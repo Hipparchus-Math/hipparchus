@@ -6,6 +6,8 @@
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus</artifactId>
   <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
   <name>Hipparchus</name>
   <url>https://www.hipparchus.org/</url>
 
@@ -323,14 +325,21 @@
     </contributor>
   </contributors>
 
-  <dependencies>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+      </dependency>    
+    </dependencies>
+  </dependencyManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -363,6 +372,12 @@
     <hipparchus.compiler.target>1.8</hipparchus.compiler.target>
     <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
   </properties>
+
+  <modules>
+      <module>core</module>
+      <module>perf</module>
+      <module>samples</module>
+  </modules>
 
   <build>
       <plugins>
@@ -479,63 +494,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-clean-plugin</artifactId>
         <version>${hipparchus.maven-clean-plugin.version}</version>
-      </plugin>
-
-
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <configuration>
-              <target>
-                <jar destfile="${project.build.directory}/${project.artifactId}-${project.version}-tools.jar">
-                  <metainf dir="${basedir}" includes="NOTICE.txt,LICENSE.txt" />
-                  <manifest>
-                    <attribute name="Specification-Title" value="${project.name} Tools" />
-                    <attribute name="Implementation-Title" value="${project.name} Tools" />
-                    <attribute name="Implementation-Vendor" value="${project.organization.name}" />
-                    <attribute name="Implementation-Version" value="${project.version}" />
-                    <attribute name="Implementation-Vendor-Id" value="org.hipparchus" />
-                    <attribute name="Implementation-Build" value="${implementation.build}"/>
-                    <attribute name="X-Compile-Source-JDK" value="${maven.compiler.source}" />
-                    <attribute name="X-Compile-Target-JDK" value="${maven.compiler.target}" />
-                  </manifest>
-                  <fileset dir="${project.build.directory}/test-classes"
-                           includes="org/hipparchus/PerfTestUtils*" />
-                </jar>
-              </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <!--  Attaches the hipparchus tools JAR to the Maven lifecycle
-            to ensure they will be signed and deployed as normal -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>build-helper-maven-plugin</artifactId>
-        <version>${hipparchus.build-helper-maven-plugin}</version>
-        <executions>
-          <execution>
-            <id>attach-artifacts</id>
-            <phase>package</phase>
-            <goals>
-              <goal>attach-artifact</goal>
-            </goals>
-            <configuration>
-              <artifacts>
-                <artifact>
-                  <file>${project.build.directory}/${project.artifactId}-${project.version}-tools.jar</file>
-                  <type>jar</type>
-                  <classifier>tools</classifier>
-                </artifact>
-              </artifacts>
-            </configuration>
-          </execution>
-        </executions>
       </plugin>
       <!--  MathJax -->
       <plugin>
@@ -815,38 +773,6 @@
             </executions>
             <configuration>
             </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-
-    <profile>
-      <id>travis</id>
-      <activation>
-        <property>
-          <name>env.TRAVIS</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.jacoco</groupId>
-            <artifactId>jacoco-maven-plugin</artifactId>
-            <version>${hipparchus.jacoco-maven-plugin.version}</version>
-            <executions>
-              <execution>
-                <id>prepare-agent</id>
-                <goals>
-                  <goal>prepare-agent</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-          <plugin>
-            <groupId>org.eluder.coveralls</groupId>
-            <artifactId>coveralls-maven-plugin</artifactId>
-            <version>3.1.0</version>
           </plugin>
         </plugins>
       </build>
