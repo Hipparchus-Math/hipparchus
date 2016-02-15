@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide;
+package org.hipparchus.userguide;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -32,18 +32,18 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
-import org.apache.commons.math4.geometry.euclidean.twod.Vector2D;
-import org.apache.commons.math4.random.HaltonSequenceGenerator;
-import org.apache.commons.math4.random.JDKRandomGenerator;
-import org.apache.commons.math4.random.MersenneTwister;
-import org.apache.commons.math4.random.RandomGenerator;
-import org.apache.commons.math4.random.RandomVectorGenerator;
-import org.apache.commons.math4.random.SobolSequenceGenerator;
-import org.apache.commons.math4.random.UncorrelatedRandomVectorGenerator;
-import org.apache.commons.math4.random.UniformRandomGenerator;
-import org.apache.commons.math4.util.FastMath;
-import org.apache.commons.math4.util.Pair;
-import org.apache.commons.math4.userguide.ExampleUtils.ExampleFrame;
+import org.hipparchus.geometry.euclidean.twod.Vector2D;
+import org.hipparchus.random.HaltonSequenceGenerator;
+import org.hipparchus.random.JDKRandomGenerator;
+import org.hipparchus.random.MersenneTwister;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.RandomVectorGenerator;
+import org.hipparchus.random.SobolSequenceGenerator;
+import org.hipparchus.random.UncorrelatedRandomVectorGenerator;
+import org.hipparchus.random.UniformRandomGenerator;
+import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Pair;
+import org.hipparchus.userguide.ExampleUtils.ExampleFrame;
 
 /**
  * Plots 2D samples drawn from various pseudo / quasi-random generators.

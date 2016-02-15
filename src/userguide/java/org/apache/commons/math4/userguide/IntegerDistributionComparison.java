@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide;
+package org.hipparchus.userguide;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -33,15 +33,15 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.apache.commons.math4.distribution.BinomialDistribution;
-import org.apache.commons.math4.distribution.GeometricDistribution;
-import org.apache.commons.math4.distribution.HypergeometricDistribution;
-import org.apache.commons.math4.distribution.IntegerDistribution;
-import org.apache.commons.math4.distribution.PascalDistribution;
-import org.apache.commons.math4.distribution.PoissonDistribution;
-import org.apache.commons.math4.distribution.UniformIntegerDistribution;
-import org.apache.commons.math4.distribution.ZipfDistribution;
-import org.apache.commons.math4.userguide.ExampleUtils.ExampleFrame;
+import org.hipparchus.distribution.BinomialDistribution;
+import org.hipparchus.distribution.GeometricDistribution;
+import org.hipparchus.distribution.HypergeometricDistribution;
+import org.hipparchus.distribution.IntegerDistribution;
+import org.hipparchus.distribution.PascalDistribution;
+import org.hipparchus.distribution.PoissonDistribution;
+import org.hipparchus.distribution.UniformIntegerDistribution;
+import org.hipparchus.distribution.ZipfDistribution;
+import org.hipparchus.userguide.ExampleUtils.ExampleFrame;
 
 import com.xeiam.xchart.Chart;
 import com.xeiam.xchart.ChartBuilder;

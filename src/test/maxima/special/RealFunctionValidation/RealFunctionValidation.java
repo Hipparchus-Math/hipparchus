@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.math4.stat.descriptive.SummaryStatistics;
-import org.apache.commons.math4.util.FastMath;
+import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.util.FastMath;
 
 /*
  * plot 'logGamma.dat' binary format="%double%double" endian=big u 1:2 w l

@@ -12,7 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
-package org.apache.commons.math4.userguide.filter;
+package org.hipparchus.userguide.filter;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -25,19 +25,19 @@ import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.apache.commons.math4.filter.DefaultMeasurementModel;
-import org.apache.commons.math4.filter.DefaultProcessModel;
-import org.apache.commons.math4.filter.KalmanFilter;
-import org.apache.commons.math4.filter.MeasurementModel;
-import org.apache.commons.math4.filter.ProcessModel;
-import org.apache.commons.math4.linear.MatrixUtils;
-import org.apache.commons.math4.linear.RealMatrix;
-import org.apache.commons.math4.linear.RealVector;
-import org.apache.commons.math4.random.RandomGenerator;
-import org.apache.commons.math4.random.Well19937c;
-import org.apache.commons.math4.util.FastMath;
-import org.apache.commons.math4.userguide.ExampleUtils;
-import org.apache.commons.math4.userguide.ExampleUtils.ExampleFrame;
+import org.hipparchus.filter.DefaultMeasurementModel;
+import org.hipparchus.filter.DefaultProcessModel;
+import org.hipparchus.filter.KalmanFilter;
+import org.hipparchus.filter.MeasurementModel;
+import org.hipparchus.filter.ProcessModel;
+import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well19937c;
+import org.hipparchus.util.FastMath;
+import org.hipparchus.userguide.ExampleUtils;
+import org.hipparchus.userguide.ExampleUtils.ExampleFrame;
 
 import com.xeiam.xchart.Chart;
 import com.xeiam.xchart.ChartBuilder;

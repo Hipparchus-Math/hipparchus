@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide.genetics;
+package org.hipparchus.userguide.genetics;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,19 +23,19 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.math4.exception.util.LocalizedFormats;
-import org.apache.commons.math4.genetics.AbstractListChromosome;
-import org.apache.commons.math4.genetics.Chromosome;
-import org.apache.commons.math4.genetics.ElitisticListPopulation;
-import org.apache.commons.math4.genetics.GeneticAlgorithm;
-import org.apache.commons.math4.genetics.InvalidRepresentationException;
-import org.apache.commons.math4.genetics.MutationPolicy;
-import org.apache.commons.math4.genetics.OnePointCrossover;
-import org.apache.commons.math4.genetics.Population;
-import org.apache.commons.math4.genetics.StoppingCondition;
-import org.apache.commons.math4.genetics.TournamentSelection;
-import org.apache.commons.math4.util.FastMath;
-import org.apache.commons.math4.util.Precision;
+import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.genetics.AbstractListChromosome;
+import org.hipparchus.genetics.Chromosome;
+import org.hipparchus.genetics.ElitisticListPopulation;
+import org.hipparchus.genetics.GeneticAlgorithm;
+import org.hipparchus.genetics.InvalidRepresentationException;
+import org.hipparchus.genetics.MutationPolicy;
+import org.hipparchus.genetics.OnePointCrossover;
+import org.hipparchus.genetics.Population;
+import org.hipparchus.genetics.StoppingCondition;
+import org.hipparchus.genetics.TournamentSelection;
+import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Precision;
 
 public class HelloWorldExample {
     public static final int    POPULATION_SIZE   = 1000;

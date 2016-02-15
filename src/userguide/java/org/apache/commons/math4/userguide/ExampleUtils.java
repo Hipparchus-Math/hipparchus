@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide;
+package org.hipparchus.userguide;
 
 import java.awt.Component;
 import java.awt.Graphics2D;

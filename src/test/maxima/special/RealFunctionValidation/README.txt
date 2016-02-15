@@ -99,7 +99,7 @@ file
 As an example, here is the properties file for evaluation of
 double Gamma.logGamma(double)
 
-method=org.apache.commons.math4.special.Gamma.logGamma
+method=org.hipparchus.special.Gamma.logGamma
 signature=double
 inputFileMask=logGamma-%02d.dat
 outputFileMask=logGamma-out-%02d.dat

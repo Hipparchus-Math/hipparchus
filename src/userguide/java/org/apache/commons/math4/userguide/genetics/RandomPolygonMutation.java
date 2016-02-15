@@ -14,13 +14,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide.genetics;
+package org.hipparchus.userguide.genetics;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.math4.genetics.Chromosome;
-import org.apache.commons.math4.genetics.MutationPolicy;
+import org.hipparchus.genetics.Chromosome;
+import org.hipparchus.genetics.MutationPolicy;
 
 public class RandomPolygonMutation implements MutationPolicy {
     

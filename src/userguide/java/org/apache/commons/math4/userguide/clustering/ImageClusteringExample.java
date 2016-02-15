@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide.clustering;
+package org.hipparchus.userguide.clustering;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -42,11 +42,11 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.apache.commons.math4.ml.clustering.CentroidCluster;
-import org.apache.commons.math4.ml.clustering.Clusterable;
-import org.apache.commons.math4.ml.clustering.KMeansPlusPlusClusterer;
-import org.apache.commons.math4.userguide.ExampleUtils;
-import org.apache.commons.math4.userguide.ExampleUtils.ExampleFrame;
+import org.hipparchus.ml.clustering.CentroidCluster;
+import org.hipparchus.ml.clustering.Clusterable;
+import org.hipparchus.ml.clustering.KMeansPlusPlusClusterer;
+import org.hipparchus.userguide.ExampleUtils;
+import org.hipparchus.userguide.ExampleUtils.ExampleFrame;
 
 /**
  * This example shows how clustering can be applied to images.

@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide.genetics;
+package org.hipparchus.userguide.genetics;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.GeneralPath;
 
-import org.apache.commons.math4.genetics.GeneticAlgorithm;
-import org.apache.commons.math4.random.RandomGenerator;
-import org.apache.commons.math4.util.FastMath;
+import org.hipparchus.genetics.GeneticAlgorithm;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.util.FastMath;
 
 /**
  * Represents a fixed size polgon with its fill color.

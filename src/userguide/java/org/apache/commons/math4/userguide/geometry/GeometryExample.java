@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide.geometry;
+package org.hipparchus.userguide.geometry;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -31,21 +31,21 @@ import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 
-import org.apache.commons.math4.geometry.enclosing.Encloser;
-import org.apache.commons.math4.geometry.enclosing.EnclosingBall;
-import org.apache.commons.math4.geometry.enclosing.WelzlEncloser;
-import org.apache.commons.math4.geometry.euclidean.twod.DiskGenerator;
-import org.apache.commons.math4.geometry.euclidean.twod.Euclidean2D;
-import org.apache.commons.math4.geometry.euclidean.twod.Segment;
-import org.apache.commons.math4.geometry.euclidean.twod.Vector2D;
-import org.apache.commons.math4.geometry.euclidean.twod.hull.ConvexHull2D;
-import org.apache.commons.math4.geometry.euclidean.twod.hull.ConvexHullGenerator2D;
-import org.apache.commons.math4.geometry.euclidean.twod.hull.MonotoneChain;
-import org.apache.commons.math4.random.MersenneTwister;
-import org.apache.commons.math4.random.RandomGenerator;
-import org.apache.commons.math4.util.FastMath;
-import org.apache.commons.math4.userguide.ExampleUtils;
-import org.apache.commons.math4.userguide.ExampleUtils.ExampleFrame;
+import org.hipparchus.geometry.enclosing.Encloser;
+import org.hipparchus.geometry.enclosing.EnclosingBall;
+import org.hipparchus.geometry.enclosing.WelzlEncloser;
+import org.hipparchus.geometry.euclidean.twod.DiskGenerator;
+import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
+import org.hipparchus.geometry.euclidean.twod.Segment;
+import org.hipparchus.geometry.euclidean.twod.Vector2D;
+import org.hipparchus.geometry.euclidean.twod.hull.ConvexHull2D;
+import org.hipparchus.geometry.euclidean.twod.hull.ConvexHullGenerator2D;
+import org.hipparchus.geometry.euclidean.twod.hull.MonotoneChain;
+import org.hipparchus.random.MersenneTwister;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.util.FastMath;
+import org.hipparchus.userguide.ExampleUtils;
+import org.hipparchus.userguide.ExampleUtils.ExampleFrame;
 import org.piccolo2d.PCamera;
 import org.piccolo2d.PCanvas;
 import org.piccolo2d.PNode;

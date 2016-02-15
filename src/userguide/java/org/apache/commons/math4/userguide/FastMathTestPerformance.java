@@ -14,10 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide;
+package org.hipparchus.userguide;
 
-import org.apache.commons.math4.PerfTestUtils;
-import org.apache.commons.math4.util.FastMath;
+import org.hipparchus.PerfTestUtils;
+import org.hipparchus.util.FastMath;
 
 /**
  * Performance benchmark for FastMath.

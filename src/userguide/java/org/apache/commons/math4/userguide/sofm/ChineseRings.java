@@ -15,13 +15,13 @@
  * limitations under the License.
  */
 
-package org.apache.commons.math4.userguide.sofm;
+package org.hipparchus.userguide.sofm;
 
-import org.apache.commons.math4.geometry.euclidean.threed.Vector3D;
-import org.apache.commons.math4.geometry.euclidean.threed.Rotation;
-import org.apache.commons.math4.random.UnitSphereRandomVectorGenerator;
-import org.apache.commons.math4.distribution.RealDistribution;
-import org.apache.commons.math4.distribution.UniformRealDistribution;
+import org.hipparchus.geometry.euclidean.threed.Vector3D;
+import org.hipparchus.geometry.euclidean.threed.Rotation;
+import org.hipparchus.random.UnitSphereRandomVectorGenerator;
+import org.hipparchus.distribution.RealDistribution;
+import org.hipparchus.distribution.UniformRealDistribution;
 
 /**
  * Class that creates two intertwined rings.

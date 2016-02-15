@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.apache.commons.math4.userguide;
+package org.hipparchus.userguide;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -34,23 +34,23 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.apache.commons.math4.distribution.NormalDistribution;
-import org.apache.commons.math4.geometry.euclidean.twod.Vector2D;
-import org.apache.commons.math4.ml.clustering.CentroidCluster;
-import org.apache.commons.math4.ml.clustering.Cluster;
-import org.apache.commons.math4.ml.clustering.Clusterable;
-import org.apache.commons.math4.ml.clustering.Clusterer;
-import org.apache.commons.math4.ml.clustering.DBSCANClusterer;
-import org.apache.commons.math4.ml.clustering.DoublePoint;
-import org.apache.commons.math4.ml.clustering.FuzzyKMeansClusterer;
-import org.apache.commons.math4.ml.clustering.KMeansPlusPlusClusterer;
-import org.apache.commons.math4.random.RandomAdaptor;
-import org.apache.commons.math4.random.RandomGenerator;
-import org.apache.commons.math4.random.SobolSequenceGenerator;
-import org.apache.commons.math4.random.Well19937c;
-import org.apache.commons.math4.util.FastMath;
-import org.apache.commons.math4.util.Pair;
-import org.apache.commons.math4.userguide.ExampleUtils.ExampleFrame;
+import org.hipparchus.distribution.NormalDistribution;
+import org.hipparchus.geometry.euclidean.twod.Vector2D;
+import org.hipparchus.ml.clustering.CentroidCluster;
+import org.hipparchus.ml.clustering.Cluster;
+import org.hipparchus.ml.clustering.Clusterable;
+import org.hipparchus.ml.clustering.Clusterer;
+import org.hipparchus.ml.clustering.DBSCANClusterer;
+import org.hipparchus.ml.clustering.DoublePoint;
+import org.hipparchus.ml.clustering.FuzzyKMeansClusterer;
+import org.hipparchus.ml.clustering.KMeansPlusPlusClusterer;
+import org.hipparchus.random.RandomAdaptor;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.SobolSequenceGenerator;
+import org.hipparchus.random.Well19937c;
+import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Pair;
+import org.hipparchus.userguide.ExampleUtils.ExampleFrame;
 
 /**
  * Plots clustering results for various algorithms and datasets.
