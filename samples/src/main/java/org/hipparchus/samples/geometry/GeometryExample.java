@@ -155,7 +155,7 @@ public class GeometryExample {
         private JComponent controlPanel;
 
         public Display() {
-            setTitle("Commons Math: Geometry Examples");
+            setTitle("Hipparchus: Geometry Examples");
             setSize(800, 700);
 
             container = new JPanel(new BorderLayout());

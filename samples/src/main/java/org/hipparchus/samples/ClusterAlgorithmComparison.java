@@ -183,7 +183,7 @@ public class ClusterAlgorithmComparison {
     public static class Display extends ExampleFrame {
         
         public Display() {
-            setTitle("Commons-Math: Cluster algorithm comparison");
+            setTitle("Hipparchus: Cluster algorithm comparison");
             setSize(800, 800);
             
             setLayout(new GridBagLayout());

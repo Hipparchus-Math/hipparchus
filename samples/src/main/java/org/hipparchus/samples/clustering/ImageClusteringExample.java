@@ -28,7 +28,6 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,15 +65,16 @@ public class ImageClusteringExample {
         private JSpinner clusterSizeSpinner;
 
         public Display() throws Exception {
-            setTitle("Commons-Math: Image Clustering Example");
+            setTitle("Hipparchus: Image Clustering Example");
             setSize(900, 350);
             
             setLayout(new FlowLayout());
 
             Box bar = Box.createHorizontalBox();
 
+            ClassLoader classLoader = ExampleUtils.class.getClassLoader();
             referenceImage = ExampleUtils.resizeImage(
-                    ImageIO.read(new File("resources/ColorfulBird.jpg")),
+                    ImageIO.read(classLoader.getResourceAsStream("ColorfulBird.jpg")),
                     350,
                     240,
                     BufferedImage.TYPE_INT_RGB);

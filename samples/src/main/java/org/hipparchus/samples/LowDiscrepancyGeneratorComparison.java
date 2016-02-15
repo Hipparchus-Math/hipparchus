@@ -121,7 +121,7 @@ public class LowDiscrepancyGeneratorComparison {
     public static class Display extends ExampleFrame {
         
         public Display() {
-            setTitle("Commons-Math: Pseudo/Quasi-random examples");
+            setTitle("Hipparchus: Pseudo/Quasi-random examples");
             setSize(800, 800);
             
             setLayout(new GridBagLayout());

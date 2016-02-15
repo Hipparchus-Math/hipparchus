@@ -150,7 +150,7 @@ public class IntegerDistributionComparison {
         private JComponent container;
 
         public Display() {
-            setTitle("Commons-Math: Integer distributions overview");
+            setTitle("Hipparchus: Integer distributions overview");
             setSize(1320, 920);
             
             container = new JPanel();

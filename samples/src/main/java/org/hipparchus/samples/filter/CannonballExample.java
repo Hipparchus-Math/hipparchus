@@ -299,7 +299,7 @@ public class CannonballExample {
         private JComponent container;
 
         public Display() {
-            setTitle("Commons Math: Kalman Filter - Cannonball");
+            setTitle("Hipparchus: Kalman Filter - Cannonball");
             setSize(800, 600);
             
             container = new JPanel();

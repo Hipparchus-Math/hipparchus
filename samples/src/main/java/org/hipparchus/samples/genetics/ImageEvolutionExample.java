@@ -24,7 +24,6 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -93,15 +92,16 @@ public class ImageEvolutionExample {
         private ImagePainter painter;
 
         public Display() throws Exception {
-            setTitle("Commons-Math: Image Evolution Example");
+            setTitle("Hipparchus: Image Evolution Example");
             setSize(600, 400);
             
             setLayout(new FlowLayout());
 
             Box bar = Box.createHorizontalBox();
 
-            ref = ImageIO.read(new File("resources/monalisa.png"));
-            //ref = ImageIO.read(new File("resources/feather-small.gif"));
+            ClassLoader classLoader = Display.class.getClassLoader();
+            ref = ImageIO.read(classLoader.getResourceAsStream("monalisa.png"));
+            //ref = ImageIO.read(classLoader.getResourceAsStream("feather-small.gif"));
 
             referenceImage = resizeImage(ref, 50, 50, BufferedImage.TYPE_INT_ARGB);
             testImage = new BufferedImage(referenceImage.getWidth(), referenceImage.getHeight(), BufferedImage.TYPE_INT_ARGB);

@@ -216,7 +216,7 @@ public class ConstantVoltageExample {
         private JComponent container;
 
         public Display() {
-            setTitle("Commons-Math: Kalman Filter example");
+            setTitle("Hipparchus: Kalman Filter example");
             setSize(1100, 700);
             
             container = new JPanel();

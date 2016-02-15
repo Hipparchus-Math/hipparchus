@@ -160,7 +160,7 @@ public class RealDistributionComparison {
         private JComponent container;
 
         public Display() {
-            setTitle("Commons-Math: Real distributions overview");
+            setTitle("Hipparchus: Real distributions overview");
             setSize(1320, 920);
             
             container = new JPanel();
