@@ -333,6 +333,39 @@
         <version>${project.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-core</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-geometry</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-genetics</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-optim</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-optim</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-legacy</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
         <version>4.12</version>
@@ -375,8 +408,14 @@
 
   <modules>
       <module>core</module>
+      <module>geometry</module>
+      <module>genetics</module>
+      <module>ode</module>
+      <module>optim</module>
+      <module>fitting</module>
       <module>perf</module>
       <module>samples</module>
+      <module>legacy</module>
   </modules>
 
   <build>

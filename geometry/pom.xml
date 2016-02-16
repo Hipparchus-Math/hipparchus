@@ -25,10 +25,10 @@
     <relativePath>../</relativePath>
   </parent>
 
-  <artifactId>hipparchus-samples</artifactId>
+  <artifactId>hipparchus-geometry</artifactId>
   <packaging>jar</packaging>
-  <name>Hipparchus::Samples</name>
-  <description>The Hipparchus samples module</description>
+  <name>Hipparchus::Computational Geometry</name>
+  <description>The Hipparchus geometry module</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,38 +42,19 @@
           <groupId>org.hipparchus</groupId>
           <artifactId>hipparchus-core</artifactId>
       </dependency>
+
+      <!-- Test dependencies -->
+
       <dependency>
           <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-genetics</artifactId>
+          <artifactId>hipparchus-core</artifactId>
+          <type>test-jar</type>
+          <scope>test</scope>
       </dependency>
       <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-geometry</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-legacy</artifactId>
-      </dependency>
-      
-      <dependency>
-          <groupId>com.xeiam.xchart</groupId>
-          <artifactId>xchart</artifactId>
-          <version>2.3.0</version>
-      </dependency>
-      <dependency>
-          <groupId>org.piccolo2d</groupId>
-          <artifactId>piccolo2d-core</artifactId>
-          <version>3.0</version>
-      </dependency>
-      <dependency>
-          <groupId>org.piccolo2d</groupId>
-          <artifactId>piccolo2d-extras</artifactId>
-          <version>3.0</version>
-      </dependency>      
-      <dependency>
-          <groupId>org.apache.commons</groupId>
-          <artifactId>commons-lang3</artifactId>
-          <version>3.1</version>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+          <scope>test</scope>
       </dependency>
   </dependencies>
 </project>

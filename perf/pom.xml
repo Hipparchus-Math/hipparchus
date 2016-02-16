@@ -27,7 +27,7 @@
 
   <artifactId>hipparchus-perf</artifactId>
   <packaging>jar</packaging>
-  <name>Hipparchus::Performance</name>
+  <name>Hipparchus::Performance Tests</name>
   <description>The Hipparchus performance test module</description>
 
   <properties>
