@@ -1,0 +1,27 @@
+# This file contains the substitution patterns for classes
+# to apply to source and documentation text files when migrating
+# from Apache Commons Math to Hipparchus.
+
+ConvergenceException               MathIllegalStateException
+DimensionMismatchException         MathIllegalArgumentException
+InsufficientDataException          MathIllegalArgumentException
+MathArithmeticException            MathRuntimeException
+MathIllegalNumberException         MathIllegalArgumentException
+MathInternalError                  MathRuntimeException
+MathParseException                 MathIllegalStateException
+MathUnsupportedOperationException  MathRuntimeException
+MaxCountExceededException          MathIllegalStateException
+MultiDimensionMismatchException    MathIllegalArgumentException
+NoBracketingException              MathIllegalArgumentException
+NoDataException                    MathIllegalArgumentException
+NonMonotonicSequenceException      MathIllegalArgumentException
+NotANumberException                MathIllegalArgumentException
+NotFiniteNumberException           MathIllegalArgumentException
+NotPositiveException               MathIllegalArgumentException
+NotStrictlyPositiveException       MathIllegalArgumentException
+NullArgumentException              NullPointerException
+NumberIsTooLargeException          MathIllegalArgumentException
+NumberIsTooSmallException          MathIllegalArgumentException
+OutOfRangeException                MathIllegalArgumentException
+TooManyEvaluationsException        MathIllegalStateException
+TooManyIterationsException         MathIllegalStateException

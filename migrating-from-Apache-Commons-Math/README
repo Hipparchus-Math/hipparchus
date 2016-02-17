@@ -1,0 +1,49 @@
+This folder contains tools to help migrating an application
+from Apache Commons Math to Hipparchus.
+
+There are scripts that can be run directly from the command
+line, and substitution patterns used by the scripts.
+
+Unix/Linux:
+===========
+
+The migrate.sh file is a shell script intended to be used for
+Unix/Linux operating systems. It is typically run as follows:
+
+ sh migrate.sh --dir src --dir doc \
+               --ignore .git \
+               --ext .java --ext .txt --ext .md
+
+The --dir option specifies the top-level directory containing
+the application files to migrate. The directory will be
+crawled recursively. The option can be repeated several times.
+
+The --ignore option specifies directories that will be ignored
+while looking for files to edit.
+
+The --ext option specifies the extensions of the files to edit.
+The option can be repeated several times.
+
+There is a --nosave option that can be used if the original files
+must be completely wipped after having been edited. If the option
+is not used, the original files will be renamed with .orig appended
+to their names, along side with the edited files. Note that if the
+script is interrupted for some reason, there may be some spurious
+.orig files remaining even if the -nosave option has been used.
+
+There is a --dry-run option that can be used to check which files
+would be modified, without really modifying them.
+
+There is a --packages-subst that can be used to select a different
+set of rules for packages substitution. The patterns in this file
+must follow the same model as the distributed packages.subst file.
+If the option is not used, the distributed packages.subst file
+will be used by default. It is possible to set the file to the
+empty string (using --packages-subst "") to ignore packages
+substitions.
+
+There is a --classes-subst that can be used to select a different
+set of rules for classes substitution. The patterns in this file
+must follow the same model as the distributed classes.subst file.
+If the option is not used, the distributed classes.subst file
+will be used by default.
