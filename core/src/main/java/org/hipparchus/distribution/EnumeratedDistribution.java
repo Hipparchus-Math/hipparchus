@@ -22,13 +22,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.MathArrays;

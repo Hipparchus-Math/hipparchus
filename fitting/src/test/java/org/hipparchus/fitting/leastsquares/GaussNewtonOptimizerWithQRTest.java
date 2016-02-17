@@ -17,19 +17,16 @@
 
 package org.hipparchus.fitting.leastsquares;
 
-import org.hipparchus.exception.ConvergenceException;
+import java.io.IOException;
+
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer;
-import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.junit.Test;
 
-import java.io.IOException;
-
 /**
- * <p>Some of the unit tests are re-implementations of the MINPACK <a
+ * <p>Some of the unit tests are re-implementations of the MINPACK <a   
  * href="http://www.netlib.org/minpack/ex/file17">file17</a> and <a
  * href="http://www.netlib.org/minpack/ex/file22">file22</a> test files.
  * The redistribution policy for MINPACK is available <a
@@ -50,17 +47,12 @@ public class GaussNewtonOptimizerWithQRTest
     }
 
     @Override
-    @Test
+    @Test(expected=MathIllegalArgumentException.class)
     public void testMoreEstimatedParametersUnsorted() {
         /*
          * Exception is expected with this optimizer
          */
-        try{
-            super.testMoreEstimatedParametersUnsorted();
-            fail(optimizer);
-        }catch (ConvergenceException e){
-            //expected
-        }
+        super.testMoreEstimatedParametersUnsorted();
     }
 
     @Test
@@ -88,35 +80,23 @@ public class GaussNewtonOptimizerWithQRTest
     }
 
     @Override
-    @Test
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCircleFittingBadInit() {
         /*
          * This test does not converge with this optimizer.
          */
-        try{
-            super.testCircleFittingBadInit();
-            fail(optimizer);
-        }catch (ConvergenceException e){
-            //expected
-        }
+        super.testCircleFittingBadInit();
     }
 
     @Override
-    @Test
+    @Test(expected=MathIllegalArgumentException.class)
     public void testHahn1()
         throws IOException {
         /*
          * TODO This test leads to a singular problem with the Gauss-Newton
          * optimizer. This should be inquired.
          */
-        try{
-            super.testHahn1();
-            fail(optimizer);
-        } catch (ConvergenceException e){
-            //expected for LU
-        } catch (TooManyEvaluationsException e){
-            //expected for QR
-        }
+        super.testHahn1();
     }
 
 }

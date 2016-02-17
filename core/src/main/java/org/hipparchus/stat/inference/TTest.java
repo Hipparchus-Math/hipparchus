@@ -18,6 +18,7 @@ package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.TDistribution;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
@@ -25,7 +26,6 @@ import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.util.FastMath;

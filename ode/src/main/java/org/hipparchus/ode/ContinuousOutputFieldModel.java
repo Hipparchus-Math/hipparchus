@@ -22,9 +22,9 @@ import java.util.List;
 
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.ode.sampling.FieldStepHandler;
 import org.hipparchus.ode.sampling.FieldStepInterpolator;
 import org.hipparchus.util.FastMath;

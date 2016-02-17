@@ -16,9 +16,9 @@
  */
 package org.hipparchus.stat.correlation;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.descriptive.moment.Mean;

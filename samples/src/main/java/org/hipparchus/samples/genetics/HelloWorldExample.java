@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.genetics.AbstractListChromosome;
 import org.hipparchus.genetics.Chromosome;
 import org.hipparchus.genetics.ElitisticListPopulation;

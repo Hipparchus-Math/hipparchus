@@ -22,12 +22,12 @@ import java.util.Iterator;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 

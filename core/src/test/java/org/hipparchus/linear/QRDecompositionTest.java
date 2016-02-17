@@ -19,15 +19,7 @@ package org.hipparchus.linear;
 
 import java.util.Random;
 
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.BlockRealMatrix;
-import org.hipparchus.linear.DefaultRealMatrixChangingVisitor;
-import org.hipparchus.linear.DefaultRealMatrixPreservingVisitor;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.QRDecomposition;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -249,7 +241,7 @@ public class QRDecompositionTest {
 
     }
 
-    @Test(expected=SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNonInvertible() {
         QRDecomposition qr =
             new QRDecomposition(MatrixUtils.createRealMatrix(testData3x3Singular));
@@ -282,7 +274,7 @@ public class QRDecompositionTest {
         return m;
     }
 
-    @Test(expected=SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQRSingular() {
         final RealMatrix a = MatrixUtils.createRealMatrix(new double[][] {
             { 1, 6, 4 }, { 2, 4, -1 }, { -1, 2, 5 }

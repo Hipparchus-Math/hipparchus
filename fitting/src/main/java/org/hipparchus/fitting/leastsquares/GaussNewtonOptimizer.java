@@ -16,15 +16,15 @@
  */
 package org.hipparchus.fitting.leastsquares;
 
-import org.hipparchus.exception.ConvergenceException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.CholeskyDecomposition;
 import org.hipparchus.linear.LUDecomposition;
 import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.NonPositiveDefiniteMatrixException;
 import org.hipparchus.linear.QRDecomposition;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
@@ -72,7 +72,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                             .getSolver()
                             .solve(jTr);
                 } catch (SingularMatrixException e) {
-                    throw new ConvergenceException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
+                    throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
                 }
             }
         },
@@ -93,7 +93,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                             .getSolver()
                             .solve(residuals);
                 } catch (SingularMatrixException e) {
-                    throw new ConvergenceException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
+                    throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
                 }
             }
         },
@@ -118,8 +118,12 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                             normal, SINGULARITY_THRESHOLD, SINGULARITY_THRESHOLD)
                             .getSolver()
                             .solve(jTr);
-                } catch (NonPositiveDefiniteMatrixException e) {
-                    throw new ConvergenceException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
+                } catch (MathIllegalArgumentException e) {
+                    if (e.getSpecifier() == LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX) {
+                        throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
+                    } else {
+                        throw e;
+                    }
                 }
             }
         },

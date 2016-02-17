@@ -18,9 +18,9 @@ package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 

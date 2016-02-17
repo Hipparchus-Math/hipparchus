@@ -16,8 +16,8 @@
  */
 package org.hipparchus.stat.correlation;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Bivariate Covariance implementation that does not require input data to be

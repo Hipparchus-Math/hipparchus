@@ -21,8 +21,8 @@ import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Formats a BigFraction number in proper format.  The number format for each of

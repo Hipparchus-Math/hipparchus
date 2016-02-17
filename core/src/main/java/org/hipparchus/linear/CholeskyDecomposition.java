@@ -18,6 +18,8 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 
@@ -94,7 +96,7 @@ public class CholeskyDecomposition {
      * elements are considered null and matrix not positive definite
      * @throws NonSquareMatrixException if the matrix is not square.
      * @throws NonSymmetricMatrixException if the matrix is not symmetric.
-     * @throws NonPositiveDefiniteMatrixException if the matrix is not
+     * @throws MathIllegalArgumentException if the matrix is not
      * strictly positive definite.
      * @see #CholeskyDecomposition(RealMatrix)
      * @see #DEFAULT_RELATIVE_SYMMETRY_THRESHOLD
@@ -138,7 +140,7 @@ public class CholeskyDecomposition {
 
             // check diagonal element
             if (ltI[i] <= absolutePositivityThreshold) {
-                throw new NonPositiveDefiniteMatrixException(ltI[i], i, absolutePositivityThreshold);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
             }
 
             ltI[i] = FastMath.sqrt(ltI[i]);

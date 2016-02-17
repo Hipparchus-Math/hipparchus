@@ -14,30 +14,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception.util;
+package org.hipparchus.exception;
 
-import java.io.Serializable;
 import java.util.Locale;
 
 /**
- * Interface for localizable strings.
+ * Dummy implementation of the {@link Localizable} interface, without localization.
  *
  * @since 2.2
  */
-public interface Localizable extends Serializable {
-    /**
-     * Gets the source (non-localized) string.
-     *
-     * @return the source string.
-     */
-    String getSourceString();
+public class DummyLocalizable implements Localizable {
 
-    /**
-     * Gets the localized string.
-     *
-     * @param locale locale into which to get the string.
-     * @return the localized string or the source string if no
-     * localized version is available.
+    /** Serializable version identifier. */
+    private static final long serialVersionUID = 8843275624471387299L;
+
+    /** Source string. */
+    private final String source;
+
+    /** Simple constructor.
+     * @param source source text
      */
-    String getLocalizedString(Locale locale);
+    public DummyLocalizable(final String source) {
+        this.source = source;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getSourceString() {
+        return source;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getLocalizedString(Locale locale) {
+        return source;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return source;
+    }
+
 }

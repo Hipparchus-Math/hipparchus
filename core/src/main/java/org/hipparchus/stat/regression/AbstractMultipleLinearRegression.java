@@ -18,10 +18,10 @@ package org.hipparchus.stat.regression;
 
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.InsufficientDataException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.NonSquareMatrixException;

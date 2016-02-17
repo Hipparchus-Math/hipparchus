@@ -16,8 +16,8 @@
  */
 package org.hipparchus.geometry.spherical.oned;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;

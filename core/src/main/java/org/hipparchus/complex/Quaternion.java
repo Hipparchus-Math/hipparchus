@@ -20,8 +20,8 @@ package org.hipparchus.complex;
 import java.io.Serializable;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;

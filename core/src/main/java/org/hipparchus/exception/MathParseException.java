@@ -16,8 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.LocalizedFormats;
-
 /**
  * Class to signal parse failures.
  *
@@ -35,8 +33,8 @@ public class MathParseException extends MathIllegalStateException {
      * {@code wrong} string.
      */
     public MathParseException(String wrong, int position, Class<?> type) {
-        getContext().addMessage(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
-                                wrong, Integer.valueOf(position), type.getName());
+        super(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+              wrong, Integer.valueOf(position), type.getName());
     }
 
     /**
@@ -45,7 +43,7 @@ public class MathParseException extends MathIllegalStateException {
      * parsing to fail.
      */
     public MathParseException(String wrong, int position) {
-        getContext().addMessage(LocalizedFormats.CANNOT_PARSE,
-                                wrong, Integer.valueOf(position));
+        super(LocalizedFormats.CANNOT_PARSE,
+              wrong, Integer.valueOf(position));
     }
 }

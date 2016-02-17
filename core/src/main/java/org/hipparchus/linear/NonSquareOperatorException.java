@@ -17,7 +17,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
 
 /**
  * Exception to be thrown when a square linear operator is expected.

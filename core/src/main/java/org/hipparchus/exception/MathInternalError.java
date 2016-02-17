@@ -16,9 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
-
 /**
  * Exception triggered when something that shouldn't happen does happen.
  *
@@ -34,7 +31,7 @@ public class MathInternalError extends MathIllegalStateException {
      * Simple constructor.
      */
     public MathInternalError() {
-        getContext().addMessage(LocalizedFormats.INTERNAL_ERROR, REPORT_URL);
+        super(LocalizedFormats.INTERNAL_ERROR, REPORT_URL);
     }
 
     /**

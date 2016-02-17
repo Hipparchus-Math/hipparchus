@@ -16,9 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
-
 /**
  * Exception to be thrown when some argument is out of range.
  *

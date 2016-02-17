@@ -18,13 +18,13 @@ package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.ChiSquaredDistribution;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 

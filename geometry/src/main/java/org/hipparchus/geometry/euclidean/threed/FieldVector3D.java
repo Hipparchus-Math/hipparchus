@@ -22,8 +22,8 @@ import java.text.NumberFormat;
 
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 

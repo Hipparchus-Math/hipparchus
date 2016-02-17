@@ -16,9 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
-
 /**
  * Base class for arithmetic exceptions.
  * It is used for all the exceptions that have the semantics of the standard

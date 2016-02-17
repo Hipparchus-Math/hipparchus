@@ -22,9 +22,7 @@ import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.fitting.PolynomialCurveFitter;
-import org.hipparchus.fitting.WeightedObservedPoints;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -152,7 +150,7 @@ public class PolynomialCurveFitterTest {
             try {
                 fitter.fit(obs.toList());
                 Assert.assertTrue(solvable || (degree == 0));
-            } catch(ConvergenceException e) {
+            } catch(MathIllegalStateException e) {
                 Assert.assertTrue((! solvable) && (degree > 0));
             }
         }

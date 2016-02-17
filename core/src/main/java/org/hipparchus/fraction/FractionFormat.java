@@ -22,9 +22,10 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathParseException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Formats a Fraction number in proper format or improper format.  The number
@@ -164,13 +165,13 @@ public class FractionFormat extends AbstractFormat {
      *            offsets of the alignment field
      * @return the value passed in as toAppendTo.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
-     * @throws FractionConversionException if the number cannot be converted to a fraction
+     * @throws MathIllegalStateException if the number cannot be converted to a fraction
      * @throws MathIllegalArgumentException if <code>obj</code> is not a valid type.
      */
     @Override
     public StringBuffer format(final Object obj,
                                final StringBuffer toAppendTo, final FieldPosition pos)
-        throws FractionConversionException, MathIllegalArgumentException {
+        throws MathIllegalStateException, MathIllegalArgumentException {
         StringBuffer ret = null;
 
         if (obj instanceof Fraction) {

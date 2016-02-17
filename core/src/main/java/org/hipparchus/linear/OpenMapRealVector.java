@@ -19,10 +19,10 @@ package org.hipparchus.linear;
 import java.io.Serializable;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.OpenIntToDoubleHashMap;
 import org.hipparchus.util.OpenIntToDoubleHashMap.Iterator;

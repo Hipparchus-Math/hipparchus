@@ -16,9 +16,9 @@
  */
 package org.hipparchus.random;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 
 /**

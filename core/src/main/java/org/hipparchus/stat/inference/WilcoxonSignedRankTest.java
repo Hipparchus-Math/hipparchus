@@ -17,8 +17,8 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.ConvergenceException;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
@@ -296,7 +296,7 @@ public class WilcoxonSignedRankTest {
      * have the same length.
      * @throws NumberIsTooLargeException if {@code exactPValue} is {@code true}
      * and {@code x.length} > 30
-     * @throws ConvergenceException if the p-value can not be computed due to
+     * @throws MathIllegalStateException if the p-value can not be computed due to
      * a convergence error
      * @throws MaxCountExceededException if the maximum number of iterations
      * is exceeded
@@ -304,7 +304,7 @@ public class WilcoxonSignedRankTest {
     public double wilcoxonSignedRankTest(final double[] x, final double[] y,
                                          final boolean exactPValue)
         throws NullArgumentException, NoDataException, DimensionMismatchException,
-        NumberIsTooLargeException, ConvergenceException, MaxCountExceededException {
+        NumberIsTooLargeException, MathIllegalStateException, MaxCountExceededException {
 
         ensureDataConformance(x, y);
 

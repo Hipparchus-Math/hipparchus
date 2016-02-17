@@ -789,7 +789,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
     /**
      * Anything requiring beta calculation should advertise SME.
      */
-    @Test(expected=org.hipparchus.linear.SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testSingularCalculateBeta() {
         OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
         model.newSampleData(new double[] {1,  2,  3, 1, 2, 3, 1, 2, 3}, 3, 2);

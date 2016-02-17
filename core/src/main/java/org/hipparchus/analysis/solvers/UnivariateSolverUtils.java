@@ -17,11 +17,11 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 
 /**

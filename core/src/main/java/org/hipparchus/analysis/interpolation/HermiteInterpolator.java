@@ -23,10 +23,10 @@ import java.util.List;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableVectorFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.CombinatoricsUtils;
 
 /** Polynomial interpolator using both sample values and sample derivatives.

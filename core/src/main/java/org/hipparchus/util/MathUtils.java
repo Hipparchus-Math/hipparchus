@@ -20,11 +20,11 @@ package org.hipparchus.util;
 import java.util.Arrays;
 
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.exception.Localizable;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Miscellaneous utility functions.

@@ -18,11 +18,11 @@ package org.hipparchus.complex;
 
 import java.io.Serializable;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 
 /**

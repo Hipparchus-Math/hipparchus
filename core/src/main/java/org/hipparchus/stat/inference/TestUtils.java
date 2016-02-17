@@ -19,9 +19,9 @@ package org.hipparchus.stat.inference;
 import java.util.Collection;
 
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.exception.ConvergenceException;
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.InsufficientDataException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotPositiveException;
@@ -354,7 +354,7 @@ public class TestUtils  {
      */
     public static double oneWayAnovaPValue(final Collection<double[]> categoryData)
         throws NullArgumentException, DimensionMismatchException,
-        ConvergenceException, MaxCountExceededException {
+        MathIllegalStateException, MaxCountExceededException {
         return ONE_WAY_ANANOVA.anovaPValue(categoryData);
     }
 
@@ -366,7 +366,7 @@ public class TestUtils  {
     public static boolean oneWayAnovaTest(final Collection<double[]> categoryData,
                                           final double alpha)
         throws NullArgumentException, DimensionMismatchException,
-        OutOfRangeException, ConvergenceException, MaxCountExceededException {
+        OutOfRangeException, MathIllegalStateException, MaxCountExceededException {
         return ONE_WAY_ANANOVA.anovaTest(categoryData, alpha);
     }
 

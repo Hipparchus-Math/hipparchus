@@ -16,11 +16,11 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.MathArrays;
 
 /**

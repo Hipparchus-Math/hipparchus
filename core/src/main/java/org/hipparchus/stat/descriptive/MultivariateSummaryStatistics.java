@@ -20,8 +20,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;

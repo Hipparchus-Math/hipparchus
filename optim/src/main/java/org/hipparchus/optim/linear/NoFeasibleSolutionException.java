@@ -16,8 +16,8 @@
  */
 package org.hipparchus.optim.linear;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * This class represents exceptions thrown by optimizers when no solution fulfills the constraints.

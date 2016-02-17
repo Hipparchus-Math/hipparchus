@@ -16,8 +16,6 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
@@ -25,15 +23,9 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.fraction.Fraction;
-import org.hipparchus.fraction.FractionConversionException;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.linear.Array2DRowFieldMatrix;
-import org.hipparchus.linear.ArrayFieldVector;
-import org.hipparchus.linear.FieldLUDecomposition;
-import org.hipparchus.linear.FieldMatrix;
-import org.hipparchus.linear.FieldVector;
-import org.hipparchus.linear.NonSquareMatrixException;
-import org.hipparchus.linear.SparseFieldMatrix;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link SparseFieldMatrix} class.
@@ -113,7 +105,6 @@ public class SparseFieldMatrixTest {
     protected Field<Fraction> field = FractionField.getInstance();
 
     public SparseFieldMatrixTest() {
-        try {
             testDataLU = new Fraction[][]{ { new Fraction(2), new Fraction(5), new Fraction(3) }, { new Fraction(.5d), new Fraction(-2.5d), new Fraction(6.5d) },
                     { new Fraction(0.5d), new Fraction(0.2d), new Fraction(.2d) } };
             luDataLUDecomposition = new Fraction[][]{ { new Fraction(6), new Fraction(9), new Fraction(8) },
@@ -124,9 +115,6 @@ public class SparseFieldMatrixTest {
             subRows01Cols23 = new Fraction[][]{ { new Fraction(3), new Fraction(4) }, { new Fraction(3.5), new Fraction(4.5) } };
             subColumn1 = new Fraction [][]{ { new Fraction(2) }, { new Fraction(2.5) }, { new Fraction(4) }, { new Fraction(5) } };
             subColumn3 = new Fraction[][]{ { new Fraction(4) }, { new Fraction(4.5) }, { new Fraction(8) }, { new Fraction(7) } };
-        } catch (FractionConversionException e) {
-            // ignore, can't happen
-        }
     }
 
     /** test dimensions */

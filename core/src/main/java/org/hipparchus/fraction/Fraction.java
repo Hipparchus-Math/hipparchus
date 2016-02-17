@@ -20,9 +20,10 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 import org.hipparchus.FieldElement;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 
@@ -94,10 +95,10 @@ public class Fraction
     /**
      * Create a fraction given the double value.
      * @param value the double value to convert to a fraction.
-     * @throws FractionConversionException if the continued fraction failed to
+     * @throws MathIllegalStateException if the continued fraction failed to
      *         converge.
      */
-    public Fraction(double value) throws FractionConversionException {
+    public Fraction(double value) throws MathIllegalStateException {
         this(value, DEFAULT_EPSILON, 100);
     }
 
@@ -114,12 +115,11 @@ public class Fraction
      * @param epsilon maximum error allowed.  The resulting fraction is within
      *        {@code epsilon} of {@code value}, in absolute terms.
      * @param maxIterations maximum number of convergents
-     * @throws FractionConversionException if the continued fraction failed to
+     * @throws MathIllegalStateException if the continued fraction failed to
      *         converge.
      */
     public Fraction(double value, double epsilon, int maxIterations)
-        throws FractionConversionException
-    {
+        throws MathIllegalStateException {
         this(value, epsilon, Integer.MAX_VALUE, maxIterations);
     }
 
@@ -138,8 +138,7 @@ public class Fraction
      *         converge
      */
     public Fraction(double value, int maxDenominator)
-        throws FractionConversionException
-    {
+        throws MathIllegalStateException {
        this(value, 0, maxDenominator, 100);
     }
 
@@ -171,17 +170,17 @@ public class Fraction
      *        {@code epsilon} of {@code value}, in absolute terms.
      * @param maxDenominator maximum denominator value allowed.
      * @param maxIterations maximum number of convergents
-     * @throws FractionConversionException if the continued fraction failed to
+     * @throws MathIllegalStateException if the continued fraction failed to
      *         converge.
      */
     private Fraction(double value, double epsilon, int maxDenominator, int maxIterations)
-        throws FractionConversionException
+        throws MathIllegalStateException
     {
         long overflow = Integer.MAX_VALUE;
         double r0 = value;
         long a0 = (long)FastMath.floor(r0);
         if (FastMath.abs(a0) > overflow) {
-            throw new FractionConversionException(value, a0, 1l);
+            throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW, value, a0, 1l);
         }
 
         // check for (almost) integer arguments, which should not go to iterations.
@@ -214,7 +213,7 @@ public class Fraction
                 if (epsilon == 0.0 && FastMath.abs(q1) < maxDenominator) {
                     break;
                 }
-                throw new FractionConversionException(value, p2, q2);
+                throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
             }
 
             double convergent = (double)p2 / (double)q2;
@@ -231,7 +230,7 @@ public class Fraction
         } while (!stop);
 
         if (n >= maxIterations) {
-            throw new FractionConversionException(value, maxIterations);
+            throw new MathIllegalStateException(LocalizedFormats.FAILED_FRACTION_CONVERSION, value, maxIterations);
         }
 
         if (q2 < maxDenominator) {

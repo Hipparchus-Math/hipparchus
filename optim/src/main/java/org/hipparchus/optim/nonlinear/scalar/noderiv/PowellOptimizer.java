@@ -16,10 +16,10 @@
  */
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;

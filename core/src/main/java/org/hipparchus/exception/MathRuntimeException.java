@@ -16,65 +16,83 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.ExceptionContext;
-import org.hipparchus.exception.util.ExceptionContextProvider;
-import org.hipparchus.exception.util.Localizable;
+import java.text.MessageFormat;
+import java.util.Locale;
 
 /**
- * As of release 4.0, all exceptions thrown by the Commons Math code (except
- * {@link NullArgumentException}) inherit from this class.
- * In most cases, this class should not be instantiated directly: it should
- * serve as a base class for implementing exception classes that describe a
- * specific "problem".
- *
- * @since 3.1
+ * All exceptions thrown by the Hipparchus code inherit from this class.
  */
-public class MathRuntimeException extends RuntimeException
-    implements ExceptionContextProvider {
-    /** Serializable version Id. */
-    private static final long serialVersionUID = 20120926L;
-    /** Context. */
-    private final ExceptionContext context;
+public class MathRuntimeException extends RuntimeException implements LocalizedException {
 
-    /**
-     * @param pattern Message pattern explaining the cause of the error.
-     * @param args Arguments.
+    /** Serializable version Id. */
+    private static final long serialVersionUID = 20160217L;
+
+    /** Format specifier (to be translated). */
+    private final Localizable specifier;
+
+    /** Parts to insert in the format (no translation). */
+    private final Object[] parts;
+
+    /** Simple constructor.
+     * @param specifier format specifier (to be translated).
+     * @param parts parts to insert in the format (no translation).
      */
-    public MathRuntimeException(Localizable pattern,
-                                Object ... args) {
-        context = new ExceptionContext(this);
-        context.addMessage(pattern, args);
+    public MathRuntimeException(final Localizable specifier, final Object ... parts) {
+        this.specifier = specifier;
+        this.parts     = (parts == null) ? new Object[0] : parts.clone();
     }
 
-    /**
-     * @param cause Root cause.
-     * @param pattern Message pattern explaining the cause of the error.
-     * @param args Arguments.
-     * @since 4.0
+    /** Simple constructor.
+     * @param cause root cause.
+     * @param specifier format specifier (to be translated).
+     * @param parts parts to insert in the format (no translation).
      */
-    public MathRuntimeException(Throwable cause,
-                                Localizable pattern,
-                                Object ... args) {
+    public MathRuntimeException(final Throwable cause, final Localizable specifier,
+                                final Object ... parts) {
         super(cause);
-        context = new ExceptionContext(this);
-        context.addMessage(pattern, args);
+        this.specifier = specifier;
+        this.parts     = (parts == null) ? new Object[0] : parts.clone();
     }
 
     /** {@inheritDoc} */
     @Override
-    public ExceptionContext getContext() {
-        return context;
+    public String getMessage(final Locale locale) {
+        return buildMessage(locale, specifier, parts);
     }
 
     /** {@inheritDoc} */
     @Override
     public String getMessage() {
-        return context.getMessage();
+        return getMessage(Locale.US);
     }
 
     /** {@inheritDoc} */
     @Override
     public String getLocalizedMessage() {
-        return context.getLocalizedMessage();
+        return getMessage(Locale.getDefault());
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public Localizable getSpecifier() {
+        return specifier;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Object[] getParts() {
+        return parts.clone();
+    }
+
+    /**
+     * Builds a message string by from a pattern and its arguments.
+     * @param locale Locale in which the message should be translated
+     * @param specifier format specifier (to be translated)
+     * @param parts parts to insert in the format (no translation)
+     * @return a message string
+     */
+    private static String buildMessage(final Locale locale, final Localizable specifier, final Object ... parts) {
+        return (specifier == null) ? "" : new MessageFormat(specifier.getLocalizedString(locale), locale).format(parts);
+    }
+
 }

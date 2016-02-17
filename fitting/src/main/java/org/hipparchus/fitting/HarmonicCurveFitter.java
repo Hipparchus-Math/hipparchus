@@ -21,10 +21,10 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hipparchus.analysis.function.HarmonicOscillator;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;

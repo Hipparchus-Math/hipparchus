@@ -16,9 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
-
 /**
  * Exception to be thrown when zero is provided where it is not allowed.
  *

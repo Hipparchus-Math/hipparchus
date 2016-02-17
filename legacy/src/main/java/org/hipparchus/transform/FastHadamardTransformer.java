@@ -20,8 +20,8 @@ import java.io.Serializable;
 
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.ArithmeticUtils;
 
 /**

@@ -17,10 +17,10 @@
 // CHECKSTYLE: stop all
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;

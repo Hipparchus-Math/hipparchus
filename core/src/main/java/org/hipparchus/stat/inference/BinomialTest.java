@@ -17,12 +17,12 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.BinomialDistribution;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Implements binomial test statistics.

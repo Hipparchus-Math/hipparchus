@@ -16,8 +16,8 @@
  */
 package org.hipparchus.genetics;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
 

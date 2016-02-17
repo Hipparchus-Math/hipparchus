@@ -20,9 +20,9 @@ package org.hipparchus.optim.univariate;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;

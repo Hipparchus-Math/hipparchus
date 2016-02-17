@@ -17,8 +17,8 @@
 
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Exception to be thrown when a symmetric, definite positive

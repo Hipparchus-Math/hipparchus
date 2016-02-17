@@ -17,8 +17,8 @@
 package org.hipparchus.geometry.euclidean.oned;
 
 import org.hipparchus.geometry.partitioning.Region.Location;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 
 /** This class represents a 1D interval.

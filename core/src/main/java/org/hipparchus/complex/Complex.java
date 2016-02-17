@@ -22,9 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.FieldElement;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;

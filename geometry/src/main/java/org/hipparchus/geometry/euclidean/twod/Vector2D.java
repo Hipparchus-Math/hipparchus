@@ -19,8 +19,8 @@ package org.hipparchus.geometry.euclidean.twod;
 import java.text.NumberFormat;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;

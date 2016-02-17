@@ -19,10 +19,10 @@ package org.hipparchus.linear;
 
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 

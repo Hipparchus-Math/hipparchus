@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 

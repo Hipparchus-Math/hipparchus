@@ -19,10 +19,10 @@ package org.hipparchus.stat.regression;
 import java.io.Serializable;
 
 import org.hipparchus.distribution.TDistribution;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 

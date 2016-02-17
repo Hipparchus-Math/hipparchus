@@ -17,8 +17,8 @@
 
 package org.hipparchus.util;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathUnsupportedOperationException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  */

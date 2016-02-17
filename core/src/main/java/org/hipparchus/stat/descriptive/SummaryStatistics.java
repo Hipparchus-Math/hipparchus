@@ -18,9 +18,9 @@ package org.hipparchus.stat.descriptive;
 
 import java.io.Serializable;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;

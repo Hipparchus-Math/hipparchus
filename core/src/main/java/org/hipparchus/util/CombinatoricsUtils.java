@@ -19,10 +19,10 @@ package org.hipparchus.util;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.special.Gamma;
 
 /**

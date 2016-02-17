@@ -16,7 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.MathArrays;
 
 /**

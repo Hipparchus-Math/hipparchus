@@ -19,7 +19,6 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.ExceptionContext;
 import org.hipparchus.util.IterationManager;
 
 /**
@@ -196,12 +195,7 @@ public class ConjugateGradient
             }
             final double rhoNext = r.dotProduct(z);
             if (check && (rhoNext <= 0.)) {
-                final NonPositiveDefiniteOperatorException e;
-                e = new NonPositiveDefiniteOperatorException();
-                final ExceptionContext context = e.getContext();
-                context.setValue(OPERATOR, m);
-                context.setValue(VECTOR, r);
-                throw e;
+                throw new NonPositiveDefiniteOperatorException();
             }
             if (manager.getIterations() == 2) {
                 p.setSubVector(0, z);
@@ -211,12 +205,7 @@ public class ConjugateGradient
             q = a.operate(p);
             final double pq = p.dotProduct(q);
             if (check && (pq <= 0.)) {
-                final NonPositiveDefiniteOperatorException e;
-                e = new NonPositiveDefiniteOperatorException();
-                final ExceptionContext context = e.getContext();
-                context.setValue(OPERATOR, a);
-                context.setValue(VECTOR, p);
-                throw e;
+                throw new NonPositiveDefiniteOperatorException();
             }
             final double alpha = rhoNext / pq;
             x.combineToSelf(1., alpha, p);

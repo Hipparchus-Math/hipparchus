@@ -18,11 +18,11 @@ package org.hipparchus.distribution;
 
 import java.io.Serializable;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 

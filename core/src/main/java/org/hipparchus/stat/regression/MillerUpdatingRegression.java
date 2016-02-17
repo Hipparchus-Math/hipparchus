@@ -18,7 +18,7 @@ package org.hipparchus.stat.regression;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;

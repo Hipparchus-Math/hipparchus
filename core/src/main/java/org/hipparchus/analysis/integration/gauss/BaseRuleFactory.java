@@ -20,8 +20,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.Pair;
 
 /**

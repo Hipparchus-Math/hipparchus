@@ -17,9 +17,10 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.EigenDecomposition;
-import org.hipparchus.linear.NonPositiveDefiniteMatrixException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.random.RandomGenerator;
@@ -71,14 +72,14 @@ public class MultivariateNormalDistribution
      * inconsistent.
      * @throws SingularMatrixException if the eigenvalue decomposition cannot
      * be performed on the provided covariance matrix.
-     * @throws NonPositiveDefiniteMatrixException if any of the eigenvalues is
+     * @throws MathIllegalArgumentException if any of the eigenvalues is
      * negative.
      */
     public MultivariateNormalDistribution(final double[] means,
                                           final double[][] covariances)
         throws SingularMatrixException,
                DimensionMismatchException,
-               NonPositiveDefiniteMatrixException {
+               MathIllegalArgumentException {
         this(new Well19937c(), means, covariances);
     }
 
@@ -97,7 +98,7 @@ public class MultivariateNormalDistribution
      * inconsistent.
      * @throws SingularMatrixException if the eigenvalue decomposition cannot
      * be performed on the provided covariance matrix.
-     * @throws NonPositiveDefiniteMatrixException if any of the eigenvalues is
+     * @throws MathIllegalArgumentException if any of the eigenvalues is
      * negative.
      */
     public MultivariateNormalDistribution(RandomGenerator rng,
@@ -105,7 +106,7 @@ public class MultivariateNormalDistribution
                                           final double[][] covariances)
             throws SingularMatrixException,
                    DimensionMismatchException,
-                   NonPositiveDefiniteMatrixException {
+                   MathIllegalArgumentException {
         super(rng, means.length);
 
         final int dim = means.length;
@@ -137,7 +138,7 @@ public class MultivariateNormalDistribution
 
         for (int i = 0; i < covMatEigenvalues.length; i++) {
             if (covMatEigenvalues[i] < 0) {
-                throw new NonPositiveDefiniteMatrixException(covMatEigenvalues[i], i, 0);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
             }
         }
 

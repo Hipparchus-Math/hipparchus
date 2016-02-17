@@ -24,9 +24,9 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathParseException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Formats a BigFraction number in proper format or improper format.

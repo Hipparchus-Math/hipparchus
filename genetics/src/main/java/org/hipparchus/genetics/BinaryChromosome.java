@@ -19,7 +19,7 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
 
 
 /**

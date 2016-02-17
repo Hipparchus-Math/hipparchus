@@ -16,9 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
-
 /**
  * Exception to be thrown when some counter maximum value is exceeded.
  *
@@ -50,7 +47,7 @@ public class MaxCountExceededException extends MathIllegalStateException {
     public MaxCountExceededException(Localizable specific,
                                      Number max,
                                      Object ... args) {
-        getContext().addMessage(specific, max, args);
+        super(specific, max, args);
         this.max = max;
     }
 

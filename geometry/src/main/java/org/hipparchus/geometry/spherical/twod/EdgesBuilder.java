@@ -21,8 +21,8 @@ import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;

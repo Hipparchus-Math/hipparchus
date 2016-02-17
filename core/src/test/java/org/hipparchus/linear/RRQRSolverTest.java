@@ -20,16 +20,8 @@ package org.hipparchus.linear;
 import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.BlockRealMatrix;
-import org.hipparchus.linear.DecompositionSolver;
-import org.hipparchus.linear.DefaultRealMatrixChangingVisitor;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RRQRDecomposition;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class RRQRSolverTest {
     double[][] testData3x3NonSingular = {
@@ -105,13 +97,13 @@ public class RRQRSolverTest {
         try {
             solver.solve(b);
             Assert.fail("an exception should have been thrown");
-        } catch (SingularMatrixException iae) {
+        } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
             Assert.fail("an exception should have been thrown");
-        } catch (SingularMatrixException iae) {
+        } catch (MathIllegalArgumentException iae) {
             // expected behavior
         }
 

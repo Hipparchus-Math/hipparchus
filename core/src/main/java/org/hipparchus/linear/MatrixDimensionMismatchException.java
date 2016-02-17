@@ -16,8 +16,8 @@
  */
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MultiDimensionMismatchException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Exception to be thrown when either the number of rows or the number of

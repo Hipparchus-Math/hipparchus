@@ -19,8 +19,8 @@ package org.hipparchus.ml.clustering;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.exception.ConvergenceException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ml.distance.DistanceMeasure;
 
 /**
@@ -50,11 +50,11 @@ public abstract class Clusterer<T extends Clusterable> {
      * @return a {@link List} of clusters
      * @throws MathIllegalArgumentException if points are null or the number of
      *   data points is not compatible with this clusterer
-     * @throws ConvergenceException if the algorithm has not yet converged after
+     * @throws MathIllegalStateException if the algorithm has not yet converged after
      *   the maximum number of iterations has been exceeded
      */
     public abstract List<? extends Cluster<T>> cluster(Collection<T> points)
-            throws MathIllegalArgumentException, ConvergenceException;
+            throws MathIllegalArgumentException, MathIllegalStateException;
 
     /**
      * Returns the {@link DistanceMeasure} instance used by this clusterer.

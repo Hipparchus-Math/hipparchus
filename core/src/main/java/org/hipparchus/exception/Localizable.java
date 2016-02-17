@@ -14,20 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception.util;
+package org.hipparchus.exception;
+
+import java.io.Serializable;
+import java.util.Locale;
 
 /**
- * Interface for accessing the context data structure stored in Commons Math
- * exceptions.
+ * Interface for localizable strings.
  *
+ * @since 2.2
  */
-public interface ExceptionContextProvider {
+public interface Localizable extends Serializable {
     /**
-     * Gets a reference to the "rich context" data structure that allows to
-     * customize error messages and store key, value pairs in exceptions.
+     * Gets the source (non-localized) string.
      *
-     * @return a reference to the exception context.
+     * @return the source string.
      */
-    ExceptionContext getContext();
+    String getSourceString();
 
+    /**
+     * Gets the localized string.
+     *
+     * @param locale locale into which to get the string.
+     * @return the localized string or the source string if no
+     * localized version is available.
+     */
+    String getLocalizedString(Locale locale);
 }

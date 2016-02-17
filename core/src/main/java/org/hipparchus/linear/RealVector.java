@@ -26,12 +26,12 @@ import org.hipparchus.analysis.function.Add;
 import org.hipparchus.analysis.function.Divide;
 import org.hipparchus.analysis.function.Multiply;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 
 /**

@@ -16,8 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.LocalizedFormats;
-
 /**
  * Exception to be thrown when a number is not a number.
  *

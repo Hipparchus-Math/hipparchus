@@ -18,8 +18,8 @@ package org.hipparchus.util;
 
 import java.io.PrintStream;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Faster, more accurate, portable alternative to {@link Math} and

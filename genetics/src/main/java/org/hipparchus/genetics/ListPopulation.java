@@ -22,11 +22,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Population of chromosomes represented by a {@link List}.

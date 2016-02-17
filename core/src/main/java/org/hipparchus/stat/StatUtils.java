@@ -19,12 +19,12 @@ package org.hipparchus.stat;
 import java.util.List;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;

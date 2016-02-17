@@ -19,9 +19,9 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.MathArrays;
 
 /**

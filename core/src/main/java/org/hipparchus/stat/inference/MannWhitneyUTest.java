@@ -17,7 +17,7 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.ConvergenceException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
@@ -159,7 +159,7 @@ public class MannWhitneyUTest {
      * @param n1 number of subjects in first sample
      * @param n2 number of subjects in second sample
      * @return two-sided asymptotic p-value
-     * @throws ConvergenceException if the p-value can not be computed
+     * @throws MathIllegalStateException if the p-value can not be computed
      * due to a convergence error
      * @throws MaxCountExceededException if the maximum number of
      * iterations is exceeded
@@ -167,7 +167,7 @@ public class MannWhitneyUTest {
     private double calculateAsymptoticPValue(final double Umin,
                                              final int n1,
                                              final int n2)
-        throws ConvergenceException, MaxCountExceededException {
+        throws MathIllegalStateException, MaxCountExceededException {
 
         /* long multiplication to avoid overflow (double not used due to efficiency
          * and to avoid precision loss)
@@ -214,14 +214,14 @@ public class MannWhitneyUTest {
      * @return asymptotic p-value
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws NoDataException if {@code x} or {@code y} are zero-length.
-     * @throws ConvergenceException if the p-value can not be computed due to a
+     * @throws MathIllegalStateException if the p-value can not be computed due to a
      * convergence error
      * @throws MaxCountExceededException if the maximum number of iterations
      * is exceeded
      */
     public double mannWhitneyUTest(final double[] x, final double[] y)
         throws NullArgumentException, NoDataException,
-        ConvergenceException, MaxCountExceededException {
+        MathIllegalStateException, MaxCountExceededException {
 
         ensureDataConformance(x, y);
 

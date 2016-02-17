@@ -1,0 +1,343 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#       http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
+
+ARGUMENT_OUTSIDE_DOMAIN = argument {0} hors domaine [{1} ; {2}]
+ARRAY_SIZE_EXCEEDS_MAX_VARIABLES = la taille de tableau ne devrait pas dépasser {0}
+ARRAY_SIZES_SHOULD_HAVE_DIFFERENCE_1 = les tableaux devraient avoir une différence de taille de 1 ({0} != {1} + 1)
+ARRAY_SUMS_TO_ZERO = somme du tableau nulle
+ASSYMETRIC_EIGEN_NOT_SUPPORTED = la décomposition en valeurs/vecteurs propres de matrices 
+AT_LEAST_ONE_COLUMN = une matrice doit comporter au moins une colonne
+AT_LEAST_ONE_ROW = une matrice doit comporter au moins une ligne
+BANDWIDTH = bande passante ({0})
+BESSEL_FUNCTION_BAD_ARGUMENT = la fonction de Bessel à l''ordre {0} ne peut pas être calculée pour x = {1}
+BESSEL_FUNCTION_FAILED_CONVERGENCE = la fonction de Bessel à l''ordre {0} n''a pas réussi à converger pour x = {1}
+BINOMIAL_INVALID_PARAMETERS_ORDER = n doit être supérieur ou égal à k pour le coefficient du binôme (n, k), or k = {0}, n = {1}
+BINOMIAL_NEGATIVE_PARAMETER = n doit être positif pour le coefficient du binôme (n, k), or n = {0}
+CANNOT_CLEAR_STATISTIC_CONSTRUCTED_FROM_EXTERNAL_MOMENTS = les statistiques basées sur des moments externes ne peuvent pas être remises à zéro
+CANNOT_COMPUTE_0TH_ROOT_OF_UNITY = impossible de calculer la racine zéroième de l''unité, 
+CANNOT_COMPUTE_BETA_DENSITY_AT_0_FOR_SOME_ALPHA = impossible de calculer la densité beta en 0 lorsque alpha = {0,number}
+CANNOT_COMPUTE_BETA_DENSITY_AT_1_FOR_SOME_BETA = impossible de calculer la densité beta en 1 lorsque beta = %.3g
+CANNOT_COMPUTE_NTH_ROOT_FOR_NEGATIVE_N = impossible de calculer la racine nième pour n négatif ou nul : {0}
+CANNOT_DISCARD_NEGATIVE_NUMBER_OF_ELEMENTS = impossible d''enlever un nombre d''éléments{0} négatif
+CANNOT_FORMAT_INSTANCE_AS_3D_VECTOR = impossible de formater une instance de {0} comme un vecteur de dimension 3
+CANNOT_FORMAT_INSTANCE_AS_COMPLEX = impossible de formater une instance de {0} comme un nombre complexe
+CANNOT_FORMAT_INSTANCE_AS_REAL_VECTOR = impossible de formater une instance de {0} comme un vecteur réel
+CANNOT_FORMAT_OBJECT_TO_FRACTION = impossible de formater l''objet sous forme d''un nombre rationnel
+CANNOT_INCREMENT_STATISTIC_CONSTRUCTED_FROM_EXTERNAL_MOMENTS = les statistiques basées sur des moments externes ne peuvent pas être incrémentées
+CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR = impossible de normer un vecteur de norme nulle
+CANNOT_RETRIEVE_AT_NEGATIVE_INDEX = impossible d''extraire un élément à un index négatif ({0})
+CANNOT_SET_AT_NEGATIVE_INDEX = impossible de mettre un élément à un index négatif ({0})
+CANNOT_SUBSTITUTE_ELEMENT_FROM_EMPTY_ARRAY = impossible de substituer un élément dans un tableau vide
+CANNOT_TRANSFORM_TO_DOUBLE = Exception de conversion dans une transformation : {0}
+CARDAN_ANGLES_SINGULARITY = singularité d''angles de Cardan
+CLASS_DOESNT_IMPLEMENT_COMPARABLE = la classe ({0}) n''implante pas l''interface Comparable
+CLOSE_VERTICES = sommets trop proches à proximité du point ({0}, {1}, {2})
+CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT = la matrice orthogonale la plus proche a un déterminant négatif {0}
+COLUMN_INDEX_OUT_OF_RANGE = l''index de colonne {0} est hors du domaine autorisé [{1}, {2}]
+COLUMN_INDEX = index de colonne ({0})
+CONSTRAINT = contrainte
+CONTINUED_FRACTION_INFINITY_DIVERGENCE = Divergence de fraction continue à l''infini pour la valeur {0}
+CONTINUED_FRACTION_NAN_DIVERGENCE = Divergence de fraction continue à NaN pour la valeur {0}
+CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR = critère de contraction ({0}) inférieur au facteur d''extension ({1}). Ceci induit une boucle infinie d''extensions/contractions car tout tableau de stockage fraîchement étendu respecte immédiatement le critère de contraction.
+CONTRACTION_CRITERIA_SMALLER_THAN_ONE = critère de contraction inférieur à un ({0}). Ceci induit une boucle infinie d''extensions/contractions car tout tableau de stockage de longueur égale au nombre d''éléments respecte le critère de contraction.
+CONVERGENCE_FAILED = Échec de convergence
+CROSSING_BOUNDARY_LOOPS = certains périmètres de frontières se croisent
+CROSSOVER_RATE = proportion de mélange ({0})
+CUMULATIVE_PROBABILITY_RETURNED_NAN = Fonction de probabilité cumulative retourné NaN à l''argument de {0} p = {1}
+DIFFERENT_ROWS_LENGTHS = certaines lignes ont une longueur de {0} alors que d''autres ont une longueur de {1}
+DIFFERENT_ORIG_AND_PERMUTED_DATA = les données originales et permutées doivent contenir les mêmes éléments
+DIGEST_NOT_INITIALIZED = modèle empirique non initialisé
+DIMENSIONS_MISMATCH_2x2 = {0}x{1} à la place de {2}x{3}
+DIMENSIONS_MISMATCH_SIMPLE = {0} != {1}
+DIMENSIONS_MISMATCH = dimensions incohérentes
+DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN = Discrètes fonction de probabilité cumulative retourné NaN à l''argument de {0}
+DISTRIBUTION_NOT_LOADED = aucune distribution n''a été chargée
+DUPLICATED_ABSCISSA_DIVISION_BY_ZERO = la duplication de l''abscisse {0} engendre une division par zéro
+EDGE_CONNECTED_TO_ONE_FACET = l''arête joignant les points ({0}, {1}, {2}) et ({3}, {4}, {5}) n''est connectée qu''à une seule facette
+ELITISM_RATE = proportion d''élitisme ({0})
+EMPTY_CLUSTER_IN_K_MEANS = groupe vide dans l''algorithme des k-moyennes
+EMPTY_INTERPOLATION_SAMPLE = échantillon d''interpolation vide
+EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY = tableau de coefficients polynômiaux vide
+EMPTY_SELECTED_COLUMN_INDEX_ARRAY = tableau des indices de colonnes sélectionnées vide
+EMPTY_SELECTED_ROW_INDEX_ARRAY = tableau des indices de lignes sélectionnées vide
+EMPTY_STRING_FOR_IMAGINARY_CHARACTER = chaîne vide pour le caractère imaginaire
+ENDPOINTS_NOT_AN_INTERVAL = les bornes ne définissent pas un intervalle : [{0}, {1}]
+EQUAL_VERTICES_IN_SIMPLEX = sommets {0} et {1} égaux dans la configuration du simplexe
+EULER_ANGLES_SINGULARITY = singularité d''angles d''Euler
+EVALUATION = évaluation
+EXPANSION_FACTOR_SMALLER_THAN_ONE = facteur d''extension inférieur à un ({0})
+FACET_ORIENTATION_MISMATCH = orientations incohérentes des facettes de part et d''autre de l''arête joignant les points ({0}, {1}, {2}) et ({3}, {4}, {5})
+FACTORIAL_NEGATIVE_PARAMETER = n doit être positif pour le calcul de n!, or n = {0}
+FAILED_BRACKETING = nombre d''itérations = {4}, itérations maximum = {5}, valeur initiale = {6}, borne inférieure = {7}, borne supérieure = {8}, valeur a finale = {0}, valeur b finale = {1}, f(a) = {2}, f(b) = {3}
+FAILED_FRACTION_CONVERSION = Impossible de convertir {0} en fraction après {1} itérations
+FIRST_COLUMNS_NOT_INITIALIZED_YET = les {0} premières colonnes ne sont pas encore initialisées
+FIRST_ELEMENT_NOT_ZERO = le premier élément n''est pas nul : {0}
+FIRST_ROWS_NOT_INITIALIZED_YET = les {0} premières lignes ne sont pas encore initialisées
+FRACTION_CONVERSION_OVERFLOW = Dépassement de capacité lors de la conversion de {0} en fraction ({1}/{2})
+FUNCTION_NOT_DIFFERENTIABLE = la fonction n''est pas différentiable
+FUNCTION_NOT_POLYNOMIAL = la fonction n''est pas polynômiale
+GCD_OVERFLOW_32_BITS = dépassement de capacité : le PGCD de {0} et {1} vaut 2³¹
+GCD_OVERFLOW_64_BITS = dépassement de capacité : le PGCD de {0} et {1} vaut 2⁶³
+HOLE_BETWEEN_MODELS_TIME_RANGES = trou de longueur {0} entre les domaines temporels des modèles
+ILL_CONDITIONED_OPERATOR = le conditionnement {1} est trop élevé
+INCONSISTENT_STATE_AT_2_PI_WRAPPING = état incohérent au niveau du recollement à 2π
+INDEX_LARGER_THAN_MAX = l''index spécifié ({0}) dépasse l''index maximal courant ({1})
+INDEX_NOT_POSITIVE = l''indice ({0}) n''est pas positif
+INDEX_OUT_OF_RANGE = l''indice ({0}) est hors du domaine autorisé [{1}, {2}]
+INDEX = indice ({0})
+NOT_FINITE_NUMBER = {0} n''est pas un nombre fini
+INFINITE_BOUND = intervalle limites doit être finie
+ARRAY_ELEMENT = valeur {0} à l''indice {1}
+INFINITE_ARRAY_ELEMENT = le tableau contient l''élément infini {0} à l''index {1}
+INFINITE_VALUE_CONVERSION = les valeurs infinies ne peuvent être converties
+INITIAL_CAPACITY_NOT_POSITIVE = la capacité initiale ({0}) n''est pas positive
+INITIAL_COLUMN_AFTER_FINAL_COLUMN = colonne initiale {1} après la colonne finale {0}
+INITIAL_ROW_AFTER_FINAL_ROW = ligne initiale {1} après la ligne finale {0}
+INSTANCES_NOT_COMPARABLE_TO_EXISTING_VALUES = l''instance de la classe {0} n''est pas comparable aux valeurs existantes
+INSUFFICIENT_DATA = données insuffisantes
+INSUFFICIENT_DATA_FOR_T_STATISTIC = deux valeurs ou plus sont nécessaires pour la statistique t, il y en a {0}
+INSUFFICIENT_DIMENSION = dimension {0} insuffisante, elle devrait être au moins {1}
+DIMENSION = dimension ({0})
+INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE = l''échantillon ne contient que {0} points alors qu''au moins {1} sont nécessaires
+INSUFFICIENT_ROWS_AND_COLUMNS = données insuffisantes : seulement {0} lignes et {1} colonnes.
+INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS = les méthodes multi-pas nécessitent au moins {0} pas précédents, il y en a {1}
+INTERNAL_ERROR = erreur interne, veuillez signaler l''erreur à {0}
+INVALID_BINARY_DIGIT = chiffre binaire invalide : {0}
+INVALID_BINARY_CHROMOSOME = la mutation binaire ne fonctionne qu''avec BinaryChromosome
+INVALID_BRACKETING_PARAMETERS = paramètres d''encadrement invalides : borne inférieure = {0}, valeur initiale = {1}, borne supérieure = {2}
+INVALID_FIXED_LENGTH_CHROMOSOME = le mélange à un point ne fonctionne qu''avec les chromosomes à taille fixe
+INVALID_IMPLEMENTATION = une fonctionnalité requise est manquante dans {0}
+INVALID_INTERVAL_INITIAL_VALUE_PARAMETERS = paramètres de l''intervalle initial invalides : borne inf = {0}, valeur initiale = {1}, borne sup = {2}
+INVALID_ITERATIONS_LIMITS = limites d''itérations invalides : min = {0}, max = {1}
+INVALID_MAX_ITERATIONS = valeur invalide pour le nombre maximal d''itérations : {0}
+NOT_ENOUGH_DATA_REGRESSION = le nombre d''observations est insuffisant pour réaliser une régression
+INVALID_REGRESSION_ARRAY= la longueur du tableau de données = {0} ne correspond pas au nombre d''observations = {1} et le nombre de variables explicatives = {2}
+INVALID_REGRESSION_OBSERVATION = la longueur du tableau de variables explicatives ({0}) ne correspond pas au nombre de variables dans le modèle ({1})
+INVALID_ROUNDING_METHOD = méthode d''arrondi {0} invalide, méthodes valides : {1} ({2}), {3} ({4}), {5} ({6}), {7} ({8}), {9} ({10}), {11} ({12}), {13} ({14}), {15} ({16})
+ITERATOR_EXHAUSTED = itération achevée
+ITERATIONS = itérations
+LCM_OVERFLOW_32_BITS = dépassement de capacité : le MCM de {0} et {1} vaut 2³¹
+LCM_OVERFLOW_64_BITS = dépassement de capacité : le MCM de {0} et {1} vaut 2⁶³
+LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE = la liste des chromosomes dépasse maxPopulationSize
+LOESS_EXPECTS_AT_LEAST_ONE_POINT = la régression Loess nécessite au moins un point
+LOWER_BOUND_NOT_BELOW_UPPER_BOUND = la borne inférieure ({0}) doit être strictement plus petite que la borne supérieure ({1})
+LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT = la borne inférieure ({0}) devrait être inférieure  ou égale à la borne supérieure ({1})
+MAP_MODIFIED_WHILE_ITERATING = la table d''adressage a été modifiée pendant l''itération
+EVALUATIONS = évaluations
+MAX_COUNT_EXCEEDED = limite ({0}) dépassé
+MAX_ITERATIONS_EXCEEDED = nombre maximal d''itérations ({0}) dépassé
+MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION = pas minimal ({1,number,0.00E00}) atteint, l''intégration nécessite {0,number,0.00E00}
+MISMATCHED_LOESS_ABSCISSA_ORDINATE_ARRAYS = Loess a besoin de tableaux d''abscisses et d''ordonnées de même taille, mais il y a {0} points en abscisse et {1} en ordonnée
+MUTATION_RATE = proportion de mutation ({0})
+MULTISTEP_STARTER_STOPPED_EARLY = arrêt prématuré du démarrage de l''intégrateur multi-pas, taille de pas peut-être trop grande"),
+NAN_ELEMENT_AT_INDEX = l''élément {0} est un NaN
+NAN_VALUE_CONVERSION = les valeurs NaN ne peuvent être converties
+NEGATIVE_BRIGHTNESS_EXPONENT = l''exposant de brillance devrait être positif ou null, or e = {0}
+NEGATIVE_COMPLEX_MODULE = module négatif ({0}) pour un nombre complexe
+NEGATIVE_ELEMENT_AT_2D_INDEX = l''élément ({0}, {1}) est négatif : {2}
+NEGATIVE_ELEMENT_AT_INDEX = l''élément {0} est négatif : {1}
+NEGATIVE_NUMBER_OF_SUCCESSES = le nombre de succès ne doit pas être négatif ({0})
+NUMBER_OF_SUCCESSES = nombre de succès ({0})
+NEGATIVE_NUMBER_OF_TRIALS = le nombre d''essais ne doit pas être négatif ({0})
+NUMBER_OF_INTERPOLATION_POINTS = nombre de points d''interpolation ({0})
+NUMBER_OF_TRIALS = nombre d''essais ({0})
+ROBUSTNESS_ITERATIONS = nombre d''itérations robuste ({0})
+START_POSITION = position de départ ({0})
+NON_CONVERGENT_CONTINUED_FRACTION = Échec de convergence (en moins de {0} itérations) de fraction continue pour la valeur {1}
+NON_INVERTIBLE_TRANSFORM = la transformation affine non-inversible réduit des lignes à de simples points
+NON_POSITIVE_MICROSPHERE_ELEMENTS = le nombre d''éléments de la microsphère devrait être positif, or n = {0}
+NON_POSITIVE_POLYNOMIAL_DEGREE = le polynôme doit être de degré positif : degré = {0}
+NON_REAL_FINITE_ABSCISSA = toutes les abscisses doivent être des nombres réels finis, mais l''abscisse {0} vaut {1}
+NON_REAL_FINITE_ORDINATE = toutes les ordonnées doivent être des nombres réels finis, mais l''ordonnée {0} vaut {1}
+NON_REAL_FINITE_WEIGHT = tous les poids doivent être des nombres réels finis, mais le poids {0} vaut {1}
+NON_SQUARE_MATRIX = matrice non carrée ({0}x{1})
+NORM = norme ({0})
+NORMALIZE_INFINITE = impossible de normaliser vers une valeur infinie
+NORMALIZE_NAN = impossible de normaliser vers NaN
+NOT_ADDITION_COMPATIBLE_MATRICES = les dimensions {0}x{1} et {2}x{3} sont incompatibles pour l''addition matricielle
+NOT_CONVEX = les points ne constituent pas une enveloppe convexe
+NOT_CONVEX_HYPERPLANES = les hyperplans ne définissent pas une région convexe
+NOT_DECREASING_NUMBER_OF_POINTS = les points {0} et {1} ne sont pas décroissants ({2} < {3})
+NOT_DECREASING_SEQUENCE = les points {3} et {2} ne sont pas décroissants ({1} < {0})
+NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS = pas assez de données ({0} lignes) pour {1} prédicteurs
+NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION = une partition spline nécessite au moins {0} points, seuls {1} ont été fournis
+NOT_INCREASING_NUMBER_OF_POINTS = les points {0} et {1} ne sont pas croissants ({2} > {3})
+NOT_INCREASING_SEQUENCE = les points {3} et {2} ne sont pas croissants ({1} > {0})
+NOT_MULTIPLICATION_COMPATIBLE_MATRICES = les dimensions {0}x{1} et {2}x{3} sont incompatibles pour la multiplication matricielle
+NOT_POSITIVE_DEFINITE_MATRIX = matrice non définie positive
+NON_POSITIVE_DEFINITE_MATRIX = matrice non définie positive : l''élément diagonal ({1},{1}) est inférieur à {2} ({0})
+NON_POSITIVE_DEFINITE_OPERATOR = opérateur linéaire non défini positif
+NON_SELF_ADJOINT_OPERATOR = opérateur linéaire non auto-adjoint
+NON_SQUARE_OPERATOR = opérateur linéaire non carré ({0}x{1})
+NOT_POSITIVE_DEGREES_OF_FREEDOM = les degrés de liberté doivent être positifs ({0})
+DEGREES_OF_FREEDOM = degrés de liberté ({0})
+NOT_POSITIVE_ELEMENT_AT_INDEX = l''élément {0} n''est pas positif : {1}
+NOT_POSITIVE_EXPONENT = exposant {0} invalide (doit être positif)
+NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE = le nombre d''éléments devrait être positif ({0})
+BASE = base ({0})
+EXPONENT = exposant ({0})
+NOT_POSITIVE_LENGTH = la longueur doit être positive ({0})
+LENGTH = longueur ({0})
+NOT_POSITIVE_MEAN = la moyenne doit être positive ({0})
+MEAN = moyenne ({0})
+NOT_POSITIVE_NUMBER_OF_SAMPLES = le nombre d''échantillons n''est pas positif : {0}
+NUMBER_OF_SAMPLES = nombre d''échantillons ({0})
+NOT_POSITIVE_PERMUTATION = la permutation k ({0}) doit être positive
+PERMUTATION_SIZE = taille de la permutation ({0})
+NOT_POSITIVE_POISSON_MEAN = la moyenne de Poisson doit être positive ({0})
+NOT_POSITIVE_POPULATION_SIZE = la taille de la population doit être positive ({0})
+POPULATION_SIZE = taille de la population ({0})
+NOT_POSITIVE_ROW_DIMENSION = nombre de lignes invalide : {0} (doit être positif)
+NOT_POSITIVE_SAMPLE_SIZE = la taille de l''échantillon doit être positive ({0})
+NOT_POSITIVE_SCALE = l''échelle doit être positive ({0})
+SCALE = facteur d''échelle ({0})
+NOT_POSITIVE_SHAPE = le facteur de forme doit être positif ({0})
+SHAPE = facteur de forme ({0})
+NOT_POSITIVE_STANDARD_DEVIATION = l''écart type doit être positif ({0})
+STANDARD_DEVIATION = écart type ({0})
+NOT_POSITIVE_UPPER_BOUND = la borne supérieure doit être positive ({0})
+NOT_POSITIVE_WINDOW_SIZE = la taille de la fenêtre doit être positive ({0})
+NOT_POWER_OF_TWO = {0} n''est pas une puissance de 2
+NOT_POWER_OF_TWO_CONSIDER_PADDING = {0} n''est pas une puissance de 2, ajoutez des éléments pour corriger
+NOT_POWER_OF_TWO_PLUS_ONE = {0} n''est pas une puissance de 2 plus un
+NOT_STRICTLY_DECREASING_NUMBER_OF_POINTS = les points {0} et {1} ne sont pas strictement décroissants ({2} <= {3})
+NOT_STRICTLY_DECREASING_SEQUENCE = les points {3} et {2} ne sont pas strictement décroissants ({1} <= {0})
+NOT_STRICTLY_INCREASING_KNOT_VALUES = les nœuds d''interpolation doivent être strictement croissants
+NOT_STRICTLY_INCREASING_NUMBER_OF_POINTS = les points {0} et {1} ne sont pas strictement croissants ({2} >= {3})
+NOT_STRICTLY_INCREASING_SEQUENCE = les points {3} et {2} ne sont pas strictement croissants ({1} >= {0})
+NOT_SUBTRACTION_COMPATIBLE_MATRICES = les dimensions {0}x{1} et {2}x{3} sont incompatibles pour la soustraction matricielle
+NOT_SUPPORTED_IN_DIMENSION_N = méthode non disponible en dimension {0}
+NOT_SUPPORTED_NAN_STRATEGY = stratégie "NaN" {0} non disponible
+NOT_SYMMETRIC_MATRIX = matrice non symmétrique
+NON_SYMMETRIC_MATRIX = matrice non symmétrique: la différence entre les éléments ({0},{1}) et ({1},{0}) est supérieure à {2}
+NO_BIN_SELECTED = aucun compartiment sélectionné
+NO_CONVERGENCE_WITH_ANY_START_POINT = aucun des {0} points de départ n''aboutit à une convergence
+NO_DATA = aucune donnée
+NO_DEGREES_OF_FREEDOM = aucun degré de liberté ({0} mesures, {1} paramètres)
+NO_DENSITY_FOR_THIS_DISTRIBUTION = La fonction de densité pour cette distribution n''a pas été mis en œuvre
+NO_FEASIBLE_SOLUTION = aucune solution réalisable
+NO_OPTIMUM_COMPUTED_YET = aucun optimum n''a encore été calculé
+NO_REGRESSORS = le modèle de régression doit inclure au moins une variable explicative
+NO_RESULT_AVAILABLE = aucun résultat n''est disponible
+NO_SUCH_MATRIX_ENTRY = pas d''élément ({0}, {1}) dans une matrice {2}x{3}
+NAN_NOT_ALLOWED = "NaN" n''est pas permis
+NULL_NOT_ALLOWED = "null" n''est pas permis
+ARRAY_ZERO_LENGTH_OR_NULL_NOT_ALLOWED = un tableau nul ou de taille zéro n''est pas autorisé
+COVARIANCE_MATRIX = matrice de covariance
+DENOMINATOR = dénominateur
+DENOMINATOR_FORMAT = format du dénominateur
+FRACTION = fraction
+FUNCTION = fonction
+IMAGINARY_FORMAT = format de la partie imaginaire
+INPUT_ARRAY = tableau d''entrée
+NUMERATOR = numérateur
+NUMERATOR_FORMAT = format du numérateur
+OBJECT_TRANSFORMATION = exception de conversion dans une transformation
+REAL_FORMAT = format de la partie réelle
+WHOLE_FORMAT = format complet
+NUMBER_TOO_LARGE = {0} est plus grand que le maximum ({1})
+NUMBER_TOO_SMALL = {0} est plus petit que le minimum ({1})
+NUMBER_TOO_LARGE_BOUND_EXCLUDED = {0} n''est pas strictement plus petit que le maximum ({1})
+NUMBER_TOO_SMALL_BOUND_EXCLUDED = {0} n''est pas strictement plus grand que le minimum ({1})
+NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE = le nombre de succès ({0}) doit être inférieur ou égal à la taille de la population ({1}) 
+NUMERATOR_OVERFLOW_AFTER_MULTIPLY = dépassement de capacité pour le numérateur après multiplication : {0}
+N_POINTS_GAUSS_LEGENDRE_INTEGRATOR_NOT_SUPPORTED = l''intégrateur de Legendre-Gauss en {0} points n''est pas disponible, le nombre de points doit être entre {1} et {2}
+OBSERVED_COUNTS_ALL_ZERO = aucune occurrence dans le tableau des observations {0}
+OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY = les occurrences observées sont toutes deux nulles pour l''entrée {0}
+BOBYQA_BOUND_DIFFERENCE_CONDITION = la différence entre la contrainte supérieure et inférieure doit être plus grande que deux fois le rayon de la région de confiance initiale ({0})
+OUT_OF_BOUNDS_CONFIDENCE_LEVEL = niveau de confiance {0} hors domaine, doit être entre {1} et {2}
+OUT_OF_BOUNDS_QUANTILE_VALUE = valeur de quantile {0} hors bornes, doit être dans l''intervalle ]0, 100]
+OUT_OF_BOUND_SIGNIFICANCE_LEVEL = niveau de signification {0} hors domaine, doit être entre {1} et {2}
+SIGNIFICANCE_LEVEL = niveau de signification ({0})
+OUT_OF_ORDER_ABSCISSA_ARRAY = les abscisses doivent être en ordre strictement croissant, mais l''élément {0} vaut {1} alors que l''élément {2} vaut {3}
+OUT_OF_PLANE = le point ({0}, {1}, {2}) est hors du plan
+OUT_OF_RANGE_ROOT_OF_UNITY_INDEX = l''indice de racine de l''unité {0} est hors du domaine autorisé [{1};{2}]
+OUT_OF_RANGE_SIMPLE = {0} hors du domaine [{1}, {2}]
+OUT_OF_RANGE_LEFT = {0} hors du domaine ({1}, {2}]
+OUT_OF_RANGE_RIGHT = {0} hors du domaine [{1}, {2})
+OUT_OF_RANGE = hors domaine
+OUTLINE_BOUNDARY_LOOP_OPEN = un périmètre frontière est ouvert
+OVERFLOW = dépassement de capacité
+OVERFLOW_IN_FRACTION = dépassement de capacité pour la fraction {0}/{1}, son signe ne peut être changé
+OVERFLOW_IN_ADDITION = dépassement de capacité pour l''addition : {0} + {1}
+OVERFLOW_IN_SUBTRACTION = dépassement de capacité pour la soustraction : {0} - {1}
+OVERFLOW_IN_MULTIPLICATION = dépassement de capacité pour la multiplication : {0} * {1}
+PERCENTILE_IMPLEMENTATION_CANNOT_ACCESS_METHOD = accès impossible à la méthode {0} dans la mise en œuvre du pourcentage {1}
+PERCENTILE_IMPLEMENTATION_UNSUPPORTED_METHOD = l''implantation de pourcentage {0} ne dispose pas de la méthode {1}
+PERMUTATION_EXCEEDS_N = la taille de la permutation ({0}) dépasse le domaine de la permutation ({1})
+POLYNOMIAL = polynôme
+POLYNOMIAL_INTERPOLANTS_MISMATCH_SEGMENTS = le nombre d''interpolants polynômiaux doit correspondre au nombre de segments ({0} != {1} - 1)
+POPULATION_LIMIT_NOT_POSITIVE = la limite de population doit être positive
+POWER_NEGATIVE_PARAMETERS = impossible d''élever une valeur entière à une puissance négative ({0}^{1})
+PROPAGATION_DIRECTION_MISMATCH = directions de propagation incohérentes
+RANDOMKEY_MUTATION_WRONG_CLASS = RandomKeyMutation ne fonctionne qu''avec la classe RandomKeys, pas avec {0}
+ROOTS_OF_UNITY_NOT_COMPUTED_YET = les racines de l''unité n''ont pas encore été calculées
+ROTATION_MATRIX_DIMENSIONS = une matrice {0}x{1} ne peut pas être une matrice de rotation
+ROW_INDEX_OUT_OF_RANGE = l''index de ligne {0} est hors du domaine autorisé [{1}, {2}]
+ROW_INDEX = index de ligne ({0})
+SAME_SIGN_AT_ENDPOINTS = les valeurs aux bornes de la fonction devraient avoir des signes diffférents ; bornes : [{0}, {1}], valeurs : [{2}, {3}]
+SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE = la taille de l''échantillon ({0}) dépasse la taille de la collection ({1})
+SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE = la taille de l''échantillon ({0}) doit être inférieure ou égale à la taille de la population ({1})
+SIMPLEX_NEED_ONE_POINT = le simplexe doit contenir au moins un point
+SIMPLE_MESSAGE = {0}
+SINGULAR_MATRIX = matrice singulière
+SINGULAR_OPERATOR = l''opérateur est singulier
+SUBARRAY_ENDS_AFTER_ARRAY_END = le sous-tableau se termine après la fin du tableau
+TOO_LARGE_CUTOFF_SINGULAR_VALUE = la valeur singulière de coupure vaut {0}, elle ne devrait pas dépasser {1}
+TOO_LARGE_TOURNAMENT_ARITY = l''arité du tournois ({0}) ne doit pas dépasser la taille de la population ({1})
+TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY = impossible d''enlever {0} éléments d''un tableau en contenant {1}
+TOO_MANY_REGRESSORS = trop de variables explicatives spécifiées {0}, il n''y en a que {1} dans le modèle
+TOO_SMALL_COST_RELATIVE_TOLERANCE = trop petite tolérance relative sur le coût ({0}), aucune réduction de la somme des carrés n''est possible
+TOO_SMALL_INTEGRATION_INTERVAL = intervalle d''intégration trop petit : {0}
+TOO_SMALL_ORTHOGONALITY_TOLERANCE = trop petite tolérance sur l''orthogonalité ({0}), la solution est orthogonale à la jacobienne
+TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE = trop petite tolérance relative sur les paramètres ({0}), aucune amélioration de la solution approximative n''est possible
+TRUST_REGION_STEP_FAILED = l''étape de la région de confiance n''a pas réduit Q
+TWO_OR_MORE_CATEGORIES_REQUIRED = deux catégories ou plus sont nécessaires, il y en a {0}
+TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED = deux valeurs ou plus sont nécessaires pour chaque catégorie, une catégorie en a {0}
+UNABLE_TO_BRACKET_OPTIMUM_IN_LINE_SEARCH = impossible d''encadrer l''optimum lors de la recherche linéaire
+UNABLE_TO_COMPUTE_COVARIANCE_SINGULAR_PROBLEM = impossible de calculer les covariances : problème singulier
+UNABLE_TO_FIRST_GUESS_HARMONIC_COEFFICIENTS = impossible de faire une première estimation des coefficients harmoniques
+UNABLE_TO_ORTHOGONOLIZE_MATRIX = impossible de rendre la matrice orthogonale en {0} itérations
+UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN = impossible de calculer la factorisation Q.R de la matrice jacobienne {0}x{1}
+UNABLE_TO_SOLVE_SINGULAR_PROBLEM = résolution impossible : problème singulier
+UNBOUNDED_SOLUTION = solution non bornée
+UNKNOWN_MODE = mode {0} inconnu, modes connus : {1} ({2}), {3} ({4}), {5} ({6}), {7} ({8}), {9} ({10}) et {11} ({12})
+UNKNOWN_PARAMETER = paramètre {0} inconnu
+UNMATCHED_ODE_IN_EXPANDED_SET = l''équation différentielle ne correspond pas à l''équation principale du jeu étendu
+CANNOT_PARSE_AS_TYPE = chaîne "{0}" non analysable (à partir de la position {1}) en un objet de type {2}
+CANNOT_PARSE = chaîne "{0}" non analysable (à partir de la position {1})
+UNPARSEABLE_3D_VECTOR = vecteur 3D non analysable : "{0}"
+UNPARSEABLE_COMPLEX_NUMBER = nombre complexe non analysable : "{0}"
+UNPARSEABLE_REAL_VECTOR = vecteur réel non analysable : "{0}"
+UNSUPPORTED_EXPANSION_MODE = mode d''extension {0} non supporté, les modes supportés sont {1} ({2}) et {3} ({4})
+UNSUPPORTED_OPERATION = opération non disponible
+ARITHMETIC_EXCEPTION = erreur arithmétique
+ILLEGAL_STATE = état incohérent
+USER_EXCEPTION = erreur générée par le code utilisateur
+URL_CONTAINS_NO_DATA = l''adresse {0} ne contient aucune donnée
+VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC = {0} valeurs ont été ajoutées 
+VECTOR_LENGTH_MISMATCH = taille de vecteur invalide : {0} au lieu de {1} attendue
+VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT = un vecteur doit comporter au moins un élément
+WEIGHT_AT_LEAST_ONE_NON_ZERO = le tableau des poids doit contenir au moins une valeur non nulle
+WRONG_BLOCK_LENGTH = forme de tableau erronée (bloc de longueur {0} au lieu des {1} attendus)
+WRONG_NUMBER_OF_POINTS = {0} sont nécessaires, seuls {1} ont été fournis
+NUMBER_OF_POINTS = nombre de points ({0})
+ZERO_DENOMINATOR = le dénominateur doit être différent de 0
+ZERO_DENOMINATOR_IN_FRACTION = dénominateur nul dans le nombre rationnel {0}/{1}
+ZERO_FRACTION_TO_DIVIDE_BY = division par un nombre rationnel nul : {0}/{1}
+ZERO_NORM = norme nulle
+ZERO_NORM_FOR_ROTATION_AXIS = norme nulle pour un axe de rotation
+ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR = norme nulle pour un axe de définition de rotation
+ZERO_NOT_ALLOWED = la valeur zéro n''est pas autorisée ici

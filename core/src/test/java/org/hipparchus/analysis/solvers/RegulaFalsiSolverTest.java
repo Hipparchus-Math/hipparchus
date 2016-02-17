@@ -18,12 +18,10 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.solvers.RegulaFalsiSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.exception.ConvergenceException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test case for {@link RegulaFalsiSolver Regula Falsi} solver.
@@ -45,7 +43,7 @@ public final class RegulaFalsiSolverTest extends BaseSecantSolverAbstractTest {
         return new int[] {3, 7, 8, 19, 18, 11, 67, 55, 288, 151, -1};
     }
 
-    @Test(expected=ConvergenceException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testIssue631() {
         final UnivariateFunction f = new UnivariateFunction() {
                 /** {@inheritDoc} */

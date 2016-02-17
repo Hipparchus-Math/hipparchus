@@ -19,9 +19,9 @@ package org.hipparchus.util;
 
 import java.math.BigDecimal;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Utilities for comparing numbers.

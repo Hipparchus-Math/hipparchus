@@ -22,9 +22,9 @@ import org.hipparchus.analysis.differentiation.MultivariateDifferentiableFunctio
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Identity;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.MathArrays;
 
 /**

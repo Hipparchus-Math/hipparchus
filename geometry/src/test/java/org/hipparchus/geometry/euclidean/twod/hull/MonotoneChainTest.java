@@ -19,11 +19,8 @@ package org.hipparchus.geometry.euclidean.twod.hull;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.exception.ConvergenceException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
-import org.hipparchus.geometry.euclidean.twod.hull.ConvexHull2D;
-import org.hipparchus.geometry.euclidean.twod.hull.ConvexHullGenerator2D;
-import org.hipparchus.geometry.euclidean.twod.hull.MonotoneChain;
 import org.junit.Test;
 
 /**
@@ -38,7 +35,7 @@ public class MonotoneChainTest extends ConvexHullGenerator2DAbstractTest {
 
     // ------------------------------------------------------------------------------
 
-    @Test(expected=ConvergenceException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testConvergenceException() {
         final Collection<Vector2D> points = new ArrayList<Vector2D>();
 

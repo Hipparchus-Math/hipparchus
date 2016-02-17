@@ -23,13 +23,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.fraction.Fraction;
-import org.hipparchus.fraction.FractionConversionException;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.linear.FieldMatrix;
-import org.hipparchus.linear.FieldVector;
-import org.hipparchus.linear.FieldVectorChangingVisitor;
-import org.hipparchus.linear.FieldVectorPreservingVisitor;
-import org.hipparchus.linear.SparseFieldVector;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -57,7 +51,7 @@ public class SparseFieldVectorTest {
     protected FractionField field = FractionField.getInstance();
 
     @Test
-    public void testMapFunctions() throws FractionConversionException {
+    public void testMapFunctions() {
         SparseFieldVector<Fraction> v1 = new SparseFieldVector<Fraction>(field,vec1);
 
         //octave =  v1 .+ 2.0
@@ -119,7 +113,7 @@ public class SparseFieldVectorTest {
     }
 
     @Test
-    public void testBasicFunctions() throws FractionConversionException {
+    public void testBasicFunctions() {
         SparseFieldVector<Fraction> v1 = new SparseFieldVector<Fraction>(field,vec1);
         SparseFieldVector<Fraction> v2 = new SparseFieldVector<Fraction>(field,vec2);
 

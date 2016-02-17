@@ -17,8 +17,8 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /** This class represents exceptions thrown while extractiong Cardan
  * or Euler angles from a rotation.

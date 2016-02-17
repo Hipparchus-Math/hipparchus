@@ -19,8 +19,8 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Mutation operator for {@link RandomKey}s. Changes a randomly chosen element

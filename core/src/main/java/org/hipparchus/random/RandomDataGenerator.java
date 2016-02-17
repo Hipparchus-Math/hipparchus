@@ -38,6 +38,7 @@ import org.hipparchus.distribution.TDistribution;
 import org.hipparchus.distribution.UniformIntegerDistribution;
 import org.hipparchus.distribution.WeibullDistribution;
 import org.hipparchus.distribution.ZipfDistribution;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
@@ -45,7 +46,6 @@ import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.MathArrays;
 
 /**

@@ -24,9 +24,9 @@ import java.util.concurrent.Callable;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 

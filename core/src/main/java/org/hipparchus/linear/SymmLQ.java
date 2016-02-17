@@ -19,7 +19,6 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.ExceptionContext;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.IterationManager;
 import org.hipparchus.util.MathUtils;
@@ -419,14 +418,7 @@ public class SymmLQ
             final double t = x.dotProduct(z);
             final double epsa = (s + MACH_PREC) * CBRT_MACH_PREC;
             if (FastMath.abs(s - t) > epsa) {
-                final NonSelfAdjointOperatorException e;
-                e = new NonSelfAdjointOperatorException();
-                final ExceptionContext context = e.getContext();
-                context.setValue(SymmLQ.OPERATOR, l);
-                context.setValue(SymmLQ.VECTOR1, x);
-                context.setValue(SymmLQ.VECTOR2, y);
-                context.setValue(SymmLQ.THRESHOLD, Double.valueOf(epsa));
-                throw e;
+                throw new NonSelfAdjointOperatorException();
             }
         }
 
@@ -440,12 +432,7 @@ public class SymmLQ
          */
         private static void throwNPDLOException(final RealLinearOperator l,
             final RealVector v) throws NonPositiveDefiniteOperatorException {
-            final NonPositiveDefiniteOperatorException e;
-            e = new NonPositiveDefiniteOperatorException();
-            final ExceptionContext context = e.getContext();
-            context.setValue(OPERATOR, l);
-            context.setValue(VECTOR, v);
-            throw e;
+            throw new NonPositiveDefiniteOperatorException();
         }
 
         /**
@@ -831,21 +818,6 @@ public class SymmLQ
             return rnorm;
         }
     }
-
-    /** Key for the exception context. */
-    private static final String OPERATOR = "operator";
-
-    /** Key for the exception context. */
-    private static final String THRESHOLD = "threshold";
-
-    /** Key for the exception context. */
-    private static final String VECTOR = "vector";
-
-    /** Key for the exception context. */
-    private static final String VECTOR1 = "vector1";
-
-    /** Key for the exception context. */
-    private static final String VECTOR2 = "vector2";
 
     /** {@code true} if symmetry of matrix and conditioner must be checked. */
     private final boolean check;

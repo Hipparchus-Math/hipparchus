@@ -25,16 +25,16 @@ import org.hipparchus.distribution.EnumeratedRealDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.InsufficientDataException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.TooManyIterationsException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.BigFractionField;
-import org.hipparchus.fraction.FractionConversionException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.MatrixUtils;
@@ -740,12 +740,12 @@ public class KolmogorovSmirnovTest {
      * @param n sample size
      * @return H matrix
      * @throws NumberIsTooLargeException if fractional part is greater than 1
-     * @throws FractionConversionException if algorithm fails to convert {@code h} to a
+     * @throws MathIllegalStateException if algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 <= h < 1\).
      */
     private FieldMatrix<BigFraction> createExactH(double d, int n)
-        throws NumberIsTooLargeException, FractionConversionException {
+        throws NumberIsTooLargeException, MathIllegalStateException {
 
         final int k = (int) Math.ceil(n * d);
         final int m = 2 * k - 1;
@@ -756,10 +756,10 @@ public class KolmogorovSmirnovTest {
         BigFraction h = null;
         try {
             h = new BigFraction(hDouble, 1.0e-20, 10000);
-        } catch (final FractionConversionException e1) {
+        } catch (final MathIllegalStateException e1) {
             try {
                 h = new BigFraction(hDouble, 1.0e-10, 10000);
-            } catch (final FractionConversionException e2) {
+            } catch (final MathIllegalStateException e2) {
                 h = new BigFraction(hDouble, 1.0e-5, 10000);
             }
         }

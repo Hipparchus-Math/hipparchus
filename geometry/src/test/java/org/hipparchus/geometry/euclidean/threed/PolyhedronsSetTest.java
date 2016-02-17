@@ -20,24 +20,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Field;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.ExceptionContext;
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.geometry.Vector;
-import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
-import org.hipparchus.geometry.euclidean.threed.Plane;
-import org.hipparchus.geometry.euclidean.threed.PolyhedronsSet;
-import org.hipparchus.geometry.euclidean.threed.Rotation;
-import org.hipparchus.geometry.euclidean.threed.SubPlane;
-import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.PolygonsSet;
 import org.hipparchus.geometry.euclidean.twod.SubLine;
@@ -422,17 +413,7 @@ public class PolyhedronsSetTest {
             new PolyhedronsSet(vertices, facets, 1.0e-10);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException miae) {
-            try {
-                Field msgPatterns = ExceptionContext.class.getDeclaredField("msgPatterns");
-                msgPatterns.setAccessible(true);
-                @SuppressWarnings("unchecked")
-                List<Localizable> list = (List<Localizable>) msgPatterns.get(miae.getContext());
-                Assert.assertEquals(expected, list.get(0));
-            } catch (NoSuchFieldException nsfe) {
-                Assert.fail(nsfe.getLocalizedMessage());
-            } catch (IllegalAccessException iae) {
-                Assert.fail(iae.getLocalizedMessage());
-            }
+            Assert.assertEquals(expected, miae.getSpecifier());
         }
     }
 

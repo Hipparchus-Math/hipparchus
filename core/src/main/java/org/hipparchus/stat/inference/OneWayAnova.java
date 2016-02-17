@@ -20,12 +20,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.hipparchus.distribution.FDistribution;
-import org.hipparchus.exception.ConvergenceException;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.MathUtils;
 
@@ -117,12 +117,12 @@ public class OneWayAnova {
      * @throws DimensionMismatchException if the length of the <code>categoryData</code>
      * array is less than 2 or a contained <code>double[]</code> array does not have
      * at least two values
-     * @throws ConvergenceException if the p-value can not be computed due to a convergence error
+     * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
      * @throws MaxCountExceededException if the maximum number of iterations is exceeded
      */
     public double anovaPValue(final Collection<double[]> categoryData)
         throws NullArgumentException, DimensionMismatchException,
-        ConvergenceException, MaxCountExceededException {
+        MathIllegalStateException, MaxCountExceededException {
 
         final AnovaStats a = anovaStats(categoryData);
         // No try-catch or advertised exception because args are valid
@@ -158,14 +158,14 @@ public class OneWayAnova {
      * @throws DimensionMismatchException if the length of the <code>categoryData</code>
      * array is less than 2 or a contained {@link SummaryStatistics} does not have
      * at least two values
-     * @throws ConvergenceException if the p-value can not be computed due to a convergence error
+     * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
      * @throws MaxCountExceededException if the maximum number of iterations is exceeded
      * @since 3.2
      */
     public double anovaPValue(final Collection<SummaryStatistics> categoryData,
                               final boolean allowOneElementData)
         throws NullArgumentException, DimensionMismatchException,
-               ConvergenceException, MaxCountExceededException {
+        MathIllegalStateException, MaxCountExceededException {
 
         final AnovaStats a = anovaStats(categoryData, allowOneElementData);
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -241,13 +241,13 @@ public class OneWayAnova {
      * array is less than 2 or a contained <code>double[]</code> array does not have
      * at least two values
      * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
-     * @throws ConvergenceException if the p-value can not be computed due to a convergence error
+     * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
      * @throws MaxCountExceededException if the maximum number of iterations is exceeded
      */
     public boolean anovaTest(final Collection<double[]> categoryData,
                              final double alpha)
         throws NullArgumentException, DimensionMismatchException,
-        OutOfRangeException, ConvergenceException, MaxCountExceededException {
+        OutOfRangeException, MathIllegalStateException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new OutOfRangeException(

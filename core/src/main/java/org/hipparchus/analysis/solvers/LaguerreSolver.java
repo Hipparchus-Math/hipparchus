@@ -19,12 +19,12 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexUtils;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 
 /**

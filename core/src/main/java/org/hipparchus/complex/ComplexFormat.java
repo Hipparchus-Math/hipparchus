@@ -22,11 +22,11 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathParseException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.CompositeFormat;
 
 /**

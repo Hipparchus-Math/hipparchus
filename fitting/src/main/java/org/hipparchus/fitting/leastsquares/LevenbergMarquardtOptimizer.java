@@ -18,8 +18,8 @@ package org.hipparchus.fitting.leastsquares;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
@@ -339,8 +339,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
             final Evaluation previous = current;
 
             // QR decomposition of the jacobian matrix
-            final InternalData internalData
-                    = qrDecomposition(current.getJacobian(), solvedCols);
+            final InternalData internalData = qrDecomposition(current.getJacobian(), solvedCols);
             final double[][] weightedJacobian = internalData.weightedJacobian;
             final int[] permutation = internalData.permutation;
             final double[] diagR = internalData.diagR;
@@ -534,14 +533,14 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 if (FastMath.abs(actRed) <= TWO_EPS &&
                     preRed <= TWO_EPS &&
                     ratio <= 2.0) {
-                    throw new ConvergenceException(LocalizedFormats.TOO_SMALL_COST_RELATIVE_TOLERANCE,
-                                                   costRelativeTolerance);
+                    throw new MathIllegalStateException(LocalizedFormats.TOO_SMALL_COST_RELATIVE_TOLERANCE,
+                                                        costRelativeTolerance);
                 } else if (delta <= TWO_EPS * xNorm) {
-                    throw new ConvergenceException(LocalizedFormats.TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE,
-                                                   parRelativeTolerance);
+                    throw new MathIllegalStateException(LocalizedFormats.TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE,
+                                                        parRelativeTolerance);
                 } else if (maxCosine <= TWO_EPS) {
-                    throw new ConvergenceException(LocalizedFormats.TOO_SMALL_ORTHOGONALITY_TOLERANCE,
-                                                   orthoTolerance);
+                    throw new MathIllegalStateException(LocalizedFormats.TOO_SMALL_ORTHOGONALITY_TOLERANCE,
+                                                        orthoTolerance);
                 }
             }
         }
@@ -932,10 +931,10 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
      * @param jacobian Weighted Jacobian matrix at the current point.
      * @param solvedCols Number of solved point.
      * @return data used in other methods of this class.
-     * @throws ConvergenceException if the decomposition cannot be performed.
+     * @throws MathIllegalStateException if the decomposition cannot be performed.
      */
-    private InternalData qrDecomposition(RealMatrix jacobian,
-                                         int solvedCols) throws ConvergenceException {
+    private InternalData qrDecomposition(RealMatrix jacobian, int solvedCols)
+        throws MathIllegalStateException {
         // Code in this class assumes that the weighted Jacobian is -(W^(1/2) J),
         // hence the multiplication by -1.
         final double[][] weightedJacobian = jacobian.scalarMultiply(-1).getData();
@@ -972,8 +971,8 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                     norm2 += aki * aki;
                 }
                 if (Double.isInfinite(norm2) || Double.isNaN(norm2)) {
-                    throw new ConvergenceException(LocalizedFormats.UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN,
-                                                   nR, nC);
+                    throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN,
+                                                        nR, nC);
                 }
                 if (norm2 > ak2) {
                     nextColumn = i;

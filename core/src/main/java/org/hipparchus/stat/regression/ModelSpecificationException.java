@@ -16,8 +16,8 @@
  */
 package org.hipparchus.stat.regression;
 
+import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.Localizable;
 
 /**
  * Exception thrown when a regression model is not correctly specified.

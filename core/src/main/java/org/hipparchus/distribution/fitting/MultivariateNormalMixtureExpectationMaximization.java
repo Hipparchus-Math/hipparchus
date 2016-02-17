@@ -22,12 +22,12 @@ import java.util.List;
 
 import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
-import org.hipparchus.exception.ConvergenceException;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.SingularMatrixException;
@@ -254,7 +254,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
 
         if (FastMath.abs(previousLogLikelihood - logLikelihood) > threshold) {
             // Did not converge before the maximum number of iterations
-            throw new ConvergenceException();
+            throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED);
         }
     }
 

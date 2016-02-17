@@ -18,10 +18,10 @@ package org.hipparchus.util;
 
 import java.math.BigInteger;
 
+import org.hipparchus.exception.Localizable;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Some useful, arithmetics related, additions to the built-in functions in
@@ -493,33 +493,23 @@ public final class ArithmeticUtils {
             throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
         }
 
-        try {
-            int exp = e;
-            int result = 1;
-            int k2p    = k;
-            while (true) {
-                if ((exp & 0x1) != 0) {
-                    result = mulAndCheck(result, k2p);
-                }
-
-                exp >>= 1;
-                if (exp == 0) {
-                    break;
-                }
-
-                k2p = mulAndCheck(k2p, k2p);
+        int exp = e;
+        int result = 1;
+        int k2p    = k;
+        while (true) {
+            if ((exp & 0x1) != 0) {
+                result = mulAndCheck(result, k2p);
             }
 
-            return result;
-        } catch (MathArithmeticException mae) {
-            // Add context information.
-            mae.getContext().addMessage(LocalizedFormats.OVERFLOW);
-            mae.getContext().addMessage(LocalizedFormats.BASE, k);
-            mae.getContext().addMessage(LocalizedFormats.EXPONENT, e);
-
-            // Rethrow.
-            throw mae;
+            exp >>= 1;
+        if (exp == 0) {
+            break;
         }
+
+        k2p = mulAndCheck(k2p, k2p);
+        }
+
+        return result;
     }
 
     /**
@@ -539,33 +529,23 @@ public final class ArithmeticUtils {
             throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
         }
 
-        try {
-            int exp = e;
-            long result = 1;
-            long k2p    = k;
-            while (true) {
-                if ((exp & 0x1) != 0) {
-                    result = mulAndCheck(result, k2p);
-                }
-
-                exp >>= 1;
-                if (exp == 0) {
-                    break;
-                }
-
-                k2p = mulAndCheck(k2p, k2p);
+        int exp = e;
+        long result = 1;
+        long k2p    = k;
+        while (true) {
+            if ((exp & 0x1) != 0) {
+                result = mulAndCheck(result, k2p);
             }
 
-            return result;
-        } catch (MathArithmeticException mae) {
-            // Add context information.
-            mae.getContext().addMessage(LocalizedFormats.OVERFLOW);
-            mae.getContext().addMessage(LocalizedFormats.BASE, k);
-            mae.getContext().addMessage(LocalizedFormats.EXPONENT, e);
-
-            // Rethrow.
-            throw mae;
+            exp >>= 1;
+        if (exp == 0) {
+            break;
         }
+
+        k2p = mulAndCheck(k2p, k2p);
+        }
+
+        return result;
     }
 
     /**

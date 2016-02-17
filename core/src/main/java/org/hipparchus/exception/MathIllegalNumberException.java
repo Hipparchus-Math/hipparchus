@@ -16,8 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
-
 /**
  * Base class for exceptions raised by a wrong number.
  * This class is not intended to be instantiated directly: it should serve

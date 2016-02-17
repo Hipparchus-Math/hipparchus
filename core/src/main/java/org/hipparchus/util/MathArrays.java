@@ -29,6 +29,7 @@ import java.util.TreeSet;
 import org.hipparchus.Field;
 import org.hipparchus.distribution.UniformIntegerDistribution;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
@@ -39,7 +40,6 @@ import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 

@@ -21,9 +21,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;

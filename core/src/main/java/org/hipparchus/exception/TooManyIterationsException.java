@@ -16,8 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.LocalizedFormats;
-
 /**
  * Exception to be thrown when the maximal number of iterations is exceeded.
  *
@@ -34,6 +32,5 @@ public class TooManyIterationsException extends MaxCountExceededException {
      */
     public TooManyIterationsException(Number max) {
         super(max);
-        getContext().addMessage(LocalizedFormats.ITERATIONS);
     }
 }

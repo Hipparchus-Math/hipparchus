@@ -22,9 +22,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * This class defines a set of {@link SecondaryEquations secondary equations} to

@@ -20,10 +20,10 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.BitSet;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.FastMath;

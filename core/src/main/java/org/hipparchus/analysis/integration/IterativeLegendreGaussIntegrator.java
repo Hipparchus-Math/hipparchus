@@ -19,12 +19,12 @@ package org.hipparchus.analysis.integration;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.integration.gauss.GaussIntegrator;
 import org.hipparchus.analysis.integration.gauss.GaussIntegratorFactory;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 
 /**

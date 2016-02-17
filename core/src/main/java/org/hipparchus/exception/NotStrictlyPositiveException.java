@@ -16,8 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
-
 /**
  * Exception to be thrown when the argument is not greater than 0.
  *

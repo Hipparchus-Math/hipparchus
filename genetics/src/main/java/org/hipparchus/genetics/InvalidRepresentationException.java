@@ -16,8 +16,8 @@
  */
 package org.hipparchus.genetics;
 
+import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.Localizable;
 
 /**
  * Exception indicating that the representation of a chromosome is not valid.

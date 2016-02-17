@@ -17,8 +17,8 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.Localizable;
 
 /**
  * This class represents exceptions thrown while building rotations

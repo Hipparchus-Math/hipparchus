@@ -15,10 +15,10 @@ package org.hipparchus.util;
 
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;

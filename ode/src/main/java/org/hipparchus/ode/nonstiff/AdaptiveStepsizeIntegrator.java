@@ -18,10 +18,10 @@
 package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.util.FastMath;

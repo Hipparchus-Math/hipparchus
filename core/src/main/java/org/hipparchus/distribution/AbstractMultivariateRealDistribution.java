@@ -16,8 +16,8 @@
  */
 package org.hipparchus.distribution;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomGenerator;
 
 /**

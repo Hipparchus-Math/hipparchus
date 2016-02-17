@@ -20,10 +20,10 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Kurtosis;
 import org.hipparchus.stat.descriptive.moment.Mean;

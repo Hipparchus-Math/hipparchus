@@ -20,8 +20,8 @@ package org.hipparchus.primes;
 import java.util.HashSet;
 import java.util.List;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.primes.Primes;
 import org.hipparchus.primes.SmallPrimes;
 import org.junit.Assert;

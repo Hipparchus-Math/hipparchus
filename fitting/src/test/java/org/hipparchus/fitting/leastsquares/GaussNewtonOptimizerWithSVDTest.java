@@ -17,11 +17,10 @@
 
 package org.hipparchus.fitting.leastsquares;
 
-import org.hipparchus.exception.ConvergenceException;
+import java.io.IOException;
+
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer;
-import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.geometry.euclidean.threed.Plane;
@@ -30,8 +29,6 @@ import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.IOException;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -95,21 +92,14 @@ public class GaussNewtonOptimizerWithSVDTest
     }
 
     @Override
-    @Test
+    @Test(expected=MathIllegalStateException.class)
     public void testHahn1()
         throws IOException {
         /*
          * TODO This test leads to a singular problem with the Gauss-Newton
          * optimizer. This should be inquired.
          */
-        try{
-            super.testHahn1();
-            fail(optimizer);
-        } catch (ConvergenceException e){
-            //expected for LU
-        } catch (TooManyEvaluationsException e){
-            //expected for QR
-        }
+        super.testHahn1();
     }
 
     @Test

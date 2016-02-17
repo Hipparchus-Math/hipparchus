@@ -17,11 +17,9 @@
 package org.hipparchus.fraction;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.ConvergenceException;
 import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.fraction.Fraction;
-import org.hipparchus.fraction.FractionConversionException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -67,7 +65,7 @@ public class FractionTest {
         assertFraction(15, 1, new Fraction(15.0000000000001));
     }
 
-    @Test(expected=ConvergenceException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testGoldenRatio() {
         // the golden ratio is notoriously a difficult number for continuous fraction
         new Fraction((1 + FastMath.sqrt(5)) / 2, 1.0e-12, 25);
@@ -75,7 +73,7 @@ public class FractionTest {
 
     // MATH-179
     @Test
-    public void testDoubleConstructor() throws ConvergenceException  {
+    public void testDoubleConstructor() {
         assertFraction(1, 2, new Fraction((double)1 / (double)2));
         assertFraction(1, 3, new Fraction((double)1 / (double)3));
         assertFraction(2, 3, new Fraction((double)2 / (double)3));
@@ -121,7 +119,7 @@ public class FractionTest {
 
     // MATH-181
     @Test
-    public void testDigitLimitConstructor() throws ConvergenceException  {
+    public void testDigitLimitConstructor() {
         assertFraction(2, 5, new Fraction(0.4,   9));
         assertFraction(2, 5, new Fraction(0.4,  99));
         assertFraction(2, 5, new Fraction(0.4, 999));
@@ -149,13 +147,13 @@ public class FractionTest {
             Fraction f = new Fraction(a, 1.0e-12, 1000);
             //System.out.println(f.getNumerator() + "/" + f.getDenominator());
             Assert.fail("an exception should have been thrown");
-        } catch (ConvergenceException ce) {
+        } catch (MathIllegalStateException mise) {
             // expected behavior
         }
     }
 
     @Test
-    public void testEpsilonLimitConstructor() throws ConvergenceException  {
+    public void testEpsilonLimitConstructor() {
         assertFraction(2, 5, new Fraction(0.4, 1.0e-5, 100));
 
         assertFraction(3, 5,      new Fraction(0.6152, 0.02, 100));
@@ -617,7 +615,7 @@ public class FractionTest {
     }
 
     @Test
-    public void testSerial() throws FractionConversionException {
+    public void testSerial() {
         Fraction[] fractions = {
             new Fraction(3, 4), Fraction.ONE, Fraction.ZERO,
             new Fraction(17), new Fraction(FastMath.PI, 1000),

@@ -20,8 +20,9 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 
 /**
@@ -478,7 +479,7 @@ public class QRDecomposition {
          * if any element of the diagonal fails the check.
          * @return {@code true} if any element of the diagonal is smaller
          * or equal to {@code min}.
-         * @throws SingularMatrixException if the matrix is singular and
+         * @throws MathIllegalArgumentException if the matrix is singular and
          * {@code raise} is {@code true}.
          */
         private static boolean checkSingular(double[] diag,
@@ -489,10 +490,7 @@ public class QRDecomposition {
                 final double d = diag[i];
                 if (FastMath.abs(d) <= min) {
                     if (raise) {
-                        final SingularMatrixException e = new SingularMatrixException();
-                        e.getContext().addMessage(LocalizedFormats.NUMBER_TOO_SMALL, d, min);
-                        e.getContext().addMessage(LocalizedFormats.INDEX, i);
-                        throw e;
+                        throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
                     } else {
                         return true;
                     }

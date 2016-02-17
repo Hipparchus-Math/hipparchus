@@ -16,8 +16,8 @@
  */
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * An exception to be thrown when the condition number of a

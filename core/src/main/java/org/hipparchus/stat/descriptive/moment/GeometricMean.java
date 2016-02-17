@@ -18,10 +18,10 @@ package org.hipparchus.stat.descriptive.moment;
 
 import java.io.Serializable;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.summary.SumOfLogs;

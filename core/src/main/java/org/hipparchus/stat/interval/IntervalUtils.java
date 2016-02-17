@@ -16,11 +16,11 @@
  */
 package org.hipparchus.stat.interval;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Factory methods to generate confidence intervals for a binomial proportion.

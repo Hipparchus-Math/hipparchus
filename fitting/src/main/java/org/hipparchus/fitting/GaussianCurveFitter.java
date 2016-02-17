@@ -23,12 +23,12 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.hipparchus.analysis.function.Gaussian;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;

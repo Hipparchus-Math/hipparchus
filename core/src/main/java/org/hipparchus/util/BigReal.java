@@ -25,8 +25,8 @@ import java.math.RoundingMode;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Arbitrary precision decimal number.

@@ -16,9 +16,9 @@
  */
 package org.hipparchus.distribution;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;

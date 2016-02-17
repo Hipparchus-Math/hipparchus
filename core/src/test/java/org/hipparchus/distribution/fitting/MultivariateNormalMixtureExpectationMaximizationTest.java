@@ -22,9 +22,8 @@ import java.util.List;
 
 import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
-import org.hipparchus.distribution.fitting.MultivariateNormalMixtureExpectationMaximization;
-import org.hipparchus.exception.ConvergenceException;
 import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -91,7 +90,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         fitter.fit(initialMix, 1000, 0);
     }
 
-    @Test(expected = ConvergenceException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void testConvergenceException() {
         // ConvergenceException thrown if fit terminates before threshold met
         double[][] data = getTestSamples();

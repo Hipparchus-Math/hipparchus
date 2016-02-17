@@ -16,8 +16,8 @@
  */
 package org.hipparchus.ode;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Exception to be thrown when a parameter is unknown.
