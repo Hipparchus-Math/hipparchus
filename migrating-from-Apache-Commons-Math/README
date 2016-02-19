@@ -14,6 +14,20 @@ Unix/Linux operating systems. It is typically run as follows:
                --ignore .git \
                --ext .java --ext .txt --ext .md
 
+Any OS:
+=======
+
+The migrate.py file is a python script intended to be used in
+any environment with a python interpreter. It is typically run
+as follows:
+
+ python migrate.py --dir src --dir doc \
+                   --ignore .git \
+                   --ext .java --ext .txt --ext .md
+
+Documentation:
+==============
+
 The --dir option specifies the top-level directory containing
 the application files to migrate. The directory will be
 crawled recursively. The option can be repeated several times.
@@ -25,7 +39,7 @@ The --ext option specifies the extensions of the files to edit.
 The option can be repeated several times.
 
 There is a --nosave option that can be used if the original files
-must be completely wipped after having been edited. If the option
+must be completely wiped after having been edited. If the option
 is not used, the original files will be renamed with .orig appended
 to their names, along side with the edited files. Note that if the
 script is interrupted for some reason, there may be some spurious
@@ -40,7 +54,7 @@ must follow the same model as the distributed packages.subst file.
 If the option is not used, the distributed packages.subst file
 will be used by default. It is possible to set the file to the
 empty string (using --packages-subst "") to ignore packages
-substitions.
+substitutions.
 
 There is a --classes-subst that can be used to select a different
 set of rules for classes substitution. The patterns in this file
