@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 import argparse
-import os
-import tempfile
+import atexit
 import filecmp
 import shutil
 import re
-import atexit
+import tempfile
+import os
 
 def is_valid_directory(parser, arg):
     if not os.path.isdir(arg):
@@ -110,7 +110,7 @@ parser.add_argument('--ignore', action='append', default=[])
 parser.add_argument('--ext', action='append', required=True)
 parser.add_argument('--nosave', action='store_false', dest='save', default=True)
 parser.add_argument('--packages-subst', default=None)
-parser.add_argument('--classes-subst', default=None, required=True)
+parser.add_argument('--classes-subst', default=None)
 parser.add_argument('--dry-run', action='store_true', default=False)
 parser.add_argument('--verbose', '-v', action='store_true', dest='verbose', default=False)
 
@@ -120,16 +120,20 @@ tempdir = tempfile.mkdtemp()
 atexit.register(lambda dir=tempdir: shutil.rmtree(dir))
 args.tempdir = tempdir
 
-args.packages_subst_pattern = []
 if args.packages_subst == None:
+	args.packages_subst = os.path.join(os.path.dirname(os.path.abspath(__file__)), "packages.subst")
+
+if args.classes_subst == None:
+	args.classes_subst = os.path.join(os.path.dirname(os.path.abspath(__file__)), "classes.subst")
+
+args.packages_subst_pattern = []
+if args.packages_subst == "":
 	print 'WARNING: package substitutions disabled at user request'
 else:
 	parsePackageSubstitutionRules(args)
 
 args.classes_subst_pattern = []
 parseClassSubstitutionRules(args)
-
-#print args
 
 # process the files
 for dir in args.dir:
