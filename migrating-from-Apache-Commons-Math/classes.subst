@@ -10,6 +10,7 @@ MathIllegalNumberException         MathIllegalArgumentException
 MathInternalError                  MathRuntimeException
 MathParseException                 MathIllegalStateException
 MathUnsupportedOperationException  MathRuntimeException
+MatrixDimensionMismatchException   MathIllegalArgumentException
 MaxCountExceededException          MathIllegalStateException
 MultiDimensionMismatchException    MathIllegalArgumentException
 NoBracketingException              MathIllegalArgumentException
