@@ -24,7 +24,7 @@ import java.util.HashSet;
 import org.hipparchus.distribution.EnumeratedRealDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.InsufficientDataException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -179,7 +179,7 @@ public class KolmogorovSmirnovTest {
      * @param exact whether or not to force exact computation of the p-value
      * @return the p-value associated with the null hypothesis that {@code data} is a sample from
      *         {@code distribution}
-     * @throws InsufficientDataException if {@code data} does not have length at least 2
+     * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
      * @throws NullArgumentException if {@code data} is null
      */
     public double kolmogorovSmirnovTest(RealDistribution distribution, double[] data, boolean exact) {
@@ -195,7 +195,7 @@ public class KolmogorovSmirnovTest {
      * @param distribution reference distribution
      * @param data sample being evaluated
      * @return Kolmogorov-Smirnov statistic \(D_n\)
-     * @throws InsufficientDataException if {@code data} does not have length at least 2
+     * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
      * @throws NullArgumentException if {@code data} is null
      */
     public double kolmogorovSmirnovStatistic(RealDistribution distribution, double[] data) {
@@ -248,7 +248,7 @@ public class KolmogorovSmirnovTest {
      *        (ignored for large samples)
      * @return p-value associated with the null hypothesis that {@code x} and {@code y} represent
      *         samples from the same distribution
-     * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
+     * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
      * @throws NullArgumentException if either {@code x} or {@code y} is null
      * @see #bootstrap(double[], double[], int, boolean)
@@ -282,7 +282,7 @@ public class KolmogorovSmirnovTest {
      * @param y second sample dataset
      * @return p-value associated with the null hypothesis that {@code x} and {@code y} represent
      *         samples from the same distribution
-     * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
+     * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
      * @throws NullArgumentException if either {@code x} or {@code y} is null
      */
@@ -300,7 +300,7 @@ public class KolmogorovSmirnovTest {
      * @param y second sample
      * @return test statistic \(D_{n,m}\) used to evaluate the null hypothesis that {@code x} and
      *         {@code y} represent samples from the same underlying distribution
-     * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
+     * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
      * @throws NullArgumentException if either {@code x} or {@code y} is null
      */
@@ -319,7 +319,7 @@ public class KolmogorovSmirnovTest {
      * @param y second sample
      * @return test statistic \(n m D_{n,m}\) used to evaluate the null hypothesis that {@code x} and
      *         {@code y} represent samples from the same underlying distribution
-     * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
+     * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
      * @throws NullArgumentException if either {@code x} or {@code y} is null
      */
@@ -369,7 +369,7 @@ public class KolmogorovSmirnovTest {
      * @param data sample being being evaluated
      * @return the p-value associated with the null hypothesis that {@code data} is a sample from
      *         {@code distribution}
-     * @throws InsufficientDataException if {@code data} does not have length at least 2
+     * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
      * @throws NullArgumentException if {@code data} is null
      */
     public double kolmogorovSmirnovTest(RealDistribution distribution, double[] data) {
@@ -385,7 +385,7 @@ public class KolmogorovSmirnovTest {
      * @param alpha significance level of the test
      * @return true iff the null hypothesis that {@code data} is a sample from {@code distribution}
      *         can be rejected with confidence 1 - {@code alpha}
-     * @throws InsufficientDataException if {@code data} does not have length at least 2
+     * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
      * @throws NullArgumentException if {@code data} is null
      */
     public boolean kolmogorovSmirnovTest(RealDistribution distribution, double[] data, double alpha) {
@@ -908,14 +908,14 @@ public class KolmogorovSmirnovTest {
      *
      * @param array array to test
      * @throws NullArgumentException if array is null
-     * @throws InsufficientDataException if array is too short
+     * @throws MathIllegalArgumentException if array is too short
      */
     private void checkArray(double[] array) {
         if (array == null) {
             throw new NullArgumentException(LocalizedFormats.NULL_NOT_ALLOWED);
         }
         if (array.length < 2) {
-            throw new InsufficientDataException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, array.length,
+            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, array.length,
                                                 2);
         }
     }

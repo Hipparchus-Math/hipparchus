@@ -20,7 +20,6 @@ import java.util.Collection;
 
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.InsufficientDataException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
@@ -459,7 +458,7 @@ public class TestUtils  {
      * @since 3.3
      */
     public static double kolmogorovSmirnovStatistic(RealDistribution dist, double[] data)
-            throws InsufficientDataException, NullArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         return KS_TEST.kolmogorovSmirnovStatistic(dist, data);
     }
 
@@ -468,7 +467,7 @@ public class TestUtils  {
      * @since 3.3
      */
     public static double kolmogorovSmirnovTest(RealDistribution dist, double[] data)
-            throws InsufficientDataException, NullArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         return KS_TEST.kolmogorovSmirnovTest(dist, data);
     }
 
@@ -477,7 +476,7 @@ public class TestUtils  {
      * @since 3.3
      */
     public static double kolmogorovSmirnovTest(RealDistribution dist, double[] data, boolean strict)
-            throws InsufficientDataException, NullArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         return KS_TEST.kolmogorovSmirnovTest(dist, data, strict);
     }
 
@@ -486,7 +485,7 @@ public class TestUtils  {
      * @since 3.3
      */
     public static boolean kolmogorovSmirnovTest(RealDistribution dist, double[] data, double alpha)
-            throws InsufficientDataException, NullArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         return KS_TEST.kolmogorovSmirnovTest(dist, data, alpha);
     }
 
@@ -495,7 +494,7 @@ public class TestUtils  {
      * @since 3.3
      */
     public static double kolmogorovSmirnovStatistic(double[] x, double[] y)
-            throws InsufficientDataException, NullArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         return KS_TEST.kolmogorovSmirnovStatistic(x, y);
     }
 
@@ -504,7 +503,7 @@ public class TestUtils  {
      * @since 3.3
      */
     public static double kolmogorovSmirnovTest(double[] x, double[] y)
-            throws InsufficientDataException, NullArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         return KS_TEST.kolmogorovSmirnovTest(x, y);
     }
 
@@ -513,7 +512,7 @@ public class TestUtils  {
      * @since 3.3
      */
     public static double kolmogorovSmirnovTest(double[] x, double[] y, boolean strict)
-            throws InsufficientDataException, NullArgumentException  {
+            throws MathIllegalArgumentException, NullArgumentException  {
         return KS_TEST.kolmogorovSmirnovTest(x, y, strict);
     }
 

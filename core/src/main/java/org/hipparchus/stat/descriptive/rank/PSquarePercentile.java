@@ -30,7 +30,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.interpolation.LinearInterpolator;
 import org.hipparchus.analysis.interpolation.NevilleInterpolator;
 import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
-import org.hipparchus.exception.InsufficientDataException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
@@ -376,7 +376,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
             final int countObserved =
                     initialFive == null ? -1 : initialFive.size();
             if (countObserved < PSQUARE_CONSTANT) {
-                throw new InsufficientDataException(
+                throw new MathIllegalArgumentException(
                         LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
                         countObserved, PSQUARE_CONSTANT);
             }

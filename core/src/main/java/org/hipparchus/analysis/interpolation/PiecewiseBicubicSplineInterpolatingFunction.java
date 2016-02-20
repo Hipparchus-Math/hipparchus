@@ -20,9 +20,8 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.InsufficientDataException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
@@ -91,7 +90,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
             yLen < MIN_NUM_POINTS ||
             f.length < MIN_NUM_POINTS ||
             f[0].length < MIN_NUM_POINTS) {
-            throw new InsufficientDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DATA);
         }
 
         if (xLen != f.length) {

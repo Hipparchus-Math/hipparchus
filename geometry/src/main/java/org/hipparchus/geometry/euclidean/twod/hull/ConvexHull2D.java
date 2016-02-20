@@ -18,7 +18,6 @@ package org.hipparchus.geometry.euclidean.twod.hull;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.InsufficientDataException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
@@ -159,9 +158,9 @@ public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializ
 
     /** {@inheritDoc} */
     @Override
-    public Region<Euclidean2D> createRegion() throws InsufficientDataException {
+    public Region<Euclidean2D> createRegion() throws MathIllegalArgumentException {
         if (vertices.length < 3) {
-            throw new InsufficientDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DATA);
         }
         final RegionFactory<Euclidean2D> factory = new RegionFactory<Euclidean2D>();
         final Segment[] segments = retrieveLineSegments();

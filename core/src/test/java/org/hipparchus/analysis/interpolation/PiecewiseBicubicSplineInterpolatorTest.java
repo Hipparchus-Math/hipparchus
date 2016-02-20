@@ -19,7 +19,6 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.InsufficientDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
@@ -67,7 +66,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
             double xval1[] = { 0.0, 1.0, 2.0, 3.0 };
             interpolator.interpolate( xval1, yval, zval );
             Assert.fail( "Failed to detect insufficient x data" );
-        } catch ( InsufficientDataException iae ) {
+        } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
 
@@ -75,7 +74,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
             double yval1[] = { 0.0, 1.0, 2.0, 3.0 };
             interpolator.interpolate( xval, yval1, zval );
             Assert.fail( "Failed to detect insufficient y data" );
-        } catch ( InsufficientDataException iae ) {
+        } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
 
@@ -83,7 +82,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
             double zval1[][] = new double[4][4];
             interpolator.interpolate( xval, yval, zval1 );
             Assert.fail( "Failed to detect insufficient z data" );
-        } catch ( InsufficientDataException iae ) {
+        } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
 

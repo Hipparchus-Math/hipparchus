@@ -16,9 +16,8 @@
  */
 package org.hipparchus.stat.regression;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.InsufficientDataException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -107,7 +106,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * @throws NullArgumentException if the data array is null
      * @throws MathIllegalArgumentException if the length of the data array is not equal
      * to <code>nobs * (nvars + 1)</code>
-     * @throws InsufficientDataException if <code>nobs</code> is less than
+     * @throws MathIllegalArgumentException if <code>nobs</code> is less than
      * <code>nvars + 1</code>
      */
     public void newSampleData(double[] data, int nobs, int nvars) {
@@ -119,7 +118,7 @@ public abstract class AbstractMultipleLinearRegression implements
                                                    data.length, nobs * (nvars + 1));
         }
         if (nobs <= nvars) {
-            throw new InsufficientDataException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, nobs, nvars + 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, nobs, nvars + 1);
         }
         double[] y = new double[nobs];
         final int cols = noIntercept ? nvars: nvars + 1;
