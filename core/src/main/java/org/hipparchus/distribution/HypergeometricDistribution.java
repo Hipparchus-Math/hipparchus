@@ -64,7 +64,7 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
      * or {@code sampleSize > populationSize}.
      */
     public HypergeometricDistribution(int populationSize, int numberOfSuccesses, int sampleSize)
-    throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooLargeException {
+    throws MathIllegalArgumentException, NumberIsTooLargeException {
         this(new Well19937c(), populationSize, numberOfSuccesses, sampleSize);
     }
 
@@ -85,7 +85,7 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
                                       int populationSize,
                                       int numberOfSuccesses,
                                       int sampleSize)
-    throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooLargeException {
+    throws MathIllegalArgumentException, NumberIsTooLargeException {
         super(rng);
 
         if (populationSize <= 0) {

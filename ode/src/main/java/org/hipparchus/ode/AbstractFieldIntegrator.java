@@ -291,7 +291,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
      */
     protected FieldODEStateAndDerivative<T> acceptStep(final AbstractFieldStepInterpolator<T> interpolator,
                                                        final T tEnd)
-        throws MaxCountExceededException, MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
 
             FieldODEStateAndDerivative<T> previousState = interpolator.getGlobalPreviousState();
             final FieldODEStateAndDerivative<T> currentState = interpolator.getGlobalCurrentState();

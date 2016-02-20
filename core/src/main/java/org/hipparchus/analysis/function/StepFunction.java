@@ -61,7 +61,7 @@ public class StepFunction implements UnivariateFunction {
     public StepFunction(double[] x,
                         double[] y)
         throws NullArgumentException, NoDataException,
-               MathIllegalArgumentException, MathIllegalArgumentException {
+               MathIllegalArgumentException {
         if (x == null ||
             y == null) {
             throw new NullArgumentException();

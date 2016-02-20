@@ -96,7 +96,7 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      */
     public PolynomialSplineFunction(double knots[], PolynomialFunction polynomials[])
         throws NullArgumentException, NumberIsTooSmallException,
-               MathIllegalArgumentException, MathIllegalArgumentException{
+               MathIllegalArgumentException {
         if (knots == null ||
             polynomials == null) {
             throw new NullArgumentException();

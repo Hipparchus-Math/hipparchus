@@ -258,7 +258,7 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
      */
     public static <S> List<Double> inducedPermutation(final List<S> originalData,
                                                       final List<S> permutedData)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         if (originalData.size() != permutedData.size()) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

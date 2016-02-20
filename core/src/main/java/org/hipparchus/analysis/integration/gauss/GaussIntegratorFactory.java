@@ -132,7 +132,7 @@ public class GaussIntegratorFactory {
      */
     private static Pair<double[], double[]> getRule(BaseRuleFactory<? extends Number> factory,
                                                     int numberOfPoints)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         return factory.getRule(numberOfPoints);
     }
 

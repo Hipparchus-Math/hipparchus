@@ -80,7 +80,7 @@ public class Covariance {
      * rectangular with at least one row and one column.
      */
     public Covariance(double[][] data, boolean biasCorrected)
-    throws MathIllegalArgumentException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException {
         this(new BlockRealMatrix(data), biasCorrected);
     }
 
@@ -98,7 +98,7 @@ public class Covariance {
      * rectangular with at least one row and one column.
      */
     public Covariance(double[][] data)
-    throws MathIllegalArgumentException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException {
         this(data, true);
     }
 
@@ -204,7 +204,7 @@ public class Covariance {
      * rectangular with at least one row and one column.
      */
     protected RealMatrix computeCovarianceMatrix(double[][] data, boolean biasCorrected)
-    throws MathIllegalArgumentException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException {
         return computeCovarianceMatrix(new BlockRealMatrix(data), biasCorrected);
     }
 
@@ -219,7 +219,7 @@ public class Covariance {
      * @see #Covariance
      */
     protected RealMatrix computeCovarianceMatrix(double[][] data)
-    throws MathIllegalArgumentException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException {
         return computeCovarianceMatrix(data, true);
     }
 

@@ -120,7 +120,7 @@ public class TransformUtils {
      *   array is not two, or the array is not rectangular
      */
     public static Complex[] createComplexArray(final double[][] dataRI)
-        throws MathIllegalArgumentException{
+        throws MathIllegalArgumentException {
 
         if (dataRI.length != 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

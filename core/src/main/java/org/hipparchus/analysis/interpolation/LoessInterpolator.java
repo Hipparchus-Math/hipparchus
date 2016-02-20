@@ -141,8 +141,7 @@ public class LoessInterpolator
      * @since 2.1
      */
     public LoessInterpolator(double bandwidth, int robustnessIters, double accuracy)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (bandwidth < 0 ||
             bandwidth > 1) {
             throw new MathIllegalArgumentException(LocalizedFormats.BANDWIDTH, bandwidth, 0, 1);

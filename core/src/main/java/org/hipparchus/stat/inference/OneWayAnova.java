@@ -245,8 +245,7 @@ public class OneWayAnova {
      */
     public boolean anovaTest(final Collection<double[]> categoryData,
                              final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(

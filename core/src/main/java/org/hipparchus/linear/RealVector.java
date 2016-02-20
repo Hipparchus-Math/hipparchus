@@ -121,7 +121,7 @@ public abstract class RealVector {
      * @throws MathIllegalArgumentException if the number of elements is not positive.
      */
     public abstract RealVector getSubVector(int index, int n)
-        throws MathIllegalArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
     /**
      * Set a sequence of consecutive elements.
@@ -1537,7 +1537,7 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public RealVector getSubVector(int index, int n)
-                throws MathIllegalArgumentException, MathIllegalArgumentException {
+                throws MathIllegalArgumentException {
                 return v.getSubVector(index, n);
             }
 

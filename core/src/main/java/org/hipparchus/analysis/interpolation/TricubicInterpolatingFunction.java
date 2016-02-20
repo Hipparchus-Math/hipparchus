@@ -144,7 +144,6 @@ public class TricubicInterpolatingFunction
                                          double[][][] d2FdYdZ,
                                          double[][][] d3FdXdYdZ)
         throws NoDataException,
-               MathIllegalArgumentException,
                MathIllegalArgumentException {
         final int xLen = x.length;
         final int yLen = y.length;

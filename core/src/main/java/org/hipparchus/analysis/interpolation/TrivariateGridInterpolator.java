@@ -49,5 +49,5 @@ public interface TrivariateGridInterpolator {
     TrivariateFunction interpolate(double[] xval, double[] yval, double[] zval,
                                    double[][][] fval)
         throws NoDataException, NumberIsTooSmallException,
-               MathIllegalArgumentException, MathIllegalArgumentException;
+               MathIllegalArgumentException;
 }

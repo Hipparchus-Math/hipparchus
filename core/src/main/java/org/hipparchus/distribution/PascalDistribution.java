@@ -91,7 +91,7 @@ public class PascalDistribution extends AbstractIntegerDistribution {
      * range {@code [0, 1]}.
      */
     public PascalDistribution(int r, double p)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), r, p);
     }
 
@@ -110,7 +110,7 @@ public class PascalDistribution extends AbstractIntegerDistribution {
     public PascalDistribution(RandomGenerator rng,
                               int r,
                               double p)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (r <= 0) {

@@ -117,7 +117,6 @@ public class Gaussian implements UnivariateDifferentiableFunction {
         @Override
         public double value(double x, double ... param)
             throws NullArgumentException,
-                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
             validateParameters(param);
 
@@ -143,7 +142,6 @@ public class Gaussian implements UnivariateDifferentiableFunction {
         @Override
         public double[] gradient(double x, double ... param)
             throws NullArgumentException,
-                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
             validateParameters(param);
 
@@ -172,7 +170,6 @@ public class Gaussian implements UnivariateDifferentiableFunction {
          */
         private void validateParameters(double[] param)
             throws NullArgumentException,
-                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
             if (param == null) {
                 throw new NullArgumentException();

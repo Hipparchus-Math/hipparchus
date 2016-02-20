@@ -64,7 +64,7 @@ public class ElitisticListPopulation extends ListPopulation {
      * @throws MathIllegalArgumentException if the elitism rate is outside the [0, 1] range
      */
     public ElitisticListPopulation(final int populationLimit, final double elitismRate)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         super(populationLimit);
         setElitismRate(elitismRate);

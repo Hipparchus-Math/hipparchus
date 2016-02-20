@@ -146,7 +146,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      */
     public BlockFieldMatrix(final int rows, final int columns,
                             final T[][] blockData, final boolean copyArray)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         super(extractField(blockData), rows, columns);
         this.rows    = rows;
         this.columns = columns;
@@ -782,7 +782,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
-        throws MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException,
         NoDataException, NullArgumentException {
         // safety checks
         MathUtils.checkNotNull(subMatrix);
@@ -866,7 +866,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setRowMatrix(final int row, final FieldMatrix<T> matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         try {
             setRowMatrix(row, (BlockFieldMatrix<T>) matrix);
         } catch (ClassCastException cce) {
@@ -886,7 +886,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      * @throws MathIllegalArgumentException if the specified row index is invalid.
      */
     public void setRowMatrix(final int row, final BlockFieldMatrix<T> matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if ((matrix.getRowDimension() != 1) ||
@@ -950,7 +950,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setColumnMatrix(final int column, final FieldMatrix<T> matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         try {
             setColumnMatrix(column, (BlockFieldMatrix<T>) matrix);
         } catch (ClassCastException cce) {
@@ -970,7 +970,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      * @throws MathIllegalArgumentException if the specified column index is invalid.
      */
     void setColumnMatrix(final int column, final BlockFieldMatrix<T> matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if ((matrix.getRowDimension() != nRows) ||
@@ -1024,7 +1024,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setRowVector(final int row, final FieldVector<T> vector)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         try {
             setRow(row, ((ArrayFieldVector<T>) vector).getDataRef());
         } catch (ClassCastException cce) {
@@ -1058,7 +1058,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setColumnVector(final int column, final FieldVector<T> vector)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         try {
             setColumn(column, ((ArrayFieldVector<T>) vector).getDataRef());
         } catch (ClassCastException cce) {
@@ -1089,7 +1089,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setRow(final int row, final T[] array)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if (array.length != nCols) {
@@ -1135,7 +1135,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setColumn(final int column, final T[] array)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if (array.length != nRows) {

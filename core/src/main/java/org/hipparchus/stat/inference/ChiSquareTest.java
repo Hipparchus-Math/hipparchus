@@ -75,8 +75,7 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException if the arrays length is less than 2
      */
     public double chiSquare(final double[] expected, final long[] observed)
-        throws MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         if (expected.length < 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -151,8 +150,7 @@ public class ChiSquareTest {
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public double chiSquareTest(final double[] expected, final long[] observed)
-        throws MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
@@ -201,8 +199,7 @@ public class ChiSquareTest {
      */
     public boolean chiSquareTest(final double[] expected, final long[] observed,
                                  final double alpha)
-        throws MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
@@ -241,8 +238,7 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException if {@code counts} has negative entries
      */
     public double chiSquare(final long[][] counts)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         checkArray(counts);
         int nRows = counts.length;
@@ -306,8 +302,7 @@ public class ChiSquareTest {
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public double chiSquareTest(final long[][] counts)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MaxCountExceededException {
+        throws NullArgumentException, MathIllegalArgumentException, MaxCountExceededException {
 
         checkArray(counts);
         double df = ((double) counts.length -1) * ((double) counts[0].length - 1);
@@ -356,8 +351,7 @@ public class ChiSquareTest {
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public boolean chiSquareTest(final long[][] counts, final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
+        throws NullArgumentException, MathIllegalArgumentException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
@@ -407,7 +401,7 @@ public class ChiSquareTest {
      * @since 1.2
      */
     public double chiSquareDataSetsComparison(long[] observed1, long[] observed2)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, ZeroException {
+        throws MathIllegalArgumentException, ZeroException {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
@@ -506,7 +500,7 @@ public class ChiSquareTest {
      * @since 1.2
      */
     public double chiSquareTestDataSetsComparison(long[] observed1, long[] observed2)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, ZeroException,
+        throws MathIllegalArgumentException, ZeroException,
         MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -562,7 +556,7 @@ public class ChiSquareTest {
     public boolean chiSquareTestDataSetsComparison(final long[] observed1,
                                                    final long[] observed2,
                                                    final double alpha)
-        throws MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException,
         ZeroException, MathIllegalArgumentException, MaxCountExceededException {
 
         if (alpha <= 0 ||
@@ -584,8 +578,7 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException if the array contains any negative entries
      */
     private void checkArray(final long[][] in)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         if (in.length < 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

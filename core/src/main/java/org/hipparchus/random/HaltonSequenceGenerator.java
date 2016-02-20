@@ -101,7 +101,7 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
      * @throws MathIllegalArgumentException if weights is non-null and the length of the input arrays differ
      */
     public HaltonSequenceGenerator(final int dimension, final int[] bases, final int[] weights)
-            throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException {
+            throws NullArgumentException, MathIllegalArgumentException {
 
         MathUtils.checkNotNull(bases);
 

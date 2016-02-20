@@ -63,6 +63,6 @@ public interface RealTransformer  {
      */
     double[] transform(UnivariateFunction f, double min, double max, int n,
                        TransformType type)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
 }

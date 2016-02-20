@@ -19,7 +19,6 @@ import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.Well1024a;
 import org.junit.Assert;
@@ -469,8 +468,8 @@ public class MathArraysTest {
         }
         try {
             MathArrays.checkNotNaN(withNaN);
-            Assert.fail("Expecting NotANumberException");
-        } catch (NotANumberException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }

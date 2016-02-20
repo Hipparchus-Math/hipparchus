@@ -255,8 +255,7 @@ public interface RealMatrix extends AnyMatrix {
     * @since 2.0
     */
     void setSubMatrix(double[][] subMatrix, int row, int column)
-        throws NoDataException, MathIllegalArgumentException,
-        MathIllegalArgumentException, NullArgumentException;
+        throws NoDataException, MathIllegalArgumentException, NullArgumentException;
 
    /**
     * Get the entries at the given row index as a row matrix.  Row indices start
@@ -281,7 +280,7 @@ public interface RealMatrix extends AnyMatrix {
      * and {@code matrix} do not match.
      */
     void setRowMatrix(int row, RealMatrix matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entries at the given column index as a column matrix. Column
@@ -307,7 +306,7 @@ public interface RealMatrix extends AnyMatrix {
      * and {@code matrix} do not match.
      */
     void setColumnMatrix(int column, RealMatrix matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the entries in row number {@code row} as a vector. Row indices
@@ -332,7 +331,7 @@ public interface RealMatrix extends AnyMatrix {
      * does not match the column dimension of {@code this} matrix.
      */
     void setRowVector(int row, RealVector vector)
-        throws MathIllegalArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entries at the given column index as a vector. Column indices
@@ -357,7 +356,7 @@ public interface RealMatrix extends AnyMatrix {
      * does not match the row dimension of {@code this} matrix.
      */
     void setColumnVector(int column, RealVector vector)
-        throws MathIllegalArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entries at the given row index. Row indices start at 0.
@@ -380,7 +379,7 @@ public interface RealMatrix extends AnyMatrix {
      * not match the column dimension of {@code this} matrix.
      */
     void setRow(int row, double[] array)
-        throws MathIllegalArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entries at the given column index as an array. Column indices
@@ -404,7 +403,7 @@ public interface RealMatrix extends AnyMatrix {
      * not match the row dimension of {@code this} matrix.
      */
     void setColumn(int column, double[] array)
-        throws MathIllegalArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entry in the specified row and column. Row and column indices

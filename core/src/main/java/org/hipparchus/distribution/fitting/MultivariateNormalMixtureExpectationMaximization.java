@@ -84,7 +84,6 @@ public class MultivariateNormalMixtureExpectationMaximization {
      */
     public MultivariateNormalMixtureExpectationMaximization(double[][] data)
         throws MathIllegalArgumentException,
-               MathIllegalArgumentException,
                NumberIsTooSmallException {
         if (data.length < 1) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
@@ -133,7 +132,6 @@ public class MultivariateNormalMixtureExpectationMaximization {
                     final int maxIterations,
                     final double threshold)
             throws SingularMatrixException,
-                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
         if (maxIterations < 1) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
@@ -304,8 +302,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
      */
     public static MixtureMultivariateNormalDistribution estimate(final double[][] data,
                                                                  final int numComponents)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (data.length < 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
                                                    data.length, 2);

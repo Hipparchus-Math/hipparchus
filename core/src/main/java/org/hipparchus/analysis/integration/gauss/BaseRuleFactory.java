@@ -52,7 +52,7 @@ public abstract class BaseRuleFactory<T extends Number> {
      * have the same length.
      */
     public Pair<double[], double[]> getRule(int numberOfPoints)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         if (numberOfPoints <= 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,

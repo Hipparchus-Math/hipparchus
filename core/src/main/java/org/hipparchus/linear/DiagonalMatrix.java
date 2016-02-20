@@ -90,8 +90,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
     @Override
     public RealMatrix createMatrix(final int rowDimension,
                                    final int columnDimension)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (rowDimension != columnDimension) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    rowDimension, columnDimension);

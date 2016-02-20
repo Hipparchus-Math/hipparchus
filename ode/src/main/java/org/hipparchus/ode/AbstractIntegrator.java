@@ -327,7 +327,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
      */
     protected double acceptStep(final AbstractStepInterpolator interpolator,
                                 final double[] y, final double[] yDot, final double tEnd)
-        throws MaxCountExceededException, MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
 
             double previousT = interpolator.getGlobalPreviousTime();
             final double currentT = interpolator.getGlobalCurrentTime();

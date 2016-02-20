@@ -71,8 +71,7 @@ public class GTest {
      * are less than 2.
      */
     public double g(final double[] expected, final long[] observed)
-            throws MathIllegalArgumentException, MathIllegalArgumentException,
-            MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
 
         if (expected.length < 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -148,8 +147,7 @@ public class GTest {
      * p-value.
      */
     public double gTest(final double[] expected, final long[] observed)
-            throws MathIllegalArgumentException, MathIllegalArgumentException,
-            MathIllegalArgumentException, MaxCountExceededException {
+            throws MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
@@ -179,8 +177,7 @@ public class GTest {
      * p-value.
      */
     public double gTestIntrinsic(final double[] expected, final long[] observed)
-            throws MathIllegalArgumentException, MathIllegalArgumentException,
-            MathIllegalArgumentException, MaxCountExceededException {
+            throws MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
@@ -234,8 +231,7 @@ public class GTest {
      */
     public boolean gTest(final double[] expected, final long[] observed,
             final double alpha)
-            throws MathIllegalArgumentException, MathIllegalArgumentException,
-            MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
+            throws MathIllegalArgumentException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
@@ -344,7 +340,7 @@ public class GTest {
      * at the same index is zero for both arrays.
      */
     public double gDataSetsComparison(final long[] observed1, final long[] observed2)
-            throws MathIllegalArgumentException, MathIllegalArgumentException, ZeroException {
+            throws MathIllegalArgumentException, ZeroException {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
@@ -471,7 +467,7 @@ public class GTest {
      */
     public double gTestDataSetsComparison(final long[] observed1,
             final long[] observed2)
-            throws MathIllegalArgumentException, MathIllegalArgumentException, ZeroException,
+            throws MathIllegalArgumentException, ZeroException,
             MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -527,7 +523,7 @@ public class GTest {
             final long[] observed1,
             final long[] observed2,
             final double alpha)
-            throws MathIllegalArgumentException, MathIllegalArgumentException,
+            throws MathIllegalArgumentException,
             ZeroException, MathIllegalArgumentException, MaxCountExceededException {
 
         if (alpha <= 0 || alpha > 0.5) {

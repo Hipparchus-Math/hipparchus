@@ -261,7 +261,7 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @throws MathIllegalArgumentException if the number of elements if not positive.
      */
     FieldVector<T> getSubVector(int index, int n)
-        throws MathIllegalArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
     /**
      * Set a set of consecutive elements.

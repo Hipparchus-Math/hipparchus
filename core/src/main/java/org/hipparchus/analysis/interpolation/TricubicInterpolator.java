@@ -38,7 +38,7 @@ public class TricubicInterpolator
                                                      final double[] zval,
                                                      final double[][][] fval)
         throws NoDataException, NumberIsTooSmallException,
-               MathIllegalArgumentException, MathIllegalArgumentException {
+               MathIllegalArgumentException {
         if (xval.length == 0 || yval.length == 0 || zval.length == 0 || fval.length == 0) {
             throw new NoDataException();
         }

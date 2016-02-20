@@ -198,7 +198,6 @@ public class UnivariateSolverUtils {
                                    double initial,
                                    double lowerBound, double upperBound)
         throws NullArgumentException,
-               MathIllegalArgumentException,
                MathIllegalArgumentException {
         return bracket(function, initial, lowerBound, upperBound, 1.0, 1.0, Integer.MAX_VALUE);
     }
@@ -225,7 +224,6 @@ public class UnivariateSolverUtils {
                                    double lowerBound, double upperBound,
                                    int maximumIterations)
         throws NullArgumentException,
-               MathIllegalArgumentException,
                MathIllegalArgumentException {
         return bracket(function, initial, lowerBound, upperBound, 1.0, 1.0, maximumIterations);
     }

@@ -249,7 +249,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @since 2.0
      */
     void setSubMatrix(T[][] subMatrix, int row, int column)
-        throws MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException,
         NoDataException, NullArgumentException;
 
    /**
@@ -274,7 +274,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * if the matrix dimensions do not match one instance row.
     */
    void setRowMatrix(int row, FieldMatrix<T> matrix)
-   throws MathIllegalArgumentException, MathIllegalArgumentException;
+   throws MathIllegalArgumentException;
 
    /**
     * Get the entries in column number {@code column}
@@ -298,7 +298,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * not match one instance column.
     */
    void setColumnMatrix(int column, FieldMatrix<T> matrix)
-   throws MathIllegalArgumentException, MathIllegalArgumentException;
+   throws MathIllegalArgumentException;
 
    /**
     * Get the entries in row number {@code row}
@@ -322,7 +322,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * match one instance row.
     */
    void setRowVector(int row, FieldVector<T> vector)
-   throws MathIllegalArgumentException, MathIllegalArgumentException;
+   throws MathIllegalArgumentException;
 
    /**
     * Returns the entries in column number {@code column}
@@ -346,7 +346,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * match one instance column.
     */
    void setColumnVector(int column, FieldVector<T> vector)
-   throws MathIllegalArgumentException, MathIllegalArgumentException;
+   throws MathIllegalArgumentException;
 
     /**
      * Get the entries in row number {@code row} as an array.
@@ -368,8 +368,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @throws MathIllegalArgumentException if the array size does not match
      * one instance row.
      */
-    void setRow(int row, T[] array) throws MathIllegalArgumentException,
-    MathIllegalArgumentException;
+    void setRow(int row, T[] array) throws MathIllegalArgumentException;
 
     /**
      * Get the entries in column number {@code col} as an array.
@@ -390,8 +389,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @throws MathIllegalArgumentException if the array size does not match
      * one instance column.
      */
-    void setColumn(int column, T[] array) throws MathIllegalArgumentException,
-    MathIllegalArgumentException;
+    void setColumn(int column, T[] array) throws MathIllegalArgumentException;
 
     /**
      * Returns the entry in the specified row and column.

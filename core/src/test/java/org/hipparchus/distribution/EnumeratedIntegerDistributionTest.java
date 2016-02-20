@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -71,8 +70,8 @@ public class EnumeratedIntegerDistributionTest {
         }
         try {
           new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, Double.NaN});
-            Assert.fail("Expected NotANumberException");
-        } catch (NotANumberException e) {
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
         }
         try {
         new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, Double.POSITIVE_INFINITY});

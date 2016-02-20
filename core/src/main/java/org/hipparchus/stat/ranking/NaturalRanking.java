@@ -23,7 +23,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotANumberException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
@@ -185,7 +186,7 @@ public class NaturalRanking implements RankingAlgorithm {
      *
      * @param data array to be ranked
      * @return array of ranks
-     * @throws NotANumberException if the selected {@link NaNStrategy} is {@code FAILED}
+     * @throws MathIllegalArgumentException if the selected {@link NaNStrategy} is {@code FAILED}
      * and a {@link Double#NaN} is encountered in the input data
      */
     @Override
@@ -215,7 +216,7 @@ public class NaturalRanking implements RankingAlgorithm {
             case FAILED:
                 nanPositions = getNanPositions(ranks);
                 if (nanPositions.size() > 0) {
-                    throw new NotANumberException();
+                    throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
                 }
                 break;
             default: // this should not happen unless NaNStrategy enum is changed

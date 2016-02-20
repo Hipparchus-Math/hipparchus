@@ -153,7 +153,7 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
      * @exception MathIllegalArgumentException if complete state has not enough elements
      */
     public T[] extractEquationData(final int index, final T[] complete)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkIndex(index);
         final int begin     = start[index];
         final int end       = start[index + 1];

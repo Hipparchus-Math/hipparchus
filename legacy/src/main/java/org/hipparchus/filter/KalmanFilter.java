@@ -117,8 +117,7 @@ public class KalmanFilter {
      *             if the matrix dimensions do not fit together
      */
     public KalmanFilter(final ProcessModel process, final MeasurementModel measurement)
-            throws NullArgumentException, NonSquareMatrixException, MathIllegalArgumentException,
-                   MathIllegalArgumentException {
+            throws NullArgumentException, NonSquareMatrixException, MathIllegalArgumentException {
 
         MathUtils.checkNotNull(process);
         MathUtils.checkNotNull(measurement);

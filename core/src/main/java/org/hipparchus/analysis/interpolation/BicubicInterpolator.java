@@ -48,8 +48,7 @@ public class BicubicInterpolator
     public BicubicInterpolatingFunction interpolate(final double[] xval,
                                                     final double[] yval,
                                                     final double[][] fval)
-        throws NoDataException, MathIllegalArgumentException,
-               MathIllegalArgumentException, NumberIsTooSmallException {
+        throws NoDataException, MathIllegalArgumentException, NumberIsTooSmallException {
         if (xval.length == 0 || yval.length == 0 || fval.length == 0) {
             throw new NoDataException();
         }

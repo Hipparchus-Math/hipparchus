@@ -77,7 +77,6 @@ public class MultivariateNormalDistribution
     public MultivariateNormalDistribution(final double[] means,
                                           final double[][] covariances)
         throws SingularMatrixException,
-               MathIllegalArgumentException,
                MathIllegalArgumentException {
         this(new Well19937c(), means, covariances);
     }
@@ -104,7 +103,6 @@ public class MultivariateNormalDistribution
                                           final double[] means,
                                           final double[][] covariances)
             throws SingularMatrixException,
-                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
         super(rng, means.length);
 

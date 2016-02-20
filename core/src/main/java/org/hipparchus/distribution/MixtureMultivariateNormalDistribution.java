@@ -84,7 +84,7 @@ public class MixtureMultivariateNormalDistribution
      */
     public MixtureMultivariateNormalDistribution(RandomGenerator rng,
                                                  List<Pair<Double, MultivariateNormalDistribution>> components)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         super(rng, components);
     }
 

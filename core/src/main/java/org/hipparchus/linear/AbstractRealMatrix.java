@@ -436,8 +436,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setSubMatrix(final double[][] subMatrix, final int row, final int column)
-        throws NoDataException, MathIllegalArgumentException,
-        MathIllegalArgumentException, NullArgumentException {
+        throws NoDataException, MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(subMatrix);
         final int nRows = subMatrix.length;
         if (nRows == 0) {
@@ -484,7 +483,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setRowMatrix(final int row, final RealMatrix matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         if ((matrix.getRowDimension() != 1) ||
@@ -515,7 +514,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setColumnMatrix(final int column, final RealMatrix matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         if ((matrix.getRowDimension() != nRows) ||
@@ -539,7 +538,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setRowVector(final int row, final RealVector vector)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         if (vector.getDimension() != nCols) {
@@ -562,7 +561,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setColumnVector(final int column, final RealVector vector)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         if (vector.getDimension() != nRows) {
@@ -591,7 +590,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setRow(final int row, final double[] array)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         if (array.length != nCols) {
@@ -620,7 +619,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setColumn(final int column, final double[] array)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         if (array.length != nRows) {

@@ -41,7 +41,7 @@ public class SymmetricGaussIntegrator extends GaussIntegrator {
      */
     public SymmetricGaussIntegrator(double[] points,
                                     double[] weights)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         super(points, weights);
     }
 

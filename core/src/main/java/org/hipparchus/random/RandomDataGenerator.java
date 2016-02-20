@@ -41,7 +41,6 @@ import org.hipparchus.distribution.ZipfDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.MathArrays;
 
@@ -532,7 +531,7 @@ public class RandomDataGenerator implements Serializable {
      * @throws MathIllegalArgumentException if {@code populationSize <= 0}.
      * @throws MathIllegalArgumentException  if {@code numberOfSuccesses < 0}.
      */
-    public int nextHypergeometric(int populationSize, int numberOfSuccesses, int sampleSize) throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooLargeException {
+    public int nextHypergeometric(int populationSize, int numberOfSuccesses, int sampleSize) throws MathIllegalArgumentException, NumberIsTooLargeException {
         return new HypergeometricDistribution(getRandomGenerator(),populationSize,
                 numberOfSuccesses, sampleSize).sample();
     }
@@ -547,7 +546,7 @@ public class RandomDataGenerator implements Serializable {
      * @throws MathIllegalArgumentException if the probability of success is not in the
      * range {@code [0, 1]}.
      */
-    public int nextPascal(int r, double p) throws MathIllegalArgumentException, MathIllegalArgumentException {
+    public int nextPascal(int r, double p) throws MathIllegalArgumentException {
         return new PascalDistribution(getRandomGenerator(), r, p).sample();
     }
 
@@ -672,10 +671,10 @@ public class RandomDataGenerator implements Serializable {
      * (exclusive)
      * @throws NumberIsTooLargeException if {@code lower >= upper}
      * @throws MathIllegalArgumentException if one of the bounds is infinite
-     * @throws NotANumberException if one of the bounds is NaN
+     * @throws MathIllegalArgumentException if one of the bounds is NaN
      */
     public double nextUniform(double lower, double upper)
-            throws NumberIsTooLargeException, MathIllegalArgumentException, NotANumberException {
+            throws NumberIsTooLargeException, MathIllegalArgumentException {
         return nextUniform(lower, upper, false);
     }
 
@@ -708,10 +707,10 @@ public class RandomDataGenerator implements Serializable {
      * {@code true}
      * @throws NumberIsTooLargeException if {@code lower >= upper}
      * @throws MathIllegalArgumentException if one of the bounds is infinite
-     * @throws NotANumberException if one of the bounds is NaN
+     * @throws MathIllegalArgumentException if one of the bounds is NaN
      */
     public double nextUniform(double lower, double upper, boolean lowerInclusive)
-        throws NumberIsTooLargeException, MathIllegalArgumentException, NotANumberException {
+        throws NumberIsTooLargeException, MathIllegalArgumentException {
 
         if (lower >= upper) {
             throw new NumberIsTooLargeException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
@@ -726,7 +725,7 @@ public class RandomDataGenerator implements Serializable {
         }
 
         if (Double.isNaN(lower) || Double.isNaN(upper)) {
-            throw new NotANumberException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
         }
 
         final RandomGenerator generator = getRandomGenerator();

@@ -362,7 +362,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
                               final int startColumn, final int endColumn,
                               final T[][] destination)
     throws MathIllegalArgumentException, NumberIsTooSmallException,
-    MathIllegalArgumentException{
+    MathIllegalArgumentException {
         // safety checks
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         final int rowsCount    = endRow + 1 - startRow;
@@ -429,7 +429,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
-        throws MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException,
         NoDataException, NullArgumentException {
         if (subMatrix == null) {
             throw new NullArgumentException();
@@ -480,7 +480,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setRowMatrix(final int row, final FieldMatrix<T> matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if ((matrix.getRowDimension() != 1) ||
@@ -514,7 +514,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setColumnMatrix(final int column, final FieldMatrix<T> matrix)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if ((matrix.getRowDimension() != nRows) ||
@@ -539,7 +539,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setRowVector(final int row, final FieldVector<T> vector)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if (vector.getDimension() != nCols) {
@@ -563,7 +563,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setColumnVector(final int column, final FieldVector<T> vector)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         checkColumnIndex(column);
         final int nRows = getRowDimension();
@@ -595,7 +595,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setRow(final int row, final T[] array)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if (array.length != nCols) {
@@ -625,7 +625,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setColumn(final int column, final T[] array)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if (array.length != nRows) {
@@ -919,7 +919,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInColumnOrder(final FieldMatrixPreservingVisitor<T> visitor,
                                final int startRow, final int endRow,
                                final int startColumn, final int endColumn)
-    throws NumberIsTooSmallException, MathIllegalArgumentException{
+    throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);

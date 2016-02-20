@@ -100,7 +100,7 @@ public class CycleCrossover<T> implements CrossoverPolicy {
     @Override
     @SuppressWarnings("unchecked")
     public ChromosomePair crossover(final Chromosome first, final Chromosome second)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         if (!(first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
             throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);

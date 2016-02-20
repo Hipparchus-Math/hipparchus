@@ -33,7 +33,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
@@ -596,14 +595,14 @@ public class MathArrays {
      * Check that no entry of the input array is {@code NaN}.
      *
      * @param in Array to be tested.
-     * @throws NotANumberException if an entry is {@code NaN}.
+     * @throws MathIllegalArgumentException if an entry is {@code NaN}.
      * @since 3.4
      */
     public static void checkNotNaN(final double[] in)
-        throws NotANumberException {
+        throws MathIllegalArgumentException {
         for(int i = 0; i < in.length; i++) {
             if (Double.isNaN(in[i])) {
-                throw new NotANumberException();
+                throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
             }
         }
     }

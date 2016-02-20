@@ -48,7 +48,7 @@ public class GaussIntegrator {
      */
     public GaussIntegrator(double[] points,
                            double[] weights)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (points.length != weights.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    points.length, weights.length);

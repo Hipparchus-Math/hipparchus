@@ -54,7 +54,7 @@ public interface BinomialConfidenceInterval {
      * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     ConfidenceInterval createInterval(int numberOfTrials, int numberOfSuccesses, double confidenceLevel)
-            throws MathIllegalArgumentException, MathIllegalArgumentException,
+            throws MathIllegalArgumentException,
                    NumberIsTooLargeException, MathIllegalArgumentException;
 
 }

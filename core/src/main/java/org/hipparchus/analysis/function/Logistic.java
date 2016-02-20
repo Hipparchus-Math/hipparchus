@@ -113,7 +113,6 @@ public class Logistic implements UnivariateDifferentiableFunction {
         @Override
         public double value(double x, double ... param)
             throws NullArgumentException,
-                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
             validateParameters(param);
             return Logistic.value(param[1] - x, param[0],
@@ -139,7 +138,6 @@ public class Logistic implements UnivariateDifferentiableFunction {
         @Override
         public double[] gradient(double x, double ... param)
             throws NullArgumentException,
-                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
             validateParameters(param);
 
@@ -179,7 +177,6 @@ public class Logistic implements UnivariateDifferentiableFunction {
          */
         private void validateParameters(double[] param)
             throws NullArgumentException,
-                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
             if (param == null) {
                 throw new NullArgumentException();

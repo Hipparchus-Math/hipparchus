@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
@@ -790,7 +789,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     // Some NaNStrategy specific testing
-    @Test(expected=NotANumberException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNanStrategyFailed() {
         double[] specialValues =
                 new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };

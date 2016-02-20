@@ -262,7 +262,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      * {@link MultidimensionalCounter#MultidimensionalCounter(int...) constructor}.
      */
     public int getCount(int ... c)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (c.length != dimension) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    c.length, dimension);

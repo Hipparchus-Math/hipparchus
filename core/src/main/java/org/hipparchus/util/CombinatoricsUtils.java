@@ -282,7 +282,7 @@ public final class CombinatoricsUtils {
      * @throws MathIllegalArgumentException if {@code n > 20}: The factorial value is too
      * large to fit in a {@code long}.
      */
-    public static long factorial(final int n) throws MathIllegalArgumentException, MathIllegalArgumentException {
+    public static long factorial(final int n) throws MathIllegalArgumentException {
         if (n < 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER, n);
         }
