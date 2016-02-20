@@ -39,11 +39,10 @@ import org.hipparchus.distribution.UniformIntegerDistribution;
 import org.hipparchus.distribution.WeibullDistribution;
 import org.hipparchus.distribution.ZipfDistribution;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
@@ -674,11 +673,11 @@ public class RandomDataGenerator implements Serializable {
      * @return a uniformly distributed random value between lower and upper
      * (exclusive)
      * @throws NumberIsTooLargeException if {@code lower >= upper}
-     * @throws NotFiniteNumberException if one of the bounds is infinite
+     * @throws MathIllegalArgumentException if one of the bounds is infinite
      * @throws NotANumberException if one of the bounds is NaN
      */
     public double nextUniform(double lower, double upper)
-            throws NumberIsTooLargeException, NotFiniteNumberException, NotANumberException {
+            throws NumberIsTooLargeException, MathIllegalArgumentException, NotANumberException {
         return nextUniform(lower, upper, false);
     }
 
@@ -710,11 +709,11 @@ public class RandomDataGenerator implements Serializable {
      * {@code [lower, upper)} interval, if {@code lowerInclusive} is
      * {@code true}
      * @throws NumberIsTooLargeException if {@code lower >= upper}
-     * @throws NotFiniteNumberException if one of the bounds is infinite
+     * @throws MathIllegalArgumentException if one of the bounds is infinite
      * @throws NotANumberException if one of the bounds is NaN
      */
     public double nextUniform(double lower, double upper, boolean lowerInclusive)
-        throws NumberIsTooLargeException, NotFiniteNumberException, NotANumberException {
+        throws NumberIsTooLargeException, MathIllegalArgumentException, NotANumberException {
 
         if (lower >= upper) {
             throw new NumberIsTooLargeException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
@@ -722,10 +721,10 @@ public class RandomDataGenerator implements Serializable {
         }
 
         if (Double.isInfinite(lower)) {
-            throw new NotFiniteNumberException(LocalizedFormats.INFINITE_BOUND, lower);
+            throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_BOUND, lower);
         }
         if (Double.isInfinite(upper)) {
-            throw new NotFiniteNumberException(LocalizedFormats.INFINITE_BOUND, upper);
+            throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_BOUND, upper);
         }
 
         if (Double.isNaN(lower) || Double.isNaN(upper)) {

@@ -22,11 +22,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
@@ -70,13 +68,11 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @throws MathIllegalArgumentException if
      * {@code singletons.length != probabilities.length}
      * @throws NotPositiveException if any of the probabilities are negative.
-     * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathRuntimeException all of the probabilities are 0.
+     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedRealDistribution(final double[] singletons, final double[] probabilities)
-    throws MathIllegalArgumentException, NotPositiveException, MathRuntimeException,
-           NotFiniteNumberException, NotANumberException {
+    throws MathIllegalArgumentException, NotPositiveException, MathIllegalArgumentException, NotANumberException {
         this(new Well19937c(), singletons, probabilities);
     }
 
@@ -90,16 +86,13 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @throws MathIllegalArgumentException if
      * {@code singletons.length != probabilities.length}
      * @throws NotPositiveException if any of the probabilities are negative.
-     * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathRuntimeException all of the probabilities are 0.
+     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedRealDistribution(final RandomGenerator rng,
                                     final double[] singletons, final double[] probabilities)
-        throws MathIllegalArgumentException, NotPositiveException, MathRuntimeException,
-               NotFiniteNumberException, NotANumberException {
+        throws MathIllegalArgumentException, NotPositiveException, MathIllegalArgumentException, NotANumberException {
         super(rng);
-
         innerDistribution = new EnumeratedDistribution<Double>(
                 rng, createDistribution(singletons, probabilities));
     }

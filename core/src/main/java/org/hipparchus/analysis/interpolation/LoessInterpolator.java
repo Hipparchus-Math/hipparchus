@@ -23,7 +23,6 @@ import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -173,7 +172,7 @@ public class LoessInterpolator
      * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
      * @throws NoDataException if {@code xval} or {@code yval} has zero size.
-     * @throws NotFiniteNumberException if any of the arguments and values are
+     * @throws MathIllegalArgumentException if any of the arguments and values are
      * not finite real numbers.
      * @throws NumberIsTooSmallException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
@@ -182,11 +181,7 @@ public class LoessInterpolator
     @Override
     public final PolynomialSplineFunction interpolate(final double[] xval,
                                                       final double[] yval)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException,
-               NoDataException,
-               NotFiniteNumberException,
-               NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NoDataException, NumberIsTooSmallException {
         return new SplineInterpolator().interpolate(xval, smooth(xval, yval));
     }
 
@@ -203,7 +198,7 @@ public class LoessInterpolator
      * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
      * @throws NoDataException if {@code xval} or {@code yval} has zero size.
-     * @throws NotFiniteNumberException if any of the arguments and values are
+     * @throws MathIllegalArgumentException if any of the arguments and values are
      not finite real numbers.
      * @throws NumberIsTooSmallException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
@@ -212,11 +207,7 @@ public class LoessInterpolator
      */
     public final double[] smooth(final double[] xval, final double[] yval,
                                  final double[] weights)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException,
-               NoDataException,
-               NotFiniteNumberException,
-               NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NoDataException, NumberIsTooSmallException {
         if (xval.length != yval.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);
@@ -373,18 +364,14 @@ public class LoessInterpolator
      * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
      * @throws NoDataException if {@code xval} or {@code yval} has zero size.
-     * @throws NotFiniteNumberException if any of the arguments and values are
+     * @throws MathIllegalArgumentException if any of the arguments and values are
      * not finite real numbers.
      * @throws NumberIsTooSmallException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
      * larger than 2/n).
      */
     public final double[] smooth(final double[] xval, final double[] yval)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException,
-               NoDataException,
-               NotFiniteNumberException,
-               NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NoDataException, NumberIsTooSmallException {
         if (xval.length != yval.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);

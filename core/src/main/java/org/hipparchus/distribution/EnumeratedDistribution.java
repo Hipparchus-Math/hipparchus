@@ -23,11 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotFiniteNumberException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.NotANumberException;
+import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -92,12 +90,11 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @param pmf probability mass function enumerated as a list of <T, probability>
      * pairs.
      * @throws NotPositiveException if any of the probabilities are negative.
-     * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathRuntimeException all of the probabilities are 0.
+     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedDistribution(final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathRuntimeException, NotFiniteNumberException, NotANumberException {
+        throws NotPositiveException, MathIllegalArgumentException, NotANumberException {
         this(new Well19937c(), pmf);
     }
 
@@ -109,12 +106,11 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @param pmf probability mass function enumerated as a list of <T, probability>
      * pairs.
      * @throws NotPositiveException if any of the probabilities are negative.
-     * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathRuntimeException all of the probabilities are 0.
+     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedDistribution(final RandomGenerator rng, final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathRuntimeException, NotFiniteNumberException, NotANumberException {
+        throws NotPositiveException, MathIllegalArgumentException, NotANumberException {
         random = rng;
 
         singletons = new ArrayList<T>(pmf.size());
@@ -128,7 +124,7 @@ public class EnumeratedDistribution<T> implements Serializable {
                 throw new NotPositiveException(sample.getValue());
             }
             if (Double.isInfinite(p)) {
-                throw new NotFiniteNumberException(p);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_FINITE_NUMBER, p);
             }
             if (Double.isNaN(p)) {
                 throw new NotANumberException();
