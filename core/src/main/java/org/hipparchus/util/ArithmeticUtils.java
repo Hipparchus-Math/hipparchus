@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Some useful, arithmetics related, additions to the built-in functions in
@@ -482,15 +482,15 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return \( k^e \)
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
      * @throws MathRuntimeException if the result would overflow.
      */
     public static int pow(final int k,
                           final int e)
-        throws NotPositiveException,
+        throws MathIllegalArgumentException,
                MathRuntimeException {
         if (e < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
         int exp = e;
@@ -518,15 +518,15 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return \( k^e \)
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
      * @throws MathRuntimeException if the result would overflow.
      */
     public static long pow(final long k,
                            final int e)
-        throws NotPositiveException,
+        throws MathIllegalArgumentException,
                MathRuntimeException {
         if (e < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
         int exp = e;
@@ -554,11 +554,11 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return k<sup>e</sup>
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
      */
-    public static BigInteger pow(final BigInteger k, int e) throws NotPositiveException {
+    public static BigInteger pow(final BigInteger k, int e) throws MathIllegalArgumentException {
         if (e < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
         return k.pow(e);
@@ -570,11 +570,11 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return k<sup>e</sup>
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
      */
-    public static BigInteger pow(final BigInteger k, long e) throws NotPositiveException {
+    public static BigInteger pow(final BigInteger k, long e) throws MathIllegalArgumentException {
         if (e < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
         BigInteger result = BigInteger.ONE;
@@ -597,11 +597,11 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return k<sup>e</sup>
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
      */
-    public static BigInteger pow(final BigInteger k, BigInteger e) throws NotPositiveException {
+    public static BigInteger pow(final BigInteger k, BigInteger e) throws MathIllegalArgumentException {
         if (e.compareTo(BigInteger.ZERO) < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
         BigInteger result = BigInteger.ONE;

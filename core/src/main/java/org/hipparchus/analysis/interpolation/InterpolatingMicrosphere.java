@@ -22,7 +22,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.util.FastMath;
@@ -66,7 +65,7 @@ public class InterpolatingMicrosphere {
      * threshold is exceeded.
      * @throws MathIllegalArgumentException if {@code dimension <= 0}
      * or {@code size <= 0}.
-     * @throws NotPositiveException if {@code darkThreshold < 0}.
+     * @throws MathIllegalArgumentException if {@code darkThreshold < 0}.
      * @throws OutOfRangeException if {@code maxDarkFraction} does not
      * belong to the interval {@code [0, 1]}.
      */
@@ -88,7 +87,7 @@ public class InterpolatingMicrosphere {
             throw new OutOfRangeException(maxDarkFraction, 0, 1);
         }
         if (darkThreshold < 0) {
-            throw new NotPositiveException(darkThreshold);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, darkThreshold, 0);
         }
 
         this.dimension = dimension;
@@ -118,7 +117,7 @@ public class InterpolatingMicrosphere {
      * vectors does not match the dimension set in the constructor.
      * @throws MathIllegalArgumentException if {@code dimension <= 0}
      * or {@code size <= 0}.
-     * @throws NotPositiveException if {@code darkThreshold < 0}.
+     * @throws MathIllegalArgumentException if {@code darkThreshold < 0}.
      * @throws OutOfRangeException if {@code maxDarkFraction} does not
      * belong to the interval {@code [0, 1]}.
      */
@@ -204,7 +203,7 @@ public class InterpolatingMicrosphere {
      * this value, no interpolation will be performed, and the value
      * of the sample will just be returned.
      * @return the estimated value at the given {@code point}.
-     * @throws NotPositiveException if {@code exponent < 0}.
+     * @throws MathIllegalArgumentException if {@code exponent < 0}.
      */
     public double value(double[] point,
                         double[][] samplePoints,
@@ -212,7 +211,7 @@ public class InterpolatingMicrosphere {
                         double exponent,
                         double noInterpolationTolerance) {
         if (exponent < 0) {
-            throw new NotPositiveException(exponent);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, exponent, 0);
         }
 
         clear();

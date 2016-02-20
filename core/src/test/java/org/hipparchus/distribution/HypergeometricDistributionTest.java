@@ -18,9 +18,6 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.distribution.HypergeometricDistribution;
-import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.Precision;
@@ -172,14 +169,14 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         }
         try {
             new HypergeometricDistribution(5, -1, 5);
-            Assert.fail("negative number of successes. NotPositiveException expected");
-        } catch(NotPositiveException ex) {
+            Assert.fail("negative number of successes. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 3, -1);
-            Assert.fail("negative sample size. NotPositiveException expected");
-        } catch(NotPositiveException ex) {
+            Assert.fail("negative sample size. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {

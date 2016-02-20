@@ -17,7 +17,6 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.junit.Assert;
@@ -93,8 +92,8 @@ public class ChiSquareTestTest {
         observed[0] = -1;
         try {
             testStatistic.chiSquareTest(expected, observed, .01);
-            Assert.fail("bad expected count, NotPositiveException expected");
-        } catch (NotPositiveException ex) {
+            Assert.fail("bad expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -145,8 +144,8 @@ public class ChiSquareTestTest {
         long[][] counts6 = {{10, -2}, {30, 40}, {60, 90} };
         try {
             testStatistic.chiSquare(counts6);
-            Assert.fail("Expecting NotPositiveException");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -233,8 +232,8 @@ public class ChiSquareTestTest {
         try {
             testStatistic.chiSquareTestDataSetsComparison(
                     observed1, observed2);
-            Assert.fail("Expecting NotPositiveException - negative count");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - negative count");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[] observed3 = {10, 0, 12, 10, 15};

@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -97,8 +96,8 @@ public class TestUtilsTest {
         observed[0] = -1;
         try {
             TestUtils.chiSquareTest(expected, observed, .01);
-            Assert.fail("bad expected count, NotPositiveException expected");
-        } catch (NotPositiveException ex) {
+            Assert.fail("bad expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -149,8 +148,8 @@ public class TestUtilsTest {
         long[][] counts6 = {{10, -2}, {30, 40}, {60, 90} };
         try {
             TestUtils.chiSquare(counts6);
-            Assert.fail("Expecting NotPositiveException");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

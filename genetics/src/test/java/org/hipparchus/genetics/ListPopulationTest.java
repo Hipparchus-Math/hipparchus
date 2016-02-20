@@ -20,7 +20,7 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.genetics.BinaryChromosome;
@@ -88,7 +88,7 @@ public class ListPopulationTest {
         Assert.assertEquals(50, population.getPopulationLimit());
     }
 
-    @Test(expected = NotPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSetPopulationLimit() {
         final ListPopulation population = new ListPopulation(10) {
             public Population nextGeneration() {
@@ -100,7 +100,7 @@ public class ListPopulationTest {
         population.setPopulationLimit(-50);
     }
 
-    @Test(expected = NotPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testConstructorPopulationLimitNotPositive() {
         new ListPopulation(-10) {
             public Population nextGeneration() {
@@ -110,7 +110,7 @@ public class ListPopulationTest {
         };
     }
 
-    @Test(expected = NotPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testChromosomeListConstructorPopulationLimitNotPositive() {
         final ArrayList<Chromosome> chromosomes = new ArrayList<Chromosome> ();
         chromosomes.add(new DummyBinaryChromosome(BinaryChromosome.randomBinaryRepresentation(3)));

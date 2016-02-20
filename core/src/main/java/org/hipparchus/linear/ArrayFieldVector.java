@@ -21,10 +21,9 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -780,9 +779,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> getSubVector(int index, int n)
-        throws OutOfRangeException, NotPositiveException {
+        throws OutOfRangeException, MathIllegalArgumentException {
         if (n < 0) {
-            throw new NotPositiveException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
         ArrayFieldVector<T> out = new ArrayFieldVector<T>(field, n);
         try {

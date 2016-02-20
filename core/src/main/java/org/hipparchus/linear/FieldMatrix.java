@@ -22,7 +22,6 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -128,11 +127,11 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      *
      * @param p raise this to power p
      * @return this^p
-     * @throws NotPositiveException if {@code p < 0}
+     * @throws MathIllegalArgumentException if {@code p < 0}
      * @throws NonSquareMatrixException if {@code this matrix} is not square
      */
     FieldMatrix<T> power(final int p) throws NonSquareMatrixException,
-    NotPositiveException;
+    MathIllegalArgumentException;
 
     /**
      * Returns matrix entries as a two-dimensional array.

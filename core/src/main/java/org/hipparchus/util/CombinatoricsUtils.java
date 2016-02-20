@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.special.Gamma;
 
@@ -80,13 +79,13 @@ public final class CombinatoricsUtils {
      * @param n the size of the set
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws MathIllegalArgumentException if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
      * @throws MathRuntimeException if the result is too large to be
      * represented by a long integer.
      */
     public static long binomialCoefficient(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathRuntimeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException, MathRuntimeException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1;
@@ -161,13 +160,13 @@ public final class CombinatoricsUtils {
      * @param n the size of the set
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws MathIllegalArgumentException if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
      * @throws MathRuntimeException if the result is too large to be
      * represented by a long integer.
      */
     public static double binomialCoefficientDouble(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathRuntimeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException, MathRuntimeException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1d;
@@ -206,13 +205,13 @@ public final class CombinatoricsUtils {
      * @param n the size of the set
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws MathIllegalArgumentException if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
      * @throws MathRuntimeException if the result is too large to be
      * represented by a long integer.
      */
     public static double binomialCoefficientLog(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathRuntimeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException, MathRuntimeException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 0;
@@ -279,13 +278,13 @@ public final class CombinatoricsUtils {
      * @return {@code n!}
      * @throws MathRuntimeException if the result is too large to be represented
      * by a {@code long}.
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws MathIllegalArgumentException if {@code n < 0}.
      * @throws MathIllegalArgumentException if {@code n > 20}: The factorial value is too
      * large to fit in a {@code long}.
      */
-    public static long factorial(final int n) throws NotPositiveException, MathIllegalArgumentException {
+    public static long factorial(final int n) throws MathIllegalArgumentException, MathIllegalArgumentException {
         if (n < 0) {
-            throw new NotPositiveException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER, n);
         }
         if (n > 20) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE, n, 20);
@@ -304,11 +303,11 @@ public final class CombinatoricsUtils {
      *
      * @param n Argument.
      * @return {@code n!}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws MathIllegalArgumentException if {@code n < 0}.
      */
-    public static double factorialDouble(final int n) throws NotPositiveException {
+    public static double factorialDouble(final int n) throws MathIllegalArgumentException {
         if (n < 0) {
-            throw new NotPositiveException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
+            throw new MathIllegalArgumentException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
                                            n);
         }
         if (n < 21) {
@@ -322,9 +321,9 @@ public final class CombinatoricsUtils {
      *
      * @param n Argument.
      * @return {@code log(n!)}
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws MathIllegalArgumentException if {@code n < 0}.
      */
-    public static double factorialLog(final int n) throws NotPositiveException {
+    public static double factorialLog(final int n) throws MathIllegalArgumentException {
         return FACTORIAL_LOG_NO_CACHE.value(n);
     }
 
@@ -336,21 +335,21 @@ public final class CombinatoricsUtils {
      * subsets.
      * <p>
      * The preconditions are {@code 0 <= k <= n } (otherwise
-     * {@code NotPositiveException} is thrown)
+     * {@code MathIllegalArgumentException} is thrown)
      * </p>
      * @param n the size of the set
      * @param k the number of non-empty subsets
      * @return {@code S(n,k)}
-     * @throws NotPositiveException if {@code k < 0}.
+     * @throws MathIllegalArgumentException if {@code k < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
      * @throws MathRuntimeException if some overflow happens, typically for n exceeding 25 and
      * k between 20 and n-2 (S(n,n-1) is handled specifically and does not overflow)
      * @since 3.1
      */
     public static long stirlingS2(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathRuntimeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException, MathRuntimeException {
         if (k < 0) {
-            throw new NotPositiveException(k);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, k, 0);
         }
         if (k > n) {
             throw new NumberIsTooLargeException(k, n, true);
@@ -431,7 +430,7 @@ public final class CombinatoricsUtils {
      * @param n Size of the set from which subsets are selected.
      * @param k Size of the subsets to be enumerated.
      * @return an {@link Iterator iterator} over the k-sets in n.
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws MathIllegalArgumentException if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
      */
     public static Iterator<int[]> combinationsIterator(int n, int k) {
@@ -443,19 +442,19 @@ public final class CombinatoricsUtils {
      *
      * @param n Size of the set.
      * @param k Size of the subsets to be counted.
-     * @throws NotPositiveException if {@code n < 0}.
+     * @throws MathIllegalArgumentException if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
      */
     public static void checkBinomial(final int n,
                                      final int k)
         throws NumberIsTooLargeException,
-               NotPositiveException {
+               MathIllegalArgumentException {
         if (n < k) {
             throw new NumberIsTooLargeException(LocalizedFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
                                                 k, n, true);
         }
         if (n < 0) {
-            throw new NotPositiveException(LocalizedFormats.BINOMIAL_NEGATIVE_PARAMETER, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.BINOMIAL_NEGATIVE_PARAMETER, n);
         }
     }
 
@@ -477,12 +476,12 @@ public final class CombinatoricsUtils {
          *
          * @param numValues Number of values of the function to compute.
          * @param cache Existing cache.
-         * @throw NotPositiveException if {@code n < 0}.
+         * @throw MathIllegalArgumentException if {@code n < 0}.
          */
         private FactorialLog(int numValues,
                              double[] cache) {
             if (numValues < 0) {
-                throw new NotPositiveException(numValues);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, numValues, 0);
             }
 
             LOG_FACTORIALS = new double[numValues];
@@ -517,7 +516,7 @@ public final class CombinatoricsUtils {
          * @param cacheSize Number of precomputed values of the function.
          * @return a new instance where {@code cacheSize} values have been
          * precomputed.
-         * @throws NotPositiveException if {@code n < 0}.
+         * @throws MathIllegalArgumentException if {@code n < 0}.
          */
         public FactorialLog withCache(final int cacheSize) {
             return new FactorialLog(cacheSize, LOG_FACTORIALS);
@@ -528,11 +527,11 @@ public final class CombinatoricsUtils {
          *
          * @param n Argument.
          * @return {@code log(n!)}.
-         * @throws NotPositiveException if {@code n < 0}.
+         * @throws MathIllegalArgumentException if {@code n < 0}.
          */
         public double value(final int n) {
             if (n < 0) {
-                throw new NotPositiveException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
+                throw new MathIllegalArgumentException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
                                                n);
             }
 

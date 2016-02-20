@@ -23,7 +23,6 @@ import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
@@ -138,20 +137,20 @@ public class LoessInterpolator
      * @param accuracy If the median residual at a certain robustness iteration
      * is less than this amount, no more iterations are done.
      * @throws OutOfRangeException if bandwidth does not lie in the interval [0,1].
-     * @throws NotPositiveException if {@code robustnessIters} is negative.
+     * @throws MathIllegalArgumentException if {@code robustnessIters} is negative.
      * @see #LoessInterpolator(double, int)
      * @since 2.1
      */
     public LoessInterpolator(double bandwidth, int robustnessIters, double accuracy)
         throws OutOfRangeException,
-               NotPositiveException {
+               MathIllegalArgumentException {
         if (bandwidth < 0 ||
             bandwidth > 1) {
             throw new OutOfRangeException(LocalizedFormats.BANDWIDTH, bandwidth, 0, 1);
         }
         this.bandwidth = bandwidth;
         if (robustnessIters < 0) {
-            throw new NotPositiveException(LocalizedFormats.ROBUSTNESS_ITERATIONS, robustnessIters);
+            throw new MathIllegalArgumentException(LocalizedFormats.ROBUSTNESS_ITERATIONS, robustnessIters);
         }
         this.robustnessIters = robustnessIters;
         this.accuracy = accuracy;

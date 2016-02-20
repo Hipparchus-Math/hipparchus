@@ -18,7 +18,6 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
@@ -59,13 +58,13 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
      * @param populationSize Population size.
      * @param numberOfSuccesses Number of successes in the population.
      * @param sampleSize Sample size.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws MathIllegalArgumentException if {@code populationSize <= 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > populationSize},
      * or {@code sampleSize > populationSize}.
      */
     public HypergeometricDistribution(int populationSize, int numberOfSuccesses, int sampleSize)
-    throws NotPositiveException, MathIllegalArgumentException, NumberIsTooLargeException {
+    throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooLargeException {
         this(new Well19937c(), populationSize, numberOfSuccesses, sampleSize);
     }
 
@@ -76,7 +75,7 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
      * @param populationSize Population size.
      * @param numberOfSuccesses Number of successes in the population.
      * @param sampleSize Sample size.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws MathIllegalArgumentException if {@code populationSize <= 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > populationSize},
      * or {@code sampleSize > populationSize}.
@@ -86,7 +85,7 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
                                       int populationSize,
                                       int numberOfSuccesses,
                                       int sampleSize)
-    throws NotPositiveException, MathIllegalArgumentException, NumberIsTooLargeException {
+    throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooLargeException {
         super(rng);
 
         if (populationSize <= 0) {
@@ -94,11 +93,11 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
                                                    populationSize);
         }
         if (numberOfSuccesses < 0) {
-            throw new NotPositiveException(LocalizedFormats.NUMBER_OF_SUCCESSES,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SUCCESSES,
                                            numberOfSuccesses);
         }
         if (sampleSize < 0) {
-            throw new NotPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES,
                                            sampleSize);
         }
 

@@ -23,7 +23,6 @@ import java.util.Locale;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -172,9 +171,9 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public RealMatrix power(final int p)
-        throws NotPositiveException, NonSquareMatrixException {
+        throws MathIllegalArgumentException, NonSquareMatrixException {
         if (p < 0) {
-            throw new NotPositiveException(LocalizedFormats.NOT_POSITIVE_EXPONENT, p);
+            throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_EXPONENT, p);
         }
 
         if (!isSquare()) {

@@ -19,7 +19,6 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -123,11 +122,11 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param p raise {@code this} to power {@code p}
      * @return {@code this^p}
-     * @throws NotPositiveException if {@code p < 0}
+     * @throws MathIllegalArgumentException if {@code p < 0}
      * @throws NonSquareMatrixException if the matrix is not square
      */
     RealMatrix power(final int p)
-        throws NotPositiveException, NonSquareMatrixException;
+        throws MathIllegalArgumentException, NonSquareMatrixException;
 
     /**
      * Returns matrix entries as a two-dimensional array.

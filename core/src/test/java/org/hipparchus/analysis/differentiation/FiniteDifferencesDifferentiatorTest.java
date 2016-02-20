@@ -25,7 +25,7 @@ import org.hipparchus.analysis.UnivariateVectorFunction;
 import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
@@ -42,7 +42,7 @@ public class FiniteDifferencesDifferentiatorTest {
         new FiniteDifferencesDifferentiator(1, 1.0);
     }
 
-    @Test(expected=NotPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testWrongStepSize() {
         new FiniteDifferencesDifferentiator(3, 0.0);
     }

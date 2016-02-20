@@ -20,7 +20,6 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 
@@ -260,10 +259,10 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @param n number of elements to be retrieved.
      * @return a vector containing n elements.
      * @throws OutOfRangeException if the index is not valid.
-     * @throws NotPositiveException if the number of elements if not positive.
+     * @throws MathIllegalArgumentException if the number of elements if not positive.
      */
     FieldVector<T> getSubVector(int index, int n)
-        throws OutOfRangeException, NotPositiveException;
+        throws OutOfRangeException, MathIllegalArgumentException;
 
     /**
      * Set a set of consecutive elements.

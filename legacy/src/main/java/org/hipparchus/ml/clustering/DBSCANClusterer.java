@@ -24,7 +24,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.ml.distance.DistanceMeasure;
 import org.hipparchus.ml.distance.EuclideanDistance;
@@ -78,10 +79,10 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
      *
      * @param eps maximum radius of the neighborhood to be considered
      * @param minPts minimum number of points needed for a cluster
-     * @throws NotPositiveException if {@code eps < 0.0} or {@code minPts < 0}
+     * @throws MathIllegalArgumentException if {@code eps < 0.0} or {@code minPts < 0}
      */
     public DBSCANClusterer(final double eps, final int minPts)
-        throws NotPositiveException {
+        throws MathIllegalArgumentException {
         this(eps, minPts, new EuclideanDistance());
     }
 
@@ -91,17 +92,17 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
      * @param eps maximum radius of the neighborhood to be considered
      * @param minPts minimum number of points needed for a cluster
      * @param measure the distance measure to use
-     * @throws NotPositiveException if {@code eps < 0.0} or {@code minPts < 0}
+     * @throws MathIllegalArgumentException if {@code eps < 0.0} or {@code minPts < 0}
      */
     public DBSCANClusterer(final double eps, final int minPts, final DistanceMeasure measure)
-        throws NotPositiveException {
+        throws MathIllegalArgumentException {
         super(measure);
 
         if (eps < 0.0d) {
-            throw new NotPositiveException(eps);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, eps, 0);
         }
         if (minPts < 0) {
-            throw new NotPositiveException(minPts);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, minPts, 0);
         }
         this.eps = eps;
         this.minPts = minPts;

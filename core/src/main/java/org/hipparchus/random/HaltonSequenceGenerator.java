@@ -18,7 +18,6 @@ package org.hipparchus.random;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathUtils;
@@ -166,9 +165,9 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
      *
      * @param index the index in the sequence to skip to
      * @return the i-th point in the Halton sequence
-     * @throws NotPositiveException if index &lt; 0
+     * @throws MathIllegalArgumentException if index &lt; 0
      */
-    public double[] skipTo(final int index) throws NotPositiveException {
+    public double[] skipTo(final int index) throws MathIllegalArgumentException {
         count = index;
         return nextVector();
     }

@@ -21,11 +21,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
@@ -1794,7 +1793,7 @@ public class DSCompiler {
                     try {
                         term *= FastMath.pow(delta[k], orders[k]) /
                         CombinatoricsUtils.factorial(orders[k]);
-                    } catch (NotPositiveException e) {
+                    } catch (MathIllegalArgumentException e) {
                         // this cannot happen
                         throw new MathInternalError(e);
                     }

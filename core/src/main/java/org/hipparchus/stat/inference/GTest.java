@@ -20,7 +20,6 @@ import org.hipparchus.distribution.ChiSquaredDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
@@ -66,14 +65,14 @@ public class GTest {
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
      * @return G-Test statistic
-     * @throws NotPositiveException if {@code observed} has negative entries
+     * @throws MathIllegalArgumentException if {@code observed} has negative entries
      * @throws MathIllegalArgumentException if {@code expected} has entries that
      * are not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
      */
     public double g(final double[] expected, final long[] observed)
-            throws NotPositiveException, MathIllegalArgumentException,
+            throws MathIllegalArgumentException, MathIllegalArgumentException,
             MathIllegalArgumentException {
 
         if (expected.length < 2) {
@@ -141,7 +140,7 @@ public class GTest {
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
      * @return p-value
-     * @throws NotPositiveException if {@code observed} has negative entries
+     * @throws MathIllegalArgumentException if {@code observed} has negative entries
      * @throws MathIllegalArgumentException if {@code expected} has entries that
      * are not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
@@ -150,7 +149,7 @@ public class GTest {
      * p-value.
      */
     public double gTest(final double[] expected, final long[] observed)
-            throws NotPositiveException, MathIllegalArgumentException,
+            throws MathIllegalArgumentException, MathIllegalArgumentException,
             MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -172,7 +171,7 @@ public class GTest {
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
      * @return p-value
-     * @throws NotPositiveException if {@code observed} has negative entries
+     * @throws MathIllegalArgumentException if {@code observed} has negative entries
      * @throws MathIllegalArgumentException {@code expected} has entries that are
      * not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
@@ -181,7 +180,7 @@ public class GTest {
      * p-value.
      */
     public double gTestIntrinsic(final double[] expected, final long[] observed)
-            throws NotPositiveException, MathIllegalArgumentException,
+            throws MathIllegalArgumentException, MathIllegalArgumentException,
             MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -224,7 +223,7 @@ public class GTest {
      * @param alpha significance level of the test
      * @return true iff null hypothesis can be rejected with confidence 1 -
      * alpha
-     * @throws NotPositiveException if {@code observed} has negative entries
+     * @throws MathIllegalArgumentException if {@code observed} has negative entries
      * @throws MathIllegalArgumentException if {@code expected} has entries that
      * are not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
@@ -236,7 +235,7 @@ public class GTest {
      */
     public boolean gTest(final double[] expected, final long[] observed,
             final double alpha)
-            throws NotPositiveException, MathIllegalArgumentException,
+            throws MathIllegalArgumentException, MathIllegalArgumentException,
             MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
@@ -339,14 +338,14 @@ public class GTest {
      * @return G-Test statistic
      * @throws MathIllegalArgumentException the the lengths of the arrays do not
      * match or their common length is less than 2
-     * @throws NotPositiveException if any entry in {@code observed1} or
+     * @throws MathIllegalArgumentException if any entry in {@code observed1} or
      * {@code observed2} is negative
      * @throws ZeroException if either all counts of
      * {@code observed1} or {@code observed2} are zero, or if the count
      * at the same index is zero for both arrays.
      */
     public double gDataSetsComparison(final long[] observed1, final long[] observed2)
-            throws MathIllegalArgumentException, NotPositiveException, ZeroException {
+            throws MathIllegalArgumentException, MathIllegalArgumentException, ZeroException {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
@@ -463,7 +462,7 @@ public class GTest {
      * @return p-value
      * @throws MathIllegalArgumentException the the length of the arrays does not
      * match or their common length is less than 2
-     * @throws NotPositiveException if any of the entries in {@code observed1} or
+     * @throws MathIllegalArgumentException if any of the entries in {@code observed1} or
      * {@code observed2} are negative
      * @throws ZeroException if either all counts of {@code observed1} or
      * {@code observed2} are zero, or if the count at some index is
@@ -473,7 +472,7 @@ public class GTest {
      */
     public double gTestDataSetsComparison(final long[] observed1,
             final long[] observed2)
-            throws MathIllegalArgumentException, NotPositiveException, ZeroException,
+            throws MathIllegalArgumentException, MathIllegalArgumentException, ZeroException,
             MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -516,7 +515,7 @@ public class GTest {
      * alpha
      * @throws MathIllegalArgumentException the the length of the arrays does not
      * match
-     * @throws NotPositiveException if any of the entries in {@code observed1} or
+     * @throws MathIllegalArgumentException if any of the entries in {@code observed1} or
      * {@code observed2} are negative
      * @throws ZeroException if either all counts of {@code observed1} or
      * {@code observed2} are zero, or if the count at some index is
@@ -529,7 +528,7 @@ public class GTest {
             final long[] observed1,
             final long[] observed2,
             final double alpha)
-            throws MathIllegalArgumentException, NotPositiveException,
+            throws MathIllegalArgumentException, MathIllegalArgumentException,
             ZeroException, OutOfRangeException, MaxCountExceededException {
 
         if (alpha <= 0 || alpha > 0.5) {

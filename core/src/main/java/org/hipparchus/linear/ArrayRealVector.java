@@ -21,9 +21,8 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -641,9 +640,9 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public RealVector getSubVector(int index, int n)
-        throws OutOfRangeException, NotPositiveException {
+        throws OutOfRangeException, MathIllegalArgumentException {
         if (n < 0) {
-            throw new NotPositiveException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
         ArrayRealVector out = new ArrayRealVector(n);
         try {

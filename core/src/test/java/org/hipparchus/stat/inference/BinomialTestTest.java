@@ -17,9 +17,6 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.stat.inference.AlternativeHypothesis;
-import org.hipparchus.stat.inference.BinomialTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -49,7 +46,7 @@ public class BinomialTestTest {
         try {
             testStatistic.binomialTest(10, -1, 0.5, AlternativeHypothesis.TWO_SIDED);
             Assert.fail("Expected not positive exception");
-        } catch (NotPositiveException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected exception;
         }
 

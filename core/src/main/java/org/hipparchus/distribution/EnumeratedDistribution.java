@@ -25,7 +25,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -89,12 +88,12 @@ public class EnumeratedDistribution<T> implements Serializable {
      *
      * @param pmf probability mass function enumerated as a list of <T, probability>
      * pairs.
-     * @throws NotPositiveException if any of the probabilities are negative.
+     * @throws MathIllegalArgumentException if any of the probabilities are negative.
      * @throws NotANumberException if any of the probabilities are NaN.
      * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedDistribution(final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathIllegalArgumentException, NotANumberException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException, NotANumberException {
         this(new Well19937c(), pmf);
     }
 
@@ -105,12 +104,12 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @param rng random number generator.
      * @param pmf probability mass function enumerated as a list of <T, probability>
      * pairs.
-     * @throws NotPositiveException if any of the probabilities are negative.
+     * @throws MathIllegalArgumentException if any of the probabilities are negative.
      * @throws NotANumberException if any of the probabilities are NaN.
      * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedDistribution(final RandomGenerator rng, final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathIllegalArgumentException, NotANumberException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException, NotANumberException {
         random = rng;
 
         singletons = new ArrayList<T>(pmf.size());
@@ -121,7 +120,7 @@ public class EnumeratedDistribution<T> implements Serializable {
             singletons.add(sample.getKey());
             final double p = sample.getValue();
             if (p < 0) {
-                throw new NotPositiveException(sample.getValue());
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, p, 0);
             }
             if (Double.isInfinite(p)) {
                 throw new MathIllegalArgumentException(LocalizedFormats.NOT_FINITE_NUMBER, p);

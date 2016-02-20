@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -1199,13 +1199,13 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      *
      * @param n Degree of root.
      * @return a List of all {@code n}-th roots of {@code this}.
-     * @throws NotPositiveException if {@code n <= 0}.
+     * @throws MathIllegalArgumentException if {@code n <= 0}.
      * @since 2.0
      */
-    public List<Complex> nthRoot(int n) throws NotPositiveException {
+    public List<Complex> nthRoot(int n) throws MathIllegalArgumentException {
 
         if (n <= 0) {
-            throw new NotPositiveException(LocalizedFormats.CANNOT_COMPUTE_NTH_ROOT_FOR_NEGATIVE_N,
+            throw new MathIllegalArgumentException(LocalizedFormats.CANNOT_COMPUTE_NTH_ROOT_FOR_NEGATIVE_N,
                                            n);
         }
 

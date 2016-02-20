@@ -21,7 +21,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
@@ -828,11 +827,11 @@ public final class StatUtils {
         }
 
         if (begin < 0) {
-            throw new NotPositiveException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
+            throw new MathIllegalArgumentException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
         }
 
         if (length < 0) {
-            throw new NotPositiveException(LocalizedFormats.LENGTH, Integer.valueOf(length));
+            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, Integer.valueOf(length));
         }
 
         return getMode(sample, begin, length);

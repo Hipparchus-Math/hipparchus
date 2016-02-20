@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -51,7 +51,7 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
      *
      * @param trials Number of trials.
      * @param p Probability of success.
-     * @throws NotPositiveException if {@code trials < 0}.
+     * @throws MathIllegalArgumentException if {@code trials < 0}.
      * @throws OutOfRangeException if {@code p < 0} or {@code p > 1}.
      */
     public BinomialDistribution(int trials, double p) {
@@ -64,7 +64,7 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
      * @param rng Random number generator.
      * @param trials Number of trials.
      * @param p Probability of success.
-     * @throws NotPositiveException if {@code trials < 0}.
+     * @throws MathIllegalArgumentException if {@code trials < 0}.
      * @throws OutOfRangeException if {@code p < 0} or {@code p > 1}.
      * @since 3.1
      */
@@ -74,7 +74,7 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
         super(rng);
 
         if (trials < 0) {
-            throw new NotPositiveException(LocalizedFormats.NUMBER_OF_TRIALS,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_TRIALS,
                                            trials);
         }
         if (p < 0 || p > 1) {

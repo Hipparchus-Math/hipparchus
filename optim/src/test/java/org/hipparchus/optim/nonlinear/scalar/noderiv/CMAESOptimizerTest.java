@@ -23,7 +23,6 @@ import org.hipparchus.Retry;
 import org.hipparchus.RetryRunner;
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -33,7 +32,6 @@ import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.hipparchus.optim.nonlinear.scalar.noderiv.CMAESOptimizer;
 import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -84,7 +82,7 @@ public class CMAESOptimizerTest {
                 1e-13, 1e-6, 100000, expected);
     }
 
-    @Test(expected = NotPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInputSigmaNegative() {
         double[] startPoint = point(DIM,0.5);
         double[] insigma = point(DIM,-0.5);

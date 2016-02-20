@@ -26,10 +26,9 @@ import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 
@@ -286,9 +285,9 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      *
      * @param index the index in the sequence to skip to
      * @return the i-th point in the Sobol sequence
-     * @throws NotPositiveException if index &lt; 0
+     * @throws MathIllegalArgumentException if index &lt; 0
      */
-    public double[] skipTo(final int index) throws NotPositiveException {
+    public double[] skipTo(final int index) throws MathIllegalArgumentException {
         if (index == 0) {
             // reset x vector
             Arrays.fill(x, 0);

@@ -25,7 +25,6 @@ import java.util.Map.Entry;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -67,12 +66,12 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @param probabilities array of probabilities.
      * @throws MathIllegalArgumentException if
      * {@code singletons.length != probabilities.length}
-     * @throws NotPositiveException if any of the probabilities are negative.
+     * @throws MathIllegalArgumentException if any of the probabilities are negative.
      * @throws NotANumberException if any of the probabilities are NaN.
      * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedRealDistribution(final double[] singletons, final double[] probabilities)
-    throws MathIllegalArgumentException, NotPositiveException, MathIllegalArgumentException, NotANumberException {
+    throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalArgumentException, NotANumberException {
         this(new Well19937c(), singletons, probabilities);
     }
 
@@ -85,13 +84,13 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @param probabilities array of probabilities.
      * @throws MathIllegalArgumentException if
      * {@code singletons.length != probabilities.length}
-     * @throws NotPositiveException if any of the probabilities are negative.
+     * @throws MathIllegalArgumentException if any of the probabilities are negative.
      * @throws NotANumberException if any of the probabilities are NaN.
      * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedRealDistribution(final RandomGenerator rng,
                                     final double[] singletons, final double[] probabilities)
-        throws MathIllegalArgumentException, NotPositiveException, MathIllegalArgumentException, NotANumberException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalArgumentException, NotANumberException {
         super(rng);
         innerDistribution = new EnumeratedDistribution<Double>(
                 rng, createDistribution(singletons, probabilities));

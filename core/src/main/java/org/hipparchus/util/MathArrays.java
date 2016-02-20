@@ -34,7 +34,6 @@ import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
@@ -613,14 +612,14 @@ public class MathArrays {
      * Check that all entries of the input array are >= 0.
      *
      * @param in Array to be tested
-     * @throws NotPositiveException if any array entries are less than 0.
+     * @throws MathIllegalArgumentException if any array entries are less than 0.
      * @since 3.1
      */
     public static void checkNonNegative(final long[] in)
-        throws NotPositiveException {
+        throws MathIllegalArgumentException {
         for (int i = 0; i < in.length; i++) {
             if (in[i] < 0) {
-                throw new NotPositiveException(in[i]);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, in[i], 0);
             }
         }
     }
@@ -629,15 +628,15 @@ public class MathArrays {
      * Check all entries of the input array are >= 0.
      *
      * @param in Array to be tested
-     * @throws NotPositiveException if any array entries are less than 0.
+     * @throws MathIllegalArgumentException if any array entries are less than 0.
      * @since 3.1
      */
     public static void checkNonNegative(final long[][] in)
-        throws NotPositiveException {
+        throws MathIllegalArgumentException {
         for (int i = 0; i < in.length; i ++) {
             for (int j = 0; j < in[i].length; j++) {
                 if (in[i][j] < 0) {
-                    throw new NotPositiveException(in[i][j]);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, in[i][j], 0);
                 }
             }
         }
@@ -1764,11 +1763,11 @@ public class MathArrays {
         }
 
         if (begin < 0) {
-            throw new NotPositiveException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
+            throw new MathIllegalArgumentException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
         }
 
         if (length < 0) {
-            throw new NotPositiveException(LocalizedFormats.LENGTH, Integer.valueOf(length));
+            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, Integer.valueOf(length));
         }
 
         if (begin + length > values.length) {

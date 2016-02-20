@@ -42,7 +42,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
@@ -532,9 +531,9 @@ public class RandomDataGenerator implements Serializable {
      * @throws NumberIsTooLargeException  if {@code numberOfSuccesses > populationSize},
      * or {@code sampleSize > populationSize}.
      * @throws MathIllegalArgumentException if {@code populationSize <= 0}.
-     * @throws NotPositiveException  if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException  if {@code numberOfSuccesses < 0}.
      */
-    public int nextHypergeometric(int populationSize, int numberOfSuccesses, int sampleSize) throws NotPositiveException, MathIllegalArgumentException, NumberIsTooLargeException {
+    public int nextHypergeometric(int populationSize, int numberOfSuccesses, int sampleSize) throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooLargeException {
         return new HypergeometricDistribution(getRandomGenerator(),populationSize,
                 numberOfSuccesses, sampleSize).sample();
     }

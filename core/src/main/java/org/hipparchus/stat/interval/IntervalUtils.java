@@ -17,7 +17,6 @@
 package org.hipparchus.stat.interval;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -66,7 +65,7 @@ public final class IntervalUtils {
      * @return Confidence interval containing the probability of success with
      *         probability {@code confidenceLevel}
      * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
      * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
@@ -95,7 +94,7 @@ public final class IntervalUtils {
      * @return Confidence interval containing the probability of success with
      *         probability {@code confidenceLevel}
      * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
      * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
@@ -134,7 +133,7 @@ public final class IntervalUtils {
      * @return Confidence interval containing the probability of success with
      *         probability {@code confidenceLevel}
      * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
      * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
@@ -150,7 +149,7 @@ public final class IntervalUtils {
      * @param numberOfSuccesses number of successes (must not exceed numberOfTrials)
      * @param confidenceLevel confidence level (must be strictly between 0 and 1)
      * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
      * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
@@ -159,7 +158,7 @@ public final class IntervalUtils {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_TRIALS, numberOfTrials);
         }
         if (numberOfSuccesses < 0) {
-            throw new NotPositiveException(LocalizedFormats.NEGATIVE_NUMBER_OF_SUCCESSES, numberOfSuccesses);
+            throw new MathIllegalArgumentException(LocalizedFormats.NEGATIVE_NUMBER_OF_SUCCESSES, numberOfSuccesses);
         }
         if (numberOfSuccesses > numberOfTrials) {
             throw new NumberIsTooLargeException(LocalizedFormats.NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE,

@@ -18,7 +18,6 @@ package org.hipparchus.stat.descriptive;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.MathArrays;
@@ -102,11 +101,11 @@ public abstract class AbstractUnivariateStatistic
         }
 
         if (begin < 0) {
-            throw new NotPositiveException(LocalizedFormats.START_POSITION, begin);
+            throw new MathIllegalArgumentException(LocalizedFormats.START_POSITION, begin);
         }
 
         if (length < 0) {
-            throw new NotPositiveException(LocalizedFormats.LENGTH, length);
+            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, length);
         }
 
         if (begin + length > values.length) {

@@ -21,7 +21,6 @@ import static org.junit.Assert.assertEquals;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -62,8 +61,8 @@ public class EnumeratedIntegerDistributionTest {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, -1.0});
-            Assert.fail("Expected NotPositiveException");
-        } catch (NotPositiveException e) {
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, 0.0});

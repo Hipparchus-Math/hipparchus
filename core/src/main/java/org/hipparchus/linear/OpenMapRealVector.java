@@ -18,10 +18,9 @@ package org.hipparchus.linear;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.OpenIntToDoubleHashMap;
@@ -349,10 +348,10 @@ public class OpenMapRealVector extends SparseRealVector
     /** {@inheritDoc} */
     @Override
     public OpenMapRealVector getSubVector(int index, int n)
-        throws NotPositiveException, OutOfRangeException {
+        throws MathIllegalArgumentException, OutOfRangeException {
         checkIndex(index);
         if (n < 0) {
-            throw new NotPositiveException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
         checkIndex(index + n - 1);
         OpenMapRealVector res = new OpenMapRealVector(n);

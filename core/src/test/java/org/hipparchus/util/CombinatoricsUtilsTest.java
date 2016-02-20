@@ -21,14 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.util.ArithmeticUtils;
-import org.hipparchus.util.CombinatoricsUtils;
-import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -298,7 +294,7 @@ public class CombinatoricsUtilsTest {
 
     }
 
-    @Test(expected=NotPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testStirlingS2NegativeN() {
         CombinatoricsUtils.stirlingS2(3, -1);
     }
@@ -313,7 +309,7 @@ public class CombinatoricsUtilsTest {
         CombinatoricsUtils.stirlingS2(26, 9);
     }
 
-    @Test(expected=NotPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCheckBinomial1() {
         // n < 0
         CombinatoricsUtils.checkBinomial(-1, -2);

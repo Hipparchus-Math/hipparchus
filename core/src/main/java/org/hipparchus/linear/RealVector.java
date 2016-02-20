@@ -28,7 +28,6 @@ import org.hipparchus.analysis.function.Multiply;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
@@ -120,10 +119,10 @@ public abstract class RealVector {
      * @param n number of elements to be retrieved.
      * @return a vector containing n elements.
      * @throws OutOfRangeException if the index is not valid.
-     * @throws NotPositiveException if the number of elements is not positive.
+     * @throws MathIllegalArgumentException if the number of elements is not positive.
      */
     public abstract RealVector getSubVector(int index, int n)
-        throws NotPositiveException, OutOfRangeException;
+        throws MathIllegalArgumentException, OutOfRangeException;
 
     /**
      * Set a sequence of consecutive elements.
@@ -1539,7 +1538,7 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public RealVector getSubVector(int index, int n)
-                throws OutOfRangeException, NotPositiveException {
+                throws OutOfRangeException, MathIllegalArgumentException {
                 return v.getSubVector(index, n);
             }
 

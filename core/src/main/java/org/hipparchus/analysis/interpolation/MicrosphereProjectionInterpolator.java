@@ -20,7 +20,6 @@ import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 
@@ -65,8 +64,8 @@ public class MicrosphereProjectionInterpolator
      * will be returned).
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code dimension <= 0} or {@code elements <= 0}.
-     * @throws NotPositiveException if {@code exponent < 0}.
-     * @throws NotPositiveException if {@code darkThreshold < 0}.
+     * @throws MathIllegalArgumentException if {@code exponent < 0}.
+     * @throws MathIllegalArgumentException if {@code darkThreshold < 0}.
      * @throws org.hipparchus.exception.OutOfRangeException if
      * {@code maxDarkFraction} does not belong to the interval {@code [0, 1]}.
      */
@@ -102,15 +101,15 @@ public class MicrosphereProjectionInterpolator
      * interpolated point and one of the sample points is less than this
      * value, no interpolation will be performed (the value of the sample
      * will be returned).
-     * @throws NotPositiveException if {@code exponent < 0}.
+     * @throws MathIllegalArgumentException if {@code exponent < 0}.
      */
     public MicrosphereProjectionInterpolator(InterpolatingMicrosphere microsphere,
                                              double exponent,
                                              boolean sharedSphere,
                                              double noInterpolationTolerance)
-        throws NotPositiveException {
+        throws MathIllegalArgumentException {
         if (exponent < 0) {
-            throw new NotPositiveException(exponent);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, exponent, 0);
         }
 
         this.microsphere = microsphere;

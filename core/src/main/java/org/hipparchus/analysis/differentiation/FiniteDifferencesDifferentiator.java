@@ -21,8 +21,8 @@ import java.io.Serializable;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.UnivariateMatrixFunction;
 import org.hipparchus.analysis.UnivariateVectorFunction;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
@@ -100,12 +100,12 @@ public class FiniteDifferencesDifferentiator
      * </p>
      * @param nbPoints number of points to use
      * @param stepSize step size (gap between each point)
-     * @exception NotPositiveException if {@code stepsize <= 0} (note that
-     * {@link NotPositiveException} extends {@link NumberIsTooSmallException})
+     * @exception MathIllegalArgumentException if {@code stepsize <= 0} (note that
+     * {@link MathIllegalArgumentException} extends {@link NumberIsTooSmallException})
      * @exception NumberIsTooSmallException {@code nbPoint <= 1}
      */
     public FiniteDifferencesDifferentiator(final int nbPoints, final double stepSize)
-        throws NotPositiveException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         this(nbPoints, stepSize, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
@@ -133,14 +133,14 @@ public class FiniteDifferencesDifferentiator
      * if there are no lower bounds)
      * @param tUpper upper bound for independent variable (may be {@code Double.POSITIVE_INFINITY}
      * if there are no upper bounds)
-     * @exception NotPositiveException if {@code stepsize <= 0} (note that
-     * {@link NotPositiveException} extends {@link NumberIsTooSmallException})
+     * @exception MathIllegalArgumentException if {@code stepsize <= 0} (note that
+     * {@link MathIllegalArgumentException} extends {@link NumberIsTooSmallException})
      * @exception NumberIsTooSmallException {@code nbPoint <= 1}
      * @exception NumberIsTooLargeException {@code stepSize * (nbPoints - 1) >= tUpper - tLower}
      */
     public FiniteDifferencesDifferentiator(final int nbPoints, final double stepSize,
                                            final double tLower, final double tUpper)
-            throws NotPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
+            throws MathIllegalArgumentException, NumberIsTooSmallException, NumberIsTooLargeException {
 
         if (nbPoints <= 1) {
             throw new NumberIsTooSmallException(stepSize, 1, false);
@@ -148,7 +148,8 @@ public class FiniteDifferencesDifferentiator
         this.nbPoints = nbPoints;
 
         if (stepSize <= 0) {
-            throw new NotPositiveException(stepSize);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   stepSize, 0);
         }
         this.stepSize = stepSize;
 

@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -285,14 +284,14 @@ public class CMAESOptimizer
 
         /**
          * @param s Sigma values.
-         * @throws NotPositiveException if any of the array entries is smaller
+         * @throws MathIllegalArgumentException if any of the array entries is smaller
          * than zero.
          */
         public Sigma(double[] s)
-            throws NotPositiveException {
+            throws MathIllegalArgumentException {
             for (int i = 0; i < s.length; i++) {
                 if (s[i] < 0) {
-                    throw new NotPositiveException(s[i]);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, s[i], 0);
                 }
             }
 

@@ -24,7 +24,6 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -241,9 +240,9 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> power(final int p) throws NonSquareMatrixException,
-    NotPositiveException {
+    MathIllegalArgumentException {
         if (p < 0) {
-            throw new NotPositiveException(p);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, p, 0);
         }
 
         if (!isSquare()) {

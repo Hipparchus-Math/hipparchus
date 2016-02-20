@@ -17,7 +17,6 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
@@ -156,8 +155,8 @@ public class GTestTest {
         try {
             testStatistic.gTestDataSetsComparison(
                     observed1, observed2);
-            Assert.fail("Expecting NotPositiveException - negative count");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - negative count");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[] observed3 = {10, 0, 12, 10, 15};
@@ -206,14 +205,14 @@ public class GTestTest {
         final long[] observed2 = {3, 4, 5, 0};
         try {
             testStatistic.gTest(expected, observed);
-            Assert.fail("negative observed count, NotPositiveException expected");
-        } catch (NotPositiveException ex) {
+            Assert.fail("negative observed count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2);
-            Assert.fail("negative observed count, NotPositiveException expected");
-        } catch (NotPositiveException ex) {
+            Assert.fail("negative observed count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

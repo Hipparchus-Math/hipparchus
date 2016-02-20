@@ -49,7 +49,6 @@ import org.hipparchus.analysis.function.Tanh;
 import org.hipparchus.analysis.function.Ulp;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
@@ -386,7 +385,7 @@ public abstract class RealVectorAbstractTest {
         create(new double[n]).getSubVector(0, n + 1);
     }
 
-    @Test(expected = NotPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testGetSubVectorInvalidIndex4() {
         final int n = 10;
         create(new double[n]).getSubVector(3, -2);
