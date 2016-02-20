@@ -18,7 +18,7 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -45,7 +45,7 @@ public class ClassicalRungeKuttaIntegratorTest {
 
   @Test
   public void testMissedEndEvent()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
       final double   t0     = 1878250320.0000029;
       final double   tEvent = 1878250379.9999986;
@@ -104,7 +104,7 @@ public class ClassicalRungeKuttaIntegratorTest {
 
   @Test
   public void testSanityChecks()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
     try  {
       TestProblem1 pb = new TestProblem1();
@@ -112,7 +112,7 @@ public class ClassicalRungeKuttaIntegratorTest {
                                                         0.0, new double[pb.getDimension()+10],
                                                         1.0, new double[pb.getDimension()]);
         Assert.fail("an exception should have been thrown");
-    } catch(DimensionMismatchException ie) {
+    } catch(MathIllegalArgumentException ie) {
     }
     try  {
         TestProblem1 pb = new TestProblem1();
@@ -120,7 +120,7 @@ public class ClassicalRungeKuttaIntegratorTest {
                                                           0.0, new double[pb.getDimension()],
                                                           1.0, new double[pb.getDimension()+10]);
           Assert.fail("an exception should have been thrown");
-      } catch(DimensionMismatchException ie) {
+      } catch(MathIllegalArgumentException ie) {
       }
     try  {
       TestProblem1 pb = new TestProblem1();
@@ -134,7 +134,7 @@ public class ClassicalRungeKuttaIntegratorTest {
 
   @Test
   public void testDecreasingSteps()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     for (TestProblemAbstract pb : new TestProblemAbstract[] {
@@ -185,7 +185,7 @@ public class ClassicalRungeKuttaIntegratorTest {
 
   @Test
   public void testSmallStep()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     TestProblem1 pb = new TestProblem1();
@@ -205,7 +205,7 @@ public class ClassicalRungeKuttaIntegratorTest {
 
   @Test
   public void testBigStep()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     TestProblem1 pb = new TestProblem1();
@@ -225,7 +225,7 @@ public class ClassicalRungeKuttaIntegratorTest {
 
   @Test
   public void testBackward()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     TestProblem5 pb = new TestProblem5();
@@ -245,7 +245,7 @@ public class ClassicalRungeKuttaIntegratorTest {
 
   @Test
   public void testKepler()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
@@ -290,7 +290,7 @@ public class ClassicalRungeKuttaIntegratorTest {
 
   @Test
   public void testStepSize()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new ClassicalRungeKuttaIntegrator(step);

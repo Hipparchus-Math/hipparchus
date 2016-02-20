@@ -19,7 +19,6 @@ package org.hipparchus.transform;
 import java.util.Arrays;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
@@ -117,19 +116,21 @@ public class TransformUtils {
      *
      * @param dataRI the array of real and imaginary parts to be transformed
      * @return an array of {@link Complex} with specified real and imaginary parts.
-     * @throws DimensionMismatchException if the number of rows of the specified
+     * @throws MathIllegalArgumentException if the number of rows of the specified
      *   array is not two, or the array is not rectangular
      */
     public static Complex[] createComplexArray(final double[][] dataRI)
-        throws DimensionMismatchException{
+        throws MathIllegalArgumentException{
 
         if (dataRI.length != 2) {
-            throw new DimensionMismatchException(dataRI.length, 2);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   dataRI.length, 2);
         }
         final double[] dataR = dataRI[0];
         final double[] dataI = dataRI[1];
         if (dataR.length != dataI.length) {
-            throw new DimensionMismatchException(dataI.length, dataR.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   dataI.length, dataR.length);
         }
 
         final int n = dataR.length;

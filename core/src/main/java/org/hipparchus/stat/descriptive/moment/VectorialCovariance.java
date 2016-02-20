@@ -19,7 +19,8 @@ package org.hipparchus.stat.descriptive.moment;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 
@@ -59,11 +60,12 @@ public class VectorialCovariance implements Serializable {
     /**
      * Add a new vector to the sample.
      * @param v vector to add
-     * @throws DimensionMismatchException if the vector does not have the right dimension
+     * @throws MathIllegalArgumentException if the vector does not have the right dimension
      */
-    public void increment(double[] v) throws DimensionMismatchException {
+    public void increment(double[] v) throws MathIllegalArgumentException {
         if (v.length != sums.length) {
-            throw new DimensionMismatchException(v.length, sums.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   v.length, sums.length);
         }
         int k = 0;
         for (int i = 0; i < v.length; ++i) {

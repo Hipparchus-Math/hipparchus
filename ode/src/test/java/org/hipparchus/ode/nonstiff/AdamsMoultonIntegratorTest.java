@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -42,9 +42,9 @@ import org.junit.Test;
 
 public class AdamsMoultonIntegratorTest {
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void dimensionCheck()
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
         TestProblem1 pb = new TestProblem1();
         FirstOrderIntegrator integ =
@@ -56,7 +56,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test(expected=NumberIsTooSmallException.class)
     public void testMinStep()
-            throws DimensionMismatchException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException, NumberIsTooSmallException,
             MaxCountExceededException, NoBracketingException {
 
           TestProblem1 pb = new TestProblem1();
@@ -78,7 +78,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void testIncreasingTolerance()
-            throws DimensionMismatchException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException, NumberIsTooSmallException,
             MaxCountExceededException, NoBracketingException {
 
         int previousCalls = Integer.MAX_VALUE;
@@ -116,7 +116,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test(expected = MaxCountExceededException.class)
     public void exceedMaxEvaluations()
-            throws DimensionMismatchException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException, NumberIsTooSmallException,
             MaxCountExceededException, NoBracketingException {
 
         TestProblem1 pb  = new TestProblem1();
@@ -134,7 +134,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void backward()
-            throws DimensionMismatchException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException, NumberIsTooSmallException,
             MaxCountExceededException, NoBracketingException {
 
         TestProblem5 pb = new TestProblem5();
@@ -154,7 +154,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void polynomial()
-            throws DimensionMismatchException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException, NumberIsTooSmallException,
             MaxCountExceededException, NoBracketingException {
         TestProblem6 pb = new TestProblem6();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());

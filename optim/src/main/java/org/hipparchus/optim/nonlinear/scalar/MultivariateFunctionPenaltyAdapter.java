@@ -17,7 +17,8 @@
 package org.hipparchus.optim.nonlinear.scalar;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -115,7 +116,7 @@ public class MultivariateFunctionPenaltyAdapter
      * unbounded values)
      * @param offset base offset of the penalty function
      * @param scale scale of the penalty function
-     * @exception DimensionMismatchException if lower bounds, upper bounds and
+     * @exception MathIllegalArgumentException if lower bounds, upper bounds and
      * scales are not consistent, either according to dimension or to bounadary
      * values
      */
@@ -128,10 +129,12 @@ public class MultivariateFunctionPenaltyAdapter
         MathUtils.checkNotNull(upper);
         MathUtils.checkNotNull(scale);
         if (lower.length != upper.length) {
-            throw new DimensionMismatchException(lower.length, upper.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   lower.length, upper.length);
         }
         if (lower.length != scale.length) {
-            throw new DimensionMismatchException(lower.length, scale.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   lower.length, scale.length);
         }
         for (int i = 0; i < lower.length; ++i) {
             // note the following test is written in such a way it also fails for NaN

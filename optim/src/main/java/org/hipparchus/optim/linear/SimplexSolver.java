@@ -146,7 +146,7 @@ public class SimplexSolver extends LinearOptimizer {
      *
      * @return {@inheritDoc}
      * @throws TooManyIterationsException if the maximal number of iterations is exceeded.
-     * @throws org.hipparchus.exception.DimensionMismatchException if the dimension
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if the dimension
      * of the constraints does not match the dimension of the objective function
      */
     @Override

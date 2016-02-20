@@ -17,7 +17,7 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
@@ -100,22 +100,22 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param m matrix to postmultiply by
      * @return {@code this * m}
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code columnDimension(this) != rowDimension(m)}
      */
     RealMatrix multiply(RealMatrix m)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the result of premultiplying {@code this} by {@code m}.
      *
      * @param m matrix to premultiply by
      * @return {@code m * this}
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code rowDimension(this) != columnDimension(m)}
      */
     RealMatrix preMultiply(RealMatrix m)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the result of multiplying {@code this} with itself {@code p}
@@ -252,14 +252,14 @@ public interface RealMatrix extends AnyMatrix {
     * @throws NoDataException if {@code subMatrix} is empty.
     * @throws OutOfRangeException if {@code subMatrix} does not fit into
     * this matrix from element in {@code (row, column)}.
-    * @throws DimensionMismatchException if {@code subMatrix} is not rectangular
+    * @throws MathIllegalArgumentException if {@code subMatrix} is not rectangular
     * (not all rows have the same length) or empty.
     * @throws NullArgumentException if {@code subMatrix} is {@code null}.
     * @since 2.0
     */
     void setSubMatrix(double[][] subMatrix, int row, int column)
         throws NoDataException, OutOfRangeException,
-        DimensionMismatchException, NullArgumentException;
+        MathIllegalArgumentException, NullArgumentException;
 
    /**
     * Get the entries at the given row index as a row matrix.  Row indices start
@@ -477,40 +477,40 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param v the vector to operate on
      * @return {@code this * v}
-     * @throws DimensionMismatchException if the length of {@code v} does not
+     * @throws MathIllegalArgumentException if the length of {@code v} does not
      * match the column dimension of {@code this}.
      */
-    double[] operate(double[] v) throws DimensionMismatchException;
+    double[] operate(double[] v) throws MathIllegalArgumentException;
 
     /**
      * Returns the result of multiplying this by the vector {@code v}.
      *
      * @param v the vector to operate on
      * @return {@code this * v}
-     * @throws DimensionMismatchException if the dimension of {@code v} does not
+     * @throws MathIllegalArgumentException if the dimension of {@code v} does not
      * match the column dimension of {@code this}.
      */
-    RealVector operate(RealVector v) throws DimensionMismatchException;
+    RealVector operate(RealVector v) throws MathIllegalArgumentException;
 
     /**
      * Returns the (row) vector result of premultiplying this by the vector {@code v}.
      *
      * @param v the row vector to premultiply by
      * @return {@code v * this}
-     * @throws DimensionMismatchException if the length of {@code v} does not
+     * @throws MathIllegalArgumentException if the length of {@code v} does not
      * match the row dimension of {@code this}.
      */
-    double[] preMultiply(double[] v) throws DimensionMismatchException;
+    double[] preMultiply(double[] v) throws MathIllegalArgumentException;
 
     /**
      * Returns the (row) vector result of premultiplying this by the vector {@code v}.
      *
      * @param v the row vector to premultiply by
      * @return {@code v * this}
-     * @throws DimensionMismatchException if the dimension of {@code v} does not
+     * @throws MathIllegalArgumentException if the dimension of {@code v} does not
      * match the row dimension of {@code this}.
      */
-    RealVector preMultiply(RealVector v) throws DimensionMismatchException;
+    RealVector preMultiply(RealVector v) throws MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries in row order.

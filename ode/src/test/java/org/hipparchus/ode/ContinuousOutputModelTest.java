@@ -19,14 +19,10 @@ package org.hipparchus.ode;
 
 import java.util.Random;
 
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.ode.ContinuousOutputModel;
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.sampling.DummyStepInterpolator;
@@ -45,7 +41,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testBoundaries() throws DimensionMismatchException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
+  public void testBoundaries() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
     integ.addStepHandler(new ContinuousOutputModel());
     integ.integrate(pb,
                     pb.getInitialTime(), pb.getInitialState(),
@@ -57,7 +53,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testRandomAccess() throws DimensionMismatchException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
+  public void testRandomAccess() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
 
     ContinuousOutputModel cm = new ContinuousOutputModel();
     integ.addStepHandler(cm);

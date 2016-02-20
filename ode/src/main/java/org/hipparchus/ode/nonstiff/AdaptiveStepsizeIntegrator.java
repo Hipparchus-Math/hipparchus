@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
@@ -215,18 +215,20 @@ public abstract class AdaptiveStepsizeIntegrator
   /** {@inheritDoc} */
   @Override
   protected void sanityChecks(final ExpandableStatefulODE equations, final double t)
-      throws DimensionMismatchException, NumberIsTooSmallException {
+      throws MathIllegalArgumentException, NumberIsTooSmallException {
 
       super.sanityChecks(equations, t);
 
       mainSetDimension = equations.getPrimaryMapper().getDimension();
 
       if ((vecAbsoluteTolerance != null) && (vecAbsoluteTolerance.length != mainSetDimension)) {
-          throw new DimensionMismatchException(mainSetDimension, vecAbsoluteTolerance.length);
+          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                 mainSetDimension, vecAbsoluteTolerance.length);
       }
 
       if ((vecRelativeTolerance != null) && (vecRelativeTolerance.length != mainSetDimension)) {
-          throw new DimensionMismatchException(mainSetDimension, vecRelativeTolerance.length);
+          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                 mainSetDimension, vecRelativeTolerance.length);
       }
 
   }
@@ -242,12 +244,12 @@ public abstract class AdaptiveStepsizeIntegrator
    * @param yDot1 work array for the first time derivative of y1
    * @return first integration step
    * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-   * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+   * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
    */
   public double initializeStep(final boolean forward, final int order, final double[] scale,
                                final double t0, final double[] y0, final double[] yDot0,
                                final double[] y1, final double[] yDot1)
-      throws MaxCountExceededException, DimensionMismatchException {
+      throws MaxCountExceededException, MathIllegalArgumentException {
 
     if (initialStep > 0) {
       // use the user provided value
@@ -343,7 +345,7 @@ public abstract class AdaptiveStepsizeIntegrator
   /** {@inheritDoc} */
   @Override
   public abstract void integrate (ExpandableStatefulODE equations, double t)
-      throws NumberIsTooSmallException, DimensionMismatchException,
+      throws NumberIsTooSmallException, MathIllegalArgumentException,
              MaxCountExceededException, NoBracketingException;
 
   /** {@inheritDoc} */

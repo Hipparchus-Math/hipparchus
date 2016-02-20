@@ -16,7 +16,8 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealLinearOperator;
 import org.hipparchus.linear.RealVector;
@@ -78,7 +79,8 @@ public class InverseHilbertMatrix
     @Override
     public RealVector operate(final RealVector x) {
         if (x.getDimension() != n) {
-            throw new DimensionMismatchException(x.getDimension(), n);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   x.getDimension(), n);
         }
         final double[] y = new double[n];
         for (int i = 0; i < n; i++) {

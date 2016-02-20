@@ -29,7 +29,7 @@ public interface MultivariateFunction {
      *
      * @param point Point at which the function must be evaluated.
      * @return the function value for the given point.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the parameter's dimension is wrong for the function being evaluated.
      * @throws  org.hipparchus.exception.MathIllegalArgumentException
      * when the activated method itself can ascertain that preconditions,

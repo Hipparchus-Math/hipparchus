@@ -16,7 +16,8 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.MatrixUtils;
@@ -140,15 +141,16 @@ public class StorelessCovariance extends Covariance {
      * Increment the covariance matrix with one row of data.
      *
      * @param data array representing one row of data.
-     * @throws DimensionMismatchException if the length of <code>rowData</code>
+     * @throws MathIllegalArgumentException if the length of <code>rowData</code>
      * does not match with the covariance matrix
      */
     public void increment(final double[] data)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         int length = data.length;
         if (length != dimension) {
-            throw new DimensionMismatchException(length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   length, dimension);
         }
 
         // only update the upper triangular part of the covariance matrix
@@ -168,12 +170,13 @@ public class StorelessCovariance extends Covariance {
      * operations in {@code sc} directly on this.
      *
      * @param sc externally computed StorelessCovariance to add to this
-     * @throws DimensionMismatchException if the dimension of sc does not match this
+     * @throws MathIllegalArgumentException if the dimension of sc does not match this
      * @since 3.3
      */
-    public void append(StorelessCovariance sc) throws DimensionMismatchException {
+    public void append(StorelessCovariance sc) throws MathIllegalArgumentException {
         if (sc.dimension != dimension) {
-            throw new DimensionMismatchException(sc.dimension, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   sc.dimension, dimension);
         }
 
         // only update the upper triangular part of the covariance matrix

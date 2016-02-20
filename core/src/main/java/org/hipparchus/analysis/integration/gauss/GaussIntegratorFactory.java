@@ -18,7 +18,7 @@ package org.hipparchus.analysis.integration.gauss;
 
 import java.math.BigDecimal;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.util.Pair;
 
@@ -128,12 +128,12 @@ public class GaussIntegratorFactory {
      * @param numberOfPoints Order of the integration rule.
      * @return the integration nodes and weights.
      * @throws NotStrictlyPositiveException if number of points is not positive
-     * @throws DimensionMismatchException if the elements of the rule pair do not
+     * @throws MathIllegalArgumentException if the elements of the rule pair do not
      * have the same length.
      */
     private static Pair<double[], double[]> getRule(BaseRuleFactory<? extends Number> factory,
                                                     int numberOfPoints)
-        throws NotStrictlyPositiveException, DimensionMismatchException {
+        throws NotStrictlyPositiveException, MathIllegalArgumentException {
         return factory.getRule(numberOfPoints);
     }
 

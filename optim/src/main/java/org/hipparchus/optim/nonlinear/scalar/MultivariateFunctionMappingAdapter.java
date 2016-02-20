@@ -20,7 +20,8 @@ import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Logit;
 import org.hipparchus.analysis.function.Sigmoid;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -91,7 +92,7 @@ public class MultivariateFunctionMappingAdapter
      * @param upper upper bounds for each element of the input parameters array
      * (some elements may be set to {@code Double.POSITIVE_INFINITY} for
      * unbounded values)
-     * @exception DimensionMismatchException if lower and upper bounds are not
+     * @exception MathIllegalArgumentException if lower and upper bounds are not
      * consistent, either according to dimension or to values
      */
     public MultivariateFunctionMappingAdapter(final MultivariateFunction bounded,
@@ -100,7 +101,8 @@ public class MultivariateFunctionMappingAdapter
         MathUtils.checkNotNull(lower);
         MathUtils.checkNotNull(upper);
         if (lower.length != upper.length) {
-            throw new DimensionMismatchException(lower.length, upper.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   lower.length, upper.length);
         }
         for (int i = 0; i < lower.length; ++i) {
             // note the following test is written in such a way it also fails for NaN

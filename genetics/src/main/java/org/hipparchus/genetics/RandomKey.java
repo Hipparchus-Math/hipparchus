@@ -22,7 +22,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
@@ -108,21 +107,23 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
      * @param representation representation of the permutation ([0,1] vector)
      * @param sortedRepr sorted <code>representation</code>
      * @return list with the sequence values permuted according to the representation
-     * @throws DimensionMismatchException iff the length of the <code>sequence</code>,
+     * @throws MathIllegalArgumentException iff the length of the <code>sequence</code>,
      *   <code>representation</code> or <code>sortedRepr</code> lists are not equal
      */
     private static <S> List<S> decodeGeneric(final List<S> sequence, List<Double> representation,
                                              final List<Double> sortedRepr)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         int l = sequence.size();
 
         // the size of the three lists must be equal
         if (representation.size() != l) {
-            throw new DimensionMismatchException(representation.size(), l);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   representation.size(), l);
         }
         if (sortedRepr.size() != l) {
-            throw new DimensionMismatchException(sortedRepr.size(), l);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   sortedRepr.size(), l);
         }
 
         // do not modify the original representation
@@ -250,17 +251,18 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
      * @param permutedData the data, somehow permuted
      * @return representation of a permutation corresponding to the permutation
      *   <code>originalData -> permutedData</code>
-     * @throws DimensionMismatchException iff the length of <code>originalData</code>
+     * @throws MathIllegalArgumentException iff the length of <code>originalData</code>
      *   and <code>permutedData</code> lists are not equal
      * @throws MathIllegalArgumentException iff the <code>permutedData</code> and
      *   <code>originalData</code> lists contain different data
      */
     public static <S> List<Double> inducedPermutation(final List<S> originalData,
                                                       final List<S> permutedData)
-        throws DimensionMismatchException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
 
         if (originalData.size() != permutedData.size()) {
-            throw new DimensionMismatchException(permutedData.size(), originalData.size());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   permutedData.size(), originalData.size());
         }
         int l = originalData.size();
 

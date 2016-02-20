@@ -18,7 +18,6 @@
 package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Test;
@@ -68,7 +67,7 @@ public class GradientFunctionTest {
 
         @Override
         public DerivativeStructure value(DerivativeStructure[] point)
-            throws DimensionMismatchException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, MathIllegalArgumentException {
             DerivativeStructure d2 = point[0].getField().getZero();
             for (DerivativeStructure x : point) {
                 d2 = d2.add(x.multiply(x));

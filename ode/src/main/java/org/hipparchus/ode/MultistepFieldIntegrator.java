@@ -19,7 +19,7 @@ package org.hipparchus.ode;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
@@ -216,13 +216,13 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
      * @param initialState initial state (time, primary and secondary state vectors)
      * @param t target time for the integration
      * (can be set to a value smaller than <code>t0</code> for backward integration)
-     * @exception DimensionMismatchException if arrays dimension do not match equations settings
+     * @exception MathIllegalArgumentException if arrays dimension do not match equations settings
      * @exception NumberIsTooSmallException if integration step is too small
      * @exception MaxCountExceededException if the number of functions evaluations is exceeded
      * @exception NoBracketingException if the location of an event cannot be bracketed
      */
     protected void start(final FieldExpandableODE<T> equations, final FieldODEState<T> initialState, final T t)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         // make sure NO user event nor user step handler is triggered,

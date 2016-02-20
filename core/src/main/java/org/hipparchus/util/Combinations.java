@@ -22,7 +22,8 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.OutOfRangeException;
 
@@ -151,7 +152,7 @@ public class Combinations implements Iterable<int[]> {
      * Its {@code compare(int[],int[])} method will throw exceptions if
      * passed combinations that are inconsistent with this instance:
      * <ul>
-     *  <li>{@code DimensionMismatchException} if the array lengths are not
+     *  <li>{@code MathIllegalArgumentException} if the array lengths are not
      *      equal to {@code k},</li>
      *  <li>{@code OutOfRangeException} if an element of the array is not
      *      within the interval [0, {@code n}).</li>
@@ -352,7 +353,7 @@ public class Combinations implements Iterable<int[]> {
         /**
          * {@inheritDoc}
          *
-         * @throws DimensionMismatchException if the array lengths are not
+         * @throws MathIllegalArgumentException if the array lengths are not
          * equal to {@code k}.
          * @throws OutOfRangeException if an element of the array is not
          * within the interval [0, {@code n}).
@@ -361,10 +362,12 @@ public class Combinations implements Iterable<int[]> {
         public int compare(int[] c1,
                            int[] c2) {
             if (c1.length != k) {
-                throw new DimensionMismatchException(c1.length, k);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       c1.length, k);
             }
             if (c2.length != k) {
-                throw new DimensionMismatchException(c2.length, k);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       c2.length, k);
             }
 
             // Method "lexNorm" works with ordered arrays.

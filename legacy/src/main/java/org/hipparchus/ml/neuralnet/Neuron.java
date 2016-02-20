@@ -22,7 +22,8 @@ import java.io.ObjectInputStream;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
 
 
@@ -134,14 +135,15 @@ public class Neuron implements Serializable {
      * @param update Features's new values.
      * @return {@code true} if the update was successful, {@code false}
      * otherwise.
-     * @throws DimensionMismatchException if the length of {@code update} is
+     * @throws MathIllegalArgumentException if the length of {@code update} is
      * not the same as specified in the {@link #Neuron(long,double[])
      * constructor}.
      */
     public boolean compareAndSetFeatures(double[] expect,
                                          double[] update) {
         if (update.length != size) {
-            throw new DimensionMismatchException(update.length, size);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   update.length, size);
         }
 
         // Get the internal reference. Note that this must not be a copy;
@@ -200,7 +202,7 @@ public class Neuron implements Serializable {
      *
      * @param current Current values.
      * @param expect Expected values.
-     * @throws DimensionMismatchException if the length of {@code expected}
+     * @throws MathIllegalArgumentException if the length of {@code expected}
      * is not the same as specified in the {@link #Neuron(long,double[])
      * constructor}.
      * @return {@code true} if the arrays contain the same values.
@@ -208,7 +210,8 @@ public class Neuron implements Serializable {
     private boolean containSameValues(double[] current,
                                       double[] expect) {
         if (expect.length != size) {
-            throw new DimensionMismatchException(expect.length, size);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   expect.length, size);
         }
 
         for (int i = 0; i < size; i++) {

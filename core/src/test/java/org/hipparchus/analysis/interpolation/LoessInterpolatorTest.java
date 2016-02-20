@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.interpolation.LoessInterpolator;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NotFiniteNumberException;
@@ -159,7 +159,7 @@ public class LoessInterpolatorTest {
         }
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testUnequalSizeArguments() {
         new LoessInterpolator().smooth(new double[] {1,2,3}, new double[] {1,2,3,4});
     }

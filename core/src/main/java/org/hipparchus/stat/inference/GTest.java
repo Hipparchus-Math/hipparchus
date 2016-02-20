@@ -17,7 +17,7 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.ChiSquaredDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NotPositiveException;
@@ -70,18 +70,20 @@ public class GTest {
      * @throws NotPositiveException if {@code observed} has negative entries
      * @throws NotStrictlyPositiveException if {@code expected} has entries that
      * are not strictly positive
-     * @throws DimensionMismatchException if the array lengths do not match or
+     * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
      */
     public double g(final double[] expected, final long[] observed)
             throws NotPositiveException, NotStrictlyPositiveException,
-            DimensionMismatchException {
+            MathIllegalArgumentException {
 
         if (expected.length < 2) {
-            throw new DimensionMismatchException(expected.length, 2);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   expected.length, 2);
         }
         if (expected.length != observed.length) {
-            throw new DimensionMismatchException(expected.length, observed.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   expected.length, observed.length);
         }
         MathArrays.checkPositive(expected);
         MathArrays.checkNonNegative(observed);
@@ -143,14 +145,14 @@ public class GTest {
      * @throws NotPositiveException if {@code observed} has negative entries
      * @throws NotStrictlyPositiveException if {@code expected} has entries that
      * are not strictly positive
-     * @throws DimensionMismatchException if the array lengths do not match or
+     * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
      * @throws MaxCountExceededException if an error occurs computing the
      * p-value.
      */
     public double gTest(final double[] expected, final long[] observed)
             throws NotPositiveException, NotStrictlyPositiveException,
-            DimensionMismatchException, MaxCountExceededException {
+            MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
@@ -174,14 +176,14 @@ public class GTest {
      * @throws NotPositiveException if {@code observed} has negative entries
      * @throws NotStrictlyPositiveException {@code expected} has entries that are
      * not strictly positive
-     * @throws DimensionMismatchException if the array lengths do not match or
+     * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
      * @throws MaxCountExceededException if an error occurs computing the
      * p-value.
      */
     public double gTestIntrinsic(final double[] expected, final long[] observed)
             throws NotPositiveException, NotStrictlyPositiveException,
-            DimensionMismatchException, MaxCountExceededException {
+            MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
@@ -226,7 +228,7 @@ public class GTest {
      * @throws NotPositiveException if {@code observed} has negative entries
      * @throws NotStrictlyPositiveException if {@code expected} has entries that
      * are not strictly positive
-     * @throws DimensionMismatchException if the array lengths do not match or
+     * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
      * @throws MaxCountExceededException if an error occurs computing the
      * p-value.
@@ -236,7 +238,7 @@ public class GTest {
     public boolean gTest(final double[] expected, final long[] observed,
             final double alpha)
             throws NotPositiveException, NotStrictlyPositiveException,
-            DimensionMismatchException, OutOfRangeException, MaxCountExceededException {
+            MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
@@ -336,7 +338,7 @@ public class GTest {
      * @param observed2 array of observed frequency counts of the second data
      * set
      * @return G-Test statistic
-     * @throws DimensionMismatchException the the lengths of the arrays do not
+     * @throws MathIllegalArgumentException the the lengths of the arrays do not
      * match or their common length is less than 2
      * @throws NotPositiveException if any entry in {@code observed1} or
      * {@code observed2} is negative
@@ -345,14 +347,16 @@ public class GTest {
      * at the same index is zero for both arrays.
      */
     public double gDataSetsComparison(final long[] observed1, final long[] observed2)
-            throws DimensionMismatchException, NotPositiveException, ZeroException {
+            throws MathIllegalArgumentException, NotPositiveException, ZeroException {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
-            throw new DimensionMismatchException(observed1.length, 2);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   observed1.length, 2);
         }
         if (observed1.length != observed2.length) {
-            throw new DimensionMismatchException(observed1.length, observed2.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   observed1.length, observed2.length);
         }
 
         // Ensure non-negative counts
@@ -458,7 +462,7 @@ public class GTest {
      * @param observed2 array of observed frequency counts of the second data
      * set
      * @return p-value
-     * @throws DimensionMismatchException the the length of the arrays does not
+     * @throws MathIllegalArgumentException the the length of the arrays does not
      * match or their common length is less than 2
      * @throws NotPositiveException if any of the entries in {@code observed1} or
      * {@code observed2} are negative
@@ -470,7 +474,7 @@ public class GTest {
      */
     public double gTestDataSetsComparison(final long[] observed1,
             final long[] observed2)
-            throws DimensionMismatchException, NotPositiveException, ZeroException,
+            throws MathIllegalArgumentException, NotPositiveException, ZeroException,
             MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -511,7 +515,7 @@ public class GTest {
      * @param alpha significance level of the test
      * @return true iff null hypothesis can be rejected with confidence 1 -
      * alpha
-     * @throws DimensionMismatchException the the length of the arrays does not
+     * @throws MathIllegalArgumentException the the length of the arrays does not
      * match
      * @throws NotPositiveException if any of the entries in {@code observed1} or
      * {@code observed2} are negative
@@ -526,7 +530,7 @@ public class GTest {
             final long[] observed1,
             final long[] observed2,
             final double alpha)
-            throws DimensionMismatchException, NotPositiveException,
+            throws MathIllegalArgumentException, NotPositiveException,
             ZeroException, OutOfRangeException, MaxCountExceededException {
 
         if (alpha <= 0 || alpha > 0.5) {

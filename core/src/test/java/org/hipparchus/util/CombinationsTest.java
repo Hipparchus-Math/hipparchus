@@ -16,14 +16,11 @@
  */
 package org.hipparchus.util;
 
-import java.util.Iterator;
 import java.util.Comparator;
+import java.util.Iterator;
 
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.util.Combinations;
-import org.hipparchus.util.CombinatoricsUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -59,7 +56,7 @@ public class CombinationsTest {
         checkLexicographicIterator(new Combinations(123, 2));
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testLexicographicComparatorWrongIterate1() {
         final int n = 5;
         final int k = 3;
@@ -67,7 +64,7 @@ public class CombinationsTest {
         comp.compare(new int[] {1}, new int[] {0, 1, 2});
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testLexicographicComparatorWrongIterate2() {
         final int n = 5;
         final int k = 3;

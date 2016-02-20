@@ -18,7 +18,7 @@ package org.hipparchus.ml.distance;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Interface for distance measures of n-dimensional vectors.
@@ -35,7 +35,7 @@ public interface DistanceMeasure extends Serializable {
      * @param a the first vector
      * @param b the second vector
      * @return the distance between the two vectors
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
-    double compute(double[] a, double[] b) throws DimensionMismatchException;
+    double compute(double[] a, double[] b) throws MathIllegalArgumentException;
 }

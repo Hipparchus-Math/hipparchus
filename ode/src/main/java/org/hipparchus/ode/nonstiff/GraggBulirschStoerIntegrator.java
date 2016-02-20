@@ -18,7 +18,7 @@
 package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -452,13 +452,13 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
    * @return true if computation was done properly,
    *         false if stability check failed before end of computation
    * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-   * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+   * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
    */
   private boolean tryStep(final double t0, final double[] y0, final double step, final int k,
                           final double[] scale, final double[][] f,
                           final double[] yMiddle, final double[] yEnd,
                           final double[] yTmp)
-      throws MaxCountExceededException, DimensionMismatchException {
+      throws MaxCountExceededException, MathIllegalArgumentException {
 
     final int    n        = sequence[k];
     final double subStep  = step / n;
@@ -546,7 +546,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
   /** {@inheritDoc} */
   @Override
   public void integrate(final ExpandableStatefulODE equations, final double t)
-      throws NumberIsTooSmallException, DimensionMismatchException,
+      throws NumberIsTooSmallException, MathIllegalArgumentException,
              MaxCountExceededException, NoBracketingException {
 
     sanityChecks(equations, t);

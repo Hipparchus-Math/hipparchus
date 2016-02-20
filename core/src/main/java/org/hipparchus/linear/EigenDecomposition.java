@@ -18,7 +18,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
@@ -410,7 +410,7 @@ public class EigenDecomposition {
          * @param b Right-hand side of the equation A &times; X = B.
          * @return a Vector X that minimizes the two norm of A &times; X - B.
          *
-         * @throws DimensionMismatchException if the matrices dimensions do not match.
+         * @throws MathIllegalArgumentException if the matrices dimensions do not match.
          * @throws SingularMatrixException if the decomposed matrix is singular.
          */
         @Override
@@ -421,7 +421,8 @@ public class EigenDecomposition {
 
             final int m = realEigenvalues.length;
             if (b.getDimension() != m) {
-                throw new DimensionMismatchException(b.getDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       b.getDimension(), m);
             }
 
             final double[] bp = new double[m];
@@ -447,7 +448,8 @@ public class EigenDecomposition {
 
             final int m = realEigenvalues.length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       b.getRowDimension(), m);
             }
 
             final int nColB = b.getColumnDimension();

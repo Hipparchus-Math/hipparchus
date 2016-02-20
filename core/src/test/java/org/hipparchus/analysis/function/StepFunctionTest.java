@@ -19,7 +19,7 @@ package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.StepFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
@@ -52,7 +52,7 @@ public class StepFunctionTest {
         new StepFunction(new double[] {}, new double[] {0});
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions5() {
         new StepFunction(new double[] {0, 1}, new double[] {0, -1, -2});
     }

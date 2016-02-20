@@ -24,7 +24,7 @@ import org.hipparchus.ExtendedFieldElementAbstractTest;
 import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.ArithmeticUtils;
@@ -48,7 +48,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         new DerivativeStructure(3, 1, 3, 1.0);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testMissingOrders() {
         new DerivativeStructure(3, 1, 0, 1.0).getPartialDerivative(0, 1);
     }
@@ -1301,7 +1301,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         }
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testComposeMismatchedDimensions() {
         new DerivativeStructure(1, 3, 0, 1.2).compose(new double[3]);
     }
@@ -1357,7 +1357,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         try {
             new DerivativeStructure(1, 4, 0.0, 0.0);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException dme) {
+        } catch (MathIllegalArgumentException dme) {
             // expected
         } catch (Exception e) {
             Assert.fail("wrong exceptionc caught " + e.getClass().getName());
@@ -1379,7 +1379,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         try {
             new DerivativeStructure(3, 1, x + y - z, 1.0, 1.0);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException dme) {
+        } catch (MathIllegalArgumentException dme) {
             // expected
         } catch (Exception e) {
             Assert.fail("wrong exceptionc caught " + e.getClass().getName());

@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -42,7 +42,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testLowAccuracyExternalDifferentiation()
-        throws NumberIsTooSmallException, DimensionMismatchException,
+        throws NumberIsTooSmallException, MathIllegalArgumentException,
                MaxCountExceededException, NoBracketingException {
         // this test does not really test JacobianMatrices,
         // it only shows that WITHOUT this class, attempting to recover
@@ -75,7 +75,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testHighAccuracyExternalDifferentiation()
-        throws NumberIsTooSmallException, DimensionMismatchException,
+        throws NumberIsTooSmallException, MathIllegalArgumentException,
                MaxCountExceededException, NoBracketingException, UnknownParameterException {
         FirstOrderIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
@@ -117,7 +117,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testInternalDifferentiation()
-                    throws NumberIsTooSmallException, DimensionMismatchException,
+                    throws NumberIsTooSmallException, MathIllegalArgumentException,
                     MaxCountExceededException, NoBracketingException,
                     UnknownParameterException, MismatchedEquations {
         AbstractIntegrator integ =
@@ -162,7 +162,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testAnalyticalDifferentiation()
-        throws MaxCountExceededException, DimensionMismatchException,
+        throws MaxCountExceededException, MathIllegalArgumentException,
                NumberIsTooSmallException, NoBracketingException,
                UnknownParameterException, MismatchedEquations {
         AbstractIntegrator integ =
@@ -202,7 +202,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testFinalResult()
-        throws MaxCountExceededException, DimensionMismatchException,
+        throws MaxCountExceededException, MathIllegalArgumentException,
                NumberIsTooSmallException, NoBracketingException,
                UnknownParameterException, MismatchedEquations {
 
@@ -258,7 +258,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testParameterizable()
-        throws MaxCountExceededException, DimensionMismatchException,
+        throws MaxCountExceededException, MathIllegalArgumentException,
                NumberIsTooSmallException, NoBracketingException,
                UnknownParameterException, MismatchedEquations {
 

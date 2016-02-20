@@ -17,7 +17,7 @@
 package org.hipparchus.random;
 
 import org.junit.Assert;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.HaltonSequenceGenerator;
@@ -114,7 +114,7 @@ public class HaltonSequenceGeneratorTest {
         try {
             new HaltonSequenceGenerator(2, new int[] { 1, 1 }, new int[] { 1 });
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
     }

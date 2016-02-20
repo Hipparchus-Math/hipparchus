@@ -18,7 +18,7 @@ package org.hipparchus.geometry.euclidean.twod;
 
 import java.text.NumberFormat;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.geometry.Point;
@@ -74,12 +74,13 @@ public class Vector2D implements Vector<Euclidean2D> {
     /** Simple constructor.
      * Build a vector from its coordinates
      * @param v coordinates array
-     * @exception DimensionMismatchException if array does not have 2 elements
+     * @exception MathIllegalArgumentException if array does not have 2 elements
      * @see #toArray()
      */
-    public Vector2D(double[] v) throws DimensionMismatchException {
+    public Vector2D(double[] v) throws MathIllegalArgumentException {
         if (v.length != 2) {
-            throw new DimensionMismatchException(v.length, 2);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   v.length, 2);
         }
         this.x = v[0];
         this.y = v[1];

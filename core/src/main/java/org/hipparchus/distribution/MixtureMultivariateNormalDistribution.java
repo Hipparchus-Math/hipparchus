@@ -19,7 +19,7 @@ package org.hipparchus.distribution;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.Pair;
@@ -80,12 +80,12 @@ public class MixtureMultivariateNormalDistribution
      * @param rng Random number generator.
      * @param components Distributions from which to sample.
      * @throws NotPositiveException if any of the weights is negative.
-     * @throws DimensionMismatchException if not all components have the same
+     * @throws MathIllegalArgumentException if not all components have the same
      * number of variables.
      */
     public MixtureMultivariateNormalDistribution(RandomGenerator rng,
                                                  List<Pair<Double, MultivariateNormalDistribution>> components)
-        throws NotPositiveException, DimensionMismatchException {
+        throws NotPositiveException, MathIllegalArgumentException {
         super(rng, components);
     }
 

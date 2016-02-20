@@ -19,7 +19,7 @@ package org.hipparchus.util;
 
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MultidimensionalCounter;
@@ -57,8 +57,8 @@ public class MultidimensionalCounterTest {
         c = new MultidimensionalCounter(2, 3);
         try {
             c.getCount(1, 1, 1);
-            Assert.fail("DimensionMismatchException expected");
-        } catch (DimensionMismatchException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {

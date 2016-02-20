@@ -16,7 +16,8 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 
@@ -128,7 +129,8 @@ public abstract class BaseMultivariateOptimizer<PAIR>
             final int dim = start.length;
             if (lowerBound != null) {
                 if (lowerBound.length != dim) {
-                    throw new DimensionMismatchException(lowerBound.length, dim);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           lowerBound.length, dim);
                 }
                 for (int i = 0; i < dim; i++) {
                     final double v = start[i];
@@ -140,7 +142,8 @@ public abstract class BaseMultivariateOptimizer<PAIR>
             }
             if (upperBound != null) {
                 if (upperBound.length != dim) {
-                    throw new DimensionMismatchException(upperBound.length, dim);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           upperBound.length, dim);
                 }
                 for (int i = 0; i < dim; i++) {
                     final double v = start[i];

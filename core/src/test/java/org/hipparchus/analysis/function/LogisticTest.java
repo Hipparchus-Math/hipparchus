@@ -21,7 +21,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.function.Logistic;
 import org.hipparchus.analysis.function.Sigmoid;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -110,7 +110,7 @@ public class LogisticTest {
         g.value(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage2() {
         final Logistic.Parametric g = new Logistic.Parametric();
         g.value(0, new double[] {0});
@@ -122,7 +122,7 @@ public class LogisticTest {
         g.gradient(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage4() {
         final Logistic.Parametric g = new Logistic.Parametric();
         g.gradient(0, new double[] {0});

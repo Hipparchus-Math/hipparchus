@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.util.Pair;
 
@@ -38,11 +38,11 @@ public class SymmetricGaussIntegrator extends GaussIntegrator {
      * @param weights Weights of the corresponding integration nodes.
      * @throws NonMonotonicSequenceException if the {@code points} are not
      * sorted in increasing order.
-     * @throws DimensionMismatchException if points and weights don't have the same length
+     * @throws MathIllegalArgumentException if points and weights don't have the same length
      */
     public SymmetricGaussIntegrator(double[] points,
                                     double[] weights)
-        throws NonMonotonicSequenceException, DimensionMismatchException {
+        throws NonMonotonicSequenceException, MathIllegalArgumentException {
         super(points, weights);
     }
 

@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.hipparchus.analysis.solvers.BaseSecantSolver;
 import org.hipparchus.analysis.solvers.PegasusSolver;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -54,7 +54,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
      */
     @Test
     public void testOverlappingEvents0()
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
         test(0);
     }
@@ -66,7 +66,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
      */
     @Test
     public void testOverlappingEvents1()
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
         test(1);
     }
@@ -78,7 +78,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
      * EventHandler.g(double, double[])}.
      */
     public void test(int eventType)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
         double e = 1e-15;
         FirstOrderIntegrator integrator = new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);

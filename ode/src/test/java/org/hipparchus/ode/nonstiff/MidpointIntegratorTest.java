@@ -18,7 +18,7 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -42,9 +42,9 @@ import org.junit.Test;
 
 public class MidpointIntegratorTest {
 
-  @Test(expected=DimensionMismatchException.class)
+  @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
       TestProblem1 pb = new TestProblem1();
       new MidpointIntegrator(0.01).integrate(pb,
@@ -55,7 +55,7 @@ public class MidpointIntegratorTest {
 
   @Test
   public void testDecreasingSteps()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
       for (TestProblemAbstract pb : new TestProblemAbstract[] {
@@ -103,7 +103,7 @@ public class MidpointIntegratorTest {
 
   @Test
   public void testSmallStep()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     TestProblem1 pb  = new TestProblem1();
@@ -125,7 +125,7 @@ public class MidpointIntegratorTest {
 
   @Test
   public void testBigStep()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     TestProblem1 pb  = new TestProblem1();
@@ -146,7 +146,7 @@ public class MidpointIntegratorTest {
 
   @Test
   public void testBackward()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
       TestProblem5 pb = new TestProblem5();
@@ -166,7 +166,7 @@ public class MidpointIntegratorTest {
 
   @Test
   public void testStepSize()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new MidpointIntegrator(step);

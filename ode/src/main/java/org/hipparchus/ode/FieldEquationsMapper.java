@@ -20,7 +20,6 @@ package org.hipparchus.ode;
 import java.io.Serializable;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -112,17 +111,19 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
      * @param y state array to map, including primary and secondary components
      * @param yDot state derivative array to map, including primary and secondary components
      * @return mapped state
-     * @exception DimensionMismatchException if an array does not match total dimension
+     * @exception MathIllegalArgumentException if an array does not match total dimension
      */
     public FieldODEStateAndDerivative<T> mapStateAndDerivative(final T t, final T[] y, final T[] yDot)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         if (y.length != getTotalDimension()) {
-            throw new DimensionMismatchException(y.length, getTotalDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   y.length, getTotalDimension());
         }
 
         if (yDot.length != getTotalDimension()) {
-            throw new DimensionMismatchException(yDot.length, getTotalDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   yDot.length, getTotalDimension());
         }
 
         final int n = getNumberOfEquations();
@@ -149,15 +150,16 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
      * equation data should be retrieved
      * @return equation data
      * @exception MathIllegalArgumentException if index is out of range
-     * @exception DimensionMismatchException if complete state has not enough elements
+     * @exception MathIllegalArgumentException if complete state has not enough elements
      */
     public T[] extractEquationData(final int index, final T[] complete)
-        throws MathIllegalArgumentException, DimensionMismatchException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         checkIndex(index);
         final int begin     = start[index];
         final int end       = start[index + 1];
         if (complete.length < end) {
-            throw new DimensionMismatchException(complete.length, end);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   complete.length, end);
         }
         final int dimension = end - begin;
         final T[] equationData = MathArrays.buildArray(complete[0].getField(), dimension);
@@ -171,19 +173,21 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
      * @param equationData equation data to be inserted into the complete array
      * @param complete placeholder where to put equation data (only the
      * part corresponding to the equation will be overwritten)
-     * @exception DimensionMismatchException if either array has not enough elements
+     * @exception MathIllegalArgumentException if either array has not enough elements
      */
     public void insertEquationData(final int index, T[] equationData, T[] complete)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkIndex(index);
         final int begin     = start[index];
         final int end       = start[index + 1];
         final int dimension = end - begin;
         if (complete.length < end) {
-            throw new DimensionMismatchException(complete.length, end);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   complete.length, end);
         }
         if (equationData.length != dimension) {
-            throw new DimensionMismatchException(equationData.length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   equationData.length, dimension);
         }
         System.arraycopy(equationData, 0, complete, begin, dimension);
     }

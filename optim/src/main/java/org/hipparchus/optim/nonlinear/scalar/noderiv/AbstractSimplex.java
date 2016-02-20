@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
@@ -124,7 +123,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      * @param referenceSimplex Reference simplex.
      * @throws NotStrictlyPositiveException if the reference simplex does not
      * contain at least one point.
-     * @throws DimensionMismatchException if there is a dimension mismatch
+     * @throws MathIllegalArgumentException if there is a dimension mismatch
      * in the reference simplex.
      * @throws IllegalArgumentException if one of its vertices is duplicated.
      */
@@ -146,7 +145,8 @@ public abstract class AbstractSimplex implements OptimizationData {
 
             // Safety checks.
             if (refI.length != dimension) {
-                throw new DimensionMismatchException(refI.length, dimension);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       refI.length, dimension);
             }
             for (int j = 0; j < i; j++) {
                 final double[] refJ = referenceSimplex[j];
@@ -209,12 +209,13 @@ public abstract class AbstractSimplex implements OptimizationData {
      * Build an initial simplex.
      *
      * @param startPoint First point of the simplex.
-     * @throws DimensionMismatchException if the start point does not match
+     * @throws MathIllegalArgumentException if the start point does not match
      * simplex dimension.
      */
     public void build(final double[] startPoint) {
         if (dimension != startPoint.length) {
-            throw new DimensionMismatchException(dimension, startPoint.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   dimension, startPoint.length);
         }
 
         // Set first vertex.
@@ -322,7 +323,8 @@ public abstract class AbstractSimplex implements OptimizationData {
      */
     protected void setPoints(PointValuePair[] points) {
         if (points.length != simplex.length) {
-            throw new DimensionMismatchException(points.length, simplex.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   points.length, simplex.length);
         }
         simplex = points;
     }

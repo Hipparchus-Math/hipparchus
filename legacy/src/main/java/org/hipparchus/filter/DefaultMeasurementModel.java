@@ -16,7 +16,7 @@
  */
 package org.hipparchus.filter;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -52,11 +52,11 @@ public class DefaultMeasurementModel implements MeasurementModel {
      *             if any of the input matrices is {@code null}
      * @throws NoDataException
      *             if any row / column dimension of the input matrices is zero
-     * @throws DimensionMismatchException
+     * @throws MathIllegalArgumentException
      *             if any of the input matrices is non-rectangular
      */
     public DefaultMeasurementModel(final double[][] measMatrix, final double[][] measNoise)
-            throws NullArgumentException, NoDataException, DimensionMismatchException {
+            throws NullArgumentException, NoDataException, MathIllegalArgumentException {
         this(new Array2DRowRealMatrix(measMatrix), new Array2DRowRealMatrix(measNoise));
     }
 

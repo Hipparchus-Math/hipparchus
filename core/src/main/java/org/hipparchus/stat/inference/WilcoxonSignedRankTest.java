@@ -17,7 +17,8 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
@@ -68,11 +69,11 @@ public class WilcoxonSignedRankTest {
      * @param y second sample
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws NoDataException if {@code x} or {@code y} are zero-length.
-     * @throws DimensionMismatchException if {@code x} and {@code y} do not
+     * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
      */
     private void ensureDataConformance(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException, DimensionMismatchException {
+        throws NullArgumentException, NoDataException, MathIllegalArgumentException {
 
         if (x == null ||
             y == null) {
@@ -83,7 +84,8 @@ public class WilcoxonSignedRankTest {
             throw new NoDataException();
         }
         if (y.length != x.length) {
-            throw new DimensionMismatchException(y.length, x.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   y.length, x.length);
         }
     }
 
@@ -165,11 +167,11 @@ public class WilcoxonSignedRankTest {
      * @return wilcoxonSignedRank statistic (the larger of W+ and W-)
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws NoDataException if {@code x} or {@code y} are zero-length.
-     * @throws DimensionMismatchException if {@code x} and {@code y} do not
+     * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
      */
     public double wilcoxonSignedRank(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException, DimensionMismatchException {
+        throws NullArgumentException, NoDataException, MathIllegalArgumentException {
 
         ensureDataConformance(x, y);
 
@@ -292,7 +294,7 @@ public class WilcoxonSignedRankTest {
      * @return p-value
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws NoDataException if {@code x} or {@code y} are zero-length.
-     * @throws DimensionMismatchException if {@code x} and {@code y} do not
+     * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
      * @throws NumberIsTooLargeException if {@code exactPValue} is {@code true}
      * and {@code x.length} > 30
@@ -303,7 +305,7 @@ public class WilcoxonSignedRankTest {
      */
     public double wilcoxonSignedRankTest(final double[] x, final double[] y,
                                          final boolean exactPValue)
-        throws NullArgumentException, NoDataException, DimensionMismatchException,
+        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
         NumberIsTooLargeException, MathIllegalStateException, MaxCountExceededException {
 
         ensureDataConformance(x, y);

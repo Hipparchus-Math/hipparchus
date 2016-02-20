@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Pair;
 
 /**
@@ -33,7 +33,7 @@ public class LegendreRuleFactory extends BaseRuleFactory<Double> {
     /** {@inheritDoc} */
     @Override
     protected Pair<Double[], Double[]> computeRule(int numberOfPoints)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         if (numberOfPoints == 1) {
             // Break recursion.

@@ -17,7 +17,8 @@
 
 package org.hipparchus.random;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RectangularCholeskyDecomposition;
 
@@ -80,7 +81,7 @@ public class CorrelatedRandomVectorGenerator
      * components.
      * @throws org.hipparchus.linear.NonPositiveDefiniteMatrixException
      * if the covariance matrix is not strictly positive definite.
-     * @throws DimensionMismatchException if the mean and covariance
+     * @throws MathIllegalArgumentException if the mean and covariance
      * arrays dimensions do not match.
      */
     public CorrelatedRandomVectorGenerator(double[] mean,
@@ -88,7 +89,8 @@ public class CorrelatedRandomVectorGenerator
                                            NormalizedRandomGenerator generator) {
         int order = covariance.getRowDimension();
         if (mean.length != order) {
-            throw new DimensionMismatchException(mean.length, order);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   mean.length, order);
         }
         this.mean = mean.clone();
 

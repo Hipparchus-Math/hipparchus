@@ -17,7 +17,8 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.TrivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -130,7 +131,7 @@ public class TricubicInterpolatingFunction
      * @param d2FdYdZ Values of the cross partial derivative of function on every grid point.
      * @param d3FdXdYdZ Values of the cross partial derivative of function on every grid point.
      * @throws NoDataException if any of the arrays has zero length.
-     * @throws DimensionMismatchException if the various arrays do not contain the expected number of elements.
+     * @throws MathIllegalArgumentException if the various arrays do not contain the expected number of elements.
      * @throws NonMonotonicSequenceException if {@code x}, {@code y} or {@code z} are not strictly increasing.
      */
     public TricubicInterpolatingFunction(double[] x,
@@ -145,7 +146,7 @@ public class TricubicInterpolatingFunction
                                          double[][][] d2FdYdZ,
                                          double[][][] d3FdXdYdZ)
         throws NoDataException,
-               DimensionMismatchException,
+               MathIllegalArgumentException,
                NonMonotonicSequenceException {
         final int xLen = x.length;
         final int yLen = y.length;
@@ -155,28 +156,36 @@ public class TricubicInterpolatingFunction
             throw new NoDataException();
         }
         if (xLen != f.length) {
-            throw new DimensionMismatchException(xLen, f.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, f.length);
         }
         if (xLen != dFdX.length) {
-            throw new DimensionMismatchException(xLen, dFdX.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, dFdX.length);
         }
         if (xLen != dFdY.length) {
-            throw new DimensionMismatchException(xLen, dFdY.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, dFdY.length);
         }
         if (xLen != dFdZ.length) {
-            throw new DimensionMismatchException(xLen, dFdZ.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, dFdZ.length);
         }
         if (xLen != d2FdXdY.length) {
-            throw new DimensionMismatchException(xLen, d2FdXdY.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, d2FdXdY.length);
         }
         if (xLen != d2FdXdZ.length) {
-            throw new DimensionMismatchException(xLen, d2FdXdZ.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, d2FdXdZ.length);
         }
         if (xLen != d2FdYdZ.length) {
-            throw new DimensionMismatchException(xLen, d2FdYdZ.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, d2FdYdZ.length);
         }
         if (xLen != d3FdXdYdZ.length) {
-            throw new DimensionMismatchException(xLen, d3FdXdYdZ.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, d3FdXdYdZ.length);
         }
 
         MathArrays.checkOrder(x);
@@ -194,56 +203,72 @@ public class TricubicInterpolatingFunction
 
         for (int i = 0; i < lastI; i++) {
             if (f[i].length != yLen) {
-                throw new DimensionMismatchException(f[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       f[i].length, yLen);
             }
             if (dFdX[i].length != yLen) {
-                throw new DimensionMismatchException(dFdX[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       dFdX[i].length, yLen);
             }
             if (dFdY[i].length != yLen) {
-                throw new DimensionMismatchException(dFdY[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       dFdY[i].length, yLen);
             }
             if (dFdZ[i].length != yLen) {
-                throw new DimensionMismatchException(dFdZ[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       dFdZ[i].length, yLen);
             }
             if (d2FdXdY[i].length != yLen) {
-                throw new DimensionMismatchException(d2FdXdY[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       d2FdXdY[i].length, yLen);
             }
             if (d2FdXdZ[i].length != yLen) {
-                throw new DimensionMismatchException(d2FdXdZ[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       d2FdXdZ[i].length, yLen);
             }
             if (d2FdYdZ[i].length != yLen) {
-                throw new DimensionMismatchException(d2FdYdZ[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       d2FdYdZ[i].length, yLen);
             }
             if (d3FdXdYdZ[i].length != yLen) {
-                throw new DimensionMismatchException(d3FdXdYdZ[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       d3FdXdYdZ[i].length, yLen);
             }
 
             final int ip1 = i + 1;
             final double xR = xval[ip1] - xval[i];
             for (int j = 0; j < lastJ; j++) {
                 if (f[i][j].length != zLen) {
-                    throw new DimensionMismatchException(f[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           f[i][j].length, zLen);
                 }
                 if (dFdX[i][j].length != zLen) {
-                    throw new DimensionMismatchException(dFdX[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           dFdX[i][j].length, zLen);
                 }
                 if (dFdY[i][j].length != zLen) {
-                    throw new DimensionMismatchException(dFdY[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           dFdY[i][j].length, zLen);
                 }
                 if (dFdZ[i][j].length != zLen) {
-                    throw new DimensionMismatchException(dFdZ[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           dFdZ[i][j].length, zLen);
                 }
                 if (d2FdXdY[i][j].length != zLen) {
-                    throw new DimensionMismatchException(d2FdXdY[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           d2FdXdY[i][j].length, zLen);
                 }
                 if (d2FdXdZ[i][j].length != zLen) {
-                    throw new DimensionMismatchException(d2FdXdZ[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           d2FdXdZ[i][j].length, zLen);
                 }
                 if (d2FdYdZ[i][j].length != zLen) {
-                    throw new DimensionMismatchException(d2FdYdZ[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           d2FdYdZ[i][j].length, zLen);
                 }
                 if (d3FdXdYdZ[i][j].length != zLen) {
-                    throw new DimensionMismatchException(d3FdXdYdZ[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           d3FdXdYdZ[i][j].length, zLen);
                 }
 
                 final int jp1 = j + 1;

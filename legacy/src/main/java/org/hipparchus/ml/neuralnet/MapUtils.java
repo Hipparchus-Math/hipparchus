@@ -49,7 +49,7 @@ public class MapUtils {
      * @param distance Distance function. The neuron's features are
      * passed as the first argument to {@link DistanceMeasure#compute(double[],double[])}.
      * @return the neuron whose features are closest to the given data.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the size of the input is not compatible with the neurons features
      * size.
      */
@@ -78,7 +78,7 @@ public class MapUtils {
      * @param distance Distance function. The neuron's features are
      * passed as the first argument to {@link DistanceMeasure#compute(double[],double[])}.
      * @return the two neurons whose features are closest to the given data.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the size of the input is not compatible with the neurons features
      * size.
      */
@@ -118,7 +118,7 @@ public class MapUtils {
      * @param distance Distance function.
      * @return the neurons, sorted in increasing order of distance in data
      * space.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the size of the input is not compatible with the neurons features
      * size.
      *

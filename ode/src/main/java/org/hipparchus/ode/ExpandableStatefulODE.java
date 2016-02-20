@@ -19,7 +19,8 @@ package org.hipparchus.ode;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 
 
@@ -108,10 +109,10 @@ public class ExpandableStatefulODE {
      * @param y array containing the current value of the complete state vector
      * @param yDot placeholder array where to put the time derivative of the complete state vector
      * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     public void computeDerivatives(final double t, final double[] y, final double[] yDot)
-        throws MaxCountExceededException, DimensionMismatchException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
 
         // compute derivatives of the primary equations
         primaryMapper.extractEquationData(y, primaryState);
@@ -187,14 +188,15 @@ public class ExpandableStatefulODE {
 
     /** Set primary part of the current state.
      * @param primaryState primary part of the current state
-     * @throws DimensionMismatchException if the dimension of the array does not
+     * @throws MathIllegalArgumentException if the dimension of the array does not
      * match the primary set
      */
-    public void setPrimaryState(final double[] primaryState) throws DimensionMismatchException {
+    public void setPrimaryState(final double[] primaryState) throws MathIllegalArgumentException {
 
         // safety checks
         if (primaryState.length != this.primaryState.length) {
-            throw new DimensionMismatchException(primaryState.length, this.primaryState.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   primaryState.length, this.primaryState.length);
         }
 
         // set the data
@@ -220,18 +222,19 @@ public class ExpandableStatefulODE {
      * @param index index of the part to set as returned by {@link
      * #addSecondaryEquations(SecondaryEquations)}
      * @param secondaryState secondary part of the current state
-     * @throws DimensionMismatchException if the dimension of the partial state does not
+     * @throws MathIllegalArgumentException if the dimension of the partial state does not
      * match the selected equations set dimension
      */
     public void setSecondaryState(final int index, final double[] secondaryState)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         // get either the secondary state
         double[] localArray = components.get(index).state;
 
         // safety checks
         if (secondaryState.length != localArray.length) {
-            throw new DimensionMismatchException(secondaryState.length, localArray.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   secondaryState.length, localArray.length);
         }
 
         // set the data
@@ -259,15 +262,16 @@ public class ExpandableStatefulODE {
 
     /** Set the complete current state.
      * @param completeState complete current state to copy data from
-     * @throws DimensionMismatchException if the dimension of the complete state does not
+     * @throws MathIllegalArgumentException if the dimension of the complete state does not
      * match the complete equations sets dimension
      */
     public void setCompleteState(final double[] completeState)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         // safety checks
         if (completeState.length != getTotalDimension()) {
-            throw new DimensionMismatchException(completeState.length, getTotalDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   completeState.length, getTotalDimension());
         }
 
         // set the data
@@ -280,10 +284,10 @@ public class ExpandableStatefulODE {
 
     /** Get the complete current state.
      * @return complete current state
-     * @throws DimensionMismatchException if the dimension of the complete state does not
+     * @throws MathIllegalArgumentException if the dimension of the complete state does not
      * match the complete equations sets dimension
      */
-    public double[] getCompleteState() throws DimensionMismatchException {
+    public double[] getCompleteState() throws MathIllegalArgumentException {
 
         // allocate complete array
         double[] completeState = new double[getTotalDimension()];

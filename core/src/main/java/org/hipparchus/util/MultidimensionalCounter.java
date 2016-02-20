@@ -19,7 +19,8 @@ package org.hipparchus.util;
 
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 
@@ -254,16 +255,17 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      *
      * @param c Indices in multidimensional counter.
      * @return the index within the unidimensionl counter.
-     * @throws DimensionMismatchException if the size of {@code c}
+     * @throws MathIllegalArgumentException if the size of {@code c}
      * does not match the size of the array given in the constructor.
      * @throws OutOfRangeException if a value of {@code c} is not in
      * the range of the corresponding dimension, as defined in the
      * {@link MultidimensionalCounter#MultidimensionalCounter(int...) constructor}.
      */
     public int getCount(int ... c)
-        throws OutOfRangeException, DimensionMismatchException {
+        throws OutOfRangeException, MathIllegalArgumentException {
         if (c.length != dimension) {
-            throw new DimensionMismatchException(c.length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   c.length, dimension);
         }
         int count = 0;
         for (int i = 0; i < dimension; i++) {

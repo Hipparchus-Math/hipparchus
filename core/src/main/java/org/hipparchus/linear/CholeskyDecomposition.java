@@ -17,7 +17,6 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -229,7 +228,8 @@ public class CholeskyDecomposition {
         public RealVector solve(final RealVector b) {
             final int m = lTData.length;
             if (b.getDimension() != m) {
-                throw new DimensionMismatchException(b.getDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       b.getDimension(), m);
             }
 
             final double[] x = b.toArray();
@@ -261,7 +261,8 @@ public class CholeskyDecomposition {
         public RealMatrix solve(RealMatrix b) {
             final int m = lTData.length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       b.getRowDimension(), m);
             }
 
             final int nColB = b.getColumnDimension();

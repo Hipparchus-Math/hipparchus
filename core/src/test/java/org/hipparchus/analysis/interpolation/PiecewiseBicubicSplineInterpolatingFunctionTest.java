@@ -18,7 +18,7 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.InsufficientDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
@@ -94,7 +94,7 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
             double xval1[] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
             bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval1, yval, zval);
             Assert.fail("Failed to detect data set array with different sizes.");
-        } catch (DimensionMismatchException iae) {
+        } catch (MathIllegalArgumentException iae) {
             // Expected.
         }
 
@@ -102,7 +102,7 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
             double yval1[] = { 0.0, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0 };
             bcf = new PiecewiseBicubicSplineInterpolatingFunction(xval, yval1, zval);
             Assert.fail("Failed to detect data set array with different sizes.");
-        } catch (DimensionMismatchException iae) {
+        } catch (MathIllegalArgumentException iae) {
             // Expected.
         }
 

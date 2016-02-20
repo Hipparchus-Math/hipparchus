@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.TooManyEvaluationsException;
@@ -52,7 +52,7 @@ public class BOBYQAOptimizerTest {
                 1e-13, 1e-6, 2000, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testBoundariesDimensionMismatch() {
         double[] startPoint = point(DIM, 0.5);
         double[][] boundaries = boundaries(DIM + 1, -1, 2);

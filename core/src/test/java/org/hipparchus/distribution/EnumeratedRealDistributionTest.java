@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.hipparchus.distribution.EnumeratedDistribution;
 import org.hipparchus.distribution.EnumeratedRealDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
@@ -64,8 +64,8 @@ public class EnumeratedRealDistributionTest {
         EnumeratedRealDistribution invalid = null;
         try {
             invalid = new EnumeratedRealDistribution(new double[]{1.0, 2.0}, new double[]{0.0});
-            Assert.fail("Expected DimensionMismatchException");
-        } catch (DimensionMismatchException e) {
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
         }
         try{
         invalid = new EnumeratedRealDistribution(new double[]{1.0, 2.0}, new double[]{0.0, -1.0});

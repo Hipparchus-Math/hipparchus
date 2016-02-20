@@ -19,15 +19,9 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Assert;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.genetics.BinaryChromosome;
-import org.hipparchus.genetics.Chromosome;
-import org.hipparchus.genetics.ChromosomePair;
-import org.hipparchus.genetics.CrossoverPolicy;
-import org.hipparchus.genetics.UniformCrossover;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -108,8 +102,8 @@ public class UniformCrossoverTest {
         }
     }
 
-    @Test(expected = DimensionMismatchException.class)
-    public void testCrossoverDimensionMismatchException(){
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testCrossoverMathIllegalArgumentException(){
         @SuppressWarnings("boxing")
         final Integer[] p1 = new Integer[] {1,0,1,0,0,1,0,1,1};
         @SuppressWarnings("boxing")

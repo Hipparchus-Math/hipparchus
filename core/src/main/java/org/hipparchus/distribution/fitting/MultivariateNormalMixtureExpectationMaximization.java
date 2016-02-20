@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
@@ -78,14 +78,14 @@ public class MultivariateNormalMixtureExpectationMaximization {
      *
      * @param data Data to use in fitting procedure
      * @throws NotStrictlyPositiveException if data has no rows
-     * @throws DimensionMismatchException if rows of data have different numbers
+     * @throws MathIllegalArgumentException if rows of data have different numbers
      *             of columns
      * @throws NumberIsTooSmallException if the number of columns in the data is
      *             less than 2
      */
     public MultivariateNormalMixtureExpectationMaximization(double[][] data)
         throws NotStrictlyPositiveException,
-               DimensionMismatchException,
+               MathIllegalArgumentException,
                NumberIsTooSmallException {
         if (data.length < 1) {
             throw new NotStrictlyPositiveException(data.length);
@@ -96,8 +96,8 @@ public class MultivariateNormalMixtureExpectationMaximization {
         for (int i = 0; i < data.length; i++) {
             if (data[i].length != data[0].length) {
                 // Jagged arrays not allowed
-                throw new DimensionMismatchException(data[i].length,
-                                                     data[0].length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       data[i].length, data[0].length);
             }
             if (data[i].length < 2) {
                 throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_TOO_SMALL,
@@ -126,7 +126,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
      *             singular during fitting
      * @throws NotStrictlyPositiveException if numComponents is less than one
      *             or threshold is less than Double.MIN_VALUE
-     * @throws DimensionMismatchException if initialMixture mean vector and data
+     * @throws MathIllegalArgumentException if initialMixture mean vector and data
      *             number of columns are not equal
      */
     public void fit(final MixtureMultivariateNormalDistribution initialMixture,
@@ -134,7 +134,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
                     final double threshold)
             throws SingularMatrixException,
                    NotStrictlyPositiveException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
         if (maxIterations < 1) {
             throw new NotStrictlyPositiveException(maxIterations);
         }
@@ -154,7 +154,8 @@ public class MultivariateNormalMixtureExpectationMaximization {
             = initialMixture.getComponents().get(0).getSecond().getMeans().length;
 
         if (numMeanColumns != numCols) {
-            throw new DimensionMismatchException(numMeanColumns, numCols);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   numMeanColumns, numCols);
         }
 
         int numIterations = 0;
@@ -296,13 +297,13 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * than the number of data rows.
      * @throws NumberIsTooSmallException if {@code numComponents < 2}.
      * @throws NotStrictlyPositiveException if data has less than 2 rows
-     * @throws DimensionMismatchException if rows of data have different numbers
+     * @throws MathIllegalArgumentException if rows of data have different numbers
      *             of columns
      */
     public static MixtureMultivariateNormalDistribution estimate(final double[][] data,
                                                                  final int numComponents)
         throws NotStrictlyPositiveException,
-               DimensionMismatchException {
+               MathIllegalArgumentException {
         if (data.length < 2) {
             throw new NotStrictlyPositiveException(data.length);
         }

@@ -16,27 +16,17 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.DefaultRealMatrixChangingVisitor;
-import org.hipparchus.linear.DefaultRealMatrixPreservingVisitor;
-import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.MatrixDimensionMismatchException;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.NonSquareMatrixException;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.FastMath;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link Array2DRowRealMatrix} class.
@@ -1117,16 +1107,20 @@ public final class Array2DRowRealMatrixTest {
             throw new NonSquareMatrixException(lu.getRowDimension(), lu.getColumnDimension());
         }
         if (lowerData.length != lowerData[0].length) {
-            throw new DimensionMismatchException(lowerData.length, lowerData[0].length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   lowerData.length, lowerData[0].length);
         }
         if (upperData.length != upperData[0].length) {
-            throw new DimensionMismatchException(upperData.length, upperData[0].length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   upperData.length, upperData[0].length);
         }
         if (lowerData.length != upperData.length) {
-            throw new DimensionMismatchException(lowerData.length, upperData.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   lowerData.length, upperData.length);
         }
         if (lowerData.length != lu.getRowDimension()) {
-            throw new DimensionMismatchException(lowerData.length, lu.getRowDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   lowerData.length, lu.getRowDimension());
         }
 
         int n = lu.getRowDimension();
@@ -1153,7 +1147,8 @@ public final class Array2DRowRealMatrixTest {
                                                matrix.getColumnDimension());
         }
         if (matrix.getRowDimension() != permutation.length) {
-            throw new DimensionMismatchException(matrix.getRowDimension(), permutation.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   matrix.getRowDimension(), permutation.length);
         }
 
         int n = matrix.getRowDimension();

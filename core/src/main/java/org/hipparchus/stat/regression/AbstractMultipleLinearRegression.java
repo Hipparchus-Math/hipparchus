@@ -16,10 +16,9 @@
  */
 package org.hipparchus.stat.regression;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.InsufficientDataException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -106,7 +105,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * @param nobs number of observations (rows)
      * @param nvars number of independent variables (columns, not counting y)
      * @throws NullArgumentException if the data array is null
-     * @throws DimensionMismatchException if the length of the data array is not equal
+     * @throws MathIllegalArgumentException if the length of the data array is not equal
      * to <code>nobs * (nvars + 1)</code>
      * @throws InsufficientDataException if <code>nobs</code> is less than
      * <code>nvars + 1</code>
@@ -116,7 +115,8 @@ public abstract class AbstractMultipleLinearRegression implements
             throw new NullArgumentException();
         }
         if (data.length != nobs * (nvars + 1)) {
-            throw new DimensionMismatchException(data.length, nobs * (nvars + 1));
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   data.length, nobs * (nvars + 1));
         }
         if (nobs <= nvars) {
             throw new InsufficientDataException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, nobs, nvars + 1);
@@ -178,7 +178,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * @param x the rectangular array representing the x sample
      * @throws NullArgumentException if x is null
      * @throws NoDataException if x is empty
-     * @throws DimensionMismatchException if x is not rectangular
+     * @throws MathIllegalArgumentException if x is not rectangular
      */
     protected void newXSampleData(double[][] x) {
         if (x == null) {
@@ -194,7 +194,8 @@ public abstract class AbstractMultipleLinearRegression implements
             final double[][] xAug = new double[x.length][nVars + 1];
             for (int i = 0; i < x.length; i++) {
                 if (x[i].length != nVars) {
-                    throw new DimensionMismatchException(x[i].length, nVars);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           x[i].length, nVars);
                 }
                 xAug[i][0] = 1.0d;
                 System.arraycopy(x[i], 0, xAug[i], 1, nVars);
@@ -215,7 +216,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * @param x the [n,k] array representing the x data
      * @param y the [n,1] array representing the y data
      * @throws NullArgumentException if {@code x} or {@code y} is null
-     * @throws DimensionMismatchException if {@code x} and {@code y} do not
+     * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length
      * @throws NoDataException if {@code x} or {@code y} are zero-length
      * @throws MathIllegalArgumentException if the number of rows of {@code x}
@@ -226,7 +227,8 @@ public abstract class AbstractMultipleLinearRegression implements
             throw new NullArgumentException();
         }
         if (x.length != y.length) {
-            throw new DimensionMismatchException(y.length, x.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   y.length, x.length);
         }
         if (x.length == 0) {  // Must be no y data either
             throw new NoDataException();
@@ -244,13 +246,14 @@ public abstract class AbstractMultipleLinearRegression implements
      *
      * @param x the [n,k] array representing the x sample
      * @param covariance the [n,n] array representing the covariance matrix
-     * @throws DimensionMismatchException if the number of rows in x is not equal
+     * @throws MathIllegalArgumentException if the number of rows in x is not equal
      * to the number of rows in covariance
      * @throws NonSquareMatrixException if the covariance matrix is not square
      */
     protected void validateCovarianceData(double[][] x, double[][] covariance) {
         if (x.length != covariance.length) {
-            throw new DimensionMismatchException(x.length, covariance.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   x.length, covariance.length);
         }
         if (covariance.length > 0 && covariance.length != covariance[0].length) {
             throw new NonSquareMatrixException(covariance.length, covariance[0].length);

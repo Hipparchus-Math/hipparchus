@@ -17,7 +17,6 @@
 package org.hipparchus.stat.correlation;
 
 import org.hipparchus.distribution.TDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -267,13 +266,14 @@ public class PearsonsCorrelation {
      * @param xArray first data array
      * @param yArray second data array
      * @return Returns Pearson's correlation coefficient for the two arrays
-     * @throws DimensionMismatchException if the arrays lengths do not match
+     * @throws MathIllegalArgumentException if the arrays lengths do not match
      * @throws MathIllegalArgumentException if there is insufficient data
      */
     public double correlation(final double[] xArray, final double[] yArray) {
         SimpleRegression regression = new SimpleRegression();
         if (xArray.length != yArray.length) {
-            throw new DimensionMismatchException(xArray.length, yArray.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xArray.length, yArray.length);
         } else if (xArray.length < 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION,
                                                    xArray.length, 2);

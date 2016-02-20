@@ -17,7 +17,6 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.TDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
@@ -74,12 +73,12 @@ public class TTest {
      * @return t statistic
      * @throws NullArgumentException if the arrays are <code>null</code>
      * @throws NoDataException if the arrays are empty
-     * @throws DimensionMismatchException if the length of the arrays is not equal
+     * @throws MathIllegalArgumentException if the length of the arrays is not equal
      * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
      */
     public double pairedT(final double[] sample1, final double[] sample2)
         throws NullArgumentException, NoDataException,
-        DimensionMismatchException, NumberIsTooSmallException {
+        MathIllegalArgumentException, NumberIsTooSmallException {
 
         checkSampleData(sample1);
         checkSampleData(sample2);
@@ -122,12 +121,12 @@ public class TTest {
      * @return p-value for t-test
      * @throws NullArgumentException if the arrays are <code>null</code>
      * @throws NoDataException if the arrays are empty
-     * @throws DimensionMismatchException if the length of the arrays is not equal
+     * @throws MathIllegalArgumentException if the length of the arrays is not equal
      * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public double pairedTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NoDataException, DimensionMismatchException,
+        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
         NumberIsTooSmallException, MaxCountExceededException {
 
         double meanDifference = StatUtils.meanDifference(sample1, sample2);
@@ -168,14 +167,14 @@ public class TTest {
      * confidence 1 - alpha
      * @throws NullArgumentException if the arrays are <code>null</code>
      * @throws NoDataException if the arrays are empty
-     * @throws DimensionMismatchException if the length of the arrays is not equal
+     * @throws MathIllegalArgumentException if the length of the arrays is not equal
      * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
      * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public boolean pairedTTest(final double[] sample1, final double[] sample2,
                                final double alpha)
-        throws NullArgumentException, NoDataException, DimensionMismatchException,
+        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
         NumberIsTooSmallException, OutOfRangeException, MaxCountExceededException {
 
         checkSignificanceLevel(alpha);

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.TooManyIterationsException;
 import org.hipparchus.optim.MaxIter;
 import org.hipparchus.optim.PointValuePair;
@@ -794,7 +794,7 @@ public class SimplexSolverTest {
         Assert.assertEquals(7.0, solution.getValue(), 1e-4);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testDimensionMatch() {
         // min 2x1 +15x2 +18x3
         // Subject to

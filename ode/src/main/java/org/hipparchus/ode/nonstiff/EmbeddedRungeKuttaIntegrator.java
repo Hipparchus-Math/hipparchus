@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -190,7 +190,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
   /** {@inheritDoc} */
   @Override
   public void integrate(final ExpandableStatefulODE equations, final double t)
-      throws NumberIsTooSmallException, DimensionMismatchException,
+      throws NumberIsTooSmallException, MathIllegalArgumentException,
              MaxCountExceededException, NoBracketingException {
 
     sanityChecks(equations, t);

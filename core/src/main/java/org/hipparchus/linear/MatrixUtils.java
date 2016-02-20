@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NoDataException;
@@ -116,16 +116,16 @@ public class MatrixUtils {
      *
      * @param data input array
      * @return  RealMatrix containing the values of the array
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code data} is not rectangular (not all rows have the same length).
      * @throws NoDataException if a row or column is empty.
      * @throws NullArgumentException if either {@code data} or {@code data[0]}
      * is {@code null}.
-     * @throws DimensionMismatchException if {@code data} is not rectangular.
+     * @throws MathIllegalArgumentException if {@code data} is not rectangular.
      * @see #createRealMatrix(int, int)
      */
     public static RealMatrix createRealMatrix(double[][] data)
-        throws NullArgumentException, DimensionMismatchException,
+        throws NullArgumentException, MathIllegalArgumentException,
         NoDataException {
         if (data == null ||
             data[0] == null) {
@@ -146,7 +146,7 @@ public class MatrixUtils {
      * @param <T> the type of the field elements
      * @param data input array
      * @return a matrix containing the values of the array.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code data} is not rectangular (not all rows have the same length).
      * @throws NoDataException if a row or column is empty.
      * @throws NullArgumentException if either {@code data} or {@code data[0]}
@@ -155,7 +155,7 @@ public class MatrixUtils {
      * @since 2.0
      */
     public static <T extends FieldElement<T>> FieldMatrix<T> createFieldMatrix(T[][] data)
-        throws DimensionMismatchException, NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NoDataException, NullArgumentException {
         if (data == null ||
             data[0] == null) {
             throw new NullArgumentException();
@@ -597,15 +597,15 @@ public class MatrixUtils {
      *
      * @param left Left hand side matrix.
      * @param right Right hand side matrix.
-     * @throws DimensionMismatchException if matrices are not multiplication
+     * @throws MathIllegalArgumentException if matrices are not multiplication
      * compatible.
      */
     public static void checkMultiplicationCompatible(final AnyMatrix left, final AnyMatrix right)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         if (left.getColumnDimension() != right.getRowDimension()) {
-            throw new DimensionMismatchException(left.getColumnDimension(),
-                                                 right.getRowDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   left.getColumnDimension(), right.getRowDimension());
         }
     }
 
@@ -918,19 +918,19 @@ public class MatrixUtils {
      * </p>
      * @param rm RealMatrix which is lower triangular
      * @param b  RealVector this is overwritten
-     * @throws DimensionMismatchException if the matrix and vector are not
+     * @throws MathIllegalArgumentException if the matrix and vector are not
      * conformable
      * @throws NonSquareMatrixException if the matrix {@code rm} is not square
      * @throws MathArithmeticException if the absolute value of one of the diagonal
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveLowerTriangularSystem(RealMatrix rm, RealVector b)
-        throws DimensionMismatchException, MathArithmeticException,
+        throws MathIllegalArgumentException, MathArithmeticException,
         NonSquareMatrixException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
-            throw new DimensionMismatchException(
-                    (rm == null) ? 0 : rm.getRowDimension(),
-                    (b == null) ? 0 : b.getDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   (rm == null) ? 0 : rm.getRowDimension(),
+                                                   (b  == null) ? 0 : b.getDimension());
         }
         if( rm.getColumnDimension() != rm.getRowDimension() ){
             throw new NonSquareMatrixException(rm.getRowDimension(),
@@ -962,7 +962,7 @@ public class MatrixUtils {
      * </p>
      * @param rm RealMatrix which is upper triangular
      * @param b  RealVector this is overwritten
-     * @throws DimensionMismatchException if the matrix and vector are not
+     * @throws MathIllegalArgumentException if the matrix and vector are not
      * conformable
      * @throws NonSquareMatrixException if the matrix {@code rm} is not
      * square
@@ -970,12 +970,12 @@ public class MatrixUtils {
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveUpperTriangularSystem(RealMatrix rm, RealVector b)
-        throws DimensionMismatchException, MathArithmeticException,
+        throws MathIllegalArgumentException, MathArithmeticException,
         NonSquareMatrixException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
-            throw new DimensionMismatchException(
-                    (rm == null) ? 0 : rm.getRowDimension(),
-                    (b == null) ? 0 : b.getDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   (rm == null) ? 0 : rm.getRowDimension(),
+                                                   (b  == null) ? 0 : b.getDimension());
         }
         if( rm.getColumnDimension() != rm.getRowDimension() ){
             throw new NonSquareMatrixException(rm.getRowDimension(),

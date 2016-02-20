@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.hipparchus.analysis.polynomials.PolynomialFunctionNewtonForm;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 
@@ -47,14 +47,14 @@ public class DividedDifferenceInterpolator
      * @param x Interpolating points array.
      * @param y Interpolating values array.
      * @return a function which interpolates the dataset.
-     * @throws DimensionMismatchException if the array lengths are different.
+     * @throws MathIllegalArgumentException if the array lengths are different.
      * @throws NumberIsTooSmallException if the number of points is less than 2.
      * @throws NonMonotonicSequenceException if {@code x} is not sorted in
      * strictly increasing order.
      */
     @Override
     public PolynomialFunctionNewtonForm interpolate(double x[], double y[])
-        throws DimensionMismatchException,
+        throws MathIllegalArgumentException,
                NumberIsTooSmallException,
                NonMonotonicSequenceException {
         /**
@@ -93,13 +93,13 @@ public class DividedDifferenceInterpolator
      * @param x Interpolating points array.
      * @param y Interpolating values array.
      * @return a fresh copy of the divided difference array.
-     * @throws DimensionMismatchException if the array lengths are different.
+     * @throws MathIllegalArgumentException if the array lengths are different.
      * @throws NumberIsTooSmallException if the number of points is less than 2.
      * @throws NonMonotonicSequenceException
      * if {@code x} is not sorted in strictly increasing order.
      */
     protected static double[] computeDividedDifference(final double x[], final double y[])
-        throws DimensionMismatchException,
+        throws MathIllegalArgumentException,
                NumberIsTooSmallException,
                NonMonotonicSequenceException {
         PolynomialFunctionLagrangeForm.verifyInterpolationArray(x, y, true);

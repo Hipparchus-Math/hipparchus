@@ -18,7 +18,6 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -63,14 +62,14 @@ public final class BicubicInterpolatorTest {
         try {
             p = interpolator.interpolate(xval, yval, wzval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         wzval = new double[xval.length - 1][yval.length];
         try {
             p = interpolator.interpolate(xval, yval, wzval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
     }

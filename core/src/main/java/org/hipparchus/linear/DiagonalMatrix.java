@@ -18,7 +18,8 @@ package org.hipparchus.linear;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
@@ -86,15 +87,16 @@ public class DiagonalMatrix extends AbstractRealMatrix
     /**
      * {@inheritDoc}
      *
-     * @throws DimensionMismatchException if the requested dimensions are not equal.
+     * @throws MathIllegalArgumentException if the requested dimensions are not equal.
      */
     @Override
     public RealMatrix createMatrix(final int rowDimension,
                                    final int columnDimension)
         throws NotStrictlyPositiveException,
-               DimensionMismatchException {
+               MathIllegalArgumentException {
         if (rowDimension != columnDimension) {
-            throw new DimensionMismatchException(rowDimension, columnDimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   rowDimension, columnDimension);
         }
 
         return new DiagonalMatrix(rowDimension);
@@ -154,11 +156,11 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param m matrix to postmultiply by
      * @return {@code this * m}
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code columnDimension(this) != rowDimension(m)}
      */
     public DiagonalMatrix multiply(final DiagonalMatrix m)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMultiplicationCompatible(this, m);
 
         final int dim = getRowDimension();
@@ -175,12 +177,12 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param m matrix to postmultiply by
      * @return {@code this * m}
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code columnDimension(this) != rowDimension(m)}
      */
     @Override
     public RealMatrix multiply(final RealMatrix m)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (m instanceof DiagonalMatrix) {
             return multiply((DiagonalMatrix) m);
         } else {
@@ -285,20 +287,20 @@ public class DiagonalMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public double[] operate(final double[] v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         return multiply(new DiagonalMatrix(v, false)).getDataRef();
     }
 
     /** {@inheritDoc} */
     @Override
     public double[] preMultiply(final double[] v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         return operate(v);
     }
 
     /** {@inheritDoc} */
     @Override
-    public RealVector preMultiply(final RealVector v) throws DimensionMismatchException {
+    public RealVector preMultiply(final RealVector v) throws MathIllegalArgumentException {
         final double[] vectorData;
         if (v instanceof ArrayRealVector) {
             vectorData = ((ArrayRealVector) v).getDataRef();

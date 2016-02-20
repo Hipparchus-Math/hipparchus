@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 
 /**
@@ -52,10 +52,10 @@ public interface SecondaryEquations {
      * @param secondary array containing the current value of the secondary state vector
      * @param secondaryDot placeholder array where to put the derivative of the secondary state vector
      * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     void computeDerivatives(double t, double[] primary, double[] primaryDot,
                             double[] secondary, double[] secondaryDot)
-        throws MaxCountExceededException, DimensionMismatchException;
+        throws MaxCountExceededException, MathIllegalArgumentException;
 
 }

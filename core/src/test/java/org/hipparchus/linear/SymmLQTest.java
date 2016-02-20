@@ -18,7 +18,8 @@ package org.hipparchus.linear;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.DecompositionSolver;
@@ -49,7 +50,8 @@ public class SymmLQTest {
             @Override
             public RealVector operate(final RealVector x) {
                 if (x.getDimension() != n) {
-                    throw new DimensionMismatchException(x.getDimension(), n);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           x.getDimension(), n);
                 }
                 final double[] y = new double[n];
                 for (int i = 0; i < n; i++) {
@@ -86,8 +88,8 @@ public class SymmLQTest {
                 @Override
                 public RealVector operate(final RealVector x) {
                     if (x.getDimension() != n) {
-                        throw new DimensionMismatchException(x.getDimension(),
-                                                             n);
+                        throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                               x.getDimension(), n);
                     }
                     final double[] y = new double[n];
                     for (int i = 0; i < n; i++) {
@@ -236,7 +238,7 @@ public class SymmLQTest {
         solver.solve(a, b, x);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testDimensionMismatchRightHandSide() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
         final IterativeLinearSolver solver;
@@ -245,7 +247,7 @@ public class SymmLQTest {
         solver.solve(a, b);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testDimensionMismatchSolution() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
         final IterativeLinearSolver solver;
@@ -357,7 +359,7 @@ public class SymmLQTest {
         solver.solve(a, m, b);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMismatchedOperatorDimensions() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
         final RealLinearOperator m = new RealLinearOperator() {

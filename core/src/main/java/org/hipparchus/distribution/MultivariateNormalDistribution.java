@@ -16,7 +16,6 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -68,7 +67,7 @@ public class MultivariateNormalDistribution
      *
      * @param means Vector of means.
      * @param covariances Covariance matrix.
-     * @throws DimensionMismatchException if the arrays length are
+     * @throws MathIllegalArgumentException if the arrays length are
      * inconsistent.
      * @throws SingularMatrixException if the eigenvalue decomposition cannot
      * be performed on the provided covariance matrix.
@@ -78,7 +77,7 @@ public class MultivariateNormalDistribution
     public MultivariateNormalDistribution(final double[] means,
                                           final double[][] covariances)
         throws SingularMatrixException,
-               DimensionMismatchException,
+               MathIllegalArgumentException,
                MathIllegalArgumentException {
         this(new Well19937c(), means, covariances);
     }
@@ -94,7 +93,7 @@ public class MultivariateNormalDistribution
      * @param rng Random Number Generator.
      * @param means Vector of means.
      * @param covariances Covariance matrix.
-     * @throws DimensionMismatchException if the arrays length are
+     * @throws MathIllegalArgumentException if the arrays length are
      * inconsistent.
      * @throws SingularMatrixException if the eigenvalue decomposition cannot
      * be performed on the provided covariance matrix.
@@ -105,19 +104,21 @@ public class MultivariateNormalDistribution
                                           final double[] means,
                                           final double[][] covariances)
             throws SingularMatrixException,
-                   DimensionMismatchException,
+                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
         super(rng, means.length);
 
         final int dim = means.length;
 
         if (covariances.length != dim) {
-            throw new DimensionMismatchException(covariances.length, dim);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   covariances.length, dim);
         }
 
         for (int i = 0; i < dim; i++) {
             if (dim != covariances[i].length) {
-                throw new DimensionMismatchException(covariances[i].length, dim);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       covariances[i].length, dim);
             }
         }
 
@@ -182,10 +183,11 @@ public class MultivariateNormalDistribution
 
     /** {@inheritDoc} */
     @Override
-    public double density(final double[] vals) throws DimensionMismatchException {
+    public double density(final double[] vals) throws MathIllegalArgumentException {
         final int dim = getDimension();
         if (vals.length != dim) {
-            throw new DimensionMismatchException(vals.length, dim);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   vals.length, dim);
         }
 
         return FastMath.pow(2 * FastMath.PI, -0.5 * dim) *

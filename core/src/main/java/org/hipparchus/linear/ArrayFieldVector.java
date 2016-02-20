@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotPositiveException;
@@ -394,7 +394,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> add(FieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         try {
             return add((ArrayFieldVector<T>) v);
         } catch (ClassCastException cce) {
@@ -411,11 +411,11 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * Compute the sum of {@code this} and {@code v}.
      * @param v vector to be added
      * @return {@code this + v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}
      */
     public ArrayFieldVector<T> add(ArrayFieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.data.length);
         T[] out = MathArrays.buildArray(field, data.length);
         for (int i = 0; i < data.length; i++) {
@@ -427,7 +427,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> subtract(FieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         try {
             return subtract((ArrayFieldVector<T>) v);
         } catch (ClassCastException cce) {
@@ -444,11 +444,11 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * Compute {@code this} minus {@code v}.
      * @param v vector to be subtracted
      * @return {@code this - v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}
      */
     public ArrayFieldVector<T> subtract(ArrayFieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.data.length);
         T[] out = MathArrays.buildArray(field, data.length);
         for (int i = 0; i < data.length; i++) {
@@ -569,7 +569,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> ebeMultiply(FieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         try {
             return ebeMultiply((ArrayFieldVector<T>) v);
         } catch (ClassCastException cce) {
@@ -586,11 +586,11 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * Element-by-element multiplication.
      * @param v vector by which instance elements must be multiplied
      * @return a vector containing {@code this[i] * v[i]} for all {@code i}
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}
      */
     public ArrayFieldVector<T> ebeMultiply(ArrayFieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.data.length);
         T[] out = MathArrays.buildArray(field, data.length);
         for (int i = 0; i < data.length; i++) {
@@ -602,7 +602,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> ebeDivide(FieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathArithmeticException {
         try {
             return ebeDivide((ArrayFieldVector<T>) v);
         } catch (ClassCastException cce) {
@@ -623,12 +623,12 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * Element-by-element division.
      * @param v vector by which instance elements must be divided
      * @return a vector containing {@code this[i] / v[i]} for all {@code i}
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}
      * @throws MathArithmeticException if one entry of {@code v} is zero.
      */
     public ArrayFieldVector<T> ebeDivide(ArrayFieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathArithmeticException {
         checkVectorDimensions(v.data.length);
         T[] out = MathArrays.buildArray(field, data.length);
         for (int i = 0; i < data.length; i++) {
@@ -653,7 +653,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public T dotProduct(FieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         try {
             return dotProduct((ArrayFieldVector<T>) v);
         } catch (ClassCastException cce) {
@@ -670,11 +670,11 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * Compute the dot product.
      * @param v vector with which dot product should be computed
      * @return the scalar dot product of {@code this} and {@code v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}
      */
     public T dotProduct(ArrayFieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.data.length);
         T dot = field.getZero();
         for (int i = 0; i < data.length; i++) {
@@ -686,19 +686,19 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> projection(FieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathArithmeticException {
         return v.mapMultiply(dotProduct(v).divide(v.dotProduct(v)));
     }
 
     /** Find the orthogonal projection of this vector onto another vector.
      * @param v vector onto which {@code this} must be projected
      * @return projection of {@code this} onto {@code v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}
      * @throws MathArithmeticException if {@code v} is the null vector.
      */
     public ArrayFieldVector<T> projection(ArrayFieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathArithmeticException {
         return (ArrayFieldVector<T>) v.mapMultiply(dotProduct(v).divide(v.dotProduct(v)));
     }
 
@@ -852,11 +852,11 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /**
      * Check if instance and specified vectors have the same dimension.
      * @param v vector to compare instance with
-     * @exception DimensionMismatchException if the vectors do not
+     * @exception MathIllegalArgumentException if the vectors do not
      * have the same dimensions
      */
     protected void checkVectorDimensions(FieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
     }
 
@@ -864,13 +864,14 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * Check if instance dimension is equal to some expected value.
      *
      * @param n Expected dimension.
-     * @throws DimensionMismatchException if the dimension is not equal to the
+     * @throws MathIllegalArgumentException if the dimension is not equal to the
      * size of {@code this} vector.
      */
     protected void checkVectorDimensions(int n)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (data.length != n) {
-            throw new DimensionMismatchException(data.length, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   data.length, n);
         }
     }
 

@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -44,7 +44,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         new MultivariateNormalMixtureExpectationMaximization(new double[][] {});
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonJaggedData() {
         // Reject data with nonconstant numbers of columns
         double[][] data = new double[][] {
@@ -104,7 +104,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         fitter.fit(initialMix, 5, 1E-5);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testIncompatibleIntialMixture() {
         // Data has 3 columns
         double[][] data = new double[][] {

@@ -18,7 +18,8 @@ package org.hipparchus.util;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * This class wraps a {@code double} value in an object. It is similar to the
@@ -649,9 +650,10 @@ public class Decimal64 extends Number
      */
     @Override
     public Decimal64 linearCombination(final Decimal64[] a, final Decimal64[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new DimensionMismatchException(a.length, b.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   a.length, b.length);
         }
         final double[] aDouble = new double[a.length];
         final double[] bDouble = new double[b.length];
@@ -667,9 +669,10 @@ public class Decimal64 extends Number
      */
     @Override
     public Decimal64 linearCombination(final double[] a, final Decimal64[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new DimensionMismatchException(a.length, b.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   a.length, b.length);
         }
         final double[] bDouble = new double[b.length];
         for (int i = 0; i < a.length; ++i) {

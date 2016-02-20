@@ -19,7 +19,7 @@ package org.hipparchus.stat.inference;
 import java.util.Collection;
 
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.InsufficientDataException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
@@ -113,7 +113,7 @@ public class TestUtils  {
      */
     public static double pairedT(final double[] sample1, final double[] sample2)
         throws NullArgumentException, NoDataException,
-        DimensionMismatchException, NumberIsTooSmallException {
+        MathIllegalArgumentException, NumberIsTooSmallException {
         return T_TEST.pairedT(sample1, sample2);
     }
 
@@ -122,7 +122,7 @@ public class TestUtils  {
      */
     public static boolean pairedTTest(final double[] sample1, final double[] sample2,
                                       final double alpha)
-        throws NullArgumentException, NoDataException, DimensionMismatchException,
+        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
         NumberIsTooSmallException, OutOfRangeException, MaxCountExceededException {
         return T_TEST.pairedTTest(sample1, sample2, alpha);
     }
@@ -131,7 +131,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#pairedTTest(double[], double[])
      */
     public static double pairedTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NoDataException, DimensionMismatchException,
+        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
         NumberIsTooSmallException, MaxCountExceededException {
         return T_TEST.pairedTTest(sample1, sample2);
     }
@@ -251,7 +251,7 @@ public class TestUtils  {
      */
     public static double chiSquare(final double[] expected, final long[] observed)
         throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException {
+        MathIllegalArgumentException {
         return CHI_SQUARE_TEST.chiSquare(expected, observed);
     }
 
@@ -260,7 +260,7 @@ public class TestUtils  {
      */
     public static double chiSquare(final long[][] counts)
         throws NullArgumentException, NotPositiveException,
-        DimensionMismatchException {
+        MathIllegalArgumentException {
         return CHI_SQUARE_TEST.chiSquare(counts);
     }
 
@@ -270,7 +270,7 @@ public class TestUtils  {
     public static boolean chiSquareTest(final double[] expected, final long[] observed,
                                         final double alpha)
         throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(expected, observed, alpha);
     }
 
@@ -279,7 +279,7 @@ public class TestUtils  {
      */
     public static double chiSquareTest(final double[] expected, final long[] observed)
         throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(expected, observed);
     }
 
@@ -287,7 +287,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTest(long[][], double)
      */
     public static boolean chiSquareTest(final long[][] counts, final double alpha)
-        throws NullArgumentException, DimensionMismatchException,
+        throws NullArgumentException, MathIllegalArgumentException,
         NotPositiveException, OutOfRangeException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(counts, alpha);
     }
@@ -296,7 +296,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTest(long[][])
      */
     public static double chiSquareTest(final long[][] counts)
-        throws NullArgumentException, DimensionMismatchException,
+        throws NullArgumentException, MathIllegalArgumentException,
         NotPositiveException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(counts);
     }
@@ -308,7 +308,7 @@ public class TestUtils  {
      */
     public static double chiSquareDataSetsComparison(final long[] observed1,
                                                      final long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException {
+        throws MathIllegalArgumentException, NotPositiveException, ZeroException {
         return CHI_SQUARE_TEST.chiSquareDataSetsComparison(observed1, observed2);
     }
 
@@ -319,7 +319,7 @@ public class TestUtils  {
      */
     public static double chiSquareTestDataSetsComparison(final long[] observed1,
                                                          final long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException,
+        throws MathIllegalArgumentException, NotPositiveException, ZeroException,
         MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTestDataSetsComparison(observed1, observed2);
     }
@@ -332,7 +332,7 @@ public class TestUtils  {
     public static boolean chiSquareTestDataSetsComparison(final long[] observed1,
                                                           final long[] observed2,
                                                           final double alpha)
-        throws DimensionMismatchException, NotPositiveException,
+        throws MathIllegalArgumentException, NotPositiveException,
         ZeroException, OutOfRangeException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTestDataSetsComparison(observed1, observed2, alpha);
     }
@@ -343,7 +343,7 @@ public class TestUtils  {
      * @since 1.2
      */
     public static double oneWayAnovaFValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException {
+        throws NullArgumentException, MathIllegalArgumentException {
         return ONE_WAY_ANANOVA.anovaFValue(categoryData);
     }
 
@@ -353,7 +353,7 @@ public class TestUtils  {
      * @since 1.2
      */
     public static double oneWayAnovaPValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException, MaxCountExceededException {
         return ONE_WAY_ANANOVA.anovaPValue(categoryData);
     }
@@ -365,7 +365,7 @@ public class TestUtils  {
      */
     public static boolean oneWayAnovaTest(final Collection<double[]> categoryData,
                                           final double alpha)
-        throws NullArgumentException, DimensionMismatchException,
+        throws NullArgumentException, MathIllegalArgumentException,
         OutOfRangeException, MathIllegalStateException, MaxCountExceededException {
         return ONE_WAY_ANANOVA.anovaTest(categoryData, alpha);
     }
@@ -376,7 +376,7 @@ public class TestUtils  {
      */
     public static double g(final double[] expected, final long[] observed)
         throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException {
+        MathIllegalArgumentException {
         return G_TEST.g(expected, observed);
     }
 
@@ -386,7 +386,7 @@ public class TestUtils  {
      */
     public static double gTest(final double[] expected, final long[] observed)
         throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
         return G_TEST.gTest(expected, observed);
     }
 
@@ -396,7 +396,7 @@ public class TestUtils  {
      */
     public static double gTestIntrinsic(final double[] expected, final long[] observed)
         throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
         return G_TEST.gTestIntrinsic(expected, observed);
     }
 
@@ -407,7 +407,7 @@ public class TestUtils  {
     public static boolean gTest(final double[] expected, final long[] observed,
                                 final double alpha)
         throws NotPositiveException, NotStrictlyPositiveException,
-        DimensionMismatchException, OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
         return G_TEST.gTest(expected, observed, alpha);
     }
 
@@ -417,7 +417,7 @@ public class TestUtils  {
      */
     public static double gDataSetsComparison(final long[] observed1,
                                                   final long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException {
+        throws MathIllegalArgumentException, NotPositiveException, ZeroException {
         return G_TEST.gDataSetsComparison(observed1, observed2);
     }
 
@@ -426,7 +426,7 @@ public class TestUtils  {
      * @since 3.1
      */
     public static double rootLogLikelihoodRatio(final long k11, final long k12, final long k21, final long k22)
-        throws DimensionMismatchException, NotPositiveException, ZeroException {
+        throws MathIllegalArgumentException, NotPositiveException, ZeroException {
         return G_TEST.rootLogLikelihoodRatio(k11, k12, k21, k22);
     }
 
@@ -437,7 +437,7 @@ public class TestUtils  {
      */
     public static double gTestDataSetsComparison(final long[] observed1,
                                                         final long[] observed2)
-        throws DimensionMismatchException, NotPositiveException, ZeroException,
+        throws MathIllegalArgumentException, NotPositiveException, ZeroException,
         MaxCountExceededException {
         return G_TEST.gTestDataSetsComparison(observed1, observed2);
     }
@@ -449,7 +449,7 @@ public class TestUtils  {
     public static boolean gTestDataSetsComparison(final long[] observed1,
                                                   final long[] observed2,
                                                   final double alpha)
-        throws DimensionMismatchException, NotPositiveException,
+        throws MathIllegalArgumentException, NotPositiveException,
         ZeroException, OutOfRangeException, MaxCountExceededException {
         return G_TEST.gTestDataSetsComparison(observed1, observed2, alpha);
     }

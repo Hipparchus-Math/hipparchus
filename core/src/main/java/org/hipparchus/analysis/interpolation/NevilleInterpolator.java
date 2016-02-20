@@ -19,7 +19,7 @@ package org.hipparchus.analysis.interpolation;
 import java.io.Serializable;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunctionLagrangeForm;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 
@@ -46,14 +46,14 @@ public class NevilleInterpolator implements UnivariateInterpolator,
      * @param x Interpolating points.
      * @param y Interpolating values.
      * @return a function which interpolates the data set
-     * @throws DimensionMismatchException if the array lengths are different.
+     * @throws MathIllegalArgumentException if the array lengths are different.
      * @throws NumberIsTooSmallException if the number of points is less than 2.
      * @throws NonMonotonicSequenceException if two abscissae have the same
      * value.
      */
     @Override
     public PolynomialFunctionLagrangeForm interpolate(double x[], double y[])
-        throws DimensionMismatchException,
+        throws MathIllegalArgumentException,
                NumberIsTooSmallException,
                NonMonotonicSequenceException {
         return new PolynomialFunctionLagrangeForm(x, y);

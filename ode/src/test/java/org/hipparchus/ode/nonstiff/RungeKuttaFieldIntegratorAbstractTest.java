@@ -23,7 +23,7 @@ import java.lang.reflect.Array;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -118,7 +118,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends RealFieldElement<T>> void doTestMissedEndEvent(final Field<T> field,
                                                                         final double epsilonT, final double epsilonY)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
             MaxCountExceededException, NoBracketingException {
         final T   t0     = field.getZero().add(1878250320.0000029);
         final T   tEvent = field.getZero().add(1878250379.9999986);
@@ -197,7 +197,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     public abstract void testSanityChecks();
 
     protected <T extends RealFieldElement<T>> void doTestSanityChecks(Field<T> field)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
         RungeKuttaFieldIntegrator<T> integrator = createIntegrator(field, field.getZero().add(0.01));
         try  {
@@ -206,7 +206,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                  new FieldODEState<T>(field.getZero(), MathArrays.buildArray(field, pb.getDimension() + 10)),
                                  field.getOne());
             Assert.fail("an exception should have been thrown");
-        } catch(DimensionMismatchException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
         try  {
             TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
@@ -225,7 +225,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                                                          final double safetyValueFactor,
                                                                          final double safetyTimeFactor,
                                                                          final double epsilonT)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         @SuppressWarnings("unchecked")
@@ -289,7 +289,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                                                    final double epsilonMaxValue,
                                                                    final double epsilonMaxTime,
                                                                    final String name)
-         throws DimensionMismatchException, NumberIsTooSmallException,
+         throws MathIllegalArgumentException, NumberIsTooSmallException,
                 MaxCountExceededException, NoBracketingException {
 
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
@@ -315,7 +315,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                                                  final double belowMaxValue,
                                                                  final double epsilonMaxTime,
                                                                  final String name)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
@@ -341,7 +341,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                                                   final double epsilonMaxValue,
                                                                   final double epsilonMaxTime,
                                                                   final String name)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
@@ -363,7 +363,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     public abstract void testKepler();
 
     protected <T extends RealFieldElement<T>> void doTestKepler(Field<T> field, double expectedMaxError, double epsilon)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field, field.getZero().add(0.9));
@@ -409,7 +409,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     public abstract void testStepSize();
 
     protected <T extends RealFieldElement<T>> void doTestStepSize(final Field<T> field, final double epsilon)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
         final T step = field.getZero().add(1.23456);
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);

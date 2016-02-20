@@ -21,7 +21,7 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.MultivariateDifferentiableFunction;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Identity;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
@@ -138,11 +138,11 @@ public class FunctionUtils {
             }
 
             /** {@inheritDoc}
-             * @throws DimensionMismatchException if functions are not consistent with each other
+             * @throws MathIllegalArgumentException if functions are not consistent with each other
              */
             @Override
             public DerivativeStructure value(final DerivativeStructure t)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 DerivativeStructure r = f[0].value(t);
                 for (int i = 1; i < f.length; i++) {
                     r = r.add(f[i].value(t));
@@ -445,7 +445,8 @@ public class FunctionUtils {
                 final double[] dv = gradient.value(dPoint);
                 if (dv.length != point.length) {
                     // the gradient function is inconsistent
-                    throw new DimensionMismatchException(dv.length, point.length);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           dv.length, point.length);
                 }
 
                 // build the combined derivative

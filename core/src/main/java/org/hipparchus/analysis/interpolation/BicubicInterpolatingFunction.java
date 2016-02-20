@@ -19,7 +19,8 @@ package org.hipparchus.analysis.interpolation;
 import java.util.Arrays;
 
 import org.hipparchus.analysis.BivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -76,7 +77,7 @@ public class BicubicInterpolatingFunction
      * to y on every grid point.
      * @param d2FdXdY Values of the cross partial derivative of function on
      * every grid point.
-     * @throws DimensionMismatchException if the various arrays do not contain
+     * @throws MathIllegalArgumentException if the various arrays do not contain
      * the expected number of elements.
      * @throws NonMonotonicSequenceException if {@code x} or {@code y} are
      * not strictly increasing.
@@ -88,7 +89,7 @@ public class BicubicInterpolatingFunction
                                         double[][] dFdX,
                                         double[][] dFdY,
                                         double[][] d2FdXdY)
-        throws DimensionMismatchException,
+        throws MathIllegalArgumentException,
                NoDataException,
                NonMonotonicSequenceException {
         final int xLen = x.length;
@@ -98,16 +99,20 @@ public class BicubicInterpolatingFunction
             throw new NoDataException();
         }
         if (xLen != f.length) {
-            throw new DimensionMismatchException(xLen, f.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, f.length);
         }
         if (xLen != dFdX.length) {
-            throw new DimensionMismatchException(xLen, dFdX.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, dFdX.length);
         }
         if (xLen != dFdY.length) {
-            throw new DimensionMismatchException(xLen, dFdY.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, dFdY.length);
         }
         if (xLen != d2FdXdY.length) {
-            throw new DimensionMismatchException(xLen, d2FdXdY.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, d2FdXdY.length);
         }
 
         MathArrays.checkOrder(x);
@@ -122,16 +127,20 @@ public class BicubicInterpolatingFunction
 
         for (int i = 0; i < lastI; i++) {
             if (f[i].length != yLen) {
-                throw new DimensionMismatchException(f[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       f[i].length, yLen);
             }
             if (dFdX[i].length != yLen) {
-                throw new DimensionMismatchException(dFdX[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       dFdX[i].length, yLen);
             }
             if (dFdY[i].length != yLen) {
-                throw new DimensionMismatchException(dFdY[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       dFdY[i].length, yLen);
             }
             if (d2FdXdY[i].length != yLen) {
-                throw new DimensionMismatchException(d2FdXdY[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       d2FdXdY[i].length, yLen);
             }
             final int ip1 = i + 1;
             final double xR = xval[ip1] - xval[i];

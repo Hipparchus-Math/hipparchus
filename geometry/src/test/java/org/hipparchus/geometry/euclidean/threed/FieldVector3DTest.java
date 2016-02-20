@@ -23,7 +23,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -36,7 +36,7 @@ import org.junit.Test;
 public class FieldVector3DTest {
 
     @Test
-    public void testConstructors() throws DimensionMismatchException {
+    public void testConstructors() throws MathIllegalArgumentException {
         double cosAlpha = 1 / 2.0;
         double sinAlpha = FastMath.sqrt(3) / 2.0;
         double cosDelta = FastMath.sqrt(2) / 2.0;
@@ -182,8 +182,8 @@ public class FieldVector3DTest {
         Assert.assertEquals("{3.000; 2.000; 1.000}", createVector(3, 2, 1, 3).toString(format));
     }
 
-    @Test(expected=DimensionMismatchException.class)
-    public void testWrongDimension() throws DimensionMismatchException {
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testWrongDimension() throws MathIllegalArgumentException {
         new FieldVector3D<DerivativeStructure>(new DerivativeStructure[] {
             new DerivativeStructure(3, 1, 0, 2),
             new DerivativeStructure(3, 1, 0, 5)

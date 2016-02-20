@@ -21,7 +21,6 @@ import java.util.Random;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.nonstiff.DormandPrince54FieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
@@ -187,9 +186,7 @@ public class ContinuousOutputFieldModelTest {
             ContinuousOutputFieldModel<T> otherCm = new ContinuousOutputFieldModel<T>();
             otherCm.handleStep(buildInterpolator(field, t0, t1, y), true);
             cm.append(otherCm);
-        } catch(DimensionMismatchException dme) {
-            return true; // there was an allowable error
-        } catch(MathIllegalArgumentException miae) {
+        } catch(MathIllegalArgumentException dme) {
             return true; // there was an allowable error
         }
         return false; // no allowable error

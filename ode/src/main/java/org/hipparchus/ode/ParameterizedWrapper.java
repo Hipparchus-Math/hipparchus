@@ -19,7 +19,7 @@ package org.hipparchus.ode;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 
 /** Wrapper class enabling {@link FirstOrderDifferentialEquations basic simple}
@@ -51,10 +51,10 @@ class ParameterizedWrapper implements ParameterizedODE {
      * @param y array containing the current value of the state vector
      * @param yDot placeholder array where to put the time derivative of the state vector
      * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     public void computeDerivatives(double t, double[] y, double[] yDot)
-        throws MaxCountExceededException, DimensionMismatchException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
         fode.computeDerivatives(t, y, yDot);
     }
 

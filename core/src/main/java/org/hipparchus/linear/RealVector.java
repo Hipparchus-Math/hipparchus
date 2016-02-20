@@ -25,7 +25,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Add;
 import org.hipparchus.analysis.function.Divide;
 import org.hipparchus.analysis.function.Multiply;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
@@ -156,11 +156,11 @@ public abstract class RealVector {
      * Check if instance and specified vectors have the same dimension.
      *
      * @param v Vector to compare instance with.
-     * @throws DimensionMismatchException if the vectors do not
+     * @throws MathIllegalArgumentException if the vectors do not
      * have the same dimension.
      */
     protected void checkVectorDimensions(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
     }
 
@@ -168,14 +168,15 @@ public abstract class RealVector {
      * Check if instance dimension is equal to some expected value.
      *
      * @param n Expected dimension.
-     * @throws DimensionMismatchException if the dimension is
+     * @throws MathIllegalArgumentException if the dimension is
      * inconsistent with the vector size.
      */
     protected void checkVectorDimensions(int n)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         int d = getDimension();
         if (d != n) {
-            throw new DimensionMismatchException(d, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   d, n);
         }
     }
 
@@ -226,10 +227,10 @@ public abstract class RealVector {
      *
      * @param v Vector to be added.
      * @return {@code this} + {@code v}.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
      */
-    public RealVector add(RealVector v) throws DimensionMismatchException {
+    public RealVector add(RealVector v) throws MathIllegalArgumentException {
         checkVectorDimensions(v);
         RealVector result = v.copy();
         Iterator<Entry> it = iterator();
@@ -247,10 +248,10 @@ public abstract class RealVector {
      *
      * @param v Vector to be subtracted.
      * @return {@code this} - {@code v}.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
      */
-    public RealVector subtract(RealVector v) throws DimensionMismatchException {
+    public RealVector subtract(RealVector v) throws MathIllegalArgumentException {
         checkVectorDimensions(v);
         RealVector result = v.mapMultiply(-1d);
         Iterator<Entry> it = iterator();
@@ -299,10 +300,10 @@ public abstract class RealVector {
      *
      * @param v Vector with which dot product should be computed
      * @return the scalar dot product between this instance and {@code v}.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
      */
-    public double dotProduct(RealVector v) throws DimensionMismatchException {
+    public double dotProduct(RealVector v) throws MathIllegalArgumentException {
         checkVectorDimensions(v);
         double d = 0;
         final int n = getDimension();
@@ -320,10 +321,10 @@ public abstract class RealVector {
      * @return the cosine of the angle between this vector and {@code v}.
      * @throws MathArithmeticException if {@code this} or {@code v} is the null
      * vector
-     * @throws DimensionMismatchException if the dimensions of {@code this} and
+     * @throws MathIllegalArgumentException if the dimensions of {@code this} and
      * {@code v} do not match
      */
-    public double cosine(RealVector v) throws DimensionMismatchException,
+    public double cosine(RealVector v) throws MathIllegalArgumentException,
         MathArithmeticException {
         final double norm = getNorm();
         final double vNorm = v.getNorm();
@@ -340,22 +341,22 @@ public abstract class RealVector {
      *
      * @param v Vector by which instance elements must be divided.
      * @return a vector containing this[i] / v[i] for all i.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
      */
     public abstract RealVector ebeDivide(RealVector v)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Element-by-element multiplication.
      *
      * @param v Vector by which instance elements must be multiplied
      * @return a vector containing this[i] * v[i] for all i.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
      */
     public abstract RealVector ebeMultiply(RealVector v)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Distance between two vectors.
@@ -365,13 +366,13 @@ public abstract class RealVector {
      *
      * @param v Vector to which distance is requested.
      * @return the distance between two vectors.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
      * @see #getL1Distance(RealVector)
      * @see #getLInfDistance(RealVector)
      * @see #getNorm()
      */
-    public double getDistance(RealVector v) throws DimensionMismatchException {
+    public double getDistance(RealVector v) throws MathIllegalArgumentException {
         checkVectorDimensions(v);
         double d = 0;
         Iterator<Entry> it = iterator();
@@ -452,11 +453,11 @@ public abstract class RealVector {
      *
      * @param v Vector to which distance is requested.
      * @return the distance between two vectors.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
      */
     public double getL1Distance(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v);
         double d = 0;
         Iterator<Entry> it = iterator();
@@ -475,14 +476,14 @@ public abstract class RealVector {
      *
      * @param v Vector to which distance is requested.
      * @return the distance between two vectors.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
      * @see #getDistance(RealVector)
      * @see #getL1Distance(RealVector)
      * @see #getLInfNorm()
      */
     public double getLInfDistance(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v);
         double d = 0;
         Iterator<Entry> it = iterator();
@@ -650,13 +651,13 @@ public abstract class RealVector {
      *
      * @param v vector onto which instance must be projected.
      * @return projection of the instance onto {@code v}.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
      * @throws MathArithmeticException if {@code this} or {@code v} is the null
      * vector
      */
     public RealVector projection(final RealVector v)
-        throws DimensionMismatchException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathArithmeticException {
         final double norm2 = v.dotProduct(v);
         if (norm2 == 0.0) {
             throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
@@ -833,11 +834,11 @@ public abstract class RealVector {
      * @param y Vector with which {@code this} is linearly combined.
      * @return a vector containing {@code a * this[i] + b * y[i]} for all
      * {@code i}.
-     * @throws DimensionMismatchException if {@code y} is not the same size as
+     * @throws MathIllegalArgumentException if {@code y} is not the same size as
      * {@code this} vector.
      */
     public RealVector combine(double a, double b, RealVector y)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         return copy().combineToSelf(a, b, y);
     }
 
@@ -850,11 +851,11 @@ public abstract class RealVector {
      * @param y Vector with which {@code this} is linearly combined.
      * @return {@code this}, with components equal to
      * {@code a * this[i] + b * y[i]} for all {@code i}.
-     * @throws DimensionMismatchException if {@code y} is not the same size as
+     * @throws MathIllegalArgumentException if {@code y} is not the same size as
      * {@code this} vector.
      */
     public RealVector combineToSelf(double a, double b, RealVector y)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(y);
         for (int i = 0; i < getDimension(); i++) {
             final double xi = getEntry(i);
@@ -1315,14 +1316,14 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public RealVector add(RealVector w)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 return v.add(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public RealVector subtract(RealVector w)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 return v.subtract(w);
             }
 
@@ -1401,28 +1402,28 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public RealVector ebeMultiply(RealVector w)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 return v.ebeMultiply(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public RealVector ebeDivide(RealVector w)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 return v.ebeDivide(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public double dotProduct(RealVector w)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 return v.dotProduct(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public double cosine(RealVector w)
-                throws DimensionMismatchException, MathArithmeticException {
+                throws MathIllegalArgumentException, MathArithmeticException {
                 return v.cosine(w);
             }
 
@@ -1447,21 +1448,21 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public double getDistance(RealVector w)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 return v.getDistance(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public double getL1Distance(RealVector w)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 return v.getL1Distance(w);
             }
 
             /** {@inheritDoc} */
             @Override
             public double getLInfDistance(RealVector w)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 return v.getLInfDistance(w);
             }
 
@@ -1588,7 +1589,7 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public RealVector combine(double a, double b, RealVector y)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 return v.combine(a, b, y);
             }
 

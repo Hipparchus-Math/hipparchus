@@ -22,7 +22,7 @@ import org.hipparchus.analysis.interpolation.LinearInterpolator;
 import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.junit.Assert;
@@ -113,7 +113,7 @@ public class LinearInterpolatorTest {
             double yval[] = { 0.0, 1.0, 2.0 };
             i.interpolate(xval, yval);
             Assert.fail("Failed to detect data set array with different sizes.");
-        } catch (DimensionMismatchException iae) {
+        } catch (MathIllegalArgumentException iae) {
             // Expected.
         }
         // X values not sorted.

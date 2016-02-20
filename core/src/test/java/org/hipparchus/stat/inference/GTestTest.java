@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.inference;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -189,14 +189,14 @@ public class GTestTest {
         final long[] observed2 = {3, 4};
         try {
             testStatistic.gTest(expected, observed);
-            Assert.fail("arrays have different lengths, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arrays have different lengths, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2);
-            Assert.fail("arrays have different lengths, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arrays have different lengths, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

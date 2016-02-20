@@ -19,7 +19,7 @@ package org.hipparchus.ode.events;
 
 
 import org.hipparchus.analysis.solvers.BrentSolver;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -84,7 +84,7 @@ public class EventStateTest {
     // Jira: MATH-695
     @Test
     public void testIssue695()
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {
@@ -148,7 +148,7 @@ public class EventStateTest {
     // Jira: MATH-965
     @Test
     public void testIssue965()
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         ExpandableStatefulODE equation =
@@ -217,7 +217,7 @@ public class EventStateTest {
 
     @Test
     public void testEventsCloserThanThreshold()
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {

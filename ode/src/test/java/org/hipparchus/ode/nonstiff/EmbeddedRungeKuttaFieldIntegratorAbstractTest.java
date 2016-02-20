@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -358,7 +358,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                                       MathArrays.buildArray(field, 6)),
                                  pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
-        } catch(DimensionMismatchException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
         try  {
             EmbeddedRungeKuttaFieldIntegrator<T> integrator =
@@ -367,7 +367,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                              new double[2], new double[4]);
             integrator.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
-        } catch(DimensionMismatchException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
         try  {
             EmbeddedRungeKuttaFieldIntegrator<T> integrator =
@@ -388,7 +388,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                                                   final double epsilonMaxValue,
                                                                   final double epsilonMaxTime,
                                                                   final String name)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);

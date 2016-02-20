@@ -28,7 +28,6 @@ import java.util.TreeSet;
 
 import org.hipparchus.Field;
 import org.hipparchus.distribution.UniformIntegerDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -116,11 +115,11 @@ public class MathArrays {
      * @param a First term of the addition.
      * @param b Second term of the addition.
      * @return a new array {@code r} where {@code r[i] = a[i] + b[i]}.
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      * @since 3.1
      */
     public static double[] ebeAdd(double[] a, double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
 
         final double[] result = a.clone();
@@ -136,11 +135,11 @@ public class MathArrays {
      * @param a First term.
      * @param b Element to be subtracted.
      * @return a new array {@code r} where {@code r[i] = a[i] - b[i]}.
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      * @since 3.1
      */
     public static double[] ebeSubtract(double[] a, double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
 
         final double[] result = a.clone();
@@ -156,11 +155,11 @@ public class MathArrays {
      * @param a First factor of the multiplication.
      * @param b Second factor of the multiplication.
      * @return a new array {@code r} where {@code r[i] = a[i] * b[i]}.
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      * @since 3.1
      */
     public static double[] ebeMultiply(double[] a, double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
 
         final double[] result = a.clone();
@@ -176,11 +175,11 @@ public class MathArrays {
      * @param a Numerator of the division.
      * @param b Denominator of the division.
      * @return a new array {@code r} where {@code r[i] = a[i] / b[i]}.
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      * @since 3.1
      */
     public static double[] ebeDivide(double[] a, double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
 
         final double[] result = a.clone();
@@ -196,10 +195,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>1</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distance1(double[] p1, double[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         double sum = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -214,10 +213,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>1</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static int distance1(int[] p1, int[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         int sum = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -232,10 +231,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>2</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distance(double[] p1, double[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         double sum = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -263,10 +262,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>2</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distance(int[] p1, int[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
       checkEqualLength(p1, p2);
       double sum = 0;
       for (int i = 0; i < p1.length; i++) {
@@ -282,10 +281,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>&infin;</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distanceInf(double[] p1, double[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         double max = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -300,10 +299,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>&infin;</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static int distanceInf(int[] p1, int[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         int max = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -392,7 +391,7 @@ public class MathArrays {
      * @param b Array.
      * @param abort Whether to throw an exception if the check fails.
      * @return {@code true} if the arrays have the same length.
-     * @throws DimensionMismatchException if the lengths differ and
+     * @throws MathIllegalArgumentException if the lengths differ and
      * {@code abort} is {@code true}.
      * @since 3.6
      */
@@ -403,7 +402,8 @@ public class MathArrays {
             return true;
         } else {
             if (abort) {
-                throw new DimensionMismatchException(a.length, b.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       a.length, b.length);
             }
             return false;
         }
@@ -414,7 +414,7 @@ public class MathArrays {
      *
      * @param a Array.
      * @param b Array.
-     * @throws DimensionMismatchException if the lengths differ.
+     * @throws MathIllegalArgumentException if the lengths differ.
      * @since 3.6
      */
     public static void checkEqualLength(double[] a,
@@ -430,7 +430,7 @@ public class MathArrays {
      * @param b Array.
      * @param abort Whether to throw an exception if the check fails.
      * @return {@code true} if the arrays have the same length.
-     * @throws DimensionMismatchException if the lengths differ and
+     * @throws MathIllegalArgumentException if the lengths differ and
      * {@code abort} is {@code true}.
      * @since 3.6
      */
@@ -441,7 +441,8 @@ public class MathArrays {
             return true;
         } else {
             if (abort) {
-                throw new DimensionMismatchException(a.length, b.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       a.length, b.length);
             }
             return false;
         }
@@ -452,7 +453,7 @@ public class MathArrays {
      *
      * @param a Array.
      * @param b Array.
-     * @throws DimensionMismatchException if the lengths differ.
+     * @throws MathIllegalArgumentException if the lengths differ.
      * @since 3.6
      */
     public static void checkEqualLength(int[] a,
@@ -550,19 +551,19 @@ public class MathArrays {
     }
 
     /**
-     * Throws DimensionMismatchException if the input array is not rectangular.
+     * Throws MathIllegalArgumentException if the input array is not rectangular.
      *
      * @param in array to be tested
      * @throws NullArgumentException if input array is null
-     * @throws DimensionMismatchException if input array is not rectangular
+     * @throws MathIllegalArgumentException if input array is not rectangular
      * @since 3.1
      */
     public static void checkRectangular(final long[][] in)
-        throws NullArgumentException, DimensionMismatchException {
+        throws NullArgumentException, MathIllegalArgumentException {
         MathUtils.checkNotNull(in);
         for (int i = 1; i < in.length; i++) {
             if (in[i].length != in[0].length) {
-                throw new DimensionMismatchException(
+                throw new MathIllegalArgumentException(
                         LocalizedFormats.DIFFERENT_ROWS_LENGTHS,
                         in[i].length, in[0].length);
             }
@@ -762,13 +763,13 @@ public class MathArrays {
      * of the other arrays.
      * @param yList Set of arrays whose permutations of entries will follow
      * those performed on {@code x}.
-     * @throws DimensionMismatchException if any {@code y} is not the same
+     * @throws MathIllegalArgumentException if any {@code y} is not the same
      * size as {@code x}.
      * @throws NullArgumentException if {@code x} or any {@code y} is null.
      * @since 3.0
      */
     public static void sortInPlace(double[] x, double[] ... yList)
-        throws DimensionMismatchException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         sortInPlace(x, OrderDirection.INCREASING, yList);
     }
 
@@ -813,7 +814,7 @@ public class MathArrays {
      * @param dir Order direction.
      * @param yList Set of arrays whose permutations of entries will follow
      * those performed on {@code x}.
-     * @throws DimensionMismatchException if any {@code y} is not the same
+     * @throws MathIllegalArgumentException if any {@code y} is not the same
      * size as {@code x}.
      * @throws NullArgumentException if {@code x} or any {@code y} is null
      * @since 3.0
@@ -822,7 +823,7 @@ public class MathArrays {
                                    final OrderDirection dir,
                                    double[] ... yList)
         throws NullArgumentException,
-               DimensionMismatchException {
+               MathIllegalArgumentException {
 
         // Consistency checks.
         if (x == null) {
@@ -838,7 +839,8 @@ public class MathArrays {
                 throw new NullArgumentException();
             }
             if (y.length != len) {
-                throw new DimensionMismatchException(y.length, len);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       y.length, len);
             }
         }
 
@@ -974,10 +976,10 @@ public class MathArrays {
      * @param a Factors.
      * @param b Factors.
      * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
-     * @throws DimensionMismatchException if arrays dimensions don't match
+     * @throws MathIllegalArgumentException if arrays dimensions don't match
      */
     public static double linearCombination(final double[] a, final double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
         final int len = a.length;
 

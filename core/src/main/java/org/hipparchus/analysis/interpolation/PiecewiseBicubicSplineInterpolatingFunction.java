@@ -20,8 +20,9 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.InsufficientDataException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
@@ -59,13 +60,13 @@ public class PiecewiseBicubicSplineInterpolatingFunction
      *         strictly increasing.
      * @throws NullArgumentException if any of the arguments are null
      * @throws NoDataException if any of the arrays has zero length.
-     * @throws DimensionMismatchException if the length of x and y don't match the row, column
+     * @throws MathIllegalArgumentException if the length of x and y don't match the row, column
      *         height of f
      */
     public PiecewiseBicubicSplineInterpolatingFunction(double[] x,
                                                        double[] y,
                                                        double[][] f)
-        throws DimensionMismatchException,
+        throws MathIllegalArgumentException,
                NullArgumentException,
                NoDataException,
                NonMonotonicSequenceException {
@@ -94,11 +95,13 @@ public class PiecewiseBicubicSplineInterpolatingFunction
         }
 
         if (xLen != f.length) {
-            throw new DimensionMismatchException(xLen, f.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xLen, f.length);
         }
 
         if (yLen != f[0].length) {
-            throw new DimensionMismatchException(yLen, f[0].length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   yLen, f[0].length);
         }
 
         MathArrays.checkOrder(x);

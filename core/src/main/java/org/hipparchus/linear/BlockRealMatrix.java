@@ -20,7 +20,7 @@ package org.hipparchus.linear;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
@@ -115,14 +115,14 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      * </p>
      *
      * @param rawData data for new matrix, in raw layout
-     * @throws DimensionMismatchException if the shape of {@code blockData} is
+     * @throws MathIllegalArgumentException if the shape of {@code blockData} is
      * inconsistent with block layout.
      * @throws NotStrictlyPositiveException if row or column dimension is not
      * positive.
      * @see #BlockRealMatrix(int, int, double[][], boolean)
      */
     public BlockRealMatrix(final double[][] rawData)
-        throws DimensionMismatchException, NotStrictlyPositiveException {
+        throws MathIllegalArgumentException, NotStrictlyPositiveException {
         this(rawData.length, rawData[0].length, toBlocksLayout(rawData), false);
     }
 
@@ -134,7 +134,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      * @param columns Number of columns in the new matrix.
      * @param blockData data for new matrix
      * @param copyArray Whether the input array will be copied or referenced.
-     * @throws DimensionMismatchException if the shape of {@code blockData} is
+     * @throws MathIllegalArgumentException if the shape of {@code blockData} is
      * inconsistent with block layout.
      * @throws NotStrictlyPositiveException if row or column dimension is not
      * positive.
@@ -144,7 +144,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      */
     public BlockRealMatrix(final int rows, final int columns,
                            final double[][] blockData, final boolean copyArray)
-        throws DimensionMismatchException, NotStrictlyPositiveException {
+        throws MathIllegalArgumentException, NotStrictlyPositiveException {
         super(rows, columns);
         this.rows = rows;
         this.columns = columns;
@@ -166,8 +166,9 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
             final int iHeight = blockHeight(iBlock);
             for (int jBlock = 0; jBlock < blockColumns; ++jBlock, ++index) {
                 if (blockData[index].length != iHeight * blockWidth(jBlock)) {
-                    throw new DimensionMismatchException(blockData[index].length,
-                                                         iHeight * blockWidth(jBlock));
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           blockData[index].length,
+                                                           iHeight * blockWidth(jBlock));
                 }
                 if (copyArray) {
                     blocks[index] = blockData[index].clone();
@@ -193,12 +194,12 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      * </p>
      * @param rawData Data array in raw layout.
      * @return a new data array containing the same entries but in blocks layout.
-     * @throws DimensionMismatchException if {@code rawData} is not rectangular.
+     * @throws MathIllegalArgumentException if {@code rawData} is not rectangular.
      * @see #createBlocksLayout(int, int)
      * @see #BlockRealMatrix(int, int, double[][], boolean)
      */
     public static double[][] toBlocksLayout(final double[][] rawData)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         final int rows = rawData.length;
         final int columns = rawData[0].length;
         final int blockRows = (rows    + BLOCK_SIZE - 1) / BLOCK_SIZE;
@@ -208,7 +209,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
         for (int i = 0; i < rawData.length; ++i) {
             final int length = rawData[i].length;
             if (length != columns) {
-                throw new DimensionMismatchException(columns, length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       columns, length);
             }
         }
 
@@ -471,7 +473,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public BlockRealMatrix multiply(final RealMatrix m)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         try {
             return multiply((BlockRealMatrix) m);
         } catch (ClassCastException cce) {
@@ -528,10 +530,10 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      *
      * @param m Matrix to postmultiply by.
      * @return {@code this} * m.
-     * @throws DimensionMismatchException if the matrices are not compatible.
+     * @throws MathIllegalArgumentException if the matrices are not compatible.
      */
     public BlockRealMatrix multiply(BlockRealMatrix m)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         // safety check
         MatrixUtils.checkMultiplicationCompatible(this, m);
 
@@ -788,7 +790,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     public void setSubMatrix(final double[][] subMatrix, final int row,
                              final int column)
         throws OutOfRangeException, NoDataException, NullArgumentException,
-        DimensionMismatchException {
+        MathIllegalArgumentException {
         // safety checks
         MathUtils.checkNotNull(subMatrix);
         final int refLength = subMatrix[0].length;
@@ -800,7 +802,8 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
         MatrixUtils.checkSubMatrixIndex(this, row, endRow, column, endColumn);
         for (final double[] subRow : subMatrix) {
             if (subRow.length != refLength) {
-                throw new DimensionMismatchException(refLength, subRow.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       refLength, subRow.length);
             }
         }
 
@@ -1259,9 +1262,10 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public double[] operate(final double[] v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v.length != columns) {
-            throw new DimensionMismatchException(v.length, columns);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   v.length, columns);
         }
         final double[] out = new double[rows];
 
@@ -1299,9 +1303,10 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public double[] preMultiply(final double[] v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v.length != rows) {
-            throw new DimensionMismatchException(v.length, rows);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   v.length, rows);
         }
         final double[] out = new double[columns];
 

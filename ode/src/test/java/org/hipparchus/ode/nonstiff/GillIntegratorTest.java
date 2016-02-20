@@ -18,7 +18,7 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -42,9 +42,9 @@ import org.junit.Test;
 
 public class GillIntegratorTest {
 
-  @Test(expected=DimensionMismatchException.class)
+  @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
       TestProblem1 pb = new TestProblem1();
       new GillIntegrator(0.01).integrate(pb,
@@ -55,7 +55,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testDecreasingSteps()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
       for (TestProblemAbstract pb : new TestProblemAbstract[] {
@@ -103,7 +103,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testSmallStep()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     TestProblem1 pb = new TestProblem1();
@@ -124,7 +124,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testBigStep()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     TestProblem1 pb = new TestProblem1();
@@ -144,7 +144,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testBackward()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
       TestProblem5 pb = new TestProblem5();
@@ -164,7 +164,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testKepler()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
@@ -179,7 +179,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testUnstableDerivative()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
     final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
     FirstOrderIntegrator integ = new GillIntegrator(0.3);
@@ -220,7 +220,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testStepSize()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new GillIntegrator(step);

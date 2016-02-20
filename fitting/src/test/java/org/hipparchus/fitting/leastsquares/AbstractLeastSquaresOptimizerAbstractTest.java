@@ -25,7 +25,6 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
@@ -362,7 +361,7 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
                     problem.getBuilder().weight(new DiagonalMatrix(new double[]{1})).build());
 
             fail(optimizer);
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             //expected
         }
     }
@@ -388,7 +387,7 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
             );
 
             fail(optimizer);
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             //expected
         }
     }

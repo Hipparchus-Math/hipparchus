@@ -22,7 +22,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
@@ -33,7 +33,7 @@ import org.junit.Test;
 
 public class Vector1DTest {
     @Test
-    public void testConstructors() throws DimensionMismatchException {
+    public void testConstructors() throws MathIllegalArgumentException {
         checkVector(new Vector1D(3, new Vector1D(FastMath.PI / 3)),
                     FastMath.PI);
         checkVector(new Vector1D(2, Vector1D.ONE, -3, new Vector1D(2)),

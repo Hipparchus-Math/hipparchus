@@ -22,7 +22,8 @@ import java.util.Arrays;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -84,13 +85,13 @@ public class Sigmoid implements UnivariateDifferentiableFunction {
          * @param param Values of lower asymptote and higher asymptote.
          * @return the value of the function.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 2.
          */
         @Override
         public double value(double x, double ... param)
             throws NullArgumentException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
             validateParameters(param);
             return Sigmoid.value(x, param[0], param[1]);
         }
@@ -105,13 +106,13 @@ public class Sigmoid implements UnivariateDifferentiableFunction {
          * @param param Values for lower asymptote and higher asymptote.
          * @return the gradient vector at {@code x}.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 2.
          */
         @Override
         public double[] gradient(double x, double ... param)
             throws NullArgumentException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
             validateParameters(param);
 
             final double invExp1 = 1 / (1 + FastMath.exp(-x));
@@ -126,17 +127,18 @@ public class Sigmoid implements UnivariateDifferentiableFunction {
          *
          * @param param Values for lower and higher asymptotes.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 2.
          */
         private void validateParameters(double[] param)
             throws NullArgumentException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
             if (param == null) {
                 throw new NullArgumentException();
             }
             if (param.length != 2) {
-                throw new DimensionMismatchException(param.length, 2);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       param.length, 2);
             }
         }
     }
@@ -158,7 +160,7 @@ public class Sigmoid implements UnivariateDifferentiableFunction {
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         double[] f = new double[t.getOrder() + 1];
         final double exp = FastMath.exp(-t.getValue());

@@ -20,12 +20,7 @@ package org.hipparchus.ode;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
-import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FieldSecondaryEquations;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -151,13 +146,13 @@ public class FieldExpandableODETest {
         try {
             equation.getMapper().mapStateAndDerivative(t0, MathArrays.buildArray(field, complete.length + 1), completeDot);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException dme) {
+        } catch (MathIllegalArgumentException dme) {
             // expected
         }
         try {
             equation.getMapper().mapStateAndDerivative(t0, complete, MathArrays.buildArray(field, completeDot.length + 1));
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException dme) {
+        } catch (MathIllegalArgumentException dme) {
             // expected
         }
         FieldODEStateAndDerivative<T> state = equation.getMapper().mapStateAndDerivative(t0, complete, completeDot);
@@ -207,13 +202,13 @@ public class FieldExpandableODETest {
         }
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExtractDimensionMismatch() {
         doTestExtractDimensionMismatch(Decimal64Field.getInstance());
     }
 
     private <T extends RealFieldElement<T>> void doTestExtractDimensionMismatch(final Field<T> field)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         FirstOrderFieldDifferentialEquations<T> main = new Linear<T>(field, 3, 0);
         FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
@@ -223,13 +218,13 @@ public class FieldExpandableODETest {
         equation.getMapper().extractEquationData(i1, tooShort);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInsertTooShortComplete() {
         doTestInsertTooShortComplete(Decimal64Field.getInstance());
     }
 
     private <T extends RealFieldElement<T>> void doTestInsertTooShortComplete(final Field<T> field)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         FirstOrderFieldDifferentialEquations<T> main = new Linear<T>(field, 3, 0);
         FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
@@ -240,13 +235,13 @@ public class FieldExpandableODETest {
         equation.getMapper().insertEquationData(i1, equationData, tooShort);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInsertWrongEquationData() {
         doTestInsertWrongEquationData(Decimal64Field.getInstance());
     }
 
     private <T extends RealFieldElement<T>> void doTestInsertWrongEquationData(final Field<T> field)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         FirstOrderFieldDifferentialEquations<T> main = new Linear<T>(field, 3, 0);
         FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NoDataException;
@@ -84,13 +84,13 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
      * and a previous point is zero (i.e. the two points are at same abscissa)
      * @exception MathArithmeticException if the number of derivatives is larger
      * than 20, which prevents computation of a factorial
-     * @throws DimensionMismatchException if derivative structures are inconsistent
+     * @throws MathIllegalArgumentException if derivative structures are inconsistent
      * @throws NullArgumentException if x is null
      */
     @SafeVarargs
     public final void addSamplePoint(final T x, final T[] ... value)
         throws ZeroException, MathArithmeticException,
-               DimensionMismatchException, NullArgumentException {
+               MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(x);
         T factorial = x.getField().getOne();

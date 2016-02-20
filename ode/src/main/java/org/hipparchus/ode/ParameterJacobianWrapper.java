@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 
 /** Wrapper class to compute Jacobian matrices by finite differences for ODE
@@ -78,7 +78,7 @@ class ParameterJacobianWrapper implements ParameterJacobianProvider {
     @Override
     public void computeParameterJacobian(double t, double[] y, double[] yDot,
                                          String paramName, double[] dFdP)
-        throws DimensionMismatchException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MaxCountExceededException {
 
         final int n = fode.getDimension();
         if (pode.isSupported(paramName)) {

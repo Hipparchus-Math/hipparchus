@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
@@ -71,8 +71,8 @@ public class TestUtilsTest {
         double[] tooShortEx = { 1 };
         try {
             TestUtils.chiSquare(tooShortEx, tooShortObs);
-            Assert.fail("arguments too short, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arguments too short, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -81,8 +81,8 @@ public class TestUtilsTest {
         double[] unMatchedEx = { 1, 1, 2 };
         try {
             TestUtils.chiSquare(unMatchedEx, unMatchedObs);
-            Assert.fail("arrays have different lengths, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arrays have different lengths, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -127,8 +127,8 @@ public class TestUtilsTest {
         long[][] counts3 = { {40, 22, 43}, {91, 21, 28}, {60, 10}};
         try {
             TestUtils.chiSquare(counts3);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -136,15 +136,15 @@ public class TestUtilsTest {
         long[][] counts4 = {{40, 22, 43}};
         try {
             TestUtils.chiSquare(counts4);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[][] counts5 = {{40}, {40}, {30}, {10}};
         try {
             TestUtils.chiSquare(counts5);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

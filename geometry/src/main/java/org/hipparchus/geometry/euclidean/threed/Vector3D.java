@@ -20,7 +20,7 @@ package org.hipparchus.geometry.euclidean.threed;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.geometry.Point;
@@ -101,12 +101,13 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
     /** Simple constructor.
      * Build a vector from its coordinates
      * @param v coordinates array
-     * @exception DimensionMismatchException if array does not have 3 elements
+     * @exception MathIllegalArgumentException if array does not have 3 elements
      * @see #toArray()
      */
-    public Vector3D(double[] v) throws DimensionMismatchException {
+    public Vector3D(double[] v) throws MathIllegalArgumentException {
         if (v.length != 3) {
-            throw new DimensionMismatchException(v.length, 3);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   v.length, 3);
         }
         this.x = v[0];
         this.y = v[1];

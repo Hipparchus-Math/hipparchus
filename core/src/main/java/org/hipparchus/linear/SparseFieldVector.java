@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotPositiveException;
@@ -150,11 +150,11 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      *
      * @param v Vector to add.
      * @return {@code this + v}.
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}.
      */
     public FieldVector<T> add(SparseFieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
         SparseFieldVector<T> res = (SparseFieldVector<T>)copy();
         OpenIntToFieldHashMap<T>.Iterator iter = v.getEntries().iterator();
@@ -222,7 +222,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
 
     /** {@inheritDoc} */
     @Override
-    public T dotProduct(FieldVector<T> v) throws DimensionMismatchException {
+    public T dotProduct(FieldVector<T> v) throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
         T res = field.getZero();
         OpenIntToFieldHashMap<T>.Iterator iter = entries.iterator();
@@ -236,7 +236,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> ebeDivide(FieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathArithmeticException {
         checkVectorDimensions(v.getDimension());
         SparseFieldVector<T> res = new SparseFieldVector<T>(this);
         OpenIntToFieldHashMap<T>.Iterator iter = res.entries.iterator();
@@ -250,7 +250,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> ebeMultiply(FieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
         SparseFieldVector<T> res = new SparseFieldVector<T>(this);
         OpenIntToFieldHashMap<T>.Iterator iter = res.entries.iterator();
@@ -424,7 +424,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> projection(FieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathArithmeticException {
         checkVectorDimensions(v.getDimension());
         return v.mapMultiply(dotProduct(v).divide(v.dotProduct(v)));
     }
@@ -466,11 +466,11 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * Optimized method to compute {@code this} minus {@code v}.
      * @param v vector to be subtracted
      * @return {@code this - v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}.
      */
     public SparseFieldVector<T> subtract(SparseFieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
         SparseFieldVector<T> res = (SparseFieldVector<T>)copy();
         OpenIntToFieldHashMap<T>.Iterator iter = v.getEntries().iterator();
@@ -489,7 +489,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> subtract(FieldVector<T> v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof SparseFieldVector<?>) {
             return subtract((SparseFieldVector<T>)v);
         } else {
@@ -561,18 +561,19 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * Check if instance dimension is equal to some expected value.
      *
      * @param n Expected dimension.
-     * @throws DimensionMismatchException if the dimensions do not match.
+     * @throws MathIllegalArgumentException if the dimensions do not match.
      */
     protected void checkVectorDimensions(int n)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (getDimension() != n) {
-            throw new DimensionMismatchException(getDimension(), n);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   getDimension(), n);
         }
     }
 
     /** {@inheritDoc} */
     @Override
-    public FieldVector<T> add(FieldVector<T> v) throws DimensionMismatchException {
+    public FieldVector<T> add(FieldVector<T> v) throws MathIllegalArgumentException {
         if (v instanceof SparseFieldVector<?>) {
             return add((SparseFieldVector<T>) v);
         } else {

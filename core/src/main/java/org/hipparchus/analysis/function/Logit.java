@@ -20,7 +20,8 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
@@ -81,13 +82,13 @@ public class Logit implements UnivariateDifferentiableFunction {
          * @param param Values of lower bound and higher bounds.
          * @return the value of the function.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 2.
          */
         @Override
         public double value(double x, double ... param)
             throws NullArgumentException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
             validateParameters(param);
             return Logit.value(x, param[0], param[1]);
         }
@@ -102,13 +103,13 @@ public class Logit implements UnivariateDifferentiableFunction {
          * @param param Values for lower and higher bounds.
          * @return the gradient vector at {@code x}.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 2.
          */
         @Override
         public double[] gradient(double x, double ... param)
             throws NullArgumentException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
             validateParameters(param);
 
             final double lo = param[0];
@@ -124,17 +125,18 @@ public class Logit implements UnivariateDifferentiableFunction {
          *
          * @param param Values for lower and higher bounds.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 2.
          */
         private void validateParameters(double[] param)
             throws NullArgumentException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
             if (param == null) {
                 throw new NullArgumentException();
             }
             if (param.length != 2) {
-                throw new DimensionMismatchException(param.length, 2);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       param.length, 2);
             }
         }
     }

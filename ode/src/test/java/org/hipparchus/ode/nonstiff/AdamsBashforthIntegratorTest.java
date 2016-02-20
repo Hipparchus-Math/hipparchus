@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
@@ -43,8 +43,8 @@ import org.junit.Test;
 
 public class AdamsBashforthIntegratorTest {
 
-    @Test(expected=DimensionMismatchException.class)
-    public void dimensionCheck() throws NumberIsTooSmallException, DimensionMismatchException, MaxCountExceededException, NoBracketingException {
+    @Test(expected=MathIllegalArgumentException.class)
+    public void dimensionCheck() throws NumberIsTooSmallException, MathIllegalArgumentException, MaxCountExceededException, NoBracketingException {
         TestProblem1 pb = new TestProblem1();
         FirstOrderIntegrator integ =
             new AdamsBashforthIntegrator(2, 0.0, 1.0, 1.0e-10, 1.0e-10);
@@ -54,7 +54,7 @@ public class AdamsBashforthIntegratorTest {
     }
 
     @Test(expected=NumberIsTooSmallException.class)
-    public void testMinStep() throws DimensionMismatchException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
+    public void testMinStep() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
 
           TestProblem1 pb = new TestProblem1();
           double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -74,7 +74,7 @@ public class AdamsBashforthIntegratorTest {
     }
 
     @Test
-    public void testIncreasingTolerance() throws DimensionMismatchException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
+    public void testIncreasingTolerance() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
 
         int previousCalls = Integer.MAX_VALUE;
         for (int i = -12; i < -2; ++i) {
@@ -109,7 +109,7 @@ public class AdamsBashforthIntegratorTest {
     }
 
     @Test(expected = MaxCountExceededException.class)
-    public void exceedMaxEvaluations() throws DimensionMismatchException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
+    public void exceedMaxEvaluations() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
 
         TestProblem1 pb  = new TestProblem1();
         double range = pb.getFinalTime() - pb.getInitialTime();
@@ -125,7 +125,7 @@ public class AdamsBashforthIntegratorTest {
     }
 
     @Test
-    public void backward() throws DimensionMismatchException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
+    public void backward() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
 
         TestProblem5 pb = new TestProblem5();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
@@ -144,7 +144,7 @@ public class AdamsBashforthIntegratorTest {
     }
 
     @Test
-    public void polynomial() throws DimensionMismatchException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
+    public void polynomial() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
         TestProblem6 pb = new TestProblem6();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
 

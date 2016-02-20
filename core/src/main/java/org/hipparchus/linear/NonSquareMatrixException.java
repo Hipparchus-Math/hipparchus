@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 
 /**
@@ -24,7 +24,7 @@ import org.hipparchus.exception.LocalizedFormats;
  *
  * @since 3.0
  */
-public class NonSquareMatrixException extends DimensionMismatchException {
+public class NonSquareMatrixException extends MathIllegalArgumentException {
     /** Serializable version Id. */
     private static final long serialVersionUID = -660069396594485772L;
 

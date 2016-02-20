@@ -21,7 +21,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
@@ -139,8 +138,9 @@ public class ContinuousOutputModel
     } else {
 
       if (getInterpolatedState().length != model.getInterpolatedState().length) {
-          throw new DimensionMismatchException(model.getInterpolatedState().length,
-                                               getInterpolatedState().length);
+          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                 model.getInterpolatedState().length,
+                                                 getInterpolatedState().length);
       }
 
       if (forward ^ model.forward) {

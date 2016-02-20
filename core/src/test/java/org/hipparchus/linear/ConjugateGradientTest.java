@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -50,7 +50,7 @@ public class ConjugateGradientTest {
         solver.solve(a, b, x);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testDimensionMismatchRightHandSide() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
         final IterativeLinearSolver solver;
@@ -60,7 +60,7 @@ public class ConjugateGradientTest {
         solver.solve(a, b, x);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testDimensionMismatchSolution() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
         final IterativeLinearSolver solver;
@@ -253,7 +253,7 @@ public class ConjugateGradientTest {
         solver.solve(a, m, b);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMismatchedOperatorDimensions() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
         final RealLinearOperator m = new RealLinearOperator() {

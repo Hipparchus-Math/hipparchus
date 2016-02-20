@@ -22,7 +22,6 @@ import java.lang.reflect.Array;
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -206,7 +205,7 @@ public class FastFourierTransformer implements Serializable {
      * @param dataRI the two dimensional array of real and imaginary parts of the data
      * @param normalization the normalization to be applied to the transformed data
      * @param type the type of transform (forward, inverse) to be performed
-     * @throws DimensionMismatchException if the number of rows of the specified
+     * @throws MathIllegalArgumentException if the number of rows of the specified
      *   array is not two, or the array is not rectangular
      * @throws MathIllegalArgumentException if the number of data points is not
      *   a power of two
@@ -215,12 +214,14 @@ public class FastFourierTransformer implements Serializable {
         final DftNormalization normalization, final TransformType type) {
 
         if (dataRI.length != 2) {
-            throw new DimensionMismatchException(dataRI.length, 2);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   dataRI.length, 2);
         }
         final double[] dataR = dataRI[0];
         final double[] dataI = dataRI[1];
         if (dataR.length != dataI.length) {
-            throw new DimensionMismatchException(dataI.length, dataR.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   dataI.length, dataR.length);
         }
 
         final int n = dataR.length;
@@ -548,23 +549,21 @@ public class FastFourierTransformer implements Serializable {
          *
          * @param vector indices of the element
          * @return matrix element
-         * @exception DimensionMismatchException if dimensions do not match
+         * @exception MathIllegalArgumentException if dimensions do not match
          */
         public Complex get(int... vector)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
 
             if (vector == null) {
                 if (dimensionSize.length > 0) {
-                    throw new DimensionMismatchException(
-                            0,
-                            dimensionSize.length);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           0, dimensionSize.length);
                 }
                 return null;
             }
             if (vector.length != dimensionSize.length) {
-                throw new DimensionMismatchException(
-                        vector.length,
-                        dimensionSize.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       vector.length, dimensionSize.length);
             }
 
             Object lastDimension = multiDimensionalComplexArray;
@@ -581,23 +580,21 @@ public class FastFourierTransformer implements Serializable {
          * @param magnitude magnitude of the element
          * @param vector indices of the element
          * @return the previous value
-         * @exception DimensionMismatchException if dimensions do not match
+         * @exception MathIllegalArgumentException if dimensions do not match
          */
         public Complex set(Complex magnitude, int... vector)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
 
             if (vector == null) {
                 if (dimensionSize.length > 0) {
-                    throw new DimensionMismatchException(
-                            0,
-                            dimensionSize.length);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           0, dimensionSize.length);
                 }
                 return null;
             }
             if (vector.length != dimensionSize.length) {
-                throw new DimensionMismatchException(
-                        vector.length,
-                        dimensionSize.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       vector.length, dimensionSize.length);
             }
 
             Object[] lastDimension = (Object[]) multiDimensionalComplexArray;

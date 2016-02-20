@@ -19,7 +19,7 @@ package org.hipparchus.complex;
 import java.util.Random;
 
 import org.hipparchus.complex.Quaternion;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -80,7 +80,7 @@ public class QuaternionTest {
         Assert.assertEquals(q3, vP[2], 0);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testWrongDimension() {
         new Quaternion(new double[] { 1, 2 });
     }

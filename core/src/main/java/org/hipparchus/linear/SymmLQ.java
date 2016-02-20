@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -115,7 +115,7 @@ import org.hipparchus.util.MathUtils;
  * </p>
  * <h3><a id="context">Exception context</a></h3>
  * <p>
- * Besides standard {@link DimensionMismatchException}, this class might throw
+ * Besides standard {@link MathIllegalArgumentException}, this class might throw
  * {@link NonSelfAdjointOperatorException} if the linear operator or the
  * preconditioner are not symmetric. In this case, the {@link ExceptionContext}
  * provides more information
@@ -886,7 +886,7 @@ public class SymmLQ
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b) throws
         NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, MaxCountExceededException,
+        MathIllegalArgumentException, MaxCountExceededException,
         NonSelfAdjointOperatorException, NonPositiveDefiniteOperatorException,
         IllConditionedOperatorException {
         MathUtils.checkNotNull(a);
@@ -922,7 +922,7 @@ public class SymmLQ
      * @return a reference to {@code x} (shallow copy)
      * @throws NullArgumentException if one of the parameters is {@code null}
      * @throws NonSquareOperatorException if {@code a} or {@code m} is not square
-     * @throws DimensionMismatchException if {@code m} or {@code b} have dimensions
+     * @throws MathIllegalArgumentException if {@code m} or {@code b} have dimensions
      * inconsistent with {@code a}
      * @throws MaxCountExceededException at exhaustion of the iteration count,
      * unless a custom
@@ -937,7 +937,7 @@ public class SymmLQ
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final boolean goodb,
         final double shift) throws NullArgumentException,
-        NonSquareOperatorException, DimensionMismatchException,
+        NonSquareOperatorException, MathIllegalArgumentException,
         MaxCountExceededException, NonSelfAdjointOperatorException,
         NonPositiveDefiniteOperatorException, IllConditionedOperatorException {
         MathUtils.checkNotNull(a);
@@ -960,7 +960,7 @@ public class SymmLQ
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x)
         throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, NonSelfAdjointOperatorException,
+        MathIllegalArgumentException, NonSelfAdjointOperatorException,
         NonPositiveDefiniteOperatorException, IllConditionedOperatorException,
         MaxCountExceededException {
         MathUtils.checkNotNull(x);
@@ -977,7 +977,7 @@ public class SymmLQ
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b)
         throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, NonSelfAdjointOperatorException,
+        MathIllegalArgumentException, NonSelfAdjointOperatorException,
         IllConditionedOperatorException, MaxCountExceededException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
@@ -1010,7 +1010,7 @@ public class SymmLQ
      * @return a reference to {@code x}
      * @throws NullArgumentException if one of the parameters is {@code null}
      * @throws NonSquareOperatorException if {@code a} is not square
-     * @throws DimensionMismatchException if {@code b} has dimensions
+     * @throws MathIllegalArgumentException if {@code b} has dimensions
      * inconsistent with {@code a}
      * @throws MaxCountExceededException at exhaustion of the iteration count,
      * unless a custom
@@ -1022,7 +1022,7 @@ public class SymmLQ
      */
     public RealVector solve(final RealLinearOperator a, final RealVector b,
         final boolean goodb, final double shift) throws NullArgumentException,
-        NonSquareOperatorException, DimensionMismatchException,
+        NonSquareOperatorException, MathIllegalArgumentException,
         NonSelfAdjointOperatorException, IllConditionedOperatorException,
         MaxCountExceededException {
         MathUtils.checkNotNull(a);
@@ -1042,7 +1042,7 @@ public class SymmLQ
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b,
         final RealVector x) throws NullArgumentException,
-        NonSquareOperatorException, DimensionMismatchException,
+        NonSquareOperatorException, MathIllegalArgumentException,
         NonSelfAdjointOperatorException, IllConditionedOperatorException,
         MaxCountExceededException {
         MathUtils.checkNotNull(x);
@@ -1064,7 +1064,7 @@ public class SymmLQ
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x)
         throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, NonSelfAdjointOperatorException,
+        MathIllegalArgumentException, NonSelfAdjointOperatorException,
         NonPositiveDefiniteOperatorException, IllConditionedOperatorException,
         MaxCountExceededException {
         return solveInPlace(a, m, b, x, false, 0.);
@@ -1100,7 +1100,7 @@ public class SymmLQ
      * @return a reference to {@code x} (shallow copy).
      * @throws NullArgumentException if one of the parameters is {@code null}
      * @throws NonSquareOperatorException if {@code a} or {@code m} is not square
-     * @throws DimensionMismatchException if {@code m}, {@code b} or {@code x}
+     * @throws MathIllegalArgumentException if {@code m}, {@code b} or {@code x}
      * have dimensions inconsistent with {@code a}.
      * @throws MaxCountExceededException at exhaustion of the iteration count,
      * unless a custom
@@ -1116,7 +1116,7 @@ public class SymmLQ
         final RealLinearOperator m, final RealVector b,
         final RealVector x, final boolean goodb, final double shift)
         throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, NonSelfAdjointOperatorException,
+        MathIllegalArgumentException, NonSelfAdjointOperatorException,
         NonPositiveDefiniteOperatorException, IllConditionedOperatorException,
         MaxCountExceededException {
         checkParameters(a, m, b, x);
@@ -1185,7 +1185,7 @@ public class SymmLQ
     @Override
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealVector b, final RealVector x) throws NullArgumentException,
-        NonSquareOperatorException, DimensionMismatchException,
+        NonSquareOperatorException, MathIllegalArgumentException,
         NonSelfAdjointOperatorException, IllConditionedOperatorException,
         MaxCountExceededException {
         return solveInPlace(a, null, b, x, false, 0.);

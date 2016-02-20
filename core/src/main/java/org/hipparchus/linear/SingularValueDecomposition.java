@@ -696,7 +696,7 @@ public class SingularValueDecomposition {
          * </p>
          * @param b Right-hand side of the equation A &times; X = B
          * @return a vector X that minimizes the two norm of A &times; X - B
-         * @throws org.hipparchus.exception.DimensionMismatchException
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
          * if the matrices dimensions do not match.
          */
         @Override
@@ -713,7 +713,7 @@ public class SingularValueDecomposition {
          *
          * @param b Right-hand side of the equation A &times; X = B
          * @return a matrix X that minimizes the two norm of A &times; X - B
-         * @throws org.hipparchus.exception.DimensionMismatchException
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
          * if the matrices dimensions do not match.
          */
         @Override

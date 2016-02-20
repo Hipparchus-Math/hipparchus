@@ -21,7 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NotPositiveException;
@@ -530,18 +531,19 @@ public class DSCompiler {
      * </p>
      * @param orders derivation orders with respect to each parameter
      * @return index of the partial derivative
-     * @exception DimensionMismatchException if the numbers of parameters does not
+     * @exception MathIllegalArgumentException if the numbers of parameters does not
      * match the instance
      * @exception NumberIsTooLargeException if sum of derivation orders is larger
      * than the instance limits
      * @see #getPartialDerivativeOrders(int)
      */
     public int getPartialDerivativeIndex(final int ... orders)
-            throws DimensionMismatchException, NumberIsTooLargeException {
+            throws MathIllegalArgumentException, NumberIsTooLargeException {
 
         // safety check
         if (orders.length != getFreeParameters()) {
-            throw new DimensionMismatchException(orders.length, getFreeParameters());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   orders.length, getFreeParameters());
         }
 
         return getPartialDerivativeIndex(parameters, order, sizes, orders);
@@ -1805,15 +1807,17 @@ public class DSCompiler {
 
     /** Check rules set compatibility.
      * @param compiler other compiler to check against instance
-     * @exception DimensionMismatchException if number of free parameters or orders are inconsistent
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     public void checkCompatibility(final DSCompiler compiler)
-            throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (parameters != compiler.parameters) {
-            throw new DimensionMismatchException(parameters, compiler.parameters);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   parameters, compiler.parameters);
         }
         if (order != compiler.order) {
-            throw new DimensionMismatchException(order, compiler.order);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   order, compiler.order);
         }
     }
 

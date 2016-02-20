@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
@@ -138,7 +137,7 @@ public class LevenbergMarquardtOptimizerTest
             Assert.assertTrue(!shouldFail);
             //TODO check it got the right answer
 
-        } catch (DimensionMismatchException ee) {
+        } catch (MathIllegalArgumentException ee) {
             Assert.assertTrue(shouldFail);
         } catch (TooManyEvaluationsException ee) {
             Assert.assertTrue(shouldFail);

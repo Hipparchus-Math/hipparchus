@@ -16,10 +16,8 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NoDataException;
@@ -29,15 +27,8 @@ import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.linear.Array2DRowFieldMatrix;
-import org.hipparchus.linear.ArrayFieldVector;
-import org.hipparchus.linear.DefaultFieldMatrixChangingVisitor;
-import org.hipparchus.linear.DefaultFieldMatrixPreservingVisitor;
-import org.hipparchus.linear.FieldLUDecomposition;
-import org.hipparchus.linear.FieldMatrix;
-import org.hipparchus.linear.FieldVector;
-import org.hipparchus.linear.MatrixDimensionMismatchException;
-import org.hipparchus.linear.NonSquareMatrixException;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link Array2DRowFieldMatrix} class.
@@ -1103,16 +1094,20 @@ public final class FieldMatrixImplTest {
             throw new NonSquareMatrixException(lu.getRowDimension(), lu.getColumnDimension());
         }
         if (lowerData.length != lowerData[0].length) {
-            throw new DimensionMismatchException(lowerData.length, lowerData[0].length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   lowerData.length, lowerData[0].length);
         }
         if (upperData.length != upperData[0].length) {
-            throw new DimensionMismatchException(upperData.length, upperData[0].length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   upperData.length, upperData[0].length);
         }
         if (lowerData.length != upperData.length) {
-            throw new DimensionMismatchException(lowerData.length, upperData.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   lowerData.length, upperData.length);
         }
         if (lowerData.length != lu.getRowDimension()) {
-            throw new DimensionMismatchException(lowerData.length, lu.getRowDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   lowerData.length, lu.getRowDimension());
         }
         int n = lu.getRowDimension();
         for (int i = 0; i < n; i++) {
@@ -1138,7 +1133,8 @@ public final class FieldMatrixImplTest {
                                                matrix.getColumnDimension());
         }
         if (matrix.getRowDimension() != permutation.length) {
-            throw new DimensionMismatchException(matrix.getRowDimension(), permutation.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   matrix.getRowDimension(), permutation.length);
         }
         int n = matrix.getRowDimension();
         int m = matrix.getColumnDimension();

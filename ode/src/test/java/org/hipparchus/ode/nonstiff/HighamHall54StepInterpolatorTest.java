@@ -25,7 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -43,7 +43,7 @@ public class HighamHall54StepInterpolatorTest {
 
   @Test
   public void derivativesConsistency()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
     TestProblem3 pb = new TestProblem3(0.1);
     double minStep = 0;
@@ -59,7 +59,7 @@ public class HighamHall54StepInterpolatorTest {
   @Test
   public void serialization()
     throws IOException, ClassNotFoundException,
-           DimensionMismatchException, NumberIsTooSmallException,
+           MathIllegalArgumentException, NumberIsTooSmallException,
            MaxCountExceededException, NoBracketingException {
 
     TestProblem3 pb = new TestProblem3(0.9);
@@ -110,7 +110,7 @@ public class HighamHall54StepInterpolatorTest {
 
   @Test
   public void checkClone()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
     TestProblem3 pb = new TestProblem3(0.9);
     double minStep = 0;

@@ -20,7 +20,8 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -76,13 +77,13 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
          * @param param Values of norm, mean and standard deviation.
          * @return the value of the function.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 3.
          */
         @Override
         public double value(double x, double ... param)
             throws NullArgumentException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
             validateParameters(param);
             return HarmonicOscillator.value(x * param[1] + param[2], param[0]);
         }
@@ -97,13 +98,13 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
          * @param param Values of amplitude, angular frequency and phase.
          * @return the gradient vector at {@code x}.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 3.
          */
         @Override
         public double[] gradient(double x, double ... param)
             throws NullArgumentException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
             validateParameters(param);
 
             final double amplitude = param[0];
@@ -125,17 +126,18 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
          *
          * @param param Values of norm, mean and standard deviation.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 3.
          */
         private void validateParameters(double[] param)
             throws NullArgumentException,
-                   DimensionMismatchException {
+                   MathIllegalArgumentException {
             if (param == null) {
                 throw new NullArgumentException();
             }
             if (param.length != 3) {
-                throw new DimensionMismatchException(param.length, 3);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       param.length, 3);
             }
         }
     }
@@ -155,7 +157,7 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         final double x = t.getValue();
         double[] f = new double[t.getOrder() + 1];
 

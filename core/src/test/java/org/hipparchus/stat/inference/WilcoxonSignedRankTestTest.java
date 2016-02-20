@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.inference;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
@@ -121,15 +121,15 @@ public class WilcoxonSignedRankTestTest {
          */
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { 1.0, 2.0 }, new double[] { 3.0 }, true);
-            Assert.fail("x and y not same size (exact), DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("x and y not same size (exact), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { 1.0, 2.0 }, new double[] { 3.0 }, false);
-            Assert.fail("x and y not same size (asymptotic), DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("x and y not same size (asymptotic), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

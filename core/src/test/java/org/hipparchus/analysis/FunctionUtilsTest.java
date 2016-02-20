@@ -36,7 +36,7 @@ import org.hipparchus.analysis.function.Pow;
 import org.hipparchus.analysis.function.Power;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
@@ -348,9 +348,9 @@ public class FunctionUtilsTest {
             DerivativeStructure dsT = new DerivativeStructure(1, 1, 0, 0.0);
             mdf.value(new DerivativeStructure[] { dsT.sin(), dsT.cos() });
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
-            Assert.assertEquals(2, e.getDimension());
-            Assert.assertEquals(3, e.getArgument());
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(3, ((Integer) e.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) e.getParts()[1]).intValue());
         }
     }
 

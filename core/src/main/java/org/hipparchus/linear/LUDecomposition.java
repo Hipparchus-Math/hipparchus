@@ -17,7 +17,8 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -292,7 +293,8 @@ public class LUDecomposition {
         public RealVector solve(RealVector b) {
             final int m = pivot.length;
             if (b.getDimension() != m) {
-                throw new DimensionMismatchException(b.getDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       b.getDimension(), m);
             }
             if (singular) {
                 throw new SingularMatrixException();
@@ -331,7 +333,8 @@ public class LUDecomposition {
 
             final int m = pivot.length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       b.getRowDimension(), m);
             }
             if (singular) {
                 throw new SingularMatrixException();

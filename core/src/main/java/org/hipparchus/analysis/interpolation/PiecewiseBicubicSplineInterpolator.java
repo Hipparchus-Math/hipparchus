@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
@@ -37,7 +37,7 @@ public class PiecewiseBicubicSplineInterpolator
     public PiecewiseBicubicSplineInterpolatingFunction interpolate( final double[] xval,
                                                                     final double[] yval,
                                                                     final double[][] fval)
-        throws DimensionMismatchException,
+        throws MathIllegalArgumentException,
                NullArgumentException,
                NoDataException,
                NonMonotonicSequenceException {

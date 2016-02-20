@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NoDataException;
@@ -81,13 +81,13 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * with the second argument set to {@code true}.</p>
      *
      * @param d Data for the new matrix.
-     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws MathIllegalArgumentException if {@code d} is not rectangular.
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @throws NoDataException if there are not at least one row and one column.
      * @see #Array2DRowFieldMatrix(FieldElement[][], boolean)
      */
     public Array2DRowFieldMatrix(final T[][] d)
-        throws DimensionMismatchException, NullArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         NoDataException {
         this(extractField(d), d);
     }
@@ -101,13 +101,13 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      *
      * @param field Field to which the elements belong.
      * @param d Data for the new matrix.
-     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws MathIllegalArgumentException if {@code d} is not rectangular.
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @throws NoDataException if there are not at least one row and one column.
      * @see #Array2DRowFieldMatrix(FieldElement[][], boolean)
      */
     public Array2DRowFieldMatrix(final Field<T> field, final T[][] d)
-        throws DimensionMismatchException, NullArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         NoDataException {
         super(field);
         copyIn(d);
@@ -123,13 +123,13 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      *
      * @param d Data for the new matrix.
      * @param copyArray Whether to copy or reference the input array.
-     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws MathIllegalArgumentException if {@code d} is not rectangular.
      * @throws NoDataException if there are not at least one row and one column.
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @see #Array2DRowFieldMatrix(FieldElement[][])
      */
     public Array2DRowFieldMatrix(final T[][] d, final boolean copyArray)
-        throws DimensionMismatchException, NoDataException,
+        throws MathIllegalArgumentException, NoDataException,
         NullArgumentException {
         this(extractField(d), d, copyArray);
     }
@@ -145,13 +145,13 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @param field Field to which the elements belong.
      * @param d Data for the new matrix.
      * @param copyArray Whether to copy or reference the input array.
-     * @throws DimensionMismatchException if {@code d} is not rectangular.
+     * @throws MathIllegalArgumentException if {@code d} is not rectangular.
      * @throws NoDataException if there are not at least one row and one column.
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @see #Array2DRowFieldMatrix(FieldElement[][])
      */
     public Array2DRowFieldMatrix(final Field<T> field, final T[][] d, final boolean copyArray)
-        throws DimensionMismatchException, NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NoDataException, NullArgumentException {
         super(field);
         if (copyArray) {
             copyIn(d);
@@ -167,7 +167,8 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             }
             for (int r = 1; r < nRows; r++) {
                 if (d[r].length != nCols) {
-                    throw new DimensionMismatchException(nCols, d[r].length);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           nCols, d[r].length);
                 }
             }
             data = d;
@@ -279,11 +280,11 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      *
      * @param m Matrix to postmultiply by.
      * @return {@code this} * m.
-     * @throws DimensionMismatchException if the number of columns of this
+     * @throws MathIllegalArgumentException if the number of columns of this
      * matrix is not equal to the number of rows of {@code m}.
      */
     public Array2DRowFieldMatrix<T> multiply(final Array2DRowFieldMatrix<T> m)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         // safety check
         checkMultiplicationCompatible(m);
 
@@ -328,7 +329,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
         throws OutOfRangeException, NullArgumentException, NoDataException,
-        DimensionMismatchException {
+        MathIllegalArgumentException {
         if (data == null) {
             if (row > 0) {
                 throw new MathIllegalStateException(LocalizedFormats.FIRST_ROWS_NOT_INITIALIZED_YET, row);
@@ -348,7 +349,8 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             data = MathArrays.buildArray(getField(), subMatrix.length, nCols);
             for (int i = 0; i < data.length; ++i) {
                 if (subMatrix[i].length != nCols) {
-                    throw new DimensionMismatchException(nCols, subMatrix[i].length);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           nCols, subMatrix[i].length);
                 }
                 System.arraycopy(subMatrix[i], 0, data[i + row], column, nCols);
             }
@@ -412,11 +414,12 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public T[] operate(final T[] v) throws DimensionMismatchException {
+    public T[] operate(final T[] v) throws MathIllegalArgumentException {
         final int nRows = this.getRowDimension();
         final int nCols = this.getColumnDimension();
         if (v.length != nCols) {
-            throw new DimensionMismatchException(v.length, nCols);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   v.length, nCols);
         }
         final T[] out = MathArrays.buildArray(getField(), nRows);
         for (int row = 0; row < nRows; row++) {
@@ -432,11 +435,12 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public T[] preMultiply(final T[] v) throws DimensionMismatchException {
+    public T[] preMultiply(final T[] v) throws MathIllegalArgumentException {
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
         if (v.length != nRows) {
-            throw new DimensionMismatchException(v.length, nRows);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   v.length, nRows);
         }
 
         final T[] out = MathArrays.buildArray(getField(), nCols);
@@ -601,12 +605,12 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      *
      * @param in Data to copy.
      * @throws NoDataException if the input array is empty.
-     * @throws DimensionMismatchException if the input array is not rectangular.
+     * @throws MathIllegalArgumentException if the input array is not rectangular.
      * @throws NullArgumentException if the input array is {@code null}.
      */
     private void copyIn(final T[][] in)
         throws NullArgumentException, NoDataException,
-        DimensionMismatchException {
+        MathIllegalArgumentException {
         setSubMatrix(in, 0, 0);
     }
 }

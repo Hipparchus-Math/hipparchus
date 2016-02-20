@@ -16,7 +16,8 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -99,10 +100,10 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
      * @throws NullArgumentException if base is null
      * @throws OutOfRangeException if the space dimension is outside the range [1, len], where
      *   len refers to the length of the bases array
-     * @throws DimensionMismatchException if weights is non-null and the length of the input arrays differ
+     * @throws MathIllegalArgumentException if weights is non-null and the length of the input arrays differ
      */
     public HaltonSequenceGenerator(final int dimension, final int[] bases, final int[] weights)
-            throws NullArgumentException, OutOfRangeException, DimensionMismatchException {
+            throws NullArgumentException, OutOfRangeException, MathIllegalArgumentException {
 
         MathUtils.checkNotNull(bases);
 
@@ -111,7 +112,8 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
         }
 
         if (weights != null && weights.length != bases.length) {
-            throw new DimensionMismatchException(weights.length, bases.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   weights.length, bases.length);
         }
 
         this.dimension = dimension;

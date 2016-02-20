@@ -20,7 +20,8 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -105,14 +106,14 @@ public class Logistic implements UnivariateDifferentiableFunction {
          * {@code a} and  {@code n}.
          * @return the value of the function.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 6.
          * @throws NotStrictlyPositiveException if {@code param[5] <= 0}.
          */
         @Override
         public double value(double x, double ... param)
             throws NullArgumentException,
-                   DimensionMismatchException,
+                   MathIllegalArgumentException,
                    NotStrictlyPositiveException {
             validateParameters(param);
             return Logistic.value(param[1] - x, param[0],
@@ -131,14 +132,14 @@ public class Logistic implements UnivariateDifferentiableFunction {
          * {@code a} and  {@code n}.
          * @return the gradient vector at {@code x}.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 6.
          * @throws NotStrictlyPositiveException if {@code param[5] <= 0}.
          */
         @Override
         public double[] gradient(double x, double ... param)
             throws NullArgumentException,
-                   DimensionMismatchException,
+                   MathIllegalArgumentException,
                    NotStrictlyPositiveException {
             validateParameters(param);
 
@@ -172,19 +173,20 @@ public class Logistic implements UnivariateDifferentiableFunction {
          * @param param Values for {@code k}, {@code m}, {@code b}, {@code q},
          * {@code a} and {@code n}.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 6.
          * @throws NotStrictlyPositiveException if {@code param[5] <= 0}.
          */
         private void validateParameters(double[] param)
             throws NullArgumentException,
-                   DimensionMismatchException,
+                   MathIllegalArgumentException,
                    NotStrictlyPositiveException {
             if (param == null) {
                 throw new NullArgumentException();
             }
             if (param.length != 6) {
-                throw new DimensionMismatchException(param.length, 6);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       param.length, 6);
             }
             if (param[5] <= 0) {
                 throw new NotStrictlyPositiveException(param[5]);

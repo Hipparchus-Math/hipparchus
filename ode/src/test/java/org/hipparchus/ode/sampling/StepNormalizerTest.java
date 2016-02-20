@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -42,7 +42,7 @@ public class StepNormalizerTest {
 
   @Test
   public void testBoundaries()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
     double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);
@@ -73,7 +73,7 @@ public class StepNormalizerTest {
 
   @Test
   public void testBeforeEnd()
-      throws DimensionMismatchException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException, NumberIsTooSmallException,
              MaxCountExceededException, NoBracketingException {
     final double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);

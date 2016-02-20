@@ -19,7 +19,8 @@ package org.hipparchus.optim.nonlinear.scalar;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.RealMatrix;
 
 /**
@@ -96,14 +97,14 @@ public class LeastSquaresConverter implements MultivariateFunction {
      * </p>
      * <p>
      * The array computed by the objective function, the observations array and the
-     * weights array must have consistent sizes or a {@link DimensionMismatchException}
+     * weights array must have consistent sizes or a {@link MathIllegalArgumentException}
      * will be triggered while computing the scalar objective.
      * </p>
      *
      * @param function vectorial residuals function to wrap
      * @param observations observations to be compared to objective function to compute residuals
      * @param weights weights to apply to the residuals
-     * @throws DimensionMismatchException if the observations vector and the weights
+     * @throws MathIllegalArgumentException if the observations vector and the weights
      * vector dimensions do not match (objective function dimension is checked only when
      * the {@link #value(double[])} method is called)
      */
@@ -111,7 +112,8 @@ public class LeastSquaresConverter implements MultivariateFunction {
                                  final double[] observations,
                                  final double[] weights) {
         if (observations.length != weights.length) {
-            throw new DimensionMismatchException(observations.length, weights.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   observations.length, weights.length);
         }
         this.function     = function;
         this.observations = observations.clone();
@@ -130,14 +132,14 @@ public class LeastSquaresConverter implements MultivariateFunction {
      * </p>
      * <p>
      * The array computed by the objective function, the observations array and the
-     * the scaling matrix must have consistent sizes or a {@link DimensionMismatchException}
+     * the scaling matrix must have consistent sizes or a {@link MathIllegalArgumentException}
      * will be triggered while computing the scalar objective.
      * </p>
      *
      * @param function vectorial residuals function to wrap
      * @param observations observations to be compared to objective function to compute residuals
      * @param scale scaling matrix
-     * @throws DimensionMismatchException if the observations vector and the scale
+     * @throws MathIllegalArgumentException if the observations vector and the scale
      * matrix dimensions do not match (objective function dimension is checked only when
      * the {@link #value(double[])} method is called)
      */
@@ -145,7 +147,8 @@ public class LeastSquaresConverter implements MultivariateFunction {
                                  final double[] observations,
                                  final RealMatrix scale) {
         if (observations.length != scale.getColumnDimension()) {
-            throw new DimensionMismatchException(observations.length, scale.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   observations.length, scale.getColumnDimension());
         }
         this.function     = function;
         this.observations = observations.clone();
@@ -159,7 +162,8 @@ public class LeastSquaresConverter implements MultivariateFunction {
         // compute residuals
         final double[] residuals = function.value(point);
         if (residuals.length != observations.length) {
-            throw new DimensionMismatchException(residuals.length, observations.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   residuals.length, observations.length);
         }
         for (int i = 0; i < residuals.length; ++i) {
             residuals[i] -= observations[i];

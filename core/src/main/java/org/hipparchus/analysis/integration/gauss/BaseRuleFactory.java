@@ -19,7 +19,7 @@ package org.hipparchus.analysis.integration.gauss;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.util.Pair;
@@ -49,11 +49,11 @@ public abstract class BaseRuleFactory<T extends Number> {
      * @param numberOfPoints Number of integration points.
      * @return a copy of the integration rule.
      * @throws NotStrictlyPositiveException if {@code numberOfPoints < 1}.
-     * @throws DimensionMismatchException if the elements of the rule pair do not
+     * @throws MathIllegalArgumentException if the elements of the rule pair do not
      * have the same length.
      */
     public Pair<double[], double[]> getRule(int numberOfPoints)
-        throws NotStrictlyPositiveException, DimensionMismatchException {
+        throws NotStrictlyPositiveException, MathIllegalArgumentException {
 
         if (numberOfPoints <= 0) {
             throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_POINTS,
@@ -87,11 +87,11 @@ public abstract class BaseRuleFactory<T extends Number> {
      *
      * @param numberOfPoints Order of the rule to be retrieved.
      * @return the points and weights corresponding to the given order.
-     * @throws DimensionMismatchException if the elements of the rule pair do not
+     * @throws MathIllegalArgumentException if the elements of the rule pair do not
      * have the same length.
      */
     protected synchronized Pair<T[], T[]> getRuleInternal(int numberOfPoints)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         final Pair<T[], T[]> rule = pointsAndWeights.get(numberOfPoints);
         if (rule == null) {
             addRule(computeRule(numberOfPoints));
@@ -105,13 +105,14 @@ public abstract class BaseRuleFactory<T extends Number> {
      * Stores a rule.
      *
      * @param rule Rule to be stored.
-     * @throws DimensionMismatchException if the elements of the pair do not
+     * @throws MathIllegalArgumentException if the elements of the pair do not
      * have the same length.
      */
-    protected void addRule(Pair<T[], T[]> rule) throws DimensionMismatchException {
+    protected void addRule(Pair<T[], T[]> rule) throws MathIllegalArgumentException {
         if (rule.getFirst().length != rule.getSecond().length) {
-            throw new DimensionMismatchException(rule.getFirst().length,
-                                                 rule.getSecond().length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   rule.getFirst().length,
+                                                   rule.getSecond().length);
         }
 
         pointsAndWeights.put(rule.getFirst().length, rule);
@@ -122,11 +123,11 @@ public abstract class BaseRuleFactory<T extends Number> {
      *
      * @param numberOfPoints Order of the rule to be computed.
      * @return the computed rule.
-     * @throws DimensionMismatchException if the elements of the pair do not
+     * @throws MathIllegalArgumentException if the elements of the pair do not
      * have the same length.
      */
     protected abstract Pair<T[], T[]> computeRule(int numberOfPoints)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Converts the from the actual {@code Number} type to {@code double}

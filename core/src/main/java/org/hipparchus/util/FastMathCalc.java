@@ -18,7 +18,8 @@ package org.hipparchus.util;
 
 import java.io.PrintStream;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Class used to compute the classical functions tables.
  * @since 3.0
@@ -646,12 +647,13 @@ class FastMathCalc {
      * Check two lengths are equal.
      * @param expectedLen expected length
      * @param actual actual length
-     * @exception DimensionMismatchException if the two lengths are not equal
+     * @exception MathIllegalArgumentException if the two lengths are not equal
      */
     private static void checkLen(int expectedLen, int actual)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (expectedLen != actual) {
-            throw new DimensionMismatchException(actual, expectedLen);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   actual, expectedLen);
         }
     }
 

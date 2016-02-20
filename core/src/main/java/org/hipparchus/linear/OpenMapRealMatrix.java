@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -174,7 +174,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      */
     @Override
     public RealMatrix multiply(final RealMatrix m)
-        throws DimensionMismatchException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException {
         try {
             return multiply((OpenMapRealMatrix) m);
         } catch (ClassCastException cce) {
@@ -203,13 +203,13 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to postmultiply by.
      * @return {@code this} * {@code m}.
-     * @throws DimensionMismatchException if the number of rows of {@code m}
+     * @throws MathIllegalArgumentException if the number of rows of {@code m}
      * differ from the number of columns of {@code this} matrix.
      * @throws NumberIsTooLargeException if the total number of entries of the
      * product is larger than {@code Integer.MAX_VALUE}.
      */
     public OpenMapRealMatrix multiply(OpenMapRealMatrix m)
-        throws DimensionMismatchException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException {
         // Safety check.
         MatrixUtils.checkMultiplicationCompatible(this, m);
 

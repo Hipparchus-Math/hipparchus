@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.util.MathArrays;
 
@@ -97,7 +97,7 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
      * @param y0 array containing the value of the state vector at integration start
      * @param finalTime target time for the integration
      * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     public void init(final T t0, final T[] y0, final T finalTime) {
 
@@ -119,10 +119,10 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
      * @param y array containing the current value of the complete state vector
      * @return time derivative of the complete state vector
      * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     public T[] computeDerivatives(final T t, final T[] y)
-        throws MaxCountExceededException, DimensionMismatchException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
 
         final T[] yDot = MathArrays.buildArray(t.getField(), mapper.getTotalDimension());
 

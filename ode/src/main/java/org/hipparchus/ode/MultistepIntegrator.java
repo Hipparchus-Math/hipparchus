@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
@@ -208,13 +208,13 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
      * @param y0 initial value of the state vector at t0
      * @param t target time for the integration
      * (can be set to a value smaller than <code>t0</code> for backward integration)
-     * @exception DimensionMismatchException if arrays dimension do not match equations settings
+     * @exception MathIllegalArgumentException if arrays dimension do not match equations settings
      * @exception NumberIsTooSmallException if integration step is too small
      * @exception MaxCountExceededException if the number of functions evaluations is exceeded
      * @exception NoBracketingException if the location of an event cannot be bracketed
      */
     protected void start(final double t0, final double[] y0, final double t)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
 
         // make sure NO user event nor user step handler is triggered,

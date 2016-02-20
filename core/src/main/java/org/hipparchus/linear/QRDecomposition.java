@@ -19,7 +19,6 @@ package org.hipparchus.linear;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -347,7 +346,8 @@ public class QRDecomposition {
             final int n = qrt.length;
             final int m = qrt[0].length;
             if (b.getDimension() != m) {
-                throw new DimensionMismatchException(b.getDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       b.getDimension(), m);
             }
             checkSingular(rDiag, threshold, true);
 
@@ -389,7 +389,8 @@ public class QRDecomposition {
             final int n = qrt.length;
             final int m = qrt[0].length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       b.getRowDimension(), m);
             }
             checkSingular(rDiag, threshold, true);
 

@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
@@ -72,17 +72,17 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * Compute the sum of {@code this} and {@code v}.
      * @param v vector to be added
      * @return {@code this + v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      */
-    FieldVector<T> add(FieldVector<T> v) throws DimensionMismatchException;
+    FieldVector<T> add(FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Compute {@code this} minus {@code v}.
      * @param v vector to be subtracted
      * @return {@code this - v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      */
-    FieldVector<T> subtract(FieldVector<T> v) throws DimensionMismatchException;
+    FieldVector<T> subtract(FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Map an addition operation to each entry.
@@ -175,38 +175,38 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * Element-by-element multiplication.
      * @param v vector by which instance elements must be multiplied
      * @return a vector containing {@code this[i] * v[i]} for all {@code i}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      */
     FieldVector<T> ebeMultiply(FieldVector<T> v)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Element-by-element division.
      * @param v vector by which instance elements must be divided
      * @return a vector containing {@code this[i] / v[i]} for all {@code i}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      * @throws MathArithmeticException if one entry of {@code v} is zero.
      */
     FieldVector<T> ebeDivide(FieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException;
+        throws MathIllegalArgumentException, MathArithmeticException;
 
     /**
      * Compute the dot product.
      * @param v vector with which dot product should be computed
      * @return the scalar dot product of {@code this} and {@code v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      */
-    T dotProduct(FieldVector<T> v) throws DimensionMismatchException;
+    T dotProduct(FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Find the orthogonal projection of this vector onto another vector.
      * @param v vector onto which {@code this} must be projected
      * @return projection of {@code this} onto {@code v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      * @throws MathArithmeticException if {@code v} is the null vector.
      */
     FieldVector<T> projection(FieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException;
+        throws MathIllegalArgumentException, MathArithmeticException;
 
     /**
      * Compute the outer product.

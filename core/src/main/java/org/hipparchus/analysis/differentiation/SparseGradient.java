@@ -24,7 +24,7 @@ import java.util.Map;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -735,7 +735,7 @@ public class SparseGradient implements RealFieldElement<SparseGradient>, Seriali
     @Override
     public SparseGradient linearCombination(final SparseGradient[] a,
                                               final SparseGradient[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         // compute a simple value, with all partial derivatives
         SparseGradient out = a[0].getField().getZero();

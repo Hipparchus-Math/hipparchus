@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.IterationManager;
@@ -45,7 +45,7 @@ import org.hipparchus.util.IterationManager;
  * </p>
  * <h3><a id="context">Exception context</a></h3>
  * <p>
- * Besides standard {@link DimensionMismatchException}, this class might throw
+ * Besides standard {@link MathIllegalArgumentException}, this class might throw
  * {@link NonPositiveDefiniteOperatorException} if the linear operator or
  * the preconditioner are not positive definite. In this case, the
  * {@link ExceptionContext} provides some more information
@@ -148,7 +148,7 @@ public class ConjugateGradient
                                    final RealVector b,
                                    final RealVector x0)
         throws NullArgumentException, NonPositiveDefiniteOperatorException,
-        NonSquareOperatorException, DimensionMismatchException,
+        NonSquareOperatorException, MathIllegalArgumentException,
         MaxCountExceededException {
         checkParameters(a, m, b, x0);
         final IterationManager manager = getIterationManager();

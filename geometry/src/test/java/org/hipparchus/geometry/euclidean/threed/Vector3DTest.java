@@ -23,7 +23,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
@@ -36,7 +36,7 @@ import org.junit.Test;
 
 public class Vector3DTest {
     @Test
-    public void testConstructors() throws DimensionMismatchException {
+    public void testConstructors() throws MathIllegalArgumentException {
         double r = FastMath.sqrt(2) /2;
         checkVector(new Vector3D(2, new Vector3D(FastMath.PI / 3, -FastMath.PI / 4)),
                     r, r * FastMath.sqrt(3), -2 * r);
@@ -116,8 +116,8 @@ public class Vector3DTest {
         Assert.assertEquals("{3.000; 2.000; 1.000}", new Vector3D(3, 2, 1).toString(format));
     }
 
-    @Test(expected=DimensionMismatchException.class)
-    public void testWrongDimension() throws DimensionMismatchException {
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testWrongDimension() throws MathIllegalArgumentException {
         new Vector3D(new double[] { 2,  5 });
     }
 

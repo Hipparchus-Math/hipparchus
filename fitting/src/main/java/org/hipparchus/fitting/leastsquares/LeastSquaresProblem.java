@@ -119,7 +119,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * Get the weighted Jacobian matrix.
          *
          * @return the weighted Jacobian: W<sup>1/2</sup> J.
-         * @throws org.hipparchus.exception.DimensionMismatchException
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
          * if the Jacobian dimension does not match problem dimension.
          */
         RealMatrix getJacobian();
@@ -159,7 +159,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * then multiplied by the square root of the weight matrix.
          *
          * @return the weighted residuals: W<sup>1/2</sup> K.
-         * @throws org.hipparchus.exception.DimensionMismatchException
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
          * if the residuals have the wrong length.
          */
         RealVector getResiduals();

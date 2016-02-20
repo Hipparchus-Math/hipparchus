@@ -20,7 +20,8 @@ package org.hipparchus.dfp;
 import java.util.Arrays;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -2767,7 +2768,7 @@ public class Dfp implements RealFieldElement<Dfp> {
      */
     @Override
     public Dfp atan2(final Dfp x)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         // compute r = sqrt(x^2+y^2)
         final Dfp r = x.multiply(x).add(multiply(this)).sqrt();
@@ -2843,9 +2844,10 @@ public class Dfp implements RealFieldElement<Dfp> {
      */
     @Override
     public Dfp linearCombination(final Dfp[] a, final Dfp[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new DimensionMismatchException(a.length, b.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   a.length, b.length);
         }
         Dfp r = getZero();
         for (int i = 0; i < a.length; ++i) {
@@ -2859,9 +2861,10 @@ public class Dfp implements RealFieldElement<Dfp> {
      */
     @Override
     public Dfp linearCombination(final double[] a, final Dfp[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new DimensionMismatchException(a.length, b.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   a.length, b.length);
         }
         Dfp r = getZero();
         for (int i = 0; i < a.length; ++i) {

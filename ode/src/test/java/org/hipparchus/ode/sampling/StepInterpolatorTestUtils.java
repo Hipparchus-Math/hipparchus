@@ -18,7 +18,7 @@ package org.hipparchus.ode.sampling;
 
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -39,7 +39,7 @@ public class StepInterpolatorTestUtils {
                                                    final TestProblemAbstract problem,
                                                    final double finiteDifferencesRatio,
                                                    final double threshold)
-        throws DimensionMismatchException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
                MaxCountExceededException, NoBracketingException {
         integrator.addStepHandler(new StepHandler() {
 

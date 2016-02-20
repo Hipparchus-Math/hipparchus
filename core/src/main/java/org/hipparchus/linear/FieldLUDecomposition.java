@@ -19,7 +19,8 @@ package org.hipparchus.linear;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -303,7 +304,8 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
                 final int m = pivot.length;
                 if (b.getDimension() != m) {
-                    throw new DimensionMismatchException(b.getDimension(), m);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                           b.getDimension(), m);
                 }
                 if (singular) {
                     throw new SingularMatrixException();
@@ -341,14 +343,15 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
          * <p>The A matrix is implicit here. It is </p>
          * @param b right-hand side of the equation A &times; X = B
          * @return a vector X such that A &times; X = B
-         * @throws DimensionMismatchException if the matrices dimensions do not match.
+         * @throws MathIllegalArgumentException if the matrices dimensions do not match.
          * @throws SingularMatrixException if the decomposed matrix is singular.
          */
         public ArrayFieldVector<T> solve(ArrayFieldVector<T> b) {
             final int m = pivot.length;
             final int length = b.getDimension();
             if (length != m) {
-                throw new DimensionMismatchException(length, m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       length, m);
             }
             if (singular) {
                 throw new SingularMatrixException();
@@ -385,7 +388,8 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
         public FieldMatrix<T> solve(FieldMatrix<T> b) {
             final int m = pivot.length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       b.getRowDimension(), m);
             }
             if (singular) {
                 throw new SingularMatrixException();

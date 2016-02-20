@@ -16,7 +16,7 @@
  */
 package org.hipparchus.ml.distance;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -33,7 +33,7 @@ public class CanberraDistance implements DistanceMeasure {
     /** {@inheritDoc} */
     @Override
     public double compute(double[] a, double[] b)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         MathArrays.checkEqualLength(a, b);
         double sum = 0;
         for (int i = 0; i < a.length; i++) {

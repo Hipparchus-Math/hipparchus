@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
@@ -291,7 +291,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector add(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             final int dim = vData.length;
@@ -317,7 +317,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector subtract(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             final int dim = vData.length;
@@ -394,7 +394,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector ebeMultiply(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             final int dim = vData.length;
@@ -418,7 +418,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector ebeDivide(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             final int dim = vData.length;
@@ -451,7 +451,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public double dotProduct(RealVector v) throws DimensionMismatchException {
+    public double dotProduct(RealVector v) throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             checkVectorDimensions(vData.length);
@@ -496,7 +496,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public double getDistance(RealVector v) throws DimensionMismatchException {
+    public double getDistance(RealVector v) throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             checkVectorDimensions(vData.length);
@@ -520,7 +520,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public double getL1Distance(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             checkVectorDimensions(vData.length);
@@ -544,7 +544,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public double getLInfDistance(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             checkVectorDimensions(vData.length);
@@ -735,12 +735,12 @@ public class ArrayRealVector extends RealVector implements Serializable {
      * Check if instance and specified vectors have the same dimension.
      *
      * @param v Vector to compare instance with.
-     * @throws DimensionMismatchException if the vectors do not
+     * @throws MathIllegalArgumentException if the vectors do not
      * have the same dimension.
      */
     @Override
     protected void checkVectorDimensions(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
     }
 
@@ -748,14 +748,15 @@ public class ArrayRealVector extends RealVector implements Serializable {
      * Check if instance dimension is equal to some expected value.
      *
      * @param n Expected dimension.
-     * @throws DimensionMismatchException if the dimension is
+     * @throws MathIllegalArgumentException if the dimension is
      * inconsistent with vector size.
      */
     @Override
     protected void checkVectorDimensions(int n)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (data.length != n) {
-            throw new DimensionMismatchException(data.length, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   data.length, n);
         }
     }
 
@@ -839,14 +840,14 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector combine(double a, double b, RealVector y)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         return copy().combineToSelf(a, b, y);
     }
 
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector combineToSelf(double a, double b, RealVector y)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (y instanceof ArrayRealVector) {
             final double[] yData = ((ArrayRealVector) y).data;
             checkVectorDimensions(yData.length);

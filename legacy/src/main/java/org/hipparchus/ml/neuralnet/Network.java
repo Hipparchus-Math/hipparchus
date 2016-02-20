@@ -32,7 +32,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 
 /**
@@ -191,13 +192,14 @@ public class Network
      *
      * @param features Initial values for the neuron's features.
      * @return the neuron's identifier.
-     * @throws DimensionMismatchException if the length of {@code features}
+     * @throws MathIllegalArgumentException if the length of {@code features}
      * is different from the expected size (as set by the
      * {@link #Network(long,int) constructor}).
      */
     public long createNeuron(double[] features) {
         if (features.length != featureSize) {
-            throw new DimensionMismatchException(features.length, featureSize);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   features.length, featureSize);
         }
 
         final long id = createNextId();

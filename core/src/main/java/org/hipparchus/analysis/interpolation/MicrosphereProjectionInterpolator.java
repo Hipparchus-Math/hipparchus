@@ -17,7 +17,8 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
@@ -121,13 +122,13 @@ public class MicrosphereProjectionInterpolator
     /**
      * {@inheritDoc}
      *
-     * @throws DimensionMismatchException if the space dimension of the
+     * @throws MathIllegalArgumentException if the space dimension of the
      * given samples does not match the space dimension of the microsphere.
      */
     @Override
     public MultivariateFunction interpolate(final double[][] xval,
                                             final double[] yval)
-        throws DimensionMismatchException,
+        throws MathIllegalArgumentException,
                NoDataException,
                NullArgumentException {
         if (xval == null ||
@@ -138,14 +139,16 @@ public class MicrosphereProjectionInterpolator
             throw new NoDataException();
         }
         if (xval.length != yval.length) {
-            throw new DimensionMismatchException(xval.length, yval.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xval.length, yval.length);
         }
         if (xval[0] == null) {
             throw new NullArgumentException();
         }
         final int dimension = microsphere.getDimension();
         if (dimension != xval[0].length) {
-            throw new DimensionMismatchException(xval[0].length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xval[0].length, dimension);
         }
 
         // Microsphere copy.

@@ -19,7 +19,8 @@ package org.hipparchus.ode;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Class mapping the part of a complete state or derivative that pertains
@@ -68,13 +69,14 @@ public class EquationsMapper implements Serializable {
      * @param complete complete state or derivative array from which
      * equation data should be retrieved
      * @param equationData placeholder where to put equation data
-     * @throws DimensionMismatchException if the dimension of the equation data does not
+     * @throws MathIllegalArgumentException if the dimension of the equation data does not
      * match the mapper dimension
      */
     public void extractEquationData(double[] complete, double[] equationData)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (equationData.length != dimension) {
-            throw new DimensionMismatchException(equationData.length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   equationData.length, dimension);
         }
         System.arraycopy(complete, firstIndex, equationData, 0, dimension);
     }
@@ -83,13 +85,14 @@ public class EquationsMapper implements Serializable {
      * @param equationData equation data to be inserted into the complete array
      * @param complete placeholder where to put equation data (only the
      * part corresponding to the equation will be overwritten)
-     * @throws DimensionMismatchException if the dimension of the equation data does not
+     * @throws MathIllegalArgumentException if the dimension of the equation data does not
      * match the mapper dimension
      */
     public void insertEquationData(double[] equationData, double[] complete)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (equationData.length != dimension) {
-            throw new DimensionMismatchException(equationData.length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   equationData.length, dimension);
         }
         System.arraycopy(equationData, 0, complete, firstIndex, dimension);
     }

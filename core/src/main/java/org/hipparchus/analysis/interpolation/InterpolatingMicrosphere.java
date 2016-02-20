@@ -19,7 +19,8 @@ package org.hipparchus.analysis.interpolation;
 import java.util.List;
 import java.util.ArrayList;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.MaxCountExceededException;
@@ -111,7 +112,7 @@ public class InterpolatingMicrosphere {
      * is considered dark.
      * @param background Value returned when the {@code maxDarkFraction}
      * threshold is exceeded.
-     * @throws DimensionMismatchException if the size of the generated
+     * @throws MathIllegalArgumentException if the size of the generated
      * vectors does not match the dimension set in the constructor.
      * @throws NotStrictlyPositiveException if {@code dimension <= 0}
      * or {@code size <= 0}.
@@ -241,7 +242,7 @@ public class InterpolatingMicrosphere {
      *
      * @param normal Facet's normal vector.
      * @param copy Whether to copy the given array.
-     * @throws DimensionMismatchException if the length of {@code n}
+     * @throws MathIllegalArgumentException if the length of {@code n}
      * does not match the space dimension.
      * @throws MaxCountExceededException if the method has been called
      * more times than the size of the sphere.
@@ -252,7 +253,8 @@ public class InterpolatingMicrosphere {
             throw new MaxCountExceededException(size);
         }
         if (normal.length > dimension) {
-            throw new DimensionMismatchException(normal.length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   normal.length, dimension);
         }
 
         microsphere.add(new Facet(copy ? normal.clone() : normal));

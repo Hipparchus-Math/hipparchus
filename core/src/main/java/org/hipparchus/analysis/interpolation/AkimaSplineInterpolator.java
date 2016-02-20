@@ -18,7 +18,7 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
@@ -56,7 +56,7 @@ public class AkimaSplineInterpolator
      * @param xvals the arguments for the interpolation points
      * @param yvals the values for the interpolation points
      * @return a function which interpolates the data set
-     * @throws DimensionMismatchException if {@code xvals} and {@code yvals} have
+     * @throws MathIllegalArgumentException if {@code xvals} and {@code yvals} have
      *         different sizes.
      * @throws NonMonotonicSequenceException if {@code xvals} is not sorted in
      *         strict increasing order.
@@ -66,7 +66,7 @@ public class AkimaSplineInterpolator
     @Override
     public PolynomialSplineFunction interpolate(double[] xvals,
                                                 double[] yvals)
-        throws DimensionMismatchException,
+        throws MathIllegalArgumentException,
                NumberIsTooSmallException,
                NonMonotonicSequenceException {
         if (xvals == null ||
@@ -75,7 +75,8 @@ public class AkimaSplineInterpolator
         }
 
         if (xvals.length != yvals.length) {
-            throw new DimensionMismatchException(xvals.length, yvals.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xvals.length, yvals.length);
         }
 
         if (xvals.length < MINIMUM_NUMBER_POINTS) {
@@ -174,12 +175,13 @@ public class AkimaSplineInterpolator
                                                               double[] yvals,
                                                               double[] firstDerivatives) {
         if (xvals.length != yvals.length) {
-            throw new DimensionMismatchException(xvals.length, yvals.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xvals.length, yvals.length);
         }
 
         if (xvals.length != firstDerivatives.length) {
-            throw new DimensionMismatchException(xvals.length,
-                                                 firstDerivatives.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xvals.length, firstDerivatives.length);
         }
 
         final int minimumLength = 2;

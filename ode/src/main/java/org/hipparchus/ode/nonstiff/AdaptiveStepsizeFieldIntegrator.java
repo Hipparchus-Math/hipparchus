@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -223,18 +223,20 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
     /** {@inheritDoc} */
     @Override
     protected void sanityChecks(final FieldODEState<T> eqn, final T t)
-        throws DimensionMismatchException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
 
         super.sanityChecks(eqn, t);
 
         mainSetDimension = eqn.getStateDimension();
 
         if (vecAbsoluteTolerance != null && vecAbsoluteTolerance.length != mainSetDimension) {
-            throw new DimensionMismatchException(mainSetDimension, vecAbsoluteTolerance.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   mainSetDimension, vecAbsoluteTolerance.length);
         }
 
         if (vecRelativeTolerance != null && vecRelativeTolerance.length != mainSetDimension) {
-            throw new DimensionMismatchException(mainSetDimension, vecRelativeTolerance.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   mainSetDimension, vecRelativeTolerance.length);
         }
 
     }
@@ -247,12 +249,12 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * @param mapper mapper for all the equations
      * @return first integration step
      * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     public T initializeStep(final boolean forward, final int order, final T[] scale,
                             final FieldODEStateAndDerivative<T> state0,
                             final FieldEquationsMapper<T> mapper)
-        throws MaxCountExceededException, DimensionMismatchException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
 
         if (initialStep.getReal() > 0) {
             // use the user provided value

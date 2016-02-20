@@ -17,7 +17,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -82,7 +82,7 @@ public class DiagonalMatrixTest {
 
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCreateError() {
         final double[] d = { -1.2, 3.4, 5 };
         final DiagonalMatrix m = new DiagonalMatrix(d, false);

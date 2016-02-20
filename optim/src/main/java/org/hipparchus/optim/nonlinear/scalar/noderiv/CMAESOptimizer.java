@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -354,13 +355,13 @@ public class CMAESOptimizer
      * @return {@inheritDoc}
      * @throws TooManyEvaluationsException if the maximal number of
      * evaluations is exceeded.
-     * @throws DimensionMismatchException if the initial guess, target, and weight
+     * @throws MathIllegalArgumentException if the initial guess, target, and weight
      * arguments have inconsistent dimensions.
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
         throws TooManyEvaluationsException,
-               DimensionMismatchException {
+               MathIllegalArgumentException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }
@@ -560,7 +561,8 @@ public class CMAESOptimizer
             final double[] init = getStartPoint();
 
             if (inputSigma.length != init.length) {
-                throw new DimensionMismatchException(inputSigma.length, init.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       inputSigma.length, init.length);
             }
 
             final double[] lB = getLowerBound();

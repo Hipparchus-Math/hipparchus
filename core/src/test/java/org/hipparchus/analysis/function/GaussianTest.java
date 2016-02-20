@@ -21,7 +21,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Gaussian;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -99,7 +99,7 @@ public class GaussianTest {
         g.value(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage2() {
         final Gaussian.Parametric g = new Gaussian.Parametric();
         g.value(0, new double[] {0});
@@ -117,7 +117,7 @@ public class GaussianTest {
         g.gradient(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage5() {
         final Gaussian.Parametric g = new Gaussian.Parametric();
         g.gradient(0, new double[] {0});

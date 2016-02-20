@@ -23,7 +23,7 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Logit;
 import org.hipparchus.analysis.function.Sigmoid;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
@@ -112,7 +112,7 @@ public class LogitTest {
         g.value(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage2() {
         final Logit.Parametric g = new Logit.Parametric();
         g.value(0, new double[] {0});
@@ -124,7 +124,7 @@ public class LogitTest {
         g.gradient(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage4() {
         final Logit.Parametric g = new Logit.Parametric();
         g.gradient(0, new double[] {0});

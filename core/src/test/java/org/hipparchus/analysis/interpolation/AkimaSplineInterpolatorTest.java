@@ -21,7 +21,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -82,7 +82,7 @@ public class AkimaSplineInterpolatorTest
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect data set array with different sizes." );
         }
-        catch ( DimensionMismatchException iae )
+        catch ( MathIllegalArgumentException iae )
         {
             // Expected.
         }

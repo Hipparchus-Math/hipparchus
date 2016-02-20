@@ -16,7 +16,6 @@ package org.hipparchus.util;
 import java.util.Arrays;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
@@ -26,9 +25,6 @@ import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.Well1024a;
-import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -75,19 +71,19 @@ public class MathArraysTest {
         }
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEbeAddPrecondition() {
         MathArrays.ebeAdd(new double[3], new double[4]);
     }
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEbeSubtractPrecondition() {
         MathArrays.ebeSubtract(new double[3], new double[4]);
     }
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEbeMultiplyPrecondition() {
         MathArrays.ebeMultiply(new double[3], new double[4]);
     }
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEbeDividePrecondition() {
         MathArrays.ebeDivide(new double[3], new double[4]);
     }
@@ -364,8 +360,8 @@ public class MathArraysTest {
         MathArrays.checkRectangular(empty);
         try {
             MathArrays.checkRectangular(ragged);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try {
@@ -482,7 +478,7 @@ public class MathArraysTest {
         }
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCheckEqualLength1() {
         MathArrays.checkEqualLength(new double[] {1, 2, 3},
                                     new double[] {1, 2, 3, 4});
@@ -578,8 +574,8 @@ public class MathArraysTest {
         final double[] onep = {2};
         try {
             MathArrays.sortInPlace(one, two);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {

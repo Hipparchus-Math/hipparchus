@@ -20,7 +20,7 @@ package org.hipparchus.linear;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
@@ -106,21 +106,21 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      *
      * @param m  Matrix to postmultiply by.
      * @return {@code this} * {@code m}.
-     * @throws DimensionMismatchException if the number of columns of
+     * @throws MathIllegalArgumentException if the number of columns of
      * {@code this} matrix is not equal to the number of rows of matrix
      * {@code m}.
      */
-    FieldMatrix<T> multiply(FieldMatrix<T> m) throws DimensionMismatchException;
+    FieldMatrix<T> multiply(FieldMatrix<T> m) throws MathIllegalArgumentException;
 
     /**
      * Premultiply this matrix by {@code m}.
      *
      * @param m Matrix to premultiply by.
      * @return {@code m} * {@code this}.
-     * @throws DimensionMismatchException if the number of columns of {@code m}
+     * @throws MathIllegalArgumentException if the number of columns of {@code m}
      * differs from the number of rows of {@code this} matrix.
      */
-    FieldMatrix<T> preMultiply(FieldMatrix<T> m) throws DimensionMismatchException;
+    FieldMatrix<T> preMultiply(FieldMatrix<T> m) throws MathIllegalArgumentException;
 
     /**
      * Returns the result multiplying this with itself <code>p</code> times.
@@ -246,13 +246,13 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @throws OutOfRangeException if {@code subMatrix} does not fit into this
      * matrix from element in {@code (row, column)}.
      * @throws NoDataException if a row or column of {@code subMatrix} is empty.
-     * @throws DimensionMismatchException if {@code subMatrix} is not
+     * @throws MathIllegalArgumentException if {@code subMatrix} is not
      * rectangular (not all rows have the same length).
      * @throws NullArgumentException if {@code subMatrix} is {@code null}.
      * @since 2.0
      */
     void setSubMatrix(T[][] subMatrix, int row, int column)
-        throws DimensionMismatchException, OutOfRangeException,
+        throws MathIllegalArgumentException, OutOfRangeException,
         NoDataException, NullArgumentException;
 
    /**
@@ -462,20 +462,20 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      *
      * @param v the vector to operate on
      * @return {@code this * v}
-     * @throws DimensionMismatchException if the number of columns of
+     * @throws MathIllegalArgumentException if the number of columns of
      * {@code this} matrix is not equal to the size of the vector {@code v}.
      */
-    T[] operate(T[] v) throws DimensionMismatchException;
+    T[] operate(T[] v) throws MathIllegalArgumentException;
 
     /**
      * Returns the result of multiplying this by the vector {@code v}.
      *
      * @param v the vector to operate on
      * @return {@code this * v}
-     * @throws DimensionMismatchException if the number of columns of
+     * @throws MathIllegalArgumentException if the number of columns of
      * {@code this} matrix is not equal to the size of the vector {@code v}.
      */
-    FieldVector<T> operate(FieldVector<T> v) throws DimensionMismatchException;
+    FieldVector<T> operate(FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Returns the (row) vector result of premultiplying this by the vector
@@ -483,10 +483,10 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      *
      * @param v the row vector to premultiply by
      * @return {@code v * this}
-     * @throws DimensionMismatchException if the number of rows of {@code this}
+     * @throws MathIllegalArgumentException if the number of rows of {@code this}
      * matrix is not equal to the size of the vector {@code v}
      */
-    T[] preMultiply(T[] v) throws DimensionMismatchException;
+    T[] preMultiply(T[] v) throws MathIllegalArgumentException;
 
     /**
      * Returns the (row) vector result of premultiplying this by the vector
@@ -494,10 +494,10 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      *
      * @param v the row vector to premultiply by
      * @return {@code v * this}
-     * @throws DimensionMismatchException if the number of rows of {@code this}
+     * @throws MathIllegalArgumentException if the number of rows of {@code this}
      * matrix is not equal to the size of the vector {@code v}
      */
-    FieldVector<T> preMultiply(FieldVector<T> v) throws DimensionMismatchException;
+    FieldVector<T> preMultiply(FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries in row order.

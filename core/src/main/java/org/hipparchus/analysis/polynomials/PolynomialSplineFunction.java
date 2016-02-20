@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
@@ -92,13 +92,13 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      * @param polynomials Polynomial functions that make up the spline.
      * @throws NullArgumentException if either of the input arrays is {@code null}.
      * @throws NumberIsTooSmallException if knots has length less than 2.
-     * @throws DimensionMismatchException if {@code polynomials.length != knots.length - 1}.
+     * @throws MathIllegalArgumentException if {@code polynomials.length != knots.length - 1}.
      * @throws NonMonotonicSequenceException if the {@code knots} array is not strictly increasing.
      *
      */
     public PolynomialSplineFunction(double knots[], PolynomialFunction polynomials[])
         throws NullArgumentException, NumberIsTooSmallException,
-               DimensionMismatchException, NonMonotonicSequenceException{
+               MathIllegalArgumentException, NonMonotonicSequenceException{
         if (knots == null ||
             polynomials == null) {
             throw new NullArgumentException();
@@ -108,7 +108,8 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
                                                 2, knots.length, false);
         }
         if (knots.length - 1 != polynomials.length) {
-            throw new DimensionMismatchException(polynomials.length, knots.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   polynomials.length, knots.length);
         }
         MathArrays.checkOrder(knots);
 

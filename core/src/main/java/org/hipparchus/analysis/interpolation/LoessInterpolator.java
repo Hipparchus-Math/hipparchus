@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
@@ -171,7 +171,7 @@ public class LoessInterpolator
      * @return A cubic spline built upon a loess fit to the data at the original abscissae
      * @throws NonMonotonicSequenceException if {@code xval} not sorted in
      * strictly increasing order.
-     * @throws DimensionMismatchException if {@code xval} and {@code yval} have
+     * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
      * @throws NoDataException if {@code xval} or {@code yval} has zero size.
      * @throws NotFiniteNumberException if any of the arguments and values are
@@ -184,7 +184,7 @@ public class LoessInterpolator
     public final PolynomialSplineFunction interpolate(final double[] xval,
                                                       final double[] yval)
         throws NonMonotonicSequenceException,
-               DimensionMismatchException,
+               MathIllegalArgumentException,
                NoDataException,
                NotFiniteNumberException,
                NumberIsTooSmallException {
@@ -201,7 +201,7 @@ public class LoessInterpolator
      * @return the values of the loess fit at corresponding original abscissae.
      * @throws NonMonotonicSequenceException if {@code xval} not sorted in
      * strictly increasing order.
-     * @throws DimensionMismatchException if {@code xval} and {@code yval} have
+     * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
      * @throws NoDataException if {@code xval} or {@code yval} has zero size.
      * @throws NotFiniteNumberException if any of the arguments and values are
@@ -214,12 +214,13 @@ public class LoessInterpolator
     public final double[] smooth(final double[] xval, final double[] yval,
                                  final double[] weights)
         throws NonMonotonicSequenceException,
-               DimensionMismatchException,
+               MathIllegalArgumentException,
                NoDataException,
                NotFiniteNumberException,
                NumberIsTooSmallException {
         if (xval.length != yval.length) {
-            throw new DimensionMismatchException(xval.length, yval.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xval.length, yval.length);
         }
 
         final int n = xval.length;
@@ -370,7 +371,7 @@ public class LoessInterpolator
      * @return values of the loess fit at corresponding original abscissae
      * @throws NonMonotonicSequenceException if {@code xval} not sorted in
      * strictly increasing order.
-     * @throws DimensionMismatchException if {@code xval} and {@code yval} have
+     * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
      * @throws NoDataException if {@code xval} or {@code yval} has zero size.
      * @throws NotFiniteNumberException if any of the arguments and values are
@@ -381,12 +382,13 @@ public class LoessInterpolator
      */
     public final double[] smooth(final double[] xval, final double[] yval)
         throws NonMonotonicSequenceException,
-               DimensionMismatchException,
+               MathIllegalArgumentException,
                NoDataException,
                NotFiniteNumberException,
                NumberIsTooSmallException {
         if (xval.length != yval.length) {
-            throw new DimensionMismatchException(xval.length, yval.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   xval.length, yval.length);
         }
 
         final double[] unitWeights = new double[xval.length];

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 
 /** Interface to compute exactly Jacobian matrix for some parameter
@@ -38,11 +38,11 @@ public interface ParameterJacobianProvider extends Parameterizable {
      * @param dFdP placeholder array where to put the Jacobian matrix of the
      * ODE with respect to the parameter
      * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      * @exception UnknownParameterException if the parameter is not supported
      */
     void computeParameterJacobian(double t, double[] y, double[] yDot,
                                   String paramName, double[] dFdP)
-        throws DimensionMismatchException, MaxCountExceededException, UnknownParameterException;
+        throws MathIllegalArgumentException, MaxCountExceededException, UnknownParameterException;
 
 }

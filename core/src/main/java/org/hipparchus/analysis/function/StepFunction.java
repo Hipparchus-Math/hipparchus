@@ -20,7 +20,8 @@ package org.hipparchus.analysis.function;
 import java.util.Arrays;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
@@ -55,13 +56,13 @@ public class StepFunction implements UnivariateFunction {
      * if the {@code x} array is not sorted in strictly increasing order.
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws NoDataException if {@code x} or {@code y} are zero-length.
-     * @throws DimensionMismatchException if {@code x} and {@code y} do not
+     * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
      */
     public StepFunction(double[] x,
                         double[] y)
         throws NullArgumentException, NoDataException,
-               DimensionMismatchException, NonMonotonicSequenceException {
+               MathIllegalArgumentException, NonMonotonicSequenceException {
         if (x == null ||
             y == null) {
             throw new NullArgumentException();
@@ -71,7 +72,8 @@ public class StepFunction implements UnivariateFunction {
             throw new NoDataException();
         }
         if (y.length != x.length) {
-            throw new DimensionMismatchException(y.length, x.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   y.length, x.length);
         }
         MathArrays.checkOrder(x);
 

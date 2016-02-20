@@ -18,21 +18,15 @@ package org.hipparchus.genetics;
 
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.genetics.BinaryChromosome;
-import org.hipparchus.genetics.Chromosome;
-import org.hipparchus.genetics.ChromosomePair;
-import org.hipparchus.genetics.CrossoverPolicy;
-import org.hipparchus.genetics.NPointCrossover;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class NPointCrossoverTest {
 
-    @Test(expected = DimensionMismatchException.class)
-    public void testCrossoverDimensionMismatchException() {
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testCrossoverMathIllegalArgumentException() {
         final Integer[] p1 = new Integer[] {1,0,1,0,0,1,0,1,1};
         final Integer[] p2 = new Integer[] {0,1,1,0,1};
 

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.hipparchus.distribution.FDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
@@ -80,12 +80,12 @@ public class OneWayAnova {
      * arrays each containing data for one category
      * @return Fvalue
      * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
-     * @throws DimensionMismatchException if the length of the <code>categoryData</code>
+     * @throws MathIllegalArgumentException if the length of the <code>categoryData</code>
      * array is less than 2 or a contained <code>double[]</code> array does not have
      * at least two values
      */
     public double anovaFValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         AnovaStats a = anovaStats(categoryData);
         return a.F;
@@ -114,14 +114,14 @@ public class OneWayAnova {
      * arrays each containing data for one category
      * @return Pvalue
      * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
-     * @throws DimensionMismatchException if the length of the <code>categoryData</code>
+     * @throws MathIllegalArgumentException if the length of the <code>categoryData</code>
      * array is less than 2 or a contained <code>double[]</code> array does not have
      * at least two values
      * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
      * @throws MaxCountExceededException if the maximum number of iterations is exceeded
      */
     public double anovaPValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException, MaxCountExceededException {
 
         final AnovaStats a = anovaStats(categoryData);
@@ -155,7 +155,7 @@ public class OneWayAnova {
      * only or for one data element per category
      * @return Pvalue
      * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
-     * @throws DimensionMismatchException if the length of the <code>categoryData</code>
+     * @throws MathIllegalArgumentException if the length of the <code>categoryData</code>
      * array is less than 2 or a contained {@link SummaryStatistics} does not have
      * at least two values
      * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
@@ -164,7 +164,7 @@ public class OneWayAnova {
      */
     public double anovaPValue(final Collection<SummaryStatistics> categoryData,
                               final boolean allowOneElementData)
-        throws NullArgumentException, DimensionMismatchException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException, MaxCountExceededException {
 
         final AnovaStats a = anovaStats(categoryData, allowOneElementData);
@@ -184,13 +184,13 @@ public class OneWayAnova {
      * @return computed AnovaStats
      * @throws NullArgumentException
      *             if <code>categoryData</code> is <code>null</code>
-     * @throws DimensionMismatchException
+     * @throws MathIllegalArgumentException
      *             if the length of the <code>categoryData</code> array is less
      *             than 2 or a contained <code>double[]</code> array does not
      *             contain at least two values
      */
     private AnovaStats anovaStats(final Collection<double[]> categoryData)
-        throws NullArgumentException, DimensionMismatchException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         MathUtils.checkNotNull(categoryData);
 
@@ -237,7 +237,7 @@ public class OneWayAnova {
      * @return true if the null hypothesis can be rejected with
      * confidence 1 - alpha
      * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
-     * @throws DimensionMismatchException if the length of the <code>categoryData</code>
+     * @throws MathIllegalArgumentException if the length of the <code>categoryData</code>
      * array is less than 2 or a contained <code>double[]</code> array does not have
      * at least two values
      * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
@@ -246,7 +246,7 @@ public class OneWayAnova {
      */
     public boolean anovaTest(final Collection<double[]> categoryData,
                              final double alpha)
-        throws NullArgumentException, DimensionMismatchException,
+        throws NullArgumentException, MathIllegalArgumentException,
         OutOfRangeException, MathIllegalStateException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
@@ -267,27 +267,27 @@ public class OneWayAnova {
      * only or for one data element per category
      * @return computed AnovaStats
      * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
-     * @throws DimensionMismatchException if <code>allowOneElementData</code> is false and the number of
+     * @throws MathIllegalArgumentException if <code>allowOneElementData</code> is false and the number of
      * categories is less than 2 or a contained SummaryStatistics does not contain
      * at least two values
      */
     private AnovaStats anovaStats(final Collection<SummaryStatistics> categoryData,
                                   final boolean allowOneElementData)
-        throws NullArgumentException, DimensionMismatchException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         MathUtils.checkNotNull(categoryData);
 
         if (!allowOneElementData) {
             // check if we have enough categories
             if (categoryData.size() < 2) {
-                throw new DimensionMismatchException(LocalizedFormats.TWO_OR_MORE_CATEGORIES_REQUIRED,
+                throw new MathIllegalArgumentException(LocalizedFormats.TWO_OR_MORE_CATEGORIES_REQUIRED,
                                                      categoryData.size(), 2);
             }
 
             // check if each category has enough data
             for (final SummaryStatistics array : categoryData) {
                 if (array.getN() <= 1) {
-                    throw new DimensionMismatchException(LocalizedFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED,
+                    throw new MathIllegalArgumentException(LocalizedFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED,
                                                          (int) array.getN(), 2);
                 }
             }

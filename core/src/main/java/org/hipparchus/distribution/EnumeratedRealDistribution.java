@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
@@ -66,7 +67,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      *
      * @param singletons array of random variable values.
      * @param probabilities array of probabilities.
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code singletons.length != probabilities.length}
      * @throws NotPositiveException if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
@@ -74,7 +75,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @throws MathArithmeticException all of the probabilities are 0.
      */
     public EnumeratedRealDistribution(final double[] singletons, final double[] probabilities)
-    throws DimensionMismatchException, NotPositiveException, MathArithmeticException,
+    throws MathIllegalArgumentException, NotPositiveException, MathArithmeticException,
            NotFiniteNumberException, NotANumberException {
         this(new Well19937c(), singletons, probabilities);
     }
@@ -86,7 +87,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @param rng random number generator.
      * @param singletons array of random variable values.
      * @param probabilities array of probabilities.
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code singletons.length != probabilities.length}
      * @throws NotPositiveException if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
@@ -95,7 +96,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      */
     public EnumeratedRealDistribution(final RandomGenerator rng,
                                     final double[] singletons, final double[] probabilities)
-        throws DimensionMismatchException, NotPositiveException, MathArithmeticException,
+        throws MathIllegalArgumentException, NotPositiveException, MathArithmeticException,
                NotFiniteNumberException, NotANumberException {
         super(rng);
 
@@ -154,7 +155,8 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      */
     private static List<Pair<Double, Double>>  createDistribution(double[] singletons, double[] probabilities) {
         if (singletons.length != probabilities.length) {
-            throw new DimensionMismatchException(probabilities.length, singletons.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   probabilities.length, singletons.length);
         }
 
         final List<Pair<Double, Double>> samples = new ArrayList<Pair<Double, Double>>(singletons.length);

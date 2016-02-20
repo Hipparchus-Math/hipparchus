@@ -47,7 +47,7 @@ import org.hipparchus.analysis.function.Sqrt;
 import org.hipparchus.analysis.function.Tan;
 import org.hipparchus.analysis.function.Tanh;
 import org.hipparchus.analysis.function.Ulp;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.NotPositiveException;
@@ -551,7 +551,7 @@ public abstract class RealVectorAbstractTest {
         doTestEbeBinaryOperation(BinaryOperation.ADD, true, false);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testAddDimensionMismatch() {
         doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.ADD);
     }
@@ -566,7 +566,7 @@ public abstract class RealVectorAbstractTest {
         doTestEbeBinaryOperation(BinaryOperation.SUB, true, false);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSubtractDimensionMismatch() {
         doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.SUB);
     }
@@ -581,7 +581,7 @@ public abstract class RealVectorAbstractTest {
         doTestEbeBinaryOperation(BinaryOperation.MUL, true, false);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testEbeMultiplyDimensionMismatch() {
         doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.MUL);
     }
@@ -596,7 +596,7 @@ public abstract class RealVectorAbstractTest {
         doTestEbeBinaryOperation(BinaryOperation.DIV, true, false);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testEbeDivideDimensionMismatch() {
         doTestEbeBinaryOperationDimensionMismatch(BinaryOperation.DIV);
     }
@@ -632,7 +632,7 @@ public abstract class RealVectorAbstractTest {
         doTestGetDistance(true);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testGetDistanceDimensionMismatch() {
         create(new double[4]).getDistance(createAlien(new double[5]));
     }
@@ -681,7 +681,7 @@ public abstract class RealVectorAbstractTest {
         doTestGetL1Distance(true);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testGetL1DistanceDimensionMismatch() {
         create(new double[4]).getL1Distance(createAlien(new double[5]));
     }
@@ -730,7 +730,7 @@ public abstract class RealVectorAbstractTest {
         doTestGetLInfDistance(true);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testGetLInfDistanceDimensionMismatch() {
         create(new double[4]).getLInfDistance(createAlien(new double[5]));
     }
@@ -986,7 +986,7 @@ public abstract class RealVectorAbstractTest {
         create(new double[4]).projection(create(new double[4]));
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testProjectionDimensionMismatch() {
         final RealVector v1 = create(new double[4]);
         final RealVector v2 = create(new double[5]);
@@ -1157,12 +1157,12 @@ public abstract class RealVectorAbstractTest {
         doTestCombine(false, true);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testCombineDimensionMismatchSameType() {
         doTestCombineDimensionMismatch(false, false);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testCombineDimensionMismatchMixedTypes() {
         doTestCombineDimensionMismatch(false, true);
     }
@@ -1177,12 +1177,12 @@ public abstract class RealVectorAbstractTest {
         doTestCombine(true, true);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testCombineToSelfDimensionMismatchSameType() {
         doTestCombineDimensionMismatch(true, false);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testCombineToSelfDimensionMismatchMixedTypes() {
         doTestCombineDimensionMismatch(true, true);
     }
@@ -1261,7 +1261,7 @@ public abstract class RealVectorAbstractTest {
         doTestDotProductSpecialValues(false);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testDotProductDimensionMismatchSameType() {
         doTestDotProductDimensionMismatch(false);
     }
@@ -1272,7 +1272,7 @@ public abstract class RealVectorAbstractTest {
         doTestDotProductSpecialValues(true);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testDotProductDimensionMismatchMixedTypes() {
         doTestDotProductDimensionMismatch(true);
     }
@@ -1332,7 +1332,7 @@ public abstract class RealVectorAbstractTest {
         w.cosine(v);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCosineDimensionMismatch() {
         final RealVector v = create(new double[] {1, 2, 3});
         final RealVector w = create(new double[] {1, 2, 3, 4});

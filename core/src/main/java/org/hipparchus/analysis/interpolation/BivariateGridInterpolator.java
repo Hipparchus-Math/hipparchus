@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -39,13 +39,13 @@ public interface BivariateGridInterpolator {
      * {@code fval[i][j] = f(xval[i], yval[j])}.
      * @return a function which interpolates the dataset.
      * @throws NoDataException if any of the arrays has zero length.
-     * @throws DimensionMismatchException if the array lengths are inconsistent.
+     * @throws MathIllegalArgumentException if the array lengths are inconsistent.
      * @throws NonMonotonicSequenceException if the array is not sorted.
      * @throws NumberIsTooSmallException if the number of points is too small for
      * the order of the interpolation
      */
     BivariateFunction interpolate(double[] xval, double[] yval,
                                   double[][] fval)
-        throws NoDataException, DimensionMismatchException,
+        throws NoDataException, MathIllegalArgumentException,
                NonMonotonicSequenceException, NumberIsTooSmallException;
 }

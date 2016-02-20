@@ -19,7 +19,7 @@ package org.hipparchus.distribution;
 import static org.junit.Assert.assertEquals;
 
 import org.hipparchus.distribution.EnumeratedIntegerDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
@@ -59,8 +59,8 @@ public class EnumeratedIntegerDistributionTest {
         EnumeratedIntegerDistribution invalid = null;
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0});
-            Assert.fail("Expected DimensionMismatchException");
-        } catch (DimensionMismatchException e) {
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, -1.0});

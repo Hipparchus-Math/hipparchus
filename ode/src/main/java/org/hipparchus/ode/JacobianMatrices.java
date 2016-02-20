@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
@@ -97,12 +96,12 @@ public class JacobianMatrices {
      * @param hY step used for finite difference computation with respect to state vector
      * @param parameters parameters to consider for Jacobian matrices processing
      * (may be null if parameters Jacobians is not desired)
-     * @exception DimensionMismatchException if there is a dimension mismatch between
+     * @exception MathIllegalArgumentException if there is a dimension mismatch between
      * the steps array {@code hY} and the equation dimension
      */
     public JacobianMatrices(final FirstOrderDifferentialEquations fode, final double[] hY,
                             final String... parameters)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         this(new MainStateJacobianWrapper(fode, hY), parameters);
     }
 
@@ -154,14 +153,14 @@ public class JacobianMatrices {
 
     /** Register the variational equations for the Jacobians matrices to the expandable set.
      * @param expandable expandable set into which variational equations should be registered
-     * @throws DimensionMismatchException if the dimension of the partial state does not
+     * @throws MathIllegalArgumentException if the dimension of the partial state does not
      * match the selected equations set dimension
      * @exception MismatchedEquations if the primary set of the expandable set does
      * not match the one used to build the instance
      * @see ExpandableStatefulODE#addSecondaryEquations(SecondaryEquations)
      */
     public void registerVariationalEquations(final ExpandableStatefulODE expandable)
-        throws DimensionMismatchException, MismatchedEquations {
+        throws MathIllegalArgumentException, MismatchedEquations {
 
         // safety checks
         final FirstOrderDifferentialEquations ode = (jode instanceof MainStateJacobianWrapper) ?
@@ -230,10 +229,10 @@ public class JacobianMatrices {
      * matrix with respect to state is set to identity.
      * </p>
      * @param dYdY0 initial Jacobian matrix w.r.t. state
-     * @exception DimensionMismatchException if matrix dimensions are incorrect
+     * @exception MathIllegalArgumentException if matrix dimensions are incorrect
      */
     public void setInitialMainStateJacobian(final double[][] dYdY0)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         // Check dimensions
         checkDimension(stateDim, dYdY0);
@@ -260,10 +259,10 @@ public class JacobianMatrices {
      * @param pName parameter name
      * @param dYdP initial Jacobian column vector with respect to the parameter
      * @exception UnknownParameterException if a parameter is not supported
-     * @throws DimensionMismatchException if the column vector does not match state dimension
+     * @throws MathIllegalArgumentException if the column vector does not match state dimension
      */
     public void setInitialParameterJacobian(final String pName, final double[] dYdP)
-        throws UnknownParameterException, DimensionMismatchException {
+        throws UnknownParameterException, MathIllegalArgumentException {
 
         // Check dimensions
         checkDimension(stateDim, dYdP);
@@ -324,13 +323,14 @@ public class JacobianMatrices {
     /** Check array dimensions.
      * @param expected expected dimension
      * @param array (may be null if expected is 0)
-     * @throws DimensionMismatchException if the array dimension does not match the expected one
+     * @throws MathIllegalArgumentException if the array dimension does not match the expected one
      */
     private void checkDimension(final int expected, final Object array)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         int arrayDimension = (array == null) ? 0 : Array.getLength(array);
         if (arrayDimension != expected) {
-            throw new DimensionMismatchException(arrayDimension, expected);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                   arrayDimension, expected);
         }
     }
 
@@ -352,7 +352,7 @@ public class JacobianMatrices {
         @Override
         public void computeDerivatives(final double t, final double[] y, final double[] yDot,
                                        final double[] z, final double[] zDot)
-            throws MaxCountExceededException, DimensionMismatchException {
+            throws MaxCountExceededException, MathIllegalArgumentException {
 
             // Lazy initialization
             if (dirtyParameter && (paramDim != 0)) {
@@ -430,16 +430,17 @@ public class JacobianMatrices {
         /** Wrap a {@link FirstOrderDifferentialEquations} into a {@link MainStateJacobianProvider}.
          * @param ode original ODE problem, without jacobians computation skill
          * @param hY step sizes to compute the jacobian df/dy
-         * @exception DimensionMismatchException if there is a dimension mismatch between
+         * @exception MathIllegalArgumentException if there is a dimension mismatch between
          * the steps array {@code hY} and the equation dimension
          */
         MainStateJacobianWrapper(final FirstOrderDifferentialEquations ode,
                                  final double[] hY)
-            throws DimensionMismatchException {
+            throws MathIllegalArgumentException {
             this.ode = ode;
             this.hY = hY.clone();
             if (hY.length != ode.getDimension()) {
-                throw new DimensionMismatchException(ode.getDimension(), hY.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                                                       ode.getDimension(), hY.length);
             }
         }
 
@@ -452,14 +453,14 @@ public class JacobianMatrices {
         /** {@inheritDoc} */
         @Override
         public void computeDerivatives(double t, double[] y, double[] yDot)
-            throws MaxCountExceededException, DimensionMismatchException {
+            throws MaxCountExceededException, MathIllegalArgumentException {
             ode.computeDerivatives(t, y, yDot);
         }
 
         /** {@inheritDoc} */
         @Override
         public void computeMainStateJacobian(double t, double[] y, double[] yDot, double[][] dFdY)
-            throws MaxCountExceededException, DimensionMismatchException {
+            throws MaxCountExceededException, MathIllegalArgumentException {
 
             final int n = ode.getDimension();
             final double[] tmpDot = new double[n];
