@@ -27,7 +27,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;
@@ -336,7 +335,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
          * @param idxStep Index step for searching interpolation bounds points.
          * @param y Y value for which X should be determined.
          * @return the value of X for the specified Y.
-         * @throws ZeroException if {@code idxStep} is 0.
+         * @throws MathIllegalArgumentException if {@code idxStep} is 0.
          * @throws MathIllegalArgumentException if specified {@code y} is not within the
          * range of the specified {@code points}.
          */
@@ -346,7 +345,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                                        double y)
             throws MathIllegalArgumentException {
             if (idxStep == 0) {
-                throw new ZeroException();
+                throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
             }
             final WeightedObservedPoint[] twoPoints
                 = getInterpolationPointsForY(points, startIdx, idxStep, y);
@@ -373,7 +372,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
          * @param y Y value for which X should be determined.
          * @return the array containing two points suitable for determining X at
          * the specified Y.
-         * @throws ZeroException if {@code idxStep} is 0.
+         * @throws MathIllegalArgumentException if {@code idxStep} is 0.
          * @throws MathIllegalArgumentException if specified {@code y} is not within the
          * range of the specified {@code points}.
          */
@@ -383,7 +382,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                                                                    double y)
             throws MathIllegalArgumentException {
             if (idxStep == 0) {
-                throw new ZeroException();
+                throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
             }
             for (int i = startIdx;
                  idxStep < 0 ? i + idxStep >= 0 : i + idxStep < points.length;

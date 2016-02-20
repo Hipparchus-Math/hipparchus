@@ -28,3 +28,4 @@ OutOfRangeException                MathIllegalArgumentException
 SingularMatrixException            MathIllegalArgumentException
 TooManyEvaluationsException        MathIllegalStateException
 TooManyIterationsException         MathIllegalStateException
+ZeroException                      MathIllegalArgumentException

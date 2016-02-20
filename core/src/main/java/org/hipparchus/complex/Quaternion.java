@@ -19,9 +19,8 @@ package org.hipparchus.complex;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.ZeroException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
@@ -247,13 +246,13 @@ public final class Quaternion implements Serializable {
      * The norm of the quaternion must not be zero.
      *
      * @return a normalized quaternion.
-     * @throws ZeroException if the norm of the quaternion is zero.
+     * @throws MathIllegalArgumentException if the norm of the quaternion is zero.
      */
     public Quaternion normalize() {
         final double norm = getNorm();
 
         if (norm < Precision.SAFE_MIN) {
-            throw new ZeroException(LocalizedFormats.NORM, norm);
+            throw new MathIllegalArgumentException(LocalizedFormats.NORM, norm);
         }
 
         return new Quaternion(q0 / norm,
@@ -359,12 +358,12 @@ public final class Quaternion implements Serializable {
      * The norm of the quaternion must not be zero.
      *
      * @return the inverse.
-     * @throws ZeroException if the norm (squared) of the quaternion is zero.
+     * @throws MathIllegalArgumentException if the norm (squared) of the quaternion is zero.
      */
     public Quaternion getInverse() {
         final double squareNorm = q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3;
         if (squareNorm < Precision.SAFE_MIN) {
-            throw new ZeroException(LocalizedFormats.NORM, squareNorm);
+            throw new MathIllegalArgumentException(LocalizedFormats.NORM, squareNorm);
         }
 
         return new Quaternion(q0 / squareNorm,

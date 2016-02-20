@@ -21,7 +21,6 @@ import java.io.Serializable;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -110,12 +109,12 @@ public class RootsOfUnity implements Serializable {
      * </ul>
      *
      * @param n the (signed) number of roots of unity to be computed
-     * @throws ZeroException if {@code n = 0}
+     * @throws MathIllegalArgumentException if {@code n = 0}
      */
-    public synchronized void computeRoots(int n) throws ZeroException {
+    public synchronized void computeRoots(int n) throws MathIllegalArgumentException {
 
         if (n == 0) {
-            throw new ZeroException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.CANNOT_COMPUTE_0TH_ROOT_OF_UNITY);
         }
 

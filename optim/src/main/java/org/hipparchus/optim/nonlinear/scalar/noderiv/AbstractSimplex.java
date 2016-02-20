@@ -24,7 +24,6 @@ import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
 
@@ -88,14 +87,14 @@ public abstract class AbstractSimplex implements OptimizationData {
      * @param steps Steps along the canonical axes representing box edges. They
      * may be negative but not zero.
      * @throws NullArgumentException if {@code steps} is {@code null}.
-     * @throws ZeroException if one of the steps is zero.
+     * @throws MathIllegalArgumentException if one of the steps is zero.
      */
     protected AbstractSimplex(final double[] steps) {
         if (steps == null) {
             throw new NullArgumentException();
         }
         if (steps.length == 0) {
-            throw new ZeroException();
+            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
         }
         dimension = steps.length;
 
@@ -106,7 +105,7 @@ public abstract class AbstractSimplex implements OptimizationData {
             final double[] vertexI = startConfiguration[i];
             for (int j = 0; j < i + 1; j++) {
                 if (steps[j] == 0) {
-                    throw new ZeroException(LocalizedFormats.EQUAL_VERTICES_IN_SIMPLEX);
+                    throw new MathIllegalArgumentException(LocalizedFormats.EQUAL_VERTICES_IN_SIMPLEX);
                 }
                 System.arraycopy(steps, 0, vertexI, 0, j + 1);
             }

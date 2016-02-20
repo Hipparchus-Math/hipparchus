@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 
 /**
@@ -297,7 +296,7 @@ public class TestUtils  {
      */
     public static double chiSquareDataSetsComparison(final long[] observed1,
                                                      final long[] observed2)
-        throws MathIllegalArgumentException, ZeroException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         return CHI_SQUARE_TEST.chiSquareDataSetsComparison(observed1, observed2);
     }
 
@@ -308,7 +307,7 @@ public class TestUtils  {
      */
     public static double chiSquareTestDataSetsComparison(final long[] observed1,
                                                          final long[] observed2)
-        throws MathIllegalArgumentException, ZeroException,
+        throws MathIllegalArgumentException, MathIllegalArgumentException,
         MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTestDataSetsComparison(observed1, observed2);
     }
@@ -322,7 +321,7 @@ public class TestUtils  {
                                                           final long[] observed2,
                                                           final double alpha)
         throws MathIllegalArgumentException,
-        ZeroException, MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTestDataSetsComparison(observed1, observed2, alpha);
     }
 
@@ -401,7 +400,7 @@ public class TestUtils  {
      */
     public static double gDataSetsComparison(final long[] observed1,
                                                   final long[] observed2)
-        throws MathIllegalArgumentException, ZeroException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         return G_TEST.gDataSetsComparison(observed1, observed2);
     }
 
@@ -410,7 +409,7 @@ public class TestUtils  {
      * @since 3.1
      */
     public static double rootLogLikelihoodRatio(final long k11, final long k12, final long k21, final long k22)
-        throws MathIllegalArgumentException, ZeroException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         return G_TEST.rootLogLikelihoodRatio(k11, k12, k21, k22);
     }
 
@@ -421,7 +420,7 @@ public class TestUtils  {
      */
     public static double gTestDataSetsComparison(final long[] observed1,
                                                         final long[] observed2)
-        throws MathIllegalArgumentException, ZeroException,
+        throws MathIllegalArgumentException, MathIllegalArgumentException,
         MaxCountExceededException {
         return G_TEST.gTestDataSetsComparison(observed1, observed2);
     }
@@ -434,7 +433,7 @@ public class TestUtils  {
                                                   final long[] observed2,
                                                   final double alpha)
         throws MathIllegalArgumentException,
-        ZeroException, MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
         return G_TEST.gTestDataSetsComparison(observed1, observed2, alpha);
     }
 

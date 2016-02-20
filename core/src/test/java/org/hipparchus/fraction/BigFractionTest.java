@@ -20,11 +20,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -80,8 +79,8 @@ public class BigFractionTest {
         }
         try {
             new BigFraction(BigInteger.ONE, BigInteger.ZERO);
-            Assert.fail("Expecting ZeroException");
-        } catch (ZeroException npe) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException npe) {
             // expected
         }
         try {
@@ -322,8 +321,8 @@ public class BigFractionTest {
         f = new BigFraction(0, 3);
         try {
             f = f.reciprocal();
-            Assert.fail("expecting ZeroException");
-        } catch (ZeroException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
         }
 
         // large values
@@ -590,8 +589,8 @@ public class BigFractionTest {
         Assert.assertTrue(BigFraction.ZERO.equals(BigFraction.getReducedFraction(0, -1)));
         try {
             BigFraction.getReducedFraction(1, 0);
-            Assert.fail("expecting ZeroException");
-        } catch (ZeroException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         Assert.assertEquals(BigFraction.getReducedFraction(2, Integer.MIN_VALUE).getNumeratorAsInt(), -1);

@@ -37,7 +37,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
@@ -229,9 +228,9 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *
      * @throws IOException if an IO error occurs
      * @throws NullArgumentException if url is null
-     * @throws ZeroException if URL contains no data
+     * @throws MathIllegalArgumentException if URL contains no data
      */
-    public void load(URL url) throws IOException, NullArgumentException, ZeroException {
+    public void load(URL url) throws IOException, NullArgumentException, MathIllegalArgumentException {
         MathUtils.checkNotNull(url);
         Charset charset = Charset.forName(FILE_CHARSET);
         BufferedReader in =
@@ -240,7 +239,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             DataAdapter da = new StreamDataAdapter(in);
             da.computeStats();
             if (sampleStats.getN() == 0) {
-                throw new ZeroException(LocalizedFormats.URL_CONTAINS_NO_DATA, url);
+                throw new MathIllegalArgumentException(LocalizedFormats.URL_CONTAINS_NO_DATA, url);
             }
             // new adapter for the second pass
             in = new BufferedReader(new InputStreamReader(url.openStream(), charset));

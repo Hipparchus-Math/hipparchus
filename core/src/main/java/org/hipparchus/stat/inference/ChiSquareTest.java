@@ -21,7 +21,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -395,13 +394,13 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException the the length of the arrays does not match
      * @throws MathIllegalArgumentException if any entries in <code>observed1</code> or
      * <code>observed2</code> are negative
-     * @throws ZeroException if either all counts of <code>observed1</code> or
+     * @throws MathIllegalArgumentException if either all counts of <code>observed1</code> or
      * <code>observed2</code> are zero, or if the count at some index is zero
      * for both arrays
      * @since 1.2
      */
     public double chiSquareDataSetsComparison(long[] observed1, long[] observed2)
-        throws MathIllegalArgumentException, ZeroException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
@@ -428,7 +427,7 @@ public class ChiSquareTest {
         }
         // Ensure neither sample is uniformly 0
         if (countSum1 == 0 || countSum2 == 0) {
-            throw new ZeroException();
+            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
         }
         // Compare and compute weight only if different
         unequalCounts = countSum1 != countSum2;
@@ -442,7 +441,7 @@ public class ChiSquareTest {
         double obs2 = 0.0d;
         for (int i = 0; i < observed1.length; i++) {
             if (observed1[i] == 0 && observed2[i] == 0) {
-                throw new ZeroException(LocalizedFormats.OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY, i);
+                throw new MathIllegalArgumentException(LocalizedFormats.OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY, i);
             } else {
                 obs1 = observed1[i];
                 obs2 = observed2[i];
@@ -493,14 +492,14 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException the the length of the arrays does not match
      * @throws MathIllegalArgumentException if any entries in <code>observed1</code> or
      * <code>observed2</code> are negative
-     * @throws ZeroException if either all counts of <code>observed1</code> or
+     * @throws MathIllegalArgumentException if either all counts of <code>observed1</code> or
      * <code>observed2</code> are zero, or if the count at the same index is zero
      * for both arrays
      * @throws MaxCountExceededException if an error occurs computing the p-value
      * @since 1.2
      */
     public double chiSquareTestDataSetsComparison(long[] observed1, long[] observed2)
-        throws MathIllegalArgumentException, ZeroException,
+        throws MathIllegalArgumentException, MathIllegalArgumentException,
         MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -546,7 +545,7 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException the the length of the arrays does not match
      * @throws MathIllegalArgumentException if any entries in <code>observed1</code> or
      * <code>observed2</code> are negative
-     * @throws ZeroException if either all counts of <code>observed1</code> or
+     * @throws MathIllegalArgumentException if either all counts of <code>observed1</code> or
      * <code>observed2</code> are zero, or if the count at the same index is zero
      * for both arrays
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
@@ -557,7 +556,7 @@ public class ChiSquareTest {
                                                    final long[] observed2,
                                                    final double alpha)
         throws MathIllegalArgumentException,
-        ZeroException, MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
 
         if (alpha <= 0 ||
             alpha > 0.5) {

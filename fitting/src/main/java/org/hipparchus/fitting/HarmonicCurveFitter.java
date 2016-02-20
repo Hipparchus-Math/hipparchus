@@ -24,7 +24,7 @@ import org.hipparchus.analysis.function.HarmonicOscillator;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.ZeroException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;
@@ -251,7 +251,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
          *
          * @param observations Sampled observations.
          * @throws NumberIsTooSmallException if the sample is too short.
-         * @throws ZeroException if the abscissa range is zero.
+         * @throws MathIllegalArgumentException if the abscissa range is zero.
          * @throws MathIllegalStateException when the guessing procedure cannot
          * produce sensible results.
          */
@@ -324,7 +324,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
          * Estimate a first guess of the amplitude and angular frequency.
          *
          * @param observations Observations, sorted w.r.t. abscissa.
-         * @throws ZeroException if the abscissa range is zero.
+         * @throws MathIllegalArgumentException if the abscissa range is zero.
          * @throws MathIllegalStateException when the guessing procedure cannot
          * produce sensible results.
          * @return the guessed amplitude (at index 0) and circular frequency
@@ -381,7 +381,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
                 // observations are sorted.
                 final double xRange = observations[last].getX() - observations[0].getX();
                 if (xRange == 0) {
-                    throw new ZeroException();
+                    throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
                 }
                 aOmega[1] = 2 * Math.PI / xRange;
 

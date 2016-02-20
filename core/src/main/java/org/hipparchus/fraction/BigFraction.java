@@ -22,11 +22,10 @@ import java.math.BigInteger;
 
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -114,14 +113,14 @@ public class BigFraction
      *
      * @param num the numerator, must not be {@code null}.
      * @param den the denominator, must not be {@code null}.
-     * @throws ZeroException if the denominator is zero.
+     * @throws MathIllegalArgumentException if the denominator is zero.
      * @throws NullArgumentException if either of the arguments is null
      */
     public BigFraction(BigInteger num, BigInteger den) {
         MathUtils.checkNotNull(num, LocalizedFormats.NUMERATOR);
         MathUtils.checkNotNull(den, LocalizedFormats.DENOMINATOR);
         if (den.signum() == 0) {
-            throw new ZeroException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_DENOMINATOR);
         }
         if (num.signum() == 0) {
             numerator   = BigInteger.ZERO;

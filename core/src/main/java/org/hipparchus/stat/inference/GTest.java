@@ -20,7 +20,6 @@ import org.hipparchus.distribution.ChiSquaredDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -335,12 +334,12 @@ public class GTest {
      * match or their common length is less than 2
      * @throws MathIllegalArgumentException if any entry in {@code observed1} or
      * {@code observed2} is negative
-     * @throws ZeroException if either all counts of
+     * @throws MathIllegalArgumentException if either all counts of
      * {@code observed1} or {@code observed2} are zero, or if the count
      * at the same index is zero for both arrays.
      */
     public double gDataSetsComparison(final long[] observed1, final long[] observed2)
-            throws MathIllegalArgumentException, ZeroException {
+            throws MathIllegalArgumentException, MathIllegalArgumentException {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
@@ -366,7 +365,7 @@ public class GTest {
 
         for (int i = 0; i < observed1.length; i++) {
             if (observed1[i] == 0 && observed2[i] == 0) {
-                throw new ZeroException(LocalizedFormats.OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY, i);
+                throw new MathIllegalArgumentException(LocalizedFormats.OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY, i);
             } else {
                 countSum1 += observed1[i];
                 countSum2 += observed2[i];
@@ -377,7 +376,7 @@ public class GTest {
         }
         // Ensure neither sample is uniformly 0
         if (countSum1 == 0 || countSum2 == 0) {
-            throw new ZeroException();
+            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
         }
         final long[] rowSums = {countSum1, countSum2};
         final double sum = (double) countSum1 + (double) countSum2;
@@ -459,7 +458,7 @@ public class GTest {
      * match or their common length is less than 2
      * @throws MathIllegalArgumentException if any of the entries in {@code observed1} or
      * {@code observed2} are negative
-     * @throws ZeroException if either all counts of {@code observed1} or
+     * @throws MathIllegalArgumentException if either all counts of {@code observed1} or
      * {@code observed2} are zero, or if the count at some index is
      * zero for both arrays
      * @throws MaxCountExceededException if an error occurs computing the
@@ -467,7 +466,7 @@ public class GTest {
      */
     public double gTestDataSetsComparison(final long[] observed1,
             final long[] observed2)
-            throws MathIllegalArgumentException, ZeroException,
+            throws MathIllegalArgumentException, MathIllegalArgumentException,
             MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -512,7 +511,7 @@ public class GTest {
      * match
      * @throws MathIllegalArgumentException if any of the entries in {@code observed1} or
      * {@code observed2} are negative
-     * @throws ZeroException if either all counts of {@code observed1} or
+     * @throws MathIllegalArgumentException if either all counts of {@code observed1} or
      * {@code observed2} are zero, or if the count at some index is
      * zero for both arrays
      * @throws MathIllegalArgumentException if {@code alpha} is not in the range
@@ -524,7 +523,7 @@ public class GTest {
             final long[] observed2,
             final double alpha)
             throws MathIllegalArgumentException,
-            ZeroException, MathIllegalArgumentException, MaxCountExceededException {
+            MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
 
         if (alpha <= 0 || alpha > 0.5) {
             throw new MathIllegalArgumentException(

@@ -13,13 +13,13 @@
  */
 package org.hipparchus.util;
 
-import java.util.List;
 import java.util.ArrayList;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.MathIllegalStateException;
+import java.util.List;
+
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.ZeroException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MaxCountExceededException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -218,13 +218,9 @@ public class IntegerSequenceTest {
         inc.increment(0);
     }
 
-    @Test(expected=ZeroException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testIncrementZeroStep() {
-        final int step = 0;
-
-        final IntegerSequence.Incrementor inc
-            = IntegerSequence.Incrementor.create()
-            .withIncrement(step);
+        IntegerSequence.Incrementor.create().withIncrement(0);
     }
 
     @Test

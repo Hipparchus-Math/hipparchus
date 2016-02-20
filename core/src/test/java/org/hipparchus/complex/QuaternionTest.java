@@ -18,13 +18,11 @@ package org.hipparchus.complex;
 
 import java.util.Random;
 
-import org.hipparchus.complex.Quaternion;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class QuaternionTest {
     /** Epsilon for double comparison. */
@@ -282,7 +280,7 @@ public class QuaternionTest {
         Assert.assertEquals(1, versor.getNorm(), 0);
     }
 
-    @Test(expected=ZeroException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public final void testNormalizeFail() {
         final Quaternion zeroQ = new Quaternion(0, 0, 0, 0);
         zeroQ.normalize();
@@ -385,8 +383,8 @@ public class QuaternionTest {
         final Quaternion qNul = new Quaternion(0, 0, 0, 0);
         try {
             final Quaternion inverseQNul = qNul.getInverse();
-            Assert.fail("expecting ZeroException but got : " + inverseQNul);
-        } catch (ZeroException ex) {
+            Assert.fail("expecting MathIllegalArgumentException but got : " + inverseQNul);
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

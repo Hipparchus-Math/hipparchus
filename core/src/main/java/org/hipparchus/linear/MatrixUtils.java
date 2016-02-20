@@ -29,7 +29,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.util.FastMath;
@@ -260,15 +259,15 @@ public class MatrixUtils {
      * @return a data.length FieldVector
      * @throws MathIllegalArgumentException if {@code data} is empty.
      * @throws NullArgumentException if {@code data} is {@code null}.
-     * @throws ZeroException if {@code data} has 0 elements
+     * @throws MathIllegalArgumentException if {@code data} has 0 elements
      */
     public static <T extends FieldElement<T>> FieldVector<T> createFieldVector(final T[] data)
-        throws MathIllegalArgumentException, NullArgumentException, ZeroException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
         if (data == null) {
             throw new NullArgumentException();
         }
         if (data.length == 0) {
-            throw new ZeroException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         return new ArrayFieldVector<T>(data[0].getField(), data, true);
     }

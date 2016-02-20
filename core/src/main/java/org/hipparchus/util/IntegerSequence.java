@@ -17,12 +17,12 @@
 package org.hipparchus.util;
 
 import java.util.Iterator;
+
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.ZeroException;
 
 /**
  * Provides a sequence of integers.
@@ -237,7 +237,7 @@ public class IntegerSequence {
          */
         public Incrementor withIncrement(int step) {
             if (step == 0) {
-                throw new ZeroException();
+                throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
             }
             return new Incrementor(this.init,
                                    this.maximalCount,

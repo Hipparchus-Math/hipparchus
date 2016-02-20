@@ -27,7 +27,6 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -91,17 +90,17 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      *
      * @param d Array.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws ZeroException if {@code d} is empty.
+     * @throws MathIllegalArgumentException if {@code d} is empty.
      * @see #ArrayFieldVector(Field, FieldElement[])
      */
     public ArrayFieldVector(T[] d)
-            throws NullArgumentException, ZeroException {
+            throws NullArgumentException, MathIllegalArgumentException {
         MathUtils.checkNotNull(d);
         try {
             field = d[0].getField();
             data = d.clone();
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new ZeroException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
     }
 
@@ -137,15 +136,15 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param copyArray If {@code true}, the input array will be copied,
      * otherwise it will be referenced.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws ZeroException if {@code d} is empty.
+     * @throws MathIllegalArgumentException if {@code d} is empty.
      * @see #ArrayFieldVector(FieldElement[])
      * @see #ArrayFieldVector(Field, FieldElement[], boolean)
      */
     public ArrayFieldVector(T[] d, boolean copyArray)
-            throws NullArgumentException, ZeroException {
+            throws NullArgumentException, MathIllegalArgumentException {
         MathUtils.checkNotNull(d);
         if (d.length == 0) {
-            throw new ZeroException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         field = d[0].getField();
         data = copyArray ? d.clone() : d;
@@ -337,15 +336,15 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param v2 Second vector (will be put at back of the new vector).
      * @throws NullArgumentException if {@code v1} or {@code v2} is
      * {@code null}.
-     * @throws ZeroException if both arrays are empty.
+     * @throws MathIllegalArgumentException if both arrays are empty.
      * @see #ArrayFieldVector(Field, FieldElement[], FieldElement[])
      */
     public ArrayFieldVector(T[] v1, T[] v2)
-            throws NullArgumentException, ZeroException {
+            throws NullArgumentException, MathIllegalArgumentException {
         MathUtils.checkNotNull(v1);
         MathUtils.checkNotNull(v2);
         if (v1.length + v2.length == 0) {
-            throw new ZeroException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         data = MathArrays.buildArray(v1[0].getField(), v1.length + v2.length);
         System.arraycopy(v1, 0, data, 0, v1.length);
@@ -361,15 +360,15 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param v2 Second vector (will be put at back of the new vector).
      * @throws NullArgumentException if {@code v1} or {@code v2} is
      * {@code null}.
-     * @throws ZeroException if both arrays are empty.
+     * @throws MathIllegalArgumentException if both arrays are empty.
      * @see #ArrayFieldVector(FieldElement[], FieldElement[])
      */
     public ArrayFieldVector(Field<T> field, T[] v1, T[] v2)
-            throws NullArgumentException, ZeroException {
+            throws NullArgumentException, MathIllegalArgumentException {
         MathUtils.checkNotNull(v1);
         MathUtils.checkNotNull(v2);
         if (v1.length + v2.length == 0) {
-            throw new ZeroException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         data = MathArrays.buildArray(field, v1.length + v2.length);
         System.arraycopy(v1, 0, data, 0, v1.length);

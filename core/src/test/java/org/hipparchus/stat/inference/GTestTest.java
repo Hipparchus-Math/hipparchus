@@ -17,7 +17,6 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -163,8 +162,8 @@ public class GTestTest {
         try {
             testStatistic.gTestDataSetsComparison(
                     observed3, observed4);
-            Assert.fail("Expecting ZeroException - double 0's");
-        } catch (ZeroException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - double 0's");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[] observed5 = {10, 10, 12, 10, 15};
@@ -172,8 +171,8 @@ public class GTestTest {
         try {
             testStatistic.gTestDataSetsComparison(
                     observed5, observed6);
-            Assert.fail("Expecting ZeroException - vanishing counts");
-        } catch (ZeroException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - vanishing counts");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

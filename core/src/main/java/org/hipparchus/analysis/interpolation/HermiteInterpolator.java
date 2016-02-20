@@ -24,9 +24,8 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableVectorFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.ZeroException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.CombinatoricsUtils;
 
 /** Polynomial interpolator using both sample values and sample derivatives.
@@ -78,13 +77,13 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      * (if only one row is passed, it is the value, if two rows are
      * passed the first one is the value and the second the derivative
      * and so on)
-     * @exception ZeroException if the abscissa difference between added point
+     * @exception MathIllegalArgumentException if the abscissa difference between added point
      * and a previous point is zero (i.e. the two points are at same abscissa)
      * @exception MathRuntimeException if the number of derivatives is larger
      * than 20, which prevents computation of a factorial
      */
     public void addSamplePoint(final double x, final double[] ... value)
-        throws ZeroException, MathRuntimeException {
+        throws MathIllegalArgumentException, MathRuntimeException {
 
         for (int i = 0; i < value.length; ++i) {
 
@@ -104,7 +103,7 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
                 final double[] bottom1 = bottomDiagonal.get(n - (j + 1));
                 final double inv = 1.0 / (x - abscissae.get(n - (j + 1)));
                 if (Double.isInfinite(inv)) {
-                    throw new ZeroException(LocalizedFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
                 }
                 for (int k = 0; k < y.length; ++k) {
                     bottom1[k] = inv * (bottom0[k] - bottom1[k]);
