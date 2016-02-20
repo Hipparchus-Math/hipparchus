@@ -18,7 +18,6 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;
@@ -88,11 +87,11 @@ public class PascalDistribution extends AbstractIntegerDistribution {
      * @param r Number of successes.
      * @param p Probability of success.
      * @throws MathIllegalArgumentException if the number of successes is not positive
-     * @throws OutOfRangeException if the probability of success is not in the
+     * @throws MathIllegalArgumentException if the probability of success is not in the
      * range {@code [0, 1]}.
      */
     public PascalDistribution(int r, double p)
-        throws MathIllegalArgumentException, OutOfRangeException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         this(new Well19937c(), r, p);
     }
 
@@ -104,14 +103,14 @@ public class PascalDistribution extends AbstractIntegerDistribution {
      * @param r Number of successes.
      * @param p Probability of success.
      * @throws MathIllegalArgumentException if the number of successes is not positive
-     * @throws OutOfRangeException if the probability of success is not in the
+     * @throws MathIllegalArgumentException if the probability of success is not in the
      * range {@code [0, 1]}.
      * @since 3.1
      */
     public PascalDistribution(RandomGenerator rng,
                               int r,
                               double p)
-        throws MathIllegalArgumentException, OutOfRangeException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         super(rng);
 
         if (r <= 0) {
@@ -119,7 +118,8 @@ public class PascalDistribution extends AbstractIntegerDistribution {
                                                    r);
         }
         if (p < 0 || p > 1) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
 
         numberOfSuccesses = r;

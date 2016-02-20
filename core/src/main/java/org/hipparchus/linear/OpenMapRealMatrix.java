@@ -21,7 +21,6 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.OpenIntToDoubleHashMap;
 
 /**
@@ -240,7 +239,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
 
     /** {@inheritDoc} */
     @Override
-    public double getEntry(int row, int column) throws OutOfRangeException {
+    public double getEntry(int row, int column) throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         MatrixUtils.checkColumnIndex(this, column);
         return entries.get(computeKey(row, column));
@@ -255,7 +254,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setEntry(int row, int column, double value)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         MatrixUtils.checkColumnIndex(this, column);
         if (value == 0.0) {
@@ -268,7 +267,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void addToEntry(int row, int column, double increment)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         MatrixUtils.checkColumnIndex(this, column);
         final int key = computeKey(row, column);
@@ -283,7 +282,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void multiplyEntry(int row, int column, double factor)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         MatrixUtils.checkColumnIndex(this, column);
         final int key = computeKey(row, column);

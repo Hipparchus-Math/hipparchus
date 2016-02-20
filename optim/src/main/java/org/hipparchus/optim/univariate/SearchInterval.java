@@ -17,7 +17,8 @@
 package org.hipparchus.optim.univariate;
 
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.OptimizationData;
 
 /**
@@ -40,7 +41,7 @@ public class SearchInterval implements OptimizationData {
      * @param hi Upper bound.
      * @param init Start value.
      * @throws NumberIsTooLargeException if {@code lo >= hi}.
-     * @throws OutOfRangeException if {@code init < lo} or {@code init > hi}.
+     * @throws MathIllegalArgumentException if {@code init < lo} or {@code init > hi}.
      */
     public SearchInterval(double lo,
                           double hi,
@@ -50,7 +51,8 @@ public class SearchInterval implements OptimizationData {
         }
         if (init < lo ||
             init > hi) {
-            throw new OutOfRangeException(init, lo, hi);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   init, lo, hi);
         }
 
         lower = lo;

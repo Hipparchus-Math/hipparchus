@@ -22,8 +22,6 @@ import java.lang.reflect.Method;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.special.Beta;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -331,25 +329,25 @@ public class BetaTest {
         }
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testLogGammaSumPrecondition1() {
 
         logGammaSum(0.0, 1.0);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testLogGammaSumPrecondition2() {
 
         logGammaSum(3.0, 1.0);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testLogGammaSumPrecondition3() {
 
         logGammaSum(1.0, 0.0);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testLogGammaSumPrecondition4() {
 
         logGammaSum(1.0, 3.0);

@@ -24,7 +24,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -126,14 +125,15 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      *
      * @param v Point for which the function value should be computed.
      * @return the value.
-     * @throws OutOfRangeException if {@code v} is outside of the domain of the
+     * @throws MathIllegalArgumentException if {@code v} is outside of the domain of the
      * spline function (smaller than the smallest knot point or larger than the
      * largest knot point).
      */
     @Override
     public double value(double v) {
         if (v < knots[0] || v > knots[n]) {
-            throw new OutOfRangeException(v, knots[0], knots[n]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   v, knots[0], knots[n]);
         }
         int i = Arrays.binarySearch(knots, v);
         if (i < 0) {
@@ -169,7 +169,8 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
     public DerivativeStructure value(final DerivativeStructure t) {
         final double t0 = t.getValue();
         if (t0 < knots[0] || t0 > knots[n]) {
-            throw new OutOfRangeException(t0, knots[0], knots[n]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   t0, knots[0], knots[n]);
         }
         int i = Arrays.binarySearch(knots, t0);
         if (i < 0) {

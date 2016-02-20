@@ -16,11 +16,9 @@
  */
 package org.hipparchus.random;
 
-import org.junit.Assert;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.random.HaltonSequenceGenerator;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -83,14 +81,14 @@ public class HaltonSequenceGeneratorTest {
         try {
             new HaltonSequenceGenerator(0);
             Assert.fail("an exception should have been thrown");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         try {
             new HaltonSequenceGenerator(41);
             Assert.fail("an exception should have been thrown");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
     }
@@ -100,7 +98,7 @@ public class HaltonSequenceGeneratorTest {
         try {
             new HaltonSequenceGenerator(2, new int[] { 1 }, null);
             Assert.fail("an exception should have been thrown");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 

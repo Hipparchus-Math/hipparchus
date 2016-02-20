@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 
 /**
  * Interface defining field-valued matrix with basic algebraic operations.
@@ -151,10 +150,10 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @return the matrix containing the data of the specified rows and columns.
      * @throws NumberIsTooSmallException is {@code endRow < startRow} of
      * {@code endColumn < startColumn}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      */
    FieldMatrix<T> getSubMatrix(int startRow, int endRow, int startColumn, int endColumn)
-   throws NumberIsTooSmallException, OutOfRangeException;
+   throws NumberIsTooSmallException, MathIllegalArgumentException;
 
    /**
     * Get a submatrix. Rows and columns are indicated
@@ -168,10 +167,10 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * {@code selectedColumns} is empty
     * @throws NullArgumentException if {@code selectedRows} or
     * {@code selectedColumns} is {@code null}.
-    * @throws OutOfRangeException if row or column selections are not valid.
+    * @throws MathIllegalArgumentException if row or column selections are not valid.
     */
    FieldMatrix<T> getSubMatrix(int[] selectedRows, int[] selectedColumns)
-   throws NoDataException, NullArgumentException, OutOfRangeException;
+   throws NoDataException, NullArgumentException, MathIllegalArgumentException;
 
    /**
     * Copy a submatrix. Rows and columns are 0-based. The designated submatrix
@@ -187,12 +186,12 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * {@code destination} are not large enough to hold the submatrix.
     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
     * {@code endColumn < startColumn}.
-    * @throws OutOfRangeException if the indices are not valid.
+    * @throws MathIllegalArgumentException if the indices are not valid.
     */
     void copySubMatrix(int startRow, int endRow, int startColumn, int endColumn,
                        T[][] destination)
     throws MathIllegalArgumentException, NumberIsTooSmallException,
-    OutOfRangeException;
+    MathIllegalArgumentException;
 
   /**
    * Copy a submatrix. Rows and columns are indicated
@@ -208,11 +207,11 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
    * {@code selectedColumns} is empty
    * @throws NullArgumentException if {@code selectedRows} or
    * {@code selectedColumns} is {@code null}.
-   * @throws OutOfRangeException if the indices are not valid.
+   * @throws MathIllegalArgumentException if the indices are not valid.
    */
   void copySubMatrix(int[] selectedRows, int[] selectedColumns, T[][] destination)
   throws MathIllegalArgumentException, NoDataException, NullArgumentException,
-  OutOfRangeException;
+  MathIllegalArgumentException;
 
     /**
      * Replace the submatrix starting at {@code (row, column)} using data in the
@@ -241,7 +240,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param subMatrix Array containing the submatrix replacement data.
      * @param row Row coordinate of the top-left element to be replaced.
      * @param column Column coordinate of the top-left element to be replaced.
-     * @throws OutOfRangeException if {@code subMatrix} does not fit into this
+     * @throws MathIllegalArgumentException if {@code subMatrix} does not fit into this
      * matrix from element in {@code (row, column)}.
      * @throws NoDataException if a row or column of {@code subMatrix} is empty.
      * @throws MathIllegalArgumentException if {@code subMatrix} is not
@@ -250,7 +249,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @since 2.0
      */
     void setSubMatrix(T[][] subMatrix, int row, int column)
-        throws MathIllegalArgumentException, OutOfRangeException,
+        throws MathIllegalArgumentException, MathIllegalArgumentException,
         NoDataException, NullArgumentException;
 
    /**
@@ -259,9 +258,9 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     *
     * @param row Row to be fetched.
     * @return a row matrix.
-    * @throws OutOfRangeException if the specified row index is invalid.
+    * @throws MathIllegalArgumentException if the specified row index is invalid.
     */
-   FieldMatrix<T> getRowMatrix(int row) throws OutOfRangeException;
+   FieldMatrix<T> getRowMatrix(int row) throws MathIllegalArgumentException;
 
    /**
     * Set the entries in row number {@code row}
@@ -270,12 +269,12 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param row Row to be set.
     * @param matrix Row matrix (must have one row and the same number
     * of columns as the instance).
-    * @throws OutOfRangeException if the specified row index is invalid.
+    * @throws MathIllegalArgumentException if the specified row index is invalid.
     * @throws MathIllegalArgumentException
     * if the matrix dimensions do not match one instance row.
     */
    void setRowMatrix(int row, FieldMatrix<T> matrix)
-   throws MathIllegalArgumentException, OutOfRangeException;
+   throws MathIllegalArgumentException, MathIllegalArgumentException;
 
    /**
     * Get the entries in column number {@code column}
@@ -283,9 +282,9 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     *
     * @param column Column to be fetched.
     * @return a column matrix.
-    * @throws OutOfRangeException if the specified column index is invalid.
+    * @throws MathIllegalArgumentException if the specified column index is invalid.
     */
-   FieldMatrix<T> getColumnMatrix(int column) throws OutOfRangeException;
+   FieldMatrix<T> getColumnMatrix(int column) throws MathIllegalArgumentException;
 
    /**
     * Set the entries in column number {@code column}
@@ -294,12 +293,12 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param column Column to be set.
     * @param matrix column matrix (must have one column and the same
     * number of rows as the instance).
-    * @throws OutOfRangeException if the specified column index is invalid.
+    * @throws MathIllegalArgumentException if the specified column index is invalid.
     * @throws MathIllegalArgumentException if the matrix dimensions do
     * not match one instance column.
     */
    void setColumnMatrix(int column, FieldMatrix<T> matrix)
-   throws MathIllegalArgumentException, OutOfRangeException;
+   throws MathIllegalArgumentException, MathIllegalArgumentException;
 
    /**
     * Get the entries in row number {@code row}
@@ -307,9 +306,9 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     *
     * @param row Row to be fetched
     * @return a row vector.
-    * @throws OutOfRangeException if the specified row index is invalid.
+    * @throws MathIllegalArgumentException if the specified row index is invalid.
     */
-   FieldVector<T> getRowVector(int row) throws OutOfRangeException;
+   FieldVector<T> getRowVector(int row) throws MathIllegalArgumentException;
 
    /**
     * Set the entries in row number {@code row}
@@ -318,12 +317,12 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param row Row to be set.
     * @param vector row vector (must have the same number of columns
     * as the instance).
-    * @throws OutOfRangeException if the specified row index is invalid.
+    * @throws MathIllegalArgumentException if the specified row index is invalid.
     * @throws MathIllegalArgumentException if the vector dimension does not
     * match one instance row.
     */
    void setRowVector(int row, FieldVector<T> vector)
-   throws MathIllegalArgumentException, OutOfRangeException;
+   throws MathIllegalArgumentException, MathIllegalArgumentException;
 
    /**
     * Returns the entries in column number {@code column}
@@ -331,9 +330,9 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     *
     * @param column Column to be fetched.
     * @return a column vector.
-    * @throws OutOfRangeException if the specified column index is invalid.
+    * @throws MathIllegalArgumentException if the specified column index is invalid.
     */
-   FieldVector<T> getColumnVector(int column) throws OutOfRangeException;
+   FieldVector<T> getColumnVector(int column) throws MathIllegalArgumentException;
 
    /**
     * Set the entries in column number {@code column}
@@ -342,21 +341,21 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param column Column to be set.
     * @param vector Column vector (must have the same number of rows
     * as the instance).
-    * @throws OutOfRangeException if the specified column index is invalid.
+    * @throws MathIllegalArgumentException if the specified column index is invalid.
     * @throws MathIllegalArgumentException if the vector dimension does not
     * match one instance column.
     */
    void setColumnVector(int column, FieldVector<T> vector)
-   throws MathIllegalArgumentException, OutOfRangeException;
+   throws MathIllegalArgumentException, MathIllegalArgumentException;
 
     /**
      * Get the entries in row number {@code row} as an array.
      *
      * @param row Row to be fetched.
      * @return array of entries in the row.
-     * @throws OutOfRangeException if the specified row index is not valid.
+     * @throws MathIllegalArgumentException if the specified row index is not valid.
      */
-    T[] getRow(int row) throws OutOfRangeException;
+    T[] getRow(int row) throws MathIllegalArgumentException;
 
     /**
      * Set the entries in row number {@code row}
@@ -365,21 +364,21 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param row Row to be set.
      * @param array Row matrix (must have the same number of columns as
      * the instance).
-     * @throws OutOfRangeException if the specified row index is invalid.
+     * @throws MathIllegalArgumentException if the specified row index is invalid.
      * @throws MathIllegalArgumentException if the array size does not match
      * one instance row.
      */
     void setRow(int row, T[] array) throws MathIllegalArgumentException,
-    OutOfRangeException;
+    MathIllegalArgumentException;
 
     /**
      * Get the entries in column number {@code col} as an array.
      *
      * @param column the column to be fetched
      * @return array of entries in the column
-     * @throws OutOfRangeException if the specified column index is not valid.
+     * @throws MathIllegalArgumentException if the specified column index is not valid.
      */
-    T[] getColumn(int column) throws OutOfRangeException;
+    T[] getColumn(int column) throws MathIllegalArgumentException;
 
     /**
      * Set the entries in column number {@code column}
@@ -387,12 +386,12 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      *
      * @param column the column to be set
      * @param array column array (must have the same number of rows as the instance)
-     * @throws OutOfRangeException if the specified column index is invalid.
+     * @throws MathIllegalArgumentException if the specified column index is invalid.
      * @throws MathIllegalArgumentException if the array size does not match
      * one instance column.
      */
     void setColumn(int column, T[] array) throws MathIllegalArgumentException,
-    OutOfRangeException;
+    MathIllegalArgumentException;
 
     /**
      * Returns the entry in the specified row and column.
@@ -400,9 +399,9 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param row  row location of entry to be fetched
      * @param column  column location of entry to be fetched
      * @return matrix entry in row,column
-     * @throws OutOfRangeException if the row or column index is not valid.
+     * @throws MathIllegalArgumentException if the row or column index is not valid.
      */
-    T getEntry(int row, int column) throws OutOfRangeException;
+    T getEntry(int row, int column) throws MathIllegalArgumentException;
 
     /**
      * Set the entry in the specified row and column.
@@ -410,10 +409,10 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param row  row location of entry to be set
      * @param column  column location of entry to be set
      * @param value matrix entry to be set in row,column
-     * @throws OutOfRangeException if the row or column index is not valid.
+     * @throws MathIllegalArgumentException if the row or column index is not valid.
      * @since 2.0
      */
-    void setEntry(int row, int column, T value) throws OutOfRangeException;
+    void setEntry(int row, int column, T value) throws MathIllegalArgumentException;
 
     /**
      * Change an entry in the specified row and column.
@@ -422,10 +421,10 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param column Column location of entry to be set.
      * @param increment Value to add to the current matrix entry in
      * {@code (row, column)}.
-     * @throws OutOfRangeException if the row or column index is not valid.
+     * @throws MathIllegalArgumentException if the row or column index is not valid.
      * @since 2.0
      */
-    void addToEntry(int row, int column, T increment) throws OutOfRangeException;
+    void addToEntry(int row, int column, T increment) throws MathIllegalArgumentException;
 
     /**
      * Change an entry in the specified row and column.
@@ -434,10 +433,10 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param column Column location of entry to be set.
      * @param factor Multiplication factor for the current matrix entry
      * in {@code (row,column)}
-     * @throws OutOfRangeException if the row or column index is not valid.
+     * @throws MathIllegalArgumentException if the row or column index is not valid.
      * @since 2.0
      */
-    void multiplyEntry(int row, int column, T factor) throws OutOfRangeException;
+    void multiplyEntry(int row, int column, T factor) throws MathIllegalArgumentException;
 
     /**
      * Returns the transpose of this matrix.
@@ -551,7 +550,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @throws NumberIsTooSmallException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
@@ -570,7 +569,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInRowOrder(FieldMatrixChangingVisitor<T> visitor,
                      int startRow, int endRow, int startColumn, int endColumn)
-    throws OutOfRangeException, NumberIsTooSmallException;
+    throws MathIllegalArgumentException, NumberIsTooSmallException;
 
     /**
      * Visit (but don't change) some matrix entries in row order.
@@ -582,7 +581,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @throws NumberIsTooSmallException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
@@ -601,7 +600,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInRowOrder(FieldMatrixPreservingVisitor<T> visitor,
                      int startRow, int endRow, int startColumn, int endColumn)
-    throws OutOfRangeException, NumberIsTooSmallException;
+    throws MathIllegalArgumentException, NumberIsTooSmallException;
 
     /**
      * Visit (and possibly change) all matrix entries in column order.
@@ -659,7 +658,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endColumn Final column index
      * @throws NumberIsTooSmallException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
      * @see #walkInRowOrder(FieldMatrixPreservingVisitor)
      * @see #walkInRowOrder(FieldMatrixChangingVisitor, int, int, int, int)
@@ -676,7 +675,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInColumnOrder(FieldMatrixChangingVisitor<T> visitor,
                         int startRow, int endRow, int startColumn, int endColumn)
-    throws NumberIsTooSmallException, OutOfRangeException;
+    throws NumberIsTooSmallException, MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries in column order.
@@ -690,7 +689,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endColumn Final column index
      * @throws NumberIsTooSmallException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
      * @see #walkInRowOrder(FieldMatrixPreservingVisitor)
      * @see #walkInRowOrder(FieldMatrixChangingVisitor, int, int, int, int)
@@ -707,7 +706,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInColumnOrder(FieldMatrixPreservingVisitor<T> visitor,
                         int startRow, int endRow, int startColumn, int endColumn)
-    throws NumberIsTooSmallException, OutOfRangeException;
+    throws NumberIsTooSmallException, MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries using the fastest possible order.
@@ -762,7 +761,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endColumn Final column index (inclusive)
      * @throws NumberIsTooSmallException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
      * @see #walkInRowOrder(FieldMatrixPreservingVisitor)
      * @see #walkInRowOrder(FieldMatrixChangingVisitor, int, int, int, int)
@@ -779,7 +778,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInOptimizedOrder(FieldMatrixChangingVisitor<T> visitor,
                            int startRow, int endRow, int startColumn, int endColumn)
-    throws NumberIsTooSmallException, OutOfRangeException;
+    throws NumberIsTooSmallException, MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries using the fastest possible order.
@@ -792,7 +791,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endColumn Final column index (inclusive)
      * @throws NumberIsTooSmallException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
      * @see #walkInRowOrder(FieldMatrixPreservingVisitor)
      * @see #walkInRowOrder(FieldMatrixChangingVisitor, int, int, int, int)
@@ -809,5 +808,5 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInOptimizedOrder(FieldMatrixPreservingVisitor<T> visitor,
                            int startRow, int endRow, int startColumn, int endColumn)
-    throws NumberIsTooSmallException, OutOfRangeException;
+    throws NumberIsTooSmallException, MathIllegalArgumentException;
 }

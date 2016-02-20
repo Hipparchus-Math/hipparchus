@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -320,7 +319,7 @@ public abstract class AbstractRealMatrix
     @Override
     public RealMatrix getSubMatrix(final int startRow, final int endRow,
                                    final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
 
         final RealMatrix subMatrix =
@@ -338,7 +337,7 @@ public abstract class AbstractRealMatrix
     @Override
     public RealMatrix getSubMatrix(final int[] selectedRows,
                                    final int[] selectedColumns)
-        throws NullArgumentException, NoDataException, OutOfRangeException {
+        throws NullArgumentException, NoDataException, MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, selectedRows, selectedColumns);
 
         final RealMatrix subMatrix =
@@ -361,7 +360,7 @@ public abstract class AbstractRealMatrix
     public void copySubMatrix(final int startRow, final int endRow,
                               final int startColumn, final int endColumn,
                               final double[][] destination)
-        throws OutOfRangeException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException, NumberIsTooSmallException,
         MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         final int rowsCount    = endRow + 1 - startRow;
@@ -410,7 +409,7 @@ public abstract class AbstractRealMatrix
     @Override
     public void copySubMatrix(int[] selectedRows, int[] selectedColumns,
                               double[][] destination)
-        throws OutOfRangeException, NullArgumentException, NoDataException,
+        throws MathIllegalArgumentException, NullArgumentException, NoDataException,
         MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, selectedRows, selectedColumns);
         final int nCols = selectedColumns.length;
@@ -437,7 +436,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setSubMatrix(final double[][] subMatrix, final int row, final int column)
-        throws NoDataException, OutOfRangeException,
+        throws NoDataException, MathIllegalArgumentException,
         MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(subMatrix);
         final int nRows = subMatrix.length;
@@ -471,7 +470,7 @@ public abstract class AbstractRealMatrix
 
     /** {@inheritDoc} */
     @Override
-    public RealMatrix getRowMatrix(final int row) throws OutOfRangeException {
+    public RealMatrix getRowMatrix(final int row) throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         final RealMatrix out = createMatrix(1, nCols);
@@ -485,7 +484,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setRowMatrix(final int row, final RealMatrix matrix)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         if ((matrix.getRowDimension() != 1) ||
@@ -502,7 +501,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public RealMatrix getColumnMatrix(final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         final RealMatrix out = createMatrix(nRows, 1);
@@ -516,7 +515,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setColumnMatrix(final int column, final RealMatrix matrix)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         if ((matrix.getRowDimension() != nRows) ||
@@ -533,14 +532,14 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public RealVector getRowVector(final int row)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         return new ArrayRealVector(getRow(row), false);
     }
 
     /** {@inheritDoc} */
     @Override
     public void setRowVector(final int row, final RealVector vector)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         if (vector.getDimension() != nCols) {
@@ -556,14 +555,14 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public RealVector getColumnVector(final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         return new ArrayRealVector(getColumn(column), false);
     }
 
     /** {@inheritDoc} */
     @Override
     public void setColumnVector(final int column, final RealVector vector)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         if (vector.getDimension() != nRows) {
@@ -578,7 +577,7 @@ public abstract class AbstractRealMatrix
 
     /** {@inheritDoc} */
     @Override
-    public double[] getRow(final int row) throws OutOfRangeException {
+    public double[] getRow(final int row) throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         final double[] out = new double[nCols];
@@ -592,7 +591,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setRow(final int row, final double[] array)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         if (array.length != nCols) {
@@ -607,7 +606,7 @@ public abstract class AbstractRealMatrix
 
     /** {@inheritDoc} */
     @Override
-    public double[] getColumn(final int column) throws OutOfRangeException {
+    public double[] getColumn(final int column) throws MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         final double[] out = new double[nRows];
@@ -621,7 +620,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setColumn(final int column, final double[] array)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         if (array.length != nRows) {
@@ -637,7 +636,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void addToEntry(int row, int column, double increment)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMatrixIndex(this, row, column);
         setEntry(row, column, getEntry(row, column) + increment);
     }
@@ -645,7 +644,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void multiplyEntry(int row, int column, double factor)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMatrixIndex(this, row, column);
         setEntry(row, column, getEntry(row, column) * factor);
     }
@@ -841,7 +840,7 @@ public abstract class AbstractRealMatrix
     public double walkInRowOrder(final RealMatrixChangingVisitor visitor,
                                  final int startRow, final int endRow,
                                  final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -860,7 +859,7 @@ public abstract class AbstractRealMatrix
     public double walkInRowOrder(final RealMatrixPreservingVisitor visitor,
                                  final int startRow, final int endRow,
                                  final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -907,7 +906,7 @@ public abstract class AbstractRealMatrix
     public double walkInColumnOrder(final RealMatrixChangingVisitor visitor,
                                     final int startRow, final int endRow,
                                     final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -926,7 +925,7 @@ public abstract class AbstractRealMatrix
     public double walkInColumnOrder(final RealMatrixPreservingVisitor visitor,
                                     final int startRow, final int endRow,
                                     final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -956,7 +955,7 @@ public abstract class AbstractRealMatrix
                                        final int startRow, final int endRow,
                                        final int startColumn,
                                        final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         return walkInRowOrder(visitor, startRow, endRow, startColumn, endColumn);
     }
 
@@ -966,7 +965,7 @@ public abstract class AbstractRealMatrix
                                        final int startRow, final int endRow,
                                        final int startColumn,
                                        final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         return walkInRowOrder(visitor, startRow, endRow, startColumn, endColumn);
     }
 
@@ -1055,10 +1054,10 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public abstract double getEntry(int row, int column)
-        throws OutOfRangeException;
+        throws MathIllegalArgumentException;
 
     /** {@inheritDoc} */
     @Override
     public abstract void setEntry(int row, int column, double value)
-        throws OutOfRangeException;
+        throws MathIllegalArgumentException;
 }

@@ -20,7 +20,7 @@ import org.junit.Assert;
 
 import java.io.InputStream;
 
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.SobolSequenceGenerator;
 import org.junit.Before;
 import org.junit.Test;
@@ -61,14 +61,14 @@ public class SobolSequenceGeneratorTest {
         try {
             new SobolSequenceGenerator(0);
             Assert.fail("an exception should have been thrown");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         try {
             new SobolSequenceGenerator(1001);
             Assert.fail("an exception should have been thrown");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
     }
@@ -80,14 +80,14 @@ public class SobolSequenceGeneratorTest {
             final InputStream is = getClass().getResourceAsStream(RESOURCE_NAME);
             new SobolSequenceGenerator(1001, is);
             Assert.fail("an exception should have been thrown");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 
         try {
             new SobolSequenceGenerator(1001);
             Assert.fail("an exception should have been thrown");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
     }

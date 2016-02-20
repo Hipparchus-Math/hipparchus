@@ -20,10 +20,7 @@ import org.hipparchus.TestUtils;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -389,14 +386,14 @@ public final class Array2DRowRealMatrixTest {
         TestUtils.assertEquals("get col",m.getColumn(2),testDataCol3,entryTolerance);
         try {
             m.getRow(10);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             m.getColumn(-1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
@@ -407,8 +404,8 @@ public final class Array2DRowRealMatrixTest {
         Assert.assertEquals("get entry",m.getEntry(0,1),2d,entryTolerance);
         try {
             m.getEntry(10, 4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -475,17 +472,9 @@ public final class Array2DRowRealMatrixTest {
             RealMatrix sub = m.getSubMatrix(startRow, endRow, startColumn, endColumn);
             Assert.assertEquals(new Array2DRowRealMatrix(reference), sub);
             if (mustFail) {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
             }
-        } catch (OutOfRangeException e) {
-            if (!mustFail) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (!mustFail) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
                 throw e;
             }
@@ -499,17 +488,9 @@ public final class Array2DRowRealMatrixTest {
             RealMatrix sub = m.getSubMatrix(selectedRows, selectedColumns);
             Assert.assertEquals(new Array2DRowRealMatrix(reference), sub);
             if (mustFail) {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
             }
-        } catch (OutOfRangeException e) {
-            if (!mustFail) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (!mustFail) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
                 throw e;
             }
@@ -551,19 +532,7 @@ public final class Array2DRowRealMatrixTest {
             m.copySubMatrix(startRow, endRow, startColumn, endColumn, sub);
             Assert.assertEquals(new Array2DRowRealMatrix(reference), new Array2DRowRealMatrix(sub));
             if (mustFail) {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallException or NoDataException");
-            }
-        } catch (OutOfRangeException e) {
-            if (!mustFail) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (!mustFail) {
-                throw e;
-            }
-        } catch (NoDataException e) {
-            if (!mustFail) {
-                throw e;
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
             }
         } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
@@ -581,19 +550,7 @@ public final class Array2DRowRealMatrixTest {
             m.copySubMatrix(selectedRows, selectedColumns, sub);
             Assert.assertEquals(new Array2DRowRealMatrix(reference), new Array2DRowRealMatrix(sub));
             if (mustFail) {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallException or NoDataException");
-            }
-        } catch (OutOfRangeException e) {
-            if (!mustFail) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (!mustFail) {
-                throw e;
-            }
-        } catch (NoDataException e) {
-            if (!mustFail) {
-                throw e;
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
             }
         } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
@@ -621,14 +578,14 @@ public final class Array2DRowRealMatrixTest {
                 m.getRowMatrix(3));
         try {
             m.getRowMatrix(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowMatrix(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -642,8 +599,8 @@ public final class Array2DRowRealMatrixTest {
         Assert.assertEquals(mRow3, m.getRowMatrix(0));
         try {
             m.setRowMatrix(-1, mRow3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -665,14 +622,14 @@ public final class Array2DRowRealMatrixTest {
                 m.getColumnMatrix(3));
         try {
             m.getColumnMatrix(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnMatrix(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -686,8 +643,8 @@ public final class Array2DRowRealMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnMatrix(1));
         try {
             m.setColumnMatrix(-1, mColumn3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -707,14 +664,14 @@ public final class Array2DRowRealMatrixTest {
         Assert.assertEquals("Row3", mRow3, m.getRowVector(3));
         try {
             m.getRowVector(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowVector(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -728,8 +685,8 @@ public final class Array2DRowRealMatrixTest {
         Assert.assertEquals(mRow3, m.getRowVector(0));
         try {
             m.setRowVector(-1, mRow3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -749,14 +706,14 @@ public final class Array2DRowRealMatrixTest {
         Assert.assertEquals("Column3", mColumn3, m.getColumnVector(3));
         try {
             m.getColumnVector(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnVector(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -770,8 +727,8 @@ public final class Array2DRowRealMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnVector(1));
         try {
             m.setColumnVector(-1, mColumn3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -797,14 +754,14 @@ public final class Array2DRowRealMatrixTest {
         checkArrays(subRow3[0], m.getRow(3));
         try {
             m.getRow(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRow(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -817,8 +774,8 @@ public final class Array2DRowRealMatrixTest {
         checkArrays(subRow3[0], m.getRow(0));
         try {
             m.setRow(-1, subRow3[0]);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -838,14 +795,14 @@ public final class Array2DRowRealMatrixTest {
         checkArrays(mColumn3, m.getColumn(3));
         try {
             m.getColumn(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumn(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -859,8 +816,8 @@ public final class Array2DRowRealMatrixTest {
         checkArrays(mColumn3, m.getColumn(1));
         try {
             m.setColumn(-1, mColumn3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -931,21 +888,21 @@ public final class Array2DRowRealMatrixTest {
         // dimension overflow
         try {
             m.setSubMatrix(testData,1,1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
         // dimension underflow
         try {
             m.setSubMatrix(testData,-1,1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
         try {
             m.setSubMatrix(testData,1,-1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 

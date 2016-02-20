@@ -24,7 +24,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -136,17 +135,17 @@ public class LoessInterpolator
      * {@link #DEFAULT_ROBUSTNESS_ITERS}.
      * @param accuracy If the median residual at a certain robustness iteration
      * is less than this amount, no more iterations are done.
-     * @throws OutOfRangeException if bandwidth does not lie in the interval [0,1].
+     * @throws MathIllegalArgumentException if bandwidth does not lie in the interval [0,1].
      * @throws MathIllegalArgumentException if {@code robustnessIters} is negative.
      * @see #LoessInterpolator(double, int)
      * @since 2.1
      */
     public LoessInterpolator(double bandwidth, int robustnessIters, double accuracy)
-        throws OutOfRangeException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException {
         if (bandwidth < 0 ||
             bandwidth > 1) {
-            throw new OutOfRangeException(LocalizedFormats.BANDWIDTH, bandwidth, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.BANDWIDTH, bandwidth, 0, 1);
         }
         this.bandwidth = bandwidth;
         if (robustnessIters < 0) {

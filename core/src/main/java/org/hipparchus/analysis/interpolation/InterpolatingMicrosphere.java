@@ -22,7 +22,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -66,7 +65,7 @@ public class InterpolatingMicrosphere {
      * @throws MathIllegalArgumentException if {@code dimension <= 0}
      * or {@code size <= 0}.
      * @throws MathIllegalArgumentException if {@code darkThreshold < 0}.
-     * @throws OutOfRangeException if {@code maxDarkFraction} does not
+     * @throws MathIllegalArgumentException if {@code maxDarkFraction} does not
      * belong to the interval {@code [0, 1]}.
      */
     protected InterpolatingMicrosphere(int dimension,
@@ -84,7 +83,8 @@ public class InterpolatingMicrosphere {
         }
         if (maxDarkFraction < 0 ||
             maxDarkFraction > 1) {
-            throw new OutOfRangeException(maxDarkFraction, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   maxDarkFraction, 0, 1);
         }
         if (darkThreshold < 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, darkThreshold, 0);
@@ -118,7 +118,7 @@ public class InterpolatingMicrosphere {
      * @throws MathIllegalArgumentException if {@code dimension <= 0}
      * or {@code size <= 0}.
      * @throws MathIllegalArgumentException if {@code darkThreshold < 0}.
-     * @throws OutOfRangeException if {@code maxDarkFraction} does not
+     * @throws MathIllegalArgumentException if {@code maxDarkFraction} does not
      * belong to the interval {@code [0, 1]}.
      */
     public InterpolatingMicrosphere(int dimension,

@@ -21,7 +21,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -197,16 +196,16 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException if <code>expected</code> has entries that are
      * not strictly positive
      * @throws MathIllegalArgumentException if the arrays length is less than 2
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public boolean chiSquareTest(final double[] expected, final long[] observed,
                                  final double alpha)
         throws MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                                           alpha, 0, 0.5);
         }
         return chiSquareTest(expected, observed) < alpha;
@@ -353,15 +352,15 @@ public class ChiSquareTest {
      * @throws NullArgumentException if the array is null
      * @throws MathIllegalArgumentException if the array is not rectangular
      * @throws MathIllegalArgumentException if {@code counts} has any negative entries
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public boolean chiSquareTest(final long[][] counts, final double alpha)
         throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                                           alpha, 0, 0.5);
         }
         return chiSquareTest(counts) < alpha;
@@ -556,7 +555,7 @@ public class ChiSquareTest {
      * @throws ZeroException if either all counts of <code>observed1</code> or
      * <code>observed2</code> are zero, or if the count at the same index is zero
      * for both arrays
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error occurs performing the test
      * @since 1.2
      */
@@ -564,11 +563,11 @@ public class ChiSquareTest {
                                                    final long[] observed2,
                                                    final double alpha)
         throws MathIllegalArgumentException, MathIllegalArgumentException,
-        ZeroException, OutOfRangeException, MaxCountExceededException {
+        ZeroException, MathIllegalArgumentException, MaxCountExceededException {
 
         if (alpha <= 0 ||
             alpha > 0.5) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                                           alpha, 0, 0.5);
         }
         return chiSquareTestDataSetsComparison(observed1, observed2) < alpha;

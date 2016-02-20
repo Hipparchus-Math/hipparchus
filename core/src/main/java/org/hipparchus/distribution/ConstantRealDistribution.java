@@ -17,7 +17,8 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Implementation of the constant real distribution.
@@ -57,9 +58,10 @@ public class ConstantRealDistribution extends AbstractRealDistribution {
     /** {@inheritDoc} */
     @Override
     public double inverseCumulativeProbability(final double p)
-            throws OutOfRangeException {
+            throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
         return value;
     }

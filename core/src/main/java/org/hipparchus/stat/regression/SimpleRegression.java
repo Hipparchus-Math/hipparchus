@@ -22,7 +22,6 @@ import org.hipparchus.distribution.TDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -650,9 +649,9 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * Bivariate Normal Distribution</a>.</p>
      *
      * @return half-width of 95% confidence interval for the slope estimate
-     * @throws OutOfRangeException if the confidence interval can not be computed.
+     * @throws MathIllegalArgumentException if the confidence interval can not be computed.
      */
-    public double getSlopeConfidenceInterval() throws OutOfRangeException {
+    public double getSlopeConfidenceInterval() throws MathIllegalArgumentException {
         return getSlopeConfidenceInterval(0.05d);
     }
 
@@ -680,20 +679,20 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * <code>Double.NaN</code>.
      * </li>
      * <li><code>(0 < alpha < 1)</code>; otherwise an
-     * <code>OutOfRangeException</code> is thrown.
+     * <code>MathIllegalArgumentException</code> is thrown.
      * </li></ul></p>
      *
      * @param alpha the desired significance level
      * @return half-width of 95% confidence interval for the slope estimate
-     * @throws OutOfRangeException if the confidence interval can not be computed.
+     * @throws MathIllegalArgumentException if the confidence interval can not be computed.
      */
     public double getSlopeConfidenceInterval(final double alpha)
-    throws OutOfRangeException {
+    throws MathIllegalArgumentException {
         if (n < 3) {
             return Double.NaN;
         }
         if (alpha >= 1 || alpha <= 0) {
-            throw new OutOfRangeException(LocalizedFormats.SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedFormats.SIGNIFICANCE_LEVEL,
                                           alpha, 0, 1);
         }
         // No advertised MathIllegalArgumentException here - will return NaN above
@@ -817,33 +816,36 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * @param variablesToInclude an array of indices of regressors to include
      * @return RegressionResults acts as a container of regression output
      * @throws MathIllegalArgumentException if the variablesToInclude array is null or zero length
-     * @throws OutOfRangeException if a requested variable is not present in model
+     * @throws MathIllegalArgumentException if a requested variable is not present in model
      */
     @Override
-    public RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException{
-        if( variablesToInclude == null || variablesToInclude.length == 0){
+    public RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException {
+        if (variablesToInclude == null || variablesToInclude.length == 0) {
           throw new MathIllegalArgumentException(LocalizedFormats.ARRAY_ZERO_LENGTH_OR_NULL_NOT_ALLOWED);
         }
-        if( variablesToInclude.length > 2 || (variablesToInclude.length > 1 && !hasIntercept) ){
+        if (variablesToInclude.length > 2 || (variablesToInclude.length > 1 && !hasIntercept)) {
             throw new ModelSpecificationException(
                     LocalizedFormats.ARRAY_SIZE_EXCEEDS_MAX_VARIABLES,
                     (variablesToInclude.length > 1 && !hasIntercept) ? 1 : 2);
         }
 
-        if( hasIntercept ){
-            if( variablesToInclude.length == 2 ){
-                if( variablesToInclude[0] == 1 ){
+        if (hasIntercept) {
+            if (variablesToInclude.length == 2) {
+                if (variablesToInclude[0] == 1) {
                     throw new ModelSpecificationException(LocalizedFormats.NOT_INCREASING_SEQUENCE);
-                }else if( variablesToInclude[0] != 0 ){
-                    throw new OutOfRangeException( variablesToInclude[0], 0,1 );
+                } else if (variablesToInclude[0] != 0) {
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           variablesToInclude[0], 0,1);
                 }
-                if( variablesToInclude[1] != 1){
-                     throw new OutOfRangeException( variablesToInclude[0], 0,1 );
+                if (variablesToInclude[1] != 1) {
+                     throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                            variablesToInclude[0], 0,1);
                 }
                 return regress();
             }else{
-                if( variablesToInclude[0] != 1 && variablesToInclude[0] != 0 ){
-                     throw new OutOfRangeException( variablesToInclude[0],0,1 );
+                if( variablesToInclude[0] != 1 && variablesToInclude[0] != 0 ) {
+                     throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                            variablesToInclude[0],0,1);
                 }
                 final double _mean = sumY * sumY / n;
                 final double _syy = sumYY + _mean;
@@ -876,9 +878,10 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
                     }
                 }
             }
-        }else{
-            if( variablesToInclude[0] != 0 ){
-                throw new OutOfRangeException(variablesToInclude[0],0,0);
+        } else {
+            if (variablesToInclude[0] != 0) {
+                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                       variablesToInclude[0], 0, 0);
             }
             return regress();
         }

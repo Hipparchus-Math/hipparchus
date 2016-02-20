@@ -24,7 +24,6 @@ import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
@@ -294,7 +293,8 @@ public abstract class AbstractSimplex implements OptimizationData {
     public PointValuePair getPoint(int index) {
         if (index < 0 ||
             index >= simplex.length) {
-            throw new OutOfRangeException(index, 0, simplex.length - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   index, 0, simplex.length - 1);
         }
         return simplex[index];
     }
@@ -309,7 +309,8 @@ public abstract class AbstractSimplex implements OptimizationData {
     protected void setPoint(int index, PointValuePair point) {
         if (index < 0 ||
             index >= simplex.length) {
-            throw new OutOfRangeException(index, 0, simplex.length - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   index, 0, simplex.length - 1);
         }
         simplex[index] = point;
     }

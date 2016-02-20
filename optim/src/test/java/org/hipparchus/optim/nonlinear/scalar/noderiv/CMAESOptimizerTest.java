@@ -25,7 +25,6 @@ import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.PointValuePair;
@@ -94,7 +93,7 @@ public class CMAESOptimizerTest {
                 1e-13, 1e-6, 100000, expected);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInputSigmaOutOfRange() {
         double[] startPoint = point(DIM,0.5);
         double[] insigma = point(DIM, 1.1);

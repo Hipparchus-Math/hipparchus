@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -39,12 +38,12 @@ public class UniformCrossoverTest {
         }
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testRatioTooLow() {
         new UniformCrossover<Integer>(-0.5d);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testRatioTooHigh() {
         new UniformCrossover<Integer>(1.5d);
     }

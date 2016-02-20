@@ -22,7 +22,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
@@ -223,7 +222,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public double getEntry(final int row, final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMatrixIndex(this, row, column);
         return row == column ? data[row] : 0;
     }
@@ -233,7 +232,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
      */
     @Override
     public void setEntry(final int row, final int column, final double value)
-        throws OutOfRangeException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException {
         if (row == column) {
             MatrixUtils.checkRowIndex(this, row);
             data[row] = value;
@@ -249,7 +248,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
     public void addToEntry(final int row,
                            final int column,
                            final double increment)
-        throws OutOfRangeException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException {
         if (row == column) {
             MatrixUtils.checkRowIndex(this, row);
             data[row] += increment;
@@ -263,7 +262,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
     public void multiplyEntry(final int row,
                               final int column,
                               final double factor)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         // we don't care about non-diagonal elements for multiplication
         if (row == column) {
             MatrixUtils.checkRowIndex(this, row);

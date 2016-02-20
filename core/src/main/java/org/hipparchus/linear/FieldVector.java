@@ -21,7 +21,6 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 
 /**
  * Interface defining a field-valued vector with basic algebraic operations.
@@ -219,19 +218,19 @@ public interface FieldVector<T extends FieldElement<T>>  {
      *
      * @param index Index location of entry to be fetched.
      * @return the vector entry at {@code index}.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      * @see #setEntry(int, FieldElement)
      */
-    T getEntry(int index) throws OutOfRangeException;
+    T getEntry(int index) throws MathIllegalArgumentException;
 
     /**
      * Set a single element.
      * @param index element index.
      * @param value new value for the element.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      * @see #getEntry(int)
      */
-    void setEntry(int index, T value) throws OutOfRangeException;
+    void setEntry(int index, T value) throws MathIllegalArgumentException;
 
     /**
      * Returns the size of the vector.
@@ -258,19 +257,19 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @param index index of first element.
      * @param n number of elements to be retrieved.
      * @return a vector containing n elements.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      * @throws MathIllegalArgumentException if the number of elements if not positive.
      */
     FieldVector<T> getSubVector(int index, int n)
-        throws OutOfRangeException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException, MathIllegalArgumentException;
 
     /**
      * Set a set of consecutive elements.
      * @param index index of first element to be set.
      * @param v vector containing the values to set.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      */
-    void setSubVector(int index, FieldVector<T> v) throws OutOfRangeException;
+    void setSubVector(int index, FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Set all elements to a single value.

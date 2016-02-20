@@ -17,7 +17,8 @@
 
 package org.hipparchus.ml.neuralnet.sofm;
 
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.neuralnet.sofm.util.ExponentialDecayFunction;
 import org.hipparchus.ml.neuralnet.sofm.util.QuasiSigmoidDecayFunction;
 
@@ -45,7 +46,7 @@ public class LearningFactorFunctionFactory {
      * @param numCall Argument for which the function returns
      * {@code valueAtNumCall}.
      * @return the learning factor function.
-     * @throws org.hipparchus.exception.OutOfRangeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code initValue <= 0} or {@code initValue > 1}.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code valueAtNumCall <= 0}.
@@ -59,7 +60,8 @@ public class LearningFactorFunctionFactory {
                                                           final long numCall) {
         if (initValue <= 0 ||
             initValue > 1) {
-            throw new OutOfRangeException(initValue, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   initValue, 0, 1);
         }
 
         return new LearningFactorFunction() {
@@ -89,7 +91,7 @@ public class LearningFactorFunctionFactory {
      * @param slope Value of the function derivative at {@code numCall}.
      * @param numCall Inflexion point.
      * @return the learning factor function.
-     * @throws org.hipparchus.exception.OutOfRangeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code initValue <= 0} or {@code initValue > 1}.
      * @throws org.hipparchus.exception.NumberIsTooLargeException
      * if {@code slope >= 0}.
@@ -101,7 +103,8 @@ public class LearningFactorFunctionFactory {
                                                            final long numCall) {
         if (initValue <= 0 ||
             initValue > 1) {
-            throw new OutOfRangeException(initValue, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   initValue, 0, 1);
         }
 
         return new LearningFactorFunction() {

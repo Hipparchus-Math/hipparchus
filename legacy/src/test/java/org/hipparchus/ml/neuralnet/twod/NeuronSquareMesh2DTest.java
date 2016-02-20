@@ -27,7 +27,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
 import org.hipparchus.ml.neuralnet.FeatureInitializerFactory;
 import org.hipparchus.ml.neuralnet.Network;
@@ -708,25 +708,25 @@ public class NeuronSquareMesh2DTest {
         try {
             net.getNeuron(2, 0);
             Assert.fail("exception expected");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             net.getNeuron(0, 2);
             Assert.fail("exception expected");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             net.getNeuron(-1, 0);
             Assert.fail("exception expected");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             net.getNeuron(0, -1);
             Assert.fail("exception expected");
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
     }

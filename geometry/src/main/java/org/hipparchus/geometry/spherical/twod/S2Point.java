@@ -17,7 +17,8 @@
 package org.hipparchus.geometry.spherical.twod;
 
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -78,10 +79,10 @@ public class S2Point implements Point<Sphere2D> {
      * @param phi polar angle \( \varphi \)
      * @see #getTheta()
      * @see #getPhi()
-     * @exception OutOfRangeException if \( \varphi \) is not in the [\( 0; \pi \)] range
+     * @exception MathIllegalArgumentException if \( \varphi \) is not in the [\( 0; \pi \)] range
      */
     public S2Point(final double theta, final double phi)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         this(theta, phi, vector(theta, phi));
     }
 
@@ -110,13 +111,14 @@ public class S2Point implements Point<Sphere2D> {
      * @param theta azimuthal angle \( \theta \) in the x-y plane
      * @param phi polar angle \( \varphi \)
      * @return normalized vector
-     * @exception OutOfRangeException if \( \varphi \) is not in the [\( 0; \pi \)] range
+     * @exception MathIllegalArgumentException if \( \varphi \) is not in the [\( 0; \pi \)] range
      */
     private static Vector3D vector(final double theta, final double phi)
-       throws OutOfRangeException {
+       throws MathIllegalArgumentException {
 
         if (phi < 0 || phi > FastMath.PI) {
-            throw new OutOfRangeException(phi, 0, FastMath.PI);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   phi, 0, FastMath.PI);
         }
 
         final double cosTheta = FastMath.cos(theta);

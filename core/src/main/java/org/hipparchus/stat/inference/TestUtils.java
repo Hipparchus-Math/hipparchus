@@ -25,7 +25,6 @@ import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 
@@ -84,7 +83,7 @@ public class TestUtils  {
     public static boolean homoscedasticTTest(final double[] sample1, final double[] sample2,
                                              final double alpha)
         throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
         return T_TEST.homoscedasticTTest(sample1, sample2, alpha);
     }
 
@@ -120,7 +119,7 @@ public class TestUtils  {
     public static boolean pairedTTest(final double[] sample1, final double[] sample2,
                                       final double alpha)
         throws NullArgumentException, NoDataException, MathIllegalArgumentException,
-        NumberIsTooSmallException, OutOfRangeException, MaxCountExceededException {
+        NumberIsTooSmallException, MathIllegalArgumentException, MaxCountExceededException {
         return T_TEST.pairedTTest(sample1, sample2, alpha);
     }
 
@@ -171,7 +170,7 @@ public class TestUtils  {
      */
     public static boolean tTest(final double mu, final double[] sample, final double alpha)
         throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
         return T_TEST.tTest(mu, sample, alpha);
     }
 
@@ -190,7 +189,7 @@ public class TestUtils  {
     public static boolean tTest(final double mu, final StatisticalSummary sampleStats,
                                 final double alpha)
         throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
         return T_TEST.tTest(mu, sampleStats, alpha);
     }
 
@@ -209,7 +208,7 @@ public class TestUtils  {
     public static boolean tTest(final double[] sample1, final double[] sample2,
                                 final double alpha)
         throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
         return T_TEST.tTest(sample1, sample2, alpha);
     }
 
@@ -229,7 +228,7 @@ public class TestUtils  {
                                 final StatisticalSummary sampleStats2,
                                 final double alpha)
         throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
         return T_TEST.tTest(sampleStats1, sampleStats2, alpha);
     }
 
@@ -267,7 +266,7 @@ public class TestUtils  {
     public static boolean chiSquareTest(final double[] expected, final long[] observed,
                                         final double alpha)
         throws MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(expected, observed, alpha);
     }
 
@@ -285,7 +284,7 @@ public class TestUtils  {
      */
     public static boolean chiSquareTest(final long[][] counts, final double alpha)
         throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(counts, alpha);
     }
 
@@ -330,7 +329,7 @@ public class TestUtils  {
                                                           final long[] observed2,
                                                           final double alpha)
         throws MathIllegalArgumentException, MathIllegalArgumentException,
-        ZeroException, OutOfRangeException, MaxCountExceededException {
+        ZeroException, MathIllegalArgumentException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTestDataSetsComparison(observed1, observed2, alpha);
     }
 
@@ -363,7 +362,7 @@ public class TestUtils  {
     public static boolean oneWayAnovaTest(final Collection<double[]> categoryData,
                                           final double alpha)
         throws NullArgumentException, MathIllegalArgumentException,
-        OutOfRangeException, MathIllegalStateException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
         return ONE_WAY_ANANOVA.anovaTest(categoryData, alpha);
     }
 
@@ -404,7 +403,7 @@ public class TestUtils  {
     public static boolean gTest(final double[] expected, final long[] observed,
                                 final double alpha)
         throws MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
         return G_TEST.gTest(expected, observed, alpha);
     }
 
@@ -447,7 +446,7 @@ public class TestUtils  {
                                                   final long[] observed2,
                                                   final double alpha)
         throws MathIllegalArgumentException, MathIllegalArgumentException,
-        ZeroException, OutOfRangeException, MaxCountExceededException {
+        ZeroException, MathIllegalArgumentException, MaxCountExceededException {
         return G_TEST.gTestDataSetsComparison(observed1, observed2, alpha);
     }
 

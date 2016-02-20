@@ -25,7 +25,6 @@ import java.util.Map.Entry;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.Pair;
@@ -202,9 +201,10 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * {@inheritDoc}
      */
     @Override
-    public double inverseCumulativeProbability(final double p) throws OutOfRangeException {
+    public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
 
         double probability = 0;

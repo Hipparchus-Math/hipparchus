@@ -19,21 +19,18 @@ package org.hipparchus.ml.neuralnet.sofm;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.ml.neuralnet.sofm.LearningFactorFunction;
-import org.hipparchus.ml.neuralnet.sofm.LearningFactorFunctionFactory;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for {@link LearningFactorFunctionFactory} class.
  */
 public class LearningFactorFunctionFactoryTest {
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition0() {
         LearningFactorFunctionFactory.exponentialDecay(0d, 0d, 2);
     }
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition1() {
         LearningFactorFunctionFactory.exponentialDecay(1 + 1e-10, 0d, 2);
     }
@@ -63,11 +60,11 @@ public class LearningFactorFunctionFactoryTest {
         Assert.assertEquals(0, f.value(Long.MAX_VALUE), 0d);
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition0() {
         LearningFactorFunctionFactory.quasiSigmoidDecay(0d, -1d, 2);
     }
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition1() {
         LearningFactorFunctionFactory.quasiSigmoidDecay(1 + 1e-10, -1d, 2);
     }

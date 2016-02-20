@@ -19,7 +19,6 @@ package org.hipparchus.random;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -83,9 +82,9 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
      * Construct a new Halton sequence generator for the given space dimension.
      *
      * @param dimension the space dimension
-     * @throws OutOfRangeException if the space dimension is outside the allowed range of [1, 40]
+     * @throws MathIllegalArgumentException if the space dimension is outside the allowed range of [1, 40]
      */
-    public HaltonSequenceGenerator(final int dimension) throws OutOfRangeException {
+    public HaltonSequenceGenerator(final int dimension) throws MathIllegalArgumentException {
         this(dimension, PRIMES, WEIGHTS);
     }
 
@@ -97,17 +96,18 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
      * @param bases the base number for each dimension, entries should be (pairwise) prime, may not be null
      * @param weights the weights used during scrambling, may be null in which case no scrambling will be performed
      * @throws NullArgumentException if base is null
-     * @throws OutOfRangeException if the space dimension is outside the range [1, len], where
+     * @throws MathIllegalArgumentException if the space dimension is outside the range [1, len], where
      *   len refers to the length of the bases array
      * @throws MathIllegalArgumentException if weights is non-null and the length of the input arrays differ
      */
     public HaltonSequenceGenerator(final int dimension, final int[] bases, final int[] weights)
-            throws NullArgumentException, OutOfRangeException, MathIllegalArgumentException {
+            throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException {
 
         MathUtils.checkNotNull(bases);
 
         if (dimension < 1 || dimension > bases.length) {
-            throw new OutOfRangeException(dimension, 1, PRIMES.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   dimension, 1, PRIMES.length);
         }
 
         if (weights != null && weights.length != bases.length) {

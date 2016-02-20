@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.EigenDecomposition;
@@ -569,7 +568,8 @@ public class CMAESOptimizer
 
             for (int i = 0; i < init.length; i++) {
                 if (inputSigma[i] > uB[i] - lB[i]) {
-                    throw new OutOfRangeException(inputSigma[i], 0, uB[i] - lB[i]);
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           inputSigma[i], 0, uB[i] - lB[i]);
                 }
             }
         }

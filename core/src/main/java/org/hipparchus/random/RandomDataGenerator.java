@@ -43,7 +43,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -545,10 +544,10 @@ public class RandomDataGenerator implements Serializable {
      * @param p the probability of success of the Pascal distribution
      * @return random value sampled from the Pascal(r, p) distribution
      * @throws MathIllegalArgumentException if the number of successes is not positive
-     * @throws OutOfRangeException if the probability of success is not in the
+     * @throws MathIllegalArgumentException if the probability of success is not in the
      * range {@code [0, 1]}.
      */
-    public int nextPascal(int r, double p) throws MathIllegalArgumentException, OutOfRangeException {
+    public int nextPascal(int r, double p) throws MathIllegalArgumentException, MathIllegalArgumentException {
         return new PascalDistribution(getRandomGenerator(), r, p).sample();
     }
 

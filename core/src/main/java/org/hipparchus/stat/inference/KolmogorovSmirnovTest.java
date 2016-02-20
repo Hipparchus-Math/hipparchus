@@ -24,14 +24,13 @@ import java.util.HashSet;
 import org.hipparchus.distribution.EnumeratedRealDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.TooManyIterationsException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.BigFractionField;
@@ -390,7 +389,7 @@ public class KolmogorovSmirnovTest {
      */
     public boolean kolmogorovSmirnovTest(RealDistribution distribution, double[] data, double alpha) {
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
         }
         return kolmogorovSmirnovTest(distribution, data) < alpha;
     }

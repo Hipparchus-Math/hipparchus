@@ -21,7 +21,6 @@ import java.io.Serializable;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.OpenIntToDoubleHashMap;
 import org.hipparchus.util.OpenIntToDoubleHashMap.Iterator;
@@ -348,7 +347,7 @@ public class OpenMapRealVector extends SparseRealVector
     /** {@inheritDoc} */
     @Override
     public OpenMapRealVector getSubVector(int index, int n)
-        throws MathIllegalArgumentException, OutOfRangeException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         checkIndex(index);
         if (n < 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
@@ -417,7 +416,7 @@ public class OpenMapRealVector extends SparseRealVector
 
     /** {@inheritDoc} */
     @Override
-    public double getEntry(int index) throws OutOfRangeException {
+    public double getEntry(int index) throws MathIllegalArgumentException {
         checkIndex(index);
         return entries.get(index);
     }
@@ -557,7 +556,7 @@ public class OpenMapRealVector extends SparseRealVector
     /** {@inheritDoc} */
     @Override
     public void setEntry(int index, double value)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         checkIndex(index);
         if (!isDefaultValue(value)) {
             entries.put(index, value);
@@ -569,7 +568,7 @@ public class OpenMapRealVector extends SparseRealVector
     /** {@inheritDoc} */
     @Override
     public void setSubVector(int index, RealVector v)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         checkIndex(index);
         checkIndex(index + v.getDimension() - 1);
         for (int i = 0; i < v.getDimension(); i++) {

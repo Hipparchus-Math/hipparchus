@@ -19,7 +19,7 @@ package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.stat.inference.TTest;
 import org.junit.Assert;
@@ -145,15 +145,15 @@ public class TTestTest {
 
         try {
             testStatistic.tTest(0d, oneSidedP, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.tTest(0d, oneSidedPStats, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -192,15 +192,15 @@ public class TTestTest {
 
         try {
             testStatistic.tTest(sample1, sample2, .95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.tTest(sampleStats1, sampleStats2, .95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

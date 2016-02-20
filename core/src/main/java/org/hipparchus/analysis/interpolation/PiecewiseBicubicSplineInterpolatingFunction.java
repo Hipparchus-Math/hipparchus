@@ -24,7 +24,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -116,7 +115,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
     @Override
     public double value(double x,
                         double y)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         final AkimaSplineInterpolator interpolator = new AkimaSplineInterpolator();
         final int offset = 2;
         final int count = offset + 3;
@@ -176,7 +175,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
      *        queried
      * @return the index in {@code val} corresponding to the interval containing
      *         {@code c}.
-     * @throws OutOfRangeException if {@code c} is out of the range defined by
+     * @throws MathIllegalArgumentException if {@code c} is out of the range defined by
      *         the boundary values of {@code val}.
      */
     private int searchIndex(double c,
@@ -186,7 +185,8 @@ public class PiecewiseBicubicSplineInterpolatingFunction
         int r = Arrays.binarySearch(val, c);
 
         if (r == -1 || r == -val.length - 1) {
-            throw new OutOfRangeException(c, val[0], val[val.length - 1]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   c, val[0], val[val.length - 1]);
         }
 
         if (r < 0) {

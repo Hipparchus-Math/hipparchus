@@ -20,7 +20,6 @@ package org.hipparchus.util;
 import java.util.NoSuchElementException;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -61,26 +60,26 @@ public class MultidimensionalCounterTest {
         }
         try {
             c.getCount(3, 1);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c.getCount(0, -1);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c.getCounts(-1);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c.getCounts(6);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
     }

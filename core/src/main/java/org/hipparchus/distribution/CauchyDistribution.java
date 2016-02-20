@@ -18,7 +18,6 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -169,10 +168,11 @@ public class CauchyDistribution extends AbstractRealDistribution {
      * and {@code Double.POSITIVE_INFINITY} when {@code p == 1}.
      */
     @Override
-    public double inverseCumulativeProbability(double p) throws OutOfRangeException {
+    public double inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
         double ret;
         if (p < 0 || p > 1) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         } else if (p == 0) {
             ret = Double.NEGATIVE_INFINITY;
         } else  if (p == 1) {

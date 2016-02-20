@@ -25,7 +25,8 @@ import java.io.ObjectInputStream;
 
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
 import org.hipparchus.ml.neuralnet.Network;
 import org.hipparchus.ml.neuralnet.Neuron;
@@ -294,7 +295,7 @@ public class NeuronSquareMesh2D
      * @param i Row index.
      * @param j Column index.
      * @return the neuron at {@code (i, j)}.
-     * @throws OutOfRangeException if {@code i} or {@code j} is
+     * @throws MathIllegalArgumentException if {@code i} or {@code j} is
      * out of range.
      *
      * @see #getNeuron(int,int,HorizontalDirection,VerticalDirection)
@@ -303,11 +304,13 @@ public class NeuronSquareMesh2D
                             int j) {
         if (i < 0 ||
             i >= numberOfRows) {
-            throw new OutOfRangeException(i, 0, numberOfRows - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   i, 0, numberOfRows - 1);
         }
         if (j < 0 ||
             j >= numberOfColumns) {
-            throw new OutOfRangeException(j, 0, numberOfColumns - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   j, 0, numberOfColumns - 1);
         }
 
         return network.getNeuron(identifiers[i][j]);

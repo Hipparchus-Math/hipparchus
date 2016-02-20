@@ -19,7 +19,6 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -158,8 +157,8 @@ public final class BicubicInterpolatingFunctionTest {
         // Ensure that an exception would have been thrown.
         try {
             bcf.value(x, y);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException expected) {}
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException expected) {}
 
         x = xMin;
         y = yMax + small;
@@ -167,8 +166,8 @@ public final class BicubicInterpolatingFunctionTest {
         // Ensure that an exception would have been thrown.
         try {
             bcf.value(x, y);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException expected) {}
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException expected) {}
     }
 
     /**

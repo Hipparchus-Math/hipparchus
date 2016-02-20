@@ -20,13 +20,6 @@ import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.DiagonalMatrix;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
@@ -318,7 +311,7 @@ public class DiagonalMatrixTest {
         Assert.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testSetEntryOutOfRange() {
         final DiagonalMatrix diag = new DiagonalMatrix(3);
         diag.setEntry(3, 3, 3.4);

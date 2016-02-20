@@ -17,7 +17,6 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -237,13 +236,13 @@ public class GTestTest {
         try {
             testStatistic.gTest(expected, observed, 0.8);
             Assert.fail("zero expected count, MathIllegalArgumentException expected");
-        } catch (OutOfRangeException ex) {
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2, -0.5);
             Assert.fail("zero expected count, MathIllegalArgumentException expected");
-        } catch (OutOfRangeException ex) {
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

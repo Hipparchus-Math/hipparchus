@@ -20,7 +20,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -238,12 +237,12 @@ public class LoessInterpolatorTest {
         li.smooth(new double[] {1,2,3,4,5,6,7,8,9,10,11,12}, new double[] {1,2,3,4,5,6,7,8,9,10,11,12});
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCompletelyIncorrectBandwidth1() {
         new LoessInterpolator(-0.2, 3, 1e-12);
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCompletelyIncorrectBandwidth2() {
         new LoessInterpolator(1.1, 3, 1e-12);
     }

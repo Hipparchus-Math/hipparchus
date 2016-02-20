@@ -20,7 +20,6 @@ import org.hipparchus.distribution.ChiSquaredDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -230,16 +229,16 @@ public class GTest {
      * are less than 2.
      * @throws MaxCountExceededException if an error occurs computing the
      * p-value.
-     * @throws OutOfRangeException if alpha is not strictly greater than zero
+     * @throws MathIllegalArgumentException if alpha is not strictly greater than zero
      * and less than or equal to 0.5
      */
     public boolean gTest(final double[] expected, final long[] observed,
             final double alpha)
             throws MathIllegalArgumentException, MathIllegalArgumentException,
-            MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
+            MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                     alpha, 0, 0.5);
         }
         return gTest(expected, observed) < alpha;
@@ -520,7 +519,7 @@ public class GTest {
      * @throws ZeroException if either all counts of {@code observed1} or
      * {@code observed2} are zero, or if the count at some index is
      * zero for both arrays
-     * @throws OutOfRangeException if {@code alpha} is not in the range
+     * @throws MathIllegalArgumentException if {@code alpha} is not in the range
      * (0, 0.5]
      * @throws MaxCountExceededException if an error occurs performing the test
      */
@@ -529,10 +528,10 @@ public class GTest {
             final long[] observed2,
             final double alpha)
             throws MathIllegalArgumentException, MathIllegalArgumentException,
-            ZeroException, OutOfRangeException, MaxCountExceededException {
+            ZeroException, MathIllegalArgumentException, MaxCountExceededException {
 
         if (alpha <= 0 || alpha > 0.5) {
-            throw new OutOfRangeException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
         }
         return gTestDataSetsComparison(observed1, observed2) < alpha;

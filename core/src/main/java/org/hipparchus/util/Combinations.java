@@ -25,7 +25,6 @@ import java.util.NoSuchElementException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.OutOfRangeException;
 
 /**
  * Utility to create <a href="http://en.wikipedia.org/wiki/Combination">
@@ -154,7 +153,7 @@ public class Combinations implements Iterable<int[]> {
      * <ul>
      *  <li>{@code MathIllegalArgumentException} if the array lengths are not
      *      equal to {@code k},</li>
-     *  <li>{@code OutOfRangeException} if an element of the array is not
+     *  <li>{@code MathIllegalArgumentException} if an element of the array is not
      *      within the interval [0, {@code n}).</li>
      * </ul>
      * @return a lexicographic comparator.
@@ -355,7 +354,7 @@ public class Combinations implements Iterable<int[]> {
          *
          * @throws MathIllegalArgumentException if the array lengths are not
          * equal to {@code k}.
-         * @throws OutOfRangeException if an element of the array is not
+         * @throws MathIllegalArgumentException if an element of the array is not
          * within the interval [0, {@code n}).
          */
         @Override
@@ -397,7 +396,7 @@ public class Combinations implements Iterable<int[]> {
          *
          * @param c Input array.
          * @return the lexicographic norm.
-         * @throws OutOfRangeException if an element of the array is not
+         * @throws MathIllegalArgumentException if an element of the array is not
          * within the interval [0, {@code n}).
          */
         private long lexNorm(int[] c) {
@@ -406,7 +405,8 @@ public class Combinations implements Iterable<int[]> {
                 final int digit = c[i];
                 if (digit < 0 ||
                     digit >= n) {
-                    throw new OutOfRangeException(digit, 0, n - 1);
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           digit, 0, n - 1);
                 }
 
                 ret += c[i] * ArithmeticUtils.pow(n, i);

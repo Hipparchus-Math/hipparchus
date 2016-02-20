@@ -29,7 +29,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -67,32 +66,32 @@ public abstract class RealVector {
      *
      * @param index Index location of entry to be fetched.
      * @return the vector entry at {@code index}.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      * @see #setEntry(int, double)
      */
-    public abstract double getEntry(int index) throws OutOfRangeException;
+    public abstract double getEntry(int index) throws MathIllegalArgumentException;
 
     /**
      * Set a single element.
      *
      * @param index element index.
      * @param value new value for the element.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      * @see #getEntry(int)
      */
     public abstract void setEntry(int index, double value)
-        throws OutOfRangeException;
+        throws MathIllegalArgumentException;
 
     /**
      * Change an entry at the specified index.
      *
      * @param index Index location of entry to be set.
      * @param increment Value to add to the vector entry.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      * @since 3.0
      */
     public void addToEntry(int index, double increment)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         setEntry(index, getEntry(index) + increment);
     }
 
@@ -118,21 +117,21 @@ public abstract class RealVector {
      * @param index index of first element.
      * @param n number of elements to be retrieved.
      * @return a vector containing n elements.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      * @throws MathIllegalArgumentException if the number of elements is not positive.
      */
     public abstract RealVector getSubVector(int index, int n)
-        throws MathIllegalArgumentException, OutOfRangeException;
+        throws MathIllegalArgumentException, MathIllegalArgumentException;
 
     /**
      * Set a sequence of consecutive elements.
      *
      * @param index index of first element to be set.
      * @param v vector containing the values to set.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      */
     public abstract void setSubVector(int index, RealVector v)
-        throws OutOfRangeException;
+        throws MathIllegalArgumentException;
 
     /**
      * Check whether any coordinate of this vector is {@code NaN}.
@@ -182,12 +181,12 @@ public abstract class RealVector {
      * Check if an index is valid.
      *
      * @param index Index to check.
-     * @exception OutOfRangeException if {@code index} is not valid.
+     * @exception MathIllegalArgumentException if {@code index} is not valid.
      */
-    protected void checkIndex(final int index) throws OutOfRangeException {
+    protected void checkIndex(final int index) throws MathIllegalArgumentException {
         if (index < 0 ||
             index >= getDimension()) {
-            throw new OutOfRangeException(LocalizedFormats.INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX,
                                           index, 0, getDimension() - 1);
         }
     }
@@ -197,19 +196,19 @@ public abstract class RealVector {
      *
      * @param start the index of the first entry of the subvector
      * @param end the index of the last entry of the subvector (inclusive)
-     * @throws OutOfRangeException if {@code start} of {@code end} are not valid
+     * @throws MathIllegalArgumentException if {@code start} of {@code end} are not valid
      * @throws NumberIsTooSmallException if {@code end < start}
      * @since 3.1
      */
     protected void checkIndices(final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         final int dim = getDimension();
         if ((start < 0) || (start >= dim)) {
-            throw new OutOfRangeException(LocalizedFormats.INDEX, start, 0,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, start, 0,
                                           dim - 1);
         }
         if ((end < 0) || (end >= dim)) {
-            throw new OutOfRangeException(LocalizedFormats.INDEX, end, 0,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, end, 0,
                                           dim - 1);
         }
         if (end < start) {
@@ -892,12 +891,12 @@ public abstract class RealVector {
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor,
                                      final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -934,12 +933,12 @@ public abstract class RealVector {
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor,
                                        final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -972,12 +971,12 @@ public abstract class RealVector {
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorChangingVisitor visitor,
                               final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -1014,12 +1013,12 @@ public abstract class RealVector {
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor,
                                        final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -1489,7 +1488,7 @@ public abstract class RealVector {
 
             /** {@inheritDoc} */
             @Override
-            public double getEntry(int index) throws OutOfRangeException {
+            public double getEntry(int index) throws MathIllegalArgumentException {
                 return v.getEntry(index);
             }
 
@@ -1538,7 +1537,7 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public RealVector getSubVector(int index, int n)
-                throws OutOfRangeException, MathIllegalArgumentException {
+                throws MathIllegalArgumentException, MathIllegalArgumentException {
                 return v.getSubVector(index, n);
             }
 

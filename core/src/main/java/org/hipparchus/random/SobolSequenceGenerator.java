@@ -29,7 +29,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -86,11 +85,12 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      * Construct a new Sobol sequence generator for the given space dimension.
      *
      * @param dimension the space dimension
-     * @throws OutOfRangeException if the space dimension is outside the allowed range of [1, 1000]
+     * @throws MathIllegalArgumentException if the space dimension is outside the allowed range of [1, 1000]
      */
-    public SobolSequenceGenerator(final int dimension) throws OutOfRangeException {
+    public SobolSequenceGenerator(final int dimension) throws MathIllegalArgumentException {
         if (dimension < 1 || dimension > MAX_DIMENSION) {
-            throw new OutOfRangeException(dimension, 1, MAX_DIMENSION);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   dimension, 1, MAX_DIMENSION);
         }
 
         // initialize the other dimensions with direction numbers from a resource
@@ -148,7 +148,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      * @param dimension the space dimension
      * @param is the stream to read the direction vectors from
      * @throws MathIllegalArgumentException if the space dimension is &lt; 1
-     * @throws OutOfRangeException if the space dimension is outside the range [1, max], where
+     * @throws MathIllegalArgumentException if the space dimension is outside the range [1, max], where
      *   max refers to the maximum dimension found in the input stream
      * @throws MathIllegalStateException if the content in the stream could not be parsed successfully
      * @throws IOException if an error occurs while reading from the input stream
@@ -170,7 +170,8 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
         // initialize the other dimensions with direction numbers from the stream
         int lastDimension = initFromStream(is);
         if (lastDimension < dimension) {
-            throw new OutOfRangeException(dimension, 1, lastDimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   dimension, 1, lastDimension);
         }
     }
 

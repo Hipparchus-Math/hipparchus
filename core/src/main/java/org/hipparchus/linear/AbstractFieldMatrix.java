@@ -26,7 +26,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -316,7 +315,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldMatrix<T> getSubMatrix(final int startRow, final int endRow,
                                        final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
 
         final FieldMatrix<T> subMatrix =
@@ -335,7 +334,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldMatrix<T> getSubMatrix(final int[] selectedRows,
                                        final int[] selectedColumns)
-    throws NoDataException, NullArgumentException, OutOfRangeException {
+    throws NoDataException, NullArgumentException, MathIllegalArgumentException {
 
         // safety checks
         checkSubMatrixIndex(selectedRows, selectedColumns);
@@ -363,7 +362,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
                               final int startColumn, final int endColumn,
                               final T[][] destination)
     throws MathIllegalArgumentException, NumberIsTooSmallException,
-    OutOfRangeException{
+    MathIllegalArgumentException{
         // safety checks
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         final int rowsCount    = endRow + 1 - startRow;
@@ -406,7 +405,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public void copySubMatrix(int[] selectedRows, int[] selectedColumns, T[][] destination)
         throws MathIllegalArgumentException, NoDataException,
-        NullArgumentException, OutOfRangeException {
+        NullArgumentException, MathIllegalArgumentException {
         // safety checks
         checkSubMatrixIndex(selectedRows, selectedColumns);
         if ((destination.length < selectedRows.length) ||
@@ -430,7 +429,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
-        throws MathIllegalArgumentException, OutOfRangeException,
+        throws MathIllegalArgumentException, MathIllegalArgumentException,
         NoDataException, NullArgumentException {
         if (subMatrix == null) {
             throw new NullArgumentException();
@@ -466,7 +465,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public FieldMatrix<T> getRowMatrix(final int row) throws OutOfRangeException {
+    public FieldMatrix<T> getRowMatrix(final int row) throws MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         final FieldMatrix<T> out = createMatrix(1, nCols);
@@ -481,7 +480,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setRowMatrix(final int row, final FieldMatrix<T> matrix)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if ((matrix.getRowDimension() != 1) ||
@@ -499,7 +498,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> getColumnMatrix(final int column)
-    throws OutOfRangeException {
+    throws MathIllegalArgumentException {
 
         checkColumnIndex(column);
         final int nRows = getRowDimension();
@@ -515,7 +514,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setColumnMatrix(final int column, final FieldMatrix<T> matrix)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if ((matrix.getRowDimension() != nRows) ||
@@ -533,14 +532,14 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> getRowVector(final int row)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         return new ArrayFieldVector<T>(field, getRow(row), false);
     }
 
     /** {@inheritDoc} */
     @Override
     public void setRowVector(final int row, final FieldVector<T> vector)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if (vector.getDimension() != nCols) {
@@ -557,14 +556,14 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> getColumnVector(final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         return new ArrayFieldVector<T>(field, getColumn(column), false);
     }
 
     /** {@inheritDoc} */
     @Override
     public void setColumnVector(final int column, final FieldVector<T> vector)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
 
         checkColumnIndex(column);
         final int nRows = getRowDimension();
@@ -581,7 +580,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public T[] getRow(final int row) throws OutOfRangeException {
+    public T[] getRow(final int row) throws MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         final T[] out = MathArrays.buildArray(field, nCols);
@@ -596,7 +595,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setRow(final int row, final T[] array)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if (array.length != nCols) {
@@ -611,7 +610,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public T[] getColumn(final int column) throws OutOfRangeException {
+    public T[] getColumn(final int column) throws MathIllegalArgumentException {
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         final T[] out = MathArrays.buildArray(field, nRows);
@@ -626,7 +625,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setColumn(final int column, final T[] array)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if (array.length != nRows) {
@@ -640,19 +639,19 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public abstract T getEntry(int row, int column) throws OutOfRangeException;
+    public abstract T getEntry(int row, int column) throws MathIllegalArgumentException;
 
     /** {@inheritDoc} */
     @Override
-    public abstract void setEntry(int row, int column, T value) throws OutOfRangeException;
+    public abstract void setEntry(int row, int column, T value) throws MathIllegalArgumentException;
 
     /** {@inheritDoc} */
     @Override
-    public abstract void addToEntry(int row, int column, T increment) throws OutOfRangeException;
+    public abstract void addToEntry(int row, int column, T increment) throws MathIllegalArgumentException;
 
     /** {@inheritDoc} */
     @Override
-    public abstract void multiplyEntry(int row, int column, T factor) throws OutOfRangeException;
+    public abstract void multiplyEntry(int row, int column, T factor) throws MathIllegalArgumentException;
 
     /** {@inheritDoc} */
     @Override
@@ -835,7 +834,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInRowOrder(final FieldMatrixChangingVisitor<T> visitor,
                             final int startRow, final int endRow,
                             final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -854,7 +853,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInRowOrder(final FieldMatrixPreservingVisitor<T> visitor,
                             final int startRow, final int endRow,
                             final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -901,7 +900,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInColumnOrder(final FieldMatrixChangingVisitor<T> visitor,
                                final int startRow, final int endRow,
                                final int startColumn, final int endColumn)
-    throws NumberIsTooSmallException, OutOfRangeException {
+    throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -920,7 +919,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInColumnOrder(final FieldMatrixPreservingVisitor<T> visitor,
                                final int startRow, final int endRow,
                                final int startColumn, final int endColumn)
-    throws NumberIsTooSmallException, OutOfRangeException{
+    throws NumberIsTooSmallException, MathIllegalArgumentException{
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -949,7 +948,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInOptimizedOrder(final FieldMatrixChangingVisitor<T> visitor,
                                   final int startRow, final int endRow,
                                   final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         return walkInRowOrder(visitor, startRow, endRow, startColumn, endColumn);
     }
 
@@ -958,7 +957,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInOptimizedOrder(final FieldMatrixPreservingVisitor<T> visitor,
                                   final int startRow, final int endRow,
                                   final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         return walkInRowOrder(visitor, startRow, endRow, startColumn, endColumn);
     }
 
@@ -1049,11 +1048,11 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      * Check if a row index is valid.
      *
      * @param row Row index to check.
-     * @throws OutOfRangeException if {@code index} is not valid.
+     * @throws MathIllegalArgumentException if {@code index} is not valid.
      */
-    protected void checkRowIndex(final int row) throws OutOfRangeException {
+    protected void checkRowIndex(final int row) throws MathIllegalArgumentException {
         if (row < 0 || row >= getRowDimension()) {
-            throw new OutOfRangeException(LocalizedFormats.ROW_INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.ROW_INDEX,
                                           row, 0, getRowDimension() - 1);
         }
     }
@@ -1062,12 +1061,12 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      * Check if a column index is valid.
      *
      * @param column Column index to check.
-     * @throws OutOfRangeException if {@code index} is not valid.
+     * @throws MathIllegalArgumentException if {@code index} is not valid.
      */
     protected void checkColumnIndex(final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         if (column < 0 || column >= getColumnDimension()) {
-            throw new OutOfRangeException(LocalizedFormats.COLUMN_INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.COLUMN_INDEX,
                                           column, 0, getColumnDimension() - 1);
         }
     }
@@ -1080,13 +1079,13 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      * @param endRow Final row index.
      * @param startColumn Initial column index.
      * @param endColumn Final column index.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @throws NumberIsTooSmallException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      */
     protected void checkSubMatrixIndex(final int startRow, final int endRow,
                                        final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkRowIndex(startRow);
         checkRowIndex(endRow);
         if (endRow < startRow) {
@@ -1110,10 +1109,10 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      * @param selectedColumns Array of column indices.
      * @throws NullArgumentException if the arrays are {@code null}.
      * @throws NoDataException if the arrays have zero length.
-     * @throws OutOfRangeException if row or column selections are not valid.
+     * @throws MathIllegalArgumentException if row or column selections are not valid.
      */
     protected void checkSubMatrixIndex(final int[] selectedRows, final int[] selectedColumns)
-        throws NoDataException, NullArgumentException, OutOfRangeException {
+        throws NoDataException, NullArgumentException, MathIllegalArgumentException {
         if (selectedRows == null ||
             selectedColumns == null) {
             throw new NullArgumentException();

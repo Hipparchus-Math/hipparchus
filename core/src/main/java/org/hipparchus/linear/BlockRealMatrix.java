@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -663,7 +662,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     public BlockRealMatrix getSubMatrix(final int startRow, final int endRow,
                                         final int startColumn,
                                         final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         // safety checks
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
 
@@ -788,7 +787,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public void setSubMatrix(final double[][] subMatrix, final int row,
                              final int column)
-        throws OutOfRangeException, NoDataException, NullArgumentException,
+        throws MathIllegalArgumentException, NoDataException, NullArgumentException,
         MathIllegalArgumentException {
         // safety checks
         MathUtils.checkNotNull(subMatrix);
@@ -841,7 +840,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public BlockRealMatrix getRowMatrix(final int row)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final BlockRealMatrix out = new BlockRealMatrix(1, columns);
 
@@ -872,7 +871,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public void setRowMatrix(final int row, final RealMatrix matrix)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         try {
             setRowMatrix(row, (BlockRealMatrix) matrix);
         } catch (ClassCastException cce) {
@@ -887,12 +886,12 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      * @param row the row to be set
      * @param matrix row matrix (must have one row and the same number of columns
      * as the instance)
-     * @throws OutOfRangeException if the specified row index is invalid.
+     * @throws MathIllegalArgumentException if the specified row index is invalid.
      * @throws MathIllegalArgumentException if the matrix dimensions do
      * not match one instance row.
      */
     public void setRowMatrix(final int row, final BlockRealMatrix matrix)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         if ((matrix.getRowDimension() != 1) ||
@@ -927,7 +926,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public BlockRealMatrix getColumnMatrix(final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final BlockRealMatrix out = new BlockRealMatrix(rows, 1);
 
@@ -956,7 +955,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public void setColumnMatrix(final int column, final RealMatrix matrix)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         try {
             setColumnMatrix(column, (BlockRealMatrix) matrix);
         } catch (ClassCastException cce) {
@@ -971,12 +970,12 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      * @param column the column to be set
      * @param matrix column matrix (must have one column and the same number of rows
      * as the instance)
-     * @throws OutOfRangeException if the specified column index is invalid.
+     * @throws MathIllegalArgumentException if the specified column index is invalid.
      * @throws MathIllegalArgumentException if the matrix dimensions do
      * not match one instance column.
      */
     void setColumnMatrix(final int column, final BlockRealMatrix matrix)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         if ((matrix.getRowDimension() != nRows) ||
@@ -1009,7 +1008,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public RealVector getRowVector(final int row)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final double[] outData = new double[columns];
 
@@ -1030,7 +1029,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public void setRowVector(final int row, final RealVector vector)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         try {
             setRow(row, ((ArrayRealVector) vector).getDataRef());
         } catch (ClassCastException cce) {
@@ -1041,7 +1040,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public RealVector getColumnVector(final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final double[] outData = new double[rows];
 
@@ -1064,7 +1063,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public void setColumnVector(final int column, final RealVector vector)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         try {
             setColumn(column, ((ArrayRealVector) vector).getDataRef());
         } catch (ClassCastException cce) {
@@ -1074,7 +1073,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
 
     /** {@inheritDoc} */
     @Override
-    public double[] getRow(final int row) throws OutOfRangeException {
+    public double[] getRow(final int row) throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final double[] out = new double[columns];
 
@@ -1095,7 +1094,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public void setRow(final int row, final double[] array)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         if (array.length != nCols) {
@@ -1118,7 +1117,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
 
     /** {@inheritDoc} */
     @Override
-    public double[] getColumn(final int column) throws OutOfRangeException {
+    public double[] getColumn(final int column) throws MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final double[] out = new double[rows];
 
@@ -1141,7 +1140,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public void setColumn(final int column, final double[] array)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         if (array.length != nRows) {
@@ -1167,7 +1166,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public double getEntry(final int row, final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMatrixIndex(this, row, column);
         final int iBlock = row / BLOCK_SIZE;
         final int jBlock = column / BLOCK_SIZE;
@@ -1179,7 +1178,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     /** {@inheritDoc} */
     @Override
     public void setEntry(final int row, final int column, final double value)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMatrixIndex(this, row, column);
         final int iBlock = row / BLOCK_SIZE;
         final int jBlock = column / BLOCK_SIZE;
@@ -1192,7 +1191,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public void addToEntry(final int row, final int column,
                            final double increment)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMatrixIndex(this, row, column);
         final int iBlock = row    / BLOCK_SIZE;
         final int jBlock = column / BLOCK_SIZE;
@@ -1205,7 +1204,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public void multiplyEntry(final int row, final int column,
                               final double factor)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMatrixIndex(this, row, column);
         final int iBlock = row / BLOCK_SIZE;
         final int jBlock = column / BLOCK_SIZE;
@@ -1402,7 +1401,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     public double walkInRowOrder(final RealMatrixChangingVisitor visitor,
                                  final int startRow, final int endRow,
                                  final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(rows, columns, startRow, endRow, startColumn, endColumn);
         for (int iBlock = startRow / BLOCK_SIZE; iBlock < 1 + endRow / BLOCK_SIZE; ++iBlock) {
@@ -1432,7 +1431,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     public double walkInRowOrder(final RealMatrixPreservingVisitor visitor,
                                  final int startRow, final int endRow,
                                  final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(rows, columns, startRow, endRow, startColumn, endColumn);
         for (int iBlock = startRow / BLOCK_SIZE; iBlock < 1 + endRow / BLOCK_SIZE; ++iBlock) {
@@ -1513,7 +1512,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
                                        final int startRow, final int endRow,
                                        final int startColumn,
                                        final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(rows, columns, startRow, endRow, startColumn, endColumn);
         for (int iBlock = startRow / BLOCK_SIZE; iBlock < 1 + endRow / BLOCK_SIZE; ++iBlock) {
@@ -1544,7 +1543,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
                                        final int startRow, final int endRow,
                                        final int startColumn,
                                        final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(rows, columns, startRow, endRow, startColumn, endColumn);
         for (int iBlock = startRow / BLOCK_SIZE; iBlock < 1 + endRow / BLOCK_SIZE; ++iBlock) {

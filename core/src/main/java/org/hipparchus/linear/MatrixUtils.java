@@ -24,13 +24,12 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.Fraction;
@@ -445,12 +444,12 @@ public class MatrixUtils {
      * @param m Matrix.
      * @param row Row index to check.
      * @param column Column index to check.
-     * @throws OutOfRangeException if {@code row} or {@code column} is not
+     * @throws MathIllegalArgumentException if {@code row} or {@code column} is not
      * a valid index.
      */
     public static void checkMatrixIndex(final AnyMatrix m,
                                         final int row, final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         checkRowIndex(m, row);
         checkColumnIndex(m, column);
     }
@@ -460,13 +459,13 @@ public class MatrixUtils {
      *
      * @param m Matrix.
      * @param row Row index to check.
-     * @throws OutOfRangeException if {@code row} is not a valid index.
+     * @throws MathIllegalArgumentException if {@code row} is not a valid index.
      */
     public static void checkRowIndex(final AnyMatrix m, final int row)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         if (row < 0 ||
             row >= m.getRowDimension()) {
-            throw new OutOfRangeException(LocalizedFormats.ROW_INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.ROW_INDEX,
                                           row, 0, m.getRowDimension() - 1);
         }
     }
@@ -476,12 +475,12 @@ public class MatrixUtils {
      *
      * @param m Matrix.
      * @param column Column index to check.
-     * @throws OutOfRangeException if {@code column} is not a valid index.
+     * @throws MathIllegalArgumentException if {@code column} is not a valid index.
      */
     public static void checkColumnIndex(final AnyMatrix m, final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         if (column < 0 || column >= m.getColumnDimension()) {
-            throw new OutOfRangeException(LocalizedFormats.COLUMN_INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.COLUMN_INDEX,
                                            column, 0, m.getColumnDimension() - 1);
         }
     }
@@ -495,14 +494,14 @@ public class MatrixUtils {
      * @param endRow Final row index.
      * @param startColumn Initial column index.
      * @param endColumn Final column index.
-     * @throws OutOfRangeException if the indices are invalid.
+     * @throws MathIllegalArgumentException if the indices are invalid.
      * @throws NumberIsTooSmallException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      */
     public static void checkSubMatrixIndex(final AnyMatrix m,
                                            final int startRow, final int endRow,
                                            final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkRowIndex(m, startRow);
         checkRowIndex(m, endRow);
         if (endRow < startRow) {
@@ -531,12 +530,12 @@ public class MatrixUtils {
      * {@code selectedColumns} are {@code null}.
      * @throws NoDataException if the row or column selections are empty (zero
      * length).
-     * @throws OutOfRangeException if row or column selections are not valid.
+     * @throws MathIllegalArgumentException if row or column selections are not valid.
      */
     public static void checkSubMatrixIndex(final AnyMatrix m,
                                            final int[] selectedRows,
                                            final int[] selectedColumns)
-        throws NoDataException, NullArgumentException, OutOfRangeException {
+        throws NoDataException, NullArgumentException, MathIllegalArgumentException {
         if (selectedRows == null) {
             throw new NullArgumentException();
         }

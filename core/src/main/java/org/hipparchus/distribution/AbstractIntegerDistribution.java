@@ -19,10 +19,9 @@ package org.hipparchus.distribution;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 
@@ -80,9 +79,10 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
      * </ul>
      */
     @Override
-    public int inverseCumulativeProbability(final double p) throws OutOfRangeException {
+    public int inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
 
         int lower = getSupportLowerBound();

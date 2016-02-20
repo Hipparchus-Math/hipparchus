@@ -23,7 +23,6 @@ import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -58,8 +57,8 @@ public class TestUtilsTest {
 
         try {
             TestUtils.chiSquareTest(expected1, observed1, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -156,8 +155,8 @@ public class TestUtilsTest {
         // bad alpha
         try {
             TestUtils.chiSquareTest(counts, 0);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -295,15 +294,15 @@ public class TestUtilsTest {
 
         try {
             TestUtils.tTest(0d, oneSidedP, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             TestUtils.tTest(0d, oneSidedPStats, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -342,15 +341,15 @@ public class TestUtilsTest {
 
         try {
             TestUtils.tTest(sample1, sample2, .95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             TestUtils.tTest(sampleStats1, sampleStats2, .95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

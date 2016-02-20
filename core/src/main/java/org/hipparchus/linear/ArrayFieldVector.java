@@ -27,7 +27,6 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -779,7 +778,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> getSubVector(int index, int n)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         if (n < 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
@@ -805,7 +804,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
 
     /** {@inheritDoc} */
     @Override
-    public void setSubVector(int index, FieldVector<T> v) throws OutOfRangeException {
+    public void setSubVector(int index, FieldVector<T> v) throws MathIllegalArgumentException {
         try {
             try {
                 set(index, (ArrayFieldVector<T>) v);
@@ -825,9 +824,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      *
      * @param index index of first element to be set.
      * @param v vector containing the values to set.
-     * @throws OutOfRangeException if the index is invalid.
+     * @throws MathIllegalArgumentException if the index is invalid.
      */
-    public void set(int index, ArrayFieldVector<T> v) throws OutOfRangeException {
+    public void set(int index, ArrayFieldVector<T> v) throws MathIllegalArgumentException {
         try {
             System.arraycopy(v.data, 0, data, index, v.data.length);
         } catch (IndexOutOfBoundsException e) {
@@ -903,12 +902,12 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @return the value returned by {@link FieldVectorPreservingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorPreservingVisitor<T> visitor,
                                 final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -945,12 +944,12 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @return the value returned by {@link FieldVectorPreservingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorPreservingVisitor<T> visitor,
                                   final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -983,12 +982,12 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @return the value returned by {@link FieldVectorChangingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorChangingVisitor<T> visitor,
                                 final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -1025,12 +1024,12 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @return the value returned by {@link FieldVectorChangingVisitor#end()}
      * at the end of the walk
      * @throws NumberIsTooSmallException if {@code end < start}.
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorChangingVisitor<T> visitor,
                                   final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -1087,11 +1086,11 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * Check if an index is valid.
      *
      * @param index Index to check.
-     * @exception OutOfRangeException if the index is not valid.
+     * @exception MathIllegalArgumentException if the index is not valid.
      */
-    private void checkIndex(final int index) throws OutOfRangeException {
+    private void checkIndex(final int index) throws MathIllegalArgumentException {
         if (index < 0 || index >= getDimension()) {
-            throw new OutOfRangeException(LocalizedFormats.INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX,
                                           index, 0, getDimension() - 1);
         }
     }
@@ -1101,19 +1100,19 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      *
      * @param start the index of the first entry of the subvector
      * @param end the index of the last entry of the subvector (inclusive)
-     * @throws OutOfRangeException if {@code start} of {@code end} are not valid
+     * @throws MathIllegalArgumentException if {@code start} of {@code end} are not valid
      * @throws NumberIsTooSmallException if {@code end < start}
      * @since 3.3
      */
     private void checkIndices(final int start, final int end)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         final int dim = getDimension();
         if ((start < 0) || (start >= dim)) {
-            throw new OutOfRangeException(LocalizedFormats.INDEX, start, 0,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, start, 0,
                                           dim - 1);
         }
         if ((end < 0) || (end >= dim)) {
-            throw new OutOfRangeException(LocalizedFormats.INDEX, end, 0,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, end, 0,
                                           dim - 1);
         }
         if (end < start) {

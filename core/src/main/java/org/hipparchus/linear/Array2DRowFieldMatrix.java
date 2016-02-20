@@ -27,7 +27,6 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -327,7 +326,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     @Override
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
-        throws OutOfRangeException, NullArgumentException, NoDataException,
+        throws MathIllegalArgumentException, NullArgumentException, NoDataException,
         MathIllegalArgumentException {
         if (data == null) {
             if (row > 0) {
@@ -362,7 +361,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public T getEntry(final int row, final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         checkRowIndex(row);
         checkColumnIndex(column);
 
@@ -372,7 +371,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void setEntry(final int row, final int column, final T value)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         checkRowIndex(row);
         checkColumnIndex(column);
 
@@ -382,7 +381,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void addToEntry(final int row, final int column, final T increment)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         checkRowIndex(row);
         checkColumnIndex(column);
 
@@ -392,7 +391,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void multiplyEntry(final int row, final int column, final T factor)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         checkRowIndex(row);
         checkColumnIndex(column);
 
@@ -489,7 +488,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     public T walkInRowOrder(final FieldMatrixChangingVisitor<T> visitor,
                             final int startRow, final int endRow,
                             final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -507,7 +506,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     public T walkInRowOrder(final FieldMatrixPreservingVisitor<T> visitor,
                             final int startRow, final int endRow,
                             final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -554,7 +553,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     public T walkInColumnOrder(final FieldMatrixChangingVisitor<T> visitor,
                                final int startRow, final int endRow,
                                final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
     checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -572,7 +571,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     public T walkInColumnOrder(final FieldMatrixPreservingVisitor<T> visitor,
                                final int startRow, final int endRow,
                                final int startColumn, final int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);

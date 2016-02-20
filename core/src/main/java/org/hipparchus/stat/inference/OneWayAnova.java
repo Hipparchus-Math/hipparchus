@@ -20,12 +20,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.hipparchus.distribution.FDistribution;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.MathUtils;
 
@@ -240,17 +239,17 @@ public class OneWayAnova {
      * @throws MathIllegalArgumentException if the length of the <code>categoryData</code>
      * array is less than 2 or a contained <code>double[]</code> array does not have
      * at least two values
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
      * @throws MaxCountExceededException if the maximum number of iterations is exceeded
      */
     public boolean anovaTest(final Collection<double[]> categoryData,
                              final double alpha)
         throws NullArgumentException, MathIllegalArgumentException,
-        OutOfRangeException, MathIllegalStateException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new OutOfRangeException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                     alpha, 0, 0.5);
         }

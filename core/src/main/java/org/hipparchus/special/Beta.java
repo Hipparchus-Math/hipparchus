@@ -17,7 +17,8 @@
 package org.hipparchus.special;
 
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.ContinuedFraction;
 import org.hipparchus.util.FastMath;
 
@@ -235,17 +236,19 @@ public class Beta {
      * @param a First argument.
      * @param b Second argument.
      * @return the value of {@code log(Gamma(a + b))}.
-     * @throws OutOfRangeException if {@code a} or {@code b} is lower than
+     * @throws MathIllegalArgumentException if {@code a} or {@code b} is lower than
      * {@code 1.0} or greater than {@code 2.0}.
      */
     private static double logGammaSum(final double a, final double b)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
 
         if ((a < 1.0) || (a > 2.0)) {
-            throw new OutOfRangeException(a, 1.0, 2.0);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   a, 1.0, 2.0);
         }
         if ((b < 1.0) || (b > 2.0)) {
-            throw new OutOfRangeException(b, 1.0, 2.0);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   b, 1.0, 2.0);
         }
 
         final double x = (a - 1.0) + (b - 1.0);
@@ -307,15 +310,16 @@ public class Beta {
      * @param a First argument.
      * @param b Second argument.
      * @return the value of {@code Delta(b) - Delta(a + b)}
-     * @throws OutOfRangeException if {@code a < 0} or {@code a > b}
+     * @throws MathIllegalArgumentException if {@code a < 0} or {@code a > b}
      * @throws NumberIsTooSmallException if {@code b < 10}
      */
     private static double deltaMinusDeltaSum(final double a,
                                              final double b)
-        throws OutOfRangeException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
 
         if ((a < 0) || (a > b)) {
-            throw new OutOfRangeException(a, 0, b);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   a, 0, b);
         }
         if (b < 10) {
             throw new NumberIsTooSmallException(b, 10, true);

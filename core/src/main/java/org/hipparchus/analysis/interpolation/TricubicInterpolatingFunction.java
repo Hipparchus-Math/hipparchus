@@ -20,7 +20,6 @@ import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -331,22 +330,25 @@ public class TricubicInterpolatingFunction
     /**
      * {@inheritDoc}
      *
-     * @throws OutOfRangeException if any of the variables is outside its interpolation range.
+     * @throws MathIllegalArgumentException if any of the variables is outside its interpolation range.
      */
     @Override
     public double value(double x, double y, double z)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         final int i = searchIndex(x, xval);
         if (i == -1) {
-            throw new OutOfRangeException(x, xval[0], xval[xval.length - 1]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   x, xval[0], xval[xval.length - 1]);
         }
         final int j = searchIndex(y, yval);
         if (j == -1) {
-            throw new OutOfRangeException(y, yval[0], yval[yval.length - 1]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   y, yval[0], yval[yval.length - 1]);
         }
         final int k = searchIndex(z, zval);
         if (k == -1) {
-            throw new OutOfRangeException(z, zval[0], zval[zval.length - 1]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   z, zval[0], zval[zval.length - 1]);
         }
 
         final double xN = (x - xval[i]) / (xval[i + 1] - xval[i]);
@@ -492,19 +494,22 @@ class TricubicFunction
      * @param y y-coordinate of the interpolation point.
      * @param z z-coordinate of the interpolation point.
      * @return the interpolated value.
-     * @throws OutOfRangeException if {@code x}, {@code y} or
+     * @throws MathIllegalArgumentException if {@code x}, {@code y} or
      * {@code z} are not in the interval {@code [0, 1]}.
      */
     @Override
-    public double value(double x, double y, double z) throws OutOfRangeException {
+    public double value(double x, double y, double z) throws MathIllegalArgumentException {
         if (x < 0 || x > 1) {
-            throw new OutOfRangeException(x, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   x, 0, 1);
         }
         if (y < 0 || y > 1) {
-            throw new OutOfRangeException(y, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   y, 0, 1);
         }
         if (z < 0 || z > 1) {
-            throw new OutOfRangeException(z, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   z, 0, 1);
         }
 
         final double x2 = x * x;

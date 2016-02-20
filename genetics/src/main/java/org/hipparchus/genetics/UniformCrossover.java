@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 
 /**
@@ -56,11 +55,11 @@ public class UniformCrossover<T> implements CrossoverPolicy {
      * Creates a new {@link UniformCrossover} policy using the given mixing ratio.
      *
      * @param ratio the mixing ratio
-     * @throws OutOfRangeException if the mixing ratio is outside the [0, 1] range
+     * @throws MathIllegalArgumentException if the mixing ratio is outside the [0, 1] range
      */
-    public UniformCrossover(final double ratio) throws OutOfRangeException {
+    public UniformCrossover(final double ratio) throws MathIllegalArgumentException {
         if (ratio < 0.0d || ratio > 1.0d) {
-            throw new OutOfRangeException(LocalizedFormats.CROSSOVER_RATE, ratio, 0.0d, 1.0d);
+            throw new MathIllegalArgumentException(LocalizedFormats.CROSSOVER_RATE, ratio, 0.0d, 1.0d);
         }
         this.ratio = ratio;
     }

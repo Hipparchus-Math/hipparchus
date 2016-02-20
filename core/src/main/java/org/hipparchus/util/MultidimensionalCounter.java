@@ -21,7 +21,6 @@ import java.util.NoSuchElementException;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 
 /**
  * Converter between unidimensional storage structure and multidimensional
@@ -221,13 +220,14 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      *
      * @param index Index in unidimensional counter.
      * @return the multidimensional counts.
-     * @throws OutOfRangeException if {@code index} is not between
+     * @throws MathIllegalArgumentException if {@code index} is not between
      * {@code 0} and the value returned by {@link #getSize()} (excluded).
      */
-    public int[] getCounts(int index) throws OutOfRangeException {
+    public int[] getCounts(int index) throws MathIllegalArgumentException {
         if (index < 0 ||
             index >= totalSize) {
-            throw new OutOfRangeException(index, 0, totalSize);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   index, 0, totalSize);
         }
 
         final int[] indices = new int[dimension];
@@ -257,12 +257,12 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      * @return the index within the unidimensionl counter.
      * @throws MathIllegalArgumentException if the size of {@code c}
      * does not match the size of the array given in the constructor.
-     * @throws OutOfRangeException if a value of {@code c} is not in
+     * @throws MathIllegalArgumentException if a value of {@code c} is not in
      * the range of the corresponding dimension, as defined in the
      * {@link MultidimensionalCounter#MultidimensionalCounter(int...) constructor}.
      */
     public int getCount(int ... c)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         if (c.length != dimension) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    c.length, dimension);
@@ -272,7 +272,8 @@ public class MultidimensionalCounter implements Iterable<Integer> {
             final int index = c[i];
             if (index < 0 ||
                 index >= size[i]) {
-                throw new OutOfRangeException(index, 0, size[i] - 1);
+                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                       index, 0, size[i] - 1);
             }
             count += uniCounterOffset[i] * c[i];
         }

@@ -23,7 +23,6 @@ import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -62,7 +61,7 @@ public class Logit implements UnivariateDifferentiableFunction {
     /** {@inheritDoc} */
     @Override
     public double value(double x)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         return value(x, lo, hi);
     }
 
@@ -146,28 +145,30 @@ public class Logit implements UnivariateDifferentiableFunction {
      * @param lo Lower bound.
      * @param hi Higher bound.
      * @return the value of the logit function at {@code x}.
-     * @throws OutOfRangeException if {@code x < lo} or {@code x > hi}.
+     * @throws MathIllegalArgumentException if {@code x < lo} or {@code x > hi}.
      */
     private static double value(double x,
                                 double lo,
                                 double hi)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         if (x < lo || x > hi) {
-            throw new OutOfRangeException(x, lo, hi);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   x, lo, hi);
         }
         return FastMath.log((x - lo) / (hi - x));
     }
 
     /** {@inheritDoc}
      * @since 3.1
-     * @exception OutOfRangeException if parameter is outside of function domain
+     * @exception MathIllegalArgumentException if parameter is outside of function domain
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         final double x = t.getValue();
         if (x < lo || x > hi) {
-            throw new OutOfRangeException(x, lo, hi);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   x, lo, hi);
         }
         double[] f = new double[t.getOrder() + 1];
 

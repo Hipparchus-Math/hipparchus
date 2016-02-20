@@ -19,12 +19,7 @@ package org.hipparchus.stat.regression;
 import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.ISAACRandom;
-import org.hipparchus.stat.regression.ModelSpecificationException;
-import org.hipparchus.stat.regression.RegressionResults;
-import org.hipparchus.stat.regression.SimpleRegression;
-import org.hipparchus.stat.regression.UpdatingMultipleLinearRegression;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -289,8 +284,8 @@ public final class SimpleRegressionTest {
         }
         try { // invalid regressor
             noIntRegression.regress(new int[] {1});
-            Assert.fail("Expecting OutOfRangeException - invalid regression");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - invalid regression");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
 
@@ -325,20 +320,20 @@ public final class SimpleRegressionTest {
         }
         try { // out of range
             regression.regress(new int[] {3,4});
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // out of range
             regression.regress(new int[] {0,2});
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // out of range
             regression.regress(new int[] {2});
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }

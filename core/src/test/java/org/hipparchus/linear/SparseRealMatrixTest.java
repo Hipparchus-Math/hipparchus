@@ -16,21 +16,13 @@
  */
 package org.hipparchus.linear;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.BlockRealMatrix;
-import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.NonSquareMatrixException;
-import org.hipparchus.linear.OpenMapRealMatrix;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link OpenMapRealMatrix} class.
@@ -345,14 +337,14 @@ public final class SparseRealMatrixTest {
         assertClose("get col", m.getColumn(2), testDataCol3, entryTolerance);
         try {
             m.getRow(10);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             m.getColumn(-1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
@@ -363,8 +355,8 @@ public final class SparseRealMatrixTest {
         Assert.assertEquals("get entry", m.getEntry(0, 1), 2d, entryTolerance);
         try {
             m.getEntry(10, 4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -441,8 +433,8 @@ public final class SparseRealMatrixTest {
         }
         try {
             m.getSubMatrix(-1, 1, 2, 2);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -465,8 +457,8 @@ public final class SparseRealMatrixTest {
         }
         try {
             m.getSubMatrix(new int[] { 0 }, new int[] { 4 });
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -480,14 +472,14 @@ public final class SparseRealMatrixTest {
         Assert.assertEquals("Row3", mRow3, m.getRowMatrix(3));
         try {
             m.getRowMatrix(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowMatrix(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -501,14 +493,14 @@ public final class SparseRealMatrixTest {
         Assert.assertEquals("Column3", mColumn3, m.getColumnMatrix(3));
         try {
             m.getColumnMatrix(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnMatrix(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -522,14 +514,14 @@ public final class SparseRealMatrixTest {
         Assert.assertEquals("Row3", mRow3, m.getRowVector(3));
         try {
             m.getRowVector(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowVector(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -543,14 +535,14 @@ public final class SparseRealMatrixTest {
         Assert.assertEquals("Column3", mColumn3, m.getColumnVector(3));
         try {
             m.getColumnVector(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnVector(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -616,21 +608,21 @@ public final class SparseRealMatrixTest {
         // dimension overflow
         try {
             m.setSubMatrix(testData, 1, 1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
         // dimension underflow
         try {
             m.setSubMatrix(testData, -1, 1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
         try {
             m.setSubMatrix(testData, 1, -1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 

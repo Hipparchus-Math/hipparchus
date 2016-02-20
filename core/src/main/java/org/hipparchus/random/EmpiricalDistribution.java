@@ -33,12 +33,11 @@ import org.hipparchus.distribution.ConstantRealDistribution;
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
@@ -655,9 +654,10 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * @since 3.1
      */
     @Override
-    public double inverseCumulativeProbability(final double p) throws OutOfRangeException {
+    public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
 
         if (p == 0.0) {

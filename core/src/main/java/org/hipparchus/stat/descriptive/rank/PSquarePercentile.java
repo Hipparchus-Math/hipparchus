@@ -30,9 +30,8 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.interpolation.LinearInterpolator;
 import org.hipparchus.analysis.interpolation.NevilleInterpolator;
 import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.util.MathArrays;
@@ -115,12 +114,12 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
     /**
      * Constructs a PSquarePercentile with the specific percentile value.
      * @param p the percentile
-     * @throws OutOfRangeException  if p is not greater than 0 and less
+     * @throws MathIllegalArgumentException  if p is not greater than 0 and less
      * than or equal to 100
      */
     public PSquarePercentile(final double p) {
         if (p > 100 || p < 0) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_RANGE, p, 0, 100);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE, p, 0, 100);
         }
         this.quantile = p / 100d;// always set it within (0,1]
     }
@@ -494,7 +493,8 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         @Override
         public double estimate(final int index) {
             if (index < LOW || index > HIGH) {
-                throw new OutOfRangeException(index, LOW, HIGH);
+                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                       index, LOW, HIGH);
             }
             return markerArray[index].estimate();
         }
@@ -552,7 +552,8 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         @Override
         public double height(final int markerIndex) {
             if (markerIndex >= markerArray.length || markerIndex <= 0) {
-                throw new OutOfRangeException(markerIndex, 1, markerArray.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                       markerIndex, 1, markerArray.length);
             }
             return markerArray[markerIndex].markerHeight;
         }
@@ -967,7 +968,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          *
          * @param markerIndex is the index of marker in the marker array
          * @return percentile value of the marker index passed
-         * @throws OutOfRangeException in case the index is not within [1-5]
+         * @throws MathIllegalArgumentException in case the index is not within [1-5]
          */
         double height(final int markerIndex);
 
@@ -984,7 +985,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          *
          * @param index the marker's index in the array of markers
          * @return percentile estimate
-         * @throws OutOfRangeException in case if index is not within [1-5]
+         * @throws MathIllegalArgumentException in case if index is not within [1-5]
          */
         double estimate(final int index);
     }

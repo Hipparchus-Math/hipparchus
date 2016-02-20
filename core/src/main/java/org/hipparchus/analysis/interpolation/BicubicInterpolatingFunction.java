@@ -22,7 +22,6 @@ import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -164,7 +163,7 @@ public class BicubicInterpolatingFunction
      */
     @Override
     public double value(double x, double y)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         final int i = searchIndex(x, xval);
         final int j = searchIndex(y, yval);
 
@@ -197,7 +196,7 @@ public class BicubicInterpolatingFunction
      * @param val Coordinate samples.
      * @return the index in {@code val} corresponding to the interval
      * containing {@code c}.
-     * @throws OutOfRangeException if {@code c} is out of the
+     * @throws MathIllegalArgumentException if {@code c} is out of the
      * range defined by the boundary values of {@code val}.
      */
     private int searchIndex(double c, double[] val) {
@@ -205,7 +204,8 @@ public class BicubicInterpolatingFunction
 
         if (r == -1 ||
             r == -val.length - 1) {
-            throw new OutOfRangeException(c, val[0], val[val.length - 1]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   c, val[0], val[val.length - 1]);
         }
 
         if (r < 0) {
@@ -299,10 +299,12 @@ class BicubicFunction implements BivariateFunction {
     @Override
     public double value(double x, double y) {
         if (x < 0 || x > 1) {
-            throw new OutOfRangeException(x, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   x, 0, 1);
         }
         if (y < 0 || y > 1) {
-            throw new OutOfRangeException(y, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   y, 0, 1);
         }
 
         final double x2 = x * x;

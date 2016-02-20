@@ -19,7 +19,6 @@ package org.hipparchus.stat.interval;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
 
 /**
  * Factory methods to generate confidence intervals for a binomial proportion.
@@ -67,7 +66,7 @@ public final class IntervalUtils {
      * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
      * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     public static ConfidenceInterval getAgrestiCoullInterval(int numberOfTrials, int numberOfSuccesses,
                                                              double confidenceLevel) {
@@ -96,7 +95,7 @@ public final class IntervalUtils {
      * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
      * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     public static ConfidenceInterval getClopperPearsonInterval(int numberOfTrials, int numberOfSuccesses,
                                                                double confidenceLevel) {
@@ -135,7 +134,7 @@ public final class IntervalUtils {
      * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
      * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     public static ConfidenceInterval getWilsonScoreInterval(int numberOfTrials, int numberOfSuccesses,
                                                             double confidenceLevel) {
@@ -151,7 +150,7 @@ public final class IntervalUtils {
      * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
      * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     static void checkParameters(int numberOfTrials, int numberOfSuccesses, double confidenceLevel) {
         if (numberOfTrials <= 0) {
@@ -165,7 +164,7 @@ public final class IntervalUtils {
                                                 numberOfSuccesses, numberOfTrials, true);
         }
         if (confidenceLevel <= 0 || confidenceLevel >= 1) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
                                           confidenceLevel, 0, 1);
         }
     }

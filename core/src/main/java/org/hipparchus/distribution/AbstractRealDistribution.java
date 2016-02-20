@@ -23,7 +23,6 @@ import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 
@@ -91,7 +90,7 @@ implements RealDistribution, Serializable {
      * </ul>
      */
     @Override
-    public double inverseCumulativeProbability(final double p) throws OutOfRangeException {
+    public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
         /*
          * IMPLEMENTATION NOTES
          * --------------------
@@ -121,7 +120,8 @@ implements RealDistribution, Serializable {
          * the root.
          */
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
 
         double lowerBound = getSupportLowerBound();

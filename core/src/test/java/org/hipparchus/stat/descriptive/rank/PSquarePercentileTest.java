@@ -29,14 +29,11 @@ import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.rank.PSquarePercentile;
-import org.hipparchus.stat.descriptive.rank.Percentile;
 import org.hipparchus.stat.descriptive.rank.PSquarePercentile.PSquareMarkers;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -171,14 +168,14 @@ public class PSquarePercentileTest extends
 
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMarkersOORLow() {
         PSquarePercentile.newMarkers(
                 Arrays.asList(new Double[] { 0.02, 1.18, 9.15, 21.91, 38.62 }),
                 0.5).estimate(0);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMarkersOORHigh() {
         PSquarePercentile.newMarkers(
                 Arrays.asList(new Double[] { 0.02, 1.18, 9.15, 21.91, 38.62 }),
@@ -272,7 +269,7 @@ public class PSquarePercentileTest extends
         Assert.assertEquals(mThis, iterator.next());
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMarkersWithLowerIndex() {
         PSquareMarkers mThat =
                 PSquarePercentile.newMarkers(
@@ -285,7 +282,7 @@ public class PSquarePercentileTest extends
         mThat.estimate(0);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMarkersWithHigherIndex() {
         PSquareMarkers mThat =
                 PSquarePercentile.newMarkers(
@@ -298,7 +295,7 @@ public class PSquarePercentileTest extends
         mThat.estimate(6);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMarkerHeightWithLowerIndex() {
         PSquareMarkers mThat =
                 PSquarePercentile.newMarkers(
@@ -308,7 +305,7 @@ public class PSquarePercentileTest extends
         mThat.height(0);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMarkerHeightWithHigherIndex() {
         PSquareMarkers mThat =
                 PSquarePercentile.newMarkers(

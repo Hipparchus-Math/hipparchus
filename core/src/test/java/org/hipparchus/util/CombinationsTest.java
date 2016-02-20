@@ -20,7 +20,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -72,7 +71,7 @@ public class CombinationsTest {
         comp.compare(new int[] {0, 1, 2}, new int[] {0, 1, 2, 3});
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testLexicographicComparatorWrongIterate3() {
         final int n = 5;
         final int k = 3;
@@ -80,7 +79,7 @@ public class CombinationsTest {
         comp.compare(new int[] {1, 2, 5}, new int[] {0, 1, 2});
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testLexicographicComparatorWrongIterate4() {
         final int n = 5;
         final int k = 3;

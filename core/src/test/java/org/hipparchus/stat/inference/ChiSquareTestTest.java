@@ -17,7 +17,6 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -54,8 +53,8 @@ public class ChiSquareTestTest {
 
         try {
             testStatistic.chiSquareTest(expected1, observed1, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -152,8 +151,8 @@ public class ChiSquareTestTest {
         // bad alpha
         try {
             testStatistic.chiSquareTest(counts, 0);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

@@ -26,7 +26,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -593,11 +592,11 @@ public class ArrayRealVector extends RealVector implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public double getEntry(int index) throws OutOfRangeException {
+    public double getEntry(int index) throws MathIllegalArgumentException {
         try {
             return data[index];
         } catch (IndexOutOfBoundsException e) {
-            throw new OutOfRangeException(LocalizedFormats.INDEX, index, 0,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, index, 0,
                 getDimension() - 1);
         }
     }
@@ -640,7 +639,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public RealVector getSubVector(int index, int n)
-        throws OutOfRangeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         if (n < 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
@@ -656,7 +655,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public void setEntry(int index, double value) throws OutOfRangeException {
+    public void setEntry(int index, double value) throws MathIllegalArgumentException {
         try {
             data[index] = value;
         } catch (IndexOutOfBoundsException e) {
@@ -667,11 +666,11 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public void addToEntry(int index, double increment)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         try {
         data[index] += increment;
         } catch(IndexOutOfBoundsException e){
-            throw new OutOfRangeException(LocalizedFormats.INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX,
                                           index, 0, data.length - 1);
         }
     }
@@ -679,7 +678,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public void setSubVector(int index, RealVector v)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             setSubVector(index, ((ArrayRealVector) v).data);
         } else {
@@ -699,11 +698,11 @@ public class ArrayRealVector extends RealVector implements Serializable {
      *
      * @param index Index of first element to be set.
      * @param v Vector containing the values to set.
-     * @throws OutOfRangeException if the index is inconsistent with the vector
+     * @throws MathIllegalArgumentException if the index is inconsistent with the vector
      * size.
      */
     public void setSubVector(int index, double[] v)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         try {
             System.arraycopy(v, 0, data, index, v.length);
         } catch (IndexOutOfBoundsException e) {
@@ -876,7 +875,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     @Override
     public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor,
         final int start, final int end) throws NumberIsTooSmallException,
-        OutOfRangeException {
+        MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(data.length, start, end);
         for (int i = start; i <= end; i++) {
@@ -903,7 +902,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     @Override
     public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor,
         final int start, final int end) throws NumberIsTooSmallException,
-        OutOfRangeException {
+        MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -921,7 +920,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     @Override
     public double walkInDefaultOrder(final RealVectorChangingVisitor visitor,
         final int start, final int end) throws NumberIsTooSmallException,
-        OutOfRangeException {
+        MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(data.length, start, end);
         for (int i = start; i <= end; i++) {
@@ -948,7 +947,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     @Override
     public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor,
         final int start, final int end) throws NumberIsTooSmallException,
-        OutOfRangeException {
+        MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 }

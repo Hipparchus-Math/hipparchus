@@ -23,7 +23,6 @@ import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.util.FastMath;
@@ -168,13 +167,13 @@ public class TTest {
      * @throws NoDataException if the arrays are empty
      * @throws MathIllegalArgumentException if the length of the arrays is not equal
      * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public boolean pairedTTest(final double[] sample1, final double[] sample2,
                                final double alpha)
         throws NullArgumentException, NoDataException, MathIllegalArgumentException,
-        NumberIsTooSmallException, OutOfRangeException, MaxCountExceededException {
+        NumberIsTooSmallException, MathIllegalArgumentException, MaxCountExceededException {
 
         checkSignificanceLevel(alpha);
         return pairedTTest(sample1, sample2) < alpha;
@@ -484,12 +483,12 @@ public class TTest {
      * @return p-value
      * @throws NullArgumentException if the sample array is <code>null</code>
      * @throws NumberIsTooSmallException if the length of the array is &lt; 2
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error computing the p-value
      */
     public boolean tTest(final double mu, final double[] sample, final double alpha)
         throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
 
         checkSignificanceLevel(alpha);
         return tTest(mu, sample) < alpha;
@@ -570,13 +569,13 @@ public class TTest {
      * @return p-value
      * @throws NullArgumentException if <code>sampleStats</code> is <code>null</code>
      * @throws NumberIsTooSmallException if the number of samples is &lt; 2
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public boolean tTest(final double mu, final StatisticalSummary sampleStats,
                          final double alpha)
     throws NullArgumentException, NumberIsTooSmallException,
-    OutOfRangeException, MaxCountExceededException {
+    MathIllegalArgumentException, MaxCountExceededException {
 
         checkSignificanceLevel(alpha);
         return tTest(mu, sampleStats) < alpha;
@@ -731,13 +730,13 @@ public class TTest {
      * confidence 1 - alpha
      * @throws NullArgumentException if the arrays are <code>null</code>
      * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public boolean tTest(final double[] sample1, final double[] sample2,
                          final double alpha)
         throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
 
         checkSignificanceLevel(alpha);
         return tTest(sample1, sample2) < alpha;
@@ -794,13 +793,13 @@ public class TTest {
      * confidence 1 - alpha
      * @throws NullArgumentException if the arrays are <code>null</code>
      * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public boolean homoscedasticTTest(final double[] sample1, final double[] sample2,
                                       final double alpha)
         throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
 
         checkSignificanceLevel(alpha);
         return homoscedasticTTest(sample1, sample2) < alpha;
@@ -956,14 +955,14 @@ public class TTest {
      * confidence 1 - alpha
      * @throws NullArgumentException if the sample statistics are <code>null</code>
      * @throws NumberIsTooSmallException if the number of samples is &lt; 2
-     * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
+     * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public boolean tTest(final StatisticalSummary sampleStats1,
                          final StatisticalSummary sampleStats2,
                          final double alpha)
         throws NullArgumentException, NumberIsTooSmallException,
-        OutOfRangeException, MaxCountExceededException {
+        MathIllegalArgumentException, MaxCountExceededException {
 
         checkSignificanceLevel(alpha);
         return tTest(sampleStats1, sampleStats2) < alpha;
@@ -1125,13 +1124,13 @@ public class TTest {
      * Check significance level.
      *
      * @param alpha significance level
-     * @throws OutOfRangeException if the significance level is out of bounds.
+     * @throws MathIllegalArgumentException if the significance level is out of bounds.
      */
     private void checkSignificanceLevel(final double alpha)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
 
         if (alpha <= 0 || alpha > 0.5) {
-            throw new OutOfRangeException(LocalizedFormats.SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedFormats.SIGNIFICANCE_LEVEL,
                                           alpha, 0.0, 0.5);
         }
 

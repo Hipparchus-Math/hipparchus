@@ -23,7 +23,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -46,11 +45,11 @@ public class ElitisticListPopulation extends ListPopulation {
      * @throws NullArgumentException if the list of chromosomes is {@code null}
      * @throws MathIllegalArgumentException if the population limit is not a positive number (&lt; 1)
      * @throws NumberIsTooLargeException if the list of chromosomes exceeds the population limit
-     * @throws OutOfRangeException if the elitism rate is outside the [0, 1] range
+     * @throws MathIllegalArgumentException if the elitism rate is outside the [0, 1] range
      */
     public ElitisticListPopulation(final List<Chromosome> chromosomes, final int populationLimit,
                                    final double elitismRate)
-        throws NullArgumentException, MathIllegalArgumentException, NumberIsTooLargeException, OutOfRangeException {
+        throws NullArgumentException, MathIllegalArgumentException, NumberIsTooLargeException, MathIllegalArgumentException {
 
         super(chromosomes, populationLimit);
         setElitismRate(elitismRate);
@@ -62,10 +61,10 @@ public class ElitisticListPopulation extends ListPopulation {
      * @param populationLimit maximal size of the population
      * @param elitismRate how many best chromosomes will be directly transferred to the next generation [in %]
      * @throws MathIllegalArgumentException if the population limit is not a positive number (&lt; 1)
-     * @throws OutOfRangeException if the elitism rate is outside the [0, 1] range
+     * @throws MathIllegalArgumentException if the elitism rate is outside the [0, 1] range
      */
     public ElitisticListPopulation(final int populationLimit, final double elitismRate)
-        throws MathIllegalArgumentException, OutOfRangeException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
 
         super(populationLimit);
         setElitismRate(elitismRate);
@@ -98,11 +97,11 @@ public class ElitisticListPopulation extends ListPopulation {
      * Sets the elitism rate, i.e. how many best chromosomes will be directly transferred to the next generation [in %].
      *
      * @param elitismRate how many best chromosomes will be directly transferred to the next generation [in %]
-     * @throws OutOfRangeException if the elitism rate is outside the [0, 1] range
+     * @throws MathIllegalArgumentException if the elitism rate is outside the [0, 1] range
      */
-    public void setElitismRate(final double elitismRate) throws OutOfRangeException {
+    public void setElitismRate(final double elitismRate) throws MathIllegalArgumentException {
         if (elitismRate < 0 || elitismRate > 1) {
-            throw new OutOfRangeException(LocalizedFormats.ELITISM_RATE, elitismRate, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.ELITISM_RATE, elitismRate, 0, 1);
         }
         this.elitismRate = elitismRate;
     }

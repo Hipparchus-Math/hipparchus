@@ -50,7 +50,6 @@ import org.hipparchus.analysis.function.Ulp;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -202,12 +201,12 @@ public abstract class RealVectorAbstractTest {
         }
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testGetEntryInvalidIndex1() {
         create(new double[4]).getEntry(-1);
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testGetEntryInvalidIndex2() {
         create(new double[4]).getEntry(4);
     }
@@ -248,12 +247,12 @@ public abstract class RealVectorAbstractTest {
         }
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testSetEntryInvalidIndex1() {
         create(new double[4]).setEntry(-1, getPreferredEntryValue());
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testSetEntryInvalidIndex2() {
         create(new double[4]).setEntry(4, getPreferredEntryValue());
     }
@@ -295,12 +294,12 @@ public abstract class RealVectorAbstractTest {
         }
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testAddToEntryInvalidIndex1() {
         create(new double[3]).addToEntry(-1, getPreferredEntryValue());
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testAddToEntryInvalidIndex2() {
         create(new double[3]).addToEntry(4, getPreferredEntryValue());
     }
@@ -367,19 +366,19 @@ public abstract class RealVectorAbstractTest {
         TestUtils.assertEquals("", expected, actual, 0d);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testGetSubVectorInvalidIndex1() {
         final int n = 10;
         create(new double[n]).getSubVector(-1, 2);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testGetSubVectorInvalidIndex2() {
         final int n = 10;
         create(new double[n]).getSubVector(n, 2);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testGetSubVectorInvalidIndex3() {
         final int n = 10;
         create(new double[n]).getSubVector(0, n + 1);
@@ -421,17 +420,17 @@ public abstract class RealVectorAbstractTest {
         TestUtils.assertEquals("", expected, actual, 0d);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSetSubVectorInvalidIndex1() {
         create(new double[10]).setSubVector(-1, create(new double[2]));
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSetSubVectorInvalidIndex2() {
         create(new double[10]).setSubVector(10, create(new double[2]));
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSetSubVectorInvalidIndex3() {
         create(new double[10]).setSubVector(9, create(new double[2]));
     }
@@ -1439,25 +1438,25 @@ public abstract class RealVectorAbstractTest {
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
@@ -1571,25 +1570,25 @@ public abstract class RealVectorAbstractTest {
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
@@ -1707,25 +1706,25 @@ public abstract class RealVectorAbstractTest {
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
@@ -1847,25 +1846,25 @@ public abstract class RealVectorAbstractTest {
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {

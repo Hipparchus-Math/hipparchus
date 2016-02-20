@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Interface for distributions on the integers.
@@ -92,9 +92,9 @@ public interface IntegerDistribution {
      * @param p the cumulative probability
      * @return the smallest {@code p}-quantile of this distribution
      * (largest 0-quantile for {@code p = 0})
-     * @throws OutOfRangeException if {@code p < 0} or {@code p > 1}
+     * @throws MathIllegalArgumentException if {@code p < 0} or {@code p > 1}
      */
-    int inverseCumulativeProbability(double p) throws OutOfRangeException;
+    int inverseCumulativeProbability(double p) throws MathIllegalArgumentException;
 
     /**
      * Use this method to get the numerical value of the mean of this

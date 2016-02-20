@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -51,7 +51,7 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
      * additional initialisation overhead.
      *
      * @param p probability of success.
-     * @throws OutOfRangeException if {@code p <= 0} or {@code p > 1}.
+     * @throws MathIllegalArgumentException if {@code p <= 0} or {@code p > 1}.
      */
     public GeometricDistribution(double p) {
         this(new Well19937c(), p);
@@ -62,13 +62,13 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
      *
      * @param rng Random number generator.
      * @param p Probability of success.
-     * @throws OutOfRangeException if {@code p <= 0} or {@code p > 1}.
+     * @throws MathIllegalArgumentException if {@code p <= 0} or {@code p > 1}.
      */
     public GeometricDistribution(RandomGenerator rng, double p) {
         super(rng);
 
         if (p <= 0 || p > 1) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_RANGE_LEFT, p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_LEFT, p, 0, 1);
         }
 
         probabilityOfSuccess = p;
@@ -177,9 +177,10 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
      * {@inheritDoc}
      */
     @Override
-    public int inverseCumulativeProbability(double p) throws OutOfRangeException {
+    public int inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
         if (p < 0 || p > 1) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
         if (p == 1) {
             return Integer.MAX_VALUE;

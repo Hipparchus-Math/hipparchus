@@ -21,7 +21,6 @@ import java.util.Arrays;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
 import org.junit.Assert;
@@ -304,25 +303,25 @@ public class SparseFieldVectorTest {
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
@@ -431,25 +430,25 @@ public class SparseFieldVectorTest {
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
@@ -562,25 +561,25 @@ public class SparseFieldVectorTest {
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
@@ -697,25 +696,25 @@ public class SparseFieldVectorTest {
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {

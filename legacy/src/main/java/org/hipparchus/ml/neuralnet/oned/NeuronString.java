@@ -21,7 +21,8 @@ import java.io.Serializable;
 import java.io.ObjectInputStream;
 
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
 import org.hipparchus.ml.neuralnet.Network;
 
@@ -153,12 +154,13 @@ public class NeuronString implements Serializable {
      *
      * @param i Neuron index.
      * @return the features of the neuron at index {@code i}.
-     * @throws OutOfRangeException if {@code i} is out of range.
+     * @throws MathIllegalArgumentException if {@code i} is out of range.
      */
     public double[] getFeatures(int i) {
         if (i < 0 ||
             i >= size) {
-            throw new OutOfRangeException(i, 0, size - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   i, 0, size - 1);
         }
 
         return network.getNeuron(identifiers[i]).getFeatures();
