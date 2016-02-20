@@ -416,6 +416,7 @@
       <module>perf</module>
       <module>samples</module>
       <module>legacy</module>
+      <module>fft</module> <!-- marked for deletion -->
   </modules>
 
   <build>
