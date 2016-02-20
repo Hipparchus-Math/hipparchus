@@ -16,10 +16,9 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomVectorGenerator;
 
 /**
@@ -185,7 +184,8 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
                     int attempts = 0;
                     while (s == null) {
                         if (attempts++ >= getMaxEvaluations()) {
-                            throw new TooManyEvaluationsException(getMaxEvaluations());
+                            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED,
+                                                                getMaxEvaluations());
                         }
                         s = generator.nextVector();
                         for (int k = 0; s != null && k < s.length; ++k) {

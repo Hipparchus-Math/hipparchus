@@ -20,7 +20,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -109,11 +109,11 @@ public class TrapezoidIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param baseIntegrator integrator holding integration parameters
      * @param n the stage of 1/2 refinement, n = 0 is no refinement
      * @return the value of n-th stage integral
-     * @throws TooManyEvaluationsException if the maximal number of evaluations
+     * @throws MathIllegalStateException if the maximal number of evaluations
      * is exceeded.
      */
     double stage(final BaseAbstractUnivariateIntegrator baseIntegrator, final int n)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
 
         if (n == 0) {
             final double max = baseIntegrator.getMax();
@@ -143,7 +143,7 @@ public class TrapezoidIntegrator extends BaseAbstractUnivariateIntegrator {
     /** {@inheritDoc} */
     @Override
     protected double doIntegrate()
-        throws MathIllegalArgumentException, TooManyEvaluationsException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
 
         double oldt = stage(this, 0);
         iterations.incrementCount();

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -60,7 +60,7 @@ public class BisectionSolver extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         double min = getMin();
         double max = getMax();
         verifyInterval(min, max);

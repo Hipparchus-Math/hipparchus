@@ -20,7 +20,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.IntegerSequence.Incrementor;
@@ -113,7 +113,7 @@ public class BracketFinder {
      * @param goal {@link GoalType Goal type}.
      * @param xA Initial point.
      * @param xB Initial point.
-     * @throws TooManyEvaluationsException if the maximum number of evaluations
+     * @throws MathIllegalStateException if the maximum number of evaluations
      * is exceeded.
      */
     public void search(UnivariateFunction func,
@@ -300,7 +300,7 @@ public class BracketFinder {
         /**
          * @param x Argument.
          * @return {@code f(x)}
-         * @throws TooManyEvaluationsException if the maximal number of evaluations is
+         * @throws MathIllegalStateException if the maximal number of evaluations is
          * exceeded.
          */
         double value(double x) {
@@ -308,7 +308,8 @@ public class BracketFinder {
                 inc.increment();
                 evaluations = inc.getCount();
             } catch (MaxCountExceededException e) {
-                throw new TooManyEvaluationsException(e.getMax());
+                throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED,
+                                                    e.getMax());
             }
 
             return func.value(x);

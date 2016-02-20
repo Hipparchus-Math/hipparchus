@@ -26,7 +26,7 @@ import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.analysis.solvers.NewtonRaphsonSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -158,13 +158,13 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         double resultN;
         try {
             resultN = newton.solve(100, f, min, max);
-        } catch (TooManyEvaluationsException tmee) {
+        } catch (MathIllegalStateException tmee) {
             resultN = Double.NaN;
         }
         double resultB;
         try {
             resultB = bracketing.solve(100, f, min, max);
-        } catch (TooManyEvaluationsException tmee) {
+        } catch (MathIllegalStateException tmee) {
             resultB = Double.NaN;
         }
         Assert.assertEquals(root, resultN, newton.getAbsoluteAccuracy());

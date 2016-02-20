@@ -16,7 +16,8 @@ package org.hipparchus.util;
 import java.util.List;
 import java.util.ArrayList;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.ZeroException;
 import org.junit.Assert;
@@ -247,7 +248,7 @@ public class IntegerSequenceTest {
         }
     }
 
-    @Test(expected=TooManyEvaluationsException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testIncrementorAlternateException() {
         final int start = 1;
         final int max = 2;
@@ -257,7 +258,8 @@ public class IntegerSequenceTest {
             = new IntegerSequence.Incrementor.MaxCountExceededCallback() {
                     /** {@inheritDoc} */
                     public void trigger(int max) {
-                        throw new TooManyEvaluationsException(max);
+                        throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED,
+                                                            max);
                     }
                 };
 

@@ -18,11 +18,12 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.MathUtils;
 
@@ -155,11 +156,11 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      *
      * @param point Point at which the objective function must be evaluated.
      * @return the objective function value at specified point.
-     * @throws TooManyEvaluationsException if the maximal number of evaluations
+     * @throws MathIllegalStateException if the maximal number of evaluations
      * is exceeded.
      */
     protected double computeObjectiveValue(double point)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         incrementEvaluationCount();
         return function.value(point);
     }
@@ -196,7 +197,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
     /** {@inheritDoc} */
     @Override
     public double solve(int maxEval, FUNC f, double min, double max, double startValue)
-        throws TooManyEvaluationsException,
+        throws MathIllegalStateException,
                MathIllegalArgumentException {
         // Initialization.
         setup(maxEval, f, min, max, startValue);
@@ -214,7 +215,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
     /** {@inheritDoc} */
     @Override
     public double solve(int maxEval, FUNC f, double startValue)
-        throws TooManyEvaluationsException,
+        throws MathIllegalStateException,
                MathIllegalArgumentException {
         return solve(maxEval, f, Double.NaN, Double.NaN, startValue);
     }
@@ -224,13 +225,13 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      * classes.
      *
      * @return the root.
-     * @throws TooManyEvaluationsException if the maximal number of evaluations
+     * @throws MathIllegalStateException if the maximal number of evaluations
      * is exceeded.
      * @throws MathIllegalArgumentException if the initial search interval does not bracket
      * a root and the solver requires it.
      */
     protected abstract double doSolve()
-        throws TooManyEvaluationsException, MathIllegalArgumentException;
+        throws MathIllegalStateException, MathIllegalArgumentException;
 
     /**
      * Check whether the function takes opposite signs at the endpoints.
@@ -312,15 +313,15 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      * {@code computeObjectiveValue} to solve the function.
      * See e.g. {@link AbstractUnivariateDifferentiableSolver}.
      *
-     * @throws TooManyEvaluationsException when the allowed number of function
+     * @throws MathIllegalStateException when the allowed number of function
      * evaluations has been exhausted.
      */
     protected void incrementEvaluationCount()
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         try {
             evaluations.incrementCount();
         } catch (MaxCountExceededException e) {
-            throw new TooManyEvaluationsException(e.getMax());
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, e.getMax());
         }
     }
 }

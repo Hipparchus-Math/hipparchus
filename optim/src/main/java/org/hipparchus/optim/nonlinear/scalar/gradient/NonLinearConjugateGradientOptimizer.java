@@ -20,7 +20,7 @@ package org.hipparchus.optim.nonlinear.scalar.gradient;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
@@ -160,7 +160,7 @@ public class NonLinearConjugateGradientOptimizer
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }

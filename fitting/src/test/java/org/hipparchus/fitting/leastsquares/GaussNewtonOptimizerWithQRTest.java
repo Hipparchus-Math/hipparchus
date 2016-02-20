@@ -20,7 +20,7 @@ package org.hipparchus.fitting.leastsquares;
 import java.io.IOException;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.junit.Test;
@@ -74,7 +74,7 @@ public class GaussNewtonOptimizerWithQRTest
         optimizer.optimize(lsp);
 
             fail(optimizer);
-        }catch (TooManyEvaluationsException e){
+        }catch (MathIllegalStateException e){
             //expected
         }
     }

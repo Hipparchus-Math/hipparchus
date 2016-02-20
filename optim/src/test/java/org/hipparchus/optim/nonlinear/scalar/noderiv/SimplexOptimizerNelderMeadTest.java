@@ -21,7 +21,7 @@ package org.hipparchus.optim.nonlinear.scalar.noderiv;
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.optim.InitialGuess;
@@ -253,7 +253,7 @@ public class SimplexOptimizerNelderMeadTest {
         Assert.assertTrue(optimum.getValue() < 1e-6);
     }
 
-    @Test(expected=TooManyEvaluationsException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testMaxIterations() {
         Powell powell = new Powell();
         SimplexOptimizer optimizer = new SimplexOptimizer(-1, 1e-3);

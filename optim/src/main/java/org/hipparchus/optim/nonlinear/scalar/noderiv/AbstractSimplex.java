@@ -197,7 +197,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      * @param evaluationFunction Evaluation function.
      * @param comparator Comparator to use to sort simplex vertices from best
      * to worst.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the algorithm fails to converge.
      */
     public abstract void iterate(final MultivariateFunction evaluationFunction,
@@ -236,7 +236,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      *
      * @param evaluationFunction Evaluation function.
      * @param comparator Comparator to use to sort simplex vertices from best to worst.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximal number of evaluations is exceeded.
      */
     public void evaluate(final MultivariateFunction evaluationFunction,

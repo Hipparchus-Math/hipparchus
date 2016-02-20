@@ -17,7 +17,7 @@
 package org.hipparchus.optim.univariate;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.BaseOptimizer;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.OptimizationData;
@@ -60,12 +60,12 @@ public abstract class UnivariateOptimizer
      *  <li>{@link UnivariateObjectiveFunction}</li>
      * </ul>
      * @return {@inheritDoc}
-     * @throws TooManyEvaluationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * evaluations is exceeded.
      */
     @Override
     public UnivariatePointValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         // Perform computation.
         return super.optimize(optData);
     }
@@ -141,7 +141,7 @@ public abstract class UnivariateOptimizer
      *
      * @param x Point at which the objective function must be evaluated.
      * @return the objective function value at the specified point.
-     * @throws TooManyEvaluationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * evaluations is exceeded.
      */
     protected double computeObjectiveValue(double x) {

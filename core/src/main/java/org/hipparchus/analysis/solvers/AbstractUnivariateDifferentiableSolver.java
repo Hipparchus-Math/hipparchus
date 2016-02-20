@@ -19,7 +19,7 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * Provide a default implementation for several functions useful to generic
@@ -61,11 +61,11 @@ public abstract class AbstractUnivariateDifferentiableSolver
      *
      * @param point Point at which the objective function must be evaluated.
      * @return the objective function value and derivative at specified point.
-     * @throws TooManyEvaluationsException
+     * @throws MathIllegalStateException
      * if the maximal number of evaluations is exceeded.
      */
     protected DerivativeStructure computeObjectiveValueAndDerivative(double point)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         incrementEvaluationCount();
         return function.value(new DerivativeStructure(1, 1, 0, point));
     }

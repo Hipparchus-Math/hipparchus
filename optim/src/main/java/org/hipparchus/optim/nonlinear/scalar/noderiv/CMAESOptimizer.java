@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.EigenDecomposition;
 import org.hipparchus.linear.MatrixUtils;
@@ -351,14 +351,14 @@ public class CMAESOptimizer
      *  <li>{@link PopulationSize}</li>
      * </ul>
      * @return {@inheritDoc}
-     * @throws TooManyEvaluationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * evaluations is exceeded.
      * @throws MathIllegalArgumentException if the initial guess, target, and weight
      * arguments have inconsistent dimensions.
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException,
+        throws MathIllegalStateException,
                MathIllegalArgumentException {
         // Set up base class and perform computation.
         return super.optimize(optData);
@@ -415,7 +415,7 @@ public class CMAESOptimizer
                 copyColumn(arxk, 0, arx, k);
                 try {
                     valuePenaltyPairs[k] = fitfun.value(arx.getColumn(k)); // compute fitness
-                } catch (TooManyEvaluationsException e) {
+                } catch (MathIllegalStateException e) {
                     break generationLoop;
                 }
             }

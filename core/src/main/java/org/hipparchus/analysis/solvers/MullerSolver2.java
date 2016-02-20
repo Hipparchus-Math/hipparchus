@@ -19,7 +19,7 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -82,7 +82,7 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException,
+        throws MathIllegalStateException,
                NumberIsTooLargeException,
                MathIllegalArgumentException {
         final double min = getMin();

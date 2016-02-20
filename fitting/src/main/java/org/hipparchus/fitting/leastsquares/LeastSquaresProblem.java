@@ -67,7 +67,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
      *
      * @param point the parameter values.
      * @return the model's value and derivative at the given point.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      *          if the maximal number of evaluations (of the model vector function) is
      *          exceeded.
      */

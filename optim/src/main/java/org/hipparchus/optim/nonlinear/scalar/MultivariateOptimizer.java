@@ -17,7 +17,7 @@
 package org.hipparchus.optim.nonlinear.scalar;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.BaseMultivariateOptimizer;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.OptimizationData;
@@ -53,12 +53,12 @@ public abstract class MultivariateOptimizer
      *  <li>{@link GoalType}</li>
      * </ul>
      * @return {@inheritDoc}
-     * @throws TooManyEvaluationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * evaluations is exceeded.
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }
@@ -107,7 +107,7 @@ public abstract class MultivariateOptimizer
      *
      * @param params Point at which the objective function must be evaluated.
      * @return the objective function value at the specified point.
-     * @throws TooManyEvaluationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * evaluations is exceeded.
      */
     public double computeObjectiveValue(double[] params) {

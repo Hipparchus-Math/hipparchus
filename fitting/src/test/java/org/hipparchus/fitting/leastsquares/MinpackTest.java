@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.fitting.leastsquares.LevenbergMarquardtOptimizer;
@@ -522,7 +522,7 @@ public class MinpackTest {
             Assert.assertFalse(exceptionExpected);
             function.checkTheoreticalMinCost(optimum.getRMS());
             function.checkTheoreticalMinParams(optimum.getPoint().toArray());
-        } catch (TooManyEvaluationsException e) {
+        } catch (MathIllegalStateException e) {
             Assert.assertTrue(exceptionExpected);
         }
     }

@@ -17,7 +17,7 @@
 package org.hipparchus.optim.nonlinear.scalar;
 
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
@@ -63,12 +63,12 @@ public abstract class GradientMultivariateOptimizer
      *  <li>{@link ObjectiveFunctionGradient}</li>
      * </ul>
      * @return {@inheritDoc}
-     * @throws TooManyEvaluationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * evaluations (of the objective function) is exceeded.
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }

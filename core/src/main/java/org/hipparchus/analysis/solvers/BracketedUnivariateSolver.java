@@ -61,7 +61,7 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * @return A value where the function is zero.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the arguments do not satisfy the requirements specified by the solver.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException if
+     * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
     double solve(int maxEval, FUNC f, double min, double max,
@@ -83,7 +83,7 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * @return A value where the function is zero.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the arguments do not satisfy the requirements specified by the solver.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException if
+     * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
     double solve(int maxEval, FUNC f, double min, double max, double startValue,

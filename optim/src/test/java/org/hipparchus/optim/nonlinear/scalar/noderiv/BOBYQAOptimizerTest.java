@@ -23,7 +23,7 @@ import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.PointValuePair;
@@ -69,7 +69,7 @@ public class BOBYQAOptimizerTest {
                1e-13, 1e-6, 2000, null);
     }
 
-    @Test(expected=TooManyEvaluationsException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testMaxEvaluations() {
         final int lowMaxEval = 2;
         double[] startPoint = point(DIM, 0.1);

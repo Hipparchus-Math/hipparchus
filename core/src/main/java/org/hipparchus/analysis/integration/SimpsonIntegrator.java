@@ -20,7 +20,7 @@ import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -98,7 +98,7 @@ public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
     /** {@inheritDoc} */
     @Override
     protected double doIntegrate()
-        throws TooManyEvaluationsException, MaxCountExceededException {
+        throws MathIllegalStateException, MaxCountExceededException {
 
         TrapezoidIntegrator qtrap = new TrapezoidIntegrator();
         if (getMinimalIterationCount() == 1) {

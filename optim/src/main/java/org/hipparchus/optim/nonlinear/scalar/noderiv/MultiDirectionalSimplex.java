@@ -186,7 +186,7 @@ public class MultiDirectionalSimplex extends AbstractSimplex {
      * @param comparator Comparator to use to sort simplex vertices from best
      * to poorest.
      * @return the best point in the transformed simplex.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximal number of evaluations is exceeded.
      */
     private PointValuePair evaluateNewSimplex(final MultivariateFunction evaluationFunction,

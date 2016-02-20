@@ -111,7 +111,7 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
      * @return A value where the function is zero.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the arguments do not satisfy the requirements specified by the solver.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException if
+     * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
     T solve(int maxEval, RealFieldUnivariateFunction<T> f, T min, T max,
@@ -133,7 +133,7 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
      * @return A value where the function is zero.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the arguments do not satisfy the requirements specified by the solver.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException if
+     * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
     T solve(int maxEval, RealFieldUnivariateFunction<T> f, T min, T max, T startValue,

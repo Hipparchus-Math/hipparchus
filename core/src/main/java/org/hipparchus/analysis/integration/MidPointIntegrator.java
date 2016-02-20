@@ -20,7 +20,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -110,14 +110,14 @@ public class MidPointIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param diffMaxMin Difference between the lower bound and upper bound
      * of the integration interval.
      * @return the value of n-th stage integral
-     * @throws TooManyEvaluationsException if the maximal number of evaluations
+     * @throws MathIllegalStateException if the maximal number of evaluations
      * is exceeded.
      */
     private double stage(final int n,
                          double previousStageResult,
                          double min,
                          double diffMaxMin)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
 
         // number of new points in this stage
         final long np = 1L << (n - 1);
@@ -140,7 +140,7 @@ public class MidPointIntegrator extends BaseAbstractUnivariateIntegrator {
     /** {@inheritDoc} */
     @Override
     protected double doIntegrate()
-        throws MathIllegalArgumentException, TooManyEvaluationsException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
 
         final double min = getMin();
         final double diff = getMax() - min;

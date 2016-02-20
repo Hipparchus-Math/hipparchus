@@ -18,7 +18,7 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -81,7 +81,7 @@ public class MullerSolver extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException,
+        throws MathIllegalStateException,
                NumberIsTooLargeException,
                MathIllegalArgumentException {
         final double min = getMin();
@@ -123,12 +123,12 @@ public class MullerSolver extends AbstractUnivariateSolver {
      * @param fMin function value at the lower bound.
      * @param fMax function value at the upper bound.
      * @return the point at which the function value is zero.
-     * @throws TooManyEvaluationsException if the allowed number of calls to
+     * @throws MathIllegalStateException if the allowed number of calls to
      * the function to be solved has been exhausted.
      */
     private double solve(double min, double max,
                          double fMin, double fMax)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         final double relativeAccuracy = getRelativeAccuracy();
         final double absoluteAccuracy = getAbsoluteAccuracy();
         final double functionValueAccuracy = getFunctionValueAccuracy();

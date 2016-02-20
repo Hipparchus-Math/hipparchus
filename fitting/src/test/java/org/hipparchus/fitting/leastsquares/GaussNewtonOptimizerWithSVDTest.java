@@ -20,7 +20,6 @@ package org.hipparchus.fitting.leastsquares;
 import java.io.IOException;
 
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.geometry.euclidean.threed.Plane;
@@ -70,7 +69,7 @@ public class GaussNewtonOptimizerWithSVDTest
         optimizer.optimize(lsp);
 
             fail(optimizer);
-        }catch (TooManyEvaluationsException e){
+        }catch (MathIllegalStateException e){
             //expected
         }
     }
@@ -109,7 +108,7 @@ public class GaussNewtonOptimizerWithSVDTest
         try {
             super.testGetIterations();
             fail(optimizer);
-        } catch (TooManyEvaluationsException e) {
+        } catch (MathIllegalStateException e) {
             //expected
         }
     }

@@ -23,7 +23,7 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -88,7 +88,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      */
     @Override
     public double doSolve()
-        throws TooManyEvaluationsException,
+        throws MathIllegalStateException,
                NumberIsTooLargeException,
                MathIllegalArgumentException {
         final double min = getMin();
@@ -176,7 +176,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * @param coefficients Polynomial coefficients.
      * @param initial Start value.
      * @return the point at which the function value is zero.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximum number of evaluations is exceeded.
      * @throws NullArgumentException if the {@code coefficients} is
      * {@code null}.
@@ -187,7 +187,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                                      double initial)
         throws NullArgumentException,
                MathIllegalArgumentException,
-               TooManyEvaluationsException {
+               MathIllegalStateException {
         setup(Integer.MAX_VALUE,
               new PolynomialFunction(coefficients),
               Double.NEGATIVE_INFINITY,
@@ -206,7 +206,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * @param coefficients Polynomial coefficients.
      * @param initial Start value.
      * @return the point at which the function value is zero.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximum number of evaluations is exceeded.
      * @throws NullArgumentException if the {@code coefficients} is
      * {@code null}.
@@ -217,7 +217,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
                                 double initial)
         throws NullArgumentException,
                MathIllegalArgumentException,
-               TooManyEvaluationsException {
+               MathIllegalStateException {
         setup(Integer.MAX_VALUE,
               new PolynomialFunction(coefficients),
               Double.NEGATIVE_INFINITY,
@@ -256,7 +256,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * @param coefficients Polynomial coefficients.
          * @param initial Start value.
          * @return the point at which the function value is zero.
-         * @throws org.hipparchus.exception.TooManyEvaluationsException
+         * @throws org.hipparchus.exception.MathIllegalStateException
          * if the maximum number of evaluations is exceeded.
          * @throws NullArgumentException if the {@code coefficients} is
          * {@code null}.
@@ -265,7 +265,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
         public Complex[] solveAll(Complex coefficients[], Complex initial)
             throws NullArgumentException,
                    MathIllegalArgumentException,
-                   TooManyEvaluationsException {
+                   MathIllegalStateException {
             if (coefficients == null) {
                 throw new NullArgumentException();
             }
@@ -305,7 +305,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * @param coefficients Polynomial coefficients.
          * @param initial Start value.
          * @return the point at which the function value is zero.
-         * @throws org.hipparchus.exception.TooManyEvaluationsException
+         * @throws org.hipparchus.exception.MathIllegalStateException
          * if the maximum number of evaluations is exceeded.
          * @throws NullArgumentException if the {@code coefficients} is
          * {@code null}.
@@ -314,7 +314,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
         public Complex solve(Complex coefficients[], Complex initial)
             throws NullArgumentException,
                    MathIllegalArgumentException,
-                   TooManyEvaluationsException {
+                   MathIllegalStateException {
             if (coefficients == null) {
                 throw new NullArgumentException();
             }

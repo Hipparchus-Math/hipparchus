@@ -24,7 +24,7 @@ import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.StepFunction;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
@@ -65,7 +65,7 @@ public final class BrentOptimizerTest {
                                GoalType.MINIMIZE,
                                new SearchInterval(4, 5));
             Assert.fail("an exception should have been thrown");
-        } catch (TooManyEvaluationsException fee) {
+        } catch (MathIllegalStateException fee) {
             // expected
         }
     }
@@ -188,7 +188,7 @@ public final class BrentOptimizerTest {
                                GoalType.MAXIMIZE,
                                new SearchInterval(0.2, 0.3));
             Assert.fail("an exception should have been thrown");
-        } catch (TooManyEvaluationsException miee) {
+        } catch (MathIllegalStateException miee) {
             // expected
         }
     }

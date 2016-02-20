@@ -20,7 +20,7 @@ import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -99,7 +99,7 @@ public class RombergIntegrator extends BaseAbstractUnivariateIntegrator {
     /** {@inheritDoc} */
     @Override
     protected double doIntegrate()
-        throws TooManyEvaluationsException, MaxCountExceededException {
+        throws MathIllegalStateException, MaxCountExceededException {
 
         final int m = iterations.getMaximalCount() + 1;
         double previousRow[] = new double[m];

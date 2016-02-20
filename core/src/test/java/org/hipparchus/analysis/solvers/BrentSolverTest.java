@@ -30,7 +30,7 @@ import org.hipparchus.analysis.solvers.BrentSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -156,8 +156,8 @@ public final class BrentSolverTest {
 
         try {
             result = solver.solve(5, f, 0.85, 5);
-            Assert.fail("Expected TooManyEvaluationsException");
-        } catch (TooManyEvaluationsException e) {
+            Assert.fail("Expected MathIllegalStateException");
+        } catch (MathIllegalStateException e) {
             // Expected.
         }
     }

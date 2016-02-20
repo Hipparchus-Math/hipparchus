@@ -23,7 +23,7 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -116,7 +116,7 @@ public class IterativeLegendreGaussIntegrator
     /** {@inheritDoc} */
     @Override
     protected double doIntegrate()
-        throws MathIllegalArgumentException, TooManyEvaluationsException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
         // Compute first estimate with a single step.
         double oldt = stage(1);
 
@@ -150,17 +150,17 @@ public class IterativeLegendreGaussIntegrator
      *
      * @param n Number of steps.
      * @return the value of n-th stage integral.
-     * @throws TooManyEvaluationsException if the maximum number of evaluations
+     * @throws MathIllegalStateException if the maximum number of evaluations
      * is exceeded.
      */
     private double stage(final int n)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         // Function to be integrated is stored in the base class.
         final UnivariateFunction f = new UnivariateFunction() {
                 /** {@inheritDoc} */
                 @Override
                 public double value(double x)
-                    throws MathIllegalArgumentException, TooManyEvaluationsException {
+                    throws MathIllegalArgumentException, MathIllegalStateException {
                     return computeObjectiveValue(x);
                 }
             };

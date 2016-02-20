@@ -20,7 +20,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * Interface for univariate real integration algorithms.
@@ -65,7 +65,7 @@ public interface UnivariateIntegrator {
      * @param min the lower bound for the interval
      * @param max the upper bound for the interval
      * @return the value of integral
-     * @throws TooManyEvaluationsException if the maximum number of function
+     * @throws MathIllegalStateException if the maximum number of function
      * evaluations is exceeded
      * @throws MaxCountExceededException if the maximum iteration count is exceeded
      * or the integrator detects convergence problems otherwise
@@ -75,7 +75,7 @@ public interface UnivariateIntegrator {
      */
     double integrate(int maxEval, UnivariateFunction f, double min,
                      double max)
-        throws TooManyEvaluationsException, MaxCountExceededException,
+        throws MathIllegalStateException, MaxCountExceededException,
                MathIllegalArgumentException, NullArgumentException;
 
     /**
