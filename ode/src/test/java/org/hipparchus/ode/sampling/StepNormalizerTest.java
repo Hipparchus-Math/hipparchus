@@ -19,13 +19,10 @@ package org.hipparchus.ode.sampling;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
-import org.hipparchus.ode.sampling.FixedStepHandler;
-import org.hipparchus.ode.sampling.StepNormalizer;
 import org.hipparchus.util.FastMath;
 import org.junit.After;
 import org.junit.Assert;
@@ -43,7 +40,7 @@ public class StepNormalizerTest {
   @Test
   public void testBoundaries()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
     double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);
     integ.addStepHandler(new StepNormalizer(range / 10.0,
@@ -74,7 +71,7 @@ public class StepNormalizerTest {
   @Test
   public void testBeforeEnd()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
     final double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);
     integ.addStepHandler(new StepNormalizer(range / 10.5,

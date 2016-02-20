@@ -20,9 +20,7 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -118,7 +116,7 @@ public class UnivariateSolverUtilsTest {
         Assert.assertTrue(sin.value(result[1]) > 0);
     }
 
-    @Test(expected=NoBracketingException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testBracketLinear(){
         UnivariateSolverUtils.bracket(new UnivariateFunction() {
             public double value(double x) {
@@ -160,7 +158,7 @@ public class UnivariateSolverUtilsTest {
         UnivariateSolverUtils.bracket(sin, 1.0, -2.0, 3.0, -1.0, 1.0, 100);
     }
 
-    @Test(expected=NoBracketingException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testIterationExceeded() {
         UnivariateSolverUtils.bracket(sin, 1.0, -2.0, 3.0, 1.0e-5, 1.0, 100);
     }

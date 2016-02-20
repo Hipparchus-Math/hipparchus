@@ -16,7 +16,8 @@
  */
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.util.FastMath;
@@ -83,7 +84,7 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
     protected double doSolve()
         throws TooManyEvaluationsException,
                NumberIsTooLargeException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         final double min = getMin();
         final double max = getMax();
 
@@ -109,7 +110,8 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
         }
 
         if(y0 * y1 > 0) {
-            throw new NoBracketingException(x0, x1, y0, y1);
+            throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                                   x0, x1, y0, y1);
         }
 
         double x2 = 0.5 * (x0 + x1);

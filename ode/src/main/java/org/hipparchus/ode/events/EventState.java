@@ -24,7 +24,7 @@ import org.hipparchus.analysis.solvers.PegasusSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.sampling.StepInterpolator;
@@ -219,10 +219,10 @@ public class EventState {
      * the end of the proposed step
      * @exception MaxCountExceededException if the interpolator throws one because
      * the number of functions evaluations is exceeded
-     * @exception NoBracketingException if the event cannot be bracketed
+     * @exception MathIllegalArgumentException if the event cannot be bracketed
      */
     public boolean evaluateStep(final StepInterpolator interpolator)
-        throws MaxCountExceededException, NoBracketingException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
 
         try {
             forward = interpolator.isForward();

@@ -23,7 +23,6 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.linear.FieldMatrixPreservingVisitor;
@@ -217,7 +216,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
                                                    final FieldODEState<T> initialState,
                                                    final T finalTime)
         throws NumberIsTooSmallException, MathIllegalArgumentException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
 
         sanityChecks(initialState, finalTime);
         final T   t0 = initialState.getTime();

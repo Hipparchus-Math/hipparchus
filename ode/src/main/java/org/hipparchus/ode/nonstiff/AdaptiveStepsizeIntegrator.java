@@ -17,10 +17,9 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
@@ -346,7 +345,7 @@ public abstract class AdaptiveStepsizeIntegrator
   @Override
   public abstract void integrate (ExpandableStatefulODE equations, double t)
       throws NumberIsTooSmallException, MathIllegalArgumentException,
-             MaxCountExceededException, NoBracketingException;
+             MaxCountExceededException, MathIllegalArgumentException;
 
   /** {@inheritDoc} */
   @Override

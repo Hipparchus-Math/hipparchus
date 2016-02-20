@@ -27,11 +27,9 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.ContinuousOutputModel;
 import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.nonstiff.HighamHall54Integrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
@@ -44,7 +42,7 @@ public class HighamHall54StepInterpolatorTest {
   @Test
   public void derivativesConsistency()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
     TestProblem3 pb = new TestProblem3(0.1);
     double minStep = 0;
     double maxStep = pb.getFinalTime() - pb.getInitialTime();
@@ -60,7 +58,7 @@ public class HighamHall54StepInterpolatorTest {
   public void serialization()
     throws IOException, ClassNotFoundException,
            MathIllegalArgumentException, NumberIsTooSmallException,
-           MaxCountExceededException, NoBracketingException {
+           MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem3 pb = new TestProblem3(0.9);
     double minStep = 0;
@@ -111,7 +109,7 @@ public class HighamHall54StepInterpolatorTest {
   @Test
   public void checkClone()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
     TestProblem3 pb = new TestProblem3(0.9);
     double minStep = 0;
     double maxStep = pb.getFinalTime() - pb.getInitialTime();

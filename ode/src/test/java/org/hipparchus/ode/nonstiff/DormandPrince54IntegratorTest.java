@@ -19,7 +19,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem1;
@@ -29,9 +28,6 @@ import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.nonstiff.AdaptiveStepsizeIntegrator;
-import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
-import org.hipparchus.ode.nonstiff.EmbeddedRungeKuttaIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -44,7 +40,7 @@ public class DormandPrince54IntegratorTest {
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       TestProblem1 pb = new TestProblem1();
       DormandPrince54Integrator integrator = new DormandPrince54Integrator(0.0, 1.0,
                                                                            1.0e-10, 1.0e-10);
@@ -56,7 +52,7 @@ public class DormandPrince54IntegratorTest {
   @Test(expected=NumberIsTooSmallException.class)
   public void testMinStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       TestProblem1 pb = new TestProblem1();
       double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -79,7 +75,7 @@ public class DormandPrince54IntegratorTest {
   @Test
   public void testSmallLastStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblemAbstract pb = new TestProblem5();
     double minStep = 1.25;
@@ -106,7 +102,7 @@ public class DormandPrince54IntegratorTest {
   @Test
   public void testBackward()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       TestProblem5 pb = new TestProblem5();
       double minStep = 0;
@@ -158,7 +154,7 @@ public class DormandPrince54IntegratorTest {
   @Test
   public void testIncreasingTolerance()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     int previousCalls = Integer.MAX_VALUE;
     for (int i = -12; i < -2; ++i) {
@@ -201,7 +197,7 @@ public class DormandPrince54IntegratorTest {
   @Test
   public void testEvents()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem4 pb = new TestProblem4();
     double minStep = 0;
@@ -236,7 +232,7 @@ public class DormandPrince54IntegratorTest {
   @Test
   public void testKepler()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;
@@ -260,7 +256,7 @@ public class DormandPrince54IntegratorTest {
   @Test
   public void testVariableSteps()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;

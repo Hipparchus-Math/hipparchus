@@ -17,7 +17,8 @@
 package org.hipparchus.analysis.solvers;
 
 
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.util.FastMath;
@@ -91,7 +92,7 @@ public class BrentSolver extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws NoBracketingException,
+        throws MathIllegalArgumentException,
                TooManyEvaluationsException,
                NumberIsTooLargeException {
         double min = getMin();
@@ -129,7 +130,8 @@ public class BrentSolver extends AbstractUnivariateSolver {
             return brent(initial, max, yInitial, yMax);
         }
 
-        throw new NoBracketingException(min, max, yMin, yMax);
+        throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                               min, max, yMin, yMax);
     }
 
     /**

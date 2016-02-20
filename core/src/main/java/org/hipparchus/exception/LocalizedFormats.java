@@ -319,7 +319,7 @@ public enum LocalizedFormats implements Localizable {
     ROTATION_MATRIX_DIMENSIONS("a {0}x{1} matrix cannot be a rotation matrix"),
     ROW_INDEX_OUT_OF_RANGE("row index {0} out of allowed range [{1}, {2}]"),
     ROW_INDEX("row index ({0})"), /* keep */
-    SAME_SIGN_AT_ENDPOINTS("function values at endpoints do not have different signs, endpoints: [{0}, {1}], values: [{2}, {3}]"),
+    NOT_BRACKETING_INTERVAL("interval does not bracket a root: f({0}) = {2}, f({1}) = {3}]"),
     SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE("sample size ({0}) exceeds collection size ({1})"), /* keep */
     SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE("sample size ({0}) must be less than or equal to population size ({1})"),
     SIMPLEX_NEED_ONE_POINT("simplex must contain at least one point"),

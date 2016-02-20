@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.util.FastMath;
@@ -83,7 +83,7 @@ public class MullerSolver extends AbstractUnivariateSolver {
     protected double doSolve()
         throws TooManyEvaluationsException,
                NumberIsTooLargeException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         final double min = getMin();
         final double max = getMax();
         final double initial = getStartValue();

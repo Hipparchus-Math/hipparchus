@@ -20,7 +20,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
@@ -33,7 +32,6 @@ import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.nonstiff.ThreeEighthesIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -45,7 +43,7 @@ public class ThreeEighthesIntegratorTest {
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       TestProblem1 pb = new TestProblem1();
       new ThreeEighthesIntegrator(0.01).integrate(pb,
                                                   0.0, new double[pb.getDimension()+10],
@@ -56,7 +54,7 @@ public class ThreeEighthesIntegratorTest {
   @Test
   public void testDecreasingSteps()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       for (TestProblemAbstract pb : new TestProblemAbstract[] {
           new TestProblem1(), new TestProblem2(), new TestProblem3(),
@@ -104,7 +102,7 @@ public class ThreeEighthesIntegratorTest {
  @Test
  public void testSmallStep()
      throws MathIllegalArgumentException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -125,7 +123,7 @@ public class ThreeEighthesIntegratorTest {
   @Test
   public void testBigStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.2;
@@ -145,7 +143,7 @@ public class ThreeEighthesIntegratorTest {
   @Test
   public void testBackward()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       TestProblem5 pb = new TestProblem5();
       double step = FastMath.abs(pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -165,7 +163,7 @@ public class ThreeEighthesIntegratorTest {
   @Test
   public void testKepler()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.0003;
@@ -215,7 +213,7 @@ public class ThreeEighthesIntegratorTest {
   @Test
   public void testStepSize()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new ThreeEighthesIntegrator(step);
       integ.addStepHandler(new StepHandler() {

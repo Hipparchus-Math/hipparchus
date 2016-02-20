@@ -20,16 +20,13 @@ package org.hipparchus.ode.sampling;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FirstOrderFieldIntegrator;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.FirstOrderFieldIntegrator;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestProblemAbstract;
-import org.hipparchus.ode.sampling.StepHandler;
-import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 
@@ -40,7 +37,7 @@ public class StepInterpolatorTestUtils {
                                                    final double finiteDifferencesRatio,
                                                    final double threshold)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         integrator.addStepHandler(new StepHandler() {
 
             public void handleStep(StepInterpolator interpolator, boolean isLast)

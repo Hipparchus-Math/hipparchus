@@ -17,7 +17,7 @@
 
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.util.FastMath;
 
@@ -73,7 +73,7 @@ public class SecantSolver extends AbstractUnivariateSolver {
     @Override
     protected final double doSolve()
         throws TooManyEvaluationsException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         // Get initial solution
         double x0 = getMin();
         double x1 = getMax();

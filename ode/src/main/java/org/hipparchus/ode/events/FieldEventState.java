@@ -22,7 +22,7 @@ import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.analysis.solvers.AllowedSolution;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.sampling.FieldStepInterpolator;
@@ -186,10 +186,10 @@ public class FieldEventState<T extends RealFieldElement<T>> {
      * the end of the proposed step
      * @exception MaxCountExceededException if the interpolator throws one because
      * the number of functions evaluations is exceeded
-     * @exception NoBracketingException if the event cannot be bracketed
+     * @exception MathIllegalArgumentException if the event cannot be bracketed
      */
     public boolean evaluateStep(final FieldStepInterpolator<T> interpolator)
-        throws MaxCountExceededException, NoBracketingException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
 
         forward = interpolator.isForward();
         final FieldODEStateAndDerivative<T> s1 = interpolator.getCurrentState();

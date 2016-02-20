@@ -19,18 +19,7 @@ package org.hipparchus.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.ode.AbstractIntegrator;
-import org.hipparchus.ode.AbstractParameterizable;
-import org.hipparchus.ode.ExpandableStatefulODE;
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.FirstOrderIntegrator;
-import org.hipparchus.ode.JacobianMatrices;
-import org.hipparchus.ode.MainStateJacobianProvider;
-import org.hipparchus.ode.ParameterJacobianProvider;
-import org.hipparchus.ode.ParameterizedODE;
-import org.hipparchus.ode.UnknownParameterException;
 import org.hipparchus.ode.JacobianMatrices.MismatchedEquations;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
@@ -43,7 +32,7 @@ public class JacobianMatricesTest {
     @Test
     public void testLowAccuracyExternalDifferentiation()
         throws NumberIsTooSmallException, MathIllegalArgumentException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         // this test does not really test JacobianMatrices,
         // it only shows that WITHOUT this class, attempting to recover
         // the jacobians from external differentiation on simple integration
@@ -76,7 +65,7 @@ public class JacobianMatricesTest {
     @Test
     public void testHighAccuracyExternalDifferentiation()
         throws NumberIsTooSmallException, MathIllegalArgumentException,
-               MaxCountExceededException, NoBracketingException, UnknownParameterException {
+               MaxCountExceededException, MathIllegalArgumentException, UnknownParameterException {
         FirstOrderIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
         double hP = 1.0e-12;
@@ -118,7 +107,7 @@ public class JacobianMatricesTest {
     @Test
     public void testInternalDifferentiation()
                     throws NumberIsTooSmallException, MathIllegalArgumentException,
-                    MaxCountExceededException, NoBracketingException,
+                    MaxCountExceededException, MathIllegalArgumentException,
                     UnknownParameterException, MismatchedEquations {
         AbstractIntegrator integ =
                         new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
@@ -163,7 +152,7 @@ public class JacobianMatricesTest {
     @Test
     public void testAnalyticalDifferentiation()
         throws MaxCountExceededException, MathIllegalArgumentException,
-               NumberIsTooSmallException, NoBracketingException,
+               NumberIsTooSmallException, MathIllegalArgumentException,
                UnknownParameterException, MismatchedEquations {
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
@@ -203,7 +192,7 @@ public class JacobianMatricesTest {
     @Test
     public void testFinalResult()
         throws MaxCountExceededException, MathIllegalArgumentException,
-               NumberIsTooSmallException, NoBracketingException,
+               NumberIsTooSmallException, MathIllegalArgumentException,
                UnknownParameterException, MismatchedEquations {
 
         AbstractIntegrator integ =
@@ -259,7 +248,7 @@ public class JacobianMatricesTest {
     @Test
     public void testParameterizable()
         throws MaxCountExceededException, MathIllegalArgumentException,
-               NumberIsTooSmallException, NoBracketingException,
+               NumberIsTooSmallException, MathIllegalArgumentException,
                UnknownParameterException, MismatchedEquations {
 
         AbstractIntegrator integ =

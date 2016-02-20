@@ -21,7 +21,6 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
@@ -41,7 +40,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testBoundaries() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
+  public void testBoundaries() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, MathIllegalArgumentException {
     integ.addStepHandler(new ContinuousOutputModel());
     integ.integrate(pb,
                     pb.getInitialTime(), pb.getInitialState(),
@@ -53,7 +52,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testRandomAccess() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, NoBracketingException {
+  public void testRandomAccess() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, MathIllegalArgumentException {
 
     ContinuousOutputModel cm = new ContinuousOutputModel();
     integ.addStepHandler(cm);

@@ -19,7 +19,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
@@ -29,8 +28,6 @@ import org.hipparchus.ode.TestProblem4;
 import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.nonstiff.AdaptiveStepsizeIntegrator;
-import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -43,7 +40,7 @@ public class DormandPrince853IntegratorTest {
   @Test
   public void testMissedEndEvent()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       final double   t0     = 1878250320.0000029;
       final double   tEvent = 1878250379.9999986;
       final double[] k  = { 1.0e-4, 1.0e-5, 1.0e-6 };
@@ -105,7 +102,7 @@ public class DormandPrince853IntegratorTest {
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       TestProblem1 pb = new TestProblem1();
       DormandPrince853Integrator integrator = new DormandPrince853Integrator(0.0, 1.0,
                                                                              1.0e-10, 1.0e-10);
@@ -118,7 +115,7 @@ public class DormandPrince853IntegratorTest {
   @Test(expected=NumberIsTooSmallException.class)
   public void testNullIntervalCheck()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       TestProblem1 pb = new TestProblem1();
       DormandPrince853Integrator integrator = new DormandPrince853Integrator(0.0, 1.0,
                                                                              1.0e-10, 1.0e-10);
@@ -131,7 +128,7 @@ public class DormandPrince853IntegratorTest {
   @Test(expected=NumberIsTooSmallException.class)
   public void testMinStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       TestProblem1 pb = new TestProblem1();
       double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -154,7 +151,7 @@ public class DormandPrince853IntegratorTest {
   @Test
   public void testIncreasingTolerance()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     int previousCalls = Integer.MAX_VALUE;
     AdaptiveStepsizeIntegrator integ =
@@ -192,7 +189,7 @@ public class DormandPrince853IntegratorTest {
   @Test
   public void testTooLargeFirstStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       AdaptiveStepsizeIntegrator integ =
               new DormandPrince853Integrator(0, Double.POSITIVE_INFINITY, Double.NaN, Double.NaN);
@@ -220,7 +217,7 @@ public class DormandPrince853IntegratorTest {
   @Test
   public void testBackward()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       TestProblem5 pb = new TestProblem5();
       double minStep = 0;
@@ -245,7 +242,7 @@ public class DormandPrince853IntegratorTest {
   @Test
   public void testEvents()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem4 pb = new TestProblem4();
     double minStep = 0;
@@ -279,7 +276,7 @@ public class DormandPrince853IntegratorTest {
   @Test
   public void testKepler()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;
@@ -303,7 +300,7 @@ public class DormandPrince853IntegratorTest {
   @Test
   public void testVariableSteps()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;
@@ -325,7 +322,7 @@ public class DormandPrince853IntegratorTest {
   @Test
   public void testUnstableDerivative()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
     final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
     FirstOrderIntegrator integ =
       new DormandPrince853Integrator(0.1, 10, 1.0e-12, 0.0);

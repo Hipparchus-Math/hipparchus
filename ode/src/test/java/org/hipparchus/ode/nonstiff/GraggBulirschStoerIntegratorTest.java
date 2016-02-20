@@ -19,7 +19,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
@@ -30,8 +29,6 @@ import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.nonstiff.AdaptiveStepsizeIntegrator;
-import org.hipparchus.ode.nonstiff.GraggBulirschStoerIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -44,7 +41,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       TestProblem1 pb = new TestProblem1();
       AdaptiveStepsizeIntegrator integrator =
         new GraggBulirschStoerIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
@@ -56,7 +53,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test(expected=NumberIsTooSmallException.class)
   public void testNullIntervalCheck()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       TestProblem1 pb = new TestProblem1();
       GraggBulirschStoerIntegrator integrator =
         new GraggBulirschStoerIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
@@ -68,7 +65,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test(expected=NumberIsTooSmallException.class)
   public void testMinStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       TestProblem5 pb  = new TestProblem5();
       double minStep   = 0.1 * FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
@@ -90,7 +87,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test
   public void testBackward()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       TestProblem5 pb = new TestProblem5();
       double minStep = 0;
@@ -115,7 +112,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test
   public void testIncreasingTolerance()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     int previousCalls = Integer.MAX_VALUE;
     for (int i = -12; i < -4; ++i) {
@@ -154,7 +151,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test
   public void testIntegratorControls()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem3 pb = new TestProblem3(0.999);
     GraggBulirschStoerIntegrator integ =
@@ -184,7 +181,7 @@ public class GraggBulirschStoerIntegratorTest {
 
   private double getMaxError(FirstOrderIntegrator integrator, TestProblemAbstract pb)
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       TestProblemHandler handler = new TestProblemHandler(pb, integrator);
       integrator.addStepHandler(handler);
       integrator.integrate(pb,
@@ -196,7 +193,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test
   public void testEvents()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem4 pb = new TestProblem4();
     double minStep = 0;
@@ -230,7 +227,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test
   public void testKepler()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem3 pb = new TestProblem3(0.9);
     double minStep        = 0;
@@ -254,7 +251,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test
   public void testVariableSteps()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem3 pb = new TestProblem3(0.9);
     double minStep        = 0;
@@ -275,7 +272,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test
   public void testTooLargeFirstStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       AdaptiveStepsizeIntegrator integ =
               new GraggBulirschStoerIntegrator(0, Double.POSITIVE_INFINITY, Double.NaN, Double.NaN);
@@ -303,7 +300,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test
   public void testUnstableDerivative()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
     final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
     FirstOrderIntegrator integ =
       new GraggBulirschStoerIntegrator(0.1, 10, 1.0e-12, 0.0);
@@ -316,7 +313,7 @@ public class GraggBulirschStoerIntegratorTest {
   @Test
   public void testIssue596()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
     FirstOrderIntegrator integ = new GraggBulirschStoerIntegrator(1e-10, 100.0, 1e-7, 1e-7);
       integ.addStepHandler(new StepHandler() {
 

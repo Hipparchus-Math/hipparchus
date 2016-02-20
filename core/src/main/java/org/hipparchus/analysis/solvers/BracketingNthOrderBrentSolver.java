@@ -18,8 +18,9 @@ package org.hipparchus.analysis.solvers;
 
 
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.TooManyEvaluationsException;
@@ -143,7 +144,7 @@ public class BracketingNthOrderBrentSolver
     protected double doSolve()
         throws TooManyEvaluationsException,
                NumberIsTooLargeException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         // prepare arrays with the first points
         final double[] x = new double[maximalOrder + 1];
         final double[] y = new double[maximalOrder + 1];
@@ -188,7 +189,8 @@ public class BracketingNthOrderBrentSolver
                 nbPoints        = 3;
                 signChangeIndex = 2;
             } else {
-                throw new NoBracketingException(x[0], x[2], y[0], y[2]);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                                       x[0], x[2], y[0], y[2]);
             }
 
         }
@@ -393,7 +395,7 @@ public class BracketingNthOrderBrentSolver
                         double max, AllowedSolution allowedSolution)
         throws TooManyEvaluationsException,
                NumberIsTooLargeException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         this.allowed = allowedSolution;
         return super.solve(maxEval, f, min, max);
     }
@@ -405,7 +407,7 @@ public class BracketingNthOrderBrentSolver
                         AllowedSolution allowedSolution)
         throws TooManyEvaluationsException,
                NumberIsTooLargeException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         this.allowed = allowedSolution;
         return super.solve(maxEval, f, min, max, startValue);
     }

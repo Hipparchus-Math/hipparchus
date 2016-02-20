@@ -30,10 +30,9 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.events.FieldEventHandler;
 import org.hipparchus.ode.events.FieldEventState;
@@ -287,12 +286,12 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
      * @return state at end of step
      * @exception MaxCountExceededException if the interpolator throws one because
      * the number of functions evaluations is exceeded
-     * @exception NoBracketingException if the location of an event cannot be bracketed
+     * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     protected FieldODEStateAndDerivative<T> acceptStep(final AbstractFieldStepInterpolator<T> interpolator,
                                                        final T tEnd)
-        throws MaxCountExceededException, MathIllegalArgumentException, NoBracketingException {
+        throws MaxCountExceededException, MathIllegalArgumentException, MathIllegalArgumentException {
 
             FieldODEStateAndDerivative<T> previousState = interpolator.getGlobalPreviousState();
             final FieldODEStateAndDerivative<T> currentState = interpolator.getGlobalCurrentState();

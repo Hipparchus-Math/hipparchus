@@ -19,7 +19,6 @@ package org.hipparchus.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 
 /** This interface represents a first order integrator for
@@ -56,11 +55,11 @@ public interface FirstOrderIntegrator extends ODEIntegrator {
    * @exception MathIllegalArgumentException if arrays dimension do not match equations settings
    * @exception NumberIsTooSmallException if integration step is too small
    * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-   * @exception NoBracketingException if the location of an event cannot be bracketed
+   * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
    */
   double integrate (FirstOrderDifferentialEquations equations,
                     double t0, double[] y0, double t, double[] y)
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException;
+             MaxCountExceededException, MathIllegalArgumentException;
 
 }

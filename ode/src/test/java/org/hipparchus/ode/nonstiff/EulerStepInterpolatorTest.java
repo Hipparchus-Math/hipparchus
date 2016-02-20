@@ -27,16 +27,11 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.ContinuousOutputModel;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.nonstiff.EulerIntegrator;
-import org.hipparchus.ode.nonstiff.EulerStepInterpolator;
-import org.hipparchus.ode.nonstiff.RungeKuttaIntegrator;
-import org.hipparchus.ode.nonstiff.RungeKuttaStepInterpolator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.util.FastMath;
@@ -136,7 +131,7 @@ public class EulerStepInterpolatorTest {
   @Test
   public void derivativesConsistency()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
     TestProblem3 pb = new TestProblem3();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
     EulerIntegrator integ = new EulerIntegrator(step);
@@ -147,7 +142,7 @@ public class EulerStepInterpolatorTest {
   public void serialization()
     throws IOException, ClassNotFoundException,
            MathIllegalArgumentException, NumberIsTooSmallException,
-           MaxCountExceededException, NoBracketingException {
+           MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;

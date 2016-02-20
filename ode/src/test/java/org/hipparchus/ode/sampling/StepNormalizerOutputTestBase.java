@@ -17,22 +17,16 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.junit.Assert;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.nonstiff.GraggBulirschStoerIntegrator;
-import org.hipparchus.ode.sampling.FixedStepHandler;
-import org.hipparchus.ode.sampling.StepNormalizer;
-import org.hipparchus.ode.sampling.StepNormalizerBounds;
-import org.hipparchus.ode.sampling.StepNormalizerMode;
+import org.junit.Assert;
 import org.junit.Test;
 
 /** Base class for step normalizer output tests. */
@@ -106,7 +100,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testIncNeither()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpInc(), getO()[0][0], getO()[0][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.NEITHER, exp, false);
     }
@@ -114,7 +108,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testIncNeitherRev()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpIncRev(), getO()[1][0], getO()[1][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.NEITHER, exp, true);
     }
@@ -122,7 +116,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testIncFirst()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpInc(), getO()[2][0], getO()[2][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.FIRST, exp, false);
     }
@@ -130,7 +124,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testIncFirstRev()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpIncRev(), getO()[3][0], getO()[3][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.FIRST, exp, true);
     }
@@ -138,7 +132,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testIncLast()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpInc(), getO()[4][0], getO()[4][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.LAST, exp, false);
     }
@@ -146,7 +140,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testIncLastRev()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpIncRev(), getO()[5][0], getO()[5][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.LAST, exp, true);
     }
@@ -154,7 +148,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testIncBoth()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpInc(), getO()[6][0], getO()[6][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.BOTH, exp, false);
     }
@@ -162,7 +156,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testIncBothRev()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpIncRev(), getO()[7][0], getO()[7][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.BOTH, exp, true);
     }
@@ -170,7 +164,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testMulNeither()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpMul(), getO()[8][0], getO()[8][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.NEITHER, exp, false);
     }
@@ -178,7 +172,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testMulNeitherRev()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpMulRev(), getO()[9][0], getO()[9][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.NEITHER, exp, true);
     }
@@ -186,7 +180,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testMulFirst()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpMul(), getO()[10][0], getO()[10][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.FIRST, exp, false);
     }
@@ -194,7 +188,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testMulFirstRev()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpMulRev(), getO()[11][0], getO()[11][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.FIRST, exp, true);
     }
@@ -202,7 +196,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testMulLast()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpMul(), getO()[12][0], getO()[12][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.LAST, exp, false);
     }
@@ -210,7 +204,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testMulLastRev()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpMulRev(), getO()[13][0], getO()[13][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.LAST, exp, true);
     }
@@ -218,7 +212,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testMulBoth()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpMul(), getO()[14][0], getO()[14][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.BOTH, exp, false);
     }
@@ -226,7 +220,7 @@ public abstract class StepNormalizerOutputTestBase
     @Test
     public void testMulBothRev()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         double[] exp = getArray(getExpMulRev(), getO()[15][0], getO()[15][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.BOTH, exp, true);
     }
@@ -239,7 +233,7 @@ public abstract class StepNormalizerOutputTestBase
      * @param bounds the step normalizer bounds setting to use
      * @param expected the expected output (normalized time points)
      * @param reverse whether to reverse the integration direction
-     * @throws NoBracketingException
+     * @throws MathIllegalArgumentException
      * @throws MaxCountExceededException
      * @throws NumberIsTooSmallException
      * @throws MathIllegalArgumentException
@@ -247,7 +241,7 @@ public abstract class StepNormalizerOutputTestBase
     private void doTest(StepNormalizerMode mode, StepNormalizerBounds bounds,
                         double[] expected, boolean reverse)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+               MaxCountExceededException, MathIllegalArgumentException {
         // Forward test.
         FirstOrderIntegrator integ = new GraggBulirschStoerIntegrator(
                                                         1e-8, 1.0, 1e-5, 1e-5);

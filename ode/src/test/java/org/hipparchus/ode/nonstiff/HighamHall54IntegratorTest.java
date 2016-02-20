@@ -20,7 +20,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
@@ -31,7 +30,6 @@ import org.hipparchus.ode.TestProblem4;
 import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.nonstiff.HighamHall54Integrator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,7 +39,7 @@ public class HighamHall54IntegratorTest {
   @Test
   public void testWrongDerivative()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       HighamHall54Integrator integrator =
           new HighamHall54Integrator(0.0, 1.0, 1.0e-10, 1.0e-10);
       FirstOrderDifferentialEquations equations =
@@ -77,7 +75,7 @@ public class HighamHall54IntegratorTest {
   @Test(expected=NumberIsTooSmallException.class)
   public void testMinStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       TestProblem1 pb = new TestProblem1();
       double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -100,7 +98,7 @@ public class HighamHall54IntegratorTest {
   @Test
   public void testIncreasingTolerance()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     int previousCalls = Integer.MAX_VALUE;
     for (int i = -12; i < -2; ++i) {
@@ -137,7 +135,7 @@ public class HighamHall54IntegratorTest {
   @Test
   public void testBackward()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       TestProblem5 pb = new TestProblem5();
       double minStep = 0;
@@ -162,7 +160,7 @@ public class HighamHall54IntegratorTest {
   @Test
   public void testEvents()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem4 pb = new TestProblem4();
     double minStep = 0;
@@ -197,7 +195,7 @@ public class HighamHall54IntegratorTest {
   @Test(expected=LocalException.class)
   public void testEventsErrors()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
       final TestProblem1 pb = new TestProblem1();
       double minStep = 0;
@@ -242,7 +240,7 @@ public class HighamHall54IntegratorTest {
   @Test
   public void testEventsNoConvergence()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem1 pb = new TestProblem1();
     double minStep = 0;
@@ -285,7 +283,7 @@ public class HighamHall54IntegratorTest {
   @Test
   public void testSanityChecks()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       final TestProblem3 pb  = new TestProblem3(0.9);
       double minStep = 0;
       double maxStep = pb.getFinalTime() - pb.getInitialTime();
@@ -345,7 +343,7 @@ public class HighamHall54IntegratorTest {
   @Test
   public void testKepler()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;

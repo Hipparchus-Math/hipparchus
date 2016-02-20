@@ -286,7 +286,7 @@ ROOTS_OF_UNITY_NOT_COMPUTED_YET = les racines de l''unité n''ont pas encore ét
 ROTATION_MATRIX_DIMENSIONS = une matrice {0}x{1} ne peut pas être une matrice de rotation
 ROW_INDEX_OUT_OF_RANGE = l''index de ligne {0} est hors du domaine autorisé [{1}, {2}]
 ROW_INDEX = index de ligne ({0})
-SAME_SIGN_AT_ENDPOINTS = les valeurs aux bornes de la fonction devraient avoir des signes diffférents ; bornes : [{0}, {1}], valeurs : [{2}, {3}]
+NOT_BRACKETING_INTERVAL =  l''intervalle n''encadre pas une racine : f({0}) = {2}, f({1}) = {3}
 SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE = la taille de l''échantillon ({0}) dépasse la taille de la collection ({1})
 SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE = la taille de l''échantillon ({0}) doit être inférieure ou égale à la taille de la population ({1})
 SIMPLEX_NEED_ONE_POINT = le simplexe doit contenir au moins un point

@@ -20,7 +20,7 @@ import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.solvers.LaguerreSolver;
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -152,8 +152,8 @@ public final class LaguerreSolverTest {
         try {
             // no bracketing
             solver.solve(100, f, 2, 3);
-            Assert.fail("Expecting NoBracketingException - no bracketing");
-        } catch (NoBracketingException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - no bracketing");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

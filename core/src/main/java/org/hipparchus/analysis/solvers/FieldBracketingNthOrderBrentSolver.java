@@ -20,8 +20,9 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.IntegerSequence;
@@ -160,11 +161,11 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
      * accept as solutions.
      * @return a value where the function is zero.
      * @exception NullArgumentException if f is null.
-     * @exception NoBracketingException if root cannot be bracketed
+     * @exception MathIllegalArgumentException if root cannot be bracketed
      */
     public T solve(final int maxEval, final RealFieldUnivariateFunction<T> f,
                    final T min, final T max, final AllowedSolution allowedSolution)
-        throws NullArgumentException, NoBracketingException {
+        throws NullArgumentException, MathIllegalArgumentException {
         return solve(maxEval, f, min, max, min.add(max).divide(2), allowedSolution);
     }
 
@@ -183,12 +184,12 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
      * accept as solutions.
      * @return a value where the function is zero.
      * @exception NullArgumentException if f is null.
-     * @exception NoBracketingException if root cannot be bracketed
+     * @exception MathIllegalArgumentException if root cannot be bracketed
      */
     public T solve(final int maxEval, final RealFieldUnivariateFunction<T> f,
                    final T min, final T max, final T startValue,
                    final AllowedSolution allowedSolution)
-        throws NullArgumentException, NoBracketingException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         // Checks.
         MathUtils.checkNotNull(f);
@@ -244,8 +245,9 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
                 nbPoints        = 3;
                 signChangeIndex = 2;
             } else {
-                throw new NoBracketingException(x[0].getReal(), x[2].getReal(),
-                                                y[0].getReal(), y[2].getReal());
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                                       x[0].getReal(), x[2].getReal(),
+                                                       y[0].getReal(), y[2].getReal());
             }
 
         }

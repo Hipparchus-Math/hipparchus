@@ -22,14 +22,13 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -115,7 +114,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
     public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
                                                    final FieldODEState<T> initialState, final T finalTime)
         throws NumberIsTooSmallException, MathIllegalArgumentException,
-        MaxCountExceededException, NoBracketingException {
+        MaxCountExceededException, MathIllegalArgumentException {
 
         sanityChecks(initialState, finalTime);
         final T   t0 = initialState.getTime();

@@ -28,7 +28,7 @@ import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sqrt;
 import org.hipparchus.analysis.solvers.BrentSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.util.FastMath;
@@ -193,14 +193,14 @@ public final class BrentSolverTest {
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5);
-            Assert.fail("Expecting NoBracketingException - non-bracketing");
-        } catch (NoBracketingException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - non-bracketing");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5, 1.2);
-            Assert.fail("Expecting NoBracketingException - non-bracketing");
-        } catch (NoBracketingException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - non-bracketing");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

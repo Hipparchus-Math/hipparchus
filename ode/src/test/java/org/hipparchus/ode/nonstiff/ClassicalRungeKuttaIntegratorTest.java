@@ -20,7 +20,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
@@ -33,8 +32,6 @@ import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.nonstiff.ClassicalRungeKuttaIntegrator;
-import org.hipparchus.ode.nonstiff.RungeKuttaIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -46,7 +43,7 @@ public class ClassicalRungeKuttaIntegratorTest {
   @Test
   public void testMissedEndEvent()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       final double   t0     = 1878250320.0000029;
       final double   tEvent = 1878250379.9999986;
       final double[] k      = { 1.0e-4, 1.0e-5, 1.0e-6 };
@@ -105,7 +102,7 @@ public class ClassicalRungeKuttaIntegratorTest {
   @Test
   public void testSanityChecks()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
     try  {
       TestProblem1 pb = new TestProblem1();
       new ClassicalRungeKuttaIntegrator(0.01).integrate(pb,
@@ -135,7 +132,7 @@ public class ClassicalRungeKuttaIntegratorTest {
   @Test
   public void testDecreasingSteps()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     for (TestProblemAbstract pb : new TestProblemAbstract[] {
         new TestProblem1(), new TestProblem2(), new TestProblem3(),
@@ -186,7 +183,7 @@ public class ClassicalRungeKuttaIntegratorTest {
   @Test
   public void testSmallStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -206,7 +203,7 @@ public class ClassicalRungeKuttaIntegratorTest {
   @Test
   public void testBigStep()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.2;
@@ -226,7 +223,7 @@ public class ClassicalRungeKuttaIntegratorTest {
   @Test
   public void testBackward()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     TestProblem5 pb = new TestProblem5();
     double step = FastMath.abs(pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -246,7 +243,7 @@ public class ClassicalRungeKuttaIntegratorTest {
   @Test
   public void testKepler()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.0003;
@@ -291,7 +288,7 @@ public class ClassicalRungeKuttaIntegratorTest {
   @Test
   public void testStepSize()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+             MaxCountExceededException, MathIllegalArgumentException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new ClassicalRungeKuttaIntegrator(step);
       integ.addStepHandler(new StepHandler() {

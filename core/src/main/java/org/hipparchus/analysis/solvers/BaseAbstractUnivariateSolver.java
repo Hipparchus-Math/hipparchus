@@ -19,7 +19,7 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
@@ -197,7 +197,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
     @Override
     public double solve(int maxEval, FUNC f, double min, double max, double startValue)
         throws TooManyEvaluationsException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         // Initialization.
         setup(maxEval, f, min, max, startValue);
 
@@ -215,7 +215,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
     @Override
     public double solve(int maxEval, FUNC f, double startValue)
         throws TooManyEvaluationsException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         return solve(maxEval, f, Double.NaN, Double.NaN, startValue);
     }
 
@@ -226,11 +226,11 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      * @return the root.
      * @throws TooManyEvaluationsException if the maximal number of evaluations
      * is exceeded.
-     * @throws NoBracketingException if the initial search interval does not bracket
+     * @throws MathIllegalArgumentException if the initial search interval does not bracket
      * a root and the solver requires it.
      */
     protected abstract double doSolve()
-        throws TooManyEvaluationsException, NoBracketingException;
+        throws TooManyEvaluationsException, MathIllegalArgumentException;
 
     /**
      * Check whether the function takes opposite signs at the endpoints.
@@ -295,13 +295,13 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      * @param lower Lower endpoint.
      * @param upper Upper endpoint.
      * @throws NullArgumentException if the function has not been set.
-     * @throws NoBracketingException if the function has the same sign at
+     * @throws MathIllegalArgumentException if the function has the same sign at
      * the endpoints.
      */
     protected void verifyBracketing(final double lower,
                                     final double upper)
         throws NullArgumentException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         UnivariateSolverUtils.verifyBracketing(function, lower, upper);
     }
 

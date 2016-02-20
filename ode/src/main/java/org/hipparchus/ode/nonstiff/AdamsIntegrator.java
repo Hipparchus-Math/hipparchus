@@ -19,7 +19,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.ode.ExpandableStatefulODE;
@@ -89,7 +88,7 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
     @Override
     public abstract void integrate(final ExpandableStatefulODE equations, final double t)
         throws NumberIsTooSmallException, MathIllegalArgumentException,
-               MaxCountExceededException, NoBracketingException;
+               MaxCountExceededException, MathIllegalArgumentException;
 
     /** {@inheritDoc} */
     @Override

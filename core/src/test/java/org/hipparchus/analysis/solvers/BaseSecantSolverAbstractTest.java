@@ -26,7 +26,7 @@ import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.PegasusSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -151,14 +151,14 @@ public abstract class BaseSecantSolverAbstractTest {
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5);
-            Assert.fail("Expecting NoBracketingException - non-bracketing");
-        } catch (NoBracketingException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - non-bracketing");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5, 1.2);
-            Assert.fail("Expecting NoBracketingException - non-bracketing");
-        } catch (NoBracketingException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - non-bracketing");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

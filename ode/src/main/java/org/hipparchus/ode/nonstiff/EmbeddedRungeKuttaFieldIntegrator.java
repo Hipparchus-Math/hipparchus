@@ -21,7 +21,6 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
@@ -217,7 +216,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
     public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
                                                    final FieldODEState<T> initialState, final T finalTime)
         throws NumberIsTooSmallException, MathIllegalArgumentException,
-        MaxCountExceededException, NoBracketingException {
+        MaxCountExceededException, MathIllegalArgumentException {
 
         sanityChecks(initialState, finalTime);
         final T   t0 = initialState.getTime();

@@ -20,7 +20,7 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexUtils;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
@@ -91,7 +91,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
     public double doSolve()
         throws TooManyEvaluationsException,
                NumberIsTooLargeException,
-               NoBracketingException {
+               MathIllegalArgumentException {
         final double min = getMin();
         final double max = getMax();
         final double initial = getStartValue();
@@ -127,7 +127,8 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
             return laguerre(initial, max);
         }
 
-        throw new NoBracketingException(min, max, yMin, yMax);
+        throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                               min, max, yMin, yMax);
     }
 
     /**
