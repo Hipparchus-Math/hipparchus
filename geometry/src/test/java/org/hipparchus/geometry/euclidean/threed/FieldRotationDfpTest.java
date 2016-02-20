@@ -20,8 +20,9 @@ package org.hipparchus.geometry.euclidean.threed;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.euclidean.threed.CardanEulerSingularityException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.threed.FieldRotation;
 import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
 import org.hipparchus.geometry.euclidean.threed.NotARotationMatrixException;
@@ -438,7 +439,7 @@ public class FieldRotationDfpTest {
     @Test
     @Deprecated
     public void testAnglesDeprecated()
-            throws CardanEulerSingularityException {
+            throws MathIllegalStateException {
 
         DfpField field = new DfpField(15);
 
@@ -490,7 +491,7 @@ public class FieldRotationDfpTest {
 
     @Test
     public void testAngles()
-        throws CardanEulerSingularityException {
+        throws MathIllegalStateException {
 
         DfpField field = new DfpField(15);
 
@@ -565,8 +566,8 @@ public class FieldRotationDfpTest {
                     try {
                         r.getAngles(CardanOrders[i], convention);
                         Assert.fail("an exception should have been caught");
-                    } catch (CardanEulerSingularityException cese) {
-                        // expected behavior
+                    } catch (MathIllegalStateException cese) {
+                        Assert.assertEquals(LocalizedFormats.CARDAN_ANGLES_SINGULARITY, cese.getSpecifier());
                     }
                 }
             }
@@ -587,8 +588,8 @@ public class FieldRotationDfpTest {
                     try {
                         r.getAngles(EulerOrders[i], convention);
                         Assert.fail("an exception should have been caught");
-                    } catch (CardanEulerSingularityException cese) {
-                        // expected behavior
+                    } catch (MathIllegalStateException cese) {
+                        Assert.assertEquals(LocalizedFormats.EULER_ANGLES_SINGULARITY, cese.getSpecifier());
                     }
                 }
             }

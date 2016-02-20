@@ -22,6 +22,7 @@ import java.io.Serializable;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -575,13 +576,13 @@ public class Rotation implements Serializable {
 
    * @param order rotation order to use
    * @return an array of three angles, in the order specified by the set
-   * @exception CardanEulerSingularityException if the rotation is
+   * @exception MathIllegalStateException if the rotation is
    * singular with respect to the angles set specified
    * @deprecated as of 3.6, replaced with {@link #getAngles(RotationOrder, RotationConvention)}
    */
   @Deprecated
   public double[] getAngles(RotationOrder order)
-      throws CardanEulerSingularityException {
+      throws MathIllegalStateException {
       return getAngles(order, RotationConvention.VECTOR_OPERATOR);
   }
 
@@ -618,12 +619,12 @@ public class Rotation implements Serializable {
    * @param order rotation order to use
    * @param convention convention to use for the semantics of the angle
    * @return an array of three angles, in the order specified by the set
-   * @exception CardanEulerSingularityException if the rotation is
+   * @exception MathIllegalStateException if the rotation is
    * singular with respect to the angles set specified
    * @since 3.6
    */
   public double[] getAngles(RotationOrder order, RotationConvention convention)
-      throws CardanEulerSingularityException {
+      throws MathIllegalStateException {
 
       if (convention == RotationConvention.VECTOR_OPERATOR) {
           if (order == RotationOrder.XYZ) {
@@ -636,7 +637,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               if  ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(-(v1.getY()), v1.getZ()),
@@ -654,7 +655,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v1.getZ(), v1.getY()),
@@ -672,7 +673,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v1.getX(), v1.getZ()),
@@ -690,7 +691,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(-(v1.getZ()), v1.getX()),
@@ -708,7 +709,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(-(v1.getX()), v1.getY()),
@@ -726,7 +727,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v1.getY(), v1.getX()),
@@ -744,7 +745,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v1.getY(), -v1.getZ()),
@@ -762,7 +763,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v1.getZ(), v1.getY()),
@@ -780,7 +781,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v1.getX(), v1.getZ()),
@@ -798,7 +799,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v1.getZ(), -v1.getX()),
@@ -816,7 +817,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v1.getX(), -v1.getY()),
@@ -834,7 +835,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v1.getY(), v1.getX()),
@@ -854,7 +855,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(-v2.getY(), v2.getZ()),
@@ -872,7 +873,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v2.getZ(), v2.getY()),
@@ -890,7 +891,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v2.getX(), v2.getZ()),
@@ -908,7 +909,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(-v2.getZ(), v2.getX()),
@@ -926,7 +927,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(-v2.getX(), v2.getY()),
@@ -944,7 +945,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               if  ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(true);
+                  throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v2.getY(), v2.getX()),
@@ -962,7 +963,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v2.getY(), -v2.getZ()),
@@ -980,7 +981,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_I);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_I);
               if ((v2.getX() < -0.9999999999) || (v2.getX() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v2.getZ(), v2.getY()),
@@ -998,7 +999,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v2.getX(), v2.getZ()),
@@ -1016,7 +1017,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_J);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_J);
               if ((v2.getY() < -0.9999999999) || (v2.getY() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v2.getZ(), -v2.getX()),
@@ -1034,7 +1035,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v2.getX(), -v2.getY()),
@@ -1052,7 +1053,7 @@ public class Rotation implements Serializable {
               Vector3D v1 = applyTo(Vector3D.PLUS_K);
               Vector3D v2 = applyInverseTo(Vector3D.PLUS_K);
               if ((v2.getZ() < -0.9999999999) || (v2.getZ() > 0.9999999999)) {
-                  throw new CardanEulerSingularityException(false);
+                  throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
               }
               return new double[] {
                   FastMath.atan2(v2.getY(), v2.getX()),

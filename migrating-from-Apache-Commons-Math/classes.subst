@@ -2,6 +2,7 @@
 # to apply to source and documentation text files when migrating
 # from Apache Commons Math to Hipparchus.
 
+CardanEulerSingularityException    MathIllegalStateException
 ConvergenceException               MathIllegalStateException
 DimensionMismatchException         MathIllegalArgumentException
 InsufficientDataException          MathIllegalArgumentException
