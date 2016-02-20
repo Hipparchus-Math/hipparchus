@@ -19,7 +19,7 @@ NoDataException                    MathIllegalArgumentException
 NonMonotonicSequenceException      MathIllegalArgumentException
 NonPositiveDefiniteMatrixException MathIllegalArgumentException
 NotANumberException                MathIllegalArgumentException
-NotFiniteNumberException           MathIllegalArgumentException
+NotARotationMatrixException        MathIllegalArgumentException
 NotPositiveException               MathIllegalArgumentException
 NotStrictlyPositiveException       MathIllegalArgumentException
 NullArgumentException              NullPointerException

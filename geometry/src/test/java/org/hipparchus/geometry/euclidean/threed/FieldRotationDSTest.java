@@ -18,16 +18,10 @@
 package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.geometry.euclidean.threed.FieldRotation;
-import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
-import org.hipparchus.geometry.euclidean.threed.NotARotationMatrixException;
-import org.hipparchus.geometry.euclidean.threed.Rotation;
-import org.hipparchus.geometry.euclidean.threed.RotationOrder;
-import org.hipparchus.geometry.euclidean.threed.Vector3D;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
@@ -452,7 +446,7 @@ public class FieldRotationDSTest {
 
     @Test
     public void testMatrix()
-            throws NotARotationMatrixException {
+            throws MathIllegalArgumentException {
 
         try {
             createRotation(new double[][] {
@@ -460,7 +454,7 @@ public class FieldRotationDSTest {
                 { 1.0, 0.0, 0.0 }
             }, 1.0e-7);
             Assert.fail("Expecting NotARotationMatrixException");
-        } catch (NotARotationMatrixException nrme) {
+        } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
 
@@ -471,7 +465,7 @@ public class FieldRotationDSTest {
                 { -0.354816,  0.574912,  0.737280 }
             }, 1.0e-7);
             Assert.fail("Expecting NotARotationMatrixException");
-        } catch (NotARotationMatrixException nrme) {
+        } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
 
@@ -482,7 +476,7 @@ public class FieldRotationDSTest {
                 {  0.8, -0.2,  0.5 }
             }, 1.0e-15);
             Assert.fail("Expecting NotARotationMatrixException");
-        } catch (NotARotationMatrixException nrme) {
+        } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
 
@@ -590,7 +584,7 @@ public class FieldRotationDSTest {
                 { 1.0, 0.0, 0.0 } };
             r = createRotation(m5, 1.0e-7);
             Assert.fail("got " + r + ", should have caught an exception");
-        } catch (NotARotationMatrixException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 

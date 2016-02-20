@@ -216,21 +216,20 @@ public class Rotation implements Serializable {
    * difference between two steps of the Frobenius norm of the
    * correction is below this threshold)
 
-   * @exception NotARotationMatrixException if the matrix is not a 3X3
+   * @exception MathIllegalArgumentException if the matrix is not a 3X3
    * matrix, or if it cannot be transformed into an orthogonal matrix
    * with the given threshold, or if the determinant of the resulting
    * orthogonal matrix is negative
 
    */
   public Rotation(double[][] m, double threshold)
-    throws NotARotationMatrixException {
+    throws MathIllegalArgumentException {
 
     // dimension check
     if ((m.length != 3) || (m[0].length != 3) ||
         (m[1].length != 3) || (m[2].length != 3)) {
-      throw new NotARotationMatrixException(
-              LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
-              m.length, m[0].length);
+      throw new MathIllegalArgumentException(LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
+                                             m.length, m[0].length);
     }
 
     // compute a "close" orthogonal matrix
@@ -241,9 +240,8 @@ public class Rotation implements Serializable {
                  ort[1][0] * (ort[0][1] * ort[2][2] - ort[2][1] * ort[0][2]) +
                  ort[2][0] * (ort[0][1] * ort[1][2] - ort[1][1] * ort[0][2]);
     if (det < 0.0) {
-      throw new NotARotationMatrixException(
-              LocalizedFormats.CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT,
-              det);
+      throw new MathIllegalArgumentException(LocalizedFormats.CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT,
+                                             det);
     }
 
     double[] quat = mat2quat(ort);
@@ -1302,11 +1300,11 @@ public class Rotation implements Serializable {
    * difference between two steps of the Frobenius norm of the
    * correction is below this threshold)
    * @return an orthogonal matrix close to m
-   * @exception NotARotationMatrixException if the matrix cannot be
+   * @exception MathIllegalArgumentException if the matrix cannot be
    * orthogonalized with the given threshold after 10 iterations
    */
   private double[][] orthogonalizeMatrix(double[][] m, double threshold)
-    throws NotARotationMatrixException {
+    throws MathIllegalArgumentException {
     double[] m0 = m[0];
     double[] m1 = m[1];
     double[] m2 = m[2];
@@ -1389,9 +1387,8 @@ public class Rotation implements Serializable {
     }
 
     // the algorithm did not converge after 10 iterations
-    throw new NotARotationMatrixException(
-            LocalizedFormats.UNABLE_TO_ORTHOGONOLIZE_MATRIX,
-            i - 1);
+    throw new MathIllegalArgumentException(LocalizedFormats.UNABLE_TO_ORTHOGONOLIZE_MATRIX,
+                                           i - 1);
   }
 
   /** Compute the <i>distance</i> between two rotations.

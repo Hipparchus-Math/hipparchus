@@ -186,21 +186,20 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * difference between two steps of the Frobenius norm of the
      * correction is below this threshold)
 
-     * @exception NotARotationMatrixException if the matrix is not a 3X3
+     * @exception MathIllegalArgumentException if the matrix is not a 3X3
      * matrix, or if it cannot be transformed into an orthogonal matrix
      * with the given threshold, or if the determinant of the resulting
      * orthogonal matrix is negative
 
      */
     public FieldRotation(final T[][] m, final double threshold)
-        throws NotARotationMatrixException {
+        throws MathIllegalArgumentException {
 
         // dimension check
         if ((m.length != 3) || (m[0].length != 3) ||
                 (m[1].length != 3) || (m[2].length != 3)) {
-            throw new NotARotationMatrixException(
-                                                  LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
-                                                  m.length, m[0].length);
+            throw new MathIllegalArgumentException(LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
+                                                   m.length, m[0].length);
         }
 
         // compute a "close" orthogonal matrix
@@ -213,9 +212,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final T det =
                 ort[0][0].multiply(d0).subtract(ort[1][0].multiply(d1)).add(ort[2][0].multiply(d2));
         if (det.getReal() < 0.0) {
-            throw new NotARotationMatrixException(
-                                                  LocalizedFormats.CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT,
-                                                  det);
+            throw new MathIllegalArgumentException(LocalizedFormats.CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT,
+                                                   det);
         }
 
         final T[] quat = mat2quat(ort);
@@ -1545,11 +1543,11 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * difference between two steps of the Frobenius norm of the
      * correction is below this threshold)
      * @return an orthogonal matrix close to m
-     * @exception NotARotationMatrixException if the matrix cannot be
+     * @exception MathIllegalArgumentException if the matrix cannot be
      * orthogonalized with the given threshold after 10 iterations
      */
     private T[][] orthogonalizeMatrix(final T[][] m, final double threshold)
-        throws NotARotationMatrixException {
+        throws MathIllegalArgumentException {
 
         T x00 = m[0][0];
         T x01 = m[0][1];
@@ -1627,8 +1625,8 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         }
 
         // the algorithm did not converge after 10 iterations
-        throw new NotARotationMatrixException(LocalizedFormats.UNABLE_TO_ORTHOGONOLIZE_MATRIX,
-                                              i - 1);
+        throw new MathIllegalArgumentException(LocalizedFormats.UNABLE_TO_ORTHOGONOLIZE_MATRIX,
+                                               i - 1);
 
     }
 
