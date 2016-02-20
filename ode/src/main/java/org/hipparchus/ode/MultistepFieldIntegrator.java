@@ -219,8 +219,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      */
     protected void start(final FieldExpandableODE<T> equations, final FieldODEState<T> initialState, final T t)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         // make sure NO user event nor user step handler is triggered,
         // this is the task of the top level integrator, not the task

@@ -25,7 +25,6 @@ import java.util.NoSuchElementException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.partitioning.AbstractRegion;
 import org.hipparchus.geometry.partitioning.BSPTree;
@@ -66,10 +65,10 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
      * @param lower lower bound of the arc
      * @param upper upper bound of the arc
      * @param tolerance tolerance below which close sub-arcs are merged together
-     * @exception NumberIsTooLargeException if lower is greater than upper
+     * @exception MathIllegalArgumentException if lower is greater than upper
      */
     public ArcsSet(final double lower, final double upper, final double tolerance)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(buildTree(lower, upper, tolerance), tolerance);
     }
 
@@ -124,17 +123,17 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
      * @param upper upper angular bound of the arc
      * @param tolerance tolerance below which close sub-arcs are merged together
      * @return the built tree
-     * @exception NumberIsTooLargeException if lower is greater than upper
+     * @exception MathIllegalArgumentException if lower is greater than upper
      */
     private static BSPTree<Sphere1D> buildTree(final double lower, final double upper,
                                                final double tolerance)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
 
         if (Precision.equals(lower, upper, 0) || (upper - lower) >= MathUtils.TWO_PI) {
             // the tree must cover the whole circle
             return new BSPTree<Sphere1D>(Boolean.TRUE);
         } else  if (lower > upper) {
-            throw new NumberIsTooLargeException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
                                                 lower, upper, true);
         }
 

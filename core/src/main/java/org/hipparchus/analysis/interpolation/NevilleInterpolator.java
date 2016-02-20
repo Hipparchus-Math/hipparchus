@@ -51,8 +51,7 @@ public class NevilleInterpolator implements UnivariateInterpolator,
      */
     @Override
     public PolynomialFunctionLagrangeForm interpolate(double x[], double y[])
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         return new PolynomialFunctionLagrangeForm(x, y);
     }
 }

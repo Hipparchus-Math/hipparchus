@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -117,7 +116,7 @@ public class ListPopulationTest {
         };
     }
 
-    @Test(expected = NumberIsTooLargeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testConstructorListOfChromosomesBiggerThanPopulationSize() {
         final ArrayList<Chromosome> chromosomes = new ArrayList<Chromosome> ();
         chromosomes.add(new DummyBinaryChromosome(BinaryChromosome.randomBinaryRepresentation(3)));
@@ -131,7 +130,7 @@ public class ListPopulationTest {
         };
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testAddTooManyChromosomes() {
         final ArrayList<Chromosome> chromosomes = new ArrayList<Chromosome> ();
         chromosomes.add(new DummyBinaryChromosome(BinaryChromosome.randomBinaryRepresentation(3)));
@@ -148,7 +147,7 @@ public class ListPopulationTest {
         population.addChromosomes(chromosomes);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testAddTooManyChromosomesSingleCall() {
 
         final ListPopulation population = new ListPopulation(2) {

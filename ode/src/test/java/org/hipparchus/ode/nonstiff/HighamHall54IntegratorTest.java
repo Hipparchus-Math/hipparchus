@@ -36,8 +36,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testWrongDerivative()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       HighamHall54Integrator integrator =
           new HighamHall54Integrator(0.0, 1.0, 1.0e-10, 1.0e-10);
       FirstOrderDifferentialEquations equations =
@@ -72,8 +71,7 @@ public class HighamHall54IntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testMinStep()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem1 pb = new TestProblem1();
       double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -95,8 +93,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testIncreasingTolerance()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     int previousCalls = Integer.MAX_VALUE;
     for (int i = -12; i < -2; ++i) {
@@ -132,8 +129,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testBackward()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
       double minStep = 0;
@@ -157,8 +153,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testEvents()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem4 pb = new TestProblem4();
     double minStep = 0;
@@ -192,8 +187,7 @@ public class HighamHall54IntegratorTest {
 
   @Test(expected=LocalException.class)
   public void testEventsErrors()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       final TestProblem1 pb = new TestProblem1();
       double minStep = 0;
@@ -237,8 +231,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testEventsNoConvergence()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem1 pb = new TestProblem1();
     double minStep = 0;
@@ -280,8 +273,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testSanityChecks()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       final TestProblem3 pb  = new TestProblem3(0.9);
       double minStep = 0;
       double maxStep = pb.getFinalTime() - pb.getInitialTime();
@@ -340,8 +332,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testKepler()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;

@@ -83,7 +83,7 @@ public class OneWayAnova {
      * at least two values
      */
     public double anovaFValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         AnovaStats a = anovaStats(categoryData);
         return a.F;
@@ -119,7 +119,7 @@ public class OneWayAnova {
      * @throws MathIllegalStateException if the maximum number of iterations is exceeded
      */
     public double anovaPValue(final Collection<double[]> categoryData)
-        throws NullArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
         final AnovaStats a = anovaStats(categoryData);
@@ -162,7 +162,7 @@ public class OneWayAnova {
      */
     public double anovaPValue(final Collection<SummaryStatistics> categoryData,
                               final boolean allowOneElementData)
-        throws NullArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
         final AnovaStats a = anovaStats(categoryData, allowOneElementData);
@@ -188,7 +188,7 @@ public class OneWayAnova {
      *             contain at least two values
      */
     private AnovaStats anovaStats(final Collection<double[]> categoryData)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(categoryData);
 
@@ -244,7 +244,7 @@ public class OneWayAnova {
      */
     public boolean anovaTest(final Collection<double[]> categoryData,
                              final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(
@@ -270,7 +270,7 @@ public class OneWayAnova {
      */
     private AnovaStats anovaStats(final Collection<SummaryStatistics> categoryData,
                                   final boolean allowOneElementData)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(categoryData);
 

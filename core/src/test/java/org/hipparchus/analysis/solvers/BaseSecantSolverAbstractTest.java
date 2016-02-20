@@ -20,14 +20,7 @@ import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.XMinus5Function;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.analysis.solvers.AllowedSolution;
-import org.hipparchus.analysis.solvers.BaseSecantSolver;
-import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
-import org.hipparchus.analysis.solvers.PegasusSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -145,8 +138,8 @@ public abstract class BaseSecantSolverAbstractTest {
         UnivariateSolver solver = getSolver();
         try {  // bad interval
             solver.solve(100, f, 1, -1);
-            Assert.fail("Expecting NumberIsTooLargeException - bad interval");
-        } catch (NumberIsTooLargeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {  // no bracket

@@ -98,128 +98,112 @@ public abstract class StepNormalizerOutputTestBase
 
     @Test
     public void testIncNeither()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpInc(), getO()[0][0], getO()[0][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.NEITHER, exp, false);
     }
 
     @Test
     public void testIncNeitherRev()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpIncRev(), getO()[1][0], getO()[1][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.NEITHER, exp, true);
     }
 
     @Test
     public void testIncFirst()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpInc(), getO()[2][0], getO()[2][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.FIRST, exp, false);
     }
 
     @Test
     public void testIncFirstRev()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpIncRev(), getO()[3][0], getO()[3][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.FIRST, exp, true);
     }
 
     @Test
     public void testIncLast()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpInc(), getO()[4][0], getO()[4][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.LAST, exp, false);
     }
 
     @Test
     public void testIncLastRev()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpIncRev(), getO()[5][0], getO()[5][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.LAST, exp, true);
     }
 
     @Test
     public void testIncBoth()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpInc(), getO()[6][0], getO()[6][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.BOTH, exp, false);
     }
 
     @Test
     public void testIncBothRev()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpIncRev(), getO()[7][0], getO()[7][1]);
         doTest(StepNormalizerMode.INCREMENT, StepNormalizerBounds.BOTH, exp, true);
     }
 
     @Test
     public void testMulNeither()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpMul(), getO()[8][0], getO()[8][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.NEITHER, exp, false);
     }
 
     @Test
     public void testMulNeitherRev()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpMulRev(), getO()[9][0], getO()[9][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.NEITHER, exp, true);
     }
 
     @Test
     public void testMulFirst()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpMul(), getO()[10][0], getO()[10][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.FIRST, exp, false);
     }
 
     @Test
     public void testMulFirstRev()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpMulRev(), getO()[11][0], getO()[11][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.FIRST, exp, true);
     }
 
     @Test
     public void testMulLast()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpMul(), getO()[12][0], getO()[12][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.LAST, exp, false);
     }
 
     @Test
     public void testMulLastRev()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpMulRev(), getO()[13][0], getO()[13][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.LAST, exp, true);
     }
 
     @Test
     public void testMulBoth()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpMul(), getO()[14][0], getO()[14][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.BOTH, exp, false);
     }
 
     @Test
     public void testMulBothRev()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double[] exp = getArray(getExpMulRev(), getO()[15][0], getO()[15][1]);
         doTest(StepNormalizerMode.MULTIPLES, StepNormalizerBounds.BOTH, exp, true);
     }
@@ -239,8 +223,7 @@ public abstract class StepNormalizerOutputTestBase
      */
     private void doTest(StepNormalizerMode mode, StepNormalizerBounds bounds,
                         double[] expected, boolean reverse)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         // Forward test.
         FirstOrderIntegrator integ = new GraggBulirschStoerIntegrator(
                                                         1e-8, 1.0, 1e-5, 1e-5);

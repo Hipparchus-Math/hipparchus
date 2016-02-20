@@ -73,7 +73,7 @@ public class TTest {
      * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      */
     public double pairedT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         checkSampleData(sample1);
         checkSampleData(sample2);
@@ -121,7 +121,7 @@ public class TTest {
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double pairedTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         double meanDifference = StatUtils.meanDifference(sample1, sample2);
         return tTest(meanDifference, 0,
@@ -168,7 +168,7 @@ public class TTest {
      */
     public boolean pairedTTest(final double[] sample1, final double[] sample2,
                                final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return pairedTTest(sample1, sample2) < alpha;
@@ -192,7 +192,7 @@ public class TTest {
      * @throws MathIllegalArgumentException if the length of <code>observed</code> is &lt; 2
      */
     public double t(final double mu, final double[] observed)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         checkSampleData(observed);
         // No try-catch or advertised exception because args have just been checked
@@ -219,7 +219,7 @@ public class TTest {
      * @throws MathIllegalArgumentException if the number of samples is &lt; 2
      */
     public double t(final double mu, final StatisticalSummary sampleStats)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         checkSampleData(sampleStats);
         return t(sampleStats.getMean(), mu, sampleStats.getVariance(),
@@ -262,7 +262,7 @@ public class TTest {
      * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      */
     public double homoscedasticT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         checkSampleData(sample1);
         checkSampleData(sample2);
@@ -303,7 +303,7 @@ public class TTest {
      * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      */
     public double t(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         checkSampleData(sample1);
         checkSampleData(sample2);
@@ -348,7 +348,7 @@ public class TTest {
      */
     public double t(final StatisticalSummary sampleStats1,
                     final StatisticalSummary sampleStats2)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         checkSampleData(sampleStats1);
         checkSampleData(sampleStats2);
@@ -396,7 +396,7 @@ public class TTest {
      */
     public double homoscedasticT(final StatisticalSummary sampleStats1,
                                  final StatisticalSummary sampleStats2)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         checkSampleData(sampleStats1);
         checkSampleData(sampleStats2);
@@ -434,7 +434,7 @@ public class TTest {
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double tTest(final double mu, final double[] sample)
-        throws NullArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sample);
@@ -482,7 +482,7 @@ public class TTest {
      * @throws MathIllegalStateException if an error computing the p-value
      */
     public boolean tTest(final double mu, final double[] sample, final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return tTest(mu, sample) < alpha;
@@ -519,7 +519,7 @@ public class TTest {
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double tTest(final double mu, final StatisticalSummary sampleStats)
-        throws NullArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sampleStats);
@@ -568,7 +568,7 @@ public class TTest {
      */
     public boolean tTest(final double mu, final StatisticalSummary sampleStats,
                          final double alpha)
-    throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+    throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return tTest(mu, sampleStats) < alpha;
@@ -613,7 +613,7 @@ public class TTest {
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double tTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sample1);
@@ -660,7 +660,7 @@ public class TTest {
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double homoscedasticTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sample1);
@@ -728,7 +728,7 @@ public class TTest {
      */
     public boolean tTest(final double[] sample1, final double[] sample2,
                          final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return tTest(sample1, sample2) < alpha;
@@ -790,7 +790,7 @@ public class TTest {
      */
     public boolean homoscedasticTTest(final double[] sample1, final double[] sample2,
                                       final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return homoscedasticTTest(sample1, sample2) < alpha;
@@ -834,7 +834,7 @@ public class TTest {
      */
     public double tTest(final StatisticalSummary sampleStats1,
                         final StatisticalSummary sampleStats2)
-        throws NullArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sampleStats1);
@@ -881,7 +881,7 @@ public class TTest {
      */
     public double homoscedasticTTest(final StatisticalSummary sampleStats1,
                                      final StatisticalSummary sampleStats2)
-        throws NullArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sampleStats1);
@@ -952,7 +952,7 @@ public class TTest {
     public boolean tTest(final StatisticalSummary sampleStats1,
                          final StatisticalSummary sampleStats2,
                          final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return tTest(sampleStats1, sampleStats2) < alpha;
@@ -1134,7 +1134,7 @@ public class TTest {
      * @throws MathIllegalArgumentException if there is not enough sample data.
      */
     private void checkSampleData(final double[] data)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         if (data == null) {
             throw new NullArgumentException();
@@ -1155,7 +1155,7 @@ public class TTest {
      * @throws MathIllegalArgumentException if there is not enough sample data.
      */
     private void checkSampleData(final StatisticalSummary stat)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         if (stat == null) {
             throw new NullArgumentException();

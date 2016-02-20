@@ -70,7 +70,7 @@ public class Combinations implements Iterable<int[]> {
      * @param n Size of the set from which subsets are selected.
      * @param k Size of the subsets to be enumerated.
      * @throws org.hipparchus.exception.MathIllegalArgumentException if {@code n < 0}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException if {@code k > n}.
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if {@code k > n}.
      */
     public Combinations(int n,
                         int k) {
@@ -99,7 +99,7 @@ public class Combinations implements Iterable<int[]> {
      * @param k Size of the subsets to be enumerated.
      * @param iterationOrder Specifies the {@link #iterator() iteration order}.
      * @throws org.hipparchus.exception.MathIllegalArgumentException if {@code n < 0}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException if {@code k > n}.
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if {@code k > n}.
      */
     private Combinations(int n,
                          int k,

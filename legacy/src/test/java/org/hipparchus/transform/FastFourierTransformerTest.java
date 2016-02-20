@@ -23,7 +23,6 @@ import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -151,8 +150,8 @@ public final class FastFourierTransformerTest {
                 try {
                     fft.transform(f, Math.PI, 0.0, n, type[j]);
                     Assert.fail(norm[i] + ", " + type[j] +
-                        ": NumberIsTooLargeException was expected");
-                } catch (NumberIsTooLargeException e) {
+                        ": MathIllegalArgumentException was expected");
+                } catch (MathIllegalArgumentException e) {
                     // Expected behaviour
                 }
             }

@@ -58,7 +58,7 @@ public class NewtonRaphsonSolver extends AbstractUnivariateDifferentiableSolver 
      * @return the value where the function is zero.
      * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximum evaluation count is exceeded.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code min >= max}.
      */
     @Override

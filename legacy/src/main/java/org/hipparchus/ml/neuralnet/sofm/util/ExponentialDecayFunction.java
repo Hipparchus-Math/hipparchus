@@ -19,7 +19,6 @@ package org.hipparchus.ml.neuralnet.sofm.util;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -49,7 +48,7 @@ public class ExponentialDecayFunction {
      * {@code valueAtNumCall}.
      * @throws MathIllegalArgumentException if {@code initValue <= 0}.
      * @throws MathIllegalArgumentException if {@code valueAtNumCall <= 0}.
-     * @throws NumberIsTooLargeException if {@code valueAtNumCall >= initValue}.
+     * @throws MathIllegalArgumentException if {@code valueAtNumCall >= initValue}.
      * @throws MathIllegalArgumentException if {@code numCall <= 0}.
      */
     public ExponentialDecayFunction(double initValue,
@@ -64,7 +63,8 @@ public class ExponentialDecayFunction {
                                                    valueAtNumCall, 0);
         }
         if (valueAtNumCall >= initValue) {
-            throw new NumberIsTooLargeException(valueAtNumCall, initValue, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   valueAtNumCall, initValue);
         }
         if (numCall <= 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,

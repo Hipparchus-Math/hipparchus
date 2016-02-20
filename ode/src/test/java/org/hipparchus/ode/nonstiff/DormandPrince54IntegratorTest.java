@@ -38,8 +38,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       TestProblem1 pb = new TestProblem1();
       DormandPrince54Integrator integrator = new DormandPrince54Integrator(0.0, 1.0,
                                                                            1.0e-10, 1.0e-10);
@@ -50,8 +49,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testMinStep()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem1 pb = new TestProblem1();
       double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -73,8 +71,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testSmallLastStep()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblemAbstract pb = new TestProblem5();
     double minStep = 1.25;
@@ -100,8 +97,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testBackward()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
       double minStep = 0;
@@ -152,8 +148,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testIncreasingTolerance()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     int previousCalls = Integer.MAX_VALUE;
     for (int i = -12; i < -2; ++i) {
@@ -195,8 +190,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testEvents()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem4 pb = new TestProblem4();
     double minStep = 0;
@@ -230,8 +224,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testKepler()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;
@@ -254,8 +247,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testVariableSteps()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;

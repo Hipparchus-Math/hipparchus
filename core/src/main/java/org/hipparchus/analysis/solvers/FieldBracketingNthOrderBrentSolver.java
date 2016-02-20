@@ -165,7 +165,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
      */
     public T solve(final int maxEval, final RealFieldUnivariateFunction<T> f,
                    final T min, final T max, final AllowedSolution allowedSolution)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         return solve(maxEval, f, min, max, min.add(max).divide(2), allowedSolution);
     }
 
@@ -189,7 +189,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
     public T solve(final int maxEval, final RealFieldUnivariateFunction<T> f,
                    final T min, final T max, final T startValue,
                    final AllowedSolution allowedSolution)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         // Checks.
         MathUtils.checkNotNull(f);

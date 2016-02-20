@@ -19,7 +19,6 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -94,7 +93,7 @@ public class BrentSolver extends AbstractUnivariateSolver {
     protected double doSolve()
         throws MathIllegalArgumentException,
                MathIllegalStateException,
-               NumberIsTooLargeException {
+               MathIllegalArgumentException {
         double min = getMin();
         double max = getMax();
         final double initial = getStartValue();

@@ -19,7 +19,6 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Erf;
@@ -260,9 +259,9 @@ public class LogNormalDistribution extends AbstractRealDistribution {
     @Override
     public double probability(double x0,
                               double x1)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         if (x0 > x1) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                                                 x0, x1, true);
         }
         if (x0 <= 0 || x1 <= 0) {

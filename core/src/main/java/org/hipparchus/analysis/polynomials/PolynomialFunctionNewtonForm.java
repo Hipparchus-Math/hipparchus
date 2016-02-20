@@ -75,7 +75,7 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
      * {@code a} and {@code c} is not equal to 1.
      */
     public PolynomialFunctionNewtonForm(double a[], double c[])
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         verifyInputArray(a, c);
         this.a = new double[a.length];
@@ -180,7 +180,7 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
      * {@code a} and {@code c} is not equal to 1.
      */
     public static double evaluate(double a[], double c[], double z)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         verifyInputArray(a, c);
 
         final int n = c.length;
@@ -231,7 +231,7 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
      * double[])
      */
     protected static void verifyInputArray(double a[], double c[])
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(a);
         MathUtils.checkNotNull(c);
         if (a.length == 0 || c.length == 0) {

@@ -121,7 +121,7 @@ public class MatrixUtils {
      * @see #createRealMatrix(int, int)
      */
     public static RealMatrix createRealMatrix(double[][] data)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null ||
             data[0] == null) {
             throw new NullArgumentException();
@@ -260,7 +260,7 @@ public class MatrixUtils {
      * @throws MathIllegalArgumentException if {@code data} has 0 elements
      */
     public static <T extends FieldElement<T>> FieldVector<T> createFieldVector(final T[] data)
-        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null) {
             throw new NullArgumentException();
         }
@@ -531,7 +531,7 @@ public class MatrixUtils {
     public static void checkSubMatrixIndex(final AnyMatrix m,
                                            final int[] selectedRows,
                                            final int[] selectedColumns)
-        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (selectedRows == null) {
             throw new NullArgumentException();
         }

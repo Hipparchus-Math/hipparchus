@@ -50,7 +50,7 @@ public class LearningFactorFunctionFactory {
      * if {@code initValue <= 0} or {@code initValue > 1}.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code valueAtNumCall <= 0}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code valueAtNumCall >= initValue}.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code numCall <= 0}.
@@ -93,7 +93,7 @@ public class LearningFactorFunctionFactory {
      * @return the learning factor function.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code initValue <= 0} or {@code initValue > 1}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code slope >= 0}.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code numCall <= 0}.

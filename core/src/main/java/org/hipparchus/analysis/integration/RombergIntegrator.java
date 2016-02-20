@@ -16,9 +16,9 @@
  */
 package org.hipparchus.analysis.integration;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -49,18 +49,18 @@ public class RombergIntegrator extends BaseAbstractUnivariateIntegrator {
      * is not strictly positive
      * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
-     * @exception NumberIsTooLargeException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is greater than {@link #ROMBERG_MAX_ITERATIONS_COUNT}
      */
     public RombergIntegrator(final double relativeAccuracy,
                              final double absoluteAccuracy,
                              final int minimalIterationCount,
                              final int maximalIterationCount)
-        throws MathIllegalArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy, minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > ROMBERG_MAX_ITERATIONS_COUNT) {
-            throw new NumberIsTooLargeException(maximalIterationCount,
-                                                ROMBERG_MAX_ITERATIONS_COUNT, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   maximalIterationCount, ROMBERG_MAX_ITERATIONS_COUNT);
         }
     }
 
@@ -73,16 +73,16 @@ public class RombergIntegrator extends BaseAbstractUnivariateIntegrator {
      * is not strictly positive
      * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
-     * @exception NumberIsTooLargeException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is greater than {@link #ROMBERG_MAX_ITERATIONS_COUNT}
      */
     public RombergIntegrator(final int minimalIterationCount,
                              final int maximalIterationCount)
-        throws MathIllegalArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > ROMBERG_MAX_ITERATIONS_COUNT) {
-            throw new NumberIsTooLargeException(maximalIterationCount,
-                                                ROMBERG_MAX_ITERATIONS_COUNT, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   maximalIterationCount, ROMBERG_MAX_ITERATIONS_COUNT);
         }
     }
 

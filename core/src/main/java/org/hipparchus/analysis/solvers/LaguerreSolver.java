@@ -21,9 +21,8 @@ import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexUtils;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -89,7 +88,6 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
     @Override
     public double doSolve()
         throws MathIllegalStateException,
-               NumberIsTooLargeException,
                MathIllegalArgumentException {
         final double min = getMin();
         final double max = getMax();
@@ -185,8 +183,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      */
     public Complex[] solveAllComplex(double[] coefficients,
                                      double initial)
-        throws NullArgumentException,
-               MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
                MathIllegalStateException {
         setup(Integer.MAX_VALUE,
               new PolynomialFunction(coefficients),
@@ -215,8 +212,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      */
     public Complex solveComplex(double[] coefficients,
                                 double initial)
-        throws NullArgumentException,
-               MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
                MathIllegalStateException {
         setup(Integer.MAX_VALUE,
               new PolynomialFunction(coefficients),
@@ -263,8 +259,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
          */
         public Complex[] solveAll(Complex coefficients[], Complex initial)
-            throws NullArgumentException,
-                   MathIllegalArgumentException,
+            throws MathIllegalArgumentException, NullArgumentException,
                    MathIllegalStateException {
             if (coefficients == null) {
                 throw new NullArgumentException();
@@ -312,8 +307,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
          */
         public Complex solve(Complex coefficients[], Complex initial)
-            throws NullArgumentException,
-                   MathIllegalArgumentException,
+            throws MathIllegalArgumentException, NullArgumentException,
                    MathIllegalStateException {
             if (coefficients == null) {
                 throw new NullArgumentException();

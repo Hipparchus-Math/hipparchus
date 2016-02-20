@@ -41,8 +41,7 @@ public class GillIntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       TestProblem1 pb = new TestProblem1();
       new GillIntegrator(0.01).integrate(pb,
                                          0.0, new double[pb.getDimension()+10],
@@ -52,8 +51,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testDecreasingSteps()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       for (TestProblemAbstract pb : new TestProblemAbstract[] {
           new TestProblem1(), new TestProblem2(), new TestProblem3(),
@@ -100,8 +98,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testSmallStep()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -121,8 +118,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testBigStep()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.2;
@@ -141,8 +137,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testBackward()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
       double step = FastMath.abs(pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -161,8 +156,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testKepler()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.0003;
@@ -176,8 +170,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testUnstableDerivative()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
     FirstOrderIntegrator integ = new GillIntegrator(0.3);
     integ.addEventHandler(stepProblem, 1.0, 1.0e-12, 1000);
@@ -217,8 +210,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testStepSize()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new GillIntegrator(step);
       integ.addStepHandler(new StepHandler() {

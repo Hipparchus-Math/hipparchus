@@ -129,8 +129,7 @@ public class EventFilterTest {
 
     @Test
     public void testIncreasingOnly()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator;
         integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
@@ -156,8 +155,7 @@ public class EventFilterTest {
 
     @Test
     public void testDecreasingOnly()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator;
         integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
@@ -183,8 +181,7 @@ public class EventFilterTest {
 
     @Test
     public void testTwoOppositeFilters()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator;
         integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);

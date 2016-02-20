@@ -62,7 +62,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
      * @throws MathIllegalArgumentException if {@code c} is empty.
      */
     public PolynomialFunction(double c[])
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         super();
         MathUtils.checkNotNull(c);
         int n = c.length;
@@ -125,7 +125,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
      * @throws NullArgumentException if {@code coefficients} is {@code null}.
      */
     protected static double evaluate(double[] coefficients, double argument)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;
         if (n == 0) {
@@ -146,7 +146,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;
         if (n == 0) {
@@ -256,7 +256,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
      * @throws NullArgumentException if {@code coefficients} is {@code null}.
      */
     protected static double[] differentiate(double[] coefficients)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;
         if (n == 0) {

@@ -17,7 +17,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -579,7 +579,7 @@ public class SingularValueDecomposition {
         }
 
         if (dimension == 0) {
-            throw new NumberIsTooLargeException(LocalizedFormats.TOO_LARGE_CUTOFF_SINGULAR_VALUE,
+            throw new MathIllegalArgumentException(LocalizedFormats.TOO_LARGE_CUTOFF_SINGULAR_VALUE,
                                                 minSingularValue, singularValues[0], true);
         }
 

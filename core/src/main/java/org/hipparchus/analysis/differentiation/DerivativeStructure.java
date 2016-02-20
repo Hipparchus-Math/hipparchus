@@ -21,10 +21,9 @@ import java.io.Serializable;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -81,10 +80,10 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** Build an instance with all values and derivatives set to 0.
      * @param parameters number of free parameters
      * @param order derivation order
-     * @throws NumberIsTooLargeException if order is too large
+     * @throws MathIllegalArgumentException if order is too large
      */
     public DerivativeStructure(final int parameters, final int order)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         this(DSCompiler.getCompiler(parameters, order));
     }
 
@@ -92,11 +91,11 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param parameters number of free parameters
      * @param order derivation order
      * @param value value of the constant
-     * @throws NumberIsTooLargeException if order is too large
+     * @throws MathIllegalArgumentException if order is too large
      * @see #DerivativeStructure(int, int, int, double)
      */
     public DerivativeStructure(final int parameters, final int order, final double value)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         this(parameters, order);
         this.data[0] = value;
     }
@@ -110,16 +109,17 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param order derivation order
      * @param index index of the variable (from 0 to {@code parameters - 1})
      * @param value value of the variable
-     * @exception NumberIsTooLargeException if {@code index &ge; parameters}.
+     * @exception MathIllegalArgumentException if {@code index &ge; parameters}.
      * @see #DerivativeStructure(int, int, double)
      */
     public DerivativeStructure(final int parameters, final int order,
                                final int index, final double value)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         this(parameters, order, value);
 
         if (index >= parameters) {
-            throw new NumberIsTooLargeException(index, parameters, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   index, parameters);
         }
 
         if (order > 0) {
@@ -198,11 +198,11 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * {@link DSCompiler#getPartialDerivativeIndex(int...)}
      * @exception MathIllegalArgumentException if derivatives array does not match the
      * {@link DSCompiler#getSize() size} expected by the compiler
-     * @throws NumberIsTooLargeException if order is too large
+     * @throws MathIllegalArgumentException if order is too large
      * @see #getAllDerivatives()
      */
     public DerivativeStructure(final int parameters, final int order, final double ... derivatives)
-        throws MathIllegalArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         this(parameters, order);
         if (derivatives.length != data.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -270,11 +270,11 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @see #getValue()
      * @exception MathIllegalArgumentException if the numbers of variables does not
      * match the instance
-     * @exception NumberIsTooLargeException if sum of derivation orders is larger
+     * @exception MathIllegalArgumentException if sum of derivation orders is larger
      * than the instance limits
      */
     public double getPartialDerivative(final int ... orders)
-        throws MathIllegalArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         return data[compiler.getPartialDerivativeIndex(orders)];
     }
 

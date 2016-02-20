@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
 
 /**
@@ -120,11 +119,11 @@ public class NPointCrossover<T> implements CrossoverPolicy {
      * @param second the second chromosome
      * @return the pair of new chromosomes that resulted from the crossover
      * @throws MathIllegalArgumentException if the length of the two chromosomes is different
-     * @throws NumberIsTooLargeException if the number of crossoverPoints is too large for the actual chromosomes
+     * @throws MathIllegalArgumentException if the number of crossoverPoints is too large for the actual chromosomes
      */
     private ChromosomePair mate(final AbstractListChromosome<T> first,
                                 final AbstractListChromosome<T> second)
-        throws MathIllegalArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
 
         final int length = first.getLength();
         if (length != second.getLength()) {
@@ -132,7 +131,8 @@ public class NPointCrossover<T> implements CrossoverPolicy {
                                                    second.getLength(), length);
         }
         if (crossoverPoints >= length) {
-            throw new NumberIsTooLargeException(crossoverPoints, length, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   crossoverPoints, length);
         }
 
         // array representations of the parents

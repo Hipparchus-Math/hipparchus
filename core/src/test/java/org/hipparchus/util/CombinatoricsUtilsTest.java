@@ -24,7 +24,6 @@ import java.util.Map;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -299,7 +298,7 @@ public class CombinatoricsUtilsTest {
         CombinatoricsUtils.stirlingS2(3, -1);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testStirlingS2LargeK() {
         CombinatoricsUtils.stirlingS2(3, 4);
     }
@@ -315,7 +314,7 @@ public class CombinatoricsUtilsTest {
         CombinatoricsUtils.checkBinomial(-1, -2);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCheckBinomial2() {
         // k > n
         CombinatoricsUtils.checkBinomial(4, 5);

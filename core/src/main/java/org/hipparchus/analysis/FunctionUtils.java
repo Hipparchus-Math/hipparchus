@@ -23,7 +23,6 @@ import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Identity;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -313,13 +312,13 @@ public class FunctionUtils {
      * @param max Upper bound of the interval (excluded).
      * @param n Number of sample points.
      * @return the array of samples.
-     * @throws NumberIsTooLargeException if the lower bound {@code min} is
+     * @throws MathIllegalArgumentException if the lower bound {@code min} is
      * greater than, or equal to the upper bound {@code max}.
      * @throws MathIllegalArgumentException if the number of sample points
      * {@code n} is negative.
      */
     public static double[] sample(UnivariateFunction f, double min, double max, int n)
-       throws NumberIsTooLargeException, MathIllegalArgumentException {
+       throws MathIllegalArgumentException {
 
         if (n <= 0) {
             throw new MathIllegalArgumentException(
@@ -327,7 +326,8 @@ public class FunctionUtils {
                     Integer.valueOf(n));
         }
         if (min >= max) {
-            throw new NumberIsTooLargeException(min, max, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   min, max);
         }
 
         final double[] s = new double[n];
@@ -377,7 +377,8 @@ public class FunctionUtils {
             @Override
             public DerivativeStructure value(final DerivativeStructure x) {
                 if (x.getOrder() > derivatives.length) {
-                    throw new NumberIsTooLargeException(x.getOrder(), derivatives.length, true);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                           x.getOrder(), derivatives.length);
                 }
                 final double[] packed = new double[x.getOrder() + 1];
                 packed[0] = f.value(x.getValue());
@@ -435,7 +436,8 @@ public class FunctionUtils {
                 for (int i = 0; i < point.length; ++i) {
                     dPoint[i] = point[i].getValue();
                     if (point[i].getOrder() > 1) {
-                        throw new NumberIsTooLargeException(point[i].getOrder(), 1, true);
+                        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                               point[i].getOrder(), 1);
                     }
                 }
 

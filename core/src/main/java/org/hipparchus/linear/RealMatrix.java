@@ -180,7 +180,7 @@ public interface RealMatrix extends AnyMatrix {
      * @throws MathIllegalArgumentException if the indices are not valid.
      */
     RealMatrix getSubMatrix(int[] selectedRows, int[] selectedColumns)
-        throws NullArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException, NullArgumentException;
 
     /**
      * Copy a submatrix. Rows and columns are indicated counting from 0 to n-1.
@@ -200,8 +200,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     void copySubMatrix(int startRow, int endRow, int startColumn,
                        int endColumn, double[][] destination)
-        throws MathIllegalArgumentException,
-        MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
     /**
      * Copy a submatrix. Rows and columns are indicated counting from 0 to n-1.
@@ -221,7 +220,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     void copySubMatrix(int[] selectedRows, int[] selectedColumns,
                        double[][] destination)
-        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException, NullArgumentException;
 
    /**
     * Replace the submatrix starting at {@code row, column} using data in the

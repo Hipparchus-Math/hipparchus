@@ -16,14 +16,14 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.OpenMapRealMatrix;
 import org.junit.Assert;
 import org.junit.Test;
 
 public final class OpenMapRealMatrixTest {
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testMath679() {
         new OpenMapRealMatrix(3, Integer.MAX_VALUE);
     }

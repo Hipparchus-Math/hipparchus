@@ -386,8 +386,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                                                   final double epsilonMaxValue,
                                                                   final double epsilonMaxTime,
                                                                   final String name)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
         double minStep = 0;

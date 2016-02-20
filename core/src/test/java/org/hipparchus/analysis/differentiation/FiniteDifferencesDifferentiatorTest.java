@@ -27,7 +27,6 @@ import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -165,7 +164,7 @@ public class FiniteDifferencesDifferentiatorTest {
 
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testWrongOrder() {
         UnivariateDifferentiableFunction f =
                 new FiniteDifferencesDifferentiator(3, 0.01).differentiate(new UnivariateFunction() {
@@ -179,7 +178,7 @@ public class FiniteDifferencesDifferentiatorTest {
         f.value(new DerivativeStructure(1, 3, 0, 1.0));
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testWrongOrderVector() {
         UnivariateDifferentiableVectorFunction f =
                 new FiniteDifferencesDifferentiator(3, 0.01).differentiate(new UnivariateVectorFunction() {
@@ -193,7 +192,7 @@ public class FiniteDifferencesDifferentiatorTest {
         f.value(new DerivativeStructure(1, 3, 0, 1.0));
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testWrongOrderMatrix() {
         UnivariateDifferentiableMatrixFunction f =
                 new FiniteDifferencesDifferentiator(3, 0.01).differentiate(new UnivariateMatrixFunction() {
@@ -207,7 +206,7 @@ public class FiniteDifferencesDifferentiatorTest {
         f.value(new DerivativeStructure(1, 3, 0, 1.0));
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testTooLargeStep() {
         new FiniteDifferencesDifferentiator(3, 2.5, 0.0, 1.0);
     }
@@ -223,7 +222,8 @@ public class FiniteDifferencesDifferentiatorTest {
                     throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
                                                            x, 0);
                 } else if (x > 1) {
-                    throw new NumberIsTooLargeException(x, 1, true);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                           x, 1);
                 } else {
                     return slope * x;
                 }
@@ -254,8 +254,9 @@ public class FiniteDifferencesDifferentiatorTest {
             // using f(0.85), f(0.95), f(1.05)
             missingBounds.value(tHigh);
             Assert.fail("an exception should have been thrown");
-        } catch (NumberIsTooLargeException nle) {
-            Assert.assertEquals(1.05, nle.getArgument().doubleValue(), 1.0e-10);
+        } catch (MathIllegalArgumentException nle) {
+            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_LARGE, nle.getSpecifier());
+            Assert.assertEquals(1.05, ((Double) nle.getParts()[0]).doubleValue(), 1.0e-10);
         } catch (Exception e) {
             Assert.fail("wrong exception caught: " + e.getClass().getName());
         }

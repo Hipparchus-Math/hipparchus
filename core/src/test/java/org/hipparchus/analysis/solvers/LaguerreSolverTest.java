@@ -18,10 +18,8 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
-import org.hipparchus.analysis.solvers.LaguerreSolver;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -145,8 +143,8 @@ public final class LaguerreSolverTest {
         try {
             // bad interval
             solver.solve(100, f, 1, -1);
-            Assert.fail("Expecting NumberIsTooLargeException - bad interval");
-        } catch (NumberIsTooLargeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {

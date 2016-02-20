@@ -441,7 +441,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * @exception NullArgumentException if value is null
      */
     @Override
-    public void setEntry(int index, T value) throws NullArgumentException, MathIllegalArgumentException {
+    public void setEntry(int index, T value) throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(value);
         checkIndex(index);
         entries.put(index, value);

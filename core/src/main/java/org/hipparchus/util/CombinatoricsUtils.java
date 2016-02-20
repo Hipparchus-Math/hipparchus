@@ -22,7 +22,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.special.Gamma;
 
 /**
@@ -80,12 +79,12 @@ public final class CombinatoricsUtils {
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
      * @throws MathIllegalArgumentException if {@code n < 0}.
-     * @throws NumberIsTooLargeException if {@code k > n}.
+     * @throws MathIllegalArgumentException if {@code k > n}.
      * @throws MathRuntimeException if the result is too large to be
      * represented by a long integer.
      */
     public static long binomialCoefficient(final int n, final int k)
-        throws MathIllegalArgumentException, NumberIsTooLargeException, MathRuntimeException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1;
@@ -161,12 +160,12 @@ public final class CombinatoricsUtils {
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
      * @throws MathIllegalArgumentException if {@code n < 0}.
-     * @throws NumberIsTooLargeException if {@code k > n}.
+     * @throws MathIllegalArgumentException if {@code k > n}.
      * @throws MathRuntimeException if the result is too large to be
      * represented by a long integer.
      */
     public static double binomialCoefficientDouble(final int n, final int k)
-        throws MathIllegalArgumentException, NumberIsTooLargeException, MathRuntimeException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1d;
@@ -206,12 +205,12 @@ public final class CombinatoricsUtils {
      * @param k the size of the subsets to be counted
      * @return {@code n choose k}
      * @throws MathIllegalArgumentException if {@code n < 0}.
-     * @throws NumberIsTooLargeException if {@code k > n}.
+     * @throws MathIllegalArgumentException if {@code k > n}.
      * @throws MathRuntimeException if the result is too large to be
      * represented by a long integer.
      */
     public static double binomialCoefficientLog(final int n, final int k)
-        throws MathIllegalArgumentException, NumberIsTooLargeException, MathRuntimeException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 0;
@@ -341,18 +340,19 @@ public final class CombinatoricsUtils {
      * @param k the number of non-empty subsets
      * @return {@code S(n,k)}
      * @throws MathIllegalArgumentException if {@code k < 0}.
-     * @throws NumberIsTooLargeException if {@code k > n}.
+     * @throws MathIllegalArgumentException if {@code k > n}.
      * @throws MathRuntimeException if some overflow happens, typically for n exceeding 25 and
      * k between 20 and n-2 (S(n,n-1) is handled specifically and does not overflow)
      * @since 3.1
      */
     public static long stirlingS2(final int n, final int k)
-        throws MathIllegalArgumentException, NumberIsTooLargeException, MathRuntimeException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         if (k < 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, k, 0);
         }
         if (k > n) {
-            throw new NumberIsTooLargeException(k, n, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   k, n);
         }
 
         long[][] stirlingS2 = STIRLING_S2.get();
@@ -431,7 +431,7 @@ public final class CombinatoricsUtils {
      * @param k Size of the subsets to be enumerated.
      * @return an {@link Iterator iterator} over the k-sets in n.
      * @throws MathIllegalArgumentException if {@code n < 0}.
-     * @throws NumberIsTooLargeException if {@code k > n}.
+     * @throws MathIllegalArgumentException if {@code k > n}.
      */
     public static Iterator<int[]> combinationsIterator(int n, int k) {
         return new Combinations(n, k).iterator();
@@ -443,14 +443,13 @@ public final class CombinatoricsUtils {
      * @param n Size of the set.
      * @param k Size of the subsets to be counted.
      * @throws MathIllegalArgumentException if {@code n < 0}.
-     * @throws NumberIsTooLargeException if {@code k > n}.
+     * @throws MathIllegalArgumentException if {@code k > n}.
      */
     public static void checkBinomial(final int n,
                                      final int k)
-        throws NumberIsTooLargeException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (n < k) {
-            throw new NumberIsTooLargeException(LocalizedFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
+            throw new MathIllegalArgumentException(LocalizedFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
                                                 k, n, true);
         }
         if (n < 0) {

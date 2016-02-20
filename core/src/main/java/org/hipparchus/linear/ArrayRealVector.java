@@ -24,7 +24,6 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -111,16 +110,17 @@ public class ArrayRealVector extends RealVector implements Serializable {
      * @param pos Position of first entry.
      * @param size Number of entries to copy.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws NumberIsTooLargeException if the size of {@code d} is less
+     * @throws MathIllegalArgumentException if the size of {@code d} is less
      * than {@code pos + size}.
      */
     public ArrayRealVector(double[] d, int pos, int size)
-        throws NullArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (d == null) {
             throw new NullArgumentException();
         }
         if (d.length < pos + size) {
-            throw new NumberIsTooLargeException(pos + size, d.length, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   pos + size, d.length);
         }
         data = new double[size];
         System.arraycopy(d, pos, data, 0, size);
@@ -145,16 +145,17 @@ public class ArrayRealVector extends RealVector implements Serializable {
      * @param pos Position of first entry.
      * @param size Number of entries to copy.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws NumberIsTooLargeException if the size of {@code d} is less
+     * @throws MathIllegalArgumentException if the size of {@code d} is less
      * than {@code pos + size}.
      */
     public ArrayRealVector(Double[] d, int pos, int size)
-        throws NullArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (d == null) {
             throw new NullArgumentException();
         }
         if (d.length < pos + size) {
-            throw new NumberIsTooLargeException(pos + size, d.length, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   pos + size, d.length);
         }
         data = new double[size];
         for (int i = pos; i < pos + size; i++) {

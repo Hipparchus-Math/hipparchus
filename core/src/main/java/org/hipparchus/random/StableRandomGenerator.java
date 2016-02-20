@@ -56,7 +56,7 @@ public class StableRandomGenerator implements NormalizedRandomGenerator {
      */
     public StableRandomGenerator(final RandomGenerator generator,
                                  final double alpha, final double beta)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (generator == null) {
             throw new NullArgumentException();
         }

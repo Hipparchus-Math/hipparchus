@@ -67,7 +67,7 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * if two abscissae have the same value.
      */
     public PolynomialFunctionLagrangeForm(double x[], double y[])
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         this.x = new double[x.length];
         this.y = new double[y.length];
         System.arraycopy(x, 0, this.x, 0, x.length);
@@ -169,7 +169,7 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * than 2.
      */
     public static double evaluate(double x[], double y[], double z)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (verifyInterpolationArray(x, y, false)) {
             return evaluateInternal(x, y, z);
         }
@@ -312,7 +312,7 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @see #computeCoefficients()
      */
     public static boolean verifyInterpolationArray(double x[], double y[], boolean abort)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (x.length != y.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    x.length, y.length);

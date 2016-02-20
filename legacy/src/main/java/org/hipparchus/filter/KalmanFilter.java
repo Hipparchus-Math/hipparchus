@@ -332,7 +332,7 @@ public class KalmanFilter {
      *             if the covariance matrix could not be inverted
      */
     public void correct(final double[] z)
-            throws NullArgumentException, MathIllegalArgumentException, SingularMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException, SingularMatrixException {
         correct(new ArrayRealVector(z, false));
     }
 
@@ -349,7 +349,7 @@ public class KalmanFilter {
      *             if the covariance matrix could not be inverted
      */
     public void correct(final RealVector z)
-            throws NullArgumentException, MathIllegalArgumentException, SingularMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException, SingularMatrixException {
 
         // sanity checks
         MathUtils.checkNotNull(z);

@@ -235,8 +235,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
     @Override
     public double integrate(final FirstOrderDifferentialEquations equations,
                             final double t0, final double[] y0, final double t, final double[] y)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (y0.length != equations.getDimension()) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

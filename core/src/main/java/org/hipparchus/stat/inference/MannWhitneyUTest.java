@@ -68,7 +68,7 @@ public class MannWhitneyUTest {
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      */
     private void ensureDataConformance(final double[] x, final double[] y)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         if (x == null ||
             y == null) {
@@ -123,7 +123,7 @@ public class MannWhitneyUTest {
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      */
     public double mannWhitneyU(final double[] x, final double[] y)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         ensureDataConformance(x, y);
 
@@ -220,7 +220,7 @@ public class MannWhitneyUTest {
      * is exceeded
      */
     public double mannWhitneyUTest(final double[] x, final double[] y)
-        throws NullArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
         ensureDataConformance(x, y);

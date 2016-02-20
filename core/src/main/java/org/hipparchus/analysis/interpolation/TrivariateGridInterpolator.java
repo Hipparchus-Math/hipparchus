@@ -46,6 +46,5 @@ public interface TrivariateGridInterpolator {
      */
     TrivariateFunction interpolate(double[] xval, double[] yval, double[] zval,
                                    double[][][] fval)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 }

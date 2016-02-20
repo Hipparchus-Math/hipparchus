@@ -44,7 +44,7 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
      */
     @Override
     public double transform(Object o)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         if (o == null) {
             throw new NullArgumentException(LocalizedFormats.OBJECT_TRANSFORMATION);

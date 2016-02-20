@@ -16,7 +16,6 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -45,11 +44,11 @@ public interface RealDistribution {
      * @return the probability that a random variable with this distribution
      * takes a value between {@code x0} and {@code x1},
      * excluding the lower and including the upper endpoint
-     * @throws NumberIsTooLargeException if {@code x0 > x1}
+     * @throws MathIllegalArgumentException if {@code x0 > x1}
      *
      * @since 4.0, was previously named cumulativeProbability
      */
-    double probability(double x0, double x1) throws NumberIsTooLargeException;
+    double probability(double x0, double x1) throws MathIllegalArgumentException;
 
     /**
      * Returns the probability density function (PDF) of this distribution

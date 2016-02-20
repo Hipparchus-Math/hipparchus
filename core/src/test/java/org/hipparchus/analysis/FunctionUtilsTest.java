@@ -36,8 +36,8 @@ import org.hipparchus.analysis.function.Pow;
 import org.hipparchus.analysis.function.Power;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -207,7 +207,7 @@ public class FunctionUtilsTest {
         }
     }
 
-    @Test(expected = NumberIsTooLargeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSampleWrongBounds(){
         FunctionUtils.sample(new Sin(), FastMath.PI, 0.0, 10);
     }
@@ -270,9 +270,10 @@ public class FunctionUtilsTest {
         try {
             f.value(new DerivativeStructure(1, 3, 0.0));
             Assert.fail("an exception should have been thrown");
-        } catch (NumberIsTooLargeException e) {
-            Assert.assertEquals(2, e.getMax());
-            Assert.assertEquals(3, e.getArgument());
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_LARGE, e.getSpecifier());
+            Assert.assertEquals(2, ((Integer) e.getParts()[1]).intValue());
+            Assert.assertEquals(3, ((Integer) e.getParts()[0]).intValue());
         }
     }
 
@@ -318,9 +319,10 @@ public class FunctionUtilsTest {
         try {
             mdf.value(new DerivativeStructure[] { new DerivativeStructure(1, 3, 0.0), new DerivativeStructure(1, 3, 0.0) });
             Assert.fail("an exception should have been thrown");
-        } catch (NumberIsTooLargeException e) {
-            Assert.assertEquals(1, e.getMax());
-            Assert.assertEquals(3, e.getArgument());
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_LARGE, e.getSpecifier());
+            Assert.assertEquals(1, ((Integer) e.getParts()[1]).intValue());
+            Assert.assertEquals(3, ((Integer) e.getParts()[0]).intValue());
         }
     }
 

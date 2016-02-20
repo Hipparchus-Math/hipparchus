@@ -102,7 +102,7 @@ public class ComplexFormat {
      * empty string.
      */
     public ComplexFormat(String imaginaryCharacter)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         this(imaginaryCharacter, CompositeFormat.getDefaultNumberFormat());
     }
 
@@ -118,7 +118,7 @@ public class ComplexFormat {
      * @throws NullArgumentException if {@code format} is {@code null}.
      */
     public ComplexFormat(String imaginaryCharacter, NumberFormat format)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         this(imaginaryCharacter, format, format);
     }
 
@@ -140,7 +140,7 @@ public class ComplexFormat {
     public ComplexFormat(String imaginaryCharacter,
                          NumberFormat realFormat,
                          NumberFormat imaginaryFormat)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (imaginaryCharacter == null) {
             throw new NullArgumentException();
         }
@@ -325,7 +325,7 @@ public class ComplexFormat {
      * empty string.
      */
     public static ComplexFormat getInstance(String imaginaryCharacter, Locale locale)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         NumberFormat f = CompositeFormat.getDefaultNumberFormat(locale);
         return new ComplexFormat(imaginaryCharacter, f);
     }

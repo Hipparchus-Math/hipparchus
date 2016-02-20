@@ -83,8 +83,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @see #Array2DRowFieldMatrix(FieldElement[][], boolean)
      */
     public Array2DRowFieldMatrix(final T[][] d)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         this(extractField(d), d);
     }
 
@@ -103,8 +102,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @see #Array2DRowFieldMatrix(FieldElement[][], boolean)
      */
     public Array2DRowFieldMatrix(final Field<T> field, final T[][] d)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         super(field);
         copyIn(d);
     }
@@ -324,7 +322,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     @Override
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
-        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null) {
             if (row > 0) {
                 throw new MathIllegalStateException(LocalizedFormats.FIRST_ROWS_NOT_INITIALIZED_YET, row);
@@ -604,7 +602,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @throws NullArgumentException if the input array is {@code null}.
      */
     private void copyIn(final T[][] in)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         setSubMatrix(in, 0, 0);
     }
 }

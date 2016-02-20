@@ -25,7 +25,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -93,7 +92,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @see #ArrayFieldVector(Field, FieldElement[])
      */
     public ArrayFieldVector(T[] d)
-            throws NullArgumentException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(d);
         try {
             field = d[0].getField();
@@ -140,7 +139,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @see #ArrayFieldVector(Field, FieldElement[], boolean)
      */
     public ArrayFieldVector(T[] d, boolean copyArray)
-            throws NullArgumentException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(d);
         if (d.length == 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
@@ -178,14 +177,15 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param pos Position of the first entry.
      * @param size Number of entries to copy.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws NumberIsTooLargeException if the size of {@code d} is less
+     * @throws MathIllegalArgumentException if the size of {@code d} is less
      * than {@code pos + size}.
      */
     public ArrayFieldVector(T[] d, int pos, int size)
-            throws NullArgumentException, NumberIsTooLargeException {
+            throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(d);
         if (d.length < pos + size) {
-            throw new NumberIsTooLargeException(pos + size, d.length, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   pos + size, d.length);
         }
         field = d[0].getField();
         data = MathArrays.buildArray(field, size);
@@ -200,14 +200,15 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param pos Position of the first entry.
      * @param size Number of entries to copy.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws NumberIsTooLargeException if the size of {@code d} is less
+     * @throws MathIllegalArgumentException if the size of {@code d} is less
      * than {@code pos + size}.
      */
     public ArrayFieldVector(Field<T> field, T[] d, int pos, int size)
-            throws NullArgumentException, NumberIsTooLargeException {
+            throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(d);
         if (d.length < pos + size) {
-            throw new NumberIsTooLargeException(pos + size, d.length, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   pos + size, d.length);
         }
         this.field = field;
         data = MathArrays.buildArray(field, size);
@@ -339,7 +340,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @see #ArrayFieldVector(Field, FieldElement[], FieldElement[])
      */
     public ArrayFieldVector(T[] v1, T[] v2)
-            throws NullArgumentException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(v1);
         MathUtils.checkNotNull(v2);
         if (v1.length + v2.length == 0) {
@@ -363,7 +364,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @see #ArrayFieldVector(FieldElement[], FieldElement[])
      */
     public ArrayFieldVector(Field<T> field, T[] v1, T[] v2)
-            throws NullArgumentException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(v1);
         MathUtils.checkNotNull(v2);
         if (v1.length + v2.length == 0) {

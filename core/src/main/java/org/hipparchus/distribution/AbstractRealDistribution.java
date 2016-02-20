@@ -22,7 +22,6 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 
@@ -63,7 +62,7 @@ implements RealDistribution, Serializable {
      * @return the probability that a random variable with this distribution
      * takes a value between {@code x0} and {@code x1}, excluding the lower
      * and including the upper endpoint.
-     * @throws NumberIsTooLargeException if {@code x0 > x1}.
+     * @throws MathIllegalArgumentException if {@code x0 > x1}.
      *
      * The default implementation uses the identity
      * {@code P(x0 < X <= x1) = P(X <= x1) - P(X <= x0)}
@@ -74,7 +73,7 @@ implements RealDistribution, Serializable {
     public double probability(double x0,
                               double x1) {
         if (x0 > x1) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                                                 x0, x1, true);
         }
         return cumulativeProbability(x1) - cumulativeProbability(x0);

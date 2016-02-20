@@ -39,8 +39,7 @@ public class MidpointStepInterpolatorTest {
 
   @Test
   public void testDerivativesConsistency()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
     MidpointIntegrator integ = new MidpointIntegrator(step);
@@ -50,7 +49,6 @@ public class MidpointStepInterpolatorTest {
   @Test
   public void serialization()
     throws IOException, ClassNotFoundException,
-           MathIllegalArgumentException,
            MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb = new TestProblem1();

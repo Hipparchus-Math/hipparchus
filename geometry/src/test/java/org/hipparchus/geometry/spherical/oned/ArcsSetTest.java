@@ -21,7 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.RegionFactory;
@@ -117,7 +117,7 @@ public class ArcsSetTest {
 
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testWrongInterval() {
         new ArcsSet(1.2, 0.0, 1.0e-10);
     }

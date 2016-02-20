@@ -58,7 +58,6 @@ public interface FirstOrderIntegrator extends ODEIntegrator {
    */
   double integrate (FirstOrderDifferentialEquations equations,
                     double t0, double[] y0, double t, double[] y)
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException;
+      throws MathIllegalArgumentException, MathIllegalStateException;
 
 }

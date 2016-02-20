@@ -82,8 +82,7 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
          */
         @Override
         public double value(double x, double ... param)
-            throws NullArgumentException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
             return HarmonicOscillator.value(x * param[1] + param[2], param[0]);
         }
@@ -103,8 +102,7 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
          */
         @Override
         public double[] gradient(double x, double ... param)
-            throws NullArgumentException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
 
             final double amplitude = param[0];
@@ -130,8 +128,7 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
          * not 3.
          */
         private void validateParameters(double[] param)
-            throws NullArgumentException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
             if (param == null) {
                 throw new NullArgumentException();
             }

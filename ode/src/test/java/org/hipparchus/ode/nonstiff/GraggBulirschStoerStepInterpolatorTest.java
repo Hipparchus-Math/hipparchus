@@ -40,8 +40,7 @@ public class GraggBulirschStoerStepInterpolatorTest {
 
   @Test
   public void derivativesConsistency()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3(0.9);
     double minStep   = 0;
     double maxStep   = pb.getFinalTime() - pb.getInitialTime();
@@ -57,7 +56,6 @@ public class GraggBulirschStoerStepInterpolatorTest {
   @Test
   public void serialization()
     throws IOException, ClassNotFoundException,
-           MathIllegalArgumentException,
            MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem3 pb  = new TestProblem3(0.9);
@@ -109,8 +107,7 @@ public class GraggBulirschStoerStepInterpolatorTest {
 
   @Test
   public void checklone()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3(0.9);
     double minStep = 0;
     double maxStep = pb.getFinalTime() - pb.getInitialTime();

@@ -41,8 +41,7 @@ public class EulerIntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       TestProblem1 pb = new TestProblem1();
       new EulerIntegrator(0.01).integrate(pb,
                                           0.0, new double[pb.getDimension()+10],
@@ -52,8 +51,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testDecreasingSteps()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       for (TestProblemAbstract pb : new TestProblemAbstract[] {
           new TestProblem1(), new TestProblem2(), new TestProblem3(),
@@ -100,8 +98,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testSmallStep()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb  = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -122,8 +119,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testBigStep()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb  = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.2;
@@ -143,8 +139,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testBackward()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
       double step = FastMath.abs(pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -163,8 +158,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testStepSize()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new EulerIntegrator(step);
       integ.addStepHandler(new StepHandler() {

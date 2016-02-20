@@ -19,7 +19,6 @@ package org.hipparchus.genetics;
 import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -37,8 +36,8 @@ public class NPointCrossoverTest {
         cp.crossover(p1c,p2c);
     }
 
-    @Test(expected = NumberIsTooLargeException.class)
-    public void testNumberIsTooLargeException() {
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testMathIllegalArgumentException() {
         final Integer[] p1 = new Integer[] {1,0,1,0,0,1,0,1,1};
         final Integer[] p2 = new Integer[] {0,1,1,0,1,0,1,1,1};
 

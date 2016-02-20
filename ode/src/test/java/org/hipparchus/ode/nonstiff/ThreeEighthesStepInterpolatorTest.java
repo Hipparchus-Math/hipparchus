@@ -38,8 +38,7 @@ public class ThreeEighthesStepInterpolatorTest {
 
   @Test
   public void derivativesConsistency()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
     ThreeEighthesIntegrator integ = new ThreeEighthesIntegrator(step);
@@ -49,7 +48,6 @@ public class ThreeEighthesStepInterpolatorTest {
   @Test
   public void serialization()
     throws IOException, ClassNotFoundException,
-           MathIllegalArgumentException,
            MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem3 pb = new TestProblem3(0.9);

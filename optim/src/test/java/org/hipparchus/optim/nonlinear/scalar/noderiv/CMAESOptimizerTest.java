@@ -23,7 +23,6 @@ import org.hipparchus.Retry;
 import org.hipparchus.RetryRunner;
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.PointValuePair;
@@ -45,7 +44,7 @@ public class CMAESOptimizerTest {
     static final int DIM = 13;
     static final int LAMBDA = 4 + (int)(3.*FastMath.log(DIM));
 
-    @Test(expected = NumberIsTooLargeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInitOutofbounds1() {
         double[] startPoint = point(DIM,3);
         double[] insigma = point(DIM, 0.3);

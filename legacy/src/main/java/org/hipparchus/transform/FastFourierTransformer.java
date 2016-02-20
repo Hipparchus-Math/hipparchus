@@ -387,7 +387,7 @@ public class FastFourierTransformer implements Serializable {
      * @param n the number of sample points
      * @param type the type of transform (forward, inverse) to be performed
      * @return the complex transformed array
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the lower bound is greater than, or equal to the upper bound
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the number of sample points {@code n} is negative

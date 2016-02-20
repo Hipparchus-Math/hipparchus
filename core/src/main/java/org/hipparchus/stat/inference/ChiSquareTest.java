@@ -237,7 +237,7 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException if {@code counts} has negative entries
      */
     public double chiSquare(final long[][] counts)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         checkArray(counts);
         int nRows = counts.length;
@@ -301,7 +301,7 @@ public class ChiSquareTest {
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double chiSquareTest(final long[][] counts)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         checkArray(counts);
         double df = ((double) counts.length -1) * ((double) counts[0].length - 1);
@@ -350,7 +350,7 @@ public class ChiSquareTest {
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public boolean chiSquareTest(final long[][] counts, final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
@@ -576,7 +576,7 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException if the array contains any negative entries
      */
     private void checkArray(final long[][] in)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         if (in.length < 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

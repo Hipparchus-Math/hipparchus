@@ -90,8 +90,7 @@ public class Sigmoid implements UnivariateDifferentiableFunction {
          */
         @Override
         public double value(double x, double ... param)
-            throws NullArgumentException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
             return Sigmoid.value(x, param[0], param[1]);
         }
@@ -111,8 +110,7 @@ public class Sigmoid implements UnivariateDifferentiableFunction {
          */
         @Override
         public double[] gradient(double x, double ... param)
-            throws NullArgumentException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
 
             final double invExp1 = 1 / (1 + FastMath.exp(-x));
@@ -131,8 +129,7 @@ public class Sigmoid implements UnivariateDifferentiableFunction {
          * not 2.
          */
         private void validateParameters(double[] param)
-            throws NullArgumentException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
             if (param == null) {
                 throw new NullArgumentException();
             }

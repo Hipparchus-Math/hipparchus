@@ -31,23 +31,20 @@ import org.junit.Test;
 public class ReappearingEventTest {
     @Test
     public void testDormandPrince()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double tEnd = test(1);
         Assert.assertEquals(10.0, tEnd, 1e-7);
     }
 
     @Test
     public void testGragg()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double tEnd = test(2);
         Assert.assertEquals(10.0, tEnd, 1e-7);
     }
 
     public double test(int integratorType)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator;
         integrator = (integratorType == 1)

@@ -39,7 +39,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testBoundaries() throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+  public void testBoundaries() throws MathIllegalArgumentException, MathIllegalStateException {
     integ.addStepHandler(new ContinuousOutputModel());
     integ.integrate(pb,
                     pb.getInitialTime(), pb.getInitialState(),
@@ -51,7 +51,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testRandomAccess() throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
+  public void testRandomAccess() throws MathIllegalArgumentException, MathIllegalStateException {
 
     ContinuousOutputModel cm = new ContinuousOutputModel();
     integ.addStepHandler(cm);

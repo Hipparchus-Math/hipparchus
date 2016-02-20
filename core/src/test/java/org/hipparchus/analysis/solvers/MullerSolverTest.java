@@ -20,10 +20,7 @@ import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Expm1;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.analysis.solvers.MullerSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -135,8 +132,8 @@ public final class MullerSolverTest {
             // bad interval
             double root = solver.solve(100, f, 1, -1);
             System.out.println("root=" + root);
-            Assert.fail("Expecting NumberIsTooLargeException - bad interval");
-        } catch (NumberIsTooLargeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {

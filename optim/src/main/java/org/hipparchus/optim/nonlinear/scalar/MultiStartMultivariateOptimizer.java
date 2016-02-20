@@ -58,8 +58,7 @@ public class MultiStartMultivariateOptimizer
     public MultiStartMultivariateOptimizer(final MultivariateOptimizer optimizer,
                                            final int starts,
                                            final RandomVectorGenerator generator)
-        throws NullArgumentException,
-        MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         super(optimizer, starts, generator);
         this.optimizer = optimizer;
     }

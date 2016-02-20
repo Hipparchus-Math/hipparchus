@@ -23,7 +23,6 @@ import org.hipparchus.analysis.UnivariateMatrixFunction;
 import org.hipparchus.analysis.UnivariateVectorFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 
 /** Univariate functions differentiator using finite differences.
@@ -135,11 +134,11 @@ public class FiniteDifferencesDifferentiator
      * @exception MathIllegalArgumentException if {@code stepsize <= 0} (note that
      * {@link MathIllegalArgumentException} extends {@link MathIllegalArgumentException})
      * @exception MathIllegalArgumentException {@code nbPoint <= 1}
-     * @exception NumberIsTooLargeException {@code stepSize * (nbPoints - 1) >= tUpper - tLower}
+     * @exception MathIllegalArgumentException {@code stepSize * (nbPoints - 1) >= tUpper - tLower}
      */
     public FiniteDifferencesDifferentiator(final int nbPoints, final double stepSize,
                                            final double tLower, final double tUpper)
-            throws MathIllegalArgumentException, NumberIsTooLargeException {
+            throws MathIllegalArgumentException {
 
         if (nbPoints <= 1) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
@@ -155,7 +154,8 @@ public class FiniteDifferencesDifferentiator
 
         halfSampleSpan = 0.5 * stepSize * (nbPoints - 1);
         if (2 * halfSampleSpan >= tUpper - tLower) {
-            throw new NumberIsTooLargeException(2 * halfSampleSpan, tUpper - tLower, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   2 * halfSampleSpan, tUpper - tLower);
         }
         final double safety = FastMath.ulp(halfSampleSpan);
         this.tMin = tLower + halfSampleSpan + safety;
@@ -188,12 +188,12 @@ public class FiniteDifferencesDifferentiator
      * @param t0 first sample point abscissa
      * @param y function values sample {@code y[i] = f(t[i]) = f(t0 + i * stepSize)}
      * @return value and derivatives at {@code t}
-     * @exception NumberIsTooLargeException if the requested derivation order
+     * @exception MathIllegalArgumentException if the requested derivation order
      * is larger or equal to the number of points
      */
     private DerivativeStructure evaluate(final DerivativeStructure t, final double t0,
                                          final double[] y)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
 
         // create divided differences diagonal arrays
         final double[] top    = new double[nbPoints];
@@ -238,7 +238,7 @@ public class FiniteDifferencesDifferentiator
 
     /** {@inheritDoc}
      * <p>The returned object cannot compute derivatives to arbitrary orders. The
-     * value function will throw a {@link NumberIsTooLargeException} if the requested
+     * value function will throw a {@link MathIllegalArgumentException} if the requested
      * derivation order is larger or equal to the number of points.
      * </p>
      */
@@ -259,7 +259,8 @@ public class FiniteDifferencesDifferentiator
 
                 // check we can achieve the requested derivation order with the sample
                 if (t.getOrder() >= nbPoints) {
-                    throw new NumberIsTooLargeException(t.getOrder(), nbPoints, false);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                           t.getOrder(), nbPoints);
                 }
 
                 // compute sample position, trying to be centered if possible
@@ -281,7 +282,7 @@ public class FiniteDifferencesDifferentiator
 
     /** {@inheritDoc}
      * <p>The returned object cannot compute derivatives to arbitrary orders. The
-     * value function will throw a {@link NumberIsTooLargeException} if the requested
+     * value function will throw a {@link MathIllegalArgumentException} if the requested
      * derivation order is larger or equal to the number of points.
      * </p>
      */
@@ -302,7 +303,8 @@ public class FiniteDifferencesDifferentiator
 
                 // check we can achieve the requested derivation order with the sample
                 if (t.getOrder() >= nbPoints) {
-                    throw new NumberIsTooLargeException(t.getOrder(), nbPoints, false);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                           t.getOrder(), nbPoints);
                 }
 
                 // compute sample position, trying to be centered if possible
@@ -335,7 +337,7 @@ public class FiniteDifferencesDifferentiator
 
     /** {@inheritDoc}
      * <p>The returned object cannot compute derivatives to arbitrary orders. The
-     * value function will throw a {@link NumberIsTooLargeException} if the requested
+     * value function will throw a {@link MathIllegalArgumentException} if the requested
      * derivation order is larger or equal to the number of points.
      * </p>
      */
@@ -356,7 +358,8 @@ public class FiniteDifferencesDifferentiator
 
                 // check we can achieve the requested derivation order with the sample
                 if (t.getOrder() >= nbPoints) {
-                    throw new NumberIsTooLargeException(t.getOrder(), nbPoints, false);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                           t.getOrder(), nbPoints);
                 }
 
                 // compute sample position, trying to be centered if possible

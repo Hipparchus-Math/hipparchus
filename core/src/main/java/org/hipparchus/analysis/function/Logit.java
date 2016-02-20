@@ -86,8 +86,7 @@ public class Logit implements UnivariateDifferentiableFunction {
          */
         @Override
         public double value(double x, double ... param)
-            throws NullArgumentException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
             return Logit.value(x, param[0], param[1]);
         }
@@ -107,8 +106,7 @@ public class Logit implements UnivariateDifferentiableFunction {
          */
         @Override
         public double[] gradient(double x, double ... param)
-            throws NullArgumentException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
 
             final double lo = param[0];
@@ -128,8 +126,7 @@ public class Logit implements UnivariateDifferentiableFunction {
          * not 2.
          */
         private void validateParameters(double[] param)
-            throws NullArgumentException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
             if (param == null) {
                 throw new NullArgumentException();
             }

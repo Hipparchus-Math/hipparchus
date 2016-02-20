@@ -19,7 +19,6 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
@@ -181,14 +180,14 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
         }
         try {
             new HypergeometricDistribution(5, 6, 5);
-            Assert.fail("numberOfSuccesses > populationSize. NumberIsTooLargeException expected");
-        } catch(NumberIsTooLargeException ex) {
+            Assert.fail("numberOfSuccesses > populationSize. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 3, 6);
-            Assert.fail("sampleSize > populationSize. NumberIsTooLargeException expected");
-        } catch(NumberIsTooLargeException ex) {
+            Assert.fail("sampleSize > populationSize. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
     }

@@ -64,8 +64,7 @@ public class AkimaSplineInterpolator
     @Override
     public PolynomialSplineFunction interpolate(double[] xvals,
                                                 double[] yvals)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (xvals == null ||
             yvals == null) {
             throw new NullArgumentException();

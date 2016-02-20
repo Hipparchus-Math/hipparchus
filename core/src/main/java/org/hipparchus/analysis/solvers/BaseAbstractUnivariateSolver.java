@@ -21,7 +21,6 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.MathUtils;
 
@@ -261,11 +260,11 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      *
      * @param lower Lower endpoint.
      * @param upper Upper endpoint.
-     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     * @throws MathIllegalArgumentException if {@code lower >= upper}.
      */
     protected void verifyInterval(final double lower,
                                   final double upper)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         UnivariateSolverUtils.verifyInterval(lower, upper);
     }
 
@@ -275,13 +274,13 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      * @param lower Lower endpoint.
      * @param initial Initial value.
      * @param upper Upper endpoint.
-     * @throws NumberIsTooLargeException if {@code lower >= initial} or
+     * @throws MathIllegalArgumentException if {@code lower >= initial} or
      * {@code initial >= upper}.
      */
     protected void verifySequence(final double lower,
                                   final double initial,
                                   final double upper)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         UnivariateSolverUtils.verifySequence(lower, initial, upper);
     }
 
@@ -297,8 +296,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      */
     protected void verifyBracketing(final double lower,
                                     final double upper)
-        throws NullArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         UnivariateSolverUtils.verifyBracketing(function, lower, upper);
     }
 

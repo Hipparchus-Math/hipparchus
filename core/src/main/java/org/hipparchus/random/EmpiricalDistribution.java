@@ -230,7 +230,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * @throws NullArgumentException if url is null
      * @throws MathIllegalArgumentException if URL contains no data
      */
-    public void load(URL url) throws IOException, NullArgumentException, MathIllegalArgumentException {
+    public void load(URL url) throws IOException, MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(url);
         Charset charset = Charset.forName(FILE_CHARSET);
         BufferedReader in =

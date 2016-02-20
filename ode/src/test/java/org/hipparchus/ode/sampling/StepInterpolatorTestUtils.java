@@ -35,8 +35,7 @@ public class StepInterpolatorTestUtils {
                                                    final TestProblemAbstract problem,
                                                    final double finiteDifferencesRatio,
                                                    final double threshold)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         integrator.addStepHandler(new StepHandler() {
 
             public void handleStep(StepInterpolator interpolator, boolean isLast)

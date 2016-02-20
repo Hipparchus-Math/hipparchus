@@ -22,7 +22,6 @@ import java.util.Random;
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.PointValuePair;
@@ -41,7 +40,7 @@ public class BOBYQAOptimizerTest {
 
     static final int DIM = 13;
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInitOutOfBounds() {
         double[] startPoint = point(DIM, 3);
         double[][] boundaries = boundaries(DIM, -1, 2);

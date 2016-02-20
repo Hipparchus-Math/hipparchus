@@ -16,7 +16,6 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -60,11 +59,11 @@ public interface IntegerDistribution {
      * @return the probability that a random variable with this distribution
      * will take a value between {@code x0} and {@code x1},
      * excluding the lower and including the upper endpoint
-     * @throws NumberIsTooLargeException if {@code x0 > x1}
+     * @throws MathIllegalArgumentException if {@code x0 > x1}
      *
      * @since 4.0, was previously named cumulativeProbability
      */
-    double probability(int x0, int x1) throws NumberIsTooLargeException;
+    double probability(int x0, int x1) throws MathIllegalArgumentException;
 
     /**
      * For a random variable {@code X} whose values are distributed according

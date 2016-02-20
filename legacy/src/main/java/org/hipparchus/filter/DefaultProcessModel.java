@@ -73,7 +73,7 @@ public class DefaultProcessModel implements ProcessModel {
                                final double[][] processNoise,
                                final double[] initialStateEstimate,
                                final double[][] initialErrorCovariance)
-            throws NullArgumentException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
 
         this(new Array2DRowRealMatrix(stateTransition),
                 new Array2DRowRealMatrix(control),
@@ -104,7 +104,7 @@ public class DefaultProcessModel implements ProcessModel {
     public DefaultProcessModel(final double[][] stateTransition,
                                final double[][] control,
                                final double[][] processNoise)
-            throws NullArgumentException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException {
 
         this(new Array2DRowRealMatrix(stateTransition),
                 new Array2DRowRealMatrix(control),

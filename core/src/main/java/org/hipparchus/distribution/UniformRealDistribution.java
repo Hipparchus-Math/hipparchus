@@ -18,7 +18,6 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -67,10 +66,10 @@ public class UniformRealDistribution extends AbstractRealDistribution {
      *
      * @param lower Lower bound of this distribution (inclusive).
      * @param upper Upper bound of this distribution (exclusive).
-     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     * @throws MathIllegalArgumentException if {@code lower >= upper}.
      */
     public UniformRealDistribution(double lower, double upper)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), lower, upper);
     }
 
@@ -80,16 +79,16 @@ public class UniformRealDistribution extends AbstractRealDistribution {
      * @param rng Random number generator.
      * @param lower Lower bound of this distribution (inclusive).
      * @param upper Upper bound of this distribution (exclusive).
-     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     * @throws MathIllegalArgumentException if {@code lower >= upper}.
      * @since 3.1
      */
     public UniformRealDistribution(RandomGenerator rng,
                                    double lower,
                                    double upper)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(rng);
         if (lower >= upper) {
-            throw new NumberIsTooLargeException(
+            throw new MathIllegalArgumentException(
                             LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                             lower, upper, false);
         }

@@ -62,8 +62,7 @@ public class SplineInterpolator implements UnivariateInterpolator {
      */
     @Override
     public PolynomialSplineFunction interpolate(double x[], double y[])
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (x.length != y.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    x.length, y.length);

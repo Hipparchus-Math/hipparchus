@@ -41,8 +41,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void dimensionCheck()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         TestProblem1 pb = new TestProblem1();
         FirstOrderIntegrator integ =
             new AdamsMoultonIntegrator(2, 0.0, 1.0, 1.0e-10, 1.0e-10);
@@ -53,8 +52,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testMinStep()
-            throws MathIllegalArgumentException,
-            MathIllegalArgumentException, MathIllegalStateException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
           TestProblem1 pb = new TestProblem1();
           double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -75,8 +73,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void testIncreasingTolerance()
-            throws MathIllegalArgumentException,
-            MathIllegalArgumentException, MathIllegalStateException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         int previousCalls = Integer.MAX_VALUE;
         for (int i = -12; i < -2; ++i) {
@@ -113,8 +110,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test(expected = MathIllegalStateException.class)
     public void exceedMaxEvaluations()
-            throws MathIllegalArgumentException,
-            MathIllegalArgumentException, MathIllegalStateException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem1 pb  = new TestProblem1();
         double range = pb.getFinalTime() - pb.getInitialTime();
@@ -131,8 +127,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void backward()
-            throws MathIllegalArgumentException,
-            MathIllegalArgumentException, MathIllegalStateException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem5 pb = new TestProblem5();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
@@ -151,8 +146,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void polynomial()
-            throws MathIllegalArgumentException,
-            MathIllegalArgumentException, MathIllegalStateException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
         TestProblem6 pb = new TestProblem6();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
 

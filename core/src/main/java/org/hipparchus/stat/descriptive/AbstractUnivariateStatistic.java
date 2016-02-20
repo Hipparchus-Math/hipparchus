@@ -19,7 +19,6 @@ package org.hipparchus.stat.descriptive;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -109,7 +108,7 @@ public abstract class AbstractUnivariateStatistic
         }
 
         if (begin + length > values.length) {
-            throw new NumberIsTooLargeException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
+            throw new MathIllegalArgumentException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
                                                 begin + length, values.length, true);
         }
         storedData = new double[length];

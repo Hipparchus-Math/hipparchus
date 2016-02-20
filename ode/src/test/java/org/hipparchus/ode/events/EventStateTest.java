@@ -80,8 +80,7 @@ public class EventStateTest {
     // Jira: MATH-695
     @Test
     public void testIssue695()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {
 
@@ -144,8 +143,7 @@ public class EventStateTest {
     // Jira: MATH-965
     @Test
     public void testIssue965()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         ExpandableStatefulODE equation =
                 new ExpandableStatefulODE(new FirstOrderDifferentialEquations() {
@@ -213,8 +211,7 @@ public class EventStateTest {
 
     @Test
     public void testEventsCloserThanThreshold()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {
 

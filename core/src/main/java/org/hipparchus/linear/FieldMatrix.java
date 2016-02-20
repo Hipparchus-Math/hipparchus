@@ -168,7 +168,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @throws MathIllegalArgumentException if row or column selections are not valid.
     */
    FieldMatrix<T> getSubMatrix(int[] selectedRows, int[] selectedColumns)
-   throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException;
+   throws MathIllegalArgumentException, NullArgumentException;
 
    /**
     * Copy a submatrix. Rows and columns are 0-based. The designated submatrix
@@ -188,8 +188,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     */
     void copySubMatrix(int startRow, int endRow, int startColumn, int endColumn,
                        T[][] destination)
-    throws MathIllegalArgumentException,
-    MathIllegalArgumentException;
+    throws MathIllegalArgumentException;
 
   /**
    * Copy a submatrix. Rows and columns are indicated
@@ -208,8 +207,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
    * @throws MathIllegalArgumentException if the indices are not valid.
    */
   void copySubMatrix(int[] selectedRows, int[] selectedColumns, T[][] destination)
-  throws MathIllegalArgumentException, NullArgumentException,
-  MathIllegalArgumentException;
+  throws MathIllegalArgumentException, NullArgumentException;
 
     /**
      * Replace the submatrix starting at {@code (row, column)} using data in the

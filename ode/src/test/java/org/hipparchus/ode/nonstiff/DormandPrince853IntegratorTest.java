@@ -38,8 +38,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test
   public void testMissedEndEvent()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       final double   t0     = 1878250320.0000029;
       final double   tEvent = 1878250379.9999986;
       final double[] k  = { 1.0e-4, 1.0e-5, 1.0e-6 };
@@ -100,8 +99,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       TestProblem1 pb = new TestProblem1();
       DormandPrince853Integrator integrator = new DormandPrince853Integrator(0.0, 1.0,
                                                                              1.0e-10, 1.0e-10);
@@ -113,8 +111,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testNullIntervalCheck()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       TestProblem1 pb = new TestProblem1();
       DormandPrince853Integrator integrator = new DormandPrince853Integrator(0.0, 1.0,
                                                                              1.0e-10, 1.0e-10);
@@ -126,8 +123,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testMinStep()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem1 pb = new TestProblem1();
       double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -149,8 +145,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test
   public void testIncreasingTolerance()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     int previousCalls = Integer.MAX_VALUE;
     AdaptiveStepsizeIntegrator integ =
@@ -187,8 +182,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test
   public void testTooLargeFirstStep()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       AdaptiveStepsizeIntegrator integ =
               new DormandPrince853Integrator(0, Double.POSITIVE_INFINITY, Double.NaN, Double.NaN);
@@ -215,8 +209,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test
   public void testBackward()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
       double minStep = 0;
@@ -240,8 +233,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test
   public void testEvents()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem4 pb = new TestProblem4();
     double minStep = 0;
@@ -274,8 +266,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test
   public void testKepler()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;
@@ -298,8 +289,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test
   public void testVariableSteps()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;
@@ -320,8 +310,7 @@ public class DormandPrince853IntegratorTest {
 
   @Test
   public void testUnstableDerivative()
-      throws MathIllegalArgumentException,
-             MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
     FirstOrderIntegrator integ =
       new DormandPrince853Integrator(0.1, 10, 1.0e-12, 0.0);

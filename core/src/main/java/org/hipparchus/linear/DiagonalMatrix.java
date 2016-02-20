@@ -21,7 +21,6 @@ import java.io.Serializable;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
@@ -227,11 +226,11 @@ public class DiagonalMatrix extends AbstractRealMatrix
     }
 
     /** {@inheritDoc}
-     * @throws NumberIsTooLargeException if {@code row != column} and value is non-zero.
+     * @throws MathIllegalArgumentException if {@code row != column} and value is non-zero.
      */
     @Override
     public void setEntry(final int row, final int column, final double value)
-        throws MathIllegalArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         if (row == column) {
             MatrixUtils.checkRowIndex(this, row);
             data[row] = value;
@@ -241,13 +240,13 @@ public class DiagonalMatrix extends AbstractRealMatrix
     }
 
     /** {@inheritDoc}
-     * @throws NumberIsTooLargeException if {@code row != column} and increment is non-zero.
+     * @throws MathIllegalArgumentException if {@code row != column} and increment is non-zero.
      */
     @Override
     public void addToEntry(final int row,
                            final int column,
                            final double increment)
-        throws MathIllegalArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         if (row == column) {
             MatrixUtils.checkRowIndex(this, row);
             data[row] += increment;
@@ -309,11 +308,12 @@ public class DiagonalMatrix extends AbstractRealMatrix
 
     /** Ensure a value is zero.
      * @param value value to check
-     * @exception NumberIsTooLargeException if value is not zero
+     * @exception MathIllegalArgumentException if value is not zero
      */
-    private void ensureZero(final double value) throws NumberIsTooLargeException {
+    private void ensureZero(final double value) throws MathIllegalArgumentException {
         if (!Precision.equals(0.0, value, 1)) {
-            throw new NumberIsTooLargeException(FastMath.abs(value), 0, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   FastMath.abs(value), 0);
         }
     }
 

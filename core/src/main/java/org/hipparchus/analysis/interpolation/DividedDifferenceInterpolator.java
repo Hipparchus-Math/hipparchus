@@ -52,8 +52,7 @@ public class DividedDifferenceInterpolator
      */
     @Override
     public PolynomialFunctionNewtonForm interpolate(double x[], double y[])
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         /**
          * a[] and c[] are defined in the general formula of Newton form:
          * p(x) = a[0] + a[1](x-c[0]) + a[2](x-c[0])(x-c[1]) + ... +
@@ -96,8 +95,7 @@ public class DividedDifferenceInterpolator
      * if {@code x} is not sorted in strictly increasing order.
      */
     protected static double[] computeDividedDifference(final double x[], final double y[])
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         PolynomialFunctionLagrangeForm.verifyInterpolationArray(x, y, true);
 
         final double[] divdiff = y.clone(); // initialization

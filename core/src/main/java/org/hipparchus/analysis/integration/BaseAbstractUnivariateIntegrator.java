@@ -236,7 +236,7 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
     protected void setup(final int maxEval,
                          final UnivariateFunction f,
                          final double lower, final double upper)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         // Checks.
         MathUtils.checkNotNull(f);

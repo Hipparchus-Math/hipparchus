@@ -41,7 +41,6 @@ import org.hipparchus.distribution.ZipfDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -204,9 +203,9 @@ public class RandomDataGenerator implements Serializable {
      * @param upper upper bound for generated integer
      * @return a random integer greater than or equal to {@code lower}
      * and less than or equal to {@code upper}
-     * @throws NumberIsTooLargeException if {@code lower >= upper}
+     * @throws MathIllegalArgumentException if {@code lower >= upper}
      */
-    public int nextInt(final int lower, final int upper) throws NumberIsTooLargeException {
+    public int nextInt(final int lower, final int upper) throws MathIllegalArgumentException {
         return new UniformIntegerDistribution(getRandomGenerator(), lower, upper).sample();
     }
 
@@ -222,11 +221,11 @@ public class RandomDataGenerator implements Serializable {
      * @param upper upper bound for generated long integer
      * @return a random long integer greater than or equal to {@code lower}
      * and less than or equal to {@code upper}
-     * @throws NumberIsTooLargeException if {@code lower >= upper}
+     * @throws MathIllegalArgumentException if {@code lower >= upper}
      */
-    public long nextLong(final long lower, final long upper) throws NumberIsTooLargeException {
+    public long nextLong(final long lower, final long upper) throws MathIllegalArgumentException {
         if (lower >= upper) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                                                 lower, upper, false);
         }
         final long max = (upper - lower) + 1;
@@ -370,9 +369,9 @@ public class RandomDataGenerator implements Serializable {
      * @param upper upper bound for generated integer
      * @return a random integer greater than or equal to {@code lower} and less
      * than or equal to {@code upper}.
-     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     * @throws MathIllegalArgumentException if {@code lower >= upper}.
      */
-    public int nextSecureInt(final int lower, final int upper) throws NumberIsTooLargeException {
+    public int nextSecureInt(final int lower, final int upper) throws MathIllegalArgumentException {
         return new UniformIntegerDistribution(getSecRan(), lower, upper).sample();
     }
 
@@ -393,11 +392,11 @@ public class RandomDataGenerator implements Serializable {
      * @param upper upper bound for generated integer
      * @return a random long integer greater than or equal to {@code lower} and
      * less than or equal to {@code upper}.
-     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     * @throws MathIllegalArgumentException if {@code lower >= upper}.
      */
-    public long nextSecureLong(final long lower, final long upper) throws NumberIsTooLargeException {
+    public long nextSecureLong(final long lower, final long upper) throws MathIllegalArgumentException {
         if (lower >= upper) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                                                 lower, upper, false);
         }
         final RandomGenerator rng = getSecRan();
@@ -526,12 +525,12 @@ public class RandomDataGenerator implements Serializable {
      * @param numberOfSuccesses number of successes in the population of the Hypergeometric distribution
      * @param sampleSize the sample size of the Hypergeometric distribution
      * @return random value sampled from the Hypergeometric(numberOfSuccesses, sampleSize) distribution
-     * @throws NumberIsTooLargeException  if {@code numberOfSuccesses > populationSize},
+     * @throws MathIllegalArgumentException  if {@code numberOfSuccesses > populationSize},
      * or {@code sampleSize > populationSize}.
      * @throws MathIllegalArgumentException if {@code populationSize <= 0}.
      * @throws MathIllegalArgumentException  if {@code numberOfSuccesses < 0}.
      */
-    public int nextHypergeometric(int populationSize, int numberOfSuccesses, int sampleSize) throws MathIllegalArgumentException, NumberIsTooLargeException {
+    public int nextHypergeometric(int populationSize, int numberOfSuccesses, int sampleSize) throws MathIllegalArgumentException {
         return new HypergeometricDistribution(getRandomGenerator(),populationSize,
                 numberOfSuccesses, sampleSize).sample();
     }
@@ -669,12 +668,12 @@ public class RandomDataGenerator implements Serializable {
      * @param upper the exclusive upper bound of the support
      * @return a uniformly distributed random value between lower and upper
      * (exclusive)
-     * @throws NumberIsTooLargeException if {@code lower >= upper}
+     * @throws MathIllegalArgumentException if {@code lower >= upper}
      * @throws MathIllegalArgumentException if one of the bounds is infinite
      * @throws MathIllegalArgumentException if one of the bounds is NaN
      */
     public double nextUniform(double lower, double upper)
-            throws NumberIsTooLargeException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         return nextUniform(lower, upper, false);
     }
 
@@ -705,15 +704,15 @@ public class RandomDataGenerator implements Serializable {
      * interval, if {@code lowerInclusive} is {@code false}, or in the
      * {@code [lower, upper)} interval, if {@code lowerInclusive} is
      * {@code true}
-     * @throws NumberIsTooLargeException if {@code lower >= upper}
+     * @throws MathIllegalArgumentException if {@code lower >= upper}
      * @throws MathIllegalArgumentException if one of the bounds is infinite
      * @throws MathIllegalArgumentException if one of the bounds is NaN
      */
     public double nextUniform(double lower, double upper, boolean lowerInclusive)
-        throws NumberIsTooLargeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         if (lower >= upper) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                                                 lower, upper, false);
         }
 
@@ -755,13 +754,13 @@ public class RandomDataGenerator implements Serializable {
      * @param k the size of the permutation
      * @return a random {@code k}-permutation of {@code n}, as an array of
      * integers
-     * @throws NumberIsTooLargeException if {@code k > n}.
+     * @throws MathIllegalArgumentException if {@code k > n}.
      * @throws MathIllegalArgumentException if {@code k <= 0}.
      */
     public int[] nextPermutation(int n, int k)
-        throws NumberIsTooLargeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (k > n) {
-            throw new NumberIsTooLargeException(LocalizedFormats.PERMUTATION_EXCEEDS_N,
+            throw new MathIllegalArgumentException(LocalizedFormats.PERMUTATION_EXCEEDS_N,
                                                 k, n, true);
         }
         if (k <= 0) {
@@ -793,14 +792,14 @@ public class RandomDataGenerator implements Serializable {
      * @param c the collection to be sampled
      * @param k the size of the sample
      * @return a random sample of {@code k} elements from {@code c}
-     * @throws NumberIsTooLargeException if {@code k > c.size()}.
+     * @throws MathIllegalArgumentException if {@code k > c.size()}.
      * @throws MathIllegalArgumentException if {@code k <= 0}.
      */
-    public Object[] nextSample(Collection<?> c, int k) throws NumberIsTooLargeException, MathIllegalArgumentException {
+    public Object[] nextSample(Collection<?> c, int k) throws MathIllegalArgumentException {
 
         int len = c.size();
         if (k > len) {
-            throw new NumberIsTooLargeException(LocalizedFormats.SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedFormats.SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE,
                                                 k, len, true);
         }
         if (k <= 0) {

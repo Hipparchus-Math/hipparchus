@@ -25,7 +25,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 
 /**
  * Population of chromosomes represented by a {@link List}.
@@ -59,10 +58,10 @@ public abstract class ListPopulation implements Population {
      * @param populationLimit maximal size of the population
      * @throws NullArgumentException if the list of chromosomes is {@code null}
      * @throws MathIllegalArgumentException if the population limit is not a positive number (&lt; 1)
-     * @throws NumberIsTooLargeException if the list of chromosomes exceeds the population limit
+     * @throws MathIllegalArgumentException if the list of chromosomes exceeds the population limit
      */
     public ListPopulation(final List<Chromosome> chromosomes, final int populationLimit)
-        throws NullArgumentException, MathIllegalArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         if (chromosomes == null) {
             throw new NullArgumentException();
@@ -71,7 +70,7 @@ public abstract class ListPopulation implements Population {
             throw new MathIllegalArgumentException(LocalizedFormats.POPULATION_LIMIT_NOT_POSITIVE, populationLimit);
         }
         if (chromosomes.size() > populationLimit) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
                                                 chromosomes.size(), populationLimit, false);
         }
         this.populationLimit = populationLimit;
@@ -82,13 +81,13 @@ public abstract class ListPopulation implements Population {
     /**
      * Add a {@link Collection} of chromosomes to this {@link Population}.
      * @param chromosomeColl a {@link Collection} of chromosomes
-     * @throws NumberIsTooLargeException if the population would exceed the population limit when
+     * @throws MathIllegalArgumentException if the population would exceed the population limit when
      * adding this chromosome
      * @since 3.1
      */
-    public void addChromosomes(final Collection<Chromosome> chromosomeColl) throws NumberIsTooLargeException {
+    public void addChromosomes(final Collection<Chromosome> chromosomeColl) throws MathIllegalArgumentException {
         if (chromosomes.size() + chromosomeColl.size() > populationLimit) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
                                                 chromosomes.size(), populationLimit, false);
         }
         this.chromosomes.addAll(chromosomeColl);
@@ -115,13 +114,13 @@ public abstract class ListPopulation implements Population {
      * Add the given chromosome to the population.
      *
      * @param chromosome the chromosome to add.
-     * @throws NumberIsTooLargeException if the population would exceed the {@code populationLimit} after
+     * @throws MathIllegalArgumentException if the population would exceed the {@code populationLimit} after
      *   adding this chromosome
      */
     @Override
-    public void addChromosome(final Chromosome chromosome) throws NumberIsTooLargeException {
+    public void addChromosome(final Chromosome chromosome) throws MathIllegalArgumentException {
         if (chromosomes.size() >= populationLimit) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
                                                 chromosomes.size(), populationLimit, false);
         }
         this.chromosomes.add(chromosome);

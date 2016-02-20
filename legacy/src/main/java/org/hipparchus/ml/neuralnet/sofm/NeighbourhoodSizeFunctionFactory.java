@@ -49,7 +49,7 @@ public class NeighbourhoodSizeFunctionFactory {
      * if {@code initValue <= 0}.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code valueAtNumCall <= 0}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code valueAtNumCall >= initValue}.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code numCall <= 0}.
@@ -86,7 +86,7 @@ public class NeighbourhoodSizeFunctionFactory {
      * @return the neighbourhood size function.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code initValue <= 0}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code slope >= 0}.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code numCall <= 0}.

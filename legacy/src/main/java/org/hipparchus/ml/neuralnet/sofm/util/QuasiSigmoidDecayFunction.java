@@ -20,7 +20,6 @@ package org.hipparchus.ml.neuralnet.sofm.util;
 import org.hipparchus.analysis.function.Logistic;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 
 /**
  * Decay function whose shape is similar to a sigmoid.
@@ -48,7 +47,7 @@ public class QuasiSigmoidDecayFunction {
      * @param slope Value of the function derivative at {@code numCall}.
      * @param numCall Inflexion point.
      * @throws MathIllegalArgumentException if {@code initValue <= 0}.
-     * @throws NumberIsTooLargeException if {@code slope >= 0}.
+     * @throws MathIllegalArgumentException if {@code slope >= 0}.
      * @throws MathIllegalArgumentException if {@code numCall <= 1}.
      */
     public QuasiSigmoidDecayFunction(double initValue,
@@ -59,7 +58,8 @@ public class QuasiSigmoidDecayFunction {
                                                    initValue, 0);
         }
         if (slope >= 0) {
-            throw new NumberIsTooLargeException(slope, 0, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   slope, 0);
         }
         if (numCall <= 1) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,

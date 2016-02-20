@@ -22,10 +22,8 @@ import java.util.List;
 
 import org.hipparchus.ExtendedFieldElementAbstractTest;
 import org.hipparchus.TestUtils;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.CombinatoricsUtils;
@@ -43,7 +41,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         return new DerivativeStructure(2, 1, 0, x);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testWrongVariableIndex() {
         new DerivativeStructure(3, 1, 3, 1.0);
     }
@@ -53,7 +51,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         new DerivativeStructure(3, 1, 0, 1.0).getPartialDerivative(0, 1);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testTooLargeOrder() {
         new DerivativeStructure(3, 1, 0, 1.0).getPartialDerivative(1, 1, 2);
     }
@@ -64,7 +62,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         Assert.assertEquals(1.0, v.getValue(), 1.0e-15);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testVariableWithoutDerivative1() {
         DerivativeStructure v = new DerivativeStructure(1, 0, 0, 1.0);
         Assert.assertEquals(1.0, v.getPartialDerivative(1), 1.0e-15);

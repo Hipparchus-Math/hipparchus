@@ -18,7 +18,6 @@ package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -80,8 +79,8 @@ public class WilcoxonSignedRankTestTest {
 
         try {
             testStatistic.wilcoxonSignedRankTest(x2, y2, true);
-            Assert.fail("More than 30 samples and exact chosen, NumberIsTooLargeException expected");
-        } catch (NumberIsTooLargeException ex) {
+            Assert.fail("More than 30 samples and exact chosen, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

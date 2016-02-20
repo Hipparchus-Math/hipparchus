@@ -17,8 +17,6 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.distribution.TriangularDistribution;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -151,19 +149,19 @@ public class TriangularDistributionTest extends RealDistributionAbstractTest {
     }
 
     /** Test pre-condition for equal lower/upper limit. */
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions1() {
         new TriangularDistribution(0, 0, 0);
     }
 
     /** Test pre-condition for lower limit larger than upper limit. */
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions2() {
         new TriangularDistribution(1, 1, 0);
     }
 
     /** Test pre-condition for mode larger than upper limit. */
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions3() {
         new TriangularDistribution(0, 2, 1);
     }

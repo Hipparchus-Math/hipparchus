@@ -30,7 +30,6 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.BigFractionField;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -737,19 +736,20 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return H matrix
-     * @throws NumberIsTooLargeException if fractional part is greater than 1
+     * @throws MathIllegalArgumentException if fractional part is greater than 1
      * @throws MathIllegalStateException if algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 <= h < 1\).
      */
     private FieldMatrix<BigFraction> createExactH(double d, int n)
-        throws NumberIsTooLargeException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         final int k = (int) Math.ceil(n * d);
         final int m = 2 * k - 1;
         final double hDouble = k - n * d;
         if (hDouble >= 1) {
-            throw new NumberIsTooLargeException(hDouble, 1.0, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   hDouble, 1.0);
         }
         BigFraction h = null;
         try {
@@ -829,16 +829,17 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return H matrix
-     * @throws NumberIsTooLargeException if fractional part is greater than 1
+     * @throws MathIllegalArgumentException if fractional part is greater than 1
      */
     private RealMatrix createRoundedH(double d, int n)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
 
         final int k = (int) Math.ceil(n * d);
         final int m = 2 * k - 1;
         final double h = k - n * d;
         if (h >= 1) {
-            throw new NumberIsTooLargeException(h, 1.0, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   h, 1.0);
         }
         final double[][] Hdata = new double[m][m];
 

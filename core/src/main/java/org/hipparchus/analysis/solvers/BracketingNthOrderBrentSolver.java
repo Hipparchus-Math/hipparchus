@@ -22,7 +22,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -145,7 +144,6 @@ public class BracketingNthOrderBrentSolver
     @Override
     protected double doSolve()
         throws MathIllegalStateException,
-               NumberIsTooLargeException,
                MathIllegalArgumentException {
         // prepare arrays with the first points
         final double[] x = new double[maximalOrder + 1];
@@ -396,7 +394,6 @@ public class BracketingNthOrderBrentSolver
     public double solve(int maxEval, UnivariateFunction f, double min,
                         double max, AllowedSolution allowedSolution)
         throws MathIllegalStateException,
-               NumberIsTooLargeException,
                MathIllegalArgumentException {
         this.allowed = allowedSolution;
         return super.solve(maxEval, f, min, max);
@@ -408,7 +405,6 @@ public class BracketingNthOrderBrentSolver
                         double max, double startValue,
                         AllowedSolution allowedSolution)
         throws MathIllegalStateException,
-               NumberIsTooLargeException,
                MathIllegalArgumentException {
         this.allowed = allowedSolution;
         return super.solve(maxEval, f, min, max, startValue);

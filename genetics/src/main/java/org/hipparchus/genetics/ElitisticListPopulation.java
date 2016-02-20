@@ -22,7 +22,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -44,12 +43,12 @@ public class ElitisticListPopulation extends ListPopulation {
      * @param elitismRate how many best chromosomes will be directly transferred to the next generation [in %]
      * @throws NullArgumentException if the list of chromosomes is {@code null}
      * @throws MathIllegalArgumentException if the population limit is not a positive number (&lt; 1)
-     * @throws NumberIsTooLargeException if the list of chromosomes exceeds the population limit
+     * @throws MathIllegalArgumentException if the list of chromosomes exceeds the population limit
      * @throws MathIllegalArgumentException if the elitism rate is outside the [0, 1] range
      */
     public ElitisticListPopulation(final List<Chromosome> chromosomes, final int populationLimit,
                                    final double elitismRate)
-        throws NullArgumentException, MathIllegalArgumentException, NumberIsTooLargeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
 
         super(chromosomes, populationLimit);
         setElitismRate(elitismRate);

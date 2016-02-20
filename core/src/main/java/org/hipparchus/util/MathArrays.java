@@ -33,7 +33,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 
@@ -561,7 +560,7 @@ public class MathArrays {
      * @since 3.1
      */
     public static void checkRectangular(final long[][] in)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(in);
         for (int i = 1; i < in.length; i++) {
             if (in[i].length != in[0].length) {
@@ -825,8 +824,7 @@ public class MathArrays {
     public static void sortInPlace(double[] x,
                                    final OrderDirection dir,
                                    double[] ... yList)
-        throws NullArgumentException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         // Consistency checks.
         if (x == null) {
@@ -1537,7 +1535,7 @@ public class MathArrays {
      * @since 3.3
      */
     public static double[] convolve(double[] x, double[] h)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(x);
         MathUtils.checkNotNull(h);
 
@@ -1621,7 +1619,7 @@ public class MathArrays {
                 if (i == start) {
                     target = start;
                 } else {
-                    // NumberIsTooLargeException cannot occur.
+                    // MathIllegalArgumentException cannot occur.
                     target = new UniformIntegerDistribution(rng, start, i).sample();
                 }
                 final int temp = list[target];
@@ -1636,7 +1634,7 @@ public class MathArrays {
                 if (i == start) {
                     target = start;
                 } else {
-                    // NumberIsTooLargeException cannot occur.
+                    // MathIllegalArgumentException cannot occur.
                     target = new UniformIntegerDistribution(rng, i, start).sample();
                 }
                 final int temp = list[target];
@@ -1768,7 +1766,7 @@ public class MathArrays {
         }
 
         if (begin + length > values.length) {
-            throw new NumberIsTooLargeException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
+            throw new MathIllegalArgumentException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
                     Integer.valueOf(begin + length), Integer.valueOf(values.length), true);
         }
 

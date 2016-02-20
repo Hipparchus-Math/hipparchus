@@ -18,7 +18,6 @@
 package org.hipparchus.ml.neuralnet.sofm;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,7 +37,7 @@ public class LearningFactorFunctionFactoryTest {
     public void testExponentialDecayPrecondition2() {
         LearningFactorFunctionFactory.exponentialDecay(1d, 0d, 2);
     }
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition3() {
         LearningFactorFunctionFactory.exponentialDecay(1d, 1d, 100);
     }
@@ -68,7 +67,7 @@ public class LearningFactorFunctionFactoryTest {
     public void testQuasiSigmoidDecayPrecondition1() {
         LearningFactorFunctionFactory.quasiSigmoidDecay(1 + 1e-10, -1d, 2);
     }
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition3() {
         LearningFactorFunctionFactory.quasiSigmoidDecay(1d, 0d, 100);
     }

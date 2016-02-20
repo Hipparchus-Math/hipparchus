@@ -21,7 +21,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.stat.ranking.NaturalRanking;
 import org.hipparchus.stat.ranking.TiesStrategy;
@@ -71,7 +70,7 @@ public class WilcoxonSignedRankTest {
      * have the same length.
      */
     private void ensureDataConformance(final double[] x, final double[] y)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         if (x == null ||
             y == null) {
@@ -114,7 +113,7 @@ public class WilcoxonSignedRankTest {
      * @throws MathIllegalArgumentException if {@code z} is zero-length.
      */
     private double[] calculateAbsoluteDifferences(final double[] z)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         if (z == null) {
             throw new NullArgumentException();
@@ -169,7 +168,7 @@ public class WilcoxonSignedRankTest {
      * have the same length.
      */
     public double wilcoxonSignedRank(final double[] x, final double[] y)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         ensureDataConformance(x, y);
 
@@ -294,7 +293,7 @@ public class WilcoxonSignedRankTest {
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
-     * @throws NumberIsTooLargeException if {@code exactPValue} is {@code true}
+     * @throws MathIllegalArgumentException if {@code exactPValue} is {@code true}
      * and {@code x.length} > 30
      * @throws MathIllegalStateException if the p-value can not be computed due to
      * a convergence error
@@ -303,8 +302,7 @@ public class WilcoxonSignedRankTest {
      */
     public double wilcoxonSignedRankTest(final double[] x, final double[] y,
                                          final boolean exactPValue)
-        throws NullArgumentException, MathIllegalArgumentException,
-        NumberIsTooLargeException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         ensureDataConformance(x, y);
 
@@ -312,7 +310,7 @@ public class WilcoxonSignedRankTest {
         final double Wmax = wilcoxonSignedRank(x, y);
 
         if (exactPValue && N > 30) {
-            throw new NumberIsTooLargeException(N, 30, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE, N, 30);
         }
 
         if (exactPValue) {

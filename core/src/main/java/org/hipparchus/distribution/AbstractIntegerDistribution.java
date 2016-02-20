@@ -21,7 +21,6 @@ import java.io.Serializable;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 
@@ -59,9 +58,9 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
      * @since 4.0, was previously named cumulativeProbability
      */
     @Override
-    public double probability(int x0, int x1) throws NumberIsTooLargeException {
+    public double probability(int x0, int x1) throws MathIllegalArgumentException {
         if (x1 < x0) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                     x0, x1, true);
         }
         return cumulativeProbability(x1) - cumulativeProbability(x0);

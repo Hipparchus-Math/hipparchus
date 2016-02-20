@@ -38,57 +38,49 @@ public class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstract
 
     @Override
     public void testMissedEndEvent()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestMissedEndEvent(Decimal64Field.getInstance(), 1.0e-15, 1.0e-15);
     }
 
     @Override
     public void testSanityChecks()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestSanityChecks(Decimal64Field.getInstance());
     }
 
     @Override
     public void testDecreasingSteps()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestDecreasingSteps(Decimal64Field.getInstance(), 1.0, 1.0, 1.0e-10);
     }
 
     @Override
     public void testSmallStep()
-         throws MathIllegalArgumentException,
-                MathIllegalArgumentException, MathIllegalStateException {
+         throws MathIllegalArgumentException, MathIllegalStateException {
         doTestSmallStep(Decimal64Field.getInstance(), 8.7e-17, 3.6e-15, 1.0e-12, "Luther");
     }
 
     @Override
     public void testBigStep()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestBigStep(Decimal64Field.getInstance(), 2.7e-5, 1.7e-3, 1.0e-12, "Luther");
     }
 
     @Override
     public void testBackward()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestBackward(Decimal64Field.getInstance(), 2.4e-13, 4.3e-13, 1.0e-12, "Luther");
     }
 
     @Override
     public void testKepler()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestKepler(Decimal64Field.getInstance(), 2.18e-7, 4.0e-10);
     }
 
     @Override
     public void testStepSize()
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestStepSize(Decimal64Field.getInstance(), 1.0e-22);
     }
 

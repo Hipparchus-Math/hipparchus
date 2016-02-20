@@ -19,7 +19,6 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -58,11 +57,11 @@ public class TriangularDistribution extends AbstractRealDistribution {
      * @param a Lower limit of this distribution (inclusive).
      * @param b Upper limit of this distribution (inclusive).
      * @param c Mode of this distribution.
-     * @throws NumberIsTooLargeException if {@code a >= b} or if {@code c > b}.
+     * @throws MathIllegalArgumentException if {@code a >= b} or if {@code c > b}.
      * @throws MathIllegalArgumentException if {@code c < a}.
      */
     public TriangularDistribution(double a, double c, double b)
-        throws NumberIsTooLargeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), a, c, b);
     }
 
@@ -73,7 +72,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
      * @param a Lower limit of this distribution (inclusive).
      * @param b Upper limit of this distribution (inclusive).
      * @param c Mode of this distribution.
-     * @throws NumberIsTooLargeException if {@code a >= b} or if {@code c > b}.
+     * @throws MathIllegalArgumentException if {@code a >= b} or if {@code c > b}.
      * @throws MathIllegalArgumentException if {@code c < a}.
      * @since 3.1
      */
@@ -81,11 +80,11 @@ public class TriangularDistribution extends AbstractRealDistribution {
                                   double a,
                                   double c,
                                   double b)
-        throws NumberIsTooLargeException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (a >= b) {
-            throw new NumberIsTooLargeException(
+            throw new MathIllegalArgumentException(
                             LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                             a, b, false);
         }
@@ -94,7 +93,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
                     LocalizedFormats.NUMBER_TOO_SMALL, c, a, true);
         }
         if (c > b) {
-            throw new NumberIsTooLargeException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.NUMBER_TOO_LARGE, c, b, true);
         }
 

@@ -25,7 +25,6 @@ import org.hipparchus.distribution.MultivariateNormalDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.SingularMatrixException;
@@ -291,7 +290,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * @param data Data to estimate distribution
      * @param numComponents Number of components for estimated mixture
      * @return Multivariate normal mixture model estimated from the data
-     * @throws NumberIsTooLargeException if {@code numComponents} is greater
+     * @throws MathIllegalArgumentException if {@code numComponents} is greater
      * than the number of data rows.
      * @throws MathIllegalArgumentException if {@code numComponents < 2}.
      * @throws MathIllegalArgumentException if data has less than 2 rows
@@ -310,7 +309,8 @@ public class MultivariateNormalMixtureExpectationMaximization {
                                                    numComponents, 2);
         }
         if (numComponents > data.length) {
-            throw new NumberIsTooLargeException(numComponents, data.length, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   numComponents, data.length);
         }
 
         final int numRows = data.length;
