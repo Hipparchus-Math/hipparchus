@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.inference;
 
-import org.hipparchus.exception.NoDataException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.inference.MannWhitneyUTest;
 import org.junit.Assert;
@@ -54,15 +54,15 @@ public class MannWhitneyUTestTest {
          */
         try {
             testStatistic.mannWhitneyUTest(new double[] { }, new double[] { 1.0 });
-            Assert.fail("x does not contain samples (exact), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("x does not contain samples (exact), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.mannWhitneyUTest(new double[] { 1.0 }, new double[] { });
-            Assert.fail("y does not contain samples (exact), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("y does not contain samples (exact), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

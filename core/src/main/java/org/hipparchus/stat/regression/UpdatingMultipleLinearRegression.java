@@ -17,7 +17,6 @@
 package org.hipparchus.stat.regression;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 
 /**
  * An interface for regression models allowing for dynamic updating of the data.
@@ -76,10 +75,10 @@ public interface UpdatingMultipleLinearRegression {
      * Performs a regression on data present in buffers and outputs a RegressionResults object
      * @return RegressionResults acts as a container of regression output
      * @throws ModelSpecificationException if the model is not correctly specified
-     * @throws NoDataException if there is not sufficient data in the model to
+     * @throws MathIllegalArgumentException if there is not sufficient data in the model to
      * estimate the regression parameters
      */
-    RegressionResults regress() throws ModelSpecificationException, NoDataException;
+    RegressionResults regress() throws ModelSpecificationException, MathIllegalArgumentException;
 
     /**
      * Performs a regression on data present in buffers including only regressors

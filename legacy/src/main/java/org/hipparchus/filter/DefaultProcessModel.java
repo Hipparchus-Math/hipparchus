@@ -17,7 +17,6 @@
 package org.hipparchus.filter;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
@@ -64,7 +63,7 @@ public class DefaultProcessModel implements ProcessModel {
      *            the initial error covariance matrix
      * @throws NullArgumentException
      *             if any of the input arrays is {@code null}
-     * @throws NoDataException
+     * @throws MathIllegalArgumentException
      *             if any row / column dimension of the input matrices is zero
      * @throws MathIllegalArgumentException
      *             if any of the input matrices is non-rectangular
@@ -74,7 +73,7 @@ public class DefaultProcessModel implements ProcessModel {
                                final double[][] processNoise,
                                final double[] initialStateEstimate,
                                final double[][] initialErrorCovariance)
-            throws NullArgumentException, NoDataException, MathIllegalArgumentException {
+            throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException {
 
         this(new Array2DRowRealMatrix(stateTransition),
                 new Array2DRowRealMatrix(control),
@@ -97,7 +96,7 @@ public class DefaultProcessModel implements ProcessModel {
      *            the process noise matrix
      * @throws NullArgumentException
      *             if any of the input arrays is {@code null}
-     * @throws NoDataException
+     * @throws MathIllegalArgumentException
      *             if any row / column dimension of the input matrices is zero
      * @throws MathIllegalArgumentException
      *             if any of the input matrices is non-rectangular
@@ -105,7 +104,7 @@ public class DefaultProcessModel implements ProcessModel {
     public DefaultProcessModel(final double[][] stateTransition,
                                final double[][] control,
                                final double[][] processNoise)
-            throws NullArgumentException, NoDataException, MathIllegalArgumentException {
+            throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException {
 
         this(new Array2DRowRealMatrix(stateTransition),
                 new Array2DRowRealMatrix(control),

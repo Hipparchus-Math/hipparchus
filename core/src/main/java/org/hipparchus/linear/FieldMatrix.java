@@ -21,7 +21,6 @@ package org.hipparchus.linear;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 
@@ -163,14 +162,14 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param selectedColumns Array of column indices.
     * @return the matrix containing the data in the
     * specified rows and columns.
-    * @throws NoDataException if {@code selectedRows} or
+    * @throws MathIllegalArgumentException if {@code selectedRows} or
     * {@code selectedColumns} is empty
     * @throws NullArgumentException if {@code selectedRows} or
     * {@code selectedColumns} is {@code null}.
     * @throws MathIllegalArgumentException if row or column selections are not valid.
     */
    FieldMatrix<T> getSubMatrix(int[] selectedRows, int[] selectedColumns)
-   throws NoDataException, NullArgumentException, MathIllegalArgumentException;
+   throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException;
 
    /**
     * Copy a submatrix. Rows and columns are 0-based. The designated submatrix
@@ -203,14 +202,14 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
    * (if larger than rows/columns counts, only the upper-left part will be used)
    * @throws MathIllegalArgumentException if the dimensions of
    * {@code destination} do not match those of {@code this}.
-   * @throws NoDataException if {@code selectedRows} or
+   * @throws MathIllegalArgumentException if {@code selectedRows} or
    * {@code selectedColumns} is empty
    * @throws NullArgumentException if {@code selectedRows} or
    * {@code selectedColumns} is {@code null}.
    * @throws MathIllegalArgumentException if the indices are not valid.
    */
   void copySubMatrix(int[] selectedRows, int[] selectedColumns, T[][] destination)
-  throws MathIllegalArgumentException, NoDataException, NullArgumentException,
+  throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException,
   MathIllegalArgumentException;
 
     /**
@@ -242,7 +241,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param column Column coordinate of the top-left element to be replaced.
      * @throws MathIllegalArgumentException if {@code subMatrix} does not fit into this
      * matrix from element in {@code (row, column)}.
-     * @throws NoDataException if a row or column of {@code subMatrix} is empty.
+     * @throws MathIllegalArgumentException if a row or column of {@code subMatrix} is empty.
      * @throws MathIllegalArgumentException if {@code subMatrix} is not
      * rectangular (not all rows have the same length).
      * @throws NullArgumentException if {@code subMatrix} is {@code null}.
@@ -250,7 +249,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     void setSubMatrix(T[][] subMatrix, int row, int column)
         throws MathIllegalArgumentException,
-        NoDataException, NullArgumentException;
+        MathIllegalArgumentException, NullArgumentException;
 
    /**
     * Get the entries in row number {@code row}

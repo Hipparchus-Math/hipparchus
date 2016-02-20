@@ -32,7 +32,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
@@ -1533,13 +1532,12 @@ public class MathArrays {
      * @return the convolution of {@code x} and {@code h}.
      * This array's length will be {@code x.length + h.length - 1}.
      * @throws NullArgumentException if either {@code x} or {@code h} is {@code null}.
-     * @throws NoDataException if either {@code x} or {@code h} is empty.
+     * @throws MathIllegalArgumentException if either {@code x} or {@code h} is empty.
      *
      * @since 3.3
      */
     public static double[] convolve(double[] x, double[] h)
-        throws NullArgumentException,
-               NoDataException {
+        throws NullArgumentException, MathIllegalArgumentException {
         MathUtils.checkNotNull(x);
         MathUtils.checkNotNull(h);
 
@@ -1547,7 +1545,7 @@ public class MathArrays {
         final int hLen = h.length;
 
         if (xLen == 0 || hLen == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         // initialize the output array

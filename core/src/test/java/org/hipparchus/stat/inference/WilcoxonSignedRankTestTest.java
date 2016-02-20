@@ -17,10 +17,8 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.stat.inference.WilcoxonSignedRankTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -91,29 +89,29 @@ public class WilcoxonSignedRankTestTest {
          */
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { }, new double[] { 1.0 }, true);
-            Assert.fail("x does not contain samples (exact), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("x does not contain samples (exact), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { }, new double[] { 1.0 }, false);
-            Assert.fail("x does not contain samples (asymptotic), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("x does not contain samples (asymptotic), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { 1.0 }, new double[] { }, true);
-            Assert.fail("y does not contain samples (exact), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("y does not contain samples (exact), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { 1.0 }, new double[] { }, false);
-            Assert.fail("y does not contain samples (asymptotic), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("y does not contain samples (asymptotic), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

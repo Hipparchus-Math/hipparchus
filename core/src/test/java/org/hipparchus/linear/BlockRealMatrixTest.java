@@ -517,7 +517,7 @@ public final class BlockRealMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockRealMatrix(reference), sub);
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -533,7 +533,7 @@ public final class BlockRealMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockRealMatrix(reference), sub);
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallExceptiono r NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallExceptiono r MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -593,7 +593,7 @@ public final class BlockRealMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockRealMatrix(reference), new BlockRealMatrix(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -612,7 +612,7 @@ public final class BlockRealMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockRealMatrix(reference), new BlockRealMatrix(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {

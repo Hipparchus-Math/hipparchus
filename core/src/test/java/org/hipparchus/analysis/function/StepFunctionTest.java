@@ -19,7 +19,6 @@ package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,12 +39,12 @@ public class StepFunctionTest {
         new StepFunction(new double[] {0, 1}, null);
     }
 
-    @Test(expected=NoDataException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions3() {
         new StepFunction(new double[] {0}, new double[] {});
     }
 
-    @Test(expected=NoDataException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions4() {
         new StepFunction(new double[] {}, new double[] {0});
     }

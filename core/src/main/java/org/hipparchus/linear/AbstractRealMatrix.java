@@ -22,7 +22,6 @@ import java.util.Locale;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
@@ -337,7 +336,7 @@ public abstract class AbstractRealMatrix
     @Override
     public RealMatrix getSubMatrix(final int[] selectedRows,
                                    final int[] selectedColumns)
-        throws NullArgumentException, NoDataException, MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, selectedRows, selectedColumns);
 
         final RealMatrix subMatrix =
@@ -409,7 +408,7 @@ public abstract class AbstractRealMatrix
     @Override
     public void copySubMatrix(int[] selectedRows, int[] selectedColumns,
                               double[][] destination)
-        throws MathIllegalArgumentException, NullArgumentException, NoDataException,
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, selectedRows, selectedColumns);
         final int nCols = selectedColumns.length;
@@ -436,16 +435,16 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setSubMatrix(final double[][] subMatrix, final int row, final int column)
-        throws NoDataException, MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(subMatrix);
         final int nRows = subMatrix.length;
         if (nRows == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
         }
 
         final int nCols = subMatrix[0].length;
         if (nCols == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
         }
 
         for (int r = 1; r < nRows; ++r) {

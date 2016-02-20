@@ -25,7 +25,6 @@ import java.util.Locale;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.CompositeFormat;
 
@@ -99,11 +98,11 @@ public class ComplexFormat {
      * @param imaginaryCharacter The custom imaginary character.
      * @throws NullArgumentException if {@code imaginaryCharacter} is
      * {@code null}.
-     * @throws NoDataException if {@code imaginaryCharacter} is an
+     * @throws MathIllegalArgumentException if {@code imaginaryCharacter} is an
      * empty string.
      */
     public ComplexFormat(String imaginaryCharacter)
-        throws NullArgumentException, NoDataException {
+        throws NullArgumentException, MathIllegalArgumentException {
         this(imaginaryCharacter, CompositeFormat.getDefaultNumberFormat());
     }
 
@@ -114,12 +113,12 @@ public class ComplexFormat {
      * @param format the custom format for both real and imaginary parts.
      * @throws NullArgumentException if {@code imaginaryCharacter} is
      * {@code null}.
-     * @throws NoDataException if {@code imaginaryCharacter} is an
+     * @throws MathIllegalArgumentException if {@code imaginaryCharacter} is an
      * empty string.
      * @throws NullArgumentException if {@code format} is {@code null}.
      */
     public ComplexFormat(String imaginaryCharacter, NumberFormat format)
-        throws NullArgumentException, NoDataException {
+        throws NullArgumentException, MathIllegalArgumentException {
         this(imaginaryCharacter, format, format);
     }
 
@@ -133,7 +132,7 @@ public class ComplexFormat {
      * @param imaginaryFormat the custom format for the imaginary part.
      * @throws NullArgumentException if {@code imaginaryCharacter} is
      * {@code null}.
-     * @throws NoDataException if {@code imaginaryCharacter} is an
+     * @throws MathIllegalArgumentException if {@code imaginaryCharacter} is an
      * empty string.
      * @throws NullArgumentException if {@code imaginaryFormat} is {@code null}.
      * @throws NullArgumentException if {@code realFormat} is {@code null}.
@@ -141,12 +140,12 @@ public class ComplexFormat {
     public ComplexFormat(String imaginaryCharacter,
                          NumberFormat realFormat,
                          NumberFormat imaginaryFormat)
-        throws NullArgumentException, NoDataException {
+        throws NullArgumentException, MathIllegalArgumentException {
         if (imaginaryCharacter == null) {
             throw new NullArgumentException();
         }
         if (imaginaryCharacter.length() == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (imaginaryFormat == null) {
             throw new NullArgumentException(LocalizedFormats.IMAGINARY_FORMAT);
@@ -322,11 +321,11 @@ public class ComplexFormat {
      * @return the complex format specific to the given locale.
      * @throws NullArgumentException if {@code imaginaryCharacter} is
      * {@code null}.
-     * @throws NoDataException if {@code imaginaryCharacter} is an
+     * @throws MathIllegalArgumentException if {@code imaginaryCharacter} is an
      * empty string.
      */
     public static ComplexFormat getInstance(String imaginaryCharacter, Locale locale)
-        throws NullArgumentException, NoDataException {
+        throws NullArgumentException, MathIllegalArgumentException {
         NumberFormat f = CompositeFormat.getDefaultNumberFormat(locale);
         return new ComplexFormat(imaginaryCharacter, f);
     }

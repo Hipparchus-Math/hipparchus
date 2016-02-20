@@ -18,7 +18,6 @@ package org.hipparchus.linear;
 
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.fraction.Fraction;
@@ -455,8 +454,8 @@ public class SparseFieldMatrixTest {
         }
         try {
             m.getSubMatrix(new int[] {}, new int[] { 0 });
-            Assert.fail("Expecting NoDataException");
-        } catch (NoDataException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {

@@ -22,7 +22,6 @@ import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
 
@@ -56,17 +55,14 @@ public class PiecewiseBicubicSplineInterpolatingFunction
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are not
      *         strictly increasing.
      * @throws NullArgumentException if any of the arguments are null
-     * @throws NoDataException if any of the arrays has zero length.
+     * @throws MathIllegalArgumentException if any of the arrays has zero length.
      * @throws MathIllegalArgumentException if the length of x and y don't match the row, column
      *         height of f
      */
     public PiecewiseBicubicSplineInterpolatingFunction(double[] x,
                                                        double[] y,
                                                        double[][] f)
-        throws MathIllegalArgumentException,
-               NullArgumentException,
-               NoDataException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (x == null ||
             y == null ||
             f == null ||
@@ -81,7 +77,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
             yLen == 0 ||
             f.length == 0 ||
             f[0].length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         if (xLen < MIN_NUM_POINTS ||

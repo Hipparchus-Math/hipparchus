@@ -18,7 +18,6 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 
@@ -177,12 +176,12 @@ public interface RealMatrix extends AnyMatrix {
      * columns
      * @throws NullArgumentException if the row or column selections are
      * {@code null}
-     * @throws NoDataException if the row or column selections are empty (zero
+     * @throws MathIllegalArgumentException if the row or column selections are empty (zero
      * length).
      * @throws MathIllegalArgumentException if the indices are not valid.
      */
     RealMatrix getSubMatrix(int[] selectedRows, int[] selectedColumns)
-        throws NullArgumentException, NoDataException, MathIllegalArgumentException;
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException;
 
     /**
      * Copy a submatrix. Rows and columns are indicated counting from 0 to n-1.
@@ -215,7 +214,7 @@ public interface RealMatrix extends AnyMatrix {
      * used)
      * @throws NullArgumentException if the row or column selections are
      * {@code null}
-     * @throws NoDataException if the row or column selections are empty (zero
+     * @throws MathIllegalArgumentException if the row or column selections are empty (zero
      * length).
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @throws MathIllegalArgumentException if the destination array is too
@@ -223,7 +222,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     void copySubMatrix(int[] selectedRows, int[] selectedColumns,
                        double[][] destination)
-        throws MathIllegalArgumentException, NullArgumentException, NoDataException,
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException;
 
    /**
@@ -246,7 +245,7 @@ public interface RealMatrix extends AnyMatrix {
     * @param subMatrix  array containing the submatrix replacement data
     * @param row  row coordinate of the top, left element to be replaced
     * @param column  column coordinate of the top, left element to be replaced
-    * @throws NoDataException if {@code subMatrix} is empty.
+    * @throws MathIllegalArgumentException if {@code subMatrix} is empty.
     * @throws MathIllegalArgumentException if {@code subMatrix} does not fit into
     * this matrix from element in {@code (row, column)}.
     * @throws MathIllegalArgumentException if {@code subMatrix} is not rectangular
@@ -255,7 +254,7 @@ public interface RealMatrix extends AnyMatrix {
     * @since 2.0
     */
     void setSubMatrix(double[][] subMatrix, int row, int column)
-        throws NoDataException, MathIllegalArgumentException, NullArgumentException;
+        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException;
 
    /**
     * Get the entries at the given row index as a row matrix.  Row indices start

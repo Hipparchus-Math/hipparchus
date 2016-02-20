@@ -19,10 +19,8 @@ package org.hipparchus.analysis.interpolation;
 import java.util.Random;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.interpolation.HermiteInterpolator;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -230,7 +228,7 @@ public class HermiteInterpolatorTest {
         return new PolynomialFunction(coeff);
     }
 
-    @Test(expected=NoDataException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEmptySample() {
         new HermiteInterpolator().value(0.0);
     }

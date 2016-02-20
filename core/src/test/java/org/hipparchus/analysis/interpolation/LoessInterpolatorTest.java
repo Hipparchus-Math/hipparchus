@@ -18,7 +18,6 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -161,7 +160,7 @@ public class LoessInterpolatorTest {
         new LoessInterpolator().smooth(new double[] {1,2,3}, new double[] {1,2,3,4});
     }
 
-    @Test(expected=NoDataException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEmptyData() {
         new LoessInterpolator().smooth(new double[] {}, new double[] {});
     }

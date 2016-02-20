@@ -18,7 +18,6 @@ import java.util.Arrays;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.Well1024a;
 import org.junit.Assert;
@@ -1079,21 +1078,21 @@ public class MathArraysTest {
         try {
             MathArrays.convolve(new double[]{1, 2}, new double[]{});
             Assert.fail("an exception should have been thrown");
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
 
         try {
             MathArrays.convolve(new double[]{}, new double[]{1, 2});
             Assert.fail("an exception should have been thrown");
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
 
         try {
             MathArrays.convolve(new double[]{}, new double[]{});
             Assert.fail("an exception should have been thrown");
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
     }

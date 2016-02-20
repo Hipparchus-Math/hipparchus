@@ -22,7 +22,6 @@ import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.ZeroException;
@@ -108,7 +107,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#pairedT(double[], double[])
      */
     public static double pairedT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NoDataException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, NumberIsTooSmallException {
         return T_TEST.pairedT(sample1, sample2);
     }
@@ -118,7 +117,7 @@ public class TestUtils  {
      */
     public static boolean pairedTTest(final double[] sample1, final double[] sample2,
                                       final double alpha)
-        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException,
         NumberIsTooSmallException, MathIllegalArgumentException, MaxCountExceededException {
         return T_TEST.pairedTTest(sample1, sample2, alpha);
     }
@@ -127,7 +126,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#pairedTTest(double[], double[])
      */
     public static double pairedTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException,
         NumberIsTooSmallException, MaxCountExceededException {
         return T_TEST.pairedTTest(sample1, sample2);
     }

@@ -27,7 +27,6 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.ZeroException;
@@ -117,7 +116,7 @@ public class MatrixUtils {
      * @return  RealMatrix containing the values of the array
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code data} is not rectangular (not all rows have the same length).
-     * @throws NoDataException if a row or column is empty.
+     * @throws MathIllegalArgumentException if a row or column is empty.
      * @throws NullArgumentException if either {@code data} or {@code data[0]}
      * is {@code null}.
      * @throws MathIllegalArgumentException if {@code data} is not rectangular.
@@ -125,7 +124,7 @@ public class MatrixUtils {
      */
     public static RealMatrix createRealMatrix(double[][] data)
         throws NullArgumentException, MathIllegalArgumentException,
-        NoDataException {
+        MathIllegalArgumentException {
         if (data == null ||
             data[0] == null) {
             throw new NullArgumentException();
@@ -147,14 +146,14 @@ public class MatrixUtils {
      * @return a matrix containing the values of the array.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code data} is not rectangular (not all rows have the same length).
-     * @throws NoDataException if a row or column is empty.
+     * @throws MathIllegalArgumentException if a row or column is empty.
      * @throws NullArgumentException if either {@code data} or {@code data[0]}
      * is {@code null}.
      * @see #createFieldMatrix(Field, int, int)
      * @since 2.0
      */
     public static <T extends FieldElement<T>> FieldMatrix<T> createFieldMatrix(T[][] data)
-        throws MathIllegalArgumentException, NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException {
         if (data == null ||
             data[0] == null) {
             throw new NullArgumentException();
@@ -242,11 +241,11 @@ public class MatrixUtils {
      *
      * @param data the input data
      * @return a data.length RealVector
-     * @throws NoDataException if {@code data} is empty.
+     * @throws MathIllegalArgumentException if {@code data} is empty.
      * @throws NullArgumentException if {@code data} is {@code null}.
      */
     public static RealVector createRealVector(double[] data)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null) {
             throw new NullArgumentException();
         }
@@ -259,12 +258,12 @@ public class MatrixUtils {
      * @param <T> the type of the field elements
      * @param data the input data
      * @return a data.length FieldVector
-     * @throws NoDataException if {@code data} is empty.
+     * @throws MathIllegalArgumentException if {@code data} is empty.
      * @throws NullArgumentException if {@code data} is {@code null}.
      * @throws ZeroException if {@code data} has 0 elements
      */
     public static <T extends FieldElement<T>> FieldVector<T> createFieldVector(final T[] data)
-        throws NoDataException, NullArgumentException, ZeroException {
+        throws MathIllegalArgumentException, NullArgumentException, ZeroException {
         if (data == null) {
             throw new NullArgumentException();
         }
@@ -280,11 +279,11 @@ public class MatrixUtils {
      *
      * @param rowData the input row data
      * @return a 1 x rowData.length RealMatrix
-     * @throws NoDataException if {@code rowData} is empty.
+     * @throws MathIllegalArgumentException if {@code rowData} is empty.
      * @throws NullArgumentException if {@code rowData} is {@code null}.
      */
     public static RealMatrix createRowRealMatrix(double[] rowData)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (rowData == null) {
             throw new NullArgumentException();
         }
@@ -303,18 +302,18 @@ public class MatrixUtils {
      * @param <T> the type of the field elements
      * @param rowData the input row data
      * @return a 1 x rowData.length FieldMatrix
-     * @throws NoDataException if {@code rowData} is empty.
+     * @throws MathIllegalArgumentException if {@code rowData} is empty.
      * @throws NullArgumentException if {@code rowData} is {@code null}.
      */
     public static <T extends FieldElement<T>> FieldMatrix<T>
         createRowFieldMatrix(final T[] rowData)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (rowData == null) {
             throw new NullArgumentException();
         }
         final int nCols = rowData.length;
         if (nCols == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
         }
         final FieldMatrix<T> m = createFieldMatrix(rowData[0].getField(), 1, nCols);
         for (int i = 0; i < nCols; ++i) {
@@ -329,11 +328,11 @@ public class MatrixUtils {
      *
      * @param columnData  the input column data
      * @return a columnData x 1 RealMatrix
-     * @throws NoDataException if {@code columnData} is empty.
+     * @throws MathIllegalArgumentException if {@code columnData} is empty.
      * @throws NullArgumentException if {@code columnData} is {@code null}.
      */
     public static RealMatrix createColumnRealMatrix(double[] columnData)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (columnData == null) {
             throw new NullArgumentException();
         }
@@ -352,18 +351,18 @@ public class MatrixUtils {
      * @param <T> the type of the field elements
      * @param columnData  the input column data
      * @return a columnData x 1 FieldMatrix
-     * @throws NoDataException if {@code data} is empty.
+     * @throws MathIllegalArgumentException if {@code data} is empty.
      * @throws NullArgumentException if {@code columnData} is {@code null}.
      */
     public static <T extends FieldElement<T>> FieldMatrix<T>
         createColumnFieldMatrix(final T[] columnData)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (columnData == null) {
             throw new NullArgumentException();
         }
         final int nRows = columnData.length;
         if (nRows == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
         }
         final FieldMatrix<T> m = createFieldMatrix(columnData[0].getField(), nRows, 1);
         for (int i = 0; i < nRows; ++i) {
@@ -528,14 +527,14 @@ public class MatrixUtils {
      * @param selectedColumns Array of column indices.
      * @throws NullArgumentException if {@code selectedRows} or
      * {@code selectedColumns} are {@code null}.
-     * @throws NoDataException if the row or column selections are empty (zero
+     * @throws MathIllegalArgumentException if the row or column selections are empty (zero
      * length).
      * @throws MathIllegalArgumentException if row or column selections are not valid.
      */
     public static void checkSubMatrixIndex(final AnyMatrix m,
                                            final int[] selectedRows,
                                            final int[] selectedColumns)
-        throws NoDataException, NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
         if (selectedRows == null) {
             throw new NullArgumentException();
         }
@@ -543,10 +542,10 @@ public class MatrixUtils {
             throw new NullArgumentException();
         }
         if (selectedRows.length == 0) {
-            throw new NoDataException(LocalizedFormats.EMPTY_SELECTED_ROW_INDEX_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_SELECTED_ROW_INDEX_ARRAY);
         }
         if (selectedColumns.length == 0) {
-            throw new NoDataException(LocalizedFormats.EMPTY_SELECTED_COLUMN_INDEX_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_SELECTED_COLUMN_INDEX_ARRAY);
         }
 
         for (final int row : selectedRows) {

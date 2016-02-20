@@ -21,7 +21,6 @@ import java.io.Serializable;
 import org.hipparchus.distribution.TDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -764,19 +763,19 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * Performs a regression on data present in buffers and outputs a RegressionResults object.
      *
      * <p>If there are fewer than 3 observations in the model and {@code hasIntercept} is true
-     * a {@code NoDataException} is thrown.  If there is no intercept term, the model must
+     * a {@code MathIllegalArgumentException} is thrown.  If there is no intercept term, the model must
      * contain at least 2 observations.</p>
      *
      * @return RegressionResults acts as a container of regression output
      * @throws ModelSpecificationException if the model is not correctly specified
-     * @throws NoDataException if there is not sufficient data in the model to
+     * @throws MathIllegalArgumentException if there is not sufficient data in the model to
      * estimate the regression parameters
      */
     @Override
-    public RegressionResults regress() throws ModelSpecificationException, NoDataException {
+    public RegressionResults regress() throws ModelSpecificationException, MathIllegalArgumentException {
         if (hasIntercept) {
             if (n < 3) {
-                throw new NoDataException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
             }
             if (FastMath.abs(sumXX) > Precision.SAFE_MIN) {
                 final double[] params = new double[] { getIntercept(), getSlope() };
@@ -794,7 +793,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
             }
         } else {
             if (n < 2) {
-                throw new NoDataException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
             }
             if (!Double.isNaN(sumXX)) {
                 final double[] vcv = new double[] { getMeanSquareError() / sumXX };

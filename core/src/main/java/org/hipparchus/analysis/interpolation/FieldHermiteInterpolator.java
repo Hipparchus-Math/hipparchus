@@ -20,10 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.MathArrays;
@@ -134,15 +133,15 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
     /** Interpolate value at a specified abscissa.
      * @param x interpolation abscissa
      * @return interpolated value
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      * @throws NullArgumentException if x is null
      */
-    public T[] value(T x) throws NoDataException, NullArgumentException {
+    public T[] value(T x) throws MathIllegalArgumentException, NullArgumentException {
 
         // safety check
         MathUtils.checkNotNull(x);
         if (abscissae.isEmpty()) {
-            throw new NoDataException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
         }
 
         final T[] value = MathArrays.buildArray(x.getField(), topDiagonal.get(0).length);
@@ -165,15 +164,15 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
      * @param order maximum derivation order
      * @return interpolated value and derivatives (value in row 0,
      * 1<sup>st</sup> derivative in row 1, ... n<sup>th</sup> derivative in row n)
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      * @throws NullArgumentException if x is null
      */
-    public T[][] derivatives(T x, int order) throws NoDataException, NullArgumentException {
+    public T[][] derivatives(T x, int order) throws MathIllegalArgumentException, NullArgumentException {
 
         // safety check
         MathUtils.checkNotNull(x);
         if (abscissae.isEmpty()) {
-            throw new NoDataException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
         }
 
         final T zero = x.getField().getZero();

@@ -23,7 +23,6 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
@@ -783,12 +782,12 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
         throws MathIllegalArgumentException,
-        NoDataException, NullArgumentException {
+        MathIllegalArgumentException, NullArgumentException {
         // safety checks
         MathUtils.checkNotNull(subMatrix);
         final int refLength = subMatrix[0].length;
         if (refLength == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
         }
         final int endRow    = row + subMatrix.length - 1;
         final int endColumn = column + refLength - 1;

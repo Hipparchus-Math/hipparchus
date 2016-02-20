@@ -24,7 +24,6 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
@@ -81,12 +80,12 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @param d Data for the new matrix.
      * @throws MathIllegalArgumentException if {@code d} is not rectangular.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws NoDataException if there are not at least one row and one column.
+     * @throws MathIllegalArgumentException if there are not at least one row and one column.
      * @see #Array2DRowFieldMatrix(FieldElement[][], boolean)
      */
     public Array2DRowFieldMatrix(final T[][] d)
         throws MathIllegalArgumentException, NullArgumentException,
-        NoDataException {
+        MathIllegalArgumentException {
         this(extractField(d), d);
     }
 
@@ -101,12 +100,12 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @param d Data for the new matrix.
      * @throws MathIllegalArgumentException if {@code d} is not rectangular.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws NoDataException if there are not at least one row and one column.
+     * @throws MathIllegalArgumentException if there are not at least one row and one column.
      * @see #Array2DRowFieldMatrix(FieldElement[][], boolean)
      */
     public Array2DRowFieldMatrix(final Field<T> field, final T[][] d)
         throws MathIllegalArgumentException, NullArgumentException,
-        NoDataException {
+        MathIllegalArgumentException {
         super(field);
         copyIn(d);
     }
@@ -122,12 +121,12 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @param d Data for the new matrix.
      * @param copyArray Whether to copy or reference the input array.
      * @throws MathIllegalArgumentException if {@code d} is not rectangular.
-     * @throws NoDataException if there are not at least one row and one column.
+     * @throws MathIllegalArgumentException if there are not at least one row and one column.
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @see #Array2DRowFieldMatrix(FieldElement[][])
      */
     public Array2DRowFieldMatrix(final T[][] d, final boolean copyArray)
-        throws MathIllegalArgumentException, NoDataException,
+        throws MathIllegalArgumentException, MathIllegalArgumentException,
         NullArgumentException {
         this(extractField(d), d, copyArray);
     }
@@ -144,12 +143,12 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @param d Data for the new matrix.
      * @param copyArray Whether to copy or reference the input array.
      * @throws MathIllegalArgumentException if {@code d} is not rectangular.
-     * @throws NoDataException if there are not at least one row and one column.
+     * @throws MathIllegalArgumentException if there are not at least one row and one column.
      * @throws NullArgumentException if {@code d} is {@code null}.
      * @see #Array2DRowFieldMatrix(FieldElement[][])
      */
     public Array2DRowFieldMatrix(final Field<T> field, final T[][] d, final boolean copyArray)
-        throws MathIllegalArgumentException, NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException {
         super(field);
         if (copyArray) {
             copyIn(d);
@@ -157,11 +156,11 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             MathUtils.checkNotNull(d);
             final int nRows = d.length;
             if (nRows == 0) {
-                throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+                throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
             }
             final int nCols = d[0].length;
             if (nCols == 0) {
-                throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+                throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
             }
             for (int r = 1; r < nRows; r++) {
                 if (d[r].length != nCols) {
@@ -179,9 +178,9 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * The input array is copied.
      *
      * @param v Column vector holding data for new matrix.
-     * @throws NoDataException if v is empty
+     * @throws MathIllegalArgumentException if v is empty
      */
-    public Array2DRowFieldMatrix(final T[] v) throws NoDataException {
+    public Array2DRowFieldMatrix(final T[] v) throws MathIllegalArgumentException {
         this(extractField(v), v);
     }
 
@@ -326,7 +325,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     @Override
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
-        throws MathIllegalArgumentException, NullArgumentException, NoDataException,
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException {
         if (data == null) {
             if (row > 0) {
@@ -337,12 +336,12 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             }
             final int nRows = subMatrix.length;
             if (nRows == 0) {
-                throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+                throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
             }
 
             final int nCols = subMatrix[0].length;
             if (nCols == 0) {
-                throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+                throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
             }
             data = MathArrays.buildArray(getField(), subMatrix.length, nCols);
             for (int i = 0; i < data.length; ++i) {
@@ -602,12 +601,12 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * Replace data with a fresh copy of the input array.
      *
      * @param in Data to copy.
-     * @throws NoDataException if the input array is empty.
+     * @throws MathIllegalArgumentException if the input array is empty.
      * @throws MathIllegalArgumentException if the input array is not rectangular.
      * @throws NullArgumentException if the input array is {@code null}.
      */
     private void copyIn(final T[][] in)
-        throws NullArgumentException, NoDataException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException {
         setSubMatrix(in, 0, 0);
     }

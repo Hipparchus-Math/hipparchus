@@ -25,7 +25,7 @@ import org.hipparchus.analysis.differentiation.UnivariateDifferentiableVectorFun
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NoDataException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.CombinatoricsUtils;
 
@@ -124,10 +124,10 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
 
     /** Compute the interpolation polynomials.
      * @return interpolation polynomials array
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      */
     public PolynomialFunction[] getPolynomials()
-        throws NoDataException {
+        throws MathIllegalArgumentException {
 
         // safety check
         checkInterpolation();
@@ -162,10 +162,10 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      * </p>
      * @param x interpolation abscissa
      * @return interpolated value
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      */
     @Override
-    public double[] value(double x) throws NoDataException {
+    public double[] value(double x) throws MathIllegalArgumentException {
 
         // safety check
         checkInterpolation();
@@ -194,11 +194,11 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      * </p>
      * @param x interpolation abscissa
      * @return interpolated value
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      */
     @Override
     public DerivativeStructure[] value(final DerivativeStructure x)
-        throws NoDataException {
+        throws MathIllegalArgumentException {
 
         // safety check
         checkInterpolation();
@@ -220,12 +220,12 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
     }
 
     /** Check interpolation can be performed.
-     * @exception NoDataException if interpolation cannot be performed
+     * @exception MathIllegalArgumentException if interpolation cannot be performed
      * because sample is empty
      */
-    private void checkInterpolation() throws NoDataException {
+    private void checkInterpolation() throws MathIllegalArgumentException {
         if (abscissae.isEmpty()) {
-            throw new NoDataException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
         }
     }
 

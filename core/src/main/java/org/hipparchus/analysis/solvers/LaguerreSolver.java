@@ -21,7 +21,6 @@ import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexUtils;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
@@ -181,13 +180,13 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * if the maximum number of evaluations is exceeded.
      * @throws NullArgumentException if the {@code coefficients} is
      * {@code null}.
-     * @throws NoDataException if the {@code coefficients} array is empty.
+     * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
      * @since 3.1
      */
     public Complex[] solveAllComplex(double[] coefficients,
                                      double initial)
         throws NullArgumentException,
-               NoDataException,
+               MathIllegalArgumentException,
                TooManyEvaluationsException {
         setup(Integer.MAX_VALUE,
               new PolynomialFunction(coefficients),
@@ -211,13 +210,13 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * if the maximum number of evaluations is exceeded.
      * @throws NullArgumentException if the {@code coefficients} is
      * {@code null}.
-     * @throws NoDataException if the {@code coefficients} array is empty.
+     * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
      * @since 3.1
      */
     public Complex solveComplex(double[] coefficients,
                                 double initial)
         throws NullArgumentException,
-               NoDataException,
+               MathIllegalArgumentException,
                TooManyEvaluationsException {
         setup(Integer.MAX_VALUE,
               new PolynomialFunction(coefficients),
@@ -261,18 +260,18 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * if the maximum number of evaluations is exceeded.
          * @throws NullArgumentException if the {@code coefficients} is
          * {@code null}.
-         * @throws NoDataException if the {@code coefficients} array is empty.
+         * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
          */
         public Complex[] solveAll(Complex coefficients[], Complex initial)
             throws NullArgumentException,
-                   NoDataException,
+                   MathIllegalArgumentException,
                    TooManyEvaluationsException {
             if (coefficients == null) {
                 throw new NullArgumentException();
             }
             final int n = coefficients.length - 1;
             if (n == 0) {
-                throw new NoDataException(LocalizedFormats.POLYNOMIAL);
+                throw new MathIllegalArgumentException(LocalizedFormats.POLYNOMIAL);
             }
             // Coefficients for deflated polynomial.
             final Complex c[] = new Complex[n + 1];
@@ -310,11 +309,11 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * if the maximum number of evaluations is exceeded.
          * @throws NullArgumentException if the {@code coefficients} is
          * {@code null}.
-         * @throws NoDataException if the {@code coefficients} array is empty.
+         * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
          */
         public Complex solve(Complex coefficients[], Complex initial)
             throws NullArgumentException,
-                   NoDataException,
+                   MathIllegalArgumentException,
                    TooManyEvaluationsException {
             if (coefficients == null) {
                 throw new NullArgumentException();
@@ -322,7 +321,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
 
             final int n = coefficients.length - 1;
             if (n == 0) {
-                throw new NoDataException(LocalizedFormats.POLYNOMIAL);
+                throw new MathIllegalArgumentException(LocalizedFormats.POLYNOMIAL);
             }
 
             final double absoluteAccuracy = getAbsoluteAccuracy();

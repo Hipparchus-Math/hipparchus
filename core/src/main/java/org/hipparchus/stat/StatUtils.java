@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
@@ -672,10 +671,10 @@ public final class StatUtils {
      * @param sample2  the second array
      * @return sum of paired differences
      * @throws MathIllegalArgumentException if the arrays do not have the same (positive) length.
-     * @throws NoDataException if the sample arrays are empty.
+     * @throws MathIllegalArgumentException if the sample arrays are empty.
      */
     public static double sumDifference(final double[] sample1, final double[] sample2)
-        throws MathIllegalArgumentException, NoDataException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
 
         int n = sample1.length;
         if (n != sample2.length) {
@@ -683,7 +682,7 @@ public final class StatUtils {
                                                    n, sample2.length);
         }
         if (n <= 0) {
-            throw new NoDataException(LocalizedFormats.INSUFFICIENT_DIMENSION);
+            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION);
         }
         double result = 0;
         for (int i = 0; i < n; i++) {
@@ -700,10 +699,10 @@ public final class StatUtils {
      * @param sample2  the second array
      * @return mean of paired differences
      * @throws MathIllegalArgumentException if the arrays do not have the same (positive) length.
-     * @throws NoDataException if the sample arrays are empty.
+     * @throws MathIllegalArgumentException if the sample arrays are empty.
      */
     public static double meanDifference(final double[] sample1, final double[] sample2)
-        throws MathIllegalArgumentException, NoDataException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         return sumDifference(sample1, sample2) / sample1.length;
     }
 

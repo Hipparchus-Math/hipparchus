@@ -23,7 +23,6 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
@@ -88,18 +87,18 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      * @param d Data array.
      * @return the field to which the array elements belong.
      * @throws NullArgumentException if the array is {@code null}.
-     * @throws NoDataException if the array is empty.
+     * @throws MathIllegalArgumentException if the array is empty.
      */
     protected static <T extends FieldElement<T>> Field<T> extractField(final T[][] d)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (d == null) {
             throw new NullArgumentException();
         }
         if (d.length == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
         }
         if (d[0].length == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
         }
         return d[0][0].getField();
     }
@@ -110,12 +109,12 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      * @param <T> Type of the field elements.
      * @param d Data array.
      * @return the field to which the array elements belong.
-     * @throws NoDataException if array is empty.
+     * @throws MathIllegalArgumentException if array is empty.
      */
     protected static <T extends FieldElement<T>> Field<T> extractField(final T[] d)
-        throws NoDataException {
+        throws MathIllegalArgumentException {
         if (d.length == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
         }
         return d[0].getField();
     }
@@ -334,7 +333,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldMatrix<T> getSubMatrix(final int[] selectedRows,
                                        final int[] selectedColumns)
-    throws NoDataException, NullArgumentException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
 
         // safety checks
         checkSubMatrixIndex(selectedRows, selectedColumns);
@@ -404,7 +403,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void copySubMatrix(int[] selectedRows, int[] selectedColumns, T[][] destination)
-        throws MathIllegalArgumentException, NoDataException,
+        throws MathIllegalArgumentException, MathIllegalArgumentException,
         NullArgumentException, MathIllegalArgumentException {
         // safety checks
         checkSubMatrixIndex(selectedRows, selectedColumns);
@@ -430,18 +429,18 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
         throws MathIllegalArgumentException,
-        NoDataException, NullArgumentException {
+        MathIllegalArgumentException, NullArgumentException {
         if (subMatrix == null) {
             throw new NullArgumentException();
         }
         final int nRows = subMatrix.length;
         if (nRows == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
         }
 
         final int nCols = subMatrix[0].length;
         if (nCols == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
         }
 
         for (int r = 1; r < nRows; ++r) {
@@ -1108,18 +1107,18 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      * @param selectedRows Array of row indices.
      * @param selectedColumns Array of column indices.
      * @throws NullArgumentException if the arrays are {@code null}.
-     * @throws NoDataException if the arrays have zero length.
+     * @throws MathIllegalArgumentException if the arrays have zero length.
      * @throws MathIllegalArgumentException if row or column selections are not valid.
      */
     protected void checkSubMatrixIndex(final int[] selectedRows, final int[] selectedColumns)
-        throws NoDataException, NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (selectedRows == null ||
             selectedColumns == null) {
             throw new NullArgumentException();
         }
         if (selectedRows.length == 0 ||
             selectedColumns.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         for (final int row : selectedRows) {

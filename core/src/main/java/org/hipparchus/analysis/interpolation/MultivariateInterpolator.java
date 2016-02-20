@@ -18,7 +18,6 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 
 /**
@@ -41,10 +40,10 @@ public interface MultivariateInterpolator {
      * @throws MathIllegalArgumentException if the arguments violate assumptions
      * made by the interpolation algorithm.
      * @throws MathIllegalArgumentException when the array dimensions are not consistent.
-     * @throws NoDataException if an array has zero-length.
+     * @throws MathIllegalArgumentException if an array has zero-length.
      * @throws NullArgumentException if the arguments are {@code null}.
      */
     MultivariateFunction interpolate(double[][] xval, double[] yval)
         throws MathIllegalArgumentException,
-               NoDataException, NullArgumentException;
+               MathIllegalArgumentException, NullArgumentException;
 }

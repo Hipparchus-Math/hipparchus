@@ -21,7 +21,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.stat.ranking.NaNStrategy;
@@ -68,12 +67,12 @@ public class WilcoxonSignedRankTest {
      * @param x first sample
      * @param y second sample
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
      */
     private void ensureDataConformance(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException, MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         if (x == null ||
             y == null) {
@@ -81,7 +80,7 @@ public class WilcoxonSignedRankTest {
         }
         if (x.length == 0 ||
             y.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (y.length != x.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -113,17 +112,17 @@ public class WilcoxonSignedRankTest {
      * @param z sample
      * @return |z|
      * @throws NullArgumentException if {@code z} is {@code null}
-     * @throws NoDataException if {@code z} is zero-length.
+     * @throws MathIllegalArgumentException if {@code z} is zero-length.
      */
     private double[] calculateAbsoluteDifferences(final double[] z)
-        throws NullArgumentException, NoDataException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         if (z == null) {
             throw new NullArgumentException();
         }
 
         if (z.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         final double[] zAbs = new double[z.length];
@@ -166,12 +165,12 @@ public class WilcoxonSignedRankTest {
      * @param y the second sample
      * @return wilcoxonSignedRank statistic (the larger of W+ and W-)
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
      */
     public double wilcoxonSignedRank(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException, MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException {
 
         ensureDataConformance(x, y);
 
@@ -293,7 +292,7 @@ public class WilcoxonSignedRankTest {
      *            calculations may take too long)
      * @return p-value
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
      * @throws NumberIsTooLargeException if {@code exactPValue} is {@code true}
@@ -305,7 +304,7 @@ public class WilcoxonSignedRankTest {
      */
     public double wilcoxonSignedRankTest(final double[] x, final double[] y,
                                          final boolean exactPValue)
-        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException,
         NumberIsTooLargeException, MathIllegalStateException, MaxCountExceededException {
 
         ensureDataConformance(x, y);

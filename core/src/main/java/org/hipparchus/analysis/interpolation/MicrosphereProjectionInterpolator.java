@@ -19,7 +19,6 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 
@@ -127,15 +126,13 @@ public class MicrosphereProjectionInterpolator
     @Override
     public MultivariateFunction interpolate(final double[][] xval,
                                             final double[] yval)
-        throws MathIllegalArgumentException,
-               NoDataException,
-               NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (xval == null ||
             yval == null) {
             throw new NullArgumentException();
         }
         if (xval.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (xval.length != yval.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

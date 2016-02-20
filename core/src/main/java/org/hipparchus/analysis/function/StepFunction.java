@@ -22,7 +22,6 @@ import java.util.Arrays;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
 
@@ -54,21 +53,20 @@ public class StepFunction implements UnivariateFunction {
      * @throws MathIllegalArgumentException
      * if the {@code x} array is not sorted in strictly increasing order.
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
      */
     public StepFunction(double[] x,
                         double[] y)
-        throws NullArgumentException, NoDataException,
-               MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException {
         if (x == null ||
             y == null) {
             throw new NullArgumentException();
         }
         if (x.length == 0 ||
             y.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (y.length != x.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

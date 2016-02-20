@@ -18,7 +18,6 @@ package org.hipparchus.stat.regression;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
@@ -142,14 +141,14 @@ public abstract class AbstractMultipleLinearRegression implements
      *
      * @param y the array representing the y sample
      * @throws NullArgumentException if y is null
-     * @throws NoDataException if y is empty
+     * @throws MathIllegalArgumentException if y is empty
      */
     protected void newYSampleData(double[] y) {
         if (y == null) {
             throw new NullArgumentException();
         }
         if (y.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         this.yVector = new ArrayRealVector(y);
     }
@@ -176,7 +175,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * </p>
      * @param x the rectangular array representing the x sample
      * @throws NullArgumentException if x is null
-     * @throws NoDataException if x is empty
+     * @throws MathIllegalArgumentException if x is empty
      * @throws MathIllegalArgumentException if x is not rectangular
      */
     protected void newXSampleData(double[][] x) {
@@ -184,7 +183,7 @@ public abstract class AbstractMultipleLinearRegression implements
             throw new NullArgumentException();
         }
         if (x.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (noIntercept) {
             this.xMatrix = new Array2DRowRealMatrix(x, true);
@@ -217,7 +216,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * @throws NullArgumentException if {@code x} or {@code y} is null
      * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length
-     * @throws NoDataException if {@code x} or {@code y} are zero-length
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length
      * @throws MathIllegalArgumentException if the number of rows of {@code x}
      * is not larger than the number of columns + 1
      */
@@ -230,7 +229,7 @@ public abstract class AbstractMultipleLinearRegression implements
                                                    y.length, x.length);
         }
         if (x.length == 0) {  // Must be no y data either
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (x[0].length + 1 > x.length) {
             throw new MathIllegalArgumentException(

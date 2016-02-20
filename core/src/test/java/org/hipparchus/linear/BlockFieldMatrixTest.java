@@ -588,7 +588,7 @@ public final class BlockFieldMatrixTest {
                 Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), sub);
             } else {
                 Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
-                     + " or NumberIsTooSmallException or NoDataException");
+                     + " or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -665,7 +665,7 @@ public final class BlockFieldMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), new BlockFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -684,7 +684,7 @@ public final class BlockFieldMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), new BlockFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {

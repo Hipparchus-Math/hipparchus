@@ -22,7 +22,6 @@ import java.util.Arrays;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -168,7 +167,7 @@ public class LoessInterpolator
      * strictly increasing order.
      * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
-     * @throws NoDataException if {@code xval} or {@code yval} has zero size.
+     * @throws MathIllegalArgumentException if {@code xval} or {@code yval} has zero size.
      * @throws MathIllegalArgumentException if any of the arguments and values are
      * not finite real numbers.
      * @throws NumberIsTooSmallException if the bandwidth is too small to
@@ -178,7 +177,7 @@ public class LoessInterpolator
     @Override
     public final PolynomialSplineFunction interpolate(final double[] xval,
                                                       final double[] yval)
-        throws MathIllegalArgumentException, NoDataException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooSmallException {
         return new SplineInterpolator().interpolate(xval, smooth(xval, yval));
     }
 
@@ -194,7 +193,7 @@ public class LoessInterpolator
      * strictly increasing order.
      * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
-     * @throws NoDataException if {@code xval} or {@code yval} has zero size.
+     * @throws MathIllegalArgumentException if {@code xval} or {@code yval} has zero size.
      * @throws MathIllegalArgumentException if any of the arguments and values are
      not finite real numbers.
      * @throws NumberIsTooSmallException if the bandwidth is too small to
@@ -204,7 +203,7 @@ public class LoessInterpolator
      */
     public final double[] smooth(final double[] xval, final double[] yval,
                                  final double[] weights)
-        throws MathIllegalArgumentException, NoDataException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         if (xval.length != yval.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);
@@ -213,7 +212,7 @@ public class LoessInterpolator
         final int n = xval.length;
 
         if (n == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         checkAllFiniteReal(xval);
@@ -360,7 +359,7 @@ public class LoessInterpolator
      * strictly increasing order.
      * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
-     * @throws NoDataException if {@code xval} or {@code yval} has zero size.
+     * @throws MathIllegalArgumentException if {@code xval} or {@code yval} has zero size.
      * @throws MathIllegalArgumentException if any of the arguments and values are
      * not finite real numbers.
      * @throws NumberIsTooSmallException if the bandwidth is too small to
@@ -368,7 +367,7 @@ public class LoessInterpolator
      * larger than 2/n).
      */
     public final double[] smooth(final double[] xval, final double[] yval)
-        throws MathIllegalArgumentException, NoDataException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooSmallException {
         if (xval.length != yval.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);

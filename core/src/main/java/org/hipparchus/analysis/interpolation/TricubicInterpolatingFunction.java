@@ -19,7 +19,6 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -128,7 +127,7 @@ public class TricubicInterpolatingFunction
      * @param d2FdXdZ Values of the cross partial derivative of function on every grid point.
      * @param d2FdYdZ Values of the cross partial derivative of function on every grid point.
      * @param d3FdXdYdZ Values of the cross partial derivative of function on every grid point.
-     * @throws NoDataException if any of the arrays has zero length.
+     * @throws MathIllegalArgumentException if any of the arrays has zero length.
      * @throws MathIllegalArgumentException if the various arrays do not contain the expected number of elements.
      * @throws MathIllegalArgumentException if {@code x}, {@code y} or {@code z} are not strictly increasing.
      */
@@ -143,14 +142,13 @@ public class TricubicInterpolatingFunction
                                          double[][][] d2FdXdZ,
                                          double[][][] d2FdYdZ,
                                          double[][][] d3FdXdYdZ)
-        throws NoDataException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         final int xLen = x.length;
         final int yLen = y.length;
         final int zLen = z.length;
 
         if (xLen == 0 || yLen == 0 || z.length == 0 || f.length == 0 || f[0].length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (xLen != f.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

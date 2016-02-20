@@ -21,7 +21,6 @@ import java.util.Arrays;
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -79,7 +78,7 @@ public class BicubicInterpolatingFunction
      * the expected number of elements.
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are
      * not strictly increasing.
-     * @throws NoDataException if any of the arrays has zero length.
+     * @throws MathIllegalArgumentException if any of the arrays has zero length.
      */
     public BicubicInterpolatingFunction(double[] x,
                                         double[] y,
@@ -87,14 +86,12 @@ public class BicubicInterpolatingFunction
                                         double[][] dFdX,
                                         double[][] dFdY,
                                         double[][] d2FdXdY)
-        throws MathIllegalArgumentException,
-               NoDataException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         final int xLen = x.length;
         final int yLen = y.length;
 
         if (xLen == 0 || yLen == 0 || f.length == 0 || f[0].length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (xLen != f.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

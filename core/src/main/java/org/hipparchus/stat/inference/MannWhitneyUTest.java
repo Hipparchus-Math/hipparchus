@@ -19,7 +19,8 @@ package org.hipparchus.stat.inference;
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoDataException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.stat.ranking.NaturalRanking;
@@ -65,10 +66,10 @@ public class MannWhitneyUTest {
      * @param x first sample
      * @param y second sample
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      */
     private void ensureDataConformance(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         if (x == null ||
             y == null) {
@@ -76,7 +77,7 @@ public class MannWhitneyUTest {
         }
         if (x.length == 0 ||
             y.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
     }
 
@@ -120,10 +121,10 @@ public class MannWhitneyUTest {
      * @param y the second sample
      * @return Mann-Whitney U statistic (maximum of U<sup>x</sup> and U<sup>y</sup>)
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      */
     public double mannWhitneyU(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         ensureDataConformance(x, y);
 
@@ -213,14 +214,14 @@ public class MannWhitneyUTest {
      * @param y the second sample
      * @return asymptotic p-value
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      * @throws MathIllegalStateException if the p-value can not be computed due to a
      * convergence error
      * @throws MaxCountExceededException if the maximum number of iterations
      * is exceeded
      */
     public double mannWhitneyUTest(final double[] x, final double[] y)
-        throws NullArgumentException, NoDataException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException, MaxCountExceededException {
 
         ensureDataConformance(x, y);

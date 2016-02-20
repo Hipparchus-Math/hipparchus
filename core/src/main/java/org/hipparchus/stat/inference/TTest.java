@@ -20,7 +20,6 @@ import org.hipparchus.distribution.TDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.stat.StatUtils;
@@ -70,12 +69,12 @@ public class TTest {
      * @param sample2 array of sample data values
      * @return t statistic
      * @throws NullArgumentException if the arrays are <code>null</code>
-     * @throws NoDataException if the arrays are empty
+     * @throws MathIllegalArgumentException if the arrays are empty
      * @throws MathIllegalArgumentException if the length of the arrays is not equal
      * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
      */
     public double pairedT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NoDataException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, NumberIsTooSmallException {
 
         checkSampleData(sample1);
@@ -118,13 +117,13 @@ public class TTest {
      * @param sample2 array of sample data values
      * @return p-value for t-test
      * @throws NullArgumentException if the arrays are <code>null</code>
-     * @throws NoDataException if the arrays are empty
+     * @throws MathIllegalArgumentException if the arrays are empty
      * @throws MathIllegalArgumentException if the length of the arrays is not equal
      * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public double pairedTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException,
         NumberIsTooSmallException, MaxCountExceededException {
 
         double meanDifference = StatUtils.meanDifference(sample1, sample2);
@@ -164,7 +163,7 @@ public class TTest {
      * @return true if the null hypothesis can be rejected with
      * confidence 1 - alpha
      * @throws NullArgumentException if the arrays are <code>null</code>
-     * @throws NoDataException if the arrays are empty
+     * @throws MathIllegalArgumentException if the arrays are empty
      * @throws MathIllegalArgumentException if the length of the arrays is not equal
      * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
@@ -172,7 +171,7 @@ public class TTest {
      */
     public boolean pairedTTest(final double[] sample1, final double[] sample2,
                                final double alpha)
-        throws NullArgumentException, NoDataException, MathIllegalArgumentException,
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException,
         NumberIsTooSmallException, MathIllegalArgumentException, MaxCountExceededException {
 
         checkSignificanceLevel(alpha);

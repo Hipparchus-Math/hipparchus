@@ -472,7 +472,7 @@ public final class Array2DRowRealMatrixTest {
             RealMatrix sub = m.getSubMatrix(startRow, endRow, startColumn, endColumn);
             Assert.assertEquals(new Array2DRowRealMatrix(reference), sub);
             if (mustFail) {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
@@ -488,7 +488,7 @@ public final class Array2DRowRealMatrixTest {
             RealMatrix sub = m.getSubMatrix(selectedRows, selectedColumns);
             Assert.assertEquals(new Array2DRowRealMatrix(reference), sub);
             if (mustFail) {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
@@ -532,7 +532,7 @@ public final class Array2DRowRealMatrixTest {
             m.copySubMatrix(startRow, endRow, startColumn, endColumn, sub);
             Assert.assertEquals(new Array2DRowRealMatrix(reference), new Array2DRowRealMatrix(sub));
             if (mustFail) {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
@@ -550,7 +550,7 @@ public final class Array2DRowRealMatrixTest {
             m.copySubMatrix(selectedRows, selectedColumns, sub);
             Assert.assertEquals(new Array2DRowRealMatrix(reference), new Array2DRowRealMatrix(sub));
             if (mustFail) {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
