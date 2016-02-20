@@ -19,7 +19,8 @@ package org.hipparchus.util;
 import java.util.Iterator;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.ZeroException;
 
@@ -357,11 +358,11 @@ public class IntegerSequence {
         /**
          * Not applicable.
          *
-         * @throws MathUnsupportedOperationException
+         * @throws MathRuntimeException
          */
         @Override
         public void remove() {
-            throw new MathUnsupportedOperationException();
+            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
         }
     }
 }

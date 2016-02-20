@@ -20,7 +20,7 @@ package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
@@ -38,7 +38,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class SimplexOptimizerNelderMeadTest {
-    @Test(expected=MathUnsupportedOperationException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testBoundsUnsupported() {
         SimplexOptimizer optimizer = new SimplexOptimizer(1e-10, 1e-30);
         final FourExtrema fourExtrema = new FourExtrema();

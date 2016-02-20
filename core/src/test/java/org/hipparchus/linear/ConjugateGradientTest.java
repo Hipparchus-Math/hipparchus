@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
@@ -462,19 +462,19 @@ public class ConjugateGradientTest {
                 try {
                     evt.getResidual().set(0.0);
                     Assert.fail("r is modifiable");
-                } catch (MathUnsupportedOperationException exc){
+                } catch (MathRuntimeException exc){
                     // Expected behavior
                 }
                 try {
                     evt.getRightHandSideVector().set(0.0);
                     Assert.fail("b is modifiable");
-                } catch (MathUnsupportedOperationException exc){
+                } catch (MathRuntimeException exc){
                     // Expected behavior
                 }
                 try {
                     evt.getSolution().set(0.0);
                     Assert.fail("x is modifiable");
-                } catch (MathUnsupportedOperationException exc){
+                } catch (MathRuntimeException exc){
                     // Expected behavior
                 }
             }

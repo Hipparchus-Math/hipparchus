@@ -18,10 +18,9 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -334,20 +333,20 @@ public class EigenDecomposition {
      * definite.
      *
      * @return the square-root of the matrix.
-     * @throws MathUnsupportedOperationException if the matrix is not
+     * @throws MathRuntimeException if the matrix is not
      * symmetric or not positive definite.
      * @since 3.1
      */
     public RealMatrix getSquareRoot() {
         if (!isSymmetric) {
-            throw new MathUnsupportedOperationException();
+            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
         }
 
         final double[] sqrtEigenValues = new double[realEigenvalues.length];
         for (int i = 0; i < realEigenvalues.length; i++) {
             final double eigen = realEigenvalues[i];
             if (eigen <= 0) {
-                throw new MathUnsupportedOperationException();
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
             sqrtEigenValues[i] = FastMath.sqrt(eigen);
         }
@@ -366,12 +365,12 @@ public class EigenDecomposition {
      * but the {@link DecompositionSolver} only supports real eigenvalues.
      *
      * @return a solver
-     * @throws MathUnsupportedOperationException if the decomposition resulted in
+     * @throws MathRuntimeException if the decomposition resulted in
      * complex eigenvalues
      */
     public DecompositionSolver getSolver() {
         if (hasComplexEigenvalues()) {
-            throw new MathUnsupportedOperationException();
+            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
         }
         return new Solver(realEigenvalues, imagEigenvalues, eigenvectors);
     }

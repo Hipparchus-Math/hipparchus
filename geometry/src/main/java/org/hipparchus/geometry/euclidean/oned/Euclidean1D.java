@@ -20,7 +20,7 @@ package org.hipparchus.geometry.euclidean.oned;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
 
 /**
@@ -86,7 +86,7 @@ public class Euclidean1D implements Serializable, Space {
      * This exception is thrown when attempting to get the sub-space of a one-dimensional space
      * </p>
      */
-    public static class NoSubSpaceException extends MathUnsupportedOperationException {
+    public static class NoSubSpaceException extends MathRuntimeException {
 
         /** Serializable UID. */
         private static final long serialVersionUID = 20140225L;

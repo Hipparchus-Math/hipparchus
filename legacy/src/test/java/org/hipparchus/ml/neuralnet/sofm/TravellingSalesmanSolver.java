@@ -30,7 +30,8 @@ import org.hipparchus.analysis.function.Constant;
 import org.hipparchus.analysis.function.HarmonicOscillator;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ml.distance.DistanceMeasure;
 import org.hipparchus.ml.distance.EuclideanDistance;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
@@ -193,7 +194,7 @@ public class TravellingSalesmanSolver {
             }
             /** {@inheritDoc} */
             public void remove() {
-                throw new MathUnsupportedOperationException();
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
         };
     }

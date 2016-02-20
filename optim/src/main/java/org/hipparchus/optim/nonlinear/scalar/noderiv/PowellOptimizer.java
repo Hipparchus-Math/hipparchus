@@ -17,7 +17,7 @@
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.optim.ConvergenceChecker;
@@ -44,7 +44,7 @@ import org.hipparchus.util.MathArrays;
  * <br/>
  * Constraints are not supported: the call to
  * {@link #optimize(OptimizationData[]) optimize} will throw
- * {@link MathUnsupportedOperationException} if bounds are passed to it.
+ * {@link MathRuntimeException} if bounds are passed to it.
  * In order to impose simple constraints, the objective function must be
  * wrapped in an adapter like
  * {@link org.hipparchus.optim.nonlinear.scalar.MultivariateFunctionMappingAdapter
@@ -287,13 +287,13 @@ public class PowellOptimizer
     }
 
     /**
-     * @throws MathUnsupportedOperationException if bounds were passed to the
+     * @throws MathRuntimeException if bounds were passed to the
      * {@link #optimize(OptimizationData[]) optimize} method.
      */
     private void checkParameters() {
         if (getLowerBound() != null ||
             getUpperBound() != null) {
-            throw new MathUnsupportedOperationException(LocalizedFormats.CONSTRAINT);
+            throw new MathRuntimeException(LocalizedFormats.CONSTRAINT);
         }
     }
 }

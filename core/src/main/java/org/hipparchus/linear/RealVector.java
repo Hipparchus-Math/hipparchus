@@ -25,10 +25,9 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Add;
 import org.hipparchus.analysis.function.Divide;
 import org.hipparchus.analysis.function.Multiply;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -779,11 +778,11 @@ public abstract class RealVector {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all circumstances.
+             * @throws MathRuntimeException in all circumstances.
              */
             @Override
-            public void remove() throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+            public void remove() throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
         };
     }
@@ -1091,13 +1090,13 @@ public abstract class RealVector {
      * @return {@code true} if two vector objects are equal, {@code false} if
      * {@code other} is null, not an instance of {@code RealVector}, or
      * not equal to this {@code RealVector} instance.
-     * @throws MathUnsupportedOperationException if this method is not
+     * @throws MathRuntimeException if this method is not
      * overridden.
      */
     @Override
     public boolean equals(Object other)
-        throws MathUnsupportedOperationException {
-        throw new MathUnsupportedOperationException();
+        throws MathRuntimeException {
+        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
     }
 
     /**
@@ -1105,12 +1104,12 @@ public abstract class RealVector {
      * subclasses of {@link RealVector} (current implementation throws an
      * exception).
      *
-     * @throws MathUnsupportedOperationException if this method is not
+     * @throws MathRuntimeException if this method is not
      * overridden.
      */
     @Override
-    public int hashCode() throws MathUnsupportedOperationException {
-        throw new MathUnsupportedOperationException();
+    public int hashCode() throws MathRuntimeException {
+        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
     }
 
     /**
@@ -1183,18 +1182,18 @@ public abstract class RealVector {
         /**
          * {@inheritDoc}
          *
-         * @throws MathUnsupportedOperationException in all circumstances.
+         * @throws MathRuntimeException in all circumstances.
          */
         @Override
-        public void remove() throws MathUnsupportedOperationException {
-            throw new MathUnsupportedOperationException();
+        public void remove() throws MathRuntimeException {
+            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
         }
     }
 
     /**
      * Returns an unmodifiable view of the specified vector.
      * The returned vector has read-only access. An attempt to modify it will
-     * result in a {@link MathUnsupportedOperationException}. However, the
+     * result in a {@link MathRuntimeException}. However, the
      * returned vector is <em>not</em> immutable, since any modification of
      * {@code v} will also change the returned view.
      * For example, in the following piece of code
@@ -1216,19 +1215,19 @@ public abstract class RealVector {
          * It wraps any {@link RealVector}, and exposes all methods which
          * do not modify it. Invoking methods which should normally result
          * in the modification of the calling {@link RealVector} results in
-         * a {@link MathUnsupportedOperationException}. It should be noted
+         * a {@link MathRuntimeException}. It should be noted
          * that {@link UnmodifiableVector} is <em>not</em> immutable.
          */
         return new RealVector() {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all circumstances.
+             * @throws MathRuntimeException in all circumstances.
              */
             @Override
             public RealVector mapToSelf(UnivariateFunction function)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1261,12 +1260,12 @@ public abstract class RealVector {
                     /**
                      * {@inheritDoc}
                      *
-                     * @throws MathUnsupportedOperationException in all
+                     * @throws MathRuntimeException in all
                      * circumstances.
                      */
                     @Override
-                    public void remove() throws MathUnsupportedOperationException {
-                        throw new MathUnsupportedOperationException();
+                    public void remove() throws MathRuntimeException {
+                        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
                     }
                 };
             }
@@ -1296,13 +1295,13 @@ public abstract class RealVector {
                     /**
                      * {@inheritDoc}
                      *
-                     * @throws MathUnsupportedOperationException in all
+                     * @throws MathRuntimeException in all
                      * circumstances.
                      */
                     @Override
                     public void remove()
-                        throws MathUnsupportedOperationException {
-                        throw new MathUnsupportedOperationException();
+                        throws MathRuntimeException {
+                        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
                     }
                 };
             }
@@ -1336,13 +1335,13 @@ public abstract class RealVector {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
             public RealVector mapAddToSelf(double d)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1354,13 +1353,13 @@ public abstract class RealVector {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
             public RealVector mapSubtractToSelf(double d)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1372,13 +1371,13 @@ public abstract class RealVector {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
             public RealVector mapMultiplyToSelf(double d)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1390,13 +1389,13 @@ public abstract class RealVector {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
             public RealVector mapDivideToSelf(double d)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1475,12 +1474,12 @@ public abstract class RealVector {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
-            public void unitize() throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+            public void unitize() throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1498,25 +1497,25 @@ public abstract class RealVector {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
             public void setEntry(int index, double value)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
             public void addToEntry(int index, double value)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1547,25 +1546,25 @@ public abstract class RealVector {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
             public void setSubVector(int index, RealVector w)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
             public void set(double value)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1596,13 +1595,13 @@ public abstract class RealVector {
             /**
              * {@inheritDoc}
              *
-             * @throws MathUnsupportedOperationException in all
+             * @throws MathRuntimeException in all
              * circumstances.
              */
             @Override
             public RealVector combineToSelf(double a, double b, RealVector y)
-                throws MathUnsupportedOperationException {
-                throw new MathUnsupportedOperationException();
+                throws MathRuntimeException {
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
 
             /** An entry in the vector. */
@@ -1616,13 +1615,13 @@ public abstract class RealVector {
                 /**
                  * {@inheritDoc}
                  *
-                 * @throws MathUnsupportedOperationException in all
+                 * @throws MathRuntimeException in all
                  * circumstances.
                  */
                 @Override
                 public void setValue(double value)
-                    throws MathUnsupportedOperationException {
-                    throw new MathUnsupportedOperationException();
+                    throws MathRuntimeException {
+                    throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
                 }
             }
         };

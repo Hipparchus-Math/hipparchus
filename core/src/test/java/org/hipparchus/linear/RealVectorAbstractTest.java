@@ -49,15 +49,9 @@ import org.hipparchus.analysis.function.Tanh;
 import org.hipparchus.analysis.function.Ulp;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.linear.OpenMapRealVector;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.RealVectorChangingVisitor;
-import org.hipparchus.linear.RealVectorPreservingVisitor;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -1083,8 +1077,8 @@ public abstract class RealVectorAbstractTest {
             Assert.assertEquals("", values[i], e.getValue(), 0d);
             try {
                 it.remove();
-                Assert.fail("MathUnsupportedOperationException should have been thrown");
-            } catch (MathUnsupportedOperationException exc) {
+                Assert.fail("MathRuntimeException should have been thrown");
+            } catch (MathRuntimeException exc) {
                 // Expected behavior
             }
         }

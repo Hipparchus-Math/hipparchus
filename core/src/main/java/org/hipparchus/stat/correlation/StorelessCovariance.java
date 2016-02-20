@@ -18,7 +18,7 @@ package org.hipparchus.stat.correlation;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -221,12 +221,12 @@ public class StorelessCovariance extends Covariance {
      * pairs of covariates - i.e., N as defined in {@link Covariance#getN()} is undefined.
      *
      * @return nothing as this implementation always throws a
-     * {@link MathUnsupportedOperationException}
-     * @throws MathUnsupportedOperationException in all cases
+     * {@link MathRuntimeException}
+     * @throws MathRuntimeException in all cases
      */
     @Override
     public int getN()
-        throws MathUnsupportedOperationException {
-        throw new MathUnsupportedOperationException();
+        throws MathRuntimeException {
+        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
     }
 }

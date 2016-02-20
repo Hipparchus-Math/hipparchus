@@ -18,7 +18,7 @@
 package org.hipparchus.util;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 
 /**
  */
@@ -59,7 +59,7 @@ public class TestBean {
      *
      */
     public Double getZ() {
-        throw new MathUnsupportedOperationException(LocalizedFormats.SIMPLE_MESSAGE, "?");
+        throw new MathRuntimeException(LocalizedFormats.SIMPLE_MESSAGE, "?");
     }
 
     /**

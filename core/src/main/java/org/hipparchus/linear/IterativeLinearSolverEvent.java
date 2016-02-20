@@ -16,7 +16,8 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.IterationEvent;
 
 /**
@@ -77,19 +78,19 @@ public abstract class IterativeLinearSolverEvent
      * </p>
      * <ul>
      * <li>this method should throw a
-     * {@link MathUnsupportedOperationException},</li>
+     * {@link MathRuntimeException},</li>
      * <li>{@link #providesResidual()} returns {@code false}.</li>
      * </ul>
      * <p>
      * The default implementation throws a
-     * {@link MathUnsupportedOperationException}. If this method is overriden,
+     * {@link MathRuntimeException}. If this method is overriden,
      * then {@link #providesResidual()} should be overriden as well.
      * </p>
      *
      * @return the updated residual, r
      */
     public RealVector getResidual() {
-        throw new MathUnsupportedOperationException();
+        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
     }
 
     /**
@@ -107,7 +108,7 @@ public abstract class IterativeLinearSolverEvent
      * implementation returns {@code false}.
      *
      * @return {@code false} if {@link #getResidual()} throws a
-     * {@link MathUnsupportedOperationException}
+     * {@link MathRuntimeException}
      */
     public boolean providesResidual() {
         return false;

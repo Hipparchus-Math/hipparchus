@@ -25,7 +25,7 @@ import java.util.Random;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
@@ -292,7 +292,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
      * generated parameters {@code args}.
      * If it turns out that {@code u} has changed after the call of method
      * {@code m}, then this test checks that the call of this method on
-     * {@code v} resulted in a {@link MathUnsupportedOperationException}. If
+     * {@code v} resulted in a {@link MathRuntimeException}. If
      * {@code u} was not modified, then this test checks that the results
      * returned by the call of method {@code m} on {@code u} and {@code v}
      * returned the same result.
@@ -323,7 +323,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
             try {
                 m.invoke(v, args);
             } catch (InvocationTargetException e) {
-                if (e.getCause() instanceof MathUnsupportedOperationException) {
+                if (e.getCause() instanceof MathRuntimeException) {
                     flag = true;
                 }
             }
@@ -366,7 +366,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
         }
     }
 
-    @Test(expected = MathUnsupportedOperationException.class)
+    @Test(expected = MathRuntimeException.class)
     public void testSetEntry() {
         RealVector u = createVector();
         RealVector v = RealVector.unmodifiableRealVector(u);
@@ -375,7 +375,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
         }
     }
 
-    @Test(expected = MathUnsupportedOperationException.class)
+    @Test(expected = MathRuntimeException.class)
     public void testAddToEntry() {
         RealVector u = createVector();
         RealVector v = RealVector.unmodifiableRealVector(u);
@@ -397,7 +397,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
         }
     }
 
-    @Test(expected = MathUnsupportedOperationException.class)
+    @Test(expected = MathRuntimeException.class)
     public void testSetSubVector() {
         RealVector u = createVector();
         RealVector v = RealVector.unmodifiableRealVector(u);
@@ -422,7 +422,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
             flag = false;
             try {
                 act.setValue(RANDOM.nextDouble());
-            } catch (MathUnsupportedOperationException e) {
+            } catch (MathRuntimeException e) {
                 flag = true;
             }
             Assert.assertTrue("exception should have been thrown", flag);
@@ -448,7 +448,7 @@ public abstract class UnmodifiableRealVectorAbstractTest {
             flag = false;
             try {
                 act.setValue(RANDOM.nextDouble());
-            } catch (MathUnsupportedOperationException e) {
+            } catch (MathRuntimeException e) {
                 flag = true;
             }
             Assert.assertTrue("exception should have been thrown", flag);
