@@ -17,7 +17,7 @@
 
 package org.hipparchus.ml.neuralnet.sofm.util;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.ml.neuralnet.sofm.util.QuasiSigmoidDecayFunction;
 import org.junit.Test;
@@ -27,7 +27,7 @@ import org.junit.Assert;
  * Tests for {@link QuasiSigmoidDecayFunction} class
  */
 public class QuasiSigmoidDecayFunctionTest {
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPrecondition1() {
         new QuasiSigmoidDecayFunction(0d, -1d, 2);
     }
@@ -35,7 +35,7 @@ public class QuasiSigmoidDecayFunctionTest {
     public void testPrecondition3() {
         new QuasiSigmoidDecayFunction(1d, 0d, 100);
     }
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPrecondition4() {
         new QuasiSigmoidDecayFunction(1d, -1d, 0);
     }

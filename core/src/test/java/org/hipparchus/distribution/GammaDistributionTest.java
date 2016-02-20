@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.hipparchus.distribution.GammaDistribution;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
@@ -86,14 +86,14 @@ public class GammaDistributionTest extends RealDistributionAbstractTest {
     public void testPreconditions() {
         try {
             new GammaDistribution(0, 1);
-            Assert.fail("Expecting NotStrictlyPositiveException for alpha = 0");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException for alpha = 0");
+        } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new GammaDistribution(1, 0);
-            Assert.fail("Expecting NotStrictlyPositiveException for alpha = 0");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException for alpha = 0");
+        } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
     }

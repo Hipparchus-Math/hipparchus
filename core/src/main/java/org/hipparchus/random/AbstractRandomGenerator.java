@@ -16,7 +16,8 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -167,12 +168,13 @@ public abstract class AbstractRandomGenerator implements RandomGenerator {
      * positive.
      * @return  a pseudorandom, uniformly distributed {@code int}
      * value between 0 (inclusive) and n (exclusive).
-     * @throws NotStrictlyPositiveException if {@code n <= 0}.
+     * @throws MathIllegalArgumentException if {@code n <= 0}.
      */
     @Override
     public int nextInt(int n) {
         if (n <= 0 ) {
-            throw new NotStrictlyPositiveException(n);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   n, 0);
         }
         int result = (int) (nextDouble() * n);
         return result < n ? result : n - 1;

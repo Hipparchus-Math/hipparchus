@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -60,7 +60,7 @@ public class GumbelDistribution extends AbstractRealDistribution {
      *
      * @param mu location parameter
      * @param beta scale parameter (must be positive)
-     * @throws NotStrictlyPositiveException if {@code beta <= 0}
+     * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
     public GumbelDistribution(double mu, double beta) {
         this(new Well19937c(), mu, beta);
@@ -72,13 +72,13 @@ public class GumbelDistribution extends AbstractRealDistribution {
      * @param rng Random number generator
      * @param mu location parameter
      * @param beta scale parameter (must be positive)
-     * @throws NotStrictlyPositiveException if {@code beta <= 0}
+     * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
     public GumbelDistribution(RandomGenerator rng, double mu, double beta) {
         super(rng);
 
         if (beta <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.SCALE, beta);
+            throw new MathIllegalArgumentException(LocalizedFormats.SCALE, beta);
         }
 
         this.beta = beta;

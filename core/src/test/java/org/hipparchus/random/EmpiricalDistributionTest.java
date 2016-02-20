@@ -35,7 +35,7 @@ import org.hipparchus.distribution.RealDistributionAbstractTest;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.EmpiricalDistribution;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
@@ -87,7 +87,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     }
 
     // MATH-1279
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPrecondition1() {
         new EmpiricalDistribution(0);
     }

@@ -21,7 +21,7 @@ import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.ZeroException;
 
 /**
@@ -308,13 +308,14 @@ public class IntegerSequence {
          *
          * @param nTimes Number of increments.
          * @throws MaxCountExceededException at counter exhaustion.
-         * @throws NotStrictlyPositiveException if {@code nTimes <= 0}.
+         * @throws MathIllegalArgumentException if {@code nTimes <= 0}.
          *
          * @see #increment()
          */
         public void increment(int nTimes) throws MaxCountExceededException {
             if (nTimes <= 0) {
-                throw new NotStrictlyPositiveException(nTimes);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                       nTimes, 0);
             }
 
             if (!canIncrement(0)) {

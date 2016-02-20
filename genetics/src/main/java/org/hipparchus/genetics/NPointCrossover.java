@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
 
@@ -60,11 +59,12 @@ public class NPointCrossover<T> implements CrossoverPolicy {
      * This condition can only be checked at runtime, as the chromosome length is not known in advance.
      *
      * @param crossoverPoints the number of crossover points
-     * @throws NotStrictlyPositiveException if the number of {@code crossoverPoints} is not strictly positive
+     * @throws MathIllegalArgumentException if the number of {@code crossoverPoints} is not strictly positive
      */
-    public NPointCrossover(final int crossoverPoints) throws NotStrictlyPositiveException {
+    public NPointCrossover(final int crossoverPoints) throws MathIllegalArgumentException {
         if (crossoverPoints <= 0) {
-            throw new NotStrictlyPositiveException(crossoverPoints);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   crossoverPoints, 0);
         }
         this.crossoverPoints = crossoverPoints;
     }

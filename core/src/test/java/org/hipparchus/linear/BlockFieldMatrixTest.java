@@ -19,25 +19,16 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.linear.ArrayFieldVector;
-import org.hipparchus.linear.BlockFieldMatrix;
-import org.hipparchus.linear.DefaultFieldMatrixChangingVisitor;
-import org.hipparchus.linear.DefaultFieldMatrixPreservingVisitor;
-import org.hipparchus.linear.FieldLUDecomposition;
-import org.hipparchus.linear.FieldMatrix;
-import org.hipparchus.linear.FieldVector;
-import org.hipparchus.linear.NonSquareMatrixException;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link BlockFieldMatrix} class.
@@ -599,22 +590,14 @@ public final class BlockFieldMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), sub);
             } else {
-                Assert.fail("Expecting OutOfRangeException or NotStrictlyPositiveException"
+                Assert.fail("Expecting OutOfRangeException or MathIllegalArgumentException"
                      + " or NumberIsTooSmallException or NoDataException");
             }
         } catch (OutOfRangeException e) {
             if (reference != null) {
                 throw e;
             }
-        } catch (NotStrictlyPositiveException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -634,15 +617,7 @@ public final class BlockFieldMatrixTest {
             if (reference != null) {
                 throw e;
             }
-        } catch (NotStrictlyPositiveException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }

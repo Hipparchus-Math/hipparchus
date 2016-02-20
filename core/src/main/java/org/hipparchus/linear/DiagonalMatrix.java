@@ -20,7 +20,6 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -44,11 +43,11 @@ public class DiagonalMatrix extends AbstractRealMatrix
      * Creates a matrix with the supplied dimension.
      *
      * @param dimension Number of rows and columns in the new matrix.
-     * @throws NotStrictlyPositiveException if the dimension is
+     * @throws MathIllegalArgumentException if the dimension is
      * not positive.
      */
     public DiagonalMatrix(final int dimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(dimension, dimension);
         data = new double[dimension];
     }
@@ -92,7 +91,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
     @Override
     public RealMatrix createMatrix(final int rowDimension,
                                    final int columnDimension)
-        throws NotStrictlyPositiveException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException {
         if (rowDimension != columnDimension) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

@@ -18,7 +18,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -75,7 +75,7 @@ public class ZipfDistribution extends AbstractIntegerDistribution {
      *
      * @param numberOfElements Number of elements.
      * @param exponent Exponent.
-     * @exception NotStrictlyPositiveException if {@code numberOfElements <= 0}
+     * @exception MathIllegalArgumentException if {@code numberOfElements <= 0}
      * or {@code exponent <= 0}.
      */
     public ZipfDistribution(final int numberOfElements, final double exponent) {
@@ -88,22 +88,22 @@ public class ZipfDistribution extends AbstractIntegerDistribution {
      * @param rng Random number generator.
      * @param numberOfElements Number of elements.
      * @param exponent Exponent.
-     * @exception NotStrictlyPositiveException if {@code numberOfElements <= 0}
+     * @exception MathIllegalArgumentException if {@code numberOfElements <= 0}
      * or {@code exponent <= 0}.
      * @since 3.1
      */
     public ZipfDistribution(RandomGenerator rng,
                             int numberOfElements,
                             double exponent)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (numberOfElements <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSION,
                                                    numberOfElements);
         }
         if (exponent <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.EXPONENT,
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT,
                                                    exponent);
         }
 

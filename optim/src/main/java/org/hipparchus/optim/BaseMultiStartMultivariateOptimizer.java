@@ -17,7 +17,8 @@
 package org.hipparchus.optim;
 
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.random.RandomVectorGenerator;
 
@@ -73,7 +74,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
      * the {@link #optimize(OptimizationData[]) optimize} will return the
      * same solution as the given {@code optimizer} would return.
      * @param generator Random vector generator to use for restarts.
-     * @throws NotStrictlyPositiveException if {@code starts < 1}.
+     * @throws MathIllegalArgumentException if {@code starts < 1}.
      */
     public BaseMultiStartMultivariateOptimizer(final BaseMultivariateOptimizer<PAIR> optimizer,
                                                final int starts,
@@ -81,7 +82,8 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
         super(optimizer.getConvergenceChecker());
 
         if (starts < 1) {
-            throw new NotStrictlyPositiveException(starts);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   starts, 1);
         }
 
         this.optimizer = optimizer;

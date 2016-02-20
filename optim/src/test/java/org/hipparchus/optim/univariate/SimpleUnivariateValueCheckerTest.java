@@ -16,14 +16,14 @@
  */
 package org.hipparchus.optim.univariate;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.univariate.SimpleUnivariateValueChecker;
 import org.hipparchus.optim.univariate.UnivariatePointValuePair;
 import org.junit.Test;
 import org.junit.Assert;
 
 public class SimpleUnivariateValueCheckerTest {
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testIterationCheckPrecondition() {
         new SimpleUnivariateValueChecker(1e-1, 1e-2, 0);
     }

@@ -61,7 +61,7 @@ public class SparseFieldMatrix<T extends FieldElement<T>> extends AbstractFieldM
      * @param field Field to which the elements belong.
      * @param rowDimension Number of rows in the new matrix.
      * @param columnDimension Number of columns in the new matrix.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if row or column dimension is not positive.
      */
     public SparseFieldMatrix(final Field<T> field,

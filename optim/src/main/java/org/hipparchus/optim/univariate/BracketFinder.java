@@ -18,7 +18,8 @@ package org.hipparchus.optim.univariate;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.util.FastMath;
@@ -93,10 +94,12 @@ public class BracketFinder {
     public BracketFinder(double growLimit,
                          int maxEvaluations) {
         if (growLimit <= 0) {
-            throw new NotStrictlyPositiveException(growLimit);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   growLimit, 0);
         }
         if (maxEvaluations <= 0) {
-            throw new NotStrictlyPositiveException(maxEvaluations);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   maxEvaluations, 0);
         }
 
         this.growLimit = growLimit;

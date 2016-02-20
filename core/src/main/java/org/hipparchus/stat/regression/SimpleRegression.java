@@ -696,7 +696,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
             throw new OutOfRangeException(LocalizedFormats.SIGNIFICANCE_LEVEL,
                                           alpha, 0, 1);
         }
-        // No advertised NotStrictlyPositiveException here - will return NaN above
+        // No advertised MathIllegalArgumentException here - will return NaN above
         TDistribution distribution = new TDistribution(n - 2);
         return getSlopeStdErr() *
             distribution.inverseCumulativeProbability(1d - alpha / 2d);
@@ -728,7 +728,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
         if (n < 3) {
             return Double.NaN;
         }
-        // No advertised NotStrictlyPositiveException here - will return NaN above
+        // No advertised MathIllegalArgumentException here - will return NaN above
         TDistribution distribution = new TDistribution(n - 2);
         return 2d * (1.0 - distribution.cumulativeProbability(
                     FastMath.abs(getSlope()) / getSlopeStdErr()));

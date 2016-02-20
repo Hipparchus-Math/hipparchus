@@ -21,9 +21,8 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.MultivariateDifferentiableFunction;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Identity;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.MathArrays;
 
@@ -316,14 +315,14 @@ public class FunctionUtils {
      * @return the array of samples.
      * @throws NumberIsTooLargeException if the lower bound {@code min} is
      * greater than, or equal to the upper bound {@code max}.
-     * @throws NotStrictlyPositiveException if the number of sample points
+     * @throws MathIllegalArgumentException if the number of sample points
      * {@code n} is negative.
      */
     public static double[] sample(UnivariateFunction f, double min, double max, int n)
-       throws NumberIsTooLargeException, NotStrictlyPositiveException {
+       throws NumberIsTooLargeException, MathIllegalArgumentException {
 
         if (n <= 0) {
-            throw new NotStrictlyPositiveException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.NOT_POSITIVE_NUMBER_OF_SAMPLES,
                     Integer.valueOf(n));
         }

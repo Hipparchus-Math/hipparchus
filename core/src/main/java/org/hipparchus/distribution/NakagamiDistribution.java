@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -59,7 +59,7 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @param mu shape parameter
      * @param omega scale parameter (must be positive)
      * @throws NumberIsTooSmallException if {@code mu < 0.5}
-     * @throws NotStrictlyPositiveException if {@code omega <= 0}
+     * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
     public NakagamiDistribution(double mu, double omega) {
         this(mu, omega, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
@@ -80,7 +80,7 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NumberIsTooSmallException if {@code mu < 0.5}
-     * @throws NotStrictlyPositiveException if {@code omega <= 0}
+     * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
     public NakagamiDistribution(double mu, double omega, double inverseAbsoluteAccuracy) {
         this(new Well19937c(), mu, omega, inverseAbsoluteAccuracy);
@@ -95,7 +95,7 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws NumberIsTooSmallException if {@code mu < 0.5}
-     * @throws NotStrictlyPositiveException if {@code omega <= 0}
+     * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
     public NakagamiDistribution(RandomGenerator rng, double mu, double omega, double inverseAbsoluteAccuracy) {
         super(rng);
@@ -104,7 +104,7 @@ public class NakagamiDistribution extends AbstractRealDistribution {
             throw new NumberIsTooSmallException(mu, 0.5, true);
         }
         if (omega <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NOT_POSITIVE_SCALE, omega);
+            throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_SCALE, omega);
         }
 
         this.mu = mu;

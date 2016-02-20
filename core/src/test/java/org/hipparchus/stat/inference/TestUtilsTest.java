@@ -22,13 +22,10 @@ import java.util.List;
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
-import org.hipparchus.stat.inference.OneWayAnova;
-import org.hipparchus.stat.inference.TestUtils;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -90,8 +87,8 @@ public class TestUtilsTest {
         expected[0] = 0;
         try {
             TestUtils.chiSquareTest(expected, observed, .01);
-            Assert.fail("bad expected count, NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("bad expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

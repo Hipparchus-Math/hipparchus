@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;
@@ -56,10 +56,10 @@ public class TDistribution extends AbstractRealDistribution {
      * additional initialisation overhead.
      *
      * @param degreesOfFreedom Degrees of freedom.
-     * @throws NotStrictlyPositiveException if {@code degreesOfFreedom <= 0}
+     * @throws MathIllegalArgumentException if {@code degreesOfFreedom <= 0}
      */
     public TDistribution(double degreesOfFreedom)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(degreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -78,11 +78,11 @@ public class TDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates
      * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code degreesOfFreedom <= 0}
+     * @throws MathIllegalArgumentException if {@code degreesOfFreedom <= 0}
      * @since 2.1
      */
     public TDistribution(double degreesOfFreedom, double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), degreesOfFreedom, inverseCumAccuracy);
     }
 
@@ -91,11 +91,11 @@ public class TDistribution extends AbstractRealDistribution {
      *
      * @param rng Random number generator.
      * @param degreesOfFreedom Degrees of freedom.
-     * @throws NotStrictlyPositiveException if {@code degreesOfFreedom <= 0}
+     * @throws MathIllegalArgumentException if {@code degreesOfFreedom <= 0}
      * @since 3.3
      */
     public TDistribution(RandomGenerator rng, double degreesOfFreedom)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(rng, degreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -107,17 +107,17 @@ public class TDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates
      * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code degreesOfFreedom <= 0}
+     * @throws MathIllegalArgumentException if {@code degreesOfFreedom <= 0}
      * @since 3.1
      */
     public TDistribution(RandomGenerator rng,
                          double degreesOfFreedom,
                          double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (degreesOfFreedom <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.DEGREES_OF_FREEDOM,
+            throw new MathIllegalArgumentException(LocalizedFormats.DEGREES_OF_FREEDOM,
                                                    degreesOfFreedom);
         }
         this.degreesOfFreedom = degreesOfFreedom;

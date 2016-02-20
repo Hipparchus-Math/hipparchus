@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.distribution.FDistribution;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -92,14 +92,14 @@ public class FDistributionTest extends RealDistributionAbstractTest {
     public void testPreconditions() {
         try {
             new FDistribution(0, 1);
-            Assert.fail("Expecting NotStrictlyPositiveException for df = 0");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException for df = 0");
+        } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new FDistribution(1, 0);
-            Assert.fail("Expecting NotStrictlyPositiveException for df = 0");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException for df = 0");
+        } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
     }

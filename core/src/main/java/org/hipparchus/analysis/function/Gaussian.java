@@ -24,7 +24,6 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -51,14 +50,15 @@ public class Gaussian implements UnivariateDifferentiableFunction {
      * @param norm Normalization factor.
      * @param mean Mean.
      * @param sigma Standard deviation.
-     * @throws NotStrictlyPositiveException if {@code sigma <= 0}.
+     * @throws MathIllegalArgumentException if {@code sigma <= 0}.
      */
     public Gaussian(double norm,
                     double mean,
                     double sigma)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         if (sigma <= 0) {
-            throw new NotStrictlyPositiveException(sigma);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   sigma, 0);
         }
 
         this.norm = norm;
@@ -72,11 +72,11 @@ public class Gaussian implements UnivariateDifferentiableFunction {
      *
      * @param mean Mean.
      * @param sigma Standard deviation.
-     * @throws NotStrictlyPositiveException if {@code sigma <= 0}.
+     * @throws MathIllegalArgumentException if {@code sigma <= 0}.
      */
     public Gaussian(double mean,
                     double sigma)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(1 / (sigma * FastMath.sqrt(2 * Math.PI)), mean, sigma);
     }
 
@@ -112,13 +112,13 @@ public class Gaussian implements UnivariateDifferentiableFunction {
          * @throws NullArgumentException if {@code param} is {@code null}.
          * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 3.
-         * @throws NotStrictlyPositiveException if {@code param[2]} is negative.
+         * @throws MathIllegalArgumentException if {@code param[2]} is negative.
          */
         @Override
         public double value(double x, double ... param)
             throws NullArgumentException,
                    MathIllegalArgumentException,
-                   NotStrictlyPositiveException {
+                   MathIllegalArgumentException {
             validateParameters(param);
 
             final double diff = x - param[1];
@@ -138,13 +138,13 @@ public class Gaussian implements UnivariateDifferentiableFunction {
          * @throws NullArgumentException if {@code param} is {@code null}.
          * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 3.
-         * @throws NotStrictlyPositiveException if {@code param[2]} is negative.
+         * @throws MathIllegalArgumentException if {@code param[2]} is negative.
          */
         @Override
         public double[] gradient(double x, double ... param)
             throws NullArgumentException,
                    MathIllegalArgumentException,
-                   NotStrictlyPositiveException {
+                   MathIllegalArgumentException {
             validateParameters(param);
 
             final double norm = param[0];
@@ -168,12 +168,12 @@ public class Gaussian implements UnivariateDifferentiableFunction {
          * @throws NullArgumentException if {@code param} is {@code null}.
          * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 3.
-         * @throws NotStrictlyPositiveException if {@code param[2]} is negative.
+         * @throws MathIllegalArgumentException if {@code param[2]} is negative.
          */
         private void validateParameters(double[] param)
             throws NullArgumentException,
                    MathIllegalArgumentException,
-                   NotStrictlyPositiveException {
+                   MathIllegalArgumentException {
             if (param == null) {
                 throw new NullArgumentException();
             }
@@ -182,7 +182,8 @@ public class Gaussian implements UnivariateDifferentiableFunction {
                                                        param.length, 3);
             }
             if (param[2] <= 0) {
-                throw new NotStrictlyPositiveException(param[2]);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                       param[2], 0);
             }
         }
     }

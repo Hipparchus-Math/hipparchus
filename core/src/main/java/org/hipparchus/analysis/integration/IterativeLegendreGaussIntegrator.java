@@ -22,7 +22,6 @@ import org.hipparchus.analysis.integration.gauss.GaussIntegratorFactory;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.util.FastMath;
@@ -60,7 +59,7 @@ public class IterativeLegendreGaussIntegrator
      * @param absoluteAccuracy Absolute accuracy of the result.
      * @param minimalIterationCount Minimum number of iterations.
      * @param maximalIterationCount Maximum number of iterations.
-     * @throws NotStrictlyPositiveException if minimal number of iterations
+     * @throws MathIllegalArgumentException if minimal number of iterations
      * or number of points are not strictly positive.
      * @throws NumberIsTooSmallException if maximal number of iterations
      * is smaller than or equal to the minimal number of iterations.
@@ -70,10 +69,10 @@ public class IterativeLegendreGaussIntegrator
                                             final double absoluteAccuracy,
                                             final int minimalIterationCount,
                                             final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         super(relativeAccuracy, absoluteAccuracy, minimalIterationCount, maximalIterationCount);
         if (n <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_POINTS, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS, n);
         }
        numberOfPoints = n;
     }
@@ -84,12 +83,12 @@ public class IterativeLegendreGaussIntegrator
      * @param n Number of integration points.
      * @param relativeAccuracy Relative accuracy of the result.
      * @param absoluteAccuracy Absolute accuracy of the result.
-     * @throws NotStrictlyPositiveException if {@code n < 1}.
+     * @throws MathIllegalArgumentException if {@code n < 1}.
      */
     public IterativeLegendreGaussIntegrator(final int n,
                                             final double relativeAccuracy,
                                             final double absoluteAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(n, relativeAccuracy, absoluteAccuracy,
              DEFAULT_MIN_ITERATIONS_COUNT, DEFAULT_MAX_ITERATIONS_COUNT);
     }
@@ -100,16 +99,16 @@ public class IterativeLegendreGaussIntegrator
      * @param n Number of integration points.
      * @param minimalIterationCount Minimum number of iterations.
      * @param maximalIterationCount Maximum number of iterations.
-     * @throws NotStrictlyPositiveException if minimal number of iterations
+     * @throws MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive.
      * @throws NumberIsTooSmallException if maximal number of iterations
      * is smaller than or equal to the minimal number of iterations.
-     * @throws NotStrictlyPositiveException if {@code n < 1}.
+     * @throws MathIllegalArgumentException if {@code n < 1}.
      */
     public IterativeLegendreGaussIntegrator(final int n,
                                             final int minimalIterationCount,
                                             final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         this(n, DEFAULT_RELATIVE_ACCURACY, DEFAULT_ABSOLUTE_ACCURACY,
              minimalIterationCount, maximalIterationCount);
     }

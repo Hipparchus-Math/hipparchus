@@ -63,7 +63,7 @@ public class MicrosphereProjectionInterpolator
      * interpolated point and one of the sample points is less than this
      * value, no interpolation will be performed (the value of the sample
      * will be returned).
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code dimension <= 0} or {@code elements <= 0}.
      * @throws NotPositiveException if {@code exponent < 0}.
      * @throws NotPositiveException if {@code darkThreshold < 0}.

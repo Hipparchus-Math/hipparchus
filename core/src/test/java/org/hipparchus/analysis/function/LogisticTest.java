@@ -19,10 +19,7 @@ package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.analysis.function.Logistic;
-import org.hipparchus.analysis.function.Sigmoid;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -34,12 +31,12 @@ import org.junit.Test;
 public class LogisticTest {
     private final double EPS = Math.ulp(1d);
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions1() {
         new Logistic(1, 0, 1, 1, 0, -1);
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions2() {
         new Logistic(1, 0, 1, 1, 0, 0);
     }
@@ -128,13 +125,13 @@ public class LogisticTest {
         g.gradient(0, new double[] {0});
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage5() {
         final Logistic.Parametric g = new Logistic.Parametric();
         g.value(0, new double[] {1, 0, 1, 1, 0 ,0});
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage6() {
         final Logistic.Parametric g = new Logistic.Parametric();
         g.gradient(0, new double[] {1, 0, 1, 1, 0 ,0});

@@ -21,7 +21,7 @@ import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.HypergeometricDistribution;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -166,8 +166,8 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
     public void testPreconditions() {
         try {
             new HypergeometricDistribution(0, 3, 5);
-            Assert.fail("negative population size. NotStrictlyPositiveException expected");
-        } catch(NotStrictlyPositiveException ex) {
+            Assert.fail("negative population size. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {

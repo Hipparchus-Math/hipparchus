@@ -20,9 +20,7 @@ package org.hipparchus.util;
 import java.util.NoSuchElementException;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.util.MultidimensionalCounter;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -37,20 +35,20 @@ public class MultidimensionalCounterTest {
 
         try {
             c = new MultidimensionalCounter(0, 1);
-            Assert.fail("NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c = new MultidimensionalCounter(2, 0);
-            Assert.fail("NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
         try {
             c = new MultidimensionalCounter(-1, 1);
-            Assert.fail("NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
 

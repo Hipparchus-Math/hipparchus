@@ -23,12 +23,7 @@ import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.transform.DftNormalization;
-import org.hipparchus.transform.FastFourierTransformer;
-import org.hipparchus.transform.TransformType;
-import org.hipparchus.transform.TransformUtils;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -133,8 +128,8 @@ public final class FastFourierTransformerTest {
                     fft.transform(f, 0.0, Math.PI, n, type[j]);
                     fft.transform(f, 0.0, Math.PI, n, type[j]);
                     Assert.fail(norm[i] + ", " + type[j] +
-                        ": NotStrictlyPositiveException was expected");
-                } catch (NotStrictlyPositiveException e) {
+                        ": MathIllegalArgumentException was expected");
+                } catch (MathIllegalArgumentException e) {
                     // Expected behaviour
                 }
             }

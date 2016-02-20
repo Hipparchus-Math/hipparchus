@@ -35,7 +35,6 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
@@ -580,15 +579,16 @@ public class MathArrays {
      * Check that all entries of the input array are strictly positive.
      *
      * @param in Array to be tested
-     * @throws NotStrictlyPositiveException if any entries of the array are not
+     * @throws MathIllegalArgumentException if any entries of the array are not
      * strictly positive.
      * @since 3.1
      */
     public static void checkPositive(final double[] in)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         for (int i = 0; i < in.length; i++) {
             if (in[i] <= 0) {
-                throw new NotStrictlyPositiveException(in[i]);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                       in[i], 0);
             }
         }
     }

@@ -18,7 +18,8 @@
 package org.hipparchus.ml.neuralnet.sofm.util;
 
 import org.hipparchus.analysis.function.Logistic;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 
 /**
@@ -46,21 +47,23 @@ public class QuasiSigmoidDecayFunction {
      * @param initValue Initial value, i.e. {@link #value(long) value(0)}.
      * @param slope Value of the function derivative at {@code numCall}.
      * @param numCall Inflexion point.
-     * @throws NotStrictlyPositiveException if {@code initValue <= 0}.
+     * @throws MathIllegalArgumentException if {@code initValue <= 0}.
      * @throws NumberIsTooLargeException if {@code slope >= 0}.
-     * @throws NotStrictlyPositiveException if {@code numCall <= 0}.
+     * @throws MathIllegalArgumentException if {@code numCall <= 1}.
      */
     public QuasiSigmoidDecayFunction(double initValue,
                                      double slope,
                                      long numCall) {
         if (initValue <= 0) {
-            throw new NotStrictlyPositiveException(initValue);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   initValue, 0);
         }
         if (slope >= 0) {
             throw new NumberIsTooLargeException(slope, 0, false);
         }
         if (numCall <= 1) {
-            throw new NotStrictlyPositiveException(numCall);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   numCall, 1);
         }
 
         final double k = initValue;

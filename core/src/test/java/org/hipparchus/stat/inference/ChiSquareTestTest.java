@@ -18,10 +18,8 @@ package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.stat.inference.ChiSquareTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -85,8 +83,8 @@ public class ChiSquareTestTest {
         expected[0] = 0;
         try {
             testStatistic.chiSquareTest(expected, observed, .01);
-            Assert.fail("bad expected count, NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("bad expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

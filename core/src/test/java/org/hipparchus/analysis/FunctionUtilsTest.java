@@ -37,7 +37,6 @@ import org.hipparchus.analysis.function.Power;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -213,12 +212,12 @@ public class FunctionUtilsTest {
         FunctionUtils.sample(new Sin(), FastMath.PI, 0.0, 10);
     }
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSampleNegativeNumberOfPoints(){
         FunctionUtils.sample(new Sin(), 0.0, FastMath.PI, -1);
     }
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSampleNullNumberOfPoints(){
         FunctionUtils.sample(new Sin(), 0.0, FastMath.PI, 0);
     }

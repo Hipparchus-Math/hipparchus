@@ -21,10 +21,9 @@ import java.io.Serializable;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -93,12 +92,12 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      * @param field Field to which the elements belong.
      * @param rows Number of rows in the new matrix.
      * @param columns Number of columns in the new matrix.
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      */
     public BlockFieldMatrix(final Field<T> field, final int rows,
                             final int columns)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(field, rows, columns);
         this.rows    = rows;
         this.columns = columns;
@@ -140,7 +139,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      *
      * @throws MathIllegalArgumentException if the {@code blockData} shape is
      * inconsistent with block layout.
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      * @see #createBlocksLayout(Field, int, int)
      * @see #toBlocksLayout(FieldElement[][])
@@ -148,7 +147,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      */
     public BlockFieldMatrix(final int rows, final int columns,
                             final T[][] blockData, final boolean copyArray)
-        throws MathIllegalArgumentException, NotStrictlyPositiveException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         super(extractField(blockData), rows, columns);
         this.rows    = rows;
         this.columns = columns;
@@ -295,7 +294,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public FieldMatrix<T> createMatrix(final int rowDimension,
                                        final int columnDimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         return new BlockFieldMatrix<T>(getField(), rowDimension,
                                        columnDimension);
     }

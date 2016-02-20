@@ -21,11 +21,10 @@ import java.io.Serializable;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -64,11 +63,11 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      * @param field Field to which the elements belong.
      * @param rowDimension Number of rows in the new matrix.
      * @param columnDimension Number of columns in the new matrix.
-     * @throws NotStrictlyPositiveException if row or column dimension is not positive.
+     * @throws MathIllegalArgumentException if row or column dimension is not positive.
      */
     public Array2DRowFieldMatrix(final Field<T> field, final int rowDimension,
                                  final int columnDimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(field, rowDimension, columnDimension);
         data = MathArrays.buildArray(field, rowDimension, columnDimension);
     }
@@ -208,7 +207,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldMatrix<T> createMatrix(final int rowDimension,
                                        final int columnDimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         return new Array2DRowFieldMatrix<T>(getField(), rowDimension, columnDimension);
     }
 

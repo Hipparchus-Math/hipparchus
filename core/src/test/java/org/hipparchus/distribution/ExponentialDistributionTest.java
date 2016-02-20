@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.distribution.ExponentialDistribution;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -114,7 +114,7 @@ public class ExponentialDistributionTest extends RealDistributionAbstractTest {
         Assert.assertEquals(5d, distribution.getMean(), Double.MIN_VALUE);
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions() {
         new ExponentialDistribution(0);
     }

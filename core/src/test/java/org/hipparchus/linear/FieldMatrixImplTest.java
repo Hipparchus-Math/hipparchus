@@ -21,7 +21,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -451,22 +450,14 @@ public final class FieldMatrixImplTest {
             if (reference != null) {
                 Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), sub);
             } else {
-                Assert.fail("Expecting OutOfRangeException or NotStrictlyPositiveException"
+                Assert.fail("Expecting OutOfRangeException or MathIllegalArgumentException"
                      + " or NumberIsTooSmallException or NoDataException");
             }
         } catch (OutOfRangeException e) {
             if (reference != null) {
                 throw e;
             }
-        } catch (NotStrictlyPositiveException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -480,22 +471,14 @@ public final class FieldMatrixImplTest {
             if (reference != null) {
                 Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), sub);
             } else {
-                Assert.fail("Expecting OutOfRangeException or NotStrictlyPositiveException"
+                Assert.fail("Expecting OutOfRangeException or MathIllegalArgumentException"
                      + " or NumberIsTooSmallException or NoDataException");
             }
         } catch (OutOfRangeException e) {
             if (reference != null) {
                 throw e;
             }
-        } catch (NotStrictlyPositiveException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }

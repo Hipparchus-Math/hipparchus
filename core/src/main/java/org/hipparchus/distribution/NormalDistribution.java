@@ -18,7 +18,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
@@ -78,10 +78,10 @@ public class NormalDistribution extends AbstractRealDistribution {
      *
      * @param mean Mean for this distribution.
      * @param sd Standard deviation for this distribution.
-     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     * @throws MathIllegalArgumentException if {@code sd <= 0}.
      */
     public NormalDistribution(double mean, double sd)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(mean, sd, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -99,11 +99,11 @@ public class NormalDistribution extends AbstractRealDistribution {
      * @param mean Mean for this distribution.
      * @param sd Standard deviation for this distribution.
      * @param inverseCumAccuracy Inverse cumulative probability accuracy.
-     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     * @throws MathIllegalArgumentException if {@code sd <= 0}.
      * @since 2.1
      */
     public NormalDistribution(double mean, double sd, double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), mean, sd, inverseCumAccuracy);
     }
 
@@ -113,11 +113,11 @@ public class NormalDistribution extends AbstractRealDistribution {
      * @param rng Random number generator.
      * @param mean Mean for this distribution.
      * @param sd Standard deviation for this distribution.
-     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     * @throws MathIllegalArgumentException if {@code sd <= 0}.
      * @since 3.3
      */
     public NormalDistribution(RandomGenerator rng, double mean, double sd)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(rng, mean, sd, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -128,18 +128,18 @@ public class NormalDistribution extends AbstractRealDistribution {
      * @param mean Mean for this distribution.
      * @param sd Standard deviation for this distribution.
      * @param inverseCumAccuracy Inverse cumulative probability accuracy.
-     * @throws NotStrictlyPositiveException if {@code sd <= 0}.
+     * @throws MathIllegalArgumentException if {@code sd <= 0}.
      * @since 3.1
      */
     public NormalDistribution(RandomGenerator rng,
                               double mean,
                               double sd,
                               double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (sd <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.STANDARD_DEVIATION, sd);
+            throw new MathIllegalArgumentException(LocalizedFormats.STANDARD_DEVIATION, sd);
         }
 
         this.mean = mean;

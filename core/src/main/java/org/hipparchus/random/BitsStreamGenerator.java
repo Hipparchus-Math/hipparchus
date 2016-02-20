@@ -18,7 +18,8 @@ package org.hipparchus.random;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /** Base class for random number generators that generates bits streams.
@@ -171,7 +172,8 @@ public abstract class BitsStreamGenerator
             } while (bits - val + (n - 1) < 0);
             return val;
         }
-        throw new NotStrictlyPositiveException(n);
+        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                               n, 0);
     }
 
     /** {@inheritDoc} */
@@ -204,7 +206,8 @@ public abstract class BitsStreamGenerator
             } while (bits - val + (n - 1) < 0);
             return val;
         }
-        throw new NotStrictlyPositiveException(n);
+        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                               n, 0);
     }
 
     /**

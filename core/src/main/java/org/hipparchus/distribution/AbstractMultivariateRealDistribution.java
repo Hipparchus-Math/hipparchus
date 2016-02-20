@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 
 /**
@@ -62,7 +62,7 @@ public abstract class AbstractMultivariateRealDistribution
     @Override
     public double[][] sample(final int sampleSize) {
         if (sampleSize <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES,
                                                    sampleSize);
         }
         final double[][] out = new double[sampleSize][dimension];

@@ -17,7 +17,8 @@
 
 package org.hipparchus.ml.neuralnet.sofm.util;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 
@@ -46,25 +47,28 @@ public class ExponentialDecayFunction {
      * @param valueAtNumCall Value of the function at {@code numCall}.
      * @param numCall Argument for which the function returns
      * {@code valueAtNumCall}.
-     * @throws NotStrictlyPositiveException if {@code initValue <= 0}.
-     * @throws NotStrictlyPositiveException if {@code valueAtNumCall <= 0}.
+     * @throws MathIllegalArgumentException if {@code initValue <= 0}.
+     * @throws MathIllegalArgumentException if {@code valueAtNumCall <= 0}.
      * @throws NumberIsTooLargeException if {@code valueAtNumCall >= initValue}.
-     * @throws NotStrictlyPositiveException if {@code numCall <= 0}.
+     * @throws MathIllegalArgumentException if {@code numCall <= 0}.
      */
     public ExponentialDecayFunction(double initValue,
                                     double valueAtNumCall,
                                     long numCall) {
         if (initValue <= 0) {
-            throw new NotStrictlyPositiveException(initValue);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   initValue, 0);
         }
         if (valueAtNumCall <= 0) {
-            throw new NotStrictlyPositiveException(valueAtNumCall);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   valueAtNumCall, 0);
         }
         if (valueAtNumCall >= initValue) {
             throw new NumberIsTooLargeException(valueAtNumCall, initValue, false);
         }
         if (numCall <= 0) {
-            throw new NotStrictlyPositiveException(numCall);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   numCall, 0);
         }
 
         a = initValue;

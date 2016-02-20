@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -249,7 +248,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquare(double[], long[])
      */
     public static double chiSquare(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException {
         return CHI_SQUARE_TEST.chiSquare(expected, observed);
     }
@@ -268,7 +267,7 @@ public class TestUtils  {
      */
     public static boolean chiSquareTest(final double[] expected, final long[] observed,
                                         final double alpha)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(expected, observed, alpha);
     }
@@ -277,7 +276,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTest(double[], long[])
      */
     public static double chiSquareTest(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException, MaxCountExceededException {
         return CHI_SQUARE_TEST.chiSquareTest(expected, observed);
     }
@@ -374,7 +373,7 @@ public class TestUtils  {
      * @since 3.1
      */
     public static double g(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException {
         return G_TEST.g(expected, observed);
     }
@@ -384,7 +383,7 @@ public class TestUtils  {
      * @since 3.1
      */
     public static double gTest(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException, MaxCountExceededException {
         return G_TEST.gTest(expected, observed);
     }
@@ -394,7 +393,7 @@ public class TestUtils  {
      * @since 3.1
      */
     public static double gTestIntrinsic(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException, MaxCountExceededException {
         return G_TEST.gTestIntrinsic(expected, observed);
     }
@@ -405,7 +404,7 @@ public class TestUtils  {
      */
     public static boolean gTest(final double[] expected, final long[] observed,
                                 final double alpha)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
         return G_TEST.gTest(expected, observed, alpha);
     }

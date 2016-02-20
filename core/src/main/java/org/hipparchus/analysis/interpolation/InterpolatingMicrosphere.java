@@ -16,15 +16,15 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import java.util.List;
 import java.util.ArrayList;
-import org.hipparchus.random.UnitSphereRandomVectorGenerator;
+import java.util.List;
+
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -64,7 +64,7 @@ public class InterpolatingMicrosphere {
      * considered dark.
      * @param background Value returned when the {@code maxDarkFraction}
      * threshold is exceeded.
-     * @throws NotStrictlyPositiveException if {@code dimension <= 0}
+     * @throws MathIllegalArgumentException if {@code dimension <= 0}
      * or {@code size <= 0}.
      * @throws NotPositiveException if {@code darkThreshold < 0}.
      * @throws OutOfRangeException if {@code maxDarkFraction} does not
@@ -76,10 +76,12 @@ public class InterpolatingMicrosphere {
                                        double darkThreshold,
                                        double background) {
         if (dimension <= 0) {
-            throw new NotStrictlyPositiveException(dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   dimension, 0);
         }
         if (size <= 0) {
-            throw new NotStrictlyPositiveException(size);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   size, 0);
         }
         if (maxDarkFraction < 0 ||
             maxDarkFraction > 1) {
@@ -114,7 +116,7 @@ public class InterpolatingMicrosphere {
      * threshold is exceeded.
      * @throws MathIllegalArgumentException if the size of the generated
      * vectors does not match the dimension set in the constructor.
-     * @throws NotStrictlyPositiveException if {@code dimension <= 0}
+     * @throws MathIllegalArgumentException if {@code dimension <= 0}
      * or {@code size <= 0}.
      * @throws NotPositiveException if {@code darkThreshold < 0}.
      * @throws OutOfRangeException if {@code maxDarkFraction} does not

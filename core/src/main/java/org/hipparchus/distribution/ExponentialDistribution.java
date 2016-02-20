@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -119,7 +119,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy Maximum absolute error in inverse
      * cumulative probability estimates (defaults to
      * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code mean <= 0}.
+     * @throws MathIllegalArgumentException if {@code mean <= 0}.
      * @since 2.1
      */
     public ExponentialDistribution(double mean, double inverseCumAccuracy) {
@@ -131,11 +131,11 @@ public class ExponentialDistribution extends AbstractRealDistribution {
      *
      * @param rng Random number generator.
      * @param mean Mean of this distribution.
-     * @throws NotStrictlyPositiveException if {@code mean <= 0}.
+     * @throws MathIllegalArgumentException if {@code mean <= 0}.
      * @since 3.3
      */
     public ExponentialDistribution(RandomGenerator rng, double mean)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(rng, mean, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -147,17 +147,17 @@ public class ExponentialDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy Maximum absolute error in inverse
      * cumulative probability estimates (defaults to
      * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code mean <= 0}.
+     * @throws MathIllegalArgumentException if {@code mean <= 0}.
      * @since 3.1
      */
     public ExponentialDistribution(RandomGenerator rng,
                                    double mean,
                                    double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (mean <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.MEAN, mean);
+            throw new MathIllegalArgumentException(LocalizedFormats.MEAN, mean);
         }
         this.mean = mean;
         logMean = FastMath.log(mean);

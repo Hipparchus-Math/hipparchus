@@ -27,7 +27,7 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -230,12 +230,12 @@ public class EnumeratedDistribution<T> implements Serializable {
      *
      * @param sampleSize the number of random values to generate.
      * @return an array representing the random sample.
-     * @throws NotStrictlyPositiveException if {@code sampleSize} is not
+     * @throws MathIllegalArgumentException if {@code sampleSize} is not
      * positive.
      */
-    public Object[] sample(int sampleSize) throws NotStrictlyPositiveException {
+    public Object[] sample(int sampleSize) throws MathIllegalArgumentException {
         if (sampleSize <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES,
                     sampleSize);
         }
 
@@ -259,12 +259,12 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @param sampleSize the number of random values to generate.
      * @param array the array to populate.
      * @return an array representing the random sample.
-     * @throws NotStrictlyPositiveException if {@code sampleSize} is not positive.
+     * @throws MathIllegalArgumentException if {@code sampleSize} is not positive.
      * @throws NullArgumentException if {@code array} is null
      */
-    public T[] sample(int sampleSize, final T[] array) throws NotStrictlyPositiveException {
+    public T[] sample(int sampleSize, final T[] array) throws MathIllegalArgumentException {
         if (sampleSize <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES, sampleSize);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES, sampleSize);
         }
 
         if (array == null) {

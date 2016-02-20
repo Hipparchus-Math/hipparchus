@@ -25,7 +25,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -66,19 +65,19 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      * @param field Field to which the elements belong.
      * @param rowDimension Number of rows in the new matrix.
      * @param columnDimension Number of columns in the new matrix.
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      */
     protected AbstractFieldMatrix(final Field<T> field,
                                   final int rowDimension,
                                   final int columnDimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         if (rowDimension <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSION,
                                                    rowDimension);
         }
         if (columnDimension <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSION,
                                                    columnDimension);
         }
         this.field = field;
@@ -133,7 +132,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public abstract FieldMatrix<T> createMatrix(final int rowDimension,
                                                 final int columnDimension)
-        throws NotStrictlyPositiveException;
+        throws MathIllegalArgumentException;
 
     /** {@inheritDoc} */
     @Override

@@ -18,7 +18,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.distribution.LogNormalDistribution;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -175,7 +175,7 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
         Assert.assertEquals(1.4, distribution.getShape(), 0);
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions() {
         new LogNormalDistribution(1, 0);
     }

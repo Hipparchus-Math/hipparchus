@@ -18,7 +18,8 @@ package org.hipparchus.random;
 
 import java.util.Random;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Utilities for creating {@link RandomGenerator} instances.
@@ -75,7 +76,8 @@ public class RandomGeneratorFactory {
             @Override
             public int nextInt(int n) {
                 if (n <= 0) {
-                    throw new NotStrictlyPositiveException(n);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                           n, 0);
                 }
                 return rng.nextInt(n);
             }

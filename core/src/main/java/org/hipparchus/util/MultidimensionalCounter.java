@@ -21,7 +21,6 @@ import java.util.NoSuchElementException;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 
 /**
@@ -169,10 +168,10 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      * Create a counter.
      *
      * @param size Counter sizes (number of slots in each dimension).
-     * @throws NotStrictlyPositiveException if one of the sizes is
+     * @throws MathIllegalArgumentException if one of the sizes is
      * negative or zero.
      */
-    public MultidimensionalCounter(int ... size) throws NotStrictlyPositiveException {
+    public MultidimensionalCounter(int ... size) throws MathIllegalArgumentException {
         dimension = size.length;
         this.size = MathArrays.copyOf(size);
 
@@ -191,7 +190,8 @@ public class MultidimensionalCounter implements Iterable<Integer> {
         uniCounterOffset[last] = 0;
 
         if (tS <= 0) {
-            throw new NotStrictlyPositiveException(tS);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   tS, 0);
         }
 
         totalSize = tS;

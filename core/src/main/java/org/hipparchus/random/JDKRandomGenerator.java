@@ -17,7 +17,9 @@
 package org.hipparchus.random;
 
 import java.util.Random;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * A {@link RandomGenerator} adapter that delegates the random number
@@ -115,7 +117,8 @@ public class JDKRandomGenerator
         try {
             return delegate.nextInt(n);
         } catch (IllegalArgumentException e) {
-            throw new NotStrictlyPositiveException(n);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   n, 0);
         }
     }
 }

@@ -22,10 +22,9 @@ import java.util.List;
 
 import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -77,18 +76,19 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * Creates an object to fit a multivariate normal mixture model to data.
      *
      * @param data Data to use in fitting procedure
-     * @throws NotStrictlyPositiveException if data has no rows
+     * @throws MathIllegalArgumentException if data has no rows
      * @throws MathIllegalArgumentException if rows of data have different numbers
      *             of columns
      * @throws NumberIsTooSmallException if the number of columns in the data is
      *             less than 2
      */
     public MultivariateNormalMixtureExpectationMaximization(double[][] data)
-        throws NotStrictlyPositiveException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException,
                NumberIsTooSmallException {
         if (data.length < 1) {
-            throw new NotStrictlyPositiveException(data.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   data.length, 1);
         }
 
         this.data = new double[data.length][data[0].length];
@@ -124,7 +124,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
      *             logLikelihoods between successive iterations
      * @throws SingularMatrixException if any component's covariance matrix is
      *             singular during fitting
-     * @throws NotStrictlyPositiveException if numComponents is less than one
+     * @throws MathIllegalArgumentException if numComponents is less than one
      *             or threshold is less than Double.MIN_VALUE
      * @throws MathIllegalArgumentException if initialMixture mean vector and data
      *             number of columns are not equal
@@ -133,14 +133,16 @@ public class MultivariateNormalMixtureExpectationMaximization {
                     final int maxIterations,
                     final double threshold)
             throws SingularMatrixException,
-                   NotStrictlyPositiveException,
+                   MathIllegalArgumentException,
                    MathIllegalArgumentException {
         if (maxIterations < 1) {
-            throw new NotStrictlyPositiveException(maxIterations);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maxIterations, 1);
         }
 
         if (threshold < Double.MIN_VALUE) {
-            throw new NotStrictlyPositiveException(threshold);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   threshold, Double.MIN_VALUE);
         }
 
         final int n = data.length;
@@ -273,12 +275,12 @@ public class MultivariateNormalMixtureExpectationMaximization {
      *            multivariate normals
      * @throws SingularMatrixException if any component's covariance matrix is
      *             singular during fitting
-     * @throws NotStrictlyPositiveException if numComponents is less than one or
+     * @throws MathIllegalArgumentException if numComponents is less than one or
      *             threshold is less than Double.MIN_VALUE
      */
     public void fit(MixtureMultivariateNormalDistribution initialMixture)
         throws SingularMatrixException,
-               NotStrictlyPositiveException {
+               MathIllegalArgumentException {
         fit(initialMixture, DEFAULT_MAX_ITERATIONS, DEFAULT_THRESHOLD);
     }
 
@@ -296,16 +298,17 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * @throws NumberIsTooLargeException if {@code numComponents} is greater
      * than the number of data rows.
      * @throws NumberIsTooSmallException if {@code numComponents < 2}.
-     * @throws NotStrictlyPositiveException if data has less than 2 rows
+     * @throws MathIllegalArgumentException if data has less than 2 rows
      * @throws MathIllegalArgumentException if rows of data have different numbers
      *             of columns
      */
     public static MixtureMultivariateNormalDistribution estimate(final double[][] data,
                                                                  final int numComponents)
-        throws NotStrictlyPositiveException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException {
         if (data.length < 2) {
-            throw new NotStrictlyPositiveException(data.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   data.length, 2);
         }
         if (numComponents < 2) {
             throw new NumberIsTooSmallException(numComponents, 2, true);

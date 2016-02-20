@@ -19,7 +19,7 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.distribution.CauchyDistribution;
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -96,13 +96,13 @@ public class CauchyDistributionTest extends RealDistributionAbstractTest {
         try {
             new CauchyDistribution(0, 0);
             Assert.fail("Cannot have zero scale");
-        } catch (NotStrictlyPositiveException ex) {
+        } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new CauchyDistribution(0, -1);
             Assert.fail("Cannot have negative scale");
-        } catch (NotStrictlyPositiveException ex) {
+        } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
     }

@@ -128,7 +128,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
         RealMatrix Q = qr.getQ();
         final int p = qr.getR().getColumnDimension();
         final int n = Q.getColumnDimension();
-        // No try-catch or advertised NotStrictlyPositiveException - NPE above if n < 3
+        // No try-catch or advertised MathIllegalArgumentException - NPE above if n < 3
         Array2DRowRealMatrix augI = new Array2DRowRealMatrix(n, n);
         double[][] augIData = augI.getDataRef();
         for (int i = 0; i < n; i++) {

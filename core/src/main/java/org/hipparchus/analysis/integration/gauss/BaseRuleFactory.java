@@ -19,9 +19,8 @@ package org.hipparchus.analysis.integration.gauss;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Pair;
 
 /**
@@ -48,15 +47,15 @@ public abstract class BaseRuleFactory<T extends Number> {
      *
      * @param numberOfPoints Number of integration points.
      * @return a copy of the integration rule.
-     * @throws NotStrictlyPositiveException if {@code numberOfPoints < 1}.
+     * @throws MathIllegalArgumentException if {@code numberOfPoints < 1}.
      * @throws MathIllegalArgumentException if the elements of the rule pair do not
      * have the same length.
      */
     public Pair<double[], double[]> getRule(int numberOfPoints)
-        throws NotStrictlyPositiveException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
 
         if (numberOfPoints <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
                                                    numberOfPoints);
         }
 

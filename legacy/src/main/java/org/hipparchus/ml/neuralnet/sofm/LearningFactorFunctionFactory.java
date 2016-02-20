@@ -47,11 +47,11 @@ public class LearningFactorFunctionFactory {
      * @return the learning factor function.
      * @throws org.hipparchus.exception.OutOfRangeException
      * if {@code initValue <= 0} or {@code initValue > 1}.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code valueAtNumCall <= 0}.
      * @throws org.hipparchus.exception.NumberIsTooLargeException
      * if {@code valueAtNumCall >= initValue}.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code numCall <= 0}.
      */
     public static LearningFactorFunction exponentialDecay(final double initValue,
@@ -93,7 +93,7 @@ public class LearningFactorFunctionFactory {
      * if {@code initValue <= 0} or {@code initValue > 1}.
      * @throws org.hipparchus.exception.NumberIsTooLargeException
      * if {@code slope >= 0}.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code numCall <= 0}.
      */
     public static LearningFactorFunction quasiSigmoidDecay(final double initValue,

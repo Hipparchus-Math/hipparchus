@@ -17,11 +17,10 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.ChiSquaredDistribution;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.FastMath;
@@ -68,13 +67,13 @@ public class GTest {
      * @param expected array of expected frequency counts
      * @return G-Test statistic
      * @throws NotPositiveException if {@code observed} has negative entries
-     * @throws NotStrictlyPositiveException if {@code expected} has entries that
+     * @throws MathIllegalArgumentException if {@code expected} has entries that
      * are not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
      */
     public double g(final double[] expected, final long[] observed)
-            throws NotPositiveException, NotStrictlyPositiveException,
+            throws NotPositiveException, MathIllegalArgumentException,
             MathIllegalArgumentException {
 
         if (expected.length < 2) {
@@ -143,7 +142,7 @@ public class GTest {
      * @param expected array of expected frequency counts
      * @return p-value
      * @throws NotPositiveException if {@code observed} has negative entries
-     * @throws NotStrictlyPositiveException if {@code expected} has entries that
+     * @throws MathIllegalArgumentException if {@code expected} has entries that
      * are not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
@@ -151,7 +150,7 @@ public class GTest {
      * p-value.
      */
     public double gTest(final double[] expected, final long[] observed)
-            throws NotPositiveException, NotStrictlyPositiveException,
+            throws NotPositiveException, MathIllegalArgumentException,
             MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -174,7 +173,7 @@ public class GTest {
      * @param expected array of expected frequency counts
      * @return p-value
      * @throws NotPositiveException if {@code observed} has negative entries
-     * @throws NotStrictlyPositiveException {@code expected} has entries that are
+     * @throws MathIllegalArgumentException {@code expected} has entries that are
      * not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
@@ -182,7 +181,7 @@ public class GTest {
      * p-value.
      */
     public double gTestIntrinsic(final double[] expected, final long[] observed)
-            throws NotPositiveException, NotStrictlyPositiveException,
+            throws NotPositiveException, MathIllegalArgumentException,
             MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -226,7 +225,7 @@ public class GTest {
      * @return true iff null hypothesis can be rejected with confidence 1 -
      * alpha
      * @throws NotPositiveException if {@code observed} has negative entries
-     * @throws NotStrictlyPositiveException if {@code expected} has entries that
+     * @throws MathIllegalArgumentException if {@code expected} has entries that
      * are not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
@@ -237,7 +236,7 @@ public class GTest {
      */
     public boolean gTest(final double[] expected, final long[] observed,
             final double alpha)
-            throws NotPositiveException, NotStrictlyPositiveException,
+            throws NotPositiveException, MathIllegalArgumentException,
             MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {

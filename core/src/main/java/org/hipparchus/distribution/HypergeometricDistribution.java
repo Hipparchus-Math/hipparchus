@@ -19,7 +19,7 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -60,12 +60,12 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
      * @param numberOfSuccesses Number of successes in the population.
      * @param sampleSize Sample size.
      * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
-     * @throws NotStrictlyPositiveException if {@code populationSize <= 0}.
+     * @throws MathIllegalArgumentException if {@code populationSize <= 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > populationSize},
      * or {@code sampleSize > populationSize}.
      */
     public HypergeometricDistribution(int populationSize, int numberOfSuccesses, int sampleSize)
-    throws NotPositiveException, NotStrictlyPositiveException, NumberIsTooLargeException {
+    throws NotPositiveException, MathIllegalArgumentException, NumberIsTooLargeException {
         this(new Well19937c(), populationSize, numberOfSuccesses, sampleSize);
     }
 
@@ -77,7 +77,7 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
      * @param numberOfSuccesses Number of successes in the population.
      * @param sampleSize Sample size.
      * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
-     * @throws NotStrictlyPositiveException if {@code populationSize <= 0}.
+     * @throws MathIllegalArgumentException if {@code populationSize <= 0}.
      * @throws NumberIsTooLargeException if {@code numberOfSuccesses > populationSize},
      * or {@code sampleSize > populationSize}.
      * @since 3.1
@@ -86,11 +86,11 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
                                       int populationSize,
                                       int numberOfSuccesses,
                                       int sampleSize)
-    throws NotPositiveException, NotStrictlyPositiveException, NumberIsTooLargeException {
+    throws NotPositiveException, MathIllegalArgumentException, NumberIsTooLargeException {
         super(rng);
 
         if (populationSize <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.POPULATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedFormats.POPULATION_SIZE,
                                                    populationSize);
         }
         if (numberOfSuccesses < 0) {

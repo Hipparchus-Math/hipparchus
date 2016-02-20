@@ -19,7 +19,7 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.ZipfDistribution.ZipfRejectionInversionSampler;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.AbstractRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
@@ -42,12 +42,12 @@ public class ZipfDistributionTest extends IntegerDistributionAbstractTest {
         setTolerance(1e-12);
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions1() {
         new ZipfDistribution(0, 1);
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions2() {
         new ZipfDistribution(1, 0);
     }

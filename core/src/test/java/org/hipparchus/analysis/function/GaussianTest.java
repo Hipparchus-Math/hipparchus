@@ -20,9 +20,7 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -34,7 +32,7 @@ import org.junit.Test;
 public class GaussianTest {
     private final double EPS = Math.ulp(1d);
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions() {
         new Gaussian(1, 2, -1);
     }
@@ -105,7 +103,7 @@ public class GaussianTest {
         g.value(0, new double[] {0});
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage3() {
         final Gaussian.Parametric g = new Gaussian.Parametric();
         g.value(0, new double[] {0, 1, 0});
@@ -123,7 +121,7 @@ public class GaussianTest {
         g.gradient(0, new double[] {0});
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage6() {
         final Gaussian.Parametric g = new Gaussian.Parametric();
         g.gradient(0, new double[] {0, 1, 0});

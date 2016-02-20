@@ -18,10 +18,8 @@ package org.hipparchus.stat.correlation;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.stat.correlation.Covariance;
 import org.hipparchus.stat.descriptive.moment.Variance;
 import org.junit.Assert;
 import org.junit.Test;
@@ -190,8 +188,8 @@ public class CovarianceTest {
         }
         try {
             new Covariance(new double[][] {{},{}});
-            Assert.fail("Expecting NotStrictlyPositiveException");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }

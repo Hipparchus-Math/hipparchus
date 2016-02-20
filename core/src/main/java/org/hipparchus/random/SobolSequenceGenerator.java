@@ -29,7 +29,7 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 
@@ -148,17 +148,18 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      *
      * @param dimension the space dimension
      * @param is the stream to read the direction vectors from
-     * @throws NotStrictlyPositiveException if the space dimension is &lt; 1
+     * @throws MathIllegalArgumentException if the space dimension is &lt; 1
      * @throws OutOfRangeException if the space dimension is outside the range [1, max], where
      *   max refers to the maximum dimension found in the input stream
      * @throws MathIllegalStateException if the content in the stream could not be parsed successfully
      * @throws IOException if an error occurs while reading from the input stream
      */
     public SobolSequenceGenerator(final int dimension, final InputStream is)
-            throws NotStrictlyPositiveException, MathIllegalStateException, IOException {
+            throws MathIllegalArgumentException, MathIllegalStateException, IOException {
 
         if (dimension < 1) {
-            throw new NotStrictlyPositiveException(dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   dimension, 1);
         }
 
         this.dimension = dimension;

@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -78,7 +78,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                 double v = Double.POSITIVE_INFINITY;
                 try {
                     v = super.value(x, p);
-                } catch (NotStrictlyPositiveException e) { // NOPMD
+                } catch (MathIllegalArgumentException e) { // NOPMD
                     // Do nothing.
                 }
                 return v;
@@ -92,7 +92,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                                Double.POSITIVE_INFINITY };
                 try {
                     v = super.gradient(x, p);
-                } catch (NotStrictlyPositiveException e) { // NOPMD
+                } catch (MathIllegalArgumentException e) { // NOPMD
                     // Do nothing.
                 }
                 return v;

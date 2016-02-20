@@ -18,7 +18,7 @@ package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.PointValuePair;
@@ -84,7 +84,7 @@ public class PowellOptimizer
      * @param rel Relative threshold.
      * @param abs Absolute threshold.
      * @param checker Convergence checker.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
      * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
@@ -103,7 +103,7 @@ public class PowellOptimizer
      * @param lineRel Relative threshold for the internal line search optimizer.
      * @param lineAbs Absolute threshold for the internal line search optimizer.
      * @param checker Convergence checker.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
      * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
@@ -117,7 +117,8 @@ public class PowellOptimizer
             throw new NumberIsTooSmallException(rel, MIN_RELATIVE_TOLERANCE, true);
         }
         if (abs <= 0) {
-            throw new NotStrictlyPositiveException(abs);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   abs, 0);
         }
         relativeThreshold = rel;
         absoluteThreshold = abs;
@@ -137,7 +138,7 @@ public class PowellOptimizer
      *
      * @param rel Relative threshold.
      * @param abs Absolute threshold.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
      * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
@@ -152,7 +153,7 @@ public class PowellOptimizer
      * @param abs Absolute threshold.
      * @param lineRel Relative threshold for the internal line search optimizer.
      * @param lineAbs Absolute threshold for the internal line search optimizer.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
      * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,

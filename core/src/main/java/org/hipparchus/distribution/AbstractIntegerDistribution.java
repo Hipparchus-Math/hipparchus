@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
@@ -186,7 +186,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
     @Override
     public int[] sample(int sampleSize) {
         if (sampleSize <= 0) {
-            throw new NotStrictlyPositiveException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.NUMBER_OF_SAMPLES, sampleSize);
         }
         int[] out = new int[sampleSize];

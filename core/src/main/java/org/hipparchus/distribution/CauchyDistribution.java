@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -85,7 +85,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy Maximum absolute error in inverse
      * cumulative probability estimates
      * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code scale <= 0}.
+     * @throws MathIllegalArgumentException if {@code scale <= 0}.
      * @since 2.1
      */
     public CauchyDistribution(double median, double scale,
@@ -99,7 +99,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
      * @param rng Random number generator.
      * @param median Median for this distribution.
      * @param scale Scale parameter for this distribution.
-     * @throws NotStrictlyPositiveException if {@code scale <= 0}.
+     * @throws MathIllegalArgumentException if {@code scale <= 0}.
      * @since 3.3
      */
     public CauchyDistribution(RandomGenerator rng, double median, double scale) {
@@ -115,7 +115,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy Maximum absolute error in inverse
      * cumulative probability estimates
      * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code scale <= 0}.
+     * @throws MathIllegalArgumentException if {@code scale <= 0}.
      * @since 3.1
      */
     public CauchyDistribution(RandomGenerator rng,
@@ -124,7 +124,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
                               double inverseCumAccuracy) {
         super(rng);
         if (scale <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.SCALE, scale);
+            throw new MathIllegalArgumentException(LocalizedFormats.SCALE, scale);
         }
         this.scale = scale;
         this.median = median;

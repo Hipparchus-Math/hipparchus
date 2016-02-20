@@ -24,7 +24,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -324,12 +323,13 @@ public class CMAESOptimizer
 
         /**
          * @param size Population size.
-         * @throws NotStrictlyPositiveException if {@code size <= 0}.
+         * @throws MathIllegalArgumentException if {@code size <= 0}.
          */
         public PopulationSize(int size)
-            throws NotStrictlyPositiveException {
+            throws MathIllegalArgumentException {
             if (size <= 0) {
-                throw new NotStrictlyPositiveException(size);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                       size, 0);
             }
             lambda = size;
         }
@@ -583,7 +583,8 @@ public class CMAESOptimizer
      */
     private void initializeCMA(double[] guess) {
         if (lambda <= 0) {
-            throw new NotStrictlyPositiveException(lambda);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   lambda, 0);
         }
         // initialize sigma
         final double[][] sigmaArray = new double[guess.length][1];

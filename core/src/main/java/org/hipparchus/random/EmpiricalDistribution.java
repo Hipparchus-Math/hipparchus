@@ -38,7 +38,7 @@ import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
@@ -149,7 +149,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Creates a new EmpiricalDistribution with the specified bin count.
      *
      * @param binCount number of bins. Must be strictly positive.
-     * @throws NotStrictlyPositiveException if {@code binCount <= 0}.
+     * @throws MathIllegalArgumentException if {@code binCount <= 0}.
      */
     public EmpiricalDistribution(int binCount) {
         this(binCount, new RandomDataGenerator());
@@ -161,7 +161,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *
      * @param binCount number of bins. Must be strictly positive.
      * @param generator random data generator (may be null, resulting in default JDK generator)
-     * @throws NotStrictlyPositiveException if {@code binCount <= 0}.
+     * @throws MathIllegalArgumentException if {@code binCount <= 0}.
      * @since 3.0
      */
     public EmpiricalDistribution(int binCount, RandomGenerator generator) {
@@ -185,13 +185,14 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *
      * @param binCount number of bins. Must be strictly positive.
      * @param randomData Random data generator.
-     * @throws NotStrictlyPositiveException if {@code binCount <= 0}.
+     * @throws MathIllegalArgumentException if {@code binCount <= 0}.
      */
     private EmpiricalDistribution(int binCount,
                                   RandomDataGenerator randomData) {
         super(randomData.getRandomGenerator());
         if (binCount <= 0) {
-            throw new NotStrictlyPositiveException(binCount);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   binCount, 0);
         }
         this.binCount = binCount;
         this.randomData = randomData;

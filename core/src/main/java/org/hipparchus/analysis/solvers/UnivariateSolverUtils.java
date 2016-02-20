@@ -19,7 +19,6 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
@@ -192,14 +191,14 @@ public class UnivariateSolverUtils {
      * value).
      * @return a two-element array holding a and b.
      * @throws MathIllegalArgumentException if a root cannot be bracketted.
-     * @throws NotStrictlyPositiveException if {@code maximumIterations <= 0}.
+     * @throws MathIllegalArgumentException if {@code maximumIterations <= 0}.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static double[] bracket(UnivariateFunction function,
                                    double initial,
                                    double lowerBound, double upperBound)
         throws NullArgumentException,
-               NotStrictlyPositiveException,
+               MathIllegalArgumentException,
                MathIllegalArgumentException {
         return bracket(function, initial, lowerBound, upperBound, 1.0, 1.0, Integer.MAX_VALUE);
     }
@@ -218,7 +217,7 @@ public class UnivariateSolverUtils {
      * @return a two element array holding a and b.
      * @throws MathIllegalArgumentException if the algorithm fails to find a and b
      * satisfying the desired conditions.
-     * @throws NotStrictlyPositiveException if {@code maximumIterations <= 0}.
+     * @throws MathIllegalArgumentException if {@code maximumIterations <= 0}.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static double[] bracket(UnivariateFunction function,
@@ -226,7 +225,7 @@ public class UnivariateSolverUtils {
                                    double lowerBound, double upperBound,
                                    int maximumIterations)
         throws NullArgumentException,
-               NotStrictlyPositiveException,
+               MathIllegalArgumentException,
                MathIllegalArgumentException {
         return bracket(function, initial, lowerBound, upperBound, 1.0, 1.0, maximumIterations);
     }
@@ -301,10 +300,11 @@ public class UnivariateSolverUtils {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
         if (q <= 0)  {
-            throw new NotStrictlyPositiveException(q);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   q, 0);
         }
         if (maximumIterations <= 0)  {
-            throw new NotStrictlyPositiveException(LocalizedFormats.INVALID_MAX_ITERATIONS, maximumIterations);
+            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_MAX_ITERATIONS, maximumIterations);
         }
         verifySequence(lowerBound, initial, upperBound);
 

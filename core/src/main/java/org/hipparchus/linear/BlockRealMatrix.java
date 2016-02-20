@@ -20,10 +20,9 @@ package org.hipparchus.linear;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -89,11 +88,11 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      *
      * @param rows  the number of rows in the new matrix
      * @param columns  the number of columns in the new matrix
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      */
     public BlockRealMatrix(final int rows, final int columns)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rows, columns);
         this.rows = rows;
         this.columns = columns;
@@ -117,12 +116,12 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      * @param rawData data for new matrix, in raw layout
      * @throws MathIllegalArgumentException if the shape of {@code blockData} is
      * inconsistent with block layout.
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      * @see #BlockRealMatrix(int, int, double[][], boolean)
      */
     public BlockRealMatrix(final double[][] rawData)
-        throws MathIllegalArgumentException, NotStrictlyPositiveException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         this(rawData.length, rawData[0].length, toBlocksLayout(rawData), false);
     }
 
@@ -136,7 +135,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      * @param copyArray Whether the input array will be copied or referenced.
      * @throws MathIllegalArgumentException if the shape of {@code blockData} is
      * inconsistent with block layout.
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      * @see #createBlocksLayout(int, int)
      * @see #toBlocksLayout(double[][])
@@ -144,7 +143,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
      */
     public BlockRealMatrix(final int rows, final int columns,
                            final double[][] blockData, final boolean copyArray)
-        throws MathIllegalArgumentException, NotStrictlyPositiveException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         super(rows, columns);
         this.rows = rows;
         this.columns = columns;
@@ -281,7 +280,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public BlockRealMatrix createMatrix(final int rowDimension,
                                         final int columnDimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         return new BlockRealMatrix(rowDimension, columnDimension);
     }
 

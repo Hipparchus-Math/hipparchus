@@ -21,7 +21,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -1076,13 +1075,13 @@ public class TTest {
      * @param n2 second sample n
      * @return p-value
      * @throws MaxCountExceededException if an error occurs computing the p-value
-     * @throws NotStrictlyPositiveException if the estimated degrees of freedom is not
+     * @throws MathIllegalArgumentException if the estimated degrees of freedom is not
      * strictly positive
      */
     protected double tTest(final double m1, final double m2,
                            final double v1, final double v2,
                            final double n1, final double n2)
-        throws MaxCountExceededException, NotStrictlyPositiveException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
 
         final double t = FastMath.abs(t(m1, m2, v1, v2, n1, n2));
         final double degreesOfFreedom = df(v1, v2, n1, n2);
@@ -1106,13 +1105,13 @@ public class TTest {
      * @param n2 second sample n
      * @return p-value
      * @throws MaxCountExceededException if an error occurs computing the p-value
-     * @throws NotStrictlyPositiveException if the estimated degrees of freedom is not
+     * @throws MathIllegalArgumentException if the estimated degrees of freedom is not
      * strictly positive
      */
     protected double homoscedasticTTest(double m1, double m2,
                                         double v1, double v2,
                                         double n1, double n2)
-        throws MaxCountExceededException, NotStrictlyPositiveException {
+        throws MaxCountExceededException, MathIllegalArgumentException {
 
         final double t = FastMath.abs(homoscedasticT(m1, m2, v1, v2, n1, n2));
         final double degreesOfFreedom = n1 + n2 - 2;

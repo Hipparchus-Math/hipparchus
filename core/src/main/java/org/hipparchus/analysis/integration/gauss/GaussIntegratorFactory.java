@@ -19,7 +19,6 @@ package org.hipparchus.analysis.integration.gauss;
 import java.math.BigDecimal;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.util.Pair;
 
 /**
@@ -60,12 +59,12 @@ public class GaussIntegratorFactory {
      * @param lowerBound Lower bound of the integration interval.
      * @param upperBound Upper bound of the integration interval.
      * @return a Gauss-Legendre integrator.
-     * @throws NotStrictlyPositiveException if number of points is not positive
+     * @throws MathIllegalArgumentException if number of points is not positive
      */
     public GaussIntegrator legendre(int numberOfPoints,
                                     double lowerBound,
                                     double upperBound)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         return new GaussIntegrator(transform(getRule(legendre, numberOfPoints),
                                              lowerBound, upperBound));
     }
@@ -79,10 +78,10 @@ public class GaussIntegratorFactory {
      *
      * @param numberOfPoints Order of the integration rule.
      * @return a Gauss-Legendre integrator.
-     * @throws NotStrictlyPositiveException if number of points is not positive
+     * @throws MathIllegalArgumentException if number of points is not positive
      */
     public GaussIntegrator legendreHighPrecision(int numberOfPoints)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         return new GaussIntegrator(getRule(legendreHighPrecision, numberOfPoints));
     }
 
@@ -95,12 +94,12 @@ public class GaussIntegratorFactory {
      * @param lowerBound Lower bound of the integration interval.
      * @param upperBound Upper bound of the integration interval.
      * @return a Gauss-Legendre integrator.
-     * @throws NotStrictlyPositiveException if number of points is not positive
+     * @throws MathIllegalArgumentException if number of points is not positive
      */
     public GaussIntegrator legendreHighPrecision(int numberOfPoints,
                                                  double lowerBound,
                                                  double upperBound)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         return new GaussIntegrator(transform(getRule(legendreHighPrecision, numberOfPoints),
                                              lowerBound, upperBound));
     }
@@ -127,13 +126,13 @@ public class GaussIntegratorFactory {
      * @param factory Integration rule factory.
      * @param numberOfPoints Order of the integration rule.
      * @return the integration nodes and weights.
-     * @throws NotStrictlyPositiveException if number of points is not positive
+     * @throws MathIllegalArgumentException if number of points is not positive
      * @throws MathIllegalArgumentException if the elements of the rule pair do not
      * have the same length.
      */
     private static Pair<double[], double[]> getRule(BaseRuleFactory<? extends Number> factory,
                                                     int numberOfPoints)
-        throws NotStrictlyPositiveException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         return factory.getRule(numberOfPoints);
     }
 

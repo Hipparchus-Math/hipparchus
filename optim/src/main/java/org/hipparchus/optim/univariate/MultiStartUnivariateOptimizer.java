@@ -22,7 +22,7 @@ import java.util.Comparator;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
@@ -71,7 +71,7 @@ public class MultiStartUnivariateOptimizer
      * the {@code optimize} methods will return the same solution as
      * {@code optimizer} would.
      * @param generator Random generator to use for restarts.
-     * @throws NotStrictlyPositiveException if {@code starts < 1}.
+     * @throws MathIllegalArgumentException if {@code starts < 1}.
      */
     public MultiStartUnivariateOptimizer(final UnivariateOptimizer optimizer,
                                          final int starts,
@@ -79,7 +79,8 @@ public class MultiStartUnivariateOptimizer
         super(optimizer.getConvergenceChecker());
 
         if (starts < 1) {
-            throw new NotStrictlyPositiveException(starts);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   starts, 1);
         }
 
         this.optimizer = optimizer;

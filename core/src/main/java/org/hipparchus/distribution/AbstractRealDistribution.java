@@ -21,7 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
@@ -236,7 +236,7 @@ implements RealDistribution, Serializable {
     @Override
     public double[] sample(int sampleSize) {
         if (sampleSize <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES,
                     sampleSize);
         }
         double[] out = new double[sampleSize];

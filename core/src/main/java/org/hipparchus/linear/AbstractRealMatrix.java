@@ -20,11 +20,10 @@ package org.hipparchus.linear;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -59,16 +58,18 @@ public abstract class AbstractRealMatrix
      *
      * @param rowDimension  the number of rows in the new matrix
      * @param columnDimension  the number of columns in the new matrix
-     * @throws NotStrictlyPositiveException if row or column dimension is not positive
+     * @throws MathIllegalArgumentException if row or column dimension is not positive
      */
     protected AbstractRealMatrix(final int rowDimension,
         final int columnDimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         if (rowDimension < 1) {
-            throw new NotStrictlyPositiveException(rowDimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   rowDimension, 1);
         }
         if (columnDimension < 1) {
-            throw new NotStrictlyPositiveException(columnDimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   columnDimension, 1);
         }
     }
 
@@ -1046,7 +1047,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public abstract RealMatrix createMatrix(int rowDimension, int columnDimension)
-        throws NotStrictlyPositiveException;
+        throws MathIllegalArgumentException;
 
     /** {@inheritDoc} */
     @Override

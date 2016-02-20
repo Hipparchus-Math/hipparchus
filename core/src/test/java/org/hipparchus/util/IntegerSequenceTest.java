@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.ArrayList;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.ZeroException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -202,7 +202,7 @@ public class IntegerSequenceTest {
         Assert.assertTrue(inc.canIncrement(0));
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testIncrementZeroTimes() {
         final int start = 1;
         final int max = 2;

@@ -21,7 +21,6 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.Well1024a;
 import org.junit.Assert;
@@ -387,8 +386,8 @@ public class MathArraysTest {
         }
         try {
             MathArrays.checkPositive(nonNegative);
-            Assert.fail("Expecting NotStrictlyPositiveException");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }

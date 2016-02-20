@@ -389,7 +389,7 @@ public class FastFourierTransformer implements Serializable {
      * @return the complex transformed array
      * @throws org.hipparchus.exception.NumberIsTooLargeException
      *   if the lower bound is greater than, or equal to the upper bound
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the number of sample points {@code n} is negative
      * @throws MathIllegalArgumentException if the number of sample points
      *   {@code n} is not a power of two

@@ -21,7 +21,6 @@ import java.math.BigDecimal;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.Fraction;
@@ -122,8 +121,8 @@ public final class MatrixUtilsTest {
                      new BlockRealMatrix(rowMatrix));
         try {
             MatrixUtils.createRowRealMatrix(new double[] {});  // empty
-            Assert.fail("Expecting NotStrictlyPositiveException");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {

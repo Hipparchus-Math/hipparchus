@@ -19,11 +19,10 @@ package org.hipparchus.linear;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -51,12 +50,12 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
      *
      * @param rowDimension Number of rows in the new matrix.
      * @param columnDimension Number of columns in the new matrix.
-     * @throws NotStrictlyPositiveException if the row or column dimension is
+     * @throws MathIllegalArgumentException if the row or column dimension is
      * not positive.
      */
     public Array2DRowRealMatrix(final int rowDimension,
                                 final int columnDimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rowDimension, columnDimension);
         data = new double[rowDimension][columnDimension];
     }
@@ -141,7 +140,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     @Override
     public RealMatrix createMatrix(final int rowDimension,
                                    final int columnDimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         return new Array2DRowRealMatrix(rowDimension, columnDimension);
     }
 

@@ -112,7 +112,7 @@ public class FastSineTransformer implements RealTransformer, Serializable {
      *
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the lower bound is greater than, or equal to the upper bound
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the number of sample points is negative
      * @throws MathIllegalArgumentException if the number of sample points is not a power of two
      */

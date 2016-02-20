@@ -18,7 +18,6 @@ package org.hipparchus.transform;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 
 /**
  * Interface for one-dimensional data sets transformations producing real results.
@@ -57,13 +56,13 @@ public interface RealTransformer  {
      * @param type the type of transform (forward, inverse) to be performed
      * @return the real transformed array
      * @throws MathIllegalArgumentException if the lower bound is greater than, or equal to the upper bound
-     * @throws NotStrictlyPositiveException if the number of sample points is negative
+     * @throws MathIllegalArgumentException if the number of sample points is negative
      * @throws MathIllegalArgumentException if the sample cannot be transformed
      *   with the given type (this may be for example due to sample size, which is
      *   constrained in some transforms)
      */
     double[] transform(UnivariateFunction f, double min, double max, int n,
                        TransformType type)
-        throws MathIllegalArgumentException, NotStrictlyPositiveException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalArgumentException;
 
 }

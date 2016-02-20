@@ -22,7 +22,6 @@ import java.util.Arrays;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 
@@ -274,7 +273,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
                                 double ... data)
         throws MathIllegalArgumentException {
         if (initialCapacity <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.INITIAL_CAPACITY_NOT_POSITIVE,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_CAPACITY_NOT_POSITIVE,
                                                    initialCapacity);
         }
         checkContractExpand(contractionCriterion, expansionFactor);

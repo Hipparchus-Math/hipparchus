@@ -178,7 +178,7 @@ public interface RealDistribution {
      *
      * @param sampleSize the number of random values to generate
      * @return an array representing the random sample
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code sampleSize} is not positive
      */
     double[] sample(int sampleSize);

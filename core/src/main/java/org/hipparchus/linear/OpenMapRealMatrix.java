@@ -20,7 +20,6 @@ package org.hipparchus.linear;
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.OpenIntToDoubleHashMap;
@@ -53,13 +52,13 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      *
      * @param rowDimension Number of rows of the matrix.
      * @param columnDimension Number of columns of the matrix.
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      * @throws NumberIsTooLargeException if the total number of entries of the
      * matrix is larger than {@code Integer.MAX_VALUE}.
      */
     public OpenMapRealMatrix(int rowDimension, int columnDimension)
-        throws NotStrictlyPositiveException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException {
         super(rowDimension, columnDimension);
         long lRow = rowDimension;
         long lCol = columnDimension;
@@ -96,7 +95,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      */
     @Override
     public OpenMapRealMatrix createMatrix(int rowDimension, int columnDimension)
-        throws NotStrictlyPositiveException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException {
         return new OpenMapRealMatrix(rowDimension, columnDimension);
     }
 

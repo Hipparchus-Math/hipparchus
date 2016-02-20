@@ -17,7 +17,8 @@
 
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -78,7 +79,7 @@ public class SimpleVectorValueChecker
      * @param relativeThreshold Relative tolerance threshold.
      * @param absoluteThreshold Absolute tolerance threshold.
      * @param maxIter Maximum iteration count.
-     * @throws NotStrictlyPositiveException if {@code maxIter <= 0}.
+     * @throws MathIllegalArgumentException if {@code maxIter <= 0}.
      *
      * @since 3.1
      */
@@ -88,7 +89,8 @@ public class SimpleVectorValueChecker
         super(relativeThreshold, absoluteThreshold);
 
         if (maxIter <= 0) {
-            throw new NotStrictlyPositiveException(maxIter);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   maxIter, 0);
         }
         maxIterationCount = maxIter;
     }

@@ -18,7 +18,6 @@ package org.hipparchus.stat.correlation;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.descriptive.moment.Mean;
@@ -77,11 +76,11 @@ public class Covariance {
      * @param biasCorrected true means covariances are bias-corrected
      * @throws MathIllegalArgumentException if the input data array is not
      * rectangular with at least two rows and one column.
-     * @throws NotStrictlyPositiveException if the input data array is not
+     * @throws MathIllegalArgumentException if the input data array is not
      * rectangular with at least one row and one column.
      */
     public Covariance(double[][] data, boolean biasCorrected)
-    throws MathIllegalArgumentException, NotStrictlyPositiveException {
+    throws MathIllegalArgumentException, MathIllegalArgumentException {
         this(new BlockRealMatrix(data), biasCorrected);
     }
 
@@ -95,11 +94,11 @@ public class Covariance {
      * @param data rectangular array with columns representing covariates
      * @throws MathIllegalArgumentException if the input data array is not
      * rectangular with at least two rows and one column.
-     * @throws NotStrictlyPositiveException if the input data array is not
+     * @throws MathIllegalArgumentException if the input data array is not
      * rectangular with at least one row and one column.
      */
     public Covariance(double[][] data)
-    throws MathIllegalArgumentException, NotStrictlyPositiveException {
+    throws MathIllegalArgumentException, MathIllegalArgumentException {
         this(data, true);
     }
 
@@ -201,11 +200,11 @@ public class Covariance {
      * @return covariance matrix
      * @throws MathIllegalArgumentException if the data array does not contain sufficient
      * data
-     * @throws NotStrictlyPositiveException if the input data array is not
+     * @throws MathIllegalArgumentException if the input data array is not
      * rectangular with at least one row and one column.
      */
     protected RealMatrix computeCovarianceMatrix(double[][] data, boolean biasCorrected)
-    throws MathIllegalArgumentException, NotStrictlyPositiveException {
+    throws MathIllegalArgumentException, MathIllegalArgumentException {
         return computeCovarianceMatrix(new BlockRealMatrix(data), biasCorrected);
     }
 
@@ -215,12 +214,12 @@ public class Covariance {
      * @param data input array (must have at least one column and two rows)
      * @return covariance matrix
      * @throws MathIllegalArgumentException if the data array does not contain sufficient data
-     * @throws NotStrictlyPositiveException if the input data array is not
+     * @throws MathIllegalArgumentException if the input data array is not
      * rectangular with at least one row and one column.
      * @see #Covariance
      */
     protected RealMatrix computeCovarianceMatrix(double[][] data)
-    throws MathIllegalArgumentException, NotStrictlyPositiveException {
+    throws MathIllegalArgumentException, MathIllegalArgumentException {
         return computeCovarianceMatrix(data, true);
     }
 

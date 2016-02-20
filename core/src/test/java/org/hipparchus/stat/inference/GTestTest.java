@@ -18,10 +18,8 @@ package org.hipparchus.stat.inference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
-import org.hipparchus.stat.inference.GTest;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -226,8 +224,8 @@ public class GTestTest {
         final double[] expected = { 1, 0, 2, 3};
         try {
             testStatistic.gTest(expected, observed);
-            Assert.fail("zero expected count, NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("zero expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -239,13 +237,13 @@ public class GTestTest {
         final long[] observed2 = { 0, 2, 2, 3 };
         try {
             testStatistic.gTest(expected, observed, 0.8);
-            Assert.fail("zero expected count, NotStrictlyPositiveException expected");
+            Assert.fail("zero expected count, MathIllegalArgumentException expected");
         } catch (OutOfRangeException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2, -0.5);
-            Assert.fail("zero expected count, NotStrictlyPositiveException expected");
+            Assert.fail("zero expected count, MathIllegalArgumentException expected");
         } catch (OutOfRangeException ex) {
             // expected
         }

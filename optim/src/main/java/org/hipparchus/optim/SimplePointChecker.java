@@ -16,7 +16,8 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Pair;
 
@@ -77,7 +78,7 @@ public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
      * @param relativeThreshold Relative tolerance threshold.
      * @param absoluteThreshold Absolute tolerance threshold.
      * @param maxIter Maximum iteration count.
-     * @throws NotStrictlyPositiveException if {@code maxIter <= 0}.
+     * @throws MathIllegalArgumentException if {@code maxIter <= 0}.
      *
      * @since 3.1
      */
@@ -87,7 +88,8 @@ public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
         super(relativeThreshold, absoluteThreshold);
 
         if (maxIter <= 0) {
-            throw new NotStrictlyPositiveException(maxIter);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   maxIter, 0);
         }
         maxIterationCount = maxIter;
     }

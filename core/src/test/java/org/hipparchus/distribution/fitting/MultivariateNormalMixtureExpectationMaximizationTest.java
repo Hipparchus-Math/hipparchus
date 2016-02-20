@@ -24,7 +24,6 @@ import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
@@ -38,7 +37,7 @@ import org.junit.Test;
  */
 public class MultivariateNormalMixtureExpectationMaximizationTest {
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonEmptyData() {
         // Should not accept empty data
         new MultivariateNormalMixtureExpectationMaximization(new double[][] {});
@@ -63,7 +62,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         new MultivariateNormalMixtureExpectationMaximization(data);
     }
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMaxIterationsPositive() {
         // Maximum iterations for fit must be positive integer
         double[][] data = getTestSamples();
@@ -76,7 +75,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         fitter.fit(initialMix, 0, 1E-5);
     }
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testThresholdPositive() {
         // Maximum iterations for fit must be positive
         double[][] data = getTestSamples();

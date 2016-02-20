@@ -17,7 +17,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Gamma;
@@ -74,9 +74,9 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      * additional initialisation overhead.
      *
      * @param p the Poisson mean
-     * @throws NotStrictlyPositiveException if {@code p <= 0}.
+     * @throws MathIllegalArgumentException if {@code p <= 0}.
      */
-    public PoissonDistribution(double p) throws NotStrictlyPositiveException {
+    public PoissonDistribution(double p) throws MathIllegalArgumentException {
         this(p, DEFAULT_EPSILON, DEFAULT_MAX_ITERATIONS);
     }
 
@@ -95,11 +95,11 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      * @param epsilon Convergence criterion for cumulative probabilities.
      * @param maxIterations the maximum number of iterations for cumulative
      * probabilities.
-     * @throws NotStrictlyPositiveException if {@code p <= 0}.
+     * @throws MathIllegalArgumentException if {@code p <= 0}.
      * @since 2.1
      */
     public PoissonDistribution(double p, double epsilon, int maxIterations)
-    throws NotStrictlyPositiveException {
+    throws MathIllegalArgumentException {
         this(new Well19937c(), p, epsilon, maxIterations);
     }
 
@@ -112,18 +112,18 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      * @param epsilon Convergence criterion for cumulative probabilities.
      * @param maxIterations the maximum number of iterations for cumulative
      * probabilities.
-     * @throws NotStrictlyPositiveException if {@code p <= 0}.
+     * @throws MathIllegalArgumentException if {@code p <= 0}.
      * @since 3.1
      */
     public PoissonDistribution(RandomGenerator rng,
                                double p,
                                double epsilon,
                                int maxIterations)
-    throws NotStrictlyPositiveException {
+    throws MathIllegalArgumentException {
         super(rng);
 
         if (p <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.MEAN, p);
+            throw new MathIllegalArgumentException(LocalizedFormats.MEAN, p);
         }
         mean = p;
         this.epsilon = epsilon;
@@ -142,11 +142,11 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      *
      * @param p Poisson mean.
      * @param epsilon Convergence criterion for cumulative probabilities.
-     * @throws NotStrictlyPositiveException if {@code p <= 0}.
+     * @throws MathIllegalArgumentException if {@code p <= 0}.
      * @since 2.1
      */
     public PoissonDistribution(double p, double epsilon)
-    throws NotStrictlyPositiveException {
+    throws MathIllegalArgumentException {
         this(p, epsilon, DEFAULT_MAX_ITERATIONS);
     }
 

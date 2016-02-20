@@ -20,7 +20,6 @@ package org.hipparchus.linear;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -42,12 +41,12 @@ public interface RealMatrix extends AnyMatrix {
      * @param rowDimension the number of rows in the new matrix
      * @param columnDimension the number of columns in the new matrix
      * @return a new matrix of the same type as the instance
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      * @since 2.0
      */
     RealMatrix createMatrix(int rowDimension, int columnDimension)
-        throws NotStrictlyPositiveException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns a (deep) copy of this.

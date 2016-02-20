@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.integration;
 
 import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.TooManyEvaluationsException;
@@ -46,7 +46,7 @@ public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
      * (must be less than or equal to {@link #SIMPSON_MAX_ITERATIONS_COUNT})
-     * @exception NotStrictlyPositiveException if minimal number of iterations
+     * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
      * @exception NumberIsTooSmallException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
@@ -57,7 +57,7 @@ public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
                              final double absoluteAccuracy,
                              final int minimalIterationCount,
                              final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException, NumberIsTooLargeException {
         super(relativeAccuracy, absoluteAccuracy, minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > SIMPSON_MAX_ITERATIONS_COUNT) {
             throw new NumberIsTooLargeException(maximalIterationCount,
@@ -70,7 +70,7 @@ public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
      * (must be less than or equal to {@link #SIMPSON_MAX_ITERATIONS_COUNT})
-     * @exception NotStrictlyPositiveException if minimal number of iterations
+     * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
      * @exception NumberIsTooSmallException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
@@ -79,7 +79,7 @@ public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
      */
     public SimpsonIntegrator(final int minimalIterationCount,
                              final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException, NumberIsTooLargeException {
         super(minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > SIMPSON_MAX_ITERATIONS_COUNT) {
             throw new NumberIsTooLargeException(maximalIterationCount,

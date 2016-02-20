@@ -16,7 +16,8 @@
  */
 package org.hipparchus.optim.univariate;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
@@ -71,7 +72,7 @@ public class BrentOptimizer extends UnivariateOptimizer {
      * @param abs Absolute threshold.
      * @param checker Additional, user-defined, convergence checking
      * procedure.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
      * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public BrentOptimizer(double rel,
@@ -83,7 +84,8 @@ public class BrentOptimizer extends UnivariateOptimizer {
             throw new NumberIsTooSmallException(rel, MIN_RELATIVE_TOLERANCE, true);
         }
         if (abs <= 0) {
-            throw new NotStrictlyPositiveException(abs);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   abs, 0);
         }
 
         relativeThreshold = rel;
@@ -101,7 +103,7 @@ public class BrentOptimizer extends UnivariateOptimizer {
      *
      * @param rel Relative threshold.
      * @param abs Absolute threshold.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
      * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public BrentOptimizer(double rel,

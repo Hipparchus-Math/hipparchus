@@ -17,11 +17,10 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.ChiSquaredDistribution;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.exception.ZeroException;
@@ -73,12 +72,12 @@ public class ChiSquareTest {
      * @param expected array of expected frequency counts
      * @return chiSquare test statistic
      * @throws NotPositiveException if <code>observed</code> has negative entries
-     * @throws NotStrictlyPositiveException if <code>expected</code> has entries that are
+     * @throws MathIllegalArgumentException if <code>expected</code> has entries that are
      * not strictly positive
      * @throws MathIllegalArgumentException if the arrays length is less than 2
      */
     public double chiSquare(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException {
 
         if (expected.length < 2) {
@@ -148,13 +147,13 @@ public class ChiSquareTest {
      * @param expected array of expected frequency counts
      * @return p-value
      * @throws NotPositiveException if <code>observed</code> has negative entries
-     * @throws NotStrictlyPositiveException if <code>expected</code> has entries that are
+     * @throws MathIllegalArgumentException if <code>expected</code> has entries that are
      * not strictly positive
      * @throws MathIllegalArgumentException if the arrays length is less than 2
      * @throws MaxCountExceededException if an error occurs computing the p-value
      */
     public double chiSquareTest(final double[] expected, final long[] observed)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException, MaxCountExceededException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -196,7 +195,7 @@ public class ChiSquareTest {
      * @return true iff null hypothesis can be rejected with confidence
      * 1 - alpha
      * @throws NotPositiveException if <code>observed</code> has negative entries
-     * @throws NotStrictlyPositiveException if <code>expected</code> has entries that are
+     * @throws MathIllegalArgumentException if <code>expected</code> has entries that are
      * not strictly positive
      * @throws MathIllegalArgumentException if the arrays length is less than 2
      * @throws OutOfRangeException if <code>alpha</code> is not in the range (0, 0.5]
@@ -204,7 +203,7 @@ public class ChiSquareTest {
      */
     public boolean chiSquareTest(final double[] expected, final long[] observed,
                                  final double alpha)
-        throws NotPositiveException, NotStrictlyPositiveException,
+        throws NotPositiveException, MathIllegalArgumentException,
         MathIllegalArgumentException, OutOfRangeException, MaxCountExceededException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
