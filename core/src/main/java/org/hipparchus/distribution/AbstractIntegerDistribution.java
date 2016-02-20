@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 
@@ -197,22 +197,22 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
 
     /**
      * Computes the cumulative probability function and checks for {@code NaN}
-     * values returned. Throws {@code MathInternalError} if the value is
+     * values returned. Throws {@code MathRuntimeException} if the value is
      * {@code NaN}. Rethrows any exception encountered evaluating the cumulative
-     * probability function. Throws {@code MathInternalError} if the cumulative
+     * probability function. Throws {@code MathRuntimeException} if the cumulative
      * probability function returns {@code NaN}.
      *
      * @param argument input value
      * @return the cumulative probability
-     * @throws MathInternalError if the cumulative probability is {@code NaN}
+     * @throws MathRuntimeException if the cumulative probability is {@code NaN}
      */
     private double checkedCumulativeProbability(int argument)
-        throws MathInternalError {
+        throws MathRuntimeException {
         double result = Double.NaN;
         result = cumulativeProbability(argument);
         if (Double.isNaN(result)) {
-            throw new MathInternalError(LocalizedFormats
-                    .DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN, argument);
+            throw new MathRuntimeException(LocalizedFormats.DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN,
+                                           argument);
         }
         return result;
     }
