@@ -20,7 +20,6 @@ import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 
@@ -132,7 +131,7 @@ public class TricubicInterpolatingFunction
      * @param d3FdXdYdZ Values of the cross partial derivative of function on every grid point.
      * @throws NoDataException if any of the arrays has zero length.
      * @throws MathIllegalArgumentException if the various arrays do not contain the expected number of elements.
-     * @throws NonMonotonicSequenceException if {@code x}, {@code y} or {@code z} are not strictly increasing.
+     * @throws MathIllegalArgumentException if {@code x}, {@code y} or {@code z} are not strictly increasing.
      */
     public TricubicInterpolatingFunction(double[] x,
                                          double[] y,
@@ -147,7 +146,7 @@ public class TricubicInterpolatingFunction
                                          double[][][] d3FdXdYdZ)
         throws NoDataException,
                MathIllegalArgumentException,
-               NonMonotonicSequenceException {
+               MathIllegalArgumentException {
         final int xLen = x.length;
         final int yLen = y.length;
         final int zLen = z.length;

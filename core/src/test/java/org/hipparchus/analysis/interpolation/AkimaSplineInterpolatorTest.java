@@ -22,7 +22,6 @@ import static org.junit.Assert.assertTrue;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.random.RandomGenerator;
@@ -95,7 +94,7 @@ public class AkimaSplineInterpolatorTest
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect unsorted arguments." );
         }
-        catch ( NonMonotonicSequenceException iae )
+        catch ( MathIllegalArgumentException iae )
         {
             // Expected.
         }

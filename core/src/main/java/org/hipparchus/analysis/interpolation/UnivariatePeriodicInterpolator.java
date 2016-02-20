@@ -18,7 +18,6 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -84,7 +83,7 @@ public class UnivariatePeriodicInterpolator
     @Override
     public UnivariateFunction interpolate(double[] xval,
                                           double[] yval)
-        throws NumberIsTooSmallException, NonMonotonicSequenceException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException {
         if (xval.length < extend) {
             throw new NumberIsTooSmallException(xval.length, extend, true);
         }

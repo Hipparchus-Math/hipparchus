@@ -22,7 +22,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.interpolation.LinearInterpolator;
 import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
 import org.hipparchus.analysis.interpolation.UnivariatePeriodicInterpolator;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -153,7 +153,7 @@ public class UnivariatePeriodicInterpolatorTest {
         interpolator.interpolate(xval, yval);
     }
 
-    @Test(expected=NonMonotonicSequenceException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testUnsortedSamples() {
         final double[] xval = { 2, 3, 7, 4, 6 };
         final double[] yval = { 1, 6, 5, -1, -2 };

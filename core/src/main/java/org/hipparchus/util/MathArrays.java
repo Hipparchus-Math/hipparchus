@@ -29,11 +29,10 @@ import java.util.TreeSet;
 import org.hipparchus.Field;
 import org.hipparchus.distribution.UniformIntegerDistribution;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
@@ -469,12 +468,12 @@ public class MathArrays {
      * @param strict Whether the order should be strict.
      * @param abort Whether to throw an exception if the check fails.
      * @return {@code true} if the array is sorted.
-     * @throws NonMonotonicSequenceException if the array is not sorted
+     * @throws MathIllegalArgumentException if the array is not sorted
      * and {@code abort} is {@code true}.
      */
     public static boolean checkOrder(double[] val, OrderDirection dir,
                                      boolean strict, boolean abort)
-        throws NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         double previous = val[0];
         final int max = val.length;
 
@@ -519,7 +518,14 @@ public class MathArrays {
 
         // Loop early exit means wrong ordering.
         if (abort) {
-            throw new NonMonotonicSequenceException(val[index], previous, index, dir, strict);
+            throw new MathIllegalArgumentException(dir == MathArrays.OrderDirection.INCREASING ?
+                                                    (strict ?
+                                                     LocalizedFormats.NOT_STRICTLY_INCREASING_SEQUENCE :
+                                                     LocalizedFormats.NOT_INCREASING_SEQUENCE) :
+                                                    (strict ?
+                                                     LocalizedFormats.NOT_STRICTLY_DECREASING_SEQUENCE :
+                                                     LocalizedFormats.NOT_DECREASING_SEQUENCE),
+                                                    val[index], previous, index, index - 1);
         } else {
             return false;
         }
@@ -531,11 +537,11 @@ public class MathArrays {
      * @param val Values.
      * @param dir Ordering direction.
      * @param strict Whether the order should be strict.
-     * @throws NonMonotonicSequenceException if the array is not sorted.
+     * @throws MathIllegalArgumentException if the array is not sorted.
      * @since 2.2
      */
     public static void checkOrder(double[] val, OrderDirection dir,
-                                  boolean strict) throws NonMonotonicSequenceException {
+                                  boolean strict) throws MathIllegalArgumentException {
         checkOrder(val, dir, strict, true);
     }
 
@@ -543,10 +549,10 @@ public class MathArrays {
      * Check that the given array is sorted in strictly increasing order.
      *
      * @param val Values.
-     * @throws NonMonotonicSequenceException if the array is not sorted.
+     * @throws MathIllegalArgumentException if the array is not sorted.
      * @since 2.2
      */
-    public static void checkOrder(double[] val) throws NonMonotonicSequenceException {
+    public static void checkOrder(double[] val) throws MathIllegalArgumentException {
         checkOrder(val, OrderDirection.INCREASING, true);
     }
 

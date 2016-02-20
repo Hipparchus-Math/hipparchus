@@ -19,7 +19,6 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -107,7 +106,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
             double xval1[] = { 0.0, 1.0, 0.5, 7.0, 3.5 };
             interpolator.interpolate( xval1, yval, zval );
             Assert.fail( "Failed to detect unsorted x arguments." );
-        } catch ( NonMonotonicSequenceException iae ) {
+        } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
 
@@ -116,7 +115,7 @@ public final class PiecewiseBicubicSplineInterpolatorTest {
             double yval1[] = { 0.0, 1.0, 1.5, 0.0, 3.0 };
             interpolator.interpolate( xval, yval1, zval );
             Assert.fail( "Failed to detect unsorted y arguments." );
-        } catch ( NonMonotonicSequenceException iae ) {
+        } catch ( MathIllegalArgumentException iae ) {
             // Expected.
         }
     }

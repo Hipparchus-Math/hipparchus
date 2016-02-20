@@ -18,10 +18,8 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.function.StepFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -57,7 +55,7 @@ public class StepFunctionTest {
         new StepFunction(new double[] {0, 1}, new double[] {0, -1, -2});
     }
 
-    @Test(expected=NonMonotonicSequenceException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions6() {
         new StepFunction(new double[] {1, 0, 1}, new double[] {0, -1, -2});
     }

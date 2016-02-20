@@ -16,10 +16,9 @@ package org.hipparchus.util;
 import java.util.Arrays;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
@@ -241,35 +240,35 @@ public class MathArraysTest {
             MathArrays.checkOrder(new double[] {-15, -5.5, -1, -1, 2, 15},
                                  MathArrays.OrderDirection.INCREASING, true);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {-15, -5.5, -1, -2, 2},
                                  MathArrays.OrderDirection.INCREASING, false);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {3, 3, -5.5, -11, -27.5},
                                  MathArrays.OrderDirection.DECREASING, true);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {3, -1, 0, -5.5, -11, -27.5},
                                  MathArrays.OrderDirection.DECREASING, false);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {3, 0, -5.5, -11, -10},
                                  MathArrays.OrderDirection.DECREASING, false);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
     }

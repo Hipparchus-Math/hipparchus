@@ -18,9 +18,8 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
 
@@ -37,7 +36,7 @@ public class LinearInterpolator implements UnivariateInterpolator {
      * @return a function which interpolates the data set
      * @throws MathIllegalArgumentException if {@code x} and {@code y}
      * have different sizes.
-     * @throws NonMonotonicSequenceException if {@code x} is not sorted in
+     * @throws MathIllegalArgumentException if {@code x} is not sorted in
      * strict increasing order.
      * @throws NumberIsTooSmallException if the size of {@code x} is smaller
      * than 2.
@@ -46,7 +45,7 @@ public class LinearInterpolator implements UnivariateInterpolator {
     public PolynomialSplineFunction interpolate(double x[], double y[])
         throws MathIllegalArgumentException,
                NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+               MathIllegalArgumentException {
         if (x.length != y.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    x.length, y.length);

@@ -18,7 +18,6 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
 
@@ -40,7 +39,7 @@ public class PiecewiseBicubicSplineInterpolator
         throws MathIllegalArgumentException,
                NullArgumentException,
                NoDataException,
-               NonMonotonicSequenceException {
+               MathIllegalArgumentException {
         if ( xval == null ||
              yval == null ||
              fval == null ||

@@ -20,9 +20,8 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -93,12 +92,12 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      * @throws NullArgumentException if either of the input arrays is {@code null}.
      * @throws NumberIsTooSmallException if knots has length less than 2.
      * @throws MathIllegalArgumentException if {@code polynomials.length != knots.length - 1}.
-     * @throws NonMonotonicSequenceException if the {@code knots} array is not strictly increasing.
+     * @throws MathIllegalArgumentException if the {@code knots} array is not strictly increasing.
      *
      */
     public PolynomialSplineFunction(double knots[], PolynomialFunction polynomials[])
         throws NullArgumentException, NumberIsTooSmallException,
-               MathIllegalArgumentException, NonMonotonicSequenceException{
+               MathIllegalArgumentException, MathIllegalArgumentException{
         if (knots == null ||
             polynomials == null) {
             throw new NullArgumentException();

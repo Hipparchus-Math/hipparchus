@@ -18,7 +18,6 @@ package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.util.Pair;
 
 /**
@@ -36,13 +35,13 @@ public class SymmetricGaussIntegrator extends GaussIntegrator {
      *
      * @param points Integration points.
      * @param weights Weights of the corresponding integration nodes.
-     * @throws NonMonotonicSequenceException if the {@code points} are not
+     * @throws MathIllegalArgumentException if the {@code points} are not
      * sorted in increasing order.
      * @throws MathIllegalArgumentException if points and weights don't have the same length
      */
     public SymmetricGaussIntegrator(double[] points,
                                     double[] weights)
-        throws NonMonotonicSequenceException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
         super(points, weights);
     }
 
@@ -51,13 +50,13 @@ public class SymmetricGaussIntegrator extends GaussIntegrator {
      * the pair) and weights (second element of the pair.
      *
      * @param pointsAndWeights Integration points and corresponding weights.
-     * @throws NonMonotonicSequenceException if the {@code points} are not
+     * @throws MathIllegalArgumentException if the {@code points} are not
      * sorted in increasing order.
      *
      * @see #SymmetricGaussIntegrator(double[], double[])
      */
     public SymmetricGaussIntegrator(Pair<double[], double[]> pointsAndWeights)
-        throws NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         this(pointsAndWeights.getFirst(), pointsAndWeights.getSecond());
     }
 

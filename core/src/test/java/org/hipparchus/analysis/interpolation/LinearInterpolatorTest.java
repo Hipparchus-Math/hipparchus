@@ -18,12 +18,9 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.interpolation.LinearInterpolator;
-import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -122,7 +119,7 @@ public class LinearInterpolatorTest {
             double yval[] = { 0.0, 1.0, 2.0 };
             i.interpolate(xval, yval);
             Assert.fail("Failed to detect unsorted arguments.");
-        } catch (NonMonotonicSequenceException iae) {
+        } catch (MathIllegalArgumentException iae) {
             // Expected.
         }
         // Not enough data to interpolate.

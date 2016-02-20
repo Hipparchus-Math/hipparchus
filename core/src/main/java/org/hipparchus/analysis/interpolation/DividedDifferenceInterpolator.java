@@ -21,7 +21,6 @@ import java.io.Serializable;
 import org.hipparchus.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.hipparchus.analysis.polynomials.PolynomialFunctionNewtonForm;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 
 /**
@@ -49,14 +48,14 @@ public class DividedDifferenceInterpolator
      * @return a function which interpolates the dataset.
      * @throws MathIllegalArgumentException if the array lengths are different.
      * @throws NumberIsTooSmallException if the number of points is less than 2.
-     * @throws NonMonotonicSequenceException if {@code x} is not sorted in
+     * @throws MathIllegalArgumentException if {@code x} is not sorted in
      * strictly increasing order.
      */
     @Override
     public PolynomialFunctionNewtonForm interpolate(double x[], double y[])
         throws MathIllegalArgumentException,
                NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+               MathIllegalArgumentException {
         /**
          * a[] and c[] are defined in the general formula of Newton form:
          * p(x) = a[0] + a[1](x-c[0]) + a[2](x-c[0])(x-c[1]) + ... +
@@ -95,13 +94,13 @@ public class DividedDifferenceInterpolator
      * @return a fresh copy of the divided difference array.
      * @throws MathIllegalArgumentException if the array lengths are different.
      * @throws NumberIsTooSmallException if the number of points is less than 2.
-     * @throws NonMonotonicSequenceException
+     * @throws MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order.
      */
     protected static double[] computeDividedDifference(final double x[], final double y[])
         throws MathIllegalArgumentException,
                NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+               MathIllegalArgumentException {
         PolynomialFunctionLagrangeForm.verifyInterpolationArray(x, y, true);
 
         final double[] divdiff = y.clone(); // initialization

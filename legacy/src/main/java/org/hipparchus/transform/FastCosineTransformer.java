@@ -110,7 +110,7 @@ public class FastCosineTransformer implements RealTransformer, Serializable {
     /**
      * {@inheritDoc}
      *
-     * @throws org.hipparchus.exception.NonMonotonicSequenceException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the lower bound is greater than, or equal to the upper bound
      * @throws org.hipparchus.exception.NotStrictlyPositiveException
      * if the number of sample points is negative

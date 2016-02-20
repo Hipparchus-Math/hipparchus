@@ -23,7 +23,6 @@ import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
@@ -55,7 +54,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
      * @param y Sample values of the y-coordinate, in increasing order.
      * @param f Values of the function on every grid point. the expected number
      *        of elements.
-     * @throws NonMonotonicSequenceException if {@code x} or {@code y} are not
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are not
      *         strictly increasing.
      * @throws NullArgumentException if any of the arguments are null
      * @throws NoDataException if any of the arrays has zero length.
@@ -68,7 +67,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
         throws MathIllegalArgumentException,
                NullArgumentException,
                NoDataException,
-               NonMonotonicSequenceException {
+               MathIllegalArgumentException {
         if (x == null ||
             y == null ||
             f == null ||

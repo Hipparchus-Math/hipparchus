@@ -22,7 +22,6 @@ import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 
@@ -79,7 +78,7 @@ public class BicubicInterpolatingFunction
      * every grid point.
      * @throws MathIllegalArgumentException if the various arrays do not contain
      * the expected number of elements.
-     * @throws NonMonotonicSequenceException if {@code x} or {@code y} are
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are
      * not strictly increasing.
      * @throws NoDataException if any of the arrays has zero length.
      */
@@ -91,7 +90,7 @@ public class BicubicInterpolatingFunction
                                         double[][] d2FdXdY)
         throws MathIllegalArgumentException,
                NoDataException,
-               NonMonotonicSequenceException {
+               MathIllegalArgumentException {
         final int xLen = x.length;
         final int yLen = y.length;
 

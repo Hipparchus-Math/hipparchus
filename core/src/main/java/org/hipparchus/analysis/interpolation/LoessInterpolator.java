@@ -20,10 +20,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -169,7 +168,7 @@ public class LoessInterpolator
      * @param xval the arguments for the interpolation points
      * @param yval the values for the interpolation points
      * @return A cubic spline built upon a loess fit to the data at the original abscissae
-     * @throws NonMonotonicSequenceException if {@code xval} not sorted in
+     * @throws MathIllegalArgumentException if {@code xval} not sorted in
      * strictly increasing order.
      * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
@@ -183,7 +182,7 @@ public class LoessInterpolator
     @Override
     public final PolynomialSplineFunction interpolate(final double[] xval,
                                                       final double[] yval)
-        throws NonMonotonicSequenceException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException,
                NoDataException,
                NotFiniteNumberException,
@@ -199,7 +198,7 @@ public class LoessInterpolator
      * @param weights point weights: coefficients by which the robustness weight
      * of a point is multiplied.
      * @return the values of the loess fit at corresponding original abscissae.
-     * @throws NonMonotonicSequenceException if {@code xval} not sorted in
+     * @throws MathIllegalArgumentException if {@code xval} not sorted in
      * strictly increasing order.
      * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
@@ -213,7 +212,7 @@ public class LoessInterpolator
      */
     public final double[] smooth(final double[] xval, final double[] yval,
                                  final double[] weights)
-        throws NonMonotonicSequenceException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException,
                NoDataException,
                NotFiniteNumberException,
@@ -369,7 +368,7 @@ public class LoessInterpolator
      * @param xval the arguments for the interpolation points
      * @param yval the values for the interpolation points
      * @return values of the loess fit at corresponding original abscissae
-     * @throws NonMonotonicSequenceException if {@code xval} not sorted in
+     * @throws MathIllegalArgumentException if {@code xval} not sorted in
      * strictly increasing order.
      * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
@@ -381,7 +380,7 @@ public class LoessInterpolator
      * larger than 2/n).
      */
     public final double[] smooth(final double[] xval, final double[] yval)
-        throws NonMonotonicSequenceException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException,
                NoDataException,
                NotFiniteNumberException,

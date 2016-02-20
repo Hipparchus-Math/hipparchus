@@ -23,7 +23,6 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
 
@@ -52,7 +51,7 @@ public class StepFunction implements UnivariateFunction {
      *
      * @param x Domain values where the function changes value.
      * @param y Values of the function.
-     * @throws NonMonotonicSequenceException
+     * @throws MathIllegalArgumentException
      * if the {@code x} array is not sorted in strictly increasing order.
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws NoDataException if {@code x} or {@code y} are zero-length.
@@ -62,7 +61,7 @@ public class StepFunction implements UnivariateFunction {
     public StepFunction(double[] x,
                         double[] y)
         throws NullArgumentException, NoDataException,
-               MathIllegalArgumentException, NonMonotonicSequenceException {
+               MathIllegalArgumentException, MathIllegalArgumentException {
         if (x == null ||
             y == null) {
             throw new NullArgumentException();

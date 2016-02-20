@@ -19,7 +19,6 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
 
@@ -50,7 +49,7 @@ public class BicubicInterpolator
                                                     final double[] yval,
                                                     final double[][] fval)
         throws NoDataException, MathIllegalArgumentException,
-               NonMonotonicSequenceException, NumberIsTooSmallException {
+               MathIllegalArgumentException, NumberIsTooSmallException {
         if (xval.length == 0 || yval.length == 0 || fval.length == 0) {
             throw new NoDataException();
         }

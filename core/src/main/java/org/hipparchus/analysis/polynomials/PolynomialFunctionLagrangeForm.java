@@ -17,9 +17,8 @@
 package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -65,11 +64,11 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @param y function values at interpolating points
      * @throws MathIllegalArgumentException if the array lengths are different.
      * @throws NumberIsTooSmallException if the number of points is less than 2.
-     * @throws NonMonotonicSequenceException
+     * @throws MathIllegalArgumentException
      * if two abscissae have the same value.
      */
     public PolynomialFunctionLagrangeForm(double x[], double y[])
-        throws MathIllegalArgumentException, NumberIsTooSmallException, NonMonotonicSequenceException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException {
         this.x = new double[x.length];
         this.y = new double[y.length];
         System.arraycopy(x, 0, this.x, 0, x.length);
@@ -90,7 +89,7 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @return the function value.
      * @throws MathIllegalArgumentException if {@code x} and {@code y} have
      * different lengths.
-     * @throws org.hipparchus.exception.NonMonotonicSequenceException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order.
      * @throws NumberIsTooSmallException if the size of {@code x} is less
      * than 2.
@@ -165,13 +164,13 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @return the function value.
      * @throws MathIllegalArgumentException if {@code x} and {@code y} have
      * different lengths.
-     * @throws NonMonotonicSequenceException
+     * @throws MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order.
      * @throws NumberIsTooSmallException if the size of {@code x} is less
      * than 2.
      */
     public static double evaluate(double x[], double y[], double z)
-        throws MathIllegalArgumentException, NumberIsTooSmallException, NonMonotonicSequenceException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException {
         if (verifyInterpolationArray(x, y, false)) {
             return evaluateInternal(x, y, z);
         }
@@ -199,7 +198,7 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @return the function value.
      * @throws MathIllegalArgumentException if {@code x} and {@code y} have
      * different lengths.
-     * @throws org.hipparchus.exception.NonMonotonicSequenceException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order.
      * @throws NumberIsTooSmallException if the size of {@code x} is less
      * than 2.
@@ -305,7 +304,7 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @param abort Whether to throw an exception if {@code x} is not sorted.
      * @throws MathIllegalArgumentException if the array lengths are different.
      * @throws NumberIsTooSmallException if the number of points is less than 2.
-     * @throws org.hipparchus.exception.NonMonotonicSequenceException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order and {@code abort}
      * is {@code true}.
      * @return {@code false} if the {@code x} is not sorted in increasing order,
@@ -314,7 +313,7 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @see #computeCoefficients()
      */
     public static boolean verifyInterpolationArray(double x[], double y[], boolean abort)
-        throws MathIllegalArgumentException, NumberIsTooSmallException, NonMonotonicSequenceException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException {
         if (x.length != y.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    x.length, y.length);

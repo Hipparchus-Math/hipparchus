@@ -21,7 +21,6 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -179,7 +178,7 @@ public class SplineInterpolatorTest {
             double yval[] = { 0.0, 1.0, 2.0 };
             i.interpolate(xval, yval);
             Assert.fail("Failed to detect unsorted arguments.");
-        } catch (NonMonotonicSequenceException iae) {
+        } catch (MathIllegalArgumentException iae) {
             // Expected.
         }
         // Not enough data to interpolate.

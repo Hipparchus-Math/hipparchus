@@ -110,7 +110,7 @@ public class FastSineTransformer implements RealTransformer, Serializable {
      *
      * This implementation enforces {@code f(x) = 0.0} at {@code x = 0.0}.
      *
-     * @throws org.hipparchus.exception.NonMonotonicSequenceException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the lower bound is greater than, or equal to the upper bound
      * @throws org.hipparchus.exception.NotStrictlyPositiveException
      *   if the number of sample points is negative

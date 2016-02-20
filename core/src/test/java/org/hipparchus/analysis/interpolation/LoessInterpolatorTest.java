@@ -16,10 +16,8 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import org.hipparchus.analysis.interpolation.LoessInterpolator;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -169,12 +167,12 @@ public class LoessInterpolatorTest {
         new LoessInterpolator().smooth(new double[] {}, new double[] {});
     }
 
-    @Test(expected=NonMonotonicSequenceException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNonStrictlyIncreasing1() {
         new LoessInterpolator().smooth(new double[] {4,3,1,2}, new double[] {3,4,5,6});
     }
 
-    @Test(expected=NonMonotonicSequenceException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNonStrictlyIncreasing2() {
         new LoessInterpolator().smooth(new double[] {1,2,2,3}, new double[] {3,4,5,6});
     }
