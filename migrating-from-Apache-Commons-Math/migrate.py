@@ -37,9 +37,10 @@ def processDir(rootDir, args):
 		
 		# do not traverse into subdirs that match an ignore
 		for ignore in args.ignore:
-			index = subdirList.index(ignore)
-			if index >= 0:
-				del subdirList[index]
+			if ignore in subdirList:
+				index = subdirList.index(ignore)
+				if index >= 0:
+					del subdirList[index]
 
 
 def processFile(file, args):
@@ -71,7 +72,7 @@ def processFile(file, args):
 
 def packageReplace(line, args):
 	for p in args.packages_subst_pattern:
-		line = re.sub(p[1], p[2], line)
+		line = re.sub(p[0], p[2], line)
 	return line
 
 def parsePackageSubstitutionRules(args):
@@ -81,11 +82,13 @@ def parsePackageSubstitutionRules(args):
 	for line in lines:
 		pattern = re.sub(r'^\s*"([^"]*)"\s*"([^"]*)"\s*', r's:\1:\2', line)
 		if pattern.startswith('s:'):
-			args.packages_subst_pattern.append(pattern.split(':'))
+			tokens = pattern.split(':')
+			tokens[0] = re.compile(tokens[1])
+			args.packages_subst_pattern.append(tokens)
 
 def classesReplace(line, args):
 	for p in args.classes_subst_pattern:
-		line = re.sub(p[1], p[2], line)
+		line = re.sub(p[0], p[2], line)
 	return line
 
 def parseClassSubstitutionRules(args):
@@ -99,7 +102,9 @@ def parseClassSubstitutionRules(args):
 	for line in lines:
 		pattern = re.sub(r'^\s*([A-Za-z_][A-Za-z0-9_]*)\s*([A-Za-z_][A-Za-z0-9_]*)\s*$', r's:(^|[^A-Za-z0-9_])\1([^A-Za-z0-9_]|$):\\1\2\\2', line)
 		if pattern.startswith('s:'):
-			args.classes_subst_pattern.append(pattern.split(':'))
+			tokens = pattern.split(':')
+			tokens[0] = re.compile(tokens[1])
+			args.classes_subst_pattern.append(tokens)
 
 
 # start main
