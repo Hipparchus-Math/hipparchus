@@ -21,7 +21,7 @@ package org.hipparchus.exception;
  *
  * @since 2.2
  */
-public class MathInternalError extends MathIllegalStateException {
+public class MathInternalError extends MathRuntimeException {
     /** Serializable version Id. */
     private static final long serialVersionUID = -6276776513966934846L;
     /** URL for reporting problems. */
@@ -42,13 +42,4 @@ public class MathInternalError extends MathIllegalStateException {
         super(cause, LocalizedFormats.INTERNAL_ERROR, REPORT_URL);
     }
 
-    /**
-     * Constructor accepting a localized message.
-     *
-     * @param pattern Message pattern explaining the cause of the error.
-     * @param args Arguments.
-     */
-    public MathInternalError(Localizable pattern, Object ... args) {
-        super(pattern, args);
-    }
 }
