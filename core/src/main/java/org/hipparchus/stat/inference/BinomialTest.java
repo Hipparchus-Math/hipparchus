@@ -152,8 +152,8 @@ public class BinomialTest {
             }
             return pTotal;
         default:
-            throw new MathInternalError(LocalizedFormats. OUT_OF_RANGE_SIMPLE, alternativeHypothesis,
-                      AlternativeHypothesis.TWO_SIDED, AlternativeHypothesis.LESS_THAN);
+            // this should never happen
+            throw new MathInternalError();
         }
     }
 }
