@@ -17,8 +17,8 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -77,15 +77,16 @@ public class UnivariatePeriodicInterpolator
     /**
      * {@inheritDoc}
      *
-     * @throws NumberIsTooSmallException if the number of extension points
+     * @throws MathIllegalArgumentException if the number of extension points
      * is larger than the size of {@code xval}.
      */
     @Override
     public UnivariateFunction interpolate(double[] xval,
                                           double[] yval)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (xval.length < extend) {
-            throw new NumberIsTooSmallException(xval.length, extend, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   xval.length, extend);
         }
 
         MathArrays.checkOrder(xval);

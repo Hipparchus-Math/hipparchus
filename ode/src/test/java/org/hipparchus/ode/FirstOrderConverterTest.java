@@ -19,7 +19,6 @@ package org.hipparchus.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.nonstiff.ClassicalRungeKuttaIntegrator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -39,7 +38,7 @@ public class FirstOrderConverterTest {
 
   @Test
   public void testDecreasingSteps()
-      throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
     double previousError = Double.NaN;
     for (int i = 0; i < 10; ++i) {
@@ -57,7 +56,7 @@ public class FirstOrderConverterTest {
 
   @Test
   public void testSmallStep()
-      throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
     double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 1.0e-4)
                    - FastMath.sin(4.0);
     Assert.assertTrue(FastMath.abs(error) < 1.0e-10);
@@ -65,7 +64,7 @@ public class FirstOrderConverterTest {
 
   @Test
   public void testBigStep()
-      throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
     double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 0.5)
                    - FastMath.sin(4.0);
     Assert.assertTrue(FastMath.abs(error) > 0.1);
@@ -98,7 +97,7 @@ public class FirstOrderConverterTest {
 
   private double integrateWithSpecifiedStep(double omega,
                                             double t0, double t,
-                                            double step) throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+                                            double step) throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
     double[] y0 = new double[2];
     y0[0] = FastMath.sin(omega * t0);
     y0[1] = omega * FastMath.cos(omega * t0);

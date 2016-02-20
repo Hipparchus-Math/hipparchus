@@ -21,16 +21,14 @@ import java.util.Random;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.hipparchus.optim.nonlinear.scalar.noderiv.BOBYQAOptimizer;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Ignore;
@@ -61,7 +59,7 @@ public class BOBYQAOptimizerTest {
                1e-13, 1e-6, 2000, null);
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testProblemDimensionTooSmall() {
         double[] startPoint = point(1, 0.5);
         doTest(new Rosen(), startPoint, null,

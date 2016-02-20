@@ -19,7 +19,6 @@ package org.hipparchus.ode.sampling;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
@@ -39,7 +38,7 @@ public class StepNormalizerTest {
 
   @Test
   public void testBoundaries()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
     double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);
@@ -70,7 +69,7 @@ public class StepNormalizerTest {
 
   @Test
   public void testBeforeEnd()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
     final double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);

@@ -22,7 +22,7 @@ import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.integration.SimpsonIntegrator;
 import org.hipparchus.analysis.integration.UnivariateIntegrator;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -108,8 +108,8 @@ public final class SimpsonIntegratorTest {
         try {
             // bad iteration limits
             new SimpsonIntegrator(5, 4);
-            Assert.fail("Expecting NumberIsTooSmallException - bad iteration limits");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {

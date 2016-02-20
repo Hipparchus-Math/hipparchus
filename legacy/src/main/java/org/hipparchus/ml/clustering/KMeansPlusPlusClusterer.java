@@ -25,7 +25,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ml.distance.DistanceMeasure;
 import org.hipparchus.ml.distance.EuclideanDistance;
 import org.hipparchus.random.JDKRandomGenerator;
@@ -201,7 +200,8 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         // number of clusters has to be smaller or equal the number of data points
         if (points.size() < k) {
-            throw new NumberIsTooSmallException(points.size(), k, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   points.size(), k);
         }
 
         // create the initial clusters

@@ -24,7 +24,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.IntegerSequence;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -77,15 +76,16 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
      * @param absoluteAccuracy Absolute accuracy.
      * @param functionValueAccuracy Function value accuracy.
      * @param maximalOrder maximal order.
-     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     * @exception MathIllegalArgumentException if maximal order is lower than 2
      */
     public FieldBracketingNthOrderBrentSolver(final T relativeAccuracy,
                                               final T absoluteAccuracy,
                                               final T functionValueAccuracy,
                                               final int maximalOrder)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         if (maximalOrder < 2) {
-            throw new NumberIsTooSmallException(maximalOrder, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maximalOrder, 2);
         }
         this.field                 = relativeAccuracy.getField();
         this.maximalOrder          = maximalOrder;

@@ -26,7 +26,6 @@ import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;
@@ -206,7 +205,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
          * parameters of the Gaussian.
          * @throws NullArgumentException if {@code observations} is
          * {@code null}.
-         * @throws NumberIsTooSmallException if there are less than 3
+         * @throws MathIllegalArgumentException if there are less than 3
          * observations.
          */
         public ParameterGuesser(Collection<WeightedObservedPoint> observations) {
@@ -214,7 +213,8 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                 throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
             }
             if (observations.size() < 3) {
-                throw new NumberIsTooSmallException(observations.size(), 3, true);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                       observations.size(), 3);
             }
 
             final List<WeightedObservedPoint> sorted = sortObservations(observations);

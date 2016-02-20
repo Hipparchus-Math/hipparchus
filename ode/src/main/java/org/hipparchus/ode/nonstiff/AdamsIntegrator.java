@@ -19,7 +19,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.MultistepIntegrator;
@@ -47,13 +46,13 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
      * be smaller than this
      * @param scalAbsoluteTolerance allowed absolute error
      * @param scalRelativeTolerance allowed relative error
-     * @exception NumberIsTooSmallException if order is 1 or less
+     * @exception MathIllegalArgumentException if order is 1 or less
      */
     public AdamsIntegrator(final String name, final int nSteps, final int order,
                            final double minStep, final double maxStep,
                            final double scalAbsoluteTolerance,
                            final double scalRelativeTolerance)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(name, nSteps, order, minStep, maxStep,
               scalAbsoluteTolerance, scalRelativeTolerance);
         transformer = AdamsNordsieckTransformer.getInstance(nSteps);
@@ -87,7 +86,7 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
     /** {@inheritDoc} */
     @Override
     public abstract void integrate(final ExpandableStatefulODE equations, final double t)
-        throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
     /** {@inheritDoc} */
     @Override

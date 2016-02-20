@@ -18,7 +18,6 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Gamma;
@@ -58,7 +57,7 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      *
      * @param mu shape parameter
      * @param omega scale parameter (must be positive)
-     * @throws NumberIsTooSmallException if {@code mu < 0.5}
+     * @throws MathIllegalArgumentException if {@code mu < 0.5}
      * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
     public NakagamiDistribution(double mu, double omega) {
@@ -79,7 +78,7 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @param omega scale parameter (must be positive)
      * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NumberIsTooSmallException if {@code mu < 0.5}
+     * @throws MathIllegalArgumentException if {@code mu < 0.5}
      * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
     public NakagamiDistribution(double mu, double omega, double inverseAbsoluteAccuracy) {
@@ -94,14 +93,15 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @param omega scale parameter (must be positive)
      * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NumberIsTooSmallException if {@code mu < 0.5}
+     * @throws MathIllegalArgumentException if {@code mu < 0.5}
      * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
     public NakagamiDistribution(RandomGenerator rng, double mu, double omega, double inverseAbsoluteAccuracy) {
         super(rng);
 
         if (mu < 0.5) {
-            throw new NumberIsTooSmallException(mu, 0.5, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   mu, 0.5);
         }
         if (omega <= 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_SCALE, omega);

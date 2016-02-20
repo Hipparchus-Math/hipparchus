@@ -22,7 +22,6 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 
 /**
  * Interface defining field-valued matrix with basic algebraic operations.
@@ -147,12 +146,12 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param startColumn Initial column index
      * @param endColumn Final column index (inclusive)
      * @return the matrix containing the data of the specified rows and columns.
-     * @throws NumberIsTooSmallException is {@code endRow < startRow} of
+     * @throws MathIllegalArgumentException is {@code endRow < startRow} of
      * {@code endColumn < startColumn}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      */
    FieldMatrix<T> getSubMatrix(int startRow, int endRow, int startColumn, int endColumn)
-   throws NumberIsTooSmallException, MathIllegalArgumentException;
+   throws MathIllegalArgumentException;
 
    /**
     * Get a submatrix. Rows and columns are indicated
@@ -183,13 +182,13 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * (if larger than rows/columns counts, only the upper-left part will be modified).
     * @throws MathIllegalArgumentException if the dimensions of
     * {@code destination} are not large enough to hold the submatrix.
-    * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+    * @throws MathIllegalArgumentException if {@code endRow < startRow} or
     * {@code endColumn < startColumn}.
     * @throws MathIllegalArgumentException if the indices are not valid.
     */
     void copySubMatrix(int startRow, int endRow, int startColumn, int endColumn,
                        T[][] destination)
-    throws MathIllegalArgumentException, NumberIsTooSmallException,
+    throws MathIllegalArgumentException,
     MathIllegalArgumentException;
 
   /**
@@ -547,7 +546,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param startColumn Initial column index
      * @param endColumn Final column index
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
      * @see #walkInRowOrder(FieldMatrixPreservingVisitor)
@@ -565,7 +564,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInRowOrder(FieldMatrixChangingVisitor<T> visitor,
                      int startRow, int endRow, int startColumn, int endColumn)
-    throws MathIllegalArgumentException, NumberIsTooSmallException;
+    throws MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries in row order.
@@ -578,7 +577,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param startColumn Initial column index
      * @param endColumn Final column index
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
      * @see #walkInRowOrder(FieldMatrixPreservingVisitor)
@@ -596,7 +595,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInRowOrder(FieldMatrixPreservingVisitor<T> visitor,
                      int startRow, int endRow, int startColumn, int endColumn)
-    throws MathIllegalArgumentException, NumberIsTooSmallException;
+    throws MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries in column order.
@@ -652,7 +651,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
@@ -671,7 +670,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInColumnOrder(FieldMatrixChangingVisitor<T> visitor,
                         int startRow, int endRow, int startColumn, int endColumn)
-    throws NumberIsTooSmallException, MathIllegalArgumentException;
+    throws MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries in column order.
@@ -683,7 +682,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
@@ -702,7 +701,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInColumnOrder(FieldMatrixPreservingVisitor<T> visitor,
                         int startRow, int endRow, int startColumn, int endColumn)
-    throws NumberIsTooSmallException, MathIllegalArgumentException;
+    throws MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries using the fastest possible order.
@@ -755,7 +754,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index (inclusive)
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
@@ -774,7 +773,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInOptimizedOrder(FieldMatrixChangingVisitor<T> visitor,
                            int startRow, int endRow, int startColumn, int endColumn)
-    throws NumberIsTooSmallException, MathIllegalArgumentException;
+    throws MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries using the fastest possible order.
@@ -785,7 +784,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index (inclusive)
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @see #walkInRowOrder(FieldMatrixChangingVisitor)
@@ -804,5 +803,5 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      */
     T walkInOptimizedOrder(FieldMatrixPreservingVisitor<T> visitor,
                            int startRow, int endRow, int startColumn, int endColumn)
-    throws NumberIsTooSmallException, MathIllegalArgumentException;
+    throws MathIllegalArgumentException;
 }

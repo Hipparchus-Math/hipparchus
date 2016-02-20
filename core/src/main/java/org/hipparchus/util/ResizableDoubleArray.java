@@ -23,7 +23,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 
 /**
  * A variable length {@link DoubleArray} implementation that automatically
@@ -407,12 +406,12 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param contraction Criterion to be checked.
      * @param expansion Factor to be checked.
-     * @throws NumberIsTooSmallException if {@code contraction < expansion}.
-     * @throws NumberIsTooSmallException if {@code contraction <= 1}.
-     * @throws NumberIsTooSmallException if {@code expansion <= 1 }.
+     * @throws MathIllegalArgumentException if {@code contraction < expansion}.
+     * @throws MathIllegalArgumentException if {@code contraction <= 1}.
+     * @throws MathIllegalArgumentException if {@code expansion <= 1 }.
      * @since 3.1
      */
-    protected void checkContractExpand(double contraction, double expansion) throws NumberIsTooSmallException {
+    protected void checkContractExpand(double contraction, double expansion) throws MathIllegalArgumentException {
         if (contraction < expansion) {
             throw new MathIllegalArgumentException(LocalizedFormats.CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR,
                                                    contraction, expansion);

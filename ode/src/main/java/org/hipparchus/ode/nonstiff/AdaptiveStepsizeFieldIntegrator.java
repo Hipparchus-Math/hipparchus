@@ -19,10 +19,9 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEState;
@@ -223,7 +222,7 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
     /** {@inheritDoc} */
     @Override
     protected void sanityChecks(final FieldODEState<T> eqn, final T t)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         super.sanityChecks(eqn, t);
 
@@ -320,17 +319,17 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * are silently increased up to this value, if false such small
      * steps generate an exception
      * @return a bounded integration step (h if no bound is reach, or a bounded value)
-     * @exception NumberIsTooSmallException if the step is too small and acceptSmall is false
+     * @exception MathIllegalArgumentException if the step is too small and acceptSmall is false
      */
     protected T filterStep(final T h, final boolean forward, final boolean acceptSmall)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         T filteredH = h;
         if (h.abs().subtract(minStep).getReal() < 0) {
             if (acceptSmall) {
                 filteredH = forward ? minStep : minStep.negate();
             } else {
-                throw new NumberIsTooSmallException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
+                throw new MathIllegalArgumentException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
                                                     h.abs().getReal(), minStep.getReal(), true);
             }
         }

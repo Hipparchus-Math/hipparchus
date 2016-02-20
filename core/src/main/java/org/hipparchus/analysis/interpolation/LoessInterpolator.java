@@ -22,7 +22,6 @@ import java.util.Arrays;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -170,14 +169,14 @@ public class LoessInterpolator
      * @throws MathIllegalArgumentException if {@code xval} or {@code yval} has zero size.
      * @throws MathIllegalArgumentException if any of the arguments and values are
      * not finite real numbers.
-     * @throws NumberIsTooSmallException if the bandwidth is too small to
+     * @throws MathIllegalArgumentException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
      * larger than 2/n).
      */
     @Override
     public final PolynomialSplineFunction interpolate(final double[] xval,
                                                       final double[] yval)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         return new SplineInterpolator().interpolate(xval, smooth(xval, yval));
     }
 
@@ -196,14 +195,14 @@ public class LoessInterpolator
      * @throws MathIllegalArgumentException if {@code xval} or {@code yval} has zero size.
      * @throws MathIllegalArgumentException if any of the arguments and values are
      not finite real numbers.
-     * @throws NumberIsTooSmallException if the bandwidth is too small to
+     * @throws MathIllegalArgumentException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
      * larger than 2/n).
      * @since 2.1
      */
     public final double[] smooth(final double[] xval, final double[] yval,
                                  final double[] weights)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         if (xval.length != yval.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);
@@ -232,7 +231,7 @@ public class LoessInterpolator
         int bandwidthInPoints = (int) (bandwidth * n);
 
         if (bandwidthInPoints < 2) {
-            throw new NumberIsTooSmallException(LocalizedFormats.BANDWIDTH,
+            throw new MathIllegalArgumentException(LocalizedFormats.BANDWIDTH,
                                                 bandwidthInPoints, 2, true);
         }
 
@@ -362,12 +361,12 @@ public class LoessInterpolator
      * @throws MathIllegalArgumentException if {@code xval} or {@code yval} has zero size.
      * @throws MathIllegalArgumentException if any of the arguments and values are
      * not finite real numbers.
-     * @throws NumberIsTooSmallException if the bandwidth is too small to
+     * @throws MathIllegalArgumentException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
      * larger than 2/n).
      */
     public final double[] smooth(final double[] xval, final double[] yval)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         if (xval.length != yval.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);

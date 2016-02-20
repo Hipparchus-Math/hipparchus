@@ -23,7 +23,6 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -69,7 +68,7 @@ public class AkimaSplineInterpolatorTest
             i.interpolate( xval, yval );
             Assert.fail( "Failed to detect insufficient data" );
         }
-        catch ( NumberIsTooSmallException iae )
+        catch ( MathIllegalArgumentException iae )
         {
             // Expected.
         }

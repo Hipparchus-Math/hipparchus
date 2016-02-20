@@ -23,7 +23,6 @@ import java.io.ObjectOutput;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.FirstOrderIntegrator;
@@ -42,7 +41,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void dimensionCheck()
-        throws MathIllegalArgumentException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException, MathIllegalStateException {
         TestProblem1 pb = new TestProblem1();
         FirstOrderIntegrator integ =
@@ -52,9 +51,9 @@ public class AdamsMoultonIntegratorTest {
                         1.0, new double[pb.getDimension()+10]);
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testMinStep()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
 
           TestProblem1 pb = new TestProblem1();
@@ -76,7 +75,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void testIncreasingTolerance()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
 
         int previousCalls = Integer.MAX_VALUE;
@@ -114,7 +113,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test(expected = MathIllegalStateException.class)
     public void exceedMaxEvaluations()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem1 pb  = new TestProblem1();
@@ -132,7 +131,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void backward()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem5 pb = new TestProblem5();
@@ -152,7 +151,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void polynomial()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
         TestProblem6 pb = new TestProblem6();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());

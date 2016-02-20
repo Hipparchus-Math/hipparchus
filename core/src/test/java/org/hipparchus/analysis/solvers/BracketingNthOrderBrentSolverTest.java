@@ -25,7 +25,7 @@ import org.hipparchus.analysis.solvers.AllowedSolution;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.analysis.solvers.NewtonRaphsonSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -47,17 +47,17 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         return new int[] {1, 3, 8, 1, 9, 4, 8, 1, 12, 1, 16};
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInsufficientOrder1() {
         new BracketingNthOrderBrentSolver(1.0e-10, 1);
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInsufficientOrder2() {
         new BracketingNthOrderBrentSolver(1.0e-10, 1.0e-10, 1);
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInsufficientOrder3() {
         new BracketingNthOrderBrentSolver(1.0e-10, 1.0e-10, 1.0e-10, 1);
     }

@@ -19,7 +19,6 @@ package org.hipparchus.optim;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 
 /**
  * Base class for implementing optimizers for multivariate functions.
@@ -136,7 +135,8 @@ public abstract class BaseMultivariateOptimizer<PAIR>
                     final double v = start[i];
                     final double lo = lowerBound[i];
                     if (v < lo) {
-                        throw new NumberIsTooSmallException(v, lo, true);
+                        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                               v, lo);
                     }
                 }
             }

@@ -49,7 +49,6 @@ import org.hipparchus.analysis.function.Tanh;
 import org.hipparchus.analysis.function.Ulp;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -1462,7 +1461,7 @@ public abstract class RealVectorAbstractTest {
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }
@@ -1594,7 +1593,7 @@ public abstract class RealVectorAbstractTest {
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }
@@ -1730,7 +1729,7 @@ public abstract class RealVectorAbstractTest {
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }
@@ -1870,7 +1869,7 @@ public abstract class RealVectorAbstractTest {
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }

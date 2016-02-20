@@ -24,7 +24,6 @@ import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.Pair;
@@ -53,7 +52,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         new MultivariateNormalMixtureExpectationMaximization(data);
     }
 
-    @Test(expected = NumberIsTooSmallException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMultipleColumnsRequired() {
         // Data should have at least 2 columns
         double[][] data = new double[][] {

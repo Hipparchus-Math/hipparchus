@@ -19,7 +19,6 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 
 /**
  * Interface defining a real-valued matrix with basic algebraic operations.
@@ -160,12 +159,12 @@ public interface RealMatrix extends AnyMatrix {
      * @return The subMatrix containing the data of the
      * specified rows and columns.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      */
     RealMatrix getSubMatrix(int startRow, int endRow, int startColumn,
                             int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Gets a submatrix. Rows and columns are indicated counting from 0 to n-1.
@@ -194,14 +193,14 @@ public interface RealMatrix extends AnyMatrix {
      * (if larger than rows/columns counts, only the upper-left part will be
      * used)
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @throws MathIllegalArgumentException if the destination array is too
      * small.
      */
     void copySubMatrix(int startRow, int endRow, int startColumn,
                        int endColumn, double[][] destination)
-        throws MathIllegalArgumentException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException,
         MathIllegalArgumentException;
 
     /**
@@ -561,7 +560,7 @@ public interface RealMatrix extends AnyMatrix {
      * @param startColumn Initial column index
      * @param endColumn Final column index
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -579,7 +578,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInRowOrder(RealMatrixChangingVisitor visitor, int startRow,
         int endRow, int startColumn, int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries in row order.
@@ -592,7 +591,7 @@ public interface RealMatrix extends AnyMatrix {
      * @param startColumn Initial column index
      * @param endColumn Final column index
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -610,7 +609,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInRowOrder(RealMatrixPreservingVisitor visitor, int startRow,
         int endRow, int startColumn, int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries in column order.
@@ -667,7 +666,7 @@ public interface RealMatrix extends AnyMatrix {
      * @param startColumn Initial column index
      * @param endColumn Final column index
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -685,7 +684,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInColumnOrder(RealMatrixChangingVisitor visitor, int startRow,
         int endRow, int startColumn, int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries in column order.
@@ -698,7 +697,7 @@ public interface RealMatrix extends AnyMatrix {
      * @param startColumn Initial column index
      * @param endColumn Final column index
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -716,7 +715,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInColumnOrder(RealMatrixPreservingVisitor visitor, int startRow,
         int endRow, int startColumn, int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries using the fastest possible order.
@@ -770,7 +769,7 @@ public interface RealMatrix extends AnyMatrix {
      * @param startColumn Initial column index
      * @param endColumn Final column index (inclusive)
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -788,7 +787,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInOptimizedOrder(RealMatrixChangingVisitor visitor,
         int startRow, int endRow, int startColumn, int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries using the fastest possible order.
@@ -800,7 +799,7 @@ public interface RealMatrix extends AnyMatrix {
      * @param startColumn Initial column index
      * @param endColumn Final column index (inclusive)
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -818,5 +817,5 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInOptimizedOrder(RealMatrixPreservingVisitor visitor,
         int startRow, int endRow, int startColumn, int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 }

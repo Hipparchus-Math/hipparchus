@@ -19,7 +19,6 @@ package org.hipparchus.linear;
 import org.hipparchus.Field;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
 import org.junit.Assert;
@@ -430,8 +429,8 @@ public class SparseFieldMatrixTest {
 
         try {
             m.getSubMatrix(1, 0, 2, 4);
-            Assert.fail("Expecting NumberIsTooSmallException");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -442,14 +441,14 @@ public class SparseFieldMatrixTest {
         }
         try {
             m.getSubMatrix(1, 0, 2, 2);
-            Assert.fail("Expecting NumberIsTooSmallException");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(1, 0, 2, 4);
-            Assert.fail("Expecting NumberIsTooSmallException");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {

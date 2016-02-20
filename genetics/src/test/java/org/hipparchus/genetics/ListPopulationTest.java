@@ -22,11 +22,6 @@ import java.util.Iterator;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.genetics.BinaryChromosome;
-import org.hipparchus.genetics.Chromosome;
-import org.hipparchus.genetics.ListPopulation;
-import org.hipparchus.genetics.Population;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -191,7 +186,7 @@ public class ListPopulationTest {
         }
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testSetPopulationLimitTooSmall() {
         final ArrayList<Chromosome> chromosomes = new ArrayList<Chromosome> ();
         chromosomes.add(new DummyBinaryChromosome(BinaryChromosome.randomBinaryRepresentation(3)));

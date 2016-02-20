@@ -21,7 +21,6 @@ import java.lang.reflect.Method;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -515,12 +514,12 @@ public class BetaTest {
         }
     }
 
-    @Test(expected = NumberIsTooSmallException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testLogGammaMinusLogGammaSumPrecondition1() {
         logGammaMinusLogGammaSum(-1.0, 8.0);
     }
 
-    @Test(expected = NumberIsTooSmallException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testLogGammaMinusLogGammaSumPrecondition2() {
         logGammaMinusLogGammaSum(1.0, 7.0);
     }
@@ -689,13 +688,13 @@ public class BetaTest {
         }
     }
 
-    @Test(expected = NumberIsTooSmallException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSumDeltaMinusDeltaSumPrecondition1() {
 
         sumDeltaMinusDeltaSum(9.0, 10.0);
     }
 
-    @Test(expected = NumberIsTooSmallException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSumDeltaMinusDeltaSumPrecondition2() {
 
         sumDeltaMinusDeltaSum(10.0, 9.0);

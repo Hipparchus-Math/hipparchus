@@ -22,7 +22,6 @@ import org.hipparchus.analysis.function.Logit;
 import org.hipparchus.analysis.function.Sigmoid;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -107,7 +106,8 @@ public class MultivariateFunctionMappingAdapter
         for (int i = 0; i < lower.length; ++i) {
             // note the following test is written in such a way it also fails for NaN
             if (!(upper[i] >= lower[i])) {
-                throw new NumberIsTooSmallException(upper[i], lower[i], true);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                       upper[i], lower[i]);
             }
         }
 

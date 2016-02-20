@@ -21,7 +21,6 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
@@ -53,14 +52,14 @@ public abstract class AdamsFieldIntegrator<T extends RealFieldElement<T>> extend
      * be smaller than this
      * @param scalAbsoluteTolerance allowed absolute error
      * @param scalRelativeTolerance allowed relative error
-     * @exception NumberIsTooSmallException if order is 1 or less
+     * @exception MathIllegalArgumentException if order is 1 or less
      */
     public AdamsFieldIntegrator(final Field<T> field, final String name,
                                 final int nSteps, final int order,
                                 final double minStep, final double maxStep,
                                 final double scalAbsoluteTolerance,
                                 final double scalRelativeTolerance)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(field, name, nSteps, order, minStep, maxStep,
               scalAbsoluteTolerance, scalRelativeTolerance);
         transformer = AdamsNordsieckFieldTransformer.getInstance(field, nSteps);
@@ -98,7 +97,7 @@ public abstract class AdamsFieldIntegrator<T extends RealFieldElement<T>> extend
     public abstract FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
                                                             final FieldODEState<T> initialState,
                                                             final T finalTime)
-        throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
     /** {@inheritDoc} */
     @Override

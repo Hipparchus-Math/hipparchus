@@ -21,7 +21,6 @@ import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
@@ -59,14 +58,13 @@ public class AkimaSplineInterpolator
      *         different sizes.
      * @throws MathIllegalArgumentException if {@code xvals} is not sorted in
      *         strict increasing order.
-     * @throws NumberIsTooSmallException if the size of {@code xvals} is smaller
+     * @throws MathIllegalArgumentException if the size of {@code xvals} is smaller
      *         than 5.
      */
     @Override
     public PolynomialSplineFunction interpolate(double[] xvals,
                                                 double[] yvals)
         throws MathIllegalArgumentException,
-               NumberIsTooSmallException,
                MathIllegalArgumentException {
         if (xvals == null ||
             yvals == null) {
@@ -79,7 +77,7 @@ public class AkimaSplineInterpolator
         }
 
         if (xvals.length < MINIMUM_NUMBER_POINTS) {
-            throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
                                                 xvals.length,
                                                 MINIMUM_NUMBER_POINTS, true);
         }
@@ -185,7 +183,7 @@ public class AkimaSplineInterpolator
 
         final int minimumLength = 2;
         if (xvals.length < minimumLength) {
-            throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
                                                 xvals.length, minimumLength,
                                                 true);
         }

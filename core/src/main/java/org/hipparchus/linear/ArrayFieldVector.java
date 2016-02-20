@@ -26,7 +26,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -900,13 +899,13 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param end the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link FieldVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @throws NumberIsTooSmallException if {@code end < start}.
+     * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorPreservingVisitor<T> visitor,
                                 final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -942,13 +941,13 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param end the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link FieldVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @throws NumberIsTooSmallException if {@code end < start}.
+     * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorPreservingVisitor<T> visitor,
                                   final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -980,13 +979,13 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param end the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link FieldVectorChangingVisitor#end()}
      * at the end of the walk
-     * @throws NumberIsTooSmallException if {@code end < start}.
+     * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorChangingVisitor<T> visitor,
                                 final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -1022,13 +1021,13 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param end the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link FieldVectorChangingVisitor#end()}
      * at the end of the walk
-     * @throws NumberIsTooSmallException if {@code end < start}.
+     * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorChangingVisitor<T> visitor,
                                   final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -1100,11 +1099,11 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param start the index of the first entry of the subvector
      * @param end the index of the last entry of the subvector (inclusive)
      * @throws MathIllegalArgumentException if {@code start} of {@code end} are not valid
-     * @throws NumberIsTooSmallException if {@code end < start}
+     * @throws MathIllegalArgumentException if {@code end < start}
      * @since 3.3
      */
     private void checkIndices(final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         final int dim = getDimension();
         if ((start < 0) || (start >= dim)) {
             throw new MathIllegalArgumentException(LocalizedFormats.INDEX, start, 0,
@@ -1115,7 +1114,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
                                           dim - 1);
         }
         if (end < start) {
-            throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 end, start, false);
         }
     }

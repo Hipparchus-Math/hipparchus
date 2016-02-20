@@ -19,7 +19,7 @@ package org.hipparchus.special;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.ContinuedFraction;
 import org.hipparchus.util.FastMath;
 
@@ -535,14 +535,15 @@ public class Gamma {
      *
      * @param x Argument.
      * @return The value of {@code 1.0 / Gamma(1.0 + x) - 1.0}.
-     * @throws NumberIsTooSmallException if {@code x < -0.5}
+     * @throws MathIllegalArgumentException if {@code x < -0.5}
      * @throws NumberIsTooLargeException if {@code x > 1.5}
      * @since 3.1
      */
     public static double invGamma1pm1(final double x) {
 
         if (x < -0.5) {
-            throw new NumberIsTooSmallException(x, -0.5, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   x, -0.5);
         }
         if (x > 1.5) {
             throw new NumberIsTooLargeException(x, 1.5, true);
@@ -628,15 +629,16 @@ public class Gamma {
      *
      * @param x Argument.
      * @return The value of {@code log(Gamma(1 + x))}.
-     * @throws NumberIsTooSmallException if {@code x < -0.5}.
+     * @throws MathIllegalArgumentException if {@code x < -0.5}.
      * @throws NumberIsTooLargeException if {@code x > 1.5}.
      * @since 3.1
      */
     public static double logGamma1p(final double x)
-        throws NumberIsTooSmallException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NumberIsTooLargeException {
 
         if (x < -0.5) {
-            throw new NumberIsTooSmallException(x, -0.5, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   x, -0.5);
         }
         if (x > 1.5) {
             throw new NumberIsTooLargeException(x, 1.5, true);

@@ -27,7 +27,6 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.ContinuousOutputModel;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.TestProblem1;
@@ -130,7 +129,7 @@ public class EulerStepInterpolatorTest {
 
   @Test
   public void derivativesConsistency()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -141,7 +140,7 @@ public class EulerStepInterpolatorTest {
   @Test
   public void serialization()
     throws IOException, ClassNotFoundException,
-           MathIllegalArgumentException, NumberIsTooSmallException,
+           MathIllegalArgumentException,
            MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb = new TestProblem1();

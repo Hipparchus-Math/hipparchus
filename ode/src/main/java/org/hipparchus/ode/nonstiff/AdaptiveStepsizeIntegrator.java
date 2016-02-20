@@ -20,7 +20,6 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.util.FastMath;
@@ -214,7 +213,7 @@ public abstract class AdaptiveStepsizeIntegrator
   /** {@inheritDoc} */
   @Override
   protected void sanityChecks(final ExpandableStatefulODE equations, final double t)
-      throws MathIllegalArgumentException, NumberIsTooSmallException {
+      throws MathIllegalArgumentException {
 
       super.sanityChecks(equations, t);
 
@@ -316,17 +315,17 @@ public abstract class AdaptiveStepsizeIntegrator
    * are silently increased up to this value, if false such small
    * steps generate an exception
    * @return a bounded integration step (h if no bound is reach, or a bounded value)
-   * @exception NumberIsTooSmallException if the step is too small and acceptSmall is false
+   * @exception MathIllegalArgumentException if the step is too small and acceptSmall is false
    */
   protected double filterStep(final double h, final boolean forward, final boolean acceptSmall)
-    throws NumberIsTooSmallException {
+    throws MathIllegalArgumentException {
 
       double filteredH = h;
       if (FastMath.abs(h) < minStep) {
           if (acceptSmall) {
               filteredH = forward ? minStep : -minStep;
           } else {
-              throw new NumberIsTooSmallException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
+              throw new MathIllegalArgumentException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
                                                   FastMath.abs(h), minStep, true);
           }
       }
@@ -344,7 +343,7 @@ public abstract class AdaptiveStepsizeIntegrator
   /** {@inheritDoc} */
   @Override
   public abstract void integrate (ExpandableStatefulODE equations, double t)
-      throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException;
+      throws MathIllegalArgumentException, MathIllegalStateException;
 
   /** {@inheritDoc} */
   @Override

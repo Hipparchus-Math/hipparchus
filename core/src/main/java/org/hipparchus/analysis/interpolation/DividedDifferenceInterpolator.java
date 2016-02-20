@@ -21,7 +21,6 @@ import java.io.Serializable;
 import org.hipparchus.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.hipparchus.analysis.polynomials.PolynomialFunctionNewtonForm;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 
 /**
  * Implements the <a href=
@@ -47,14 +46,13 @@ public class DividedDifferenceInterpolator
      * @param y Interpolating values array.
      * @return a function which interpolates the dataset.
      * @throws MathIllegalArgumentException if the array lengths are different.
-     * @throws NumberIsTooSmallException if the number of points is less than 2.
+     * @throws MathIllegalArgumentException if the number of points is less than 2.
      * @throws MathIllegalArgumentException if {@code x} is not sorted in
      * strictly increasing order.
      */
     @Override
     public PolynomialFunctionNewtonForm interpolate(double x[], double y[])
         throws MathIllegalArgumentException,
-               NumberIsTooSmallException,
                MathIllegalArgumentException {
         /**
          * a[] and c[] are defined in the general formula of Newton form:
@@ -93,13 +91,12 @@ public class DividedDifferenceInterpolator
      * @param y Interpolating values array.
      * @return a fresh copy of the divided difference array.
      * @throws MathIllegalArgumentException if the array lengths are different.
-     * @throws NumberIsTooSmallException if the number of points is less than 2.
+     * @throws MathIllegalArgumentException if the number of points is less than 2.
      * @throws MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order.
      */
     protected static double[] computeDividedDifference(final double x[], final double y[])
         throws MathIllegalArgumentException,
-               NumberIsTooSmallException,
                MathIllegalArgumentException {
         PolynomialFunctionLagrangeForm.verifyInterpolationArray(x, y, true);
 

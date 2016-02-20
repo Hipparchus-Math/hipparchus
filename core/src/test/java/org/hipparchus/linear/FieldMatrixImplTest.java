@@ -448,7 +448,7 @@ public final class FieldMatrixImplTest {
                 Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), sub);
             } else {
                 Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
-                     + " or NumberIsTooSmallException or MathIllegalArgumentException");
+                     + " or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -465,7 +465,7 @@ public final class FieldMatrixImplTest {
                 Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), sub);
             } else {
                 Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
-                     + " or NumberIsTooSmallException or MathIllegalArgumentException");
+                     + " or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -505,7 +505,7 @@ public final class FieldMatrixImplTest {
             if (reference != null) {
                 Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), new Array2DRowFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
+                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {
@@ -524,7 +524,7 @@ public final class FieldMatrixImplTest {
             if (reference != null) {
                 Assert.assertEquals(new Array2DRowFieldMatrix<Fraction>(reference), new Array2DRowFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting MathIllegalArgumentException or NumberIsTooSmallException or MathIllegalArgumentException");
+                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
         } catch (MathIllegalArgumentException e) {
             if (reference != null) {

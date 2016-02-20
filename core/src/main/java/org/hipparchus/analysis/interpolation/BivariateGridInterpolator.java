@@ -18,7 +18,6 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 
 /**
  * Interface representing a bivariate real interpolating function where the
@@ -39,10 +38,10 @@ public interface BivariateGridInterpolator {
      * @throws MathIllegalArgumentException if any of the arrays has zero length.
      * @throws MathIllegalArgumentException if the array lengths are inconsistent.
      * @throws MathIllegalArgumentException if the array is not sorted.
-     * @throws NumberIsTooSmallException if the number of points is too small for
+     * @throws MathIllegalArgumentException if the number of points is too small for
      * the order of the interpolation
      */
     BivariateFunction interpolate(double[] xval, double[] yval,
                                   double[][] fval)
-        throws MathIllegalArgumentException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 }

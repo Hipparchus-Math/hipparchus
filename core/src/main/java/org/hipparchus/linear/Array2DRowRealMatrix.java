@@ -23,7 +23,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -423,7 +422,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     public double walkInRowOrder(final RealMatrixChangingVisitor visitor,
                                  final int startRow, final int endRow,
                                  final int startColumn, final int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -441,7 +440,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     public double walkInRowOrder(final RealMatrixPreservingVisitor visitor,
                                  final int startRow, final int endRow,
                                  final int startColumn, final int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -488,7 +487,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     public double walkInColumnOrder(final RealMatrixChangingVisitor visitor,
                                     final int startRow, final int endRow,
                                     final int startColumn, final int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -506,7 +505,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     public double walkInColumnOrder(final RealMatrixPreservingVisitor visitor,
                                     final int startRow, final int endRow,
                                     final int startColumn, final int endColumn)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);

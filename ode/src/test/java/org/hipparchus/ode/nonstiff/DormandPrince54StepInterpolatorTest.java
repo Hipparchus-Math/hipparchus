@@ -27,7 +27,6 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.ContinuousOutputModel;
 import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.sampling.StepHandler;
@@ -41,7 +40,7 @@ public class DormandPrince54StepInterpolatorTest {
 
   @Test
   public void derivativesConsistency()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3(0.1);
     double minStep = 0;
@@ -57,7 +56,7 @@ public class DormandPrince54StepInterpolatorTest {
   @Test
   public void serialization()
     throws IOException, ClassNotFoundException,
-           MathIllegalArgumentException, NumberIsTooSmallException,
+           MathIllegalArgumentException,
            MathIllegalArgumentException, MathIllegalStateException  {
 
     TestProblem3 pb = new TestProblem3(0.9);
@@ -108,7 +107,7 @@ public class DormandPrince54StepInterpolatorTest {
 
   @Test
   public void checkClone()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
       TestProblem3 pb = new TestProblem3(0.9);
       double minStep = 0;

@@ -18,9 +18,8 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -60,10 +59,10 @@ public class TriangularDistribution extends AbstractRealDistribution {
      * @param b Upper limit of this distribution (inclusive).
      * @param c Mode of this distribution.
      * @throws NumberIsTooLargeException if {@code a >= b} or if {@code c > b}.
-     * @throws NumberIsTooSmallException if {@code c < a}.
+     * @throws MathIllegalArgumentException if {@code c < a}.
      */
     public TriangularDistribution(double a, double c, double b)
-        throws NumberIsTooLargeException, NumberIsTooSmallException {
+        throws NumberIsTooLargeException, MathIllegalArgumentException {
         this(new Well19937c(), a, c, b);
     }
 
@@ -75,14 +74,14 @@ public class TriangularDistribution extends AbstractRealDistribution {
      * @param b Upper limit of this distribution (inclusive).
      * @param c Mode of this distribution.
      * @throws NumberIsTooLargeException if {@code a >= b} or if {@code c > b}.
-     * @throws NumberIsTooSmallException if {@code c < a}.
+     * @throws MathIllegalArgumentException if {@code c < a}.
      * @since 3.1
      */
     public TriangularDistribution(RandomGenerator rng,
                                   double a,
                                   double c,
                                   double b)
-        throws NumberIsTooLargeException, NumberIsTooSmallException {
+        throws NumberIsTooLargeException, MathIllegalArgumentException {
         super(rng);
 
         if (a >= b) {
@@ -91,7 +90,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
                             a, b, false);
         }
         if (c < a) {
-            throw new NumberIsTooSmallException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.NUMBER_TOO_SMALL, c, a, true);
         }
         if (c > b) {

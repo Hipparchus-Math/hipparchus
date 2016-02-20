@@ -20,7 +20,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem1;
@@ -42,7 +41,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testMissedEndEvent()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
         final double   t0     = 1878250320.0000029;
         final double   tEvent = 1878250379.9999986;
@@ -101,7 +100,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testSanityChecks()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
         try  {
             TestProblem1 pb = new TestProblem1();
@@ -125,13 +124,13 @@ public class LutherIntegratorTest {
                                                  0.0, new double[pb.getDimension()],
                                                  0.0, new double[pb.getDimension()]);
             Assert.fail("an exception should have been thrown");
-        } catch(NumberIsTooSmallException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
     }
 
     @Test
     public void testDecreasingSteps()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
 
         for (TestProblemAbstract pb : new TestProblemAbstract[] {
@@ -182,7 +181,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testSmallStep()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem1 pb = new TestProblem1();
@@ -202,7 +201,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testBigStep()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem1 pb = new TestProblem1();
@@ -222,7 +221,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testBackward()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem5 pb = new TestProblem5();
@@ -242,7 +241,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testKepler()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
 
         final TestProblem3 pb  = new TestProblem3(0.9);
@@ -283,7 +282,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testStepSize()
-            throws MathIllegalArgumentException, NumberIsTooSmallException,
+            throws MathIllegalArgumentException,
             MathIllegalArgumentException, MathIllegalStateException {
         final double step = 1.23456;
         FirstOrderIntegrator integ = new LutherIntegrator(step);

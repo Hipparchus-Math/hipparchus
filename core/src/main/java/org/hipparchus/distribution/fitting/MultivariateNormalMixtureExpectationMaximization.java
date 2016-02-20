@@ -26,7 +26,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.SingularMatrixException;
@@ -79,12 +78,11 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * @throws MathIllegalArgumentException if data has no rows
      * @throws MathIllegalArgumentException if rows of data have different numbers
      *             of columns
-     * @throws NumberIsTooSmallException if the number of columns in the data is
+     * @throws MathIllegalArgumentException if the number of columns in the data is
      *             less than 2
      */
     public MultivariateNormalMixtureExpectationMaximization(double[][] data)
-        throws MathIllegalArgumentException,
-               NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         if (data.length < 1) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
                                                    data.length, 1);
@@ -99,7 +97,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
                                                        data[i].length, data[0].length);
             }
             if (data[i].length < 2) {
-                throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_TOO_SMALL,
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
                                                     data[i].length, 2, true);
             }
             this.data[i] = MathArrays.copyOf(data[i], data[i].length);
@@ -295,7 +293,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * @return Multivariate normal mixture model estimated from the data
      * @throws NumberIsTooLargeException if {@code numComponents} is greater
      * than the number of data rows.
-     * @throws NumberIsTooSmallException if {@code numComponents < 2}.
+     * @throws MathIllegalArgumentException if {@code numComponents < 2}.
      * @throws MathIllegalArgumentException if data has less than 2 rows
      * @throws MathIllegalArgumentException if rows of data have different numbers
      *             of columns
@@ -308,7 +306,8 @@ public class MultivariateNormalMixtureExpectationMaximization {
                                                    data.length, 2);
         }
         if (numComponents < 2) {
-            throw new NumberIsTooSmallException(numComponents, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   numComponents, 2);
         }
         if (numComponents > data.length) {
             throw new NumberIsTooLargeException(numComponents, data.length, true);

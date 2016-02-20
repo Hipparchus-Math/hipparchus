@@ -25,7 +25,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -874,8 +873,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor,
-        final int start, final int end) throws NumberIsTooSmallException,
-        MathIllegalArgumentException {
+        final int start, final int end) throws MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(data.length, start, end);
         for (int i = start; i <= end; i++) {
@@ -901,8 +899,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
      */
     @Override
     public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor,
-        final int start, final int end) throws NumberIsTooSmallException,
-        MathIllegalArgumentException {
+        final int start, final int end) throws MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -919,8 +916,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public double walkInDefaultOrder(final RealVectorChangingVisitor visitor,
-        final int start, final int end) throws NumberIsTooSmallException,
-        MathIllegalArgumentException {
+        final int start, final int end) throws MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(data.length, start, end);
         for (int i = start; i <= end; i++) {
@@ -946,8 +942,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
      */
     @Override
     public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor,
-        final int start, final int end) throws NumberIsTooSmallException,
-        MathIllegalArgumentException {
+        final int start, final int end) throws MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 }

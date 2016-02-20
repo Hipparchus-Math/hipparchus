@@ -19,7 +19,6 @@ package org.hipparchus.stat.correlation;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 
@@ -126,12 +125,12 @@ public class StorelessCovariance extends Covariance {
      * @param xIndex row index in the covariance matrix
      * @param yIndex column index in the covariance matrix
      * @return the covariance of the given element
-     * @throws NumberIsTooSmallException if the number of observations
+     * @throws MathIllegalArgumentException if the number of observations
      * in the cell is &lt; 2
      */
     public double getCovariance(final int xIndex,
                                 final int yIndex)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         return getElement(xIndex, yIndex).getResult();
 
@@ -190,11 +189,11 @@ public class StorelessCovariance extends Covariance {
 
     /**
      * {@inheritDoc}
-     * @throws NumberIsTooSmallException if the number of observations
+     * @throws MathIllegalArgumentException if the number of observations
      * in a cell is &lt; 2
      */
     @Override
-    public RealMatrix getCovarianceMatrix() throws NumberIsTooSmallException {
+    public RealMatrix getCovarianceMatrix() throws MathIllegalArgumentException {
         return MatrixUtils.createRealMatrix(getData());
     }
 
@@ -202,10 +201,10 @@ public class StorelessCovariance extends Covariance {
      * Return the covariance matrix as two-dimensional array.
      *
      * @return a two-dimensional double array of covariance values
-     * @throws NumberIsTooSmallException if the number of observations
+     * @throws MathIllegalArgumentException if the number of observations
      * for a cell is &lt; 2
      */
-    public double[][] getData() throws NumberIsTooSmallException {
+    public double[][] getData() throws MathIllegalArgumentException {
         final double[][] data = new double[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {

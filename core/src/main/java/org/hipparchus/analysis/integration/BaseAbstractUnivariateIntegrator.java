@@ -22,7 +22,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.MathUtils;
 
@@ -101,14 +100,14 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
      * @param maximalIterationCount maximum number of iterations
      * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
      */
     protected BaseAbstractUnivariateIntegrator(final double relativeAccuracy,
                                                final double absoluteAccuracy,
                                                final int minimalIterationCount,
                                                final int maximalIterationCount)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         // accuracy settings
         this.relativeAccuracy      = relativeAccuracy;
@@ -120,7 +119,8 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
                                                    minimalIterationCount, 0);
         }
         if (maximalIterationCount <= minimalIterationCount) {
-            throw new NumberIsTooSmallException(maximalIterationCount, minimalIterationCount, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   maximalIterationCount, minimalIterationCount);
         }
         this.minimalIterationCount = minimalIterationCount;
         this.iterations            = new Incrementor();
@@ -148,12 +148,12 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
      * @param maximalIterationCount maximum number of iterations
      * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
      */
     protected BaseAbstractUnivariateIntegrator(final int minimalIterationCount,
                                            final int maximalIterationCount)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         this(DEFAULT_RELATIVE_ACCURACY, DEFAULT_ABSOLUTE_ACCURACY,
              minimalIterationCount, maximalIterationCount);
     }

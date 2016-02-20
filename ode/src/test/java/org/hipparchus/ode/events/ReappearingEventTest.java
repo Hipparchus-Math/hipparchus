@@ -21,7 +21,6 @@ import java.util.Arrays;
 import org.hipparchus.analysis.solvers.PegasusSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
@@ -32,7 +31,7 @@ import org.junit.Test;
 public class ReappearingEventTest {
     @Test
     public void testDormandPrince()
-        throws MathIllegalArgumentException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException, MathIllegalStateException {
         double tEnd = test(1);
         Assert.assertEquals(10.0, tEnd, 1e-7);
@@ -40,14 +39,14 @@ public class ReappearingEventTest {
 
     @Test
     public void testGragg()
-        throws MathIllegalArgumentException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException, MathIllegalStateException {
         double tEnd = test(2);
         Assert.assertEquals(10.0, tEnd, 1e-7);
     }
 
     public double test(int integratorType)
-        throws MathIllegalArgumentException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator;

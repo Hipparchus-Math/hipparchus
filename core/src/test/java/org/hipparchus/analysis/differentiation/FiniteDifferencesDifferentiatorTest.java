@@ -24,10 +24,10 @@ import org.hipparchus.analysis.UnivariateMatrixFunction;
 import org.hipparchus.analysis.UnivariateVectorFunction;
 import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -37,7 +37,7 @@ import org.junit.Test;
  */
 public class FiniteDifferencesDifferentiatorTest {
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testWrongNumberOfPoints() {
         new FiniteDifferencesDifferentiator(1, 1.0);
     }
@@ -220,7 +220,8 @@ public class FiniteDifferencesDifferentiatorTest {
             @Override
             public double value(double x) {
                 if (x < 0) {
-                    throw new NumberIsTooSmallException(x, 0, true);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                           x, 0);
                 } else if (x > 1) {
                     throw new NumberIsTooLargeException(x, 1, true);
                 } else {
@@ -241,8 +242,9 @@ public class FiniteDifferencesDifferentiatorTest {
             // using f(-0.05), f(0.05), f(0.15)
             missingBounds.value(tLow);
             Assert.fail("an exception should have been thrown");
-        } catch (NumberIsTooSmallException nse) {
-            Assert.assertEquals(-0.05, nse.getArgument().doubleValue(), 1.0e-10);
+        } catch (MathIllegalArgumentException nse) {
+            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_SMALL, nse.getSpecifier());
+            Assert.assertEquals(-0.05, ((Double) nse.getParts()[0]).doubleValue(), 1.0e-10);
         } catch (Exception e) {
             Assert.fail("wrong exception caught: " + e.getClass().getName());
         }

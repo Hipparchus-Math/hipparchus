@@ -22,7 +22,7 @@ import java.util.Random;
 
 import org.hipparchus.analysis.function.HarmonicOscillator;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fitting.HarmonicCurveFitter;
 import org.hipparchus.fitting.WeightedObservedPoint;
 import org.hipparchus.fitting.WeightedObservedPoints;
@@ -35,7 +35,7 @@ public class HarmonicCurveFitterTest {
     /**
      * Zero points is not enough observed points.
      */
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions1() {
         HarmonicCurveFitter.create().fit(new WeightedObservedPoints().toList());
     }

@@ -20,7 +20,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem1;
@@ -42,7 +41,7 @@ public class GillIntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
       TestProblem1 pb = new TestProblem1();
       new GillIntegrator(0.01).integrate(pb,
@@ -53,7 +52,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testDecreasingSteps()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
       for (TestProblemAbstract pb : new TestProblemAbstract[] {
@@ -101,7 +100,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testSmallStep()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb = new TestProblem1();
@@ -122,7 +121,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testBigStep()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb = new TestProblem1();
@@ -142,7 +141,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testBackward()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
@@ -162,7 +161,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testKepler()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
@@ -177,7 +176,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testUnstableDerivative()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
     final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
     FirstOrderIntegrator integ = new GillIntegrator(0.3);
@@ -218,7 +217,7 @@ public class GillIntegratorTest {
 
   @Test
   public void testStepSize()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new GillIntegrator(step);

@@ -19,7 +19,6 @@ package org.hipparchus.linear;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -426,8 +425,8 @@ public final class SparseRealMatrixTest {
 
         try {
             m.getSubMatrix(1, 0, 2, 4);
-            Assert.fail("Expecting NumberIsTooSmallException");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -438,14 +437,14 @@ public final class SparseRealMatrixTest {
         }
         try {
             m.getSubMatrix(1, 0, 2, 2);
-            Assert.fail("Expecting NumberIsTooSmallException");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getSubMatrix(1, 0, 2, 4);
-            Assert.fail("Expecting NumberIsTooSmallException");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {

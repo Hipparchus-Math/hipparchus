@@ -28,7 +28,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.util.FastMath;
@@ -492,24 +491,24 @@ public class MatrixUtils {
      * @param startColumn Initial column index.
      * @param endColumn Final column index.
      * @throws MathIllegalArgumentException if the indices are invalid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      */
     public static void checkSubMatrixIndex(final AnyMatrix m,
                                            final int startRow, final int endRow,
                                            final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkRowIndex(m, startRow);
         checkRowIndex(m, endRow);
         if (endRow < startRow) {
-            throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 endRow, startRow, false);
         }
 
         checkColumnIndex(m, startColumn);
         checkColumnIndex(m, endColumn);
         if (endColumn < startColumn) {
-            throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
                                                 endColumn, startColumn, false);
         }
 

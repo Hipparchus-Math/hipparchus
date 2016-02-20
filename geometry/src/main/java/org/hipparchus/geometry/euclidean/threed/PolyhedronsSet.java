@@ -23,7 +23,6 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
@@ -268,7 +267,7 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
         int maxFacets  = 0;
         for (final int[] facet : facets) {
             if (facet.length < 3) {
-                throw new NumberIsTooSmallException(LocalizedFormats.WRONG_NUMBER_OF_POINTS,
+                throw new MathIllegalArgumentException(LocalizedFormats.WRONG_NUMBER_OF_POINTS,
                                                     3, facet.length, true);
             }
             for (final int index : facet) {

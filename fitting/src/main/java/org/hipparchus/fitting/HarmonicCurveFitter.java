@@ -22,9 +22,8 @@ import java.util.List;
 
 import org.hipparchus.analysis.function.HarmonicOscillator;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;
@@ -250,14 +249,14 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
          * Simple constructor.
          *
          * @param observations Sampled observations.
-         * @throws NumberIsTooSmallException if the sample is too short.
+         * @throws MathIllegalArgumentException if the sample is too short.
          * @throws MathIllegalArgumentException if the abscissa range is zero.
          * @throws MathIllegalStateException when the guessing procedure cannot
          * produce sensible results.
          */
         public ParameterGuesser(Collection<WeightedObservedPoint> observations) {
             if (observations.size() < 4) {
-                throw new NumberIsTooSmallException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
                                                     observations.size(), 4, true);
             }
 

@@ -20,7 +20,6 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -58,13 +57,12 @@ public class SplineInterpolator implements UnivariateInterpolator {
      * have different sizes.
      * @throws MathIllegalArgumentException if {@code x} is not sorted in
      * strict increasing order.
-     * @throws NumberIsTooSmallException if the size of {@code x} is smaller
+     * @throws MathIllegalArgumentException if the size of {@code x} is smaller
      * than 3.
      */
     @Override
     public PolynomialSplineFunction interpolate(double x[], double y[])
         throws MathIllegalArgumentException,
-               NumberIsTooSmallException,
                MathIllegalArgumentException {
         if (x.length != y.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -72,7 +70,7 @@ public class SplineInterpolator implements UnivariateInterpolator {
         }
 
         if (x.length < 3) {
-            throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
                                                 x.length, 3, true);
         }
 

@@ -17,7 +17,7 @@
 package org.hipparchus.stat.correlation;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Bivariate Covariance implementation that does not require input data to be
@@ -120,12 +120,12 @@ class StorelessBivariateCovariance {
      * Return the current covariance estimate.
      *
      * @return the current covariance
-     * @throws NumberIsTooSmallException if the number of observations
+     * @throws MathIllegalArgumentException if the number of observations
      * is &lt; 2
      */
-    public double getResult() throws NumberIsTooSmallException {
+    public double getResult() throws MathIllegalArgumentException {
         if (n < 2) {
-            throw new NumberIsTooSmallException(LocalizedFormats.INSUFFICIENT_DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION,
                                                 n, 2, true);
         }
         if (biasCorrected) {

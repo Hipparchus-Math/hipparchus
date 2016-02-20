@@ -21,7 +21,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
@@ -715,11 +714,11 @@ public final class StatUtils {
      * @param meanDifference   the mean difference between corresponding entries
      * @return variance of paired differences
      * @throws MathIllegalArgumentException if the arrays do not have the same length.
-     * @throws NumberIsTooSmallException if the arrays length is less than 2.
+     * @throws MathIllegalArgumentException if the arrays length is less than 2.
      * @see #meanDifference(double[],double[])
      */
     public static double varianceDifference(final double[] sample1, final double[] sample2, double meanDifference)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         double sum1 = 0d;
         double sum2 = 0d;
@@ -730,7 +729,8 @@ public final class StatUtils {
                                                    n, sample2.length);
         }
         if (n < 2) {
-            throw new NumberIsTooSmallException(n, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   n, 2);
         }
         for (int i = 0; i < n; i++) {
             diff = sample1[i] - sample2[i];

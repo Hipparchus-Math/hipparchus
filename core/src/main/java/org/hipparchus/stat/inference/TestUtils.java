@@ -22,7 +22,6 @@ import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 
 /**
@@ -61,7 +60,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#homoscedasticT(double[], double[])
      */
     public static double homoscedasticT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
         return T_TEST.homoscedasticT(sample1, sample2);
     }
 
@@ -70,7 +69,7 @@ public class TestUtils  {
      */
     public static double homoscedasticT(final StatisticalSummary sampleStats1,
                                         final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
         return T_TEST.homoscedasticT(sampleStats1, sampleStats2);
     }
 
@@ -79,8 +78,7 @@ public class TestUtils  {
      */
     public static boolean homoscedasticTTest(final double[] sample1, final double[] sample2,
                                              final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         return T_TEST.homoscedasticTTest(sample1, sample2, alpha);
     }
 
@@ -88,7 +86,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#homoscedasticTTest(double[], double[])
      */
     public static double homoscedasticTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         return T_TEST.homoscedasticTTest(sample1, sample2);
     }
 
@@ -97,7 +95,7 @@ public class TestUtils  {
      */
     public static double homoscedasticTTest(final StatisticalSummary sampleStats1,
                                             final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         return T_TEST.homoscedasticTTest(sampleStats1, sampleStats2);
     }
 
@@ -105,7 +103,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#pairedT(double[], double[])
      */
     public static double pairedT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
         return T_TEST.pairedT(sample1, sample2);
     }
 
@@ -114,8 +112,7 @@ public class TestUtils  {
      */
     public static boolean pairedTTest(final double[] sample1, final double[] sample2,
                                       final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException,
-        NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         return T_TEST.pairedTTest(sample1, sample2, alpha);
     }
 
@@ -123,8 +120,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#pairedTTest(double[], double[])
      */
     public static double pairedTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException,
-        NumberIsTooSmallException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         return T_TEST.pairedTTest(sample1, sample2);
     }
 
@@ -132,7 +128,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#t(double, double[])
      */
     public static double t(final double mu, final double[] observed)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
         return T_TEST.t(mu, observed);
     }
 
@@ -140,7 +136,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#t(double, org.hipparchus.stat.descriptive.StatisticalSummary)
      */
     public static double t(final double mu, final StatisticalSummary sampleStats)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
         return T_TEST.t(mu, sampleStats);
     }
 
@@ -148,7 +144,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#t(double[], double[])
      */
     public static double t(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
         return T_TEST.t(sample1, sample2);
     }
 
@@ -157,7 +153,7 @@ public class TestUtils  {
      */
     public static double t(final StatisticalSummary sampleStats1,
                            final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
         return T_TEST.t(sampleStats1, sampleStats2);
     }
 
@@ -165,8 +161,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#tTest(double, double[], double)
      */
     public static boolean tTest(final double mu, final double[] sample, final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         return T_TEST.tTest(mu, sample, alpha);
     }
 
@@ -174,7 +169,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#tTest(double, double[])
      */
     public static double tTest(final double mu, final double[] sample)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
         return T_TEST.tTest(mu, sample);
     }
@@ -184,8 +179,7 @@ public class TestUtils  {
      */
     public static boolean tTest(final double mu, final StatisticalSummary sampleStats,
                                 final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         return T_TEST.tTest(mu, sampleStats, alpha);
     }
 
@@ -193,7 +187,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#tTest(double, org.hipparchus.stat.descriptive.StatisticalSummary)
      */
     public static double tTest(final double mu, final StatisticalSummary sampleStats)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
         return T_TEST.tTest(mu, sampleStats);
     }
@@ -203,8 +197,7 @@ public class TestUtils  {
      */
     public static boolean tTest(final double[] sample1, final double[] sample2,
                                 final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         return T_TEST.tTest(sample1, sample2, alpha);
     }
 
@@ -212,7 +205,7 @@ public class TestUtils  {
      * @see org.hipparchus.stat.inference.TTest#tTest(double[], double[])
      */
     public static double tTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
         return T_TEST.tTest(sample1, sample2);
     }
@@ -223,8 +216,7 @@ public class TestUtils  {
     public static boolean tTest(final StatisticalSummary sampleStats1,
                                 final StatisticalSummary sampleStats2,
                                 final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         return T_TEST.tTest(sampleStats1, sampleStats2, alpha);
     }
 
@@ -233,7 +225,7 @@ public class TestUtils  {
      */
     public static double tTest(final StatisticalSummary sampleStats1,
                                final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
         return T_TEST.tTest(sampleStats1, sampleStats2);
     }

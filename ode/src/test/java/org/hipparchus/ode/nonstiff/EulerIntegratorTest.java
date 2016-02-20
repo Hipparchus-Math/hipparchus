@@ -20,7 +20,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem1;
@@ -42,7 +41,7 @@ public class EulerIntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
       TestProblem1 pb = new TestProblem1();
       new EulerIntegrator(0.01).integrate(pb,
@@ -53,7 +52,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testDecreasingSteps()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
       for (TestProblemAbstract pb : new TestProblemAbstract[] {
@@ -101,7 +100,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testSmallStep()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb  = new TestProblem1();
@@ -123,7 +122,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testBigStep()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb  = new TestProblem1();
@@ -144,7 +143,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testBackward()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
@@ -164,7 +163,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testStepSize()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new EulerIntegrator(step);

@@ -24,7 +24,6 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -314,7 +313,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldMatrix<T> getSubMatrix(final int startRow, final int endRow,
                                        final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
 
         final FieldMatrix<T> subMatrix =
@@ -360,7 +359,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public void copySubMatrix(final int startRow, final int endRow,
                               final int startColumn, final int endColumn,
                               final T[][] destination)
-    throws MathIllegalArgumentException, NumberIsTooSmallException,
+    throws MathIllegalArgumentException,
     MathIllegalArgumentException {
         // safety checks
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
@@ -832,7 +831,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInRowOrder(final FieldMatrixChangingVisitor<T> visitor,
                             final int startRow, final int endRow,
                             final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -851,7 +850,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInRowOrder(final FieldMatrixPreservingVisitor<T> visitor,
                             final int startRow, final int endRow,
                             final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -898,7 +897,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInColumnOrder(final FieldMatrixChangingVisitor<T> visitor,
                                final int startRow, final int endRow,
                                final int startColumn, final int endColumn)
-    throws NumberIsTooSmallException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -917,7 +916,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInColumnOrder(final FieldMatrixPreservingVisitor<T> visitor,
                                final int startRow, final int endRow,
                                final int startColumn, final int endColumn)
-    throws NumberIsTooSmallException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException {
         checkSubMatrixIndex(startRow, endRow, startColumn, endColumn);
         visitor.start(getRowDimension(), getColumnDimension(),
                       startRow, endRow, startColumn, endColumn);
@@ -946,7 +945,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInOptimizedOrder(final FieldMatrixChangingVisitor<T> visitor,
                                   final int startRow, final int endRow,
                                   final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         return walkInRowOrder(visitor, startRow, endRow, startColumn, endColumn);
     }
 
@@ -955,7 +954,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     public T walkInOptimizedOrder(final FieldMatrixPreservingVisitor<T> visitor,
                                   final int startRow, final int endRow,
                                   final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         return walkInRowOrder(visitor, startRow, endRow, startColumn, endColumn);
     }
 
@@ -1078,23 +1077,23 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      * @param startColumn Initial column index.
      * @param endColumn Final column index.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      */
     protected void checkSubMatrixIndex(final int startRow, final int endRow,
                                        final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkRowIndex(startRow);
         checkRowIndex(endRow);
         if (endRow < startRow) {
-            throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 endRow, startRow, true);
         }
 
         checkColumnIndex(startColumn);
         checkColumnIndex(endColumn);
         if (endColumn < startColumn) {
-            throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
                                                 endColumn, startColumn, true);
         }
     }

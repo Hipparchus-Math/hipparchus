@@ -24,7 +24,6 @@ import org.hipparchus.analysis.UnivariateVectorFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 
 /** Univariate functions differentiator using finite differences.
@@ -101,11 +100,11 @@ public class FiniteDifferencesDifferentiator
      * @param nbPoints number of points to use
      * @param stepSize step size (gap between each point)
      * @exception MathIllegalArgumentException if {@code stepsize <= 0} (note that
-     * {@link MathIllegalArgumentException} extends {@link NumberIsTooSmallException})
-     * @exception NumberIsTooSmallException {@code nbPoint <= 1}
+     * {@link MathIllegalArgumentException} extends {@link MathIllegalArgumentException})
+     * @exception MathIllegalArgumentException {@code nbPoint <= 1}
      */
     public FiniteDifferencesDifferentiator(final int nbPoints, final double stepSize)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         this(nbPoints, stepSize, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
     }
 
@@ -134,16 +133,17 @@ public class FiniteDifferencesDifferentiator
      * @param tUpper upper bound for independent variable (may be {@code Double.POSITIVE_INFINITY}
      * if there are no upper bounds)
      * @exception MathIllegalArgumentException if {@code stepsize <= 0} (note that
-     * {@link MathIllegalArgumentException} extends {@link NumberIsTooSmallException})
-     * @exception NumberIsTooSmallException {@code nbPoint <= 1}
+     * {@link MathIllegalArgumentException} extends {@link MathIllegalArgumentException})
+     * @exception MathIllegalArgumentException {@code nbPoint <= 1}
      * @exception NumberIsTooLargeException {@code stepSize * (nbPoints - 1) >= tUpper - tLower}
      */
     public FiniteDifferencesDifferentiator(final int nbPoints, final double stepSize,
                                            final double tLower, final double tUpper)
-            throws MathIllegalArgumentException, NumberIsTooSmallException, NumberIsTooLargeException {
+            throws MathIllegalArgumentException, NumberIsTooLargeException {
 
         if (nbPoints <= 1) {
-            throw new NumberIsTooSmallException(stepSize, 1, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   stepSize, 1);
         }
         this.nbPoints = nbPoints;
 

@@ -20,7 +20,6 @@ import java.io.Serializable;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunctionLagrangeForm;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 
 /**
  * Implements the <a href="http://mathworld.wolfram.com/NevillesAlgorithm.html">
@@ -46,14 +45,13 @@ public class NevilleInterpolator implements UnivariateInterpolator,
      * @param y Interpolating values.
      * @return a function which interpolates the data set
      * @throws MathIllegalArgumentException if the array lengths are different.
-     * @throws NumberIsTooSmallException if the number of points is less than 2.
+     * @throws MathIllegalArgumentException if the number of points is less than 2.
      * @throws MathIllegalArgumentException if two abscissae have the same
      * value.
      */
     @Override
     public PolynomialFunctionLagrangeForm interpolate(double x[], double y[])
         throws MathIllegalArgumentException,
-               NumberIsTooSmallException,
                MathIllegalArgumentException {
         return new PolynomialFunctionLagrangeForm(x, y);
     }

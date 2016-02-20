@@ -16,7 +16,6 @@
  */
 package org.hipparchus.special;
 
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.ContinuedFraction;
@@ -271,17 +270,19 @@ public class Beta {
      * @param a First argument.
      * @param b Second argument.
      * @return the value of {@code log(Gamma(b) / Gamma(a + b))}.
-     * @throws NumberIsTooSmallException if {@code a < 0.0} or {@code b < 10.0}.
+     * @throws MathIllegalArgumentException if {@code a < 0.0} or {@code b < 10.0}.
      */
     private static double logGammaMinusLogGammaSum(final double a,
                                                    final double b)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         if (a < 0.0) {
-            throw new NumberIsTooSmallException(a, 0.0, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   a, 0.0);
         }
         if (b < 10.0) {
-            throw new NumberIsTooSmallException(b, 10.0, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   b, 10.0);
         }
 
         /*
@@ -311,18 +312,19 @@ public class Beta {
      * @param b Second argument.
      * @return the value of {@code Delta(b) - Delta(a + b)}
      * @throws MathIllegalArgumentException if {@code a < 0} or {@code a > b}
-     * @throws NumberIsTooSmallException if {@code b < 10}
+     * @throws MathIllegalArgumentException if {@code b < 10}
      */
     private static double deltaMinusDeltaSum(final double a,
                                              final double b)
-        throws MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         if ((a < 0) || (a > b)) {
             throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
                                                    a, 0, b);
         }
         if (b < 10) {
-            throw new NumberIsTooSmallException(b, 10, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   b, 10);
         }
 
         final double h = a / b;
@@ -359,16 +361,18 @@ public class Beta {
      * @param p First argument.
      * @param q Second argument.
      * @return the value of {@code Delta(p) + Delta(q) - Delta(p + q)}.
-     * @throws NumberIsTooSmallException if {@code p < 10.0} or {@code q < 10.0}.
+     * @throws MathIllegalArgumentException if {@code p < 10.0} or {@code q < 10.0}.
      */
     private static double sumDeltaMinusDeltaSum(final double p,
                                                 final double q) {
 
         if (p < 10.0) {
-            throw new NumberIsTooSmallException(p, 10.0, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   p, 10.0);
         }
         if (q < 10.0) {
-            throw new NumberIsTooSmallException(q, 10.0, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   q, 10.0);
         }
 
         final double a = FastMath.min(p, q);

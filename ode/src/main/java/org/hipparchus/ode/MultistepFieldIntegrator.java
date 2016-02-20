@@ -22,7 +22,6 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.ode.nonstiff.AdaptiveStepsizeFieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
@@ -111,19 +110,19 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
      * integration)
      * @param scalAbsoluteTolerance allowed absolute error
      * @param scalRelativeTolerance allowed relative error
-     * @exception NumberIsTooSmallException if number of steps is smaller than 2
+     * @exception MathIllegalArgumentException if number of steps is smaller than 2
      */
     protected MultistepFieldIntegrator(final Field<T> field, final String name,
                                        final int nSteps, final int order,
                                        final double minStep, final double maxStep,
                                        final double scalAbsoluteTolerance,
                                        final double scalRelativeTolerance)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         super(field, name, minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
 
         if (nSteps < 2) {
-            throw new NumberIsTooSmallException(
+            throw new MathIllegalArgumentException(
                   LocalizedFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
                   nSteps, 2, true);
         }
@@ -215,12 +214,12 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
      * @param t target time for the integration
      * (can be set to a value smaller than <code>t0</code> for backward integration)
      * @exception MathIllegalArgumentException if arrays dimension do not match equations settings
-     * @exception NumberIsTooSmallException if integration step is too small
+     * @exception MathIllegalArgumentException if integration step is too small
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      */
     protected void start(final FieldExpandableODE<T> equations, final FieldODEState<T> initialState, final T t)
-        throws MathIllegalArgumentException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException, MathIllegalStateException {
 
         // make sure NO user event nor user step handler is triggered,

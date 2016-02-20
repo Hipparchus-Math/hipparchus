@@ -16,7 +16,8 @@
  */
 package org.hipparchus.genetics;
 
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Stops after a fixed number of generations.
@@ -38,11 +39,12 @@ public class FixedGenerationCount implements StoppingCondition {
      * Create a new FixedGenerationCount instance.
      *
      * @param maxGenerations number of generations to evolve
-     * @throws NumberIsTooSmallException if the number of generations is &lt; 1
+     * @throws MathIllegalArgumentException if the number of generations is &lt; 1
      */
-    public FixedGenerationCount(final int maxGenerations) throws NumberIsTooSmallException {
+    public FixedGenerationCount(final int maxGenerations) throws MathIllegalArgumentException {
         if (maxGenerations <= 0) {
-            throw new NumberIsTooSmallException(maxGenerations, 1, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maxGenerations, 1);
         }
         this.maxGenerations = maxGenerations;
     }

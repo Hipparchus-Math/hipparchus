@@ -19,11 +19,7 @@ package org.hipparchus.analysis.interpolation;
 import java.util.Random;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.interpolation.LinearInterpolator;
-import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
-import org.hipparchus.analysis.interpolation.UnivariatePeriodicInterpolator;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -142,7 +138,7 @@ public class UnivariatePeriodicInterpolatorTest {
         }
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testTooFewSamples() {
         final double[] xval = { 2, 3, 7 };
         final double[] yval = { 1, 6, 5 };

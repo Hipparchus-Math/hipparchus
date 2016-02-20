@@ -20,7 +20,6 @@ package org.hipparchus.ode.sampling;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FirstOrderFieldIntegrator;
@@ -36,7 +35,7 @@ public class StepInterpolatorTestUtils {
                                                    final TestProblemAbstract problem,
                                                    final double finiteDifferencesRatio,
                                                    final double threshold)
-        throws MathIllegalArgumentException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException, MathIllegalStateException {
         integrator.addStepHandler(new StepHandler() {
 

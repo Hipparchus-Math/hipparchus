@@ -33,7 +33,6 @@ import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.events.FieldEventHandler;
 import org.hipparchus.ode.events.FieldEventState;
 import org.hipparchus.ode.sampling.AbstractFieldStepInterpolator;
@@ -398,18 +397,18 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     /** Check the integration span.
      * @param eqn set of differential equations
      * @param t target time for the integration
-     * @exception NumberIsTooSmallException if integration span is too small
+     * @exception MathIllegalArgumentException if integration span is too small
      * @exception MathIllegalArgumentException if adaptive step size integrators
      * tolerance arrays dimensions are not compatible with equations settings
      */
     protected void sanityChecks(final FieldODEState<T> eqn, final T t)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         final double threshold = 1000 * FastMath.ulp(FastMath.max(FastMath.abs(eqn.getTime().getReal()),
                                                                   FastMath.abs(t.getReal())));
         final double dt = eqn.getTime().subtract(t).abs().getReal();
         if (dt <= threshold) {
-            throw new NumberIsTooSmallException(LocalizedFormats.TOO_SMALL_INTEGRATION_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedFormats.TOO_SMALL_INTEGRATION_INTERVAL,
                                                 dt, threshold, false);
         }
 

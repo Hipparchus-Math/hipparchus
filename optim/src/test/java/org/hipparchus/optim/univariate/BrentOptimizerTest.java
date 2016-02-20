@@ -23,7 +23,8 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.StepFunction;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.MaxEval;
@@ -92,7 +93,8 @@ public final class BrentOptimizerTest {
         UnivariateFunction f = new UnivariateFunction() {
             public double value(double x) {
                 if (x < lower) {
-                    throw new NumberIsTooSmallException(x, lower, true);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                           x, lower);
                 } else if (x > upper) {
                     throw new NumberIsTooLargeException(x, upper, true);
                 } else {

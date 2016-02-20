@@ -21,7 +21,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.util.FastMath;
@@ -71,10 +70,10 @@ public class TTest {
      * @throws NullArgumentException if the arrays are <code>null</code>
      * @throws MathIllegalArgumentException if the arrays are empty
      * @throws MathIllegalArgumentException if the length of the arrays is not equal
-     * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      */
     public double pairedT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         checkSampleData(sample1);
         checkSampleData(sample2);
@@ -118,12 +117,11 @@ public class TTest {
      * @throws NullArgumentException if the arrays are <code>null</code>
      * @throws MathIllegalArgumentException if the arrays are empty
      * @throws MathIllegalArgumentException if the length of the arrays is not equal
-     * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double pairedTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, MathIllegalArgumentException,
-        NumberIsTooSmallException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         double meanDifference = StatUtils.meanDifference(sample1, sample2);
         return tTest(meanDifference, 0,
@@ -164,14 +162,13 @@ public class TTest {
      * @throws NullArgumentException if the arrays are <code>null</code>
      * @throws MathIllegalArgumentException if the arrays are empty
      * @throws MathIllegalArgumentException if the length of the arrays is not equal
-     * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public boolean pairedTTest(final double[] sample1, final double[] sample2,
                                final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException,
-        NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return pairedTTest(sample1, sample2) < alpha;
@@ -192,10 +189,10 @@ public class TTest {
      * @param observed array of values
      * @return t statistic
      * @throws NullArgumentException if <code>observed</code> is <code>null</code>
-     * @throws NumberIsTooSmallException if the length of <code>observed</code> is &lt; 2
+     * @throws MathIllegalArgumentException if the length of <code>observed</code> is &lt; 2
      */
     public double t(final double mu, final double[] observed)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         checkSampleData(observed);
         // No try-catch or advertised exception because args have just been checked
@@ -219,10 +216,10 @@ public class TTest {
      * @param sampleStats DescriptiveStatistics holding sample summary statitstics
      * @return t statistic
      * @throws NullArgumentException if <code>sampleStats</code> is <code>null</code>
-     * @throws NumberIsTooSmallException if the number of samples is &lt; 2
+     * @throws MathIllegalArgumentException if the number of samples is &lt; 2
      */
     public double t(final double mu, final StatisticalSummary sampleStats)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         checkSampleData(sampleStats);
         return t(sampleStats.getMean(), mu, sampleStats.getVariance(),
@@ -262,10 +259,10 @@ public class TTest {
      * @param sample2 array of sample data values
      * @return t statistic
      * @throws NullArgumentException if the arrays are <code>null</code>
-     * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      */
     public double homoscedasticT(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         checkSampleData(sample1);
         checkSampleData(sample2);
@@ -303,10 +300,10 @@ public class TTest {
      * @param sample2 array of sample data values
      * @return t statistic
      * @throws NullArgumentException if the arrays are <code>null</code>
-     * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      */
     public double t(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         checkSampleData(sample1);
         checkSampleData(sample2);
@@ -347,11 +344,11 @@ public class TTest {
      * @param sampleStats2 StatisticalSummary describing data from the second sample
      * @return t statistic
      * @throws NullArgumentException if the sample statistics are <code>null</code>
-     * @throws NumberIsTooSmallException if the number of samples is &lt; 2
+     * @throws MathIllegalArgumentException if the number of samples is &lt; 2
      */
     public double t(final StatisticalSummary sampleStats1,
                     final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         checkSampleData(sampleStats1);
         checkSampleData(sampleStats2);
@@ -395,11 +392,11 @@ public class TTest {
      * @param sampleStats2 StatisticalSummary describing data from the second sample
      * @return t statistic
      * @throws NullArgumentException if the sample statistics are <code>null</code>
-     * @throws NumberIsTooSmallException if the number of samples is &lt; 2
+     * @throws MathIllegalArgumentException if the number of samples is &lt; 2
      */
     public double homoscedasticT(final StatisticalSummary sampleStats1,
                                  final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         checkSampleData(sampleStats1);
         checkSampleData(sampleStats2);
@@ -433,11 +430,11 @@ public class TTest {
      * @param sample array of sample data values
      * @return p-value
      * @throws NullArgumentException if the sample array is <code>null</code>
-     * @throws NumberIsTooSmallException if the length of the array is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the array is &lt; 2
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double tTest(final double mu, final double[] sample)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sample);
@@ -480,13 +477,12 @@ public class TTest {
      * @param alpha significance level of the test
      * @return p-value
      * @throws NullArgumentException if the sample array is <code>null</code>
-     * @throws NumberIsTooSmallException if the length of the array is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the array is &lt; 2
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MathIllegalStateException if an error computing the p-value
      */
     public boolean tTest(final double mu, final double[] sample, final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return tTest(mu, sample) < alpha;
@@ -519,11 +515,11 @@ public class TTest {
      * @param sampleStats StatisticalSummary describing sample data
      * @return p-value
      * @throws NullArgumentException if <code>sampleStats</code> is <code>null</code>
-     * @throws NumberIsTooSmallException if the number of samples is &lt; 2
+     * @throws MathIllegalArgumentException if the number of samples is &lt; 2
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double tTest(final double mu, final StatisticalSummary sampleStats)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sampleStats);
@@ -566,14 +562,13 @@ public class TTest {
      * @param alpha significance level of the test
      * @return p-value
      * @throws NullArgumentException if <code>sampleStats</code> is <code>null</code>
-     * @throws NumberIsTooSmallException if the number of samples is &lt; 2
+     * @throws MathIllegalArgumentException if the number of samples is &lt; 2
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public boolean tTest(final double mu, final StatisticalSummary sampleStats,
                          final double alpha)
-    throws NullArgumentException, NumberIsTooSmallException,
-    MathIllegalArgumentException, MathIllegalStateException {
+    throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return tTest(mu, sampleStats) < alpha;
@@ -614,11 +609,11 @@ public class TTest {
      * @param sample2 array of sample data values
      * @return p-value for t-test
      * @throws NullArgumentException if the arrays are <code>null</code>
-     * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double tTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sample1);
@@ -661,11 +656,11 @@ public class TTest {
      * @param sample2 array of sample data values
      * @return p-value for t-test
      * @throws NullArgumentException if the arrays are <code>null</code>
-     * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double homoscedasticTTest(final double[] sample1, final double[] sample2)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sample1);
@@ -727,14 +722,13 @@ public class TTest {
      * @return true if the null hypothesis can be rejected with
      * confidence 1 - alpha
      * @throws NullArgumentException if the arrays are <code>null</code>
-     * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public boolean tTest(final double[] sample1, final double[] sample2,
                          final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return tTest(sample1, sample2) < alpha;
@@ -790,14 +784,13 @@ public class TTest {
      * @return true if the null hypothesis can be rejected with
      * confidence 1 - alpha
      * @throws NullArgumentException if the arrays are <code>null</code>
-     * @throws NumberIsTooSmallException if the length of the arrays is &lt; 2
+     * @throws MathIllegalArgumentException if the length of the arrays is &lt; 2
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public boolean homoscedasticTTest(final double[] sample1, final double[] sample2,
                                       final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return homoscedasticTTest(sample1, sample2) < alpha;
@@ -836,12 +829,12 @@ public class TTest {
      * @param sampleStats2  StatisticalSummary describing data from the second sample
      * @return p-value for t-test
      * @throws NullArgumentException if the sample statistics are <code>null</code>
-     * @throws NumberIsTooSmallException if the number of samples is &lt; 2
+     * @throws MathIllegalArgumentException if the number of samples is &lt; 2
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double tTest(final StatisticalSummary sampleStats1,
                         final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sampleStats1);
@@ -883,12 +876,12 @@ public class TTest {
      * @param sampleStats2  StatisticalSummary describing data from the second sample
      * @return p-value for t-test
      * @throws NullArgumentException if the sample statistics are <code>null</code>
-     * @throws NumberIsTooSmallException if the number of samples is &lt; 2
+     * @throws MathIllegalArgumentException if the number of samples is &lt; 2
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public double homoscedasticTTest(final StatisticalSummary sampleStats1,
                                      final StatisticalSummary sampleStats2)
-        throws NullArgumentException, NumberIsTooSmallException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalStateException {
 
         checkSampleData(sampleStats1);
@@ -952,15 +945,14 @@ public class TTest {
      * @return true if the null hypothesis can be rejected with
      * confidence 1 - alpha
      * @throws NullArgumentException if the sample statistics are <code>null</code>
-     * @throws NumberIsTooSmallException if the number of samples is &lt; 2
+     * @throws MathIllegalArgumentException if the number of samples is &lt; 2
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MathIllegalStateException if an error occurs computing the p-value
      */
     public boolean tTest(final StatisticalSummary sampleStats1,
                          final StatisticalSummary sampleStats2,
                          final double alpha)
-        throws NullArgumentException, NumberIsTooSmallException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return tTest(sampleStats1, sampleStats2) < alpha;
@@ -1139,16 +1131,16 @@ public class TTest {
      *
      * @param data Sample data.
      * @throws NullArgumentException if {@code data} is {@code null}.
-     * @throws NumberIsTooSmallException if there is not enough sample data.
+     * @throws MathIllegalArgumentException if there is not enough sample data.
      */
     private void checkSampleData(final double[] data)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         if (data == null) {
             throw new NullArgumentException();
         }
         if (data.length < 2) {
-            throw new NumberIsTooSmallException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
                     data.length, 2, true);
         }
@@ -1160,16 +1152,16 @@ public class TTest {
      *
      * @param stat Statistical summary.
      * @throws NullArgumentException if {@code data} is {@code null}.
-     * @throws NumberIsTooSmallException if there is not enough sample data.
+     * @throws MathIllegalArgumentException if there is not enough sample data.
      */
     private void checkSampleData(final StatisticalSummary stat)
-        throws NullArgumentException, NumberIsTooSmallException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         if (stat == null) {
             throw new NullArgumentException();
         }
         if (stat.getN() < 2) {
-            throw new NumberIsTooSmallException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
                     stat.getN(), 2, true);
         }

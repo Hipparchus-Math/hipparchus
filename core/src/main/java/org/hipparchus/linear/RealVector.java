@@ -28,7 +28,6 @@ import org.hipparchus.analysis.function.Multiply;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -197,11 +196,11 @@ public abstract class RealVector {
      * @param start the index of the first entry of the subvector
      * @param end the index of the last entry of the subvector (inclusive)
      * @throws MathIllegalArgumentException if {@code start} of {@code end} are not valid
-     * @throws NumberIsTooSmallException if {@code end < start}
+     * @throws MathIllegalArgumentException if {@code end < start}
      * @since 3.1
      */
     protected void checkIndices(final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         final int dim = getDimension();
         if ((start < 0) || (start >= dim)) {
             throw new MathIllegalArgumentException(LocalizedFormats.INDEX, start, 0,
@@ -213,7 +212,7 @@ public abstract class RealVector {
         }
         if (end < start) {
             // TODO Use more specific error message
-            throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 end, start, false);
         }
     }
@@ -890,13 +889,13 @@ public abstract class RealVector {
      * @param end the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @throws NumberIsTooSmallException if {@code end < start}.
+     * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor,
                                      final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -932,13 +931,13 @@ public abstract class RealVector {
      * @param end the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @throws NumberIsTooSmallException if {@code end < start}.
+     * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor,
                                        final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -970,13 +969,13 @@ public abstract class RealVector {
      * @param end the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
-     * @throws NumberIsTooSmallException if {@code end < start}.
+     * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorChangingVisitor visitor,
                               final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(getDimension(), start, end);
         for (int i = start; i <= end; i++) {
@@ -1012,13 +1011,13 @@ public abstract class RealVector {
      * @param end the index of the last entry to be visited (inclusive)
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
-     * @throws NumberIsTooSmallException if {@code end < start}.
+     * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
      * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor,
                                        final int start, final int end)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 

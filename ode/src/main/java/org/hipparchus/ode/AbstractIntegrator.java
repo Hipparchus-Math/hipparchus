@@ -31,7 +31,6 @@ import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.events.EventHandler;
 import org.hipparchus.ode.events.EventState;
 import org.hipparchus.ode.sampling.AbstractStepInterpolator;
@@ -236,7 +235,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
     @Override
     public double integrate(final FirstOrderDifferentialEquations equations,
                             final double t0, final double[] y0, final double t, final double[] y)
-        throws MathIllegalArgumentException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException, MathIllegalStateException {
 
         if (y0.length != equations.getDimension()) {
@@ -275,14 +274,14 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
      * @param equations complete set of differential equations to integrate
      * @param t target time for the integration
      * (can be set to a value smaller than <code>t0</code> for backward integration)
-     * @exception NumberIsTooSmallException if integration step is too small
+     * @exception MathIllegalArgumentException if integration step is too small
      * @throws MathIllegalArgumentException if the dimension of the complete state does not
      * match the complete equations sets dimension
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      */
     public abstract void integrate(ExpandableStatefulODE equations, double t)
-        throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
     /** Compute the derivatives and check the number of evaluations.
      * @param t current value of the independent <I>time</I> variable
@@ -454,18 +453,18 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
     /** Check the integration span.
      * @param equations set of differential equations
      * @param t target time for the integration
-     * @exception NumberIsTooSmallException if integration span is too small
+     * @exception MathIllegalArgumentException if integration span is too small
      * @exception MathIllegalArgumentException if adaptive step size integrators
      * tolerance arrays dimensions are not compatible with equations settings
      */
     protected void sanityChecks(final ExpandableStatefulODE equations, final double t)
-        throws NumberIsTooSmallException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         final double threshold = 1000 * FastMath.ulp(FastMath.max(FastMath.abs(equations.getTime()),
                                                                   FastMath.abs(t)));
         final double dt = FastMath.abs(equations.getTime() - t);
         if (dt <= threshold) {
-            throw new NumberIsTooSmallException(LocalizedFormats.TOO_SMALL_INTEGRATION_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedFormats.TOO_SMALL_INTEGRATION_INTERVAL,
                                                 dt, threshold, false);
         }
 

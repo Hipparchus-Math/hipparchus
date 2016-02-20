@@ -20,10 +20,9 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -75,14 +74,15 @@ public class BracketingNthOrderBrentSolver
      *
      * @param absoluteAccuracy Absolute accuracy.
      * @param maximalOrder maximal order.
-     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     * @exception MathIllegalArgumentException if maximal order is lower than 2
      */
     public BracketingNthOrderBrentSolver(final double absoluteAccuracy,
                                          final int maximalOrder)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(absoluteAccuracy);
         if (maximalOrder < 2) {
-            throw new NumberIsTooSmallException(maximalOrder, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maximalOrder, 2);
         }
         this.maximalOrder = maximalOrder;
         this.allowed = AllowedSolution.ANY_SIDE;
@@ -94,15 +94,16 @@ public class BracketingNthOrderBrentSolver
      * @param relativeAccuracy Relative accuracy.
      * @param absoluteAccuracy Absolute accuracy.
      * @param maximalOrder maximal order.
-     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     * @exception MathIllegalArgumentException if maximal order is lower than 2
      */
     public BracketingNthOrderBrentSolver(final double relativeAccuracy,
                                          final double absoluteAccuracy,
                                          final int maximalOrder)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy);
         if (maximalOrder < 2) {
-            throw new NumberIsTooSmallException(maximalOrder, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maximalOrder, 2);
         }
         this.maximalOrder = maximalOrder;
         this.allowed = AllowedSolution.ANY_SIDE;
@@ -115,16 +116,17 @@ public class BracketingNthOrderBrentSolver
      * @param absoluteAccuracy Absolute accuracy.
      * @param functionValueAccuracy Function value accuracy.
      * @param maximalOrder maximal order.
-     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     * @exception MathIllegalArgumentException if maximal order is lower than 2
      */
     public BracketingNthOrderBrentSolver(final double relativeAccuracy,
                                          final double absoluteAccuracy,
                                          final double functionValueAccuracy,
                                          final int maximalOrder)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy);
         if (maximalOrder < 2) {
-            throw new NumberIsTooSmallException(maximalOrder, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maximalOrder, 2);
         }
         this.maximalOrder = maximalOrder;
         this.allowed = AllowedSolution.ANY_SIDE;

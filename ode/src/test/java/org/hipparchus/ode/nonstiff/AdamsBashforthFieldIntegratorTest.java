@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Decimal64Field;
 import org.junit.Test;
 
@@ -41,7 +41,7 @@ public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstr
                         vecAbsoluteTolerance, vecRelativeTolerance);
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testMinStep() {
         doDimensionCheck(Decimal64Field.getInstance());
     }

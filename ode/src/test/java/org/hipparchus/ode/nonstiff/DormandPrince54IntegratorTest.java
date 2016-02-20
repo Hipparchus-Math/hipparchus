@@ -19,7 +19,6 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem3;
@@ -39,7 +38,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
       TestProblem1 pb = new TestProblem1();
       DormandPrince54Integrator integrator = new DormandPrince54Integrator(0.0, 1.0,
@@ -49,9 +48,9 @@ public class DormandPrince54IntegratorTest {
                            1.0, new double[pb.getDimension()+10]);
   }
 
-  @Test(expected=NumberIsTooSmallException.class)
+  @Test(expected=MathIllegalArgumentException.class)
   public void testMinStep()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem1 pb = new TestProblem1();
@@ -74,7 +73,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testSmallLastStep()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblemAbstract pb = new TestProblem5();
@@ -101,7 +100,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testBackward()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
@@ -153,7 +152,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testIncreasingTolerance()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     int previousCalls = Integer.MAX_VALUE;
@@ -196,7 +195,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testEvents()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem4 pb = new TestProblem4();
@@ -231,7 +230,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testKepler()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
@@ -255,7 +254,7 @@ public class DormandPrince54IntegratorTest {
 
   @Test
   public void testVariableSteps()
-      throws MathIllegalArgumentException, NumberIsTooSmallException,
+      throws MathIllegalArgumentException,
              MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);

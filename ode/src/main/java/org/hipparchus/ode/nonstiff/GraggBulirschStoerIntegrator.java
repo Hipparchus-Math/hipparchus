@@ -20,7 +20,6 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.events.EventHandler;
 import org.hipparchus.ode.sampling.AbstractStepInterpolator;
@@ -545,7 +544,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
   /** {@inheritDoc} */
   @Override
   public void integrate(final ExpandableStatefulODE equations, final double t)
-      throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     sanityChecks(equations, t);
     setEquations(equations);

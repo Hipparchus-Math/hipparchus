@@ -26,7 +26,6 @@ import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 
 /**
  * Population of chromosomes represented by a {@link List}.
@@ -158,15 +157,16 @@ public abstract class ListPopulation implements Population {
      * Sets the maximal population size.
      * @param populationLimit maximal population size.
      * @throws MathIllegalArgumentException if the population limit is not a positive number (&lt; 1)
-     * @throws NumberIsTooSmallException if the new population size is smaller than the current number
+     * @throws MathIllegalArgumentException if the new population size is smaller than the current number
      *   of chromosomes in the population
      */
-    public void setPopulationLimit(final int populationLimit) throws MathIllegalArgumentException, NumberIsTooSmallException {
+    public void setPopulationLimit(final int populationLimit) throws MathIllegalArgumentException {
         if (populationLimit <= 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.POPULATION_LIMIT_NOT_POSITIVE, populationLimit);
         }
         if (populationLimit < chromosomes.size()) {
-            throw new NumberIsTooSmallException(populationLimit, chromosomes.size(), true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   populationLimit, chromosomes.size());
         }
         this.populationLimit = populationLimit;
     }

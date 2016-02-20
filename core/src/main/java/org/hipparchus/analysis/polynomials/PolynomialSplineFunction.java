@@ -23,7 +23,6 @@ import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -89,20 +88,19 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      * @param knots Spline segment interval delimiters.
      * @param polynomials Polynomial functions that make up the spline.
      * @throws NullArgumentException if either of the input arrays is {@code null}.
-     * @throws NumberIsTooSmallException if knots has length less than 2.
+     * @throws MathIllegalArgumentException if knots has length less than 2.
      * @throws MathIllegalArgumentException if {@code polynomials.length != knots.length - 1}.
      * @throws MathIllegalArgumentException if the {@code knots} array is not strictly increasing.
      *
      */
     public PolynomialSplineFunction(double knots[], PolynomialFunction polynomials[])
-        throws NullArgumentException, NumberIsTooSmallException,
-               MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException {
         if (knots == null ||
             polynomials == null) {
             throw new NullArgumentException();
         }
         if (knots.length < 2) {
-            throw new NumberIsTooSmallException(LocalizedFormats.NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION,
+            throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION,
                                                 2, knots.length, false);
         }
         if (knots.length - 1 != polynomials.length) {

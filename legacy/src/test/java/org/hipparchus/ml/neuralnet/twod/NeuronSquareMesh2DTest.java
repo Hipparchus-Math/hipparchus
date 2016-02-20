@@ -23,17 +23,15 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
-import java.util.Set;
 import java.util.HashSet;
+import java.util.Set;
 
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
 import org.hipparchus.ml.neuralnet.FeatureInitializerFactory;
 import org.hipparchus.ml.neuralnet.Network;
 import org.hipparchus.ml.neuralnet.Neuron;
 import org.hipparchus.ml.neuralnet.SquareNeighbourhood;
-import org.hipparchus.ml.neuralnet.twod.NeuronSquareMesh2D;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,7 +42,7 @@ import org.junit.Test;
 public class NeuronSquareMesh2DTest {
     final FeatureInitializer init = FeatureInitializerFactory.uniform(0, 2);
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testMinimalNetworkSize1() {
         final FeatureInitializer[] initArray = { init };
 
@@ -54,7 +52,7 @@ public class NeuronSquareMesh2DTest {
                                initArray);
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testMinimalNetworkSize2() {
         final FeatureInitializer[] initArray = { init };
 

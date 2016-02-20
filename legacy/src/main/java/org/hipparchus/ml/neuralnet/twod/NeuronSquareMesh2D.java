@@ -17,16 +17,15 @@
 
 package org.hipparchus.ml.neuralnet.twod;
 
-import java.util.List;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.io.Serializable;
-import java.io.ObjectInputStream;
+import java.util.List;
 
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
 import org.hipparchus.ml.neuralnet.Network;
 import org.hipparchus.ml.neuralnet.Neuron;
@@ -102,7 +101,7 @@ public class NeuronSquareMesh2D
      * @param neighbourhoodType Neighbourhood type.
      * @param featuresList Arrays that will initialize the features sets of
      * the network's neurons.
-     * @throws NumberIsTooSmallException if {@code numRows < 2} or
+     * @throws MathIllegalArgumentException if {@code numRows < 2} or
      * {@code numCols < 2}.
      */
     NeuronSquareMesh2D(boolean wrapRowDim,
@@ -113,10 +112,12 @@ public class NeuronSquareMesh2D
         numberOfColumns = featuresList[0].length;
 
         if (numberOfRows < 2) {
-            throw new NumberIsTooSmallException(numberOfRows, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   numberOfRows, 2);
         }
         if (numberOfColumns < 2) {
-            throw new NumberIsTooSmallException(numberOfColumns, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   numberOfColumns, 2);
         }
 
         wrapRows = wrapRowDim;
@@ -160,7 +161,7 @@ public class NeuronSquareMesh2D
      * corresponding element of the features set of each newly created
      * neuron. In particular, the size of this array defines the size of
      * feature set.
-     * @throws NumberIsTooSmallException if {@code numRows < 2} or
+     * @throws MathIllegalArgumentException if {@code numRows < 2} or
      * {@code numCols < 2}.
      */
     public NeuronSquareMesh2D(int numRows,
@@ -170,10 +171,12 @@ public class NeuronSquareMesh2D
                               SquareNeighbourhood neighbourhoodType,
                               FeatureInitializer[] featureInit) {
         if (numRows < 2) {
-            throw new NumberIsTooSmallException(numRows, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   numRows, 2);
         }
         if (numCols < 2) {
-            throw new NumberIsTooSmallException(numCols, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   numCols, 2);
         }
 
         numberOfRows = numRows;

@@ -18,7 +18,8 @@ package org.hipparchus.genetics;
 
 import java.util.concurrent.TimeUnit;
 
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Stops after a fixed amount of time has elapsed.
@@ -41,9 +42,9 @@ public class FixedElapsedTime implements StoppingCondition {
      * Create a new {@link FixedElapsedTime} instance.
      *
      * @param maxTime maximum number of seconds generations are allowed to evolve
-     * @throws NumberIsTooSmallException if the provided time is &lt; 0
+     * @throws MathIllegalArgumentException if the provided time is &lt; 0
      */
-    public FixedElapsedTime(final long maxTime) throws NumberIsTooSmallException {
+    public FixedElapsedTime(final long maxTime) throws MathIllegalArgumentException {
         this(maxTime, TimeUnit.SECONDS);
     }
 
@@ -52,11 +53,12 @@ public class FixedElapsedTime implements StoppingCondition {
      *
      * @param maxTime maximum time generations are allowed to evolve
      * @param unit {@link TimeUnit} of the maxTime argument
-     * @throws NumberIsTooSmallException if the provided time is &lt; 0
+     * @throws MathIllegalArgumentException if the provided time is &lt; 0
      */
-    public FixedElapsedTime(final long maxTime, final TimeUnit unit) throws NumberIsTooSmallException {
+    public FixedElapsedTime(final long maxTime, final TimeUnit unit) throws MathIllegalArgumentException {
         if (maxTime < 0) {
-            throw new NumberIsTooSmallException(maxTime, 0, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maxTime, 0);
         }
         maxTimePeriod = unit.toNanos(maxTime);
     }

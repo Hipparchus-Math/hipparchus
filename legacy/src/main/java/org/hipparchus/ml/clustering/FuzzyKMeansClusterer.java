@@ -21,9 +21,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.ml.distance.DistanceMeasure;
@@ -101,9 +101,9 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
      *
      * @param k the number of clusters to split the data into
      * @param fuzziness the fuzziness factor, must be &gt; 1.0
-     * @throws NumberIsTooSmallException if {@code fuzziness <= 1.0}
+     * @throws MathIllegalArgumentException if {@code fuzziness <= 1.0}
      */
-    public FuzzyKMeansClusterer(final int k, final double fuzziness) throws NumberIsTooSmallException {
+    public FuzzyKMeansClusterer(final int k, final double fuzziness) throws MathIllegalArgumentException {
         this(k, fuzziness, -1, new EuclideanDistance());
     }
 
@@ -115,11 +115,11 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
      * @param maxIterations the maximum number of iterations to run the algorithm for.
      *   If negative, no maximum will be used.
      * @param measure the distance measure to use
-     * @throws NumberIsTooSmallException if {@code fuzziness <= 1.0}
+     * @throws MathIllegalArgumentException if {@code fuzziness <= 1.0}
      */
     public FuzzyKMeansClusterer(final int k, final double fuzziness,
                                 final int maxIterations, final DistanceMeasure measure)
-            throws NumberIsTooSmallException {
+            throws MathIllegalArgumentException {
         this(k, fuzziness, maxIterations, measure, DEFAULT_EPSILON, new JDKRandomGenerator());
     }
 
@@ -133,17 +133,18 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
      * @param measure the distance measure to use
      * @param epsilon the convergence criteria (default is 1e-3)
      * @param random random generator to use for choosing initial centers
-     * @throws NumberIsTooSmallException if {@code fuzziness <= 1.0}
+     * @throws MathIllegalArgumentException if {@code fuzziness <= 1.0}
      */
     public FuzzyKMeansClusterer(final int k, final double fuzziness,
                                 final int maxIterations, final DistanceMeasure measure,
                                 final double epsilon, final RandomGenerator random)
-            throws NumberIsTooSmallException {
+            throws MathIllegalArgumentException {
 
         super(measure);
 
         if (fuzziness <= 1.0d) {
-            throw new NumberIsTooSmallException(fuzziness, 1.0, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   fuzziness, 1.0);
         }
         this.k = k;
         this.fuzziness = fuzziness;
@@ -275,7 +276,8 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
         // number of clusters has to be smaller or equal the number of data points
         if (size < k) {
-            throw new NumberIsTooSmallException(size, k, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   size, k);
         }
 
         // copy the input collection to an unmodifiable list with indexed access

@@ -20,7 +20,6 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
 import org.junit.Assert;
@@ -327,7 +326,7 @@ public class SparseFieldVectorTest {
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }
@@ -454,7 +453,7 @@ public class SparseFieldVectorTest {
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }
@@ -585,7 +584,7 @@ public class SparseFieldVectorTest {
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }
@@ -720,7 +719,7 @@ public class SparseFieldVectorTest {
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }

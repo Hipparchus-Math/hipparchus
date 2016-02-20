@@ -23,7 +23,6 @@ import java.io.ObjectOutput;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.FirstOrderIntegrator;
@@ -42,7 +41,7 @@ import org.junit.Test;
 public class AdamsBashforthIntegratorTest {
 
     @Test(expected=MathIllegalArgumentException.class)
-    public void dimensionCheck() throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+    public void dimensionCheck() throws MathIllegalArgumentException, MathIllegalStateException {
         TestProblem1 pb = new TestProblem1();
         FirstOrderIntegrator integ =
             new AdamsBashforthIntegrator(2, 0.0, 1.0, 1.0e-10, 1.0e-10);
@@ -51,8 +50,8 @@ public class AdamsBashforthIntegratorTest {
                         1.0, new double[pb.getDimension()+10]);
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
-    public void testMinStep() throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testMinStep() throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
           TestProblem1 pb = new TestProblem1();
           double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -72,7 +71,7 @@ public class AdamsBashforthIntegratorTest {
     }
 
     @Test
-    public void testIncreasingTolerance() throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+    public void testIncreasingTolerance() throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         int previousCalls = Integer.MAX_VALUE;
         for (int i = -12; i < -2; ++i) {
@@ -107,7 +106,7 @@ public class AdamsBashforthIntegratorTest {
     }
 
     @Test(expected = MathIllegalStateException.class)
-    public void exceedMaxEvaluations() throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+    public void exceedMaxEvaluations() throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem1 pb  = new TestProblem1();
         double range = pb.getFinalTime() - pb.getInitialTime();
@@ -123,7 +122,7 @@ public class AdamsBashforthIntegratorTest {
     }
 
     @Test
-    public void backward() throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+    public void backward() throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem5 pb = new TestProblem5();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
@@ -142,7 +141,7 @@ public class AdamsBashforthIntegratorTest {
     }
 
     @Test
-    public void polynomial() throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
+    public void polynomial() throws MathIllegalArgumentException, MathIllegalArgumentException, MathIllegalStateException {
         TestProblem6 pb = new TestProblem6();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
 

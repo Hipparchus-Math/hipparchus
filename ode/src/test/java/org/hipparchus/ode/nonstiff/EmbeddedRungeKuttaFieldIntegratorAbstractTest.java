@@ -23,7 +23,6 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
@@ -175,11 +174,11 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         private static final long serialVersionUID = 20151208L;
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public abstract void testMinStep();
 
     protected <T extends RealFieldElement<T>> void doTestMinStep(final Field<T> field)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         double minStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.1).getReal();
@@ -375,7 +374,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                              new double[4], new double[4]);
             integrator.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getInitialState().getTime());
             Assert.fail("an exception should have been thrown");
-        } catch(NumberIsTooSmallException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
     }
 
@@ -387,7 +386,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
                                                                   final double epsilonMaxValue,
                                                                   final double epsilonMaxTime,
                                                                   final String name)
-        throws MathIllegalArgumentException, NumberIsTooSmallException,
+        throws MathIllegalArgumentException,
                MathIllegalArgumentException, MathIllegalStateException {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
