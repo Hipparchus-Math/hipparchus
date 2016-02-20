@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.TooManyIterationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.MaxIter;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.linear.LinearConstraint;
@@ -781,8 +781,8 @@ public class SimplexSolverTest {
         try {
             solver.optimize(new MaxIter(3), f, new LinearConstraintSet(constraints),
                             GoalType.MAXIMIZE, new NonNegativeConstraint(true), callback);
-            Assert.fail("expected TooManyIterationsException");
-        } catch (TooManyIterationsException ex) {
+            Assert.fail("expected MathIllegalStateException");
+        } catch (MathIllegalStateException ex) {
             // expected
         }
 

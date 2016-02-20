@@ -19,7 +19,7 @@ package org.hipparchus.optim.linear;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.hipparchus.exception.TooManyIterationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
@@ -85,12 +85,12 @@ public abstract class LinearOptimizer
      *  <li>{@link NonNegativeConstraint}</li>
      * </ul>
      * @return {@inheritDoc}
-     * @throws TooManyIterationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * iterations is exceeded.
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
-        throws TooManyIterationsException {
+        throws MathIllegalStateException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }

@@ -19,7 +19,7 @@ package org.hipparchus.optim.linear;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.TooManyIterationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.util.FastMath;
@@ -43,7 +43,7 @@ import org.hipparchus.util.Precision;
  * <p>
  * <b>Note:</b> Depending on the problem definition, the default convergence criteria
  * may be too strict, resulting in {@link NoFeasibleSolutionException} or
- * {@link TooManyIterationsException}. In such a case it is advised to adjust these
+ * {@link MathIllegalStateException}. In such a case it is advised to adjust these
  * criteria with more appropriate values, e.g. relaxing the epsilon value.
  * <p>
  * Default convergence criteria:
@@ -145,13 +145,13 @@ public class SimplexSolver extends LinearOptimizer {
      * </ul>
      *
      * @return {@inheritDoc}
-     * @throws TooManyIterationsException if the maximal number of iterations is exceeded.
+     * @throws MathIllegalStateException if the maximal number of iterations is exceeded.
      * @throws org.hipparchus.exception.MathIllegalArgumentException if the dimension
      * of the constraints does not match the dimension of the objective function
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
-        throws TooManyIterationsException {
+        throws MathIllegalStateException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }
@@ -312,11 +312,11 @@ public class SimplexSolver extends LinearOptimizer {
      * Runs one iteration of the Simplex method on the given model.
      *
      * @param tableau Simple tableau for the problem.
-     * @throws TooManyIterationsException if the allowed number of iterations has been exhausted.
+     * @throws MathIllegalStateException if the allowed number of iterations has been exhausted.
      * @throws UnboundedSolutionException if the model is found not to have a bounded solution.
      */
     protected void doIteration(final SimplexTableau tableau)
-        throws TooManyIterationsException,
+        throws MathIllegalStateException,
                UnboundedSolutionException {
 
         incrementIterationCount();
@@ -334,12 +334,12 @@ public class SimplexSolver extends LinearOptimizer {
      * Solves Phase 1 of the Simplex method.
      *
      * @param tableau Simple tableau for the problem.
-     * @throws TooManyIterationsException if the allowed number of iterations has been exhausted.
+     * @throws MathIllegalStateException if the allowed number of iterations has been exhausted.
      * @throws UnboundedSolutionException if the model is found not to have a bounded solution.
      * @throws NoFeasibleSolutionException if there is no feasible solution?
      */
     protected void solvePhase1(final SimplexTableau tableau)
-        throws TooManyIterationsException,
+        throws MathIllegalStateException,
                UnboundedSolutionException,
                NoFeasibleSolutionException {
 
@@ -361,7 +361,7 @@ public class SimplexSolver extends LinearOptimizer {
     /** {@inheritDoc} */
     @Override
     public PointValuePair doOptimize()
-        throws TooManyIterationsException,
+        throws MathIllegalStateException,
                UnboundedSolutionException,
                NoFeasibleSolutionException {
 

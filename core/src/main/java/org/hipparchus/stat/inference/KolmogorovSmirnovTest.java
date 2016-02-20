@@ -31,7 +31,6 @@ import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.TooManyIterationsException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.BigFractionField;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -626,7 +625,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         ret = sum * FastMath.sqrt(2 * FastMath.PI) / z;
 
@@ -647,7 +646,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         final double sqrtHalfPi = FastMath.sqrt(FastMath.PI / 2);
         // Instead of doubling sum, divide by 3 instead of 6
@@ -673,7 +672,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         double sum2 = 0;
         kTerm2 = 0;
@@ -686,7 +685,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         // Again, adjust coefficients instead of doubling sum, sum2
         ret += (sqrtHalfPi / n) * (sum / (36 * z2 * z2 * z2 * z) - sum2 / (18 * z2 * z));
@@ -711,7 +710,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         sum2 = 0;
         for (k = 1; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
@@ -725,7 +724,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         return ret + (sqrtHalfPi / (sqrtN * n)) * (sum / (3240 * z6 * z4) +
                 + sum2 / (108 * z6));
@@ -923,13 +922,13 @@ public class KolmogorovSmirnovTest {
      * Computes \( 1 + 2 \sum_{i=1}^\infty (-1)^i e^{-2 i^2 t^2} \) stopping when successive partial
      * sums are within {@code tolerance} of one another, or when {@code maxIterations} partial sums
      * have been computed. If the sum does not converge before {@code maxIterations} iterations a
-     * {@link TooManyIterationsException} is thrown.
+     * {@link MathIllegalStateException} is thrown.
      *
      * @param t argument
      * @param tolerance Cauchy criterion for partial sums
      * @param maxIterations maximum number of partial sums to compute
      * @return Kolmogorov sum evaluated at t
-     * @throws TooManyIterationsException if the series does not converge
+     * @throws MathIllegalStateException if the series does not converge
      */
     public double ksSum(double t, double tolerance, int maxIterations) {
         if (t == 0.0) {
@@ -951,7 +950,7 @@ public class KolmogorovSmirnovTest {
             i++;
         }
         if (i == maxIterations) {
-            throw new TooManyIterationsException(maxIterations);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, maxIterations);
         }
         return partialSum * 2;
     }
