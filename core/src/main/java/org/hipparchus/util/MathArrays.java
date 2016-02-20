@@ -29,7 +29,7 @@ import java.util.TreeSet;
 import org.hipparchus.Field;
 import org.hipparchus.distribution.UniformIntegerDistribution;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NoDataException;
@@ -1429,13 +1429,13 @@ public class MathArrays {
      * @param values Input array to be normalized
      * @param normalizedSum Target sum for the normalized array
      * @return the normalized array.
-     * @throws MathArithmeticException if the input array contains infinite
+     * @throws MathRuntimeException if the input array contains infinite
      * elements or sums to zero.
      * @throws MathIllegalArgumentException if the target sum is infinite or {@code NaN}.
      * @since 2.1
      */
     public static double[] normalizeArray(double[] values, double normalizedSum)
-        throws MathIllegalArgumentException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         if (Double.isInfinite(normalizedSum)) {
             throw new MathIllegalArgumentException(LocalizedFormats.NORMALIZE_INFINITE);
         }
@@ -1454,7 +1454,7 @@ public class MathArrays {
             }
         }
         if (sum == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ARRAY_SUMS_TO_ZERO);
+            throw new MathRuntimeException(LocalizedFormats.ARRAY_SUMS_TO_ZERO);
         }
         for (int i = 0; i < len; i++) {
             if (Double.isNaN(values[i])) {

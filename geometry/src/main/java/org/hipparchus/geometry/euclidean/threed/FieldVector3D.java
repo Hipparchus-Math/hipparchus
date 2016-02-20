@@ -23,7 +23,7 @@ import java.text.NumberFormat;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -518,12 +518,12 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
     /** Get a normalized vector aligned with the instance.
      * @return a new normalized vector
-     * @exception MathArithmeticException if the norm is zero
+     * @exception MathRuntimeException if the norm is zero
      */
-    public FieldVector3D<T> normalize() throws MathArithmeticException {
+    public FieldVector3D<T> normalize() throws MathRuntimeException {
         final T s = getNorm();
         if (s.getReal() == 0) {
-            throw new MathArithmeticException(LocalizedFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
+            throw new MathRuntimeException(LocalizedFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
         }
         return scalarMultiply(s.reciprocal());
     }
@@ -541,13 +541,13 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      *   Vector3D j = Vector3D.crossProduct(k, i);
      * </code></pre></p>
      * @return a new normalized vector orthogonal to the instance
-     * @exception MathArithmeticException if the norm of the instance is null
+     * @exception MathRuntimeException if the norm of the instance is null
      */
-    public FieldVector3D<T> orthogonal() throws MathArithmeticException {
+    public FieldVector3D<T> orthogonal() throws MathRuntimeException {
 
         final double threshold = 0.6 * getNorm().getReal();
         if (threshold == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
 
         if (FastMath.abs(x.getReal()) <= threshold) {
@@ -573,14 +573,14 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param v2 second vector
      * @param <T> the type of the field elements
      * @return angular separation between v1 and v2
-     * @exception MathArithmeticException if either vector has a null norm
+     * @exception MathRuntimeException if either vector has a null norm
      */
     public static <T extends RealFieldElement<T>> T angle(final FieldVector3D<T> v1, final FieldVector3D<T> v2)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
         if (normProduct.getReal() == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
 
         final T dot = dotProduct(v1, v2);
@@ -609,14 +609,14 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param v2 second vector
      * @param <T> the type of the field elements
      * @return angular separation between v1 and v2
-     * @exception MathArithmeticException if either vector has a null norm
+     * @exception MathRuntimeException if either vector has a null norm
      */
     public static <T extends RealFieldElement<T>> T angle(final FieldVector3D<T> v1, final Vector3D v2)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
         if (normProduct.getReal() == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
 
         final T dot = dotProduct(v1, v2);
@@ -645,10 +645,10 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @param v2 second vector
      * @param <T> the type of the field elements
      * @return angular separation between v1 and v2
-     * @exception MathArithmeticException if either vector has a null norm
+     * @exception MathRuntimeException if either vector has a null norm
      */
     public static <T extends RealFieldElement<T>> T angle(final Vector3D v1, final FieldVector3D<T> v2)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         return angle(v2, v1);
     }
 

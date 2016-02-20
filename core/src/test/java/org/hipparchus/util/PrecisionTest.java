@@ -16,7 +16,7 @@ package org.hipparchus.util;
 import java.math.BigDecimal;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -471,7 +471,7 @@ public class PrecisionTest {
         try {
             Precision.round(1.234f, 2, BigDecimal.ROUND_UNNECESSARY);
             Assert.fail();
-        } catch (MathArithmeticException ex) {
+        } catch (MathRuntimeException ex) {
             // success
         }
 

@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
@@ -624,7 +624,7 @@ public class OpenMapRealVector extends SparseRealVector
 
     /** {@inheritDoc} */
     @Override
-    public OpenMapRealVector unitVector() throws MathArithmeticException {
+    public OpenMapRealVector unitVector() throws MathRuntimeException {
         OpenMapRealVector res = copy();
         res.unitize();
         return res;
@@ -632,10 +632,10 @@ public class OpenMapRealVector extends SparseRealVector
 
     /** {@inheritDoc} */
     @Override
-    public void unitize() throws MathArithmeticException {
+    public void unitize() throws MathRuntimeException {
         double norm = getNorm();
         if (isDefaultValue(norm)) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
         Iterator iter = entries.iterator();
         while (iter.hasNext()) {

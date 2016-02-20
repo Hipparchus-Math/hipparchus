@@ -18,7 +18,7 @@ package org.hipparchus.geometry;
 
 import java.text.NumberFormat;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 
 /** This interface represents a generic vector in a vectorial space or a point in an affine space.
  * @param <S> Type of the space.
@@ -86,9 +86,9 @@ public interface Vector<S extends Space> extends Point<S> {
 
     /** Get a normalized vector aligned with the instance.
      * @return a new normalized vector
-     * @exception MathArithmeticException if the norm is zero
+     * @exception MathRuntimeException if the norm is zero
      */
-    Vector<S> normalize() throws MathArithmeticException;
+    Vector<S> normalize() throws MathRuntimeException;
 
     /** Multiply the instance by a scalar.
      * @param a scalar

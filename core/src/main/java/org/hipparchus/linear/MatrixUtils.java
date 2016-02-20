@@ -26,7 +26,7 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -923,11 +923,11 @@ public class MatrixUtils {
      * @throws MathIllegalArgumentException if the matrix and vector are not
      * conformable
      * @throws NonSquareMatrixException if the matrix {@code rm} is not square
-     * @throws MathArithmeticException if the absolute value of one of the diagonal
+     * @throws MathRuntimeException if the absolute value of one of the diagonal
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveLowerTriangularSystem(RealMatrix rm, RealVector b)
-        throws MathIllegalArgumentException, MathArithmeticException,
+        throws MathIllegalArgumentException, MathRuntimeException,
         NonSquareMatrixException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -942,7 +942,7 @@ public class MatrixUtils {
         for( int i = 0 ; i < rows ; i++ ){
             double diag = rm.getEntry(i, i);
             if( FastMath.abs(diag) < Precision.SAFE_MIN ){
-                throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+                throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
             }
             double bi = b.getEntry(i)/diag;
             b.setEntry(i,  bi );
@@ -968,11 +968,11 @@ public class MatrixUtils {
      * conformable
      * @throws NonSquareMatrixException if the matrix {@code rm} is not
      * square
-     * @throws MathArithmeticException if the absolute value of one of the diagonal
+     * @throws MathRuntimeException if the absolute value of one of the diagonal
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveUpperTriangularSystem(RealMatrix rm, RealVector b)
-        throws MathIllegalArgumentException, MathArithmeticException,
+        throws MathIllegalArgumentException, MathRuntimeException,
         NonSquareMatrixException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -987,7 +987,7 @@ public class MatrixUtils {
         for( int i = rows-1 ; i >-1 ; i-- ){
             double diag = rm.getEntry(i, i);
             if( FastMath.abs(diag) < Precision.SAFE_MIN ){
-                throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+                throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
             }
             double bi = b.getEntry(i)/diag;
             b.setEntry(i,  bi );

@@ -22,7 +22,7 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -236,7 +236,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> ebeDivide(FieldVector<T> v)
-        throws MathIllegalArgumentException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         checkVectorDimensions(v.getDimension());
         SparseFieldVector<T> res = new SparseFieldVector<T>(this);
         OpenIntToFieldHashMap<T>.Iterator iter = res.entries.iterator();
@@ -320,14 +320,14 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> mapDivide(T d)
-        throws NullArgumentException, MathArithmeticException {
+        throws NullArgumentException, MathRuntimeException {
         return copy().mapDivideToSelf(d);
     }
 
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> mapDivideToSelf(T d)
-        throws NullArgumentException, MathArithmeticException {
+        throws NullArgumentException, MathRuntimeException {
         OpenIntToFieldHashMap<T>.Iterator iter = entries.iterator();
         while (iter.hasNext()) {
             iter.advance();
@@ -338,13 +338,13 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
 
     /** {@inheritDoc} */
     @Override
-    public FieldVector<T> mapInv() throws MathArithmeticException {
+    public FieldVector<T> mapInv() throws MathRuntimeException {
         return copy().mapInvToSelf();
     }
 
     /** {@inheritDoc} */
     @Override
-    public FieldVector<T> mapInvToSelf() throws MathArithmeticException {
+    public FieldVector<T> mapInvToSelf() throws MathRuntimeException {
         for (int i = 0; i < virtualSize; i++) {
             setEntry(i, field.getOne().divide(getEntry(i)));
         }
@@ -424,7 +424,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> projection(FieldVector<T> v)
-        throws MathIllegalArgumentException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         checkVectorDimensions(v.getDimension());
         return v.mapMultiply(dotProduct(v).divide(v.dotProduct(v)));
     }

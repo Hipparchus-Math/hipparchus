@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.hipparchus.distribution.EnumeratedIntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
@@ -69,8 +69,8 @@ public class EnumeratedIntegerDistributionTest {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, 0.0});
-            Assert.fail("Expected MathArithmeticException");
-        } catch (MathArithmeticException e) {
+            Assert.fail("Expected MathRuntimeException");
+        } catch (MathRuntimeException e) {
         }
         try {
           new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, Double.NaN});

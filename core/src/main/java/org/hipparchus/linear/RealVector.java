@@ -27,7 +27,7 @@ import org.hipparchus.analysis.function.Divide;
 import org.hipparchus.analysis.function.Multiply;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -319,19 +319,19 @@ public abstract class RealVector {
      *
      * @param v Vector.
      * @return the cosine of the angle between this vector and {@code v}.
-     * @throws MathArithmeticException if {@code this} or {@code v} is the null
+     * @throws MathRuntimeException if {@code this} or {@code v} is the null
      * vector
      * @throws MathIllegalArgumentException if the dimensions of {@code this} and
      * {@code v} do not match
      */
     public double cosine(RealVector v) throws MathIllegalArgumentException,
-        MathArithmeticException {
+        MathRuntimeException {
         final double norm = getNorm();
         final double vNorm = v.getNorm();
 
         if (norm == 0 ||
             vNorm == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
         return dotProduct(v) / (norm * vNorm);
     }
@@ -653,14 +653,14 @@ public abstract class RealVector {
      * @return projection of the instance onto {@code v}.
      * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this} vector.
-     * @throws MathArithmeticException if {@code this} or {@code v} is the null
+     * @throws MathRuntimeException if {@code this} or {@code v} is the null
      * vector
      */
     public RealVector projection(final RealVector v)
-        throws MathIllegalArgumentException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         final double norm2 = v.dotProduct(v);
         if (norm2 == 0.0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
         return v.mapMultiply(dotProduct(v) / v.dotProduct(v));
     }
@@ -699,12 +699,12 @@ public abstract class RealVector {
      * The instance is not changed by this method.
      *
      * @return a unit vector pointing in direction of this vector.
-     * @throws MathArithmeticException if the norm is zero.
+     * @throws MathRuntimeException if the norm is zero.
      */
-    public RealVector unitVector() throws MathArithmeticException {
+    public RealVector unitVector() throws MathRuntimeException {
         final double norm = getNorm();
         if (norm == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
         return mapDivide(norm);
     }
@@ -713,12 +713,12 @@ public abstract class RealVector {
      * Converts this vector into a unit vector.
      * The instance itself is changed by this method.
      *
-     * @throws MathArithmeticException if the norm is zero.
+     * @throws MathRuntimeException if the norm is zero.
      */
-    public void unitize() throws MathArithmeticException {
+    public void unitize() throws MathRuntimeException {
         final double norm = getNorm();
         if (norm == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
         mapDivideToSelf(getNorm());
     }
@@ -1423,7 +1423,7 @@ public abstract class RealVector {
             /** {@inheritDoc} */
             @Override
             public double cosine(RealVector w)
-                throws MathIllegalArgumentException, MathArithmeticException {
+                throws MathIllegalArgumentException, MathRuntimeException {
                 return v.cosine(w);
             }
 
@@ -1468,7 +1468,7 @@ public abstract class RealVector {
 
             /** {@inheritDoc} */
             @Override
-            public RealVector unitVector() throws MathArithmeticException {
+            public RealVector unitVector() throws MathRuntimeException {
                 return v.unitVector();
             }
 

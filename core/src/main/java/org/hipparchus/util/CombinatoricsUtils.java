@@ -20,7 +20,8 @@ import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.special.Gamma;
@@ -72,7 +73,7 @@ public final class CombinatoricsUtils {
      * <li> The result is small enough to fit into a {@code long}. The
      * largest value of {@code n} for which all coefficients are
      * {@code  < Long.MAX_VALUE} is 66. If the computed value exceeds
-     * {@code Long.MAX_VALUE} a {@code MathArithMeticException} is
+     * {@code Long.MAX_VALUE} a {@code MathRuntimeException} is
      * thrown.</li>
      * </ul></p>
      *
@@ -81,11 +82,11 @@ public final class CombinatoricsUtils {
      * @return {@code n choose k}
      * @throws NotPositiveException if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if the result is too large to be
+     * @throws MathRuntimeException if the result is too large to be
      * represented by a long integer.
      */
     public static long binomialCoefficient(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+        throws NotPositiveException, NumberIsTooLargeException, MathRuntimeException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1;
@@ -162,11 +163,11 @@ public final class CombinatoricsUtils {
      * @return {@code n choose k}
      * @throws NotPositiveException if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if the result is too large to be
+     * @throws MathRuntimeException if the result is too large to be
      * represented by a long integer.
      */
     public static double binomialCoefficientDouble(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+        throws NotPositiveException, NumberIsTooLargeException, MathRuntimeException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 1d;
@@ -207,11 +208,11 @@ public final class CombinatoricsUtils {
      * @return {@code n choose k}
      * @throws NotPositiveException if {@code n < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if the result is too large to be
+     * @throws MathRuntimeException if the result is too large to be
      * represented by a long integer.
      */
     public static double binomialCoefficientLog(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+        throws NotPositiveException, NumberIsTooLargeException, MathRuntimeException {
         CombinatoricsUtils.checkBinomial(n, k);
         if ((n == k) || (k == 0)) {
             return 0;
@@ -270,25 +271,24 @@ public final class CombinatoricsUtils {
      * <li> The result is small enough to fit into a {@code long}. The
      * largest value of {@code n} for which {@code n!} does not exceed
      * Long.MAX_VALUE} is 20. If the computed value exceeds {@code Long.MAX_VALUE}
-     * an {@code MathArithMeticException } is thrown.</li>
+     * an {@code MathRuntimeException } is thrown.</li>
      * </ul>
      * </p>
      *
      * @param n argument
      * @return {@code n!}
-     * @throws MathArithmeticException if the result is too large to be represented
+     * @throws MathRuntimeException if the result is too large to be represented
      * by a {@code long}.
      * @throws NotPositiveException if {@code n < 0}.
-     * @throws MathArithmeticException if {@code n > 20}: The factorial value is too
+     * @throws MathIllegalArgumentException if {@code n > 20}: The factorial value is too
      * large to fit in a {@code long}.
      */
-    public static long factorial(final int n) throws NotPositiveException, MathArithmeticException {
+    public static long factorial(final int n) throws NotPositiveException, MathIllegalArgumentException {
         if (n < 0) {
-            throw new NotPositiveException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
-                                           n);
+            throw new NotPositiveException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER, n);
         }
         if (n > 20) {
-            throw new MathArithmeticException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE, n, 20);
         }
         return FACTORIALS[n];
     }
@@ -343,12 +343,12 @@ public final class CombinatoricsUtils {
      * @return {@code S(n,k)}
      * @throws NotPositiveException if {@code k < 0}.
      * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws MathArithmeticException if some overflow happens, typically for n exceeding 25 and
+     * @throws MathRuntimeException if some overflow happens, typically for n exceeding 25 and
      * k between 20 and n-2 (S(n,n-1) is handled specifically and does not overflow)
      * @since 3.1
      */
     public static long stirlingS2(final int n, final int k)
-        throws NotPositiveException, NumberIsTooLargeException, MathArithmeticException {
+        throws NotPositiveException, NumberIsTooLargeException, MathRuntimeException {
         if (k < 0) {
             throw new NotPositiveException(k);
         }
@@ -404,7 +404,7 @@ public final class CombinatoricsUtils {
                     sum += sign * binomialCoefficient(k, j) * ArithmeticUtils.pow(j, n);
                     if (sum < 0) {
                         // there was an overflow somewhere
-                        throw new MathArithmeticException(LocalizedFormats.ARGUMENT_OUTSIDE_DOMAIN,
+                        throw new MathRuntimeException(LocalizedFormats.ARGUMENT_OUTSIDE_DOMAIN,
                                                           n, 0, stirlingS2.length - 1);
                     }
                 }

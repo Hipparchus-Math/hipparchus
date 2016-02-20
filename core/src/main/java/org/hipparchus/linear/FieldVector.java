@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -140,10 +140,10 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @param d value to divide all entries by
      * @return {@code this / d}
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws MathArithmeticException if {@code d} is zero.
+     * @throws MathRuntimeException if {@code d} is zero.
      */
     FieldVector<T> mapDivide(T d)
-        throws NullArgumentException, MathArithmeticException;
+        throws NullArgumentException, MathRuntimeException;
 
     /**
      * Map a division operation to each entry.
@@ -151,25 +151,25 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @param d value to divide all entries by
      * @return for convenience, return {@code this}
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws MathArithmeticException if {@code d} is zero.
+     * @throws MathRuntimeException if {@code d} is zero.
      */
     FieldVector<T> mapDivideToSelf(T d)
-        throws NullArgumentException, MathArithmeticException;
+        throws NullArgumentException, MathRuntimeException;
 
     /**
      * Map the 1/x function to each entry.
      * @return a vector containing the result of applying the function to each entry.
-     * @throws MathArithmeticException if one of the entries is zero.
+     * @throws MathRuntimeException if one of the entries is zero.
      */
-    FieldVector<T> mapInv() throws MathArithmeticException;
+    FieldVector<T> mapInv() throws MathRuntimeException;
 
     /**
      * Map the 1/x function to each entry.
      * <p>The instance <strong>is</strong> changed by this method.</p>
      * @return for convenience, return {@code this}
-     * @throws MathArithmeticException if one of the entries is zero.
+     * @throws MathRuntimeException if one of the entries is zero.
      */
-    FieldVector<T> mapInvToSelf() throws MathArithmeticException;
+    FieldVector<T> mapInvToSelf() throws MathRuntimeException;
 
     /**
      * Element-by-element multiplication.
@@ -185,10 +185,10 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @param v vector by which instance elements must be divided
      * @return a vector containing {@code this[i] / v[i]} for all {@code i}
      * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
-     * @throws MathArithmeticException if one entry of {@code v} is zero.
+     * @throws MathRuntimeException if one entry of {@code v} is zero.
      */
     FieldVector<T> ebeDivide(FieldVector<T> v)
-        throws MathIllegalArgumentException, MathArithmeticException;
+        throws MathIllegalArgumentException, MathRuntimeException;
 
     /**
      * Compute the dot product.
@@ -203,10 +203,10 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @param v vector onto which {@code this} must be projected
      * @return projection of {@code this} onto {@code v}
      * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
-     * @throws MathArithmeticException if {@code v} is the null vector.
+     * @throws MathRuntimeException if {@code v} is the null vector.
      */
     FieldVector<T> projection(FieldVector<T> v)
-        throws MathIllegalArgumentException, MathArithmeticException;
+        throws MathIllegalArgumentException, MathRuntimeException;
 
     /**
      * Compute the outer product.

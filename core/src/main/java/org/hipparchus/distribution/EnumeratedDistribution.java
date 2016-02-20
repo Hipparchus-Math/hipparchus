@@ -23,7 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
@@ -94,10 +94,10 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @throws NotPositiveException if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws MathRuntimeException all of the probabilities are 0.
      */
     public EnumeratedDistribution(final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathArithmeticException, NotFiniteNumberException, NotANumberException {
+        throws NotPositiveException, MathRuntimeException, NotFiniteNumberException, NotANumberException {
         this(new Well19937c(), pmf);
     }
 
@@ -111,10 +111,10 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @throws NotPositiveException if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws MathRuntimeException all of the probabilities are 0.
      */
     public EnumeratedDistribution(final RandomGenerator rng, final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathArithmeticException, NotFiniteNumberException, NotANumberException {
+        throws NotPositiveException, MathRuntimeException, NotFiniteNumberException, NotANumberException {
         random = rng;
 
         singletons = new ArrayList<T>(pmf.size());

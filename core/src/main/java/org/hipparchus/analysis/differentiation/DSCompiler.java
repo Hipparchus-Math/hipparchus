@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
@@ -1781,10 +1781,10 @@ public class DSCompiler {
      * @param dsOffset offset of the derivative structure in its array
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
-     * @throws MathArithmeticException if factorials becomes too large
+     * @throws MathRuntimeException if factorials becomes too large
      */
     public double taylor(final double[] ds, final int dsOffset, final double ... delta)
-       throws MathArithmeticException {
+       throws MathRuntimeException {
         double value = 0;
         for (int i = getSize() - 1; i >= 0; --i) {
             final int[] orders = getPartialDerivativeOrders(i);

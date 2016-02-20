@@ -24,7 +24,7 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableVectorFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.ZeroException;
 import org.hipparchus.util.CombinatoricsUtils;
@@ -80,11 +80,11 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      * and so on)
      * @exception ZeroException if the abscissa difference between added point
      * and a previous point is zero (i.e. the two points are at same abscissa)
-     * @exception MathArithmeticException if the number of derivatives is larger
+     * @exception MathRuntimeException if the number of derivatives is larger
      * than 20, which prevents computation of a factorial
      */
     public void addSamplePoint(final double x, final double[] ... value)
-        throws ZeroException, MathArithmeticException {
+        throws ZeroException, MathRuntimeException {
 
         for (int i = 0; i < value.length; ++i) {
 

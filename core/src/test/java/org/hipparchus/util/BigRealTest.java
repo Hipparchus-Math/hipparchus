@@ -21,7 +21,7 @@ import java.math.BigInteger;
 import java.math.MathContext;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.BigReal;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -116,7 +116,7 @@ public class BigRealTest {
         Assert.assertEquals(1024.0, a.divide(b).doubleValue(), 1.0e-15);
     }
 
-    @Test(expected = MathArithmeticException.class)
+    @Test(expected = MathRuntimeException.class)
     public void testDivisionByZero() {
         final BigReal a = BigReal.ONE;
         final BigReal b = BigReal.ZERO;
@@ -135,7 +135,7 @@ public class BigRealTest {
         Assert.assertTrue(FastMath.abs(r.doubleValue()) <= eps);
     }
 
-    @Test(expected = MathArithmeticException.class)
+    @Test(expected = MathRuntimeException.class)
     public void testReciprocalOfZero() {
         BigReal.ZERO.reciprocal();
     }

@@ -16,7 +16,7 @@ package org.hipparchus.util;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
@@ -348,7 +348,7 @@ public final class MathUtilsTest {
         Assert.assertEquals(val, a);
     }
 
-    @Test(expected=MathArithmeticException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testCopySignByte2() {
         MathUtils.copySign(Byte.MIN_VALUE, (byte) 1);
     }

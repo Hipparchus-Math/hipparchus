@@ -17,7 +17,7 @@
 package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
@@ -55,11 +55,11 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     /** Build a plane normal to a given direction and containing the origin.
      * @param normal normal direction to the plane
      * @param tolerance tolerance below which points are considered identical
-     * @exception MathArithmeticException if the normal norm is too small
+     * @exception MathRuntimeException if the normal norm is too small
      * @since 3.3
      */
     public Plane(final Vector3D normal, final double tolerance)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         setNormal(normal);
         this.tolerance = tolerance;
         originOffset = 0;
@@ -70,11 +70,11 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @param p point belonging to the plane
      * @param normal normal direction to the plane
      * @param tolerance tolerance below which points are considered identical
-     * @exception MathArithmeticException if the normal norm is too small
+     * @exception MathRuntimeException if the normal norm is too small
      * @since 3.3
      */
     public Plane(final Vector3D p, final Vector3D normal, final double tolerance)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         setNormal(normal);
         this.tolerance = tolerance;
         originOffset = -p.dotProduct(w);
@@ -88,11 +88,11 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @param p2 second point belonging to the plane
      * @param p3 third point belonging to the plane
      * @param tolerance tolerance below which points are considered identical
-     * @exception MathArithmeticException if the points do not constitute a plane
+     * @exception MathRuntimeException if the points do not constitute a plane
      * @since 3.3
      */
     public Plane(final Vector3D p1, final Vector3D p2, final Vector3D p3, final double tolerance)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         this(p1, p2.subtract(p1).crossProduct(p3.subtract(p1)), tolerance);
     }
 
@@ -125,9 +125,9 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     /** Reset the instance as if built from a point and a normal.
      * @param p point belonging to the plane
      * @param normal normal direction to the plane
-     * @exception MathArithmeticException if the normal norm is too small
+     * @exception MathRuntimeException if the normal norm is too small
      */
-    public void reset(final Vector3D p, final Vector3D normal) throws MathArithmeticException {
+    public void reset(final Vector3D p, final Vector3D normal) throws MathRuntimeException {
         setNormal(normal);
         originOffset = -p.dotProduct(w);
         setFrame();
@@ -149,12 +149,12 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
 
     /** Set the normal vactor.
      * @param normal normal direction to the plane (will be copied)
-     * @exception MathArithmeticException if the normal norm is too small
+     * @exception MathRuntimeException if the normal norm is too small
      */
-    private void setNormal(final Vector3D normal) throws MathArithmeticException {
+    private void setNormal(final Vector3D normal) throws MathRuntimeException {
         final double norm = normal.getNorm();
         if (norm < 1.0e-10) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
         w = new Vector3D(1.0 / norm, normal);
     }

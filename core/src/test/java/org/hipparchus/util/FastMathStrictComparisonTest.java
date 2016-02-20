@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -177,7 +177,7 @@ public class FastMathStrictComparisonTest {
                 actual = ite.getCause();
             }
             if (expected instanceof ArithmeticException) {
-                Assert.assertEquals(MathArithmeticException.class, actual.getClass());
+                Assert.assertEquals(MathRuntimeException.class, actual.getClass());
             } else  if (!expected.equals(actual)) {
                 reportFailedResults(mathMethod, params, expected, actual, entries);
             }

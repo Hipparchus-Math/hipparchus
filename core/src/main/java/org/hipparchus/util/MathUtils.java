@@ -22,7 +22,7 @@ import java.util.Arrays;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NullArgumentException;
 
@@ -162,17 +162,17 @@ public final class MathUtils {
      * @param sign Sign of the returned value.
      * @return a value with magnitude equal to {@code magnitude} and with the
      * same sign as the {@code sign} argument.
-     * @throws MathArithmeticException if {@code magnitude == Byte.MIN_VALUE}
+     * @throws MathRuntimeException if {@code magnitude == Byte.MIN_VALUE}
      * and {@code sign >= 0}.
      */
     public static byte copySign(byte magnitude, byte sign)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         if ((magnitude >= 0 && sign >= 0) ||
             (magnitude < 0 && sign < 0)) { // Sign is OK.
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Byte.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         } else {
             return (byte) -magnitude; // Flip sign.
         }
@@ -185,17 +185,17 @@ public final class MathUtils {
      * @param sign Sign of the returned value.
      * @return a value with magnitude equal to {@code magnitude} and with the
      * same sign as the {@code sign} argument.
-     * @throws MathArithmeticException if {@code magnitude == Short.MIN_VALUE}
+     * @throws MathRuntimeException if {@code magnitude == Short.MIN_VALUE}
      * and {@code sign >= 0}.
      */
     public static short copySign(short magnitude, short sign)
-            throws MathArithmeticException {
+            throws MathRuntimeException {
         if ((magnitude >= 0 && sign >= 0) ||
             (magnitude < 0 && sign < 0)) { // Sign is OK.
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Short.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         } else {
             return (short) -magnitude; // Flip sign.
         }
@@ -208,17 +208,17 @@ public final class MathUtils {
      * @param sign Sign of the returned value.
      * @return a value with magnitude equal to {@code magnitude} and with the
      * same sign as the {@code sign} argument.
-     * @throws MathArithmeticException if {@code magnitude == Integer.MIN_VALUE}
+     * @throws MathRuntimeException if {@code magnitude == Integer.MIN_VALUE}
      * and {@code sign >= 0}.
      */
     public static int copySign(int magnitude, int sign)
-            throws MathArithmeticException {
+            throws MathRuntimeException {
         if ((magnitude >= 0 && sign >= 0) ||
             (magnitude < 0 && sign < 0)) { // Sign is OK.
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Integer.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         } else {
             return -magnitude; // Flip sign.
         }
@@ -231,17 +231,17 @@ public final class MathUtils {
      * @param sign Sign of the returned value.
      * @return a value with magnitude equal to {@code magnitude} and with the
      * same sign as the {@code sign} argument.
-     * @throws MathArithmeticException if {@code magnitude == Long.MIN_VALUE}
+     * @throws MathRuntimeException if {@code magnitude == Long.MIN_VALUE}
      * and {@code sign >= 0}.
      */
     public static long copySign(long magnitude, long sign)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         if ((magnitude >= 0 && sign >= 0) ||
             (magnitude < 0 && sign < 0)) { // Sign is OK.
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Long.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         } else {
             return -magnitude; // Flip sign.
         }

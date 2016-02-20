@@ -23,7 +23,7 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
@@ -517,7 +517,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> mapDivide(T d)
-        throws NullArgumentException, MathArithmeticException {
+        throws NullArgumentException, MathRuntimeException {
         MathUtils.checkNotNull(d);
         T[] out = MathArrays.buildArray(field, data.length);
         for (int i = 0; i < data.length; i++) {
@@ -529,7 +529,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> mapDivideToSelf(T d)
-        throws NullArgumentException, MathArithmeticException {
+        throws NullArgumentException, MathRuntimeException {
         MathUtils.checkNotNull(d);
         for (int i = 0; i < data.length; i++) {
             data[i] = data[i].divide(d);
@@ -539,14 +539,14 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
 
     /** {@inheritDoc} */
     @Override
-    public FieldVector<T> mapInv() throws MathArithmeticException {
+    public FieldVector<T> mapInv() throws MathRuntimeException {
         T[] out = MathArrays.buildArray(field, data.length);
         final T one = field.getOne();
         for (int i = 0; i < data.length; i++) {
             try {
                 out[i] = one.divide(data[i]);
-            } catch (final MathArithmeticException e) {
-                throw new MathArithmeticException(LocalizedFormats.INDEX, i);
+            } catch (final MathRuntimeException e) {
+                throw new MathRuntimeException(LocalizedFormats.INDEX, i);
             }
         }
         return new ArrayFieldVector<T>(field, out, false);
@@ -554,13 +554,13 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
 
     /** {@inheritDoc} */
     @Override
-    public FieldVector<T> mapInvToSelf() throws MathArithmeticException {
+    public FieldVector<T> mapInvToSelf() throws MathRuntimeException {
         final T one = field.getOne();
         for (int i = 0; i < data.length; i++) {
             try {
                 data[i] = one.divide(data[i]);
-            } catch (final MathArithmeticException e) {
-                throw new MathArithmeticException(LocalizedFormats.INDEX, i);
+            } catch (final MathRuntimeException e) {
+                throw new MathRuntimeException(LocalizedFormats.INDEX, i);
             }
         }
         return this;
@@ -602,7 +602,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> ebeDivide(FieldVector<T> v)
-        throws MathIllegalArgumentException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         try {
             return ebeDivide((ArrayFieldVector<T>) v);
         } catch (ClassCastException cce) {
@@ -611,8 +611,8 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             for (int i = 0; i < data.length; i++) {
                 try {
                     out[i] = data[i].divide(v.getEntry(i));
-                } catch (final MathArithmeticException e) {
-                    throw new MathArithmeticException(LocalizedFormats.INDEX, i);
+                } catch (final MathRuntimeException e) {
+                    throw new MathRuntimeException(LocalizedFormats.INDEX, i);
                 }
             }
             return new ArrayFieldVector<T>(field, out, false);
@@ -625,17 +625,17 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @return a vector containing {@code this[i] / v[i]} for all {@code i}
      * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}
-     * @throws MathArithmeticException if one entry of {@code v} is zero.
+     * @throws MathRuntimeException if one entry of {@code v} is zero.
      */
     public ArrayFieldVector<T> ebeDivide(ArrayFieldVector<T> v)
-        throws MathIllegalArgumentException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         checkVectorDimensions(v.data.length);
         T[] out = MathArrays.buildArray(field, data.length);
         for (int i = 0; i < data.length; i++) {
             try {
                 out[i] = data[i].divide(v.data[i]);
-            } catch (final MathArithmeticException e) {
-                throw new MathArithmeticException(LocalizedFormats.INDEX, i);
+            } catch (final MathRuntimeException e) {
+                throw new MathRuntimeException(LocalizedFormats.INDEX, i);
             }
         }
         return new ArrayFieldVector<T>(field, out, false);
@@ -686,7 +686,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> projection(FieldVector<T> v)
-        throws MathIllegalArgumentException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         return v.mapMultiply(dotProduct(v).divide(v.dotProduct(v)));
     }
 
@@ -695,10 +695,10 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @return projection of {@code this} onto {@code v}
      * @throws MathIllegalArgumentException if {@code v} is not the same size as
      * {@code this}
-     * @throws MathArithmeticException if {@code v} is the null vector.
+     * @throws MathRuntimeException if {@code v} is the null vector.
      */
     public ArrayFieldVector<T> projection(ArrayFieldVector<T> v)
-        throws MathIllegalArgumentException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         return (ArrayFieldVector<T>) v.mapMultiply(dotProduct(v).divide(v.dotProduct(v)));
     }
 

@@ -20,7 +20,7 @@ package org.hipparchus.geometry.euclidean.threed;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -269,11 +269,11 @@ public class Rotation implements Serializable {
    * @param u2 second vector of the origin pair
    * @param v1 desired image of u1 by the rotation
    * @param v2 desired image of u2 by the rotation
-   * @exception MathArithmeticException if the norm of one of the vectors is zero,
+   * @exception MathRuntimeException if the norm of one of the vectors is zero,
    * or if one of the pair is degenerated (i.e. the vectors of the pair are collinear)
    */
   public Rotation(Vector3D u1, Vector3D u2, Vector3D v1, Vector3D v2)
-      throws MathArithmeticException {
+      throws MathRuntimeException {
 
       // build orthonormalized base from u1, u2
       // this fails when vectors are null or collinear, which is forbidden to define a rotation
@@ -325,13 +325,13 @@ public class Rotation implements Serializable {
 
    * @param u origin vector
    * @param v desired image of u by the rotation
-   * @exception MathArithmeticException if the norm of one of the vectors is zero
+   * @exception MathRuntimeException if the norm of one of the vectors is zero
    */
-  public Rotation(Vector3D u, Vector3D v) throws MathArithmeticException {
+  public Rotation(Vector3D u, Vector3D v) throws MathRuntimeException {
 
     double normProduct = u.getNorm() * v.getNorm();
     if (normProduct == 0) {
-        throw new MathArithmeticException(LocalizedFormats.ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR);
+        throw new MathRuntimeException(LocalizedFormats.ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR);
     }
 
     double dot = u.dotProduct(v);

@@ -17,7 +17,7 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.threed.CardanEulerSingularityException;
 import org.hipparchus.geometry.euclidean.threed.NotARotationMatrixException;
@@ -191,7 +191,7 @@ public class RotationTest {
   }
 
   @Test
-  public void testVectorOnePair() throws MathArithmeticException {
+  public void testVectorOnePair() throws MathRuntimeException {
 
     Vector3D u = new Vector3D(3, 2, 1);
     Vector3D v = new Vector3D(-4, 2, 2);
@@ -203,14 +203,14 @@ public class RotationTest {
     try {
         new Rotation(u, Vector3D.ZERO);
         Assert.fail("an exception should have been thrown");
-    } catch (MathArithmeticException e) {
+    } catch (MathRuntimeException e) {
         // expected behavior
     }
 
   }
 
   @Test
-  public void testVectorTwoPairs() throws MathArithmeticException {
+  public void testVectorTwoPairs() throws MathRuntimeException {
 
     Vector3D u1 = new Vector3D(3, 0, 0);
     Vector3D u2 = new Vector3D(0, 5, 0);
@@ -243,7 +243,7 @@ public class RotationTest {
     try {
         new Rotation(u1, u2, Vector3D.ZERO, v2);
         Assert.fail("an exception should have been thrown");
-    } catch (MathArithmeticException e) {
+    } catch (MathRuntimeException e) {
       // expected behavior
     }
 
@@ -731,7 +731,7 @@ public class RotationTest {
   }
 
   @Test
-  public void testIssue639() throws MathArithmeticException{
+  public void testIssue639() throws MathRuntimeException{
       Vector3D u1 = new Vector3D(-1321008684645961.0 /  268435456.0,
                                  -5774608829631843.0 /  268435456.0,
                                  -3822921525525679.0 / 4294967296.0);
@@ -746,7 +746,7 @@ public class RotationTest {
   }
 
   @Test
-  public void testIssue801() throws MathArithmeticException {
+  public void testIssue801() throws MathRuntimeException {
       Vector3D u1 = new Vector3D(0.9999988431610581, -0.0015210774290851095, 0.0);
       Vector3D u2 = new Vector3D(0.0, 0.0, 1.0);
 

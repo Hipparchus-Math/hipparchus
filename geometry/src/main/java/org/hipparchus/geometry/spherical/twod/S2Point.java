@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.spherical.twod;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
@@ -88,9 +88,9 @@ public class S2Point implements Point<Sphere2D> {
     /** Simple constructor.
      * Build a vector from its underlying 3D vector
      * @param vector 3D vector
-     * @exception MathArithmeticException if vector norm is zero
+     * @exception MathRuntimeException if vector norm is zero
      */
-    public S2Point(final Vector3D vector) throws MathArithmeticException {
+    public S2Point(final Vector3D vector) throws MathRuntimeException {
         this(FastMath.atan2(vector.getY(), vector.getX()), Vector3D.angle(Vector3D.PLUS_K, vector),
              vector.normalize());
     }

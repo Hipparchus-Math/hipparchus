@@ -22,7 +22,7 @@ import java.text.NumberFormat;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;
@@ -305,10 +305,10 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
 
     /** {@inheritDoc} */
     @Override
-    public Vector3D normalize() throws MathArithmeticException {
+    public Vector3D normalize() throws MathRuntimeException {
         double s = getNorm();
         if (s == 0) {
-            throw new MathArithmeticException(LocalizedFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
+            throw new MathRuntimeException(LocalizedFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
         }
         return scalarMultiply(1 / s);
     }
@@ -326,13 +326,13 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
      *   Vector3D j = Vector3D.crossProduct(k, i);
      * </code></pre></p>
      * @return a new normalized vector orthogonal to the instance
-     * @exception MathArithmeticException if the norm of the instance is null
+     * @exception MathRuntimeException if the norm of the instance is null
      */
-    public Vector3D orthogonal() throws MathArithmeticException {
+    public Vector3D orthogonal() throws MathRuntimeException {
 
         double threshold = 0.6 * getNorm();
         if (threshold == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
 
         if (FastMath.abs(x) <= threshold) {
@@ -356,13 +356,13 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
      * @param v1 first vector
      * @param v2 second vector
      * @return angular separation between v1 and v2
-     * @exception MathArithmeticException if either vector has a null norm
+     * @exception MathRuntimeException if either vector has a null norm
      */
-    public static double angle(Vector3D v1, Vector3D v2) throws MathArithmeticException {
+    public static double angle(Vector3D v1, Vector3D v2) throws MathRuntimeException {
 
         double normProduct = v1.getNorm() * v2.getNorm();
         if (normProduct == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
 
         double dot = v1.dotProduct(v2);

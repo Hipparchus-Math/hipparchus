@@ -20,7 +20,7 @@ package org.hipparchus.linear;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.util.FastMath;
@@ -112,12 +112,12 @@ public class EigenDecomposition {
      *
      * @param matrix Matrix to decompose.
      * @throws MaxCountExceededException if the algorithm fails to converge.
-     * @throws MathArithmeticException if the decomposition of a general matrix
+     * @throws MathRuntimeException if the decomposition of a general matrix
      * results in a matrix with zero norm
      * @since 3.1
      */
     public EigenDecomposition(final RealMatrix matrix)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         final double symTol = 10 * matrix.getRowDimension() * matrix.getColumnDimension() * Precision.EPSILON;
         isSymmetric = MatrixUtils.isSymmetric(matrix, symTol);
         if (isSymmetric) {
@@ -763,10 +763,10 @@ public class EigenDecomposition {
      * Find eigenvectors from a matrix transformed to Schur form.
      *
      * @param schur the schur transformation of the matrix
-     * @throws MathArithmeticException if the Schur form has a norm of zero
+     * @throws MathRuntimeException if the Schur form has a norm of zero
      */
     private void findEigenVectorsFromSchur(final SchurTransformer schur)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         final double[][] matrixT = schur.getT().getData();
         final double[][] matrixP = schur.getP().getData();
 
@@ -782,7 +782,7 @@ public class EigenDecomposition {
 
         // we can not handle a matrix with zero norm
         if (Precision.equals(norm, 0.0, EPSILON)) {
-           throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+           throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
 
         // Backsubstitute to find vectors of upper triangular form

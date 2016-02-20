@@ -24,7 +24,7 @@ import java.util.List;
 import org.hipparchus.distribution.EnumeratedDistribution;
 import org.hipparchus.distribution.EnumeratedRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
@@ -74,8 +74,8 @@ public class EnumeratedRealDistributionTest {
         }
         try {
             invalid = new EnumeratedRealDistribution(new double[]{1.0, 2.0}, new double[]{0.0, 0.0});
-            Assert.fail("Expected MathArithmeticException");
-        } catch (MathArithmeticException e) {
+            Assert.fail("Expected MathRuntimeException");
+        } catch (MathRuntimeException e) {
         }
         try {
             invalid = new EnumeratedRealDistribution(new double[]{1.0, 2.0}, new double[]{0.0, Double.NaN});

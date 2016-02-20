@@ -16,7 +16,7 @@
  */
 package org.hipparchus;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 
 
@@ -69,16 +69,16 @@ public interface FieldElement<T> {
      * @param a element to divide by
      * @return a new element representing this &divide; a
      * @throws NullArgumentException if {@code a} is {@code null}.
-     * @throws MathArithmeticException if {@code a} is zero
+     * @throws MathRuntimeException if {@code a} is zero
      */
-    T divide(T a) throws NullArgumentException, MathArithmeticException;
+    T divide(T a) throws NullArgumentException, MathRuntimeException;
 
     /**
      * Returns the multiplicative inverse of {@code this} element.
      * @return the inverse of {@code this}.
-     * @throws MathArithmeticException if {@code this} is zero
+     * @throws MathRuntimeException if {@code this} is zero
      */
-    T reciprocal() throws MathArithmeticException;
+    T reciprocal() throws MathRuntimeException;
 
     /** Get the {@link Field} to which the instance belongs.
      * @return {@link Field} to which the instance belongs

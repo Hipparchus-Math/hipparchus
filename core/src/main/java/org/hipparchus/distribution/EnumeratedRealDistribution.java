@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
@@ -72,10 +72,10 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @throws NotPositiveException if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws MathRuntimeException all of the probabilities are 0.
      */
     public EnumeratedRealDistribution(final double[] singletons, final double[] probabilities)
-    throws MathIllegalArgumentException, NotPositiveException, MathArithmeticException,
+    throws MathIllegalArgumentException, NotPositiveException, MathRuntimeException,
            NotFiniteNumberException, NotANumberException {
         this(new Well19937c(), singletons, probabilities);
     }
@@ -92,11 +92,11 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @throws NotPositiveException if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws MathRuntimeException all of the probabilities are 0.
      */
     public EnumeratedRealDistribution(final RandomGenerator rng,
                                     final double[] singletons, final double[] probabilities)
-        throws MathIllegalArgumentException, NotPositiveException, MathArithmeticException,
+        throws MathIllegalArgumentException, NotPositiveException, MathRuntimeException,
                NotFiniteNumberException, NotANumberException {
         super(rng);
 

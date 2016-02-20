@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -440,8 +440,8 @@ public class BigFractionTest {
         BigFraction f2 = BigFraction.ZERO;
         try {
             f1.divide(f2);
-            Assert.fail("expecting MathArithmeticException");
-        } catch (MathArithmeticException ex) {
+            Assert.fail("expecting MathRuntimeException");
+        } catch (MathRuntimeException ex) {
         }
 
         f1 = new BigFraction(0, 5);

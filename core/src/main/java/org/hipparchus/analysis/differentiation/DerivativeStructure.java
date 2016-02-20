@@ -23,7 +23,7 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -944,9 +944,9 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** Evaluate Taylor expansion a derivative structure.
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
-     * @throws MathArithmeticException if factorials becomes too large
+     * @throws MathRuntimeException if factorials becomes too large
      */
-    public double taylor(final double ... delta) throws MathArithmeticException {
+    public double taylor(final double ... delta) throws MathRuntimeException {
         return compiler.taylor(data, 0, delta);
     }
 

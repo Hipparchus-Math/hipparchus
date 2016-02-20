@@ -26,7 +26,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
@@ -89,7 +89,7 @@ public class PolyhedronsSetTest {
     }
 
     @Test
-    public void testTetrahedron() throws MathArithmeticException {
+    public void testTetrahedron() throws MathRuntimeException {
         Vector3D vertex1 = new Vector3D(1, 2, 3);
         Vector3D vertex2 = new Vector3D(2, 2, 4);
         Vector3D vertex3 = new Vector3D(2, 3, 3);
@@ -123,7 +123,7 @@ public class PolyhedronsSetTest {
     }
 
     @Test
-    public void testIsometry() throws MathArithmeticException, MathIllegalArgumentException {
+    public void testIsometry() throws MathRuntimeException, MathIllegalArgumentException {
         Vector3D vertex1 = new Vector3D(1.1, 2.2, 3.3);
         Vector3D vertex2 = new Vector3D(2.0, 2.4, 4.2);
         Vector3D vertex3 = new Vector3D(2.8, 3.3, 3.7);
@@ -247,7 +247,7 @@ public class PolyhedronsSetTest {
     }
 
     @Test
-    public void testIssue780() throws MathArithmeticException {
+    public void testIssue780() throws MathRuntimeException {
         float[] coords = {
             1.000000f, -1.000000f, -1.000000f,
             1.000000f, -1.000000f, 1.000000f,

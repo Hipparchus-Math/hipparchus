@@ -21,7 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooLargeException;
@@ -137,14 +138,14 @@ public class CombinatoricsUtilsTest {
 
         try {
             CombinatoricsUtils.binomialCoefficient(67, 30);
-            Assert.fail("expecting MathArithmeticException");
-        } catch (MathArithmeticException ex) {
+            Assert.fail("expecting MathRuntimeException");
+        } catch (MathRuntimeException ex) {
             // ignored
         }
         try {
             CombinatoricsUtils.binomialCoefficient(67, 34);
-            Assert.fail("expecting MathArithmeticException");
-        } catch (MathArithmeticException ex) {
+            Assert.fail("expecting MathRuntimeException");
+        } catch (MathRuntimeException ex) {
             // ignored
         }
         double x = CombinatoricsUtils.binomialCoefficientDouble(1030, 515);
@@ -167,12 +168,12 @@ public class CombinatoricsUtilsTest {
                 boolean didThrow = false;
                 try {
                     ourResult = CombinatoricsUtils.binomialCoefficient(n, k);
-                } catch (MathArithmeticException ex) {
+                } catch (MathRuntimeException ex) {
                     didThrow = true;
                 }
                 try {
                     exactResult = binomialCoefficient(n, k);
-                } catch (MathArithmeticException ex) {
+                } catch (MathRuntimeException ex) {
                     shouldThrow = true;
                 }
                 Assert.assertEquals(n + " choose " + k, exactResult, ourResult);
@@ -199,8 +200,8 @@ public class CombinatoricsUtilsTest {
         // This one should throw
         try {
             CombinatoricsUtils.binomialCoefficient(700, 300);
-            Assert.fail("Expecting MathArithmeticException");
-        } catch (MathArithmeticException ex) {
+            Assert.fail("Expecting MathRuntimeException");
+        } catch (MathRuntimeException ex) {
             // Expected
         }
 
@@ -248,8 +249,8 @@ public class CombinatoricsUtilsTest {
         }
         try {
             CombinatoricsUtils.factorial(21);
-            Assert.fail("expecting MathArithmeticException");
-        } catch (MathArithmeticException ex) {
+            Assert.fail("expecting MathRuntimeException");
+        } catch (MathRuntimeException ex) {
             // ignored
         }
         Assert.assertTrue("expecting infinite factorial value", Double.isInfinite(CombinatoricsUtils.factorialDouble(171)));
@@ -307,7 +308,7 @@ public class CombinatoricsUtilsTest {
         CombinatoricsUtils.stirlingS2(3, 4);
     }
 
-    @Test(expected=MathArithmeticException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testStirlingS2Overflow() {
         CombinatoricsUtils.stirlingS2(26, 9);
     }
@@ -333,7 +334,7 @@ public class CombinatoricsUtilsTest {
     /**
      * Exact (caching) recursive implementation to test against
      */
-    private long binomialCoefficient(int n, int k) throws MathArithmeticException {
+    private long binomialCoefficient(int n, int k) throws MathRuntimeException {
         if (binomialCache.size() > n) {
             Long cachedResult = binomialCache.get(n).get(Integer.valueOf(k));
             if (cachedResult != null) {
@@ -357,7 +358,7 @@ public class CombinatoricsUtilsTest {
                 binomialCoefficient(n - 1, k));
         }
         if (result == -1) {
-            throw new MathArithmeticException();
+            throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
         }
         for (int i = binomialCache.size(); i < n + 1; i++) {
             binomialCache.add(new HashMap<Integer, Long>());

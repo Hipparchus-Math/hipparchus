@@ -26,7 +26,7 @@ import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.NullArgumentException;
@@ -463,12 +463,12 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return \(P(D_n < d)\)
-     * @throws MathArithmeticException if algorithm fails to convert {@code h} to a
+     * @throws MathRuntimeException if algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\)
      */
     public double cdf(double d, int n)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         return cdf(d, n, false);
     }
 
@@ -482,12 +482,12 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return \(P(D_n < d)\)
-     * @throws MathArithmeticException if the algorithm fails to convert {@code h} to a
+     * @throws MathRuntimeException if the algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\)
      */
     public double cdfExact(double d, int n)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         return cdf(d, n, true);
     }
 
@@ -503,12 +503,12 @@ public class KolmogorovSmirnovTest {
      *        gain speed. Almost never choose {@code true} in real applications unless you are very
      *        sure; {@code true} is almost solely for verification purposes.
      * @return \(P(D_n < d)\)
-     * @throws MathArithmeticException if algorithm fails to convert {@code h} to a
+     * @throws MathRuntimeException if algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\).
      */
     public double cdf(double d, int n, boolean exact)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
 
         final double ninv = 1 / ((double) n);
         final double ninvhalf = 0.5 * ninv;
@@ -545,12 +545,12 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return the two-sided probability of \(P(D_n < d)\)
-     * @throws MathArithmeticException if algorithm fails to convert {@code h} to a
+     * @throws MathRuntimeException if algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\).
      */
     private double exactK(double d, int n)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
 
         final int k = (int) Math.ceil(n * d);
 

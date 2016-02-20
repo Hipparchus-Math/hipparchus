@@ -16,7 +16,7 @@ package org.hipparchus.util;
 import java.util.Arrays;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NonMonotonicSequenceException;
@@ -1017,14 +1017,14 @@ public class MathArraysTest {
                                 MathArrays.normalizeArray(testValues3, 1),
                                 Double.MIN_VALUE);
 
-        // Zero sum -> MathArithmeticException
+        // Zero sum -> MathRuntimeException
         double[] zeroSum = new double[] {-1, 1};
         try {
             MathArrays.normalizeArray(zeroSum, 1);
-            Assert.fail("expecting MathArithmeticException");
-        } catch (MathArithmeticException ex) {}
+            Assert.fail("expecting MathRuntimeException");
+        } catch (MathRuntimeException ex) {}
 
-        // Infinite elements -> MathArithmeticException
+        // Infinite elements -> MathRuntimeException
         double[] hasInf = new double[] {1, 2, 1, Double.NEGATIVE_INFINITY};
         try {
             MathArrays.normalizeArray(hasInf, 1);

@@ -22,7 +22,7 @@ import java.math.BigInteger;
 
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -639,12 +639,12 @@ public class BigFraction
      * @param bg the {@code BigInteger} to divide by, must not be {@code null}
      * @return a {@link BigFraction} instance with the resulting values
      * @throws NullArgumentException if the {@code BigInteger} is {@code null}
-     * @throws MathArithmeticException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the fraction to divide by is zero
      */
     public BigFraction divide(final BigInteger bg) {
         MathUtils.checkNotNull(bg);
         if (bg.signum() == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
         }
         if (numerator.signum() == 0) {
             return ZERO;
@@ -660,7 +660,7 @@ public class BigFraction
      *
      * @param i the {@code int} to divide by
      * @return a {@link BigFraction} instance with the resulting values
-     * @throws MathArithmeticException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the fraction to divide by is zero
      */
     public BigFraction divide(final int i) {
         return divide(BigInteger.valueOf(i));
@@ -674,7 +674,7 @@ public class BigFraction
      *
      * @param l the {@code long} to divide by
      * @return a {@link BigFraction} instance with the resulting values
-     * @throws MathArithmeticException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the fraction to divide by is zero
      */
     public BigFraction divide(final long l) {
         return divide(BigInteger.valueOf(l));
@@ -689,13 +689,13 @@ public class BigFraction
      * @param fraction Fraction to divide by, must not be {@code null}.
      * @return a {@link BigFraction} instance with the resulting values.
      * @throws NullArgumentException if the {@code fraction} is {@code null}.
-     * @throws MathArithmeticException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the fraction to divide by is zero
      */
     @Override
     public BigFraction divide(final BigFraction fraction) {
         MathUtils.checkNotNull(fraction, LocalizedFormats.FRACTION);
         if (fraction.numerator.signum() == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
         }
         if (numerator.signum() == 0) {
             return ZERO;

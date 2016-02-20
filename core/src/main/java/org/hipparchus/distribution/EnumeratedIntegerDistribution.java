@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NotFiniteNumberException;
 import org.hipparchus.exception.NotPositiveException;
@@ -71,10 +71,10 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
      * @throws NotPositiveException if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws MathRuntimeException all of the probabilities are 0.
      */
     public EnumeratedIntegerDistribution(final int[] singletons, final double[] probabilities)
-    throws MathIllegalArgumentException, NotPositiveException, MathArithmeticException,
+    throws MathIllegalArgumentException, NotPositiveException, MathRuntimeException,
            NotFiniteNumberException, NotANumberException{
         this(new Well19937c(), singletons, probabilities);
     }
@@ -91,11 +91,11 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
      * @throws NotPositiveException if any of the probabilities are negative.
      * @throws NotFiniteNumberException if any of the probabilities are infinite.
      * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws MathRuntimeException all of the probabilities are 0.
      */
     public EnumeratedIntegerDistribution(final RandomGenerator rng,
                                        final int[] singletons, final double[] probabilities)
-        throws MathIllegalArgumentException, NotPositiveException, MathArithmeticException,
+        throws MathIllegalArgumentException, NotPositiveException, MathRuntimeException,
                 NotFiniteNumberException, NotANumberException {
         super(rng);
         innerDistribution = new EnumeratedDistribution<Integer>(

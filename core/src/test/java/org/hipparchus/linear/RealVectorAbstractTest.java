@@ -48,7 +48,7 @@ import org.hipparchus.analysis.function.Tan;
 import org.hipparchus.analysis.function.Tanh;
 import org.hipparchus.analysis.function.Ulp;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathUnsupportedOperationException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NumberIsTooSmallException;
@@ -981,7 +981,7 @@ public abstract class RealVectorAbstractTest {
         doTestProjection(true);
     }
 
-    @Test(expected = MathArithmeticException.class)
+    @Test(expected = MathRuntimeException.class)
     public void testProjectionNullVector() {
         create(new double[4]).projection(create(new double[4]));
     }
@@ -1062,12 +1062,12 @@ public abstract class RealVectorAbstractTest {
         }
     }
 
-    @Test(expected=MathArithmeticException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testUnitVectorNullVector() {
         doTestUnitVectorNullVector(false);
     }
 
-    @Test(expected=MathArithmeticException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testUnitizeNullVector() {
         doTestUnitVectorNullVector(true);
     }
@@ -1318,14 +1318,14 @@ public abstract class RealVectorAbstractTest {
         doTestCosine(true);
     }
 
-    @Test(expected=MathArithmeticException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testCosineLeftNullVector() {
         final RealVector v = create(new double[] {0, 0, 0});
         final RealVector w = create(new double[] {1, 0, 0});
         v.cosine(w);
     }
 
-    @Test(expected=MathArithmeticException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testCosineRightNullVector() {
         final RealVector v = create(new double[] {0, 0, 0});
         final RealVector w = create(new double[] {1, 0, 0});

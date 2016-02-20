@@ -21,7 +21,7 @@ import java.math.BigInteger;
 
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.ArithmeticUtils;
@@ -257,17 +257,17 @@ public class Fraction
      * reduced to lowest terms.
      * @param num the numerator.
      * @param den the denominator.
-     * @throws MathArithmeticException if the denominator is {@code zero}
+     * @throws MathRuntimeException if the denominator is {@code zero}
      */
     public Fraction(int num, int den) {
         if (den == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
                                               num, den);
         }
         if (den < 0) {
             if (num == Integer.MIN_VALUE ||
                 den == Integer.MIN_VALUE) {
-                throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_FRACTION,
+                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_FRACTION,
                                                   num, den);
             }
             num = -num;
@@ -412,7 +412,7 @@ public class Fraction
     @Override
     public Fraction negate() {
         if (numerator==Integer.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_FRACTION, numerator, denominator);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_FRACTION, numerator, denominator);
         }
         return new Fraction(-numerator, denominator);
     }
@@ -433,7 +433,7 @@ public class Fraction
      * @param fraction  the fraction to add, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
      * @throws NullArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the resulting numerator or denominator exceeds
+     * @throws MathRuntimeException if the resulting numerator or denominator exceeds
      *  {@code Integer.MAX_VALUE}
      */
     @Override
@@ -457,7 +457,7 @@ public class Fraction
      * @param fraction  the fraction to subtract, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
      * @throws NullArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the resulting numerator or denominator
+     * @throws MathRuntimeException if the resulting numerator or denominator
      *   cannot be represented in an {@code int}.
      */
     @Override
@@ -481,7 +481,7 @@ public class Fraction
      * @param isAdd true to add, false to subtract
      * @return a {@code Fraction} instance with the resulting values
      * @throws NullArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the resulting numerator or denominator
+     * @throws MathRuntimeException if the resulting numerator or denominator
      *   cannot be represented in an {@code int}.
      */
     private Fraction addSub(Fraction fraction, boolean isAdd) {
@@ -523,7 +523,7 @@ public class Fraction
         // result is (t/d2) / (u'/d1)(v'/d2)
         BigInteger w = t.divide(BigInteger.valueOf(d2));
         if (w.bitLength() > 31) {
-            throw new MathArithmeticException(LocalizedFormats.NUMERATOR_OVERFLOW_AFTER_MULTIPLY,
+            throw new MathRuntimeException(LocalizedFormats.NUMERATOR_OVERFLOW_AFTER_MULTIPLY,
                                               w);
         }
         return new Fraction (w.intValue(),
@@ -538,7 +538,7 @@ public class Fraction
      * @param fraction  the fraction to multiply by, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
      * @throws NullArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the resulting numerator or denominator exceeds
+     * @throws MathRuntimeException if the resulting numerator or denominator exceeds
      *  {@code Integer.MAX_VALUE}
      */
     @Override
@@ -574,8 +574,8 @@ public class Fraction
      * @param fraction  the fraction to divide by, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
      * @throws IllegalArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the fraction to divide by is zero
-     * @throws MathArithmeticException if the resulting numerator or denominator exceeds
+     * @throws MathRuntimeException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the resulting numerator or denominator exceeds
      *  {@code Integer.MAX_VALUE}
      */
     @Override
@@ -584,7 +584,7 @@ public class Fraction
             throw new NullArgumentException(LocalizedFormats.FRACTION);
         }
         if (fraction.numerator == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_FRACTION_TO_DIVIDE_BY,
+            throw new MathRuntimeException(LocalizedFormats.ZERO_FRACTION_TO_DIVIDE_BY,
                                               fraction.numerator, fraction.denominator);
         }
         return multiply(fraction.reciprocal());
@@ -620,11 +620,11 @@ public class Fraction
      * @param numerator  the numerator, for example the three in 'three sevenths'
      * @param denominator  the denominator, for example the seven in 'three sevenths'
      * @return a new fraction instance, with the numerator and denominator reduced
-     * @throws MathArithmeticException if the denominator is {@code zero}
+     * @throws MathRuntimeException if the denominator is {@code zero}
      */
     public static Fraction getReducedFraction(int numerator, int denominator) {
         if (denominator == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
                                               numerator, denominator);
         }
         if (numerator==0) {
@@ -637,7 +637,7 @@ public class Fraction
         if (denominator < 0) {
             if (numerator==Integer.MIN_VALUE ||
                     denominator==Integer.MIN_VALUE) {
-                throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_FRACTION,
+                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_FRACTION,
                                                   numerator, denominator);
             }
             numerator = -numerator;

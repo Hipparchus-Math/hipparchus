@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -90,7 +90,7 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
 
         // Check for overflow.
         if (Double.isInfinite(weightSum)) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         }
 
         // Store each distribution and its normalized weight.

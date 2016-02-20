@@ -22,7 +22,7 @@ import java.util.List;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.ZeroException;
@@ -82,14 +82,14 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
      * and so on)
      * @exception ZeroException if the abscissa difference between added point
      * and a previous point is zero (i.e. the two points are at same abscissa)
-     * @exception MathArithmeticException if the number of derivatives is larger
+     * @exception MathRuntimeException if the number of derivatives is larger
      * than 20, which prevents computation of a factorial
      * @throws MathIllegalArgumentException if derivative structures are inconsistent
      * @throws NullArgumentException if x is null
      */
     @SafeVarargs
     public final void addSamplePoint(final T x, final T[] ... value)
-        throws ZeroException, MathArithmeticException,
+        throws ZeroException, MathRuntimeException,
                MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(x);

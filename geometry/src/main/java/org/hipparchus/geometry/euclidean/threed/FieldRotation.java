@@ -22,7 +22,7 @@ import java.io.Serializable;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -241,11 +241,11 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * @param u2 second vector of the origin pair
      * @param v1 desired image of u1 by the rotation
      * @param v2 desired image of u2 by the rotation
-     * @exception MathArithmeticException if the norm of one of the vectors is zero,
+     * @exception MathRuntimeException if the norm of one of the vectors is zero,
      * or if one of the pair is degenerated (i.e. the vectors of the pair are collinear)
      */
     public FieldRotation(FieldVector3D<T> u1, FieldVector3D<T> u2, FieldVector3D<T> v1, FieldVector3D<T> v2)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
 
         // build orthonormalized base from u1, u2
         // this fails when vectors are null or collinear, which is forbidden to define a rotation
@@ -290,13 +290,13 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
      * @param u origin vector
      * @param v desired image of u by the rotation
-     * @exception MathArithmeticException if the norm of one of the vectors is zero
+     * @exception MathRuntimeException if the norm of one of the vectors is zero
      */
-    public FieldRotation(final FieldVector3D<T> u, final FieldVector3D<T> v) throws MathArithmeticException {
+    public FieldRotation(final FieldVector3D<T> u, final FieldVector3D<T> v) throws MathRuntimeException {
 
         final T normProduct = u.getNorm().multiply(v.getNorm());
         if (normProduct.getReal() == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR);
         }
 
         final T dot = FieldVector3D.dotProduct(u, v);

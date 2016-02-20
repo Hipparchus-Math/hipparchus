@@ -23,7 +23,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.util.FastMath;
@@ -199,12 +199,12 @@ public class Vector1DTest {
     }
 
     @Test
-    public void testNormalize() throws MathArithmeticException {
+    public void testNormalize() throws MathRuntimeException {
         Assert.assertEquals(1.0, new Vector1D(5).normalize().getNorm(), 1.0e-12);
         try {
             Vector1D.ZERO.normalize();
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException ae) {
+        } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }

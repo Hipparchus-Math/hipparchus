@@ -26,7 +26,7 @@ import java.math.RoundingMode;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 
 /**
  * Arbitrary precision decimal number.
@@ -248,30 +248,30 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
     /**
      * {@inheritDoc}
      *
-     * @throws MathArithmeticException if {@code a} is zero
+     * @throws MathRuntimeException if {@code a} is zero
      */
     @Override
-    public BigReal divide(BigReal a) throws MathArithmeticException {
+    public BigReal divide(BigReal a) throws MathRuntimeException {
         try {
             return new BigReal(d.divide(a.d, scale, roundingMode));
         } catch (ArithmeticException e) {
             // Division by zero has occurred
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NOT_ALLOWED);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NOT_ALLOWED);
         }
     }
 
     /**
      * {@inheritDoc}
      *
-     * @throws MathArithmeticException if {@code this} is zero
+     * @throws MathRuntimeException if {@code this} is zero
      */
     @Override
-    public BigReal reciprocal() throws MathArithmeticException {
+    public BigReal reciprocal() throws MathRuntimeException {
         try {
             return new BigReal(BigDecimal.ONE.divide(d, scale, roundingMode));
         } catch (ArithmeticException e) {
             // Division by zero has occurred
-            throw new MathArithmeticException(LocalizedFormats.ZERO_NOT_ALLOWED);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_NOT_ALLOWED);
         }
     }
 
