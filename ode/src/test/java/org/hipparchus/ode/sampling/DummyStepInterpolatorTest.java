@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.AbstractStepInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -33,7 +33,7 @@ import org.junit.Test;
 public class DummyStepInterpolatorTest {
 
   @Test
-  public void testNoReset() throws MaxCountExceededException {
+  public void testNoReset() throws MathIllegalStateException {
 
     double[]   y    =   { 0.0, 1.0, -2.0 };
     DummyStepInterpolator interpolator = new DummyStepInterpolator(y, new double[y.length], true);
@@ -49,7 +49,7 @@ public class DummyStepInterpolatorTest {
   }
 
   @Test
-  public void testFixedState() throws MaxCountExceededException {
+  public void testFixedState() throws MathIllegalStateException {
 
     double[]   y    =   { 1.0, 3.0, -4.0 };
     DummyStepInterpolator interpolator = new DummyStepInterpolator(y, new double[y.length], true);
@@ -73,7 +73,7 @@ public class DummyStepInterpolatorTest {
 
   @Test
   public void testSerialization()
-  throws IOException, ClassNotFoundException, MaxCountExceededException {
+  throws IOException, ClassNotFoundException, MathIllegalStateException {
 
     double[]   y    =   { 0.0, 1.0, -2.0 };
     DummyStepInterpolator interpolator = new DummyStepInterpolator(y, new double[y.length], true);

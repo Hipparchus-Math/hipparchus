@@ -21,7 +21,7 @@ import java.util.Iterator;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 
 /**
@@ -121,7 +121,7 @@ public class IntegerSequence {
     /**
      * Utility that increments a counter until a maximum is reached, at
      * which point, the instance will by default throw a
-     * {@link MaxCountExceededException}.
+     * {@link MathIllegalStateException}.
      * However, the user is able to override this behaviour by defining a
      * custom {@link MaxCountExceededCallback callback}, in order to e.g.
      * select which exception must be thrown.
@@ -132,8 +132,8 @@ public class IntegerSequence {
             = new MaxCountExceededCallback() {
                     /** {@inheritDoc} */
                     @Override
-                    public void trigger(int max) throws MaxCountExceededException {
-                        throw new MaxCountExceededException(max);
+                    public void trigger(int max) throws MathIllegalStateException {
+                        throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
                     }
                 };
 
@@ -157,9 +157,9 @@ public class IntegerSequence {
              * Function called when the maximal count has been reached.
              *
              * @param maximalCount Maximal count.
-             * @throws MaxCountExceededException at counter exhaustion
+             * @throws MathIllegalStateException at counter exhaustion
              */
-            void trigger(int maximalCount) throws MaxCountExceededException;
+            void trigger(int maximalCount) throws MathIllegalStateException;
         }
 
         /**
@@ -281,7 +281,7 @@ public class IntegerSequence {
          * Checks whether incrementing the counter {@code nTimes} is allowed.
          *
          * @return {@code false} if calling {@link #increment()}
-         * will trigger a {@code MaxCountExceededException},
+         * will trigger a {@code MathIllegalStateException},
          * {@code true} otherwise.
          */
         public boolean canIncrement() {
@@ -307,12 +307,12 @@ public class IntegerSequence {
          * Performs multiple increments.
          *
          * @param nTimes Number of increments.
-         * @throws MaxCountExceededException at counter exhaustion.
+         * @throws MathIllegalStateException at counter exhaustion.
          * @throws MathIllegalArgumentException if {@code nTimes <= 0}.
          *
          * @see #increment()
          */
-        public void increment(int nTimes) throws MaxCountExceededException {
+        public void increment(int nTimes) throws MathIllegalStateException {
             if (nTimes <= 0) {
                 throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                        nTimes, 0);
@@ -331,14 +331,14 @@ public class IntegerSequence {
          * callback object passed to the
          * {@link #withCallback(MaxCountExceededCallback)} method.
          * If not explictly set, a default callback is used that will throw
-         * a {@code MaxCountExceededException}.
+         * a {@code MathIllegalStateException}.
          *
-         * @throws MaxCountExceededException at counter exhaustion, unless a
+         * @throws MathIllegalStateException at counter exhaustion, unless a
          * custom {@link MaxCountExceededCallback callback} has been set.
          *
          * @see #increment(int)
          */
-        public void increment() throws MaxCountExceededException {
+        public void increment() throws MathIllegalStateException {
             increment(1);
         }
 

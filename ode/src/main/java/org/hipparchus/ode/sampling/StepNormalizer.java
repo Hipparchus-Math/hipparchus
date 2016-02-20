@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -197,11 +197,11 @@ public class StepNormalizer implements StepHandler {
      * should build a local copy using the clone method and store this
      * copy.
      * @param isLast true if the step is the last one
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
     public void handleStep(final StepInterpolator interpolator, final boolean isLast)
-        throws MaxCountExceededException {
+        throws MathIllegalStateException {
         // The first time, update the last state with the start information.
         if (lastState == null) {
             firstTime = interpolator.getPreviousTime();
@@ -286,11 +286,11 @@ public class StepNormalizer implements StepHandler {
      * @param interpolator interpolator for the last accepted step, to use to
      * get the interpolated information
      * @param t the time for which to store the interpolated information
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
     private void storeStep(StepInterpolator interpolator, double t)
-        throws MaxCountExceededException {
+        throws MathIllegalStateException {
         lastTime = t;
         interpolator.setInterpolatedTime(lastTime);
         System.arraycopy(interpolator.getInterpolatedState(), 0,

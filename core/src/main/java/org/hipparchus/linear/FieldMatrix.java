@@ -209,7 +209,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
    * @throws MathIllegalArgumentException if the indices are not valid.
    */
   void copySubMatrix(int[] selectedRows, int[] selectedColumns, T[][] destination)
-  throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException,
+  throws MathIllegalArgumentException, NullArgumentException,
   MathIllegalArgumentException;
 
     /**
@@ -248,8 +248,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @since 2.0
      */
     void setSubMatrix(T[][] subMatrix, int row, int column)
-        throws MathIllegalArgumentException,
-        MathIllegalArgumentException, NullArgumentException;
+        throws MathIllegalArgumentException, NullArgumentException;
 
    /**
     * Get the entries in row number {@code row}

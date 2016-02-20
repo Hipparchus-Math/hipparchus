@@ -177,7 +177,7 @@ public class LoessInterpolator
     @Override
     public final PolynomialSplineFunction interpolate(final double[] xval,
                                                       final double[] yval)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         return new SplineInterpolator().interpolate(xval, smooth(xval, yval));
     }
 
@@ -367,7 +367,7 @@ public class LoessInterpolator
      * larger than 2/n).
      */
     public final double[] smooth(final double[] xval, final double[] yval)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException, NumberIsTooSmallException {
         if (xval.length != yval.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);

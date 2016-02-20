@@ -18,10 +18,8 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.Incrementor;
@@ -197,8 +195,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
     /** {@inheritDoc} */
     @Override
     public double solve(int maxEval, FUNC f, double min, double max, double startValue)
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         // Initialization.
         setup(maxEval, f, min, max, startValue);
 
@@ -215,8 +212,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
     /** {@inheritDoc} */
     @Override
     public double solve(int maxEval, FUNC f, double startValue)
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         return solve(maxEval, f, Double.NaN, Double.NaN, startValue);
     }
 
@@ -231,7 +227,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      * a root and the solver requires it.
      */
     protected abstract double doSolve()
-        throws MathIllegalStateException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
     /**
      * Check whether the function takes opposite signs at the endpoints.
@@ -318,10 +314,6 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      */
     protected void incrementEvaluationCount()
         throws MathIllegalStateException {
-        try {
-            evaluations.incrementCount();
-        } catch (MaxCountExceededException e) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, e.getMax());
-        }
+        evaluations.incrementCount();
     }
 }

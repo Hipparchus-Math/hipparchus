@@ -20,7 +20,6 @@ import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.stat.ranking.NaNStrategy;
@@ -170,7 +169,7 @@ public class WilcoxonSignedRankTest {
      * have the same length.
      */
     public double wilcoxonSignedRank(final double[] x, final double[] y)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException {
 
         ensureDataConformance(x, y);
 
@@ -299,13 +298,13 @@ public class WilcoxonSignedRankTest {
      * and {@code x.length} > 30
      * @throws MathIllegalStateException if the p-value can not be computed due to
      * a convergence error
-     * @throws MaxCountExceededException if the maximum number of iterations
+     * @throws MathIllegalStateException if the maximum number of iterations
      * is exceeded
      */
     public double wilcoxonSignedRankTest(final double[] x, final double[] y,
                                          final boolean exactPValue)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException,
-        NumberIsTooLargeException, MathIllegalStateException, MaxCountExceededException {
+        throws NullArgumentException, MathIllegalArgumentException,
+        NumberIsTooLargeException, MathIllegalStateException {
 
         ensureDataConformance(x, y);
 

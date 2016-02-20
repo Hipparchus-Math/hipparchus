@@ -24,7 +24,7 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
@@ -118,7 +118,7 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
     protected <T extends RealFieldElement<T>> void doTestMissedEndEvent(final Field<T> field,
                                                                         final double epsilonT, final double epsilonY)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-            MaxCountExceededException, MathIllegalArgumentException {
+            MathIllegalArgumentException, MathIllegalStateException {
         final T   t0     = field.getZero().add(1878250320.0000029);
         final T   tEvent = field.getZero().add(1878250379.9999986);
         final T[] k      = MathArrays.buildArray(field, 3);
@@ -197,7 +197,7 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
 
     protected <T extends RealFieldElement<T>> void doTestSanityChecks(Field<T> field)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
         RungeKuttaFieldIntegrator<T> integrator = createIntegrator(field, field.getZero().add(0.01));
         try  {
             TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
@@ -225,7 +225,7 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
                                                                          final double safetyTimeFactor,
                                                                          final double epsilonT)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         @SuppressWarnings("unchecked")
         TestFieldProblemAbstract<T>[] allProblems =
@@ -289,7 +289,7 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
                                                                    final double epsilonMaxTime,
                                                                    final String name)
          throws MathIllegalArgumentException, NumberIsTooSmallException,
-                MaxCountExceededException, MathIllegalArgumentException {
+                MathIllegalArgumentException, MathIllegalStateException {
 
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001);
@@ -315,7 +315,7 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
                                                                  final double epsilonMaxTime,
                                                                  final String name)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.2);
@@ -341,7 +341,7 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
                                                                   final double epsilonMaxTime,
                                                                   final String name)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.001).abs();
@@ -363,7 +363,7 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
 
     protected <T extends RealFieldElement<T>> void doTestKepler(Field<T> field, double expectedMaxError, double epsilon)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field, field.getZero().add(0.9));
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.0003);
@@ -388,7 +388,7 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
             maxError = pb.getField().getZero();
         }
         public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
-                        throws MaxCountExceededException {
+                        throws MathIllegalStateException {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
             T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
@@ -409,7 +409,7 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
 
     protected <T extends RealFieldElement<T>> void doTestStepSize(final Field<T> field, final double epsilon)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
         final T step = field.getZero().add(1.23456);
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
         integ.addStepHandler(new FieldStepHandler<T>() {

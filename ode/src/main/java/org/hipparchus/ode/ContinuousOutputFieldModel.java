@@ -23,7 +23,7 @@ import java.util.List;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.FieldStepHandler;
 import org.hipparchus.ode.sampling.FieldStepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -113,11 +113,11 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
      * propagation direction, hole between the dates)
      * @exception MathIllegalArgumentException if the dimensions of the states or
      * the number of secondary states do not match
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * during step finalization
      */
     public void append(final ContinuousOutputFieldModel<T> model)
-        throws MathIllegalArgumentException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (model.steps.size() == 0) {
             return;
@@ -190,11 +190,11 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
      * the instance for later use.
      * @param interpolator interpolator for the last accepted step.
      * @param isLast true if the step is the last one
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * during step finalization
      */
     public void handleStep(final FieldStepInterpolator<T> interpolator, final boolean isLast)
-        throws MaxCountExceededException {
+        throws MathIllegalStateException {
 
         if (steps.size() == 0) {
             initialTime = interpolator.getPreviousState().getTime();

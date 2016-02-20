@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.MathArrays;
@@ -217,7 +217,7 @@ class DormandPrince853FieldStepInterpolator<T extends RealFieldElement<T>>
     protected FieldODEStateAndDerivative<T> computeInterpolatedStateAndDerivatives(final FieldEquationsMapper<T> mapper,
                                                                                    final T time, final T theta,
                                                                                    final T thetaH, final T oneMinusThetaH)
-        throws MaxCountExceededException {
+        throws MathIllegalStateException {
 
         final T one      = time.getField().getOne();
         final T eta      = one.subtract(theta);

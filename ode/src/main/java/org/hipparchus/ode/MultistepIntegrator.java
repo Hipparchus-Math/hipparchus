@@ -20,7 +20,6 @@ package org.hipparchus.ode;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.ode.nonstiff.AdaptiveStepsizeIntegrator;
@@ -209,12 +208,12 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
      * (can be set to a value smaller than <code>t0</code> for backward integration)
      * @exception MathIllegalArgumentException if arrays dimension do not match equations settings
      * @exception NumberIsTooSmallException if integration step is too small
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      */
     protected void start(final double t0, final double[] y0, final double t)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         // make sure NO user event nor user step handler is triggered,
         // this is the task of the top level integrator, not the task
@@ -380,7 +379,7 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
         /** {@inheritDoc} */
         @Override
         public void handleStep(StepInterpolator interpolator, boolean isLast)
-            throws MaxCountExceededException {
+            throws MathIllegalStateException {
 
             final double prev = interpolator.getPreviousTime();
             final double curr = interpolator.getCurrentTime();

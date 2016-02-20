@@ -72,7 +72,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
      * @see #Array2DRowRealMatrix(double[][], boolean)
      */
     public Array2DRowRealMatrix(final double[][] d)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         copyIn(d);
     }
 
@@ -93,7 +93,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
      * @see #Array2DRowRealMatrix(double[][])
      */
     public Array2DRowRealMatrix(final double[][] d, final boolean copyArray)
-        throws MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException,
         NullArgumentException {
         if (copyArray) {
             copyIn(d);
@@ -264,7 +264,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     @Override
     public void setSubMatrix(final double[][] subMatrix, final int row,
                              final int column)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null) {
             if (row > 0) {
                 throw new MathIllegalStateException(LocalizedFormats.FIRST_ROWS_NOT_INITIALIZED_YET, row);
@@ -542,7 +542,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
      * @throws NullArgumentException if the input array is {@code null}.
      */
     private void copyIn(final double[][] in)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         setSubMatrix(in, 0, 0);
     }
 }

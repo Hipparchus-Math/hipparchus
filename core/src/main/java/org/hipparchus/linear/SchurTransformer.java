@@ -18,7 +18,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -126,7 +126,7 @@ class SchurTransformer {
 
     /**
      * Transform original matrix to Schur form.
-     * @throws MaxCountExceededException if the transformation does not converge
+     * @throws MathIllegalStateException if the transformation does not converge
      */
     private void transform() {
         final int n = matrixT.length;
@@ -202,7 +202,7 @@ class SchurTransformer {
 
                 // stop transformation after too many iterations
                 if (++iteration > MAX_ITERATIONS) {
-                    throw new MaxCountExceededException(LocalizedFormats.CONVERGENCE_FAILED,
+                    throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED,
                                                         MAX_ITERATIONS);
                 }
 

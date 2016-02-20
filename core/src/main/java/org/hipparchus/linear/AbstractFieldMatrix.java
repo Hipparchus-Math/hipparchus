@@ -403,7 +403,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     /** {@inheritDoc} */
     @Override
     public void copySubMatrix(int[] selectedRows, int[] selectedColumns, T[][] destination)
-        throws MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException,
         NullArgumentException, MathIllegalArgumentException {
         // safety checks
         checkSubMatrixIndex(selectedRows, selectedColumns);
@@ -428,8 +428,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
-        throws MathIllegalArgumentException,
-        MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (subMatrix == null) {
             throw new NullArgumentException();
         }

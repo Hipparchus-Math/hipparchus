@@ -21,7 +21,7 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
 import org.hipparchus.ode.FieldEquationsMapper;
@@ -248,13 +248,13 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * @param state0 state at integration start time
      * @param mapper mapper for all the equations
      * @return first integration step
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     public T initializeStep(final boolean forward, final int order, final T[] scale,
                             final FieldODEStateAndDerivative<T> state0,
                             final FieldEquationsMapper<T> mapper)
-        throws MaxCountExceededException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (initialStep.getReal() > 0) {
             // use the user provided value

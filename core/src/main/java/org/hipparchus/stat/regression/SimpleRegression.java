@@ -719,7 +719,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * <code>Double.NaN</code>.</p>
      *
      * @return significance level for slope/correlation
-     * @throws org.hipparchus.exception.MaxCountExceededException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the significance level can not be computed.
      */
     public double getSignificance() {

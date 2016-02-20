@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -245,13 +245,13 @@ public class InterpolatingMicrosphere {
      * @param copy Whether to copy the given array.
      * @throws MathIllegalArgumentException if the length of {@code n}
      * does not match the space dimension.
-     * @throws MaxCountExceededException if the method has been called
+     * @throws MathIllegalStateException if the method has been called
      * more times than the size of the sphere.
      */
     protected void add(double[] normal,
                        boolean copy) {
         if (microsphere.size() >= size) {
-            throw new MaxCountExceededException(size);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, size);
         }
         if (normal.length > dimension) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

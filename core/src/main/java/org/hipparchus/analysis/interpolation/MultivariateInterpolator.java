@@ -44,6 +44,5 @@ public interface MultivariateInterpolator {
      * @throws NullArgumentException if the arguments are {@code null}.
      */
     MultivariateFunction interpolate(double[][] xval, double[] yval)
-        throws MathIllegalArgumentException,
-               MathIllegalArgumentException, NullArgumentException;
+        throws MathIllegalArgumentException, NullArgumentException;
 }

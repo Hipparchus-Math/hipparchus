@@ -23,7 +23,6 @@ import org.hipparchus.distribution.FDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.MathUtils;
@@ -117,11 +116,11 @@ public class OneWayAnova {
      * array is less than 2 or a contained <code>double[]</code> array does not have
      * at least two values
      * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
-     * @throws MaxCountExceededException if the maximum number of iterations is exceeded
+     * @throws MathIllegalStateException if the maximum number of iterations is exceeded
      */
     public double anovaPValue(final Collection<double[]> categoryData)
         throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalStateException, MaxCountExceededException {
+        MathIllegalStateException {
 
         final AnovaStats a = anovaStats(categoryData);
         // No try-catch or advertised exception because args are valid
@@ -158,13 +157,13 @@ public class OneWayAnova {
      * array is less than 2 or a contained {@link SummaryStatistics} does not have
      * at least two values
      * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
-     * @throws MaxCountExceededException if the maximum number of iterations is exceeded
+     * @throws MathIllegalStateException if the maximum number of iterations is exceeded
      * @since 3.2
      */
     public double anovaPValue(final Collection<SummaryStatistics> categoryData,
                               final boolean allowOneElementData)
         throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalStateException, MaxCountExceededException {
+        MathIllegalStateException {
 
         final AnovaStats a = anovaStats(categoryData, allowOneElementData);
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
@@ -241,11 +240,11 @@ public class OneWayAnova {
      * at least two values
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
-     * @throws MaxCountExceededException if the maximum number of iterations is exceeded
+     * @throws MathIllegalStateException if the maximum number of iterations is exceeded
      */
     public boolean anovaTest(final Collection<double[]> categoryData,
                              final double alpha)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
+        throws NullArgumentException, MathIllegalArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(

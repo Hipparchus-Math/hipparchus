@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.ConjugateGradient;
@@ -209,7 +209,7 @@ public class ConjugateGradientTest {
             boolean caught = false;
             try {
                 solver.solve(a, b);
-            } catch (MaxCountExceededException e) {
+            } catch (MathIllegalStateException e) {
                 caught = true;
                 final RealVector y = a.operate(x);
                 for (int i = 0; i < n; i++) {
@@ -222,7 +222,7 @@ public class ConjugateGradientTest {
                 }
             }
             Assert
-                .assertTrue("MaxCountExceededException should have been caught",
+                .assertTrue("MathIllegalStateException should have been caught",
                             caught);
         }
     }
@@ -381,7 +381,7 @@ public class ConjugateGradientTest {
             boolean caught = false;
             try {
                 solver.solve(a, m, b);
-            } catch (MaxCountExceededException e) {
+            } catch (MathIllegalStateException e) {
                 caught = true;
                 final RealVector y = a.operate(x);
                 for (int i = 0; i < n; i++) {
@@ -392,7 +392,7 @@ public class ConjugateGradientTest {
                     Assert.assertEquals(msg, expected, actual, delta);
                 }
             }
-            Assert.assertTrue("MaxCountExceededException should have been caught", caught);
+            Assert.assertTrue("MathIllegalStateException should have been caught", caught);
         }
     }
 

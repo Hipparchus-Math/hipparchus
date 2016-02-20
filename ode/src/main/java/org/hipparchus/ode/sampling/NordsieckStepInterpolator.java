@@ -22,7 +22,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Arrays;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.util.FastMath;
@@ -175,9 +175,9 @@ public class NordsieckStepInterpolator extends AbstractStepInterpolator {
      * to be preserved across several calls.</p>
      * @return state vector at time {@link #getInterpolatedTime}
      * @see #getInterpolatedDerivatives()
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      */
-    public double[] getInterpolatedStateVariation() throws MaxCountExceededException {
+    public double[] getInterpolatedStateVariation() throws MathIllegalStateException {
         // compute and ignore interpolated state
         // to make sure state variation is computed as a side effect
         getInterpolatedState();

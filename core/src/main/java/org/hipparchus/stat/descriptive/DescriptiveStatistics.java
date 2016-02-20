@@ -443,7 +443,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *  overridden and the supplied implementation does not support setQuantile
      * @throws MathIllegalArgumentException if p is not a valid quantile
      */
-    public double getPercentile(double p) throws MathIllegalStateException, MathIllegalArgumentException {
+    public double getPercentile(double p) throws MathIllegalArgumentException, MathIllegalStateException {
         if (percentileImpl instanceof Percentile) {
             ((Percentile) percentileImpl).setQuantile(p);
         } else {

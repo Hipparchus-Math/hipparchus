@@ -19,7 +19,7 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
@@ -242,13 +242,13 @@ public abstract class AdaptiveStepsizeIntegrator
    * @param y1 work array for a state vector
    * @param yDot1 work array for the first time derivative of y1
    * @return first integration step
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
    */
   public double initializeStep(final boolean forward, final int order, final double[] scale,
                                final double t0, final double[] y0, final double[] yDot0,
                                final double[] y1, final double[] yDot1)
-      throws MaxCountExceededException, MathIllegalArgumentException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     if (initialStep > 0) {
       // use the user provided value
@@ -344,8 +344,7 @@ public abstract class AdaptiveStepsizeIntegrator
   /** {@inheritDoc} */
   @Override
   public abstract void integrate (ExpandableStatefulODE equations, double t)
-      throws NumberIsTooSmallException, MathIllegalArgumentException,
-             MaxCountExceededException, MathIllegalArgumentException;
+      throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException;
 
   /** {@inheritDoc} */
   @Override

@@ -21,7 +21,7 @@ import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -110,7 +110,7 @@ public class EigenDecomposition {
      * Supports decomposition of a general matrix since 3.1.
      *
      * @param matrix Matrix to decompose.
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      * @throws MathRuntimeException if the decomposition of a general matrix
      * results in a matrix with zero norm
      * @since 3.1
@@ -134,7 +134,7 @@ public class EigenDecomposition {
      *
      * @param main Main diagonal of the symmetric tridiagonal form.
      * @param secondary Secondary of the tridiagonal form.
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      * @since 3.1
      */
     public EigenDecomposition(final double[] main, final double[] secondary) {
@@ -610,7 +610,7 @@ public class EigenDecomposition {
                 }
                 if (m != j) {
                     if (its == MAX_ITER) {
-                        throw new MaxCountExceededException(LocalizedFormats.CONVERGENCE_FAILED,
+                        throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED,
                                                             MAX_ITER);
                     }
                     its++;

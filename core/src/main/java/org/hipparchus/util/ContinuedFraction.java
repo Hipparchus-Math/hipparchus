@@ -18,7 +18,6 @@ package org.hipparchus.util;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 
 /**
  * Provides a generic means to evaluate continued fractions.  Subclasses simply
@@ -89,10 +88,10 @@ public abstract class ContinuedFraction {
      * @param maxIterations maximum number of convergents
      * @return the value of the continued fraction evaluated at x.
      * @throws MathIllegalStateException if the algorithm fails to converge.
-     * @throws MaxCountExceededException if maximal number of iterations is reached
+     * @throws MathIllegalStateException if maximal number of iterations is reached
      */
     public double evaluate(double x, int maxIterations)
-        throws MathIllegalStateException, MaxCountExceededException {
+        throws MathIllegalStateException {
         return evaluate(x, DEFAULT_EPSILON, maxIterations);
     }
 
@@ -117,10 +116,10 @@ public abstract class ContinuedFraction {
      * @param maxIterations maximum number of convergents
      * @return the value of the continued fraction evaluated at x.
      * @throws ConvergenceException if the algorithm fails to converge.
-     * @throws MaxCountExceededException if maximal number of iterations is reached
+     * @throws MathIllegalStateException if maximal number of iterations is reached
      */
     public double evaluate(double x, double epsilon, int maxIterations)
-        throws MathIllegalStateException, MaxCountExceededException {
+        throws MathIllegalStateException {
         final double small = 1e-50;
         double hPrev = getA(0, x);
 
@@ -169,7 +168,7 @@ public abstract class ContinuedFraction {
         }
 
         if (n >= maxIterations) {
-            throw new MaxCountExceededException(LocalizedFormats.NON_CONVERGENT_CONTINUED_FRACTION,
+            throw new MathIllegalStateException(LocalizedFormats.NON_CONVERGENT_CONTINUED_FRACTION,
                                                 maxIterations, x);
         }
 

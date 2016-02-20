@@ -22,7 +22,7 @@ import java.util.List;
 import org.hipparchus.analysis.solvers.BaseSecantSolver;
 import org.hipparchus.analysis.solvers.PegasusSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
@@ -53,7 +53,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
     @Test
     public void testOverlappingEvents0()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
         test(0);
     }
 
@@ -65,7 +65,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
     @Test
     public void testOverlappingEvents1()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
         test(1);
     }
 
@@ -77,7 +77,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
      */
     public void test(int eventType)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator = new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
         BaseSecantSolver rootSolver = new PegasusSolver(e, e);

@@ -786,7 +786,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     @Override
     public void setSubMatrix(final double[][] subMatrix, final int row,
                              final int column)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalArgumentException {
         // safety checks
         MathUtils.checkNotNull(subMatrix);

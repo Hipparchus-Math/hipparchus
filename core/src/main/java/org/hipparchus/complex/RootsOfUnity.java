@@ -157,7 +157,7 @@ public class RootsOfUnity implements Serializable {
      * @throws MathIllegalArgumentException if {@code k} is out of range
      */
     public synchronized double getReal(int k)
-            throws MathIllegalStateException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (omegaCount == 0) {
             throw new MathIllegalStateException(
@@ -184,7 +184,7 @@ public class RootsOfUnity implements Serializable {
      * @throws MathIllegalArgumentException if {@code k} is out of range
      */
     public synchronized double getImaginary(int k)
-            throws MathIllegalStateException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (omegaCount == 0) {
             throw new MathIllegalStateException(

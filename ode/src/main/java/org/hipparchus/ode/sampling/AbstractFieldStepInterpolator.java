@@ -18,7 +18,7 @@
 package org.hipparchus.ode.sampling;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 
@@ -165,11 +165,11 @@ public abstract class AbstractFieldStepInterpolator<T extends RealFieldElement<T
      * @param oneMinusThetaH time gap between the interpolated time and
      * the current time
      * @return interpolated state and derivatives
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      */
     protected abstract FieldODEStateAndDerivative<T> computeInterpolatedStateAndDerivatives(FieldEquationsMapper<T> equationsMapper,
                                                                                             T time, T theta,
                                                                                             T thetaH, T oneMinusThetaH)
-        throws MaxCountExceededException;
+        throws MathIllegalStateException;
 
 }

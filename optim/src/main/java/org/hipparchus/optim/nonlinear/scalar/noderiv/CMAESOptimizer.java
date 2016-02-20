@@ -358,8 +358,7 @@ public class CMAESOptimizer
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }

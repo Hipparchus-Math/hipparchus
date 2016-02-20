@@ -674,7 +674,7 @@ public final class StatUtils {
      * @throws MathIllegalArgumentException if the sample arrays are empty.
      */
     public static double sumDifference(final double[] sample1, final double[] sample2)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         int n = sample1.length;
         if (n != sample2.length) {
@@ -702,7 +702,7 @@ public final class StatUtils {
      * @throws MathIllegalArgumentException if the sample arrays are empty.
      */
     public static double meanDifference(final double[] sample1, final double[] sample2)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         return sumDifference(sample1, sample2) / sample1.length;
     }
 

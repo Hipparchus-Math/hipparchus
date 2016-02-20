@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.sampling.StepInterpolator;
@@ -317,7 +317,7 @@ class DormandPrince853StepInterpolator
   @Override
   protected void computeInterpolatedStateAndDerivatives(final double theta,
                                           final double oneMinusThetaH)
-      throws MaxCountExceededException {
+      throws MathIllegalStateException {
 
     if (! vectorsInitialized) {
 
@@ -406,7 +406,7 @@ class DormandPrince853StepInterpolator
 
   /** {@inheritDoc} */
   @Override
-  protected void doFinalize() throws MaxCountExceededException {
+  protected void doFinalize() throws MathIllegalStateException {
 
       if (currentState == null) {
           // we are finalizing an uninitialized instance
@@ -456,7 +456,7 @@ class DormandPrince853StepInterpolator
     try {
         // save the local attributes
         finalizeStep();
-    } catch (MaxCountExceededException mcee) {
+    } catch (MathIllegalStateException mcee) {
         final IOException ioe = new IOException(mcee.getLocalizedMessage());
         ioe.initCause(mcee);
         throw ioe;

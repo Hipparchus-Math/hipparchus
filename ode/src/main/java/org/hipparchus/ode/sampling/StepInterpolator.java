@@ -19,7 +19,7 @@ package org.hipparchus.ode.sampling;
 
 import java.io.Externalizable;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /** This interface represents an interpolator over the last step
  * during an ODE integration.
@@ -99,9 +99,9 @@ public interface StepInterpolator extends Externalizable {
    * @see #getInterpolatedSecondaryState(int)
    * @see #getInterpolatedSecondaryDerivatives(int)
    * @see #setInterpolatedTime(double)
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
-  double[] getInterpolatedState() throws MaxCountExceededException;
+  double[] getInterpolatedState() throws MathIllegalStateException;
 
   /**
    * Get the derivatives of the state vector of the interpolated point.
@@ -115,9 +115,9 @@ public interface StepInterpolator extends Externalizable {
    * @see #getInterpolatedSecondaryDerivatives(int)
    * @see #setInterpolatedTime(double)
    * @since 2.0
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
-  double[] getInterpolatedDerivatives() throws MaxCountExceededException;
+  double[] getInterpolatedDerivatives() throws MathIllegalStateException;
 
   /** Get the interpolated secondary state corresponding to the secondary equations.
    * <p>The returned vector is a reference to a reused array, so
@@ -134,9 +134,9 @@ public interface StepInterpolator extends Externalizable {
    * @see #getInterpolatedSecondaryDerivatives(int)
    * @see #setInterpolatedTime(double)
    * @since 3.0
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
-  double[] getInterpolatedSecondaryState(int index) throws MaxCountExceededException;
+  double[] getInterpolatedSecondaryState(int index) throws MathIllegalStateException;
 
   /** Get the interpolated secondary derivatives corresponding to the secondary equations.
    * <p>The returned vector is a reference to a reused array, so
@@ -152,9 +152,9 @@ public interface StepInterpolator extends Externalizable {
    * @see #getInterpolatedSecondaryState(int)
    * @see #setInterpolatedTime(double)
    * @since 3.0
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
-  double[] getInterpolatedSecondaryDerivatives(int index) throws MaxCountExceededException;
+  double[] getInterpolatedSecondaryDerivatives(int index) throws MathIllegalStateException;
 
   /** Check if the natural integration direction is forward.
    * <p>This method provides the integration direction as specified by
@@ -173,9 +173,9 @@ public interface StepInterpolator extends Externalizable {
    * interpolated time without any side effect.</p>
    * @return a deep copy of the instance, which can be used independently.
    * @see #setInterpolatedTime(double)
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    * during step finalization
    */
-   StepInterpolator copy() throws MaxCountExceededException;
+   StepInterpolator copy() throws MathIllegalStateException;
 
 }

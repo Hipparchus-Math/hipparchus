@@ -65,8 +65,7 @@ public class RiddersSolver extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double min = getMin();
         double max = getMax();
         // [x1, x2] is the bracketing interval in each iteration

@@ -336,7 +336,7 @@ public abstract class AbstractRealMatrix
     @Override
     public RealMatrix getSubMatrix(final int[] selectedRows,
                                    final int[] selectedColumns)
-        throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, selectedRows, selectedColumns);
 
         final RealMatrix subMatrix =
@@ -408,8 +408,7 @@ public abstract class AbstractRealMatrix
     @Override
     public void copySubMatrix(int[] selectedRows, int[] selectedColumns,
                               double[][] destination)
-        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, selectedRows, selectedColumns);
         final int nCols = selectedColumns.length;
         if ((destination.length < selectedRows.length) ||
@@ -435,7 +434,7 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setSubMatrix(final double[][] subMatrix, final int row, final int column)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(subMatrix);
         final int nRows = subMatrix.length;
         if (nRows == 0) {

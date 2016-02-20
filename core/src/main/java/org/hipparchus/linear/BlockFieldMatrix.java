@@ -781,8 +781,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public void setSubMatrix(final T[][] subMatrix, final int row,
                              final int column)
-        throws MathIllegalArgumentException,
-        MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         // safety checks
         MathUtils.checkNotNull(subMatrix);
         final int refLength = subMatrix[0].length;

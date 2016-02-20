@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * This class defines a set of {@link SecondaryEquations secondary equations} to
@@ -352,7 +352,7 @@ public class JacobianMatrices {
         @Override
         public void computeDerivatives(final double t, final double[] y, final double[] yDot,
                                        final double[] z, final double[] zDot)
-            throws MaxCountExceededException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
             // Lazy initialization
             if (dirtyParameter && (paramDim != 0)) {
@@ -453,14 +453,14 @@ public class JacobianMatrices {
         /** {@inheritDoc} */
         @Override
         public void computeDerivatives(double t, double[] y, double[] yDot)
-            throws MaxCountExceededException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
             ode.computeDerivatives(t, y, yDot);
         }
 
         /** {@inheritDoc} */
         @Override
         public void computeMainStateJacobian(double t, double[] y, double[] yDot, double[][] dFdY)
-            throws MaxCountExceededException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
             final int n = ode.getDimension();
             final double[] tmpDot = new double[n];

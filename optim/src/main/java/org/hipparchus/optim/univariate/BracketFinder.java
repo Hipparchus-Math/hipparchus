@@ -17,7 +17,6 @@
 package org.hipparchus.optim.univariate;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -307,9 +306,9 @@ public class BracketFinder {
             try {
                 inc.increment();
                 evaluations = inc.getCount();
-            } catch (MaxCountExceededException e) {
+            } catch (MathIllegalStateException e) {
                 throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED,
-                                                    e.getMax());
+                                                    inc.getMaximalCount());
             }
 
             return func.value(x);

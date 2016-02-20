@@ -16,7 +16,8 @@
  */
 package org.hipparchus.special;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.ContinuedFraction;
@@ -272,7 +273,7 @@ public class Gamma {
      * @param a Parameter.
      * @param x Value.
      * @return the regularized gamma function P(a, x).
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
     public static double regularizedGammaP(double a, double x) {
         return regularizedGammaP(a, x, DEFAULT_EPSILON, Integer.MAX_VALUE);
@@ -304,7 +305,7 @@ public class Gamma {
      * further elements in the series.
      * @param maxIterations Maximum number of "iterations" to complete.
      * @return the regularized gamma function P(a, x)
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
     public static double regularizedGammaP(double a,
                                            double x,
@@ -336,7 +337,7 @@ public class Gamma {
                 sum += an;
             }
             if (n >= maxIterations) {
-                throw new MaxCountExceededException(maxIterations);
+                throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, maxIterations);
             } else if (Double.isInfinite(sum)) {
                 ret = 1.0;
             } else {
@@ -353,7 +354,7 @@ public class Gamma {
      * @param a the a parameter.
      * @param x the value.
      * @return the regularized gamma function Q(a, x)
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
     public static double regularizedGammaQ(double a, double x) {
         return regularizedGammaQ(a, x, DEFAULT_EPSILON, Integer.MAX_VALUE);
@@ -382,7 +383,7 @@ public class Gamma {
      * further elements in the series.
      * @param maxIterations Maximum number of "iterations" to complete.
      * @return the regularized gamma function P(a, x)
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
     public static double regularizedGammaQ(final double a,
                                            double x,

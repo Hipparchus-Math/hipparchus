@@ -21,9 +21,8 @@ import org.hipparchus.analysis.integration.gauss.GaussIntegrator;
 import org.hipparchus.analysis.integration.gauss.GaussIntegratorFactory;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -116,7 +115,7 @@ public class IterativeLegendreGaussIntegrator
     /** {@inheritDoc} */
     @Override
     protected double doIntegrate()
-        throws MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         // Compute first estimate with a single step.
         double oldt = stage(1);
 

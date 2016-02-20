@@ -30,7 +30,7 @@ import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.events.EventHandler;
 import org.hipparchus.ode.events.EventState;
@@ -237,7 +237,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
     public double integrate(final FirstOrderDifferentialEquations equations,
                             final double t0, final double[] y0, final double t, final double[] y)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         if (y0.length != equations.getDimension()) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -278,25 +278,24 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
      * @exception NumberIsTooSmallException if integration step is too small
      * @throws MathIllegalArgumentException if the dimension of the complete state does not
      * match the complete equations sets dimension
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      */
     public abstract void integrate(ExpandableStatefulODE equations, double t)
-        throws NumberIsTooSmallException, MathIllegalArgumentException,
-               MaxCountExceededException, MathIllegalArgumentException;
+        throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException;
 
     /** Compute the derivatives and check the number of evaluations.
      * @param t current value of the independent <I>time</I> variable
      * @param y array containing the current value of the state vector
      * @param yDot placeholder array where to put the time derivative of the state vector
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      * @exception NullPointerException if the ODE equations have not been set (i.e. if this method
      * is called outside of a call to {@link #integrate(ExpandableStatefulODE, double)} or {@link
      * #integrate(FirstOrderDifferentialEquations, double, double[], double, double[])})
      */
     public void computeDerivatives(final double t, final double[] y, final double[] yDot)
-        throws MaxCountExceededException, MathIllegalArgumentException, NullPointerException {
+        throws MathIllegalArgumentException, MathIllegalStateException, NullPointerException {
         evaluations.increment();
         expandable.computeDerivatives(t, y, yDot);
     }
@@ -319,7 +318,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
      * @param yDot placeholder array where to put the time derivative of the state vector
      * @param tEnd final integration time
      * @return time at end of step
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
@@ -327,7 +326,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
      */
     protected double acceptStep(final AbstractStepInterpolator interpolator,
                                 final double[] y, final double[] yDot, final double tEnd)
-        throws MaxCountExceededException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
             double previousT = interpolator.getGlobalPreviousTime();
             final double currentT = interpolator.getGlobalCurrentTime();

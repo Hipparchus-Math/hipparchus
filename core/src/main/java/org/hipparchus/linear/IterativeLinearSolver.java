@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.IterationManager;
 import org.hipparchus.util.MathUtils;
@@ -112,14 +112,14 @@ public abstract class IterativeLinearSolver {
      * @throws NonSquareOperatorException if {@code a} is not square
      * @throws MathIllegalArgumentException if {@code b} has dimensions
      * inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(final RealLinearOperator a, final RealVector b)
         throws NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         x.set(0.);
@@ -138,14 +138,14 @@ public abstract class IterativeLinearSolver {
      * @throws NonSquareOperatorException if {@code a} is not square
      * @throws MathIllegalArgumentException if {@code b} or {@code x0} have
      * dimensions inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(RealLinearOperator a, RealVector b, RealVector x0)
         throws NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, b, x0.copy());
     }
@@ -163,12 +163,12 @@ public abstract class IterativeLinearSolver {
      * @throws NonSquareOperatorException if {@code a} is not square
      * @throws MathIllegalArgumentException if {@code b} or {@code x0} have
      * dimensions inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
      */
     public abstract RealVector solveInPlace(RealLinearOperator a, RealVector b,
         RealVector x0) throws NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException;
+        MathIllegalArgumentException, MathIllegalStateException;
 }

@@ -21,7 +21,6 @@ import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.Incrementor;
@@ -218,11 +217,7 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
      */
     protected double computeObjectiveValue(final double point)
         throws MathIllegalStateException {
-        try {
-            evaluations.incrementCount();
-        } catch (MaxCountExceededException e) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, e.getMax());
-        }
+        evaluations.incrementCount();
         return function.value(point);
     }
 
@@ -261,8 +256,7 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
     @Override
     public double integrate(final int maxEval, final UnivariateFunction f,
                             final double lower, final double upper)
-        throws MathIllegalStateException, MaxCountExceededException,
-               MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException, NullArgumentException {
 
         // Initialization.
         setup(maxEval, f, lower, upper);
@@ -279,10 +273,10 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
      * @return the root.
      * @throws MathIllegalStateException if the maximal number of evaluations
      * is exceeded.
-     * @throws MaxCountExceededException if the maximum iteration count is exceeded
+     * @throws MathIllegalStateException if the maximum iteration count is exceeded
      * or the integrator detects convergence problems otherwise
      */
     protected abstract double doIntegrate()
-        throws MathIllegalStateException, MaxCountExceededException;
+        throws MathIllegalStateException;
 
 }

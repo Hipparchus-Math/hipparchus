@@ -19,7 +19,7 @@ package org.hipparchus.stat.inference;
 import org.hipparchus.distribution.ChiSquaredDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -142,11 +142,11 @@ public class GTest {
      * are not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
-     * @throws MaxCountExceededException if an error occurs computing the
+     * @throws MathIllegalStateException if an error occurs computing the
      * p-value.
      */
     public double gTest(final double[] expected, final long[] observed)
-            throws MathIllegalArgumentException, MaxCountExceededException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
@@ -172,11 +172,11 @@ public class GTest {
      * not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
-     * @throws MaxCountExceededException if an error occurs computing the
+     * @throws MathIllegalStateException if an error occurs computing the
      * p-value.
      */
     public double gTestIntrinsic(final double[] expected, final long[] observed)
-            throws MathIllegalArgumentException, MaxCountExceededException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
@@ -223,14 +223,14 @@ public class GTest {
      * are not strictly positive
      * @throws MathIllegalArgumentException if the array lengths do not match or
      * are less than 2.
-     * @throws MaxCountExceededException if an error occurs computing the
+     * @throws MathIllegalStateException if an error occurs computing the
      * p-value.
      * @throws MathIllegalArgumentException if alpha is not strictly greater than zero
      * and less than or equal to 0.5
      */
     public boolean gTest(final double[] expected, final long[] observed,
             final double alpha)
-            throws MathIllegalArgumentException, MaxCountExceededException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
@@ -339,7 +339,7 @@ public class GTest {
      * at the same index is zero for both arrays.
      */
     public double gDataSetsComparison(final long[] observed1, final long[] observed2)
-            throws MathIllegalArgumentException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
@@ -461,13 +461,13 @@ public class GTest {
      * @throws MathIllegalArgumentException if either all counts of {@code observed1} or
      * {@code observed2} are zero, or if the count at some index is
      * zero for both arrays
-     * @throws MaxCountExceededException if an error occurs computing the
+     * @throws MathIllegalStateException if an error occurs computing the
      * p-value.
      */
     public double gTestDataSetsComparison(final long[] observed1,
             final long[] observed2)
-            throws MathIllegalArgumentException, MathIllegalArgumentException,
-            MaxCountExceededException {
+            throws MathIllegalArgumentException,
+            MathIllegalStateException {
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
@@ -516,14 +516,13 @@ public class GTest {
      * zero for both arrays
      * @throws MathIllegalArgumentException if {@code alpha} is not in the range
      * (0, 0.5]
-     * @throws MaxCountExceededException if an error occurs performing the test
+     * @throws MathIllegalStateException if an error occurs performing the test
      */
     public boolean gTestDataSetsComparison(
             final long[] observed1,
             final long[] observed2,
             final double alpha)
-            throws MathIllegalArgumentException,
-            MathIllegalArgumentException, MathIllegalArgumentException, MaxCountExceededException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (alpha <= 0 || alpha > 0.5) {
             throw new MathIllegalArgumentException(

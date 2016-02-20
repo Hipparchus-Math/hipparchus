@@ -19,7 +19,6 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -168,7 +167,7 @@ public class IntegerSequenceTest {
         Assert.assertEquals(seq.size(), r.size());
     }
 
-    @Test(expected=MaxCountExceededException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testIncrementorCountExceeded() {
         final int start = 1;
         final int max = 7;
@@ -239,7 +238,7 @@ public class IntegerSequenceTest {
         try {
             inc.increment();
             Assert.fail("exception expected");
-        } catch (MaxCountExceededException e) {
+        } catch (MathIllegalStateException e) {
             // Expected.
         }
     }

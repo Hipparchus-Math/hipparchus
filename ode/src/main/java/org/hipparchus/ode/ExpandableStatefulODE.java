@@ -21,7 +21,7 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 
 /**
@@ -108,11 +108,11 @@ public class ExpandableStatefulODE {
      * @param t current value of the independent <I>time</I> variable
      * @param y array containing the current value of the complete state vector
      * @param yDot placeholder array where to put the time derivative of the complete state vector
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     public void computeDerivatives(final double t, final double[] y, final double[] yDot)
-        throws MaxCountExceededException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         // compute derivatives of the primary equations
         primaryMapper.extractEquationData(y, primaryState);

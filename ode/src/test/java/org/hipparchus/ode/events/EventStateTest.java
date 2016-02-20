@@ -20,7 +20,7 @@ package org.hipparchus.ode.events;
 
 import org.hipparchus.analysis.solvers.BrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
@@ -36,7 +36,7 @@ public class EventStateTest {
 
     // JIRA: MATH-322
     @Test
-    public void closeEvents() throws MaxCountExceededException, MathIllegalArgumentException {
+    public void closeEvents() throws MathIllegalArgumentException, MathIllegalStateException {
 
         final double r1  = 90.0;
         final double r2  = 135.0;
@@ -82,7 +82,7 @@ public class EventStateTest {
     @Test
     public void testIssue695()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {
 
@@ -146,7 +146,7 @@ public class EventStateTest {
     @Test
     public void testIssue965()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         ExpandableStatefulODE equation =
                 new ExpandableStatefulODE(new FirstOrderDifferentialEquations() {
@@ -215,7 +215,7 @@ public class EventStateTest {
     @Test
     public void testEventsCloserThanThreshold()
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {
 

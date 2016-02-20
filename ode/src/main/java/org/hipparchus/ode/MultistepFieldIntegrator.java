@@ -22,7 +22,6 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.ode.nonstiff.AdaptiveStepsizeFieldIntegrator;
@@ -217,12 +216,12 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
      * (can be set to a value smaller than <code>t0</code> for backward integration)
      * @exception MathIllegalArgumentException if arrays dimension do not match equations settings
      * @exception NumberIsTooSmallException if integration step is too small
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      */
     protected void start(final FieldExpandableODE<T> equations, final FieldODEState<T> initialState, final T t)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
 
         // make sure NO user event nor user step handler is triggered,
         // this is the task of the top level integrator, not the task
@@ -389,7 +388,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
         /** {@inheritDoc} */
         @Override
         public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
-            throws MaxCountExceededException {
+            throws MathIllegalStateException {
 
 
             if (count == 0) {

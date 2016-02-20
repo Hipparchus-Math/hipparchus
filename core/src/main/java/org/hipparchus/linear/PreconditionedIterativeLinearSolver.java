@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.IterationManager;
 import org.hipparchus.util.MathUtils;
@@ -85,7 +85,7 @@ public abstract class PreconditionedIterativeLinearSolver
      * square
      * @throws MathIllegalArgumentException if {@code m}, {@code b} or
      * {@code x0} have dimensions inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
@@ -93,7 +93,7 @@ public abstract class PreconditionedIterativeLinearSolver
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x0)
         throws NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, m, b, x0.copy());
     }
@@ -102,7 +102,7 @@ public abstract class PreconditionedIterativeLinearSolver
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b)
         throws NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         x.set(0.);
@@ -114,7 +114,7 @@ public abstract class PreconditionedIterativeLinearSolver
     public RealVector solve(final RealLinearOperator a, final RealVector b,
                             final RealVector x0)
         throws NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, null, b, x0.copy());
     }
@@ -166,14 +166,14 @@ public abstract class PreconditionedIterativeLinearSolver
      * square
      * @throws MathIllegalArgumentException if {@code m} or {@code b} have
      * dimensions inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(RealLinearOperator a, RealLinearOperator m,
         RealVector b) throws NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         return solveInPlace(a, m, b, x);
@@ -194,7 +194,7 @@ public abstract class PreconditionedIterativeLinearSolver
      * square
      * @throws MathIllegalArgumentException if {@code m}, {@code b} or
      * {@code x0} have dimensions inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
@@ -202,14 +202,14 @@ public abstract class PreconditionedIterativeLinearSolver
     public abstract RealVector solveInPlace(RealLinearOperator a,
         RealLinearOperator m, RealVector b, RealVector x0) throws
         NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException;
+        MathIllegalArgumentException, MathIllegalStateException;
 
     /** {@inheritDoc} */
     @Override
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealVector b, final RealVector x0) throws
         NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException {
+        MathIllegalArgumentException, MathIllegalStateException {
         return solveInPlace(a, null, b, x0);
     }
 }

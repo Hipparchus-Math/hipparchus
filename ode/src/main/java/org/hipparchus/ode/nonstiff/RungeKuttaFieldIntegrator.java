@@ -21,7 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
 import org.hipparchus.ode.FieldEquationsMapper;
@@ -113,8 +113,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
     @Override
     public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
                                                    final FieldODEState<T> initialState, final T finalTime)
-        throws NumberIsTooSmallException, MathIllegalArgumentException,
-        MaxCountExceededException, MathIllegalArgumentException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
         final T   t0 = initialState.getTime();

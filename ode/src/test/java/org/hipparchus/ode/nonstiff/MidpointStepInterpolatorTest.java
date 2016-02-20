@@ -26,7 +26,7 @@ import java.io.ObjectOutputStream;
 import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.ContinuousOutputModel;
 import org.hipparchus.ode.TestProblem1;
@@ -41,7 +41,7 @@ public class MidpointStepInterpolatorTest {
   @Test
   public void testDerivativesConsistency()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, MathIllegalArgumentException {
+             MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
     MidpointIntegrator integ = new MidpointIntegrator(step);
@@ -52,7 +52,7 @@ public class MidpointStepInterpolatorTest {
   public void serialization()
     throws IOException, ClassNotFoundException,
            MathIllegalArgumentException, NumberIsTooSmallException,
-           MaxCountExceededException, MathIllegalArgumentException {
+           MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;

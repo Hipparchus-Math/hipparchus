@@ -20,7 +20,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.linear.FieldMatrix;
@@ -241,8 +241,7 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
     public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
                                                    final FieldODEState<T> initialState,
                                                    final T finalTime)
-        throws NumberIsTooSmallException, MathIllegalArgumentException,
-               MaxCountExceededException, MathIllegalArgumentException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
         final T   t0 = initialState.getTime();

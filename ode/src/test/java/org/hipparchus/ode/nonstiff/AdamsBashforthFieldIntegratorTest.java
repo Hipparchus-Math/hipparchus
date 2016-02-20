@@ -21,7 +21,6 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.Decimal64Field;
 import org.junit.Test;
@@ -55,7 +54,7 @@ public class AdamsBashforthFieldIntegratorTest extends AdamsFieldIntegratorAbstr
         doTestIncreasingTolerance(Decimal64Field.getInstance(), 2.6, 122);
     }
 
-    @Test(expected = MaxCountExceededException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void exceedMaxEvaluations() {
         doExceedMaxEvaluations(Decimal64Field.getInstance(), 650);
     }

@@ -15,7 +15,6 @@ package org.hipparchus.util;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -60,8 +59,8 @@ public class IncrementorTest {
         // and not in the previous loop.
         try {
             i.incrementCount();
-            Assert.fail("MaxCountExceededException expected");
-        } catch (MaxCountExceededException e) {
+            Assert.fail("MathIllegalStateException expected");
+        } catch (MathIllegalStateException e) {
             // Expected.
         }
     }
@@ -87,7 +86,7 @@ public class IncrementorTest {
         Assert.assertEquals(3, i.getCount());
     }
 
-    @Test(expected=MaxCountExceededException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testAboveMaxCount() {
         final Incrementor i = new Incrementor();
 

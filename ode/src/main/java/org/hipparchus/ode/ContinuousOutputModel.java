@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -122,11 +122,11 @@ public class ContinuousOutputModel
    * @exception MathIllegalArgumentException if the model to append is not
    * compatible with the instance (dimension of the state vector,
    * propagation direction, hole between the dates)
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    * during step finalization
    */
   public void append(final ContinuousOutputModel model)
-    throws MathIllegalArgumentException, MaxCountExceededException {
+    throws MathIllegalArgumentException, MathIllegalStateException {
 
     if (model.steps.size() == 0) {
       return;
@@ -183,11 +183,11 @@ public class ContinuousOutputModel
    * the instance for later use.
    * @param interpolator interpolator for the last accepted step.
    * @param isLast true if the step is the last one
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    * during step finalization
    */
   public void handleStep(final StepInterpolator interpolator, final boolean isLast)
-      throws MaxCountExceededException {
+      throws MathIllegalStateException {
 
     if (steps.size() == 0) {
       initialTime = interpolator.getPreviousTime();
@@ -343,13 +343,13 @@ public class ContinuousOutputModel
    * to be preserved across several calls to the associated
    * {@link #setInterpolatedTime(double)} method.</p>
    * @return state vector at time {@link #getInterpolatedTime}
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    * @see #setInterpolatedTime(double)
    * @see #getInterpolatedDerivatives()
    * @see #getInterpolatedSecondaryState(int)
    * @see #getInterpolatedSecondaryDerivatives(int)
    */
-  public double[] getInterpolatedState() throws MaxCountExceededException {
+  public double[] getInterpolatedState() throws MathIllegalStateException {
     return steps.get(index).getInterpolatedState();
   }
 
@@ -360,14 +360,14 @@ public class ContinuousOutputModel
    * to be preserved across several calls to the associated
    * {@link #setInterpolatedTime(double)} method.</p>
    * @return derivatives of the state vector at time {@link #getInterpolatedTime}
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    * @see #setInterpolatedTime(double)
    * @see #getInterpolatedState()
    * @see #getInterpolatedSecondaryState(int)
    * @see #getInterpolatedSecondaryDerivatives(int)
    * @since 3.4
    */
-  public double[] getInterpolatedDerivatives() throws MaxCountExceededException {
+  public double[] getInterpolatedDerivatives() throws MathIllegalStateException {
     return steps.get(index).getInterpolatedDerivatives();
   }
 
@@ -386,10 +386,10 @@ public class ContinuousOutputModel
    * @see #getInterpolatedDerivatives()
    * @see #getInterpolatedSecondaryDerivatives(int)
    * @since 3.2
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
   public double[] getInterpolatedSecondaryState(final int secondaryStateIndex)
-    throws MaxCountExceededException {
+    throws MathIllegalStateException {
     return steps.get(index).getInterpolatedSecondaryState(secondaryStateIndex);
   }
 
@@ -408,10 +408,10 @@ public class ContinuousOutputModel
    * @see #getInterpolatedDerivatives()
    * @see #getInterpolatedSecondaryState(int)
    * @since 3.4
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
   public double[] getInterpolatedSecondaryDerivatives(final int secondaryStateIndex)
-    throws MaxCountExceededException {
+    throws MathIllegalStateException {
     return steps.get(index).getInterpolatedSecondaryDerivatives(secondaryStateIndex);
   }
 

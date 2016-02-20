@@ -17,10 +17,9 @@
 package org.hipparchus.analysis.integration;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -140,7 +139,7 @@ public class MidPointIntegrator extends BaseAbstractUnivariateIntegrator {
     /** {@inheritDoc} */
     @Override
     protected double doIntegrate()
-        throws MathIllegalArgumentException, MathIllegalStateException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         final double min = getMin();
         final double diff = getMax() - min;

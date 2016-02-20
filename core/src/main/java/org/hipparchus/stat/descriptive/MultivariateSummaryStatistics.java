@@ -426,8 +426,7 @@ public class MultivariateSummaryStatistics
      * (i.e. if n > 0)
      */
     private void setImpl(StorelessUnivariateStatistic[] newImpl,
-                         StorelessUnivariateStatistic[] oldImpl) throws MathIllegalStateException,
-                         MathIllegalArgumentException {
+                         StorelessUnivariateStatistic[] oldImpl) throws MathIllegalArgumentException, MathIllegalStateException {
         checkEmpty();
         checkDimension(newImpl.length);
         System.arraycopy(newImpl, 0, oldImpl, 0, newImpl.length);
@@ -456,7 +455,7 @@ public class MultivariateSummaryStatistics
      *  (i.e if n > 0)
      */
     public void setSumImpl(StorelessUnivariateStatistic[] sumImpl)
-    throws MathIllegalStateException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException, MathIllegalStateException {
         setImpl(sumImpl, this.sumImpl);
     }
 
@@ -483,7 +482,7 @@ public class MultivariateSummaryStatistics
      *  (i.e if n > 0)
      */
     public void setSumsqImpl(StorelessUnivariateStatistic[] sumsqImpl)
-    throws MathIllegalStateException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException, MathIllegalStateException {
         setImpl(sumsqImpl, this.sumSqImpl);
     }
 
@@ -510,7 +509,7 @@ public class MultivariateSummaryStatistics
      *  (i.e if n > 0)
      */
     public void setMinImpl(StorelessUnivariateStatistic[] minImpl)
-    throws MathIllegalStateException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException, MathIllegalStateException {
         setImpl(minImpl, this.minImpl);
     }
 
@@ -537,7 +536,7 @@ public class MultivariateSummaryStatistics
      *  (i.e if n > 0)
      */
     public void setMaxImpl(StorelessUnivariateStatistic[] maxImpl)
-    throws MathIllegalStateException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException, MathIllegalStateException {
         setImpl(maxImpl, this.maxImpl);
     }
 
@@ -564,7 +563,7 @@ public class MultivariateSummaryStatistics
      *  (i.e if n > 0)
      */
     public void setSumLogImpl(StorelessUnivariateStatistic[] sumLogImpl)
-    throws MathIllegalStateException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException, MathIllegalStateException {
         setImpl(sumLogImpl, this.sumLogImpl);
     }
 
@@ -591,7 +590,7 @@ public class MultivariateSummaryStatistics
      *  (i.e if n > 0)
      */
     public void setGeoMeanImpl(StorelessUnivariateStatistic[] geoMeanImpl)
-    throws MathIllegalStateException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException, MathIllegalStateException {
         setImpl(geoMeanImpl, this.geoMeanImpl);
     }
 
@@ -618,7 +617,7 @@ public class MultivariateSummaryStatistics
      *  (i.e if n > 0)
      */
     public void setMeanImpl(StorelessUnivariateStatistic[] meanImpl)
-    throws MathIllegalStateException, MathIllegalArgumentException {
+    throws MathIllegalArgumentException, MathIllegalStateException {
         setImpl(meanImpl, this.meanImpl);
     }
 

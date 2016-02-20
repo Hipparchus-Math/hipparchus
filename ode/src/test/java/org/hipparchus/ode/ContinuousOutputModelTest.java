@@ -20,7 +20,7 @@ package org.hipparchus.ode;
 import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
@@ -40,7 +40,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testBoundaries() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, MathIllegalArgumentException {
+  public void testBoundaries() throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
     integ.addStepHandler(new ContinuousOutputModel());
     integ.integrate(pb,
                     pb.getInitialTime(), pb.getInitialState(),
@@ -52,7 +52,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testRandomAccess() throws MathIllegalArgumentException, NumberIsTooSmallException, MaxCountExceededException, MathIllegalArgumentException {
+  public void testRandomAccess() throws MathIllegalArgumentException, NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
 
     ContinuousOutputModel cm = new ContinuousOutputModel();
     integ.addStepHandler(cm);
@@ -88,7 +88,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testModelsMerging() throws MaxCountExceededException, MathIllegalArgumentException {
+  public void testModelsMerging() throws MathIllegalArgumentException, MathIllegalStateException {
 
       // theoretical solution: y[0] = cos(t), y[1] = sin(t)
       FirstOrderDifferentialEquations problem =
@@ -140,7 +140,7 @@ public class ContinuousOutputModelTest {
   }
 
   @Test
-  public void testErrorConditions() throws MaxCountExceededException, MathIllegalArgumentException {
+  public void testErrorConditions() throws MathIllegalArgumentException, MathIllegalStateException {
 
       ContinuousOutputModel cm = new ContinuousOutputModel();
       cm.handleStep(buildInterpolator(0, new double[] { 0.0, 1.0, -2.0 }, 1), true);
@@ -161,7 +161,7 @@ public class ContinuousOutputModelTest {
 
   private boolean checkAppendError(ContinuousOutputModel cm,
                                    double t0, double[] y0, double t1)
-      throws MaxCountExceededException, MathIllegalArgumentException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       try {
           ContinuousOutputModel otherCm = new ContinuousOutputModel();
           otherCm.handleStep(buildInterpolator(t0, y0, t1), true);

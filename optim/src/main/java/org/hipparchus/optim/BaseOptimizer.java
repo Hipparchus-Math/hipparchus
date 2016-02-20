@@ -141,8 +141,7 @@ public abstract class BaseOptimizer<PAIR> {
      * iterations is exceeded.
      */
     public PAIR optimize(OptimizationData... optData)
-        throws MathIllegalStateException,
-               MathIllegalStateException {
+        throws MathIllegalStateException {
         // Parse options.
         parseOptimizationData(optData);
 
@@ -163,8 +162,7 @@ public abstract class BaseOptimizer<PAIR> {
      * iterations is exceeded.
      */
     public PAIR optimize()
-        throws MathIllegalStateException,
-               MathIllegalStateException {
+        throws MathIllegalStateException {
         // Reset counters.
         evaluations.resetCount();
         iterations.resetCount();

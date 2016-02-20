@@ -23,7 +23,7 @@ import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.PegasusSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ExpandableStatefulODE;
@@ -160,11 +160,11 @@ public class EventState {
 
     /** Reinitialize the beginning of the step.
      * @param interpolator valid for the current step
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
     public void reinitializeBegin(final StepInterpolator interpolator)
-        throws MaxCountExceededException {
+        throws MathIllegalStateException {
 
         t0 = interpolator.getPreviousTime();
         interpolator.setInterpolatedTime(t0);
@@ -217,12 +217,12 @@ public class EventState {
      * @param interpolator step interpolator for the proposed step
      * @return true if the event handler triggers an event before
      * the end of the proposed step
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the event cannot be bracketed
      */
     public boolean evaluateStep(final StepInterpolator interpolator)
-        throws MaxCountExceededException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         try {
             forward = interpolator.isForward();
@@ -238,12 +238,12 @@ public class EventState {
             final UnivariateFunction f = new UnivariateFunction() {
                 /** {@inheritDoc} */
                 @Override
-                public double value(final double t) throws LocalMaxCountExceededException {
+                public double value(final double t) throws LocalMathIllegalStateException {
                     try {
                         interpolator.setInterpolatedTime(t);
                         return handler.g(t, getCompleteState(interpolator));
-                    } catch (MaxCountExceededException mcee) {
-                        throw new LocalMaxCountExceededException(mcee);
+                    } catch (MathIllegalStateException mcee) {
+                        throw new LocalMathIllegalStateException(mcee);
                     }
                 }
             };
@@ -334,7 +334,7 @@ public class EventState {
             pendingEventTime = Double.NaN;
             return false;
 
-        } catch (LocalMaxCountExceededException lmcee) {
+        } catch (LocalMathIllegalStateException lmcee) {
             throw lmcee.getException();
         }
 
@@ -405,25 +405,25 @@ public class EventState {
     }
 
     /** Local wrapper to propagate exceptions. */
-    private static class LocalMaxCountExceededException extends RuntimeException {
+    private static class LocalMathIllegalStateException extends RuntimeException {
 
         /** Serializable UID. */
         private static final long serialVersionUID = 20120901L;
 
         /** Wrapped exception. */
-        private final MaxCountExceededException wrapped;
+        private final MathIllegalStateException wrapped;
 
         /** Simple constructor.
          * @param exception exception to wrap
          */
-        LocalMaxCountExceededException(final MaxCountExceededException exception) {
+        LocalMathIllegalStateException(final MathIllegalStateException exception) {
             wrapped = exception;
         }
 
         /** Get the wrapped exception.
          * @return wrapped exception
          */
-        public MaxCountExceededException getException() {
+        public MathIllegalStateException getException() {
             return wrapped;
         }
 

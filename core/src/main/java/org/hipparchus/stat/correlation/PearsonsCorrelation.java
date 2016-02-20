@@ -186,7 +186,7 @@ public class PearsonsCorrelation {
      * matrix must have been used to create this instance.</p>
      *
      * @return matrix of p-values
-     * @throws org.hipparchus.exception.MaxCountExceededException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if an error occurs estimating probabilities
      * @throws NullPointerException if this instance was created with no data
      */

@@ -170,7 +170,7 @@ public class FractionFormat extends AbstractFormat {
     @Override
     public StringBuffer format(final Object obj,
                                final StringBuffer toAppendTo, final FieldPosition pos)
-        throws MathIllegalStateException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         StringBuffer ret = null;
 
         if (obj instanceof Fraction) {

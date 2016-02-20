@@ -19,7 +19,7 @@ package org.hipparchus.util;
 import java.util.Collection;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * This abstract class provides a general framework for managing iterative
@@ -142,11 +142,11 @@ public class IterationManager {
      * maximum number of iterations is reached. This method should be called at
      * the beginning of a new iteration.
      *
-     * @throws MaxCountExceededException if the maximum number of iterations is
+     * @throws MathIllegalStateException if the maximum number of iterations is
      * reached.
      */
     public void incrementIterationCount()
-        throws MaxCountExceededException {
+        throws MathIllegalStateException {
         iterations.incrementCount();
     }
 

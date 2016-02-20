@@ -17,10 +17,9 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.stat.ranking.NaturalRanking;
@@ -162,13 +161,13 @@ public class MannWhitneyUTest {
      * @return two-sided asymptotic p-value
      * @throws MathIllegalStateException if the p-value can not be computed
      * due to a convergence error
-     * @throws MaxCountExceededException if the maximum number of
+     * @throws MathIllegalStateException if the maximum number of
      * iterations is exceeded
      */
     private double calculateAsymptoticPValue(final double Umin,
                                              final int n1,
                                              final int n2)
-        throws MathIllegalStateException, MaxCountExceededException {
+        throws MathIllegalStateException {
 
         /* long multiplication to avoid overflow (double not used due to efficiency
          * and to avoid precision loss)
@@ -217,12 +216,12 @@ public class MannWhitneyUTest {
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
      * @throws MathIllegalStateException if the p-value can not be computed due to a
      * convergence error
-     * @throws MaxCountExceededException if the maximum number of iterations
+     * @throws MathIllegalStateException if the maximum number of iterations
      * is exceeded
      */
     public double mannWhitneyUTest(final double[] x, final double[] y)
         throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalStateException, MaxCountExceededException {
+        MathIllegalStateException {
 
         ensureDataConformance(x, y);
 

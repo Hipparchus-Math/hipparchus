@@ -20,7 +20,7 @@ package org.hipparchus.ode.nonstiff;
 import java.util.Arrays;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrixPreservingVisitor;
@@ -207,8 +207,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
     /** {@inheritDoc} */
     @Override
     public void integrate(final ExpandableStatefulODE equations,final double t)
-        throws NumberIsTooSmallException, MathIllegalArgumentException,
-               MaxCountExceededException, MathIllegalArgumentException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(equations, t);
         setEquations(equations);

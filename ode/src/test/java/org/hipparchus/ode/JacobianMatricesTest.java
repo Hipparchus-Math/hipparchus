@@ -18,7 +18,7 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.JacobianMatrices.MismatchedEquations;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
@@ -31,8 +31,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testLowAccuracyExternalDifferentiation()
-        throws NumberIsTooSmallException, MathIllegalArgumentException,
-               MaxCountExceededException, MathIllegalArgumentException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException {
         // this test does not really test JacobianMatrices,
         // it only shows that WITHOUT this class, attempting to recover
         // the jacobians from external differentiation on simple integration
@@ -64,8 +63,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testHighAccuracyExternalDifferentiation()
-        throws NumberIsTooSmallException, MathIllegalArgumentException,
-               MaxCountExceededException, MathIllegalArgumentException, UnknownParameterException {
+        throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException, UnknownParameterException {
         FirstOrderIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
         double hP = 1.0e-12;
@@ -106,8 +104,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testInternalDifferentiation()
-                    throws NumberIsTooSmallException, MathIllegalArgumentException,
-                    MaxCountExceededException, MathIllegalArgumentException,
+                    throws NumberIsTooSmallException, MathIllegalArgumentException, MathIllegalStateException,
                     UnknownParameterException, MismatchedEquations {
         AbstractIntegrator integ =
                         new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
@@ -151,7 +148,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testAnalyticalDifferentiation()
-        throws MaxCountExceededException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, MathIllegalStateException,
                NumberIsTooSmallException, MathIllegalArgumentException,
                UnknownParameterException, MismatchedEquations {
         AbstractIntegrator integ =
@@ -191,7 +188,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testFinalResult()
-        throws MaxCountExceededException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, MathIllegalStateException,
                NumberIsTooSmallException, MathIllegalArgumentException,
                UnknownParameterException, MismatchedEquations {
 
@@ -247,7 +244,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testParameterizable()
-        throws MaxCountExceededException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, MathIllegalStateException,
                NumberIsTooSmallException, MathIllegalArgumentException,
                UnknownParameterException, MismatchedEquations {
 

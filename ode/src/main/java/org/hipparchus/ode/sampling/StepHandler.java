@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 
 /**
@@ -66,10 +66,10 @@ public interface StepHandler {
      * Keeping only a reference to the interpolator and reusing it will
      * result in unpredictable behavior (potentially crashing the application).
      * @param isLast true if the step is the last one
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
     void handleStep(StepInterpolator interpolator, boolean isLast)
-        throws MaxCountExceededException;
+        throws MathIllegalStateException;
 
 }

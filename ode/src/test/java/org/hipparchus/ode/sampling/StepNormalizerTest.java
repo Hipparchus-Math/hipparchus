@@ -18,7 +18,7 @@
 package org.hipparchus.ode.sampling;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem3;
@@ -40,7 +40,7 @@ public class StepNormalizerTest {
   @Test
   public void testBoundaries()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, MathIllegalArgumentException {
+             MathIllegalArgumentException, MathIllegalStateException {
     double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);
     integ.addStepHandler(new StepNormalizer(range / 10.0,
@@ -71,7 +71,7 @@ public class StepNormalizerTest {
   @Test
   public void testBeforeEnd()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, MathIllegalArgumentException {
+             MathIllegalArgumentException, MathIllegalStateException {
     final double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);
     integ.addStepHandler(new StepNormalizer(range / 10.5,

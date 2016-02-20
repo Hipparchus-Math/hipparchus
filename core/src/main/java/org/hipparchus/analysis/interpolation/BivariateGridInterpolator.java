@@ -44,5 +44,5 @@ public interface BivariateGridInterpolator {
      */
     BivariateFunction interpolate(double[] xval, double[] yval,
                                   double[][] fval)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException, NumberIsTooSmallException;
 }

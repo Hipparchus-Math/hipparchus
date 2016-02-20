@@ -32,7 +32,7 @@ import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.events.FieldEventHandler;
 import org.hipparchus.ode.events.FieldEventState;
@@ -259,13 +259,13 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
      * @param y array containing the current value of the state vector
      * @return state completed with derivatives
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception NullPointerException if the ODE equations have not been set (i.e. if this method
      * is called outside of a call to {@link #integrate(FieldExpandableODE, FieldODEState,
      * RealFieldElement) integrate}
      */
     public T[] computeDerivatives(final T t, final T[] y)
-        throws MathIllegalArgumentException, MaxCountExceededException, NullPointerException {
+        throws MathIllegalArgumentException, MathIllegalStateException, NullPointerException {
         evaluations.increment();
         return equations.computeDerivatives(t, y);
     }
@@ -284,14 +284,14 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
      * @param interpolator step interpolator
      * @param tEnd final integration time
      * @return state at end of step
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     protected FieldODEStateAndDerivative<T> acceptStep(final AbstractFieldStepInterpolator<T> interpolator,
                                                        final T tEnd)
-        throws MaxCountExceededException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
             FieldODEStateAndDerivative<T> previousState = interpolator.getGlobalPreviousState();
             final FieldODEStateAndDerivative<T> currentState = interpolator.getGlobalCurrentState();

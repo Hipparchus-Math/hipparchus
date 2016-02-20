@@ -17,7 +17,7 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /** Interface to compute exactly Jacobian matrix for some parameter
  *  when computing {@link JacobianMatrices partial derivatives equations}.
@@ -37,12 +37,12 @@ public interface ParameterJacobianProvider extends Parameterizable {
      * @param paramName name of the parameter to consider
      * @param dFdP placeholder array where to put the Jacobian matrix of the
      * ODE with respect to the parameter
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      * @exception UnknownParameterException if the parameter is not supported
      */
     void computeParameterJacobian(double t, double[] y, double[] yDot,
                                   String paramName, double[] dFdP)
-        throws MathIllegalArgumentException, MaxCountExceededException, UnknownParameterException;
+        throws MathIllegalArgumentException, MathIllegalStateException, UnknownParameterException;
 
 }

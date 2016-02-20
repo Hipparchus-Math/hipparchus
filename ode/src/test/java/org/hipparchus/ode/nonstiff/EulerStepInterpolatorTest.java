@@ -26,7 +26,7 @@ import java.io.ObjectOutputStream;
 import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.ContinuousOutputModel;
 import org.hipparchus.ode.EquationsMapper;
@@ -41,7 +41,7 @@ import org.junit.Test;
 public class EulerStepInterpolatorTest {
 
   @Test
-  public void noReset() throws MaxCountExceededException {
+  public void noReset() throws MathIllegalStateException {
 
     double[]   y    =   { 0.0, 1.0, -2.0 };
     double[][] yDot = { { 1.0, 2.0, -2.0 } };
@@ -61,7 +61,7 @@ public class EulerStepInterpolatorTest {
   }
 
   @Test
-  public void interpolationAtBounds() throws MaxCountExceededException {
+  public void interpolationAtBounds() throws MathIllegalStateException {
 
     double   t0 = 0;
     double[] y0 = {0.0, 1.0, -2.0};
@@ -99,7 +99,7 @@ public class EulerStepInterpolatorTest {
   }
 
   @Test
-  public void interpolationInside() throws MaxCountExceededException {
+  public void interpolationInside() throws MathIllegalStateException {
 
     double[]   y    =   { 0.0, 1.0, -2.0 };
     double[][] yDot = { { 1.0, 2.0, -2.0 } };
@@ -131,7 +131,7 @@ public class EulerStepInterpolatorTest {
   @Test
   public void derivativesConsistency()
       throws MathIllegalArgumentException, NumberIsTooSmallException,
-             MaxCountExceededException, MathIllegalArgumentException {
+             MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
     EulerIntegrator integ = new EulerIntegrator(step);
@@ -142,7 +142,7 @@ public class EulerStepInterpolatorTest {
   public void serialization()
     throws IOException, ClassNotFoundException,
            MathIllegalArgumentException, NumberIsTooSmallException,
-           MaxCountExceededException, MathIllegalArgumentException {
+           MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;

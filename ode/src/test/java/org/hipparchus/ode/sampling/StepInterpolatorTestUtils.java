@@ -19,7 +19,7 @@ package org.hipparchus.ode.sampling;
 
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
@@ -37,11 +37,11 @@ public class StepInterpolatorTestUtils {
                                                    final double finiteDifferencesRatio,
                                                    final double threshold)
         throws MathIllegalArgumentException, NumberIsTooSmallException,
-               MaxCountExceededException, MathIllegalArgumentException {
+               MathIllegalArgumentException, MathIllegalStateException {
         integrator.addStepHandler(new StepHandler() {
 
             public void handleStep(StepInterpolator interpolator, boolean isLast)
-                throws MaxCountExceededException {
+                throws MathIllegalStateException {
 
                 final double dt = interpolator.getCurrentTime() - interpolator.getPreviousTime();
                 final double h  = finiteDifferencesRatio * dt;
@@ -98,7 +98,7 @@ public class StepInterpolatorTestUtils {
         integrator.addStepHandler(new FieldStepHandler<T>() {
 
             public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
-                throws MaxCountExceededException {
+                throws MathIllegalStateException {
 
                 final T h = interpolator.getCurrentState().getTime().subtract(interpolator.getPreviousState().getTime()).multiply(0.001);
                 final T t = interpolator.getCurrentState().getTime().subtract(h.multiply(300));

@@ -17,7 +17,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.IterationManager;
@@ -886,7 +886,7 @@ public class SymmLQ
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b) throws
         NullArgumentException, NonSquareOperatorException,
-        MathIllegalArgumentException, MaxCountExceededException,
+        MathIllegalArgumentException, MathIllegalStateException,
         NonSelfAdjointOperatorException, NonPositiveDefiniteOperatorException,
         IllConditionedOperatorException {
         MathUtils.checkNotNull(a);
@@ -924,7 +924,7 @@ public class SymmLQ
      * @throws NonSquareOperatorException if {@code a} or {@code m} is not square
      * @throws MathIllegalArgumentException if {@code m} or {@code b} have dimensions
      * inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
@@ -938,7 +938,7 @@ public class SymmLQ
         final RealLinearOperator m, final RealVector b, final boolean goodb,
         final double shift) throws NullArgumentException,
         NonSquareOperatorException, MathIllegalArgumentException,
-        MaxCountExceededException, NonSelfAdjointOperatorException,
+        MathIllegalStateException, NonSelfAdjointOperatorException,
         NonPositiveDefiniteOperatorException, IllConditionedOperatorException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
@@ -962,7 +962,7 @@ public class SymmLQ
         throws NullArgumentException, NonSquareOperatorException,
         MathIllegalArgumentException, NonSelfAdjointOperatorException,
         NonPositiveDefiniteOperatorException, IllConditionedOperatorException,
-        MaxCountExceededException {
+        MathIllegalStateException {
         MathUtils.checkNotNull(x);
         return solveInPlace(a, m, b, x.copy(), false, 0.);
     }
@@ -978,7 +978,7 @@ public class SymmLQ
     public RealVector solve(final RealLinearOperator a, final RealVector b)
         throws NullArgumentException, NonSquareOperatorException,
         MathIllegalArgumentException, NonSelfAdjointOperatorException,
-        IllConditionedOperatorException, MaxCountExceededException {
+        IllConditionedOperatorException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         x.set(0.);
@@ -1012,7 +1012,7 @@ public class SymmLQ
      * @throws NonSquareOperatorException if {@code a} is not square
      * @throws MathIllegalArgumentException if {@code b} has dimensions
      * inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
@@ -1024,7 +1024,7 @@ public class SymmLQ
         final boolean goodb, final double shift) throws NullArgumentException,
         NonSquareOperatorException, MathIllegalArgumentException,
         NonSelfAdjointOperatorException, IllConditionedOperatorException,
-        MaxCountExceededException {
+        MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         return solveInPlace(a, null, b, x, goodb, shift);
@@ -1044,7 +1044,7 @@ public class SymmLQ
         final RealVector x) throws NullArgumentException,
         NonSquareOperatorException, MathIllegalArgumentException,
         NonSelfAdjointOperatorException, IllConditionedOperatorException,
-        MaxCountExceededException {
+        MathIllegalStateException {
         MathUtils.checkNotNull(x);
         return solveInPlace(a, null, b, x.copy(), false, 0.);
     }
@@ -1066,7 +1066,7 @@ public class SymmLQ
         throws NullArgumentException, NonSquareOperatorException,
         MathIllegalArgumentException, NonSelfAdjointOperatorException,
         NonPositiveDefiniteOperatorException, IllConditionedOperatorException,
-        MaxCountExceededException {
+        MathIllegalStateException {
         return solveInPlace(a, m, b, x, false, 0.);
     }
 
@@ -1102,7 +1102,7 @@ public class SymmLQ
      * @throws NonSquareOperatorException if {@code a} or {@code m} is not square
      * @throws MathIllegalArgumentException if {@code m}, {@code b} or {@code x}
      * have dimensions inconsistent with {@code a}.
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
@@ -1118,7 +1118,7 @@ public class SymmLQ
         throws NullArgumentException, NonSquareOperatorException,
         MathIllegalArgumentException, NonSelfAdjointOperatorException,
         NonPositiveDefiniteOperatorException, IllConditionedOperatorException,
-        MaxCountExceededException {
+        MathIllegalStateException {
         checkParameters(a, m, b, x);
 
         final IterationManager manager = getIterationManager();
@@ -1187,7 +1187,7 @@ public class SymmLQ
         final RealVector b, final RealVector x) throws NullArgumentException,
         NonSquareOperatorException, MathIllegalArgumentException,
         NonSelfAdjointOperatorException, IllConditionedOperatorException,
-        MaxCountExceededException {
+        MathIllegalStateException {
         return solveInPlace(a, null, b, x, false, 0.);
     }
 }

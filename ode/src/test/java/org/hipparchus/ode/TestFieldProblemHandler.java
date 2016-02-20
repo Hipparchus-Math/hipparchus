@@ -18,7 +18,7 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.FieldStepHandler;
 import org.hipparchus.ode.sampling.FieldStepInterpolator;
 import org.hipparchus.util.MathUtils;
@@ -71,7 +71,7 @@ public class TestFieldProblemHandler<T extends RealFieldElement<T>>
         expectedStepStart = null;
     }
 
-    public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast) throws MaxCountExceededException {
+    public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast) throws MathIllegalStateException {
 
         T start = integrator.getCurrentStepStart().getTime();
         if (start.subtract(problem.getInitialState().getTime()).divide(integrator.getCurrentSignedStepsize()).abs().getReal() > 0.001) {

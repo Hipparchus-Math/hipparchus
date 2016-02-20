@@ -122,8 +122,7 @@ public class MatrixUtils {
      * @see #createRealMatrix(int, int)
      */
     public static RealMatrix createRealMatrix(double[][] data)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException {
+        throws NullArgumentException, MathIllegalArgumentException {
         if (data == null ||
             data[0] == null) {
             throw new NullArgumentException();
@@ -152,7 +151,7 @@ public class MatrixUtils {
      * @since 2.0
      */
     public static <T extends FieldElement<T>> FieldMatrix<T> createFieldMatrix(T[][] data)
-        throws MathIllegalArgumentException, MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null ||
             data[0] == null) {
             throw new NullArgumentException();

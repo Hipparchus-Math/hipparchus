@@ -72,8 +72,7 @@ public class SecantSolver extends AbstractUnivariateSolver {
     /** {@inheritDoc} */
     @Override
     protected final double doSolve()
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         // Get initial solution
         double x0 = getMin();
         double x1 = getMax();

@@ -55,7 +55,7 @@ public class DefaultMeasurementModel implements MeasurementModel {
      *             if any of the input matrices is non-rectangular
      */
     public DefaultMeasurementModel(final double[][] measMatrix, final double[][] measNoise)
-            throws NullArgumentException, MathIllegalArgumentException, MathIllegalArgumentException {
+            throws NullArgumentException, MathIllegalArgumentException {
         this(new Array2DRowRealMatrix(measMatrix), new Array2DRowRealMatrix(measNoise));
     }
 

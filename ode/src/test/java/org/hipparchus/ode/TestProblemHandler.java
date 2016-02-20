@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
@@ -70,7 +70,7 @@ public class TestProblemHandler
     expectedStepStart = Double.NaN;
   }
 
-  public void handleStep(StepInterpolator interpolator, boolean isLast) throws MaxCountExceededException {
+  public void handleStep(StepInterpolator interpolator, boolean isLast) throws MathIllegalStateException {
 
     double start = integrator.getCurrentStepStart();
     if (FastMath.abs((start - problem.getInitialTime()) / integrator.getCurrentSignedStepsize()) > 0.001) {
