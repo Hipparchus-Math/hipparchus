@@ -75,7 +75,7 @@ public class AkimaSplineInterpolator
         }
 
         if (xvals.length != yvals.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xvals.length, yvals.length);
         }
 
@@ -175,12 +175,12 @@ public class AkimaSplineInterpolator
                                                               double[] yvals,
                                                               double[] firstDerivatives) {
         if (xvals.length != yvals.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xvals.length, yvals.length);
         }
 
         if (xvals.length != firstDerivatives.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xvals.length, firstDerivatives.length);
         }
 

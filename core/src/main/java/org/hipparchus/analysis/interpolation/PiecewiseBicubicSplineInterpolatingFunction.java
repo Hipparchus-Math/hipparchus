@@ -95,12 +95,12 @@ public class PiecewiseBicubicSplineInterpolatingFunction
         }
 
         if (xLen != f.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xLen, f.length);
         }
 
         if (yLen != f[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    yLen, f[0].length);
         }
 

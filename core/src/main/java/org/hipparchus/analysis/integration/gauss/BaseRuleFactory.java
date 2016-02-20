@@ -110,7 +110,7 @@ public abstract class BaseRuleFactory<T extends Number> {
      */
     protected void addRule(Pair<T[], T[]> rule) throws MathIllegalArgumentException {
         if (rule.getFirst().length != rule.getSecond().length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    rule.getFirst().length,
                                                    rule.getSecond().length);
         }

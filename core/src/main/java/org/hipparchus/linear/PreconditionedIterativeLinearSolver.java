@@ -147,7 +147,7 @@ public abstract class PreconditionedIterativeLinearSolver
                                                      m.getRowDimension());
             }
             if (m.getRowDimension() != a.getRowDimension()) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        m.getRowDimension(), a.getRowDimension());
             }
         }

@@ -115,7 +115,7 @@ public abstract class AbstractMultipleLinearRegression implements
             throw new NullArgumentException();
         }
         if (data.length != nobs * (nvars + 1)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    data.length, nobs * (nvars + 1));
         }
         if (nobs <= nvars) {
@@ -194,7 +194,7 @@ public abstract class AbstractMultipleLinearRegression implements
             final double[][] xAug = new double[x.length][nVars + 1];
             for (int i = 0; i < x.length; i++) {
                 if (x[i].length != nVars) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            x[i].length, nVars);
                 }
                 xAug[i][0] = 1.0d;
@@ -227,7 +227,7 @@ public abstract class AbstractMultipleLinearRegression implements
             throw new NullArgumentException();
         }
         if (x.length != y.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    y.length, x.length);
         }
         if (x.length == 0) {  // Must be no y data either
@@ -252,7 +252,7 @@ public abstract class AbstractMultipleLinearRegression implements
      */
     protected void validateCovarianceData(double[][] x, double[][] covariance) {
         if (x.length != covariance.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    x.length, covariance.length);
         }
         if (covariance.length > 0 && covariance.length != covariance[0].length) {

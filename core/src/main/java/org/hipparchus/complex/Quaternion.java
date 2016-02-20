@@ -88,7 +88,7 @@ public final class Quaternion implements Serializable {
                       final double[] v)
         throws MathIllegalArgumentException {
         if (v.length != 3) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, 3);
         }
         this.q0 = scalar;

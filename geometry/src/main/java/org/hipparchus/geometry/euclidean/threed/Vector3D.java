@@ -106,7 +106,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
      */
     public Vector3D(double[] v) throws MathIllegalArgumentException {
         if (v.length != 3) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, 3);
         }
         this.x = v[0];

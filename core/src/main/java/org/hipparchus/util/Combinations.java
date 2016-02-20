@@ -362,11 +362,11 @@ public class Combinations implements Iterable<int[]> {
         public int compare(int[] c1,
                            int[] c2) {
             if (c1.length != k) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        c1.length, k);
             }
             if (c2.length != k) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        c2.length, k);
             }
 

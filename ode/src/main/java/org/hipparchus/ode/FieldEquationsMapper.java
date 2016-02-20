@@ -117,12 +117,12 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
         throws MathIllegalArgumentException {
 
         if (y.length != getTotalDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    y.length, getTotalDimension());
         }
 
         if (yDot.length != getTotalDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    yDot.length, getTotalDimension());
         }
 
@@ -158,7 +158,7 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
         final int begin     = start[index];
         final int end       = start[index + 1];
         if (complete.length < end) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    complete.length, end);
         }
         final int dimension = end - begin;
@@ -182,11 +182,11 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
         final int end       = start[index + 1];
         final int dimension = end - begin;
         if (complete.length < end) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    complete.length, end);
         }
         if (equationData.length != dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    equationData.length, dimension);
         }
         System.arraycopy(equationData, 0, complete, begin, dimension);

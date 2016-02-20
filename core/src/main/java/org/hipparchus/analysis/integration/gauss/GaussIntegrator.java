@@ -51,7 +51,7 @@ public class GaussIntegrator {
                            double[] weights)
         throws NonMonotonicSequenceException, MathIllegalArgumentException {
         if (points.length != weights.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    points.length, weights.length);
         }
 

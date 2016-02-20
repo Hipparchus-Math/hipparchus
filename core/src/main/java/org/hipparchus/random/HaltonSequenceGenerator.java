@@ -112,7 +112,7 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
         }
 
         if (weights != null && weights.length != bases.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    weights.length, bases.length);
         }
 

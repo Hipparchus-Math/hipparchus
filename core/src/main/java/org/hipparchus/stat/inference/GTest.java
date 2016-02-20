@@ -78,11 +78,11 @@ public class GTest {
             MathIllegalArgumentException {
 
         if (expected.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, 2);
         }
         if (expected.length != observed.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, observed.length);
         }
         MathArrays.checkPositive(expected);
@@ -351,11 +351,11 @@ public class GTest {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, 2);
         }
         if (observed1.length != observed2.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, observed2.length);
         }
 

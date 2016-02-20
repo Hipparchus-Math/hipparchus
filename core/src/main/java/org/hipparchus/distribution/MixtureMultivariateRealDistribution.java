@@ -79,7 +79,7 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
         for (int i = 0; i < numComp; i++) {
             final Pair<Double, T> comp = components.get(i);
             if (comp.getSecond().getDimension() != dim) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        comp.getSecond().getDimension(), dim);
             }
             if (comp.getFirst() < 0) {

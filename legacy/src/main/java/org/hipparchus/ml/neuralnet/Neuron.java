@@ -142,7 +142,7 @@ public class Neuron implements Serializable {
     public boolean compareAndSetFeatures(double[] expect,
                                          double[] update) {
         if (update.length != size) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    update.length, size);
         }
 
@@ -210,7 +210,7 @@ public class Neuron implements Serializable {
     private boolean containSameValues(double[] current,
                                       double[] expect) {
         if (expect.length != size) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    expect.length, size);
         }
 

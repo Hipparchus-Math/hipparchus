@@ -89,7 +89,7 @@ public class CorrelatedRandomVectorGenerator
                                            NormalizedRandomGenerator generator) {
         int order = covariance.getRowDimension();
         if (mean.length != order) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    mean.length, order);
         }
         this.mean = mean.clone();

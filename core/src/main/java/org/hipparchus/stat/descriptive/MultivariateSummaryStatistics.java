@@ -640,7 +640,7 @@ public class MultivariateSummaryStatistics
      */
     private void checkDimension(int dimension) throws MathIllegalArgumentException {
         if (dimension != k) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    dimension, k);
         }
     }

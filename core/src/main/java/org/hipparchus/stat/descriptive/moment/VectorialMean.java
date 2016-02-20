@@ -51,7 +51,7 @@ public class VectorialMean implements Serializable {
      */
     public void increment(double[] v) throws MathIllegalArgumentException {
         if (v.length != means.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, means.length);
         }
         for (int i = 0; i < v.length; ++i) {

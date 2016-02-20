@@ -870,7 +870,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     protected void checkVectorDimensions(int n)
         throws MathIllegalArgumentException {
         if (data.length != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    data.length, n);
         }
     }

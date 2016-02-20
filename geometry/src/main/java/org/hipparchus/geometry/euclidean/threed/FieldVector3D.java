@@ -70,7 +70,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      */
     public FieldVector3D(final T[] v) throws MathIllegalArgumentException {
         if (v.length != 3) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, 3);
         }
         this.x = v[0];

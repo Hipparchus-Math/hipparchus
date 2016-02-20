@@ -170,7 +170,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
     private void checkDimensionsEquality(final int d1, final int d2)
         throws MathIllegalArgumentException {
         if (d1 != d2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    d2, d1);
         }
     }

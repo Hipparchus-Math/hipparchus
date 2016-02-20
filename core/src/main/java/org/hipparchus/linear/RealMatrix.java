@@ -61,22 +61,22 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param m matrix to be added
      * @return {@code this + m}
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     RealMatrix add(RealMatrix m)
-        throws MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns {@code this} minus {@code m}.
      *
      * @param m matrix to be subtracted
      * @return {@code this - m}
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     RealMatrix subtract(RealMatrix m)
-        throws MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the result of adding {@code d} to each entry of {@code this}.
@@ -200,13 +200,13 @@ public interface RealMatrix extends AnyMatrix {
      * @throws OutOfRangeException if the indices are not valid.
      * @throws NumberIsTooSmallException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
-     * @throws MatrixDimensionMismatchException if the destination array is too
+     * @throws MathIllegalArgumentException if the destination array is too
      * small.
      */
     void copySubMatrix(int startRow, int endRow, int startColumn,
                        int endColumn, double[][] destination)
         throws OutOfRangeException, NumberIsTooSmallException,
-        MatrixDimensionMismatchException;
+        MathIllegalArgumentException;
 
     /**
      * Copy a submatrix. Rows and columns are indicated counting from 0 to n-1.
@@ -221,13 +221,13 @@ public interface RealMatrix extends AnyMatrix {
      * @throws NoDataException if the row or column selections are empty (zero
      * length).
      * @throws OutOfRangeException if the indices are not valid.
-     * @throws MatrixDimensionMismatchException if the destination array is too
+     * @throws MathIllegalArgumentException if the destination array is too
      * small.
      */
     void copySubMatrix(int[] selectedRows, int[] selectedColumns,
                        double[][] destination)
         throws OutOfRangeException, NullArgumentException, NoDataException,
-        MatrixDimensionMismatchException;
+        MathIllegalArgumentException;
 
    /**
     * Replace the submatrix starting at {@code row, column} using data in the
@@ -279,12 +279,12 @@ public interface RealMatrix extends AnyMatrix {
      * @param matrix Row matrix to be copied (must have one row and the same
      * number of columns as the instance).
      * @throws OutOfRangeException if the specified row index is invalid.
-     * @throws MatrixDimensionMismatchException if the row dimension of the
+     * @throws MathIllegalArgumentException if the row dimension of the
      * {@code matrix} is not {@code 1}, or the column dimensions of {@code this}
      * and {@code matrix} do not match.
      */
     void setRowMatrix(int row, RealMatrix matrix)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws OutOfRangeException, MathIllegalArgumentException;
 
     /**
      * Get the entries at the given column index as a column matrix. Column
@@ -305,12 +305,12 @@ public interface RealMatrix extends AnyMatrix {
      * @param matrix Column matrix to be copied (must have one column and the
      * same number of rows as the instance).
      * @throws OutOfRangeException if the specified column index is invalid.
-     * @throws MatrixDimensionMismatchException if the column dimension of the
+     * @throws MathIllegalArgumentException if the column dimension of the
      * {@code matrix} is not {@code 1}, or the row dimensions of {@code this}
      * and {@code matrix} do not match.
      */
     void setColumnMatrix(int column, RealMatrix matrix)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws OutOfRangeException, MathIllegalArgumentException;
 
     /**
      * Returns the entries in row number {@code row} as a vector. Row indices
@@ -331,11 +331,11 @@ public interface RealMatrix extends AnyMatrix {
      * @param vector row vector to be copied (must have the same number of
      * column as the instance).
      * @throws OutOfRangeException if the specified row index is invalid.
-     * @throws MatrixDimensionMismatchException if the {@code vector} dimension
+     * @throws MathIllegalArgumentException if the {@code vector} dimension
      * does not match the column dimension of {@code this} matrix.
      */
     void setRowVector(int row, RealVector vector)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws OutOfRangeException, MathIllegalArgumentException;
 
     /**
      * Get the entries at the given column index as a vector. Column indices
@@ -356,11 +356,11 @@ public interface RealMatrix extends AnyMatrix {
      * @param vector column vector to be copied (must have the same number of
      * rows as the instance).
      * @throws OutOfRangeException if the specified column index is invalid.
-     * @throws MatrixDimensionMismatchException if the {@code vector} dimension
+     * @throws MathIllegalArgumentException if the {@code vector} dimension
      * does not match the row dimension of {@code this} matrix.
      */
     void setColumnVector(int column, RealVector vector)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws OutOfRangeException, MathIllegalArgumentException;
 
     /**
      * Get the entries at the given row index. Row indices start at 0.
@@ -379,11 +379,11 @@ public interface RealMatrix extends AnyMatrix {
      * @param array Row matrix to be copied (must have the same number of
      * columns as the instance)
      * @throws OutOfRangeException if the specified row index is invalid.
-     * @throws MatrixDimensionMismatchException if the {@code array} length does
+     * @throws MathIllegalArgumentException if the {@code array} length does
      * not match the column dimension of {@code this} matrix.
      */
     void setRow(int row, double[] array)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws OutOfRangeException, MathIllegalArgumentException;
 
     /**
      * Get the entries at the given column index as an array. Column indices
@@ -403,11 +403,11 @@ public interface RealMatrix extends AnyMatrix {
      * @param array Column array to be copied (must have the same number of
      * rows as the instance).
      * @throws OutOfRangeException if the specified column index is invalid.
-     * @throws MatrixDimensionMismatchException if the {@code array} length does
+     * @throws MathIllegalArgumentException if the {@code array} length does
      * not match the row dimension of {@code this} matrix.
      */
     void setColumn(int column, double[] array)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws OutOfRangeException, MathIllegalArgumentException;
 
     /**
      * Get the entry in the specified row and column. Row and column indices

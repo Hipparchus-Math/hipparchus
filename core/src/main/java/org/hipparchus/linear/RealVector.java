@@ -175,7 +175,7 @@ public abstract class RealVector {
         throws MathIllegalArgumentException {
         int d = getDimension();
         if (d != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    d, n);
         }
     }

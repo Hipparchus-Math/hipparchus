@@ -228,7 +228,7 @@ public class CholeskyDecomposition {
         public RealVector solve(final RealVector b) {
             final int m = lTData.length;
             if (b.getDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        b.getDimension(), m);
             }
 
@@ -261,7 +261,7 @@ public class CholeskyDecomposition {
         public RealMatrix solve(RealMatrix b) {
             final int m = lTData.length;
             if (b.getRowDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        b.getRowDimension(), m);
             }
 

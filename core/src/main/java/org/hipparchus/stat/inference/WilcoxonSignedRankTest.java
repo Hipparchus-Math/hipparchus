@@ -84,7 +84,7 @@ public class WilcoxonSignedRankTest {
             throw new NoDataException();
         }
         if (y.length != x.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    y.length, x.length);
         }
     }

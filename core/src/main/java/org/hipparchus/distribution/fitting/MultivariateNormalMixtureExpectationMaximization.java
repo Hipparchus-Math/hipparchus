@@ -96,7 +96,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
         for (int i = 0; i < data.length; i++) {
             if (data[i].length != data[0].length) {
                 // Jagged arrays not allowed
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        data[i].length, data[0].length);
             }
             if (data[i].length < 2) {
@@ -154,7 +154,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
             = initialMixture.getComponents().get(0).getSecond().getMeans().length;
 
         if (numMeanColumns != numCols) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    numMeanColumns, numCols);
         }
 

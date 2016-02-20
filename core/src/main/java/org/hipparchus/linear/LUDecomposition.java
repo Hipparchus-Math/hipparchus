@@ -293,7 +293,7 @@ public class LUDecomposition {
         public RealVector solve(RealVector b) {
             final int m = pivot.length;
             if (b.getDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        b.getDimension(), m);
             }
             if (singular) {
@@ -333,7 +333,7 @@ public class LUDecomposition {
 
             final int m = pivot.length;
             if (b.getRowDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        b.getRowDimension(), m);
             }
             if (singular) {

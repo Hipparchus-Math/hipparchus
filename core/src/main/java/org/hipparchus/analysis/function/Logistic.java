@@ -185,7 +185,7 @@ public class Logistic implements UnivariateDifferentiableFunction {
                 throw new NullArgumentException();
             }
             if (param.length != 6) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        param.length, 6);
             }
             if (param[5] <= 0) {

@@ -123,13 +123,13 @@ public class TransformUtils {
         throws MathIllegalArgumentException{
 
         if (dataRI.length != 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    dataRI.length, 2);
         }
         final double[] dataR = dataRI[0];
         final double[] dataI = dataRI[1];
         if (dataR.length != dataI.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    dataI.length, dataR.length);
         }
 

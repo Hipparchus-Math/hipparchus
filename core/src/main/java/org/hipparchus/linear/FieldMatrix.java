@@ -70,20 +70,20 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      *
      * @param m Matrix to be added.
      * @return {@code this} + {@code m}.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this} matrix.
      */
-    FieldMatrix<T> add(FieldMatrix<T> m) throws MatrixDimensionMismatchException;
+    FieldMatrix<T> add(FieldMatrix<T> m) throws MathIllegalArgumentException;
 
     /**
      * Subtract {@code m} from this matrix.
      *
      * @param m Matrix to be subtracted.
      * @return {@code this} - {@code m}.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this} matrix.
      */
-    FieldMatrix<T> subtract(FieldMatrix<T> m) throws MatrixDimensionMismatchException;
+    FieldMatrix<T> subtract(FieldMatrix<T> m) throws MathIllegalArgumentException;
 
      /**
      * Increment each entry of this matrix.
@@ -185,7 +185,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param endColumn Final column index (inclusive).
     * @param destination The array where the submatrix data should be copied
     * (if larger than rows/columns counts, only the upper-left part will be modified).
-    * @throws MatrixDimensionMismatchException if the dimensions of
+    * @throws MathIllegalArgumentException if the dimensions of
     * {@code destination} are not large enough to hold the submatrix.
     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
     * {@code endColumn < startColumn}.
@@ -193,7 +193,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     */
     void copySubMatrix(int startRow, int endRow, int startColumn, int endColumn,
                        T[][] destination)
-    throws MatrixDimensionMismatchException, NumberIsTooSmallException,
+    throws MathIllegalArgumentException, NumberIsTooSmallException,
     OutOfRangeException;
 
   /**
@@ -204,7 +204,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
    * @param selectedColumns Array of column indices.
    * @param destination Arrays where the submatrix data should be copied
    * (if larger than rows/columns counts, only the upper-left part will be used)
-   * @throws MatrixDimensionMismatchException if the dimensions of
+   * @throws MathIllegalArgumentException if the dimensions of
    * {@code destination} do not match those of {@code this}.
    * @throws NoDataException if {@code selectedRows} or
    * {@code selectedColumns} is empty
@@ -213,7 +213,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
    * @throws OutOfRangeException if the indices are not valid.
    */
   void copySubMatrix(int[] selectedRows, int[] selectedColumns, T[][] destination)
-  throws MatrixDimensionMismatchException, NoDataException, NullArgumentException,
+  throws MathIllegalArgumentException, NoDataException, NullArgumentException,
   OutOfRangeException;
 
     /**
@@ -273,11 +273,11 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param matrix Row matrix (must have one row and the same number
     * of columns as the instance).
     * @throws OutOfRangeException if the specified row index is invalid.
-    * @throws MatrixDimensionMismatchException
+    * @throws MathIllegalArgumentException
     * if the matrix dimensions do not match one instance row.
     */
    void setRowMatrix(int row, FieldMatrix<T> matrix)
-   throws MatrixDimensionMismatchException, OutOfRangeException;
+   throws MathIllegalArgumentException, OutOfRangeException;
 
    /**
     * Get the entries in column number {@code column}
@@ -297,11 +297,11 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param matrix column matrix (must have one column and the same
     * number of rows as the instance).
     * @throws OutOfRangeException if the specified column index is invalid.
-    * @throws MatrixDimensionMismatchException if the matrix dimensions do
+    * @throws MathIllegalArgumentException if the matrix dimensions do
     * not match one instance column.
     */
    void setColumnMatrix(int column, FieldMatrix<T> matrix)
-   throws MatrixDimensionMismatchException, OutOfRangeException;
+   throws MathIllegalArgumentException, OutOfRangeException;
 
    /**
     * Get the entries in row number {@code row}
@@ -321,11 +321,11 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param vector row vector (must have the same number of columns
     * as the instance).
     * @throws OutOfRangeException if the specified row index is invalid.
-    * @throws MatrixDimensionMismatchException if the vector dimension does not
+    * @throws MathIllegalArgumentException if the vector dimension does not
     * match one instance row.
     */
    void setRowVector(int row, FieldVector<T> vector)
-   throws MatrixDimensionMismatchException, OutOfRangeException;
+   throws MathIllegalArgumentException, OutOfRangeException;
 
    /**
     * Returns the entries in column number {@code column}
@@ -345,11 +345,11 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     * @param vector Column vector (must have the same number of rows
     * as the instance).
     * @throws OutOfRangeException if the specified column index is invalid.
-    * @throws MatrixDimensionMismatchException if the vector dimension does not
+    * @throws MathIllegalArgumentException if the vector dimension does not
     * match one instance column.
     */
    void setColumnVector(int column, FieldVector<T> vector)
-   throws MatrixDimensionMismatchException, OutOfRangeException;
+   throws MathIllegalArgumentException, OutOfRangeException;
 
     /**
      * Get the entries in row number {@code row} as an array.
@@ -368,10 +368,10 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param array Row matrix (must have the same number of columns as
      * the instance).
      * @throws OutOfRangeException if the specified row index is invalid.
-     * @throws MatrixDimensionMismatchException if the array size does not match
+     * @throws MathIllegalArgumentException if the array size does not match
      * one instance row.
      */
-    void setRow(int row, T[] array) throws MatrixDimensionMismatchException,
+    void setRow(int row, T[] array) throws MathIllegalArgumentException,
     OutOfRangeException;
 
     /**
@@ -390,10 +390,10 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param column the column to be set
      * @param array column array (must have the same number of rows as the instance)
      * @throws OutOfRangeException if the specified column index is invalid.
-     * @throws MatrixDimensionMismatchException if the array size does not match
+     * @throws MathIllegalArgumentException if the array size does not match
      * one instance column.
      */
-    void setColumn(int column, T[] array) throws MatrixDimensionMismatchException,
+    void setColumn(int column, T[] array) throws MathIllegalArgumentException,
     OutOfRangeException;
 
     /**

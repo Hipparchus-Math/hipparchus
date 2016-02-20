@@ -173,7 +173,7 @@ class SimplexTableau implements Serializable {
         for (final LinearConstraint constraint : c) {
             final int constraintDimension = constraint.getCoefficients().getDimension();
             if (constraintDimension != dimension) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        constraintDimension, dimension);
             }
         }

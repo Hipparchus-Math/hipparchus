@@ -755,7 +755,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     protected void checkVectorDimensions(int n)
         throws MathIllegalArgumentException {
         if (data.length != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    data.length, n);
         }
     }

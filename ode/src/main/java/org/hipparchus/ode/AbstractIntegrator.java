@@ -241,11 +241,11 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
                MaxCountExceededException, NoBracketingException {
 
         if (y0.length != equations.getDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    y0.length, equations.getDimension());
         }
         if (y.length != equations.getDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    y.length, equations.getDimension());
         }
 

@@ -135,7 +135,7 @@ public class Logit implements UnivariateDifferentiableFunction {
                 throw new NullArgumentException();
             }
             if (param.length != 2) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        param.length, 2);
             }
         }

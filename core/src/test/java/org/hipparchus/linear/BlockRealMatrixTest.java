@@ -32,7 +32,6 @@ import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.DefaultRealMatrixChangingVisitor;
 import org.hipparchus.linear.DefaultRealMatrixPreservingVisitor;
 import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.MatrixDimensionMismatchException;
 import org.hipparchus.linear.NonSquareMatrixException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
@@ -701,8 +700,8 @@ public final class BlockRealMatrixTest {
         }
         try {
             m.setRowMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -762,8 +761,8 @@ public final class BlockRealMatrixTest {
         }
         try {
             m.setColumnMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -824,8 +823,8 @@ public final class BlockRealMatrixTest {
         }
         try {
             m.setRowVector(0, new ArrayRealVector(5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -885,8 +884,8 @@ public final class BlockRealMatrixTest {
         }
         try {
             m.setColumnVector(0, new ArrayRealVector(5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -951,8 +950,8 @@ public final class BlockRealMatrixTest {
         }
         try {
             m.setRow(0, new double[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1013,8 +1012,8 @@ public final class BlockRealMatrixTest {
         }
         try {
             m.setColumn(0, new double[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

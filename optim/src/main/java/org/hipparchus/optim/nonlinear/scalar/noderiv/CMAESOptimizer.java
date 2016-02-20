@@ -561,7 +561,7 @@ public class CMAESOptimizer
             final double[] init = getStartPoint();
 
             if (inputSigma.length != init.length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        inputSigma.length, init.length);
             }
 

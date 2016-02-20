@@ -155,7 +155,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      */
     private static List<Pair<Double, Double>>  createDistribution(double[] singletons, double[] probabilities) {
         if (singletons.length != probabilities.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    probabilities.length, singletons.length);
         }
 

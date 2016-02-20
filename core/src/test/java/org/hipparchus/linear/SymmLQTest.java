@@ -50,7 +50,7 @@ public class SymmLQTest {
             @Override
             public RealVector operate(final RealVector x) {
                 if (x.getDimension() != n) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            x.getDimension(), n);
                 }
                 final double[] y = new double[n];
@@ -88,7 +88,7 @@ public class SymmLQTest {
                 @Override
                 public RealVector operate(final RealVector x) {
                     if (x.getDimension() != n) {
-                        throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                        throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                                x.getDimension(), n);
                     }
                     final double[] y = new double[n];

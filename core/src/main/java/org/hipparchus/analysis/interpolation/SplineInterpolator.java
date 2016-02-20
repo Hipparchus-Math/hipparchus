@@ -68,7 +68,7 @@ public class SplineInterpolator implements UnivariateInterpolator {
                NumberIsTooSmallException,
                NonMonotonicSequenceException {
         if (x.length != y.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    x.length, y.length);
         }
 

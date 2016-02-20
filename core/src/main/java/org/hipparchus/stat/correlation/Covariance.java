@@ -243,7 +243,7 @@ public class Covariance {
         int length = xArray.length;
         if (length != yArray.length) {
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE, length, yArray.length);
+                  LocalizedFormats.DIMENSIONS_MISMATCH, length, yArray.length);
         } else if (length < 2) {
             throw new MathIllegalArgumentException(
                   LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, length, 2);

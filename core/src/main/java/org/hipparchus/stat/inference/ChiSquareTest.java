@@ -82,11 +82,11 @@ public class ChiSquareTest {
         MathIllegalArgumentException {
 
         if (expected.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, 2);
         }
         if (expected.length != observed.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, observed.length);
         }
         MathArrays.checkPositive(expected);
@@ -414,11 +414,11 @@ public class ChiSquareTest {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, 2);
         }
         if (observed1.length != observed2.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, observed2.length);
         }
 
@@ -591,12 +591,12 @@ public class ChiSquareTest {
         NotPositiveException {
 
         if (in.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    in.length, 2);
         }
 
         if (in[0].length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    in[0].length, 2);
         }
 

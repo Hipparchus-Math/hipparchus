@@ -205,7 +205,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         throws MathIllegalArgumentException, NumberIsTooLargeException {
         this(parameters, order);
         if (derivatives.length != data.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    derivatives.length, data.length);
         }
         System.arraycopy(derivatives, 0, data, 0, data.length);
@@ -610,7 +610,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     public DerivativeStructure compose(final double ... f)
         throws MathIllegalArgumentException {
         if (f.length != getOrder() + 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    f.length, getOrder() + 1);
         }
         final DerivativeStructure result = new DerivativeStructure(compiler);

@@ -83,11 +83,11 @@ public abstract class IterativeLinearSolver {
                                                        a.getColumnDimension());
         }
         if (b.getDimension() != a.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    b.getDimension(), a.getRowDimension());
         }
         if (x0.getDimension() != a.getColumnDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    x0.getDimension(), a.getColumnDimension());
         }
     }

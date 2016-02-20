@@ -219,7 +219,7 @@ public class LoessInterpolator
                NotFiniteNumberException,
                NumberIsTooSmallException {
         if (xval.length != yval.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);
         }
 
@@ -387,7 +387,7 @@ public class LoessInterpolator
                NotFiniteNumberException,
                NumberIsTooSmallException {
         if (xval.length != yval.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);
         }
 

@@ -272,7 +272,7 @@ public class PearsonsCorrelation {
     public double correlation(final double[] xArray, final double[] yArray) {
         SimpleRegression regression = new SimpleRegression();
         if (xArray.length != yArray.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xArray.length, yArray.length);
         } else if (xArray.length < 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION,

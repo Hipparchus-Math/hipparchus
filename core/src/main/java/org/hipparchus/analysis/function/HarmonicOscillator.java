@@ -136,7 +136,7 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
                 throw new NullArgumentException();
             }
             if (param.length != 3) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        param.length, 3);
             }
         }

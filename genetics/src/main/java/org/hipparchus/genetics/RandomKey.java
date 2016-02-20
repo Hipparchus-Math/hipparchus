@@ -118,11 +118,11 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
 
         // the size of the three lists must be equal
         if (representation.size() != l) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    representation.size(), l);
         }
         if (sortedRepr.size() != l) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    sortedRepr.size(), l);
         }
 
@@ -261,7 +261,7 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
         throws MathIllegalArgumentException, MathIllegalArgumentException {
 
         if (originalData.size() != permutedData.size()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    permutedData.size(), originalData.size());
         }
         int l = originalData.size();

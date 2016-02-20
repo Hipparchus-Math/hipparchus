@@ -139,7 +139,7 @@ public class MicrosphereProjectionInterpolator
             throw new NoDataException();
         }
         if (xval.length != yval.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);
         }
         if (xval[0] == null) {
@@ -147,7 +147,7 @@ public class MicrosphereProjectionInterpolator
         }
         final int dimension = microsphere.getDimension();
         if (dimension != xval[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval[0].length, dimension);
         }
 

@@ -55,7 +55,7 @@ public class BicubicInterpolator
             throw new NoDataException();
         }
         if (xval.length != fval.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, fval.length);
         }
 

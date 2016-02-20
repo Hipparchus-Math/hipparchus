@@ -566,7 +566,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     protected void checkVectorDimensions(int n)
         throws MathIllegalArgumentException {
         if (getDimension() != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    getDimension(), n);
         }
     }

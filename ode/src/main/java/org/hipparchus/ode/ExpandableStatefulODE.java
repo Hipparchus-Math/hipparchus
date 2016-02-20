@@ -195,7 +195,7 @@ public class ExpandableStatefulODE {
 
         // safety checks
         if (primaryState.length != this.primaryState.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    primaryState.length, this.primaryState.length);
         }
 
@@ -233,7 +233,7 @@ public class ExpandableStatefulODE {
 
         // safety checks
         if (secondaryState.length != localArray.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    secondaryState.length, localArray.length);
         }
 
@@ -270,7 +270,7 @@ public class ExpandableStatefulODE {
 
         // safety checks
         if (completeState.length != getTotalDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    completeState.length, getTotalDimension());
         }
 

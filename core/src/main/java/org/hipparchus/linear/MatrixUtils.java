@@ -563,15 +563,16 @@ public class MatrixUtils {
      *
      * @param left Left hand side matrix.
      * @param right Right hand side matrix.
-     * @throws MatrixDimensionMismatchException if the matrices are not addition
+     * @throws MathIllegalArgumentException if the matrices are not addition
      * compatible.
      */
     public static void checkAdditionCompatible(final AnyMatrix left, final AnyMatrix right)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         if ((left.getRowDimension()    != right.getRowDimension()) ||
             (left.getColumnDimension() != right.getColumnDimension())) {
-            throw new MatrixDimensionMismatchException(left.getRowDimension(), left.getColumnDimension(),
-                                                       right.getRowDimension(), right.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   left.getRowDimension(), left.getColumnDimension(),
+                                                   right.getRowDimension(), right.getColumnDimension());
         }
     }
 
@@ -580,15 +581,16 @@ public class MatrixUtils {
      *
      * @param left Left hand side matrix.
      * @param right Right hand side matrix.
-     * @throws MatrixDimensionMismatchException if the matrices are not addition
+     * @throws MathIllegalArgumentException if the matrices are not addition
      * compatible.
      */
     public static void checkSubtractionCompatible(final AnyMatrix left, final AnyMatrix right)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         if ((left.getRowDimension()    != right.getRowDimension()) ||
             (left.getColumnDimension() != right.getColumnDimension())) {
-            throw new MatrixDimensionMismatchException(left.getRowDimension(), left.getColumnDimension(),
-                                                       right.getRowDimension(), right.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   left.getRowDimension(), left.getColumnDimension(),
+                                                   right.getRowDimension(), right.getColumnDimension());
         }
     }
 
@@ -604,7 +606,7 @@ public class MatrixUtils {
         throws MathIllegalArgumentException {
 
         if (left.getColumnDimension() != right.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    left.getColumnDimension(), right.getRowDimension());
         }
     }
@@ -928,7 +930,7 @@ public class MatrixUtils {
         throws MathIllegalArgumentException, MathArithmeticException,
         NonSquareMatrixException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    (rm == null) ? 0 : rm.getRowDimension(),
                                                    (b  == null) ? 0 : b.getDimension());
         }
@@ -973,7 +975,7 @@ public class MatrixUtils {
         throws MathIllegalArgumentException, MathArithmeticException,
         NonSquareMatrixException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    (rm == null) ? 0 : rm.getRowDimension(),
                                                    (b  == null) ? 0 : b.getDimension());
         }

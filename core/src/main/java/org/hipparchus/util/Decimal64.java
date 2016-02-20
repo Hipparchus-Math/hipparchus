@@ -652,7 +652,7 @@ public class Decimal64 extends Number
     public Decimal64 linearCombination(final Decimal64[] a, final Decimal64[] b)
         throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    a.length, b.length);
         }
         final double[] aDouble = new double[a.length];
@@ -671,7 +671,7 @@ public class Decimal64 extends Number
     public Decimal64 linearCombination(final double[] a, final Decimal64[] b)
         throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    a.length, b.length);
         }
         final double[] bDouble = new double[b.length];

@@ -542,7 +542,7 @@ public class DSCompiler {
 
         // safety check
         if (orders.length != getFreeParameters()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    orders.length, getFreeParameters());
         }
 
@@ -1812,11 +1812,11 @@ public class DSCompiler {
     public void checkCompatibility(final DSCompiler compiler)
         throws MathIllegalArgumentException {
         if (parameters != compiler.parameters) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    parameters, compiler.parameters);
         }
         if (order != compiler.order) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    order, compiler.order);
         }
     }

@@ -304,7 +304,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
                 final int m = pivot.length;
                 if (b.getDimension() != m) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            b.getDimension(), m);
                 }
                 if (singular) {
@@ -350,7 +350,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
             final int m = pivot.length;
             final int length = b.getDimension();
             if (length != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        length, m);
             }
             if (singular) {
@@ -388,7 +388,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
         public FieldMatrix<T> solve(FieldMatrix<T> b) {
             final int m = pivot.length;
             if (b.getRowDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        b.getRowDimension(), m);
             }
             if (singular) {

@@ -2846,7 +2846,7 @@ public class Dfp implements RealFieldElement<Dfp> {
     public Dfp linearCombination(final Dfp[] a, final Dfp[] b)
         throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    a.length, b.length);
         }
         Dfp r = getZero();
@@ -2863,7 +2863,7 @@ public class Dfp implements RealFieldElement<Dfp> {
     public Dfp linearCombination(final double[] a, final Dfp[] b)
         throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    a.length, b.length);
         }
         Dfp r = getZero();

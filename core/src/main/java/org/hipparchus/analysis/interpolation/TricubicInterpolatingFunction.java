@@ -156,35 +156,35 @@ public class TricubicInterpolatingFunction
             throw new NoDataException();
         }
         if (xLen != f.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xLen, f.length);
         }
         if (xLen != dFdX.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xLen, dFdX.length);
         }
         if (xLen != dFdY.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xLen, dFdY.length);
         }
         if (xLen != dFdZ.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xLen, dFdZ.length);
         }
         if (xLen != d2FdXdY.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xLen, d2FdXdY.length);
         }
         if (xLen != d2FdXdZ.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xLen, d2FdXdZ.length);
         }
         if (xLen != d2FdYdZ.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xLen, d2FdYdZ.length);
         }
         if (xLen != d3FdXdYdZ.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xLen, d3FdXdYdZ.length);
         }
 
@@ -203,35 +203,35 @@ public class TricubicInterpolatingFunction
 
         for (int i = 0; i < lastI; i++) {
             if (f[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        f[i].length, yLen);
             }
             if (dFdX[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        dFdX[i].length, yLen);
             }
             if (dFdY[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        dFdY[i].length, yLen);
             }
             if (dFdZ[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        dFdZ[i].length, yLen);
             }
             if (d2FdXdY[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        d2FdXdY[i].length, yLen);
             }
             if (d2FdXdZ[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        d2FdXdZ[i].length, yLen);
             }
             if (d2FdYdZ[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        d2FdYdZ[i].length, yLen);
             }
             if (d3FdXdYdZ[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        d3FdXdYdZ[i].length, yLen);
             }
 
@@ -239,35 +239,35 @@ public class TricubicInterpolatingFunction
             final double xR = xval[ip1] - xval[i];
             for (int j = 0; j < lastJ; j++) {
                 if (f[i][j].length != zLen) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            f[i][j].length, zLen);
                 }
                 if (dFdX[i][j].length != zLen) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            dFdX[i][j].length, zLen);
                 }
                 if (dFdY[i][j].length != zLen) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            dFdY[i][j].length, zLen);
                 }
                 if (dFdZ[i][j].length != zLen) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            dFdZ[i][j].length, zLen);
                 }
                 if (d2FdXdY[i][j].length != zLen) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            d2FdXdY[i][j].length, zLen);
                 }
                 if (d2FdXdZ[i][j].length != zLen) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            d2FdXdZ[i][j].length, zLen);
                 }
                 if (d2FdYdZ[i][j].length != zLen) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            d2FdYdZ[i][j].length, zLen);
                 }
                 if (d3FdXdYdZ[i][j].length != zLen) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            d3FdXdYdZ[i][j].length, zLen);
                 }
 

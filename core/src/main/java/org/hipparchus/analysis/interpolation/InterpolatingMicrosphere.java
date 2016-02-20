@@ -253,7 +253,7 @@ public class InterpolatingMicrosphere {
             throw new MaxCountExceededException(size);
         }
         if (normal.length > dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    normal.length, dimension);
         }
 

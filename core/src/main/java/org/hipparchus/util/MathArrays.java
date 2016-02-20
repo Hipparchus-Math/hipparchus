@@ -402,7 +402,7 @@ public class MathArrays {
             return true;
         } else {
             if (abort) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        a.length, b.length);
             }
             return false;
@@ -441,7 +441,7 @@ public class MathArrays {
             return true;
         } else {
             if (abort) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        a.length, b.length);
             }
             return false;
@@ -839,7 +839,7 @@ public class MathArrays {
                 throw new NullArgumentException();
             }
             if (y.length != len) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        y.length, len);
             }
         }

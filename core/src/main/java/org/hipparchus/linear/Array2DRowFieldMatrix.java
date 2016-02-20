@@ -167,7 +167,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             }
             for (int r = 1; r < nRows; r++) {
                 if (d[r].length != nCols) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            nCols, d[r].length);
                 }
             }
@@ -223,11 +223,11 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      *
      * @param m Matrix to be added.
      * @return {@code this} + m.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as this matrix.
      */
     public Array2DRowFieldMatrix<T> add(final Array2DRowFieldMatrix<T> m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         // safety check
         checkAdditionCompatible(m);
 
@@ -251,11 +251,11 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
      *
      * @param m Matrix to be subtracted.
      * @return {@code this} + m.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as this matrix.
      */
     public Array2DRowFieldMatrix<T> subtract(final Array2DRowFieldMatrix<T> m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         // safety check
         checkSubtractionCompatible(m);
 
@@ -349,7 +349,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             data = MathArrays.buildArray(getField(), subMatrix.length, nCols);
             for (int i = 0; i < data.length; ++i) {
                 if (subMatrix[i].length != nCols) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            nCols, subMatrix[i].length);
                 }
                 System.arraycopy(subMatrix[i], 0, data[i + row], column, nCols);
@@ -418,7 +418,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
         final int nRows = this.getRowDimension();
         final int nCols = this.getColumnDimension();
         if (v.length != nCols) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, nCols);
         }
         final T[] out = MathArrays.buildArray(getField(), nRows);
@@ -439,7 +439,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
         if (v.length != nRows) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, nRows);
         }
 

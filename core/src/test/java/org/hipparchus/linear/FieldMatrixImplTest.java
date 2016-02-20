@@ -615,8 +615,8 @@ public final class FieldMatrixImplTest {
         }
         try {
             m.setRowMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -659,8 +659,8 @@ public final class FieldMatrixImplTest {
         }
         try {
             m.setColumnMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -701,8 +701,8 @@ public final class FieldMatrixImplTest {
         }
         try {
             m.setRowVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -743,8 +743,8 @@ public final class FieldMatrixImplTest {
         }
         try {
             m.setColumnVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -790,8 +790,8 @@ public final class FieldMatrixImplTest {
         }
         try {
             m.setRow(0, new Fraction[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -832,8 +832,8 @@ public final class FieldMatrixImplTest {
         }
         try {
             m.setColumn(0, new Fraction[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1094,19 +1094,19 @@ public final class FieldMatrixImplTest {
             throw new NonSquareMatrixException(lu.getRowDimension(), lu.getColumnDimension());
         }
         if (lowerData.length != lowerData[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    lowerData.length, lowerData[0].length);
         }
         if (upperData.length != upperData[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    upperData.length, upperData[0].length);
         }
         if (lowerData.length != upperData.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    lowerData.length, upperData.length);
         }
         if (lowerData.length != lu.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    lowerData.length, lu.getRowDimension());
         }
         int n = lu.getRowDimension();
@@ -1133,7 +1133,7 @@ public final class FieldMatrixImplTest {
                                                matrix.getColumnDimension());
         }
         if (matrix.getRowDimension() != permutation.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    matrix.getRowDimension(), permutation.length);
         }
         int n = matrix.getRowDimension();

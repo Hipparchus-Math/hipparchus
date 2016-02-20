@@ -198,7 +198,7 @@ public class Network
      */
     public long createNeuron(double[] features) {
         if (features.length != featureSize) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    features.length, featureSize);
         }
 

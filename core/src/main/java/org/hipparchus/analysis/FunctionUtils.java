@@ -445,7 +445,7 @@ public class FunctionUtils {
                 final double[] dv = gradient.value(dPoint);
                 if (dv.length != point.length) {
                     // the gradient function is inconsistent
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            dv.length, point.length);
                 }
 

@@ -149,7 +149,7 @@ public class StorelessCovariance extends Covariance {
 
         int length = data.length;
         if (length != dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    length, dimension);
         }
 
@@ -175,7 +175,7 @@ public class StorelessCovariance extends Covariance {
      */
     public void append(StorelessCovariance sc) throws MathIllegalArgumentException {
         if (sc.dimension != dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    sc.dimension, dimension);
         }
 

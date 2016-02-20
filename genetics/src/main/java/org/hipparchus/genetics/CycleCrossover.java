@@ -121,7 +121,7 @@ public class CycleCrossover<T> implements CrossoverPolicy {
 
         final int length = first.getLength();
         if (length != second.getLength()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    second.getLength(), length);
         }
 

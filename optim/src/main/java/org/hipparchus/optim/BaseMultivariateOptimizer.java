@@ -129,7 +129,7 @@ public abstract class BaseMultivariateOptimizer<PAIR>
             final int dim = start.length;
             if (lowerBound != null) {
                 if (lowerBound.length != dim) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            lowerBound.length, dim);
                 }
                 for (int i = 0; i < dim; i++) {
@@ -142,7 +142,7 @@ public abstract class BaseMultivariateOptimizer<PAIR>
             }
             if (upperBound != null) {
                 if (upperBound.length != dim) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            upperBound.length, dim);
                 }
                 for (int i = 0; i < dim; i++) {

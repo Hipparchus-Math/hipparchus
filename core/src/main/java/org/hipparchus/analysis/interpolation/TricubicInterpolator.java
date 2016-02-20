@@ -44,7 +44,7 @@ public class TricubicInterpolator
             throw new NoDataException();
         }
         if (xval.length != fval.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, fval.length);
         }
 
@@ -67,7 +67,7 @@ public class TricubicInterpolator
 
         for (int i = 1; i < xLen - 1; i++) {
             if (yval.length != fval[i].length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        yval.length, fval[i].length);
             }
 
@@ -81,7 +81,7 @@ public class TricubicInterpolator
 
             for (int j = 1; j < yLen - 1; j++) {
                 if (zval.length != fval[i][j].length) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            zval.length, fval[i][j].length);
                 }
 

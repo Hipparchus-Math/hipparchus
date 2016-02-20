@@ -170,7 +170,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
             final int iHeight = blockHeight(iBlock);
             for (int jBlock = 0; jBlock < blockColumns; ++jBlock, ++index) {
                 if (blockData[index].length != iHeight * blockWidth(jBlock)) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            blockData[index].length,
                                                            iHeight * blockWidth(jBlock));
                 }
@@ -217,7 +217,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
         for (int i = 0; i < rawData.length; ++i) {
             final int length = rawData[i].length;
             if (length != columns) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        columns, length);
             }
         }
@@ -318,7 +318,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> add(final FieldMatrix<T> m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         try {
             return add((BlockFieldMatrix<T>) m);
         } catch (ClassCastException cce) {
@@ -363,11 +363,11 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      *
      * @param m matrix to be added
      * @return {@code this + m}
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}
      */
     public BlockFieldMatrix<T> add(final BlockFieldMatrix<T> m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         // safety check
         checkAdditionCompatible(m);
@@ -390,7 +390,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> subtract(final FieldMatrix<T> m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         try {
             return subtract((BlockFieldMatrix<T>) m);
         } catch (ClassCastException cce) {
@@ -435,10 +435,10 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      *
      * @param m matrix to be subtracted
      * @return {@code this - m}
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}
      */
-    public BlockFieldMatrix<T> subtract(final BlockFieldMatrix<T> m) throws MatrixDimensionMismatchException {
+    public BlockFieldMatrix<T> subtract(final BlockFieldMatrix<T> m) throws MathIllegalArgumentException {
         // safety check
         checkSubtractionCompatible(m);
 
@@ -797,7 +797,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
         checkSubMatrixIndex(row, endRow, column, endColumn);
         for (final T[] subRow : subMatrix) {
             if (subRow.length != refLength) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        refLength, subRow.length);
             }
         }
@@ -868,7 +868,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setRowMatrix(final int row, final FieldMatrix<T> matrix)
-        throws MatrixDimensionMismatchException, OutOfRangeException {
+        throws MathIllegalArgumentException, OutOfRangeException {
         try {
             setRowMatrix(row, (BlockFieldMatrix<T>) matrix);
         } catch (ClassCastException cce) {
@@ -883,19 +883,19 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      * @param row the row to be set
      * @param matrix row matrix (must have one row and the same number of columns
      * as the instance)
-     * @throws MatrixDimensionMismatchException if the matrix dimensions do
+     * @throws MathIllegalArgumentException if the matrix dimensions do
      * not match one instance row.
      * @throws OutOfRangeException if the specified row index is invalid.
      */
     public void setRowMatrix(final int row, final BlockFieldMatrix<T> matrix)
-        throws MatrixDimensionMismatchException, OutOfRangeException {
+        throws MathIllegalArgumentException, OutOfRangeException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if ((matrix.getRowDimension() != 1) ||
             (matrix.getColumnDimension() != nCols)) {
-            throw new MatrixDimensionMismatchException(matrix.getRowDimension(),
-                                                       matrix.getColumnDimension(),
-                                                       1, nCols);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension(),
+                                                   1, nCols);
         }
 
         // perform copy block-wise, to ensure good cache behavior
@@ -952,7 +952,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setColumnMatrix(final int column, final FieldMatrix<T> matrix)
-        throws MatrixDimensionMismatchException, OutOfRangeException {
+        throws MathIllegalArgumentException, OutOfRangeException {
         try {
             setColumnMatrix(column, (BlockFieldMatrix<T>) matrix);
         } catch (ClassCastException cce) {
@@ -967,19 +967,19 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      * @param column Column to be set.
      * @param matrix Column matrix (must have one column and the same number of rows
      * as the instance).
-     * @throws MatrixDimensionMismatchException if the matrix dimensions do
+     * @throws MathIllegalArgumentException if the matrix dimensions do
      * not match one instance column.
      * @throws OutOfRangeException if the specified column index is invalid.
      */
     void setColumnMatrix(final int column, final BlockFieldMatrix<T> matrix)
-        throws MatrixDimensionMismatchException, OutOfRangeException {
+        throws MathIllegalArgumentException, OutOfRangeException {
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if ((matrix.getRowDimension() != nRows) ||
             (matrix.getColumnDimension() != 1)) {
-            throw new MatrixDimensionMismatchException(matrix.getRowDimension(),
-                                                       matrix.getColumnDimension(),
-                                                       nRows, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension(),
+                                                   nRows, 1);
         }
 
         // perform copy block-wise, to ensure good cache behavior
@@ -1026,7 +1026,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setRowVector(final int row, final FieldVector<T> vector)
-        throws MatrixDimensionMismatchException, OutOfRangeException {
+        throws MathIllegalArgumentException, OutOfRangeException {
         try {
             setRow(row, ((ArrayFieldVector<T>) vector).getDataRef());
         } catch (ClassCastException cce) {
@@ -1060,7 +1060,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setColumnVector(final int column, final FieldVector<T> vector)
-        throws OutOfRangeException, MatrixDimensionMismatchException {
+        throws OutOfRangeException, MathIllegalArgumentException {
         try {
             setColumn(column, ((ArrayFieldVector<T>) vector).getDataRef());
         } catch (ClassCastException cce) {
@@ -1091,11 +1091,13 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setRow(final int row, final T[] array)
-        throws OutOfRangeException, MatrixDimensionMismatchException {
+        throws OutOfRangeException, MathIllegalArgumentException {
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if (array.length != nCols) {
-            throw new MatrixDimensionMismatchException(1, array.length, 1, nCols);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   1, array.length,
+                                                   1, nCols);
         }
 
         // perform copy block-wise, to ensure good cache behavior
@@ -1135,11 +1137,13 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     /** {@inheritDoc} */
     @Override
     public void setColumn(final int column, final T[] array)
-        throws MatrixDimensionMismatchException, OutOfRangeException {
+        throws MathIllegalArgumentException, OutOfRangeException {
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if (array.length != nRows) {
-            throw new MatrixDimensionMismatchException(array.length, 1, nRows, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   array.length,
+                                                   1, nRows, 1);
         }
 
         // perform copy block-wise, to ensure good cache behavior
@@ -1273,7 +1277,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public T[] operate(final T[] v) throws MathIllegalArgumentException {
         if (v.length != columns) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, columns);
         }
         final T[] out = MathArrays.buildArray(getField(), rows);
@@ -1316,7 +1320,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     public T[] preMultiply(final T[] v) throws MathIllegalArgumentException {
 
         if (v.length != rows) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, rows);
         }
         final T[] out = MathArrays.buildArray(getField(), columns);

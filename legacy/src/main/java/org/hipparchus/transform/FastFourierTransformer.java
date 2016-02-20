@@ -214,13 +214,13 @@ public class FastFourierTransformer implements Serializable {
         final DftNormalization normalization, final TransformType type) {
 
         if (dataRI.length != 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    dataRI.length, 2);
         }
         final double[] dataR = dataRI[0];
         final double[] dataI = dataRI[1];
         if (dataR.length != dataI.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    dataI.length, dataR.length);
         }
 
@@ -556,13 +556,13 @@ public class FastFourierTransformer implements Serializable {
 
             if (vector == null) {
                 if (dimensionSize.length > 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            0, dimensionSize.length);
                 }
                 return null;
             }
             if (vector.length != dimensionSize.length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        vector.length, dimensionSize.length);
             }
 
@@ -587,13 +587,13 @@ public class FastFourierTransformer implements Serializable {
 
             if (vector == null) {
                 if (dimensionSize.length > 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                            0, dimensionSize.length);
                 }
                 return null;
             }
             if (vector.length != dimensionSize.length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        vector.length, dimensionSize.length);
             }
 

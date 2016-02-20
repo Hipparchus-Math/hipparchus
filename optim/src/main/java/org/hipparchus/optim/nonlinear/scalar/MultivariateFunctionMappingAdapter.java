@@ -101,7 +101,7 @@ public class MultivariateFunctionMappingAdapter
         MathUtils.checkNotNull(lower);
         MathUtils.checkNotNull(upper);
         if (lower.length != upper.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    lower.length, upper.length);
         }
         for (int i = 0; i < lower.length; ++i) {

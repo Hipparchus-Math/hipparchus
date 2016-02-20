@@ -138,7 +138,7 @@ public class ContinuousOutputModel
     } else {
 
       if (getInterpolatedState().length != model.getInterpolatedState().length) {
-          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                  model.getInterpolatedState().length,
                                                  getInterpolatedState().length);
       }

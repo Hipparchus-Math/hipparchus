@@ -222,12 +222,12 @@ public abstract class AdaptiveStepsizeIntegrator
       mainSetDimension = equations.getPrimaryMapper().getDimension();
 
       if ((vecAbsoluteTolerance != null) && (vecAbsoluteTolerance.length != mainSetDimension)) {
-          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                  mainSetDimension, vecAbsoluteTolerance.length);
       }
 
       if ((vecRelativeTolerance != null) && (vecRelativeTolerance.length != mainSetDimension)) {
-          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                  mainSetDimension, vecRelativeTolerance.length);
       }
 

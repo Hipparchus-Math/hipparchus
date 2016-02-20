@@ -346,7 +346,7 @@ public class QRDecomposition {
             final int n = qrt.length;
             final int m = qrt[0].length;
             if (b.getDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        b.getDimension(), m);
             }
             checkSingular(rDiag, threshold, true);
@@ -389,7 +389,7 @@ public class QRDecomposition {
             final int n = qrt.length;
             final int m = qrt[0].length;
             if (b.getRowDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        b.getRowDimension(), m);
             }
             checkSingular(rDiag, threshold, true);

@@ -108,7 +108,7 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
                                                 2, knots.length, false);
         }
         if (knots.length - 1 != polynomials.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    polynomials.length, knots.length);
         }
         MathArrays.checkOrder(knots);

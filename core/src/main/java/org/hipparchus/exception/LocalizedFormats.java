@@ -93,8 +93,7 @@ public enum LocalizedFormats implements Localizable {
     DIFFERENT_ORIG_AND_PERMUTED_DATA("original and permuted data must contain the same elements"),
     DIGEST_NOT_INITIALIZED("digest not initialized"),
     DIMENSIONS_MISMATCH_2x2("got {0}x{1} but expected {2}x{3}"), /* keep */
-    DIMENSIONS_MISMATCH_SIMPLE("{0} != {1}"), /* keep */
-    DIMENSIONS_MISMATCH("dimensions mismatch"), /* keep */
+    DIMENSIONS_MISMATCH("inconsistent dimensions: {0} != {1}"), /* keep */
     DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN("Discrete cumulative probability function returned NaN for argument {0}"),
     DISTRIBUTION_NOT_LOADED("distribution not loaded"),
     DUPLICATED_ABSCISSA_DIVISION_BY_ZERO("duplicated abscissa {0} causes division by zero"),

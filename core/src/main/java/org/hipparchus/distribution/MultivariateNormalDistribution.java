@@ -111,13 +111,13 @@ public class MultivariateNormalDistribution
         final int dim = means.length;
 
         if (covariances.length != dim) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    covariances.length, dim);
         }
 
         for (int i = 0; i < dim; i++) {
             if (dim != covariances[i].length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        covariances[i].length, dim);
             }
         }
@@ -186,7 +186,7 @@ public class MultivariateNormalDistribution
     public double density(final double[] vals) throws MathIllegalArgumentException {
         final int dim = getDimension();
         if (vals.length != dim) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    vals.length, dim);
         }
 

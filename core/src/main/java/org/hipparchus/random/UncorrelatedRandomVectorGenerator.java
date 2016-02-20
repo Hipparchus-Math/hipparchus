@@ -53,7 +53,7 @@ public class UncorrelatedRandomVectorGenerator
                                            double[] standardDeviation,
                                            NormalizedRandomGenerator generator) {
     if (mean.length != standardDeviation.length) {
-        throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+        throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                mean.length, standardDeviation.length);
     }
     this.mean              = mean.clone();

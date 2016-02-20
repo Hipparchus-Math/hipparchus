@@ -111,11 +111,11 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to be added.
      * @return {@code this} + {@code m}.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     public OpenMapRealMatrix add(OpenMapRealMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         MatrixUtils.checkAdditionCompatible(this, m);
 
@@ -134,7 +134,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public OpenMapRealMatrix subtract(final RealMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         try {
             return subtract((OpenMapRealMatrix) m);
         } catch (ClassCastException cce) {
@@ -147,11 +147,11 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to be subtracted.
      * @return {@code this} - {@code m}.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     public OpenMapRealMatrix subtract(OpenMapRealMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkAdditionCompatible(this, m);
 
         final OpenMapRealMatrix out = new OpenMapRealMatrix(this);

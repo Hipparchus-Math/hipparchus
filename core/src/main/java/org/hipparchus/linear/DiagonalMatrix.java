@@ -95,7 +95,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
         throws NotStrictlyPositiveException,
                MathIllegalArgumentException {
         if (rowDimension != columnDimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    rowDimension, columnDimension);
         }
 
@@ -113,11 +113,11 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to be added.
      * @return {@code this + m}.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     public DiagonalMatrix add(final DiagonalMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         // Safety check.
         MatrixUtils.checkAdditionCompatible(this, m);
 
@@ -135,11 +135,11 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to be subtracted.
      * @return {@code this - m}
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     public DiagonalMatrix subtract(final DiagonalMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkSubtractionCompatible(this, m);
 
         final int dim = getRowDimension();

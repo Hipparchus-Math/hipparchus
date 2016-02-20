@@ -652,7 +652,7 @@ class FastMathCalc {
     private static void checkLen(int expectedLen, int actual)
         throws MathIllegalArgumentException {
         if (expectedLen != actual) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    actual, expectedLen);
         }
     }

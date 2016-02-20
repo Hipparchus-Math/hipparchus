@@ -64,7 +64,7 @@ public class VectorialCovariance implements Serializable {
      */
     public void increment(double[] v) throws MathIllegalArgumentException {
         if (v.length != sums.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, sums.length);
         }
         int k = 0;

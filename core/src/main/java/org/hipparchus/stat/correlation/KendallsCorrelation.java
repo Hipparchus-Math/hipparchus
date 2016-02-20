@@ -156,7 +156,7 @@ public class KendallsCorrelation {
             throws MathIllegalArgumentException {
 
         if (xArray.length != yArray.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    xArray.length, yArray.length);
         }
 

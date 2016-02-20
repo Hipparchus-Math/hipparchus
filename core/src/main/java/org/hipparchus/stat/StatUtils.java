@@ -680,7 +680,7 @@ public final class StatUtils {
 
         int n = sample1.length;
         if (n != sample2.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    n, sample2.length);
         }
         if (n <= 0) {
@@ -728,7 +728,7 @@ public final class StatUtils {
         double diff = 0d;
         int n = sample1.length;
         if (n != sample2.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    n, sample2.length);
         }
         if (n < 2) {

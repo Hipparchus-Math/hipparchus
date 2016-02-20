@@ -37,7 +37,6 @@ import org.hipparchus.linear.DefaultFieldMatrixPreservingVisitor;
 import org.hipparchus.linear.FieldLUDecomposition;
 import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.FieldVector;
-import org.hipparchus.linear.MatrixDimensionMismatchException;
 import org.hipparchus.linear.NonSquareMatrixException;
 
 /**
@@ -782,8 +781,8 @@ public final class BlockFieldMatrixTest {
         }
         try {
             m.setRowMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -846,8 +845,8 @@ public final class BlockFieldMatrixTest {
         }
         try {
             m.setColumnMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -910,8 +909,8 @@ public final class BlockFieldMatrixTest {
         }
         try {
             m.setRowVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -972,8 +971,8 @@ public final class BlockFieldMatrixTest {
         }
         try {
             m.setColumnVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1039,8 +1038,8 @@ public final class BlockFieldMatrixTest {
         }
         try {
             m.setRow(0, new Fraction[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1102,8 +1101,8 @@ public final class BlockFieldMatrixTest {
         }
         try {
             m.setColumn(0, new Fraction[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

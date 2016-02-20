@@ -316,7 +316,7 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
     public static boolean verifyInterpolationArray(double x[], double y[], boolean abort)
         throws MathIllegalArgumentException, NumberIsTooSmallException, NonMonotonicSequenceException {
         if (x.length != y.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    x.length, y.length);
         }
         if (x.length < 2) {

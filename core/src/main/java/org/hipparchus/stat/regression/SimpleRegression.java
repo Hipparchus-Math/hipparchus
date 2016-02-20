@@ -296,7 +296,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     public void addObservations(final double[][] x,final double[] y) throws ModelSpecificationException {
         if ((x == null) || (y == null) || (x.length != y.length)) {
             throw new ModelSpecificationException(
-                  LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                  LocalizedFormats.DIMENSIONS_MISMATCH,
                   (x == null) ? 0 : x.length,
                   (y == null) ? 0 : y.length);
         }

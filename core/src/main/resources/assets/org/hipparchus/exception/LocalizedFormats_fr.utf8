@@ -60,8 +60,7 @@ DIFFERENT_ROWS_LENGTHS = certaines lignes ont une longueur de {0} alors que d''a
 DIFFERENT_ORIG_AND_PERMUTED_DATA = les données originales et permutées doivent contenir les mêmes éléments
 DIGEST_NOT_INITIALIZED = modèle empirique non initialisé
 DIMENSIONS_MISMATCH_2x2 = {0}x{1} à la place de {2}x{3}
-DIMENSIONS_MISMATCH_SIMPLE = {0} != {1}
-DIMENSIONS_MISMATCH = dimensions incohérentes
+DIMENSIONS_MISMATCH = dimensions incohérentes : {0} != {1}
 DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN = Discrètes fonction de probabilité cumulative retourné NaN à l''argument de {0}
 DISTRIBUTION_NOT_LOADED = aucune distribution n''a été chargée
 DUPLICATED_ABSCISSA_DIVISION_BY_ZERO = la duplication de l''abscisse {0} engendre une division par zéro

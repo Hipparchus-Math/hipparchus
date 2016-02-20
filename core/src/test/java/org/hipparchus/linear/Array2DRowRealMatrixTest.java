@@ -565,7 +565,7 @@ public final class Array2DRowRealMatrixTest {
             if (!mustFail) {
                 throw e;
             }
-        } catch (MatrixDimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
                 throw e;
             }
@@ -595,7 +595,7 @@ public final class Array2DRowRealMatrixTest {
             if (!mustFail) {
                 throw e;
             }
-        } catch (MatrixDimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             if (!mustFail) {
                 throw e;
             }
@@ -648,8 +648,8 @@ public final class Array2DRowRealMatrixTest {
         }
         try {
             m.setRowMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -692,8 +692,8 @@ public final class Array2DRowRealMatrixTest {
         }
         try {
             m.setColumnMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -734,8 +734,8 @@ public final class Array2DRowRealMatrixTest {
         }
         try {
             m.setRowVector(0, new ArrayRealVector(5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -776,8 +776,8 @@ public final class Array2DRowRealMatrixTest {
         }
         try {
             m.setColumnVector(0, new ArrayRealVector(5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -823,8 +823,8 @@ public final class Array2DRowRealMatrixTest {
         }
         try {
             m.setRow(0, new double[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -865,8 +865,8 @@ public final class Array2DRowRealMatrixTest {
         }
         try {
             m.setColumn(0, new double[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1107,19 +1107,19 @@ public final class Array2DRowRealMatrixTest {
             throw new NonSquareMatrixException(lu.getRowDimension(), lu.getColumnDimension());
         }
         if (lowerData.length != lowerData[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    lowerData.length, lowerData[0].length);
         }
         if (upperData.length != upperData[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    upperData.length, upperData[0].length);
         }
         if (lowerData.length != upperData.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    lowerData.length, upperData.length);
         }
         if (lowerData.length != lu.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    lowerData.length, lu.getRowDimension());
         }
 
@@ -1147,7 +1147,7 @@ public final class Array2DRowRealMatrixTest {
                                                matrix.getColumnDimension());
         }
         if (matrix.getRowDimension() != permutation.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    matrix.getRowDimension(), permutation.length);
         }
 

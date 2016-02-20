@@ -145,7 +145,7 @@ public abstract class AbstractSimplex implements OptimizationData {
 
             // Safety checks.
             if (refI.length != dimension) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        refI.length, dimension);
             }
             for (int j = 0; j < i; j++) {
@@ -214,7 +214,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      */
     public void build(final double[] startPoint) {
         if (dimension != startPoint.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    dimension, startPoint.length);
         }
 
@@ -323,7 +323,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      */
     protected void setPoints(PointValuePair[] points) {
         if (points.length != simplex.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    points.length, simplex.length);
         }
         simplex = points;

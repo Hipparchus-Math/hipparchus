@@ -79,7 +79,7 @@ public class Vector2D implements Vector<Euclidean2D> {
      */
     public Vector2D(double[] v) throws MathIllegalArgumentException {
         if (v.length != 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    v.length, 2);
         }
         this.x = v[0];

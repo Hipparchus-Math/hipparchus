@@ -421,7 +421,7 @@ public class EigenDecomposition {
 
             final int m = realEigenvalues.length;
             if (b.getDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        b.getDimension(), m);
             }
 
@@ -448,7 +448,7 @@ public class EigenDecomposition {
 
             final int m = realEigenvalues.length;
             if (b.getRowDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                        b.getRowDimension(), m);
             }
 
