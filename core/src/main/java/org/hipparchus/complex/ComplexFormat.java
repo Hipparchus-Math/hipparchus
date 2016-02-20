@@ -24,7 +24,7 @@ import java.util.Locale;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.CompositeFormat;
@@ -344,16 +344,16 @@ public class ComplexFormat {
      *
      * @param source the string to parse.
      * @return the parsed {@link Complex} object.
-     * @throws MathParseException if the beginning of the specified string
+     * @throws MathIllegalStateException if the beginning of the specified string
      * cannot be parsed.
      */
-    public Complex parse(String source) throws MathParseException {
+    public Complex parse(String source) throws MathIllegalStateException {
         ParsePosition parsePosition = new ParsePosition(0);
         Complex result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathParseException(source,
-                                         parsePosition.getErrorIndex(),
-                                         Complex.class);
+            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+                                                source, parsePosition.getErrorIndex(),
+                                                Complex.class);
         }
         return result;
     }

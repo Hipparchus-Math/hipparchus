@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.CompositeFormat;
 
 /**
@@ -277,16 +278,16 @@ public class RealMatrixFormat {
      *
      * @param source String to parse.
      * @return the parsed {@link RealMatrix} object.
-     * @throws MathParseException if the beginning of the specified string
+     * @throws MathIllegalStateException if the beginning of the specified string
      * cannot be parsed.
      */
     public RealMatrix parse(String source) {
         final ParsePosition parsePosition = new ParsePosition(0);
         final RealMatrix result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathParseException(source,
-                                         parsePosition.getErrorIndex(),
-                                         Array2DRowRealMatrix.class);
+            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+                                                source, parsePosition.getErrorIndex(),
+                                                Array2DRowRealMatrix.class);
         }
         return result;
     }

@@ -22,7 +22,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.CompositeFormat;
 
 /**
@@ -219,10 +219,10 @@ public abstract class VectorFormat<S extends Space> {
      * Parses a string to produce a {@link Vector} object.
      * @param source the string to parse
      * @return the parsed {@link Vector} object.
-     * @throws MathParseException if the beginning of the specified string
+     * @throws MathIllegalStateException if the beginning of the specified string
      * cannot be parsed.
      */
-    public abstract Vector<S> parse(String source) throws MathParseException;
+    public abstract Vector<S> parse(String source) throws MathIllegalStateException;
 
     /**
      * Parses a string to produce a {@link Vector} object.

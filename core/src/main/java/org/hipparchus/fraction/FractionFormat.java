@@ -25,7 +25,6 @@ import java.util.Locale;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathParseException;
 
 /**
  * Formats a Fraction number in proper format or improper format.  The number
@@ -189,15 +188,16 @@ public class FractionFormat extends AbstractFormat {
      * Parses a string to produce a {@link Fraction} object.
      * @param source the string to parse
      * @return the parsed {@link Fraction} object.
-     * @exception MathParseException if the beginning of the specified string
+     * @exception MathIllegalStateException if the beginning of the specified string
      *            cannot be parsed.
      */
     @Override
-    public Fraction parse(final String source) throws MathParseException {
+    public Fraction parse(final String source) throws MathIllegalStateException {
         final ParsePosition parsePosition = new ParsePosition(0);
         final Fraction result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathParseException(source, parsePosition.getErrorIndex(), Fraction.class);
+            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+                                                source, parsePosition.getErrorIndex(), Fraction.class);
         }
         return result;
     }

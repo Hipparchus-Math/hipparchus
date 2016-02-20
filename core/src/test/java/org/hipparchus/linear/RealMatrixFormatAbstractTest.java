@@ -24,7 +24,7 @@ import java.util.Locale;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.Assert;
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealMatrixFormat;
@@ -319,8 +319,8 @@ public abstract class RealMatrixFormatAbstractTest {
     public void testParseNoComponents() {
         try {
             realMatrixFormat.parse("{{ }}");
-            Assert.fail("Expecting MathParseException");
-        } catch (MathParseException pe) {
+            Assert.fail("Expecting MathIllegalStateException");
+        } catch (MathIllegalStateException pe) {
             // expected behavior
         }
     }

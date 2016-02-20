@@ -21,7 +21,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.euclidean.oned.Vector1DFormat;
 import org.junit.Assert;
@@ -129,7 +129,7 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseSimpleNoDecimals() throws MathParseException {
+    public void testParseSimpleNoDecimals() throws MathIllegalStateException {
         String source = "{1}";
         Vector1D expected = new Vector1D(1);
         Vector1D actual = vector1DFormat.parse(source);
@@ -150,7 +150,7 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseSimpleWithDecimals() throws MathParseException {
+    public void testParseSimpleWithDecimals() throws MathIllegalStateException {
         String source =
             "{1" + getDecimalCharacter() +
             "23}";
@@ -160,7 +160,7 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseSimpleWithDecimalsTrunc() throws MathParseException {
+    public void testParseSimpleWithDecimalsTrunc() throws MathIllegalStateException {
         String source =
             "{1" + getDecimalCharacter() +
             "2323}";
@@ -170,7 +170,7 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNegativeX() throws MathParseException {
+    public void testParseNegativeX() throws MathIllegalStateException {
         String source =
             "{-1" + getDecimalCharacter() +
             "2323}";
@@ -180,7 +180,7 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNegativeY() throws MathParseException {
+    public void testParseNegativeY() throws MathIllegalStateException {
         String source =
             "{1" + getDecimalCharacter() +
             "2323}";
@@ -190,7 +190,7 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNegativeZ() throws MathParseException {
+    public void testParseNegativeZ() throws MathIllegalStateException {
         String source =
             "{1" + getDecimalCharacter() +
             "2323}";
@@ -200,7 +200,7 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNegativeAll() throws MathParseException {
+    public void testParseNegativeAll() throws MathIllegalStateException {
         String source =
             "{-1" + getDecimalCharacter() +
             "2323}";
@@ -210,7 +210,7 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseZeroX() throws MathParseException {
+    public void testParseZeroX() throws MathIllegalStateException {
         String source =
             "{0" + getDecimalCharacter() +
             "0}";
@@ -220,7 +220,7 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNonDefaultSetting() throws MathParseException {
+    public void testParseNonDefaultSetting() throws MathIllegalStateException {
         String source =
             "[1" + getDecimalCharacter() +
             "2323]";
@@ -230,21 +230,21 @@ public abstract class Vector1DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNan() throws MathParseException {
+    public void testParseNan() throws MathIllegalStateException {
         String source = "{(NaN)}";
         Vector1D actual = vector1DFormat.parse(source);
         Assert.assertEquals(Vector1D.NaN, actual);
     }
 
     @Test
-    public void testParsePositiveInfinity() throws MathParseException {
+    public void testParsePositiveInfinity() throws MathIllegalStateException {
         String source = "{(Infinity)}";
         Vector1D actual = vector1DFormat.parse(source);
         Assert.assertEquals(Vector1D.POSITIVE_INFINITY, actual);
     }
 
     @Test
-    public void testParseNegativeInfinity() throws MathParseException {
+    public void testParseNegativeInfinity() throws MathIllegalStateException {
         String source = "{(-Infinity)}";
         Vector1D actual = vector1DFormat.parse(source);
         Assert.assertEquals(Vector1D.NEGATIVE_INFINITY, actual);

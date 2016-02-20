@@ -26,7 +26,7 @@ import java.util.Locale;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * Formats a BigFraction number in proper format or improper format.
@@ -183,15 +183,17 @@ public class BigFractionFormat extends AbstractFormat implements Serializable {
      * Parses a string to produce a {@link BigFraction} object.
      * @param source the string to parse
      * @return the parsed {@link BigFraction} object.
-     * @exception MathParseException if the beginning of the specified string
+     * @exception MathIllegalStateException if the beginning of the specified string
      *            cannot be parsed.
      */
     @Override
-    public BigFraction parse(final String source) throws MathParseException {
+    public BigFraction parse(final String source) throws MathIllegalStateException {
         final ParsePosition parsePosition = new ParsePosition(0);
         final BigFraction result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathParseException(source, parsePosition.getErrorIndex(), BigFraction.class);
+            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+                                                source, parsePosition.getErrorIndex(),
+                                                BigFraction.class);
         }
         return result;
     }

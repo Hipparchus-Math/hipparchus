@@ -25,8 +25,9 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.MathParseException;
 import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -110,7 +111,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
         } catch (IOException e) {
             // the internal resource file could not be read -> should not happen
             throw new MathInternalError();
-        } catch (MathParseException e) {
+        } catch (MathIllegalStateException e) {
             // the internal resource file could not be parsed -> should not happen
             throw new MathInternalError();
         } finally {
@@ -150,11 +151,11 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      * @throws NotStrictlyPositiveException if the space dimension is &lt; 1
      * @throws OutOfRangeException if the space dimension is outside the range [1, max], where
      *   max refers to the maximum dimension found in the input stream
-     * @throws MathParseException if the content in the stream could not be parsed successfully
+     * @throws MathIllegalStateException if the content in the stream could not be parsed successfully
      * @throws IOException if an error occurs while reading from the input stream
      */
     public SobolSequenceGenerator(final int dimension, final InputStream is)
-            throws NotStrictlyPositiveException, MathParseException, IOException {
+            throws NotStrictlyPositiveException, MathIllegalStateException, IOException {
 
         if (dimension < 1) {
             throw new NotStrictlyPositiveException(dimension);
@@ -182,9 +183,9 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      * @param is the input stream to read the direction vector from
      * @return the last dimension that has been read from the input stream
      * @throws IOException if the stream could not be read
-     * @throws MathParseException if the content could not be parsed successfully
+     * @throws MathIllegalStateException if the content could not be parsed successfully
      */
-    private int initFromStream(final InputStream is) throws MathParseException, IOException {
+    private int initFromStream(final InputStream is) throws MathIllegalStateException, IOException {
 
         // special case: dimension 1 -> use unit initialization
         for (int i = 1; i <= BITS; i++) {
@@ -219,10 +220,9 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
                     if (dim > dimension) {
                         return dim;
                     }
-                } catch (NoSuchElementException e) {
-                    throw new MathParseException(line, lineNumber);
-                } catch (NumberFormatException e) {
-                    throw new MathParseException(line, lineNumber);
+                } catch (NoSuchElementException|NumberFormatException e) {
+                    throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE,
+                                                        line, lineNumber);
                 }
                 lineNumber++;
             }
