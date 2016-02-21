@@ -16,6 +16,7 @@
  */
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -775,7 +776,7 @@ public class SymmLQ
                  * x has converged to an eigenvector of A corresponding to the
                  * eigenvalue shift.
                  */
-                throw new SingularOperatorException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_OPERATOR);
             }
             rnorm = FastMath.min(cgnorm, lqnorm);
             hasConverged = (cgnorm <= epsx) || (cgnorm <= epsr);

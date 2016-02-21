@@ -28,6 +28,7 @@ NumberIsTooLargeException          MathIllegalArgumentException
 NumberIsTooSmallException          MathIllegalArgumentException
 OutOfRangeException                MathIllegalArgumentException
 SingularMatrixException            MathIllegalArgumentException
+SingularOperatorException          MathIllegalArgumentException
 TooManyEvaluationsException        MathIllegalStateException
 TooManyIterationsException         MathIllegalStateException
 UnboundedSolutionException         MathIllegalStateException
