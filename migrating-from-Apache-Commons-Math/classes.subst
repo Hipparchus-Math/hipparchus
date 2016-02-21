@@ -19,6 +19,7 @@ MultiDimensionMismatchException        MathIllegalArgumentException
 NoBracketingException                  MathIllegalArgumentException
 NoDataException                        MathIllegalArgumentException
 NoFeasibleSolutionException            MathIllegalStateException
+NonSelfAdjointOperatorException        MathIllegalArgumentException
 NonMonotonicSequenceException          MathIllegalArgumentException
 NonPositiveDefiniteMatrixException     MathIllegalArgumentException
 NonPositiveDefiniteOperatorException   MathIllegalArgumentException

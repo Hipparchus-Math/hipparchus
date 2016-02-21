@@ -27,7 +27,6 @@ import org.hipparchus.linear.IterativeLinearSolver;
 import org.hipparchus.linear.IterativeLinearSolverEvent;
 import org.hipparchus.linear.JacobiPreconditioner;
 import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.NonSelfAdjointOperatorException;
 import org.hipparchus.linear.NonSquareOperatorException;
 import org.hipparchus.linear.PreconditionedIterativeLinearSolver;
 import org.hipparchus.linear.RealLinearOperator;
@@ -555,7 +554,7 @@ public class SymmLQTest {
         }
     }
 
-    @Test(expected = NonSelfAdjointOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSelfAdjointOperator() {
         final RealLinearOperator a;
         a = new Array2DRowRealMatrix(new double[][] {
@@ -568,7 +567,7 @@ public class SymmLQTest {
         new SymmLQ(100, 1., true).solve(a, b);
     }
 
-    @Test(expected = NonSelfAdjointOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSelfAdjointPreconditioner() {
         final RealLinearOperator a = new Array2DRowRealMatrix(new double[][] {
             {1., 2., 3.},
