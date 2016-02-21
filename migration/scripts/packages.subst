@@ -31,7 +31,7 @@
 "org\.apache\.commons\.math[34]\.geometry\.hull"                     "org.hipparchus.geometry.hull"
 "org\.apache\.commons\.math[34]\.geometry\.enclosing"                "org.hipparchus.geometry.enclosing"
 "org\.apache\.commons\.math[34]\.geometry"                           "org.hipparchus.geometry"
-"org\.apache\.commons\.math[34]\.exception\.util"                    "org.hipparchus.exception"
+"org\.apache\.commons\.math[34]\.exception\.util"                    "org.hipparchus.exception.util"
 "org\.apache\.commons\.math[34]\.exception"                          "org.hipparchus.exception"
 "org\.apache\.commons\.math[34]\.fraction"                           "org.hipparchus.fraction"
 "org\.apache\.commons\.math[34]\.random"                             "org.hipparchus.random"

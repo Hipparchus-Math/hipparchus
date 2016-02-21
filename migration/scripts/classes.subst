@@ -2,6 +2,7 @@
 # to apply to source and documentation text files when migrating
 # from Apache Commons Math to Hipparchus.
 
+LocalizedFormats                       LocalizedMigrationFormats
 CardanEulerSingularityException        MathIllegalStateException
 ConvergenceException                   MathIllegalStateException
 DimensionMismatchException             MathIllegalArgumentException

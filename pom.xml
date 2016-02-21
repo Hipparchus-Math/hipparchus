@@ -364,6 +364,11 @@
         <artifactId>hipparchus-legacy</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-migration</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>junit</groupId>
@@ -416,6 +421,7 @@
       <module>perf</module>
       <module>samples</module>
       <module>legacy</module>
+      <module>migration</module>
       <module>fft</module> <!-- marked for deletion -->
   </modules>
 
