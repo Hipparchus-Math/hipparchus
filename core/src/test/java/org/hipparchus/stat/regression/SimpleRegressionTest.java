@@ -278,8 +278,8 @@ public final class SimpleRegressionTest {
         }
         try { // more than 1 regressor
             noIntRegression.regress(new int[] {0, 1});
-            Assert.fail("Expecting ModelSpecificationException - too many regressors");
-        } catch (ModelSpecificationException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - too many regressors");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // invalid regressor
@@ -308,14 +308,14 @@ public final class SimpleRegressionTest {
         }
         try { // more than 2 regressors
             regression.regress(new int[] {0, 1, 2});
-            Assert.fail("Expecting ModelSpecificationException - too many regressors");
-        } catch (ModelSpecificationException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - too many regressors");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // wrong order
             regression.regress(new int[] {1,0});
-            Assert.fail("Expecting ModelSpecificationException - invalid regression");
-        } catch (ModelSpecificationException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - invalid regression");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try { // out of range

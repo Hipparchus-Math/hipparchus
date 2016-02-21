@@ -250,13 +250,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * data.</p>
      *
      * @param data array of observations to be added
-     * @throws ModelSpecificationException if the length of {@code data[i]} is not
+     * @throws MathIllegalArgumentException if the length of {@code data[i]} is not
      * greater than or equal to 2
      */
-    public void addData(final double[][] data) throws ModelSpecificationException {
+    public void addData(final double[][] data) throws MathIllegalArgumentException {
         for (int i = 0; i < data.length; i++) {
             if( data[i].length < 2 ){
-               throw new ModelSpecificationException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,
+               throw new MathIllegalArgumentException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,
                     data[i].length, 2);
             }
             addData(data[i][0], data[i][1]);
@@ -268,14 +268,14 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      *
      * @param x the independent variables which form the design matrix
      * @param y the dependent or response variable
-     * @throws ModelSpecificationException if the length of {@code x} does not equal
+     * @throws MathIllegalArgumentException if the length of {@code x} does not equal
      * the number of independent variables in the model
      */
     @Override
     public void addObservation(final double[] x,final double y)
-            throws ModelSpecificationException {
+            throws MathIllegalArgumentException {
         if( x == null || x.length == 0 ){
-            throw new ModelSpecificationException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,x!=null?x.length:0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,x!=null?x.length:0, 1);
         }
         addData( x[0], y );
     }
@@ -287,13 +287,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * @param x a series of observations on the independent variables
      * @param y a series of observations on the dependent variable
      * The length of x and y must be the same
-     * @throws ModelSpecificationException if {@code x} is not rectangular, does not match
+     * @throws MathIllegalArgumentException if {@code x} is not rectangular, does not match
      * the length of {@code y} or does not contain sufficient data to estimate the model
      */
     @Override
-    public void addObservations(final double[][] x,final double[] y) throws ModelSpecificationException {
+    public void addObservations(final double[][] x,final double[] y) throws MathIllegalArgumentException {
         if ((x == null) || (y == null) || (x.length != y.length)) {
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                   LocalizedFormats.DIMENSIONS_MISMATCH,
                   (x == null) ? 0 : x.length,
                   (y == null) ? 0 : y.length);
@@ -305,7 +305,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
             }
         }
         if( !obsOk ){
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                   LocalizedFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                   0, 1);
         }
@@ -767,12 +767,12 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * contain at least 2 observations.</p>
      *
      * @return RegressionResults acts as a container of regression output
-     * @throws ModelSpecificationException if the model is not correctly specified
+     * @throws MathIllegalArgumentException if the model is not correctly specified
      * @throws MathIllegalArgumentException if there is not sufficient data in the model to
      * estimate the regression parameters
      */
     @Override
-    public RegressionResults regress() throws ModelSpecificationException, MathIllegalArgumentException {
+    public RegressionResults regress() throws MathIllegalArgumentException, MathIllegalArgumentException {
         if (hasIntercept) {
             if (n < 3) {
                 throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
@@ -823,7 +823,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
           throw new MathIllegalArgumentException(LocalizedFormats.ARRAY_ZERO_LENGTH_OR_NULL_NOT_ALLOWED);
         }
         if (variablesToInclude.length > 2 || (variablesToInclude.length > 1 && !hasIntercept)) {
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.ARRAY_SIZE_EXCEEDS_MAX_VARIABLES,
                     (variablesToInclude.length > 1 && !hasIntercept) ? 1 : 2);
         }
@@ -831,7 +831,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
         if (hasIntercept) {
             if (variablesToInclude.length == 2) {
                 if (variablesToInclude[0] == 1) {
-                    throw new ModelSpecificationException(LocalizedFormats.NOT_INCREASING_SEQUENCE);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NOT_INCREASING_SEQUENCE);
                 } else if (variablesToInclude[0] != 0) {
                     throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
                                                            variablesToInclude[0], 0,1);

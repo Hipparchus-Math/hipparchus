@@ -13,6 +13,7 @@ MathParseException                 MathIllegalStateException
 MathUnsupportedOperationException  MathRuntimeException
 MatrixDimensionMismatchException   MathIllegalArgumentException
 MaxCountExceededException          MathIllegalStateException
+ModelSpecificationException        MathIllegalArgumentException
 MultiDimensionMismatchException    MathIllegalArgumentException
 NoBracketingException              MathIllegalArgumentException
 NoDataException                    MathIllegalArgumentException

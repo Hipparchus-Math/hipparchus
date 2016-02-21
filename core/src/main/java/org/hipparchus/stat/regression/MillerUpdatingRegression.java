@@ -19,6 +19,7 @@ package org.hipparchus.stat.regression;
 import java.util.Arrays;
 
 import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
@@ -95,12 +96,12 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      * @param numberOfVariables number of regressors to expect, not including constant
      * @param includeConstant include a constant automatically
      * @param errorTolerance  zero tolerance, how machine zero is determined
-     * @throws ModelSpecificationException if {@code numberOfVariables is less than 1}
+     * @throws MathIllegalArgumentException if {@code numberOfVariables is less than 1}
      */
     public MillerUpdatingRegression(int numberOfVariables, boolean includeConstant, double errorTolerance)
-            throws ModelSpecificationException {
+            throws MathIllegalArgumentException {
         if (numberOfVariables < 1) {
-            throw new ModelSpecificationException(LocalizedFormats.NO_REGRESSORS);
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_REGRESSORS);
         }
         if (includeConstant) {
             this.nvars = numberOfVariables + 1;
@@ -134,10 +135,10 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      *
      * @param numberOfVariables maximum number of potential regressors
      * @param includeConstant include a constant automatically
-     * @throws ModelSpecificationException if {@code numberOfVariables is less than 1}
+     * @throws MathIllegalArgumentException if {@code numberOfVariables is less than 1}
      */
     public MillerUpdatingRegression(int numberOfVariables, boolean includeConstant)
-            throws ModelSpecificationException {
+            throws MathIllegalArgumentException {
         this(numberOfVariables, includeConstant, Precision.EPSILON);
     }
 
@@ -163,16 +164,16 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      * Adds an observation to the regression model.
      * @param x the array with regressor values
      * @param y  the value of dependent variable given these regressors
-     * @exception ModelSpecificationException if the length of {@code x} does not equal
+     * @exception MathIllegalArgumentException if the length of {@code x} does not equal
      * the number of independent variables in the model
      */
     @Override
     public void addObservation(final double[] x, final double y)
-            throws ModelSpecificationException {
+            throws MathIllegalArgumentException {
 
         if ((!this.hasIntercept && x.length != nvars) ||
                (this.hasIntercept && x.length + 1 != nvars)) {
-            throw new ModelSpecificationException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,
+            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,
                     x.length, nvars);
         }
         if (!this.hasIntercept) {
@@ -191,23 +192,23 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      * Adds multiple observations to the model.
      * @param x observations on the regressors
      * @param y observations on the regressand
-     * @throws ModelSpecificationException if {@code x} is not rectangular, does not match
+     * @throws MathIllegalArgumentException if {@code x} is not rectangular, does not match
      * the length of {@code y} or does not contain sufficient data to estimate the model
      */
     @Override
-    public void addObservations(double[][] x, double[] y) throws ModelSpecificationException {
+    public void addObservations(double[][] x, double[] y) throws MathIllegalArgumentException {
         if ((x == null) || (y == null) || (x.length != y.length)) {
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                   LocalizedFormats.DIMENSIONS_MISMATCH,
                   (x == null) ? 0 : x.length,
                   (y == null) ? 0 : y.length);
         }
         if (x.length == 0) {  // Must be no y data either
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.NO_DATA);
         }
         if (x[0].length + 1 > x.length) {
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                   LocalizedFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                   x.length, x[0].length);
         }
@@ -370,16 +371,16 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      * @param nreq how many of the regressors to include (either in canonical
      * order, or in the current reordered state)
      * @return an array with the estimated slope coefficients
-     * @throws ModelSpecificationException if {@code nreq} is less than 1
+     * @throws MathIllegalArgumentException if {@code nreq} is less than 1
      * or greater than the number of independent variables
      */
-    private double[] regcf(int nreq) throws ModelSpecificationException {
+    private double[] regcf(int nreq) throws MathIllegalArgumentException {
         int nextr;
         if (nreq < 1) {
-            throw new ModelSpecificationException(LocalizedFormats.NO_REGRESSORS);
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_REGRESSORS);
         }
         if (nreq > this.nvars) {
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.TOO_MANY_REGRESSORS, nreq, this.nvars);
         }
         if (!this.tol_set) {
@@ -904,11 +905,11 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      * Conducts a regression on the data in the model, using all regressors.
      *
      * @return RegressionResults the structure holding all regression results
-     * @exception  ModelSpecificationException - thrown if number of observations is
+     * @exception  MathIllegalArgumentException - thrown if number of observations is
      * less than the number of variables
      */
     @Override
-    public RegressionResults regress() throws ModelSpecificationException {
+    public RegressionResults regress() throws MathIllegalArgumentException {
         return regress(this.nvars);
     }
 
@@ -918,18 +919,18 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      * @param numberOfRegressors many of the regressors to include (either in canonical
      * order, or in the current reordered state)
      * @return RegressionResults the structure holding all regression results
-     * @exception  ModelSpecificationException - thrown if number of observations is
+     * @exception  MathIllegalArgumentException - thrown if number of observations is
      * less than the number of variables or number of regressors requested
      * is greater than the regressors in the model
      */
-    public RegressionResults regress(int numberOfRegressors) throws ModelSpecificationException {
+    public RegressionResults regress(int numberOfRegressors) throws MathIllegalArgumentException {
         if (this.nobs <= numberOfRegressors) {
-           throw new ModelSpecificationException(
+           throw new MathIllegalArgumentException(
                    LocalizedFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                    this.nobs, numberOfRegressors);
         }
         if( numberOfRegressors > this.nvars ){
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.TOO_MANY_REGRESSORS, numberOfRegressors, this.nvars);
         }
 
@@ -1003,19 +1004,19 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      *
      * @param  variablesToInclude array of variables to include in regression
      * @return RegressionResults the structure holding all regression results
-     * @exception  ModelSpecificationException - thrown if number of observations is
+     * @exception  MathIllegalArgumentException - thrown if number of observations is
      * less than the number of variables, the number of regressors requested
      * is greater than the regressors in the model or a regressor index in
      * regressor array does not exist
      */
     @Override
-    public RegressionResults regress(int[] variablesToInclude) throws ModelSpecificationException {
+    public RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException {
         if (variablesToInclude.length > this.nvars) {
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.TOO_MANY_REGRESSORS, variablesToInclude.length, this.nvars);
         }
         if (this.nobs <= this.nvars) {
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                     this.nobs, this.nvars);
         }
@@ -1023,7 +1024,7 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
         int iExclude = 0;
         for (int i = 0; i < variablesToInclude.length; i++) {
             if (i >= this.nvars) {
-                throw new ModelSpecificationException(
+                throw new MathIllegalArgumentException(
                         LocalizedFormats.INDEX_LARGER_THAN_MAX, i, this.nvars);
             }
             if (i > 0 && variablesToInclude[i] == variablesToInclude[i - 1]) {
