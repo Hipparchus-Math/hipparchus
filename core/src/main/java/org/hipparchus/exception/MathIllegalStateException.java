@@ -17,7 +17,6 @@
 package org.hipparchus.exception;
 
 import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Base class for all exceptions that signal that the process
@@ -51,13 +50,6 @@ public class MathIllegalStateException extends MathRuntimeException {
                                      Localizable pattern,
                                      Object ... args) {
         super(cause, pattern, args);
-    }
-
-    /**
-     * Default constructor.
-     */
-    public MathIllegalStateException() {
-        this(LocalizedFormats.ILLEGAL_STATE);
     }
 
 }

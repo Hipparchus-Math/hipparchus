@@ -22,6 +22,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.util.LocalizedFormats;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -181,7 +182,7 @@ public class PolynomialSplineFunctionTest {
                  return i - 1;
              }
          }
-         throw new MathIllegalStateException();
+         throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
      }
 }
 

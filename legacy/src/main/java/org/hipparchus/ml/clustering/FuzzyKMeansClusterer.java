@@ -24,6 +24,7 @@ import java.util.List;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.ml.distance.DistanceMeasure;
@@ -208,7 +209,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
      */
     public RealMatrix getMembershipMatrix() {
         if (membershipMatrix == null) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
         return MatrixUtils.createRealMatrix(membershipMatrix);
     }
@@ -239,7 +240,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
      */
     public double getObjectiveFunctionValue() {
         if (points == null || clusters == null) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
 
         int i = 0;

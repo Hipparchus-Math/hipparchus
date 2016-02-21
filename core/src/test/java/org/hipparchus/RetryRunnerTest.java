@@ -20,6 +20,7 @@ package org.hipparchus;
 import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.util.LocalizedFormats;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -36,7 +37,7 @@ public class RetryRunnerTest {
     @Test(expected=MathIllegalStateException.class)
     @Retry
     public void testRetryFailAlways() {
-        throw new MathIllegalStateException();
+        throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
     }
 
     /**
@@ -48,7 +49,7 @@ public class RetryRunnerTest {
     @Retry(100)
     public void testRetryFailSometimes() {
         if (rng.nextBoolean()) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
     }
 }

@@ -19,6 +19,7 @@ package org.hipparchus.optim;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomVectorGenerator;
 
 /**
@@ -154,10 +155,10 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
             }
         }
         if (maxEvalIndex == -1) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
         if (initialGuessIndex == -1) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
 
         RuntimeException lastException = null;

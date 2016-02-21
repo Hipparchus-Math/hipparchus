@@ -157,10 +157,10 @@ public class MultiStartUnivariateOptimizer
             }
         }
         if (maxEvalIndex == -1) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
         if (searchIntervalIndex == -1) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
 
         RuntimeException lastException = null;
