@@ -22,13 +22,10 @@ import java.util.Collection;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.transform.DstNormalization;
-import org.hipparchus.transform.FastSineTransformer;
-import org.hipparchus.transform.RealTransformer;
-import org.hipparchus.transform.TransformType;
-import org.hipparchus.transform.TransformUtils;
+import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -163,7 +160,7 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
             } else if (normalization == DstNormalization.ORTHOGONAL_DST_I) {
                 s = FastMath.sqrt(2.0 / n);
             } else {
-                throw new MathIllegalStateException();
+                throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
             }
         } else if (type == TransformType.INVERSE) {
             if (normalization == DstNormalization.STANDARD_DST_I) {
@@ -171,14 +168,14 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
             } else if (normalization == DstNormalization.ORTHOGONAL_DST_I) {
                 s = FastMath.sqrt(2.0 / n);
             } else {
-                throw new MathIllegalStateException();
+                throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
             }
         } else {
             /*
              * Should never occur. This clause is a safeguard in case other
              * types are used to TransformType (which should not be done).
              */
-            throw new MathIllegalStateException();
+            throw new MathInternalError();
         }
         TransformUtils.scaleArray(y, s);
         return y;

@@ -182,7 +182,7 @@ public class PolynomialSplineFunctionTest {
                  return i - 1;
              }
          }
-         throw new MathIllegalStateException();
+         throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
      }
 }
 

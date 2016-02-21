@@ -50,11 +50,4 @@ public class MathIllegalStateException extends MathRuntimeException {
         super(cause, pattern, args);
     }
 
-    /**
-     * Default constructor.
-     */
-    public MathIllegalStateException() {
-        this(LocalizedFormats.ILLEGAL_STATE);
-    }
-
 }

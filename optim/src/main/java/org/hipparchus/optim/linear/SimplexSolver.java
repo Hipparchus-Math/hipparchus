@@ -19,6 +19,7 @@ package org.hipparchus.optim.linear;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
@@ -316,15 +317,14 @@ public class SimplexSolver extends LinearOptimizer {
      * @throws MathIllegalStateException if the model is found not to have a bounded solution.
      */
     protected void doIteration(final SimplexTableau tableau)
-        throws MathIllegalStateException,
-               MathIllegalStateException {
+        throws MathIllegalStateException {
 
         incrementIterationCount();
 
         Integer pivotCol = getPivotColumn(tableau);
         Integer pivotRow = getPivotRow(tableau, pivotCol);
         if (pivotRow == null) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.UNBOUNDED_SOLUTION);
         }
 
         tableau.performRowOperations(pivotCol, pivotRow);

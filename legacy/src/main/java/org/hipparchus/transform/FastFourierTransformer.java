@@ -24,7 +24,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -190,7 +190,7 @@ public class FastFourierTransformer implements Serializable {
                  * normalizations are ever implemented, and the corresponding
                  * test is forgotten in the present switch.
                  */
-                throw new MathIllegalStateException();
+                throw new MathInternalError();
         }
     }
 

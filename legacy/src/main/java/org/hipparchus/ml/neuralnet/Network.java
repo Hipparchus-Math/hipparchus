@@ -99,14 +99,14 @@ public class Network
             long[][] neighbourIdList) {
         final int numNeurons = neuronList.length;
         if (numNeurons != neighbourIdList.length) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
 
         for (int i = 0; i < numNeurons; i++) {
             final Neuron n = neuronList[i];
             final long id = n.getIdentifier();
             if (id >= nextId) {
-                throw new MathIllegalStateException();
+                throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
             }
             neuronMap.put(id, n);
             linkMap.put(id, new HashSet<Long>());
@@ -117,7 +117,7 @@ public class Network
             final Set<Long> aLinks = linkMap.get(aId);
             for (Long bId : neighbourIdList[i]) {
                 if (neuronMap.get(bId) == null) {
-                    throw new MathIllegalStateException();
+                    throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
                 }
                 addLinkToLinkSet(aLinks, bId);
             }

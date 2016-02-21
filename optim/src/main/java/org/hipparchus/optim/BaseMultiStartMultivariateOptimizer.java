@@ -155,10 +155,10 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
             }
         }
         if (maxEvalIndex == -1) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
         if (initialGuessIndex == -1) {
-            throw new MathIllegalStateException();
+            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
         }
 
         RuntimeException lastException = null;

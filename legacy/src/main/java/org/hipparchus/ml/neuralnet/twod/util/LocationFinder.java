@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.HashMap;
 import org.hipparchus.ml.neuralnet.Neuron;
 import org.hipparchus.ml.neuralnet.twod.NeuronSquareMesh2D;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 
 /**
@@ -84,7 +85,7 @@ public class LocationFinder {
             for (int c = 0; c < nC; c++) {
                 final Long id = map.getNeuron(r, c).getIdentifier();
                 if (locations.get(id) != null) {
-                    throw new MathIllegalStateException();
+                    throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
                 }
                 locations.put(id, new Location(r, c));
             }
