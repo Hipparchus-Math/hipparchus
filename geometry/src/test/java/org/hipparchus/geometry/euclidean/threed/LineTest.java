@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.threed.Line;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -27,7 +27,7 @@ import org.junit.Test;
 public class LineTest {
 
     @Test
-    public void testContains() throws MathIllegalArgumentException, MathArithmeticException {
+    public void testContains() throws MathIllegalArgumentException, MathRuntimeException {
         Vector3D p1 = new Vector3D(0, 0, 1);
         Line l = new Line(p1, new Vector3D(0, 0, 2), 1.0e-10);
         Assert.assertTrue(l.contains(p1));
@@ -41,7 +41,7 @@ public class LineTest {
     }
 
     @Test
-    public void testSimilar() throws MathIllegalArgumentException, MathArithmeticException {
+    public void testSimilar() throws MathIllegalArgumentException, MathRuntimeException {
         Vector3D p1  = new Vector3D (1.2, 3.4, -5.8);
         Vector3D p2  = new Vector3D (3.4, -5.8, 1.2);
         Line     lA  = new Line(p1, p2, 1.0e-10);

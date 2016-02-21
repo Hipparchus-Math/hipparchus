@@ -17,15 +17,10 @@
 package org.hipparchus.ode.events;
 
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
-import org.hipparchus.ode.events.EventFilter;
-import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.events.FilterType;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937a;
@@ -134,8 +129,7 @@ public class EventFilterTest {
 
     @Test
     public void testIncreasingOnly()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator;
         integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
@@ -161,8 +155,7 @@ public class EventFilterTest {
 
     @Test
     public void testDecreasingOnly()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator;
         integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);
@@ -188,8 +181,7 @@ public class EventFilterTest {
 
     @Test
     public void testTwoOppositeFilters()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator;
         integrator = new DormandPrince853Integrator(1.0e-3, 100.0, 1e-7, 1e-7);

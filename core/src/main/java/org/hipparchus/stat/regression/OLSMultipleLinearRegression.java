@@ -128,7 +128,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
         RealMatrix Q = qr.getQ();
         final int p = qr.getR().getColumnDimension();
         final int n = Q.getColumnDimension();
-        // No try-catch or advertised NotStrictlyPositiveException - NPE above if n < 3
+        // No try-catch or advertised MathIllegalArgumentException - NPE above if n < 3
         Array2DRowRealMatrix augI = new Array2DRowRealMatrix(n, n);
         double[][] augIData = augI.getDataRef();
         for (int i = 0; i < n; i++) {
@@ -173,7 +173,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      *
      * @return residual sum of squares
      * @since 2.2
-     * @throws org.hipparchus.linear.SingularMatrixException if the design matrix is singular
+     * @throws org.hipparchus.linear.MathIllegalArgumentException if the design matrix is singular
      * @throws NullPointerException if the data for the model have not been loaded
      */
     public double calculateResidualSumOfSquares() {
@@ -193,7 +193,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      *
      * @return R-square statistic
      * @throws NullPointerException if the sample has not been set
-     * @throws org.hipparchus.linear.SingularMatrixException if the design matrix is singular
+     * @throws org.hipparchus.linear.MathIllegalArgumentException if the design matrix is singular
      * @since 2.2
      */
     public double calculateRSquared() {
@@ -216,7 +216,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      *
      * @return adjusted R-Squared statistic
      * @throws NullPointerException if the sample has not been set
-     * @throws org.hipparchus.linear.SingularMatrixException if the design matrix is singular
+     * @throws org.hipparchus.linear.MathIllegalArgumentException if the design matrix is singular
      * @see #isNoIntercept()
      * @since 2.2
      */
@@ -249,7 +249,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * a {@code NullPointerException} will be thrown.</p>
      *
      * @return beta
-     * @throws org.hipparchus.linear.SingularMatrixException if the design matrix is singular
+     * @throws org.hipparchus.linear.MathIllegalArgumentException if the design matrix is singular
      * @throws NullPointerException if the data for the model have not been loaded
      */
     @Override
@@ -271,7 +271,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * a {@code NullPointerException} will be thrown.</p>
      *
      * @return The beta variance-covariance matrix
-     * @throws org.hipparchus.linear.SingularMatrixException if the design matrix is singular
+     * @throws org.hipparchus.linear.MathIllegalArgumentException if the design matrix is singular
      * @throws NullPointerException if the data for the model have not been loaded
      */
     @Override

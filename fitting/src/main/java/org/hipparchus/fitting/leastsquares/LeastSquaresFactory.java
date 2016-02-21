@@ -18,8 +18,8 @@ package org.hipparchus.fitting.leastsquares;
 
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;

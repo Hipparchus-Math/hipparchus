@@ -19,15 +19,11 @@ package org.hipparchus.ode.events;
 
 
 import org.hipparchus.analysis.solvers.BrentSolver;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.SecondaryEquations;
-import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.events.EventState;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.nonstiff.LutherIntegrator;
 import org.hipparchus.ode.sampling.AbstractStepInterpolator;
@@ -39,7 +35,7 @@ public class EventStateTest {
 
     // JIRA: MATH-322
     @Test
-    public void closeEvents() throws MaxCountExceededException, NoBracketingException {
+    public void closeEvents() throws MathIllegalArgumentException, MathIllegalStateException {
 
         final double r1  = 90.0;
         final double r2  = 135.0;
@@ -84,8 +80,7 @@ public class EventStateTest {
     // Jira: MATH-695
     @Test
     public void testIssue695()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {
 
@@ -148,8 +143,7 @@ public class EventStateTest {
     // Jira: MATH-965
     @Test
     public void testIssue965()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         ExpandableStatefulODE equation =
                 new ExpandableStatefulODE(new FirstOrderDifferentialEquations() {
@@ -217,8 +211,7 @@ public class EventStateTest {
 
     @Test
     public void testEventsCloserThanThreshold()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {
 

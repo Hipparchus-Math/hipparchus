@@ -20,10 +20,6 @@ import java.util.Random;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.transform.RealTransformer;
-import org.hipparchus.transform.TransformType;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -189,7 +185,7 @@ public abstract class RealTransformerAbstractTest {
 
     /**
      * {@link RealTransformer#transform(UnivariateFunction, double, double, int, TransformType)}
-     * should throw a {@link NotStrictlyPositiveException} if number of samples
+     * should throw a {@link MathIllegalArgumentException} if number of samples
      * is not strictly positive.
      */
     @Test
@@ -205,7 +201,7 @@ public abstract class RealTransformerAbstractTest {
                 try {
                     transformer.transform(f, a, b, -n, type[j]);
                     Assert.fail(type[j] + ", " + (-n));
-                } catch (NotStrictlyPositiveException e) {
+                } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
             }
@@ -214,7 +210,7 @@ public abstract class RealTransformerAbstractTest {
 
     /**
      * {@link RealTransformer#transform(UnivariateFunction, double, double, int, TransformType)}
-     * should throw a {@link NumberIsTooLargeException} if sampling bounds are
+     * should throw a {@link MathIllegalArgumentException} if sampling bounds are
      * not correctly ordered.
      */
     @Test
@@ -230,7 +226,7 @@ public abstract class RealTransformerAbstractTest {
                 try {
                     transformer.transform(f, b, a, n, type[j]);
                     Assert.fail(type[j] + ", " + b + ", " + a);
-                } catch (NumberIsTooLargeException e) {
+                } catch (MathIllegalArgumentException e) {
                     // Expected: do nothing
                 }
             }

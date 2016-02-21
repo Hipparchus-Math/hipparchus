@@ -22,13 +22,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotFiniteNumberException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.MathArrays;
@@ -91,13 +87,12 @@ public class EnumeratedDistribution<T> implements Serializable {
      *
      * @param pmf probability mass function enumerated as a list of <T, probability>
      * pairs.
-     * @throws NotPositiveException if any of the probabilities are negative.
-     * @throws NotFiniteNumberException if any of the probabilities are infinite.
-     * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws MathIllegalArgumentException if any of the probabilities are negative.
+     * @throws MathIllegalArgumentException if any of the probabilities are NaN.
+     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedDistribution(final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathArithmeticException, NotFiniteNumberException, NotANumberException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), pmf);
     }
 
@@ -108,13 +103,12 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @param rng random number generator.
      * @param pmf probability mass function enumerated as a list of <T, probability>
      * pairs.
-     * @throws NotPositiveException if any of the probabilities are negative.
-     * @throws NotFiniteNumberException if any of the probabilities are infinite.
-     * @throws NotANumberException if any of the probabilities are NaN.
-     * @throws MathArithmeticException all of the probabilities are 0.
+     * @throws MathIllegalArgumentException if any of the probabilities are negative.
+     * @throws MathIllegalArgumentException if any of the probabilities are NaN.
+     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
      */
     public EnumeratedDistribution(final RandomGenerator rng, final List<Pair<T, Double>> pmf)
-        throws NotPositiveException, MathArithmeticException, NotFiniteNumberException, NotANumberException {
+        throws MathIllegalArgumentException {
         random = rng;
 
         singletons = new ArrayList<T>(pmf.size());
@@ -125,13 +119,13 @@ public class EnumeratedDistribution<T> implements Serializable {
             singletons.add(sample.getKey());
             final double p = sample.getValue();
             if (p < 0) {
-                throw new NotPositiveException(sample.getValue());
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, p, 0);
             }
             if (Double.isInfinite(p)) {
-                throw new NotFiniteNumberException(p);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_FINITE_NUMBER, p);
             }
             if (Double.isNaN(p)) {
-                throw new NotANumberException();
+                throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
             }
             probs[i] = p;
         }
@@ -230,12 +224,12 @@ public class EnumeratedDistribution<T> implements Serializable {
      *
      * @param sampleSize the number of random values to generate.
      * @return an array representing the random sample.
-     * @throws NotStrictlyPositiveException if {@code sampleSize} is not
+     * @throws MathIllegalArgumentException if {@code sampleSize} is not
      * positive.
      */
-    public Object[] sample(int sampleSize) throws NotStrictlyPositiveException {
+    public Object[] sample(int sampleSize) throws MathIllegalArgumentException {
         if (sampleSize <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES,
                     sampleSize);
         }
 
@@ -259,12 +253,12 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @param sampleSize the number of random values to generate.
      * @param array the array to populate.
      * @return an array representing the random sample.
-     * @throws NotStrictlyPositiveException if {@code sampleSize} is not positive.
+     * @throws MathIllegalArgumentException if {@code sampleSize} is not positive.
      * @throws NullArgumentException if {@code array} is null
      */
-    public T[] sample(int sampleSize, final T[] array) throws NotStrictlyPositiveException {
+    public T[] sample(int sampleSize, final T[] array) throws MathIllegalArgumentException {
         if (sampleSize <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES, sampleSize);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES, sampleSize);
         }
 
         if (array == null) {

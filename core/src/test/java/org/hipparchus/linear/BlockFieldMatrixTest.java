@@ -19,26 +19,13 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.linear.ArrayFieldVector;
-import org.hipparchus.linear.BlockFieldMatrix;
-import org.hipparchus.linear.DefaultFieldMatrixChangingVisitor;
-import org.hipparchus.linear.DefaultFieldMatrixPreservingVisitor;
-import org.hipparchus.linear.FieldLUDecomposition;
-import org.hipparchus.linear.FieldMatrix;
-import org.hipparchus.linear.FieldVector;
-import org.hipparchus.linear.MatrixDimensionMismatchException;
-import org.hipparchus.linear.NonSquareMatrixException;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link BlockFieldMatrix} class.
@@ -365,8 +352,8 @@ public final class BlockFieldMatrixTest {
         m = new BlockFieldMatrix<Fraction>(testData2);
         try {
             m.getTrace();
-            Assert.fail("Expecting NonSquareMatrixException");
-        } catch (NonSquareMatrixException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
@@ -494,14 +481,14 @@ public final class BlockFieldMatrixTest {
         TestUtils.assertEquals(m.getColumn(2), testDataCol3);
         try {
             m.getRow(10);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             m.getColumn(-1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
@@ -512,8 +499,8 @@ public final class BlockFieldMatrixTest {
         Assert.assertEquals(m.getEntry(0,1),new Fraction(2));
         try {
             m.getEntry(10, 4);
-            Assert.fail ("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail ("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -600,22 +587,10 @@ public final class BlockFieldMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), sub);
             } else {
-                Assert.fail("Expecting OutOfRangeException or NotStrictlyPositiveException"
-                     + " or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException"
+                     + " or MathIllegalArgumentException or MathIllegalArgumentException");
             }
-        } catch (OutOfRangeException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NotStrictlyPositiveException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -629,21 +604,9 @@ public final class BlockFieldMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), sub);
             } else {
-                Assert.fail("Expecting OutOfRangeException");
+                Assert.fail("Expecting MathIllegalArgumentException");
             }
-        } catch (OutOfRangeException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NotStrictlyPositiveException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -702,17 +665,9 @@ public final class BlockFieldMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), new BlockFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
-        } catch (OutOfRangeException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -729,17 +684,9 @@ public final class BlockFieldMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockFieldMatrix<Fraction>(reference), new BlockFieldMatrix<Fraction>(sub));
             } else {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
-        } catch (OutOfRangeException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -755,14 +702,14 @@ public final class BlockFieldMatrixTest {
         Assert.assertEquals("Row3", mRow3, m.getRowMatrix(3));
         try {
             m.getRowMatrix(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowMatrix(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -776,14 +723,14 @@ public final class BlockFieldMatrixTest {
         Assert.assertEquals(mRow3, m.getRowMatrix(0));
         try {
             m.setRowMatrix(-1, mRow3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -819,14 +766,14 @@ public final class BlockFieldMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnMatrix(3));
         try {
             m.getColumnMatrix(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnMatrix(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -840,14 +787,14 @@ public final class BlockFieldMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnMatrix(1));
         try {
             m.setColumnMatrix(-1, mColumn3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -883,14 +830,14 @@ public final class BlockFieldMatrixTest {
         Assert.assertEquals(mRow3, m.getRowVector(3));
         try {
             m.getRowVector(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowVector(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -904,14 +851,14 @@ public final class BlockFieldMatrixTest {
         Assert.assertEquals(mRow3, m.getRowVector(0));
         try {
             m.setRowVector(-1, mRow3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -945,14 +892,14 @@ public final class BlockFieldMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnVector(3));
         try {
             m.getColumnVector(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnVector(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -966,14 +913,14 @@ public final class BlockFieldMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnVector(1));
         try {
             m.setColumnVector(-1, mColumn3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnVector(0, new ArrayFieldVector<Fraction>(FractionField.getInstance(), 5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1013,14 +960,14 @@ public final class BlockFieldMatrixTest {
         checkArrays(subRow3[0], m.getRow(3));
         try {
             m.getRow(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRow(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1033,14 +980,14 @@ public final class BlockFieldMatrixTest {
         checkArrays(subRow3[0], m.getRow(0));
         try {
             m.setRow(-1, subRow3[0]);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRow(0, new Fraction[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1075,14 +1022,14 @@ public final class BlockFieldMatrixTest {
         checkArrays(mColumn3, m.getColumn(3));
         try {
             m.getColumn(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumn(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1096,14 +1043,14 @@ public final class BlockFieldMatrixTest {
         checkArrays(mColumn3, m.getColumn(1));
         try {
             m.setColumn(-1, mColumn3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumn(0, new Fraction[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1204,21 +1151,21 @@ public final class BlockFieldMatrixTest {
         // dimension overflow
         try {
             m.setSubMatrix(testData,1,1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
         // dimension underflow
         try {
             m.setSubMatrix(testData,-1,1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
         try {
             m.setSubMatrix(testData,1,-1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 

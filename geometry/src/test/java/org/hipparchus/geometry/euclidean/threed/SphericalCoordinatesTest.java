@@ -19,7 +19,7 @@ package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.threed.SphericalCoordinates;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.util.FastMath;
@@ -29,7 +29,7 @@ import org.junit.Test;
 public class SphericalCoordinatesTest {
 
     @Test
-    public void testCoordinatesStoC() throws DimensionMismatchException {
+    public void testCoordinatesStoC() throws MathIllegalArgumentException {
         double piO2 = 0.5 * FastMath.PI;
         SphericalCoordinates sc1 = new SphericalCoordinates(2.0, 0, piO2);
         Assert.assertEquals(0, sc1.getCartesian().distance(new Vector3D(2, 0, 0)), 1.0e-10);
@@ -46,7 +46,7 @@ public class SphericalCoordinatesTest {
     }
 
     @Test
-    public void testCoordinatesCtoS() throws DimensionMismatchException {
+    public void testCoordinatesCtoS() throws MathIllegalArgumentException {
         double piO2 = 0.5 * FastMath.PI;
         SphericalCoordinates sc1 = new SphericalCoordinates(new Vector3D(2, 0, 0));
         Assert.assertEquals(2,           sc1.getR(),     1.0e-10);

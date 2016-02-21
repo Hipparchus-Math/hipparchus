@@ -42,7 +42,7 @@ public class FeatureInitializerFactory {
      * uniform distribution.
      * @return an initializer such that the features will be initialized with
      * values within the given range.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code min >= max}.
      */
     public static FeatureInitializer uniform(final RandomGenerator rng,
@@ -59,7 +59,7 @@ public class FeatureInitializerFactory {
      * @param max Upper bound of the range.
      * @return an initializer such that the features will be initialized with
      * values within the given range.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code min >= max}.
      */
     public static FeatureInitializer uniform(final double min,

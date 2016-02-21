@@ -16,12 +16,9 @@
  */
 package org.hipparchus.analysis.integration;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -46,22 +43,22 @@ public class MidPointIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
      * (must be less than or equal to {@link #MIDPOINT_MAX_ITERATIONS_COUNT}
-     * @exception NotStrictlyPositiveException if minimal number of iterations
+     * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
-     * @exception NumberIsTooLargeException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is greater than {@link #MIDPOINT_MAX_ITERATIONS_COUNT}
      */
     public MidPointIntegrator(final double relativeAccuracy,
                               final double absoluteAccuracy,
                               final int minimalIterationCount,
                               final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy, minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > MIDPOINT_MAX_ITERATIONS_COUNT) {
-            throw new NumberIsTooLargeException(maximalIterationCount,
-                                                MIDPOINT_MAX_ITERATIONS_COUNT, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   maximalIterationCount, MIDPOINT_MAX_ITERATIONS_COUNT);
         }
     }
 
@@ -70,20 +67,20 @@ public class MidPointIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
      * (must be less than or equal to {@link #MIDPOINT_MAX_ITERATIONS_COUNT}
-     * @exception NotStrictlyPositiveException if minimal number of iterations
+     * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
-     * @exception NumberIsTooLargeException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is greater than {@link #MIDPOINT_MAX_ITERATIONS_COUNT}
      */
     public MidPointIntegrator(final int minimalIterationCount,
                               final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > MIDPOINT_MAX_ITERATIONS_COUNT) {
-            throw new NumberIsTooLargeException(maximalIterationCount,
-                                                MIDPOINT_MAX_ITERATIONS_COUNT, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   maximalIterationCount, MIDPOINT_MAX_ITERATIONS_COUNT);
         }
     }
 
@@ -111,14 +108,14 @@ public class MidPointIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param diffMaxMin Difference between the lower bound and upper bound
      * of the integration interval.
      * @return the value of n-th stage integral
-     * @throws TooManyEvaluationsException if the maximal number of evaluations
+     * @throws MathIllegalStateException if the maximal number of evaluations
      * is exceeded.
      */
     private double stage(final int n,
                          double previousStageResult,
                          double min,
                          double diffMaxMin)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
 
         // number of new points in this stage
         final long np = 1L << (n - 1);
@@ -141,7 +138,7 @@ public class MidPointIntegrator extends BaseAbstractUnivariateIntegrator {
     /** {@inheritDoc} */
     @Override
     protected double doIntegrate()
-        throws MathIllegalArgumentException, TooManyEvaluationsException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         final double min = getMin();
         final double diff = getMax() - min;

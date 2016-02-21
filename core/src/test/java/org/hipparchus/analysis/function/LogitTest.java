@@ -21,11 +21,8 @@ import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.analysis.function.Logit;
-import org.hipparchus.analysis.function.Sigmoid;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
@@ -38,7 +35,7 @@ import org.junit.Test;
 public class LogitTest {
     private final double EPS = Math.ulp(1d);
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions1() {
         final double lo = -1;
         final double hi = 2;
@@ -47,7 +44,7 @@ public class LogitTest {
         f.value(lo - 1);
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions2() {
         final double lo = -1;
         final double hi = 2;
@@ -87,7 +84,7 @@ public class LogitTest {
             try {
                 f.value(new DerivativeStructure(1, 1, 0, arg));
                 Assert.fail("an exception should have been thrown");
-            } catch (OutOfRangeException ore) {
+            } catch (MathIllegalArgumentException ore) {
                 // expected
             } catch (Exception e) {
                 Assert.fail("wrong exception caught: " + e.getMessage());
@@ -112,7 +109,7 @@ public class LogitTest {
         g.value(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage2() {
         final Logit.Parametric g = new Logit.Parametric();
         g.value(0, new double[] {0});
@@ -124,19 +121,19 @@ public class LogitTest {
         g.gradient(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage4() {
         final Logit.Parametric g = new Logit.Parametric();
         g.gradient(0, new double[] {0});
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage5() {
         final Logit.Parametric g = new Logit.Parametric();
         g.value(-1, new double[] {0, 1});
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage6() {
         final Logit.Parametric g = new Logit.Parametric();
         g.value(2, new double[] {0, 1});

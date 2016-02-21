@@ -18,8 +18,7 @@ package org.hipparchus.geometry.hull;
 
 import java.util.Collection;
 
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 
@@ -41,9 +40,8 @@ public interface ConvexHullGenerator<S extends Space, P extends Point<S>> {
      *
      * @param points the set of input points
      * @return the convex hull
-     * @throws NullArgumentException if the input collection is {@code null}
-     * @throws ConvergenceException if generator fails to generate a convex hull for
+     * @throws MathIllegalStateException if generator fails to generate a convex hull for
      * the given set of input points
      */
-    ConvexHull<S, P> generate(Collection<P> points) throws NullArgumentException, ConvergenceException;
+    ConvexHull<S, P> generate(Collection<P> points) throws MathIllegalStateException;
 }

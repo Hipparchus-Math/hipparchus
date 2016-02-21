@@ -21,8 +21,8 @@ import java.util.ArrayList;
 
 import org.hipparchus.distribution.MixtureMultivariateRealDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class MultivariateNormalMixtureModelDistributionTest {
         Assert.assertEquals(2d / 3, comp.get(1).getFirst().doubleValue(), Math.ulp(1d));
     }
 
-    @Test(expected=MathArithmeticException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testWeightSumOverFlow() {
         final double[] weights = { 0.5 * Double.MAX_VALUE, 0.51 * Double.MAX_VALUE };
         final double[][] means = { { -1.5, 2.0 },
@@ -64,7 +64,7 @@ public class MultivariateNormalMixtureModelDistributionTest {
         create(weights, means, covariances);
     }
 
-    @Test(expected=NotPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditionPositiveWeights() {
         final double[] negativeWeights = { -0.5, 1.5 };
         final double[][] means = { { -1.5, 2.0 },

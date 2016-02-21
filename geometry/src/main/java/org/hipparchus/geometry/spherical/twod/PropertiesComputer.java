@@ -19,7 +19,7 @@ package org.hipparchus.geometry.spherical.twod;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
@@ -81,7 +81,7 @@ class PropertiesComputer implements BSPTreeVisitor<Sphere2D> {
             final List<Vertex> boundary = convex.getBoundaryLoops();
             if (boundary.size() != 1) {
                 // this should never happen
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
 
             // compute the geometrical properties of the convex cell

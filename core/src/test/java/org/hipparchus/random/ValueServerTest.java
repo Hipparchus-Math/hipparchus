@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import org.hipparchus.RetryRunner;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.ZeroException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.ValueServer;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
@@ -146,7 +146,7 @@ public final class ValueServerTest {
             vs.setValuesFileURL(url);
             vs.computeDistribution();
             Assert.fail("an exception should have been thrown");
-        } catch (ZeroException ze) {
+        } catch (MathIllegalArgumentException ze) {
             // expected behavior
         }
     }

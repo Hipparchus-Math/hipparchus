@@ -20,8 +20,8 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -56,7 +56,7 @@ public class Logistic implements UnivariateDifferentiableFunction {
      * If {@code b < 0}, value of the function for x going towards +&infin;.
      * @param n Parameter that affects near which asymptote the maximum
      * growth occurs.
-     * @throws NotStrictlyPositiveException if {@code n <= 0}.
+     * @throws MathIllegalArgumentException if {@code n <= 0}.
      */
     public Logistic(double k,
                     double m,
@@ -64,9 +64,10 @@ public class Logistic implements UnivariateDifferentiableFunction {
                     double q,
                     double a,
                     double n)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         if (n <= 0) {
-            throw new NotStrictlyPositiveException(n);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   n, 0);
         }
 
         this.k = k;
@@ -105,15 +106,13 @@ public class Logistic implements UnivariateDifferentiableFunction {
          * {@code a} and  {@code n}.
          * @return the value of the function.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 6.
-         * @throws NotStrictlyPositiveException if {@code param[5] <= 0}.
+         * @throws MathIllegalArgumentException if {@code param[5] <= 0}.
          */
         @Override
         public double value(double x, double ... param)
-            throws NullArgumentException,
-                   DimensionMismatchException,
-                   NotStrictlyPositiveException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
             return Logistic.value(param[1] - x, param[0],
                                   param[2], param[3],
@@ -131,15 +130,13 @@ public class Logistic implements UnivariateDifferentiableFunction {
          * {@code a} and  {@code n}.
          * @return the gradient vector at {@code x}.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 6.
-         * @throws NotStrictlyPositiveException if {@code param[5] <= 0}.
+         * @throws MathIllegalArgumentException if {@code param[5] <= 0}.
          */
         @Override
         public double[] gradient(double x, double ... param)
-            throws NullArgumentException,
-                   DimensionMismatchException,
-                   NotStrictlyPositiveException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
 
             final double b = param[2];
@@ -172,22 +169,22 @@ public class Logistic implements UnivariateDifferentiableFunction {
          * @param param Values for {@code k}, {@code m}, {@code b}, {@code q},
          * {@code a} and {@code n}.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 6.
-         * @throws NotStrictlyPositiveException if {@code param[5] <= 0}.
+         * @throws MathIllegalArgumentException if {@code param[5] <= 0}.
          */
         private void validateParameters(double[] param)
-            throws NullArgumentException,
-                   DimensionMismatchException,
-                   NotStrictlyPositiveException {
+            throws MathIllegalArgumentException, NullArgumentException {
             if (param == null) {
                 throw new NullArgumentException();
             }
             if (param.length != 6) {
-                throw new DimensionMismatchException(param.length, 6);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       param.length, 6);
             }
             if (param[5] <= 0) {
-                throw new NotStrictlyPositiveException(param[5]);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                       param[5], 0);
             }
         }
     }

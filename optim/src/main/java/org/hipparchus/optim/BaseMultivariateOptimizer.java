@@ -16,9 +16,8 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Base class for implementing optimizers for multivariate functions.
@@ -128,25 +127,29 @@ public abstract class BaseMultivariateOptimizer<PAIR>
             final int dim = start.length;
             if (lowerBound != null) {
                 if (lowerBound.length != dim) {
-                    throw new DimensionMismatchException(lowerBound.length, dim);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           lowerBound.length, dim);
                 }
                 for (int i = 0; i < dim; i++) {
                     final double v = start[i];
                     final double lo = lowerBound[i];
                     if (v < lo) {
-                        throw new NumberIsTooSmallException(v, lo, true);
+                        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                               v, lo);
                     }
                 }
             }
             if (upperBound != null) {
                 if (upperBound.length != dim) {
-                    throw new DimensionMismatchException(upperBound.length, dim);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           upperBound.length, dim);
                 }
                 for (int i = 0; i < dim; i++) {
                     final double v = start[i];
                     final double hi = upperBound[i];
                     if (v > hi) {
-                        throw new NumberIsTooLargeException(v, hi, true);
+                        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                               v, hi);
                     }
                 }
             }

@@ -17,7 +17,6 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -34,8 +33,8 @@ public interface UnivariateInterpolator {
      * @throws MathIllegalArgumentException
      * if the arguments violate assumptions made by the interpolation
      * algorithm.
-     * @throws DimensionMismatchException if arrays lengthes do not match
+     * @throws MathIllegalArgumentException if arrays lengthes do not match
      */
     UnivariateFunction interpolate(double xval[], double yval[])
-        throws MathIllegalArgumentException, DimensionMismatchException;
+        throws MathIllegalArgumentException;
 }

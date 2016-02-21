@@ -18,11 +18,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.distribution.HypergeometricDistribution;
-import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
@@ -166,32 +162,32 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
     public void testPreconditions() {
         try {
             new HypergeometricDistribution(0, 3, 5);
-            Assert.fail("negative population size. NotStrictlyPositiveException expected");
-        } catch(NotStrictlyPositiveException ex) {
+            Assert.fail("negative population size. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, -1, 5);
-            Assert.fail("negative number of successes. NotPositiveException expected");
-        } catch(NotPositiveException ex) {
+            Assert.fail("negative number of successes. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 3, -1);
-            Assert.fail("negative sample size. NotPositiveException expected");
-        } catch(NotPositiveException ex) {
+            Assert.fail("negative sample size. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 6, 5);
-            Assert.fail("numberOfSuccesses > populationSize. NumberIsTooLargeException expected");
-        } catch(NumberIsTooLargeException ex) {
+            Assert.fail("numberOfSuccesses > populationSize. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new HypergeometricDistribution(5, 3, 6);
-            Assert.fail("sampleSize > populationSize. NumberIsTooLargeException expected");
-        } catch(NumberIsTooLargeException ex) {
+            Assert.fail("sampleSize > populationSize. MathIllegalArgumentException expected");
+        } catch(MathIllegalArgumentException ex) {
             // Expected.
         }
     }

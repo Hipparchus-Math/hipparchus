@@ -19,7 +19,7 @@ package org.hipparchus.fitting;
 import java.util.Collection;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;
@@ -49,7 +49,7 @@ public class PolynomialCurveFitter extends AbstractCurveFitter {
      *
      * @param initialGuess Initial guess.
      * @param maxIter Maximum number of iterations of the optimization algorithm.
-     * @throws MathInternalError if {@code initialGuess} is {@code null}.
+     * @throws MathRuntimeException if {@code initialGuess} is {@code null}.
      */
     private PolynomialCurveFitter(double[] initialGuess,
                                   int maxIter) {
@@ -112,7 +112,7 @@ public class PolynomialCurveFitter extends AbstractCurveFitter {
                 new AbstractCurveFitter.TheoreticalValuesFunction(FUNCTION, observations);
 
         if (initialGuess == null) {
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         }
 
         // Return a new least squares problem set up to fit a polynomial curve to the

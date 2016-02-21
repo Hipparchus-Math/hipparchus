@@ -19,6 +19,8 @@ package org.hipparchus.linear;
 
 import java.util.Arrays;
 
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 
@@ -56,12 +58,12 @@ class TriDiagonalTransformer {
      * Only the upper triangular part of the matrix is used.</p>
      *
      * @param matrix Symmetrical matrix to transform.
-     * @throws NonSquareMatrixException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not square.
      */
     TriDiagonalTransformer(RealMatrix matrix) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         final int m = matrix.getRowDimension();

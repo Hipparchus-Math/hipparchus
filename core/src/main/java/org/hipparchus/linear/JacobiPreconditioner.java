@@ -17,6 +17,8 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.analysis.function.Sqrt;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -54,13 +56,14 @@ public class JacobiPreconditioner extends RealLinearOperator {
      * @param a the linear operator for which the preconditioner should be built
      * @return the diagonal preconditioner made of the inverse of the diagonal
      * coefficients of the specified linear operator
-     * @throws NonSquareOperatorException if {@code a} is not square
+     * @throws MathIllegalArgumentException if {@code a} is not square
      */
     public static JacobiPreconditioner create(final RealLinearOperator a)
-        throws NonSquareOperatorException {
+        throws MathIllegalArgumentException {
         final int n = a.getColumnDimension();
         if (a.getRowDimension() != n) {
-            throw new NonSquareOperatorException(a.getRowDimension(), n);
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_OPERATOR,
+                                                   a.getRowDimension(), n);
         }
         final double[] diag = new double[n];
         if (a instanceof AbstractRealMatrix) {

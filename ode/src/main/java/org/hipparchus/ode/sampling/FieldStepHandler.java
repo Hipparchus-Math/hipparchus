@@ -18,7 +18,7 @@
 package org.hipparchus.ode.sampling;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 
 /**
@@ -66,10 +66,10 @@ public interface FieldStepHandler<T extends RealFieldElement<T>> {
      * Keeping only a reference to the interpolator and reusing it will
      * result in unpredictable behavior (potentially crashing the application).
      * @param isLast true if the step is the last one
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
     void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
-        throws MaxCountExceededException;
+        throws MathIllegalStateException;
 
 }

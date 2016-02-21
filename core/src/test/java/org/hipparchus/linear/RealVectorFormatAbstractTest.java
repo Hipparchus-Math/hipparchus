@@ -23,7 +23,7 @@ import java.util.Locale;
 
 import org.junit.Test;
 import org.junit.Assert;
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVectorFormat;
 
@@ -310,8 +310,8 @@ public abstract class RealVectorFormatAbstractTest {
     public void testParseNoComponents() {
         try {
             realVectorFormat.parse("{ }");
-            Assert.fail("Expecting MathParseException");
-        } catch (MathParseException pe) {
+            Assert.fail("Expecting MathIllegalStateException");
+        } catch (MathIllegalStateException pe) {
             // expected behavior
         }
     }

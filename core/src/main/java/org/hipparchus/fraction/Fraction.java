@@ -20,9 +20,10 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 
@@ -94,10 +95,10 @@ public class Fraction
     /**
      * Create a fraction given the double value.
      * @param value the double value to convert to a fraction.
-     * @throws FractionConversionException if the continued fraction failed to
+     * @throws MathIllegalStateException if the continued fraction failed to
      *         converge.
      */
-    public Fraction(double value) throws FractionConversionException {
+    public Fraction(double value) throws MathIllegalStateException {
         this(value, DEFAULT_EPSILON, 100);
     }
 
@@ -114,12 +115,11 @@ public class Fraction
      * @param epsilon maximum error allowed.  The resulting fraction is within
      *        {@code epsilon} of {@code value}, in absolute terms.
      * @param maxIterations maximum number of convergents
-     * @throws FractionConversionException if the continued fraction failed to
+     * @throws MathIllegalStateException if the continued fraction failed to
      *         converge.
      */
     public Fraction(double value, double epsilon, int maxIterations)
-        throws FractionConversionException
-    {
+        throws MathIllegalStateException {
         this(value, epsilon, Integer.MAX_VALUE, maxIterations);
     }
 
@@ -138,8 +138,7 @@ public class Fraction
      *         converge
      */
     public Fraction(double value, int maxDenominator)
-        throws FractionConversionException
-    {
+        throws MathIllegalStateException {
        this(value, 0, maxDenominator, 100);
     }
 
@@ -171,17 +170,17 @@ public class Fraction
      *        {@code epsilon} of {@code value}, in absolute terms.
      * @param maxDenominator maximum denominator value allowed.
      * @param maxIterations maximum number of convergents
-     * @throws FractionConversionException if the continued fraction failed to
+     * @throws MathIllegalStateException if the continued fraction failed to
      *         converge.
      */
     private Fraction(double value, double epsilon, int maxDenominator, int maxIterations)
-        throws FractionConversionException
+        throws MathIllegalStateException
     {
         long overflow = Integer.MAX_VALUE;
         double r0 = value;
         long a0 = (long)FastMath.floor(r0);
         if (FastMath.abs(a0) > overflow) {
-            throw new FractionConversionException(value, a0, 1l);
+            throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW, value, a0, 1l);
         }
 
         // check for (almost) integer arguments, which should not go to iterations.
@@ -214,7 +213,7 @@ public class Fraction
                 if (epsilon == 0.0 && FastMath.abs(q1) < maxDenominator) {
                     break;
                 }
-                throw new FractionConversionException(value, p2, q2);
+                throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
             }
 
             double convergent = (double)p2 / (double)q2;
@@ -231,7 +230,7 @@ public class Fraction
         } while (!stop);
 
         if (n >= maxIterations) {
-            throw new FractionConversionException(value, maxIterations);
+            throw new MathIllegalStateException(LocalizedFormats.FAILED_FRACTION_CONVERSION, value, maxIterations);
         }
 
         if (q2 < maxDenominator) {
@@ -258,17 +257,17 @@ public class Fraction
      * reduced to lowest terms.
      * @param num the numerator.
      * @param den the denominator.
-     * @throws MathArithmeticException if the denominator is {@code zero}
+     * @throws MathRuntimeException if the denominator is {@code zero}
      */
     public Fraction(int num, int den) {
         if (den == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
                                               num, den);
         }
         if (den < 0) {
             if (num == Integer.MIN_VALUE ||
                 den == Integer.MIN_VALUE) {
-                throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_FRACTION,
+                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_FRACTION,
                                                   num, den);
             }
             num = -num;
@@ -413,7 +412,7 @@ public class Fraction
     @Override
     public Fraction negate() {
         if (numerator==Integer.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_FRACTION, numerator, denominator);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_FRACTION, numerator, denominator);
         }
         return new Fraction(-numerator, denominator);
     }
@@ -434,7 +433,7 @@ public class Fraction
      * @param fraction  the fraction to add, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
      * @throws NullArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the resulting numerator or denominator exceeds
+     * @throws MathRuntimeException if the resulting numerator or denominator exceeds
      *  {@code Integer.MAX_VALUE}
      */
     @Override
@@ -458,7 +457,7 @@ public class Fraction
      * @param fraction  the fraction to subtract, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
      * @throws NullArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the resulting numerator or denominator
+     * @throws MathRuntimeException if the resulting numerator or denominator
      *   cannot be represented in an {@code int}.
      */
     @Override
@@ -482,7 +481,7 @@ public class Fraction
      * @param isAdd true to add, false to subtract
      * @return a {@code Fraction} instance with the resulting values
      * @throws NullArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the resulting numerator or denominator
+     * @throws MathRuntimeException if the resulting numerator or denominator
      *   cannot be represented in an {@code int}.
      */
     private Fraction addSub(Fraction fraction, boolean isAdd) {
@@ -524,7 +523,7 @@ public class Fraction
         // result is (t/d2) / (u'/d1)(v'/d2)
         BigInteger w = t.divide(BigInteger.valueOf(d2));
         if (w.bitLength() > 31) {
-            throw new MathArithmeticException(LocalizedFormats.NUMERATOR_OVERFLOW_AFTER_MULTIPLY,
+            throw new MathRuntimeException(LocalizedFormats.NUMERATOR_OVERFLOW_AFTER_MULTIPLY,
                                               w);
         }
         return new Fraction (w.intValue(),
@@ -539,7 +538,7 @@ public class Fraction
      * @param fraction  the fraction to multiply by, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
      * @throws NullArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the resulting numerator or denominator exceeds
+     * @throws MathRuntimeException if the resulting numerator or denominator exceeds
      *  {@code Integer.MAX_VALUE}
      */
     @Override
@@ -575,8 +574,8 @@ public class Fraction
      * @param fraction  the fraction to divide by, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
      * @throws IllegalArgumentException if the fraction is {@code null}
-     * @throws MathArithmeticException if the fraction to divide by is zero
-     * @throws MathArithmeticException if the resulting numerator or denominator exceeds
+     * @throws MathRuntimeException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the resulting numerator or denominator exceeds
      *  {@code Integer.MAX_VALUE}
      */
     @Override
@@ -585,7 +584,7 @@ public class Fraction
             throw new NullArgumentException(LocalizedFormats.FRACTION);
         }
         if (fraction.numerator == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_FRACTION_TO_DIVIDE_BY,
+            throw new MathRuntimeException(LocalizedFormats.ZERO_FRACTION_TO_DIVIDE_BY,
                                               fraction.numerator, fraction.denominator);
         }
         return multiply(fraction.reciprocal());
@@ -621,11 +620,11 @@ public class Fraction
      * @param numerator  the numerator, for example the three in 'three sevenths'
      * @param denominator  the denominator, for example the seven in 'three sevenths'
      * @return a new fraction instance, with the numerator and denominator reduced
-     * @throws MathArithmeticException if the denominator is {@code zero}
+     * @throws MathRuntimeException if the denominator is {@code zero}
      */
     public static Fraction getReducedFraction(int numerator, int denominator) {
         if (denominator == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
                                               numerator, denominator);
         }
         if (numerator==0) {
@@ -638,7 +637,7 @@ public class Fraction
         if (denominator < 0) {
             if (numerator==Integer.MIN_VALUE ||
                     denominator==Integer.MIN_VALUE) {
-                throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_FRACTION,
+                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_FRACTION,
                                                   numerator, denominator);
             }
             numerator = -numerator;

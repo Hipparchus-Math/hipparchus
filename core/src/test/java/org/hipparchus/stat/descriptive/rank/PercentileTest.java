@@ -20,9 +20,7 @@ import java.util.Arrays;
 
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotANumberException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
@@ -666,15 +664,15 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
                         { Percentile.EstimationType.R_7, 19.555 }, { Percentile.EstimationType.R_8, 20.460 },{Percentile.EstimationType.R_9,20.415} };
         try {
             Percentile.EstimationType.LEGACY.evaluate(testArray, -1d, new KthSelector(new MedianOf3PivotingStrategy()));
-        } catch (final OutOfRangeException oore) {
+        } catch (final MathIllegalArgumentException oore) {
         }
         try {
             Percentile.EstimationType.LEGACY.evaluate(testArray, 101d, new KthSelector());
-        } catch (final OutOfRangeException oore) {
+        } catch (final MathIllegalArgumentException oore) {
         }
         try {
             Percentile.EstimationType.LEGACY.evaluate(testArray, 50d, new KthSelector());
-        } catch(final OutOfRangeException oore) {
+        } catch(final MathIllegalArgumentException oore) {
         }
         for (final Object[] o : map) {
             final Percentile.EstimationType e = (Percentile.EstimationType) o[0];
@@ -735,8 +733,8 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
             }
             try {
                 e.evaluate(testArray, 120, new KthSelector());
-                Assert.fail("Expecting OutOfRangeException");
-            } catch (final OutOfRangeException oore) {
+                Assert.fail("Expecting MathIllegalArgumentException");
+            } catch (final MathIllegalArgumentException oore) {
                 // expected
             }
         }
@@ -791,7 +789,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     }
 
     // Some NaNStrategy specific testing
-    @Test(expected=NotANumberException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNanStrategyFailed() {
         double[] specialValues =
                 new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };

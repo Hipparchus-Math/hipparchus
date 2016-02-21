@@ -16,34 +16,28 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
+import java.io.Serializable;
+import java.util.Locale;
 
 /**
- * Base class for all unsupported features.
- * It is used for all the exceptions that have the semantics of the standard
- * {@link UnsupportedOperationException}, but must also provide a localized
- * message.
+ * Interface for localizable strings.
  *
  * @since 2.2
  */
-public class MathUnsupportedOperationException extends MathRuntimeException {
-    /** Serializable version Id. */
-    private static final long serialVersionUID = -6024911025449780478L;
+public interface Localizable extends Serializable {
+    /**
+     * Gets the source (non-localized) string.
+     *
+     * @return the source string.
+     */
+    String getSourceString();
 
     /**
-     * Default constructor.
+     * Gets the localized string.
+     *
+     * @param locale locale into which to get the string.
+     * @return the localized string or the source string if no
+     * localized version is available.
      */
-    public MathUnsupportedOperationException() {
-        this(LocalizedFormats.UNSUPPORTED_OPERATION);
-    }
-    /**
-     * @param pattern Message pattern providing the specific context of
-     * the error.
-     * @param args Arguments.
-     */
-    public MathUnsupportedOperationException(Localizable pattern, Object ... args) {
-        super(pattern, args);
-    }
-
+    String getLocalizedString(Locale locale);
 }

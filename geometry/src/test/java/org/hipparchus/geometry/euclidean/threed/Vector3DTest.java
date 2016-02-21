@@ -23,8 +23,8 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -36,7 +36,7 @@ import org.junit.Test;
 
 public class Vector3DTest {
     @Test
-    public void testConstructors() throws DimensionMismatchException {
+    public void testConstructors() throws MathIllegalArgumentException {
         double r = FastMath.sqrt(2) /2;
         checkVector(new Vector3D(2, new Vector3D(FastMath.PI / 3, -FastMath.PI / 4)),
                     r, r * FastMath.sqrt(3), -2 * r);
@@ -116,8 +116,8 @@ public class Vector3DTest {
         Assert.assertEquals("{3.000; 2.000; 1.000}", new Vector3D(3, 2, 1).toString(format));
     }
 
-    @Test(expected=DimensionMismatchException.class)
-    public void testWrongDimension() throws DimensionMismatchException {
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testWrongDimension() throws MathIllegalArgumentException {
         new Vector3D(new double[] { 2,  5 });
     }
 
@@ -267,7 +267,7 @@ public class Vector3DTest {
     }
 
     @Test
-    public void testAngularSeparation() throws MathArithmeticException {
+    public void testAngularSeparation() throws MathRuntimeException {
         Vector3D v1 = new Vector3D(2, -1, 4);
 
         Vector3D  k = v1.normalize();
@@ -278,12 +278,12 @@ public class Vector3DTest {
   }
 
     @Test
-    public void testNormalize() throws MathArithmeticException {
+    public void testNormalize() throws MathRuntimeException {
         Assert.assertEquals(1.0, new Vector3D(5, -4, 2).normalize().getNorm(), 1.0e-12);
         try {
             Vector3D.ZERO.normalize();
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException ae) {
+        } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }
@@ -294,7 +294,7 @@ public class Vector3DTest {
     }
 
     @Test
-    public void testOrthogonal() throws MathArithmeticException {
+    public void testOrthogonal() throws MathRuntimeException {
         Vector3D v1 = new Vector3D(0.1, 2.5, 1.3);
         Assert.assertEquals(0.0, Vector3D.dotProduct(v1, v1.orthogonal()), 1.0e-12);
         Vector3D v2 = new Vector3D(2.3, -0.003, 7.6);
@@ -306,12 +306,12 @@ public class Vector3DTest {
         try {
             new Vector3D(0, 0, 0).orthogonal();
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException ae) {
+        } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }
     @Test
-    public void testAngle() throws MathArithmeticException {
+    public void testAngle() throws MathRuntimeException {
         Assert.assertEquals(0.22572612855273393616,
                             Vector3D.angle(new Vector3D(1, 2, 3), new Vector3D(4, 5, 6)),
                             1.0e-12);
@@ -324,7 +324,7 @@ public class Vector3DTest {
         try {
             Vector3D.angle(Vector3D.ZERO, Vector3D.PLUS_I);
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException ae) {
+        } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }

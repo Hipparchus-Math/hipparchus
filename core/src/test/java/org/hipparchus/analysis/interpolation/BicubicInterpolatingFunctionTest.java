@@ -18,9 +18,7 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -63,25 +61,25 @@ public final class BicubicInterpolatingFunctionTest {
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, wzval, zval, zval, zval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, wzval, zval, zval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, zval, wzval, zval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, zval, zval, wzval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
 
@@ -89,25 +87,25 @@ public final class BicubicInterpolatingFunctionTest {
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, wzval, zval, zval, zval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, wzval, zval, zval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, zval, wzval, zval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             bcf = new BicubicInterpolatingFunction(xval, yval, zval, zval, zval, wzval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
     }
@@ -159,8 +157,8 @@ public final class BicubicInterpolatingFunctionTest {
         // Ensure that an exception would have been thrown.
         try {
             bcf.value(x, y);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException expected) {}
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException expected) {}
 
         x = xMin;
         y = yMax + small;
@@ -168,8 +166,8 @@ public final class BicubicInterpolatingFunctionTest {
         // Ensure that an exception would have been thrown.
         try {
             bcf.value(x, y);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException expected) {}
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException expected) {}
     }
 
     /**

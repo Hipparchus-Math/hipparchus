@@ -14,10 +14,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception.util;
+package org.hipparchus.exception;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.Locale;
 import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 /**
@@ -87,8 +93,7 @@ public enum LocalizedFormats implements Localizable {
     DIFFERENT_ORIG_AND_PERMUTED_DATA("original and permuted data must contain the same elements"),
     DIGEST_NOT_INITIALIZED("digest not initialized"),
     DIMENSIONS_MISMATCH_2x2("got {0}x{1} but expected {2}x{3}"), /* keep */
-    DIMENSIONS_MISMATCH_SIMPLE("{0} != {1}"), /* keep */
-    DIMENSIONS_MISMATCH("dimensions mismatch"), /* keep */
+    DIMENSIONS_MISMATCH("inconsistent dimensions: {0} != {1}"), /* keep */
     DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN("Discrete cumulative probability function returned NaN for argument {0}"),
     DISTRIBUTION_NOT_LOADED("distribution not loaded"),
     DUPLICATED_ABSCISSA_DIVISION_BY_ZERO("duplicated abscissa {0} causes division by zero"),
@@ -314,7 +319,7 @@ public enum LocalizedFormats implements Localizable {
     ROTATION_MATRIX_DIMENSIONS("a {0}x{1} matrix cannot be a rotation matrix"),
     ROW_INDEX_OUT_OF_RANGE("row index {0} out of allowed range [{1}, {2}]"),
     ROW_INDEX("row index ({0})"), /* keep */
-    SAME_SIGN_AT_ENDPOINTS("function values at endpoints do not have different signs, endpoints: [{0}, {1}], values: [{2}, {3}]"),
+    NOT_BRACKETING_INTERVAL("interval does not bracket a root: f({0}) = {2}, f({1}) = {3}]"),
     SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE("sample size ({0}) exceeds collection size ({1})"), /* keep */
     SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE("sample size ({0}) must be less than or equal to population size ({1})"),
     SIMPLEX_NEED_ONE_POINT("simplex must contain at least one point"),
@@ -396,10 +401,15 @@ public enum LocalizedFormats implements Localizable {
         try {
             final String path = LocalizedFormats.class.getName().replaceAll("\\.", "/");
             ResourceBundle bundle =
-                    ResourceBundle.getBundle("assets/" + path, locale);
+                    ResourceBundle.getBundle("assets/" + path, locale, new UTF8Control());
             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
-                // the value of the resource is the translated format
-                return bundle.getString(toString());
+                final String translated = bundle.getString(name());
+                if ((translated != null) &&
+                    (translated.length() > 0) &&
+                    (!translated.toLowerCase().contains("missing translation"))) {
+                    // the value of the resource is the translated format
+                    return translated;
+                }
             }
 
         } catch (MissingResourceException mre) { // NOPMD
@@ -409,6 +419,50 @@ public enum LocalizedFormats implements Localizable {
         // either the locale is not supported or the resource is unknown
         // don't translate and fall back to using the source format
         return sourceFormat;
+
+    }
+
+    /** Control class loading properties in UTF-8 encoding.
+     * <p>
+     * This class has been very slightly adapted from BalusC answer to question: <a
+     * href="http://stackoverflow.com/questions/4659929/how-to-use-utf-8-in-resource-properties-with-resourcebundle">
+     * How to use UTF-8 in resource properties with ResourceBundle</a>.
+     * </p>
+     */
+    public static class UTF8Control extends ResourceBundle.Control {
+
+        /** {@inheritDoc} */
+        @Override
+        public ResourceBundle newBundle(final String baseName, final Locale locale, final String format,
+                                        final ClassLoader loader, final boolean reload)
+            throws IllegalAccessException, InstantiationException, IOException {
+            // The below is a copy of the default implementation.
+            final String bundleName = toBundleName(baseName, locale);
+            final String resourceName = toResourceName(bundleName, "utf8");
+            ResourceBundle bundle = null;
+            InputStream stream = null;
+            if (reload) {
+                final URL url = loader.getResource(resourceName);
+                if (url != null) {
+                    final URLConnection connection = url.openConnection();
+                    if (connection != null) {
+                        connection.setUseCaches(false);
+                        stream = connection.getInputStream();
+                    }
+                }
+            } else {
+                stream = loader.getResourceAsStream(resourceName);
+            }
+            if (stream != null) {
+                try {
+                    // Only this line is changed to make it to read properties files as UTF-8.
+                    bundle = new PropertyResourceBundle(new InputStreamReader(stream, "UTF-8"));
+                } finally {
+                    stream.close();
+                }
+            }
+            return bundle;
+        }
 
     }
 

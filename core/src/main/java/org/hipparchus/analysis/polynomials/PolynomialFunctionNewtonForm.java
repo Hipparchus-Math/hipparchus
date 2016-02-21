@@ -18,10 +18,9 @@ package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NoDataException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -71,12 +70,12 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
      * @param a Coefficients in Newton form formula.
      * @param c Centers.
      * @throws NullArgumentException if any argument is {@code null}.
-     * @throws NoDataException if any array has zero length.
-     * @throws DimensionMismatchException if the size difference between
+     * @throws MathIllegalArgumentException if any array has zero length.
+     * @throws MathIllegalArgumentException if the size difference between
      * {@code a} and {@code c} is not equal to 1.
      */
     public PolynomialFunctionNewtonForm(double a[], double c[])
-        throws NullArgumentException, NoDataException, DimensionMismatchException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         verifyInputArray(a, c);
         this.a = new double[a.length];
@@ -176,12 +175,12 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
      * @param z Point at which the function value is to be computed.
      * @return the function value.
      * @throws NullArgumentException if any argument is {@code null}.
-     * @throws NoDataException if any array has zero length.
-     * @throws DimensionMismatchException if the size difference between
+     * @throws MathIllegalArgumentException if any array has zero length.
+     * @throws MathIllegalArgumentException if the size difference between
      * {@code a} and {@code c} is not equal to 1.
      */
     public static double evaluate(double a[], double c[], double z)
-        throws NullArgumentException, DimensionMismatchException, NoDataException {
+        throws MathIllegalArgumentException, NullArgumentException {
         verifyInputArray(a, c);
 
         final int n = c.length;
@@ -225,21 +224,21 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
      * @param a the coefficients in Newton form formula
      * @param c the centers
      * @throws NullArgumentException if any argument is {@code null}.
-     * @throws NoDataException if any array has zero length.
-     * @throws DimensionMismatchException if the size difference between
+     * @throws MathIllegalArgumentException if any array has zero length.
+     * @throws MathIllegalArgumentException if the size difference between
      * {@code a} and {@code c} is not equal to 1.
      * @see org.hipparchus.analysis.interpolation.DividedDifferenceInterpolator#computeDividedDifference(double[],
      * double[])
      */
     protected static void verifyInputArray(double a[], double c[])
-        throws NullArgumentException, NoDataException, DimensionMismatchException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(a);
         MathUtils.checkNotNull(c);
         if (a.length == 0 || c.length == 0) {
-            throw new NoDataException(LocalizedFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
         if (a.length != c.length + 1) {
-            throw new DimensionMismatchException(LocalizedFormats.ARRAY_SIZES_SHOULD_HAVE_DIFFERENCE_1,
+            throw new MathIllegalArgumentException(LocalizedFormats.ARRAY_SIZES_SHOULD_HAVE_DIFFERENCE_1,
                                                  a.length, c.length);
         }
     }

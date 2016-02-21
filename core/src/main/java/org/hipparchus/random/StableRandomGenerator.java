@@ -16,9 +16,9 @@
  */
 package org.hipparchus.random;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -51,23 +51,23 @@ public class StableRandomGenerator implements NormalizedRandomGenerator {
      * @param alpha Stability parameter. Must be in range (0, 2]
      * @param beta Skewness parameter. Must be in range [-1, 1]
      * @throws NullArgumentException if generator is null
-     * @throws OutOfRangeException if {@code alpha <= 0} or {@code alpha > 2}
+     * @throws MathIllegalArgumentException if {@code alpha <= 0} or {@code alpha > 2}
      * or {@code beta < -1} or {@code beta > 1}
      */
     public StableRandomGenerator(final RandomGenerator generator,
                                  final double alpha, final double beta)
-        throws NullArgumentException, OutOfRangeException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (generator == null) {
             throw new NullArgumentException();
         }
 
         if (!(alpha > 0d && alpha <= 2d)) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_RANGE_LEFT,
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_LEFT,
                     alpha, 0, 2);
         }
 
         if (!(beta >= -1d && beta <= 1d)) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
                     beta, -1, 1);
         }
 

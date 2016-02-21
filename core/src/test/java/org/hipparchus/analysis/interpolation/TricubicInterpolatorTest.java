@@ -17,7 +17,6 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.TrivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -65,21 +64,21 @@ public final class TricubicInterpolatorTest {
         try {
             tcf = new TricubicInterpolator().interpolate(xval, yval, zval, wfval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         wfval = new double[xval.length][yval.length - 1][zval.length];
         try {
             tcf = new TricubicInterpolator().interpolate(xval, yval, zval, wfval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         wfval = new double[xval.length][yval.length][zval.length - 1];
         try {
             tcf = new TricubicInterpolator().interpolate(xval, yval, zval, wfval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
     }

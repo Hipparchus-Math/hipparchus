@@ -16,9 +16,9 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathUnsupportedOperationException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 
@@ -125,12 +125,12 @@ public class StorelessCovariance extends Covariance {
      * @param xIndex row index in the covariance matrix
      * @param yIndex column index in the covariance matrix
      * @return the covariance of the given element
-     * @throws NumberIsTooSmallException if the number of observations
+     * @throws MathIllegalArgumentException if the number of observations
      * in the cell is &lt; 2
      */
     public double getCovariance(final int xIndex,
                                 final int yIndex)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         return getElement(xIndex, yIndex).getResult();
 
@@ -140,15 +140,16 @@ public class StorelessCovariance extends Covariance {
      * Increment the covariance matrix with one row of data.
      *
      * @param data array representing one row of data.
-     * @throws DimensionMismatchException if the length of <code>rowData</code>
+     * @throws MathIllegalArgumentException if the length of <code>rowData</code>
      * does not match with the covariance matrix
      */
     public void increment(final double[] data)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         int length = data.length;
         if (length != dimension) {
-            throw new DimensionMismatchException(length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   length, dimension);
         }
 
         // only update the upper triangular part of the covariance matrix
@@ -168,12 +169,13 @@ public class StorelessCovariance extends Covariance {
      * operations in {@code sc} directly on this.
      *
      * @param sc externally computed StorelessCovariance to add to this
-     * @throws DimensionMismatchException if the dimension of sc does not match this
+     * @throws MathIllegalArgumentException if the dimension of sc does not match this
      * @since 3.3
      */
-    public void append(StorelessCovariance sc) throws DimensionMismatchException {
+    public void append(StorelessCovariance sc) throws MathIllegalArgumentException {
         if (sc.dimension != dimension) {
-            throw new DimensionMismatchException(sc.dimension, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   sc.dimension, dimension);
         }
 
         // only update the upper triangular part of the covariance matrix
@@ -187,11 +189,11 @@ public class StorelessCovariance extends Covariance {
 
     /**
      * {@inheritDoc}
-     * @throws NumberIsTooSmallException if the number of observations
+     * @throws MathIllegalArgumentException if the number of observations
      * in a cell is &lt; 2
      */
     @Override
-    public RealMatrix getCovarianceMatrix() throws NumberIsTooSmallException {
+    public RealMatrix getCovarianceMatrix() throws MathIllegalArgumentException {
         return MatrixUtils.createRealMatrix(getData());
     }
 
@@ -199,10 +201,10 @@ public class StorelessCovariance extends Covariance {
      * Return the covariance matrix as two-dimensional array.
      *
      * @return a two-dimensional double array of covariance values
-     * @throws NumberIsTooSmallException if the number of observations
+     * @throws MathIllegalArgumentException if the number of observations
      * for a cell is &lt; 2
      */
-    public double[][] getData() throws NumberIsTooSmallException {
+    public double[][] getData() throws MathIllegalArgumentException {
         final double[][] data = new double[dimension][dimension];
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < dimension; j++) {
@@ -218,12 +220,12 @@ public class StorelessCovariance extends Covariance {
      * pairs of covariates - i.e., N as defined in {@link Covariance#getN()} is undefined.
      *
      * @return nothing as this implementation always throws a
-     * {@link MathUnsupportedOperationException}
-     * @throws MathUnsupportedOperationException in all cases
+     * {@link MathRuntimeException}
+     * @throws MathRuntimeException in all cases
      */
     @Override
     public int getN()
-        throws MathUnsupportedOperationException {
-        throw new MathUnsupportedOperationException();
+        throws MathRuntimeException {
+        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
     }
 }

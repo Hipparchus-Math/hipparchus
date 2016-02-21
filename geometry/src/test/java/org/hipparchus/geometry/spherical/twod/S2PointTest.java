@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.spherical.twod;
 
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.geometry.spherical.twod.S2Point;
 import org.hipparchus.geometry.spherical.twod.Sphere2D;
@@ -41,12 +41,12 @@ public class S2PointTest {
         }
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNegativePolarAngle() {
         new S2Point(1.0, -1.0);
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testTooLargePolarAngle() {
         new S2Point(1.0, 3.5);
     }

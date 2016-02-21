@@ -16,34 +16,44 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
+import java.util.Locale;
 
 /**
- * Exception to be thrown when the argument is not greater than 0.
+ * Dummy implementation of the {@link Localizable} interface, without localization.
  *
  * @since 2.2
  */
-public class NotStrictlyPositiveException extends NumberIsTooSmallException {
+public class DummyLocalizable implements Localizable {
 
-    /** Serializable version Id. */
-    private static final long serialVersionUID = -7824848630829852237L;
+    /** Serializable version identifier. */
+    private static final long serialVersionUID = 8843275624471387299L;
 
-    /**
-     * Construct the exception.
-     *
-     * @param value Argument.
+    /** Source string. */
+    private final String source;
+
+    /** Simple constructor.
+     * @param source source text
      */
-    public NotStrictlyPositiveException(Number value) {
-        super(value, INTEGER_ZERO, false);
+    public DummyLocalizable(final String source) {
+        this.source = source;
     }
-    /**
-     * Construct the exception with a specific context.
-     *
-     * @param specific Specific context where the error occurred.
-     * @param value Argument.
-     */
-    public NotStrictlyPositiveException(Localizable specific,
-                                        Number value) {
-        super(specific, value, INTEGER_ZERO, false);
+
+    /** {@inheritDoc} */
+    @Override
+    public String getSourceString() {
+        return source;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public String getLocalizedString(Locale locale) {
+        return source;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public String toString() {
+        return source;
+    }
+
 }

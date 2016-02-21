@@ -22,9 +22,9 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathParseException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * Formats a Fraction number in proper format or improper format.  The number
@@ -164,13 +164,13 @@ public class FractionFormat extends AbstractFormat {
      *            offsets of the alignment field
      * @return the value passed in as toAppendTo.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
-     * @throws FractionConversionException if the number cannot be converted to a fraction
+     * @throws MathIllegalStateException if the number cannot be converted to a fraction
      * @throws MathIllegalArgumentException if <code>obj</code> is not a valid type.
      */
     @Override
     public StringBuffer format(final Object obj,
                                final StringBuffer toAppendTo, final FieldPosition pos)
-        throws FractionConversionException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         StringBuffer ret = null;
 
         if (obj instanceof Fraction) {
@@ -188,15 +188,16 @@ public class FractionFormat extends AbstractFormat {
      * Parses a string to produce a {@link Fraction} object.
      * @param source the string to parse
      * @return the parsed {@link Fraction} object.
-     * @exception MathParseException if the beginning of the specified string
+     * @exception MathIllegalStateException if the beginning of the specified string
      *            cannot be parsed.
      */
     @Override
-    public Fraction parse(final String source) throws MathParseException {
+    public Fraction parse(final String source) throws MathIllegalStateException {
         final ParsePosition parsePosition = new ParsePosition(0);
         final Fraction result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathParseException(source, parsePosition.getErrorIndex(), Fraction.class);
+            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+                                                source, parsePosition.getErrorIndex(), Fraction.class);
         }
         return result;
     }

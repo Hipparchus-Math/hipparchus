@@ -19,10 +19,7 @@ package org.hipparchus.analysis.integration;
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.analysis.integration.TrapezoidIntegrator;
-import org.hipparchus.analysis.integration.UnivariateIntegrator;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -103,22 +100,22 @@ public final class TrapezoidIntegratorTest {
         try {
             // bad interval
             new TrapezoidIntegrator().integrate(1000, f, 1, -1);
-            Assert.fail("Expecting NumberIsTooLargeException - bad interval");
-        } catch (NumberIsTooLargeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new TrapezoidIntegrator(5, 4);
-            Assert.fail("Expecting NumberIsTooSmallException - bad iteration limits");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // bad iteration limits
             new TrapezoidIntegrator(10,99);
-            Assert.fail("Expecting NumberIsTooLargeException - bad iteration limits");
-        } catch (NumberIsTooLargeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad iteration limits");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

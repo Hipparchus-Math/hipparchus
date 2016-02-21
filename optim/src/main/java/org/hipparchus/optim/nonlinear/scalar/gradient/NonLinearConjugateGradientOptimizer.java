@@ -17,16 +17,16 @@
 
 package org.hipparchus.optim.nonlinear.scalar.gradient;
 
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.MathUnsupportedOperationException;
-import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.GradientMultivariateOptimizer;
 import org.hipparchus.optim.nonlinear.scalar.LineSearch;
+import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
 
 
 /**
@@ -38,7 +38,7 @@ import org.hipparchus.optim.nonlinear.scalar.LineSearch;
  * <br/>
  * Constraints are not supported: the call to
  * {@link #optimize(OptimizationData[]) optimize} will throw
- * {@link MathUnsupportedOperationException} if bounds are passed to it.
+ * {@link MathRuntimeException} if bounds are passed to it.
  *
  * @since 2.0
  */
@@ -160,7 +160,7 @@ public class NonLinearConjugateGradientOptimizer
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }
@@ -236,7 +236,7 @@ public class NonLinearConjugateGradientOptimizer
                 break;
             default:
                 // Should never happen.
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
             steepestDescent = newSteepestDescent;
 
@@ -325,13 +325,13 @@ public class NonLinearConjugateGradientOptimizer
 //     }
 
     /**
-     * @throws MathUnsupportedOperationException if bounds were passed to the
+     * @throws MathRuntimeException if bounds were passed to the
      * {@link #optimize(OptimizationData[]) optimize} method.
      */
     private void checkParameters() {
         if (getLowerBound() != null ||
             getUpperBound() != null) {
-            throw new MathUnsupportedOperationException(LocalizedFormats.CONSTRAINT);
+            throw new MathRuntimeException(LocalizedFormats.CONSTRAINT);
         }
     }
 }

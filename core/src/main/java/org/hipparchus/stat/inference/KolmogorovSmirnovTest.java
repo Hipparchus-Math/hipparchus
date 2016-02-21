@@ -24,17 +24,13 @@ import java.util.HashSet;
 import org.hipparchus.distribution.EnumeratedRealDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.InsufficientDataException;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.TooManyIterationsException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.BigFractionField;
-import org.hipparchus.fraction.FractionConversionException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.MatrixUtils;
@@ -179,7 +175,7 @@ public class KolmogorovSmirnovTest {
      * @param exact whether or not to force exact computation of the p-value
      * @return the p-value associated with the null hypothesis that {@code data} is a sample from
      *         {@code distribution}
-     * @throws InsufficientDataException if {@code data} does not have length at least 2
+     * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
      * @throws NullArgumentException if {@code data} is null
      */
     public double kolmogorovSmirnovTest(RealDistribution distribution, double[] data, boolean exact) {
@@ -195,7 +191,7 @@ public class KolmogorovSmirnovTest {
      * @param distribution reference distribution
      * @param data sample being evaluated
      * @return Kolmogorov-Smirnov statistic \(D_n\)
-     * @throws InsufficientDataException if {@code data} does not have length at least 2
+     * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
      * @throws NullArgumentException if {@code data} is null
      */
     public double kolmogorovSmirnovStatistic(RealDistribution distribution, double[] data) {
@@ -248,7 +244,7 @@ public class KolmogorovSmirnovTest {
      *        (ignored for large samples)
      * @return p-value associated with the null hypothesis that {@code x} and {@code y} represent
      *         samples from the same distribution
-     * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
+     * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
      * @throws NullArgumentException if either {@code x} or {@code y} is null
      * @see #bootstrap(double[], double[], int, boolean)
@@ -282,7 +278,7 @@ public class KolmogorovSmirnovTest {
      * @param y second sample dataset
      * @return p-value associated with the null hypothesis that {@code x} and {@code y} represent
      *         samples from the same distribution
-     * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
+     * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
      * @throws NullArgumentException if either {@code x} or {@code y} is null
      */
@@ -300,7 +296,7 @@ public class KolmogorovSmirnovTest {
      * @param y second sample
      * @return test statistic \(D_{n,m}\) used to evaluate the null hypothesis that {@code x} and
      *         {@code y} represent samples from the same underlying distribution
-     * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
+     * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
      * @throws NullArgumentException if either {@code x} or {@code y} is null
      */
@@ -319,7 +315,7 @@ public class KolmogorovSmirnovTest {
      * @param y second sample
      * @return test statistic \(n m D_{n,m}\) used to evaluate the null hypothesis that {@code x} and
      *         {@code y} represent samples from the same underlying distribution
-     * @throws InsufficientDataException if either {@code x} or {@code y} does not have length at
+     * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
      * @throws NullArgumentException if either {@code x} or {@code y} is null
      */
@@ -369,7 +365,7 @@ public class KolmogorovSmirnovTest {
      * @param data sample being being evaluated
      * @return the p-value associated with the null hypothesis that {@code data} is a sample from
      *         {@code distribution}
-     * @throws InsufficientDataException if {@code data} does not have length at least 2
+     * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
      * @throws NullArgumentException if {@code data} is null
      */
     public double kolmogorovSmirnovTest(RealDistribution distribution, double[] data) {
@@ -385,12 +381,12 @@ public class KolmogorovSmirnovTest {
      * @param alpha significance level of the test
      * @return true iff the null hypothesis that {@code data} is a sample from {@code distribution}
      *         can be rejected with confidence 1 - {@code alpha}
-     * @throws InsufficientDataException if {@code data} does not have length at least 2
+     * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
      * @throws NullArgumentException if {@code data} is null
      */
     public boolean kolmogorovSmirnovTest(RealDistribution distribution, double[] data, double alpha) {
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
         }
         return kolmogorovSmirnovTest(distribution, data) < alpha;
     }
@@ -463,12 +459,12 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return \(P(D_n < d)\)
-     * @throws MathArithmeticException if algorithm fails to convert {@code h} to a
+     * @throws MathRuntimeException if algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\)
      */
     public double cdf(double d, int n)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         return cdf(d, n, false);
     }
 
@@ -482,12 +478,12 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return \(P(D_n < d)\)
-     * @throws MathArithmeticException if the algorithm fails to convert {@code h} to a
+     * @throws MathRuntimeException if the algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\)
      */
     public double cdfExact(double d, int n)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         return cdf(d, n, true);
     }
 
@@ -503,12 +499,12 @@ public class KolmogorovSmirnovTest {
      *        gain speed. Almost never choose {@code true} in real applications unless you are very
      *        sure; {@code true} is almost solely for verification purposes.
      * @return \(P(D_n < d)\)
-     * @throws MathArithmeticException if algorithm fails to convert {@code h} to a
+     * @throws MathRuntimeException if algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\).
      */
     public double cdf(double d, int n, boolean exact)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
 
         final double ninv = 1 / ((double) n);
         final double ninvhalf = 0.5 * ninv;
@@ -545,12 +541,12 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return the two-sided probability of \(P(D_n < d)\)
-     * @throws MathArithmeticException if algorithm fails to convert {@code h} to a
+     * @throws MathRuntimeException if algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 \le h < 1\).
      */
     private double exactK(double d, int n)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
 
         final int k = (int) Math.ceil(n * d);
 
@@ -627,7 +623,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         ret = sum * FastMath.sqrt(2 * FastMath.PI) / z;
 
@@ -648,7 +644,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         final double sqrtHalfPi = FastMath.sqrt(FastMath.PI / 2);
         // Instead of doubling sum, divide by 3 instead of 6
@@ -674,7 +670,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         double sum2 = 0;
         kTerm2 = 0;
@@ -687,7 +683,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         // Again, adjust coefficients instead of doubling sum, sum2
         ret += (sqrtHalfPi / n) * (sum / (36 * z2 * z2 * z2 * z) - sum2 / (18 * z2 * z));
@@ -712,7 +708,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         sum2 = 0;
         for (k = 1; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
@@ -726,7 +722,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new TooManyIterationsException(MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         return ret + (sqrtHalfPi / (sqrtN * n)) * (sum / (3240 * z6 * z4) +
                 + sum2 / (108 * z6));
@@ -739,27 +735,28 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return H matrix
-     * @throws NumberIsTooLargeException if fractional part is greater than 1
-     * @throws FractionConversionException if algorithm fails to convert {@code h} to a
+     * @throws MathIllegalArgumentException if fractional part is greater than 1
+     * @throws MathIllegalStateException if algorithm fails to convert {@code h} to a
      *         {@link org.hipparchus.fraction.BigFraction} in expressing {@code d} as \((k
      *         - h) / m\) for integer {@code k, m} and \(0 <= h < 1\).
      */
     private FieldMatrix<BigFraction> createExactH(double d, int n)
-        throws NumberIsTooLargeException, FractionConversionException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         final int k = (int) Math.ceil(n * d);
         final int m = 2 * k - 1;
         final double hDouble = k - n * d;
         if (hDouble >= 1) {
-            throw new NumberIsTooLargeException(hDouble, 1.0, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   hDouble, 1.0);
         }
         BigFraction h = null;
         try {
             h = new BigFraction(hDouble, 1.0e-20, 10000);
-        } catch (final FractionConversionException e1) {
+        } catch (final MathIllegalStateException e1) {
             try {
                 h = new BigFraction(hDouble, 1.0e-10, 10000);
-            } catch (final FractionConversionException e2) {
+            } catch (final MathIllegalStateException e2) {
                 h = new BigFraction(hDouble, 1.0e-5, 10000);
             }
         }
@@ -831,16 +828,17 @@ public class KolmogorovSmirnovTest {
      * @param d statistic
      * @param n sample size
      * @return H matrix
-     * @throws NumberIsTooLargeException if fractional part is greater than 1
+     * @throws MathIllegalArgumentException if fractional part is greater than 1
      */
     private RealMatrix createRoundedH(double d, int n)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
 
         final int k = (int) Math.ceil(n * d);
         final int m = 2 * k - 1;
         final double h = k - n * d;
         if (h >= 1) {
-            throw new NumberIsTooLargeException(h, 1.0, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   h, 1.0);
         }
         final double[][] Hdata = new double[m][m];
 
@@ -908,14 +906,14 @@ public class KolmogorovSmirnovTest {
      *
      * @param array array to test
      * @throws NullArgumentException if array is null
-     * @throws InsufficientDataException if array is too short
+     * @throws MathIllegalArgumentException if array is too short
      */
     private void checkArray(double[] array) {
         if (array == null) {
             throw new NullArgumentException(LocalizedFormats.NULL_NOT_ALLOWED);
         }
         if (array.length < 2) {
-            throw new InsufficientDataException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, array.length,
+            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, array.length,
                                                 2);
         }
     }
@@ -924,13 +922,13 @@ public class KolmogorovSmirnovTest {
      * Computes \( 1 + 2 \sum_{i=1}^\infty (-1)^i e^{-2 i^2 t^2} \) stopping when successive partial
      * sums are within {@code tolerance} of one another, or when {@code maxIterations} partial sums
      * have been computed. If the sum does not converge before {@code maxIterations} iterations a
-     * {@link TooManyIterationsException} is thrown.
+     * {@link MathIllegalStateException} is thrown.
      *
      * @param t argument
      * @param tolerance Cauchy criterion for partial sums
      * @param maxIterations maximum number of partial sums to compute
      * @return Kolmogorov sum evaluated at t
-     * @throws TooManyIterationsException if the series does not converge
+     * @throws MathIllegalStateException if the series does not converge
      */
     public double ksSum(double t, double tolerance, int maxIterations) {
         if (t == 0.0) {
@@ -952,7 +950,7 @@ public class KolmogorovSmirnovTest {
             i++;
         }
         if (i == maxIterations) {
-            throw new TooManyIterationsException(maxIterations);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, maxIterations);
         }
         return partialSum * 2;
     }
@@ -1168,7 +1166,7 @@ public class KolmogorovSmirnovTest {
            ct++;
        } while (ties && ct < 1000);
        if (ties) {
-           throw new MathInternalError(); // Should never happen
+           throw MathRuntimeException.createInternalError(); // Should never happen
        }
     }
 

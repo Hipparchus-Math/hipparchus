@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.hipparchus.analysis.differentiation.DSCompiler;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -130,12 +130,12 @@ public class DSCompilerTest {
 
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testIncompatibleParams() {
         DSCompiler.getCompiler(3, 2).checkCompatibility(DSCompiler.getCompiler(4, 2));
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testIncompatibleOrder() {
         DSCompiler.getCompiler(3, 3).checkCompatibility(DSCompiler.getCompiler(3, 2));
     }

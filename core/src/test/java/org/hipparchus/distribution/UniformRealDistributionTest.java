@@ -18,7 +18,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -83,13 +83,13 @@ public class UniformRealDistributionTest extends RealDistributionAbstractTest {
     }
 
     /** Test pre-condition for equal lower/upper bound. */
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions1() {
         new UniformRealDistribution(0, 0);
     }
 
     /** Test pre-condition for lower bound larger than upper bound. */
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions2() {
         new UniformRealDistribution(1, 0);
     }

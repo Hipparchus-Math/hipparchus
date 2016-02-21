@@ -13,12 +13,12 @@
  */
 package org.hipparchus.util;
 
-import java.util.List;
 import java.util.ArrayList;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.ZeroException;
+import java.util.List;
+
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -167,7 +167,7 @@ public class IntegerSequenceTest {
         Assert.assertEquals(seq.size(), r.size());
     }
 
-    @Test(expected=MaxCountExceededException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testIncrementorCountExceeded() {
         final int start = 1;
         final int max = 7;
@@ -202,7 +202,7 @@ public class IntegerSequenceTest {
         Assert.assertTrue(inc.canIncrement(0));
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testIncrementZeroTimes() {
         final int start = 1;
         final int max = 2;
@@ -217,13 +217,9 @@ public class IntegerSequenceTest {
         inc.increment(0);
     }
 
-    @Test(expected=ZeroException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testIncrementZeroStep() {
-        final int step = 0;
-
-        final IntegerSequence.Incrementor inc
-            = IntegerSequence.Incrementor.create()
-            .withIncrement(step);
+        IntegerSequence.Incrementor.create().withIncrement(0);
     }
 
     @Test
@@ -242,12 +238,12 @@ public class IntegerSequenceTest {
         try {
             inc.increment();
             Assert.fail("exception expected");
-        } catch (MaxCountExceededException e) {
+        } catch (MathIllegalStateException e) {
             // Expected.
         }
     }
 
-    @Test(expected=TooManyEvaluationsException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testIncrementorAlternateException() {
         final int start = 1;
         final int max = 2;
@@ -257,7 +253,8 @@ public class IntegerSequenceTest {
             = new IntegerSequence.Incrementor.MaxCountExceededCallback() {
                     /** {@inheritDoc} */
                     public void trigger(int max) {
-                        throw new TooManyEvaluationsException(max);
+                        throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED,
+                                                            max);
                     }
                 };
 

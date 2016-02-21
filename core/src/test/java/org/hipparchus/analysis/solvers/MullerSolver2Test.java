@@ -20,10 +20,7 @@ import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Expm1;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.analysis.solvers.MullerSolver2;
-import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -132,15 +129,15 @@ public final class MullerSolver2Test {
         try {
             // bad interval
             solver.solve(100, f, 1, -1);
-            Assert.fail("Expecting NumberIsTooLargeException - bad interval");
-        } catch (NumberIsTooLargeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             // no bracketing
             solver.solve(100, f, 2, 3);
-            Assert.fail("Expecting NoBracketingException - no bracketing");
-        } catch (NoBracketingException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - no bracketing");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

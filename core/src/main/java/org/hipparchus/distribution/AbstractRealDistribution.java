@@ -20,10 +20,8 @@ import java.io.Serializable;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 
@@ -64,7 +62,7 @@ implements RealDistribution, Serializable {
      * @return the probability that a random variable with this distribution
      * takes a value between {@code x0} and {@code x1}, excluding the lower
      * and including the upper endpoint.
-     * @throws NumberIsTooLargeException if {@code x0 > x1}.
+     * @throws MathIllegalArgumentException if {@code x0 > x1}.
      *
      * The default implementation uses the identity
      * {@code P(x0 < X <= x1) = P(X <= x1) - P(X <= x0)}
@@ -75,7 +73,7 @@ implements RealDistribution, Serializable {
     public double probability(double x0,
                               double x1) {
         if (x0 > x1) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                                                 x0, x1, true);
         }
         return cumulativeProbability(x1) - cumulativeProbability(x0);
@@ -91,7 +89,7 @@ implements RealDistribution, Serializable {
      * </ul>
      */
     @Override
-    public double inverseCumulativeProbability(final double p) throws OutOfRangeException {
+    public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
         /*
          * IMPLEMENTATION NOTES
          * --------------------
@@ -121,7 +119,8 @@ implements RealDistribution, Serializable {
          * the root.
          */
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
 
         double lowerBound = getSupportLowerBound();
@@ -236,7 +235,7 @@ implements RealDistribution, Serializable {
     @Override
     public double[] sample(int sampleSize) {
         if (sampleSize <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES,
                     sampleSize);
         }
         double[] out = new double[sampleSize];

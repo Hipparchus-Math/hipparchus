@@ -17,8 +17,8 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 
@@ -51,10 +51,10 @@ public class UniformIntegerDistribution extends AbstractIntegerDistribution {
      *
      * @param lower Lower bound (inclusive) of this distribution.
      * @param upper Upper bound (inclusive) of this distribution.
-     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     * @throws MathIllegalArgumentException if {@code lower >= upper}.
      */
     public UniformIntegerDistribution(int lower, int upper)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), lower, upper);
     }
 
@@ -65,17 +65,17 @@ public class UniformIntegerDistribution extends AbstractIntegerDistribution {
      * @param rng Random number generator.
      * @param lower Lower bound (inclusive) of this distribution.
      * @param upper Upper bound (inclusive) of this distribution.
-     * @throws NumberIsTooLargeException if {@code lower > upper}.
+     * @throws MathIllegalArgumentException if {@code lower > upper}.
      * @since 3.1
      */
     public UniformIntegerDistribution(RandomGenerator rng,
                                       int lower,
                                       int upper)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (lower > upper) {
-            throw new NumberIsTooLargeException(
+            throw new MathIllegalArgumentException(
                             LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                             lower, upper, true);
         }

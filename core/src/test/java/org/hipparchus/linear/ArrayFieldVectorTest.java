@@ -24,15 +24,8 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.linear.ArrayFieldVector;
-import org.hipparchus.linear.FieldMatrix;
-import org.hipparchus.linear.FieldVector;
-import org.hipparchus.linear.FieldVectorChangingVisitor;
-import org.hipparchus.linear.FieldVectorPreservingVisitor;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -371,8 +364,8 @@ public class ArrayFieldVectorTest {
         Assert.assertEquals(new Fraction(5), vout5.getEntry(1));
         try {
             v4.getSubVector(3, 7);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
@@ -381,8 +374,8 @@ public class ArrayFieldVectorTest {
         Assert.assertEquals(new Fraction(11), v_set1.getEntry(1));
         try {
             v_set1.setEntry(3, new Fraction(11));
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
@@ -392,8 +385,8 @@ public class ArrayFieldVectorTest {
         Assert.assertEquals(new Fraction(7), v_set2.getEntry(6));
         try {
             v_set2.set(7, v1);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
@@ -414,8 +407,8 @@ public class ArrayFieldVectorTest {
         Assert.assertEquals(new Fraction(7), v_set4.getEntry(6));
         try {
             v_set4.setSubVector(7, v2_t);
-            Assert.fail("OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected behavior
         }
 
@@ -725,31 +718,31 @@ public class ArrayFieldVectorTest {
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }
@@ -852,31 +845,31 @@ public class ArrayFieldVectorTest {
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }
@@ -983,31 +976,31 @@ public class ArrayFieldVectorTest {
         try {
             v.walkInDefaultOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInDefaultOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }
@@ -1118,31 +1111,31 @@ public class ArrayFieldVectorTest {
         try {
             v.walkInOptimizedOrder(visitor, -1, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 5, 4);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, -1);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 0, 5);
             Assert.fail();
-        } catch (OutOfRangeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
         try {
             v.walkInOptimizedOrder(visitor, 4, 0);
             Assert.fail();
-        } catch (NumberIsTooSmallException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected behavior
         }
     }

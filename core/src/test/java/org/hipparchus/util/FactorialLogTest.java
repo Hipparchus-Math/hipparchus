@@ -16,7 +16,7 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
 
 import org.junit.Assert;
@@ -27,12 +27,12 @@ import org.junit.Test;
  */
 public class FactorialLogTest {
 
-    @Test(expected=NotPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPrecondition1() {
         CombinatoricsUtils.FactorialLog.create().withCache(-1);
     }
 
-    @Test(expected=NotPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNonPositiveArgument() {
         final CombinatoricsUtils.FactorialLog f = CombinatoricsUtils.FactorialLog.create();
         f.value(-1);

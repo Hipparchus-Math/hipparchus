@@ -21,9 +21,8 @@ import java.util.Collection;
 
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.FieldEventHandler;
 import org.hipparchus.ode.sampling.FieldStepHandler;
 
@@ -177,12 +176,12 @@ public interface FirstOrderFieldIntegrator<T extends RealFieldElement<T>> {
      * @return final state, its time will be the same as {@code finalTime} if
      * integration reached its target, but may be different if some {@link
      * org.hipparchus.ode.events.FieldEventHandler} stops it at some point.
-     * @exception NumberIsTooSmallException if integration step is too small
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception NoBracketingException if the location of an event cannot be bracketed
+     * @exception MathIllegalArgumentException if integration step is too small
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
+     * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      */
     FieldODEStateAndDerivative<T> integrate(FieldExpandableODE<T> equations,
                                             FieldODEState<T> initialState, T finalTime)
-        throws NumberIsTooSmallException, MaxCountExceededException, NoBracketingException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
 }

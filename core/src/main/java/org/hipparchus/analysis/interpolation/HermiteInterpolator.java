@@ -23,10 +23,9 @@ import java.util.List;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableVectorFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.CombinatoricsUtils;
 
 /** Polynomial interpolator using both sample values and sample derivatives.
@@ -78,13 +77,13 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      * (if only one row is passed, it is the value, if two rows are
      * passed the first one is the value and the second the derivative
      * and so on)
-     * @exception ZeroException if the abscissa difference between added point
+     * @exception MathIllegalArgumentException if the abscissa difference between added point
      * and a previous point is zero (i.e. the two points are at same abscissa)
-     * @exception MathArithmeticException if the number of derivatives is larger
+     * @exception MathRuntimeException if the number of derivatives is larger
      * than 20, which prevents computation of a factorial
      */
     public void addSamplePoint(final double x, final double[] ... value)
-        throws ZeroException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
 
         for (int i = 0; i < value.length; ++i) {
 
@@ -104,7 +103,7 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
                 final double[] bottom1 = bottomDiagonal.get(n - (j + 1));
                 final double inv = 1.0 / (x - abscissae.get(n - (j + 1)));
                 if (Double.isInfinite(inv)) {
-                    throw new ZeroException(LocalizedFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
                 }
                 for (int k = 0; k < y.length; ++k) {
                     bottom1[k] = inv * (bottom0[k] - bottom1[k]);
@@ -124,10 +123,10 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
 
     /** Compute the interpolation polynomials.
      * @return interpolation polynomials array
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      */
     public PolynomialFunction[] getPolynomials()
-        throws NoDataException {
+        throws MathIllegalArgumentException {
 
         // safety check
         checkInterpolation();
@@ -162,10 +161,10 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      * </p>
      * @param x interpolation abscissa
      * @return interpolated value
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      */
     @Override
-    public double[] value(double x) throws NoDataException {
+    public double[] value(double x) throws MathIllegalArgumentException {
 
         // safety check
         checkInterpolation();
@@ -194,11 +193,11 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      * </p>
      * @param x interpolation abscissa
      * @return interpolated value
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      */
     @Override
     public DerivativeStructure[] value(final DerivativeStructure x)
-        throws NoDataException {
+        throws MathIllegalArgumentException {
 
         // safety check
         checkInterpolation();
@@ -220,12 +219,12 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
     }
 
     /** Check interpolation can be performed.
-     * @exception NoDataException if interpolation cannot be performed
+     * @exception MathIllegalArgumentException if interpolation cannot be performed
      * because sample is empty
      */
-    private void checkInterpolation() throws NoDataException {
+    private void checkInterpolation() throws MathIllegalArgumentException {
         if (abscissae.isEmpty()) {
-            throw new NoDataException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
         }
     }
 

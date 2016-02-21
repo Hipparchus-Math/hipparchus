@@ -16,17 +16,15 @@
  */
 package org.hipparchus.filter;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.CholeskyDecomposition;
-import org.hipparchus.linear.MatrixDimensionMismatchException;
 import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.NonSquareMatrixException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -108,17 +106,16 @@ public class KalmanFilter {
      *            the model defining the given measurement characteristics
      * @throws NullArgumentException
      *             if any of the given inputs is null (except for the control matrix)
-     * @throws NonSquareMatrixException
+     * @throws MathIllegalArgumentException
      *             if the transition matrix is non square
-     * @throws DimensionMismatchException
+     * @throws MathIllegalArgumentException
      *             if the column dimension of the transition matrix does not match the dimension of the
      *             initial state estimation vector
-     * @throws MatrixDimensionMismatchException
+     * @throws MathIllegalArgumentException
      *             if the matrix dimensions do not fit together
      */
     public KalmanFilter(final ProcessModel process, final MeasurementModel measurement)
-            throws NullArgumentException, NonSquareMatrixException, DimensionMismatchException,
-                   MatrixDimensionMismatchException {
+            throws MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(process);
         MathUtils.checkNotNull(measurement);
@@ -158,8 +155,9 @@ public class KalmanFilter {
         }
 
         if (transitionMatrix.getColumnDimension() != stateEstimation.getDimension()) {
-            throw new DimensionMismatchException(transitionMatrix.getColumnDimension(),
-                                                 stateEstimation.getDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   transitionMatrix.getColumnDimension(),
+                                                   stateEstimation.getDimension());
         }
 
         // initialize the error covariance to the process noise if it is not
@@ -174,9 +172,9 @@ public class KalmanFilter {
 
         // A must be a square matrix
         if (!transitionMatrix.isSquare()) {
-            throw new NonSquareMatrixException(
-                    transitionMatrix.getRowDimension(),
-                    transitionMatrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                    transitionMatrix.getRowDimension(),
+                                                    transitionMatrix.getColumnDimension());
         }
 
         // row dimension of B must be equal to A
@@ -185,10 +183,11 @@ public class KalmanFilter {
             controlMatrix.getRowDimension() > 0 &&
             controlMatrix.getColumnDimension() > 0 &&
             controlMatrix.getRowDimension() != transitionMatrix.getRowDimension()) {
-            throw new MatrixDimensionMismatchException(controlMatrix.getRowDimension(),
-                                                       controlMatrix.getColumnDimension(),
-                                                       transitionMatrix.getRowDimension(),
-                                                       controlMatrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   controlMatrix.getRowDimension(),
+                                                   controlMatrix.getColumnDimension(),
+                                                   transitionMatrix.getRowDimension(),
+                                                   controlMatrix.getColumnDimension());
         }
 
         // Q must be equal to A
@@ -196,18 +195,20 @@ public class KalmanFilter {
 
         // column dimension of H must be equal to row dimension of A
         if (measurementMatrix.getColumnDimension() != transitionMatrix.getRowDimension()) {
-            throw new MatrixDimensionMismatchException(measurementMatrix.getRowDimension(),
-                                                       measurementMatrix.getColumnDimension(),
-                                                       measurementMatrix.getRowDimension(),
-                                                       transitionMatrix.getRowDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   measurementMatrix.getRowDimension(),
+                                                   measurementMatrix.getColumnDimension(),
+                                                   measurementMatrix.getRowDimension(),
+                                                   transitionMatrix.getRowDimension());
         }
 
         // row dimension of R must be equal to row dimension of H
         if (measNoise.getRowDimension() != measurementMatrix.getRowDimension()) {
-            throw new MatrixDimensionMismatchException(measNoise.getRowDimension(),
-                                                       measNoise.getColumnDimension(),
-                                                       measurementMatrix.getRowDimension(),
-                                                       measNoise.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   measNoise.getRowDimension(),
+                                                   measNoise.getColumnDimension(),
+                                                   measurementMatrix.getRowDimension(),
+                                                   measNoise.getColumnDimension());
         }
     }
 
@@ -277,10 +278,10 @@ public class KalmanFilter {
      *
      * @param u
      *            the control vector
-     * @throws DimensionMismatchException
+     * @throws MathIllegalArgumentException
      *             if the dimension of the control vector does not fit
      */
-    public void predict(final double[] u) throws DimensionMismatchException {
+    public void predict(final double[] u) throws MathIllegalArgumentException {
         predict(new ArrayRealVector(u, false));
     }
 
@@ -289,15 +290,15 @@ public class KalmanFilter {
      *
      * @param u
      *            the control vector
-     * @throws DimensionMismatchException
+     * @throws MathIllegalArgumentException
      *             if the dimension of the control vector does not match
      */
-    public void predict(final RealVector u) throws DimensionMismatchException {
+    public void predict(final RealVector u) throws MathIllegalArgumentException {
         // sanity checks
         if (u != null &&
             u.getDimension() != controlMatrix.getColumnDimension()) {
-            throw new DimensionMismatchException(u.getDimension(),
-                                                 controlMatrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   u.getDimension(), controlMatrix.getColumnDimension());
         }
 
         // project the state estimation ahead (a priori state)
@@ -323,13 +324,13 @@ public class KalmanFilter {
      *            the measurement vector
      * @throws NullArgumentException
      *             if the measurement vector is {@code null}
-     * @throws DimensionMismatchException
+     * @throws MathIllegalArgumentException
      *             if the dimension of the measurement vector does not fit
-     * @throws SingularMatrixException
+     * @throws MathIllegalArgumentException
      *             if the covariance matrix could not be inverted
      */
     public void correct(final double[] z)
-            throws NullArgumentException, DimensionMismatchException, SingularMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException {
         correct(new ArrayRealVector(z, false));
     }
 
@@ -340,19 +341,19 @@ public class KalmanFilter {
      *            the measurement vector
      * @throws NullArgumentException
      *             if the measurement vector is {@code null}
-     * @throws DimensionMismatchException
+     * @throws MathIllegalArgumentException
      *             if the dimension of the measurement vector does not fit
-     * @throws SingularMatrixException
+     * @throws MathIllegalArgumentException
      *             if the covariance matrix could not be inverted
      */
     public void correct(final RealVector z)
-            throws NullArgumentException, DimensionMismatchException, SingularMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException {
 
         // sanity checks
         MathUtils.checkNotNull(z);
         if (z.getDimension() != measurementMatrix.getRowDimension()) {
-            throw new DimensionMismatchException(z.getDimension(),
-                                                 measurementMatrix.getRowDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   z.getDimension(), measurementMatrix.getRowDimension());
         }
 
         // S = H * P(k) * H' + R

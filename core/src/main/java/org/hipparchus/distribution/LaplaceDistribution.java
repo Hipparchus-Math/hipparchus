@@ -16,9 +16,8 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -52,7 +51,7 @@ public class LaplaceDistribution extends AbstractRealDistribution {
      *
      * @param mu location parameter
      * @param beta scale parameter (must be positive)
-     * @throws NotStrictlyPositiveException if {@code beta <= 0}
+     * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
     public LaplaceDistribution(double mu, double beta) {
         this(new Well19937c(), mu, beta);
@@ -64,13 +63,13 @@ public class LaplaceDistribution extends AbstractRealDistribution {
      * @param rng Random number generator
      * @param mu location parameter
      * @param beta scale parameter (must be positive)
-     * @throws NotStrictlyPositiveException if {@code beta <= 0}
+     * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
     public LaplaceDistribution(RandomGenerator rng, double mu, double beta) {
         super(rng);
 
         if (beta <= 0.0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NOT_POSITIVE_SCALE, beta);
+            throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_SCALE, beta);
         }
 
         this.mu = mu;
@@ -113,9 +112,10 @@ public class LaplaceDistribution extends AbstractRealDistribution {
 
     /** {@inheritDoc} */
     @Override
-    public double inverseCumulativeProbability(double p) throws OutOfRangeException {
+    public double inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0.0, 1.0);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0.0, 1.0);
         } else if (p == 0) {
             return Double.NEGATIVE_INFINITY;
         } else if (p == 1) {

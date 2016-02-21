@@ -15,14 +15,9 @@
 package org.hipparchus.filter;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.filter.DefaultMeasurementModel;
-import org.hipparchus.filter.DefaultProcessModel;
-import org.hipparchus.filter.KalmanFilter;
-import org.hipparchus.filter.MeasurementModel;
-import org.hipparchus.filter.ProcessModel;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.MatrixDimensionMismatchException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
@@ -40,7 +35,7 @@ import org.junit.Test;
  */
 public class KalmanFilterTest {
 
-    @Test(expected=MatrixDimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testTransitionMeasurementMatrixMismatch() {
 
         // A and H matrix do not match in dimensions
@@ -64,7 +59,7 @@ public class KalmanFilterTest {
         Assert.fail("transition and measurement matrix should not be compatible");
     }
 
-    @Test(expected=MatrixDimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testTransitionControlMatrixMismatch() {
 
         // A and B matrix do not match in dimensions

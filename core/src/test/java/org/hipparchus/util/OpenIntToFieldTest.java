@@ -20,16 +20,15 @@ import java.util.ConcurrentModificationException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Set;
-import java.util.Map.Entry;
 
 import org.hipparchus.Field;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fraction.Fraction;
-import org.hipparchus.fraction.FractionConversionException;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.util.OpenIntToFieldHashMap;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +41,7 @@ public class OpenIntToFieldTest {
     private FractionField field = FractionField.getInstance();
 
     @Before
-    public void setUp() throws FractionConversionException {
+    public void setUp() {
         javaMap.put(50, new Fraction(100.0));
         javaMap.put(75, new Fraction(75.0));
         javaMap.put(25, new Fraction(500.0));
@@ -69,7 +68,7 @@ public class OpenIntToFieldTest {
             dd = r.nextDouble();
             try {
                 map.put(r.nextInt(), new Fraction(dd));
-            } catch (FractionConversionException e) {
+            } catch (MathIllegalStateException e) {
                 throw new IllegalStateException("Invalid :"+dd, e);
             }
         return map;

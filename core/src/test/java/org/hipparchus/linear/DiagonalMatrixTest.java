@@ -17,16 +17,8 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.DiagonalMatrix;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
@@ -82,7 +74,7 @@ public class DiagonalMatrixTest {
 
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCreateError() {
         final double[] d = { -1.2, 3.4, 5 };
         final DiagonalMatrix m = new DiagonalMatrix(d, false);
@@ -278,7 +270,7 @@ public class DiagonalMatrixTest {
         TestUtils.assertEquals("preMultiply(Vector) returns wrong result", diagResult, denseResult, 0d);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testSetNonDiagonalEntry() {
         final DiagonalMatrix diag = new DiagonalMatrix(3);
         diag.setEntry(1, 2, 3.4);
@@ -291,7 +283,7 @@ public class DiagonalMatrixTest {
         Assert.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testAddNonDiagonalEntry() {
         final DiagonalMatrix diag = new DiagonalMatrix(3);
         diag.addToEntry(1, 2, 3.4);
@@ -318,7 +310,7 @@ public class DiagonalMatrixTest {
         Assert.assertEquals(0.0, diag.getEntry(1, 2), Precision.SAFE_MIN);
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testSetEntryOutOfRange() {
         final DiagonalMatrix diag = new DiagonalMatrix(3);
         diag.setEntry(3, 3, 3.4);
@@ -329,7 +321,7 @@ public class DiagonalMatrixTest {
         new DiagonalMatrix(null, false);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testSetSubMatrixError() {
         final double[] data = { -1.2, 3.4, 5 };
         final DiagonalMatrix diag = new DiagonalMatrix(data);
@@ -346,14 +338,14 @@ public class DiagonalMatrixTest {
         Assert.assertEquals( 6.0, diag.getEntry(2, 2), 1.0e-20);
     }
 
-    @Test(expected=SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInverseError() {
         final double[] data = { 1, 2, 0 };
         final DiagonalMatrix diag = new DiagonalMatrix(data);
         diag.inverse();
     }
 
-    @Test(expected=SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInverseError2() {
         final double[] data = { 1, 2, 1e-6 };
         final DiagonalMatrix diag = new DiagonalMatrix(data);

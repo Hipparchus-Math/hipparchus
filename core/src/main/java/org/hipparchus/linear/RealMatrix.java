@@ -17,13 +17,8 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 
 /**
  * Interface defining a real-valued matrix with basic algebraic operations.
@@ -42,12 +37,12 @@ public interface RealMatrix extends AnyMatrix {
      * @param rowDimension the number of rows in the new matrix
      * @param columnDimension the number of columns in the new matrix
      * @return a new matrix of the same type as the instance
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      * @since 2.0
      */
     RealMatrix createMatrix(int rowDimension, int columnDimension)
-        throws NotStrictlyPositiveException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns a (deep) copy of this.
@@ -61,22 +56,22 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param m matrix to be added
      * @return {@code this + m}
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     RealMatrix add(RealMatrix m)
-        throws MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns {@code this} minus {@code m}.
      *
      * @param m matrix to be subtracted
      * @return {@code this - m}
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     RealMatrix subtract(RealMatrix m)
-        throws MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the result of adding {@code d} to each entry of {@code this}.
@@ -100,22 +95,22 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param m matrix to postmultiply by
      * @return {@code this * m}
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code columnDimension(this) != rowDimension(m)}
      */
     RealMatrix multiply(RealMatrix m)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the result of premultiplying {@code this} by {@code m}.
      *
      * @param m matrix to premultiply by
      * @return {@code m * this}
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code rowDimension(this) != columnDimension(m)}
      */
     RealMatrix preMultiply(RealMatrix m)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the result of multiplying {@code this} with itself {@code p}
@@ -124,11 +119,11 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param p raise {@code this} to power {@code p}
      * @return {@code this^p}
-     * @throws NotPositiveException if {@code p < 0}
-     * @throws NonSquareMatrixException if the matrix is not square
+     * @throws MathIllegalArgumentException if {@code p < 0}
+     * @throws MathIllegalArgumentException if the matrix is not square
      */
     RealMatrix power(final int p)
-        throws NotPositiveException, NonSquareMatrixException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns matrix entries as a two-dimensional array.
@@ -163,13 +158,13 @@ public interface RealMatrix extends AnyMatrix {
      * @param endColumn Final column index (inclusive)
      * @return The subMatrix containing the data of the
      * specified rows and columns.
-     * @throws OutOfRangeException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if the indices are not valid.
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      */
     RealMatrix getSubMatrix(int startRow, int endRow, int startColumn,
                             int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Gets a submatrix. Rows and columns are indicated counting from 0 to n-1.
@@ -180,12 +175,12 @@ public interface RealMatrix extends AnyMatrix {
      * columns
      * @throws NullArgumentException if the row or column selections are
      * {@code null}
-     * @throws NoDataException if the row or column selections are empty (zero
+     * @throws MathIllegalArgumentException if the row or column selections are empty (zero
      * length).
-     * @throws OutOfRangeException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the indices are not valid.
      */
     RealMatrix getSubMatrix(int[] selectedRows, int[] selectedColumns)
-        throws NullArgumentException, NoDataException, OutOfRangeException;
+        throws MathIllegalArgumentException, NullArgumentException;
 
     /**
      * Copy a submatrix. Rows and columns are indicated counting from 0 to n-1.
@@ -197,16 +192,15 @@ public interface RealMatrix extends AnyMatrix {
      * @param destination The arrays where the submatrix data should be copied
      * (if larger than rows/columns counts, only the upper-left part will be
      * used)
-     * @throws OutOfRangeException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if the indices are not valid.
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
-     * @throws MatrixDimensionMismatchException if the destination array is too
+     * @throws MathIllegalArgumentException if the destination array is too
      * small.
      */
     void copySubMatrix(int startRow, int endRow, int startColumn,
                        int endColumn, double[][] destination)
-        throws OutOfRangeException, NumberIsTooSmallException,
-        MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Copy a submatrix. Rows and columns are indicated counting from 0 to n-1.
@@ -218,16 +212,15 @@ public interface RealMatrix extends AnyMatrix {
      * used)
      * @throws NullArgumentException if the row or column selections are
      * {@code null}
-     * @throws NoDataException if the row or column selections are empty (zero
+     * @throws MathIllegalArgumentException if the row or column selections are empty (zero
      * length).
-     * @throws OutOfRangeException if the indices are not valid.
-     * @throws MatrixDimensionMismatchException if the destination array is too
+     * @throws MathIllegalArgumentException if the indices are not valid.
+     * @throws MathIllegalArgumentException if the destination array is too
      * small.
      */
     void copySubMatrix(int[] selectedRows, int[] selectedColumns,
                        double[][] destination)
-        throws OutOfRangeException, NullArgumentException, NoDataException,
-        MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException, NullArgumentException;
 
    /**
     * Replace the submatrix starting at {@code row, column} using data in the
@@ -249,17 +242,16 @@ public interface RealMatrix extends AnyMatrix {
     * @param subMatrix  array containing the submatrix replacement data
     * @param row  row coordinate of the top, left element to be replaced
     * @param column  column coordinate of the top, left element to be replaced
-    * @throws NoDataException if {@code subMatrix} is empty.
-    * @throws OutOfRangeException if {@code subMatrix} does not fit into
+    * @throws MathIllegalArgumentException if {@code subMatrix} is empty.
+    * @throws MathIllegalArgumentException if {@code subMatrix} does not fit into
     * this matrix from element in {@code (row, column)}.
-    * @throws DimensionMismatchException if {@code subMatrix} is not rectangular
+    * @throws MathIllegalArgumentException if {@code subMatrix} is not rectangular
     * (not all rows have the same length) or empty.
     * @throws NullArgumentException if {@code subMatrix} is {@code null}.
     * @since 2.0
     */
     void setSubMatrix(double[][] subMatrix, int row, int column)
-        throws NoDataException, OutOfRangeException,
-        DimensionMismatchException, NullArgumentException;
+        throws MathIllegalArgumentException, NullArgumentException;
 
    /**
     * Get the entries at the given row index as a row matrix.  Row indices start
@@ -267,9 +259,9 @@ public interface RealMatrix extends AnyMatrix {
     *
     * @param row Row to be fetched.
     * @return row Matrix.
-    * @throws OutOfRangeException if the specified row index is invalid.
+    * @throws MathIllegalArgumentException if the specified row index is invalid.
     */
-   RealMatrix getRowMatrix(int row) throws OutOfRangeException;
+   RealMatrix getRowMatrix(int row) throws MathIllegalArgumentException;
 
     /**
      * Sets the specified {@code row} of {@code this} matrix to the entries of
@@ -278,13 +270,13 @@ public interface RealMatrix extends AnyMatrix {
      * @param row Row to be set.
      * @param matrix Row matrix to be copied (must have one row and the same
      * number of columns as the instance).
-     * @throws OutOfRangeException if the specified row index is invalid.
-     * @throws MatrixDimensionMismatchException if the row dimension of the
+     * @throws MathIllegalArgumentException if the specified row index is invalid.
+     * @throws MathIllegalArgumentException if the row dimension of the
      * {@code matrix} is not {@code 1}, or the column dimensions of {@code this}
      * and {@code matrix} do not match.
      */
     void setRowMatrix(int row, RealMatrix matrix)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entries at the given column index as a column matrix. Column
@@ -292,10 +284,10 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param column Column to be fetched.
      * @return column Matrix.
-     * @throws OutOfRangeException if the specified column index is invalid.
+     * @throws MathIllegalArgumentException if the specified column index is invalid.
      */
     RealMatrix getColumnMatrix(int column)
-        throws OutOfRangeException;
+        throws MathIllegalArgumentException;
 
     /**
      * Sets the specified {@code column} of {@code this} matrix to the entries
@@ -304,13 +296,13 @@ public interface RealMatrix extends AnyMatrix {
      * @param column Column to be set.
      * @param matrix Column matrix to be copied (must have one column and the
      * same number of rows as the instance).
-     * @throws OutOfRangeException if the specified column index is invalid.
-     * @throws MatrixDimensionMismatchException if the column dimension of the
+     * @throws MathIllegalArgumentException if the specified column index is invalid.
+     * @throws MathIllegalArgumentException if the column dimension of the
      * {@code matrix} is not {@code 1}, or the row dimensions of {@code this}
      * and {@code matrix} do not match.
      */
     void setColumnMatrix(int column, RealMatrix matrix)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the entries in row number {@code row} as a vector. Row indices
@@ -318,10 +310,10 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param row Row to be fetched.
      * @return a row vector.
-     * @throws OutOfRangeException if the specified row index is invalid.
+     * @throws MathIllegalArgumentException if the specified row index is invalid.
      */
     RealVector getRowVector(int row)
-        throws OutOfRangeException;
+        throws MathIllegalArgumentException;
 
     /**
      * Sets the specified {@code row} of {@code this} matrix to the entries of
@@ -330,12 +322,12 @@ public interface RealMatrix extends AnyMatrix {
      * @param row Row to be set.
      * @param vector row vector to be copied (must have the same number of
      * column as the instance).
-     * @throws OutOfRangeException if the specified row index is invalid.
-     * @throws MatrixDimensionMismatchException if the {@code vector} dimension
+     * @throws MathIllegalArgumentException if the specified row index is invalid.
+     * @throws MathIllegalArgumentException if the {@code vector} dimension
      * does not match the column dimension of {@code this} matrix.
      */
     void setRowVector(int row, RealVector vector)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entries at the given column index as a vector. Column indices
@@ -343,10 +335,10 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param column Column to be fetched.
      * @return a column vector.
-     * @throws OutOfRangeException if the specified column index is invalid
+     * @throws MathIllegalArgumentException if the specified column index is invalid
      */
     RealVector getColumnVector(int column)
-        throws OutOfRangeException;
+        throws MathIllegalArgumentException;
 
     /**
      * Sets the specified {@code column} of {@code this} matrix to the entries
@@ -355,21 +347,21 @@ public interface RealMatrix extends AnyMatrix {
      * @param column Column to be set.
      * @param vector column vector to be copied (must have the same number of
      * rows as the instance).
-     * @throws OutOfRangeException if the specified column index is invalid.
-     * @throws MatrixDimensionMismatchException if the {@code vector} dimension
+     * @throws MathIllegalArgumentException if the specified column index is invalid.
+     * @throws MathIllegalArgumentException if the {@code vector} dimension
      * does not match the row dimension of {@code this} matrix.
      */
     void setColumnVector(int column, RealVector vector)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entries at the given row index. Row indices start at 0.
      *
      * @param row Row to be fetched.
      * @return the array of entries in the row.
-     * @throws OutOfRangeException if the specified row index is not valid.
+     * @throws MathIllegalArgumentException if the specified row index is not valid.
      */
-    double[] getRow(int row) throws OutOfRangeException;
+    double[] getRow(int row) throws MathIllegalArgumentException;
 
     /**
      * Sets the specified {@code row} of {@code this} matrix to the entries
@@ -378,12 +370,12 @@ public interface RealMatrix extends AnyMatrix {
      * @param row Row to be set.
      * @param array Row matrix to be copied (must have the same number of
      * columns as the instance)
-     * @throws OutOfRangeException if the specified row index is invalid.
-     * @throws MatrixDimensionMismatchException if the {@code array} length does
+     * @throws MathIllegalArgumentException if the specified row index is invalid.
+     * @throws MathIllegalArgumentException if the {@code array} length does
      * not match the column dimension of {@code this} matrix.
      */
     void setRow(int row, double[] array)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entries at the given column index as an array. Column indices
@@ -391,9 +383,9 @@ public interface RealMatrix extends AnyMatrix {
      *
      * @param column Column to be fetched.
      * @return the array of entries in the column.
-     * @throws OutOfRangeException if the specified column index is not valid.
+     * @throws MathIllegalArgumentException if the specified column index is not valid.
      */
-    double[] getColumn(int column) throws OutOfRangeException;
+    double[] getColumn(int column) throws MathIllegalArgumentException;
 
     /**
      * Sets the specified {@code column} of {@code this} matrix to the entries
@@ -402,12 +394,12 @@ public interface RealMatrix extends AnyMatrix {
      * @param column Column to be set.
      * @param array Column array to be copied (must have the same number of
      * rows as the instance).
-     * @throws OutOfRangeException if the specified column index is invalid.
-     * @throws MatrixDimensionMismatchException if the {@code array} length does
+     * @throws MathIllegalArgumentException if the specified column index is invalid.
+     * @throws MathIllegalArgumentException if the {@code array} length does
      * not match the row dimension of {@code this} matrix.
      */
     void setColumn(int column, double[] array)
-        throws OutOfRangeException, MatrixDimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Get the entry in the specified row and column. Row and column indices
@@ -416,9 +408,9 @@ public interface RealMatrix extends AnyMatrix {
      * @param row Row index of entry to be fetched.
      * @param column Column index of entry to be fetched.
      * @return the matrix entry at {@code (row, column)}.
-     * @throws OutOfRangeException if the row or column index is not valid.
+     * @throws MathIllegalArgumentException if the row or column index is not valid.
      */
-    double getEntry(int row, int column) throws OutOfRangeException;
+    double getEntry(int row, int column) throws MathIllegalArgumentException;
 
     /**
      * Set the entry in the specified row and column. Row and column indices
@@ -427,10 +419,10 @@ public interface RealMatrix extends AnyMatrix {
      * @param row Row index of entry to be set.
      * @param column Column index of entry to be set.
      * @param value the new value of the entry.
-     * @throws OutOfRangeException if the row or column index is not valid
+     * @throws MathIllegalArgumentException if the row or column index is not valid
      * @since 2.0
      */
-    void setEntry(int row, int column, double value) throws OutOfRangeException;
+    void setEntry(int row, int column, double value) throws MathIllegalArgumentException;
 
     /**
      * Adds (in place) the specified value to the specified entry of
@@ -439,10 +431,10 @@ public interface RealMatrix extends AnyMatrix {
      * @param row Row index of the entry to be modified.
      * @param column Column index of the entry to be modified.
      * @param increment value to add to the matrix entry.
-     * @throws OutOfRangeException if the row or column index is not valid.
+     * @throws MathIllegalArgumentException if the row or column index is not valid.
      * @since 2.0
      */
-    void addToEntry(int row, int column, double increment) throws OutOfRangeException;
+    void addToEntry(int row, int column, double increment) throws MathIllegalArgumentException;
 
     /**
      * Multiplies (in place) the specified entry of {@code this} matrix by the
@@ -451,10 +443,10 @@ public interface RealMatrix extends AnyMatrix {
      * @param row Row index of the entry to be modified.
      * @param column Column index of the entry to be modified.
      * @param factor Multiplication factor for the matrix entry.
-     * @throws OutOfRangeException if the row or column index is not valid.
+     * @throws MathIllegalArgumentException if the row or column index is not valid.
      * @since 2.0
      */
-    void multiplyEntry(int row, int column, double factor) throws OutOfRangeException;
+    void multiplyEntry(int row, int column, double factor) throws MathIllegalArgumentException;
 
     /**
      * Returns the transpose of this matrix.
@@ -468,49 +460,49 @@ public interface RealMatrix extends AnyMatrix {
      * trace</a> of the matrix (the sum of the elements on the main diagonal).
      *
      * @return the trace.
-     * @throws NonSquareMatrixException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not square.
      */
-    double getTrace() throws NonSquareMatrixException;
+    double getTrace() throws MathIllegalArgumentException;
 
     /**
      * Returns the result of multiplying this by the vector {@code v}.
      *
      * @param v the vector to operate on
      * @return {@code this * v}
-     * @throws DimensionMismatchException if the length of {@code v} does not
+     * @throws MathIllegalArgumentException if the length of {@code v} does not
      * match the column dimension of {@code this}.
      */
-    double[] operate(double[] v) throws DimensionMismatchException;
+    double[] operate(double[] v) throws MathIllegalArgumentException;
 
     /**
      * Returns the result of multiplying this by the vector {@code v}.
      *
      * @param v the vector to operate on
      * @return {@code this * v}
-     * @throws DimensionMismatchException if the dimension of {@code v} does not
+     * @throws MathIllegalArgumentException if the dimension of {@code v} does not
      * match the column dimension of {@code this}.
      */
-    RealVector operate(RealVector v) throws DimensionMismatchException;
+    RealVector operate(RealVector v) throws MathIllegalArgumentException;
 
     /**
      * Returns the (row) vector result of premultiplying this by the vector {@code v}.
      *
      * @param v the row vector to premultiply by
      * @return {@code v * this}
-     * @throws DimensionMismatchException if the length of {@code v} does not
+     * @throws MathIllegalArgumentException if the length of {@code v} does not
      * match the row dimension of {@code this}.
      */
-    double[] preMultiply(double[] v) throws DimensionMismatchException;
+    double[] preMultiply(double[] v) throws MathIllegalArgumentException;
 
     /**
      * Returns the (row) vector result of premultiplying this by the vector {@code v}.
      *
      * @param v the row vector to premultiply by
      * @return {@code v * this}
-     * @throws DimensionMismatchException if the dimension of {@code v} does not
+     * @throws MathIllegalArgumentException if the dimension of {@code v} does not
      * match the row dimension of {@code this}.
      */
-    RealVector preMultiply(RealVector v) throws DimensionMismatchException;
+    RealVector preMultiply(RealVector v) throws MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries in row order.
@@ -566,8 +558,8 @@ public interface RealMatrix extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index
-     * @throws OutOfRangeException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if the indices are not valid.
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -585,7 +577,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInRowOrder(RealMatrixChangingVisitor visitor, int startRow,
         int endRow, int startColumn, int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries in row order.
@@ -597,8 +589,8 @@ public interface RealMatrix extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index
-     * @throws OutOfRangeException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if the indices are not valid.
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -616,7 +608,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInRowOrder(RealMatrixPreservingVisitor visitor, int startRow,
         int endRow, int startColumn, int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries in column order.
@@ -672,8 +664,8 @@ public interface RealMatrix extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index
-     * @throws OutOfRangeException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if the indices are not valid.
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -691,7 +683,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInColumnOrder(RealMatrixChangingVisitor visitor, int startRow,
         int endRow, int startColumn, int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries in column order.
@@ -703,8 +695,8 @@ public interface RealMatrix extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index
-     * @throws OutOfRangeException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if the indices are not valid.
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -722,7 +714,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInColumnOrder(RealMatrixPreservingVisitor visitor, int startRow,
         int endRow, int startColumn, int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (and possibly change) all matrix entries using the fastest possible order.
@@ -775,8 +767,8 @@ public interface RealMatrix extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index (inclusive)
-     * @throws OutOfRangeException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if the indices are not valid.
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -794,7 +786,7 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInOptimizedOrder(RealMatrixChangingVisitor visitor,
         int startRow, int endRow, int startColumn, int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 
     /**
      * Visit (but don't change) some matrix entries using the fastest possible order.
@@ -805,8 +797,8 @@ public interface RealMatrix extends AnyMatrix {
      * @param endRow Final row index (inclusive)
      * @param startColumn Initial column index
      * @param endColumn Final column index (inclusive)
-     * @throws OutOfRangeException if the indices are not valid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if the indices are not valid.
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      * @see #walkInRowOrder(RealMatrixChangingVisitor)
      * @see #walkInRowOrder(RealMatrixPreservingVisitor)
@@ -824,5 +816,5 @@ public interface RealMatrix extends AnyMatrix {
      */
     double walkInOptimizedOrder(RealMatrixPreservingVisitor visitor,
         int startRow, int endRow, int startColumn, int endColumn)
-        throws OutOfRangeException, NumberIsTooSmallException;
+        throws MathIllegalArgumentException;
 }

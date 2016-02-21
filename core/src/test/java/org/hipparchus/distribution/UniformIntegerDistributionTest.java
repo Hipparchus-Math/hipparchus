@@ -21,7 +21,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.UniformIntegerDistribution;
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Test cases for UniformIntegerDistribution. See class javadoc for
@@ -105,7 +105,7 @@ public class UniformIntegerDistributionTest extends IntegerDistributionAbstractT
     public void testPreconditionUpperBoundInclusive() {
         try {
             new UniformIntegerDistribution(1, 0);
-        } catch (NumberIsTooLargeException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
 

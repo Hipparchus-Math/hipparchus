@@ -17,12 +17,10 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.BinomialDistribution;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Implements binomial test statistics.
@@ -52,8 +50,8 @@ public class BinomialTest {
      * @param alternativeHypothesis type of hypothesis being evaluated (one- or two-sided)
      * @param alpha significance level of the test
      * @return true if the null hypothesis can be rejected with confidence {@code 1 - alpha}
-     * @throws NotPositiveException if {@code numberOfTrials} or {@code numberOfSuccesses} is negative
-     * @throws OutOfRangeException if {@code probability} is not between 0 and 1
+     * @throws MathIllegalArgumentException if {@code numberOfTrials} or {@code numberOfSuccesses} is negative
+     * @throws MathIllegalArgumentException if {@code probability} is not between 0 and 1
      * @throws MathIllegalArgumentException if {@code numberOfTrials} &lt; {@code numberOfSuccesses} or
      * if {@code alternateHypothesis} is null.
      * @see AlternativeHypothesis
@@ -93,8 +91,8 @@ public class BinomialTest {
      * @param probability assumed probability of a single trial under the null hypothesis
      * @param alternativeHypothesis type of hypothesis being evaluated (one- or two-sided)
      * @return p-value
-     * @throws NotPositiveException if {@code numberOfTrials} or {@code numberOfSuccesses} is negative
-     * @throws OutOfRangeException if {@code probability} is not between 0 and 1
+     * @throws MathIllegalArgumentException if {@code numberOfTrials} or {@code numberOfSuccesses} is negative
+     * @throws MathIllegalArgumentException if {@code probability} is not between 0 and 1
      * @throws MathIllegalArgumentException if {@code numberOfTrials} &lt; {@code numberOfSuccesses} or
      * if {@code alternateHypothesis} is null.
      * @see AlternativeHypothesis
@@ -102,13 +100,14 @@ public class BinomialTest {
     public double binomialTest(int numberOfTrials, int numberOfSuccesses, double probability,
                                AlternativeHypothesis alternativeHypothesis) {
         if (numberOfTrials < 0) {
-            throw new NotPositiveException(numberOfTrials);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, numberOfTrials, 0);
         }
         if (numberOfSuccesses < 0) {
-            throw new NotPositiveException(numberOfSuccesses);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, numberOfSuccesses, 0);
         }
         if (probability < 0 || probability > 1) {
-            throw new OutOfRangeException(probability, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   probability, 0, 1);
         }
         if (numberOfTrials < numberOfSuccesses) {
             throw new MathIllegalArgumentException(
@@ -153,8 +152,8 @@ public class BinomialTest {
             }
             return pTotal;
         default:
-            throw new MathInternalError(LocalizedFormats. OUT_OF_RANGE_SIMPLE, alternativeHypothesis,
-                      AlternativeHypothesis.TWO_SIDED, AlternativeHypothesis.LESS_THAN);
+            // this should never happen
+            throw MathRuntimeException.createInternalError();
         }
     }
 }

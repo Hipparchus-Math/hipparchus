@@ -19,7 +19,7 @@ package org.hipparchus.optim.nonlinear.scalar.gradient;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
@@ -99,7 +99,7 @@ import org.junit.Test;
  * @author Luc Maisonobe (non-minpack tests and minpack tests Java translation)
  */
 public class NonLinearConjugateGradientOptimizerTest {
-    @Test(expected=MathUnsupportedOperationException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testBoundsUnsupported() {
         LinearProblem problem
             = new LinearProblem(new double[][] { { 2 } }, new double[] { 3 });

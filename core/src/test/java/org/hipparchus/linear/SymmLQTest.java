@@ -18,7 +18,8 @@ package org.hipparchus.linear;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.DecompositionSolver;
@@ -26,9 +27,6 @@ import org.hipparchus.linear.IterativeLinearSolver;
 import org.hipparchus.linear.IterativeLinearSolverEvent;
 import org.hipparchus.linear.JacobiPreconditioner;
 import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.NonPositiveDefiniteOperatorException;
-import org.hipparchus.linear.NonSelfAdjointOperatorException;
-import org.hipparchus.linear.NonSquareOperatorException;
 import org.hipparchus.linear.PreconditionedIterativeLinearSolver;
 import org.hipparchus.linear.RealLinearOperator;
 import org.hipparchus.linear.RealVector;
@@ -49,7 +47,8 @@ public class SymmLQTest {
             @Override
             public RealVector operate(final RealVector x) {
                 if (x.getDimension() != n) {
-                    throw new DimensionMismatchException(x.getDimension(), n);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           x.getDimension(), n);
                 }
                 final double[] y = new double[n];
                 for (int i = 0; i < n; i++) {
@@ -86,8 +85,8 @@ public class SymmLQTest {
                 @Override
                 public RealVector operate(final RealVector x) {
                     if (x.getDimension() != n) {
-                        throw new DimensionMismatchException(x.getDimension(),
-                                                             n);
+                        throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                               x.getDimension(), n);
                     }
                     final double[] y = new double[n];
                     for (int i = 0; i < n; i++) {
@@ -226,7 +225,7 @@ public class SymmLQTest {
         saundersTest(50, true, true, 0.25, 0.10);
     }
 
-    @Test(expected = NonSquareOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSquareOperator() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 3);
         final IterativeLinearSolver solver;
@@ -236,7 +235,7 @@ public class SymmLQTest {
         solver.solve(a, b, x);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testDimensionMismatchRightHandSide() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
         final IterativeLinearSolver solver;
@@ -245,7 +244,7 @@ public class SymmLQTest {
         solver.solve(a, b);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testDimensionMismatchSolution() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(3, 3);
         final IterativeLinearSolver solver;
@@ -331,7 +330,7 @@ public class SymmLQTest {
         }
     }
 
-    @Test(expected = NonSquareOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSquarePreconditioner() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
         final RealLinearOperator m = new RealLinearOperator() {
@@ -357,7 +356,7 @@ public class SymmLQTest {
         solver.solve(a, m, b);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMismatchedOperatorDimensions() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
         final RealLinearOperator m = new RealLinearOperator() {
@@ -383,7 +382,7 @@ public class SymmLQTest {
         solver.solve(a, m, b);
     }
 
-    @Test(expected = NonPositiveDefiniteOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonPositiveDefinitePreconditioner() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
         a.setEntry(0, 0, 1d);
@@ -554,7 +553,7 @@ public class SymmLQTest {
         }
     }
 
-    @Test(expected = NonSelfAdjointOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSelfAdjointOperator() {
         final RealLinearOperator a;
         a = new Array2DRowRealMatrix(new double[][] {
@@ -567,7 +566,7 @@ public class SymmLQTest {
         new SymmLQ(100, 1., true).solve(a, b);
     }
 
-    @Test(expected = NonSelfAdjointOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSelfAdjointPreconditioner() {
         final RealLinearOperator a = new Array2DRowRealMatrix(new double[][] {
             {1., 2., 3.},

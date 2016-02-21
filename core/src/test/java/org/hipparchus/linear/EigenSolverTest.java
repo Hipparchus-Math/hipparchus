@@ -24,7 +24,6 @@ import org.hipparchus.linear.DecompositionSolver;
 import org.hipparchus.linear.EigenDecomposition;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.util.Precision;
 import org.junit.Test;
 import org.junit.Assert;
@@ -49,7 +48,7 @@ public class EigenSolverTest {
         try {
             es.getInverse();
             Assert.fail("an exception should have been thrown");
-        } catch (SingularMatrixException ime) {
+        } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
     }
@@ -97,14 +96,14 @@ public class EigenSolverTest {
         }
     }
 
-    @Test(expected=SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNonInvertibleMath1045() {
         EigenDecomposition eigen =
             new EigenDecomposition(MatrixUtils.createRealMatrix(bigSingular));
         eigen.getSolver().getInverse();
     }
 
-    @Test(expected=SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testZeroMatrix() {
         EigenDecomposition eigen =
             new EigenDecomposition(MatrixUtils.createRealMatrix(new double[][] {{0}}));

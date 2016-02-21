@@ -17,10 +17,8 @@
 package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -63,13 +61,13 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      *
      * @param x interpolating points
      * @param y function values at interpolating points
-     * @throws DimensionMismatchException if the array lengths are different.
-     * @throws NumberIsTooSmallException if the number of points is less than 2.
-     * @throws NonMonotonicSequenceException
+     * @throws MathIllegalArgumentException if the array lengths are different.
+     * @throws MathIllegalArgumentException if the number of points is less than 2.
+     * @throws MathIllegalArgumentException
      * if two abscissae have the same value.
      */
     public PolynomialFunctionLagrangeForm(double x[], double y[])
-        throws DimensionMismatchException, NumberIsTooSmallException, NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         this.x = new double[x.length];
         this.y = new double[y.length];
         System.arraycopy(x, 0, this.x, 0, x.length);
@@ -88,11 +86,11 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      *
      * @param z Point at which the function value is to be computed.
      * @return the function value.
-     * @throws DimensionMismatchException if {@code x} and {@code y} have
+     * @throws MathIllegalArgumentException if {@code x} and {@code y} have
      * different lengths.
-     * @throws org.hipparchus.exception.NonMonotonicSequenceException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order.
-     * @throws NumberIsTooSmallException if the size of {@code x} is less
+     * @throws MathIllegalArgumentException if the size of {@code x} is less
      * than 2.
      */
     @Override
@@ -163,15 +161,15 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @param y Interpolating values array.
      * @param z Point at which the function value is to be computed.
      * @return the function value.
-     * @throws DimensionMismatchException if {@code x} and {@code y} have
+     * @throws MathIllegalArgumentException if {@code x} and {@code y} have
      * different lengths.
-     * @throws NonMonotonicSequenceException
+     * @throws MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order.
-     * @throws NumberIsTooSmallException if the size of {@code x} is less
+     * @throws MathIllegalArgumentException if the size of {@code x} is less
      * than 2.
      */
     public static double evaluate(double x[], double y[], double z)
-        throws DimensionMismatchException, NumberIsTooSmallException, NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         if (verifyInterpolationArray(x, y, false)) {
             return evaluateInternal(x, y, z);
         }
@@ -197,11 +195,11 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @param y Interpolating values array.
      * @param z Point at which the function value is to be computed.
      * @return the function value.
-     * @throws DimensionMismatchException if {@code x} and {@code y} have
+     * @throws MathIllegalArgumentException if {@code x} and {@code y} have
      * different lengths.
-     * @throws org.hipparchus.exception.NonMonotonicSequenceException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order.
-     * @throws NumberIsTooSmallException if the size of {@code x} is less
+     * @throws MathIllegalArgumentException if the size of {@code x} is less
      * than 2.
      */
     private static double evaluateInternal(double x[], double y[], double z) {
@@ -303,9 +301,9 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @param x Interpolating points array.
      * @param y Interpolating values array.
      * @param abort Whether to throw an exception if {@code x} is not sorted.
-     * @throws DimensionMismatchException if the array lengths are different.
-     * @throws NumberIsTooSmallException if the number of points is less than 2.
-     * @throws org.hipparchus.exception.NonMonotonicSequenceException
+     * @throws MathIllegalArgumentException if the array lengths are different.
+     * @throws MathIllegalArgumentException if the number of points is less than 2.
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code x} is not sorted in strictly increasing order and {@code abort}
      * is {@code true}.
      * @return {@code false} if the {@code x} is not sorted in increasing order,
@@ -314,12 +312,13 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      * @see #computeCoefficients()
      */
     public static boolean verifyInterpolationArray(double x[], double y[], boolean abort)
-        throws DimensionMismatchException, NumberIsTooSmallException, NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         if (x.length != y.length) {
-            throw new DimensionMismatchException(x.length, y.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   x.length, y.length);
         }
         if (x.length < 2) {
-            throw new NumberIsTooSmallException(LocalizedFormats.WRONG_NUMBER_OF_POINTS, 2, x.length, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.WRONG_NUMBER_OF_POINTS, 2, x.length, true);
         }
 
         return MathArrays.checkOrder(x, MathArrays.OrderDirection.INCREASING, true, abort);

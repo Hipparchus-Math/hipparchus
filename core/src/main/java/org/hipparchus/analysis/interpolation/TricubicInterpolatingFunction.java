@@ -17,10 +17,8 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.TrivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -129,9 +127,9 @@ public class TricubicInterpolatingFunction
      * @param d2FdXdZ Values of the cross partial derivative of function on every grid point.
      * @param d2FdYdZ Values of the cross partial derivative of function on every grid point.
      * @param d3FdXdYdZ Values of the cross partial derivative of function on every grid point.
-     * @throws NoDataException if any of the arrays has zero length.
-     * @throws DimensionMismatchException if the various arrays do not contain the expected number of elements.
-     * @throws NonMonotonicSequenceException if {@code x}, {@code y} or {@code z} are not strictly increasing.
+     * @throws MathIllegalArgumentException if any of the arrays has zero length.
+     * @throws MathIllegalArgumentException if the various arrays do not contain the expected number of elements.
+     * @throws MathIllegalArgumentException if {@code x}, {@code y} or {@code z} are not strictly increasing.
      */
     public TricubicInterpolatingFunction(double[] x,
                                          double[] y,
@@ -144,39 +142,45 @@ public class TricubicInterpolatingFunction
                                          double[][][] d2FdXdZ,
                                          double[][][] d2FdYdZ,
                                          double[][][] d3FdXdYdZ)
-        throws NoDataException,
-               DimensionMismatchException,
-               NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         final int xLen = x.length;
         final int yLen = y.length;
         final int zLen = z.length;
 
         if (xLen == 0 || yLen == 0 || z.length == 0 || f.length == 0 || f[0].length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (xLen != f.length) {
-            throw new DimensionMismatchException(xLen, f.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xLen, f.length);
         }
         if (xLen != dFdX.length) {
-            throw new DimensionMismatchException(xLen, dFdX.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xLen, dFdX.length);
         }
         if (xLen != dFdY.length) {
-            throw new DimensionMismatchException(xLen, dFdY.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xLen, dFdY.length);
         }
         if (xLen != dFdZ.length) {
-            throw new DimensionMismatchException(xLen, dFdZ.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xLen, dFdZ.length);
         }
         if (xLen != d2FdXdY.length) {
-            throw new DimensionMismatchException(xLen, d2FdXdY.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xLen, d2FdXdY.length);
         }
         if (xLen != d2FdXdZ.length) {
-            throw new DimensionMismatchException(xLen, d2FdXdZ.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xLen, d2FdXdZ.length);
         }
         if (xLen != d2FdYdZ.length) {
-            throw new DimensionMismatchException(xLen, d2FdYdZ.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xLen, d2FdYdZ.length);
         }
         if (xLen != d3FdXdYdZ.length) {
-            throw new DimensionMismatchException(xLen, d3FdXdYdZ.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xLen, d3FdXdYdZ.length);
         }
 
         MathArrays.checkOrder(x);
@@ -194,56 +198,72 @@ public class TricubicInterpolatingFunction
 
         for (int i = 0; i < lastI; i++) {
             if (f[i].length != yLen) {
-                throw new DimensionMismatchException(f[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       f[i].length, yLen);
             }
             if (dFdX[i].length != yLen) {
-                throw new DimensionMismatchException(dFdX[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       dFdX[i].length, yLen);
             }
             if (dFdY[i].length != yLen) {
-                throw new DimensionMismatchException(dFdY[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       dFdY[i].length, yLen);
             }
             if (dFdZ[i].length != yLen) {
-                throw new DimensionMismatchException(dFdZ[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       dFdZ[i].length, yLen);
             }
             if (d2FdXdY[i].length != yLen) {
-                throw new DimensionMismatchException(d2FdXdY[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       d2FdXdY[i].length, yLen);
             }
             if (d2FdXdZ[i].length != yLen) {
-                throw new DimensionMismatchException(d2FdXdZ[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       d2FdXdZ[i].length, yLen);
             }
             if (d2FdYdZ[i].length != yLen) {
-                throw new DimensionMismatchException(d2FdYdZ[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       d2FdYdZ[i].length, yLen);
             }
             if (d3FdXdYdZ[i].length != yLen) {
-                throw new DimensionMismatchException(d3FdXdYdZ[i].length, yLen);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       d3FdXdYdZ[i].length, yLen);
             }
 
             final int ip1 = i + 1;
             final double xR = xval[ip1] - xval[i];
             for (int j = 0; j < lastJ; j++) {
                 if (f[i][j].length != zLen) {
-                    throw new DimensionMismatchException(f[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           f[i][j].length, zLen);
                 }
                 if (dFdX[i][j].length != zLen) {
-                    throw new DimensionMismatchException(dFdX[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           dFdX[i][j].length, zLen);
                 }
                 if (dFdY[i][j].length != zLen) {
-                    throw new DimensionMismatchException(dFdY[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           dFdY[i][j].length, zLen);
                 }
                 if (dFdZ[i][j].length != zLen) {
-                    throw new DimensionMismatchException(dFdZ[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           dFdZ[i][j].length, zLen);
                 }
                 if (d2FdXdY[i][j].length != zLen) {
-                    throw new DimensionMismatchException(d2FdXdY[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           d2FdXdY[i][j].length, zLen);
                 }
                 if (d2FdXdZ[i][j].length != zLen) {
-                    throw new DimensionMismatchException(d2FdXdZ[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           d2FdXdZ[i][j].length, zLen);
                 }
                 if (d2FdYdZ[i][j].length != zLen) {
-                    throw new DimensionMismatchException(d2FdYdZ[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           d2FdYdZ[i][j].length, zLen);
                 }
                 if (d3FdXdYdZ[i][j].length != zLen) {
-                    throw new DimensionMismatchException(d3FdXdYdZ[i][j].length, zLen);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           d3FdXdYdZ[i][j].length, zLen);
                 }
 
                 final int jp1 = j + 1;
@@ -307,22 +327,25 @@ public class TricubicInterpolatingFunction
     /**
      * {@inheritDoc}
      *
-     * @throws OutOfRangeException if any of the variables is outside its interpolation range.
+     * @throws MathIllegalArgumentException if any of the variables is outside its interpolation range.
      */
     @Override
     public double value(double x, double y, double z)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         final int i = searchIndex(x, xval);
         if (i == -1) {
-            throw new OutOfRangeException(x, xval[0], xval[xval.length - 1]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   x, xval[0], xval[xval.length - 1]);
         }
         final int j = searchIndex(y, yval);
         if (j == -1) {
-            throw new OutOfRangeException(y, yval[0], yval[yval.length - 1]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   y, yval[0], yval[yval.length - 1]);
         }
         final int k = searchIndex(z, zval);
         if (k == -1) {
-            throw new OutOfRangeException(z, zval[0], zval[zval.length - 1]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   z, zval[0], zval[zval.length - 1]);
         }
 
         final double xN = (x - xval[i]) / (xval[i + 1] - xval[i]);
@@ -468,19 +491,22 @@ class TricubicFunction
      * @param y y-coordinate of the interpolation point.
      * @param z z-coordinate of the interpolation point.
      * @return the interpolated value.
-     * @throws OutOfRangeException if {@code x}, {@code y} or
+     * @throws MathIllegalArgumentException if {@code x}, {@code y} or
      * {@code z} are not in the interval {@code [0, 1]}.
      */
     @Override
-    public double value(double x, double y, double z) throws OutOfRangeException {
+    public double value(double x, double y, double z) throws MathIllegalArgumentException {
         if (x < 0 || x > 1) {
-            throw new OutOfRangeException(x, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   x, 0, 1);
         }
         if (y < 0 || y > 1) {
-            throw new OutOfRangeException(y, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   y, 0, 1);
         }
         if (z < 0 || z > 1) {
-            throw new OutOfRangeException(z, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   z, 0, 1);
         }
 
         final double x2 = x * x;

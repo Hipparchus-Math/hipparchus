@@ -16,10 +16,10 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.ExceptionContext;
 import org.hipparchus.util.IterationManager;
 
 /**
@@ -46,8 +46,8 @@ import org.hipparchus.util.IterationManager;
  * </p>
  * <h3><a id="context">Exception context</a></h3>
  * <p>
- * Besides standard {@link DimensionMismatchException}, this class might throw
- * {@link NonPositiveDefiniteOperatorException} if the linear operator or
+ * Besides standard {@link MathIllegalArgumentException}, this class might throw
+ * {@link MathIllegalArgumentException} if the linear operator or
  * the preconditioner are not positive definite. In this case, the
  * {@link ExceptionContext} provides some more information
  * <ul>
@@ -140,7 +140,7 @@ public class ConjugateGradient
     /**
      * {@inheritDoc}
      *
-     * @throws NonPositiveDefiniteOperatorException if {@code a} or {@code m} is
+     * @throws MathIllegalArgumentException if {@code a} or {@code m} is
      * not positive definite
      */
     @Override
@@ -148,9 +148,8 @@ public class ConjugateGradient
                                    final RealLinearOperator m,
                                    final RealVector b,
                                    final RealVector x0)
-        throws NullArgumentException, NonPositiveDefiniteOperatorException,
-        NonSquareOperatorException, DimensionMismatchException,
-        MaxCountExceededException {
+        throws MathIllegalArgumentException, NullArgumentException,
+        MathIllegalStateException {
         checkParameters(a, m, b, x0);
         final IterationManager manager = getIterationManager();
         // Initialization of default stopping criterion
@@ -196,12 +195,7 @@ public class ConjugateGradient
             }
             final double rhoNext = r.dotProduct(z);
             if (check && (rhoNext <= 0.)) {
-                final NonPositiveDefiniteOperatorException e;
-                e = new NonPositiveDefiniteOperatorException();
-                final ExceptionContext context = e.getContext();
-                context.setValue(OPERATOR, m);
-                context.setValue(VECTOR, r);
-                throw e;
+                throw new MathIllegalArgumentException(LocalizedFormats.NON_POSITIVE_DEFINITE_OPERATOR);
             }
             if (manager.getIterations() == 2) {
                 p.setSubVector(0, z);
@@ -211,12 +205,7 @@ public class ConjugateGradient
             q = a.operate(p);
             final double pq = p.dotProduct(q);
             if (check && (pq <= 0.)) {
-                final NonPositiveDefiniteOperatorException e;
-                e = new NonPositiveDefiniteOperatorException();
-                final ExceptionContext context = e.getContext();
-                context.setValue(OPERATOR, a);
-                context.setValue(VECTOR, p);
-                throw e;
+                throw new MathIllegalArgumentException(LocalizedFormats.NON_POSITIVE_DEFINITE_OPERATOR);
             }
             final double alpha = rhoNext / pq;
             x.combineToSelf(1., alpha, p);

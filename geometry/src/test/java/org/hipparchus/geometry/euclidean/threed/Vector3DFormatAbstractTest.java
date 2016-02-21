@@ -21,7 +21,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.euclidean.threed.Vector3DFormat;
 import org.junit.Test;
@@ -161,7 +161,7 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseSimpleNoDecimals() throws MathParseException {
+    public void testParseSimpleNoDecimals() throws MathIllegalStateException {
         String source = "{1; 1; 1}";
         Vector3D expected = new Vector3D(1, 1, 1);
         Vector3D actual = vector3DFormat.parse(source);
@@ -182,7 +182,7 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseSimpleWithDecimals() throws MathParseException {
+    public void testParseSimpleWithDecimals() throws MathIllegalStateException {
         String source =
             "{1" + getDecimalCharacter() +
             "23; 1" + getDecimalCharacter() +
@@ -194,7 +194,7 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseSimpleWithDecimalsTrunc() throws MathParseException {
+    public void testParseSimpleWithDecimalsTrunc() throws MathIllegalStateException {
         String source =
             "{1" + getDecimalCharacter() +
             "2323; 1" + getDecimalCharacter() +
@@ -206,7 +206,7 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNegativeX() throws MathParseException {
+    public void testParseNegativeX() throws MathIllegalStateException {
         String source =
             "{-1" + getDecimalCharacter() +
             "2323; 1" + getDecimalCharacter() +
@@ -218,7 +218,7 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNegativeY() throws MathParseException {
+    public void testParseNegativeY() throws MathIllegalStateException {
         String source =
             "{1" + getDecimalCharacter() +
             "2323; -1" + getDecimalCharacter() +
@@ -230,7 +230,7 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNegativeZ() throws MathParseException {
+    public void testParseNegativeZ() throws MathIllegalStateException {
         String source =
             "{1" + getDecimalCharacter() +
             "2323; 1" + getDecimalCharacter() +
@@ -242,7 +242,7 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNegativeAll() throws MathParseException {
+    public void testParseNegativeAll() throws MathIllegalStateException {
         String source =
             "{-1" + getDecimalCharacter() +
             "2323; -1" + getDecimalCharacter() +
@@ -254,7 +254,7 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseZeroX() throws MathParseException {
+    public void testParseZeroX() throws MathIllegalStateException {
         String source =
             "{0" + getDecimalCharacter() +
             "0; -1" + getDecimalCharacter() +
@@ -266,7 +266,7 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNonDefaultSetting() throws MathParseException {
+    public void testParseNonDefaultSetting() throws MathIllegalStateException {
         String source =
             "[1" + getDecimalCharacter() +
             "2323 : 1" + getDecimalCharacter() +
@@ -278,21 +278,21 @@ public abstract class Vector3DFormatAbstractTest {
     }
 
     @Test
-    public void testParseNan() throws MathParseException {
+    public void testParseNan() throws MathIllegalStateException {
         String source = "{(NaN); (NaN); (NaN)}";
         Vector3D actual = vector3DFormat.parse(source);
         Assert.assertEquals(Vector3D.NaN, actual);
     }
 
     @Test
-    public void testParsePositiveInfinity() throws MathParseException {
+    public void testParsePositiveInfinity() throws MathIllegalStateException {
         String source = "{(Infinity); (Infinity); (Infinity)}";
         Vector3D actual = vector3DFormat.parse(source);
         Assert.assertEquals(Vector3D.POSITIVE_INFINITY, actual);
     }
 
     @Test
-    public void testParseNegativeInfinity() throws MathParseException {
+    public void testParseNegativeInfinity() throws MathIllegalStateException {
         String source = "{(-Infinity); (-Infinity); (-Infinity)}";
         Vector3D actual = vector3DFormat.parse(source);
         Assert.assertEquals(Vector3D.NEGATIVE_INFINITY, actual);

@@ -19,10 +19,8 @@ package org.hipparchus.stat.regression;
 import java.io.Serializable;
 
 import org.hipparchus.distribution.TDistribution;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -252,13 +250,13 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * data.</p>
      *
      * @param data array of observations to be added
-     * @throws ModelSpecificationException if the length of {@code data[i]} is not
+     * @throws MathIllegalArgumentException if the length of {@code data[i]} is not
      * greater than or equal to 2
      */
-    public void addData(final double[][] data) throws ModelSpecificationException {
+    public void addData(final double[][] data) throws MathIllegalArgumentException {
         for (int i = 0; i < data.length; i++) {
             if( data[i].length < 2 ){
-               throw new ModelSpecificationException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,
+               throw new MathIllegalArgumentException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,
                     data[i].length, 2);
             }
             addData(data[i][0], data[i][1]);
@@ -270,14 +268,14 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      *
      * @param x the independent variables which form the design matrix
      * @param y the dependent or response variable
-     * @throws ModelSpecificationException if the length of {@code x} does not equal
+     * @throws MathIllegalArgumentException if the length of {@code x} does not equal
      * the number of independent variables in the model
      */
     @Override
     public void addObservation(final double[] x,final double y)
-            throws ModelSpecificationException {
+            throws MathIllegalArgumentException {
         if( x == null || x.length == 0 ){
-            throw new ModelSpecificationException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,x!=null?x.length:0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,x!=null?x.length:0, 1);
         }
         addData( x[0], y );
     }
@@ -289,14 +287,14 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * @param x a series of observations on the independent variables
      * @param y a series of observations on the dependent variable
      * The length of x and y must be the same
-     * @throws ModelSpecificationException if {@code x} is not rectangular, does not match
+     * @throws MathIllegalArgumentException if {@code x} is not rectangular, does not match
      * the length of {@code y} or does not contain sufficient data to estimate the model
      */
     @Override
-    public void addObservations(final double[][] x,final double[] y) throws ModelSpecificationException {
+    public void addObservations(final double[][] x,final double[] y) throws MathIllegalArgumentException {
         if ((x == null) || (y == null) || (x.length != y.length)) {
-            throw new ModelSpecificationException(
-                  LocalizedFormats.DIMENSIONS_MISMATCH_SIMPLE,
+            throw new MathIllegalArgumentException(
+                  LocalizedFormats.DIMENSIONS_MISMATCH,
                   (x == null) ? 0 : x.length,
                   (y == null) ? 0 : y.length);
         }
@@ -307,7 +305,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
             }
         }
         if( !obsOk ){
-            throw new ModelSpecificationException(
+            throw new MathIllegalArgumentException(
                   LocalizedFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                   0, 1);
         }
@@ -650,9 +648,9 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * Bivariate Normal Distribution</a>.</p>
      *
      * @return half-width of 95% confidence interval for the slope estimate
-     * @throws OutOfRangeException if the confidence interval can not be computed.
+     * @throws MathIllegalArgumentException if the confidence interval can not be computed.
      */
-    public double getSlopeConfidenceInterval() throws OutOfRangeException {
+    public double getSlopeConfidenceInterval() throws MathIllegalArgumentException {
         return getSlopeConfidenceInterval(0.05d);
     }
 
@@ -680,23 +678,23 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * <code>Double.NaN</code>.
      * </li>
      * <li><code>(0 < alpha < 1)</code>; otherwise an
-     * <code>OutOfRangeException</code> is thrown.
+     * <code>MathIllegalArgumentException</code> is thrown.
      * </li></ul></p>
      *
      * @param alpha the desired significance level
      * @return half-width of 95% confidence interval for the slope estimate
-     * @throws OutOfRangeException if the confidence interval can not be computed.
+     * @throws MathIllegalArgumentException if the confidence interval can not be computed.
      */
     public double getSlopeConfidenceInterval(final double alpha)
-    throws OutOfRangeException {
+    throws MathIllegalArgumentException {
         if (n < 3) {
             return Double.NaN;
         }
         if (alpha >= 1 || alpha <= 0) {
-            throw new OutOfRangeException(LocalizedFormats.SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedFormats.SIGNIFICANCE_LEVEL,
                                           alpha, 0, 1);
         }
-        // No advertised NotStrictlyPositiveException here - will return NaN above
+        // No advertised MathIllegalArgumentException here - will return NaN above
         TDistribution distribution = new TDistribution(n - 2);
         return getSlopeStdErr() *
             distribution.inverseCumulativeProbability(1d - alpha / 2d);
@@ -721,14 +719,14 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * <code>Double.NaN</code>.</p>
      *
      * @return significance level for slope/correlation
-     * @throws org.hipparchus.exception.MaxCountExceededException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the significance level can not be computed.
      */
     public double getSignificance() {
         if (n < 3) {
             return Double.NaN;
         }
-        // No advertised NotStrictlyPositiveException here - will return NaN above
+        // No advertised MathIllegalArgumentException here - will return NaN above
         TDistribution distribution = new TDistribution(n - 2);
         return 2d * (1.0 - distribution.cumulativeProbability(
                     FastMath.abs(getSlope()) / getSlopeStdErr()));
@@ -765,19 +763,19 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * Performs a regression on data present in buffers and outputs a RegressionResults object.
      *
      * <p>If there are fewer than 3 observations in the model and {@code hasIntercept} is true
-     * a {@code NoDataException} is thrown.  If there is no intercept term, the model must
+     * a {@code MathIllegalArgumentException} is thrown.  If there is no intercept term, the model must
      * contain at least 2 observations.</p>
      *
      * @return RegressionResults acts as a container of regression output
-     * @throws ModelSpecificationException if the model is not correctly specified
-     * @throws NoDataException if there is not sufficient data in the model to
+     * @throws MathIllegalArgumentException if the model is not correctly specified
+     * @throws MathIllegalArgumentException if there is not sufficient data in the model to
      * estimate the regression parameters
      */
     @Override
-    public RegressionResults regress() throws ModelSpecificationException, NoDataException {
+    public RegressionResults regress() throws MathIllegalArgumentException {
         if (hasIntercept) {
             if (n < 3) {
-                throw new NoDataException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
             }
             if (FastMath.abs(sumXX) > Precision.SAFE_MIN) {
                 final double[] params = new double[] { getIntercept(), getSlope() };
@@ -795,7 +793,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
             }
         } else {
             if (n < 2) {
-                throw new NoDataException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
             }
             if (!Double.isNaN(sumXX)) {
                 final double[] vcv = new double[] { getMeanSquareError() / sumXX };
@@ -817,33 +815,36 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * @param variablesToInclude an array of indices of regressors to include
      * @return RegressionResults acts as a container of regression output
      * @throws MathIllegalArgumentException if the variablesToInclude array is null or zero length
-     * @throws OutOfRangeException if a requested variable is not present in model
+     * @throws MathIllegalArgumentException if a requested variable is not present in model
      */
     @Override
-    public RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException{
-        if( variablesToInclude == null || variablesToInclude.length == 0){
+    public RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException {
+        if (variablesToInclude == null || variablesToInclude.length == 0) {
           throw new MathIllegalArgumentException(LocalizedFormats.ARRAY_ZERO_LENGTH_OR_NULL_NOT_ALLOWED);
         }
-        if( variablesToInclude.length > 2 || (variablesToInclude.length > 1 && !hasIntercept) ){
-            throw new ModelSpecificationException(
+        if (variablesToInclude.length > 2 || (variablesToInclude.length > 1 && !hasIntercept)) {
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.ARRAY_SIZE_EXCEEDS_MAX_VARIABLES,
                     (variablesToInclude.length > 1 && !hasIntercept) ? 1 : 2);
         }
 
-        if( hasIntercept ){
-            if( variablesToInclude.length == 2 ){
-                if( variablesToInclude[0] == 1 ){
-                    throw new ModelSpecificationException(LocalizedFormats.NOT_INCREASING_SEQUENCE);
-                }else if( variablesToInclude[0] != 0 ){
-                    throw new OutOfRangeException( variablesToInclude[0], 0,1 );
+        if (hasIntercept) {
+            if (variablesToInclude.length == 2) {
+                if (variablesToInclude[0] == 1) {
+                    throw new MathIllegalArgumentException(LocalizedFormats.NOT_INCREASING_SEQUENCE);
+                } else if (variablesToInclude[0] != 0) {
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           variablesToInclude[0], 0,1);
                 }
-                if( variablesToInclude[1] != 1){
-                     throw new OutOfRangeException( variablesToInclude[0], 0,1 );
+                if (variablesToInclude[1] != 1) {
+                     throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                            variablesToInclude[0], 0,1);
                 }
                 return regress();
             }else{
-                if( variablesToInclude[0] != 1 && variablesToInclude[0] != 0 ){
-                     throw new OutOfRangeException( variablesToInclude[0],0,1 );
+                if( variablesToInclude[0] != 1 && variablesToInclude[0] != 0 ) {
+                     throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                            variablesToInclude[0],0,1);
                 }
                 final double _mean = sumY * sumY / n;
                 final double _syy = sumYY + _mean;
@@ -876,9 +877,10 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
                     }
                 }
             }
-        }else{
-            if( variablesToInclude[0] != 0 ){
-                throw new OutOfRangeException(variablesToInclude[0],0,0);
+        } else {
+            if (variablesToInclude[0] != 0) {
+                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                       variablesToInclude[0], 0, 0);
             }
             return regress();
         }

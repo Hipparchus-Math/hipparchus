@@ -16,19 +16,10 @@ package org.hipparchus.util;
 import java.util.Arrays;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
-import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.Well1024a;
-import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -75,19 +66,19 @@ public class MathArraysTest {
         }
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEbeAddPrecondition() {
         MathArrays.ebeAdd(new double[3], new double[4]);
     }
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEbeSubtractPrecondition() {
         MathArrays.ebeSubtract(new double[3], new double[4]);
     }
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEbeMultiplyPrecondition() {
         MathArrays.ebeMultiply(new double[3], new double[4]);
     }
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEbeDividePrecondition() {
         MathArrays.ebeDivide(new double[3], new double[4]);
     }
@@ -245,35 +236,35 @@ public class MathArraysTest {
             MathArrays.checkOrder(new double[] {-15, -5.5, -1, -1, 2, 15},
                                  MathArrays.OrderDirection.INCREASING, true);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {-15, -5.5, -1, -2, 2},
                                  MathArrays.OrderDirection.INCREASING, false);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {3, 3, -5.5, -11, -27.5},
                                  MathArrays.OrderDirection.DECREASING, true);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {3, -1, 0, -5.5, -11, -27.5},
                                  MathArrays.OrderDirection.DECREASING, false);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
             MathArrays.checkOrder(new double[] {3, 0, -5.5, -11, -10},
                                  MathArrays.OrderDirection.DECREASING, false);
             Assert.fail("an exception should have been thrown");
-        } catch (NonMonotonicSequenceException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
     }
@@ -364,8 +355,8 @@ public class MathArraysTest {
         MathArrays.checkRectangular(empty);
         try {
             MathArrays.checkRectangular(ragged);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
         try {
@@ -392,8 +383,8 @@ public class MathArraysTest {
         }
         try {
             MathArrays.checkPositive(nonNegative);
-            Assert.fail("Expecting NotStrictlyPositiveException");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }
@@ -414,8 +405,8 @@ public class MathArraysTest {
         }
         try {
             MathArrays.checkNonNegative(hasNegative);
-            Assert.fail("Expecting NotPositiveException");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }
@@ -436,8 +427,8 @@ public class MathArraysTest {
         }
         try {
             MathArrays.checkNonNegative(hasNegative);
-            Assert.fail("Expecting NotPositiveException");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }
@@ -476,13 +467,13 @@ public class MathArraysTest {
         }
         try {
             MathArrays.checkNotNaN(withNaN);
-            Assert.fail("Expecting NotANumberException");
-        } catch (NotANumberException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // Expected
         }
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCheckEqualLength1() {
         MathArrays.checkEqualLength(new double[] {1, 2, 3},
                                     new double[] {1, 2, 3, 4});
@@ -578,8 +569,8 @@ public class MathArraysTest {
         final double[] onep = {2};
         try {
             MathArrays.sortInPlace(one, two);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -1021,14 +1012,14 @@ public class MathArraysTest {
                                 MathArrays.normalizeArray(testValues3, 1),
                                 Double.MIN_VALUE);
 
-        // Zero sum -> MathArithmeticException
+        // Zero sum -> MathRuntimeException
         double[] zeroSum = new double[] {-1, 1};
         try {
             MathArrays.normalizeArray(zeroSum, 1);
-            Assert.fail("expecting MathArithmeticException");
-        } catch (MathArithmeticException ex) {}
+            Assert.fail("expecting MathRuntimeException");
+        } catch (MathRuntimeException ex) {}
 
-        // Infinite elements -> MathArithmeticException
+        // Infinite elements -> MathRuntimeException
         double[] hasInf = new double[] {1, 2, 1, Double.NEGATIVE_INFINITY};
         try {
             MathArrays.normalizeArray(hasInf, 1);
@@ -1087,21 +1078,21 @@ public class MathArraysTest {
         try {
             MathArrays.convolve(new double[]{1, 2}, new double[]{});
             Assert.fail("an exception should have been thrown");
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
 
         try {
             MathArrays.convolve(new double[]{}, new double[]{1, 2});
             Assert.fail("an exception should have been thrown");
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
 
         try {
             MathArrays.convolve(new double[]{}, new double[]{});
             Assert.fail("an exception should have been thrown");
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected behavior
         }
     }

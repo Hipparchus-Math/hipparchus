@@ -19,10 +19,8 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
@@ -216,8 +214,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
     @Override
     public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
                                                    final FieldODEState<T> initialState, final T finalTime)
-        throws NumberIsTooSmallException, DimensionMismatchException,
-        MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
         final T   t0 = initialState.getTime();

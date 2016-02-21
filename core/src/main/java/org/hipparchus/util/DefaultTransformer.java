@@ -19,9 +19,9 @@ package org.hipparchus.util;
 
 import java.io.Serializable;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * A Default NumberTransformer for java.lang.Numbers and Numeric Strings. This
@@ -44,7 +44,7 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
      */
     @Override
     public double transform(Object o)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         if (o == null) {
             throw new NullArgumentException(LocalizedFormats.OBJECT_TRANSFORMATION);

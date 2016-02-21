@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.CompositeFormat;
 
 /**
@@ -216,16 +217,17 @@ public class RealVectorFormat {
      *
      * @param source String to parse.
      * @return the parsed {@link RealVector} object.
-     * @throws MathParseException if the beginning of the specified string
+     * @throws MathIllegalStateException if the beginning of the specified string
      * cannot be parsed.
      */
     public ArrayRealVector parse(String source) {
         final ParsePosition parsePosition = new ParsePosition(0);
         final ArrayRealVector result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathParseException(source,
-                                         parsePosition.getErrorIndex(),
-                                         ArrayRealVector.class);
+            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+                                                source,
+                                                parsePosition.getErrorIndex(),
+                                                ArrayRealVector.class);
         }
         return result;
     }

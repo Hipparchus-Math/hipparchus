@@ -16,13 +16,8 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import org.hipparchus.analysis.interpolation.LoessInterpolator;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
-import org.hipparchus.exception.NotFiniteNumberException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -159,68 +154,93 @@ public class LoessInterpolatorTest {
         }
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testUnequalSizeArguments() {
         new LoessInterpolator().smooth(new double[] {1,2,3}, new double[] {1,2,3,4});
     }
 
-    @Test(expected=NoDataException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEmptyData() {
         new LoessInterpolator().smooth(new double[] {}, new double[] {});
     }
 
-    @Test(expected=NonMonotonicSequenceException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNonStrictlyIncreasing1() {
         new LoessInterpolator().smooth(new double[] {4,3,1,2}, new double[] {3,4,5,6});
     }
 
-    @Test(expected=NonMonotonicSequenceException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNonStrictlyIncreasing2() {
         new LoessInterpolator().smooth(new double[] {1,2,2,3}, new double[] {3,4,5,6});
     }
 
-    @Test(expected=NotFiniteNumberException.class)
+    @Test
     public void testNotAllFiniteReal1() {
-        new LoessInterpolator().smooth(new double[] {1,2,Double.NaN}, new double[] {3,4,5});
+        try {
+            new LoessInterpolator().smooth(new double[] {1,2,Double.NaN}, new double[] {3,4,5});
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+        }
     }
 
-    @Test(expected=NotFiniteNumberException.class)
+    @Test
     public void testNotAllFiniteReal2() {
-        new LoessInterpolator().smooth(new double[] {1,2,Double.POSITIVE_INFINITY}, new double[] {3,4,5});
+        try {
+            new LoessInterpolator().smooth(new double[] {1,2,Double.POSITIVE_INFINITY}, new double[] {3,4,5});
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+        }
     }
 
-    @Test(expected=NotFiniteNumberException.class)
+    @Test
     public void testNotAllFiniteReal3() {
-        new LoessInterpolator().smooth(new double[] {1,2,Double.NEGATIVE_INFINITY}, new double[] {3,4,5});
+        try {
+            new LoessInterpolator().smooth(new double[] {1,2,Double.NEGATIVE_INFINITY}, new double[] {3,4,5});
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+        }
     }
 
-    @Test(expected=NotFiniteNumberException.class)
+    @Test
     public void testNotAllFiniteReal4() {
-        new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.NaN});
+        try {
+            new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.NaN});
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+        }
     }
 
-    @Test(expected=NotFiniteNumberException.class)
+    @Test
     public void testNotAllFiniteReal5() {
-        new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.POSITIVE_INFINITY});
+        try {
+            new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.POSITIVE_INFINITY});
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+        }
     }
 
-    @Test(expected=NotFiniteNumberException.class)
+    @Test
     public void testNotAllFiniteReal6() {
-        new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.NEGATIVE_INFINITY});
+        try {
+            new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.NEGATIVE_INFINITY});
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+        }
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInsufficientBandwidth() {
         LoessInterpolator li = new LoessInterpolator(0.1, 3, 1e-12);
         li.smooth(new double[] {1,2,3,4,5,6,7,8,9,10,11,12}, new double[] {1,2,3,4,5,6,7,8,9,10,11,12});
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCompletelyIncorrectBandwidth1() {
         new LoessInterpolator(-0.2, 3, 1e-12);
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCompletelyIncorrectBandwidth2() {
         new LoessInterpolator(1.1, 3, 1e-12);
     }

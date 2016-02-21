@@ -17,9 +17,8 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Erf;
@@ -106,10 +105,10 @@ public class LogNormalDistribution extends AbstractRealDistribution {
      *
      * @param scale the scale parameter of this distribution
      * @param shape the shape parameter of this distribution
-     * @throws NotStrictlyPositiveException if {@code shape <= 0}.
+     * @throws MathIllegalArgumentException if {@code shape <= 0}.
      */
     public LogNormalDistribution(double scale, double shape)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(scale, shape, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -127,10 +126,10 @@ public class LogNormalDistribution extends AbstractRealDistribution {
      * @param scale the scale parameter of this distribution
      * @param shape the shape parameter of this distribution
      * @param inverseCumAccuracy Inverse cumulative probability accuracy.
-     * @throws NotStrictlyPositiveException if {@code shape <= 0}.
+     * @throws MathIllegalArgumentException if {@code shape <= 0}.
      */
     public LogNormalDistribution(double scale, double shape, double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), scale, shape, inverseCumAccuracy);
     }
 
@@ -140,11 +139,11 @@ public class LogNormalDistribution extends AbstractRealDistribution {
      * @param rng Random number generator.
      * @param scale Scale parameter of this distribution.
      * @param shape Shape parameter of this distribution.
-     * @throws NotStrictlyPositiveException if {@code shape <= 0}.
+     * @throws MathIllegalArgumentException if {@code shape <= 0}.
      * @since 3.3
      */
     public LogNormalDistribution(RandomGenerator rng, double scale, double shape)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(rng, scale, shape, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -155,18 +154,18 @@ public class LogNormalDistribution extends AbstractRealDistribution {
      * @param scale Scale parameter of this distribution.
      * @param shape Shape parameter of this distribution.
      * @param inverseCumAccuracy Inverse cumulative probability accuracy.
-     * @throws NotStrictlyPositiveException if {@code shape <= 0}.
+     * @throws MathIllegalArgumentException if {@code shape <= 0}.
      * @since 3.1
      */
     public LogNormalDistribution(RandomGenerator rng,
                                  double scale,
                                  double shape,
                                  double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (shape <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.SHAPE, shape);
+            throw new MathIllegalArgumentException(LocalizedFormats.SHAPE, shape);
         }
 
         this.scale = scale;
@@ -260,9 +259,9 @@ public class LogNormalDistribution extends AbstractRealDistribution {
     @Override
     public double probability(double x0,
                               double x1)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         if (x0 > x1) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                                                 x0, x1, true);
         }
         if (x0 <= 0 || x1 <= 0) {

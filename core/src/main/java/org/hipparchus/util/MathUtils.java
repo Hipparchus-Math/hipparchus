@@ -20,11 +20,11 @@ package org.hipparchus.util;
 import java.util.Arrays;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NotFiniteNumberException;
+import org.hipparchus.exception.Localizable;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Miscellaneous utility functions.
@@ -162,17 +162,17 @@ public final class MathUtils {
      * @param sign Sign of the returned value.
      * @return a value with magnitude equal to {@code magnitude} and with the
      * same sign as the {@code sign} argument.
-     * @throws MathArithmeticException if {@code magnitude == Byte.MIN_VALUE}
+     * @throws MathRuntimeException if {@code magnitude == Byte.MIN_VALUE}
      * and {@code sign >= 0}.
      */
     public static byte copySign(byte magnitude, byte sign)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         if ((magnitude >= 0 && sign >= 0) ||
             (magnitude < 0 && sign < 0)) { // Sign is OK.
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Byte.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         } else {
             return (byte) -magnitude; // Flip sign.
         }
@@ -185,17 +185,17 @@ public final class MathUtils {
      * @param sign Sign of the returned value.
      * @return a value with magnitude equal to {@code magnitude} and with the
      * same sign as the {@code sign} argument.
-     * @throws MathArithmeticException if {@code magnitude == Short.MIN_VALUE}
+     * @throws MathRuntimeException if {@code magnitude == Short.MIN_VALUE}
      * and {@code sign >= 0}.
      */
     public static short copySign(short magnitude, short sign)
-            throws MathArithmeticException {
+            throws MathRuntimeException {
         if ((magnitude >= 0 && sign >= 0) ||
             (magnitude < 0 && sign < 0)) { // Sign is OK.
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Short.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         } else {
             return (short) -magnitude; // Flip sign.
         }
@@ -208,17 +208,17 @@ public final class MathUtils {
      * @param sign Sign of the returned value.
      * @return a value with magnitude equal to {@code magnitude} and with the
      * same sign as the {@code sign} argument.
-     * @throws MathArithmeticException if {@code magnitude == Integer.MIN_VALUE}
+     * @throws MathRuntimeException if {@code magnitude == Integer.MIN_VALUE}
      * and {@code sign >= 0}.
      */
     public static int copySign(int magnitude, int sign)
-            throws MathArithmeticException {
+            throws MathRuntimeException {
         if ((magnitude >= 0 && sign >= 0) ||
             (magnitude < 0 && sign < 0)) { // Sign is OK.
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Integer.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         } else {
             return -magnitude; // Flip sign.
         }
@@ -231,17 +231,17 @@ public final class MathUtils {
      * @param sign Sign of the returned value.
      * @return a value with magnitude equal to {@code magnitude} and with the
      * same sign as the {@code sign} argument.
-     * @throws MathArithmeticException if {@code magnitude == Long.MIN_VALUE}
+     * @throws MathRuntimeException if {@code magnitude == Long.MIN_VALUE}
      * and {@code sign >= 0}.
      */
     public static long copySign(long magnitude, long sign)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         if ((magnitude >= 0 && sign >= 0) ||
             (magnitude < 0 && sign < 0)) { // Sign is OK.
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Long.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         } else {
             return -magnitude; // Flip sign.
         }
@@ -250,13 +250,13 @@ public final class MathUtils {
      * Check that the argument is a real number.
      *
      * @param x Argument.
-     * @throws NotFiniteNumberException if {@code x} is not a
+     * @throws MathIllegalArgumentException if {@code x} is not a
      * finite real number.
      */
     public static void checkFinite(final double x)
-        throws NotFiniteNumberException {
+        throws MathIllegalArgumentException {
         if (Double.isInfinite(x) || Double.isNaN(x)) {
-            throw new NotFiniteNumberException(x);
+            throw new MathIllegalArgumentException(LocalizedFormats.NOT_FINITE_NUMBER, x);
         }
     }
 
@@ -264,15 +264,15 @@ public final class MathUtils {
      * Check that all the elements are real numbers.
      *
      * @param val Arguments.
-     * @throws NotFiniteNumberException if any values of the array is not a
+     * @throws MathIllegalArgumentException if any values of the array is not a
      * finite real number.
      */
     public static void checkFinite(final double[] val)
-        throws NotFiniteNumberException {
+        throws MathIllegalArgumentException {
         for (int i = 0; i < val.length; i++) {
             final double x = val[i];
             if (Double.isInfinite(x) || Double.isNaN(x)) {
-                throw new NotFiniteNumberException(LocalizedFormats.ARRAY_ELEMENT, x, i);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_FINITE_NUMBER, x);
             }
         }
     }

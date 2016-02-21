@@ -16,8 +16,8 @@
  */
 package org.hipparchus.stat.interval;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Represents an interval estimate of a population parameter.

@@ -17,11 +17,9 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.util.FastMath;
@@ -215,18 +213,20 @@ public abstract class AdaptiveStepsizeIntegrator
   /** {@inheritDoc} */
   @Override
   protected void sanityChecks(final ExpandableStatefulODE equations, final double t)
-      throws DimensionMismatchException, NumberIsTooSmallException {
+      throws MathIllegalArgumentException {
 
       super.sanityChecks(equations, t);
 
       mainSetDimension = equations.getPrimaryMapper().getDimension();
 
       if ((vecAbsoluteTolerance != null) && (vecAbsoluteTolerance.length != mainSetDimension)) {
-          throw new DimensionMismatchException(mainSetDimension, vecAbsoluteTolerance.length);
+          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                 mainSetDimension, vecAbsoluteTolerance.length);
       }
 
       if ((vecRelativeTolerance != null) && (vecRelativeTolerance.length != mainSetDimension)) {
-          throw new DimensionMismatchException(mainSetDimension, vecRelativeTolerance.length);
+          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                 mainSetDimension, vecRelativeTolerance.length);
       }
 
   }
@@ -241,13 +241,13 @@ public abstract class AdaptiveStepsizeIntegrator
    * @param y1 work array for a state vector
    * @param yDot1 work array for the first time derivative of y1
    * @return first integration step
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-   * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
+   * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
    */
   public double initializeStep(final boolean forward, final int order, final double[] scale,
                                final double t0, final double[] y0, final double[] yDot0,
                                final double[] y1, final double[] yDot1)
-      throws MaxCountExceededException, DimensionMismatchException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     if (initialStep > 0) {
       // use the user provided value
@@ -315,17 +315,17 @@ public abstract class AdaptiveStepsizeIntegrator
    * are silently increased up to this value, if false such small
    * steps generate an exception
    * @return a bounded integration step (h if no bound is reach, or a bounded value)
-   * @exception NumberIsTooSmallException if the step is too small and acceptSmall is false
+   * @exception MathIllegalArgumentException if the step is too small and acceptSmall is false
    */
   protected double filterStep(final double h, final boolean forward, final boolean acceptSmall)
-    throws NumberIsTooSmallException {
+    throws MathIllegalArgumentException {
 
       double filteredH = h;
       if (FastMath.abs(h) < minStep) {
           if (acceptSmall) {
               filteredH = forward ? minStep : -minStep;
           } else {
-              throw new NumberIsTooSmallException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
+              throw new MathIllegalArgumentException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
                                                   FastMath.abs(h), minStep, true);
           }
       }
@@ -343,8 +343,7 @@ public abstract class AdaptiveStepsizeIntegrator
   /** {@inheritDoc} */
   @Override
   public abstract void integrate (ExpandableStatefulODE equations, double t)
-      throws NumberIsTooSmallException, DimensionMismatchException,
-             MaxCountExceededException, NoBracketingException;
+      throws MathIllegalArgumentException, MathIllegalStateException;
 
   /** {@inheritDoc} */
   @Override

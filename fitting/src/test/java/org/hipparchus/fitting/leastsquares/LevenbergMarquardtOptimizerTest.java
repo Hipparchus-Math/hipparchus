@@ -17,32 +17,26 @@
 
 package org.hipparchus.fitting.leastsquares;
 
+import static org.hamcrest.CoreMatchers.is;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
-import org.hipparchus.fitting.leastsquares.LevenbergMarquardtOptimizer;
-import org.hipparchus.fitting.leastsquares.ParameterValidator;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -78,31 +72,25 @@ public class LevenbergMarquardtOptimizerTest
     }
 
     @Override
-    @Test
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNonInvertible() {
-        try{
-            /*
-             * Overrides the method from parent class, since the default singularity
-             * threshold (1e-14) does not trigger the expected exception.
-             */
-            LinearProblem problem = new LinearProblem(new double[][] {
-                    {  1, 2, -3 },
-                    {  2, 1,  3 },
-                    { -3, 0, -9 }
-            }, new double[] { 1, 1, 1 });
+        /*
+         * Overrides the method from parent class, since the default singularity
+         * threshold (1e-14) does not trigger the expected exception.
+         */
+        LinearProblem problem = new LinearProblem(new double[][] {
+            {  1, 2, -3 },
+            {  2, 1,  3 },
+            { -3, 0, -9 }
+        }, new double[] { 1, 1, 1 });
 
-            final Optimum optimum = optimizer.optimize(
-                    problem.getBuilder().maxIterations(20).build());
+        final Optimum optimum = optimizer.optimize(
+                                                   problem.getBuilder().maxIterations(20).build());
 
-            //TODO check that it is a bad fit? Why the extra conditions?
-            Assert.assertTrue(FastMath.sqrt(problem.getTarget().length) * optimum.getRMS() > 0.6);
+        //TODO check that it is a bad fit? Why the extra conditions?
+        Assert.assertTrue(FastMath.sqrt(problem.getTarget().length) * optimum.getRMS() > 0.6);
 
-            optimum.getCovariances(1.5e-14);
-
-            fail(optimizer);
-        }catch (SingularMatrixException e){
-            //expected
-        }
+        optimum.getCovariances(1.5e-14);
     }
 
     @Test
@@ -149,9 +137,9 @@ public class LevenbergMarquardtOptimizerTest
             Assert.assertTrue(!shouldFail);
             //TODO check it got the right answer
 
-        } catch (DimensionMismatchException ee) {
+        } catch (MathIllegalArgumentException ee) {
             Assert.assertTrue(shouldFail);
-        } catch (TooManyEvaluationsException ee) {
+        } catch (MathIllegalStateException ee) {
             Assert.assertTrue(shouldFail);
         }
     }

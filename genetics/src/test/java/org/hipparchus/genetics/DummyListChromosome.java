@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.genetics.AbstractListChromosome;
-import org.hipparchus.genetics.InvalidRepresentationException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Implementation of ListChromosome for testing purposes
@@ -40,7 +40,7 @@ public class DummyListChromosome extends AbstractListChromosome<Integer> {
     }
 
     @Override
-    protected void checkValidity(final List<Integer> chromosomeRepresentation) throws InvalidRepresentationException {
+    protected void checkValidity(final List<Integer> chromosomeRepresentation) throws MathIllegalArgumentException {
         // Not important.
     }
 

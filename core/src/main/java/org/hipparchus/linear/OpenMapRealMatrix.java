@@ -19,10 +19,8 @@ package org.hipparchus.linear;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.OpenIntToDoubleHashMap;
 
 /**
@@ -53,18 +51,19 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      *
      * @param rowDimension Number of rows of the matrix.
      * @param columnDimension Number of columns of the matrix.
-     * @throws NotStrictlyPositiveException if row or column dimension is not
+     * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
-     * @throws NumberIsTooLargeException if the total number of entries of the
+     * @throws MathIllegalArgumentException if the total number of entries of the
      * matrix is larger than {@code Integer.MAX_VALUE}.
      */
     public OpenMapRealMatrix(int rowDimension, int columnDimension)
-        throws NotStrictlyPositiveException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(rowDimension, columnDimension);
         long lRow = rowDimension;
         long lCol = columnDimension;
         if (lRow * lCol >= Integer.MAX_VALUE) {
-            throw new NumberIsTooLargeException(lRow * lCol, Integer.MAX_VALUE, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   lRow * lCol, Integer.MAX_VALUE);
         }
         this.rows = rowDimension;
         this.columns = columnDimension;
@@ -91,12 +90,12 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /**
      * {@inheritDoc}
      *
-     * @throws NumberIsTooLargeException if the total number of entries of the
+     * @throws MathIllegalArgumentException if the total number of entries of the
      * matrix is larger than {@code Integer.MAX_VALUE}.
      */
     @Override
     public OpenMapRealMatrix createMatrix(int rowDimension, int columnDimension)
-        throws NotStrictlyPositiveException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         return new OpenMapRealMatrix(rowDimension, columnDimension);
     }
 
@@ -111,11 +110,11 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to be added.
      * @return {@code this} + {@code m}.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     public OpenMapRealMatrix add(OpenMapRealMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         MatrixUtils.checkAdditionCompatible(this, m);
 
@@ -134,7 +133,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public OpenMapRealMatrix subtract(final RealMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         try {
             return subtract((OpenMapRealMatrix) m);
         } catch (ClassCastException cce) {
@@ -147,11 +146,11 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to be subtracted.
      * @return {@code this} - {@code m}.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     public OpenMapRealMatrix subtract(OpenMapRealMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkAdditionCompatible(this, m);
 
         final OpenMapRealMatrix out = new OpenMapRealMatrix(this);
@@ -168,13 +167,13 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /**
      * {@inheritDoc}
      *
-     * @throws NumberIsTooLargeException if {@code m} is an
+     * @throws MathIllegalArgumentException if {@code m} is an
      * {@code OpenMapRealMatrix}, and the total number of entries of the product
      * is larger than {@code Integer.MAX_VALUE}.
      */
     @Override
     public RealMatrix multiply(final RealMatrix m)
-        throws DimensionMismatchException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         try {
             return multiply((OpenMapRealMatrix) m);
         } catch (ClassCastException cce) {
@@ -203,13 +202,13 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to postmultiply by.
      * @return {@code this} * {@code m}.
-     * @throws DimensionMismatchException if the number of rows of {@code m}
+     * @throws MathIllegalArgumentException if the number of rows of {@code m}
      * differ from the number of columns of {@code this} matrix.
-     * @throws NumberIsTooLargeException if the total number of entries of the
+     * @throws MathIllegalArgumentException if the total number of entries of the
      * product is larger than {@code Integer.MAX_VALUE}.
      */
     public OpenMapRealMatrix multiply(OpenMapRealMatrix m)
-        throws DimensionMismatchException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         // Safety check.
         MatrixUtils.checkMultiplicationCompatible(this, m);
 
@@ -241,7 +240,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
 
     /** {@inheritDoc} */
     @Override
-    public double getEntry(int row, int column) throws OutOfRangeException {
+    public double getEntry(int row, int column) throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         MatrixUtils.checkColumnIndex(this, column);
         return entries.get(computeKey(row, column));
@@ -256,7 +255,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void setEntry(int row, int column, double value)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         MatrixUtils.checkColumnIndex(this, column);
         if (value == 0.0) {
@@ -269,7 +268,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void addToEntry(int row, int column, double increment)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         MatrixUtils.checkColumnIndex(this, column);
         final int key = computeKey(row, column);
@@ -284,7 +283,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public void multiplyEntry(int row, int column, double factor)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkRowIndex(this, row);
         MatrixUtils.checkColumnIndex(this, column);
         final int key = computeKey(row, column);

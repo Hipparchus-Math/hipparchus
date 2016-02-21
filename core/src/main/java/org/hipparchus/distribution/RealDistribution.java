@@ -16,8 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Base interface for distributions on the reals.
@@ -45,11 +44,11 @@ public interface RealDistribution {
      * @return the probability that a random variable with this distribution
      * takes a value between {@code x0} and {@code x1},
      * excluding the lower and including the upper endpoint
-     * @throws NumberIsTooLargeException if {@code x0 > x1}
+     * @throws MathIllegalArgumentException if {@code x0 > x1}
      *
      * @since 4.0, was previously named cumulativeProbability
      */
-    double probability(double x0, double x1) throws NumberIsTooLargeException;
+    double probability(double x0, double x1) throws MathIllegalArgumentException;
 
     /**
      * Returns the probability density function (PDF) of this distribution
@@ -106,9 +105,9 @@ public interface RealDistribution {
      * @param p the cumulative probability
      * @return the smallest {@code p}-quantile of this distribution
      * (largest 0-quantile for {@code p = 0})
-     * @throws OutOfRangeException if {@code p < 0} or {@code p > 1}
+     * @throws MathIllegalArgumentException if {@code p < 0} or {@code p > 1}
      */
-    double inverseCumulativeProbability(double p) throws OutOfRangeException;
+    double inverseCumulativeProbability(double p) throws MathIllegalArgumentException;
 
     /**
      * Use this method to get the numerical value of the mean of this
@@ -178,7 +177,7 @@ public interface RealDistribution {
      *
      * @param sampleSize the number of random values to generate
      * @return an array representing the random sample
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code sampleSize} is not positive
      */
     double[] sample(int sampleSize);

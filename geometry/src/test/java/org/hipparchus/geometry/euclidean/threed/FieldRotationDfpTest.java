@@ -19,15 +19,10 @@ package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.euclidean.threed.CardanEulerSingularityException;
-import org.hipparchus.geometry.euclidean.threed.FieldRotation;
-import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
-import org.hipparchus.geometry.euclidean.threed.NotARotationMatrixException;
-import org.hipparchus.geometry.euclidean.threed.Rotation;
-import org.hipparchus.geometry.euclidean.threed.RotationOrder;
-import org.hipparchus.geometry.euclidean.threed.Vector3D;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
@@ -231,7 +226,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testVectorOnePair() throws MathArithmeticException {
+    public void testVectorOnePair() throws MathRuntimeException {
 
         FieldVector3D<Dfp> u = createVector(3, 2, 1);
         FieldVector3D<Dfp> v = createVector(-4, 2, 2);
@@ -243,14 +238,14 @@ public class FieldRotationDfpTest {
         try {
             new FieldRotation<Dfp>(u, createVector(0, 0, 0));
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException e) {
+        } catch (MathRuntimeException e) {
             // expected behavior
         }
 
     }
 
     @Test
-    public void testVectorTwoPairs() throws MathArithmeticException {
+    public void testVectorTwoPairs() throws MathRuntimeException {
 
         FieldVector3D<Dfp> u1 = createVector(3, 0, 0);
         FieldVector3D<Dfp> u2 = createVector(0, 5, 0);
@@ -283,7 +278,7 @@ public class FieldRotationDfpTest {
         try {
             new FieldRotation<Dfp>(u1, u2, createVector(0, 0, 0), v2);
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException e) {
+        } catch (MathRuntimeException e) {
             // expected behavior
         }
 
@@ -291,7 +286,7 @@ public class FieldRotationDfpTest {
 
     @Test
     public void testMatrix()
-            throws NotARotationMatrixException {
+            throws MathIllegalArgumentException {
 
         try {
             createRotation(new double[][] {
@@ -299,7 +294,7 @@ public class FieldRotationDfpTest {
                 { 1.0, 0.0, 0.0 }
             }, 1.0e-7);
             Assert.fail("Expecting NotARotationMatrixException");
-        } catch (NotARotationMatrixException nrme) {
+        } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
 
@@ -310,7 +305,7 @@ public class FieldRotationDfpTest {
                 { -0.354816,  0.574912,  0.737280 }
             }, 1.0e-7);
             Assert.fail("Expecting NotARotationMatrixException");
-        } catch (NotARotationMatrixException nrme) {
+        } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
 
@@ -321,7 +316,7 @@ public class FieldRotationDfpTest {
                 {  0.8, -0.2,  0.5 }
             }, 1.0e-15);
             Assert.fail("Expecting NotARotationMatrixException");
-        } catch (NotARotationMatrixException nrme) {
+        } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
 
@@ -429,7 +424,7 @@ public class FieldRotationDfpTest {
                 { 1.0, 0.0, 0.0 } };
             r = createRotation(m5, 1.0e-7);
             Assert.fail("got " + r + ", should have caught an exception");
-        } catch (NotARotationMatrixException e) {
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 
@@ -438,7 +433,7 @@ public class FieldRotationDfpTest {
     @Test
     @Deprecated
     public void testAnglesDeprecated()
-            throws CardanEulerSingularityException {
+            throws MathIllegalStateException {
 
         DfpField field = new DfpField(15);
 
@@ -490,7 +485,7 @@ public class FieldRotationDfpTest {
 
     @Test
     public void testAngles()
-        throws CardanEulerSingularityException {
+        throws MathIllegalStateException {
 
         DfpField field = new DfpField(15);
 
@@ -565,8 +560,8 @@ public class FieldRotationDfpTest {
                     try {
                         r.getAngles(CardanOrders[i], convention);
                         Assert.fail("an exception should have been caught");
-                    } catch (CardanEulerSingularityException cese) {
-                        // expected behavior
+                    } catch (MathIllegalStateException cese) {
+                        Assert.assertEquals(LocalizedFormats.CARDAN_ANGLES_SINGULARITY, cese.getSpecifier());
                     }
                 }
             }
@@ -587,8 +582,8 @@ public class FieldRotationDfpTest {
                     try {
                         r.getAngles(EulerOrders[i], convention);
                         Assert.fail("an exception should have been caught");
-                    } catch (CardanEulerSingularityException cese) {
-                        // expected behavior
+                    } catch (MathIllegalStateException cese) {
+                        Assert.assertEquals(LocalizedFormats.EULER_ANGLES_SINGULARITY, cese.getSpecifier());
                     }
                 }
             }
@@ -957,7 +952,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testIssue639() throws MathArithmeticException{
+    public void testIssue639() throws MathRuntimeException{
         FieldVector3D<Dfp> u1 = createVector(-1321008684645961.0 /  268435456.0,
                                    -5774608829631843.0 /  268435456.0,
                                    -3822921525525679.0 / 4294967296.0);
@@ -972,7 +967,7 @@ public class FieldRotationDfpTest {
     }
 
     @Test
-    public void testIssue801() throws MathArithmeticException {
+    public void testIssue801() throws MathRuntimeException {
         FieldVector3D<Dfp> u1 = createVector(0.9999988431610581, -0.0015210774290851095, 0.0);
         FieldVector3D<Dfp> u2 = createVector(0.0, 0.0, 1.0);
 

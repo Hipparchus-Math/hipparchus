@@ -20,10 +20,9 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.BitSet;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.FastMath;
@@ -338,7 +337,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
 
         MathArrays.verifyValues(values, begin, length);
         if (p > 100 || p <= 0) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUNDS_QUANTILE_VALUE, p, 0, 100);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUNDS_QUANTILE_VALUE, p, 0, 100);
         }
         if (length == 0) {
             return Double.NaN;
@@ -373,7 +372,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      */
     public void setQuantile(final double p) throws MathIllegalArgumentException {
         if (p <= 0 || p > 100) {
-            throw new OutOfRangeException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.OUT_OF_BOUNDS_QUANTILE_VALUE, p, 0, 100);
         }
         quantile = p;
@@ -988,14 +987,14 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
          * @param p the p<sup>th</sup> quantile to be computed
          * @param selector a {@link KthSelector} used for pivoting during search
          * @return estimated percentile
-         * @throws OutOfRangeException if p is out of range
+         * @throws MathIllegalArgumentException if p is out of range
          * @throws NullArgumentException if work array is null
          */
         protected double evaluate(final double[] work, final int[] pivotsHeap, final double p,
                                   final KthSelector selector) {
             MathUtils.checkNotNull(work);
             if (p > 100 || p <= 0) {
-                throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUNDS_QUANTILE_VALUE,
+                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUNDS_QUANTILE_VALUE,
                                               p, 0, 100);
             }
             return estimate(work, pivotsHeap, index(p/100d, work.length), work.length, selector);
@@ -1012,7 +1011,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
          * @param p the p<sup>th</sup> quantile to be computed
          * @return estimated percentile
          * @param selector a {@link KthSelector} used for pivoting during search
-         * @throws OutOfRangeException if length or p is out of range
+         * @throws MathIllegalArgumentException if length or p is out of range
          * @throws NullArgumentException if work array is null
          */
         public double evaluate(final double[] work, final double p, final KthSelector selector) {

@@ -17,11 +17,9 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -42,13 +40,12 @@ public class UnivariateSolverUtils {
      * @param x0 Lower bound for the interval.
      * @param x1 Upper bound for the interval.
      * @return a value where the function is zero.
-     * @throws NoBracketingException if the function has the same sign at the
+     * @throws MathIllegalArgumentException if the function has the same sign at the
      * endpoints.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static double solve(UnivariateFunction function, double x0, double x1)
-        throws NullArgumentException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (function == null) {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
@@ -65,15 +62,14 @@ public class UnivariateSolverUtils {
      * @param x1 Upper bound for the interval.
      * @param absoluteAccuracy Accuracy to be used by the solver.
      * @return a value where the function is zero.
-     * @throws NoBracketingException if the function has the same sign at the
+     * @throws MathIllegalArgumentException if the function has the same sign at the
      * endpoints.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static double solve(UnivariateFunction function,
                                double x0, double x1,
                                double absoluteAccuracy)
-        throws NullArgumentException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (function == null) {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
@@ -96,14 +92,14 @@ public class UnivariateSolverUtils {
      * @param allowedSolution the kind of solutions that the root-finding algorithm may
      * accept as solutions.
      * @return a root approximation, on the specified side of the exact root
-     * @throws NoBracketingException if the function has the same sign at the
+     * @throws MathIllegalArgumentException if the function has the same sign at the
      * endpoints.
      */
     public static double forceSide(final int maxEval, final UnivariateFunction f,
                                    final BracketedUnivariateSolver<UnivariateFunction> bracketing,
                                    final double baseRoot, final double min, final double max,
                                    final AllowedSolution allowedSolution)
-        throws NoBracketingException {
+        throws MathIllegalArgumentException {
 
         if (allowedSolution == AllowedSolution.ANY_SIDE) {
             // no further bracketing required
@@ -164,10 +160,10 @@ public class UnivariateSolverUtils {
 
         }
 
-        throw new NoBracketingException(LocalizedFormats.FAILED_BRACKETING,
-                                        xLo, xHi, fLo, fHi,
-                                        maxEval - remainingEval, maxEval, baseRoot,
-                                        min, max);
+        throw new MathIllegalArgumentException(LocalizedFormats.FAILED_BRACKETING,
+                                               xLo, xHi, fLo, fHi,
+                                               maxEval - remainingEval, maxEval, baseRoot,
+                                               min, max);
 
     }
 
@@ -191,16 +187,14 @@ public class UnivariateSolverUtils {
      * @param upperBound Upper bound (b never is greater than this
      * value).
      * @return a two-element array holding a and b.
-     * @throws NoBracketingException if a root cannot be bracketted.
-     * @throws NotStrictlyPositiveException if {@code maximumIterations <= 0}.
+     * @throws MathIllegalArgumentException if a root cannot be bracketted.
+     * @throws MathIllegalArgumentException if {@code maximumIterations <= 0}.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static double[] bracket(UnivariateFunction function,
                                    double initial,
                                    double lowerBound, double upperBound)
-        throws NullArgumentException,
-               NotStrictlyPositiveException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, NullArgumentException {
         return bracket(function, initial, lowerBound, upperBound, 1.0, 1.0, Integer.MAX_VALUE);
     }
 
@@ -216,18 +210,16 @@ public class UnivariateSolverUtils {
      * value).
      * @param maximumIterations Maximum number of iterations to perform
      * @return a two element array holding a and b.
-     * @throws NoBracketingException if the algorithm fails to find a and b
+     * @throws MathIllegalArgumentException if the algorithm fails to find a and b
      * satisfying the desired conditions.
-     * @throws NotStrictlyPositiveException if {@code maximumIterations <= 0}.
+     * @throws MathIllegalArgumentException if {@code maximumIterations <= 0}.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static double[] bracket(UnivariateFunction function,
                                    double initial,
                                    double lowerBound, double upperBound,
                                    int maximumIterations)
-        throws NullArgumentException,
-               NotStrictlyPositiveException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, NullArgumentException {
         return bracket(function, initial, lowerBound, upperBound, 1.0, 1.0, maximumIterations);
     }
 
@@ -245,8 +237,8 @@ public class UnivariateSolverUtils {
      * \( \delta_{k+1} = r \delta_k + q, \delta_0 = 0\) and starting search with \( k=1 \).
      * The algorithm stops when one of the following happens: <ul>
      * <li> at least one positive and one negative value have been found --  success!</li>
-     * <li> both endpoints have reached their respective limits -- NoBracketingException </li>
-     * <li> {@code maximumIterations} iterations elapse -- NoBracketingException </li></ul>
+     * <li> both endpoints have reached their respective limits -- MathIllegalArgumentException </li>
+     * <li> {@code maximumIterations} iterations elapse -- MathIllegalArgumentException </li></ul>
      * <p>
      * If different signs are found at first iteration ({@code k=1}), then the returned
      * interval will be \( [a, b] = [l_1, u_1] \). If different signs are found at a later
@@ -290,21 +282,22 @@ public class UnivariateSolverUtils {
      * @param r multiplicative factor used to compute bounds sequence
      * @param maximumIterations Maximum number of iterations to perform
      * @return a two element array holding the bracketing values.
-     * @exception NoBracketingException if function cannot be bracketed in the search interval
+     * @exception MathIllegalArgumentException if function cannot be bracketed in the search interval
      */
     public static double[] bracket(final UnivariateFunction function, final double initial,
                                    final double lowerBound, final double upperBound,
                                    final double q, final double r, final int maximumIterations)
-        throws NoBracketingException {
+        throws MathIllegalArgumentException {
 
         if (function == null) {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
         if (q <= 0)  {
-            throw new NotStrictlyPositiveException(q);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   q, 0);
         }
         if (maximumIterations <= 0)  {
-            throw new NotStrictlyPositiveException(LocalizedFormats.INVALID_MAX_ITERATIONS, maximumIterations);
+            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_MAX_ITERATIONS, maximumIterations);
         }
         verifySequence(lowerBound, initial, upperBound);
 
@@ -352,7 +345,8 @@ public class UnivariateSolverUtils {
         }
 
         // no bracketing found
-        throw new NoBracketingException(a, b, fa, fb);
+        throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                               a, b, fa, fb);
 
     }
 
@@ -410,13 +404,13 @@ public class UnivariateSolverUtils {
      *
      * @param lower Lower endpoint.
      * @param upper Upper endpoint.
-     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     * @throws MathIllegalArgumentException if {@code lower >= upper}.
      */
     public static void verifyInterval(final double lower,
                                       final double upper)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         if (lower >= upper) {
-            throw new NumberIsTooLargeException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
                                                 lower, upper, false);
         }
     }
@@ -427,13 +421,13 @@ public class UnivariateSolverUtils {
      * @param lower Lower endpoint.
      * @param initial Initial value.
      * @param upper Upper endpoint.
-     * @throws NumberIsTooLargeException if {@code lower >= initial} or
+     * @throws MathIllegalArgumentException if {@code lower >= initial} or
      * {@code initial >= upper}.
      */
     public static void verifySequence(final double lower,
                                       final double initial,
                                       final double upper)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         verifyInterval(lower, initial);
         verifyInterval(initial, upper);
     }
@@ -445,23 +439,22 @@ public class UnivariateSolverUtils {
      * @param function Function.
      * @param lower Lower endpoint.
      * @param upper Upper endpoint.
-     * @throws NoBracketingException if the function has the same sign at the
+     * @throws MathIllegalArgumentException if the function has the same sign at the
      * endpoints.
      * @throws NullArgumentException if {@code function} is {@code null}.
      */
     public static void verifyBracketing(UnivariateFunction function,
                                         final double lower,
                                         final double upper)
-        throws NullArgumentException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (function == null) {
             throw new NullArgumentException(LocalizedFormats.FUNCTION);
         }
         verifyInterval(lower, upper);
         if (!isBracketing(function, lower, upper)) {
-            throw new NoBracketingException(lower, upper,
-                                            function.value(lower),
-                                            function.value(upper));
+            throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                                   lower, upper,
+                                                   function.value(lower), function.value(upper));
         }
     }
 }

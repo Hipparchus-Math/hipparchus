@@ -58,7 +58,7 @@ public class Erf {
      *
      * @param x the value.
      * @return the error function erf(x)
-     * @throws org.hipparchus.exception.MaxCountExceededException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the algorithm fails to converge.
      * @see Gamma#regularizedGammaP(double, double, double, int)
      */
@@ -88,7 +88,7 @@ public class Erf {
      *
      * @param x the value
      * @return the complementary error function erfc(x)
-     * @throws org.hipparchus.exception.MaxCountExceededException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the algorithm fails to converge.
      * @see Gamma#regularizedGammaQ(double, double, double, int)
      * @since 2.2

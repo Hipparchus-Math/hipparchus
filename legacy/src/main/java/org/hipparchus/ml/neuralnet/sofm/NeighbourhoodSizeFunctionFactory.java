@@ -45,13 +45,13 @@ public class NeighbourhoodSizeFunctionFactory {
      * @param numCall Argument for which the function returns
      * {@code valueAtNumCall}.
      * @return the neighbourhood size function.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code initValue <= 0}.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code valueAtNumCall <= 0}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code valueAtNumCall >= initValue}.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code numCall <= 0}.
      */
     public static NeighbourhoodSizeFunction exponentialDecay(final double initValue,
@@ -84,11 +84,11 @@ public class NeighbourhoodSizeFunctionFactory {
      * @param slope Value of the function derivative at {@code numCall}.
      * @param numCall Inflexion point.
      * @return the neighbourhood size function.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code initValue <= 0}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code slope >= 0}.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code numCall <= 0}.
      */
     public static NeighbourhoodSizeFunction quasiSigmoidDecay(final double initValue,

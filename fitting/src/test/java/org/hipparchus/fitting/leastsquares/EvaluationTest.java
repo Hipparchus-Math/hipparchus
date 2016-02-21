@@ -13,30 +13,25 @@
  */
 package org.hipparchus.fitting.leastsquares;
 
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.fitting.leastsquares.LeastSquaresFactory;
-import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
-import org.hipparchus.fitting.leastsquares.MultivariateJacobianFunction;
-import org.hipparchus.fitting.leastsquares.ValueAndJacobianFunction;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Pair;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.Arrays;
 
 /**
  * The only features tested here are utility methods defined
@@ -121,7 +116,7 @@ public class EvaluationTest {
         try {
             evaluation.getCovariances(FastMath.nextAfter(1e-4, 1.0));
             Assert.fail("Expected Exception");
-        } catch (SingularMatrixException e) {
+        } catch (MathIllegalArgumentException e) {
             //expected
         }
     }

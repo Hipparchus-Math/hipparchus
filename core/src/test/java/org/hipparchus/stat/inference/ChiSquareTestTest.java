@@ -16,12 +16,7 @@
  */
 package org.hipparchus.stat.inference;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.stat.inference.ChiSquareTest;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -57,8 +52,8 @@ public class ChiSquareTestTest {
 
         try {
             testStatistic.chiSquareTest(expected1, observed1, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -66,8 +61,8 @@ public class ChiSquareTestTest {
         double[] tooShortEx = { 1 };
         try {
             testStatistic.chiSquare(tooShortEx, tooShortObs);
-            Assert.fail("arguments too short, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arguments too short, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -76,8 +71,8 @@ public class ChiSquareTestTest {
         double[] unMatchedEx = { 1, 1, 2 };
         try {
             testStatistic.chiSquare(unMatchedEx, unMatchedObs);
-            Assert.fail("arrays have different lengths, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arrays have different lengths, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -85,8 +80,8 @@ public class ChiSquareTestTest {
         expected[0] = 0;
         try {
             testStatistic.chiSquareTest(expected, observed, .01);
-            Assert.fail("bad expected count, NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("bad expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -95,8 +90,8 @@ public class ChiSquareTestTest {
         observed[0] = -1;
         try {
             testStatistic.chiSquareTest(expected, observed, .01);
-            Assert.fail("bad expected count, NotPositiveException expected");
-        } catch (NotPositiveException ex) {
+            Assert.fail("bad expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -122,8 +117,8 @@ public class ChiSquareTestTest {
         long[][] counts3 = { {40, 22, 43}, {91, 21, 28}, {60, 10}};
         try {
             testStatistic.chiSquare(counts3);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -131,15 +126,15 @@ public class ChiSquareTestTest {
         long[][] counts4 = {{40, 22, 43}};
         try {
             testStatistic.chiSquare(counts4);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[][] counts5 = {{40}, {40}, {30}, {10}};
         try {
             testStatistic.chiSquare(counts5);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -147,16 +142,16 @@ public class ChiSquareTestTest {
         long[][] counts6 = {{10, -2}, {30, 40}, {60, 90} };
         try {
             testStatistic.chiSquare(counts6);
-            Assert.fail("Expecting NotPositiveException");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         // bad alpha
         try {
             testStatistic.chiSquareTest(counts, 0);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -235,8 +230,8 @@ public class ChiSquareTestTest {
         try {
             testStatistic.chiSquareTestDataSetsComparison(
                     observed1, observed2);
-            Assert.fail("Expecting NotPositiveException - negative count");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - negative count");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[] observed3 = {10, 0, 12, 10, 15};
@@ -244,8 +239,8 @@ public class ChiSquareTestTest {
         try {
             testStatistic.chiSquareTestDataSetsComparison(
                     observed3, observed4);
-            Assert.fail("Expecting ZeroException - double 0's");
-        } catch (ZeroException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - double 0's");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[] observed5 = {10, 10, 12, 10, 15};
@@ -253,8 +248,8 @@ public class ChiSquareTestTest {
         try {
             testStatistic.chiSquareTestDataSetsComparison(
                     observed5, observed6);
-            Assert.fail("Expecting ZeroException - vanishing counts");
-        } catch (ZeroException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - vanishing counts");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

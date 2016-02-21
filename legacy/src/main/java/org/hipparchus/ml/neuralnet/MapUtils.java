@@ -24,7 +24,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Comparator;
 
-import org.hipparchus.exception.NoDataException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.distance.DistanceMeasure;
 import org.hipparchus.ml.neuralnet.twod.NeuronSquareMesh2D;
 import org.hipparchus.util.Pair;
@@ -49,7 +50,7 @@ public class MapUtils {
      * @param distance Distance function. The neuron's features are
      * passed as the first argument to {@link DistanceMeasure#compute(double[],double[])}.
      * @return the neuron whose features are closest to the given data.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the size of the input is not compatible with the neurons features
      * size.
      */
@@ -78,7 +79,7 @@ public class MapUtils {
      * @param distance Distance function. The neuron's features are
      * passed as the first argument to {@link DistanceMeasure#compute(double[],double[])}.
      * @return the two neurons whose features are closest to the given data.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the size of the input is not compatible with the neurons features
      * size.
      */
@@ -118,7 +119,7 @@ public class MapUtils {
      * @param distance Distance function.
      * @return the neurons, sorted in increasing order of distance in data
      * space.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the size of the input is not compatible with the neurons features
      * size.
      *
@@ -238,7 +239,7 @@ public class MapUtils {
      * @param neurons List of neurons to scan.
      * @param distance Distance function.
      * @return the error.
-     * @throws NoDataException if {@code data} is empty.
+     * @throws MathIllegalArgumentException if {@code data} is empty.
      */
     public static double computeQuantizationError(Iterable<double[]> data,
                                                   Iterable<Neuron> neurons,
@@ -251,7 +252,7 @@ public class MapUtils {
         }
 
         if (count == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         return d / count;
@@ -266,7 +267,7 @@ public class MapUtils {
      * @param net Network.
      * @param distance Distance function.
      * @return the error.
-     * @throws NoDataException if {@code data} is empty.
+     * @throws MathIllegalArgumentException if {@code data} is empty.
      */
     public static double computeTopographicError(Iterable<double[]> data,
                                                  Network net,
@@ -284,7 +285,7 @@ public class MapUtils {
         }
 
         if (count == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         return ((double) notAdjacentCount) / count;

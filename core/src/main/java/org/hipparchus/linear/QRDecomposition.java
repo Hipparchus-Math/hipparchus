@@ -19,9 +19,9 @@ package org.hipparchus.linear;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 
 /**
@@ -346,7 +346,8 @@ public class QRDecomposition {
             final int n = qrt.length;
             final int m = qrt[0].length;
             if (b.getDimension() != m) {
-                throw new DimensionMismatchException(b.getDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       b.getDimension(), m);
             }
             checkSingular(rDiag, threshold, true);
 
@@ -388,7 +389,8 @@ public class QRDecomposition {
             final int n = qrt.length;
             final int m = qrt[0].length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       b.getRowDimension(), m);
             }
             checkSingular(rDiag, threshold, true);
 
@@ -462,7 +464,7 @@ public class QRDecomposition {
 
         /**
          * {@inheritDoc}
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         @Override
         public RealMatrix getInverse() {
@@ -474,11 +476,11 @@ public class QRDecomposition {
          *
          * @param diag Diagonal elements of the R matrix.
          * @param min Singularity threshold.
-         * @param raise Whether to raise a {@link SingularMatrixException}
+         * @param raise Whether to raise a {@link MathIllegalArgumentException}
          * if any element of the diagonal fails the check.
          * @return {@code true} if any element of the diagonal is smaller
          * or equal to {@code min}.
-         * @throws SingularMatrixException if the matrix is singular and
+         * @throws MathIllegalArgumentException if the matrix is singular and
          * {@code raise} is {@code true}.
          */
         private static boolean checkSingular(double[] diag,
@@ -489,10 +491,7 @@ public class QRDecomposition {
                 final double d = diag[i];
                 if (FastMath.abs(d) <= min) {
                     if (raise) {
-                        final SingularMatrixException e = new SingularMatrixException();
-                        e.getContext().addMessage(LocalizedFormats.NUMBER_TOO_SMALL, d, min);
-                        e.getContext().addMessage(LocalizedFormats.INDEX, i);
-                        throw e;
+                        throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
                     } else {
                         return true;
                     }

@@ -21,11 +21,11 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -113,14 +113,14 @@ public class BigFraction
      *
      * @param num the numerator, must not be {@code null}.
      * @param den the denominator, must not be {@code null}.
-     * @throws ZeroException if the denominator is zero.
+     * @throws MathIllegalArgumentException if the denominator is zero.
      * @throws NullArgumentException if either of the arguments is null
      */
     public BigFraction(BigInteger num, BigInteger den) {
         MathUtils.checkNotNull(num, LocalizedFormats.NUMERATOR);
         MathUtils.checkNotNull(den, LocalizedFormats.DENOMINATOR);
         if (den.signum() == 0) {
-            throw new ZeroException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_DENOMINATOR);
         }
         if (num.signum() == 0) {
             numerator   = BigInteger.ZERO;
@@ -221,13 +221,13 @@ public class BigFraction
      *            <code>epsilon</code> of <code>value</code>, in absolute terms.
      * @param maxIterations
      *            maximum number of convergents.
-     * @throws FractionConversionException
+     * @throws MathIllegalStateException
      *             if the continued fraction failed to converge.
      * @see #BigFraction(double)
      */
     public BigFraction(final double value, final double epsilon,
                        final int maxIterations)
-        throws FractionConversionException {
+        throws MathIllegalStateException {
         this(value, epsilon, Integer.MAX_VALUE, maxIterations);
     }
 
@@ -262,18 +262,19 @@ public class BigFraction
      *            maximum denominator value allowed.
      * @param maxIterations
      *            maximum number of convergents.
-     * @throws FractionConversionException
+     * @throws MathIllegalStateException
      *             if the continued fraction failed to converge.
      */
     private BigFraction(final double value, final double epsilon,
                         final int maxDenominator, int maxIterations)
-        throws FractionConversionException {
+        throws MathIllegalStateException {
         long overflow = Integer.MAX_VALUE;
         double r0 = value;
         long a0 = (long) FastMath.floor(r0);
 
         if (FastMath.abs(a0) > overflow) {
-            throw new FractionConversionException(value, a0, 1l);
+            throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW,
+                                                value, a0, 1l);
         }
 
         // check for (almost) integer arguments, which should not go
@@ -306,7 +307,7 @@ public class BigFraction
                 if (epsilon == 0.0 && FastMath.abs(q1) < maxDenominator) {
                     break;
                 }
-                throw new FractionConversionException(value, p2, q2);
+                throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
             }
 
             final double convergent = (double) p2 / (double) q2;
@@ -325,7 +326,7 @@ public class BigFraction
         } while (!stop);
 
         if (n >= maxIterations) {
-            throw new FractionConversionException(value, maxIterations);
+            throw new MathIllegalStateException(LocalizedFormats.FAILED_FRACTION_CONVERSION, value, maxIterations);
         }
 
         if (q2 < maxDenominator) {
@@ -351,11 +352,11 @@ public class BigFraction
      *            the double value to convert to a fraction.
      * @param maxDenominator
      *            The maximum allowed value for denominator.
-     * @throws FractionConversionException
+     * @throws MathIllegalStateException
      *             if the continued fraction failed to converge.
      */
     public BigFraction(final double value, final int maxDenominator)
-        throws FractionConversionException {
+        throws MathIllegalStateException {
         this(value, 0, maxDenominator, 100);
     }
 
@@ -637,12 +638,12 @@ public class BigFraction
      * @param bg the {@code BigInteger} to divide by, must not be {@code null}
      * @return a {@link BigFraction} instance with the resulting values
      * @throws NullArgumentException if the {@code BigInteger} is {@code null}
-     * @throws MathArithmeticException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the fraction to divide by is zero
      */
     public BigFraction divide(final BigInteger bg) {
         MathUtils.checkNotNull(bg);
         if (bg.signum() == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
         }
         if (numerator.signum() == 0) {
             return ZERO;
@@ -658,7 +659,7 @@ public class BigFraction
      *
      * @param i the {@code int} to divide by
      * @return a {@link BigFraction} instance with the resulting values
-     * @throws MathArithmeticException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the fraction to divide by is zero
      */
     public BigFraction divide(final int i) {
         return divide(BigInteger.valueOf(i));
@@ -672,7 +673,7 @@ public class BigFraction
      *
      * @param l the {@code long} to divide by
      * @return a {@link BigFraction} instance with the resulting values
-     * @throws MathArithmeticException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the fraction to divide by is zero
      */
     public BigFraction divide(final long l) {
         return divide(BigInteger.valueOf(l));
@@ -687,13 +688,13 @@ public class BigFraction
      * @param fraction Fraction to divide by, must not be {@code null}.
      * @return a {@link BigFraction} instance with the resulting values.
      * @throws NullArgumentException if the {@code fraction} is {@code null}.
-     * @throws MathArithmeticException if the fraction to divide by is zero
+     * @throws MathRuntimeException if the fraction to divide by is zero
      */
     @Override
     public BigFraction divide(final BigFraction fraction) {
         MathUtils.checkNotNull(fraction, LocalizedFormats.FRACTION);
         if (fraction.numerator.signum() == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
         }
         if (numerator.signum() == 0) {
             return ZERO;

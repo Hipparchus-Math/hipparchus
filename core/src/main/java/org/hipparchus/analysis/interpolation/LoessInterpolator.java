@@ -20,14 +20,8 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
-import org.hipparchus.exception.NotFiniteNumberException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -139,21 +133,20 @@ public class LoessInterpolator
      * {@link #DEFAULT_ROBUSTNESS_ITERS}.
      * @param accuracy If the median residual at a certain robustness iteration
      * is less than this amount, no more iterations are done.
-     * @throws OutOfRangeException if bandwidth does not lie in the interval [0,1].
-     * @throws NotPositiveException if {@code robustnessIters} is negative.
+     * @throws MathIllegalArgumentException if bandwidth does not lie in the interval [0,1].
+     * @throws MathIllegalArgumentException if {@code robustnessIters} is negative.
      * @see #LoessInterpolator(double, int)
      * @since 2.1
      */
     public LoessInterpolator(double bandwidth, int robustnessIters, double accuracy)
-        throws OutOfRangeException,
-               NotPositiveException {
+        throws MathIllegalArgumentException {
         if (bandwidth < 0 ||
             bandwidth > 1) {
-            throw new OutOfRangeException(LocalizedFormats.BANDWIDTH, bandwidth, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.BANDWIDTH, bandwidth, 0, 1);
         }
         this.bandwidth = bandwidth;
         if (robustnessIters < 0) {
-            throw new NotPositiveException(LocalizedFormats.ROBUSTNESS_ITERATIONS, robustnessIters);
+            throw new MathIllegalArgumentException(LocalizedFormats.ROBUSTNESS_ITERATIONS, robustnessIters);
         }
         this.robustnessIters = robustnessIters;
         this.accuracy = accuracy;
@@ -169,25 +162,21 @@ public class LoessInterpolator
      * @param xval the arguments for the interpolation points
      * @param yval the values for the interpolation points
      * @return A cubic spline built upon a loess fit to the data at the original abscissae
-     * @throws NonMonotonicSequenceException if {@code xval} not sorted in
+     * @throws MathIllegalArgumentException if {@code xval} not sorted in
      * strictly increasing order.
-     * @throws DimensionMismatchException if {@code xval} and {@code yval} have
+     * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
-     * @throws NoDataException if {@code xval} or {@code yval} has zero size.
-     * @throws NotFiniteNumberException if any of the arguments and values are
+     * @throws MathIllegalArgumentException if {@code xval} or {@code yval} has zero size.
+     * @throws MathIllegalArgumentException if any of the arguments and values are
      * not finite real numbers.
-     * @throws NumberIsTooSmallException if the bandwidth is too small to
+     * @throws MathIllegalArgumentException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
      * larger than 2/n).
      */
     @Override
     public final PolynomialSplineFunction interpolate(final double[] xval,
                                                       final double[] yval)
-        throws NonMonotonicSequenceException,
-               DimensionMismatchException,
-               NoDataException,
-               NotFiniteNumberException,
-               NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         return new SplineInterpolator().interpolate(xval, smooth(xval, yval));
     }
 
@@ -199,33 +188,30 @@ public class LoessInterpolator
      * @param weights point weights: coefficients by which the robustness weight
      * of a point is multiplied.
      * @return the values of the loess fit at corresponding original abscissae.
-     * @throws NonMonotonicSequenceException if {@code xval} not sorted in
+     * @throws MathIllegalArgumentException if {@code xval} not sorted in
      * strictly increasing order.
-     * @throws DimensionMismatchException if {@code xval} and {@code yval} have
+     * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
-     * @throws NoDataException if {@code xval} or {@code yval} has zero size.
-     * @throws NotFiniteNumberException if any of the arguments and values are
+     * @throws MathIllegalArgumentException if {@code xval} or {@code yval} has zero size.
+     * @throws MathIllegalArgumentException if any of the arguments and values are
      not finite real numbers.
-     * @throws NumberIsTooSmallException if the bandwidth is too small to
+     * @throws MathIllegalArgumentException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
      * larger than 2/n).
      * @since 2.1
      */
     public final double[] smooth(final double[] xval, final double[] yval,
                                  final double[] weights)
-        throws NonMonotonicSequenceException,
-               DimensionMismatchException,
-               NoDataException,
-               NotFiniteNumberException,
-               NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         if (xval.length != yval.length) {
-            throw new DimensionMismatchException(xval.length, yval.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xval.length, yval.length);
         }
 
         final int n = xval.length;
 
         if (n == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         checkAllFiniteReal(xval);
@@ -245,7 +231,7 @@ public class LoessInterpolator
         int bandwidthInPoints = (int) (bandwidth * n);
 
         if (bandwidthInPoints < 2) {
-            throw new NumberIsTooSmallException(LocalizedFormats.BANDWIDTH,
+            throw new MathIllegalArgumentException(LocalizedFormats.BANDWIDTH,
                                                 bandwidthInPoints, 2, true);
         }
 
@@ -368,25 +354,22 @@ public class LoessInterpolator
      * @param xval the arguments for the interpolation points
      * @param yval the values for the interpolation points
      * @return values of the loess fit at corresponding original abscissae
-     * @throws NonMonotonicSequenceException if {@code xval} not sorted in
+     * @throws MathIllegalArgumentException if {@code xval} not sorted in
      * strictly increasing order.
-     * @throws DimensionMismatchException if {@code xval} and {@code yval} have
+     * @throws MathIllegalArgumentException if {@code xval} and {@code yval} have
      * different sizes.
-     * @throws NoDataException if {@code xval} or {@code yval} has zero size.
-     * @throws NotFiniteNumberException if any of the arguments and values are
+     * @throws MathIllegalArgumentException if {@code xval} or {@code yval} has zero size.
+     * @throws MathIllegalArgumentException if any of the arguments and values are
      * not finite real numbers.
-     * @throws NumberIsTooSmallException if the bandwidth is too small to
+     * @throws MathIllegalArgumentException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
      * larger than 2/n).
      */
     public final double[] smooth(final double[] xval, final double[] yval)
-        throws NonMonotonicSequenceException,
-               DimensionMismatchException,
-               NoDataException,
-               NotFiniteNumberException,
-               NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         if (xval.length != yval.length) {
-            throw new DimensionMismatchException(xval.length, yval.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xval.length, yval.length);
         }
 
         final double[] unitWeights = new double[xval.length];

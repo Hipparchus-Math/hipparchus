@@ -17,8 +17,8 @@
 package org.hipparchus.geometry.euclidean.oned;
 
 import org.hipparchus.geometry.partitioning.Region.Location;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 
 /** This class represents a 1D interval.
@@ -39,7 +39,7 @@ public class Interval {
      */
     public Interval(final double lower, final double upper) {
         if (upper < lower) {
-            throw new NumberIsTooSmallException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
                                                 upper, lower, true);
         }
         this.lower = lower;

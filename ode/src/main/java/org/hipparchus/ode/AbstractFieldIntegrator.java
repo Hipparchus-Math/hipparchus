@@ -30,11 +30,9 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.FieldEventHandler;
 import org.hipparchus.ode.events.FieldEventState;
 import org.hipparchus.ode.sampling.AbstractFieldStepInterpolator;
@@ -259,14 +257,14 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
      * @param t current value of the independent <I>time</I> variable
      * @param y array containing the current value of the state vector
      * @return state completed with derivatives
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception NullPointerException if the ODE equations have not been set (i.e. if this method
      * is called outside of a call to {@link #integrate(FieldExpandableODE, FieldODEState,
      * RealFieldElement) integrate}
      */
     public T[] computeDerivatives(final T t, final T[] y)
-        throws DimensionMismatchException, MaxCountExceededException, NullPointerException {
+        throws MathIllegalArgumentException, MathIllegalStateException, NullPointerException {
         evaluations.increment();
         return equations.computeDerivatives(t, y);
     }
@@ -285,14 +283,14 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
      * @param interpolator step interpolator
      * @param tEnd final integration time
      * @return state at end of step
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
-     * @exception NoBracketingException if the location of an event cannot be bracketed
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     protected FieldODEStateAndDerivative<T> acceptStep(final AbstractFieldStepInterpolator<T> interpolator,
                                                        final T tEnd)
-        throws MaxCountExceededException, DimensionMismatchException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
             FieldODEStateAndDerivative<T> previousState = interpolator.getGlobalPreviousState();
             final FieldODEStateAndDerivative<T> currentState = interpolator.getGlobalCurrentState();
@@ -399,18 +397,18 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     /** Check the integration span.
      * @param eqn set of differential equations
      * @param t target time for the integration
-     * @exception NumberIsTooSmallException if integration span is too small
-     * @exception DimensionMismatchException if adaptive step size integrators
+     * @exception MathIllegalArgumentException if integration span is too small
+     * @exception MathIllegalArgumentException if adaptive step size integrators
      * tolerance arrays dimensions are not compatible with equations settings
      */
     protected void sanityChecks(final FieldODEState<T> eqn, final T t)
-        throws NumberIsTooSmallException, DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         final double threshold = 1000 * FastMath.ulp(FastMath.max(FastMath.abs(eqn.getTime().getReal()),
                                                                   FastMath.abs(t.getReal())));
         final double dt = eqn.getTime().subtract(t).abs().getReal();
         if (dt <= threshold) {
-            throw new NumberIsTooSmallException(LocalizedFormats.TOO_SMALL_INTEGRATION_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedFormats.TOO_SMALL_INTEGRATION_INTERVAL,
                                                 dt, threshold, false);
         }
 

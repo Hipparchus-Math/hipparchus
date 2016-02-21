@@ -21,13 +21,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
 
@@ -91,14 +87,14 @@ public abstract class AbstractSimplex implements OptimizationData {
      * @param steps Steps along the canonical axes representing box edges. They
      * may be negative but not zero.
      * @throws NullArgumentException if {@code steps} is {@code null}.
-     * @throws ZeroException if one of the steps is zero.
+     * @throws MathIllegalArgumentException if one of the steps is zero.
      */
     protected AbstractSimplex(final double[] steps) {
         if (steps == null) {
             throw new NullArgumentException();
         }
         if (steps.length == 0) {
-            throw new ZeroException();
+            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
         }
         dimension = steps.length;
 
@@ -109,7 +105,7 @@ public abstract class AbstractSimplex implements OptimizationData {
             final double[] vertexI = startConfiguration[i];
             for (int j = 0; j < i + 1; j++) {
                 if (steps[j] == 0) {
-                    throw new ZeroException(LocalizedFormats.EQUAL_VERTICES_IN_SIMPLEX);
+                    throw new MathIllegalArgumentException(LocalizedFormats.EQUAL_VERTICES_IN_SIMPLEX);
                 }
                 System.arraycopy(steps, 0, vertexI, 0, j + 1);
             }
@@ -122,15 +118,15 @@ public abstract class AbstractSimplex implements OptimizationData {
      * optimization.
      *
      * @param referenceSimplex Reference simplex.
-     * @throws NotStrictlyPositiveException if the reference simplex does not
+     * @throws MathIllegalArgumentException if the reference simplex does not
      * contain at least one point.
-     * @throws DimensionMismatchException if there is a dimension mismatch
+     * @throws MathIllegalArgumentException if there is a dimension mismatch
      * in the reference simplex.
      * @throws IllegalArgumentException if one of its vertices is duplicated.
      */
     protected AbstractSimplex(final double[][] referenceSimplex) {
         if (referenceSimplex.length <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.SIMPLEX_NEED_ONE_POINT,
+            throw new MathIllegalArgumentException(LocalizedFormats.SIMPLEX_NEED_ONE_POINT,
                                                    referenceSimplex.length);
         }
         dimension = referenceSimplex.length - 1;
@@ -146,7 +142,8 @@ public abstract class AbstractSimplex implements OptimizationData {
 
             // Safety checks.
             if (refI.length != dimension) {
-                throw new DimensionMismatchException(refI.length, dimension);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       refI.length, dimension);
             }
             for (int j = 0; j < i; j++) {
                 final double[] refJ = referenceSimplex[j];
@@ -199,7 +196,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      * @param evaluationFunction Evaluation function.
      * @param comparator Comparator to use to sort simplex vertices from best
      * to worst.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the algorithm fails to converge.
      */
     public abstract void iterate(final MultivariateFunction evaluationFunction,
@@ -209,12 +206,13 @@ public abstract class AbstractSimplex implements OptimizationData {
      * Build an initial simplex.
      *
      * @param startPoint First point of the simplex.
-     * @throws DimensionMismatchException if the start point does not match
+     * @throws MathIllegalArgumentException if the start point does not match
      * simplex dimension.
      */
     public void build(final double[] startPoint) {
         if (dimension != startPoint.length) {
-            throw new DimensionMismatchException(dimension, startPoint.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   dimension, startPoint.length);
         }
 
         // Set first vertex.
@@ -237,7 +235,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      *
      * @param evaluationFunction Evaluation function.
      * @param comparator Comparator to use to sort simplex vertices from best to worst.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximal number of evaluations is exceeded.
      */
     public void evaluate(final MultivariateFunction evaluationFunction,
@@ -294,7 +292,8 @@ public abstract class AbstractSimplex implements OptimizationData {
     public PointValuePair getPoint(int index) {
         if (index < 0 ||
             index >= simplex.length) {
-            throw new OutOfRangeException(index, 0, simplex.length - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   index, 0, simplex.length - 1);
         }
         return simplex[index];
     }
@@ -309,7 +308,8 @@ public abstract class AbstractSimplex implements OptimizationData {
     protected void setPoint(int index, PointValuePair point) {
         if (index < 0 ||
             index >= simplex.length) {
-            throw new OutOfRangeException(index, 0, simplex.length - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   index, 0, simplex.length - 1);
         }
         simplex[index] = point;
     }
@@ -322,7 +322,8 @@ public abstract class AbstractSimplex implements OptimizationData {
      */
     protected void setPoints(PointValuePair[] points) {
         if (points.length != simplex.length) {
-            throw new DimensionMismatchException(points.length, simplex.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   points.length, simplex.length);
         }
         simplex = points;
     }

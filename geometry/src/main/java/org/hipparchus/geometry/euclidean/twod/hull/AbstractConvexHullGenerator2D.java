@@ -18,9 +18,9 @@ package org.hipparchus.geometry.euclidean.twod.hull;
 
 import java.util.Collection;
 
-import org.hipparchus.exception.ConvergenceException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.util.MathUtils;
 
@@ -87,7 +87,7 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
     /** {@inheritDoc} */
     @Override
     public ConvexHull2D generate(final Collection<Vector2D> points)
-            throws NullArgumentException, ConvergenceException {
+            throws MathIllegalStateException {
         // check for null points
         MathUtils.checkNotNull(points);
 
@@ -103,7 +103,7 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
                                     tolerance);
         } catch (MathIllegalArgumentException e) {
             // the hull vertices may not form a convex hull if the tolerance value is to large
-            throw new ConvergenceException();
+            throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED);
         }
     }
 

@@ -18,7 +18,7 @@ package org.hipparchus.stat.ranking;
 
 import org.junit.Assert;
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.NotANumberException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.ranking.NaNStrategy;
@@ -49,8 +49,8 @@ public class NaturalRankingTest {
 
         try {
             ranks = ranking.rank(exampleData);
-            Assert.fail("expected NotANumberException due to NaNStrategy.FAILED");
-        } catch (NotANumberException e) {
+            Assert.fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 
@@ -63,8 +63,8 @@ public class NaturalRankingTest {
 
         try {
             ranks = ranking.rank(multipleNaNs);
-            Assert.fail("expected NotANumberException due to NaNStrategy.FAILED");
-        } catch (NotANumberException e) {
+            Assert.fail("expected MathIllegalArgumentException due to NaNStrategy.FAILED");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 
@@ -210,7 +210,7 @@ public class NaturalRankingTest {
         TestUtils.assertEquals(correctRanks, ranks, 0d);
     }
 
-    @Test(expected=NotANumberException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNaNsFailed() {
         double[] data = { 0, Double.POSITIVE_INFINITY, Double.NaN, Double.NEGATIVE_INFINITY };
         NaturalRanking ranking = new NaturalRanking(NaNStrategy.FAILED);

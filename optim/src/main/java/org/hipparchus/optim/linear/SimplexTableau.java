@@ -28,7 +28,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealVector;
@@ -113,7 +114,7 @@ class SimplexTableau implements Serializable {
      * or {@link GoalType#MINIMIZE}.
      * @param restrictToNonNegative Whether to restrict the variables to non-negative values.
      * @param epsilon Amount of error to accept when checking for optimality.
-     * @throws DimensionMismatchException if the dimension of the constraints does not match the
+     * @throws MathIllegalArgumentException if the dimension of the constraints does not match the
      *   dimension of the objective function
      */
     SimplexTableau(final LinearObjectiveFunction f,
@@ -132,7 +133,7 @@ class SimplexTableau implements Serializable {
      * @param restrictToNonNegative whether to restrict the variables to non-negative values
      * @param epsilon amount of error to accept when checking for optimality
      * @param maxUlps amount of error to accept in floating point comparisons
-     * @throws DimensionMismatchException if the dimension of the constraints does not match the
+     * @throws MathIllegalArgumentException if the dimension of the constraints does not match the
      *   dimension of the objective function
      */
     SimplexTableau(final LinearObjectiveFunction f,
@@ -140,7 +141,7 @@ class SimplexTableau implements Serializable {
                    final GoalType goalType,
                    final boolean restrictToNonNegative,
                    final double epsilon,
-                   final int maxUlps) throws DimensionMismatchException {
+                   final int maxUlps) throws MathIllegalArgumentException {
         checkDimensions(f, constraints);
         this.f                      = f;
         this.constraints            = normalizeConstraints(constraints);
@@ -163,7 +164,7 @@ class SimplexTableau implements Serializable {
      * Checks that the dimensions of the objective function and the constraints match.
      * @param objectiveFunction the objective function
      * @param c the set of constraints
-     * @throws DimensionMismatchException if the constraint dimensions do not match with the
+     * @throws MathIllegalArgumentException if the constraint dimensions do not match with the
      *   dimension of the objective function
      */
     private void checkDimensions(final LinearObjectiveFunction objectiveFunction,
@@ -172,7 +173,8 @@ class SimplexTableau implements Serializable {
         for (final LinearConstraint constraint : c) {
             final int constraintDimension = constraint.getCoefficients().getDimension();
             if (constraintDimension != dimension) {
-                throw new DimensionMismatchException(constraintDimension, dimension);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       constraintDimension, dimension);
             }
         }
     }

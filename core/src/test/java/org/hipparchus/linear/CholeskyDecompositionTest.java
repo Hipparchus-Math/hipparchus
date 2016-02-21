@@ -17,14 +17,9 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.linear.CholeskyDecomposition;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.NonPositiveDefiniteMatrixException;
-import org.hipparchus.linear.NonSquareMatrixException;
-import org.hipparchus.linear.NonSymmetricMatrixException;
-import org.hipparchus.linear.RealMatrix;
-import org.junit.Test;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class CholeskyDecompositionTest {
 
@@ -48,13 +43,13 @@ public class CholeskyDecompositionTest {
     }
 
     /** test non-square matrix */
-    @Test(expected = NonSquareMatrixException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSquare() {
         new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[3][2]));
     }
 
     /** test non-symmetric matrix */
-    @Test(expected = NonSymmetricMatrixException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNotSymmetricMatrixException() {
         double[][] changed = testData.clone();
         changed[0][changed[0].length - 1] += 1.0e-5;
@@ -62,7 +57,7 @@ public class CholeskyDecompositionTest {
     }
 
     /** test non positive definite matrix */
-    @Test(expected = NonPositiveDefiniteMatrixException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNotPositiveDefinite() {
         new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][] {
                 { 14, 11, 13, 15, 24 },
@@ -73,7 +68,7 @@ public class CholeskyDecompositionTest {
         }));
     }
 
-    @Test(expected = NonPositiveDefiniteMatrixException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMath274() {
         new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][] {
                 { 0.40434286, -0.09376327, 0.30328980, 0.04909388 },

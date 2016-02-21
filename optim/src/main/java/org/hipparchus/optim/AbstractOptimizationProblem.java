@@ -16,8 +16,8 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.exception.TooManyIterationsException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Incrementor;
 
 /**
@@ -82,11 +82,11 @@ public abstract class AbstractOptimizationProblem<PAIR>
         /**
          * {@inheritDoc}
          *
-         * @throws TooManyEvaluationsException
+         * @throws MathIllegalStateException
          */
         @Override
         public void trigger(int max) {
-            throw new TooManyEvaluationsException(max);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
         }
     }
 
@@ -96,11 +96,11 @@ public abstract class AbstractOptimizationProblem<PAIR>
         /**
          * {@inheritDoc}
          *
-         * @throws TooManyIterationsException
+         * @throws MathIllegalStateException
          */
         @Override
         public void trigger(int max) {
-            throw new TooManyIterationsException(max);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
         }
     }
 

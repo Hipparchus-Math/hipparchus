@@ -18,11 +18,9 @@ package org.hipparchus.complex;
 
 import java.io.Serializable;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -111,12 +109,12 @@ public class RootsOfUnity implements Serializable {
      * </ul>
      *
      * @param n the (signed) number of roots of unity to be computed
-     * @throws ZeroException if {@code n = 0}
+     * @throws MathIllegalArgumentException if {@code n = 0}
      */
-    public synchronized void computeRoots(int n) throws ZeroException {
+    public synchronized void computeRoots(int n) throws MathIllegalArgumentException {
 
         if (n == 0) {
-            throw new ZeroException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.CANNOT_COMPUTE_0TH_ROOT_OF_UNITY);
         }
 
@@ -159,14 +157,14 @@ public class RootsOfUnity implements Serializable {
      * @throws MathIllegalArgumentException if {@code k} is out of range
      */
     public synchronized double getReal(int k)
-            throws MathIllegalStateException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (omegaCount == 0) {
             throw new MathIllegalStateException(
                     LocalizedFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
         }
         if ((k < 0) || (k >= omegaCount)) {
-            throw new OutOfRangeException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
                     Integer.valueOf(k),
                     Integer.valueOf(0),
@@ -183,17 +181,17 @@ public class RootsOfUnity implements Serializable {
      * @return imaginary part of the {@code k}-th {@code n}-th root of unity
      * @throws MathIllegalStateException if no roots of unity have been
      * computed yet
-     * @throws OutOfRangeException if {@code k} is out of range
+     * @throws MathIllegalArgumentException if {@code k} is out of range
      */
     public synchronized double getImaginary(int k)
-            throws MathIllegalStateException, OutOfRangeException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (omegaCount == 0) {
             throw new MathIllegalStateException(
                     LocalizedFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
         }
         if ((k < 0) || (k >= omegaCount)) {
-            throw new OutOfRangeException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
                     Integer.valueOf(k),
                     Integer.valueOf(0),

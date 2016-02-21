@@ -22,18 +22,13 @@ import java.util.Random;
 import org.hipparchus.Retry;
 import org.hipparchus.RetryRunner;
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.SimpleBounds;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.ObjectiveFunction;
-import org.hipparchus.optim.nonlinear.scalar.noderiv.CMAESOptimizer;
 import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -49,7 +44,7 @@ public class CMAESOptimizerTest {
     static final int DIM = 13;
     static final int LAMBDA = 4 + (int)(3.*FastMath.log(DIM));
 
-    @Test(expected = NumberIsTooLargeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInitOutofbounds1() {
         double[] startPoint = point(DIM,3);
         double[] insigma = point(DIM, 0.3);
@@ -60,7 +55,7 @@ public class CMAESOptimizerTest {
                 GoalType.MINIMIZE, LAMBDA, true, 0, 1e-13,
                 1e-13, 1e-6, 100000, expected);
     }
-    @Test(expected = NumberIsTooSmallException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInitOutofbounds2() {
         double[] startPoint = point(DIM, -2);
         double[] insigma = point(DIM, 0.3);
@@ -72,7 +67,7 @@ public class CMAESOptimizerTest {
                 1e-13, 1e-6, 100000, expected);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testBoundariesDimensionMismatch() {
         double[] startPoint = point(DIM,0.5);
         double[] insigma = point(DIM, 0.3);
@@ -84,7 +79,7 @@ public class CMAESOptimizerTest {
                 1e-13, 1e-6, 100000, expected);
     }
 
-    @Test(expected = NotPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInputSigmaNegative() {
         double[] startPoint = point(DIM,0.5);
         double[] insigma = point(DIM,-0.5);
@@ -96,7 +91,7 @@ public class CMAESOptimizerTest {
                 1e-13, 1e-6, 100000, expected);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInputSigmaOutOfRange() {
         double[] startPoint = point(DIM,0.5);
         double[] insigma = point(DIM, 1.1);
@@ -108,7 +103,7 @@ public class CMAESOptimizerTest {
                 1e-13, 1e-6, 100000, expected);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInputSigmaDimensionMismatch() {
         double[] startPoint = point(DIM,0.5);
         double[] insigma = point(DIM + 1, 0.5);

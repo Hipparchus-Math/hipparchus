@@ -20,12 +20,13 @@ package org.hipparchus.linear;
 import org.junit.Test;
 import org.junit.Assert;
 import org.hipparchus.TestUtils;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.linear.FieldLUDecomposition;
 import org.hipparchus.linear.FieldMatrix;
-import org.hipparchus.linear.NonSquareMatrixException;
 
 public class FieldLUDecompositionTest {
     private Fraction[][] testData = {
@@ -81,9 +82,9 @@ public class FieldLUDecompositionTest {
                     { Fraction.ZERO, Fraction.ZERO },
                     { Fraction.ZERO, Fraction.ZERO }
             }));
-            Assert.fail("Expected NonSquareMatrixException");
-        } catch (NonSquareMatrixException ime) {
-            // expected behavior
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ime) {
+            Assert.assertEquals(LocalizedFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 

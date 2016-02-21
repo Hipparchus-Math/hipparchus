@@ -21,7 +21,8 @@ import org.hipparchus.ml.neuralnet.MapUtils;
 import org.hipparchus.ml.neuralnet.Neuron;
 import org.hipparchus.ml.neuralnet.twod.NeuronSquareMesh2D;
 import org.hipparchus.ml.distance.DistanceMeasure;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Visualization of high-dimensional data projection on a 2D-map.
@@ -61,7 +62,7 @@ public class SmoothedDataHistogram implements MapDataVisualization {
     /**
      * {@inheritDoc}
      *
-     * @throws NumberIsTooSmallException if the size of the {@code map}
+     * @throws MathIllegalArgumentException if the size of the {@code map}
      * is smaller than the number of {@link #SmoothedDataHistogram(int,DistanceMeasure)
      * smoothing bins}.
      */
@@ -73,7 +74,8 @@ public class SmoothedDataHistogram implements MapDataVisualization {
 
         final int mapSize = nR * nC;
         if (mapSize < smoothingBins) {
-            throw new NumberIsTooSmallException(mapSize, smoothingBins, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   mapSize, smoothingBins);
         }
 
         final LocationFinder finder = new LocationFinder(map);

@@ -16,14 +16,17 @@
  */
 package org.hipparchus.fitting.leastsquares;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.sameInstance;
+
+import java.io.IOException;
+import java.util.Arrays;
+
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
-import org.hipparchus.fitting.leastsquares.MultivariateJacobianFunction;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
@@ -39,13 +42,6 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.IOException;
-import java.util.Arrays;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.hamcrest.CoreMatchers.sameInstance;
 
 /**
  * Some of the unit tests are re-implementations of the MINPACK <a
@@ -236,16 +232,18 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
     public void testNonInvertible() throws Exception {
         try {
             LinearProblem problem = new LinearProblem(new double[][]{
-                    {1, 2, -3},
-                    {2, 1, 3},
-                    {-3, 0, -9}
+                {1, 2, -3},
+                {2, 1, 3},
+                {-3, 0, -9}
             }, new double[]{1, 1, 1});
 
             optimizer.optimize(problem.getBuilder().build());
 
             fail(optimizer);
-        } catch (ConvergenceException e) {
-            //expected
+        } catch (MathIllegalArgumentException miae) {
+            // expected
+        } catch (MathIllegalStateException mise) {
+            // expected
         }
     }
 
@@ -363,7 +361,7 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
                     problem.getBuilder().weight(new DiagonalMatrix(new double[]{1})).build());
 
             fail(optimizer);
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             //expected
         }
     }
@@ -389,7 +387,7 @@ public abstract class AbstractLeastSquaresOptimizerAbstractTest {
             );
 
             fail(optimizer);
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             //expected
         }
     }

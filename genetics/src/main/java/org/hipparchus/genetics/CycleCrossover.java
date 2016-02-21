@@ -21,9 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Cycle Crossover [CX] builds offspring from <b>ordered</b> chromosomes by identifying cycles
@@ -96,12 +95,12 @@ public class CycleCrossover<T> implements CrossoverPolicy {
      * {@inheritDoc}
      *
      * @throws MathIllegalArgumentException if the chromosomes are not an instance of {@link AbstractListChromosome}
-     * @throws DimensionMismatchException if the length of the two chromosomes is different
+     * @throws MathIllegalArgumentException if the length of the two chromosomes is different
      */
     @Override
     @SuppressWarnings("unchecked")
     public ChromosomePair crossover(final Chromosome first, final Chromosome second)
-        throws DimensionMismatchException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         if (!(first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
             throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
@@ -115,14 +114,15 @@ public class CycleCrossover<T> implements CrossoverPolicy {
      * @param first the first chromosome
      * @param second the second chromosome
      * @return the pair of new chromosomes that resulted from the crossover
-     * @throws DimensionMismatchException if the length of the two chromosomes is different
+     * @throws MathIllegalArgumentException if the length of the two chromosomes is different
      */
     protected ChromosomePair mate(final AbstractListChromosome<T> first, final AbstractListChromosome<T> second)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         final int length = first.getLength();
         if (length != second.getLength()) {
-            throw new DimensionMismatchException(second.getLength(), length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   second.getLength(), length);
         }
 
         // array representations of the parents

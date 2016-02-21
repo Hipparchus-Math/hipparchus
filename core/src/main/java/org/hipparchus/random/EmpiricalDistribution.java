@@ -32,13 +32,11 @@ import org.hipparchus.distribution.AbstractRealDistribution;
 import org.hipparchus.distribution.ConstantRealDistribution;
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.RealDistribution;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
@@ -149,7 +147,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Creates a new EmpiricalDistribution with the specified bin count.
      *
      * @param binCount number of bins. Must be strictly positive.
-     * @throws NotStrictlyPositiveException if {@code binCount <= 0}.
+     * @throws MathIllegalArgumentException if {@code binCount <= 0}.
      */
     public EmpiricalDistribution(int binCount) {
         this(binCount, new RandomDataGenerator());
@@ -161,7 +159,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *
      * @param binCount number of bins. Must be strictly positive.
      * @param generator random data generator (may be null, resulting in default JDK generator)
-     * @throws NotStrictlyPositiveException if {@code binCount <= 0}.
+     * @throws MathIllegalArgumentException if {@code binCount <= 0}.
      * @since 3.0
      */
     public EmpiricalDistribution(int binCount, RandomGenerator generator) {
@@ -185,13 +183,14 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *
      * @param binCount number of bins. Must be strictly positive.
      * @param randomData Random data generator.
-     * @throws NotStrictlyPositiveException if {@code binCount <= 0}.
+     * @throws MathIllegalArgumentException if {@code binCount <= 0}.
      */
     private EmpiricalDistribution(int binCount,
                                   RandomDataGenerator randomData) {
         super(randomData.getRandomGenerator());
         if (binCount <= 0) {
-            throw new NotStrictlyPositiveException(binCount);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   binCount, 0);
         }
         this.binCount = binCount;
         this.randomData = randomData;
@@ -213,7 +212,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             fillBinStats(new ArrayDataAdapter(in));
         } catch (IOException ex) {
             // Can't happen
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         }
         loaded = true;
 
@@ -229,9 +228,9 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *
      * @throws IOException if an IO error occurs
      * @throws NullArgumentException if url is null
-     * @throws ZeroException if URL contains no data
+     * @throws MathIllegalArgumentException if URL contains no data
      */
-    public void load(URL url) throws IOException, NullArgumentException, ZeroException {
+    public void load(URL url) throws IOException, MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(url);
         Charset charset = Charset.forName(FILE_CHARSET);
         BufferedReader in =
@@ -240,7 +239,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             DataAdapter da = new StreamDataAdapter(in);
             da.computeStats();
             if (sampleStats.getN() == 0) {
-                throw new ZeroException(LocalizedFormats.URL_CONTAINS_NO_DATA, url);
+                throw new MathIllegalArgumentException(LocalizedFormats.URL_CONTAINS_NO_DATA, url);
             }
             // new adapter for the second pass
             in = new BufferedReader(new InputStreamReader(url.openStream(), charset));
@@ -654,9 +653,10 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * @since 3.1
      */
     @Override
-    public double inverseCumulativeProbability(final double p) throws OutOfRangeException {
+    public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
 
         if (p == 0.0) {

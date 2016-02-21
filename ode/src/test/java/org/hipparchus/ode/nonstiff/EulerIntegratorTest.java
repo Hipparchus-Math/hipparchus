@@ -18,10 +18,8 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem1;
@@ -33,7 +31,6 @@ import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.nonstiff.EulerIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -42,10 +39,9 @@ import org.junit.Test;
 
 public class EulerIntegratorTest {
 
-  @Test(expected=DimensionMismatchException.class)
+  @Test(expected=MathIllegalArgumentException.class)
   public void testDimensionCheck()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       TestProblem1 pb = new TestProblem1();
       new EulerIntegrator(0.01).integrate(pb,
                                           0.0, new double[pb.getDimension()+10],
@@ -55,8 +51,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testDecreasingSteps()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       for (TestProblemAbstract pb : new TestProblemAbstract[] {
           new TestProblem1(), new TestProblem2(), new TestProblem3(),
@@ -103,8 +98,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testSmallStep()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb  = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -125,8 +119,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testBigStep()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb  = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.2;
@@ -146,8 +139,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testBackward()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
       double step = FastMath.abs(pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -166,8 +158,7 @@ public class EulerIntegratorTest {
 
   @Test
   public void testStepSize()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       final double step = 1.23456;
       FirstOrderIntegrator integ = new EulerIntegrator(step);
       integ.addStepHandler(new StepHandler() {

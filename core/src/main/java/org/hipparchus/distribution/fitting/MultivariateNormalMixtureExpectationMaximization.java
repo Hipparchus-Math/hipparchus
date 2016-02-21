@@ -22,15 +22,11 @@ import java.util.List;
 
 import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.stat.correlation.Covariance;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -77,18 +73,17 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * Creates an object to fit a multivariate normal mixture model to data.
      *
      * @param data Data to use in fitting procedure
-     * @throws NotStrictlyPositiveException if data has no rows
-     * @throws DimensionMismatchException if rows of data have different numbers
+     * @throws MathIllegalArgumentException if data has no rows
+     * @throws MathIllegalArgumentException if rows of data have different numbers
      *             of columns
-     * @throws NumberIsTooSmallException if the number of columns in the data is
+     * @throws MathIllegalArgumentException if the number of columns in the data is
      *             less than 2
      */
     public MultivariateNormalMixtureExpectationMaximization(double[][] data)
-        throws NotStrictlyPositiveException,
-               DimensionMismatchException,
-               NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         if (data.length < 1) {
-            throw new NotStrictlyPositiveException(data.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   data.length, 1);
         }
 
         this.data = new double[data.length][data[0].length];
@@ -96,11 +91,11 @@ public class MultivariateNormalMixtureExpectationMaximization {
         for (int i = 0; i < data.length; i++) {
             if (data[i].length != data[0].length) {
                 // Jagged arrays not allowed
-                throw new DimensionMismatchException(data[i].length,
-                                                     data[0].length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       data[i].length, data[0].length);
             }
             if (data[i].length < 2) {
-                throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_TOO_SMALL,
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
                                                     data[i].length, 2, true);
             }
             this.data[i] = MathArrays.copyOf(data[i], data[i].length);
@@ -114,7 +109,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * the constructor and the initial mixture provided to this function. If the
      * data has many local optima, multiple runs of the fitting function with
      * different initial mixtures may be required to find the optimal solution.
-     * If a SingularMatrixException is encountered, it is possible that another
+     * If a MathIllegalArgumentException is encountered, it is possible that another
      * initialization would work.
      *
      * @param initialMixture Model containing initial values of weights and
@@ -122,25 +117,25 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * @param maxIterations Maximum iterations allowed for fit
      * @param threshold Convergence threshold computed as difference in
      *             logLikelihoods between successive iterations
-     * @throws SingularMatrixException if any component's covariance matrix is
+     * @throws MathIllegalArgumentException if any component's covariance matrix is
      *             singular during fitting
-     * @throws NotStrictlyPositiveException if numComponents is less than one
+     * @throws MathIllegalArgumentException if numComponents is less than one
      *             or threshold is less than Double.MIN_VALUE
-     * @throws DimensionMismatchException if initialMixture mean vector and data
+     * @throws MathIllegalArgumentException if initialMixture mean vector and data
      *             number of columns are not equal
      */
     public void fit(final MixtureMultivariateNormalDistribution initialMixture,
                     final int maxIterations,
                     final double threshold)
-            throws SingularMatrixException,
-                   NotStrictlyPositiveException,
-                   DimensionMismatchException {
+            throws MathIllegalArgumentException {
         if (maxIterations < 1) {
-            throw new NotStrictlyPositiveException(maxIterations);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maxIterations, 1);
         }
 
         if (threshold < Double.MIN_VALUE) {
-            throw new NotStrictlyPositiveException(threshold);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   threshold, Double.MIN_VALUE);
         }
 
         final int n = data.length;
@@ -154,7 +149,8 @@ public class MultivariateNormalMixtureExpectationMaximization {
             = initialMixture.getComponents().get(0).getSecond().getMeans().length;
 
         if (numMeanColumns != numCols) {
-            throw new DimensionMismatchException(numMeanColumns, numCols);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   numMeanColumns, numCols);
         }
 
         int numIterations = 0;
@@ -254,7 +250,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
 
         if (FastMath.abs(previousLogLikelihood - logLikelihood) > threshold) {
             // Did not converge before the maximum number of iterations
-            throw new ConvergenceException();
+            throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED);
         }
     }
 
@@ -265,19 +261,18 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * the constructor and the initial mixture provided to this function. If the
      * data has many local optima, multiple runs of the fitting function with
      * different initial mixtures may be required to find the optimal solution.
-     * If a SingularMatrixException is encountered, it is possible that another
+     * If a MathIllegalArgumentException is encountered, it is possible that another
      * initialization would work.
      *
      * @param initialMixture Model containing initial values of weights and
      *            multivariate normals
-     * @throws SingularMatrixException if any component's covariance matrix is
+     * @throws MathIllegalArgumentException if any component's covariance matrix is
      *             singular during fitting
-     * @throws NotStrictlyPositiveException if numComponents is less than one or
+     * @throws MathIllegalArgumentException if numComponents is less than one or
      *             threshold is less than Double.MIN_VALUE
      */
     public void fit(MixtureMultivariateNormalDistribution initialMixture)
-        throws SingularMatrixException,
-               NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         fit(initialMixture, DEFAULT_MAX_ITERATIONS, DEFAULT_THRESHOLD);
     }
 
@@ -292,25 +287,27 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * @param data Data to estimate distribution
      * @param numComponents Number of components for estimated mixture
      * @return Multivariate normal mixture model estimated from the data
-     * @throws NumberIsTooLargeException if {@code numComponents} is greater
+     * @throws MathIllegalArgumentException if {@code numComponents} is greater
      * than the number of data rows.
-     * @throws NumberIsTooSmallException if {@code numComponents < 2}.
-     * @throws NotStrictlyPositiveException if data has less than 2 rows
-     * @throws DimensionMismatchException if rows of data have different numbers
+     * @throws MathIllegalArgumentException if {@code numComponents < 2}.
+     * @throws MathIllegalArgumentException if data has less than 2 rows
+     * @throws MathIllegalArgumentException if rows of data have different numbers
      *             of columns
      */
     public static MixtureMultivariateNormalDistribution estimate(final double[][] data,
                                                                  final int numComponents)
-        throws NotStrictlyPositiveException,
-               DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (data.length < 2) {
-            throw new NotStrictlyPositiveException(data.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   data.length, 2);
         }
         if (numComponents < 2) {
-            throw new NumberIsTooSmallException(numComponents, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   numComponents, 2);
         }
         if (numComponents > data.length) {
-            throw new NumberIsTooLargeException(numComponents, data.length, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   numComponents, data.length);
         }
 
         final int numRows = data.length;

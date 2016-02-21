@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.clustering.CentroidCluster;
 import org.hipparchus.ml.clustering.Cluster;
 import org.hipparchus.ml.clustering.DoublePoint;
@@ -175,7 +175,7 @@ public class KMeansPlusPlusClustererTest {
     /**
      * 2 variables cannot be clustered into 3 clusters. See issue MATH-436.
      */
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPerformClusterAnalysisToManyClusters() {
         KMeansPlusPlusClusterer<DoublePoint> transformer =
             new KMeansPlusPlusClusterer<DoublePoint>(3, 1, new EuclideanDistance(), random);

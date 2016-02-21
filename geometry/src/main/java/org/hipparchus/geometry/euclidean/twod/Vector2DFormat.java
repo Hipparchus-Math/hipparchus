@@ -22,7 +22,8 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.VectorFormat;
 import org.hipparchus.util.CompositeFormat;
@@ -114,13 +115,13 @@ public class Vector2DFormat extends VectorFormat<Euclidean2D> {
 
     /** {@inheritDoc} */
     @Override
-    public Vector2D parse(final String source) throws MathParseException {
+    public Vector2D parse(final String source) throws MathIllegalStateException {
         ParsePosition parsePosition = new ParsePosition(0);
         Vector2D result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathParseException(source,
-                                         parsePosition.getErrorIndex(),
-                                         Vector2D.class);
+            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+                                                source, parsePosition.getErrorIndex(),
+                                                Vector2D.class);
         }
         return result;
     }

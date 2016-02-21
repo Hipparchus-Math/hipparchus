@@ -18,9 +18,9 @@
 package org.hipparchus.special;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.ConvergenceException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -136,11 +136,11 @@ public class BesselJ
      * @param x Argument
      * @return Value of the Bessel function at x
      * @throws MathIllegalArgumentException if {@code x} is too large relative to {@code order}
-     * @throws ConvergenceException if the algorithm fails to converge
+     * @throws MathIllegalStateException if the algorithm fails to converge
      */
     @Override
     public double value(double x)
-        throws MathIllegalArgumentException, ConvergenceException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         return BesselJ.value(order, x);
     }
 
@@ -151,10 +151,10 @@ public class BesselJ
      * @param x Argument
      * @return Value of the Bessel function of the first kind, \(J_{order}(x)\)
      * @throws MathIllegalArgumentException if {@code x} is too large relative to {@code order}
-     * @throws ConvergenceException if the algorithm fails to converge
+     * @throws MathIllegalStateException if the algorithm fails to converge
      */
     public static double value(double order, double x)
-        throws MathIllegalArgumentException, ConvergenceException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         final int n = (int) order;
         final double alpha = order - n;
         final int nb = n + 1;
@@ -167,7 +167,7 @@ public class BesselJ
         } else if (FastMath.abs(res.vals[res.nVals - 1]) < 1e-100) {
             return res.vals[n]; // underflow; return value (will be zero)
         }
-        throw new ConvergenceException(LocalizedFormats.BESSEL_FUNCTION_FAILED_CONVERGENCE, order, x);
+        throw new MathIllegalStateException(LocalizedFormats.BESSEL_FUNCTION_FAILED_CONVERGENCE, order, x);
     }
 
     /**

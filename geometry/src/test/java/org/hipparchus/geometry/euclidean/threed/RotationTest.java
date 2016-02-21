@@ -17,13 +17,10 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.geometry.euclidean.threed.CardanEulerSingularityException;
-import org.hipparchus.geometry.euclidean.threed.NotARotationMatrixException;
-import org.hipparchus.geometry.euclidean.threed.Rotation;
-import org.hipparchus.geometry.euclidean.threed.RotationOrder;
-import org.hipparchus.geometry.euclidean.threed.Vector3D;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
@@ -191,7 +188,7 @@ public class RotationTest {
   }
 
   @Test
-  public void testVectorOnePair() throws MathArithmeticException {
+  public void testVectorOnePair() throws MathRuntimeException {
 
     Vector3D u = new Vector3D(3, 2, 1);
     Vector3D v = new Vector3D(-4, 2, 2);
@@ -203,14 +200,14 @@ public class RotationTest {
     try {
         new Rotation(u, Vector3D.ZERO);
         Assert.fail("an exception should have been thrown");
-    } catch (MathArithmeticException e) {
+    } catch (MathRuntimeException e) {
         // expected behavior
     }
 
   }
 
   @Test
-  public void testVectorTwoPairs() throws MathArithmeticException {
+  public void testVectorTwoPairs() throws MathRuntimeException {
 
     Vector3D u1 = new Vector3D(3, 0, 0);
     Vector3D u2 = new Vector3D(0, 5, 0);
@@ -243,7 +240,7 @@ public class RotationTest {
     try {
         new Rotation(u1, u2, Vector3D.ZERO, v2);
         Assert.fail("an exception should have been thrown");
-    } catch (MathArithmeticException e) {
+    } catch (MathRuntimeException e) {
       // expected behavior
     }
 
@@ -251,7 +248,7 @@ public class RotationTest {
 
   @Test
   public void testMatrix()
-    throws NotARotationMatrixException {
+    throws MathIllegalArgumentException {
 
     try {
       new Rotation(new double[][] {
@@ -259,7 +256,7 @@ public class RotationTest {
                      { 1.0, 0.0, 0.0 }
                    }, 1.0e-7);
       Assert.fail("Expecting NotARotationMatrixException");
-    } catch (NotARotationMatrixException nrme) {
+    } catch (MathIllegalArgumentException nrme) {
       // expected behavior
     }
 
@@ -270,7 +267,7 @@ public class RotationTest {
                      { -0.354816,  0.574912,  0.737280 }
                    }, 1.0e-7);
       Assert.fail("Expecting NotARotationMatrixException");
-    } catch (NotARotationMatrixException nrme) {
+    } catch (MathIllegalArgumentException nrme) {
       // expected behavior
     }
 
@@ -281,7 +278,7 @@ public class RotationTest {
                        {  0.8, -0.2,  0.5 }
                      }, 1.0e-15);
         Assert.fail("Expecting NotARotationMatrixException");
-      } catch (NotARotationMatrixException nrme) {
+      } catch (MathIllegalArgumentException nrme) {
         // expected behavior
       }
 
@@ -389,7 +386,7 @@ public class RotationTest {
                         { 1.0, 0.0, 0.0 } };
       r = new Rotation(m5, 1.0e-7);
       Assert.fail("got " + r + ", should have caught an exception");
-    } catch (NotARotationMatrixException e) {
+    } catch (MathIllegalArgumentException e) {
       // expected
     }
 
@@ -398,7 +395,7 @@ public class RotationTest {
   @Test
   @Deprecated
   public void testAnglesDeprecated()
-    throws CardanEulerSingularityException {
+    throws MathIllegalStateException {
 
     RotationOrder[] CardanOrders = {
       RotationOrder.XYZ, RotationOrder.XZY, RotationOrder.YXZ,
@@ -443,7 +440,7 @@ public class RotationTest {
 
   @Test
   public void testAngles()
-      throws CardanEulerSingularityException {
+      throws MathIllegalStateException {
 
       for (RotationConvention convention : RotationConvention.values()) {
           RotationOrder[] CardanOrders = {
@@ -504,8 +501,8 @@ public class RotationTest {
                   try {
                       r.getAngles(CardanOrders[i], convention);
                       Assert.fail("an exception should have been caught");
-                  } catch (CardanEulerSingularityException cese) {
-                      // expected behavior
+                  } catch (MathIllegalStateException cese) {
+                      Assert.assertEquals(LocalizedFormats.CARDAN_ANGLES_SINGULARITY, cese.getSpecifier());
                   }
               }
           }
@@ -522,8 +519,8 @@ public class RotationTest {
                   try {
                       r.getAngles(EulerOrders[i], convention);
                       Assert.fail("an exception should have been caught");
-                  } catch (CardanEulerSingularityException cese) {
-                      // expected behavior
+                  } catch (MathIllegalStateException cese) {
+                      Assert.assertEquals(LocalizedFormats.EULER_ANGLES_SINGULARITY, cese.getSpecifier());
                   }
               }
           }
@@ -731,7 +728,7 @@ public class RotationTest {
   }
 
   @Test
-  public void testIssue639() throws MathArithmeticException{
+  public void testIssue639() throws MathRuntimeException{
       Vector3D u1 = new Vector3D(-1321008684645961.0 /  268435456.0,
                                  -5774608829631843.0 /  268435456.0,
                                  -3822921525525679.0 / 4294967296.0);
@@ -746,7 +743,7 @@ public class RotationTest {
   }
 
   @Test
-  public void testIssue801() throws MathArithmeticException {
+  public void testIssue801() throws MathRuntimeException {
       Vector3D u1 = new Vector3D(0.9999988431610581, -0.0015210774290851095, 0.0);
       Vector3D u2 = new Vector3D(0.0, 0.0, 1.0);
 

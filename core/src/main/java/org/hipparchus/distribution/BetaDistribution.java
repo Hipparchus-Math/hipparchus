@@ -16,8 +16,8 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;
@@ -163,13 +163,13 @@ public class BetaDistribution extends AbstractRealDistribution {
             return Double.NEGATIVE_INFINITY;
         } else if (x == 0) {
             if (alpha < 1) {
-                throw new NumberIsTooSmallException(LocalizedFormats.CANNOT_COMPUTE_BETA_DENSITY_AT_0_FOR_SOME_ALPHA,
+                throw new MathIllegalArgumentException(LocalizedFormats.CANNOT_COMPUTE_BETA_DENSITY_AT_0_FOR_SOME_ALPHA,
                                                     alpha, 1, false);
             }
             return Double.NEGATIVE_INFINITY;
         } else if (x == 1) {
             if (beta < 1) {
-                throw new NumberIsTooSmallException(LocalizedFormats.CANNOT_COMPUTE_BETA_DENSITY_AT_1_FOR_SOME_BETA,
+                throw new MathIllegalArgumentException(LocalizedFormats.CANNOT_COMPUTE_BETA_DENSITY_AT_1_FOR_SOME_BETA,
                                                     beta, 1, false);
             }
             return Double.NEGATIVE_INFINITY;

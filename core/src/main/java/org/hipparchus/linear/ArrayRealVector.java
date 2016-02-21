@@ -21,13 +21,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -114,16 +110,17 @@ public class ArrayRealVector extends RealVector implements Serializable {
      * @param pos Position of first entry.
      * @param size Number of entries to copy.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws NumberIsTooLargeException if the size of {@code d} is less
+     * @throws MathIllegalArgumentException if the size of {@code d} is less
      * than {@code pos + size}.
      */
     public ArrayRealVector(double[] d, int pos, int size)
-        throws NullArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (d == null) {
             throw new NullArgumentException();
         }
         if (d.length < pos + size) {
-            throw new NumberIsTooLargeException(pos + size, d.length, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   pos + size, d.length);
         }
         data = new double[size];
         System.arraycopy(d, pos, data, 0, size);
@@ -148,16 +145,17 @@ public class ArrayRealVector extends RealVector implements Serializable {
      * @param pos Position of first entry.
      * @param size Number of entries to copy.
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws NumberIsTooLargeException if the size of {@code d} is less
+     * @throws MathIllegalArgumentException if the size of {@code d} is less
      * than {@code pos + size}.
      */
     public ArrayRealVector(Double[] d, int pos, int size)
-        throws NullArgumentException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (d == null) {
             throw new NullArgumentException();
         }
         if (d.length < pos + size) {
-            throw new NumberIsTooLargeException(pos + size, d.length, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   pos + size, d.length);
         }
         data = new double[size];
         for (int i = pos; i < pos + size; i++) {
@@ -291,7 +289,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector add(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             final int dim = vData.length;
@@ -317,7 +315,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector subtract(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             final int dim = vData.length;
@@ -394,7 +392,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector ebeMultiply(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             final int dim = vData.length;
@@ -418,7 +416,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector ebeDivide(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             final int dim = vData.length;
@@ -451,7 +449,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public double dotProduct(RealVector v) throws DimensionMismatchException {
+    public double dotProduct(RealVector v) throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             checkVectorDimensions(vData.length);
@@ -496,7 +494,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public double getDistance(RealVector v) throws DimensionMismatchException {
+    public double getDistance(RealVector v) throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             checkVectorDimensions(vData.length);
@@ -520,7 +518,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public double getL1Distance(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             checkVectorDimensions(vData.length);
@@ -544,7 +542,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public double getLInfDistance(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             final double[] vData = ((ArrayRealVector) v).data;
             checkVectorDimensions(vData.length);
@@ -594,11 +592,11 @@ public class ArrayRealVector extends RealVector implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public double getEntry(int index) throws OutOfRangeException {
+    public double getEntry(int index) throws MathIllegalArgumentException {
         try {
             return data[index];
         } catch (IndexOutOfBoundsException e) {
-            throw new OutOfRangeException(LocalizedFormats.INDEX, index, 0,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, index, 0,
                 getDimension() - 1);
         }
     }
@@ -641,9 +639,9 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public RealVector getSubVector(int index, int n)
-        throws OutOfRangeException, NotPositiveException {
+        throws MathIllegalArgumentException {
         if (n < 0) {
-            throw new NotPositiveException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
         ArrayRealVector out = new ArrayRealVector(n);
         try {
@@ -657,7 +655,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public void setEntry(int index, double value) throws OutOfRangeException {
+    public void setEntry(int index, double value) throws MathIllegalArgumentException {
         try {
             data[index] = value;
         } catch (IndexOutOfBoundsException e) {
@@ -668,11 +666,11 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public void addToEntry(int index, double increment)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         try {
         data[index] += increment;
         } catch(IndexOutOfBoundsException e){
-            throw new OutOfRangeException(LocalizedFormats.INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.INDEX,
                                           index, 0, data.length - 1);
         }
     }
@@ -680,7 +678,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public void setSubVector(int index, RealVector v)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         if (v instanceof ArrayRealVector) {
             setSubVector(index, ((ArrayRealVector) v).data);
         } else {
@@ -700,11 +698,11 @@ public class ArrayRealVector extends RealVector implements Serializable {
      *
      * @param index Index of first element to be set.
      * @param v Vector containing the values to set.
-     * @throws OutOfRangeException if the index is inconsistent with the vector
+     * @throws MathIllegalArgumentException if the index is inconsistent with the vector
      * size.
      */
     public void setSubVector(int index, double[] v)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         try {
             System.arraycopy(v, 0, data, index, v.length);
         } catch (IndexOutOfBoundsException e) {
@@ -735,12 +733,12 @@ public class ArrayRealVector extends RealVector implements Serializable {
      * Check if instance and specified vectors have the same dimension.
      *
      * @param v Vector to compare instance with.
-     * @throws DimensionMismatchException if the vectors do not
+     * @throws MathIllegalArgumentException if the vectors do not
      * have the same dimension.
      */
     @Override
     protected void checkVectorDimensions(RealVector v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkVectorDimensions(v.getDimension());
     }
 
@@ -748,14 +746,15 @@ public class ArrayRealVector extends RealVector implements Serializable {
      * Check if instance dimension is equal to some expected value.
      *
      * @param n Expected dimension.
-     * @throws DimensionMismatchException if the dimension is
+     * @throws MathIllegalArgumentException if the dimension is
      * inconsistent with vector size.
      */
     @Override
     protected void checkVectorDimensions(int n)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (data.length != n) {
-            throw new DimensionMismatchException(data.length, n);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   data.length, n);
         }
     }
 
@@ -839,14 +838,14 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector combine(double a, double b, RealVector y)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         return copy().combineToSelf(a, b, y);
     }
 
     /** {@inheritDoc} */
     @Override
     public ArrayRealVector combineToSelf(double a, double b, RealVector y)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (y instanceof ArrayRealVector) {
             final double[] yData = ((ArrayRealVector) y).data;
             checkVectorDimensions(yData.length);
@@ -875,8 +874,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor,
-        final int start, final int end) throws NumberIsTooSmallException,
-        OutOfRangeException {
+        final int start, final int end) throws MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(data.length, start, end);
         for (int i = start; i <= end; i++) {
@@ -902,8 +900,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
      */
     @Override
     public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor,
-        final int start, final int end) throws NumberIsTooSmallException,
-        OutOfRangeException {
+        final int start, final int end) throws MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 
@@ -920,8 +917,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     /** {@inheritDoc} */
     @Override
     public double walkInDefaultOrder(final RealVectorChangingVisitor visitor,
-        final int start, final int end) throws NumberIsTooSmallException,
-        OutOfRangeException {
+        final int start, final int end) throws MathIllegalArgumentException {
         checkIndices(start, end);
         visitor.start(data.length, start, end);
         for (int i = start; i <= end; i++) {
@@ -947,8 +943,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
      */
     @Override
     public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor,
-        final int start, final int end) throws NumberIsTooSmallException,
-        OutOfRangeException {
+        final int start, final int end) throws MathIllegalArgumentException {
         return walkInDefaultOrder(visitor, start, end);
     }
 }

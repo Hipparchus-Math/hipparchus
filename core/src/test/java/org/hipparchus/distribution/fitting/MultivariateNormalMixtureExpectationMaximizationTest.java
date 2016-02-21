@@ -22,11 +22,8 @@ import java.util.List;
 
 import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
-import org.hipparchus.distribution.fitting.MultivariateNormalMixtureExpectationMaximization;
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.Pair;
@@ -39,13 +36,13 @@ import org.junit.Test;
  */
 public class MultivariateNormalMixtureExpectationMaximizationTest {
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonEmptyData() {
         // Should not accept empty data
         new MultivariateNormalMixtureExpectationMaximization(new double[][] {});
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonJaggedData() {
         // Reject data with nonconstant numbers of columns
         double[][] data = new double[][] {
@@ -55,7 +52,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         new MultivariateNormalMixtureExpectationMaximization(data);
     }
 
-    @Test(expected = NumberIsTooSmallException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMultipleColumnsRequired() {
         // Data should have at least 2 columns
         double[][] data = new double[][] {
@@ -64,7 +61,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         new MultivariateNormalMixtureExpectationMaximization(data);
     }
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testMaxIterationsPositive() {
         // Maximum iterations for fit must be positive integer
         double[][] data = getTestSamples();
@@ -77,7 +74,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         fitter.fit(initialMix, 0, 1E-5);
     }
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testThresholdPositive() {
         // Maximum iterations for fit must be positive
         double[][] data = getTestSamples();
@@ -91,7 +88,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         fitter.fit(initialMix, 1000, 0);
     }
 
-    @Test(expected = ConvergenceException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void testConvergenceException() {
         // ConvergenceException thrown if fit terminates before threshold met
         double[][] data = getTestSamples();
@@ -105,7 +102,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
         fitter.fit(initialMix, 5, 1E-5);
     }
 
-    @Test(expected = DimensionMismatchException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testIncompatibleIntialMixture() {
         // Data has 3 columns
         double[][] data = new double[][] {

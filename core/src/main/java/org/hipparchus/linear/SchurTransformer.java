@@ -17,8 +17,9 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -63,12 +64,12 @@ class SchurTransformer {
      * Build the transformation to Schur form of a general real matrix.
      *
      * @param matrix matrix to transform
-     * @throws NonSquareMatrixException if the matrix is not square
+     * @throws MathIllegalArgumentException if the matrix is not square
      */
     SchurTransformer(final RealMatrix matrix) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         HessenbergTransformer transformer = new HessenbergTransformer(matrix);
@@ -126,7 +127,7 @@ class SchurTransformer {
 
     /**
      * Transform original matrix to Schur form.
-     * @throws MaxCountExceededException if the transformation does not converge
+     * @throws MathIllegalStateException if the transformation does not converge
      */
     private void transform() {
         final int n = matrixT.length;
@@ -202,7 +203,7 @@ class SchurTransformer {
 
                 // stop transformation after too many iterations
                 if (++iteration > MAX_ITERATIONS) {
-                    throw new MaxCountExceededException(LocalizedFormats.CONVERGENCE_FAILED,
+                    throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED,
                                                         MAX_ITERATIONS);
                 }
 

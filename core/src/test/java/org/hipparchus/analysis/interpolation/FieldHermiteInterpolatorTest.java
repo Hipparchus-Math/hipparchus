@@ -18,12 +18,10 @@ package org.hipparchus.analysis.interpolation;
 
 import java.util.Random;
 
-import org.hipparchus.analysis.interpolation.FieldHermiteInterpolator;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -256,12 +254,12 @@ public class FieldHermiteInterpolatorTest {
         return new PolynomialFunction(coeff);
     }
 
-    @Test(expected=NoDataException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEmptySampleValue() {
         new FieldHermiteInterpolator<BigFraction>().value(BigFraction.ZERO);
     }
 
-    @Test(expected=NoDataException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testEmptySampleDerivative() {
         new FieldHermiteInterpolator<BigFraction>().derivatives(BigFraction.ZERO, 1);
     }

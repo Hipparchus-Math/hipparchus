@@ -21,7 +21,7 @@ import org.hipparchus.analysis.function.Expm1;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.interpolation.NevilleInterpolator;
 import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -123,8 +123,8 @@ public final class NevilleInterpolatorTest {
             double y[] = { 0.0, 4.0, 4.0, 2.5 };
             UnivariateFunction p = interpolator.interpolate(x, y);
             p.value(0.0);
-            Assert.fail("Expecting NonMonotonicSequenceException - bad abscissas array");
-        } catch (NonMonotonicSequenceException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad abscissas array");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

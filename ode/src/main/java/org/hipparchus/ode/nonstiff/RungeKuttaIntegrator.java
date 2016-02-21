@@ -18,10 +18,8 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
@@ -93,8 +91,7 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator {
   /** {@inheritDoc} */
   @Override
   public void integrate(final ExpandableStatefulODE equations, final double t)
-      throws NumberIsTooSmallException, DimensionMismatchException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     sanityChecks(equations, t);
     setEquations(equations);

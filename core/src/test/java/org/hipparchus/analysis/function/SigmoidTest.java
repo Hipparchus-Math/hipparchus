@@ -20,7 +20,7 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.function.Sigmoid;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -79,7 +79,7 @@ public class SigmoidTest {
         g.value(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage2() {
         final Sigmoid.Parametric g = new Sigmoid.Parametric();
         g.value(0, new double[] {0});
@@ -91,7 +91,7 @@ public class SigmoidTest {
         g.gradient(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage4() {
         final Sigmoid.Parametric g = new Sigmoid.Parametric();
         g.gradient(0, new double[] {0});

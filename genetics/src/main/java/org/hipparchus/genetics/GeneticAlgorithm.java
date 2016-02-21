@@ -16,8 +16,8 @@
  */
 package org.hipparchus.genetics;
 
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
 
@@ -62,20 +62,20 @@ public class GeneticAlgorithm {
      * @param mutationPolicy The {@link MutationPolicy}
      * @param mutationRate The mutation rate as a percentage (0-1 inclusive)
      * @param selectionPolicy The {@link SelectionPolicy}
-     * @throws OutOfRangeException if the crossover or mutation rate is outside the [0, 1] range
+     * @throws MathIllegalArgumentException if the crossover or mutation rate is outside the [0, 1] range
      */
     public GeneticAlgorithm(final CrossoverPolicy crossoverPolicy,
                             final double crossoverRate,
                             final MutationPolicy mutationPolicy,
                             final double mutationRate,
-                            final SelectionPolicy selectionPolicy) throws OutOfRangeException {
+                            final SelectionPolicy selectionPolicy) throws MathIllegalArgumentException {
 
         if (crossoverRate < 0 || crossoverRate > 1) {
-            throw new OutOfRangeException(LocalizedFormats.CROSSOVER_RATE,
+            throw new MathIllegalArgumentException(LocalizedFormats.CROSSOVER_RATE,
                                           crossoverRate, 0, 1);
         }
         if (mutationRate < 0 || mutationRate > 1) {
-            throw new OutOfRangeException(LocalizedFormats.MUTATION_RATE,
+            throw new MathIllegalArgumentException(LocalizedFormats.MUTATION_RATE,
                                           mutationRate, 0, 1);
         }
         this.crossoverPolicy = crossoverPolicy;

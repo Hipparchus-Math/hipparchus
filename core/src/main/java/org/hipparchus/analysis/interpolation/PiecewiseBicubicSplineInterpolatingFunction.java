@@ -20,12 +20,9 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.InsufficientDataException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -55,20 +52,17 @@ public class PiecewiseBicubicSplineInterpolatingFunction
      * @param y Sample values of the y-coordinate, in increasing order.
      * @param f Values of the function on every grid point. the expected number
      *        of elements.
-     * @throws NonMonotonicSequenceException if {@code x} or {@code y} are not
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are not
      *         strictly increasing.
      * @throws NullArgumentException if any of the arguments are null
-     * @throws NoDataException if any of the arrays has zero length.
-     * @throws DimensionMismatchException if the length of x and y don't match the row, column
+     * @throws MathIllegalArgumentException if any of the arrays has zero length.
+     * @throws MathIllegalArgumentException if the length of x and y don't match the row, column
      *         height of f
      */
     public PiecewiseBicubicSplineInterpolatingFunction(double[] x,
                                                        double[] y,
                                                        double[][] f)
-        throws DimensionMismatchException,
-               NullArgumentException,
-               NoDataException,
-               NonMonotonicSequenceException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (x == null ||
             y == null ||
             f == null ||
@@ -83,22 +77,24 @@ public class PiecewiseBicubicSplineInterpolatingFunction
             yLen == 0 ||
             f.length == 0 ||
             f[0].length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         if (xLen < MIN_NUM_POINTS ||
             yLen < MIN_NUM_POINTS ||
             f.length < MIN_NUM_POINTS ||
             f[0].length < MIN_NUM_POINTS) {
-            throw new InsufficientDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DATA);
         }
 
         if (xLen != f.length) {
-            throw new DimensionMismatchException(xLen, f.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xLen, f.length);
         }
 
         if (yLen != f[0].length) {
-            throw new DimensionMismatchException(yLen, f[0].length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   yLen, f[0].length);
         }
 
         MathArrays.checkOrder(x);
@@ -115,7 +111,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
     @Override
     public double value(double x,
                         double y)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         final AkimaSplineInterpolator interpolator = new AkimaSplineInterpolator();
         final int offset = 2;
         final int count = offset + 3;
@@ -175,7 +171,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
      *        queried
      * @return the index in {@code val} corresponding to the interval containing
      *         {@code c}.
-     * @throws OutOfRangeException if {@code c} is out of the range defined by
+     * @throws MathIllegalArgumentException if {@code c} is out of the range defined by
      *         the boundary values of {@code val}.
      */
     private int searchIndex(double c,
@@ -185,7 +181,8 @@ public class PiecewiseBicubicSplineInterpolatingFunction
         int r = Arrays.binarySearch(val, c);
 
         if (r == -1 || r == -val.length - 1) {
-            throw new OutOfRangeException(c, val[0], val[val.length - 1]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   c, val[0], val[val.length - 1]);
         }
 
         if (r < 0) {

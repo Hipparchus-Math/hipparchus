@@ -16,11 +16,8 @@
  */
 package org.hipparchus.stat.inference;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NoDataException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.stat.inference.WilcoxonSignedRankTest;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -82,8 +79,8 @@ public class WilcoxonSignedRankTestTest {
 
         try {
             testStatistic.wilcoxonSignedRankTest(x2, y2, true);
-            Assert.fail("More than 30 samples and exact chosen, NumberIsTooLargeException expected");
-        } catch (NumberIsTooLargeException ex) {
+            Assert.fail("More than 30 samples and exact chosen, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -91,29 +88,29 @@ public class WilcoxonSignedRankTestTest {
          */
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { }, new double[] { 1.0 }, true);
-            Assert.fail("x does not contain samples (exact), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("x does not contain samples (exact), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { }, new double[] { 1.0 }, false);
-            Assert.fail("x does not contain samples (asymptotic), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("x does not contain samples (asymptotic), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { 1.0 }, new double[] { }, true);
-            Assert.fail("y does not contain samples (exact), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("y does not contain samples (exact), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { 1.0 }, new double[] { }, false);
-            Assert.fail("y does not contain samples (asymptotic), NoDataException expected");
-        } catch (NoDataException ex) {
+            Assert.fail("y does not contain samples (asymptotic), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -121,15 +118,15 @@ public class WilcoxonSignedRankTestTest {
          */
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { 1.0, 2.0 }, new double[] { 3.0 }, true);
-            Assert.fail("x and y not same size (exact), DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("x and y not same size (exact), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] { 1.0, 2.0 }, new double[] { 3.0 }, false);
-            Assert.fail("x and y not same size (asymptotic), DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("x and y not same size (asymptotic), MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

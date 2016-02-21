@@ -18,8 +18,7 @@ package org.hipparchus.geometry.euclidean.twod.hull;
 
 import java.util.Collection;
 
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.hull.ConvexHullGenerator;
@@ -33,6 +32,6 @@ public interface ConvexHullGenerator2D extends ConvexHullGenerator<Euclidean2D, 
 
     /** {@inheritDoc} */
     @Override
-    ConvexHull2D generate(Collection<Vector2D> points) throws NullArgumentException, ConvergenceException;
+    ConvexHull2D generate(Collection<Vector2D> points) throws MathIllegalStateException;
 
 }

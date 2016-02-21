@@ -22,8 +22,8 @@ import org.hipparchus.analysis.solvers.AllowedSolution;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.dfp.DfpMath;
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,7 +34,7 @@ import org.junit.Test;
  */
 public final class FieldBracketingNthOrderBrentSolverTest {
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInsufficientOrder3() {
         new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
                                                     functionValueAccuracy, 1);
@@ -154,7 +154,7 @@ public final class FieldBracketingNthOrderBrentSolverTest {
             break;
         default :
             // this should never happen
-            throw new MathInternalError(null);
+            throw new MathRuntimeException(null);
         }
     }
 

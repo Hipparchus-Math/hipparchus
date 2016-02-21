@@ -18,8 +18,9 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -129,12 +130,11 @@ public abstract class BaseSecantSolver
     /**
      * {@inheritDoc}
      *
-     * @throws ConvergenceException if the algorithm failed due to finite
+     * @throws MathIllegalStateException if the algorithm failed due to finite
      * precision.
      */
     @Override
-    protected final double doSolve()
-        throws ConvergenceException {
+    protected final double doSolve() throws MathIllegalStateException {
         // Get initial solution
         double x0 = getMin();
         double x1 = getMax();
@@ -195,12 +195,12 @@ public abstract class BaseSecantSolver
                     // Detect early that algorithm is stuck, instead of waiting
                     // for the maximum number of iterations to be exceeded.
                     if (x == x1) {
-                        throw new ConvergenceException();
+                        throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED);
                     }
                     break;
                 default:
                     // Should never happen.
-                    throw new MathInternalError();
+                    throw MathRuntimeException.createInternalError();
                 }
             }
             // Update from [x0, x1] to [x0, x].
@@ -235,7 +235,7 @@ public abstract class BaseSecantSolver
                     }
                     break;
                 default:
-                    throw new MathInternalError();
+                    throw MathRuntimeException.createInternalError();
                 }
             }
 
@@ -255,7 +255,7 @@ public abstract class BaseSecantSolver
                 case ABOVE_SIDE:
                     return (f1 >= 0) ? x1 : x0;
                 default:
-                    throw new MathInternalError();
+                    throw MathRuntimeException.createInternalError();
                 }
             }
         }

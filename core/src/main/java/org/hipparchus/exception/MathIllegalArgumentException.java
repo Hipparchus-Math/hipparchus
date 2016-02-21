@@ -16,8 +16,6 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.Localizable;
-
 /**
  * Base class for all preconditions violation exceptions.
  * In most cases, this class should not be instantiated directly: it should

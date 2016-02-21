@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Base interface for multivariate distributions on the reals.
@@ -69,10 +69,10 @@ public interface MultivariateRealDistribution {
      *
      * @param sampleSize the number of random vectors to generate.
      * @return an array representing the random samples.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code sampleSize} is not positive.
      *
      * @see #sample()
      */
-    double[][] sample(int sampleSize) throws NotStrictlyPositiveException;
+    double[][] sample(int sampleSize) throws MathIllegalArgumentException;
 }

@@ -105,7 +105,7 @@ public class LineSearch {
      * @param startPoint Starting point.
      * @param direction Search direction.
      * @return the optimum.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the number of evaluations is exceeded.
      */
     public UnivariatePointValuePair search(final double[] startPoint,

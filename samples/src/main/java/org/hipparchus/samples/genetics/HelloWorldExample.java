@@ -23,12 +23,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.genetics.AbstractListChromosome;
 import org.hipparchus.genetics.Chromosome;
 import org.hipparchus.genetics.ElitisticListPopulation;
 import org.hipparchus.genetics.GeneticAlgorithm;
-import org.hipparchus.genetics.InvalidRepresentationException;
 import org.hipparchus.genetics.MutationPolicy;
 import org.hipparchus.genetics.OnePointCrossover;
 import org.hipparchus.genetics.Population;
@@ -138,10 +138,10 @@ public class HelloWorldExample {
         }
 
         @Override
-        protected void checkValidity(List<Character> repr) throws InvalidRepresentationException {
+        protected void checkValidity(List<Character> repr) throws MathIllegalArgumentException {
             for (char c : repr) {
                 if (c < 32 || c > 126) {
-                    throw new InvalidRepresentationException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
+                    throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
                 }
             }
         }

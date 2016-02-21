@@ -135,9 +135,9 @@ public class MultiDirectionalSimplex extends AbstractSimplex {
      * {@link AbstractSimplex#AbstractSimplex(double[][])}.
      * @param khi Expansion coefficient.
      * @param gamma Contraction coefficient.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the reference simplex does not contain at least one point.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if there is a dimension mismatch in the reference simplex.
      */
     public MultiDirectionalSimplex(final double[][] referenceSimplex,
@@ -186,7 +186,7 @@ public class MultiDirectionalSimplex extends AbstractSimplex {
      * @param comparator Comparator to use to sort simplex vertices from best
      * to poorest.
      * @return the best point in the transformed simplex.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximal number of evaluations is exceeded.
      */
     private PointValuePair evaluateNewSimplex(final MultivariateFunction evaluationFunction,

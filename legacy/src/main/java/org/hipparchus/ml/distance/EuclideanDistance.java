@@ -16,7 +16,7 @@
  */
 package org.hipparchus.ml.distance;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -32,7 +32,7 @@ public class EuclideanDistance implements DistanceMeasure {
     /** {@inheritDoc} */
     @Override
     public double compute(double[] a, double[] b)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         return MathArrays.distance(a, b);
     }
 

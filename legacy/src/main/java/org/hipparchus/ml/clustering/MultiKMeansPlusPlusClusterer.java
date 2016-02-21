@@ -20,8 +20,8 @@ package org.hipparchus.ml.clustering;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.exception.ConvergenceException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ml.clustering.evaluation.ClusterEvaluator;
 import org.hipparchus.ml.clustering.evaluation.SumOfClusterVariances;
 
@@ -98,13 +98,13 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
      * @return a list of clusters containing the points
      * @throws MathIllegalArgumentException if the data points are null or the number
      *   of clusters is larger than the number of data points
-     * @throws ConvergenceException if an empty cluster is encountered and the
+     * @throws MathIllegalStateException if an empty cluster is encountered and the
      *   underlying {@link KMeansPlusPlusClusterer} has its
      *   {@link KMeansPlusPlusClusterer.EmptyClusterStrategy} is set to {@code ERROR}.
      */
     @Override
     public List<CentroidCluster<T>> cluster(final Collection<T> points)
-        throws MathIllegalArgumentException, ConvergenceException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         // at first, we have not found any clusters list yet
         List<CentroidCluster<T>> best = null;

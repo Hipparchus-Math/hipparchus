@@ -24,9 +24,9 @@ import java.util.concurrent.Callable;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 
@@ -311,7 +311,7 @@ public class PerfTestUtils {
      * @param ellipsis String to use in place of the part being removed
      * from the original string.
      * @return the truncated string.
-     * @throws NumberIsTooLargeException if the length of {@code ellipsis}
+     * @throws MathIllegalArgumentException if the length of {@code ellipsis}
      * is larger than {@code maxLength - 2}.
      */
     private static String truncate(String str,
@@ -319,7 +319,8 @@ public class PerfTestUtils {
                                    String ellipsis) {
         final int ellSize = ellipsis.length();
         if (ellSize > maxLength - 2) {
-            throw new NumberIsTooLargeException(ellSize, maxLength - 2, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   ellSize, maxLength - 2);
         }
 
         final int strSize = str.length();

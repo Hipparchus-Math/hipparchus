@@ -16,8 +16,8 @@
  */
 package org.hipparchus.geometry.spherical.oned;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -56,10 +56,10 @@ public class Arc {
      * @param lower lower angular bound of the arc
      * @param upper upper angular bound of the arc
      * @param tolerance tolerance below which angles are considered identical
-     * @exception NumberIsTooLargeException if lower is greater than upper
+     * @exception MathIllegalArgumentException if lower is greater than upper
      */
     public Arc(final double lower, final double upper, final double tolerance)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         this.tolerance = tolerance;
         if (Precision.equals(lower, upper, 0) || (upper - lower) >= MathUtils.TWO_PI) {
             // the arc must cover the whole circle
@@ -71,7 +71,7 @@ public class Arc {
             this.upper  = this.lower + (upper - lower);
             this.middle = 0.5 * (this.lower + this.upper);
         } else {
-            throw new NumberIsTooLargeException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
                                                 lower, upper, true);
         }
     }

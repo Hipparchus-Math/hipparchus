@@ -17,35 +17,31 @@
 
 package org.hipparchus.ml.neuralnet.sofm;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.ml.neuralnet.sofm.LearningFactorFunction;
-import org.hipparchus.ml.neuralnet.sofm.LearningFactorFunctionFactory;
-import org.junit.Test;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for {@link LearningFactorFunctionFactory} class.
  */
 public class LearningFactorFunctionFactoryTest {
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition0() {
         LearningFactorFunctionFactory.exponentialDecay(0d, 0d, 2);
     }
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition1() {
         LearningFactorFunctionFactory.exponentialDecay(1 + 1e-10, 0d, 2);
     }
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition2() {
         LearningFactorFunctionFactory.exponentialDecay(1d, 0d, 2);
     }
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition3() {
         LearningFactorFunctionFactory.exponentialDecay(1d, 1d, 100);
     }
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition4() {
         LearningFactorFunctionFactory.exponentialDecay(1d, 0.2, 0);
     }
@@ -63,19 +59,19 @@ public class LearningFactorFunctionFactoryTest {
         Assert.assertEquals(0, f.value(Long.MAX_VALUE), 0d);
     }
 
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition0() {
         LearningFactorFunctionFactory.quasiSigmoidDecay(0d, -1d, 2);
     }
-    @Test(expected=OutOfRangeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition1() {
         LearningFactorFunctionFactory.quasiSigmoidDecay(1 + 1e-10, -1d, 2);
     }
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition3() {
         LearningFactorFunctionFactory.quasiSigmoidDecay(1d, 0d, 100);
     }
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition4() {
         LearningFactorFunctionFactory.quasiSigmoidDecay(1d, -1d, 0);
     }

@@ -13,9 +13,8 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.util.Incrementor;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -60,8 +59,8 @@ public class IncrementorTest {
         // and not in the previous loop.
         try {
             i.incrementCount();
-            Assert.fail("MaxCountExceededException expected");
-        } catch (MaxCountExceededException e) {
+            Assert.fail("MathIllegalStateException expected");
+        } catch (MathIllegalStateException e) {
             // Expected.
         }
     }
@@ -87,7 +86,7 @@ public class IncrementorTest {
         Assert.assertEquals(3, i.getCount());
     }
 
-    @Test(expected=MaxCountExceededException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testAboveMaxCount() {
         final Incrementor i = new Incrementor();
 
@@ -98,13 +97,13 @@ public class IncrementorTest {
         i.incrementCount();
     }
 
-    @Test(expected=TooManyEvaluationsException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testAlternateException() {
         final Incrementor.MaxCountExceededCallback cb
             = new Incrementor.MaxCountExceededCallback() {
                     /** {@inheritDoc} */
                     public void trigger(int max) {
-                        throw new TooManyEvaluationsException(max);
+                        throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
                     }
                 };
 

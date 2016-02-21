@@ -19,7 +19,7 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -56,15 +56,15 @@ public class NewtonRaphsonSolver extends AbstractUnivariateDifferentiableSolver 
      * @param max Upper bound for the interval.
      * @param maxEval Maximum number of evaluations.
      * @return the value where the function is zero.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximum evaluation count is exceeded.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code min >= max}.
      */
     @Override
     public double solve(int maxEval, final UnivariateDifferentiableFunction f,
                         final double min, final double max)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         return super.solve(maxEval, f, UnivariateSolverUtils.midpoint(min, max));
     }
 
@@ -73,7 +73,7 @@ public class NewtonRaphsonSolver extends AbstractUnivariateDifferentiableSolver 
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         final double startValue = getStartValue();
         final double absoluteAccuracy = getAbsoluteAccuracy();
 

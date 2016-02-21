@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.spherical.oned;
 
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.FastMath;
@@ -69,7 +69,7 @@ public class S1PointTest {
         try {
             a.getSpace().getSubSpace();
             Assert.fail("an exception should have been thrown");
-        } catch (MathUnsupportedOperationException muoe) {
+        } catch (MathRuntimeException muoe) {
             // expected
         }
     }

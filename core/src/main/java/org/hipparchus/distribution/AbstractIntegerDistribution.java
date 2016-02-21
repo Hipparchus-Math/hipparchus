@@ -18,11 +18,9 @@ package org.hipparchus.distribution;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 
@@ -60,9 +58,9 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
      * @since 4.0, was previously named cumulativeProbability
      */
     @Override
-    public double probability(int x0, int x1) throws NumberIsTooLargeException {
+    public double probability(int x0, int x1) throws MathIllegalArgumentException {
         if (x1 < x0) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                     x0, x1, true);
         }
         return cumulativeProbability(x1) - cumulativeProbability(x0);
@@ -80,9 +78,10 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
      * </ul>
      */
     @Override
-    public int inverseCumulativeProbability(final double p) throws OutOfRangeException {
+    public int inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0, 1);
         }
 
         int lower = getSupportLowerBound();
@@ -186,7 +185,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
     @Override
     public int[] sample(int sampleSize) {
         if (sampleSize <= 0) {
-            throw new NotStrictlyPositiveException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.NUMBER_OF_SAMPLES, sampleSize);
         }
         int[] out = new int[sampleSize];
@@ -198,22 +197,22 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
 
     /**
      * Computes the cumulative probability function and checks for {@code NaN}
-     * values returned. Throws {@code MathInternalError} if the value is
+     * values returned. Throws {@code MathRuntimeException} if the value is
      * {@code NaN}. Rethrows any exception encountered evaluating the cumulative
-     * probability function. Throws {@code MathInternalError} if the cumulative
+     * probability function. Throws {@code MathRuntimeException} if the cumulative
      * probability function returns {@code NaN}.
      *
      * @param argument input value
      * @return the cumulative probability
-     * @throws MathInternalError if the cumulative probability is {@code NaN}
+     * @throws MathRuntimeException if the cumulative probability is {@code NaN}
      */
     private double checkedCumulativeProbability(int argument)
-        throws MathInternalError {
+        throws MathRuntimeException {
         double result = Double.NaN;
         result = cumulativeProbability(argument);
         if (Double.isNaN(result)) {
-            throw new MathInternalError(LocalizedFormats
-                    .DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN, argument);
+            throw new MathRuntimeException(LocalizedFormats.DISCRETE_CUMULATIVE_PROBABILITY_RETURNED_NAN,
+                                           argument);
         }
         return result;
     }

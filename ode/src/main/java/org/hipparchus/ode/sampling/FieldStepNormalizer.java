@@ -18,7 +18,7 @@
 package org.hipparchus.ode.sampling;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -190,11 +190,11 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * should build a local copy using the clone method and store this
      * copy.
      * @param isLast true if the step is the last one
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
     public void handleStep(final FieldStepInterpolator<T> interpolator, final boolean isLast)
-        throws MaxCountExceededException {
+        throws MathIllegalStateException {
         // The first time, update the last state with the start information.
         if (last == null) {
 

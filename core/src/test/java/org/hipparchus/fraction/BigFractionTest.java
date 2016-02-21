@@ -20,13 +20,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.fraction.BigFraction;
-import org.hipparchus.fraction.FractionConversionException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -82,19 +79,19 @@ public class BigFractionTest {
         }
         try {
             new BigFraction(BigInteger.ONE, BigInteger.ZERO);
-            Assert.fail("Expecting ZeroException");
-        } catch (ZeroException npe) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException npe) {
             // expected
         }
         try {
             new BigFraction(2.0 * Integer.MAX_VALUE, 1.0e-5, 100000);
             Assert.fail("Expecting FractionConversionException");
-        } catch (FractionConversionException fce) {
+        } catch (MathIllegalStateException mise) {
             // expected
         }
     }
 
-    @Test(expected=ConvergenceException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testGoldenRatio() {
         // the golden ratio is notoriously a difficult number for continuous fraction
         new BigFraction((1 + FastMath.sqrt(5)) / 2, 1.0e-12, 25);
@@ -102,7 +99,7 @@ public class BigFractionTest {
 
     // MATH-179
     @Test
-    public void testDoubleConstructor() throws ConvergenceException {
+    public void testDoubleConstructor() throws MathIllegalStateException {
         assertFraction(1, 2, new BigFraction((double) 1 / (double) 2, 1.0e-5, 100));
         assertFraction(1, 3, new BigFraction((double) 1 / (double) 3, 1.0e-5, 100));
         assertFraction(2, 3, new BigFraction((double) 2 / (double) 3, 1.0e-5, 100));
@@ -148,7 +145,7 @@ public class BigFractionTest {
 
     // MATH-181
     @Test
-    public void testDigitLimitConstructor() throws ConvergenceException {
+    public void testDigitLimitConstructor() {
         assertFraction(2, 5, new BigFraction(0.4, 9));
         assertFraction(2, 5, new BigFraction(0.4, 99));
         assertFraction(2, 5, new BigFraction(0.4, 999));
@@ -163,19 +160,19 @@ public class BigFractionTest {
     }
 
     // MATH-1029
-    @Test(expected=FractionConversionException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testPositiveValueOverflow() {
         assertFraction((long) 1e10, 1, new BigFraction(1e10, 1000));
     }
 
     // MATH-1029
-    @Test(expected=FractionConversionException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testNegativeValueOverflow() {
         assertFraction((long) -1e10, 1, new BigFraction(-1e10, 1000));
     }
 
     @Test
-    public void testEpsilonLimitConstructor() throws ConvergenceException {
+    public void testEpsilonLimitConstructor() {
         assertFraction(2, 5, new BigFraction(0.4, 1.0e-5, 100));
 
         assertFraction(3, 5, new BigFraction(0.6152, 0.02, 100));
@@ -324,8 +321,8 @@ public class BigFractionTest {
         f = new BigFraction(0, 3);
         try {
             f = f.reciprocal();
-            Assert.fail("expecting ZeroException");
-        } catch (ZeroException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
         }
 
         // large values
@@ -442,8 +439,8 @@ public class BigFractionTest {
         BigFraction f2 = BigFraction.ZERO;
         try {
             f1.divide(f2);
-            Assert.fail("expecting MathArithmeticException");
-        } catch (MathArithmeticException ex) {
+            Assert.fail("expecting MathRuntimeException");
+        } catch (MathRuntimeException ex) {
         }
 
         f1 = new BigFraction(0, 5);
@@ -592,8 +589,8 @@ public class BigFractionTest {
         Assert.assertTrue(BigFraction.ZERO.equals(BigFraction.getReducedFraction(0, -1)));
         try {
             BigFraction.getReducedFraction(1, 0);
-            Assert.fail("expecting ZeroException");
-        } catch (ZeroException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         Assert.assertEquals(BigFraction.getReducedFraction(2, Integer.MIN_VALUE).getNumeratorAsInt(), -1);
@@ -629,7 +626,7 @@ public class BigFractionTest {
     }
 
     @Test
-    public void testSerial() throws FractionConversionException {
+    public void testSerial() {
         BigFraction[] fractions = {
             new BigFraction(3, 4), BigFraction.ONE, BigFraction.ZERO,
             new BigFraction(17), new BigFraction(FastMath.PI, 1000),

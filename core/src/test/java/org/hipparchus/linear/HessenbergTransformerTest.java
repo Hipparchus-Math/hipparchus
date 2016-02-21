@@ -20,12 +20,10 @@ package org.hipparchus.linear;
 import java.util.Random;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.linear.HessenbergTransformer;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.NonSquareMatrixException;
-import org.hipparchus.linear.RealMatrix;
-import org.junit.Test;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class HessenbergTransformerTest {
 
@@ -57,8 +55,8 @@ public class HessenbergTransformerTest {
         try {
             new HessenbergTransformer(MatrixUtils.createRealMatrix(new double[3][2]));
             Assert.fail("an exception should have been thrown");
-        } catch (NonSquareMatrixException ime) {
-            // expected behavior
+        } catch (MathIllegalArgumentException ime) {
+            Assert.assertEquals(LocalizedFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 

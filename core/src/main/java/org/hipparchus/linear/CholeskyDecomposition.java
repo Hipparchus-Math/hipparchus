@@ -17,7 +17,8 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 
@@ -72,8 +73,8 @@ public class CholeskyDecomposition {
      * #DEFAULT_ABSOLUTE_POSITIVITY_THRESHOLD}
      * </p>
      * @param matrix the matrix to decompose
-     * @throws NonSquareMatrixException if the matrix is not square.
-     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
+     * @throws MathIllegalArgumentException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not symmetric.
      * @throws NonPositiveDefiniteMatrixException if the matrix is not
      * strictly positive definite.
      * @see #CholeskyDecomposition(RealMatrix, double, double)
@@ -92,9 +93,9 @@ public class CholeskyDecomposition {
      * elements are considered too different and matrix not symmetric
      * @param absolutePositivityThreshold threshold below which diagonal
      * elements are considered null and matrix not positive definite
-     * @throws NonSquareMatrixException if the matrix is not square.
-     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
-     * @throws NonPositiveDefiniteMatrixException if the matrix is not
+     * @throws MathIllegalArgumentException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not symmetric.
+     * @throws MathIllegalArgumentException if the matrix is not
      * strictly positive definite.
      * @see #CholeskyDecomposition(RealMatrix)
      * @see #DEFAULT_RELATIVE_SYMMETRY_THRESHOLD
@@ -104,8 +105,8 @@ public class CholeskyDecomposition {
                                      final double relativeSymmetryThreshold,
                                      final double absolutePositivityThreshold) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         final int order = matrix.getRowDimension();
@@ -125,7 +126,8 @@ public class CholeskyDecomposition {
                 final double maxDelta =
                     relativeSymmetryThreshold * FastMath.max(FastMath.abs(lIJ), FastMath.abs(lJI));
                 if (FastMath.abs(lIJ - lJI) > maxDelta) {
-                    throw new NonSymmetricMatrixException(i, j, relativeSymmetryThreshold);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NON_SYMMETRIC_MATRIX,
+                                                           i, j, relativeSymmetryThreshold);
                 }
                 lJ[i] = 0;
            }
@@ -138,7 +140,7 @@ public class CholeskyDecomposition {
 
             // check diagonal element
             if (ltI[i] <= absolutePositivityThreshold) {
-                throw new NonPositiveDefiniteMatrixException(ltI[i], i, absolutePositivityThreshold);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
             }
 
             ltI[i] = FastMath.sqrt(ltI[i]);
@@ -227,7 +229,8 @@ public class CholeskyDecomposition {
         public RealVector solve(final RealVector b) {
             final int m = lTData.length;
             if (b.getDimension() != m) {
-                throw new DimensionMismatchException(b.getDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       b.getDimension(), m);
             }
 
             final double[] x = b.toArray();
@@ -259,7 +262,8 @@ public class CholeskyDecomposition {
         public RealMatrix solve(RealMatrix b) {
             final int m = lTData.length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       b.getRowDimension(), m);
             }
 
             final int nColB = b.getColumnDimension();

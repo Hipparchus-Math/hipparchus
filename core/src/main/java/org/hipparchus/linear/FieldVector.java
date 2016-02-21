@@ -18,11 +18,9 @@ package org.hipparchus.linear;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 
 /**
  * Interface defining a field-valued vector with basic algebraic operations.
@@ -72,17 +70,17 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * Compute the sum of {@code this} and {@code v}.
      * @param v vector to be added
      * @return {@code this + v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      */
-    FieldVector<T> add(FieldVector<T> v) throws DimensionMismatchException;
+    FieldVector<T> add(FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Compute {@code this} minus {@code v}.
      * @param v vector to be subtracted
      * @return {@code this - v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      */
-    FieldVector<T> subtract(FieldVector<T> v) throws DimensionMismatchException;
+    FieldVector<T> subtract(FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Map an addition operation to each entry.
@@ -140,10 +138,10 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @param d value to divide all entries by
      * @return {@code this / d}
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws MathArithmeticException if {@code d} is zero.
+     * @throws MathRuntimeException if {@code d} is zero.
      */
     FieldVector<T> mapDivide(T d)
-        throws NullArgumentException, MathArithmeticException;
+        throws NullArgumentException, MathRuntimeException;
 
     /**
      * Map a division operation to each entry.
@@ -151,62 +149,62 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @param d value to divide all entries by
      * @return for convenience, return {@code this}
      * @throws NullArgumentException if {@code d} is {@code null}.
-     * @throws MathArithmeticException if {@code d} is zero.
+     * @throws MathRuntimeException if {@code d} is zero.
      */
     FieldVector<T> mapDivideToSelf(T d)
-        throws NullArgumentException, MathArithmeticException;
+        throws NullArgumentException, MathRuntimeException;
 
     /**
      * Map the 1/x function to each entry.
      * @return a vector containing the result of applying the function to each entry.
-     * @throws MathArithmeticException if one of the entries is zero.
+     * @throws MathRuntimeException if one of the entries is zero.
      */
-    FieldVector<T> mapInv() throws MathArithmeticException;
+    FieldVector<T> mapInv() throws MathRuntimeException;
 
     /**
      * Map the 1/x function to each entry.
      * <p>The instance <strong>is</strong> changed by this method.</p>
      * @return for convenience, return {@code this}
-     * @throws MathArithmeticException if one of the entries is zero.
+     * @throws MathRuntimeException if one of the entries is zero.
      */
-    FieldVector<T> mapInvToSelf() throws MathArithmeticException;
+    FieldVector<T> mapInvToSelf() throws MathRuntimeException;
 
     /**
      * Element-by-element multiplication.
      * @param v vector by which instance elements must be multiplied
      * @return a vector containing {@code this[i] * v[i]} for all {@code i}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      */
     FieldVector<T> ebeMultiply(FieldVector<T> v)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Element-by-element division.
      * @param v vector by which instance elements must be divided
      * @return a vector containing {@code this[i] / v[i]} for all {@code i}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
-     * @throws MathArithmeticException if one entry of {@code v} is zero.
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
+     * @throws MathRuntimeException if one entry of {@code v} is zero.
      */
     FieldVector<T> ebeDivide(FieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException;
+        throws MathIllegalArgumentException, MathRuntimeException;
 
     /**
      * Compute the dot product.
      * @param v vector with which dot product should be computed
      * @return the scalar dot product of {@code this} and {@code v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
      */
-    T dotProduct(FieldVector<T> v) throws DimensionMismatchException;
+    T dotProduct(FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Find the orthogonal projection of this vector onto another vector.
      * @param v vector onto which {@code this} must be projected
      * @return projection of {@code this} onto {@code v}
-     * @throws DimensionMismatchException if {@code v} is not the same size as {@code this}
-     * @throws MathArithmeticException if {@code v} is the null vector.
+     * @throws MathIllegalArgumentException if {@code v} is not the same size as {@code this}
+     * @throws MathRuntimeException if {@code v} is the null vector.
      */
     FieldVector<T> projection(FieldVector<T> v)
-        throws DimensionMismatchException, MathArithmeticException;
+        throws MathIllegalArgumentException, MathRuntimeException;
 
     /**
      * Compute the outer product.
@@ -220,19 +218,19 @@ public interface FieldVector<T extends FieldElement<T>>  {
      *
      * @param index Index location of entry to be fetched.
      * @return the vector entry at {@code index}.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      * @see #setEntry(int, FieldElement)
      */
-    T getEntry(int index) throws OutOfRangeException;
+    T getEntry(int index) throws MathIllegalArgumentException;
 
     /**
      * Set a single element.
      * @param index element index.
      * @param value new value for the element.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      * @see #getEntry(int)
      */
-    void setEntry(int index, T value) throws OutOfRangeException;
+    void setEntry(int index, T value) throws MathIllegalArgumentException;
 
     /**
      * Returns the size of the vector.
@@ -259,19 +257,19 @@ public interface FieldVector<T extends FieldElement<T>>  {
      * @param index index of first element.
      * @param n number of elements to be retrieved.
      * @return a vector containing n elements.
-     * @throws OutOfRangeException if the index is not valid.
-     * @throws NotPositiveException if the number of elements if not positive.
+     * @throws MathIllegalArgumentException if the index is not valid.
+     * @throws MathIllegalArgumentException if the number of elements if not positive.
      */
     FieldVector<T> getSubVector(int index, int n)
-        throws OutOfRangeException, NotPositiveException;
+        throws MathIllegalArgumentException;
 
     /**
      * Set a set of consecutive elements.
      * @param index index of first element to be set.
      * @param v vector containing the values to set.
-     * @throws OutOfRangeException if the index is not valid.
+     * @throws MathIllegalArgumentException if the index is not valid.
      */
-    void setSubVector(int index, FieldVector<T> v) throws OutOfRangeException;
+    void setSubVector(int index, FieldVector<T> v) throws MathIllegalArgumentException;
 
     /**
      * Set all elements to a single value.

@@ -38,14 +38,9 @@ import org.hipparchus.distribution.TDistribution;
 import org.hipparchus.distribution.UniformIntegerDistribution;
 import org.hipparchus.distribution.WeibullDistribution;
 import org.hipparchus.distribution.ZipfDistribution;
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotFiniteNumberException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -159,11 +154,11 @@ public class RandomDataGenerator implements Serializable {
      *
      * @param len the desired string length.
      * @return the random string.
-     * @throws NotStrictlyPositiveException if {@code len <= 0}.
+     * @throws MathIllegalArgumentException if {@code len <= 0}.
      */
-    public String nextHexString(int len) throws NotStrictlyPositiveException {
+    public String nextHexString(int len) throws MathIllegalArgumentException {
         if (len <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.LENGTH, len);
+            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, len);
         }
 
         // Get a random number generator
@@ -208,9 +203,9 @@ public class RandomDataGenerator implements Serializable {
      * @param upper upper bound for generated integer
      * @return a random integer greater than or equal to {@code lower}
      * and less than or equal to {@code upper}
-     * @throws NumberIsTooLargeException if {@code lower >= upper}
+     * @throws MathIllegalArgumentException if {@code lower >= upper}
      */
-    public int nextInt(final int lower, final int upper) throws NumberIsTooLargeException {
+    public int nextInt(final int lower, final int upper) throws MathIllegalArgumentException {
         return new UniformIntegerDistribution(getRandomGenerator(), lower, upper).sample();
     }
 
@@ -226,11 +221,11 @@ public class RandomDataGenerator implements Serializable {
      * @param upper upper bound for generated long integer
      * @return a random long integer greater than or equal to {@code lower}
      * and less than or equal to {@code upper}
-     * @throws NumberIsTooLargeException if {@code lower >= upper}
+     * @throws MathIllegalArgumentException if {@code lower >= upper}
      */
-    public long nextLong(final long lower, final long upper) throws NumberIsTooLargeException {
+    public long nextLong(final long lower, final long upper) throws MathIllegalArgumentException {
         if (lower >= upper) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                                                 lower, upper, false);
         }
         final long max = (upper - lower) + 1;
@@ -281,7 +276,8 @@ public class RandomDataGenerator implements Serializable {
             } while (bits - val + (n - 1) < 0);
             return val;
         }
-        throw new NotStrictlyPositiveException(n);
+        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                               n, 0);
     }
 
     /**
@@ -306,11 +302,11 @@ public class RandomDataGenerator implements Serializable {
      * </p>
      * @param len the length of the string to be generated
      * @return a random string of hex characters of length {@code len}
-     * @throws NotStrictlyPositiveException if {@code len <= 0}
+     * @throws MathIllegalArgumentException if {@code len <= 0}
      */
-    public String nextSecureHexString(int len) throws NotStrictlyPositiveException {
+    public String nextSecureHexString(int len) throws MathIllegalArgumentException {
         if (len <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.LENGTH, len);
+            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, len);
         }
 
         // Get SecureRandom and setup Digest provider
@@ -320,7 +316,7 @@ public class RandomDataGenerator implements Serializable {
             alg = MessageDigest.getInstance("SHA-1");
         } catch (NoSuchAlgorithmException ex) {
             // this should never happen
-            throw new MathInternalError(ex);
+            throw MathRuntimeException.createInternalError(ex);
         }
         alg.reset();
 
@@ -373,9 +369,9 @@ public class RandomDataGenerator implements Serializable {
      * @param upper upper bound for generated integer
      * @return a random integer greater than or equal to {@code lower} and less
      * than or equal to {@code upper}.
-     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     * @throws MathIllegalArgumentException if {@code lower >= upper}.
      */
-    public int nextSecureInt(final int lower, final int upper) throws NumberIsTooLargeException {
+    public int nextSecureInt(final int lower, final int upper) throws MathIllegalArgumentException {
         return new UniformIntegerDistribution(getSecRan(), lower, upper).sample();
     }
 
@@ -396,11 +392,11 @@ public class RandomDataGenerator implements Serializable {
      * @param upper upper bound for generated integer
      * @return a random long integer greater than or equal to {@code lower} and
      * less than or equal to {@code upper}.
-     * @throws NumberIsTooLargeException if {@code lower >= upper}.
+     * @throws MathIllegalArgumentException if {@code lower >= upper}.
      */
-    public long nextSecureLong(final long lower, final long upper) throws NumberIsTooLargeException {
+    public long nextSecureLong(final long lower, final long upper) throws MathIllegalArgumentException {
         if (lower >= upper) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                                                 lower, upper, false);
         }
         final RandomGenerator rng = getSecRan();
@@ -443,9 +439,9 @@ public class RandomDataGenerator implements Serializable {
      *
      * @param mean the mean of the Poisson distribution
      * @return a random value following the specified Poisson distribution
-     * @throws NotStrictlyPositiveException if {@code mean <= 0}.
+     * @throws MathIllegalArgumentException if {@code mean <= 0}.
      */
-    public long nextPoisson(double mean) throws NotStrictlyPositiveException {
+    public long nextPoisson(double mean) throws MathIllegalArgumentException {
         return new PoissonDistribution(getRandomGenerator(), mean,
                 PoissonDistribution.DEFAULT_EPSILON,
                 PoissonDistribution.DEFAULT_MAX_ITERATIONS).sample();
@@ -462,11 +458,11 @@ public class RandomDataGenerator implements Serializable {
      * @param mu the mean of the distribution
      * @param sigma the standard deviation of the distribution
      * @return a random value following the specified Gaussian distribution
-     * @throws NotStrictlyPositiveException if {@code sigma <= 0}.
+     * @throws MathIllegalArgumentException if {@code sigma <= 0}.
      */
-    public double nextGaussian(double mu, double sigma) throws NotStrictlyPositiveException {
+    public double nextGaussian(double mu, double sigma) throws MathIllegalArgumentException {
         if (sigma <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.STANDARD_DEVIATION, sigma);
+            throw new MathIllegalArgumentException(LocalizedFormats.STANDARD_DEVIATION, sigma);
         }
         return sigma * getRandomGenerator().nextGaussian() + mu;
     }
@@ -488,9 +484,9 @@ public class RandomDataGenerator implements Serializable {
      *
      * @param mean the mean of the distribution
      * @return a random value following the specified exponential distribution
-     * @throws NotStrictlyPositiveException if {@code mean <= 0}.
+     * @throws MathIllegalArgumentException if {@code mean <= 0}.
      */
-    public double nextExponential(double mean) throws NotStrictlyPositiveException {
+    public double nextExponential(double mean) throws MathIllegalArgumentException {
         return new ExponentialDistribution(getRandomGenerator(), mean,
                 ExponentialDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
     }
@@ -514,10 +510,10 @@ public class RandomDataGenerator implements Serializable {
      * @param shape the median of the Gamma distribution
      * @param scale the scale parameter of the Gamma distribution
      * @return random value sampled from the Gamma(shape, scale) distribution
-     * @throws NotStrictlyPositiveException if {@code shape <= 0} or
+     * @throws MathIllegalArgumentException if {@code shape <= 0} or
      * {@code scale <= 0}.
      */
-    public double nextGamma(double shape, double scale) throws NotStrictlyPositiveException {
+    public double nextGamma(double shape, double scale) throws MathIllegalArgumentException {
         return new GammaDistribution(getRandomGenerator(),shape, scale,
                 GammaDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
     }
@@ -529,12 +525,12 @@ public class RandomDataGenerator implements Serializable {
      * @param numberOfSuccesses number of successes in the population of the Hypergeometric distribution
      * @param sampleSize the sample size of the Hypergeometric distribution
      * @return random value sampled from the Hypergeometric(numberOfSuccesses, sampleSize) distribution
-     * @throws NumberIsTooLargeException  if {@code numberOfSuccesses > populationSize},
+     * @throws MathIllegalArgumentException  if {@code numberOfSuccesses > populationSize},
      * or {@code sampleSize > populationSize}.
-     * @throws NotStrictlyPositiveException if {@code populationSize <= 0}.
-     * @throws NotPositiveException  if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code populationSize <= 0}.
+     * @throws MathIllegalArgumentException  if {@code numberOfSuccesses < 0}.
      */
-    public int nextHypergeometric(int populationSize, int numberOfSuccesses, int sampleSize) throws NotPositiveException, NotStrictlyPositiveException, NumberIsTooLargeException {
+    public int nextHypergeometric(int populationSize, int numberOfSuccesses, int sampleSize) throws MathIllegalArgumentException {
         return new HypergeometricDistribution(getRandomGenerator(),populationSize,
                 numberOfSuccesses, sampleSize).sample();
     }
@@ -545,11 +541,11 @@ public class RandomDataGenerator implements Serializable {
      * @param r the number of successes of the Pascal distribution
      * @param p the probability of success of the Pascal distribution
      * @return random value sampled from the Pascal(r, p) distribution
-     * @throws NotStrictlyPositiveException if the number of successes is not positive
-     * @throws OutOfRangeException if the probability of success is not in the
+     * @throws MathIllegalArgumentException if the number of successes is not positive
+     * @throws MathIllegalArgumentException if the probability of success is not in the
      * range {@code [0, 1]}.
      */
-    public int nextPascal(int r, double p) throws NotStrictlyPositiveException, OutOfRangeException {
+    public int nextPascal(int r, double p) throws MathIllegalArgumentException {
         return new PascalDistribution(getRandomGenerator(), r, p).sample();
     }
 
@@ -558,9 +554,9 @@ public class RandomDataGenerator implements Serializable {
      *
      * @param df the degrees of freedom of the T distribution
      * @return random value from the T(df) distribution
-     * @throws NotStrictlyPositiveException if {@code df <= 0}
+     * @throws MathIllegalArgumentException if {@code df <= 0}
      */
-    public double nextT(double df) throws NotStrictlyPositiveException {
+    public double nextT(double df) throws MathIllegalArgumentException {
         return new TDistribution(getRandomGenerator(), df,
                 TDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
     }
@@ -571,10 +567,10 @@ public class RandomDataGenerator implements Serializable {
      * @param shape the shape parameter of the Weibull distribution
      * @param scale the scale parameter of the Weibull distribution
      * @return random value sampled from the Weibull(shape, size) distribution
-     * @throws NotStrictlyPositiveException if {@code shape <= 0} or
+     * @throws MathIllegalArgumentException if {@code shape <= 0} or
      * {@code scale <= 0}.
      */
-    public double nextWeibull(double shape, double scale) throws NotStrictlyPositiveException {
+    public double nextWeibull(double shape, double scale) throws MathIllegalArgumentException {
         return new WeibullDistribution(getRandomGenerator(), shape, scale,
                 WeibullDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
     }
@@ -585,10 +581,10 @@ public class RandomDataGenerator implements Serializable {
      * @param numberOfElements the number of elements of the ZipfDistribution
      * @param exponent the exponent of the ZipfDistribution
      * @return random value sampled from the Zipf(numberOfElements, exponent) distribution
-     * @exception NotStrictlyPositiveException if {@code numberOfElements <= 0}
+     * @exception MathIllegalArgumentException if {@code numberOfElements <= 0}
      * or {@code exponent <= 0}.
      */
-    public int nextZipf(int numberOfElements, double exponent) throws NotStrictlyPositiveException {
+    public int nextZipf(int numberOfElements, double exponent) throws MathIllegalArgumentException {
         return new ZipfDistribution(getRandomGenerator(), numberOfElements, exponent).sample();
     }
 
@@ -644,10 +640,10 @@ public class RandomDataGenerator implements Serializable {
      * @param numeratorDf the numerator degrees of freedom of the F distribution
      * @param denominatorDf the denominator degrees of freedom of the F distribution
      * @return random value sampled from the F(numeratorDf, denominatorDf) distribution
-     * @throws NotStrictlyPositiveException if
+     * @throws MathIllegalArgumentException if
      * {@code numeratorDf <= 0} or {@code denominatorDf <= 0}.
      */
-    public double nextF(double numeratorDf, double denominatorDf) throws NotStrictlyPositiveException {
+    public double nextF(double numeratorDf, double denominatorDf) throws MathIllegalArgumentException {
         return new FDistribution(getRandomGenerator(), numeratorDf, denominatorDf,
                 FDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
     }
@@ -672,12 +668,12 @@ public class RandomDataGenerator implements Serializable {
      * @param upper the exclusive upper bound of the support
      * @return a uniformly distributed random value between lower and upper
      * (exclusive)
-     * @throws NumberIsTooLargeException if {@code lower >= upper}
-     * @throws NotFiniteNumberException if one of the bounds is infinite
-     * @throws NotANumberException if one of the bounds is NaN
+     * @throws MathIllegalArgumentException if {@code lower >= upper}
+     * @throws MathIllegalArgumentException if one of the bounds is infinite
+     * @throws MathIllegalArgumentException if one of the bounds is NaN
      */
     public double nextUniform(double lower, double upper)
-            throws NumberIsTooLargeException, NotFiniteNumberException, NotANumberException {
+            throws MathIllegalArgumentException {
         return nextUniform(lower, upper, false);
     }
 
@@ -708,27 +704,27 @@ public class RandomDataGenerator implements Serializable {
      * interval, if {@code lowerInclusive} is {@code false}, or in the
      * {@code [lower, upper)} interval, if {@code lowerInclusive} is
      * {@code true}
-     * @throws NumberIsTooLargeException if {@code lower >= upper}
-     * @throws NotFiniteNumberException if one of the bounds is infinite
-     * @throws NotANumberException if one of the bounds is NaN
+     * @throws MathIllegalArgumentException if {@code lower >= upper}
+     * @throws MathIllegalArgumentException if one of the bounds is infinite
+     * @throws MathIllegalArgumentException if one of the bounds is NaN
      */
     public double nextUniform(double lower, double upper, boolean lowerInclusive)
-        throws NumberIsTooLargeException, NotFiniteNumberException, NotANumberException {
+        throws MathIllegalArgumentException {
 
         if (lower >= upper) {
-            throw new NumberIsTooLargeException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                                                 lower, upper, false);
         }
 
         if (Double.isInfinite(lower)) {
-            throw new NotFiniteNumberException(LocalizedFormats.INFINITE_BOUND, lower);
+            throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_BOUND, lower);
         }
         if (Double.isInfinite(upper)) {
-            throw new NotFiniteNumberException(LocalizedFormats.INFINITE_BOUND, upper);
+            throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_BOUND, upper);
         }
 
         if (Double.isNaN(lower) || Double.isNaN(upper)) {
-            throw new NotANumberException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
         }
 
         final RandomGenerator generator = getRandomGenerator();
@@ -758,17 +754,17 @@ public class RandomDataGenerator implements Serializable {
      * @param k the size of the permutation
      * @return a random {@code k}-permutation of {@code n}, as an array of
      * integers
-     * @throws NumberIsTooLargeException if {@code k > n}.
-     * @throws NotStrictlyPositiveException if {@code k <= 0}.
+     * @throws MathIllegalArgumentException if {@code k > n}.
+     * @throws MathIllegalArgumentException if {@code k <= 0}.
      */
     public int[] nextPermutation(int n, int k)
-        throws NumberIsTooLargeException, NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         if (k > n) {
-            throw new NumberIsTooLargeException(LocalizedFormats.PERMUTATION_EXCEEDS_N,
+            throw new MathIllegalArgumentException(LocalizedFormats.PERMUTATION_EXCEEDS_N,
                                                 k, n, true);
         }
         if (k <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.PERMUTATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedFormats.PERMUTATION_SIZE,
                                                    k);
         }
 
@@ -796,18 +792,18 @@ public class RandomDataGenerator implements Serializable {
      * @param c the collection to be sampled
      * @param k the size of the sample
      * @return a random sample of {@code k} elements from {@code c}
-     * @throws NumberIsTooLargeException if {@code k > c.size()}.
-     * @throws NotStrictlyPositiveException if {@code k <= 0}.
+     * @throws MathIllegalArgumentException if {@code k > c.size()}.
+     * @throws MathIllegalArgumentException if {@code k <= 0}.
      */
-    public Object[] nextSample(Collection<?> c, int k) throws NumberIsTooLargeException, NotStrictlyPositiveException {
+    public Object[] nextSample(Collection<?> c, int k) throws MathIllegalArgumentException {
 
         int len = c.size();
         if (k > len) {
-            throw new NumberIsTooLargeException(LocalizedFormats.SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedFormats.SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE,
                                                 k, len, true);
         }
         if (k <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_SAMPLES, k);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES, k);
         }
 
         Object[] objects = c.toArray();

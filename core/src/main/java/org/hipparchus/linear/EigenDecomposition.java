@@ -18,11 +18,10 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.MathUnsupportedOperationException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -111,13 +110,13 @@ public class EigenDecomposition {
      * Supports decomposition of a general matrix since 3.1.
      *
      * @param matrix Matrix to decompose.
-     * @throws MaxCountExceededException if the algorithm fails to converge.
-     * @throws MathArithmeticException if the decomposition of a general matrix
+     * @throws MathIllegalStateException if the algorithm fails to converge.
+     * @throws MathRuntimeException if the decomposition of a general matrix
      * results in a matrix with zero norm
      * @since 3.1
      */
     public EigenDecomposition(final RealMatrix matrix)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         final double symTol = 10 * matrix.getRowDimension() * matrix.getColumnDimension() * Precision.EPSILON;
         isSymmetric = MatrixUtils.isSymmetric(matrix, symTol);
         if (isSymmetric) {
@@ -135,7 +134,7 @@ public class EigenDecomposition {
      *
      * @param main Main diagonal of the symmetric tridiagonal form.
      * @param secondary Secondary of the tridiagonal form.
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      * @since 3.1
      */
     public EigenDecomposition(final double[] main, final double[] secondary) {
@@ -334,20 +333,20 @@ public class EigenDecomposition {
      * definite.
      *
      * @return the square-root of the matrix.
-     * @throws MathUnsupportedOperationException if the matrix is not
+     * @throws MathRuntimeException if the matrix is not
      * symmetric or not positive definite.
      * @since 3.1
      */
     public RealMatrix getSquareRoot() {
         if (!isSymmetric) {
-            throw new MathUnsupportedOperationException();
+            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
         }
 
         final double[] sqrtEigenValues = new double[realEigenvalues.length];
         for (int i = 0; i < realEigenvalues.length; i++) {
             final double eigen = realEigenvalues[i];
             if (eigen <= 0) {
-                throw new MathUnsupportedOperationException();
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
             sqrtEigenValues[i] = FastMath.sqrt(eigen);
         }
@@ -366,12 +365,12 @@ public class EigenDecomposition {
      * but the {@link DecompositionSolver} only supports real eigenvalues.
      *
      * @return a solver
-     * @throws MathUnsupportedOperationException if the decomposition resulted in
+     * @throws MathRuntimeException if the decomposition resulted in
      * complex eigenvalues
      */
     public DecompositionSolver getSolver() {
         if (hasComplexEigenvalues()) {
-            throw new MathUnsupportedOperationException();
+            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
         }
         return new Solver(realEigenvalues, imagEigenvalues, eigenvectors);
     }
@@ -410,18 +409,19 @@ public class EigenDecomposition {
          * @param b Right-hand side of the equation A &times; X = B.
          * @return a Vector X that minimizes the two norm of A &times; X - B.
          *
-         * @throws DimensionMismatchException if the matrices dimensions do not match.
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the matrices dimensions do not match.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         @Override
         public RealVector solve(final RealVector b) {
             if (!isNonSingular()) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int m = realEigenvalues.length;
             if (b.getDimension() != m) {
-                throw new DimensionMismatchException(b.getDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       b.getDimension(), m);
             }
 
             final double[] bp = new double[m];
@@ -442,12 +442,13 @@ public class EigenDecomposition {
         public RealMatrix solve(RealMatrix b) {
 
             if (!isNonSingular()) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int m = realEigenvalues.length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       b.getRowDimension(), m);
             }
 
             final int nColB = b.getColumnDimension();
@@ -517,12 +518,12 @@ public class EigenDecomposition {
          * Get the inverse of the decomposed matrix.
          *
          * @return the inverse matrix.
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         @Override
         public RealMatrix getInverse() {
             if (!isNonSingular()) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int m = realEigenvalues.length;
@@ -609,7 +610,7 @@ public class EigenDecomposition {
                 }
                 if (m != j) {
                     if (its == MAX_ITER) {
-                        throw new MaxCountExceededException(LocalizedFormats.CONVERGENCE_FAILED,
+                        throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED,
                                                             MAX_ITER);
                     }
                     its++;
@@ -761,10 +762,10 @@ public class EigenDecomposition {
      * Find eigenvectors from a matrix transformed to Schur form.
      *
      * @param schur the schur transformation of the matrix
-     * @throws MathArithmeticException if the Schur form has a norm of zero
+     * @throws MathRuntimeException if the Schur form has a norm of zero
      */
     private void findEigenVectorsFromSchur(final SchurTransformer schur)
-        throws MathArithmeticException {
+        throws MathRuntimeException {
         final double[][] matrixT = schur.getT().getData();
         final double[][] matrixP = schur.getP().getData();
 
@@ -780,7 +781,7 @@ public class EigenDecomposition {
 
         // we can not handle a matrix with zero norm
         if (Precision.equals(norm, 0.0, EPSILON)) {
-           throw new MathArithmeticException(LocalizedFormats.ZERO_NORM);
+           throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
         }
 
         // Backsubstitute to find vectors of upper triangular form

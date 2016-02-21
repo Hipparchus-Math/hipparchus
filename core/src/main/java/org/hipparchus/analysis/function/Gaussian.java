@@ -22,8 +22,8 @@ import java.util.Arrays;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -50,14 +50,15 @@ public class Gaussian implements UnivariateDifferentiableFunction {
      * @param norm Normalization factor.
      * @param mean Mean.
      * @param sigma Standard deviation.
-     * @throws NotStrictlyPositiveException if {@code sigma <= 0}.
+     * @throws MathIllegalArgumentException if {@code sigma <= 0}.
      */
     public Gaussian(double norm,
                     double mean,
                     double sigma)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         if (sigma <= 0) {
-            throw new NotStrictlyPositiveException(sigma);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   sigma, 0);
         }
 
         this.norm = norm;
@@ -71,11 +72,11 @@ public class Gaussian implements UnivariateDifferentiableFunction {
      *
      * @param mean Mean.
      * @param sigma Standard deviation.
-     * @throws NotStrictlyPositiveException if {@code sigma <= 0}.
+     * @throws MathIllegalArgumentException if {@code sigma <= 0}.
      */
     public Gaussian(double mean,
                     double sigma)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(1 / (sigma * FastMath.sqrt(2 * Math.PI)), mean, sigma);
     }
 
@@ -109,15 +110,13 @@ public class Gaussian implements UnivariateDifferentiableFunction {
          * @param param Values of norm, mean and standard deviation.
          * @return the value of the function.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 3.
-         * @throws NotStrictlyPositiveException if {@code param[2]} is negative.
+         * @throws MathIllegalArgumentException if {@code param[2]} is negative.
          */
         @Override
         public double value(double x, double ... param)
-            throws NullArgumentException,
-                   DimensionMismatchException,
-                   NotStrictlyPositiveException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
 
             final double diff = x - param[1];
@@ -135,15 +134,13 @@ public class Gaussian implements UnivariateDifferentiableFunction {
          * @param param Values of norm, mean and standard deviation.
          * @return the gradient vector at {@code x}.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 3.
-         * @throws NotStrictlyPositiveException if {@code param[2]} is negative.
+         * @throws MathIllegalArgumentException if {@code param[2]} is negative.
          */
         @Override
         public double[] gradient(double x, double ... param)
-            throws NullArgumentException,
-                   DimensionMismatchException,
-                   NotStrictlyPositiveException {
+            throws MathIllegalArgumentException, NullArgumentException {
             validateParameters(param);
 
             final double norm = param[0];
@@ -165,22 +162,22 @@ public class Gaussian implements UnivariateDifferentiableFunction {
          *
          * @param param Values of norm, mean and standard deviation.
          * @throws NullArgumentException if {@code param} is {@code null}.
-         * @throws DimensionMismatchException if the size of {@code param} is
+         * @throws MathIllegalArgumentException if the size of {@code param} is
          * not 3.
-         * @throws NotStrictlyPositiveException if {@code param[2]} is negative.
+         * @throws MathIllegalArgumentException if {@code param[2]} is negative.
          */
         private void validateParameters(double[] param)
-            throws NullArgumentException,
-                   DimensionMismatchException,
-                   NotStrictlyPositiveException {
+            throws MathIllegalArgumentException, NullArgumentException {
             if (param == null) {
                 throw new NullArgumentException();
             }
             if (param.length != 3) {
-                throw new DimensionMismatchException(param.length, 3);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       param.length, 3);
             }
             if (param[2] <= 0) {
-                throw new NotStrictlyPositiveException(param[2]);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                       param[2], 0);
             }
         }
     }
@@ -202,7 +199,7 @@ public class Gaussian implements UnivariateDifferentiableFunction {
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         final double u = is * (t.getValue() - mean);
         double[] f = new double[t.getOrder() + 1];

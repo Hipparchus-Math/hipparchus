@@ -16,7 +16,7 @@
  */
 package org.hipparchus.genetics;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 
 /**
@@ -46,10 +46,10 @@ public interface Population extends Iterable<Chromosome> {
     /**
      * Add the given chromosome to the population.
      * @param chromosome the chromosome to add.
-     * @throws NumberIsTooLargeException if the population would exceed the population limit when adding
+     * @throws MathIllegalArgumentException if the population would exceed the population limit when adding
      *   this chromosome
      */
-    void addChromosome(Chromosome chromosome) throws NumberIsTooLargeException;
+    void addChromosome(Chromosome chromosome) throws MathIllegalArgumentException;
 
     /**
      * Access the fittest chromosome in this population.

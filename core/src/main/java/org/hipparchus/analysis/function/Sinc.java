@@ -19,7 +19,7 @@ package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -97,7 +97,7 @@ public class Sinc implements UnivariateDifferentiableFunction {
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         final double scaledX  = (normalized ? FastMath.PI : 1) * t.getValue();
         final double scaledX2 = scaledX * scaledX;

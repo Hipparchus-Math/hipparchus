@@ -20,7 +20,7 @@ import org.hipparchus.geometry.euclidean.oned.Interval;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -74,7 +74,7 @@ public class IntervalTest {
     }
 
     // MATH-1256
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testStrictOrdering() {
         new Interval(0, -1);
     }

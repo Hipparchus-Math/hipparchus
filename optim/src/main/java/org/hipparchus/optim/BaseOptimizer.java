@@ -16,8 +16,8 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.exception.TooManyIterationsException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Incrementor;
 
 /**
@@ -135,14 +135,13 @@ public abstract class BaseOptimizer<PAIR> {
      *  <li>{@link MaxIter}</li>
      * </ul>
      * @return a point/value pair that satisfies the convergence criteria.
-     * @throws TooManyEvaluationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * evaluations is exceeded.
-     * @throws TooManyIterationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * iterations is exceeded.
      */
     public PAIR optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException,
-               TooManyIterationsException {
+        throws MathIllegalStateException {
         // Parse options.
         parseOptimizationData(optData);
 
@@ -157,14 +156,13 @@ public abstract class BaseOptimizer<PAIR> {
      * Performs the optimization.
      *
      * @return a point/value pair that satisfies the convergence criteria.
-     * @throws TooManyEvaluationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * evaluations is exceeded.
-     * @throws TooManyIterationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * iterations is exceeded.
      */
     public PAIR optimize()
-        throws TooManyEvaluationsException,
-               TooManyIterationsException {
+        throws MathIllegalStateException {
         // Reset counters.
         evaluations.resetCount();
         iterations.resetCount();
@@ -183,22 +181,22 @@ public abstract class BaseOptimizer<PAIR> {
     /**
      * Increment the evaluation count.
      *
-     * @throws TooManyEvaluationsException if the allowed evaluations
+     * @throws MathIllegalStateException if the allowed evaluations
      * have been exhausted.
      */
     protected void incrementEvaluationCount()
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
         evaluations.incrementCount();
     }
 
     /**
      * Increment the iteration count.
      *
-     * @throws TooManyIterationsException if the allowed iterations
+     * @throws MathIllegalStateException if the allowed iterations
      * have been exhausted.
      */
     protected void incrementIterationCount()
-        throws TooManyIterationsException {
+        throws MathIllegalStateException {
         iterations.incrementCount();
     }
 
@@ -236,11 +234,11 @@ public abstract class BaseOptimizer<PAIR> {
         implements  Incrementor.MaxCountExceededCallback {
         /**
          * {@inheritDoc}
-         * @throws TooManyEvaluationsException
+         * @throws MathIllegalStateException
          */
         @Override
         public void trigger(int max) {
-            throw new TooManyEvaluationsException(max);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
         }
     }
 
@@ -252,11 +250,11 @@ public abstract class BaseOptimizer<PAIR> {
         implements Incrementor.MaxCountExceededCallback {
         /**
          * {@inheritDoc}
-         * @throws TooManyIterationsException
+         * @throws MathIllegalStateException
          */
         @Override
         public void trigger(int max) {
-            throw new TooManyIterationsException(max);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
         }
     }
 }

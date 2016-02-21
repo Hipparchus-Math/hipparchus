@@ -25,14 +25,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ContinuousOutputModel;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.nonstiff.MidpointIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.junit.Assert;
@@ -42,8 +39,7 @@ public class MidpointStepInterpolatorTest {
 
   @Test
   public void testDerivativesConsistency()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
     MidpointIntegrator integ = new MidpointIntegrator(step);
@@ -53,8 +49,7 @@ public class MidpointStepInterpolatorTest {
   @Test
   public void serialization()
     throws IOException, ClassNotFoundException,
-           DimensionMismatchException, NumberIsTooSmallException,
-           MaxCountExceededException, NoBracketingException {
+           MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem1 pb = new TestProblem1();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;

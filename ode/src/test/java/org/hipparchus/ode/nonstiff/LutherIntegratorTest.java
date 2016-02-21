@@ -18,10 +18,8 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem1;
@@ -33,8 +31,6 @@ import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.nonstiff.LutherIntegrator;
-import org.hipparchus.ode.nonstiff.RungeKuttaIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -45,8 +41,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testMissedEndEvent()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
         final double   t0     = 1878250320.0000029;
         final double   tEvent = 1878250379.9999986;
         final double[] k      = { 1.0e-4, 1.0e-5, 1.0e-6 };
@@ -104,15 +99,14 @@ public class LutherIntegratorTest {
 
     @Test
     public void testSanityChecks()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
         try  {
             TestProblem1 pb = new TestProblem1();
             new LutherIntegrator(0.01).integrate(pb,
                                                  0.0, new double[pb.getDimension()+10],
                                                  1.0, new double[pb.getDimension()]);
             Assert.fail("an exception should have been thrown");
-        } catch(DimensionMismatchException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
         try  {
             TestProblem1 pb = new TestProblem1();
@@ -120,7 +114,7 @@ public class LutherIntegratorTest {
                                                  0.0, new double[pb.getDimension()],
                                                  1.0, new double[pb.getDimension()+10]);
             Assert.fail("an exception should have been thrown");
-        } catch(DimensionMismatchException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
         try  {
             TestProblem1 pb = new TestProblem1();
@@ -128,14 +122,13 @@ public class LutherIntegratorTest {
                                                  0.0, new double[pb.getDimension()],
                                                  0.0, new double[pb.getDimension()]);
             Assert.fail("an exception should have been thrown");
-        } catch(NumberIsTooSmallException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
     }
 
     @Test
     public void testDecreasingSteps()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         for (TestProblemAbstract pb : new TestProblemAbstract[] {
             new TestProblem1(), new TestProblem2(), new TestProblem3(),
@@ -185,8 +178,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testSmallStep()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem1 pb = new TestProblem1();
         double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -205,8 +197,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testBigStep()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem1 pb = new TestProblem1();
         double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.2;
@@ -225,8 +216,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testBackward()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem5 pb = new TestProblem5();
         double step = FastMath.abs(pb.getFinalTime() - pb.getInitialTime()) * 0.001;
@@ -245,8 +235,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testKepler()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         final TestProblem3 pb  = new TestProblem3(0.9);
         double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.0003;
@@ -286,8 +275,7 @@ public class LutherIntegratorTest {
 
     @Test
     public void testStepSize()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
         final double step = 1.23456;
         FirstOrderIntegrator integ = new LutherIntegrator(step);
         integ.addStepHandler(new StepHandler() {

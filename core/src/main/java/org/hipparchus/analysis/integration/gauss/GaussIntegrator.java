@@ -17,8 +17,8 @@
 package org.hipparchus.analysis.integration.gauss;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
 
@@ -42,16 +42,16 @@ public class GaussIntegrator {
      *
      * @param points Integration points.
      * @param weights Weights of the corresponding integration nodes.
-     * @throws NonMonotonicSequenceException if the {@code points} are not
+     * @throws MathIllegalArgumentException if the {@code points} are not
      * sorted in increasing order.
-     * @throws DimensionMismatchException if points and weights don't have the same length
+     * @throws MathIllegalArgumentException if points and weights don't have the same length
      */
     public GaussIntegrator(double[] points,
                            double[] weights)
-        throws NonMonotonicSequenceException, DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (points.length != weights.length) {
-            throw new DimensionMismatchException(points.length,
-                                                 weights.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   points.length, weights.length);
         }
 
         MathArrays.checkOrder(points, MathArrays.OrderDirection.INCREASING, true, true);
@@ -65,13 +65,13 @@ public class GaussIntegrator {
      * the pair) and weights (second element of the pair.
      *
      * @param pointsAndWeights Integration points and corresponding weights.
-     * @throws NonMonotonicSequenceException if the {@code points} are not
+     * @throws MathIllegalArgumentException if the {@code points} are not
      * sorted in increasing order.
      *
      * @see #GaussIntegrator(double[], double[])
      */
     public GaussIntegrator(Pair<double[], double[]> pointsAndWeights)
-        throws NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         this(pointsAndWeights.getFirst(), pointsAndWeights.getSecond());
     }
 

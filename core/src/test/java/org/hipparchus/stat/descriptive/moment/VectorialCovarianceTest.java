@@ -18,7 +18,7 @@
 package org.hipparchus.stat.descriptive.moment;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.descriptive.moment.VectorialCovariance;
 import org.junit.Test;
@@ -42,9 +42,9 @@ public class VectorialCovarianceTest {
         try {
             new VectorialCovariance(8, true).increment(new double[5]);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException dme) {
-            Assert.assertEquals(5, dme.getArgument());
-            Assert.assertEquals(8, dme.getDimension());
+        } catch (MathIllegalArgumentException dme) {
+            Assert.assertEquals(5, ((Integer) dme.getParts()[0]).intValue());
+            Assert.assertEquals(8, ((Integer) dme.getParts()[1]).intValue());
         }
     }
 

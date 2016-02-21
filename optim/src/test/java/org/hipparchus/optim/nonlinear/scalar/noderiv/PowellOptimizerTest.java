@@ -18,7 +18,7 @@ package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.analysis.SumSincFunction;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.optim.InitialGuess;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.PointValuePair;
@@ -34,7 +34,7 @@ import org.junit.Test;
  * Test for {@link PowellOptimizer}.
  */
 public class PowellOptimizerTest {
-    @Test(expected=MathUnsupportedOperationException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testBoundsUnsupported() {
         final MultivariateFunction func = new SumSincFunction(-1);
         final PowellOptimizer optim = new PowellOptimizer(1e-8, 1e-5,

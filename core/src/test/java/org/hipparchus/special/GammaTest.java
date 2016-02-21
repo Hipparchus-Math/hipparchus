@@ -17,8 +17,7 @@
 package org.hipparchus.special;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -399,13 +398,13 @@ public class GammaTest {
         }
     }
 
-    @Test(expected = NumberIsTooSmallException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInvGamma1pm1Precondition1() {
 
         Gamma.invGamma1pm1(-0.51);
     }
 
-    @Test(expected = NumberIsTooLargeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testInvGamma1pm1Precondition2() {
 
         Gamma.invGamma1pm1(1.51);
@@ -445,13 +444,13 @@ public class GammaTest {
         }
     }
 
-    @Test(expected = NumberIsTooSmallException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testLogGamma1pPrecondition1() {
 
         Gamma.logGamma1p(-0.51);
     }
 
-    @Test(expected = NumberIsTooLargeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testLogGamma1pPrecondition2() {
 
         Gamma.logGamma1p(1.51);

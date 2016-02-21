@@ -23,7 +23,8 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -142,10 +143,11 @@ public class IterativeLegendreGaussIntegratorTest {
         // setting up limits prevents such large number of calls
         try {
             gauss.integrate(1000, f, -10, maxX);
-            Assert.fail("expected TooManyEvaluationsException");
-        } catch (TooManyEvaluationsException tmee) {
+            Assert.fail("expected MathIllegalStateException");
+        } catch (MathIllegalStateException tmee) {
             // expected
-            Assert.assertEquals(1000, tmee.getMax());
+            Assert.assertEquals(LocalizedFormats.MAX_COUNT_EXCEEDED, tmee.getSpecifier());
+            Assert.assertEquals(1000, ((Integer) tmee.getParts()[0]).intValue());
         }
 
         // integrating on the two sides should be simpler

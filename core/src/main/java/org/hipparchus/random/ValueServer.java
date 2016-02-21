@@ -22,11 +22,10 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Generates values for use in simulation applications.
@@ -116,7 +115,7 @@ public class ValueServer {
      * @throws MathIllegalStateException if mode is not recognized
      * @throws MathIllegalArgumentException if the underlying random generator thwrows one
      */
-    public double getNext() throws IOException, MathIllegalStateException, MathIllegalArgumentException {
+    public double getNext() throws IOException, MathIllegalArgumentException, MathIllegalStateException {
         switch (mode) {
             case DIGEST_MODE: return getNextDigest();
             case REPLAY_MODE: return getNextReplay();
@@ -142,7 +141,7 @@ public class ValueServer {
      * @throws MathIllegalArgumentException if the underlying random generator thwrows one
      */
     public void fill(double[] values)
-        throws IOException, MathIllegalStateException, MathIllegalArgumentException {
+        throws IOException, MathIllegalArgumentException, MathIllegalStateException {
         for (int i = 0; i < values.length; i++) {
             values[i] = getNext();
         }
@@ -159,7 +158,7 @@ public class ValueServer {
      * @throws MathIllegalArgumentException if the underlying random generator thwrows one
      */
     public double[] fill(int length)
-        throws IOException, MathIllegalStateException, MathIllegalArgumentException {
+        throws IOException, MathIllegalArgumentException, MathIllegalStateException {
         double[] out = new double[length];
         for (int i = 0; i < length; i++) {
             out[i] = getNext();
@@ -179,9 +178,9 @@ public class ValueServer {
      *
      * @throws IOException if an I/O error occurs reading the input file
      * @throws NullArgumentException if the {@code valuesFileURL} has not been set
-     * @throws ZeroException if URL contains no data
+     * @throws MathIllegalArgumentException if URL contains no data
      */
-    public void computeDistribution() throws IOException, ZeroException, NullArgumentException {
+    public void computeDistribution() throws IOException, MathIllegalArgumentException, NullArgumentException {
         computeDistribution(EmpiricalDistribution.DEFAULT_BIN_COUNT);
     }
 
@@ -199,9 +198,9 @@ public class ValueServer {
      * distribution
      * @throws NullArgumentException if the {@code valuesFileURL} has not been set
      * @throws IOException if an error occurs reading the input file
-     * @throws ZeroException if URL contains no data
+     * @throws MathIllegalArgumentException if URL contains no data
      */
-    public void computeDistribution(int binCount) throws NullArgumentException, IOException, ZeroException {
+    public void computeDistribution(int binCount) throws NullArgumentException, IOException, MathIllegalArgumentException {
         empiricalDistribution = new EmpiricalDistribution(binCount, randomData.getRandomGenerator());
         empiricalDistribution.load(valuesFileURL);
         mu = empiricalDistribution.getSampleStats().getMean();

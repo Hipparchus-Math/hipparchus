@@ -18,12 +18,8 @@ package org.hipparchus.distribution;
 
 import static org.junit.Assert.assertEquals;
 
-import org.hipparchus.distribution.EnumeratedIntegerDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotFiniteNumberException;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -59,28 +55,28 @@ public class EnumeratedIntegerDistributionTest {
         EnumeratedIntegerDistribution invalid = null;
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0});
-            Assert.fail("Expected DimensionMismatchException");
-        } catch (DimensionMismatchException e) {
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, -1.0});
-            Assert.fail("Expected NotPositiveException");
-        } catch (NotPositiveException e) {
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
         }
         try {
             new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, 0.0});
-            Assert.fail("Expected MathArithmeticException");
-        } catch (MathArithmeticException e) {
+            Assert.fail("Expected MathRuntimeException");
+        } catch (MathRuntimeException e) {
         }
         try {
           new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, Double.NaN});
-            Assert.fail("Expected NotANumberException");
-        } catch (NotANumberException e) {
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
         }
         try {
         new EnumeratedIntegerDistribution(new int[]{1, 2}, new double[]{0.0, Double.POSITIVE_INFINITY});
             Assert.fail("Expected NotFiniteNumberException");
-        } catch (NotFiniteNumberException e) {
+        } catch (MathIllegalArgumentException e) {
         }
         Assert.assertNull("Expected non-initialized DiscreteRealDistribution", invalid);
     }

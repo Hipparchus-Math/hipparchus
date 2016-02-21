@@ -19,12 +19,10 @@ package org.hipparchus.util;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * A variable length {@link DoubleArray} implementation that automatically
@@ -274,7 +272,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
                                 double ... data)
         throws MathIllegalArgumentException {
         if (initialCapacity <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.INITIAL_CAPACITY_NOT_POSITIVE,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_CAPACITY_NOT_POSITIVE,
                                                    initialCapacity);
         }
         checkContractExpand(contractionCriterion, expansionFactor);
@@ -408,31 +406,25 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param contraction Criterion to be checked.
      * @param expansion Factor to be checked.
-     * @throws NumberIsTooSmallException if {@code contraction < expansion}.
-     * @throws NumberIsTooSmallException if {@code contraction <= 1}.
-     * @throws NumberIsTooSmallException if {@code expansion <= 1 }.
+     * @throws MathIllegalArgumentException if {@code contraction < expansion}.
+     * @throws MathIllegalArgumentException if {@code contraction <= 1}.
+     * @throws MathIllegalArgumentException if {@code expansion <= 1 }.
      * @since 3.1
      */
-    protected void checkContractExpand(double contraction, double expansion) throws NumberIsTooSmallException {
+    protected void checkContractExpand(double contraction, double expansion) throws MathIllegalArgumentException {
         if (contraction < expansion) {
-            final NumberIsTooSmallException e = new NumberIsTooSmallException(contraction, 1, true);
-            e.getContext().addMessage(LocalizedFormats.CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR,
-                                      contraction, expansion);
-            throw e;
+            throw new MathIllegalArgumentException(LocalizedFormats.CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR,
+                                                   contraction, expansion);
         }
 
         if (contraction <= 1) {
-            final NumberIsTooSmallException e = new NumberIsTooSmallException(contraction, 1, false);
-            e.getContext().addMessage(LocalizedFormats.CONTRACTION_CRITERIA_SMALLER_THAN_ONE,
-                                      contraction);
-            throw e;
+            throw new MathIllegalArgumentException(LocalizedFormats.CONTRACTION_CRITERIA_SMALLER_THAN_ONE,
+                                                   contraction);
         }
 
         if (expansion <= 1) {
-            final NumberIsTooSmallException e = new NumberIsTooSmallException(contraction, 1, false);
-            e.getContext().addMessage(LocalizedFormats.EXPANSION_FACTOR_SMALLER_THAN_ONE,
-                                      expansion);
-            throw e;
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPANSION_FACTOR_SMALLER_THAN_ONE,
+                                                   expansion);
         }
     }
 

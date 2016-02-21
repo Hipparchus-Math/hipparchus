@@ -22,7 +22,6 @@ import org.hipparchus.linear.DecompositionSolver;
 import org.hipparchus.linear.LUDecomposition;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.SingularMatrixException;
 import org.junit.Test;
 import org.junit.Assert;
 
@@ -109,19 +108,19 @@ public class LUSolverTest {
         try {
             solver.solve(b);
             Assert.fail("an exception should have been thrown");
-        } catch (SingularMatrixException ime) {
+        } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
             Assert.fail("an exception should have been thrown");
-        } catch (SingularMatrixException ime) {
+        } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
         try {
             solver.solve(new ArrayRealVectorTest.RealVectorTestImpl(b.getColumn(0)));
             Assert.fail("an exception should have been thrown");
-        } catch (SingularMatrixException ime) {
+        } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
     }

@@ -23,8 +23,8 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.random.Well1024a;
@@ -36,7 +36,7 @@ import org.junit.Test;
 public class FieldVector3DTest {
 
     @Test
-    public void testConstructors() throws DimensionMismatchException {
+    public void testConstructors() throws MathIllegalArgumentException {
         double cosAlpha = 1 / 2.0;
         double sinAlpha = FastMath.sqrt(3) / 2.0;
         double cosDelta = FastMath.sqrt(2) / 2.0;
@@ -182,8 +182,8 @@ public class FieldVector3DTest {
         Assert.assertEquals("{3.000; 2.000; 1.000}", createVector(3, 2, 1, 3).toString(format));
     }
 
-    @Test(expected=DimensionMismatchException.class)
-    public void testWrongDimension() throws DimensionMismatchException {
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testWrongDimension() throws MathIllegalArgumentException {
         new FieldVector3D<DerivativeStructure>(new DerivativeStructure[] {
             new DerivativeStructure(3, 1, 0, 2),
             new DerivativeStructure(3, 1, 0, 5)
@@ -495,7 +495,7 @@ public class FieldVector3DTest {
     }
 
     @Test
-    public void testAngularSeparation() throws MathArithmeticException {
+    public void testAngularSeparation() throws MathRuntimeException {
         FieldVector3D<DerivativeStructure> v1 = createVector(2, -1, 4, 3);
 
         FieldVector3D<DerivativeStructure>  k = v1.normalize();
@@ -509,7 +509,7 @@ public class FieldVector3DTest {
         try {
             FieldVector3D.angle(v1, Vector3D.ZERO);
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException mae) {
+        } catch (MathRuntimeException mae) {
             // expected
         }
         Assert.assertEquals(0.0, FieldVector3D.angle(v1, v1.toVector3D()).getReal(), 1.0e-15);
@@ -518,12 +518,12 @@ public class FieldVector3DTest {
     }
 
     @Test
-    public void testNormalize() throws MathArithmeticException {
+    public void testNormalize() throws MathRuntimeException {
         Assert.assertEquals(1.0, createVector(5, -4, 2, 3).normalize().getNorm().getReal(), 1.0e-12);
         try {
             createVector(0, 0, 0, 3).normalize();
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException ae) {
+        } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }
@@ -535,7 +535,7 @@ public class FieldVector3DTest {
     }
 
     @Test
-    public void testOrthogonal() throws MathArithmeticException {
+    public void testOrthogonal() throws MathRuntimeException {
         FieldVector3D<DerivativeStructure> v1 = createVector(0.1, 2.5, 1.3, 3);
         Assert.assertEquals(0.0, FieldVector3D.dotProduct(v1, v1.orthogonal()).getReal(), 1.0e-12);
         FieldVector3D<DerivativeStructure> v2 = createVector(2.3, -0.003, 7.6, 3);
@@ -547,13 +547,13 @@ public class FieldVector3DTest {
         try {
             createVector(0, 0, 0, 3).orthogonal();
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException ae) {
+        } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }
 
     @Test
-    public void testAngle() throws MathArithmeticException {
+    public void testAngle() throws MathRuntimeException {
         Assert.assertEquals(0.22572612855273393616,
                             FieldVector3D.angle(createVector(1, 2, 3, 3), createVector(4, 5, 6, 3)).getReal(),
                             1.0e-12);
@@ -566,7 +566,7 @@ public class FieldVector3DTest {
         try {
             FieldVector3D.angle(createVector(0, 0, 0, 3), createVector(1, 0, 0, 3));
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException ae) {
+        } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }

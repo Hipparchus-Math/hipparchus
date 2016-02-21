@@ -18,18 +18,14 @@ package org.hipparchus.ode.sampling;
 
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FirstOrderFieldIntegrator;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.FirstOrderFieldIntegrator;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestProblemAbstract;
-import org.hipparchus.ode.sampling.StepHandler;
-import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 
@@ -39,12 +35,11 @@ public class StepInterpolatorTestUtils {
                                                    final TestProblemAbstract problem,
                                                    final double finiteDifferencesRatio,
                                                    final double threshold)
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         integrator.addStepHandler(new StepHandler() {
 
             public void handleStep(StepInterpolator interpolator, boolean isLast)
-                throws MaxCountExceededException {
+                throws MathIllegalStateException {
 
                 final double dt = interpolator.getCurrentTime() - interpolator.getPreviousTime();
                 final double h  = finiteDifferencesRatio * dt;
@@ -101,7 +96,7 @@ public class StepInterpolatorTestUtils {
         integrator.addStepHandler(new FieldStepHandler<T>() {
 
             public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
-                throws MaxCountExceededException {
+                throws MathIllegalStateException {
 
                 final T h = interpolator.getCurrentState().getTime().subtract(interpolator.getPreviousState().getTime()).multiply(0.001);
                 final T t = interpolator.getCurrentState().getTime().subtract(h.multiply(300));

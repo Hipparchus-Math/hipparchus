@@ -17,7 +17,6 @@
 package org.hipparchus.stat.regression;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 
 /**
  * An interface for regression models allowing for dynamic updating of the data.
@@ -48,10 +47,10 @@ public interface UpdatingMultipleLinearRegression {
      *
      * @param x the independent variables which form the design matrix
      * @param y the dependent or response variable
-     * @throws ModelSpecificationException if the length of {@code x} does not equal
+     * @throws MathIllegalArgumentException if the length of {@code x} does not equal
      * the number of independent variables in the model
      */
-    void addObservation(double[] x, double y) throws ModelSpecificationException;
+    void addObservation(double[] x, double y) throws MathIllegalArgumentException;
 
     /**
      * Adds a series of observations to the regression model. The lengths of
@@ -60,10 +59,10 @@ public interface UpdatingMultipleLinearRegression {
      * @param x a series of observations on the independent variables
      * @param y a series of observations on the dependent variable
      * The length of x and y must be the same
-     * @throws ModelSpecificationException if {@code x} is not rectangular, does not match
+     * @throws MathIllegalArgumentException if {@code x} is not rectangular, does not match
      * the length of {@code y} or does not contain sufficient data to estimate the model
      */
-    void addObservations(double[][] x, double[] y) throws ModelSpecificationException;
+    void addObservations(double[][] x, double[] y) throws MathIllegalArgumentException;
 
     /**
      * Clears internal buffers and resets the regression model. This means all
@@ -75,19 +74,19 @@ public interface UpdatingMultipleLinearRegression {
     /**
      * Performs a regression on data present in buffers and outputs a RegressionResults object
      * @return RegressionResults acts as a container of regression output
-     * @throws ModelSpecificationException if the model is not correctly specified
-     * @throws NoDataException if there is not sufficient data in the model to
+     * @throws MathIllegalArgumentException if the model is not correctly specified
+     * @throws MathIllegalArgumentException if there is not sufficient data in the model to
      * estimate the regression parameters
      */
-    RegressionResults regress() throws ModelSpecificationException, NoDataException;
+    RegressionResults regress() throws MathIllegalArgumentException;
 
     /**
      * Performs a regression on data present in buffers including only regressors
      * indexed in variablesToInclude and outputs a RegressionResults object
      * @param variablesToInclude an array of indices of regressors to include
      * @return RegressionResults acts as a container of regression output
-     * @throws ModelSpecificationException if the model is not correctly specified
+     * @throws MathIllegalArgumentException if the model is not correctly specified
      * @throws MathIllegalArgumentException if the variablesToInclude array is null or zero length
      */
-    RegressionResults regress(int[] variablesToInclude) throws ModelSpecificationException, MathIllegalArgumentException;
+    RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException;
 }

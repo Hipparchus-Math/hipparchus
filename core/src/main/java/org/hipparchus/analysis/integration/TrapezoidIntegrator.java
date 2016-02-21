@@ -16,12 +16,9 @@
  */
 package org.hipparchus.analysis.integration;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -49,22 +46,22 @@ public class TrapezoidIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
      * (must be less than or equal to {@link #TRAPEZOID_MAX_ITERATIONS_COUNT}
-     * @exception NotStrictlyPositiveException if minimal number of iterations
+     * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
-     * @exception NumberIsTooLargeException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is greater than {@link #TRAPEZOID_MAX_ITERATIONS_COUNT}
      */
     public TrapezoidIntegrator(final double relativeAccuracy,
                                final double absoluteAccuracy,
                                final int minimalIterationCount,
                                final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy, minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > TRAPEZOID_MAX_ITERATIONS_COUNT) {
-            throw new NumberIsTooLargeException(maximalIterationCount,
-                                                TRAPEZOID_MAX_ITERATIONS_COUNT, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   maximalIterationCount, TRAPEZOID_MAX_ITERATIONS_COUNT);
         }
     }
 
@@ -73,20 +70,20 @@ public class TrapezoidIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
      * (must be less than or equal to {@link #TRAPEZOID_MAX_ITERATIONS_COUNT}
-     * @exception NotStrictlyPositiveException if minimal number of iterations
+     * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
-     * @exception NumberIsTooLargeException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is greater than {@link #TRAPEZOID_MAX_ITERATIONS_COUNT}
      */
     public TrapezoidIntegrator(final int minimalIterationCount,
                                final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         super(minimalIterationCount, maximalIterationCount);
         if (maximalIterationCount > TRAPEZOID_MAX_ITERATIONS_COUNT) {
-            throw new NumberIsTooLargeException(maximalIterationCount,
-                                                TRAPEZOID_MAX_ITERATIONS_COUNT, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   maximalIterationCount, TRAPEZOID_MAX_ITERATIONS_COUNT);
         }
     }
 
@@ -110,11 +107,11 @@ public class TrapezoidIntegrator extends BaseAbstractUnivariateIntegrator {
      * @param baseIntegrator integrator holding integration parameters
      * @param n the stage of 1/2 refinement, n = 0 is no refinement
      * @return the value of n-th stage integral
-     * @throws TooManyEvaluationsException if the maximal number of evaluations
+     * @throws MathIllegalStateException if the maximal number of evaluations
      * is exceeded.
      */
     double stage(final BaseAbstractUnivariateIntegrator baseIntegrator, final int n)
-        throws TooManyEvaluationsException {
+        throws MathIllegalStateException {
 
         if (n == 0) {
             final double max = baseIntegrator.getMax();
@@ -144,7 +141,7 @@ public class TrapezoidIntegrator extends BaseAbstractUnivariateIntegrator {
     /** {@inheritDoc} */
     @Override
     protected double doIntegrate()
-        throws MathIllegalArgumentException, TooManyEvaluationsException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         double oldt = stage(this, 0);
         iterations.incrementCount();

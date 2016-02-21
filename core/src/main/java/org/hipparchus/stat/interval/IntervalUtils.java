@@ -16,11 +16,8 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Factory methods to generate confidence intervals for a binomial proportion.
@@ -65,10 +62,10 @@ public final class IntervalUtils {
      *        success falls within the returned interval
      * @return Confidence interval containing the probability of success with
      *         probability {@code confidenceLevel}
-     * @throws NotStrictlyPositiveException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
-     * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses > numberOfTrials}.
+     * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     public static ConfidenceInterval getAgrestiCoullInterval(int numberOfTrials, int numberOfSuccesses,
                                                              double confidenceLevel) {
@@ -94,10 +91,10 @@ public final class IntervalUtils {
      *        success falls within the returned interval
      * @return Confidence interval containing the probability of success with
      *         probability {@code confidenceLevel}
-     * @throws NotStrictlyPositiveException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
-     * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses > numberOfTrials}.
+     * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     public static ConfidenceInterval getClopperPearsonInterval(int numberOfTrials, int numberOfSuccesses,
                                                                double confidenceLevel) {
@@ -133,10 +130,10 @@ public final class IntervalUtils {
      *        success falls within the returned interval
      * @return Confidence interval containing the probability of success with
      *         probability {@code confidenceLevel}
-     * @throws NotStrictlyPositiveException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
-     * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses > numberOfTrials}.
+     * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     public static ConfidenceInterval getWilsonScoreInterval(int numberOfTrials, int numberOfSuccesses,
                                                             double confidenceLevel) {
@@ -149,24 +146,24 @@ public final class IntervalUtils {
      * @param numberOfTrials number of trials (must be positive)
      * @param numberOfSuccesses number of successes (must not exceed numberOfTrials)
      * @param confidenceLevel confidence level (must be strictly between 0 and 1)
-     * @throws NotStrictlyPositiveException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
-     * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses > numberOfTrials}.
+     * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     static void checkParameters(int numberOfTrials, int numberOfSuccesses, double confidenceLevel) {
         if (numberOfTrials <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NUMBER_OF_TRIALS, numberOfTrials);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_TRIALS, numberOfTrials);
         }
         if (numberOfSuccesses < 0) {
-            throw new NotPositiveException(LocalizedFormats.NEGATIVE_NUMBER_OF_SUCCESSES, numberOfSuccesses);
+            throw new MathIllegalArgumentException(LocalizedFormats.NEGATIVE_NUMBER_OF_SUCCESSES, numberOfSuccesses);
         }
         if (numberOfSuccesses > numberOfTrials) {
-            throw new NumberIsTooLargeException(LocalizedFormats.NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE,
                                                 numberOfSuccesses, numberOfTrials, true);
         }
         if (confidenceLevel <= 0 || confidenceLevel >= 1) {
-            throw new OutOfRangeException(LocalizedFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
                                           confidenceLevel, 0, 1);
         }
     }

@@ -20,9 +20,8 @@ package org.hipparchus.analysis.function;
 import java.util.Arrays;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
 
@@ -51,27 +50,27 @@ public class StepFunction implements UnivariateFunction {
      *
      * @param x Domain values where the function changes value.
      * @param y Values of the function.
-     * @throws NonMonotonicSequenceException
+     * @throws MathIllegalArgumentException
      * if the {@code x} array is not sorted in strictly increasing order.
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws NoDataException if {@code x} or {@code y} are zero-length.
-     * @throws DimensionMismatchException if {@code x} and {@code y} do not
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      * have the same length.
      */
     public StepFunction(double[] x,
                         double[] y)
-        throws NullArgumentException, NoDataException,
-               DimensionMismatchException, NonMonotonicSequenceException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (x == null ||
             y == null) {
             throw new NullArgumentException();
         }
         if (x.length == 0 ||
             y.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (y.length != x.length) {
-            throw new DimensionMismatchException(y.length, x.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   y.length, x.length);
         }
         MathArrays.checkOrder(x);
 

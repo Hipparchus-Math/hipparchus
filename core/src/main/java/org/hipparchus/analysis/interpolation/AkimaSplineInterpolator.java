@@ -18,11 +18,9 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
@@ -56,30 +54,29 @@ public class AkimaSplineInterpolator
      * @param xvals the arguments for the interpolation points
      * @param yvals the values for the interpolation points
      * @return a function which interpolates the data set
-     * @throws DimensionMismatchException if {@code xvals} and {@code yvals} have
+     * @throws MathIllegalArgumentException if {@code xvals} and {@code yvals} have
      *         different sizes.
-     * @throws NonMonotonicSequenceException if {@code xvals} is not sorted in
+     * @throws MathIllegalArgumentException if {@code xvals} is not sorted in
      *         strict increasing order.
-     * @throws NumberIsTooSmallException if the size of {@code xvals} is smaller
+     * @throws MathIllegalArgumentException if the size of {@code xvals} is smaller
      *         than 5.
      */
     @Override
     public PolynomialSplineFunction interpolate(double[] xvals,
                                                 double[] yvals)
-        throws DimensionMismatchException,
-               NumberIsTooSmallException,
-               NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         if (xvals == null ||
             yvals == null) {
             throw new NullArgumentException();
         }
 
         if (xvals.length != yvals.length) {
-            throw new DimensionMismatchException(xvals.length, yvals.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xvals.length, yvals.length);
         }
 
         if (xvals.length < MINIMUM_NUMBER_POINTS) {
-            throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
                                                 xvals.length,
                                                 MINIMUM_NUMBER_POINTS, true);
         }
@@ -174,17 +171,18 @@ public class AkimaSplineInterpolator
                                                               double[] yvals,
                                                               double[] firstDerivatives) {
         if (xvals.length != yvals.length) {
-            throw new DimensionMismatchException(xvals.length, yvals.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xvals.length, yvals.length);
         }
 
         if (xvals.length != firstDerivatives.length) {
-            throw new DimensionMismatchException(xvals.length,
-                                                 firstDerivatives.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xvals.length, firstDerivatives.length);
         }
 
         final int minimumLength = 2;
         if (xvals.length < minimumLength) {
-            throw new NumberIsTooSmallException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
                                                 xvals.length, minimumLength,
                                                 true);
         }

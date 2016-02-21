@@ -21,10 +21,8 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.MultivariateDifferentiableFunction;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Identity;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -138,11 +136,11 @@ public class FunctionUtils {
             }
 
             /** {@inheritDoc}
-             * @throws DimensionMismatchException if functions are not consistent with each other
+             * @throws MathIllegalArgumentException if functions are not consistent with each other
              */
             @Override
             public DerivativeStructure value(final DerivativeStructure t)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
                 DerivativeStructure r = f[0].value(t);
                 for (int i = 1; i < f.length; i++) {
                     r = r.add(f[i].value(t));
@@ -314,21 +312,22 @@ public class FunctionUtils {
      * @param max Upper bound of the interval (excluded).
      * @param n Number of sample points.
      * @return the array of samples.
-     * @throws NumberIsTooLargeException if the lower bound {@code min} is
+     * @throws MathIllegalArgumentException if the lower bound {@code min} is
      * greater than, or equal to the upper bound {@code max}.
-     * @throws NotStrictlyPositiveException if the number of sample points
+     * @throws MathIllegalArgumentException if the number of sample points
      * {@code n} is negative.
      */
     public static double[] sample(UnivariateFunction f, double min, double max, int n)
-       throws NumberIsTooLargeException, NotStrictlyPositiveException {
+       throws MathIllegalArgumentException {
 
         if (n <= 0) {
-            throw new NotStrictlyPositiveException(
+            throw new MathIllegalArgumentException(
                     LocalizedFormats.NOT_POSITIVE_NUMBER_OF_SAMPLES,
                     Integer.valueOf(n));
         }
         if (min >= max) {
-            throw new NumberIsTooLargeException(min, max, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                                                   min, max);
         }
 
         final double[] s = new double[n];
@@ -378,7 +377,8 @@ public class FunctionUtils {
             @Override
             public DerivativeStructure value(final DerivativeStructure x) {
                 if (x.getOrder() > derivatives.length) {
-                    throw new NumberIsTooLargeException(x.getOrder(), derivatives.length, true);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                           x.getOrder(), derivatives.length);
                 }
                 final double[] packed = new double[x.getOrder() + 1];
                 packed[0] = f.value(x.getValue());
@@ -436,7 +436,8 @@ public class FunctionUtils {
                 for (int i = 0; i < point.length; ++i) {
                     dPoint[i] = point[i].getValue();
                     if (point[i].getOrder() > 1) {
-                        throw new NumberIsTooLargeException(point[i].getOrder(), 1, true);
+                        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                               point[i].getOrder(), 1);
                     }
                 }
 
@@ -445,7 +446,8 @@ public class FunctionUtils {
                 final double[] dv = gradient.value(dPoint);
                 if (dv.length != point.length) {
                     // the gradient function is inconsistent
-                    throw new DimensionMismatchException(dv.length, point.length);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           dv.length, point.length);
                 }
 
                 // build the combined derivative

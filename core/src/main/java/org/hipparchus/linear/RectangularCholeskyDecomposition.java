@@ -17,6 +17,8 @@
 
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -60,12 +62,12 @@ public class RectangularCholeskyDecomposition {
      * Analysis of the Cholesky Decomposition of a Semi-definite Matrix</a>
      *
      * @param matrix Symmetric positive semidefinite matrix.
-     * @exception NonPositiveDefiniteMatrixException if the matrix is not
+     * @exception MathIllegalArgumentException if the matrix is not
      * positive semidefinite.
      * @since 3.1
      */
     public RectangularCholeskyDecomposition(RealMatrix matrix)
-        throws NonPositiveDefiniteMatrixException {
+        throws MathIllegalArgumentException {
         this(matrix, 0);
     }
 
@@ -75,11 +77,11 @@ public class RectangularCholeskyDecomposition {
      * @param matrix Symmetric positive semidefinite matrix.
      * @param small Diagonal elements threshold under which columns are
      * considered to be dependent on previous ones and are discarded.
-     * @exception NonPositiveDefiniteMatrixException if the matrix is not
+     * @exception MathIllegalArgumentException if the matrix is not
      * positive semidefinite.
      */
     public RectangularCholeskyDecomposition(RealMatrix matrix, double small)
-        throws NonPositiveDefiniteMatrixException {
+        throws MathIllegalArgumentException {
 
         final int order = matrix.getRowDimension();
         final double[][] c = matrix.getData();
@@ -119,7 +121,7 @@ public class RectangularCholeskyDecomposition {
             if (c[ir][ir] <= small) {
 
                 if (r == 0) {
-                    throw new NonPositiveDefiniteMatrixException(c[ir][ir], ir, small);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
                 }
 
                 // check remaining diagonal elements
@@ -127,7 +129,7 @@ public class RectangularCholeskyDecomposition {
                     if (c[index[i]][index[i]] < -small) {
                         // there is at least one sufficiently negative diagonal element,
                         // the symmetric positive semidefinite matrix is wrong
-                        throw new NonPositiveDefiniteMatrixException(c[index[i]][index[i]], i, small);
+                        throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
                     }
                 }
 

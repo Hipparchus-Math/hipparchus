@@ -20,12 +20,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NoDataException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -80,17 +78,17 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
      * (if only one row is passed, it is the value, if two rows are
      * passed the first one is the value and the second the derivative
      * and so on)
-     * @exception ZeroException if the abscissa difference between added point
+     * @exception MathIllegalArgumentException if the abscissa difference between added point
      * and a previous point is zero (i.e. the two points are at same abscissa)
-     * @exception MathArithmeticException if the number of derivatives is larger
+     * @exception MathRuntimeException if the number of derivatives is larger
      * than 20, which prevents computation of a factorial
-     * @throws DimensionMismatchException if derivative structures are inconsistent
+     * @throws MathIllegalArgumentException if derivative structures are inconsistent
      * @throws NullArgumentException if x is null
      */
     @SafeVarargs
     public final void addSamplePoint(final T x, final T[] ... value)
-        throws ZeroException, MathArithmeticException,
-               DimensionMismatchException, NullArgumentException {
+        throws MathIllegalArgumentException, MathRuntimeException,
+               MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(x);
         T factorial = x.getField().getOne();
@@ -112,7 +110,7 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
             for (int j = i; j < n; ++j) {
                 final T[] bottom1 = bottomDiagonal.get(n - (j + 1));
                 if (x.equals(abscissae.get(n - (j + 1)))) {
-                    throw new ZeroException(LocalizedFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
                 }
                 final T inv = x.subtract(abscissae.get(n - (j + 1))).reciprocal();
                 for (int k = 0; k < y.length; ++k) {
@@ -134,15 +132,15 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
     /** Interpolate value at a specified abscissa.
      * @param x interpolation abscissa
      * @return interpolated value
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      * @throws NullArgumentException if x is null
      */
-    public T[] value(T x) throws NoDataException, NullArgumentException {
+    public T[] value(T x) throws MathIllegalArgumentException, NullArgumentException {
 
         // safety check
         MathUtils.checkNotNull(x);
         if (abscissae.isEmpty()) {
-            throw new NoDataException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
         }
 
         final T[] value = MathArrays.buildArray(x.getField(), topDiagonal.get(0).length);
@@ -165,15 +163,15 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
      * @param order maximum derivation order
      * @return interpolated value and derivatives (value in row 0,
      * 1<sup>st</sup> derivative in row 1, ... n<sup>th</sup> derivative in row n)
-     * @exception NoDataException if sample is empty
+     * @exception MathIllegalArgumentException if sample is empty
      * @throws NullArgumentException if x is null
      */
-    public T[][] derivatives(T x, int order) throws NoDataException, NullArgumentException {
+    public T[][] derivatives(T x, int order) throws MathIllegalArgumentException, NullArgumentException {
 
         // safety check
         MathUtils.checkNotNull(x);
         if (abscissae.isEmpty()) {
-            throw new NoDataException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
         }
 
         final T zero = x.getField().getZero();

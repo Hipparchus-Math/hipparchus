@@ -23,12 +23,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.hipparchus.analysis.function.Gaussian;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;
@@ -78,7 +75,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                 double v = Double.POSITIVE_INFINITY;
                 try {
                     v = super.value(x, p);
-                } catch (NotStrictlyPositiveException e) { // NOPMD
+                } catch (MathIllegalArgumentException e) { // NOPMD
                     // Do nothing.
                 }
                 return v;
@@ -92,7 +89,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                                Double.POSITIVE_INFINITY };
                 try {
                     v = super.gradient(x, p);
-                } catch (NotStrictlyPositiveException e) { // NOPMD
+                } catch (MathIllegalArgumentException e) { // NOPMD
                     // Do nothing.
                 }
                 return v;
@@ -208,7 +205,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
          * parameters of the Gaussian.
          * @throws NullArgumentException if {@code observations} is
          * {@code null}.
-         * @throws NumberIsTooSmallException if there are less than 3
+         * @throws MathIllegalArgumentException if there are less than 3
          * observations.
          */
         public ParameterGuesser(Collection<WeightedObservedPoint> observations) {
@@ -216,7 +213,8 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                 throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
             }
             if (observations.size() < 3) {
-                throw new NumberIsTooSmallException(observations.size(), 3, true);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                       observations.size(), 3);
             }
 
             final List<WeightedObservedPoint> sorted = sortObservations(observations);
@@ -302,7 +300,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                 final double fwhmX1 = interpolateXAtY(points, maxYIdx, -1, halfY);
                 final double fwhmX2 = interpolateXAtY(points, maxYIdx, 1, halfY);
                 fwhmApprox = fwhmX2 - fwhmX1;
-            } catch (OutOfRangeException e) {
+            } catch (MathIllegalArgumentException e) {
                 // TODO: Exceptions should not be used for flow control.
                 fwhmApprox = points[points.length - 1].getX() - points[0].getX();
             }
@@ -337,17 +335,17 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
          * @param idxStep Index step for searching interpolation bounds points.
          * @param y Y value for which X should be determined.
          * @return the value of X for the specified Y.
-         * @throws ZeroException if {@code idxStep} is 0.
-         * @throws OutOfRangeException if specified {@code y} is not within the
+         * @throws MathIllegalArgumentException if {@code idxStep} is 0.
+         * @throws MathIllegalArgumentException if specified {@code y} is not within the
          * range of the specified {@code points}.
          */
         private double interpolateXAtY(WeightedObservedPoint[] points,
                                        int startIdx,
                                        int idxStep,
                                        double y)
-            throws OutOfRangeException {
+            throws MathIllegalArgumentException {
             if (idxStep == 0) {
-                throw new ZeroException();
+                throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
             }
             final WeightedObservedPoint[] twoPoints
                 = getInterpolationPointsForY(points, startIdx, idxStep, y);
@@ -374,17 +372,17 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
          * @param y Y value for which X should be determined.
          * @return the array containing two points suitable for determining X at
          * the specified Y.
-         * @throws ZeroException if {@code idxStep} is 0.
-         * @throws OutOfRangeException if specified {@code y} is not within the
+         * @throws MathIllegalArgumentException if {@code idxStep} is 0.
+         * @throws MathIllegalArgumentException if specified {@code y} is not within the
          * range of the specified {@code points}.
          */
         private WeightedObservedPoint[] getInterpolationPointsForY(WeightedObservedPoint[] points,
                                                                    int startIdx,
                                                                    int idxStep,
                                                                    double y)
-            throws OutOfRangeException {
+            throws MathIllegalArgumentException {
             if (idxStep == 0) {
-                throw new ZeroException();
+                throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
             }
             for (int i = startIdx;
                  idxStep < 0 ? i + idxStep >= 0 : i + idxStep < points.length;
@@ -403,9 +401,8 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
             // Boundaries are replaced by dummy values because the raised
             // exception is caught and the message never displayed.
             // TODO: Exceptions should not be used for flow control.
-            throw new OutOfRangeException(y,
-                                          Double.NEGATIVE_INFINITY,
-                                          Double.POSITIVE_INFINITY);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   y, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         }
 
         /**

@@ -18,11 +18,8 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem1;
@@ -31,7 +28,6 @@ import org.hipparchus.ode.TestProblem4;
 import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.nonstiff.HighamHall54Integrator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,8 +36,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testWrongDerivative()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       HighamHall54Integrator integrator =
           new HighamHall54Integrator(0.0, 1.0, 1.0e-10, 1.0e-10);
       FirstOrderDifferentialEquations equations =
@@ -74,10 +69,9 @@ public class HighamHall54IntegratorTest {
 
   }
 
-  @Test(expected=NumberIsTooSmallException.class)
+  @Test(expected=MathIllegalArgumentException.class)
   public void testMinStep()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem1 pb = new TestProblem1();
       double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -99,8 +93,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testIncreasingTolerance()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     int previousCalls = Integer.MAX_VALUE;
     for (int i = -12; i < -2; ++i) {
@@ -136,8 +129,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testBackward()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       TestProblem5 pb = new TestProblem5();
       double minStep = 0;
@@ -161,8 +153,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testEvents()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     TestProblem4 pb = new TestProblem4();
     double minStep = 0;
@@ -196,8 +187,7 @@ public class HighamHall54IntegratorTest {
 
   @Test(expected=LocalException.class)
   public void testEventsErrors()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
       final TestProblem1 pb = new TestProblem1();
       double minStep = 0;
@@ -241,8 +231,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testEventsNoConvergence()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem1 pb = new TestProblem1();
     double minStep = 0;
@@ -276,7 +265,7 @@ public class HighamHall54IntegratorTest {
                       pb.getInitialTime(), pb.getInitialState(),
                       pb.getFinalTime(), new double[pb.getDimension()]);
       Assert.fail("an exception should have been thrown");
-    } catch (TooManyEvaluationsException tmee) {
+    } catch (MathIllegalStateException tmee) {
         // Expected.
     }
 
@@ -284,8 +273,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testSanityChecks()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
       final TestProblem3 pb  = new TestProblem3(0.9);
       double minStep = 0;
       double maxStep = pb.getFinalTime() - pb.getInitialTime();
@@ -296,7 +284,7 @@ public class HighamHall54IntegratorTest {
         integ.integrate(pb, pb.getInitialTime(), new double[6],
                         pb.getFinalTime(), new double[pb.getDimension()]);
         Assert.fail("an exception should have been thrown");
-      } catch (DimensionMismatchException ie) {
+      } catch (MathIllegalArgumentException ie) {
         // expected behavior
       }
 
@@ -306,7 +294,7 @@ public class HighamHall54IntegratorTest {
         integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
                         pb.getFinalTime(), new double[6]);
         Assert.fail("an exception should have been thrown");
-      } catch (DimensionMismatchException ie) {
+      } catch (MathIllegalArgumentException ie) {
         // expected behavior
       }
 
@@ -316,7 +304,7 @@ public class HighamHall54IntegratorTest {
         integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
                         pb.getFinalTime(), new double[pb.getDimension()]);
         Assert.fail("an exception should have been thrown");
-      } catch (DimensionMismatchException ie) {
+      } catch (MathIllegalArgumentException ie) {
         // expected behavior
       }
 
@@ -326,7 +314,7 @@ public class HighamHall54IntegratorTest {
         integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
                         pb.getFinalTime(), new double[pb.getDimension()]);
         Assert.fail("an exception should have been thrown");
-      } catch (DimensionMismatchException ie) {
+      } catch (MathIllegalArgumentException ie) {
         // expected behavior
       }
 
@@ -336,7 +324,7 @@ public class HighamHall54IntegratorTest {
         integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
                         pb.getInitialTime(), new double[pb.getDimension()]);
         Assert.fail("an exception should have been thrown");
-      } catch (NumberIsTooSmallException ie) {
+      } catch (MathIllegalArgumentException ie) {
         // expected behavior
       }
 
@@ -344,8 +332,7 @@ public class HighamHall54IntegratorTest {
 
   @Test
   public void testKepler()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
 
     final TestProblem3 pb  = new TestProblem3(0.9);
     double minStep = 0;

@@ -17,10 +17,9 @@
 // CHECKSTYLE: stop all
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
@@ -2393,13 +2392,14 @@ public class BOBYQAOptimizer
 
         // Check problem dimension.
         if (dimension < MINIMUM_PROBLEM_DIMENSION) {
-            throw new NumberIsTooSmallException(dimension, MINIMUM_PROBLEM_DIMENSION, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   dimension, MINIMUM_PROBLEM_DIMENSION);
         }
         // Check number of interpolation points.
         final int[] nPointsInterval = { dimension + 2, (dimension + 2) * (dimension + 1) / 2 };
         if (numberOfInterpolationPoints < nPointsInterval[0] ||
             numberOfInterpolationPoints > nPointsInterval[1]) {
-            throw new OutOfRangeException(LocalizedFormats.NUMBER_OF_INTERPOLATION_POINTS,
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_INTERPOLATION_POINTS,
                                           numberOfInterpolationPoints,
                                           nPointsInterval[0],
                                           nPointsInterval[1]);

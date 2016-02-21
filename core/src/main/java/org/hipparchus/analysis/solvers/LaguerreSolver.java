@@ -19,12 +19,10 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexUtils;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NoDataException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -89,9 +87,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      */
     @Override
     public double doSolve()
-        throws TooManyEvaluationsException,
-               NumberIsTooLargeException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         final double min = getMin();
         final double max = getMax();
         final double initial = getStartValue();
@@ -127,7 +123,8 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
             return laguerre(initial, max);
         }
 
-        throw new NoBracketingException(min, max, yMin, yMax);
+        throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                               min, max, yMin, yMax);
     }
 
     /**
@@ -176,18 +173,17 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * @param coefficients Polynomial coefficients.
      * @param initial Start value.
      * @return the point at which the function value is zero.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximum number of evaluations is exceeded.
      * @throws NullArgumentException if the {@code coefficients} is
      * {@code null}.
-     * @throws NoDataException if the {@code coefficients} array is empty.
+     * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
      * @since 3.1
      */
     public Complex[] solveAllComplex(double[] coefficients,
                                      double initial)
-        throws NullArgumentException,
-               NoDataException,
-               TooManyEvaluationsException {
+        throws MathIllegalArgumentException, NullArgumentException,
+               MathIllegalStateException {
         setup(Integer.MAX_VALUE,
               new PolynomialFunction(coefficients),
               Double.NEGATIVE_INFINITY,
@@ -206,18 +202,17 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * @param coefficients Polynomial coefficients.
      * @param initial Start value.
      * @return the point at which the function value is zero.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      * if the maximum number of evaluations is exceeded.
      * @throws NullArgumentException if the {@code coefficients} is
      * {@code null}.
-     * @throws NoDataException if the {@code coefficients} array is empty.
+     * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
      * @since 3.1
      */
     public Complex solveComplex(double[] coefficients,
                                 double initial)
-        throws NullArgumentException,
-               NoDataException,
-               TooManyEvaluationsException {
+        throws MathIllegalArgumentException, NullArgumentException,
+               MathIllegalStateException {
         setup(Integer.MAX_VALUE,
               new PolynomialFunction(coefficients),
               Double.NEGATIVE_INFINITY,
@@ -256,22 +251,21 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * @param coefficients Polynomial coefficients.
          * @param initial Start value.
          * @return the point at which the function value is zero.
-         * @throws org.hipparchus.exception.TooManyEvaluationsException
+         * @throws org.hipparchus.exception.MathIllegalStateException
          * if the maximum number of evaluations is exceeded.
          * @throws NullArgumentException if the {@code coefficients} is
          * {@code null}.
-         * @throws NoDataException if the {@code coefficients} array is empty.
+         * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
          */
         public Complex[] solveAll(Complex coefficients[], Complex initial)
-            throws NullArgumentException,
-                   NoDataException,
-                   TooManyEvaluationsException {
+            throws MathIllegalArgumentException, NullArgumentException,
+                   MathIllegalStateException {
             if (coefficients == null) {
                 throw new NullArgumentException();
             }
             final int n = coefficients.length - 1;
             if (n == 0) {
-                throw new NoDataException(LocalizedFormats.POLYNOMIAL);
+                throw new MathIllegalArgumentException(LocalizedFormats.POLYNOMIAL);
             }
             // Coefficients for deflated polynomial.
             final Complex c[] = new Complex[n + 1];
@@ -305,23 +299,22 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
          * @param coefficients Polynomial coefficients.
          * @param initial Start value.
          * @return the point at which the function value is zero.
-         * @throws org.hipparchus.exception.TooManyEvaluationsException
+         * @throws org.hipparchus.exception.MathIllegalStateException
          * if the maximum number of evaluations is exceeded.
          * @throws NullArgumentException if the {@code coefficients} is
          * {@code null}.
-         * @throws NoDataException if the {@code coefficients} array is empty.
+         * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
          */
         public Complex solve(Complex coefficients[], Complex initial)
-            throws NullArgumentException,
-                   NoDataException,
-                   TooManyEvaluationsException {
+            throws MathIllegalArgumentException, NullArgumentException,
+                   MathIllegalStateException {
             if (coefficients == null) {
                 throw new NullArgumentException();
             }
 
             final int n = coefficients.length - 1;
             if (n == 0) {
-                throw new NoDataException(LocalizedFormats.POLYNOMIAL);
+                throw new MathIllegalArgumentException(LocalizedFormats.POLYNOMIAL);
             }
 
             final double absoluteAccuracy = getAbsoluteAccuracy();

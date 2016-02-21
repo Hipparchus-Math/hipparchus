@@ -22,10 +22,9 @@ import java.lang.reflect.Array;
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -185,13 +184,11 @@ public class FastFourierTransformer implements Serializable {
                 }
                 break;
             default:
-                /*
-                 * This should never occur in normal conditions. However this
-                 * clause has been added as a safeguard if other types of
-                 * normalizations are ever implemented, and the corresponding
-                 * test is forgotten in the present switch.
-                 */
-                throw new MathIllegalStateException();
+                // This should never occur in normal conditions. However this
+                // clause has been added as a safeguard if other types of
+                // normalizations are ever implemented, and the corresponding
+                // test is forgotten in the present switch.
+                throw MathRuntimeException.createInternalError();
         }
     }
 
@@ -206,7 +203,7 @@ public class FastFourierTransformer implements Serializable {
      * @param dataRI the two dimensional array of real and imaginary parts of the data
      * @param normalization the normalization to be applied to the transformed data
      * @param type the type of transform (forward, inverse) to be performed
-     * @throws DimensionMismatchException if the number of rows of the specified
+     * @throws MathIllegalArgumentException if the number of rows of the specified
      *   array is not two, or the array is not rectangular
      * @throws MathIllegalArgumentException if the number of data points is not
      *   a power of two
@@ -215,12 +212,14 @@ public class FastFourierTransformer implements Serializable {
         final DftNormalization normalization, final TransformType type) {
 
         if (dataRI.length != 2) {
-            throw new DimensionMismatchException(dataRI.length, 2);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   dataRI.length, 2);
         }
         final double[] dataR = dataRI[0];
         final double[] dataI = dataRI[1];
         if (dataR.length != dataI.length) {
-            throw new DimensionMismatchException(dataI.length, dataR.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   dataI.length, dataR.length);
         }
 
         final int n = dataR.length;
@@ -386,9 +385,9 @@ public class FastFourierTransformer implements Serializable {
      * @param n the number of sample points
      * @param type the type of transform (forward, inverse) to be performed
      * @return the complex transformed array
-     * @throws org.hipparchus.exception.NumberIsTooLargeException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the lower bound is greater than, or equal to the upper bound
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the number of sample points {@code n} is negative
      * @throws MathIllegalArgumentException if the number of sample points
      *   {@code n} is not a power of two
@@ -548,23 +547,21 @@ public class FastFourierTransformer implements Serializable {
          *
          * @param vector indices of the element
          * @return matrix element
-         * @exception DimensionMismatchException if dimensions do not match
+         * @exception MathIllegalArgumentException if dimensions do not match
          */
         public Complex get(int... vector)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
 
             if (vector == null) {
                 if (dimensionSize.length > 0) {
-                    throw new DimensionMismatchException(
-                            0,
-                            dimensionSize.length);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           0, dimensionSize.length);
                 }
                 return null;
             }
             if (vector.length != dimensionSize.length) {
-                throw new DimensionMismatchException(
-                        vector.length,
-                        dimensionSize.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       vector.length, dimensionSize.length);
             }
 
             Object lastDimension = multiDimensionalComplexArray;
@@ -581,23 +578,21 @@ public class FastFourierTransformer implements Serializable {
          * @param magnitude magnitude of the element
          * @param vector indices of the element
          * @return the previous value
-         * @exception DimensionMismatchException if dimensions do not match
+         * @exception MathIllegalArgumentException if dimensions do not match
          */
         public Complex set(Complex magnitude, int... vector)
-                throws DimensionMismatchException {
+                throws MathIllegalArgumentException {
 
             if (vector == null) {
                 if (dimensionSize.length > 0) {
-                    throw new DimensionMismatchException(
-                            0,
-                            dimensionSize.length);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           0, dimensionSize.length);
                 }
                 return null;
             }
             if (vector.length != dimensionSize.length) {
-                throw new DimensionMismatchException(
-                        vector.length,
-                        dimensionSize.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       vector.length, dimensionSize.length);
             }
 
             Object[] lastDimension = (Object[]) multiDimensionalComplexArray;

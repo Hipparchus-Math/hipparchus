@@ -19,7 +19,8 @@ package org.hipparchus.linear;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -79,12 +80,12 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
     /**
      * Calculates the LU-decomposition of the given matrix.
      * @param matrix The matrix to decompose.
-     * @throws NonSquareMatrixException if matrix is not square
+     * @throws MathIllegalArgumentException if matrix is not square
      */
     public FieldLUDecomposition(FieldMatrix<T> matrix) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         final int m = matrix.getColumnDimension();
@@ -303,10 +304,11 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
                 final int m = pivot.length;
                 if (b.getDimension() != m) {
-                    throw new DimensionMismatchException(b.getDimension(), m);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           b.getDimension(), m);
                 }
                 if (singular) {
-                    throw new SingularMatrixException();
+                    throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
                 }
 
                 // Apply permutations to b
@@ -341,17 +343,18 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
          * <p>The A matrix is implicit here. It is </p>
          * @param b right-hand side of the equation A &times; X = B
          * @return a vector X such that A &times; X = B
-         * @throws DimensionMismatchException if the matrices dimensions do not match.
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the matrices dimensions do not match.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         public ArrayFieldVector<T> solve(ArrayFieldVector<T> b) {
             final int m = pivot.length;
             final int length = b.getDimension();
             if (length != m) {
-                throw new DimensionMismatchException(length, m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       length, m);
             }
             if (singular) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             // Apply permutations to b
@@ -385,10 +388,11 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
         public FieldMatrix<T> solve(FieldMatrix<T> b) {
             final int m = pivot.length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       b.getRowDimension(), m);
             }
             if (singular) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int nColB = b.getColumnDimension();

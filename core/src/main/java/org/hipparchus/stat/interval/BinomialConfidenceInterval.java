@@ -16,10 +16,7 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Interface to generate confidence intervals for a binomial proportion.
@@ -50,13 +47,12 @@ public interface BinomialConfidenceInterval {
      *        success falls within the returned interval
      * @return Confidence interval containing the probability of success with
      *         probability {@code confidenceLevel}
-     * @throws NotStrictlyPositiveException if {@code numberOfTrials <= 0}.
-     * @throws NotPositiveException if {@code numberOfSuccesses < 0}.
-     * @throws NumberIsTooLargeException if {@code numberOfSuccesses > numberOfTrials}.
-     * @throws OutOfRangeException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
+     * @throws MathIllegalArgumentException if {@code numberOfTrials <= 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
+     * @throws MathIllegalArgumentException if {@code numberOfSuccesses > numberOfTrials}.
+     * @throws MathIllegalArgumentException if {@code confidenceLevel} is not in the interval {@code (0, 1)}.
      */
     ConfidenceInterval createInterval(int numberOfTrials, int numberOfSuccesses, double confidenceLevel)
-            throws NotStrictlyPositiveException, NotPositiveException,
-                   NumberIsTooLargeException, OutOfRangeException;
+            throws MathIllegalArgumentException;
 
 }

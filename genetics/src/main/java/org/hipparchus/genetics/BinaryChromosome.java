@@ -19,7 +19,8 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 
 /**
@@ -32,18 +33,18 @@ public abstract class BinaryChromosome extends AbstractListChromosome<Integer> {
     /**
      * Constructor.
      * @param representation list of {0,1} values representing the chromosome
-     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome
+     * @throws MathIllegalArgumentException iff the <code>representation</code> can not represent a valid chromosome
      */
-    public BinaryChromosome(List<Integer> representation) throws InvalidRepresentationException {
+    public BinaryChromosome(List<Integer> representation) throws MathIllegalArgumentException {
         super(representation);
     }
 
     /**
      * Constructor.
      * @param representation array of {0,1} values representing the chromosome
-     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome
+     * @throws MathIllegalArgumentException iff the <code>representation</code> can not represent a valid chromosome
      */
-    public BinaryChromosome(Integer[] representation) throws InvalidRepresentationException {
+    public BinaryChromosome(Integer[] representation) throws MathIllegalArgumentException {
         super(representation);
     }
 
@@ -51,10 +52,10 @@ public abstract class BinaryChromosome extends AbstractListChromosome<Integer> {
      * {@inheritDoc}
      */
     @Override
-    protected void checkValidity(List<Integer> chromosomeRepresentation) throws InvalidRepresentationException {
+    protected void checkValidity(List<Integer> chromosomeRepresentation) throws MathIllegalArgumentException {
         for (int i : chromosomeRepresentation) {
             if (i < 0 || i >1) {
-                throw new InvalidRepresentationException(LocalizedFormats.INVALID_BINARY_DIGIT,
+                throw new MathIllegalArgumentException(LocalizedFormats.INVALID_BINARY_DIGIT,
                                                          i);
             }
         }

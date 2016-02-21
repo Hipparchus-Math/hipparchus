@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.differentiation;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Interface for univariate functions derivatives.
  * <p>This interface represents a simple function which computes
@@ -34,10 +34,10 @@ public interface UnivariateDifferentiableFunction extends UnivariateFunction {
      * value and the first derivative of the function.</p>
      * @param t function input value
      * @return function result
-     * @exception DimensionMismatchException if t is inconsistent with the
+     * @exception MathIllegalArgumentException if t is inconsistent with the
      * function's free parameters or order
      */
     DerivativeStructure value(DerivativeStructure t)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
 }

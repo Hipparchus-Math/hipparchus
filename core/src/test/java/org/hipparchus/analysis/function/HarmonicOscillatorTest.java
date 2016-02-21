@@ -20,7 +20,7 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.function.HarmonicOscillator;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -89,7 +89,7 @@ public class HarmonicOscillatorTest {
         g.value(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage2() {
         final HarmonicOscillator.Parametric g = new HarmonicOscillator.Parametric();
         g.value(0, new double[] {0});
@@ -101,7 +101,7 @@ public class HarmonicOscillatorTest {
         g.gradient(0, null);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testParametricUsage4() {
         final HarmonicOscillator.Parametric g = new HarmonicOscillator.Parametric();
         g.gradient(0, new double[] {0});

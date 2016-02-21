@@ -22,7 +22,7 @@ import java.math.BigInteger;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.BigFractionFormat;
 import org.hipparchus.fraction.ProperBigFractionFormat;
@@ -146,13 +146,13 @@ public class BigFractionFormatTest {
         try {
             properFormat.parse(source);
             Assert.fail(msg);
-        } catch (MathParseException ex) {
+        } catch (MathIllegalStateException ex) {
             // success
         }
         try {
             improperFormat.parse(source);
             Assert.fail(msg);
-        } catch (MathParseException ex) {
+        } catch (MathIllegalStateException ex) {
             // success
         }
     }
@@ -164,13 +164,13 @@ public class BigFractionFormatTest {
         try {
             properFormat.parse(source);
             Assert.fail(msg);
-        } catch (MathParseException ex) {
+        } catch (MathIllegalStateException ex) {
             // success
         }
         try {
             improperFormat.parse(source);
             Assert.fail(msg);
-        } catch (MathParseException ex) {
+        } catch (MathIllegalStateException ex) {
             // success
         }
     }
@@ -217,7 +217,7 @@ public class BigFractionFormatTest {
         try {
             improperFormat.parse(source);
             Assert.fail("invalid improper fraction.");
-        } catch (MathParseException ex) {
+        } catch (MathIllegalStateException ex) {
             // success
         }
     }
@@ -235,7 +235,7 @@ public class BigFractionFormatTest {
         try {
             improperFormat.parse(source);
             Assert.fail("invalid improper fraction.");
-        } catch (MathParseException ex) {
+        } catch (MathIllegalStateException ex) {
             // success
         }
     }
@@ -246,14 +246,14 @@ public class BigFractionFormatTest {
         try {
             properFormat.parse(source);
             Assert.fail("invalid minus in improper fraction.");
-        } catch (MathParseException ex) {
+        } catch (MathIllegalStateException ex) {
             // expected
         }
         source = "2 2 / -3";
         try {
             properFormat.parse(source);
             Assert.fail("invalid minus in improper fraction.");
-        } catch (MathParseException ex) {
+        } catch (MathIllegalStateException ex) {
             // expected
         }
     }

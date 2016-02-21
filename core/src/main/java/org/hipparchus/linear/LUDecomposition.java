@@ -17,7 +17,8 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -69,7 +70,7 @@ public class LUDecomposition {
      * threshold.
      *
      * @param matrix Matrix to decompose.
-     * @throws NonSquareMatrixException if matrix is not square.
+     * @throws MathIllegalArgumentException if matrix is not square.
      */
     public LUDecomposition(RealMatrix matrix) {
         this(matrix, DEFAULT_TOO_SMALL);
@@ -80,12 +81,12 @@ public class LUDecomposition {
      * @param matrix The matrix to decompose.
      * @param singularityThreshold threshold (based on partial row norm)
      * under which a matrix is considered singular
-     * @throws NonSquareMatrixException if matrix is not square
+     * @throws MathIllegalArgumentException if matrix is not square
      */
     public LUDecomposition(RealMatrix matrix, double singularityThreshold) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         final int m = matrix.getColumnDimension();
@@ -292,10 +293,11 @@ public class LUDecomposition {
         public RealVector solve(RealVector b) {
             final int m = pivot.length;
             if (b.getDimension() != m) {
-                throw new DimensionMismatchException(b.getDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       b.getDimension(), m);
             }
             if (singular) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final double[] bp = new double[m];
@@ -331,10 +333,11 @@ public class LUDecomposition {
 
             final int m = pivot.length;
             if (b.getRowDimension() != m) {
-                throw new DimensionMismatchException(b.getRowDimension(), m);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       b.getRowDimension(), m);
             }
             if (singular) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int nColB = b.getColumnDimension();
@@ -384,7 +387,7 @@ public class LUDecomposition {
          * Get the inverse of the decomposed matrix.
          *
          * @return the inverse matrix.
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         @Override
         public RealMatrix getInverse() {

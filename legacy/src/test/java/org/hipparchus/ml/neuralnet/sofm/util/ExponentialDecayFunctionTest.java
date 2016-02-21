@@ -17,29 +17,27 @@
 
 package org.hipparchus.ml.neuralnet.sofm.util;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.ml.neuralnet.sofm.util.ExponentialDecayFunction;
-import org.junit.Test;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for {@link ExponentialDecayFunction} class
  */
 public class ExponentialDecayFunctionTest {
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPrecondition1() {
         new ExponentialDecayFunction(0d, 0d, 2);
     }
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPrecondition2() {
         new ExponentialDecayFunction(1d, 0d, 2);
     }
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPrecondition3() {
         new ExponentialDecayFunction(1d, 1d, 100);
     }
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPrecondition4() {
         new ExponentialDecayFunction(1d, 0.2, 0);
     }

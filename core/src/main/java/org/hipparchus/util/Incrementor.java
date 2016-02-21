@@ -16,13 +16,14 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 
 /**
  * Utility that increments a counter until a maximum is reached, at
  * which point, the instance will by default throw a
- * {@link MaxCountExceededException}.
+ * {@link MathIllegalStateException}.
  * However, the user is able to override this behaviour by defining a
  * custom {@link MaxCountExceededCallback callback}, in order to e.g.
  * select which exception must be thrown.
@@ -65,8 +66,8 @@ public class Incrementor {
              new MaxCountExceededCallback() {
                  /** {@inheritDoc} */
                  @Override
-                public void trigger(int max) throws MaxCountExceededException {
-                     throw new MaxCountExceededException(max);
+                public void trigger(int max) throws MathIllegalStateException {
+                     throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
                  }
              });
     }
@@ -121,7 +122,7 @@ public class Incrementor {
      * Checks whether a single increment is allowed.
      *
      * @return {@code false} if the next call to {@link #incrementCount(int)
-     * incrementCount} will trigger a {@code MaxCountExceededException},
+     * incrementCount} will trigger a {@code MathIllegalStateException},
      * {@code true} otherwise.
      */
     public boolean canIncrement() {
@@ -133,9 +134,9 @@ public class Incrementor {
      * See the other {@link #incrementCount() incrementCount} method).
      *
      * @param value Number of increments.
-     * @throws MaxCountExceededException at counter exhaustion.
+     * @throws MathIllegalStateException at counter exhaustion.
      */
-    public void incrementCount(int value) throws MaxCountExceededException {
+    public void incrementCount(int value) throws MathIllegalStateException {
         for (int i = 0; i < value; i++) {
             incrementCount();
         }
@@ -148,13 +149,13 @@ public class Incrementor {
      * callback object passed to the
      * {@link #Incrementor(int,MaxCountExceededCallback) constructor}.
      * If not explictly set, a default callback is used that will throw
-     * a {@code MaxCountExceededException}.
+     * a {@code MathIllegalStateException}.
      *
-     * @throws MaxCountExceededException at counter exhaustion, unless a
+     * @throws MathIllegalStateException at counter exhaustion, unless a
      * custom {@link MaxCountExceededCallback callback} has been set at
      * construction.
      */
-    public void incrementCount() throws MaxCountExceededException {
+    public void incrementCount() throws MathIllegalStateException {
         if (++count > maximalCount) {
             maxCountCallback.trigger(maximalCount);
         }
@@ -176,8 +177,8 @@ public class Incrementor {
          * Function called when the maximal count has been reached.
          *
          * @param maximalCount Maximal count.
-         * @throws MaxCountExceededException at counter exhaustion
+         * @throws MathIllegalStateException at counter exhaustion
          */
-        void trigger(int maximalCount) throws MaxCountExceededException;
+        void trigger(int maximalCount) throws MathIllegalStateException;
     }
 }

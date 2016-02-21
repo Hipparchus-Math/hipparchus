@@ -16,8 +16,8 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Gamma;
@@ -110,10 +110,10 @@ public class GammaDistribution extends AbstractRealDistribution {
      *
      * @param shape the shape parameter
      * @param scale the scale parameter
-     * @throws NotStrictlyPositiveException if {@code shape <= 0} or
+     * @throws MathIllegalArgumentException if {@code shape <= 0} or
      * {@code scale <= 0}.
      */
-    public GammaDistribution(double shape, double scale) throws NotStrictlyPositiveException {
+    public GammaDistribution(double shape, double scale) throws MathIllegalArgumentException {
         this(shape, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -133,12 +133,12 @@ public class GammaDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to
      * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code shape <= 0} or
+     * @throws MathIllegalArgumentException if {@code shape <= 0} or
      * {@code scale <= 0}.
      * @since 2.1
      */
     public GammaDistribution(double shape, double scale, double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), shape, scale, inverseCumAccuracy);
     }
 
@@ -148,12 +148,12 @@ public class GammaDistribution extends AbstractRealDistribution {
      * @param rng Random number generator.
      * @param shape the shape parameter
      * @param scale the scale parameter
-     * @throws NotStrictlyPositiveException if {@code shape <= 0} or
+     * @throws MathIllegalArgumentException if {@code shape <= 0} or
      * {@code scale <= 0}.
      * @since 3.3
      */
     public GammaDistribution(RandomGenerator rng, double shape, double scale)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(rng, shape, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -166,7 +166,7 @@ public class GammaDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to
      * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code shape <= 0} or
+     * @throws MathIllegalArgumentException if {@code shape <= 0} or
      * {@code scale <= 0}.
      * @since 3.1
      */
@@ -174,14 +174,14 @@ public class GammaDistribution extends AbstractRealDistribution {
                              double shape,
                              double scale,
                              double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (shape <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.SHAPE, shape);
+            throw new MathIllegalArgumentException(LocalizedFormats.SHAPE, shape);
         }
         if (scale <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.SCALE, scale);
+            throw new MathIllegalArgumentException(LocalizedFormats.SCALE, scale);
         }
 
         this.shape = shape;

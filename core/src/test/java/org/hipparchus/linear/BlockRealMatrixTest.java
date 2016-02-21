@@ -19,24 +19,12 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.junit.Test;
-import org.junit.Assert;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.BlockRealMatrix;
-import org.hipparchus.linear.DefaultRealMatrixChangingVisitor;
-import org.hipparchus.linear.DefaultRealMatrixPreservingVisitor;
-import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.MatrixDimensionMismatchException;
-import org.hipparchus.linear.NonSquareMatrixException;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.FastMath;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link BlockRealMatrix} class.
@@ -317,8 +305,8 @@ public final class BlockRealMatrixTest {
         m = new BlockRealMatrix(testData2);
         try {
             m.getTrace();
-            Assert.fail("Expecting NonSquareMatrixException");
-        } catch (NonSquareMatrixException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
@@ -443,14 +431,14 @@ public final class BlockRealMatrixTest {
         assertClose(m.getColumn(2), testDataCol3, entryTolerance);
         try {
             m.getRow(10);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         try {
             m.getColumn(-1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
@@ -461,8 +449,8 @@ public final class BlockRealMatrixTest {
         Assert.assertEquals("get entry",m.getEntry(0,1),2d,entryTolerance);
         try {
             m.getEntry(10, 4);
-            Assert.fail ("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail ("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -529,17 +517,9 @@ public final class BlockRealMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockRealMatrix(reference), sub);
             } else {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
-        } catch (OutOfRangeException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -553,17 +533,9 @@ public final class BlockRealMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockRealMatrix(reference), sub);
             } else {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallExceptiono r NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentExceptiono r MathIllegalArgumentException");
             }
-        } catch (OutOfRangeException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -621,17 +593,9 @@ public final class BlockRealMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockRealMatrix(reference), new BlockRealMatrix(sub));
             } else {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
-        } catch (OutOfRangeException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -648,17 +612,9 @@ public final class BlockRealMatrixTest {
             if (reference != null) {
                 Assert.assertEquals(new BlockRealMatrix(reference), new BlockRealMatrix(sub));
             } else {
-                Assert.fail("Expecting OutOfRangeException or NumberIsTooSmallException or NoDataException");
+                Assert.fail("Expecting MathIllegalArgumentException or MathIllegalArgumentException or MathIllegalArgumentException");
             }
-        } catch (OutOfRangeException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NumberIsTooSmallException e) {
-            if (reference != null) {
-                throw e;
-            }
-        } catch (NoDataException e) {
+        } catch (MathIllegalArgumentException e) {
             if (reference != null) {
                 throw e;
             }
@@ -674,14 +630,14 @@ public final class BlockRealMatrixTest {
         Assert.assertEquals("Row3", mRow3, m.getRowMatrix(3));
         try {
             m.getRowMatrix(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowMatrix(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -695,14 +651,14 @@ public final class BlockRealMatrixTest {
         Assert.assertEquals(mRow3, m.getRowMatrix(0));
         try {
             m.setRowMatrix(-1, mRow3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -735,14 +691,14 @@ public final class BlockRealMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnMatrix(3));
         try {
             m.getColumnMatrix(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnMatrix(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -756,14 +712,14 @@ public final class BlockRealMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnMatrix(1));
         try {
             m.setColumnMatrix(-1, mColumn3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnMatrix(0, m);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -797,14 +753,14 @@ public final class BlockRealMatrixTest {
         Assert.assertEquals(mRow3, m.getRowVector(3));
         try {
             m.getRowVector(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRowVector(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -818,14 +774,14 @@ public final class BlockRealMatrixTest {
         Assert.assertEquals(mRow3, m.getRowVector(0));
         try {
             m.setRowVector(-1, mRow3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRowVector(0, new ArrayRealVector(5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -858,14 +814,14 @@ public final class BlockRealMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnVector(3));
         try {
             m.getColumnVector(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumnVector(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -879,14 +835,14 @@ public final class BlockRealMatrixTest {
         Assert.assertEquals(mColumn3, m.getColumnVector(1));
         try {
             m.setColumnVector(-1, mColumn3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumnVector(0, new ArrayRealVector(5));
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -925,14 +881,14 @@ public final class BlockRealMatrixTest {
         checkArrays(subRow3[0], m.getRow(3));
         try {
             m.getRow(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getRow(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -945,14 +901,14 @@ public final class BlockRealMatrixTest {
         checkArrays(subRow3[0], m.getRow(0));
         try {
             m.setRow(-1, subRow3[0]);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setRow(0, new double[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -986,14 +942,14 @@ public final class BlockRealMatrixTest {
         checkArrays(mColumn3, m.getColumn(3));
         try {
             m.getColumn(-1);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.getColumn(4);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1007,14 +963,14 @@ public final class BlockRealMatrixTest {
         checkArrays(mColumn3, m.getColumn(1));
         try {
             m.setColumn(-1, mColumn3);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             m.setColumn(0, new double[5]);
-            Assert.fail("Expecting MatrixDimensionMismatchException");
-        } catch (MatrixDimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -1104,21 +1060,21 @@ public final class BlockRealMatrixTest {
         // dimension overflow
         try {
             m.setSubMatrix(testData,1,1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
         // dimension underflow
         try {
             m.setSubMatrix(testData,-1,1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
         try {
             m.setSubMatrix(testData,1,-1);
-            Assert.fail("expecting OutOfRangeException");
-        } catch (OutOfRangeException e) {
+            Assert.fail("expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
             // expected
         }
 

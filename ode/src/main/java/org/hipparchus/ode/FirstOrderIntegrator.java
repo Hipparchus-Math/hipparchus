@@ -17,10 +17,8 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /** This interface represents a first order integrator for
  * differential equations.
@@ -53,14 +51,13 @@ public interface FirstOrderIntegrator extends ODEIntegrator {
    * @return stop time, will be the same as target time if integration reached its
    * target, but may be different if some {@link
    * org.hipparchus.ode.events.EventHandler} stops it at some point.
-   * @exception DimensionMismatchException if arrays dimension do not match equations settings
-   * @exception NumberIsTooSmallException if integration step is too small
-   * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-   * @exception NoBracketingException if the location of an event cannot be bracketed
+   * @exception MathIllegalArgumentException if arrays dimension do not match equations settings
+   * @exception MathIllegalArgumentException if integration step is too small
+   * @exception MathIllegalStateException if the number of functions evaluations is exceeded
+   * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
    */
   double integrate (FirstOrderDifferentialEquations equations,
                     double t0, double[] y0, double t, double[] y)
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException;
+      throws MathIllegalArgumentException, MathIllegalStateException;
 
 }

@@ -20,10 +20,10 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.util.IntegerSequence;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -76,15 +76,16 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
      * @param absoluteAccuracy Absolute accuracy.
      * @param functionValueAccuracy Function value accuracy.
      * @param maximalOrder maximal order.
-     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     * @exception MathIllegalArgumentException if maximal order is lower than 2
      */
     public FieldBracketingNthOrderBrentSolver(final T relativeAccuracy,
                                               final T absoluteAccuracy,
                                               final T functionValueAccuracy,
                                               final int maximalOrder)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         if (maximalOrder < 2) {
-            throw new NumberIsTooSmallException(maximalOrder, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maximalOrder, 2);
         }
         this.field                 = relativeAccuracy.getField();
         this.maximalOrder          = maximalOrder;
@@ -160,11 +161,11 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
      * accept as solutions.
      * @return a value where the function is zero.
      * @exception NullArgumentException if f is null.
-     * @exception NoBracketingException if root cannot be bracketed
+     * @exception MathIllegalArgumentException if root cannot be bracketed
      */
     public T solve(final int maxEval, final RealFieldUnivariateFunction<T> f,
                    final T min, final T max, final AllowedSolution allowedSolution)
-        throws NullArgumentException, NoBracketingException {
+        throws MathIllegalArgumentException, NullArgumentException {
         return solve(maxEval, f, min, max, min.add(max).divide(2), allowedSolution);
     }
 
@@ -183,12 +184,12 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
      * accept as solutions.
      * @return a value where the function is zero.
      * @exception NullArgumentException if f is null.
-     * @exception NoBracketingException if root cannot be bracketed
+     * @exception MathIllegalArgumentException if root cannot be bracketed
      */
     public T solve(final int maxEval, final RealFieldUnivariateFunction<T> f,
                    final T min, final T max, final T startValue,
                    final AllowedSolution allowedSolution)
-        throws NullArgumentException, NoBracketingException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         // Checks.
         MathUtils.checkNotNull(f);
@@ -244,8 +245,9 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
                 nbPoints        = 3;
                 signChangeIndex = 2;
             } else {
-                throw new NoBracketingException(x[0].getReal(), x[2].getReal(),
-                                                y[0].getReal(), y[2].getReal());
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                                       x[0].getReal(), x[2].getReal(),
+                                                       y[0].getReal(), y[2].getReal());
             }
 
         }
@@ -287,7 +289,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
                     return yA.getReal() < 0 ? xB : xA;
                 default :
                     // this should never happen
-                    throw new MathInternalError(null);
+                    throw new MathRuntimeException(null);
                 }
             }
 

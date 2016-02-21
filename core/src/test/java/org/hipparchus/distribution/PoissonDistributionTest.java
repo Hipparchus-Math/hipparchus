@@ -18,7 +18,7 @@ package org.hipparchus.distribution;
 
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.PoissonDistribution;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -147,7 +147,7 @@ public class PoissonDistributionTest extends IntegerDistributionAbstractTest {
         Assert.assertEquals(0, dist.inverseCumulativeProbability(0d));
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testNegativeMean() {
         new PoissonDistribution(-1);
     }

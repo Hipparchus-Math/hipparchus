@@ -22,18 +22,12 @@ import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.StepFunction;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
-import org.hipparchus.optim.univariate.BrentOptimizer;
-import org.hipparchus.optim.univariate.SearchInterval;
-import org.hipparchus.optim.univariate.SimpleUnivariateValueChecker;
-import org.hipparchus.optim.univariate.UnivariateObjectiveFunction;
-import org.hipparchus.optim.univariate.UnivariateOptimizer;
-import org.hipparchus.optim.univariate.UnivariatePointValuePair;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -65,7 +59,7 @@ public final class BrentOptimizerTest {
                                GoalType.MINIMIZE,
                                new SearchInterval(4, 5));
             Assert.fail("an exception should have been thrown");
-        } catch (TooManyEvaluationsException fee) {
+        } catch (MathIllegalStateException fee) {
             // expected
         }
     }
@@ -92,9 +86,11 @@ public final class BrentOptimizerTest {
         UnivariateFunction f = new UnivariateFunction() {
             public double value(double x) {
                 if (x < lower) {
-                    throw new NumberIsTooSmallException(x, lower, true);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                           x, lower);
                 } else if (x > upper) {
-                    throw new NumberIsTooLargeException(x, upper, true);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                           x, upper);
                 } else {
                     return x;
                 }
@@ -188,7 +184,7 @@ public final class BrentOptimizerTest {
                                GoalType.MAXIMIZE,
                                new SearchInterval(0.2, 0.3));
             Assert.fail("an exception should have been thrown");
-        } catch (TooManyEvaluationsException miee) {
+        } catch (MathIllegalStateException miee) {
             // expected
         }
     }

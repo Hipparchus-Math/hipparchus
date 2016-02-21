@@ -18,7 +18,7 @@
 package org.hipparchus.distribution;
 
 import org.hipparchus.distribution.WeibullDistribution;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -87,8 +87,8 @@ public class WeibullDistributionTest extends RealDistributionAbstractTest {
         Assert.assertEquals(1, dist.getShape(), 0);
         try {
             new WeibullDistribution(0, 2);
-            Assert.fail("NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
     }
@@ -99,8 +99,8 @@ public class WeibullDistributionTest extends RealDistributionAbstractTest {
         Assert.assertEquals(2, dist.getScale(), 0);
         try {
             new WeibullDistribution(1, 0);
-            Assert.fail("NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException e) {
+            Assert.fail("MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException e) {
             // Expected.
         }
     }

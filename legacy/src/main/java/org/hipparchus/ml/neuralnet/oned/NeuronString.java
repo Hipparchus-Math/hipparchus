@@ -17,11 +17,11 @@
 
 package org.hipparchus.ml.neuralnet.oned;
 
-import java.io.Serializable;
 import java.io.ObjectInputStream;
+import java.io.Serializable;
 
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
 import org.hipparchus.ml.neuralnet.Network;
 
@@ -54,14 +54,15 @@ public class NeuronString implements Serializable {
      * neurons will be linked together).
      * @param featuresList Arrays that will initialize the features sets of
      * the network's neurons.
-     * @throws NumberIsTooSmallException if {@code num < 2}.
+     * @throws MathIllegalArgumentException if {@code num < 2}.
      */
     NeuronString(boolean wrap,
                  double[][] featuresList) {
         size = featuresList.length;
 
         if (size < 2) {
-            throw new NumberIsTooSmallException(size, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   size, 2);
         }
 
         this.wrap = wrap;
@@ -96,13 +97,14 @@ public class NeuronString implements Serializable {
      * neurons will be linked together).
      * @param featureInit Arrays that will initialize the features sets of
      * the network's neurons.
-     * @throws NumberIsTooSmallException if {@code num < 2}.
+     * @throws MathIllegalArgumentException if {@code num < 2}.
      */
     public NeuronString(int num,
                         boolean wrap,
                         FeatureInitializer[] featureInit) {
         if (num < 2) {
-            throw new NumberIsTooSmallException(num, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   num, 2);
         }
 
         size = num;
@@ -153,12 +155,13 @@ public class NeuronString implements Serializable {
      *
      * @param i Neuron index.
      * @return the features of the neuron at index {@code i}.
-     * @throws OutOfRangeException if {@code i} is out of range.
+     * @throws MathIllegalArgumentException if {@code i} is out of range.
      */
     public double[] getFeatures(int i) {
         if (i < 0 ||
             i >= size) {
-            throw new OutOfRangeException(i, 0, size - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   i, 0, size - 1);
         }
 
         return network.getNeuron(identifiers[i]).getFeatures();

@@ -19,10 +19,9 @@ package org.hipparchus.distribution;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.Pair;
@@ -65,8 +64,8 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
      *
      * @param rng Random number generator.
      * @param components Distributions from which to sample.
-     * @throws NotPositiveException if any of the weights is negative.
-     * @throws DimensionMismatchException if not all components have the same
+     * @throws MathIllegalArgumentException if any of the weights is negative.
+     * @throws MathIllegalArgumentException if not all components have the same
      * number of variables.
      */
     public MixtureMultivariateRealDistribution(RandomGenerator rng,
@@ -79,17 +78,18 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
         for (int i = 0; i < numComp; i++) {
             final Pair<Double, T> comp = components.get(i);
             if (comp.getSecond().getDimension() != dim) {
-                throw new DimensionMismatchException(comp.getSecond().getDimension(), dim);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       comp.getSecond().getDimension(), dim);
             }
             if (comp.getFirst() < 0) {
-                throw new NotPositiveException(comp.getFirst());
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, comp.getFirst(), 0);
             }
             weightSum += comp.getFirst();
         }
 
         // Check for overflow.
         if (Double.isInfinite(weightSum)) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         }
 
         // Store each distribution and its normalized weight.

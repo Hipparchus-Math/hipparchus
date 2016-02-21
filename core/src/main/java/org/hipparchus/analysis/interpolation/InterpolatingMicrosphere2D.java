@@ -43,11 +43,11 @@ public class InterpolatingMicrosphere2D extends InterpolatingMicrosphere {
      * considered dark.
      * @param background Value returned when the {@code maxDarkFraction}
      * threshold is exceeded.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code size <= 0}.
-     * @throws org.hipparchus.exception.NotPositiveException if
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if
      * {@code darkThreshold < 0}.
-     * @throws org.hipparchus.exception.OutOfRangeException if
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if
      * {@code maxDarkFraction} does not belong to the interval {@code [0, 1]}.
      */
     public InterpolatingMicrosphere2D(int size,

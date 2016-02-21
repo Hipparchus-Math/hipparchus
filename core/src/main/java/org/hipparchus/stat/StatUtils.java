@@ -18,13 +18,9 @@ package org.hipparchus.stat;
 
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
@@ -673,18 +669,19 @@ public final class StatUtils {
      * @param sample1  the first array
      * @param sample2  the second array
      * @return sum of paired differences
-     * @throws DimensionMismatchException if the arrays do not have the same (positive) length.
-     * @throws NoDataException if the sample arrays are empty.
+     * @throws MathIllegalArgumentException if the arrays do not have the same (positive) length.
+     * @throws MathIllegalArgumentException if the sample arrays are empty.
      */
     public static double sumDifference(final double[] sample1, final double[] sample2)
-        throws DimensionMismatchException, NoDataException {
+        throws MathIllegalArgumentException {
 
         int n = sample1.length;
         if (n != sample2.length) {
-            throw new DimensionMismatchException(n, sample2.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   n, sample2.length);
         }
         if (n <= 0) {
-            throw new NoDataException(LocalizedFormats.INSUFFICIENT_DIMENSION);
+            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION);
         }
         double result = 0;
         for (int i = 0; i < n; i++) {
@@ -700,11 +697,11 @@ public final class StatUtils {
      * @param sample1  the first array
      * @param sample2  the second array
      * @return mean of paired differences
-     * @throws DimensionMismatchException if the arrays do not have the same (positive) length.
-     * @throws NoDataException if the sample arrays are empty.
+     * @throws MathIllegalArgumentException if the arrays do not have the same (positive) length.
+     * @throws MathIllegalArgumentException if the sample arrays are empty.
      */
     public static double meanDifference(final double[] sample1, final double[] sample2)
-        throws DimensionMismatchException, NoDataException {
+        throws MathIllegalArgumentException {
         return sumDifference(sample1, sample2) / sample1.length;
     }
 
@@ -716,22 +713,24 @@ public final class StatUtils {
      * @param sample2  the second array
      * @param meanDifference   the mean difference between corresponding entries
      * @return variance of paired differences
-     * @throws DimensionMismatchException if the arrays do not have the same length.
-     * @throws NumberIsTooSmallException if the arrays length is less than 2.
+     * @throws MathIllegalArgumentException if the arrays do not have the same length.
+     * @throws MathIllegalArgumentException if the arrays length is less than 2.
      * @see #meanDifference(double[],double[])
      */
     public static double varianceDifference(final double[] sample1, final double[] sample2, double meanDifference)
-        throws DimensionMismatchException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         double sum1 = 0d;
         double sum2 = 0d;
         double diff = 0d;
         int n = sample1.length;
         if (n != sample2.length) {
-            throw new DimensionMismatchException(n, sample2.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   n, sample2.length);
         }
         if (n < 2) {
-            throw new NumberIsTooSmallException(n, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   n, 2);
         }
         for (int i = 0; i < n; i++) {
             diff = sample1[i] - sample2[i];
@@ -827,11 +826,11 @@ public final class StatUtils {
         }
 
         if (begin < 0) {
-            throw new NotPositiveException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
+            throw new MathIllegalArgumentException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
         }
 
         if (length < 0) {
-            throw new NotPositiveException(LocalizedFormats.LENGTH, Integer.valueOf(length));
+            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, Integer.valueOf(length));
         }
 
         return getMode(sample, begin, length);

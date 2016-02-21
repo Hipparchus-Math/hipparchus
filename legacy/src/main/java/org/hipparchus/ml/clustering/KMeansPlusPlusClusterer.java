@@ -22,10 +22,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.hipparchus.exception.ConvergenceException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ml.distance.DistanceMeasure;
 import org.hipparchus.ml.distance.EuclideanDistance;
 import org.hipparchus.random.JDKRandomGenerator;
@@ -189,19 +188,20 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
      * @return a list of clusters containing the points
      * @throws MathIllegalArgumentException if the data points are null or the number
      *     of clusters is larger than the number of data points
-     * @throws ConvergenceException if an empty cluster is encountered and the
+     * @throws MathIllegalStateException if an empty cluster is encountered and the
      * {@link #emptyStrategy} is set to {@code ERROR}
      */
     @Override
     public List<CentroidCluster<T>> cluster(final Collection<T> points)
-        throws MathIllegalArgumentException, ConvergenceException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         // sanity checks
         MathUtils.checkNotNull(points);
 
         // number of clusters has to be smaller or equal the number of data points
         if (points.size() < k) {
-            throw new NumberIsTooSmallException(points.size(), k, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   points.size(), k);
         }
 
         // create the initial clusters
@@ -231,7 +231,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
                             newCenter = getFarthestPoint(clusters);
                             break;
                         default :
-                            throw new ConvergenceException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
+                            throw new MathIllegalStateException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
                     }
                     emptyCluster = true;
                 } else {
@@ -408,10 +408,10 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
      *
      * @param clusters the {@link Cluster}s to search
      * @return a random point from the selected cluster
-     * @throws ConvergenceException if clusters are all empty
+     * @throws MathIllegalStateException if clusters are all empty
      */
     private T getPointFromLargestVarianceCluster(final Collection<CentroidCluster<T>> clusters)
-            throws ConvergenceException {
+            throws MathIllegalStateException {
 
         double maxVariance = Double.NEGATIVE_INFINITY;
         Cluster<T> selected = null;
@@ -437,7 +437,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         // did we find at least one non-empty cluster ?
         if (selected == null) {
-            throw new ConvergenceException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
+            throw new MathIllegalStateException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
         }
 
         // extract a random point from the cluster
@@ -451,10 +451,10 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
      *
      * @param clusters the {@link Cluster}s to search
      * @return a random point from the selected cluster
-     * @throws ConvergenceException if clusters are all empty
+     * @throws MathIllegalStateException if clusters are all empty
      */
     private T getPointFromLargestNumberCluster(final Collection<? extends Cluster<T>> clusters)
-            throws ConvergenceException {
+            throws MathIllegalStateException {
 
         int maxNumber = 0;
         Cluster<T> selected = null;
@@ -473,7 +473,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         // did we find at least one non-empty cluster ?
         if (selected == null) {
-            throw new ConvergenceException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
+            throw new MathIllegalStateException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
         }
 
         // extract a random point from the cluster
@@ -487,9 +487,9 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
      *
      * @param clusters the {@link Cluster}s to search
      * @return point farthest to its cluster center
-     * @throws ConvergenceException if clusters are all empty
+     * @throws MathIllegalStateException if clusters are all empty
      */
-    private T getFarthestPoint(final Collection<CentroidCluster<T>> clusters) throws ConvergenceException {
+    private T getFarthestPoint(final Collection<CentroidCluster<T>> clusters) throws MathIllegalStateException {
 
         double maxDistance = Double.NEGATIVE_INFINITY;
         Cluster<T> selectedCluster = null;
@@ -512,7 +512,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         // did we find at least one non-empty cluster ?
         if (selectedCluster == null) {
-            throw new ConvergenceException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
+            throw new MathIllegalStateException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
         }
 
         return selectedCluster.getPoints().remove(selectedPoint);

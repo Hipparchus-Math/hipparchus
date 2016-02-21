@@ -18,7 +18,7 @@ package org.hipparchus.complex;
 
 import org.hipparchus.complex.RootsOfUnity;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.ZeroException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -48,7 +48,7 @@ public class RootsOfUnityTest {
         roots.isCounterClockWise();
     }
 
-    @Test(expected = ZeroException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testZeroNumberOfRoots() {
         final RootsOfUnity roots = new RootsOfUnity();
         roots.computeRoots(0);

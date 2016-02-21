@@ -16,10 +16,8 @@
  */
 package org.hipparchus.exception;
 
-import org.hipparchus.exception.util.ExceptionContext;
-import org.hipparchus.exception.util.ExceptionContextProvider;
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
+import java.text.MessageFormat;
+import java.util.Locale;
 
 /**
  * All conditions checks that fail due to a {@code null} argument must throw
@@ -35,13 +33,16 @@ import org.hipparchus.exception.util.LocalizedFormats;
  * @since 2.2
  */
 public class NullArgumentException extends NullPointerException
-    implements ExceptionContextProvider {
+    implements LocalizedException {
 
     /** Serializable version Id. */
-    private static final long serialVersionUID = 20150225L;
+    private static final long serialVersionUID = 20160217L;
 
-    /** Context. */
-    private final ExceptionContext context;
+    /** Format specifier (to be translated). */
+    private final Localizable specifier;
+
+    /** Parts to insert in the format (no translation). */
+    private final Object[] parts;
 
     /**
      * Default constructor.
@@ -49,36 +50,55 @@ public class NullArgumentException extends NullPointerException
     public NullArgumentException() {
         this(LocalizedFormats.NULL_NOT_ALLOWED);
     }
-    /**
-     * @param pattern Message pattern providing the specific context of
-     * the error.
-     * @param arguments Values for replacing the placeholders in {@code pattern}.
+
+    /** Simple constructor.
+     * @param specifier format specifier (to be translated).
+     * @param parts parts to insert in the format (no translation).
      */
-    public NullArgumentException(Localizable pattern,
-                                 Object ... arguments) {
-        context = new ExceptionContext(this);
-        context.addMessage(pattern, arguments);
+    public NullArgumentException(final Localizable specifier, final Object ... parts) {
+        this.specifier = specifier;
+        this.parts     = (parts == null) ? new Object[0] : parts.clone();
     }
 
-    /**
-     * {@inheritDoc}
-     * @since 4.0
-     */
+    /** {@inheritDoc} */
     @Override
-    public ExceptionContext getContext() {
-        return context;
+    public String getMessage(final Locale locale) {
+        return buildMessage(locale, specifier, parts);
     }
 
     /** {@inheritDoc} */
     @Override
     public String getMessage() {
-        return context.getMessage();
+        return getMessage(Locale.US);
     }
 
     /** {@inheritDoc} */
     @Override
     public String getLocalizedMessage() {
-        return context.getLocalizedMessage();
+        return getMessage(Locale.getDefault());
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Localizable getSpecifier() {
+        return specifier;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Object[] getParts() {
+        return parts.clone();
+    }
+
+    /**
+     * Builds a message string by from a pattern and its arguments.
+     * @param locale Locale in which the message should be translated
+     * @param specifier format specifier (to be translated)
+     * @param parts parts to insert in the format (no translation)
+     * @return a message string
+     */
+    private static String buildMessage(final Locale locale, final Localizable specifier, final Object ... parts) {
+        return (specifier == null) ? "" : new MessageFormat(specifier.getLocalizedString(locale), locale).format(parts);
     }
 
 }

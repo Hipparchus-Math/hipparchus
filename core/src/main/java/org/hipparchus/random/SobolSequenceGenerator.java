@@ -25,11 +25,10 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.MathParseException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -86,17 +85,18 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      * Construct a new Sobol sequence generator for the given space dimension.
      *
      * @param dimension the space dimension
-     * @throws OutOfRangeException if the space dimension is outside the allowed range of [1, 1000]
+     * @throws MathIllegalArgumentException if the space dimension is outside the allowed range of [1, 1000]
      */
-    public SobolSequenceGenerator(final int dimension) throws OutOfRangeException {
+    public SobolSequenceGenerator(final int dimension) throws MathIllegalArgumentException {
         if (dimension < 1 || dimension > MAX_DIMENSION) {
-            throw new OutOfRangeException(dimension, 1, MAX_DIMENSION);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   dimension, 1, MAX_DIMENSION);
         }
 
         // initialize the other dimensions with direction numbers from a resource
         final InputStream is = getClass().getResourceAsStream(RESOURCE_NAME);
         if (is == null) {
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         }
 
         this.dimension = dimension;
@@ -109,10 +109,10 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
             initFromStream(is);
         } catch (IOException e) {
             // the internal resource file could not be read -> should not happen
-            throw new MathInternalError();
-        } catch (MathParseException e) {
+            throw MathRuntimeException.createInternalError();
+        } catch (MathIllegalStateException e) {
             // the internal resource file could not be parsed -> should not happen
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         } finally {
             try {
                 is.close();
@@ -147,17 +147,18 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      *
      * @param dimension the space dimension
      * @param is the stream to read the direction vectors from
-     * @throws NotStrictlyPositiveException if the space dimension is &lt; 1
-     * @throws OutOfRangeException if the space dimension is outside the range [1, max], where
+     * @throws MathIllegalArgumentException if the space dimension is &lt; 1
+     * @throws MathIllegalArgumentException if the space dimension is outside the range [1, max], where
      *   max refers to the maximum dimension found in the input stream
-     * @throws MathParseException if the content in the stream could not be parsed successfully
+     * @throws MathIllegalStateException if the content in the stream could not be parsed successfully
      * @throws IOException if an error occurs while reading from the input stream
      */
     public SobolSequenceGenerator(final int dimension, final InputStream is)
-            throws NotStrictlyPositiveException, MathParseException, IOException {
+            throws MathIllegalArgumentException, MathIllegalStateException, IOException {
 
         if (dimension < 1) {
-            throw new NotStrictlyPositiveException(dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   dimension, 1);
         }
 
         this.dimension = dimension;
@@ -169,7 +170,8 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
         // initialize the other dimensions with direction numbers from the stream
         int lastDimension = initFromStream(is);
         if (lastDimension < dimension) {
-            throw new OutOfRangeException(dimension, 1, lastDimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   dimension, 1, lastDimension);
         }
     }
 
@@ -182,9 +184,9 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      * @param is the input stream to read the direction vector from
      * @return the last dimension that has been read from the input stream
      * @throws IOException if the stream could not be read
-     * @throws MathParseException if the content could not be parsed successfully
+     * @throws MathIllegalStateException if the content could not be parsed successfully
      */
-    private int initFromStream(final InputStream is) throws MathParseException, IOException {
+    private int initFromStream(final InputStream is) throws MathIllegalStateException, IOException {
 
         // special case: dimension 1 -> use unit initialization
         for (int i = 1; i <= BITS; i++) {
@@ -219,10 +221,9 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
                     if (dim > dimension) {
                         return dim;
                     }
-                } catch (NoSuchElementException e) {
-                    throw new MathParseException(line, lineNumber);
-                } catch (NumberFormatException e) {
-                    throw new MathParseException(line, lineNumber);
+                } catch (NoSuchElementException|NumberFormatException e) {
+                    throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE,
+                                                        line, lineNumber);
                 }
                 lineNumber++;
             }
@@ -285,9 +286,9 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      *
      * @param index the index in the sequence to skip to
      * @return the i-th point in the Sobol sequence
-     * @throws NotPositiveException if index &lt; 0
+     * @throws MathIllegalArgumentException if index &lt; 0
      */
-    public double[] skipTo(final int index) throws NotPositiveException {
+    public double[] skipTo(final int index) throws MathIllegalArgumentException {
         if (index == 0) {
             // reset x vector
             Arrays.fill(x, 0);

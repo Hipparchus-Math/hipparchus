@@ -21,8 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
@@ -50,7 +49,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
     createIntegrator(Field<T> field, final int nSteps, final double minStep, final double maxStep,
                      final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance);
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public abstract void testMinStep();
 
     protected <T extends RealFieldElement<T>> void doDimensionCheck(final Field<T> field) {
@@ -103,7 +102,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
     }
 
-    @Test(expected = MaxCountExceededException.class)
+    @Test(expected = MathIllegalStateException.class)
     public abstract void exceedMaxEvaluations();
 
     protected <T extends RealFieldElement<T>> void doExceedMaxEvaluations(final Field<T> field, final int max) {

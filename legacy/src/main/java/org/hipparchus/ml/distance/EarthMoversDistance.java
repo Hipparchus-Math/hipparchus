@@ -16,7 +16,7 @@
  */
 package org.hipparchus.ml.distance;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -35,7 +35,7 @@ public class EarthMoversDistance implements DistanceMeasure {
     /** {@inheritDoc} */
     @Override
     public double compute(double[] a, double[] b)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         MathArrays.checkEqualLength(a, b);
         double lastDistance = 0;
         double totalDistance = 0;

@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode.events;
 
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 
 /** Enumerate for {@link EventFilter filtering events}.
  *
@@ -142,7 +142,7 @@ public enum FilterType {
                         }
                     default    :
                         // this should never happen
-                        throw new MathInternalError();
+                        throw MathRuntimeException.createInternalError();
                 }
             } else {
                 switch (previous) {
@@ -197,7 +197,7 @@ public enum FilterType {
                         }
                     default    :
                         // this should never happen
-                        throw new MathInternalError();
+                        throw MathRuntimeException.createInternalError();
                 }
             }
         }
@@ -320,7 +320,7 @@ public enum FilterType {
                         }
                     default    :
                         // this should never happen
-                        throw new MathInternalError();
+                        throw MathRuntimeException.createInternalError();
                 }
             } else {
                 switch (previous) {
@@ -375,7 +375,7 @@ public enum FilterType {
                         }
                     default    :
                         // this should never happen
-                        throw new MathInternalError();
+                        throw MathRuntimeException.createInternalError();
                 }
             }
         }

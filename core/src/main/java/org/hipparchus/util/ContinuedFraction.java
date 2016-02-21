@@ -16,9 +16,8 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * Provides a generic means to evaluate continued fractions.  Subclasses simply
@@ -66,9 +65,9 @@ public abstract class ContinuedFraction {
      * Evaluates the continued fraction at the value x.
      * @param x the evaluation point.
      * @return the value of the continued fraction evaluated at x.
-     * @throws ConvergenceException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
-    public double evaluate(double x) throws ConvergenceException {
+    public double evaluate(double x) throws MathIllegalStateException {
         return evaluate(x, DEFAULT_EPSILON, Integer.MAX_VALUE);
     }
 
@@ -77,9 +76,9 @@ public abstract class ContinuedFraction {
      * @param x the evaluation point.
      * @param epsilon maximum error allowed.
      * @return the value of the continued fraction evaluated at x.
-     * @throws ConvergenceException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
-    public double evaluate(double x, double epsilon) throws ConvergenceException {
+    public double evaluate(double x, double epsilon) throws MathIllegalStateException {
         return evaluate(x, epsilon, Integer.MAX_VALUE);
     }
 
@@ -88,11 +87,11 @@ public abstract class ContinuedFraction {
      * @param x the evaluation point.
      * @param maxIterations maximum number of convergents
      * @return the value of the continued fraction evaluated at x.
-     * @throws ConvergenceException if the algorithm fails to converge.
-     * @throws MaxCountExceededException if maximal number of iterations is reached
+     * @throws MathIllegalStateException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if maximal number of iterations is reached
      */
     public double evaluate(double x, int maxIterations)
-        throws ConvergenceException, MaxCountExceededException {
+        throws MathIllegalStateException {
         return evaluate(x, DEFAULT_EPSILON, maxIterations);
     }
 
@@ -117,10 +116,10 @@ public abstract class ContinuedFraction {
      * @param maxIterations maximum number of convergents
      * @return the value of the continued fraction evaluated at x.
      * @throws ConvergenceException if the algorithm fails to converge.
-     * @throws MaxCountExceededException if maximal number of iterations is reached
+     * @throws MathIllegalStateException if maximal number of iterations is reached
      */
     public double evaluate(double x, double epsilon, int maxIterations)
-        throws ConvergenceException, MaxCountExceededException {
+        throws MathIllegalStateException {
         final double small = 1e-50;
         double hPrev = getA(0, x);
 
@@ -152,12 +151,10 @@ public abstract class ContinuedFraction {
             hN = hPrev * deltaN;
 
             if (Double.isInfinite(hN)) {
-                throw new ConvergenceException(LocalizedFormats.CONTINUED_FRACTION_INFINITY_DIVERGENCE,
-                                               x);
+                throw new MathIllegalStateException(LocalizedFormats.CONTINUED_FRACTION_INFINITY_DIVERGENCE, x);
             }
             if (Double.isNaN(hN)) {
-                throw new ConvergenceException(LocalizedFormats.CONTINUED_FRACTION_NAN_DIVERGENCE,
-                                               x);
+                throw new MathIllegalStateException(LocalizedFormats.CONTINUED_FRACTION_NAN_DIVERGENCE, x);
             }
 
             if (FastMath.abs(deltaN - 1.0) < epsilon) {
@@ -171,7 +168,7 @@ public abstract class ContinuedFraction {
         }
 
         if (n >= maxIterations) {
-            throw new MaxCountExceededException(LocalizedFormats.NON_CONVERGENT_CONTINUED_FRACTION,
+            throw new MathIllegalStateException(LocalizedFormats.NON_CONVERGENT_CONTINUED_FRACTION,
                                                 maxIterations, x);
         }
 

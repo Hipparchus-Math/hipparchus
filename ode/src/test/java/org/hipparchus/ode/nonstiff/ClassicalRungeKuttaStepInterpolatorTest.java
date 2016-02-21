@@ -25,13 +25,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ContinuousOutputModel;
 import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.nonstiff.ClassicalRungeKuttaIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.junit.Assert;
@@ -41,8 +38,7 @@ public class ClassicalRungeKuttaStepInterpolatorTest {
 
   @Test
   public void derivativesConsistency()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     TestProblem3 pb = new TestProblem3();
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
     ClassicalRungeKuttaIntegrator integ = new ClassicalRungeKuttaIntegrator(step);
@@ -52,8 +48,7 @@ public class ClassicalRungeKuttaStepInterpolatorTest {
   @Test
   public void serialization()
     throws IOException, ClassNotFoundException,
-           DimensionMismatchException, NumberIsTooSmallException,
-           MaxCountExceededException, NoBracketingException  {
+           MathIllegalArgumentException, MathIllegalStateException  {
 
     TestProblem3 pb = new TestProblem3(0.9);
     double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.0003;

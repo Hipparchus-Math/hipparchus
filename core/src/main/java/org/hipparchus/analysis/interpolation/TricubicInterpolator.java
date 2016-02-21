@@ -16,10 +16,8 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -37,13 +35,13 @@ public class TricubicInterpolator
                                                      final double[] yval,
                                                      final double[] zval,
                                                      final double[][][] fval)
-        throws NoDataException, NumberIsTooSmallException,
-               DimensionMismatchException, NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         if (xval.length == 0 || yval.length == 0 || zval.length == 0 || fval.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (xval.length != fval.length) {
-            throw new DimensionMismatchException(xval.length, fval.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xval.length, fval.length);
         }
 
         MathArrays.checkOrder(xval);
@@ -65,7 +63,8 @@ public class TricubicInterpolator
 
         for (int i = 1; i < xLen - 1; i++) {
             if (yval.length != fval[i].length) {
-                throw new DimensionMismatchException(yval.length, fval[i].length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       yval.length, fval[i].length);
             }
 
             final int nI = i + 1;
@@ -78,7 +77,8 @@ public class TricubicInterpolator
 
             for (int j = 1; j < yLen - 1; j++) {
                 if (zval.length != fval[i][j].length) {
-                    throw new DimensionMismatchException(zval.length, fval[i][j].length);
+                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                           zval.length, fval[i][j].length);
                 }
 
                 final int nJ = j + 1;

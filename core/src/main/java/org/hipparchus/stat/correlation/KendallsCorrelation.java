@@ -19,7 +19,8 @@ package org.hipparchus.stat.correlation;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -149,13 +150,14 @@ public class KendallsCorrelation {
      * @param xArray first data array
      * @param yArray second data array
      * @return Returns Kendall's Tau rank correlation coefficient for the two arrays
-     * @throws DimensionMismatchException if the arrays lengths do not match
+     * @throws MathIllegalArgumentException if the arrays lengths do not match
      */
     public double correlation(final double[] xArray, final double[] yArray)
-            throws DimensionMismatchException {
+            throws MathIllegalArgumentException {
 
         if (xArray.length != yArray.length) {
-            throw new DimensionMismatchException(xArray.length, yArray.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xArray.length, yArray.length);
         }
 
         final int n = xArray.length;

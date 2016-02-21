@@ -20,7 +20,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.TDistribution;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Test cases for TDistribution.
  * Extends ContinuousDistributionAbstractTest.  See class javadoc for
@@ -120,7 +120,7 @@ public class TDistributionTest extends RealDistributionAbstractTest {
         Assert.assertEquals(5d, dist.getDegreesOfFreedom(), Double.MIN_VALUE);
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testPreconditions() {
         new TDistribution(0);
     }

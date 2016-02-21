@@ -17,9 +17,8 @@
 
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.ranking.NaNStrategy;
@@ -169,12 +168,13 @@ public class SpearmansCorrelation {
      * @param xArray first data array
      * @param yArray second data array
      * @return Returns Spearman's rank correlation coefficient for the two arrays
-     * @throws DimensionMismatchException if the arrays lengths do not match
+     * @throws MathIllegalArgumentException if the arrays lengths do not match
      * @throws MathIllegalArgumentException if the array length is less than 2
      */
     public double correlation(final double[] xArray, final double[] yArray) {
         if (xArray.length != yArray.length) {
-            throw new DimensionMismatchException(xArray.length, yArray.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xArray.length, yArray.length);
         } else if (xArray.length < 2) {
             throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION,
                                                    xArray.length, 2);

@@ -19,7 +19,7 @@ package org.hipparchus.analysis.integration.gauss;
 import java.math.BigDecimal;
 import java.math.MathContext;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Pair;
 
 /**
@@ -62,7 +62,7 @@ public class LegendreHighPrecisionRuleFactory extends BaseRuleFactory<BigDecimal
     /** {@inheritDoc} */
     @Override
     protected Pair<BigDecimal[], BigDecimal[]> computeRule(int numberOfPoints)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         if (numberOfPoints == 1) {
             // Break recursion.

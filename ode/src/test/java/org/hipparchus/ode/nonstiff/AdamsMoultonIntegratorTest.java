@@ -21,10 +21,8 @@ package org.hipparchus.ode.nonstiff;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.FirstOrderIntegrator;
@@ -33,7 +31,6 @@ import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
-import org.hipparchus.ode.nonstiff.AdamsMoultonIntegrator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.ode.sampling.StepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -42,10 +39,9 @@ import org.junit.Test;
 
 public class AdamsMoultonIntegratorTest {
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void dimensionCheck()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         TestProblem1 pb = new TestProblem1();
         FirstOrderIntegrator integ =
             new AdamsMoultonIntegrator(2, 0.0, 1.0, 1.0e-10, 1.0e-10);
@@ -54,10 +50,9 @@ public class AdamsMoultonIntegratorTest {
                         1.0, new double[pb.getDimension()+10]);
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testMinStep()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
           TestProblem1 pb = new TestProblem1();
           double minStep = 0.1 * (pb.getFinalTime() - pb.getInitialTime());
@@ -78,8 +73,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void testIncreasingTolerance()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         int previousCalls = Integer.MAX_VALUE;
         for (int i = -12; i < -2; ++i) {
@@ -114,10 +108,9 @@ public class AdamsMoultonIntegratorTest {
 
     }
 
-    @Test(expected = MaxCountExceededException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void exceedMaxEvaluations()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem1 pb  = new TestProblem1();
         double range = pb.getFinalTime() - pb.getInitialTime();
@@ -134,8 +127,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void backward()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem5 pb = new TestProblem5();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
@@ -154,8 +146,7 @@ public class AdamsMoultonIntegratorTest {
 
     @Test
     public void polynomial()
-            throws DimensionMismatchException, NumberIsTooSmallException,
-            MaxCountExceededException, NoBracketingException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
         TestProblem6 pb = new TestProblem6();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
 

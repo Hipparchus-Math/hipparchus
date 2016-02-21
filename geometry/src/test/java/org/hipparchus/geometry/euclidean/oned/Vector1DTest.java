@@ -22,8 +22,8 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.util.FastMath;
@@ -33,7 +33,7 @@ import org.junit.Test;
 
 public class Vector1DTest {
     @Test
-    public void testConstructors() throws DimensionMismatchException {
+    public void testConstructors() throws MathIllegalArgumentException {
         checkVector(new Vector1D(3, new Vector1D(FastMath.PI / 3)),
                     FastMath.PI);
         checkVector(new Vector1D(2, Vector1D.ONE, -3, new Vector1D(2)),
@@ -199,12 +199,12 @@ public class Vector1DTest {
     }
 
     @Test
-    public void testNormalize() throws MathArithmeticException {
+    public void testNormalize() throws MathRuntimeException {
         Assert.assertEquals(1.0, new Vector1D(5).normalize().getNorm(), 1.0e-12);
         try {
             Vector1D.ZERO.normalize();
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException ae) {
+        } catch (MathRuntimeException ae) {
             // expected behavior
         }
     }

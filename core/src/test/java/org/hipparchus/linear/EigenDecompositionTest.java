@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Random;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.EigenDecomposition;
 import org.hipparchus.linear.LUDecomposition;
@@ -367,7 +367,7 @@ public class EigenDecompositionTest {
         }
     }
 
-    @Test(expected=MathUnsupportedOperationException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testSquareRootNonSymmetric() {
         final double[][] data = {
             { 1,  2, 4 },
@@ -380,7 +380,7 @@ public class EigenDecompositionTest {
         final RealMatrix sqrtM = dec.getSquareRoot();
     }
 
-    @Test(expected=MathUnsupportedOperationException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testSquareRootNonPositiveDefinite() {
         final double[][] data = {
             { 1, 2,  4 },

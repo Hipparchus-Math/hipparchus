@@ -17,10 +17,9 @@
 
 package org.hipparchus.ml.neuralnet.twod.util;
 
-import org.hipparchus.ml.neuralnet.Neuron;
-import org.hipparchus.ml.neuralnet.Network;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
 import org.hipparchus.ml.neuralnet.FeatureInitializerFactory;
+import org.hipparchus.ml.neuralnet.Network;
 import org.hipparchus.ml.neuralnet.SquareNeighbourhood;
 import org.hipparchus.ml.neuralnet.twod.NeuronSquareMesh2D;
 import org.junit.Assert;

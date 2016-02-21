@@ -16,12 +16,11 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.EigenDecomposition;
-import org.hipparchus.linear.NonPositiveDefiniteMatrixException;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -67,18 +66,16 @@ public class MultivariateNormalDistribution
      *
      * @param means Vector of means.
      * @param covariances Covariance matrix.
-     * @throws DimensionMismatchException if the arrays length are
+     * @throws MathIllegalArgumentException if the arrays length are
      * inconsistent.
-     * @throws SingularMatrixException if the eigenvalue decomposition cannot
+     * @throws MathIllegalArgumentException if the eigenvalue decomposition cannot
      * be performed on the provided covariance matrix.
-     * @throws NonPositiveDefiniteMatrixException if any of the eigenvalues is
+     * @throws MathIllegalArgumentException if any of the eigenvalues is
      * negative.
      */
     public MultivariateNormalDistribution(final double[] means,
                                           final double[][] covariances)
-        throws SingularMatrixException,
-               DimensionMismatchException,
-               NonPositiveDefiniteMatrixException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), means, covariances);
     }
 
@@ -93,30 +90,30 @@ public class MultivariateNormalDistribution
      * @param rng Random Number Generator.
      * @param means Vector of means.
      * @param covariances Covariance matrix.
-     * @throws DimensionMismatchException if the arrays length are
+     * @throws MathIllegalArgumentException if the arrays length are
      * inconsistent.
-     * @throws SingularMatrixException if the eigenvalue decomposition cannot
+     * @throws MathIllegalArgumentException if the eigenvalue decomposition cannot
      * be performed on the provided covariance matrix.
-     * @throws NonPositiveDefiniteMatrixException if any of the eigenvalues is
+     * @throws MathIllegalArgumentException if any of the eigenvalues is
      * negative.
      */
     public MultivariateNormalDistribution(RandomGenerator rng,
                                           final double[] means,
                                           final double[][] covariances)
-            throws SingularMatrixException,
-                   DimensionMismatchException,
-                   NonPositiveDefiniteMatrixException {
+            throws MathIllegalArgumentException {
         super(rng, means.length);
 
         final int dim = means.length;
 
         if (covariances.length != dim) {
-            throw new DimensionMismatchException(covariances.length, dim);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   covariances.length, dim);
         }
 
         for (int i = 0; i < dim; i++) {
             if (dim != covariances[i].length) {
-                throw new DimensionMismatchException(covariances[i].length, dim);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       covariances[i].length, dim);
             }
         }
 
@@ -137,7 +134,7 @@ public class MultivariateNormalDistribution
 
         for (int i = 0; i < covMatEigenvalues.length; i++) {
             if (covMatEigenvalues[i] < 0) {
-                throw new NonPositiveDefiniteMatrixException(covMatEigenvalues[i], i, 0);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
             }
         }
 
@@ -181,10 +178,11 @@ public class MultivariateNormalDistribution
 
     /** {@inheritDoc} */
     @Override
-    public double density(final double[] vals) throws DimensionMismatchException {
+    public double density(final double[] vals) throws MathIllegalArgumentException {
         final int dim = getDimension();
         if (vals.length != dim) {
-            throw new DimensionMismatchException(vals.length, dim);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   vals.length, dim);
         }
 
         return FastMath.pow(2 * FastMath.PI, -0.5 * dim) *

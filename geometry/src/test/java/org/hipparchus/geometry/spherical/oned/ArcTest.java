@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.spherical.oned;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.spherical.oned.Arc;
 import org.hipparchus.util.FastMath;
@@ -44,7 +44,7 @@ public class ArcTest {
         Assert.assertEquals(3.4, arc.getSize(), 1.0e-10);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testWrongInterval() {
         new Arc(1.2, 0.0, 1.0e-10);
     }

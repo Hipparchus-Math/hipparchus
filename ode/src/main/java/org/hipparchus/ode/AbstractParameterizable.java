@@ -19,6 +19,9 @@ package org.hipparchus.ode;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+
 /** This abstract class provides boilerplate parameters list.
  *
  * @since 3.0
@@ -66,13 +69,13 @@ public abstract class AbstractParameterizable implements Parameterizable {
 
     /** Check if a parameter is supported and throw an IllegalArgumentException if not.
      * @param name name of the parameter to check
-     * @exception UnknownParameterException if the parameter is not supported
+     * @exception MathIllegalArgumentException if the parameter is not supported
      * @see #isSupported(String)
      */
     public void complainIfNotSupported(final String name)
-        throws UnknownParameterException {
+        throws MathIllegalArgumentException {
         if (!isSupported(name)) {
-            throw new UnknownParameterException(name);
+            throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, name);
         }
     }
 

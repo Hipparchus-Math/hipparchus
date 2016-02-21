@@ -19,9 +19,8 @@ package org.hipparchus.complex;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
@@ -82,13 +81,14 @@ public final class Quaternion implements Serializable {
      * @param scalar Scalar part of the quaternion.
      * @param v Components of the vector part of the quaternion.
      *
-     * @throws DimensionMismatchException if the array length is not 3.
+     * @throws MathIllegalArgumentException if the array length is not 3.
      */
     public Quaternion(final double scalar,
                       final double[] v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (v.length != 3) {
-            throw new DimensionMismatchException(v.length, 3);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   v.length, 3);
         }
         this.q0 = scalar;
         this.q1 = v[0];
@@ -246,13 +246,13 @@ public final class Quaternion implements Serializable {
      * The norm of the quaternion must not be zero.
      *
      * @return a normalized quaternion.
-     * @throws ZeroException if the norm of the quaternion is zero.
+     * @throws MathIllegalArgumentException if the norm of the quaternion is zero.
      */
     public Quaternion normalize() {
         final double norm = getNorm();
 
         if (norm < Precision.SAFE_MIN) {
-            throw new ZeroException(LocalizedFormats.NORM, norm);
+            throw new MathIllegalArgumentException(LocalizedFormats.NORM, norm);
         }
 
         return new Quaternion(q0 / norm,
@@ -358,12 +358,12 @@ public final class Quaternion implements Serializable {
      * The norm of the quaternion must not be zero.
      *
      * @return the inverse.
-     * @throws ZeroException if the norm (squared) of the quaternion is zero.
+     * @throws MathIllegalArgumentException if the norm (squared) of the quaternion is zero.
      */
     public Quaternion getInverse() {
         final double squareNorm = q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3;
         if (squareNorm < Precision.SAFE_MIN) {
-            throw new ZeroException(LocalizedFormats.NORM, squareNorm);
+            throw new MathIllegalArgumentException(LocalizedFormats.NORM, squareNorm);
         }
 
         return new Quaternion(q0 / squareNorm,

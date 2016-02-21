@@ -24,14 +24,10 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NoDataException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.util.FastMath;
@@ -116,17 +112,16 @@ public class MatrixUtils {
      *
      * @param data input array
      * @return  RealMatrix containing the values of the array
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code data} is not rectangular (not all rows have the same length).
-     * @throws NoDataException if a row or column is empty.
+     * @throws MathIllegalArgumentException if a row or column is empty.
      * @throws NullArgumentException if either {@code data} or {@code data[0]}
      * is {@code null}.
-     * @throws DimensionMismatchException if {@code data} is not rectangular.
+     * @throws MathIllegalArgumentException if {@code data} is not rectangular.
      * @see #createRealMatrix(int, int)
      */
     public static RealMatrix createRealMatrix(double[][] data)
-        throws NullArgumentException, DimensionMismatchException,
-        NoDataException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null ||
             data[0] == null) {
             throw new NullArgumentException();
@@ -146,16 +141,16 @@ public class MatrixUtils {
      * @param <T> the type of the field elements
      * @param data input array
      * @return a matrix containing the values of the array.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code data} is not rectangular (not all rows have the same length).
-     * @throws NoDataException if a row or column is empty.
+     * @throws MathIllegalArgumentException if a row or column is empty.
      * @throws NullArgumentException if either {@code data} or {@code data[0]}
      * is {@code null}.
      * @see #createFieldMatrix(Field, int, int)
      * @since 2.0
      */
     public static <T extends FieldElement<T>> FieldMatrix<T> createFieldMatrix(T[][] data)
-        throws DimensionMismatchException, NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null ||
             data[0] == null) {
             throw new NullArgumentException();
@@ -243,11 +238,11 @@ public class MatrixUtils {
      *
      * @param data the input data
      * @return a data.length RealVector
-     * @throws NoDataException if {@code data} is empty.
+     * @throws MathIllegalArgumentException if {@code data} is empty.
      * @throws NullArgumentException if {@code data} is {@code null}.
      */
     public static RealVector createRealVector(double[] data)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null) {
             throw new NullArgumentException();
         }
@@ -260,17 +255,17 @@ public class MatrixUtils {
      * @param <T> the type of the field elements
      * @param data the input data
      * @return a data.length FieldVector
-     * @throws NoDataException if {@code data} is empty.
+     * @throws MathIllegalArgumentException if {@code data} is empty.
      * @throws NullArgumentException if {@code data} is {@code null}.
-     * @throws ZeroException if {@code data} has 0 elements
+     * @throws MathIllegalArgumentException if {@code data} has 0 elements
      */
     public static <T extends FieldElement<T>> FieldVector<T> createFieldVector(final T[] data)
-        throws NoDataException, NullArgumentException, ZeroException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (data == null) {
             throw new NullArgumentException();
         }
         if (data.length == 0) {
-            throw new ZeroException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         return new ArrayFieldVector<T>(data[0].getField(), data, true);
     }
@@ -281,11 +276,11 @@ public class MatrixUtils {
      *
      * @param rowData the input row data
      * @return a 1 x rowData.length RealMatrix
-     * @throws NoDataException if {@code rowData} is empty.
+     * @throws MathIllegalArgumentException if {@code rowData} is empty.
      * @throws NullArgumentException if {@code rowData} is {@code null}.
      */
     public static RealMatrix createRowRealMatrix(double[] rowData)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (rowData == null) {
             throw new NullArgumentException();
         }
@@ -304,18 +299,18 @@ public class MatrixUtils {
      * @param <T> the type of the field elements
      * @param rowData the input row data
      * @return a 1 x rowData.length FieldMatrix
-     * @throws NoDataException if {@code rowData} is empty.
+     * @throws MathIllegalArgumentException if {@code rowData} is empty.
      * @throws NullArgumentException if {@code rowData} is {@code null}.
      */
     public static <T extends FieldElement<T>> FieldMatrix<T>
         createRowFieldMatrix(final T[] rowData)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (rowData == null) {
             throw new NullArgumentException();
         }
         final int nCols = rowData.length;
         if (nCols == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
         }
         final FieldMatrix<T> m = createFieldMatrix(rowData[0].getField(), 1, nCols);
         for (int i = 0; i < nCols; ++i) {
@@ -330,11 +325,11 @@ public class MatrixUtils {
      *
      * @param columnData  the input column data
      * @return a columnData x 1 RealMatrix
-     * @throws NoDataException if {@code columnData} is empty.
+     * @throws MathIllegalArgumentException if {@code columnData} is empty.
      * @throws NullArgumentException if {@code columnData} is {@code null}.
      */
     public static RealMatrix createColumnRealMatrix(double[] columnData)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (columnData == null) {
             throw new NullArgumentException();
         }
@@ -353,18 +348,18 @@ public class MatrixUtils {
      * @param <T> the type of the field elements
      * @param columnData  the input column data
      * @return a columnData x 1 FieldMatrix
-     * @throws NoDataException if {@code data} is empty.
+     * @throws MathIllegalArgumentException if {@code data} is empty.
      * @throws NullArgumentException if {@code columnData} is {@code null}.
      */
     public static <T extends FieldElement<T>> FieldMatrix<T>
         createColumnFieldMatrix(final T[] columnData)
-        throws NoDataException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (columnData == null) {
             throw new NullArgumentException();
         }
         final int nRows = columnData.length;
         if (nRows == 0) {
-            throw new NoDataException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
         }
         final FieldMatrix<T> m = createFieldMatrix(columnData[0].getField(), nRows, 1);
         for (int i = 0; i < nRows; ++i) {
@@ -381,8 +376,8 @@ public class MatrixUtils {
      * @param raiseException If {@code true}, an exception will be raised if
      * the matrix is not symmetric.
      * @return {@code true} if {@code matrix} is symmetric.
-     * @throws NonSquareMatrixException if the matrix is not square.
-     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
+     * @throws MathIllegalArgumentException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not symmetric.
      */
     private static boolean isSymmetricInternal(RealMatrix matrix,
                                                double relativeTolerance,
@@ -390,7 +385,8 @@ public class MatrixUtils {
         final int rows = matrix.getRowDimension();
         if (rows != matrix.getColumnDimension()) {
             if (raiseException) {
-                throw new NonSquareMatrixException(rows, matrix.getColumnDimension());
+                throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                       rows, matrix.getColumnDimension());
             } else {
                 return false;
             }
@@ -402,7 +398,8 @@ public class MatrixUtils {
                 if (FastMath.abs(mij - mji) >
                     FastMath.max(FastMath.abs(mij), FastMath.abs(mji)) * relativeTolerance) {
                     if (raiseException) {
-                        throw new NonSymmetricMatrixException(i, j, relativeTolerance);
+                        throw new MathIllegalArgumentException(LocalizedFormats.NON_SYMMETRIC_MATRIX,
+                                                               i, j, relativeTolerance);
                     } else {
                         return false;
                     }
@@ -417,8 +414,8 @@ public class MatrixUtils {
      *
      * @param matrix Matrix to check.
      * @param eps Relative tolerance.
-     * @throws NonSquareMatrixException if the matrix is not square.
-     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
+     * @throws MathIllegalArgumentException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not symmetric.
      * @since 3.1
      */
     public static void checkSymmetric(RealMatrix matrix,
@@ -445,12 +442,12 @@ public class MatrixUtils {
      * @param m Matrix.
      * @param row Row index to check.
      * @param column Column index to check.
-     * @throws OutOfRangeException if {@code row} or {@code column} is not
+     * @throws MathIllegalArgumentException if {@code row} or {@code column} is not
      * a valid index.
      */
     public static void checkMatrixIndex(final AnyMatrix m,
                                         final int row, final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         checkRowIndex(m, row);
         checkColumnIndex(m, column);
     }
@@ -460,13 +457,13 @@ public class MatrixUtils {
      *
      * @param m Matrix.
      * @param row Row index to check.
-     * @throws OutOfRangeException if {@code row} is not a valid index.
+     * @throws MathIllegalArgumentException if {@code row} is not a valid index.
      */
     public static void checkRowIndex(final AnyMatrix m, final int row)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         if (row < 0 ||
             row >= m.getRowDimension()) {
-            throw new OutOfRangeException(LocalizedFormats.ROW_INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.ROW_INDEX,
                                           row, 0, m.getRowDimension() - 1);
         }
     }
@@ -476,12 +473,12 @@ public class MatrixUtils {
      *
      * @param m Matrix.
      * @param column Column index to check.
-     * @throws OutOfRangeException if {@code column} is not a valid index.
+     * @throws MathIllegalArgumentException if {@code column} is not a valid index.
      */
     public static void checkColumnIndex(final AnyMatrix m, final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         if (column < 0 || column >= m.getColumnDimension()) {
-            throw new OutOfRangeException(LocalizedFormats.COLUMN_INDEX,
+            throw new MathIllegalArgumentException(LocalizedFormats.COLUMN_INDEX,
                                            column, 0, m.getColumnDimension() - 1);
         }
     }
@@ -495,25 +492,25 @@ public class MatrixUtils {
      * @param endRow Final row index.
      * @param startColumn Initial column index.
      * @param endColumn Final column index.
-     * @throws OutOfRangeException if the indices are invalid.
-     * @throws NumberIsTooSmallException if {@code endRow < startRow} or
+     * @throws MathIllegalArgumentException if the indices are invalid.
+     * @throws MathIllegalArgumentException if {@code endRow < startRow} or
      * {@code endColumn < startColumn}.
      */
     public static void checkSubMatrixIndex(final AnyMatrix m,
                                            final int startRow, final int endRow,
                                            final int startColumn, final int endColumn)
-        throws NumberIsTooSmallException, OutOfRangeException {
+        throws MathIllegalArgumentException {
         checkRowIndex(m, startRow);
         checkRowIndex(m, endRow);
         if (endRow < startRow) {
-            throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 endRow, startRow, false);
         }
 
         checkColumnIndex(m, startColumn);
         checkColumnIndex(m, endColumn);
         if (endColumn < startColumn) {
-            throw new NumberIsTooSmallException(LocalizedFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
+            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
                                                 endColumn, startColumn, false);
         }
 
@@ -529,14 +526,14 @@ public class MatrixUtils {
      * @param selectedColumns Array of column indices.
      * @throws NullArgumentException if {@code selectedRows} or
      * {@code selectedColumns} are {@code null}.
-     * @throws NoDataException if the row or column selections are empty (zero
+     * @throws MathIllegalArgumentException if the row or column selections are empty (zero
      * length).
-     * @throws OutOfRangeException if row or column selections are not valid.
+     * @throws MathIllegalArgumentException if row or column selections are not valid.
      */
     public static void checkSubMatrixIndex(final AnyMatrix m,
                                            final int[] selectedRows,
                                            final int[] selectedColumns)
-        throws NoDataException, NullArgumentException, OutOfRangeException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (selectedRows == null) {
             throw new NullArgumentException();
         }
@@ -544,10 +541,10 @@ public class MatrixUtils {
             throw new NullArgumentException();
         }
         if (selectedRows.length == 0) {
-            throw new NoDataException(LocalizedFormats.EMPTY_SELECTED_ROW_INDEX_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_SELECTED_ROW_INDEX_ARRAY);
         }
         if (selectedColumns.length == 0) {
-            throw new NoDataException(LocalizedFormats.EMPTY_SELECTED_COLUMN_INDEX_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_SELECTED_COLUMN_INDEX_ARRAY);
         }
 
         for (final int row : selectedRows) {
@@ -563,15 +560,16 @@ public class MatrixUtils {
      *
      * @param left Left hand side matrix.
      * @param right Right hand side matrix.
-     * @throws MatrixDimensionMismatchException if the matrices are not addition
+     * @throws MathIllegalArgumentException if the matrices are not addition
      * compatible.
      */
     public static void checkAdditionCompatible(final AnyMatrix left, final AnyMatrix right)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         if ((left.getRowDimension()    != right.getRowDimension()) ||
             (left.getColumnDimension() != right.getColumnDimension())) {
-            throw new MatrixDimensionMismatchException(left.getRowDimension(), left.getColumnDimension(),
-                                                       right.getRowDimension(), right.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   left.getRowDimension(), left.getColumnDimension(),
+                                                   right.getRowDimension(), right.getColumnDimension());
         }
     }
 
@@ -580,15 +578,16 @@ public class MatrixUtils {
      *
      * @param left Left hand side matrix.
      * @param right Right hand side matrix.
-     * @throws MatrixDimensionMismatchException if the matrices are not addition
+     * @throws MathIllegalArgumentException if the matrices are not addition
      * compatible.
      */
     public static void checkSubtractionCompatible(final AnyMatrix left, final AnyMatrix right)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         if ((left.getRowDimension()    != right.getRowDimension()) ||
             (left.getColumnDimension() != right.getColumnDimension())) {
-            throw new MatrixDimensionMismatchException(left.getRowDimension(), left.getColumnDimension(),
-                                                       right.getRowDimension(), right.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   left.getRowDimension(), left.getColumnDimension(),
+                                                   right.getRowDimension(), right.getColumnDimension());
         }
     }
 
@@ -597,15 +596,15 @@ public class MatrixUtils {
      *
      * @param left Left hand side matrix.
      * @param right Right hand side matrix.
-     * @throws DimensionMismatchException if matrices are not multiplication
+     * @throws MathIllegalArgumentException if matrices are not multiplication
      * compatible.
      */
     public static void checkMultiplicationCompatible(final AnyMatrix left, final AnyMatrix right)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
 
         if (left.getColumnDimension() != right.getRowDimension()) {
-            throw new DimensionMismatchException(left.getColumnDimension(),
-                                                 right.getRowDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   left.getColumnDimension(), right.getRowDimension());
         }
     }
 
@@ -918,29 +917,29 @@ public class MatrixUtils {
      * </p>
      * @param rm RealMatrix which is lower triangular
      * @param b  RealVector this is overwritten
-     * @throws DimensionMismatchException if the matrix and vector are not
+     * @throws MathIllegalArgumentException if the matrix and vector are not
      * conformable
-     * @throws NonSquareMatrixException if the matrix {@code rm} is not square
-     * @throws MathArithmeticException if the absolute value of one of the diagonal
+     * @throws MathIllegalArgumentException if the matrix {@code rm} is not square
+     * @throws MathRuntimeException if the absolute value of one of the diagonal
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveLowerTriangularSystem(RealMatrix rm, RealVector b)
-        throws DimensionMismatchException, MathArithmeticException,
-        NonSquareMatrixException {
+        throws MathIllegalArgumentException, MathRuntimeException,
+        MathIllegalArgumentException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
-            throw new DimensionMismatchException(
-                    (rm == null) ? 0 : rm.getRowDimension(),
-                    (b == null) ? 0 : b.getDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   (rm == null) ? 0 : rm.getRowDimension(),
+                                                   (b  == null) ? 0 : b.getDimension());
         }
         if( rm.getColumnDimension() != rm.getRowDimension() ){
-            throw new NonSquareMatrixException(rm.getRowDimension(),
-                                               rm.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   rm.getRowDimension(), rm.getColumnDimension());
         }
         int rows = rm.getRowDimension();
         for( int i = 0 ; i < rows ; i++ ){
             double diag = rm.getEntry(i, i);
             if( FastMath.abs(diag) < Precision.SAFE_MIN ){
-                throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+                throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
             }
             double bi = b.getEntry(i)/diag;
             b.setEntry(i,  bi );
@@ -962,30 +961,30 @@ public class MatrixUtils {
      * </p>
      * @param rm RealMatrix which is upper triangular
      * @param b  RealVector this is overwritten
-     * @throws DimensionMismatchException if the matrix and vector are not
+     * @throws MathIllegalArgumentException if the matrix and vector are not
      * conformable
-     * @throws NonSquareMatrixException if the matrix {@code rm} is not
+     * @throws MathIllegalArgumentException if the matrix {@code rm} is not
      * square
-     * @throws MathArithmeticException if the absolute value of one of the diagonal
+     * @throws MathRuntimeException if the absolute value of one of the diagonal
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveUpperTriangularSystem(RealMatrix rm, RealVector b)
-        throws DimensionMismatchException, MathArithmeticException,
-        NonSquareMatrixException {
+        throws MathIllegalArgumentException, MathRuntimeException,
+        MathIllegalArgumentException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
-            throw new DimensionMismatchException(
-                    (rm == null) ? 0 : rm.getRowDimension(),
-                    (b == null) ? 0 : b.getDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   (rm == null) ? 0 : rm.getRowDimension(),
+                                                   (b  == null) ? 0 : b.getDimension());
         }
         if( rm.getColumnDimension() != rm.getRowDimension() ){
-            throw new NonSquareMatrixException(rm.getRowDimension(),
-                                               rm.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   rm.getRowDimension(), rm.getColumnDimension());
         }
         int rows = rm.getRowDimension();
         for( int i = rows-1 ; i >-1 ; i-- ){
             double diag = rm.getEntry(i, i);
             if( FastMath.abs(diag) < Precision.SAFE_MIN ){
-                throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+                throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
             }
             double bi = b.getEntry(i)/diag;
             b.setEntry(i,  bi );
@@ -1005,14 +1004,14 @@ public class MatrixUtils {
      * The element corresponding to this index will part of the
      * upper-left sub-matrix.
      * @return the inverse of {@code m}.
-     * @throws NonSquareMatrixException if {@code m} is not square.
+     * @throws MathIllegalArgumentException if {@code m} is not square.
      */
     public static RealMatrix blockInverse(RealMatrix m,
                                           int splitIndex) {
         final int n = m.getRowDimension();
         if (m.getColumnDimension() != n) {
-            throw new NonSquareMatrixException(m.getRowDimension(),
-                                               m.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   m.getRowDimension(), m.getColumnDimension());
         }
 
         final int splitIndex1 = splitIndex + 1;
@@ -1025,14 +1024,14 @@ public class MatrixUtils {
         final SingularValueDecomposition aDec = new SingularValueDecomposition(a);
         final DecompositionSolver aSolver = aDec.getSolver();
         if (!aSolver.isNonSingular()) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
         final RealMatrix aInv = aSolver.getInverse();
 
         final SingularValueDecomposition dDec = new SingularValueDecomposition(d);
         final DecompositionSolver dSolver = dDec.getSolver();
         if (!dSolver.isNonSingular()) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
         final RealMatrix dInv = dSolver.getInverse();
 
@@ -1040,7 +1039,7 @@ public class MatrixUtils {
         final SingularValueDecomposition tmp1Dec = new SingularValueDecomposition(tmp1);
         final DecompositionSolver tmp1Solver = tmp1Dec.getSolver();
         if (!tmp1Solver.isNonSingular()) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
         final RealMatrix result00 = tmp1Solver.getInverse();
 
@@ -1048,7 +1047,7 @@ public class MatrixUtils {
         final SingularValueDecomposition tmp2Dec = new SingularValueDecomposition(tmp2);
         final DecompositionSolver tmp2Solver = tmp2Dec.getSolver();
         if (!tmp2Solver.isNonSingular()) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
         final RealMatrix result11 = tmp2Solver.getInverse();
 
@@ -1076,12 +1075,12 @@ public class MatrixUtils {
      * @param matrix Matrix whose inverse shall be computed
      * @return the inverse of {@code matrix}
      * @throws NullArgumentException if {@code matrix} is {@code null}
-     * @throws SingularMatrixException if m is singular
-     * @throws NonSquareMatrixException if matrix is not square
+     * @throws MathIllegalArgumentException if m is singular
+     * @throws MathIllegalArgumentException if matrix is not square
      * @since 3.3
      */
     public static RealMatrix inverse(RealMatrix matrix)
-            throws NullArgumentException, SingularMatrixException, NonSquareMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException {
         return inverse(matrix, 0);
     }
 
@@ -1095,18 +1094,18 @@ public class MatrixUtils {
      * @param threshold Singularity threshold
      * @return the inverse of {@code m}
      * @throws NullArgumentException if {@code matrix} is {@code null}
-     * @throws SingularMatrixException if matrix is singular
-     * @throws NonSquareMatrixException if matrix is not square
+     * @throws MathIllegalArgumentException if matrix is singular
+     * @throws MathIllegalArgumentException if matrix is not square
      * @since 3.3
      */
     public static RealMatrix inverse(RealMatrix matrix, double threshold)
-            throws NullArgumentException, SingularMatrixException, NonSquareMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(matrix);
 
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         if (matrix instanceof DiagonalMatrix) {

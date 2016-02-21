@@ -20,7 +20,7 @@ package org.hipparchus.genetics;
 import java.util.Collections;
 import java.util.List;
 
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.genetics.Chromosome;
 import org.hipparchus.genetics.ElitisticListPopulation;
 import org.hipparchus.genetics.Population;
@@ -52,40 +52,40 @@ public class ElitisticListPopulationTest {
         Assert.assertEquals(rate, pop.getElitismRate(), 1e-6);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSetElitismRateTooLow() {
         final double rate = -0.25;
         final ElitisticListPopulation pop = new ElitisticListPopulation(100, 0.203);
         pop.setElitismRate(rate);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSetElitismRateTooHigh() {
         final double rate = 1.25;
         final ElitisticListPopulation pop = new ElitisticListPopulation(100, 0.203);
         pop.setElitismRate(rate);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testConstructorTooLow() {
         final double rate = -0.25;
         new ElitisticListPopulation(100, rate);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testConstructorTooHigh() {
         final double rate = 1.25;
         new ElitisticListPopulation(100, rate);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testChromosomeListConstructorTooLow() {
         final List<Chromosome> chromosomes = Collections.emptyList();
         final double rate = -0.25;
         new ElitisticListPopulation(chromosomes, 100, rate);
     }
 
-    @Test(expected = OutOfRangeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testChromosomeListConstructorTooHigh() {
         final List<Chromosome> chromosomes = Collections.emptyList();
         final double rate = 1.25;

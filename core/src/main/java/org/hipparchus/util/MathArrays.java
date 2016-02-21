@@ -28,18 +28,10 @@ import java.util.TreeSet;
 
 import org.hipparchus.Field;
 import org.hipparchus.distribution.UniformIntegerDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
-import org.hipparchus.exception.NotANumberException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 
@@ -116,11 +108,11 @@ public class MathArrays {
      * @param a First term of the addition.
      * @param b Second term of the addition.
      * @return a new array {@code r} where {@code r[i] = a[i] + b[i]}.
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      * @since 3.1
      */
     public static double[] ebeAdd(double[] a, double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
 
         final double[] result = a.clone();
@@ -136,11 +128,11 @@ public class MathArrays {
      * @param a First term.
      * @param b Element to be subtracted.
      * @return a new array {@code r} where {@code r[i] = a[i] - b[i]}.
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      * @since 3.1
      */
     public static double[] ebeSubtract(double[] a, double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
 
         final double[] result = a.clone();
@@ -156,11 +148,11 @@ public class MathArrays {
      * @param a First factor of the multiplication.
      * @param b Second factor of the multiplication.
      * @return a new array {@code r} where {@code r[i] = a[i] * b[i]}.
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      * @since 3.1
      */
     public static double[] ebeMultiply(double[] a, double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
 
         final double[] result = a.clone();
@@ -176,11 +168,11 @@ public class MathArrays {
      * @param a Numerator of the division.
      * @param b Denominator of the division.
      * @return a new array {@code r} where {@code r[i] = a[i] / b[i]}.
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      * @since 3.1
      */
     public static double[] ebeDivide(double[] a, double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
 
         final double[] result = a.clone();
@@ -196,10 +188,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>1</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distance1(double[] p1, double[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         double sum = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -214,10 +206,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>1</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static int distance1(int[] p1, int[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         int sum = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -232,10 +224,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>2</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distance(double[] p1, double[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         double sum = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -263,10 +255,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>2</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distance(int[] p1, int[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
       checkEqualLength(p1, p2);
       double sum = 0;
       for (int i = 0; i < p1.length; i++) {
@@ -282,10 +274,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>&infin;</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distanceInf(double[] p1, double[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         double max = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -300,10 +292,10 @@ public class MathArrays {
      * @param p1 the first point
      * @param p2 the second point
      * @return the L<sub>&infin;</sub> distance between the two points
-     * @throws DimensionMismatchException if the array lengths differ.
+     * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static int distanceInf(int[] p1, int[] p2)
-    throws DimensionMismatchException {
+    throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         int max = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -365,7 +357,7 @@ public class MathArrays {
                 break;
             default:
                 // Should never happen.
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
 
             previous = val[i];
@@ -392,7 +384,7 @@ public class MathArrays {
      * @param b Array.
      * @param abort Whether to throw an exception if the check fails.
      * @return {@code true} if the arrays have the same length.
-     * @throws DimensionMismatchException if the lengths differ and
+     * @throws MathIllegalArgumentException if the lengths differ and
      * {@code abort} is {@code true}.
      * @since 3.6
      */
@@ -403,7 +395,8 @@ public class MathArrays {
             return true;
         } else {
             if (abort) {
-                throw new DimensionMismatchException(a.length, b.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       a.length, b.length);
             }
             return false;
         }
@@ -414,7 +407,7 @@ public class MathArrays {
      *
      * @param a Array.
      * @param b Array.
-     * @throws DimensionMismatchException if the lengths differ.
+     * @throws MathIllegalArgumentException if the lengths differ.
      * @since 3.6
      */
     public static void checkEqualLength(double[] a,
@@ -430,7 +423,7 @@ public class MathArrays {
      * @param b Array.
      * @param abort Whether to throw an exception if the check fails.
      * @return {@code true} if the arrays have the same length.
-     * @throws DimensionMismatchException if the lengths differ and
+     * @throws MathIllegalArgumentException if the lengths differ and
      * {@code abort} is {@code true}.
      * @since 3.6
      */
@@ -441,7 +434,8 @@ public class MathArrays {
             return true;
         } else {
             if (abort) {
-                throw new DimensionMismatchException(a.length, b.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       a.length, b.length);
             }
             return false;
         }
@@ -452,7 +446,7 @@ public class MathArrays {
      *
      * @param a Array.
      * @param b Array.
-     * @throws DimensionMismatchException if the lengths differ.
+     * @throws MathIllegalArgumentException if the lengths differ.
      * @since 3.6
      */
     public static void checkEqualLength(int[] a,
@@ -468,12 +462,12 @@ public class MathArrays {
      * @param strict Whether the order should be strict.
      * @param abort Whether to throw an exception if the check fails.
      * @return {@code true} if the array is sorted.
-     * @throws NonMonotonicSequenceException if the array is not sorted
+     * @throws MathIllegalArgumentException if the array is not sorted
      * and {@code abort} is {@code true}.
      */
     public static boolean checkOrder(double[] val, OrderDirection dir,
                                      boolean strict, boolean abort)
-        throws NonMonotonicSequenceException {
+        throws MathIllegalArgumentException {
         double previous = val[0];
         final int max = val.length;
 
@@ -505,7 +499,7 @@ public class MathArrays {
                 break;
             default:
                 // Should never happen.
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
 
             previous = val[index];
@@ -518,7 +512,14 @@ public class MathArrays {
 
         // Loop early exit means wrong ordering.
         if (abort) {
-            throw new NonMonotonicSequenceException(val[index], previous, index, dir, strict);
+            throw new MathIllegalArgumentException(dir == MathArrays.OrderDirection.INCREASING ?
+                                                    (strict ?
+                                                     LocalizedFormats.NOT_STRICTLY_INCREASING_SEQUENCE :
+                                                     LocalizedFormats.NOT_INCREASING_SEQUENCE) :
+                                                    (strict ?
+                                                     LocalizedFormats.NOT_STRICTLY_DECREASING_SEQUENCE :
+                                                     LocalizedFormats.NOT_DECREASING_SEQUENCE),
+                                                    val[index], previous, index, index - 1);
         } else {
             return false;
         }
@@ -530,11 +531,11 @@ public class MathArrays {
      * @param val Values.
      * @param dir Ordering direction.
      * @param strict Whether the order should be strict.
-     * @throws NonMonotonicSequenceException if the array is not sorted.
+     * @throws MathIllegalArgumentException if the array is not sorted.
      * @since 2.2
      */
     public static void checkOrder(double[] val, OrderDirection dir,
-                                  boolean strict) throws NonMonotonicSequenceException {
+                                  boolean strict) throws MathIllegalArgumentException {
         checkOrder(val, dir, strict, true);
     }
 
@@ -542,27 +543,27 @@ public class MathArrays {
      * Check that the given array is sorted in strictly increasing order.
      *
      * @param val Values.
-     * @throws NonMonotonicSequenceException if the array is not sorted.
+     * @throws MathIllegalArgumentException if the array is not sorted.
      * @since 2.2
      */
-    public static void checkOrder(double[] val) throws NonMonotonicSequenceException {
+    public static void checkOrder(double[] val) throws MathIllegalArgumentException {
         checkOrder(val, OrderDirection.INCREASING, true);
     }
 
     /**
-     * Throws DimensionMismatchException if the input array is not rectangular.
+     * Throws MathIllegalArgumentException if the input array is not rectangular.
      *
      * @param in array to be tested
      * @throws NullArgumentException if input array is null
-     * @throws DimensionMismatchException if input array is not rectangular
+     * @throws MathIllegalArgumentException if input array is not rectangular
      * @since 3.1
      */
     public static void checkRectangular(final long[][] in)
-        throws NullArgumentException, DimensionMismatchException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(in);
         for (int i = 1; i < in.length; i++) {
             if (in[i].length != in[0].length) {
-                throw new DimensionMismatchException(
+                throw new MathIllegalArgumentException(
                         LocalizedFormats.DIFFERENT_ROWS_LENGTHS,
                         in[i].length, in[0].length);
             }
@@ -573,15 +574,16 @@ public class MathArrays {
      * Check that all entries of the input array are strictly positive.
      *
      * @param in Array to be tested
-     * @throws NotStrictlyPositiveException if any entries of the array are not
+     * @throws MathIllegalArgumentException if any entries of the array are not
      * strictly positive.
      * @since 3.1
      */
     public static void checkPositive(final double[] in)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         for (int i = 0; i < in.length; i++) {
             if (in[i] <= 0) {
-                throw new NotStrictlyPositiveException(in[i]);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                       in[i], 0);
             }
         }
     }
@@ -590,14 +592,14 @@ public class MathArrays {
      * Check that no entry of the input array is {@code NaN}.
      *
      * @param in Array to be tested.
-     * @throws NotANumberException if an entry is {@code NaN}.
+     * @throws MathIllegalArgumentException if an entry is {@code NaN}.
      * @since 3.4
      */
     public static void checkNotNaN(final double[] in)
-        throws NotANumberException {
+        throws MathIllegalArgumentException {
         for(int i = 0; i < in.length; i++) {
             if (Double.isNaN(in[i])) {
-                throw new NotANumberException();
+                throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
             }
         }
     }
@@ -606,14 +608,14 @@ public class MathArrays {
      * Check that all entries of the input array are >= 0.
      *
      * @param in Array to be tested
-     * @throws NotPositiveException if any array entries are less than 0.
+     * @throws MathIllegalArgumentException if any array entries are less than 0.
      * @since 3.1
      */
     public static void checkNonNegative(final long[] in)
-        throws NotPositiveException {
+        throws MathIllegalArgumentException {
         for (int i = 0; i < in.length; i++) {
             if (in[i] < 0) {
-                throw new NotPositiveException(in[i]);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, in[i], 0);
             }
         }
     }
@@ -622,15 +624,15 @@ public class MathArrays {
      * Check all entries of the input array are >= 0.
      *
      * @param in Array to be tested
-     * @throws NotPositiveException if any array entries are less than 0.
+     * @throws MathIllegalArgumentException if any array entries are less than 0.
      * @since 3.1
      */
     public static void checkNonNegative(final long[][] in)
-        throws NotPositiveException {
+        throws MathIllegalArgumentException {
         for (int i = 0; i < in.length; i ++) {
             for (int j = 0; j < in[i].length; j++) {
                 if (in[i][j] < 0) {
-                    throw new NotPositiveException(in[i][j]);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, in[i][j], 0);
                 }
             }
         }
@@ -762,13 +764,13 @@ public class MathArrays {
      * of the other arrays.
      * @param yList Set of arrays whose permutations of entries will follow
      * those performed on {@code x}.
-     * @throws DimensionMismatchException if any {@code y} is not the same
+     * @throws MathIllegalArgumentException if any {@code y} is not the same
      * size as {@code x}.
      * @throws NullArgumentException if {@code x} or any {@code y} is null.
      * @since 3.0
      */
     public static void sortInPlace(double[] x, double[] ... yList)
-        throws DimensionMismatchException, NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         sortInPlace(x, OrderDirection.INCREASING, yList);
     }
 
@@ -813,7 +815,7 @@ public class MathArrays {
      * @param dir Order direction.
      * @param yList Set of arrays whose permutations of entries will follow
      * those performed on {@code x}.
-     * @throws DimensionMismatchException if any {@code y} is not the same
+     * @throws MathIllegalArgumentException if any {@code y} is not the same
      * size as {@code x}.
      * @throws NullArgumentException if {@code x} or any {@code y} is null
      * @since 3.0
@@ -821,8 +823,7 @@ public class MathArrays {
     public static void sortInPlace(double[] x,
                                    final OrderDirection dir,
                                    double[] ... yList)
-        throws NullArgumentException,
-               DimensionMismatchException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         // Consistency checks.
         if (x == null) {
@@ -838,7 +839,8 @@ public class MathArrays {
                 throw new NullArgumentException();
             }
             if (y.length != len) {
-                throw new DimensionMismatchException(y.length, len);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       y.length, len);
             }
         }
 
@@ -974,10 +976,10 @@ public class MathArrays {
      * @param a Factors.
      * @param b Factors.
      * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
-     * @throws DimensionMismatchException if arrays dimensions don't match
+     * @throws MathIllegalArgumentException if arrays dimensions don't match
      */
     public static double linearCombination(final double[] a, final double[] b)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         checkEqualLength(a, b);
         final int len = a.length;
 
@@ -1427,13 +1429,13 @@ public class MathArrays {
      * @param values Input array to be normalized
      * @param normalizedSum Target sum for the normalized array
      * @return the normalized array.
-     * @throws MathArithmeticException if the input array contains infinite
+     * @throws MathRuntimeException if the input array contains infinite
      * elements or sums to zero.
      * @throws MathIllegalArgumentException if the target sum is infinite or {@code NaN}.
      * @since 2.1
      */
     public static double[] normalizeArray(double[] values, double normalizedSum)
-        throws MathIllegalArgumentException, MathArithmeticException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         if (Double.isInfinite(normalizedSum)) {
             throw new MathIllegalArgumentException(LocalizedFormats.NORMALIZE_INFINITE);
         }
@@ -1452,7 +1454,7 @@ public class MathArrays {
             }
         }
         if (sum == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ARRAY_SUMS_TO_ZERO);
+            throw new MathRuntimeException(LocalizedFormats.ARRAY_SUMS_TO_ZERO);
         }
         for (int i = 0; i < len; i++) {
             if (Double.isNaN(values[i])) {
@@ -1527,13 +1529,12 @@ public class MathArrays {
      * @return the convolution of {@code x} and {@code h}.
      * This array's length will be {@code x.length + h.length - 1}.
      * @throws NullArgumentException if either {@code x} or {@code h} is {@code null}.
-     * @throws NoDataException if either {@code x} or {@code h} is empty.
+     * @throws MathIllegalArgumentException if either {@code x} or {@code h} is empty.
      *
      * @since 3.3
      */
     public static double[] convolve(double[] x, double[] h)
-        throws NullArgumentException,
-               NoDataException {
+        throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(x);
         MathUtils.checkNotNull(h);
 
@@ -1541,7 +1542,7 @@ public class MathArrays {
         final int hLen = h.length;
 
         if (xLen == 0 || hLen == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
 
         // initialize the output array
@@ -1617,7 +1618,7 @@ public class MathArrays {
                 if (i == start) {
                     target = start;
                 } else {
-                    // NumberIsTooLargeException cannot occur.
+                    // MathIllegalArgumentException cannot occur.
                     target = new UniformIntegerDistribution(rng, start, i).sample();
                 }
                 final int temp = list[target];
@@ -1632,7 +1633,7 @@ public class MathArrays {
                 if (i == start) {
                     target = start;
                 } else {
-                    // NumberIsTooLargeException cannot occur.
+                    // MathIllegalArgumentException cannot occur.
                     target = new UniformIntegerDistribution(rng, i, start).sample();
                 }
                 final int temp = list[target];
@@ -1642,7 +1643,7 @@ public class MathArrays {
         }
             break;
         default:
-            throw new MathInternalError(); // Should never happen.
+            throw MathRuntimeException.createInternalError(); // Should never happen.
         }
     }
 
@@ -1756,15 +1757,15 @@ public class MathArrays {
         }
 
         if (begin < 0) {
-            throw new NotPositiveException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
+            throw new MathIllegalArgumentException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
         }
 
         if (length < 0) {
-            throw new NotPositiveException(LocalizedFormats.LENGTH, Integer.valueOf(length));
+            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, Integer.valueOf(length));
         }
 
         if (begin + length > values.length) {
-            throw new NumberIsTooLargeException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
+            throw new MathIllegalArgumentException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
                     Integer.valueOf(begin + length), Integer.valueOf(values.length), true);
         }
 

@@ -21,11 +21,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -154,11 +152,11 @@ public class DSCompiler {
      * @param order derivation order
      * @param valueCompiler compiler for the value part
      * @param derivativeCompiler compiler for the derivative part
-     * @throws NumberIsTooLargeException if order is too large
+     * @throws MathIllegalArgumentException if order is too large
      */
     private DSCompiler(final int parameters, final int order,
                        final DSCompiler valueCompiler, final DSCompiler derivativeCompiler)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
 
         this.parameters = parameters;
         this.order      = order;
@@ -183,10 +181,10 @@ public class DSCompiler {
      * @param parameters number of free parameters
      * @param order derivation order
      * @return cached rules set
-     * @throws NumberIsTooLargeException if order is too large
+     * @throws MathIllegalArgumentException if order is too large
      */
     public static DSCompiler getCompiler(int parameters, int order)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
 
         // get the cached compilers
         final DSCompiler[][] cache = compilers.get();
@@ -403,14 +401,14 @@ public class DSCompiler {
      * @param sizes sizes array
      * @param derivativesIndirection derivatives indirection array
      * @return multiplication indirection array
-     * @throws NumberIsTooLargeException if order is too large
+     * @throws MathIllegalArgumentException if order is too large
      */
     private static int[][][] compileCompositionIndirection(final int parameters, final int order,
                                                            final DSCompiler valueCompiler,
                                                            final DSCompiler derivativeCompiler,
                                                            final int[][] sizes,
                                                            final int[][] derivativesIndirection)
-       throws NumberIsTooLargeException {
+       throws MathIllegalArgumentException {
 
         if ((parameters == 0) || (order == 0)) {
             return new int[][][] { { { 1, 0 } } };
@@ -530,18 +528,19 @@ public class DSCompiler {
      * </p>
      * @param orders derivation orders with respect to each parameter
      * @return index of the partial derivative
-     * @exception DimensionMismatchException if the numbers of parameters does not
+     * @exception MathIllegalArgumentException if the numbers of parameters does not
      * match the instance
-     * @exception NumberIsTooLargeException if sum of derivation orders is larger
+     * @exception MathIllegalArgumentException if sum of derivation orders is larger
      * than the instance limits
      * @see #getPartialDerivativeOrders(int)
      */
     public int getPartialDerivativeIndex(final int ... orders)
-            throws DimensionMismatchException, NumberIsTooLargeException {
+            throws MathIllegalArgumentException {
 
         // safety check
         if (orders.length != getFreeParameters()) {
-            throw new DimensionMismatchException(orders.length, getFreeParameters());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   orders.length, getFreeParameters());
         }
 
         return getPartialDerivativeIndex(parameters, order, sizes, orders);
@@ -555,12 +554,12 @@ public class DSCompiler {
      * @param orders derivation orders with respect to each parameter
      * (the length of this array must match the number of parameters)
      * @return index of the partial derivative
-     * @exception NumberIsTooLargeException if sum of derivation orders is larger
+     * @exception MathIllegalArgumentException if sum of derivation orders is larger
      * than the instance limits
      */
     private static int getPartialDerivativeIndex(final int parameters, final int order,
                                                  final int[][] sizes, final int ... orders)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
 
         // the value is obtained by diving into the recursive Dan Kalman's structure
         // this is theorem 2 of his paper, with recursion replaced by iteration
@@ -575,7 +574,8 @@ public class DSCompiler {
             // safety check
             ordersSum += derivativeOrder;
             if (ordersSum > order) {
-                throw new NumberIsTooLargeException(ordersSum, order, true);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                       ordersSum, order);
             }
 
             while (derivativeOrder-- > 0) {
@@ -601,12 +601,12 @@ public class DSCompiler {
      * @param destSizes sizes array for the destination derivative structure
      * @return index of the partial derivative with the <em>same</em> characteristics
      * in destination derivative structure
-     * @throws NumberIsTooLargeException if order is too large
+     * @throws MathIllegalArgumentException if order is too large
      */
     private static int convertIndex(final int index,
                                     final int srcP, final int[][] srcDerivativesIndirection,
                                     final int destP, final int destO, final int[][] destSizes)
-        throws NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         int[] orders = new int[destP];
         System.arraycopy(srcDerivativesIndirection[index], 0, orders, 0, FastMath.min(srcP, destP));
         return getPartialDerivativeIndex(destP, destO, destSizes, orders);
@@ -1779,10 +1779,10 @@ public class DSCompiler {
      * @param dsOffset offset of the derivative structure in its array
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
-     * @throws MathArithmeticException if factorials becomes too large
+     * @throws MathRuntimeException if factorials becomes too large
      */
     public double taylor(final double[] ds, final int dsOffset, final double ... delta)
-       throws MathArithmeticException {
+       throws MathRuntimeException {
         double value = 0;
         for (int i = getSize() - 1; i >= 0; --i) {
             final int[] orders = getPartialDerivativeOrders(i);
@@ -1792,9 +1792,9 @@ public class DSCompiler {
                     try {
                         term *= FastMath.pow(delta[k], orders[k]) /
                         CombinatoricsUtils.factorial(orders[k]);
-                    } catch (NotPositiveException e) {
+                    } catch (MathIllegalArgumentException e) {
                         // this cannot happen
-                        throw new MathInternalError(e);
+                        throw MathRuntimeException.createInternalError(e);
                     }
                 }
             }
@@ -1805,15 +1805,17 @@ public class DSCompiler {
 
     /** Check rules set compatibility.
      * @param compiler other compiler to check against instance
-     * @exception DimensionMismatchException if number of free parameters or orders are inconsistent
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     public void checkCompatibility(final DSCompiler compiler)
-            throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (parameters != compiler.parameters) {
-            throw new DimensionMismatchException(parameters, compiler.parameters);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   parameters, compiler.parameters);
         }
         if (order != compiler.order) {
-            throw new DimensionMismatchException(order, compiler.order);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   order, compiler.order);
         }
     }
 

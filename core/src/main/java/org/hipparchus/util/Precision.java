@@ -19,9 +19,9 @@ package org.hipparchus.util;
 
 import java.math.BigDecimal;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Utilities for comparing numbers.
@@ -479,11 +479,11 @@ public class Precision {
      * @param roundingMethod Rounding method as defined in {@link BigDecimal}.
      * @return the rounded value.
      * @since 1.1 (previously in {@code MathUtils}, moved as of version 3.0)
-     * @throws MathArithmeticException if an exact operation is required but result is not exact
+     * @throws MathRuntimeException if an exact operation is required but result is not exact
      * @throws MathIllegalArgumentException if {@code roundingMethod} is not a valid rounding method.
      */
     public static float round(float x, int scale, int roundingMethod)
-        throws MathArithmeticException, MathIllegalArgumentException {
+        throws MathRuntimeException, MathIllegalArgumentException {
         final float sign = FastMath.copySign(1f, x);
         final float factor = (float) FastMath.pow(10.0f, scale) * sign;
         return (float) roundUnscaled(x * factor, sign, roundingMethod) / factor;
@@ -498,14 +498,14 @@ public class Precision {
      * @param sign Sign of the original, scaled value.
      * @param roundingMethod Rounding method, as defined in {@link BigDecimal}.
      * @return the rounded value.
-     * @throws MathArithmeticException if an exact operation is required but result is not exact
+     * @throws MathRuntimeException if an exact operation is required but result is not exact
      * @throws MathIllegalArgumentException if {@code roundingMethod} is not a valid rounding method.
      * @since 1.1 (previously in {@code MathUtils}, moved as of version 3.0)
      */
     private static double roundUnscaled(double unscaled,
                                         double sign,
                                         int roundingMethod)
-        throws MathArithmeticException, MathIllegalArgumentException {
+        throws MathRuntimeException, MathIllegalArgumentException {
         switch (roundingMethod) {
         case BigDecimal.ROUND_CEILING :
             if (sign == -1) {
@@ -562,7 +562,7 @@ public class Precision {
         }
         case BigDecimal.ROUND_UNNECESSARY :
             if (unscaled != FastMath.floor(unscaled)) {
-                throw new MathArithmeticException();
+                throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
             }
             break;
         case BigDecimal.ROUND_UP :

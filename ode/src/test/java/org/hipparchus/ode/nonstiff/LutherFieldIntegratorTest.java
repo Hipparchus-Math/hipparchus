@@ -20,10 +20,8 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Decimal64Field;
 
 public class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
@@ -40,57 +38,49 @@ public class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstract
 
     @Override
     public void testMissedEndEvent()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestMissedEndEvent(Decimal64Field.getInstance(), 1.0e-15, 1.0e-15);
     }
 
     @Override
     public void testSanityChecks()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestSanityChecks(Decimal64Field.getInstance());
     }
 
     @Override
     public void testDecreasingSteps()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestDecreasingSteps(Decimal64Field.getInstance(), 1.0, 1.0, 1.0e-10);
     }
 
     @Override
     public void testSmallStep()
-         throws DimensionMismatchException, NumberIsTooSmallException,
-                MaxCountExceededException, NoBracketingException {
+         throws MathIllegalArgumentException, MathIllegalStateException {
         doTestSmallStep(Decimal64Field.getInstance(), 8.7e-17, 3.6e-15, 1.0e-12, "Luther");
     }
 
     @Override
     public void testBigStep()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestBigStep(Decimal64Field.getInstance(), 2.7e-5, 1.7e-3, 1.0e-12, "Luther");
     }
 
     @Override
     public void testBackward()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestBackward(Decimal64Field.getInstance(), 2.4e-13, 4.3e-13, 1.0e-12, "Luther");
     }
 
     @Override
     public void testKepler()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestKepler(Decimal64Field.getInstance(), 2.18e-7, 4.0e-10);
     }
 
     @Override
     public void testStepSize()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         doTestStepSize(Decimal64Field.getInstance(), 1.0e-22);
     }
 

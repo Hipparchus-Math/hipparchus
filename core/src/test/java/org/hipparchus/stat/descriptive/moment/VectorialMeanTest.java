@@ -18,7 +18,7 @@
 package org.hipparchus.stat.descriptive.moment;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.moment.VectorialMean;
 import org.junit.Test;
 import org.junit.Assert;
@@ -41,9 +41,9 @@ public class VectorialMeanTest {
         try {
             new VectorialMean(8).increment(new double[5]);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException dme) {
-            Assert.assertEquals(5, dme.getArgument());
-            Assert.assertEquals(8, dme.getDimension());
+        } catch (MathIllegalArgumentException dme) {
+            Assert.assertEquals(5, ((Integer) dme.getParts()[0]).intValue());
+            Assert.assertEquals(8, ((Integer) dme.getParts()[1]).intValue());
         }
     }
 

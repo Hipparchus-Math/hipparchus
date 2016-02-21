@@ -20,8 +20,8 @@ import java.io.Serializable;
 
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.ArithmeticUtils;
 
 /**
@@ -58,9 +58,9 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
     /**
      * {@inheritDoc}
      *
-     * @throws org.hipparchus.exception.NonMonotonicSequenceException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the lower bound is greater than, or equal to the upper bound
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      *   if the number of sample points is negative
      * @throws MathIllegalArgumentException if the number of sample points is not a power of two
      */

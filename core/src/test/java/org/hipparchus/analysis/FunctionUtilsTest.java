@@ -36,9 +36,8 @@ import org.hipparchus.analysis.function.Pow;
 import org.hipparchus.analysis.function.Power;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -208,17 +207,17 @@ public class FunctionUtilsTest {
         }
     }
 
-    @Test(expected = NumberIsTooLargeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSampleWrongBounds(){
         FunctionUtils.sample(new Sin(), FastMath.PI, 0.0, 10);
     }
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSampleNegativeNumberOfPoints(){
         FunctionUtils.sample(new Sin(), 0.0, FastMath.PI, -1);
     }
 
-    @Test(expected = NotStrictlyPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSampleNullNumberOfPoints(){
         FunctionUtils.sample(new Sin(), 0.0, FastMath.PI, 0);
     }
@@ -271,9 +270,10 @@ public class FunctionUtilsTest {
         try {
             f.value(new DerivativeStructure(1, 3, 0.0));
             Assert.fail("an exception should have been thrown");
-        } catch (NumberIsTooLargeException e) {
-            Assert.assertEquals(2, e.getMax());
-            Assert.assertEquals(3, e.getArgument());
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_LARGE, e.getSpecifier());
+            Assert.assertEquals(2, ((Integer) e.getParts()[1]).intValue());
+            Assert.assertEquals(3, ((Integer) e.getParts()[0]).intValue());
         }
     }
 
@@ -319,9 +319,10 @@ public class FunctionUtilsTest {
         try {
             mdf.value(new DerivativeStructure[] { new DerivativeStructure(1, 3, 0.0), new DerivativeStructure(1, 3, 0.0) });
             Assert.fail("an exception should have been thrown");
-        } catch (NumberIsTooLargeException e) {
-            Assert.assertEquals(1, e.getMax());
-            Assert.assertEquals(3, e.getArgument());
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_LARGE, e.getSpecifier());
+            Assert.assertEquals(1, ((Integer) e.getParts()[1]).intValue());
+            Assert.assertEquals(3, ((Integer) e.getParts()[0]).intValue());
         }
     }
 
@@ -348,9 +349,9 @@ public class FunctionUtilsTest {
             DerivativeStructure dsT = new DerivativeStructure(1, 1, 0, 0.0);
             mdf.value(new DerivativeStructure[] { dsT.sin(), dsT.cos() });
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
-            Assert.assertEquals(2, e.getDimension());
-            Assert.assertEquals(3, e.getArgument());
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(3, ((Integer) e.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) e.getParts()[1]).intValue());
         }
     }
 

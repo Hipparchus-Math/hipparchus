@@ -18,7 +18,7 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 
 /**
@@ -100,11 +100,11 @@ public interface BaseUnivariateSolver<FUNC extends UnivariateFunction> {
      * @return a value where the function is zero.
      * @throws MathIllegalArgumentException
      * if the arguments do not satisfy the requirements specified by the solver.
-     * @throws TooManyEvaluationsException if
+     * @throws MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
     double solve(int maxEval, FUNC f, double min, double max)
-        throws MathIllegalArgumentException, TooManyEvaluationsException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
     /**
      * Solve for a zero in the given interval, start at {@code startValue}.
@@ -120,11 +120,11 @@ public interface BaseUnivariateSolver<FUNC extends UnivariateFunction> {
      * @return a value where the function is zero.
      * @throws MathIllegalArgumentException
      * if the arguments do not satisfy the requirements specified by the solver.
-     * @throws TooManyEvaluationsException if
+     * @throws MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
     double solve(int maxEval, FUNC f, double min, double max, double startValue)
-        throws MathIllegalArgumentException, TooManyEvaluationsException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
     /**
      * Solve for a zero in the vicinity of {@code startValue}.
@@ -135,7 +135,7 @@ public interface BaseUnivariateSolver<FUNC extends UnivariateFunction> {
      * @param maxEval Maximum number of evaluations.
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the arguments do not satisfy the requirements specified by the solver.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException if
+     * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
     double solve(int maxEval, FUNC f, double startValue);

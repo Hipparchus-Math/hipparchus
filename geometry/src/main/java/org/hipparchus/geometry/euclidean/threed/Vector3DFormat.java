@@ -22,7 +22,8 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.hipparchus.exception.MathParseException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.VectorFormat;
 import org.hipparchus.util.CompositeFormat;
@@ -122,17 +123,17 @@ public class Vector3DFormat extends VectorFormat<Euclidean3D> {
      * Parses a string to produce a {@link Vector3D} object.
      * @param source the string to parse
      * @return the parsed {@link Vector3D} object.
-     * @throws MathParseException if the beginning of the specified string
+     * @throws MathIllegalStateException if the beginning of the specified string
      * cannot be parsed.
      */
     @Override
-    public Vector3D parse(final String source) throws MathParseException {
+    public Vector3D parse(final String source) throws MathIllegalStateException {
         ParsePosition parsePosition = new ParsePosition(0);
         Vector3D result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathParseException(source,
-                                         parsePosition.getErrorIndex(),
-                                         Vector3D.class);
+            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+                                                source, parsePosition.getErrorIndex(),
+                                                Vector3D.class);
         }
         return result;
     }

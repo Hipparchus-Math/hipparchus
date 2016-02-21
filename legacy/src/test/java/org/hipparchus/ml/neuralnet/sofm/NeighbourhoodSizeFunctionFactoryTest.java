@@ -17,30 +17,27 @@
 
 package org.hipparchus.ml.neuralnet.sofm;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.ml.neuralnet.sofm.NeighbourhoodSizeFunction;
-import org.hipparchus.ml.neuralnet.sofm.NeighbourhoodSizeFunctionFactory;
-import org.junit.Test;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Tests for {@link NeighbourhoodSizeFunctionFactory} class.
  */
 public class NeighbourhoodSizeFunctionFactoryTest {
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition1() {
         NeighbourhoodSizeFunctionFactory.exponentialDecay(0, 0, 2);
     }
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition2() {
         NeighbourhoodSizeFunctionFactory.exponentialDecay(1, 0, 2);
     }
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition3() {
         NeighbourhoodSizeFunctionFactory.exponentialDecay(1, 1, 100);
     }
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testExponentialDecayPrecondition4() {
         NeighbourhoodSizeFunctionFactory.exponentialDecay(2, 1, 0);
     }
@@ -58,15 +55,15 @@ public class NeighbourhoodSizeFunctionFactoryTest {
         Assert.assertEquals(0, f.value(Long.MAX_VALUE));
     }
 
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition1() {
         NeighbourhoodSizeFunctionFactory.quasiSigmoidDecay(0d, -1d, 2);
     }
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition3() {
         NeighbourhoodSizeFunctionFactory.quasiSigmoidDecay(1d, 0d, 100);
     }
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testQuasiSigmoidDecayPrecondition4() {
         NeighbourhoodSizeFunctionFactory.quasiSigmoidDecay(1d, -1d, 0);
     }

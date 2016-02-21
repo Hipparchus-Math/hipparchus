@@ -18,7 +18,6 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -79,7 +78,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     wfval, fval, fval, fval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -87,7 +86,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, wfval, fval, fval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -95,7 +94,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, wfval, fval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -103,7 +102,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, wfval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -111,7 +110,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     wfval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -119,7 +118,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     fval, wfval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -127,7 +126,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     fval, fval, wfval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -135,7 +134,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, wfval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         wfval = new double[xval.length][yval.length - 1][zval.length];
@@ -144,7 +143,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     wfval, fval, fval, fval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -152,7 +151,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, wfval, fval, fval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -160,7 +159,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, wfval, fval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -168,7 +167,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, wfval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -176,7 +175,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     wfval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -184,7 +183,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     fval, wfval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -192,7 +191,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     fval, fval, wfval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -200,7 +199,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, wfval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         wfval = new double[xval.length][yval.length][zval.length - 1];
@@ -209,7 +208,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     wfval, fval, fval, fval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -217,7 +216,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, wfval, fval, fval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -225,7 +224,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, wfval, fval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -233,7 +232,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, wfval,
                                                     fval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -241,7 +240,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     wfval, fval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -249,7 +248,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     fval, wfval, fval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -257,7 +256,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     fval, fval, wfval, fval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
         try {
@@ -265,7 +264,7 @@ public final class TricubicInterpolatingFunctionTest {
                                                     fval, fval, fval, fval,
                                                     fval, fval, fval, wfval);
             Assert.fail("an exception should have been thrown");
-        } catch (DimensionMismatchException e) {
+        } catch (MathIllegalArgumentException e) {
             // Expected
         }
     }

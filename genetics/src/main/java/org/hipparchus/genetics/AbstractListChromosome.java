@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+
 /**
  * Chromosome represented by an immutable list of a fixed length.
  *
@@ -35,18 +37,18 @@ public abstract class AbstractListChromosome<T> extends Chromosome {
     /**
      * Constructor, copying the input representation.
      * @param representation inner representation of the chromosome
-     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome
+     * @throws MathIllegalArgumentException iff the <code>representation</code> can not represent a valid chromosome
      */
-    public AbstractListChromosome(final List<T> representation) throws InvalidRepresentationException {
+    public AbstractListChromosome(final List<T> representation) throws MathIllegalArgumentException {
         this(representation, true);
     }
 
     /**
      * Constructor, copying the input representation.
      * @param representation inner representation of the chromosome
-     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome
+     * @throws MathIllegalArgumentException iff the <code>representation</code> can not represent a valid chromosome
      */
-    public AbstractListChromosome(final T[] representation) throws InvalidRepresentationException {
+    public AbstractListChromosome(final T[] representation) throws MathIllegalArgumentException {
         this(Arrays.asList(representation));
     }
 
@@ -66,9 +68,9 @@ public abstract class AbstractListChromosome<T> extends Chromosome {
      * Asserts that <code>representation</code> can represent a valid chromosome.
      *
      * @param chromosomeRepresentation representation of the chromosome
-     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome
+     * @throws MathIllegalArgumentException iff the <code>representation</code> can not represent a valid chromosome
      */
-    protected abstract void checkValidity(List<T> chromosomeRepresentation) throws InvalidRepresentationException;
+    protected abstract void checkValidity(List<T> chromosomeRepresentation) throws MathIllegalArgumentException;
 
     /**
      * Returns the (immutable) inner representation of the chromosome.

@@ -16,12 +16,7 @@
  */
 package org.hipparchus.stat.inference;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.ZeroException;
-import org.hipparchus.stat.inference.GTest;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -158,8 +153,8 @@ public class GTestTest {
         try {
             testStatistic.gTestDataSetsComparison(
                     observed1, observed2);
-            Assert.fail("Expecting NotPositiveException - negative count");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - negative count");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[] observed3 = {10, 0, 12, 10, 15};
@@ -167,8 +162,8 @@ public class GTestTest {
         try {
             testStatistic.gTestDataSetsComparison(
                     observed3, observed4);
-            Assert.fail("Expecting ZeroException - double 0's");
-        } catch (ZeroException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - double 0's");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[] observed5 = {10, 10, 12, 10, 15};
@@ -176,8 +171,8 @@ public class GTestTest {
         try {
             testStatistic.gTestDataSetsComparison(
                     observed5, observed6);
-            Assert.fail("Expecting ZeroException - vanishing counts");
-        } catch (ZeroException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - vanishing counts");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -189,14 +184,14 @@ public class GTestTest {
         final long[] observed2 = {3, 4};
         try {
             testStatistic.gTest(expected, observed);
-            Assert.fail("arrays have different lengths, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arrays have different lengths, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2);
-            Assert.fail("arrays have different lengths, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arrays have different lengths, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -208,14 +203,14 @@ public class GTestTest {
         final long[] observed2 = {3, 4, 5, 0};
         try {
             testStatistic.gTest(expected, observed);
-            Assert.fail("negative observed count, NotPositiveException expected");
-        } catch (NotPositiveException ex) {
+            Assert.fail("negative observed count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2);
-            Assert.fail("negative observed count, NotPositiveException expected");
-        } catch (NotPositiveException ex) {
+            Assert.fail("negative observed count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -226,8 +221,8 @@ public class GTestTest {
         final double[] expected = { 1, 0, 2, 3};
         try {
             testStatistic.gTest(expected, observed);
-            Assert.fail("zero expected count, NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("zero expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -239,14 +234,14 @@ public class GTestTest {
         final long[] observed2 = { 0, 2, 2, 3 };
         try {
             testStatistic.gTest(expected, observed, 0.8);
-            Assert.fail("zero expected count, NotStrictlyPositiveException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("zero expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             testStatistic.gTestDataSetsComparison(observed, observed2, -0.5);
-            Assert.fail("zero expected count, NotStrictlyPositiveException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("zero expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }

@@ -18,8 +18,8 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * This interface allows users to add secondary differential equations to a primary
@@ -66,10 +66,10 @@ public interface FieldSecondaryEquations<T extends RealFieldElement<T>> {
      * @param primaryDot array containing the derivative of the primary state vector
      * @param secondary array containing the current value of the secondary state vector
      * @return derivative of the secondary state vector
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     T[] computeDerivatives(T t, T[] primary, T[] primaryDot, T[] secondary)
-        throws MaxCountExceededException, DimensionMismatchException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
 }

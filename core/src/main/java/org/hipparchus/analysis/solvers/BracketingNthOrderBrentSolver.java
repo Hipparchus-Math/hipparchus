@@ -18,11 +18,10 @@ package org.hipparchus.analysis.solvers;
 
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -74,14 +73,15 @@ public class BracketingNthOrderBrentSolver
      *
      * @param absoluteAccuracy Absolute accuracy.
      * @param maximalOrder maximal order.
-     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     * @exception MathIllegalArgumentException if maximal order is lower than 2
      */
     public BracketingNthOrderBrentSolver(final double absoluteAccuracy,
                                          final int maximalOrder)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(absoluteAccuracy);
         if (maximalOrder < 2) {
-            throw new NumberIsTooSmallException(maximalOrder, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maximalOrder, 2);
         }
         this.maximalOrder = maximalOrder;
         this.allowed = AllowedSolution.ANY_SIDE;
@@ -93,15 +93,16 @@ public class BracketingNthOrderBrentSolver
      * @param relativeAccuracy Relative accuracy.
      * @param absoluteAccuracy Absolute accuracy.
      * @param maximalOrder maximal order.
-     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     * @exception MathIllegalArgumentException if maximal order is lower than 2
      */
     public BracketingNthOrderBrentSolver(final double relativeAccuracy,
                                          final double absoluteAccuracy,
                                          final int maximalOrder)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy);
         if (maximalOrder < 2) {
-            throw new NumberIsTooSmallException(maximalOrder, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maximalOrder, 2);
         }
         this.maximalOrder = maximalOrder;
         this.allowed = AllowedSolution.ANY_SIDE;
@@ -114,16 +115,17 @@ public class BracketingNthOrderBrentSolver
      * @param absoluteAccuracy Absolute accuracy.
      * @param functionValueAccuracy Function value accuracy.
      * @param maximalOrder maximal order.
-     * @exception NumberIsTooSmallException if maximal order is lower than 2
+     * @exception MathIllegalArgumentException if maximal order is lower than 2
      */
     public BracketingNthOrderBrentSolver(final double relativeAccuracy,
                                          final double absoluteAccuracy,
                                          final double functionValueAccuracy,
                                          final int maximalOrder)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy);
         if (maximalOrder < 2) {
-            throw new NumberIsTooSmallException(maximalOrder, 2, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   maximalOrder, 2);
         }
         this.maximalOrder = maximalOrder;
         this.allowed = AllowedSolution.ANY_SIDE;
@@ -141,9 +143,7 @@ public class BracketingNthOrderBrentSolver
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException,
-               NumberIsTooLargeException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         // prepare arrays with the first points
         final double[] x = new double[maximalOrder + 1];
         final double[] y = new double[maximalOrder + 1];
@@ -188,7 +188,8 @@ public class BracketingNthOrderBrentSolver
                 nbPoints        = 3;
                 signChangeIndex = 2;
             } else {
-                throw new NoBracketingException(x[0], x[2], y[0], y[2]);
+                throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                                                       x[0], x[2], y[0], y[2]);
             }
 
         }
@@ -226,7 +227,7 @@ public class BracketingNthOrderBrentSolver
                     return (yA <  0) ? xB : xA;
                 default :
                     // this should never happen
-                    throw new MathInternalError();
+                    throw MathRuntimeException.createInternalError();
                 }
             }
 
@@ -391,9 +392,7 @@ public class BracketingNthOrderBrentSolver
     @Override
     public double solve(int maxEval, UnivariateFunction f, double min,
                         double max, AllowedSolution allowedSolution)
-        throws TooManyEvaluationsException,
-               NumberIsTooLargeException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         this.allowed = allowedSolution;
         return super.solve(maxEval, f, min, max);
     }
@@ -403,9 +402,7 @@ public class BracketingNthOrderBrentSolver
     public double solve(int maxEval, UnivariateFunction f, double min,
                         double max, double startValue,
                         AllowedSolution allowedSolution)
-        throws TooManyEvaluationsException,
-               NumberIsTooLargeException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         this.allowed = allowedSolution;
         return super.solve(maxEval, f, min, max, startValue);
     }

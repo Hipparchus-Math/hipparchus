@@ -16,9 +16,9 @@
  */
 package org.hipparchus.special;
 
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.ContinuedFraction;
 import org.hipparchus.util.FastMath;
 
@@ -272,7 +272,7 @@ public class Gamma {
      * @param a Parameter.
      * @param x Value.
      * @return the regularized gamma function P(a, x).
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
     public static double regularizedGammaP(double a, double x) {
         return regularizedGammaP(a, x, DEFAULT_EPSILON, Integer.MAX_VALUE);
@@ -304,7 +304,7 @@ public class Gamma {
      * further elements in the series.
      * @param maxIterations Maximum number of "iterations" to complete.
      * @return the regularized gamma function P(a, x)
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
     public static double regularizedGammaP(double a,
                                            double x,
@@ -336,7 +336,7 @@ public class Gamma {
                 sum += an;
             }
             if (n >= maxIterations) {
-                throw new MaxCountExceededException(maxIterations);
+                throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, maxIterations);
             } else if (Double.isInfinite(sum)) {
                 ret = 1.0;
             } else {
@@ -353,7 +353,7 @@ public class Gamma {
      * @param a the a parameter.
      * @param x the value.
      * @return the regularized gamma function Q(a, x)
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
     public static double regularizedGammaQ(double a, double x) {
         return regularizedGammaQ(a, x, DEFAULT_EPSILON, Integer.MAX_VALUE);
@@ -382,7 +382,7 @@ public class Gamma {
      * further elements in the series.
      * @param maxIterations Maximum number of "iterations" to complete.
      * @return the regularized gamma function P(a, x)
-     * @throws MaxCountExceededException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      */
     public static double regularizedGammaQ(final double a,
                                            double x,
@@ -534,17 +534,19 @@ public class Gamma {
      *
      * @param x Argument.
      * @return The value of {@code 1.0 / Gamma(1.0 + x) - 1.0}.
-     * @throws NumberIsTooSmallException if {@code x < -0.5}
-     * @throws NumberIsTooLargeException if {@code x > 1.5}
+     * @throws MathIllegalArgumentException if {@code x < -0.5}
+     * @throws MathIllegalArgumentException if {@code x > 1.5}
      * @since 3.1
      */
     public static double invGamma1pm1(final double x) {
 
         if (x < -0.5) {
-            throw new NumberIsTooSmallException(x, -0.5, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   x, -0.5);
         }
         if (x > 1.5) {
-            throw new NumberIsTooLargeException(x, 1.5, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   x, 1.5);
         }
 
         final double ret;
@@ -627,18 +629,20 @@ public class Gamma {
      *
      * @param x Argument.
      * @return The value of {@code log(Gamma(1 + x))}.
-     * @throws NumberIsTooSmallException if {@code x < -0.5}.
-     * @throws NumberIsTooLargeException if {@code x > 1.5}.
+     * @throws MathIllegalArgumentException if {@code x < -0.5}.
+     * @throws MathIllegalArgumentException if {@code x > 1.5}.
      * @since 3.1
      */
     public static double logGamma1p(final double x)
-        throws NumberIsTooSmallException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
 
         if (x < -0.5) {
-            throw new NumberIsTooSmallException(x, -0.5, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   x, -0.5);
         }
         if (x > 1.5) {
-            throw new NumberIsTooLargeException(x, 1.5, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   x, 1.5);
         }
 
         return -FastMath.log1p(invGamma1pm1(x));

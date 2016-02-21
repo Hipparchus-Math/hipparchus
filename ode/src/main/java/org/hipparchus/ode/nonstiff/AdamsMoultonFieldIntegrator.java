@@ -21,10 +21,8 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.linear.FieldMatrixPreservingVisitor;
 import org.hipparchus.ode.FieldExpandableODE;
@@ -177,13 +175,13 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
      * be smaller than this
      * @param scalAbsoluteTolerance allowed absolute error
      * @param scalRelativeTolerance allowed relative error
-     * @exception NumberIsTooSmallException if order is 1 or less
+     * @exception MathIllegalArgumentException if order is 1 or less
      */
     public AdamsMoultonFieldIntegrator(final Field<T> field, final int nSteps,
                                        final double minStep, final double maxStep,
                                        final double scalAbsoluteTolerance,
                                        final double scalRelativeTolerance)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(field, METHOD_NAME, nSteps, nSteps + 1, minStep, maxStep,
               scalAbsoluteTolerance, scalRelativeTolerance);
     }
@@ -216,8 +214,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
     public FieldODEStateAndDerivative<T> integrate(final FieldExpandableODE<T> equations,
                                                    final FieldODEState<T> initialState,
                                                    final T finalTime)
-        throws NumberIsTooSmallException, DimensionMismatchException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
         final T   t0 = initialState.getTime();

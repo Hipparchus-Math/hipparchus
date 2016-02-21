@@ -20,15 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
-import org.hipparchus.stat.inference.OneWayAnova;
-import org.hipparchus.stat.inference.TestUtils;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -62,8 +56,8 @@ public class TestUtilsTest {
 
         try {
             TestUtils.chiSquareTest(expected1, observed1, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -71,8 +65,8 @@ public class TestUtilsTest {
         double[] tooShortEx = { 1 };
         try {
             TestUtils.chiSquare(tooShortEx, tooShortObs);
-            Assert.fail("arguments too short, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arguments too short, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -81,8 +75,8 @@ public class TestUtilsTest {
         double[] unMatchedEx = { 1, 1, 2 };
         try {
             TestUtils.chiSquare(unMatchedEx, unMatchedObs);
-            Assert.fail("arrays have different lengths, DimensionMismatchException expected");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("arrays have different lengths, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -90,8 +84,8 @@ public class TestUtilsTest {
         expected[0] = 0;
         try {
             TestUtils.chiSquareTest(expected, observed, .01);
-            Assert.fail("bad expected count, NotStrictlyPositiveException expected");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("bad expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -100,8 +94,8 @@ public class TestUtilsTest {
         observed[0] = -1;
         try {
             TestUtils.chiSquareTest(expected, observed, .01);
-            Assert.fail("bad expected count, NotPositiveException expected");
-        } catch (NotPositiveException ex) {
+            Assert.fail("bad expected count, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -127,8 +121,8 @@ public class TestUtilsTest {
         long[][] counts3 = { {40, 22, 43}, {91, 21, 28}, {60, 10}};
         try {
             TestUtils.chiSquare(counts3);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -136,15 +130,15 @@ public class TestUtilsTest {
         long[][] counts4 = {{40, 22, 43}};
         try {
             TestUtils.chiSquare(counts4);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         long[][] counts5 = {{40}, {40}, {30}, {10}};
         try {
             TestUtils.chiSquare(counts5);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -152,16 +146,16 @@ public class TestUtilsTest {
         long[][] counts6 = {{10, -2}, {30, 40}, {60, 90} };
         try {
             TestUtils.chiSquare(counts6);
-            Assert.fail("Expecting NotPositiveException");
-        } catch (NotPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         // bad alpha
         try {
             TestUtils.chiSquareTest(counts, 0);
-            Assert.fail("Expecting OutOfRangeException");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -236,28 +230,28 @@ public class TestUtilsTest {
 
         try {
             TestUtils.t(mu, emptyObs);
-            Assert.fail("arguments too short, NumberIsTooSmallException expected");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("arguments too short, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             TestUtils.t(mu, emptyStats);
-            Assert.fail("arguments too short, NumberIsTooSmallException expected");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("arguments too short, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             TestUtils.t(mu, tooShortObs);
-            Assert.fail("insufficient data to compute t statistic, NumberIsTooSmallException expected");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("insufficient data to compute t statistic, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
             TestUtils.tTest(mu, tooShortObs);
-            Assert.fail("insufficient data to perform t test, NumberIsTooSmallException expected");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("insufficient data to perform t test, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -299,15 +293,15 @@ public class TestUtilsTest {
 
         try {
             TestUtils.tTest(0d, oneSidedP, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             TestUtils.tTest(0d, oneSidedPStats, 95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -346,22 +340,22 @@ public class TestUtilsTest {
 
         try {
             TestUtils.tTest(sample1, sample2, .95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             TestUtils.tTest(sampleStats1, sampleStats2, .95);
-            Assert.fail("alpha out of range, OutOfRangeException expected");
-        } catch (OutOfRangeException ex) {
+            Assert.fail("alpha out of range, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
         try {
             TestUtils.tTest(sample1, tooShortObs, .01);
-            Assert.fail("insufficient data, NumberIsTooSmallException expected");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("insufficient data, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -374,8 +368,8 @@ public class TestUtilsTest {
 
         try {
             TestUtils.tTest(sample1, tooShortObs);
-            Assert.fail("insufficient data, NumberIsTooSmallException expected");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("insufficient data, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 
@@ -388,8 +382,8 @@ public class TestUtilsTest {
 
         try {
             TestUtils.t(sample1, tooShortObs);
-            Assert.fail("insufficient data, NumberIsTooSmallException expected");
-        } catch (NumberIsTooSmallException ex) {
+            Assert.fail("insufficient data, MathIllegalArgumentException expected");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
 

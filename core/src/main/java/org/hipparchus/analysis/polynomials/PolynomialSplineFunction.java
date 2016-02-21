@@ -20,12 +20,9 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NonMonotonicSequenceException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -91,24 +88,24 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      * @param knots Spline segment interval delimiters.
      * @param polynomials Polynomial functions that make up the spline.
      * @throws NullArgumentException if either of the input arrays is {@code null}.
-     * @throws NumberIsTooSmallException if knots has length less than 2.
-     * @throws DimensionMismatchException if {@code polynomials.length != knots.length - 1}.
-     * @throws NonMonotonicSequenceException if the {@code knots} array is not strictly increasing.
+     * @throws MathIllegalArgumentException if knots has length less than 2.
+     * @throws MathIllegalArgumentException if {@code polynomials.length != knots.length - 1}.
+     * @throws MathIllegalArgumentException if the {@code knots} array is not strictly increasing.
      *
      */
     public PolynomialSplineFunction(double knots[], PolynomialFunction polynomials[])
-        throws NullArgumentException, NumberIsTooSmallException,
-               DimensionMismatchException, NonMonotonicSequenceException{
+        throws MathIllegalArgumentException, NullArgumentException {
         if (knots == null ||
             polynomials == null) {
             throw new NullArgumentException();
         }
         if (knots.length < 2) {
-            throw new NumberIsTooSmallException(LocalizedFormats.NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION,
+            throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION,
                                                 2, knots.length, false);
         }
         if (knots.length - 1 != polynomials.length) {
-            throw new DimensionMismatchException(polynomials.length, knots.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   polynomials.length, knots.length);
         }
         MathArrays.checkOrder(knots);
 
@@ -126,14 +123,15 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      *
      * @param v Point for which the function value should be computed.
      * @return the value.
-     * @throws OutOfRangeException if {@code v} is outside of the domain of the
+     * @throws MathIllegalArgumentException if {@code v} is outside of the domain of the
      * spline function (smaller than the smallest knot point or larger than the
      * largest knot point).
      */
     @Override
     public double value(double v) {
         if (v < knots[0] || v > knots[n]) {
-            throw new OutOfRangeException(v, knots[0], knots[n]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   v, knots[0], knots[n]);
         }
         int i = Arrays.binarySearch(knots, v);
         if (i < 0) {
@@ -169,7 +167,8 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
     public DerivativeStructure value(final DerivativeStructure t) {
         final double t0 = t.getValue();
         if (t0 < knots[0] || t0 > knots[n]) {
-            throw new OutOfRangeException(t0, knots[0], knots[n]);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   t0, knots[0], knots[n]);
         }
         int i = Arrays.binarySearch(knots, t0);
         if (i < 0) {

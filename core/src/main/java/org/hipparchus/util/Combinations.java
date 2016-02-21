@@ -22,9 +22,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 
 /**
  * Utility to create <a href="http://en.wikipedia.org/wiki/Combination">
@@ -69,8 +69,8 @@ public class Combinations implements Iterable<int[]> {
      *
      * @param n Size of the set from which subsets are selected.
      * @param k Size of the subsets to be enumerated.
-     * @throws org.hipparchus.exception.NotPositiveException if {@code n < 0}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException if {@code k > n}.
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if {@code n < 0}.
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if {@code k > n}.
      */
     public Combinations(int n,
                         int k) {
@@ -98,8 +98,8 @@ public class Combinations implements Iterable<int[]> {
      * @param n Size of the set from which subsets are selected.
      * @param k Size of the subsets to be enumerated.
      * @param iterationOrder Specifies the {@link #iterator() iteration order}.
-     * @throws org.hipparchus.exception.NotPositiveException if {@code n < 0}.
-     * @throws org.hipparchus.exception.NumberIsTooLargeException if {@code k > n}.
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if {@code n < 0}.
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if {@code k > n}.
      */
     private Combinations(int n,
                          int k,
@@ -140,7 +140,7 @@ public class Combinations implements Iterable<int[]> {
         case LEXICOGRAPHIC:
             return new LexicographicIterator(n, k);
         default:
-            throw new MathInternalError(); // Should never happen.
+            throw MathRuntimeException.createInternalError(); // Should never happen.
         }
     }
 
@@ -151,9 +151,9 @@ public class Combinations implements Iterable<int[]> {
      * Its {@code compare(int[],int[])} method will throw exceptions if
      * passed combinations that are inconsistent with this instance:
      * <ul>
-     *  <li>{@code DimensionMismatchException} if the array lengths are not
+     *  <li>{@code MathIllegalArgumentException} if the array lengths are not
      *      equal to {@code k},</li>
-     *  <li>{@code OutOfRangeException} if an element of the array is not
+     *  <li>{@code MathIllegalArgumentException} if an element of the array is not
      *      within the interval [0, {@code n}).</li>
      * </ul>
      * @return a lexicographic comparator.
@@ -352,19 +352,21 @@ public class Combinations implements Iterable<int[]> {
         /**
          * {@inheritDoc}
          *
-         * @throws DimensionMismatchException if the array lengths are not
+         * @throws MathIllegalArgumentException if the array lengths are not
          * equal to {@code k}.
-         * @throws OutOfRangeException if an element of the array is not
+         * @throws MathIllegalArgumentException if an element of the array is not
          * within the interval [0, {@code n}).
          */
         @Override
         public int compare(int[] c1,
                            int[] c2) {
             if (c1.length != k) {
-                throw new DimensionMismatchException(c1.length, k);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       c1.length, k);
             }
             if (c2.length != k) {
-                throw new DimensionMismatchException(c2.length, k);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       c2.length, k);
             }
 
             // Method "lexNorm" works with ordered arrays.
@@ -394,7 +396,7 @@ public class Combinations implements Iterable<int[]> {
          *
          * @param c Input array.
          * @return the lexicographic norm.
-         * @throws OutOfRangeException if an element of the array is not
+         * @throws MathIllegalArgumentException if an element of the array is not
          * within the interval [0, {@code n}).
          */
         private long lexNorm(int[] c) {
@@ -403,7 +405,8 @@ public class Combinations implements Iterable<int[]> {
                 final int digit = c[i];
                 if (digit < 0 ||
                     digit >= n) {
-                    throw new OutOfRangeException(digit, 0, n - 1);
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           digit, 0, n - 1);
                 }
 
                 ret += c[i] * ArithmeticUtils.pow(n, i);

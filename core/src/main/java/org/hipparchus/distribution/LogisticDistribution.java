@@ -16,9 +16,8 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -54,7 +53,7 @@ public class LogisticDistribution extends AbstractRealDistribution {
      *
      * @param mu location parameter
      * @param s scale parameter (must be positive)
-     * @throws NotStrictlyPositiveException if {@code beta <= 0}
+     * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
     public LogisticDistribution(double mu, double s) {
         this(new Well19937c(), mu, s);
@@ -66,13 +65,13 @@ public class LogisticDistribution extends AbstractRealDistribution {
      * @param rng Random number generator
      * @param mu location parameter
      * @param s scale parameter (must be positive)
-     * @throws NotStrictlyPositiveException if {@code beta <= 0}
+     * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
     public LogisticDistribution(RandomGenerator rng, double mu, double s) {
         super(rng);
 
         if (s <= 0.0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.NOT_POSITIVE_SCALE, s);
+            throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_SCALE, s);
         }
 
         this.mu = mu;
@@ -114,9 +113,10 @@ public class LogisticDistribution extends AbstractRealDistribution {
 
     /** {@inheritDoc} */
     @Override
-    public double inverseCumulativeProbability(double p) throws OutOfRangeException {
+    public double inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0.0, 1.0);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0.0, 1.0);
         } else if (p == 0) {
             return 0.0;
         } else if (p == 1) {

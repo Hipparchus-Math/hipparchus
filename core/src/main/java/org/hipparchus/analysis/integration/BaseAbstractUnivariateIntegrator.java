@@ -18,12 +18,10 @@ package org.hipparchus.analysis.integration;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.TooManyEvaluationsException;
 import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.MathUtils;
 
@@ -100,16 +98,16 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
      * @param absoluteAccuracy absolute accuracy of the result
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
-     * @exception NotStrictlyPositiveException if minimal number of iterations
+     * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
      */
     protected BaseAbstractUnivariateIntegrator(final double relativeAccuracy,
                                                final double absoluteAccuracy,
                                                final int minimalIterationCount,
                                                final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         // accuracy settings
         this.relativeAccuracy      = relativeAccuracy;
@@ -117,10 +115,12 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
 
         // iterations count settings
         if (minimalIterationCount <= 0) {
-            throw new NotStrictlyPositiveException(minimalIterationCount);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   minimalIterationCount, 0);
         }
         if (maximalIterationCount <= minimalIterationCount) {
-            throw new NumberIsTooSmallException(maximalIterationCount, minimalIterationCount, false);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   maximalIterationCount, minimalIterationCount);
         }
         this.minimalIterationCount = minimalIterationCount;
         this.iterations            = new Incrementor();
@@ -146,14 +146,14 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
      * Construct an integrator with given iteration counts.
      * @param minimalIterationCount minimum number of iterations
      * @param maximalIterationCount maximum number of iterations
-     * @exception NotStrictlyPositiveException if minimal number of iterations
+     * @exception MathIllegalArgumentException if minimal number of iterations
      * is not strictly positive
-     * @exception NumberIsTooSmallException if maximal number of iterations
+     * @exception MathIllegalArgumentException if maximal number of iterations
      * is lesser than or equal to the minimal number of iterations
      */
     protected BaseAbstractUnivariateIntegrator(final int minimalIterationCount,
                                            final int maximalIterationCount)
-        throws NotStrictlyPositiveException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         this(DEFAULT_RELATIVE_ACCURACY, DEFAULT_ABSOLUTE_ACCURACY,
              minimalIterationCount, maximalIterationCount);
     }
@@ -212,16 +212,12 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
      *
      * @param point Point at which the objective function must be evaluated.
      * @return the objective function value at specified point.
-     * @throws TooManyEvaluationsException if the maximal number of function
+     * @throws MathIllegalStateException if the maximal number of function
      * evaluations is exceeded.
      */
     protected double computeObjectiveValue(final double point)
-        throws TooManyEvaluationsException {
-        try {
-            evaluations.incrementCount();
-        } catch (MaxCountExceededException e) {
-            throw new TooManyEvaluationsException(e.getMax());
-        }
+        throws MathIllegalStateException {
+        evaluations.incrementCount();
         return function.value(point);
     }
 
@@ -240,7 +236,7 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
     protected void setup(final int maxEval,
                          final UnivariateFunction f,
                          final double lower, final double upper)
-        throws NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         // Checks.
         MathUtils.checkNotNull(f);
@@ -260,8 +256,7 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
     @Override
     public double integrate(final int maxEval, final UnivariateFunction f,
                             final double lower, final double upper)
-        throws TooManyEvaluationsException, MaxCountExceededException,
-               MathIllegalArgumentException, NullArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException, NullArgumentException {
 
         // Initialization.
         setup(maxEval, f, lower, upper);
@@ -276,12 +271,12 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
      * classes.
      *
      * @return the root.
-     * @throws TooManyEvaluationsException if the maximal number of evaluations
+     * @throws MathIllegalStateException if the maximal number of evaluations
      * is exceeded.
-     * @throws MaxCountExceededException if the maximum iteration count is exceeded
+     * @throws MathIllegalStateException if the maximum iteration count is exceeded
      * or the integrator detects convergence problems otherwise
      */
     protected abstract double doIntegrate()
-        throws TooManyEvaluationsException, MaxCountExceededException;
+        throws MathIllegalStateException;
 
 }

@@ -67,7 +67,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
      *
      * @param point the parameter values.
      * @return the model's value and derivative at the given point.
-     * @throws org.hipparchus.exception.TooManyEvaluationsException
+     * @throws org.hipparchus.exception.MathIllegalStateException
      *          if the maximal number of evaluations (of the model vector function) is
      *          exceeded.
      */
@@ -88,7 +88,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          *
          * @param threshold Singularity threshold.
          * @return the covariance matrix.
-         * @throws org.hipparchus.linear.SingularMatrixException
+         * @throws org.hipparchus.linear.MathIllegalArgumentException
          *          if the covariance matrix cannot be computed (singular problem).
          */
         RealMatrix getCovariances(double threshold);
@@ -102,7 +102,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * @param covarianceSingularityThreshold Singularity threshold (see {@link
          *                                       #getCovariances(double) computeCovariances}).
          * @return an estimate of the standard deviation of the optimized parameters
-         * @throws org.hipparchus.linear.SingularMatrixException
+         * @throws org.hipparchus.linear.MathIllegalArgumentException
          *          if the covariance matrix cannot be computed.
          */
         RealVector getSigma(double covarianceSingularityThreshold);
@@ -119,7 +119,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * Get the weighted Jacobian matrix.
          *
          * @return the weighted Jacobian: W<sup>1/2</sup> J.
-         * @throws org.hipparchus.exception.DimensionMismatchException
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
          * if the Jacobian dimension does not match problem dimension.
          */
         RealMatrix getJacobian();
@@ -159,7 +159,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * then multiplied by the square root of the weight matrix.
          *
          * @return the weighted residuals: W<sup>1/2</sup> K.
-         * @throws org.hipparchus.exception.DimensionMismatchException
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
          * if the residuals have the wrong length.
          */
         RealVector getResiduals();

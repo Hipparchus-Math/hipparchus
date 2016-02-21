@@ -20,13 +20,7 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.genetics.BinaryChromosome;
-import org.hipparchus.genetics.Chromosome;
-import org.hipparchus.genetics.ListPopulation;
-import org.hipparchus.genetics.Population;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -88,7 +82,7 @@ public class ListPopulationTest {
         Assert.assertEquals(50, population.getPopulationLimit());
     }
 
-    @Test(expected = NotPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testSetPopulationLimit() {
         final ListPopulation population = new ListPopulation(10) {
             public Population nextGeneration() {
@@ -100,7 +94,7 @@ public class ListPopulationTest {
         population.setPopulationLimit(-50);
     }
 
-    @Test(expected = NotPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testConstructorPopulationLimitNotPositive() {
         new ListPopulation(-10) {
             public Population nextGeneration() {
@@ -110,7 +104,7 @@ public class ListPopulationTest {
         };
     }
 
-    @Test(expected = NotPositiveException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testChromosomeListConstructorPopulationLimitNotPositive() {
         final ArrayList<Chromosome> chromosomes = new ArrayList<Chromosome> ();
         chromosomes.add(new DummyBinaryChromosome(BinaryChromosome.randomBinaryRepresentation(3)));
@@ -122,7 +116,7 @@ public class ListPopulationTest {
         };
     }
 
-    @Test(expected = NumberIsTooLargeException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testConstructorListOfChromosomesBiggerThanPopulationSize() {
         final ArrayList<Chromosome> chromosomes = new ArrayList<Chromosome> ();
         chromosomes.add(new DummyBinaryChromosome(BinaryChromosome.randomBinaryRepresentation(3)));
@@ -136,7 +130,7 @@ public class ListPopulationTest {
         };
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testAddTooManyChromosomes() {
         final ArrayList<Chromosome> chromosomes = new ArrayList<Chromosome> ();
         chromosomes.add(new DummyBinaryChromosome(BinaryChromosome.randomBinaryRepresentation(3)));
@@ -153,7 +147,7 @@ public class ListPopulationTest {
         population.addChromosomes(chromosomes);
     }
 
-    @Test(expected=NumberIsTooLargeException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testAddTooManyChromosomesSingleCall() {
 
         final ListPopulation population = new ListPopulation(2) {
@@ -191,7 +185,7 @@ public class ListPopulationTest {
         }
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testSetPopulationLimitTooSmall() {
         final ArrayList<Chromosome> chromosomes = new ArrayList<Chromosome> ();
         chromosomes.add(new DummyBinaryChromosome(BinaryChromosome.randomBinaryRepresentation(3)));

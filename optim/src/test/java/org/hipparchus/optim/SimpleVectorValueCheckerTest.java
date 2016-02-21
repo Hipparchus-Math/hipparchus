@@ -16,14 +16,14 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.PointVectorValuePair;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.junit.Test;
 import org.junit.Assert;
 
 public class SimpleVectorValueCheckerTest {
-    @Test(expected=NotStrictlyPositiveException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testIterationCheckPrecondition() {
         new SimpleVectorValueChecker(1e-1, 1e-2, 0);
     }

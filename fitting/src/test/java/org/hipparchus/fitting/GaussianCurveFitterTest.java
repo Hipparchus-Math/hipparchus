@@ -17,7 +17,7 @@
 package org.hipparchus.fitting;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.TooManyIterationsException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.GaussianCurveFitter;
 import org.hipparchus.fitting.WeightedObservedPoints;
 import org.junit.Assert;
@@ -206,7 +206,7 @@ public class GaussianCurveFitterTest {
         Assert.assertEquals(0.015039355620304326, parameters[2], 1e-4);
     }
 
-    @Test(expected=TooManyIterationsException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testWithMaxIterations2() {
         final int maxIter = 1; // Too few iterations.
         final double[] init = { 3.5e6, 4.2, 0.1 };

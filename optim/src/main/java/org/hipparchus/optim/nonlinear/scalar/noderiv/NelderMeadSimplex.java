@@ -164,9 +164,9 @@ public class NelderMeadSimplex extends AbstractSimplex {
      * @param khi Expansion coefficient.
      * @param gamma Contraction coefficient.
      * @param sigma Shrinkage coefficient.
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the reference simplex does not contain at least one point.
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if there is a dimension mismatch in the reference simplex.
      */
     public NelderMeadSimplex(final double[][] referenceSimplex,

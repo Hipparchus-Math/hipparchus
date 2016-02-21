@@ -21,10 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.FieldStepHandler;
 import org.hipparchus.ode.sampling.FieldStepInterpolator;
 import org.hipparchus.util.FastMath;
@@ -112,13 +111,13 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
      * @exception MathIllegalArgumentException if the model to append is not
      * compatible with the instance (dimension of the state vector,
      * propagation direction, hole between the dates)
-     * @exception DimensionMismatchException if the dimensions of the states or
+     * @exception MathIllegalArgumentException if the dimensions of the states or
      * the number of secondary states do not match
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * during step finalization
      */
     public void append(final ContinuousOutputFieldModel<T> model)
-        throws MathIllegalArgumentException, MaxCountExceededException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (model.steps.size() == 0) {
             return;
@@ -166,12 +165,13 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
     /** Check dimensions equality.
      * @param d1 first dimension
      * @param d2 second dimansion
-     * @exception DimensionMismatchException if dimensions do not match
+     * @exception MathIllegalArgumentException if dimensions do not match
      */
     private void checkDimensionsEquality(final int d1, final int d2)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (d1 != d2) {
-            throw new DimensionMismatchException(d2, d1);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   d2, d1);
         }
     }
 
@@ -190,11 +190,11 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
      * the instance for later use.
      * @param interpolator interpolator for the last accepted step.
      * @param isLast true if the step is the last one
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * during step finalization
      */
     public void handleStep(final FieldStepInterpolator<T> interpolator, final boolean isLast)
-        throws MaxCountExceededException {
+        throws MathIllegalStateException {
 
         if (steps.size() == 0) {
             initialTime = interpolator.getPreviousState().getTime();

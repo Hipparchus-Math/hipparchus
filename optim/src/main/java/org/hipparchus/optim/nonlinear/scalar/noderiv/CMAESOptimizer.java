@@ -21,11 +21,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.EigenDecomposition;
 import org.hipparchus.linear.MatrixUtils;
@@ -285,14 +283,14 @@ public class CMAESOptimizer
 
         /**
          * @param s Sigma values.
-         * @throws NotPositiveException if any of the array entries is smaller
+         * @throws MathIllegalArgumentException if any of the array entries is smaller
          * than zero.
          */
         public Sigma(double[] s)
-            throws NotPositiveException {
+            throws MathIllegalArgumentException {
             for (int i = 0; i < s.length; i++) {
                 if (s[i] < 0) {
-                    throw new NotPositiveException(s[i]);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, s[i], 0);
                 }
             }
 
@@ -323,12 +321,13 @@ public class CMAESOptimizer
 
         /**
          * @param size Population size.
-         * @throws NotStrictlyPositiveException if {@code size <= 0}.
+         * @throws MathIllegalArgumentException if {@code size <= 0}.
          */
         public PopulationSize(int size)
-            throws NotStrictlyPositiveException {
+            throws MathIllegalArgumentException {
             if (size <= 0) {
-                throw new NotStrictlyPositiveException(size);
+                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                       size, 0);
             }
             lambda = size;
         }
@@ -352,15 +351,14 @@ public class CMAESOptimizer
      *  <li>{@link PopulationSize}</li>
      * </ul>
      * @return {@inheritDoc}
-     * @throws TooManyEvaluationsException if the maximal number of
+     * @throws MathIllegalStateException if the maximal number of
      * evaluations is exceeded.
-     * @throws DimensionMismatchException if the initial guess, target, and weight
+     * @throws MathIllegalArgumentException if the initial guess, target, and weight
      * arguments have inconsistent dimensions.
      */
     @Override
     public PointValuePair optimize(OptimizationData... optData)
-        throws TooManyEvaluationsException,
-               DimensionMismatchException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         // Set up base class and perform computation.
         return super.optimize(optData);
     }
@@ -416,7 +414,7 @@ public class CMAESOptimizer
                 copyColumn(arxk, 0, arx, k);
                 try {
                     valuePenaltyPairs[k] = fitfun.value(arx.getColumn(k)); // compute fitness
-                } catch (TooManyEvaluationsException e) {
+                } catch (MathIllegalStateException e) {
                     break generationLoop;
                 }
             }
@@ -560,7 +558,8 @@ public class CMAESOptimizer
             final double[] init = getStartPoint();
 
             if (inputSigma.length != init.length) {
-                throw new DimensionMismatchException(inputSigma.length, init.length);
+                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                       inputSigma.length, init.length);
             }
 
             final double[] lB = getLowerBound();
@@ -568,7 +567,8 @@ public class CMAESOptimizer
 
             for (int i = 0; i < init.length; i++) {
                 if (inputSigma[i] > uB[i] - lB[i]) {
-                    throw new OutOfRangeException(inputSigma[i], 0, uB[i] - lB[i]);
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           inputSigma[i], 0, uB[i] - lB[i]);
                 }
             }
         }
@@ -581,7 +581,8 @@ public class CMAESOptimizer
      */
     private void initializeCMA(double[] guess) {
         if (lambda <= 0) {
-            throw new NotStrictlyPositiveException(lambda);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   lambda, 0);
         }
         // initialize sigma
         final double[][] sigmaArray = new double[guess.length][1];

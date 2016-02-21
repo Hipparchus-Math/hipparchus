@@ -17,15 +17,11 @@
 
 package org.hipparchus.ode.sampling;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FirstOrderIntegrator;
 import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
-import org.hipparchus.ode.sampling.FixedStepHandler;
-import org.hipparchus.ode.sampling.StepNormalizer;
 import org.hipparchus.util.FastMath;
 import org.junit.After;
 import org.junit.Assert;
@@ -42,8 +38,7 @@ public class StepNormalizerTest {
 
   @Test
   public void testBoundaries()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);
     integ.addStepHandler(new StepNormalizer(range / 10.0,
@@ -73,8 +68,7 @@ public class StepNormalizerTest {
 
   @Test
   public void testBeforeEnd()
-      throws DimensionMismatchException, NumberIsTooSmallException,
-             MaxCountExceededException, NoBracketingException {
+      throws MathIllegalArgumentException, MathIllegalStateException {
     final double range = pb.getFinalTime() - pb.getInitialTime();
     setLastSeen(false);
     integ.addStepHandler(new StepNormalizer(range / 10.5,

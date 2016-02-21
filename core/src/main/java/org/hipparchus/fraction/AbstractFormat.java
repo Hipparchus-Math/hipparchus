@@ -23,8 +23,8 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 /**
  * Common part shared by both {@link FractionFormat} and {@link BigFractionFormat}.

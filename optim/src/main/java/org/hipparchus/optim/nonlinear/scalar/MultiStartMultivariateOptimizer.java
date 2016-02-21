@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.optim.BaseMultiStartMultivariateOptimizer;
 import org.hipparchus.optim.PointValuePair;
@@ -53,13 +53,12 @@ public class MultiStartMultivariateOptimizer
      * @param generator Random vector generator to use for restarts.
      * @throws NullArgumentException if {@code optimizer} or {@code generator}
      * is {@code null}.
-     * @throws NotStrictlyPositiveException if {@code starts < 1}.
+     * @throws MathIllegalArgumentException if {@code starts < 1}.
      */
     public MultiStartMultivariateOptimizer(final MultivariateOptimizer optimizer,
                                            final int starts,
                                            final RandomVectorGenerator generator)
-        throws NullArgumentException,
-        NotStrictlyPositiveException {
+        throws MathIllegalArgumentException, NullArgumentException {
         super(optimizer, starts, generator);
         this.optimizer = optimizer;
     }

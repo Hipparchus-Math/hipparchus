@@ -19,7 +19,7 @@ package org.hipparchus.geometry.enclosing;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 
@@ -102,7 +102,7 @@ public class WelzlEncloser<S extends Space, P extends Point<S>> implements Enclo
             ball = moveToFrontBall(extreme, extreme.size(), support);
             if (ball.getRadius() < savedBall.getRadius()) {
                 // this should never happen
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
 
             // it was an interesting point, move it to the front

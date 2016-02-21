@@ -17,7 +17,7 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * This class defines a linear operator operating on real ({@code double})
@@ -69,11 +69,11 @@ public abstract class RealLinearOperator {
      *
      * @param x the vector to operate on
      * @return the product of {@code this} instance with {@code x}
-     * @throws DimensionMismatchException if the column dimension does not match
+     * @throws MathIllegalArgumentException if the column dimension does not match
      * the size of {@code x}
      */
     public abstract RealVector operate(final RealVector x)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the result of multiplying the transpose of {@code this} operator
@@ -84,13 +84,13 @@ public abstract class RealLinearOperator {
      * @param x the vector to operate on
      * @return the product of the transpose of {@code this} instance with
      * {@code x}
-     * @throws org.hipparchus.exception.DimensionMismatchException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the row dimension does not match the size of {@code x}
      * @throws UnsupportedOperationException if this operation is not supported
      * by {@code this} operator
      */
     public RealVector operateTranspose(final RealVector x)
-        throws DimensionMismatchException, UnsupportedOperationException {
+        throws MathIllegalArgumentException, UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 

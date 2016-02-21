@@ -19,10 +19,9 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEState;
@@ -223,18 +222,20 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
     /** {@inheritDoc} */
     @Override
     protected void sanityChecks(final FieldODEState<T> eqn, final T t)
-        throws DimensionMismatchException, NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         super.sanityChecks(eqn, t);
 
         mainSetDimension = eqn.getStateDimension();
 
         if (vecAbsoluteTolerance != null && vecAbsoluteTolerance.length != mainSetDimension) {
-            throw new DimensionMismatchException(mainSetDimension, vecAbsoluteTolerance.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   mainSetDimension, vecAbsoluteTolerance.length);
         }
 
         if (vecRelativeTolerance != null && vecRelativeTolerance.length != mainSetDimension) {
-            throw new DimensionMismatchException(mainSetDimension, vecRelativeTolerance.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   mainSetDimension, vecRelativeTolerance.length);
         }
 
     }
@@ -246,13 +247,13 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * @param state0 state at integration start time
      * @param mapper mapper for all the equations
      * @return first integration step
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     public T initializeStep(final boolean forward, final int order, final T[] scale,
                             final FieldODEStateAndDerivative<T> state0,
                             final FieldEquationsMapper<T> mapper)
-        throws MaxCountExceededException, DimensionMismatchException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (initialStep.getReal() > 0) {
             // use the user provided value
@@ -318,17 +319,17 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
      * are silently increased up to this value, if false such small
      * steps generate an exception
      * @return a bounded integration step (h if no bound is reach, or a bounded value)
-     * @exception NumberIsTooSmallException if the step is too small and acceptSmall is false
+     * @exception MathIllegalArgumentException if the step is too small and acceptSmall is false
      */
     protected T filterStep(final T h, final boolean forward, final boolean acceptSmall)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         T filteredH = h;
         if (h.abs().subtract(minStep).getReal() < 0) {
             if (acceptSmall) {
                 filteredH = forward ? minStep : minStep.negate();
             } else {
-                throw new NumberIsTooSmallException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
+                throw new MathIllegalArgumentException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
                                                     h.abs().getReal(), minStep.getReal(), true);
             }
         }

@@ -16,7 +16,8 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.StableRandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -91,44 +92,44 @@ public class StableRandomGeneratorTest {
     @Test
     public void testAlphaRangeBelowZero() {
         try {
-            new StableRandomGenerator(rg,
-                    -1.0, 0.0);
-            Assert.fail("Expected OutOfRangeException");
-        } catch (OutOfRangeException e) {
-            Assert.assertEquals(-1.0, e.getArgument());
+            new StableRandomGenerator(rg, -1.0, 0.0);
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
+            Assert.assertEquals(-1.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
 
     @Test
     public void testAlphaRangeAboveTwo() {
         try {
-            new StableRandomGenerator(rg,
-                    3.0, 0.0);
-            Assert.fail("Expected OutOfRangeException");
-        } catch (OutOfRangeException e) {
-            Assert.assertEquals(3.0, e.getArgument());
+            new StableRandomGenerator(rg, 3.0, 0.0);
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
+            Assert.assertEquals(3.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
 
     @Test
     public void testBetaRangeBelowMinusOne() {
         try {
-            new StableRandomGenerator(rg,
-                    1.0, -2.0);
-            Assert.fail("Expected OutOfRangeException");
-        } catch (OutOfRangeException e) {
-            Assert.assertEquals(-2.0, e.getArgument());
+            new StableRandomGenerator(rg, 1.0, -2.0);
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
+            Assert.assertEquals(-2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
 
     @Test
     public void testBetaRangeAboveOne() {
         try {
-            new StableRandomGenerator(rg,
-                    1.0, 2.0);
-            Assert.fail("Expected OutOfRangeException");
-        } catch (OutOfRangeException e) {
-            Assert.assertEquals(2.0, e.getArgument());
+            new StableRandomGenerator(rg, 1.0, 2.0);
+            Assert.fail("Expected MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException e) {
+            Assert.assertEquals(LocalizedFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
+            Assert.assertEquals(2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
 }

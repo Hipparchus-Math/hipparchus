@@ -17,9 +17,8 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NoDataException;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 
@@ -62,11 +61,11 @@ public class MicrosphereProjectionInterpolator
      * interpolated point and one of the sample points is less than this
      * value, no interpolation will be performed (the value of the sample
      * will be returned).
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code dimension <= 0} or {@code elements <= 0}.
-     * @throws NotPositiveException if {@code exponent < 0}.
-     * @throws NotPositiveException if {@code darkThreshold < 0}.
-     * @throws org.hipparchus.exception.OutOfRangeException if
+     * @throws MathIllegalArgumentException if {@code exponent < 0}.
+     * @throws MathIllegalArgumentException if {@code darkThreshold < 0}.
+     * @throws org.hipparchus.exception.MathIllegalArgumentException if
      * {@code maxDarkFraction} does not belong to the interval {@code [0, 1]}.
      */
     public MicrosphereProjectionInterpolator(int dimension,
@@ -101,15 +100,15 @@ public class MicrosphereProjectionInterpolator
      * interpolated point and one of the sample points is less than this
      * value, no interpolation will be performed (the value of the sample
      * will be returned).
-     * @throws NotPositiveException if {@code exponent < 0}.
+     * @throws MathIllegalArgumentException if {@code exponent < 0}.
      */
     public MicrosphereProjectionInterpolator(InterpolatingMicrosphere microsphere,
                                              double exponent,
                                              boolean sharedSphere,
                                              double noInterpolationTolerance)
-        throws NotPositiveException {
+        throws MathIllegalArgumentException {
         if (exponent < 0) {
-            throw new NotPositiveException(exponent);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, exponent, 0);
         }
 
         this.microsphere = microsphere;
@@ -121,31 +120,31 @@ public class MicrosphereProjectionInterpolator
     /**
      * {@inheritDoc}
      *
-     * @throws DimensionMismatchException if the space dimension of the
+     * @throws MathIllegalArgumentException if the space dimension of the
      * given samples does not match the space dimension of the microsphere.
      */
     @Override
     public MultivariateFunction interpolate(final double[][] xval,
                                             final double[] yval)
-        throws DimensionMismatchException,
-               NoDataException,
-               NullArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         if (xval == null ||
             yval == null) {
             throw new NullArgumentException();
         }
         if (xval.length == 0) {
-            throw new NoDataException();
+            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
         }
         if (xval.length != yval.length) {
-            throw new DimensionMismatchException(xval.length, yval.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xval.length, yval.length);
         }
         if (xval[0] == null) {
             throw new NullArgumentException();
         }
         final int dimension = microsphere.getDimension();
         if (dimension != xval[0].length) {
-            throw new DimensionMismatchException(xval[0].length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   xval[0].length, dimension);
         }
 
         // Microsphere copy.

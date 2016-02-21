@@ -27,7 +27,7 @@ import org.hipparchus.TestUtils;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.dfp.DfpMath;
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
@@ -1642,7 +1642,7 @@ public class FastMathTest {
                 try {
                     FastMath.incrementExact(a);
                     Assert.fail("an exception should have been thrown");
-                } catch (MathArithmeticException mae) {
+                } catch (MathRuntimeException mae) {
                     // expected
                 }
             } else {
@@ -1668,7 +1668,7 @@ public class FastMathTest {
                 try {
                     FastMath.decrementExact(a);
                     Assert.fail("an exception should have been thrown");
-                } catch (MathArithmeticException mae) {
+                } catch (MathRuntimeException mae) {
                     // expected
                 }
             } else {
@@ -1696,7 +1696,7 @@ public class FastMathTest {
                     try {
                         FastMath.addExact(a, b);
                         Assert.fail("an exception should have been thrown");
-                    } catch (MathArithmeticException mae) {
+                    } catch (MathRuntimeException mae) {
                         // expected
                     }
                 } else {
@@ -1725,7 +1725,7 @@ public class FastMathTest {
                     try {
                         FastMath.addExact(a, b);
                         Assert.fail("an exception should have been thrown");
-                    } catch (MathArithmeticException mae) {
+                    } catch (MathRuntimeException mae) {
                         // expected
                     }
                 } else {
@@ -1754,7 +1754,7 @@ public class FastMathTest {
                     try {
                         FastMath.subtractExact(a, b);
                         Assert.fail("an exception should have been thrown");
-                    } catch (MathArithmeticException mae) {
+                    } catch (MathRuntimeException mae) {
                         // expected
                     }
                 } else {
@@ -1783,7 +1783,7 @@ public class FastMathTest {
                     try {
                         FastMath.subtractExact(a, b);
                         Assert.fail("an exception should have been thrown");
-                    } catch (MathArithmeticException mae) {
+                    } catch (MathRuntimeException mae) {
                         // expected
                     }
                 } else {
@@ -1812,7 +1812,7 @@ public class FastMathTest {
                     try {
                         FastMath.multiplyExact(a, b);
                         Assert.fail("an exception should have been thrown " + a + b);
-                    } catch (MathArithmeticException mae) {
+                    } catch (MathRuntimeException mae) {
                         // expected
                     }
                 } else {
@@ -1841,7 +1841,7 @@ public class FastMathTest {
                     try {
                         FastMath.multiplyExact(a, b);
                         Assert.fail("an exception should have been thrown " + a + b);
-                    } catch (MathArithmeticException mae) {
+                    } catch (MathRuntimeException mae) {
                         // expected
                     }
                 } else {
@@ -1851,12 +1851,12 @@ public class FastMathTest {
         }
     }
 
-    @Test(expected=MathArithmeticException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testToIntExactTooLow() {
         FastMath.toIntExact(-1l + Integer.MIN_VALUE);
     }
 
-    @Test(expected=MathArithmeticException.class)
+    @Test(expected=MathRuntimeException.class)
     public void testToIntExactTooHigh() {
         FastMath.toIntExact(+1l + Integer.MAX_VALUE);
     }
@@ -1879,7 +1879,7 @@ public class FastMathTest {
         try {
             FastMath.floorDiv(1, 0);
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException mae) {
+        } catch (MathRuntimeException mae) {
             // expected
         }
         for (int a = -100; a <= 100; ++a) {
@@ -1900,7 +1900,7 @@ public class FastMathTest {
         try {
             FastMath.floorMod(1, 0);
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException mae) {
+        } catch (MathRuntimeException mae) {
             // expected
         }
         for (int a = -100; a <= 100; ++a) {
@@ -1922,7 +1922,7 @@ public class FastMathTest {
                 try {
                     FastMath.floorDiv(a, b);
                     Assert.fail("an exception should have been thrown");
-                } catch (MathArithmeticException mae) {
+                } catch (MathRuntimeException mae) {
                     // expected
                 }
             } else {
@@ -1951,7 +1951,7 @@ public class FastMathTest {
         try {
             FastMath.floorDiv(1l, 0l);
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException mae) {
+        } catch (MathRuntimeException mae) {
             // expected
         }
         for (long a = -100l; a <= 100l; ++a) {
@@ -1972,7 +1972,7 @@ public class FastMathTest {
         try {
             FastMath.floorMod(1l, 0l);
             Assert.fail("an exception should have been thrown");
-        } catch (MathArithmeticException mae) {
+        } catch (MathRuntimeException mae) {
             // expected
         }
         for (long a = -100l; a <= 100l; ++a) {
@@ -1994,7 +1994,7 @@ public class FastMathTest {
                 try {
                     FastMath.floorDiv(a, b);
                     Assert.fail("an exception should have been thrown");
-                } catch (MathArithmeticException mae) {
+                } catch (MathRuntimeException mae) {
                     // expected
                 }
             } else {

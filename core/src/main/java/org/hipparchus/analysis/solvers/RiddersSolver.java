@@ -16,8 +16,8 @@
  */
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -65,8 +65,7 @@ public class RiddersSolver extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws TooManyEvaluationsException,
-               NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double min = getMin();
         double max = getMax();
         // [x1, x2] is the bracketing interval in each iteration

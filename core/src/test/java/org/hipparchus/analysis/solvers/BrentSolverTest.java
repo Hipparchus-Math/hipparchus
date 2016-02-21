@@ -26,11 +26,8 @@ import org.hipparchus.analysis.function.Constant;
 import org.hipparchus.analysis.function.Inverse;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sqrt;
-import org.hipparchus.analysis.solvers.BrentSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.TooManyEvaluationsException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -156,8 +153,8 @@ public final class BrentSolverTest {
 
         try {
             result = solver.solve(5, f, 0.85, 5);
-            Assert.fail("Expected TooManyEvaluationsException");
-        } catch (TooManyEvaluationsException e) {
+            Assert.fail("Expected MathIllegalStateException");
+        } catch (MathIllegalStateException e) {
             // Expected.
         }
     }
@@ -187,20 +184,20 @@ public final class BrentSolverTest {
         BrentSolver solver = new BrentSolver();
         try {  // bad interval
             solver.solve(100, f, 1, -1);
-            Assert.fail("Expecting NumberIsTooLargeException - bad interval");
-        } catch (NumberIsTooLargeException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - bad interval");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5);
-            Assert.fail("Expecting NoBracketingException - non-bracketing");
-        } catch (NoBracketingException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - non-bracketing");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {  // no bracket
             solver.solve(100, f, 1, 1.5, 1.2);
-            Assert.fail("Expecting NoBracketingException - non-bracketing");
-        } catch (NoBracketingException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException - non-bracketing");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
     }
@@ -220,8 +217,8 @@ public final class BrentSolverTest {
         // invalid guess (it *is* a root, but outside of the range)
         try {
           result = solver.solve(100, f, 0.6, 7.0, 0.0);
-          Assert.fail("a NumberIsTooLargeException was expected");
-        } catch (NumberIsTooLargeException iae) {
+          Assert.fail("a MathIllegalArgumentException was expected");
+        } catch (MathIllegalArgumentException iae) {
             // expected behaviour
         }
 

@@ -16,10 +16,9 @@
  */
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
-import org.hipparchus.exception.MathUnsupportedOperationException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.NumberIsTooSmallException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
@@ -44,7 +43,7 @@ import org.hipparchus.util.MathArrays;
  * <br/>
  * Constraints are not supported: the call to
  * {@link #optimize(OptimizationData[]) optimize} will throw
- * {@link MathUnsupportedOperationException} if bounds are passed to it.
+ * {@link MathRuntimeException} if bounds are passed to it.
  * In order to impose simple constraints, the objective function must be
  * wrapped in an adapter like
  * {@link org.hipparchus.optim.nonlinear.scalar.MultivariateFunctionMappingAdapter
@@ -84,8 +83,8 @@ public class PowellOptimizer
      * @param rel Relative threshold.
      * @param abs Absolute threshold.
      * @param checker Convergence checker.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
-     * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
                            double abs,
@@ -103,8 +102,8 @@ public class PowellOptimizer
      * @param lineRel Relative threshold for the internal line search optimizer.
      * @param lineAbs Absolute threshold for the internal line search optimizer.
      * @param checker Convergence checker.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
-     * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
                            double abs,
@@ -114,10 +113,12 @@ public class PowellOptimizer
         super(checker);
 
         if (rel < MIN_RELATIVE_TOLERANCE) {
-            throw new NumberIsTooSmallException(rel, MIN_RELATIVE_TOLERANCE, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                                                   rel, MIN_RELATIVE_TOLERANCE);
         }
         if (abs <= 0) {
-            throw new NotStrictlyPositiveException(abs);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   abs, 0);
         }
         relativeThreshold = rel;
         absoluteThreshold = abs;
@@ -137,8 +138,8 @@ public class PowellOptimizer
      *
      * @param rel Relative threshold.
      * @param abs Absolute threshold.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
-     * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
                            double abs) {
@@ -152,8 +153,8 @@ public class PowellOptimizer
      * @param abs Absolute threshold.
      * @param lineRel Relative threshold for the internal line search optimizer.
      * @param lineAbs Absolute threshold for the internal line search optimizer.
-     * @throws NotStrictlyPositiveException if {@code abs <= 0}.
-     * @throws NumberIsTooSmallException if {@code rel < 2 * Math.ulp(1d)}.
+     * @throws MathIllegalArgumentException if {@code abs <= 0}.
+     * @throws MathIllegalArgumentException if {@code rel < 2 * Math.ulp(1d)}.
      */
     public PowellOptimizer(double rel,
                            double abs,
@@ -287,13 +288,13 @@ public class PowellOptimizer
     }
 
     /**
-     * @throws MathUnsupportedOperationException if bounds were passed to the
+     * @throws MathRuntimeException if bounds were passed to the
      * {@link #optimize(OptimizationData[]) optimize} method.
      */
     private void checkParameters() {
         if (getLowerBound() != null ||
             getUpperBound() != null) {
-            throw new MathUnsupportedOperationException(LocalizedFormats.CONSTRAINT);
+            throw new MathRuntimeException(LocalizedFormats.CONSTRAINT);
         }
     }
 }

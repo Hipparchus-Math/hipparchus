@@ -18,7 +18,7 @@ package org.hipparchus.geometry;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.MathRuntimeException;
 
 /** This interface represents a generic space, with affine and vectorial counterparts.
  * @see Vector
@@ -34,9 +34,9 @@ public interface Space extends Serializable {
     /** Get the n-1 dimension subspace of this space.
      * @return n-1 dimension sub-space of this space
      * @see #getDimension()
-     * @exception MathUnsupportedOperationException for dimension-1 spaces
+     * @exception MathRuntimeException for dimension-1 spaces
      * which do not have sub-spaces
      */
-    Space getSubSpace() throws MathUnsupportedOperationException;
+    Space getSubSpace() throws MathRuntimeException;
 
 }

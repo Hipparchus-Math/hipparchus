@@ -20,24 +20,11 @@ import java.math.BigDecimal;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.Fraction;
-import org.hipparchus.fraction.FractionConversionException;
 import org.hipparchus.fraction.FractionField;
-import org.hipparchus.linear.Array2DRowFieldMatrix;
-import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.BlockRealMatrix;
-import org.hipparchus.linear.DiagonalMatrix;
-import org.hipparchus.linear.FieldMatrix;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.NonSquareMatrixException;
-import org.hipparchus.linear.NonSymmetricMatrixException;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -134,8 +121,8 @@ public final class MatrixUtilsTest {
                      new BlockRealMatrix(rowMatrix));
         try {
             MatrixUtils.createRowRealMatrix(new double[] {});  // empty
-            Assert.fail("Expecting NotStrictlyPositiveException");
-        } catch (NotStrictlyPositiveException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // expected
         }
         try {
@@ -298,7 +285,7 @@ public final class MatrixUtilsTest {
                 }
                 d[i] = dI;
             }
-        } catch (FractionConversionException fce) {
+        } catch (MathIllegalStateException fce) {
             Assert.fail(fce.getMessage());
         }
         return d;
@@ -310,7 +297,7 @@ public final class MatrixUtilsTest {
             for (int i = 0; i < data.length; ++i) {
                 d[i] = new Fraction(data[i]);
             }
-        } catch (FractionConversionException fce) {
+        } catch (MathIllegalStateException fce) {
             Assert.fail(fce.getMessage());
         }
         return d;
@@ -378,7 +365,7 @@ public final class MatrixUtilsTest {
         }
     }
 
-    @Test(expected=SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testBlockInverseNonInvertible() {
         final double[][] data = {
             { -1, 0, 123, 4 },
@@ -450,7 +437,7 @@ public final class MatrixUtilsTest {
         MatrixUtils.checkSymmetric(MatrixUtils.createRealMatrix(dataSym), Math.ulp(1d));
     }
 
-    @Test(expected=NonSymmetricMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCheckSymmetric2() {
         final double[][] dataNonSym = {
             { 1, 2, -3 },
@@ -460,13 +447,13 @@ public final class MatrixUtilsTest {
         MatrixUtils.checkSymmetric(MatrixUtils.createRealMatrix(dataNonSym), Math.ulp(1d));
     }
 
-    @Test(expected=SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInverseSingular() {
         RealMatrix m = MatrixUtils.createRealMatrix(testData3x3Singular);
         MatrixUtils.inverse(m);
     }
 
-    @Test(expected=NonSquareMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInverseNonSquare() {
         RealMatrix m = MatrixUtils.createRealMatrix(testData3x4);
         MatrixUtils.inverse(m);

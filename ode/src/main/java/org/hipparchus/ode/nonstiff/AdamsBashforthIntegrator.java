@@ -17,10 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.ode.EquationsMapper;
@@ -157,13 +155,13 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
      * be smaller than this
      * @param scalAbsoluteTolerance allowed absolute error
      * @param scalRelativeTolerance allowed relative error
-     * @exception NumberIsTooSmallException if order is 1 or less
+     * @exception MathIllegalArgumentException if order is 1 or less
      */
     public AdamsBashforthIntegrator(final int nSteps,
                                     final double minStep, final double maxStep,
                                     final double scalAbsoluteTolerance,
                                     final double scalRelativeTolerance)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
         super(METHOD_NAME, nSteps, nSteps, minStep, maxStep,
               scalAbsoluteTolerance, scalRelativeTolerance);
     }
@@ -235,8 +233,7 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
     /** {@inheritDoc} */
     @Override
     public void integrate(final ExpandableStatefulODE equations, final double t)
-        throws NumberIsTooSmallException, DimensionMismatchException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(equations, t);
         setEquations(equations);

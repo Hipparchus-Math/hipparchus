@@ -16,8 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Interface for distributions on the integers.
@@ -60,11 +59,11 @@ public interface IntegerDistribution {
      * @return the probability that a random variable with this distribution
      * will take a value between {@code x0} and {@code x1},
      * excluding the lower and including the upper endpoint
-     * @throws NumberIsTooLargeException if {@code x0 > x1}
+     * @throws MathIllegalArgumentException if {@code x0 > x1}
      *
      * @since 4.0, was previously named cumulativeProbability
      */
-    double probability(int x0, int x1) throws NumberIsTooLargeException;
+    double probability(int x0, int x1) throws MathIllegalArgumentException;
 
     /**
      * For a random variable {@code X} whose values are distributed according
@@ -92,9 +91,9 @@ public interface IntegerDistribution {
      * @param p the cumulative probability
      * @return the smallest {@code p}-quantile of this distribution
      * (largest 0-quantile for {@code p = 0})
-     * @throws OutOfRangeException if {@code p < 0} or {@code p > 1}
+     * @throws MathIllegalArgumentException if {@code p < 0} or {@code p > 1}
      */
-    int inverseCumulativeProbability(double p) throws OutOfRangeException;
+    int inverseCumulativeProbability(double p) throws MathIllegalArgumentException;
 
     /**
      * Use this method to get the numerical value of the mean of this
@@ -165,7 +164,7 @@ public interface IntegerDistribution {
      *
      * @param sampleSize the number of random values to generate
      * @return an array representing the random sample
-     * @throws org.hipparchus.exception.NotStrictlyPositiveException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code sampleSize} is not positive
      * @since 3.0
      */

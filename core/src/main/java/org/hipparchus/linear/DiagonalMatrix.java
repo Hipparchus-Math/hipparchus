@@ -18,11 +18,9 @@ package org.hipparchus.linear;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
@@ -43,11 +41,11 @@ public class DiagonalMatrix extends AbstractRealMatrix
      * Creates a matrix with the supplied dimension.
      *
      * @param dimension Number of rows and columns in the new matrix.
-     * @throws NotStrictlyPositiveException if the dimension is
+     * @throws MathIllegalArgumentException if the dimension is
      * not positive.
      */
     public DiagonalMatrix(final int dimension)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(dimension, dimension);
         data = new double[dimension];
     }
@@ -86,15 +84,15 @@ public class DiagonalMatrix extends AbstractRealMatrix
     /**
      * {@inheritDoc}
      *
-     * @throws DimensionMismatchException if the requested dimensions are not equal.
+     * @throws MathIllegalArgumentException if the requested dimensions are not equal.
      */
     @Override
     public RealMatrix createMatrix(final int rowDimension,
                                    final int columnDimension)
-        throws NotStrictlyPositiveException,
-               DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (rowDimension != columnDimension) {
-            throw new DimensionMismatchException(rowDimension, columnDimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   rowDimension, columnDimension);
         }
 
         return new DiagonalMatrix(rowDimension);
@@ -111,11 +109,11 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to be added.
      * @return {@code this + m}.
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     public DiagonalMatrix add(final DiagonalMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         // Safety check.
         MatrixUtils.checkAdditionCompatible(this, m);
 
@@ -133,11 +131,11 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param m Matrix to be subtracted.
      * @return {@code this - m}
-     * @throws MatrixDimensionMismatchException if {@code m} is not the same
+     * @throws MathIllegalArgumentException if {@code m} is not the same
      * size as {@code this}.
      */
     public DiagonalMatrix subtract(final DiagonalMatrix m)
-        throws MatrixDimensionMismatchException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkSubtractionCompatible(this, m);
 
         final int dim = getRowDimension();
@@ -154,11 +152,11 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param m matrix to postmultiply by
      * @return {@code this * m}
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code columnDimension(this) != rowDimension(m)}
      */
     public DiagonalMatrix multiply(final DiagonalMatrix m)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMultiplicationCompatible(this, m);
 
         final int dim = getRowDimension();
@@ -175,12 +173,12 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param m matrix to postmultiply by
      * @return {@code this * m}
-     * @throws DimensionMismatchException if
+     * @throws MathIllegalArgumentException if
      * {@code columnDimension(this) != rowDimension(m)}
      */
     @Override
     public RealMatrix multiply(final RealMatrix m)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         if (m instanceof DiagonalMatrix) {
             return multiply((DiagonalMatrix) m);
         } else {
@@ -222,17 +220,17 @@ public class DiagonalMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public double getEntry(final int row, final int column)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         MatrixUtils.checkMatrixIndex(this, row, column);
         return row == column ? data[row] : 0;
     }
 
     /** {@inheritDoc}
-     * @throws NumberIsTooLargeException if {@code row != column} and value is non-zero.
+     * @throws MathIllegalArgumentException if {@code row != column} and value is non-zero.
      */
     @Override
     public void setEntry(final int row, final int column, final double value)
-        throws OutOfRangeException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         if (row == column) {
             MatrixUtils.checkRowIndex(this, row);
             data[row] = value;
@@ -242,13 +240,13 @@ public class DiagonalMatrix extends AbstractRealMatrix
     }
 
     /** {@inheritDoc}
-     * @throws NumberIsTooLargeException if {@code row != column} and increment is non-zero.
+     * @throws MathIllegalArgumentException if {@code row != column} and increment is non-zero.
      */
     @Override
     public void addToEntry(final int row,
                            final int column,
                            final double increment)
-        throws OutOfRangeException, NumberIsTooLargeException {
+        throws MathIllegalArgumentException {
         if (row == column) {
             MatrixUtils.checkRowIndex(this, row);
             data[row] += increment;
@@ -262,7 +260,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
     public void multiplyEntry(final int row,
                               final int column,
                               final double factor)
-        throws OutOfRangeException {
+        throws MathIllegalArgumentException {
         // we don't care about non-diagonal elements for multiplication
         if (row == column) {
             MatrixUtils.checkRowIndex(this, row);
@@ -285,20 +283,20 @@ public class DiagonalMatrix extends AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public double[] operate(final double[] v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         return multiply(new DiagonalMatrix(v, false)).getDataRef();
     }
 
     /** {@inheritDoc} */
     @Override
     public double[] preMultiply(final double[] v)
-        throws DimensionMismatchException {
+        throws MathIllegalArgumentException {
         return operate(v);
     }
 
     /** {@inheritDoc} */
     @Override
-    public RealVector preMultiply(final RealVector v) throws DimensionMismatchException {
+    public RealVector preMultiply(final RealVector v) throws MathIllegalArgumentException {
         final double[] vectorData;
         if (v instanceof ArrayRealVector) {
             vectorData = ((ArrayRealVector) v).getDataRef();
@@ -310,11 +308,12 @@ public class DiagonalMatrix extends AbstractRealMatrix
 
     /** Ensure a value is zero.
      * @param value value to check
-     * @exception NumberIsTooLargeException if value is not zero
+     * @exception MathIllegalArgumentException if value is not zero
      */
-    private void ensureZero(final double value) throws NumberIsTooLargeException {
+    private void ensureZero(final double value) throws MathIllegalArgumentException {
         if (!Precision.equals(0.0, value, 1)) {
-            throw new NumberIsTooLargeException(FastMath.abs(value), 0, true);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                                                   FastMath.abs(value), 0);
         }
     }
 
@@ -325,10 +324,10 @@ public class DiagonalMatrix extends AbstractRealMatrix
      * use {@link #inverse(double)} if a different threshold is needed.
      *
      * @return the inverse of {@code m}
-     * @throws SingularMatrixException if the matrix is singular
+     * @throws MathIllegalArgumentException if the matrix is singular
      * @since 3.3
      */
-    public DiagonalMatrix inverse() throws SingularMatrixException {
+    public DiagonalMatrix inverse() throws MathIllegalArgumentException {
         return inverse(0);
     }
 
@@ -337,12 +336,12 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param threshold Singularity threshold.
      * @return the inverse of {@code m}
-     * @throws SingularMatrixException if the matrix is singular
+     * @throws MathIllegalArgumentException if the matrix is singular
      * @since 3.3
      */
-    public DiagonalMatrix inverse(double threshold) throws SingularMatrixException {
+    public DiagonalMatrix inverse(double threshold) throws MathIllegalArgumentException {
         if (isSingular(threshold)) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
 
         final double[] result = new double[data.length];

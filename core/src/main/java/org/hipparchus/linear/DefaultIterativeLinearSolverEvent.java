@@ -16,7 +16,8 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
 
 /**
  * A default concrete implementation of the abstract class
@@ -48,7 +49,7 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
      * used by the {@code source}. Failure to do so may compromise subsequent
      * iterations of the {@code source}. If the residual vector {@code r} is
      * {@code null}, then {@link #getResidual()} throws a
-     * {@link MathUnsupportedOperationException}, and
+     * {@link MathRuntimeException}, and
      * {@link #providesResidual()} returns {@code false}.
      *
      * @param source the iterative solver which fired this event
@@ -77,7 +78,7 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
      * the {@code source}. Failure to do so may compromise subsequent iterations
      * of the {@code source}. Callling {@link #getResidual()} on instances
      * returned by this constructor throws a
-     * {@link MathUnsupportedOperationException}, while
+     * {@link MathRuntimeException}, while
      * {@link #providesResidual()} returns {@code false}.
      *
      * @param source the iterative solver which fired this event
@@ -105,7 +106,7 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
     /**
      * {@inheritDoc}
      *
-     * This implementation throws an {@link MathUnsupportedOperationException}
+     * This implementation throws a {@link MathRuntimeException}
      * if no residual vector {@code r} was provided at construction time.
      */
     @Override
@@ -113,7 +114,7 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
         if (r != null) {
             return r;
         }
-        throw new MathUnsupportedOperationException();
+        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
     }
 
     /** {@inheritDoc} */

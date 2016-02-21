@@ -19,9 +19,8 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.util.LocalizedFormats;
 
 
 /**
@@ -72,12 +71,12 @@ public class OnePointCrossover<T> implements CrossoverPolicy {
      * @return pair of two children (c1,c2)
      * @throws MathIllegalArgumentException iff one of the chromosomes is
      *   not an instance of {@link AbstractListChromosome}
-     * @throws DimensionMismatchException if the length of the two chromosomes is different
+     * @throws MathIllegalArgumentException if the length of the two chromosomes is different
      */
     @Override
     @SuppressWarnings("unchecked") // OK because of instanceof checks
     public ChromosomePair crossover(final Chromosome first, final Chromosome second)
-        throws DimensionMismatchException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         if (! (first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
             throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
@@ -92,13 +91,14 @@ public class OnePointCrossover<T> implements CrossoverPolicy {
      * @param first the first chromosome.
      * @param second the second chromosome.
      * @return the pair of new chromosomes that resulted from the crossover.
-     * @throws DimensionMismatchException if the length of the two chromosomes is different
+     * @throws MathIllegalArgumentException if the length of the two chromosomes is different
      */
     private ChromosomePair crossover(final AbstractListChromosome<T> first,
-                                     final AbstractListChromosome<T> second) throws DimensionMismatchException {
+                                     final AbstractListChromosome<T> second) throws MathIllegalArgumentException {
         final int length = first.getLength();
         if (length != second.getLength()) {
-            throw new DimensionMismatchException(second.getLength(), length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   second.getLength(), length);
         }
 
         // array representations of the parents

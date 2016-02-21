@@ -16,14 +16,13 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -63,10 +62,10 @@ public class InterpolatingMicrosphere {
      * considered dark.
      * @param background Value returned when the {@code maxDarkFraction}
      * threshold is exceeded.
-     * @throws NotStrictlyPositiveException if {@code dimension <= 0}
+     * @throws MathIllegalArgumentException if {@code dimension <= 0}
      * or {@code size <= 0}.
-     * @throws NotPositiveException if {@code darkThreshold < 0}.
-     * @throws OutOfRangeException if {@code maxDarkFraction} does not
+     * @throws MathIllegalArgumentException if {@code darkThreshold < 0}.
+     * @throws MathIllegalArgumentException if {@code maxDarkFraction} does not
      * belong to the interval {@code [0, 1]}.
      */
     protected InterpolatingMicrosphere(int dimension,
@@ -75,17 +74,20 @@ public class InterpolatingMicrosphere {
                                        double darkThreshold,
                                        double background) {
         if (dimension <= 0) {
-            throw new NotStrictlyPositiveException(dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   dimension, 0);
         }
         if (size <= 0) {
-            throw new NotStrictlyPositiveException(size);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   size, 0);
         }
         if (maxDarkFraction < 0 ||
             maxDarkFraction > 1) {
-            throw new OutOfRangeException(maxDarkFraction, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   maxDarkFraction, 0, 1);
         }
         if (darkThreshold < 0) {
-            throw new NotPositiveException(darkThreshold);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, darkThreshold, 0);
         }
 
         this.dimension = dimension;
@@ -111,12 +113,12 @@ public class InterpolatingMicrosphere {
      * is considered dark.
      * @param background Value returned when the {@code maxDarkFraction}
      * threshold is exceeded.
-     * @throws DimensionMismatchException if the size of the generated
+     * @throws MathIllegalArgumentException if the size of the generated
      * vectors does not match the dimension set in the constructor.
-     * @throws NotStrictlyPositiveException if {@code dimension <= 0}
+     * @throws MathIllegalArgumentException if {@code dimension <= 0}
      * or {@code size <= 0}.
-     * @throws NotPositiveException if {@code darkThreshold < 0}.
-     * @throws OutOfRangeException if {@code maxDarkFraction} does not
+     * @throws MathIllegalArgumentException if {@code darkThreshold < 0}.
+     * @throws MathIllegalArgumentException if {@code maxDarkFraction} does not
      * belong to the interval {@code [0, 1]}.
      */
     public InterpolatingMicrosphere(int dimension,
@@ -201,7 +203,7 @@ public class InterpolatingMicrosphere {
      * this value, no interpolation will be performed, and the value
      * of the sample will just be returned.
      * @return the estimated value at the given {@code point}.
-     * @throws NotPositiveException if {@code exponent < 0}.
+     * @throws MathIllegalArgumentException if {@code exponent < 0}.
      */
     public double value(double[] point,
                         double[][] samplePoints,
@@ -209,7 +211,7 @@ public class InterpolatingMicrosphere {
                         double exponent,
                         double noInterpolationTolerance) {
         if (exponent < 0) {
-            throw new NotPositiveException(exponent);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, exponent, 0);
         }
 
         clear();
@@ -241,18 +243,19 @@ public class InterpolatingMicrosphere {
      *
      * @param normal Facet's normal vector.
      * @param copy Whether to copy the given array.
-     * @throws DimensionMismatchException if the length of {@code n}
+     * @throws MathIllegalArgumentException if the length of {@code n}
      * does not match the space dimension.
-     * @throws MaxCountExceededException if the method has been called
+     * @throws MathIllegalStateException if the method has been called
      * more times than the size of the sphere.
      */
     protected void add(double[] normal,
                        boolean copy) {
         if (microsphere.size() >= size) {
-            throw new MaxCountExceededException(size);
+            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, size);
         }
         if (normal.length > dimension) {
-            throw new DimensionMismatchException(normal.length, dimension);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   normal.length, dimension);
         }
 
         microsphere.add(new Facet(copy ? normal.clone() : normal));

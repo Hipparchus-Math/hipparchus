@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.MathArithmeticException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.threed.Line;
 import org.hipparchus.geometry.euclidean.threed.Plane;
@@ -28,7 +28,7 @@ import org.junit.Test;
 public class PlaneTest {
 
     @Test
-    public void testContains() throws MathArithmeticException {
+    public void testContains() throws MathRuntimeException {
         Plane p = new Plane(new Vector3D(0, 0, 1), new Vector3D(0, 0, 1), 1.0e-10);
         Assert.assertTrue(p.contains(new Vector3D(0, 0, 1)));
         Assert.assertTrue(p.contains(new Vector3D(17, -32, 1)));
@@ -36,7 +36,7 @@ public class PlaneTest {
     }
 
     @Test
-    public void testOffset() throws MathArithmeticException {
+    public void testOffset() throws MathRuntimeException {
         Vector3D p1 = new Vector3D(1, 1, 1);
         Plane p = new Plane(p1, new Vector3D(0.2, 0, 0), 1.0e-10);
         Assert.assertEquals(-5.0, p.getOffset(new Vector3D(-4, 0, 0)), 1.0e-10);
@@ -50,13 +50,13 @@ public class PlaneTest {
     }
 
     @Test
-    public void testPoint() throws MathArithmeticException {
+    public void testPoint() throws MathRuntimeException {
         Plane p = new Plane(new Vector3D(2, -3, 1), new Vector3D(1, 4, 9), 1.0e-10);
         Assert.assertTrue(p.contains(p.getOrigin()));
     }
 
     @Test
-    public void testThreePoints() throws MathArithmeticException {
+    public void testThreePoints() throws MathRuntimeException {
         Vector3D p1 = new Vector3D(1.2, 3.4, -5.8);
         Vector3D p2 = new Vector3D(3.4, -5.8, 1.2);
         Vector3D p3 = new Vector3D(-2.0, 4.3, 0.7);
@@ -67,7 +67,7 @@ public class PlaneTest {
     }
 
     @Test
-    public void testRotate() throws MathArithmeticException, MathIllegalArgumentException {
+    public void testRotate() throws MathRuntimeException, MathIllegalArgumentException {
         Vector3D p1 = new Vector3D(1.2, 3.4, -5.8);
         Vector3D p2 = new Vector3D(3.4, -5.8, 1.2);
         Vector3D p3 = new Vector3D(-2.0, 4.3, 0.7);
@@ -92,7 +92,7 @@ public class PlaneTest {
     }
 
     @Test
-    public void testTranslate() throws MathArithmeticException {
+    public void testTranslate() throws MathRuntimeException {
         Vector3D p1 = new Vector3D(1.2, 3.4, -5.8);
         Vector3D p2 = new Vector3D(3.4, -5.8, 1.2);
         Vector3D p3 = new Vector3D(-2.0, 4.3, 0.7);
@@ -116,7 +116,7 @@ public class PlaneTest {
     }
 
     @Test
-    public void testIntersection() throws MathArithmeticException, MathIllegalArgumentException {
+    public void testIntersection() throws MathRuntimeException, MathIllegalArgumentException {
         Plane p = new Plane(new Vector3D(1, 2, 3), new Vector3D(-4, 1, -5), 1.0e-10);
         Line  l = new Line(new Vector3D(0.2, -3.5, 0.7), new Vector3D(1.2, -2.5, -0.3), 1.0e-10);
         Vector3D point = p.intersection(l);
@@ -128,7 +128,7 @@ public class PlaneTest {
     }
 
     @Test
-    public void testIntersection2() throws MathArithmeticException {
+    public void testIntersection2() throws MathRuntimeException {
         Vector3D p1  = new Vector3D (1.2, 3.4, -5.8);
         Vector3D p2  = new Vector3D (3.4, -5.8, 1.2);
         Plane    pA  = new Plane(p1, p2, new Vector3D (-2.0, 4.3, 0.7), 1.0e-10);
@@ -140,7 +140,7 @@ public class PlaneTest {
     }
 
     @Test
-    public void testIntersection3() throws MathArithmeticException {
+    public void testIntersection3() throws MathRuntimeException {
         Vector3D reference = new Vector3D (1.2, 3.4, -5.8);
         Plane p1 = new Plane(reference, new Vector3D(1, 3, 3), 1.0e-10);
         Plane p2 = new Plane(reference, new Vector3D(-2, 4, 0), 1.0e-10);
@@ -152,7 +152,7 @@ public class PlaneTest {
     }
 
     @Test
-    public void testSimilar() throws MathArithmeticException {
+    public void testSimilar() throws MathRuntimeException {
         Vector3D p1  = new Vector3D (1.2, 3.4, -5.8);
         Vector3D p2  = new Vector3D (3.4, -5.8, 1.2);
         Vector3D p3  = new Vector3D (-2.0, 4.3, 0.7);

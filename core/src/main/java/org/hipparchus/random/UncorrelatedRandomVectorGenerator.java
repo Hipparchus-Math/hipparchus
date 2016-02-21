@@ -19,7 +19,8 @@ package org.hipparchus.random;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * A {@link RandomVectorGenerator} that generates vectors with uncorrelated
@@ -52,7 +53,8 @@ public class UncorrelatedRandomVectorGenerator
                                            double[] standardDeviation,
                                            NormalizedRandomGenerator generator) {
     if (mean.length != standardDeviation.length) {
-        throw new DimensionMismatchException(mean.length, standardDeviation.length);
+        throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                               mean.length, standardDeviation.length);
     }
     this.mean              = mean.clone();
     this.standardDeviation = standardDeviation.clone();

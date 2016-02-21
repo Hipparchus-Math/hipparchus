@@ -18,8 +18,8 @@ package org.hipparchus.util;
 
 import java.io.PrintStream;
 
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
 
 /**
  * Faster, more accurate, portable alternative to {@link Math} and
@@ -3744,12 +3744,12 @@ public class FastMath {
     /** Convert a long to interger, detecting overflows
      * @param n number to convert to int
      * @return integer with same valie as n if no overflows occur
-     * @exception MathArithmeticException if n cannot fit into an int
+     * @exception MathRuntimeException if n cannot fit into an int
      * @since 3.4
      */
-    public static int toIntExact(final long n) throws MathArithmeticException {
+    public static int toIntExact(final long n) throws MathRuntimeException {
         if (n < Integer.MIN_VALUE || n > Integer.MAX_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
         }
         return (int) n;
     }
@@ -3757,13 +3757,13 @@ public class FastMath {
     /** Increment a number, detecting overflows.
      * @param n number to increment
      * @return n+1 if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
-    public static int incrementExact(final int n) throws MathArithmeticException {
+    public static int incrementExact(final int n) throws MathRuntimeException {
 
         if (n == Integer.MAX_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_ADDITION, n, 1);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, n, 1);
         }
 
         return n + 1;
@@ -3773,13 +3773,13 @@ public class FastMath {
     /** Increment a number, detecting overflows.
      * @param n number to increment
      * @return n+1 if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
-    public static long incrementExact(final long n) throws MathArithmeticException {
+    public static long incrementExact(final long n) throws MathRuntimeException {
 
         if (n == Long.MAX_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_ADDITION, n, 1);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, n, 1);
         }
 
         return n + 1;
@@ -3789,13 +3789,13 @@ public class FastMath {
     /** Decrement a number, detecting overflows.
      * @param n number to decrement
      * @return n-1 if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
-    public static int decrementExact(final int n) throws MathArithmeticException {
+    public static int decrementExact(final int n) throws MathRuntimeException {
 
         if (n == Integer.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, n, 1);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, n, 1);
         }
 
         return n - 1;
@@ -3805,13 +3805,13 @@ public class FastMath {
     /** Decrement a number, detecting overflows.
      * @param n number to decrement
      * @return n-1 if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
-    public static long decrementExact(final long n) throws MathArithmeticException {
+    public static long decrementExact(final long n) throws MathRuntimeException {
 
         if (n == Long.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, n, 1);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, n, 1);
         }
 
         return n - 1;
@@ -3822,17 +3822,17 @@ public class FastMath {
      * @param a first number to add
      * @param b second number to add
      * @return a+b if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
-    public static int addExact(final int a, final int b) throws MathArithmeticException {
+    public static int addExact(final int a, final int b) throws MathRuntimeException {
 
         // compute sum
         final int sum = a + b;
 
         // check for overflow
         if ((a ^ b) >= 0 && (sum ^ b) < 0) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_ADDITION, a, b);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, a, b);
         }
 
         return sum;
@@ -3843,17 +3843,17 @@ public class FastMath {
      * @param a first number to add
      * @param b second number to add
      * @return a+b if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
-    public static long addExact(final long a, final long b) throws MathArithmeticException {
+    public static long addExact(final long a, final long b) throws MathRuntimeException {
 
         // compute sum
         final long sum = a + b;
 
         // check for overflow
         if ((a ^ b) >= 0 && (sum ^ b) < 0) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_ADDITION, a, b);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, a, b);
         }
 
         return sum;
@@ -3864,7 +3864,7 @@ public class FastMath {
      * @param a first number
      * @param b second number to subtract from a
      * @return a-b if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
     public static int subtractExact(final int a, final int b) {
@@ -3874,7 +3874,7 @@ public class FastMath {
 
         // check for overflow
         if ((a ^ b) < 0 && (sub ^ b) >= 0) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, a, b);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, a, b);
         }
 
         return sub;
@@ -3885,7 +3885,7 @@ public class FastMath {
      * @param a first number
      * @param b second number to subtract from a
      * @return a-b if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
     public static long subtractExact(final long a, final long b) {
@@ -3895,7 +3895,7 @@ public class FastMath {
 
         // check for overflow
         if ((a ^ b) < 0 && (sub ^ b) >= 0) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, a, b);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, a, b);
         }
 
         return sub;
@@ -3906,14 +3906,14 @@ public class FastMath {
      * @param a first number to multiply
      * @param b second number to multiply
      * @return a*b if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
     public static int multiplyExact(final int a, final int b) {
         if (((b  >  0)  && (a > Integer.MAX_VALUE / b || a < Integer.MIN_VALUE / b)) ||
             ((b  < -1)  && (a > Integer.MIN_VALUE / b || a < Integer.MAX_VALUE / b)) ||
             ((b == -1)  && (a == Integer.MIN_VALUE))) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_MULTIPLICATION, a, b);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_MULTIPLICATION, a, b);
         }
         return a * b;
     }
@@ -3922,14 +3922,14 @@ public class FastMath {
      * @param a first number to multiply
      * @param b second number to multiply
      * @return a*b if no overflows occur
-     * @exception MathArithmeticException if an overflow occurs
+     * @exception MathRuntimeException if an overflow occurs
      * @since 3.4
      */
     public static long multiplyExact(final long a, final long b) {
         if (((b  >  0l)  && (a > Long.MAX_VALUE / b || a < Long.MIN_VALUE / b)) ||
             ((b  < -1l)  && (a > Long.MIN_VALUE / b || a < Long.MAX_VALUE / b)) ||
             ((b == -1l)  && (a == Long.MIN_VALUE))) {
-                throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_MULTIPLICATION, a, b);
+                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_MULTIPLICATION, a, b);
             }
             return a * b;
     }
@@ -3943,14 +3943,14 @@ public class FastMath {
      * @param a dividend
      * @param b divisor
      * @return q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
-     * @exception MathArithmeticException if b == 0
+     * @exception MathRuntimeException if b == 0
      * @see #floorMod(int, int)
      * @since 3.4
      */
-    public static int floorDiv(final int a, final int b) throws MathArithmeticException {
+    public static int floorDiv(final int a, final int b) throws MathRuntimeException {
 
         if (b == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
         }
 
         final int m = a % b;
@@ -3973,14 +3973,14 @@ public class FastMath {
      * @param a dividend
      * @param b divisor
      * @return q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
-     * @exception MathArithmeticException if b == 0
+     * @exception MathRuntimeException if b == 0
      * @see #floorMod(long, long)
      * @since 3.4
      */
-    public static long floorDiv(final long a, final long b) throws MathArithmeticException {
+    public static long floorDiv(final long a, final long b) throws MathRuntimeException {
 
         if (b == 0l) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
         }
 
         final long m = a % b;
@@ -4003,14 +4003,14 @@ public class FastMath {
      * @param a dividend
      * @param b divisor
      * @return r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
-     * @exception MathArithmeticException if b == 0
+     * @exception MathRuntimeException if b == 0
      * @see #floorDiv(int, int)
      * @since 3.4
      */
-    public static int floorMod(final int a, final int b) throws MathArithmeticException {
+    public static int floorMod(final int a, final int b) throws MathRuntimeException {
 
         if (b == 0) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
         }
 
         final int m = a % b;
@@ -4033,14 +4033,14 @@ public class FastMath {
      * @param a dividend
      * @param b divisor
      * @return r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
-     * @exception MathArithmeticException if b == 0
+     * @exception MathRuntimeException if b == 0
      * @see #floorDiv(long, long)
      * @since 3.4
      */
     public static long floorMod(final long a, final long b) {
 
         if (b == 0l) {
-            throw new MathArithmeticException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
         }
 
         final long m = a % b;

@@ -20,20 +20,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.TooManyIterationsException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.MaxIter;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.linear.LinearConstraint;
 import org.hipparchus.optim.linear.LinearConstraintSet;
 import org.hipparchus.optim.linear.LinearObjectiveFunction;
-import org.hipparchus.optim.linear.NoFeasibleSolutionException;
 import org.hipparchus.optim.linear.NonNegativeConstraint;
 import org.hipparchus.optim.linear.PivotSelectionRule;
 import org.hipparchus.optim.linear.Relationship;
 import org.hipparchus.optim.linear.SimplexSolver;
 import org.hipparchus.optim.linear.SolutionCallback;
-import org.hipparchus.optim.linear.UnboundedSolutionException;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.util.Precision;
 import org.junit.Test;
@@ -169,7 +167,7 @@ public class SimplexSolverTest {
 
     }
 
-    @Test(expected = NoFeasibleSolutionException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void testMath434UnfeasibleSolution() {
         double epsilon = 1e-6;
 
@@ -310,7 +308,7 @@ public class SimplexSolverTest {
         Assert.assertEquals(0, solution.getPoint()[1], .0000001);
     }
 
-    @Test(expected=NoFeasibleSolutionException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testMath290LEQ() {
         LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 1, 5 }, 0 );
         Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
@@ -556,7 +554,7 @@ public class SimplexSolverTest {
         Assert.assertEquals(12.0, solution.getValue(), 0.0);
     }
 
-    @Test(expected = NoFeasibleSolutionException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void testInfeasibleSolution() {
         LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 15 }, 0);
         Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
@@ -568,7 +566,7 @@ public class SimplexSolverTest {
                         GoalType.MAXIMIZE, new NonNegativeConstraint(false));
     }
 
-    @Test(expected = UnboundedSolutionException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void testUnboundedSolution() {
         LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 15, 10 }, 0);
         Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
@@ -781,8 +779,8 @@ public class SimplexSolverTest {
         try {
             solver.optimize(new MaxIter(3), f, new LinearConstraintSet(constraints),
                             GoalType.MAXIMIZE, new NonNegativeConstraint(true), callback);
-            Assert.fail("expected TooManyIterationsException");
-        } catch (TooManyIterationsException ex) {
+            Assert.fail("expected MathIllegalStateException");
+        } catch (MathIllegalStateException ex) {
             // expected
         }
 
@@ -794,7 +792,7 @@ public class SimplexSolverTest {
         Assert.assertEquals(7.0, solution.getValue(), 1e-4);
     }
 
-    @Test(expected=DimensionMismatchException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testDimensionMatch() {
         // min 2x1 +15x2 +18x3
         // Subject to

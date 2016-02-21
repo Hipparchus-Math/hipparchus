@@ -17,8 +17,8 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;
@@ -61,13 +61,13 @@ public class FDistribution extends AbstractRealDistribution {
      *
      * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
-     * @throws NotStrictlyPositiveException if
+     * @throws MathIllegalArgumentException if
      * {@code numeratorDegreesOfFreedom <= 0} or
      * {@code denominatorDegreesOfFreedom <= 0}.
      */
     public FDistribution(double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(numeratorDegreesOfFreedom, denominatorDegreesOfFreedom,
              DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
@@ -87,7 +87,7 @@ public class FDistribution extends AbstractRealDistribution {
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates.
-     * @throws NotStrictlyPositiveException if
+     * @throws MathIllegalArgumentException if
      * {@code numeratorDegreesOfFreedom <= 0} or
      * {@code denominatorDegreesOfFreedom <= 0}.
      * @since 2.1
@@ -95,7 +95,7 @@ public class FDistribution extends AbstractRealDistribution {
     public FDistribution(double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom,
                          double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), numeratorDegreesOfFreedom,
              denominatorDegreesOfFreedom, inverseCumAccuracy);
     }
@@ -106,14 +106,14 @@ public class FDistribution extends AbstractRealDistribution {
      * @param rng Random number generator.
      * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
-     * @throws NotStrictlyPositiveException if {@code numeratorDegreesOfFreedom <= 0} or
+     * @throws MathIllegalArgumentException if {@code numeratorDegreesOfFreedom <= 0} or
      * {@code denominatorDegreesOfFreedom <= 0}.
      * @since 3.3
      */
     public FDistribution(RandomGenerator rng,
                          double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(rng, numeratorDegreesOfFreedom, denominatorDegreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -125,7 +125,7 @@ public class FDistribution extends AbstractRealDistribution {
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates.
-     * @throws NotStrictlyPositiveException if {@code numeratorDegreesOfFreedom <= 0} or
+     * @throws MathIllegalArgumentException if {@code numeratorDegreesOfFreedom <= 0} or
      * {@code denominatorDegreesOfFreedom <= 0}.
      * @since 3.1
      */
@@ -133,15 +133,15 @@ public class FDistribution extends AbstractRealDistribution {
                          double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom,
                          double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (numeratorDegreesOfFreedom <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.DEGREES_OF_FREEDOM,
+            throw new MathIllegalArgumentException(LocalizedFormats.DEGREES_OF_FREEDOM,
                                                    numeratorDegreesOfFreedom);
         }
         if (denominatorDegreesOfFreedom <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.DEGREES_OF_FREEDOM,
+            throw new MathIllegalArgumentException(LocalizedFormats.DEGREES_OF_FREEDOM,
                                                    denominatorDegreesOfFreedom);
         }
         this.numeratorDegreesOfFreedom = numeratorDegreesOfFreedom;

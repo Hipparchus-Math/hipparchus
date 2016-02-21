@@ -16,8 +16,8 @@
  */
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 
 /** Interface expanding {@link FirstOrderDifferentialEquations first order
  *  differential equations} in order to compute exactly the main state jacobian
@@ -32,10 +32,10 @@ public interface MainStateJacobianProvider extends FirstOrderDifferentialEquatio
      * @param y array containing the current value of the main state vector
      * @param yDot array containing the current value of the time derivative of the main state vector
      * @param dFdY placeholder array where to put the jacobian matrix of the ODE w.r.t. the main state vector
-     * @exception MaxCountExceededException if the number of functions evaluations is exceeded
-     * @exception DimensionMismatchException if arrays dimensions do not match equations settings
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
+     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
     void computeMainStateJacobian(double t, double[] y, double[] yDot, double[][] dFdY)
-        throws MaxCountExceededException, DimensionMismatchException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
 }

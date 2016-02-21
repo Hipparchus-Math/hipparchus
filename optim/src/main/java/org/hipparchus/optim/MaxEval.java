@@ -16,7 +16,8 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Maximum number of evaluations of the function to be optimized.
@@ -29,11 +30,12 @@ public class MaxEval implements OptimizationData {
 
     /**
      * @param max Allowed number of evalutations.
-     * @throws NotStrictlyPositiveException if {@code max <= 0}.
+     * @throws MathIllegalArgumentException if {@code max <= 0}.
      */
     public MaxEval(int max) {
         if (max <= 0) {
-            throw new NotStrictlyPositiveException(max);
+            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                                                   max, 0);
         }
 
         maxEval = max;

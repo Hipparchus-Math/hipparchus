@@ -19,7 +19,8 @@ package org.hipparchus.stat.regression;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -144,15 +145,16 @@ public class RegressionResults implements Serializable {
      *
      * @param index Index.
      * @return the parameters estimated for regressor at index.
-     * @throws OutOfRangeException if {@code index} is not in the interval
+     * @throws MathIllegalArgumentException if {@code index} is not in the interval
      * {@code [0, number of parameters)}.
      */
-    public double getParameterEstimate(int index) throws OutOfRangeException {
+    public double getParameterEstimate(int index) throws MathIllegalArgumentException {
         if (parameters == null) {
             return Double.NaN;
         }
         if (index < 0 || index >= this.parameters.length) {
-            throw new OutOfRangeException(index, 0, this.parameters.length - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   index, 0, this.parameters.length - 1);
         }
         return this.parameters[index];
     }
@@ -181,15 +183,16 @@ public class RegressionResults implements Serializable {
      *
      * @param index Index.
      * @return the standard errors associated with parameters estimated at index.
-     * @throws OutOfRangeException if {@code index} is not in the interval
+     * @throws MathIllegalArgumentException if {@code index} is not in the interval
      * {@code [0, number of parameters)}.
      */
-    public double getStdErrorOfEstimate(int index) throws OutOfRangeException {
+    public double getStdErrorOfEstimate(int index) throws MathIllegalArgumentException {
         if (parameters == null) {
             return Double.NaN;
         }
         if (index < 0 || index >= this.parameters.length) {
-            throw new OutOfRangeException(index, 0, this.parameters.length - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   index, 0, this.parameters.length - 1);
         }
         double var = this.getVcvElement(index, index);
         if (!Double.isNaN(var) && var > Double.MIN_VALUE) {
@@ -234,18 +237,20 @@ public class RegressionResults implements Serializable {
      * @param i {@code i}th regression parameter.
      * @param j {@code j}th regression parameter.
      * @return the covariance of the parameter estimates.
-     * @throws OutOfRangeException if {@code i} or {@code j} is not in the
+     * @throws MathIllegalArgumentException if {@code i} or {@code j} is not in the
      * interval {@code [0, number of parameters)}.
      */
-    public double getCovarianceOfParameters(int i, int j) throws OutOfRangeException {
+    public double getCovarianceOfParameters(int i, int j) throws MathIllegalArgumentException {
         if (parameters == null) {
             return Double.NaN;
         }
         if (i < 0 || i >= this.parameters.length) {
-            throw new OutOfRangeException(i, 0, this.parameters.length - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   i, 0, this.parameters.length - 1);
         }
         if (j < 0 || j >= this.parameters.length) {
-            throw new OutOfRangeException(j, 0, this.parameters.length - 1);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   j, 0, this.parameters.length - 1);
         }
         return this.getVcvElement(i, j);
     }

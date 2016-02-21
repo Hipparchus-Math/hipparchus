@@ -17,9 +17,8 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.NotStrictlyPositiveException;
-import org.hipparchus.exception.OutOfRangeException;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Gamma;
@@ -71,11 +70,11 @@ public class WeibullDistribution extends AbstractRealDistribution {
      *
      * @param alpha Shape parameter.
      * @param beta Scale parameter.
-     * @throws NotStrictlyPositiveException if {@code alpha <= 0} or
+     * @throws MathIllegalArgumentException if {@code alpha <= 0} or
      * {@code beta <= 0}.
      */
     public WeibullDistribution(double alpha, double beta)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(alpha, beta, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -95,7 +94,7 @@ public class WeibullDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy Maximum absolute error in inverse
      * cumulative probability estimates
      * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code alpha <= 0} or
+     * @throws MathIllegalArgumentException if {@code alpha <= 0} or
      * {@code beta <= 0}.
      * @since 2.1
      */
@@ -110,11 +109,11 @@ public class WeibullDistribution extends AbstractRealDistribution {
      * @param rng Random number generator.
      * @param alpha Shape parameter.
      * @param beta Scale parameter.
-     * @throws NotStrictlyPositiveException if {@code alpha <= 0} or {@code beta <= 0}.
+     * @throws MathIllegalArgumentException if {@code alpha <= 0} or {@code beta <= 0}.
      * @since 3.3
      */
     public WeibullDistribution(RandomGenerator rng, double alpha, double beta)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         this(rng, alpha, beta, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
     }
 
@@ -127,22 +126,22 @@ public class WeibullDistribution extends AbstractRealDistribution {
      * @param inverseCumAccuracy Maximum absolute error in inverse
      * cumulative probability estimates
      * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws NotStrictlyPositiveException if {@code alpha <= 0} or {@code beta <= 0}.
+     * @throws MathIllegalArgumentException if {@code alpha <= 0} or {@code beta <= 0}.
      * @since 3.1
      */
     public WeibullDistribution(RandomGenerator rng,
                                double alpha,
                                double beta,
                                double inverseCumAccuracy)
-        throws NotStrictlyPositiveException {
+        throws MathIllegalArgumentException {
         super(rng);
 
         if (alpha <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.SHAPE,
+            throw new MathIllegalArgumentException(LocalizedFormats.SHAPE,
                                                    alpha);
         }
         if (beta <= 0) {
-            throw new NotStrictlyPositiveException(LocalizedFormats.SCALE,
+            throw new MathIllegalArgumentException(LocalizedFormats.SCALE,
                                                    beta);
         }
         scale = beta;
@@ -230,7 +229,8 @@ public class WeibullDistribution extends AbstractRealDistribution {
     public double inverseCumulativeProbability(double p) {
         double ret;
         if (p < 0.0 || p > 1.0) {
-            throw new OutOfRangeException(p, 0.0, 1.0);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   p, 0.0, 1.0);
         } else if (p == 0) {
             ret = 0.0;
         } else  if (p == 1) {

@@ -16,7 +16,7 @@
  */
 package org.hipparchus;
 
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Interface representing a <a href="http://mathworld.wolfram.com/RealNumber.html">real</a>
@@ -67,10 +67,10 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * @param a right hand side parameter of the operator
      * @return this - n &times; a where n is the closest integer to this/a
      * (the even integer is chosen for n if this/a is halfway between two integers)
-     * @exception DimensionMismatchException if number of free parameters or orders are inconsistent
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     T remainder(T a)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /** absolute value.
      * @return abs(this)
@@ -140,10 +140,10 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      *
      * @param y a value
      * @return sqrt(<i>this</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)
-     * @exception DimensionMismatchException if number of free parameters or orders are inconsistent
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     T hypot(T y)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /** {@inheritDoc} */
     @Override
@@ -180,10 +180,10 @@ public interface RealFieldElement<T> extends FieldElement<T> {
     /** Power operation.
      * @param e exponent
      * @return this<sup>e</sup>
-     * @exception DimensionMismatchException if number of free parameters or orders are inconsistent
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     T pow(T e)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /** Exponential.
      * @return exponential of the instance
@@ -244,10 +244,10 @@ public interface RealFieldElement<T> extends FieldElement<T> {
     /** Two arguments arc tangent operation.
      * @param x second argument of the arc tangent
      * @return atan2(this, x)
-     * @exception DimensionMismatchException if number of free parameters or orders are inconsistent
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     T atan2(T x)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /** Hyperbolic cosine operation.
      * @return cosh(this)
@@ -284,22 +284,22 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * @param a Factors.
      * @param b Factors.
      * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
-     * @throws DimensionMismatchException if arrays dimensions don't match
+     * @throws MathIllegalArgumentException if arrays dimensions don't match
      * @since 3.2
      */
     T linearCombination(T[] a, T[] b)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Compute a linear combination.
      * @param a Factors.
      * @param b Factors.
      * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
-     * @throws DimensionMismatchException if arrays dimensions don't match
+     * @throws MathIllegalArgumentException if arrays dimensions don't match
      * @since 3.2
      */
     T linearCombination(double[] a, T[] b)
-        throws DimensionMismatchException;
+        throws MathIllegalArgumentException;
 
     /**
      * Compute a linear combination.

@@ -20,7 +20,7 @@ package org.hipparchus.stat.descriptive;
 import java.util.Locale;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.DimensionMismatchException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.stat.descriptive.MultivariateSummaryStatistics;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
@@ -183,8 +183,8 @@ public class MultivariateSummaryStatisticsTest {
     public void testDimension() {
         try {
             createMultivariateSummaryStatistics(2, true).addValue(new double[3]);
-            Assert.fail("Expecting DimensionMismatchException");
-        } catch (DimensionMismatchException dme) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException dme) {
             // expected behavior
         }
     }

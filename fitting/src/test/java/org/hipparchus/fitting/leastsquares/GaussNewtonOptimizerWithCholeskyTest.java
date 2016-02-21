@@ -17,16 +17,12 @@
 
 package org.hipparchus.fitting.leastsquares;
 
-import org.hipparchus.exception.ConvergenceException;
-import org.hipparchus.exception.TooManyEvaluationsException;
-import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer;
-import org.hipparchus.fitting.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
+import java.io.IOException;
+
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.junit.Test;
-
-import java.io.IOException;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a
@@ -50,36 +46,25 @@ public class GaussNewtonOptimizerWithCholeskyTest
     }
 
     @Override
-    @Test
+    @Test(expected=MathIllegalStateException.class)
     public void testMoreEstimatedParametersSimple() {
         /*
          * Exception is expected with this optimizer
          */
-        try {
-            super.testMoreEstimatedParametersSimple();
-            fail(optimizer);
-        } catch (ConvergenceException e) {
-            //expected
-        }
+        super.testMoreEstimatedParametersSimple();
     }
 
     @Override
-    @Test
+    @Test(expected=MathIllegalStateException.class)
     public void testMoreEstimatedParametersUnsorted() {
         /*
          * Exception is expected with this optimizer
          */
-        try{
-            super.testMoreEstimatedParametersUnsorted();
-            fail(optimizer);
-        }catch (ConvergenceException e){
-            //expected
-        }
+        super.testMoreEstimatedParametersUnsorted();
     }
 
-    @Test
+    @Test(expected=MathIllegalStateException.class)
     public void testMaxEvaluations() throws Exception {
-        try{
         CircleVectorial circle = new CircleVectorial();
         circle.addPoint( 30.0,  68.0);
         circle.addPoint( 50.0,  -6.0);
@@ -94,43 +79,28 @@ public class GaussNewtonOptimizerWithCholeskyTest
                 .build();
 
         optimizer.optimize(lsp);
-
-            fail(optimizer);
-        }catch (TooManyEvaluationsException e){
-            //expected
-        }
     }
 
     @Override
-    @Test
+    @Test(expected=MathIllegalStateException.class)
     public void testCircleFittingBadInit() {
         /*
          * This test does not converge with this optimizer.
          */
-        try{
-            super.testCircleFittingBadInit();
-            fail(optimizer);
-        }catch (ConvergenceException e){
-            //expected
-        }
+        super.testCircleFittingBadInit();
+        fail(optimizer);
     }
 
     @Override
-    @Test
+    @Test(expected=MathIllegalStateException.class)
     public void testHahn1()
         throws IOException {
         /*
          * TODO This test leads to a singular problem with the Gauss-Newton
          * optimizer. This should be inquired.
          */
-        try{
-            super.testHahn1();
-            fail(optimizer);
-        } catch (ConvergenceException e){
-            //expected for LU
-        } catch (TooManyEvaluationsException e){
-            //expected for QR
-        }
+        super.testHahn1();
+        fail(optimizer);
     }
 
 }

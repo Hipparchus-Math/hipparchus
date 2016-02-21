@@ -16,8 +16,9 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.IterationManager;
 import org.hipparchus.util.MathUtils;
@@ -66,28 +67,27 @@ public abstract class IterativeLinearSolver {
      * @param b the right-hand side vector
      * @param x0 the initial guess of the solution
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} is not square
-     * @throws DimensionMismatchException if {@code b} or {@code x0} have
+     * @throws MathIllegalArgumentException if {@code a} is not square
+     * @throws MathIllegalArgumentException if {@code b} or {@code x0} have
      * dimensions inconsistent with {@code a}
      */
     protected static void checkParameters(final RealLinearOperator a,
         final RealVector b, final RealVector x0) throws
-        NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException {
+        MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(a);
         MathUtils.checkNotNull(b);
         MathUtils.checkNotNull(x0);
         if (a.getRowDimension() != a.getColumnDimension()) {
-            throw new NonSquareOperatorException(a.getRowDimension(),
-                                                       a.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_OPERATOR,
+                                                   a.getRowDimension(), a.getColumnDimension());
         }
         if (b.getDimension() != a.getRowDimension()) {
-            throw new DimensionMismatchException(b.getDimension(),
-                                                 a.getRowDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   b.getDimension(), a.getRowDimension());
         }
         if (x0.getDimension() != a.getColumnDimension()) {
-            throw new DimensionMismatchException(x0.getDimension(),
-                                                 a.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   x0.getDimension(), a.getColumnDimension());
         }
     }
 
@@ -108,17 +108,16 @@ public abstract class IterativeLinearSolver {
      * @param b the right-hand side vector
      * @return a new vector containing the solution
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} is not square
-     * @throws DimensionMismatchException if {@code b} has dimensions
+     * @throws MathIllegalArgumentException if {@code a} is not square
+     * @throws MathIllegalArgumentException if {@code b} has dimensions
      * inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(final RealLinearOperator a, final RealVector b)
-        throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, MaxCountExceededException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         x.set(0.);
@@ -134,17 +133,16 @@ public abstract class IterativeLinearSolver {
      * @param x0 the initial guess of the solution
      * @return a new vector containing the solution
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} is not square
-     * @throws DimensionMismatchException if {@code b} or {@code x0} have
+     * @throws MathIllegalArgumentException if {@code a} is not square
+     * @throws MathIllegalArgumentException if {@code b} or {@code x0} have
      * dimensions inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(RealLinearOperator a, RealVector b, RealVector x0)
-        throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, MaxCountExceededException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, b, x0.copy());
     }
@@ -159,15 +157,14 @@ public abstract class IterativeLinearSolver {
      * @return a reference to {@code x0} (shallow copy) updated with the
      * solution
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} is not square
-     * @throws DimensionMismatchException if {@code b} or {@code x0} have
+     * @throws MathIllegalArgumentException if {@code a} is not square
+     * @throws MathIllegalArgumentException if {@code b} or {@code x0} have
      * dimensions inconsistent with {@code a}
-     * @throws MaxCountExceededException at exhaustion of the iteration count,
+     * @throws MathIllegalStateException at exhaustion of the iteration count,
      * unless a custom
      * {@link org.hipparchus.util.Incrementor.MaxCountExceededCallback callback}
      * has been set at construction of the {@link IterationManager}
      */
     public abstract RealVector solveInPlace(RealLinearOperator a, RealVector b,
-        RealVector x0) throws NullArgumentException, NonSquareOperatorException,
-        DimensionMismatchException, MaxCountExceededException;
+        RealVector x0) throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException;
 }

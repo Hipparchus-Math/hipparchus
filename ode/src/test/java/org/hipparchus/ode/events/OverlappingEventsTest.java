@@ -21,13 +21,10 @@ import java.util.List;
 
 import org.hipparchus.analysis.solvers.BaseSecantSolver;
 import org.hipparchus.analysis.solvers.PegasusSolver;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FirstOrderDifferentialEquations;
 import org.hipparchus.ode.FirstOrderIntegrator;
-import org.hipparchus.ode.events.EventHandler;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -54,8 +51,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
      */
     @Test
     public void testOverlappingEvents0()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         test(0);
     }
 
@@ -66,8 +62,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
      */
     @Test
     public void testOverlappingEvents1()
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         test(1);
     }
 
@@ -78,8 +73,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
      * EventHandler.g(double, double[])}.
      */
     public void test(int eventType)
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
         FirstOrderIntegrator integrator = new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
         BaseSecantSolver rootSolver = new PegasusSolver(e, e);

@@ -17,21 +17,19 @@
 package org.hipparchus.distribution;
 
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.integration.BaseAbstractUnivariateIntegrator;
 import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
-import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NumberIsTooLargeException;
 import org.hipparchus.util.FastMath;
 import org.junit.After;
 import org.junit.Assert;
@@ -190,7 +188,7 @@ public abstract class RealDistributionAbstractTest {
                 } else {
                     try {
                         distribution.probability(cumulativeTestPoints[i], cumulativeTestPoints[j]);
-                    } catch (NumberIsTooLargeException e) {
+                    } catch (MathIllegalArgumentException e) {
                         continue;
                     }
                     Assert.fail("distribution.probability(double, double) should have thrown an exception that second argument is too large");

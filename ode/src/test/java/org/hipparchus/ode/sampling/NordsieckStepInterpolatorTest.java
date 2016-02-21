@@ -25,15 +25,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ContinuousOutputModel;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.nonstiff.AdamsBashforthIntegrator;
-import org.hipparchus.ode.sampling.StepHandler;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,8 +38,7 @@ public class NordsieckStepInterpolatorTest {
 
     @Test
     public void derivativesConsistency()
-        throws NumberIsTooSmallException, DimensionMismatchException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         TestProblem3 pb = new TestProblem3();
         AdamsBashforthIntegrator integ = new AdamsBashforthIntegrator(4, 0.0, 1.0, 1.0e-10, 1.0e-10);
         StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.05, 2.8e-9);
@@ -51,8 +47,7 @@ public class NordsieckStepInterpolatorTest {
     @Test
     public void serialization()
     throws IOException, ClassNotFoundException,
-           NumberIsTooSmallException, DimensionMismatchException,
-           MaxCountExceededException, NoBracketingException {
+           MathIllegalArgumentException, MathIllegalStateException {
 
         TestProblem1 pb = new TestProblem1();
         AdamsBashforthIntegrator integ = new AdamsBashforthIntegrator(4, 0.0, 1.0, 1.0e-10, 1.0e-10);

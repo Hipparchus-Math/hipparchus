@@ -21,8 +21,8 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.analysis.solvers.AllowedSolution;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.sampling.FieldStepInterpolator;
@@ -148,11 +148,11 @@ public class FieldEventState<T extends RealFieldElement<T>> {
 
     /** Reinitialize the beginning of the step.
      * @param interpolator valid for the current step
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
     public void reinitializeBegin(final FieldStepInterpolator<T> interpolator)
-        throws MaxCountExceededException {
+        throws MathIllegalStateException {
 
         final FieldODEStateAndDerivative<T> s0 = interpolator.getPreviousState();
         t0 = s0.getTime();
@@ -184,12 +184,12 @@ public class FieldEventState<T extends RealFieldElement<T>> {
      * @param interpolator step interpolator for the proposed step
      * @return true if the event handler triggers an event before
      * the end of the proposed step
-     * @exception MaxCountExceededException if the interpolator throws one because
+     * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
-     * @exception NoBracketingException if the event cannot be bracketed
+     * @exception MathIllegalArgumentException if the event cannot be bracketed
      */
     public boolean evaluateStep(final FieldStepInterpolator<T> interpolator)
-        throws MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         forward = interpolator.isForward();
         final FieldODEStateAndDerivative<T> s1 = interpolator.getCurrentState();

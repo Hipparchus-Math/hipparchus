@@ -21,15 +21,13 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.MaxCountExceededException;
-import org.hipparchus.exception.NoBracketingException;
-import org.hipparchus.exception.NumberIsTooSmallException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
-import org.hipparchus.ode.FirstOrderFieldIntegrator;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
+import org.hipparchus.ode.FirstOrderFieldIntegrator;
 import org.hipparchus.ode.TestFieldProblem1;
 import org.hipparchus.ode.TestFieldProblem3;
 import org.hipparchus.ode.TestFieldProblem4;
@@ -176,11 +174,11 @@ public abstract class AbstractEmbeddedRungeKuttaFieldIntegratorTest {
         private static final long serialVersionUID = 20151208L;
     }
 
-    @Test(expected=NumberIsTooSmallException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public abstract void testMinStep();
 
     protected <T extends RealFieldElement<T>> void doTestMinStep(final Field<T> field)
-        throws NumberIsTooSmallException {
+        throws MathIllegalArgumentException {
 
         TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
         double minStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.1).getReal();
@@ -338,7 +336,7 @@ public abstract class AbstractEmbeddedRungeKuttaFieldIntegratorTest {
         try {
             integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
-        } catch (MaxCountExceededException mcee) {
+        } catch (MathIllegalStateException mcee) {
             // Expected.
         }
 
@@ -358,7 +356,7 @@ public abstract class AbstractEmbeddedRungeKuttaFieldIntegratorTest {
                                                       MathArrays.buildArray(field, 6)),
                                  pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
-        } catch(DimensionMismatchException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
         try  {
             EmbeddedRungeKuttaFieldIntegrator<T> integrator =
@@ -367,7 +365,7 @@ public abstract class AbstractEmbeddedRungeKuttaFieldIntegratorTest {
                                              new double[2], new double[4]);
             integrator.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
             Assert.fail("an exception should have been thrown");
-        } catch(DimensionMismatchException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
         try  {
             EmbeddedRungeKuttaFieldIntegrator<T> integrator =
@@ -376,7 +374,7 @@ public abstract class AbstractEmbeddedRungeKuttaFieldIntegratorTest {
                                              new double[4], new double[4]);
             integrator.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getInitialState().getTime());
             Assert.fail("an exception should have been thrown");
-        } catch(NumberIsTooSmallException ie) {
+        } catch(MathIllegalArgumentException ie) {
         }
     }
 
@@ -388,8 +386,7 @@ public abstract class AbstractEmbeddedRungeKuttaFieldIntegratorTest {
                                                                   final double epsilonMaxValue,
                                                                   final double epsilonMaxTime,
                                                                   final String name)
-        throws DimensionMismatchException, NumberIsTooSmallException,
-               MaxCountExceededException, NoBracketingException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         TestFieldProblem5<T> pb = new TestFieldProblem5<T>(field);
         double minStep = 0;
@@ -441,7 +438,7 @@ public abstract class AbstractEmbeddedRungeKuttaFieldIntegratorTest {
             maxError = pb.getField().getZero();
         }
         public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
-                        throws MaxCountExceededException {
+                        throws MathIllegalStateException {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
             T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());

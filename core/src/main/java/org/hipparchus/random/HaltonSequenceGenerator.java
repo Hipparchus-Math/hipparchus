@@ -16,10 +16,9 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.exception.DimensionMismatchException;
-import org.hipparchus.exception.NotPositiveException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.OutOfRangeException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -83,9 +82,9 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
      * Construct a new Halton sequence generator for the given space dimension.
      *
      * @param dimension the space dimension
-     * @throws OutOfRangeException if the space dimension is outside the allowed range of [1, 40]
+     * @throws MathIllegalArgumentException if the space dimension is outside the allowed range of [1, 40]
      */
-    public HaltonSequenceGenerator(final int dimension) throws OutOfRangeException {
+    public HaltonSequenceGenerator(final int dimension) throws MathIllegalArgumentException {
         this(dimension, PRIMES, WEIGHTS);
     }
 
@@ -97,21 +96,23 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
      * @param bases the base number for each dimension, entries should be (pairwise) prime, may not be null
      * @param weights the weights used during scrambling, may be null in which case no scrambling will be performed
      * @throws NullArgumentException if base is null
-     * @throws OutOfRangeException if the space dimension is outside the range [1, len], where
+     * @throws MathIllegalArgumentException if the space dimension is outside the range [1, len], where
      *   len refers to the length of the bases array
-     * @throws DimensionMismatchException if weights is non-null and the length of the input arrays differ
+     * @throws MathIllegalArgumentException if weights is non-null and the length of the input arrays differ
      */
     public HaltonSequenceGenerator(final int dimension, final int[] bases, final int[] weights)
-            throws NullArgumentException, OutOfRangeException, DimensionMismatchException {
+            throws MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(bases);
 
         if (dimension < 1 || dimension > bases.length) {
-            throw new OutOfRangeException(dimension, 1, PRIMES.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                   dimension, 1, PRIMES.length);
         }
 
         if (weights != null && weights.length != bases.length) {
-            throw new DimensionMismatchException(weights.length, bases.length);
+            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                                                   weights.length, bases.length);
         }
 
         this.dimension = dimension;
@@ -164,9 +165,9 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
      *
      * @param index the index in the sequence to skip to
      * @return the i-th point in the Halton sequence
-     * @throws NotPositiveException if index &lt; 0
+     * @throws MathIllegalArgumentException if index &lt; 0
      */
-    public double[] skipTo(final int index) throws NotPositiveException {
+    public double[] skipTo(final int index) throws MathIllegalArgumentException {
         count = index;
         return nextVector();
     }

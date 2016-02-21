@@ -20,7 +20,8 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.integration.RombergIntegrator;
 import org.hipparchus.analysis.integration.UnivariateIntegrator;
 import org.hipparchus.distribution.AbstractRealDistribution;
-import org.hipparchus.exception.OutOfRangeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,7 +42,8 @@ public class AbstractRealDistributionTest {
             @Override
             public double cumulativeProbability(final double x) {
                 if ((x < x0) || (x > x3)) {
-                    throw new OutOfRangeException(x, x0, x3);
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           x, x0, x3);
                 }
                 if (x <= x1) {
                     return p12 * (x - x0) / (x1 - x0);
@@ -56,7 +58,8 @@ public class AbstractRealDistributionTest {
             @Override
             public double density(final double x) {
                 if ((x < x0) || (x > x3)) {
-                    throw new OutOfRangeException(x, x0, x3);
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           x, x0, x3);
                 }
                 if (x <= x1) {
                     return p12 / (x1 - x0);
@@ -125,7 +128,8 @@ public class AbstractRealDistributionTest {
             @Override
             public double cumulativeProbability(final double x) {
                 if ((x < x0) || (x > x4)) {
-                    throw new OutOfRangeException(x, x0, x4);
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           x, x0, x4);
                 }
                 if (x <= x1) {
                     return p12 * (x - x0) / (x1 - x0);
@@ -141,7 +145,8 @@ public class AbstractRealDistributionTest {
             @Override
             public double density(final double x) {
                 if ((x < x0) || (x > x4)) {
-                    throw new OutOfRangeException(x, x0, x4);
+                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                                                           x, x0, x4);
                 }
                 if (x <= x1) {
                     return p12 / (x1 - x0);

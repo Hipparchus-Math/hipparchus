@@ -38,7 +38,8 @@ import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.exception.MathUnsupportedOperationException;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
 
 /**
  * SOFM for categorizing points that belong to each of two intertwined rings.
@@ -234,7 +235,7 @@ public class ChineseRingsClassifier {
 
                     /** {@inheritDoc} */
                     public void remove() {
-                        throw new MathUnsupportedOperationException();
+                        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
                     }
                 };
             }
@@ -270,7 +271,7 @@ public class ChineseRingsClassifier {
 
             /** {@inheritDoc} */
             public void remove() {
-                throw new MathUnsupportedOperationException();
+                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
             }
         };
     }

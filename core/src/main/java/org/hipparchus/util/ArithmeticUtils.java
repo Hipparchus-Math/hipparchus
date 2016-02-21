@@ -18,10 +18,10 @@ package org.hipparchus.util;
 
 import java.math.BigInteger;
 
-import org.hipparchus.exception.MathArithmeticException;
-import org.hipparchus.exception.NotPositiveException;
-import org.hipparchus.exception.util.Localizable;
-import org.hipparchus.exception.util.LocalizedFormats;
+import org.hipparchus.exception.Localizable;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Some useful, arithmetics related, additions to the built-in functions in
@@ -41,15 +41,15 @@ public final class ArithmeticUtils {
      * @param x an addend
      * @param y an addend
      * @return the sum {@code x+y}
-     * @throws MathArithmeticException if the result can not be represented
+     * @throws MathRuntimeException if the result can not be represented
      * as an {@code int}.
      * @since 1.1
      */
     public static int addAndCheck(int x, int y)
-            throws MathArithmeticException {
+            throws MathRuntimeException {
         long s = (long)x + (long)y;
         if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_ADDITION, x, y);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, x, y);
         }
         return (int)s;
     }
@@ -60,10 +60,10 @@ public final class ArithmeticUtils {
      * @param a an addend
      * @param b an addend
      * @return the sum {@code a+b}
-     * @throws MathArithmeticException if the result can not be represented as an long
+     * @throws MathRuntimeException if the result can not be represented as an long
      * @since 1.2
      */
-    public static long addAndCheck(long a, long b) throws MathArithmeticException {
+    public static long addAndCheck(long a, long b) throws MathRuntimeException {
         return addAndCheck(a, b, LocalizedFormats.OVERFLOW_IN_ADDITION);
     }
 
@@ -91,18 +91,18 @@ public final class ArithmeticUtils {
      * @param p Number.
      * @param q Number.
      * @return the greatest common divisor (never negative).
-     * @throws MathArithmeticException if the result cannot be represented as
+     * @throws MathRuntimeException if the result cannot be represented as
      * a non-negative {@code int} value.
      * @since 1.1
      */
-    public static int gcd(int p, int q) throws MathArithmeticException {
+    public static int gcd(int p, int q) throws MathRuntimeException {
         int a = p;
         int b = q;
         if (a == 0 ||
             b == 0) {
             if (a == Integer.MIN_VALUE ||
                 b == Integer.MIN_VALUE) {
-                throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
+                throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
                                                   p, q);
             }
             return FastMath.abs(a + b);
@@ -129,7 +129,7 @@ public final class ArithmeticUtils {
         }
         if (useLong) {
             if(al == bl) {
-                throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
+                throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
                                                   p, q);
             }
             long blbu = bl;
@@ -137,7 +137,7 @@ public final class ArithmeticUtils {
             al = blbu % al;
             if (al == 0) {
                 if (bl > Integer.MAX_VALUE) {
-                    throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
+                    throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
                                                       p, q);
                 }
                 return (int) bl;
@@ -231,16 +231,16 @@ public final class ArithmeticUtils {
      * @param p Number.
      * @param q Number.
      * @return the greatest common divisor, never negative.
-     * @throws MathArithmeticException if the result cannot be represented as
+     * @throws MathRuntimeException if the result cannot be represented as
      * a non-negative {@code long} value.
      * @since 2.1
      */
-    public static long gcd(final long p, final long q) throws MathArithmeticException {
+    public static long gcd(final long p, final long q) throws MathRuntimeException {
         long u = p;
         long v = q;
         if ((u == 0) || (v == 0)) {
             if ((u == Long.MIN_VALUE) || (v == Long.MIN_VALUE)){
-                throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_64_BITS,
+                throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_64_BITS,
                                                   p, q);
             }
             return FastMath.abs(u) + FastMath.abs(v);
@@ -265,7 +265,7 @@ public final class ArithmeticUtils {
             k++; // cast out twos.
         }
         if (k == 63) {
-            throw new MathArithmeticException(LocalizedFormats.GCD_OVERFLOW_64_BITS,
+            throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_64_BITS,
                                               p, q);
         }
         // B2. Initialize: u and v have been divided by 2^k and at least
@@ -311,17 +311,17 @@ public final class ArithmeticUtils {
      * @param a Number.
      * @param b Number.
      * @return the least common multiple, never negative.
-     * @throws MathArithmeticException if the result cannot be represented as
+     * @throws MathRuntimeException if the result cannot be represented as
      * a non-negative {@code int} value.
      * @since 1.1
      */
-    public static int lcm(int a, int b) throws MathArithmeticException {
+    public static int lcm(int a, int b) throws MathRuntimeException {
         if (a == 0 || b == 0){
             return 0;
         }
         int lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
         if (lcm == Integer.MIN_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.LCM_OVERFLOW_32_BITS,
+            throw new MathRuntimeException(LocalizedFormats.LCM_OVERFLOW_32_BITS,
                                               a, b);
         }
         return lcm;
@@ -345,17 +345,17 @@ public final class ArithmeticUtils {
      * @param a Number.
      * @param b Number.
      * @return the least common multiple, never negative.
-     * @throws MathArithmeticException if the result cannot be represented
+     * @throws MathRuntimeException if the result cannot be represented
      * as a non-negative {@code long} value.
      * @since 2.1
      */
-    public static long lcm(long a, long b) throws MathArithmeticException {
+    public static long lcm(long a, long b) throws MathRuntimeException {
         if (a == 0 || b == 0){
             return 0;
         }
         long lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
         if (lcm == Long.MIN_VALUE){
-            throw new MathArithmeticException(LocalizedFormats.LCM_OVERFLOW_64_BITS,
+            throw new MathRuntimeException(LocalizedFormats.LCM_OVERFLOW_64_BITS,
                                               a, b);
         }
         return lcm;
@@ -367,14 +367,14 @@ public final class ArithmeticUtils {
      * @param x Factor.
      * @param y Factor.
      * @return the product {@code x * y}.
-     * @throws MathArithmeticException if the result can not be
+     * @throws MathRuntimeException if the result can not be
      * represented as an {@code int}.
      * @since 1.1
      */
-    public static int mulAndCheck(int x, int y) throws MathArithmeticException {
+    public static int mulAndCheck(int x, int y) throws MathRuntimeException {
         long m = ((long)x) * ((long)y);
         if (m < Integer.MIN_VALUE || m > Integer.MAX_VALUE) {
-            throw new MathArithmeticException();
+            throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
         }
         return (int)m;
     }
@@ -385,11 +385,11 @@ public final class ArithmeticUtils {
      * @param a Factor.
      * @param b Factor.
      * @return the product {@code a * b}.
-     * @throws MathArithmeticException if the result can not be represented
+     * @throws MathRuntimeException if the result can not be represented
      * as a {@code long}.
      * @since 1.2
      */
-    public static long mulAndCheck(long a, long b) throws MathArithmeticException {
+    public static long mulAndCheck(long a, long b) throws MathRuntimeException {
         long ret;
         if (a > b) {
             // use symmetry to reduce boundary cases
@@ -401,14 +401,14 @@ public final class ArithmeticUtils {
                     if (a >= Long.MAX_VALUE / b) {
                         ret = a * b;
                     } else {
-                        throw new MathArithmeticException();
+                        throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
                     }
                 } else if (b > 0) {
                     // check for negative overflow with negative a, positive b
                     if (Long.MIN_VALUE / b <= a) {
                         ret = a * b;
                     } else {
-                        throw new MathArithmeticException();
+                        throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
 
                     }
                 } else {
@@ -423,7 +423,7 @@ public final class ArithmeticUtils {
                 if (a <= Long.MAX_VALUE / b) {
                     ret = a * b;
                 } else {
-                    throw new MathArithmeticException();
+                    throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
                 }
             } else {
                 // assert a == 0
@@ -439,14 +439,14 @@ public final class ArithmeticUtils {
      * @param x Minuend.
      * @param y Subtrahend.
      * @return the difference {@code x - y}.
-     * @throws MathArithmeticException if the result can not be represented
+     * @throws MathRuntimeException if the result can not be represented
      * as an {@code int}.
      * @since 1.1
      */
-    public static int subAndCheck(int x, int y) throws MathArithmeticException {
+    public static int subAndCheck(int x, int y) throws MathRuntimeException {
         long s = (long)x - (long)y;
         if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
-            throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, x, y);
+            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, x, y);
         }
         return (int)s;
     }
@@ -457,17 +457,17 @@ public final class ArithmeticUtils {
      * @param a Value.
      * @param b Value.
      * @return the difference {@code a - b}.
-     * @throws MathArithmeticException if the result can not be represented as a
+     * @throws MathRuntimeException if the result can not be represented as a
      * {@code long}.
      * @since 1.2
      */
-    public static long subAndCheck(long a, long b) throws MathArithmeticException {
+    public static long subAndCheck(long a, long b) throws MathRuntimeException {
         long ret;
         if (b == Long.MIN_VALUE) {
             if (a < 0) {
                 ret = a - b;
             } else {
-                throw new MathArithmeticException(LocalizedFormats.OVERFLOW_IN_ADDITION, a, -b);
+                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, a, -b);
             }
         } else {
             // use additive inverse
@@ -482,44 +482,34 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return \( k^e \)
-     * @throws NotPositiveException if {@code e < 0}.
-     * @throws MathArithmeticException if the result would overflow.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
+     * @throws MathRuntimeException if the result would overflow.
      */
     public static int pow(final int k,
                           final int e)
-        throws NotPositiveException,
-               MathArithmeticException {
+        throws MathIllegalArgumentException,
+               MathRuntimeException {
         if (e < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
-        try {
-            int exp = e;
-            int result = 1;
-            int k2p    = k;
-            while (true) {
-                if ((exp & 0x1) != 0) {
-                    result = mulAndCheck(result, k2p);
-                }
-
-                exp >>= 1;
-                if (exp == 0) {
-                    break;
-                }
-
-                k2p = mulAndCheck(k2p, k2p);
+        int exp = e;
+        int result = 1;
+        int k2p    = k;
+        while (true) {
+            if ((exp & 0x1) != 0) {
+                result = mulAndCheck(result, k2p);
             }
 
-            return result;
-        } catch (MathArithmeticException mae) {
-            // Add context information.
-            mae.getContext().addMessage(LocalizedFormats.OVERFLOW);
-            mae.getContext().addMessage(LocalizedFormats.BASE, k);
-            mae.getContext().addMessage(LocalizedFormats.EXPONENT, e);
-
-            // Rethrow.
-            throw mae;
+            exp >>= 1;
+        if (exp == 0) {
+            break;
         }
+
+        k2p = mulAndCheck(k2p, k2p);
+        }
+
+        return result;
     }
 
     /**
@@ -528,44 +518,34 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return \( k^e \)
-     * @throws NotPositiveException if {@code e < 0}.
-     * @throws MathArithmeticException if the result would overflow.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
+     * @throws MathRuntimeException if the result would overflow.
      */
     public static long pow(final long k,
                            final int e)
-        throws NotPositiveException,
-               MathArithmeticException {
+        throws MathIllegalArgumentException,
+               MathRuntimeException {
         if (e < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
-        try {
-            int exp = e;
-            long result = 1;
-            long k2p    = k;
-            while (true) {
-                if ((exp & 0x1) != 0) {
-                    result = mulAndCheck(result, k2p);
-                }
-
-                exp >>= 1;
-                if (exp == 0) {
-                    break;
-                }
-
-                k2p = mulAndCheck(k2p, k2p);
+        int exp = e;
+        long result = 1;
+        long k2p    = k;
+        while (true) {
+            if ((exp & 0x1) != 0) {
+                result = mulAndCheck(result, k2p);
             }
 
-            return result;
-        } catch (MathArithmeticException mae) {
-            // Add context information.
-            mae.getContext().addMessage(LocalizedFormats.OVERFLOW);
-            mae.getContext().addMessage(LocalizedFormats.BASE, k);
-            mae.getContext().addMessage(LocalizedFormats.EXPONENT, e);
-
-            // Rethrow.
-            throw mae;
+            exp >>= 1;
+        if (exp == 0) {
+            break;
         }
+
+        k2p = mulAndCheck(k2p, k2p);
+        }
+
+        return result;
     }
 
     /**
@@ -574,11 +554,11 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return k<sup>e</sup>
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
      */
-    public static BigInteger pow(final BigInteger k, int e) throws NotPositiveException {
+    public static BigInteger pow(final BigInteger k, int e) throws MathIllegalArgumentException {
         if (e < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
         return k.pow(e);
@@ -590,11 +570,11 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return k<sup>e</sup>
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
      */
-    public static BigInteger pow(final BigInteger k, long e) throws NotPositiveException {
+    public static BigInteger pow(final BigInteger k, long e) throws MathIllegalArgumentException {
         if (e < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
         BigInteger result = BigInteger.ONE;
@@ -617,11 +597,11 @@ public final class ArithmeticUtils {
      * @param k Number to raise.
      * @param e Exponent (must be positive or zero).
      * @return k<sup>e</sup>
-     * @throws NotPositiveException if {@code e < 0}.
+     * @throws MathIllegalArgumentException if {@code e < 0}.
      */
-    public static BigInteger pow(final BigInteger k, BigInteger e) throws NotPositiveException {
+    public static BigInteger pow(final BigInteger k, BigInteger e) throws MathIllegalArgumentException {
         if (e.compareTo(BigInteger.ZERO) < 0) {
-            throw new NotPositiveException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
         }
 
         BigInteger result = BigInteger.ONE;
@@ -644,14 +624,14 @@ public final class ArithmeticUtils {
      * @param b Addend.
      * @param pattern Pattern to use for any thrown exception.
      * @return the sum {@code a + b}.
-     * @throws MathArithmeticException if the result cannot be represented
+     * @throws MathRuntimeException if the result cannot be represented
      * as a {@code long}.
      * @since 1.2
      */
-     private static long addAndCheck(long a, long b, Localizable pattern) throws MathArithmeticException {
+     private static long addAndCheck(long a, long b, Localizable pattern) throws MathRuntimeException {
          final long result = a + b;
          if (!((a ^ b) < 0 || (a ^ result) >= 0)) {
-             throw new MathArithmeticException(pattern, a, b);
+             throw new MathRuntimeException(pattern, a, b);
          }
          return result;
     }
