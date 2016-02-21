@@ -149,7 +149,6 @@ public class JacobianMatricesTest {
     @Test
     public void testAnalyticalDifferentiation()
         throws MathIllegalArgumentException, MathIllegalStateException,
-               MathIllegalArgumentException,
                MathIllegalArgumentException, MismatchedEquations {
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
@@ -189,7 +188,6 @@ public class JacobianMatricesTest {
     @Test
     public void testFinalResult()
         throws MathIllegalArgumentException, MathIllegalStateException,
-               MathIllegalArgumentException,
                MathIllegalArgumentException, MismatchedEquations {
 
         AbstractIntegrator integ =
@@ -245,7 +243,6 @@ public class JacobianMatricesTest {
     @Test
     public void testParameterizable()
         throws MathIllegalArgumentException, MathIllegalStateException,
-               MathIllegalArgumentException,
                MathIllegalArgumentException, MismatchedEquations {
 
         AbstractIntegrator integ =

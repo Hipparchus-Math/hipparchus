@@ -27,7 +27,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.stat.correlation.Covariance;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -110,7 +109,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * the constructor and the initial mixture provided to this function. If the
      * data has many local optima, multiple runs of the fitting function with
      * different initial mixtures may be required to find the optimal solution.
-     * If a SingularMatrixException is encountered, it is possible that another
+     * If a MathIllegalArgumentException is encountered, it is possible that another
      * initialization would work.
      *
      * @param initialMixture Model containing initial values of weights and
@@ -118,7 +117,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * @param maxIterations Maximum iterations allowed for fit
      * @param threshold Convergence threshold computed as difference in
      *             logLikelihoods between successive iterations
-     * @throws SingularMatrixException if any component's covariance matrix is
+     * @throws MathIllegalArgumentException if any component's covariance matrix is
      *             singular during fitting
      * @throws MathIllegalArgumentException if numComponents is less than one
      *             or threshold is less than Double.MIN_VALUE
@@ -128,8 +127,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
     public void fit(final MixtureMultivariateNormalDistribution initialMixture,
                     final int maxIterations,
                     final double threshold)
-            throws SingularMatrixException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         if (maxIterations < 1) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
                                                    maxIterations, 1);
@@ -263,19 +261,18 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * the constructor and the initial mixture provided to this function. If the
      * data has many local optima, multiple runs of the fitting function with
      * different initial mixtures may be required to find the optimal solution.
-     * If a SingularMatrixException is encountered, it is possible that another
+     * If a MathIllegalArgumentException is encountered, it is possible that another
      * initialization would work.
      *
      * @param initialMixture Model containing initial values of weights and
      *            multivariate normals
-     * @throws SingularMatrixException if any component's covariance matrix is
+     * @throws MathIllegalArgumentException if any component's covariance matrix is
      *             singular during fitting
      * @throws MathIllegalArgumentException if numComponents is less than one or
      *             threshold is less than Double.MIN_VALUE
      */
     public void fit(MixtureMultivariateNormalDistribution initialMixture)
-        throws SingularMatrixException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         fit(initialMixture, DEFAULT_MAX_ITERATIONS, DEFAULT_THRESHOLD);
     }
 

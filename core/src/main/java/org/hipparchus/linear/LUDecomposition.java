@@ -297,7 +297,7 @@ public class LUDecomposition {
                                                        b.getDimension(), m);
             }
             if (singular) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final double[] bp = new double[m];
@@ -337,7 +337,7 @@ public class LUDecomposition {
                                                        b.getRowDimension(), m);
             }
             if (singular) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int nColB = b.getColumnDimension();
@@ -387,7 +387,7 @@ public class LUDecomposition {
          * Get the inverse of the decomposed matrix.
          *
          * @return the inverse matrix.
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         @Override
         public RealMatrix getInverse() {

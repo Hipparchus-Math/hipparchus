@@ -19,10 +19,11 @@ package org.hipparchus.fitting.leastsquares;
 
 import java.io.IOException;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.hipparchus.optim.SimpleVectorValueChecker;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -47,12 +48,16 @@ public class GaussNewtonOptimizerWithQRTest
     }
 
     @Override
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testMoreEstimatedParametersUnsorted() {
         /*
          * Exception is expected with this optimizer
          */
-        super.testMoreEstimatedParametersUnsorted();
+        try {
+            super.testMoreEstimatedParametersUnsorted();
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+        }
     }
 
     @Test
@@ -80,23 +85,30 @@ public class GaussNewtonOptimizerWithQRTest
     }
 
     @Override
-    @Test(expected=MathIllegalArgumentException.class)
+    @Test
     public void testCircleFittingBadInit() {
-        /*
-         * This test does not converge with this optimizer.
-         */
-        super.testCircleFittingBadInit();
+        try {
+            /*
+             * This test does not converge with this optimizer.
+             */
+            super.testCircleFittingBadInit();
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+        }
     }
 
     @Override
-    @Test(expected=MathIllegalArgumentException.class)
-    public void testHahn1()
-        throws IOException {
-        /*
-         * TODO This test leads to a singular problem with the Gauss-Newton
-         * optimizer. This should be inquired.
-         */
-        super.testHahn1();
+    @Test
+    public void testHahn1() throws IOException {
+        try {
+            /*
+             * TODO This test leads to a singular problem with the Gauss-Newton
+             * optimizer. This should be inquired.
+             */
+            super.testHahn1();
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+        }
     }
 
 }

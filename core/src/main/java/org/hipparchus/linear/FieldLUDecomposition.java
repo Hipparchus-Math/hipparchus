@@ -308,7 +308,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                                                            b.getDimension(), m);
                 }
                 if (singular) {
-                    throw new SingularMatrixException();
+                    throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
                 }
 
                 // Apply permutations to b
@@ -344,7 +344,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
          * @param b right-hand side of the equation A &times; X = B
          * @return a vector X such that A &times; X = B
          * @throws MathIllegalArgumentException if the matrices dimensions do not match.
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         public ArrayFieldVector<T> solve(ArrayFieldVector<T> b) {
             final int m = pivot.length;
@@ -354,7 +354,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                                                        length, m);
             }
             if (singular) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             // Apply permutations to b
@@ -392,7 +392,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
                                                        b.getRowDimension(), m);
             }
             if (singular) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int nColB = b.getColumnDimension();

@@ -464,7 +464,7 @@ public class QRDecomposition {
 
         /**
          * {@inheritDoc}
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         @Override
         public RealMatrix getInverse() {
@@ -476,7 +476,7 @@ public class QRDecomposition {
          *
          * @param diag Diagonal elements of the R matrix.
          * @param min Singularity threshold.
-         * @param raise Whether to raise a {@link SingularMatrixException}
+         * @param raise Whether to raise a {@link MathIllegalArgumentException}
          * if any element of the diagonal fails the check.
          * @return {@code true} if any element of the diagonal is smaller
          * or equal to {@code min}.

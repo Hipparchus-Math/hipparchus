@@ -28,7 +28,6 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.QRDecomposition;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.linear.SingularValueDecomposition;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.util.Incrementor;
@@ -71,7 +70,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                     return new LUDecomposition(normal, SINGULARITY_THRESHOLD)
                             .getSolver()
                             .solve(jTr);
-                } catch (SingularMatrixException e) {
+                } catch (MathIllegalArgumentException e) {
                     throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
                 }
             }
@@ -92,7 +91,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                     return new QRDecomposition(jacobian, SINGULARITY_THRESHOLD)
                             .getSolver()
                             .solve(residuals);
-                } catch (SingularMatrixException e) {
+                } catch (MathIllegalArgumentException e) {
                     throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
                 }
             }

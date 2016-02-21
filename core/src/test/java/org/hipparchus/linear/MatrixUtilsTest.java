@@ -365,7 +365,7 @@ public final class MatrixUtilsTest {
         }
     }
 
-    @Test(expected=SingularMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testBlockInverseNonInvertible() {
         final double[][] data = {
             { -1, 0, 123, 4 },

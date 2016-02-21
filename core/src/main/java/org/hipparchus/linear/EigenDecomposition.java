@@ -410,12 +410,12 @@ public class EigenDecomposition {
          * @return a Vector X that minimizes the two norm of A &times; X - B.
          *
          * @throws MathIllegalArgumentException if the matrices dimensions do not match.
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         @Override
         public RealVector solve(final RealVector b) {
             if (!isNonSingular()) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int m = realEigenvalues.length;
@@ -442,7 +442,7 @@ public class EigenDecomposition {
         public RealMatrix solve(RealMatrix b) {
 
             if (!isNonSingular()) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int m = realEigenvalues.length;
@@ -518,12 +518,12 @@ public class EigenDecomposition {
          * Get the inverse of the decomposed matrix.
          *
          * @return the inverse matrix.
-         * @throws SingularMatrixException if the decomposed matrix is singular.
+         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
          */
         @Override
         public RealMatrix getInverse() {
             if (!isNonSingular()) {
-                throw new SingularMatrixException();
+                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
             }
 
             final int m = realEigenvalues.length;

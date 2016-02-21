@@ -78,7 +78,7 @@ public interface UpdatingMultipleLinearRegression {
      * @throws MathIllegalArgumentException if there is not sufficient data in the model to
      * estimate the regression parameters
      */
-    RegressionResults regress() throws MathIllegalArgumentException, MathIllegalArgumentException;
+    RegressionResults regress() throws MathIllegalArgumentException;
 
     /**
      * Performs a regression on data present in buffers including only regressors
@@ -88,5 +88,5 @@ public interface UpdatingMultipleLinearRegression {
      * @throws MathIllegalArgumentException if the model is not correctly specified
      * @throws MathIllegalArgumentException if the variablesToInclude array is null or zero length
      */
-    RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException, MathIllegalArgumentException;
+    RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException;
 }

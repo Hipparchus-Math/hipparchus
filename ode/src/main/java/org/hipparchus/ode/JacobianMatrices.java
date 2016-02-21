@@ -262,7 +262,7 @@ public class JacobianMatrices {
      * @throws MathIllegalArgumentException if the column vector does not match state dimension
      */
     public void setInitialParameterJacobian(final String pName, final double[] dYdP)
-        throws MathIllegalArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
 
         // Check dimensions
         checkDimension(stateDim, dYdP);

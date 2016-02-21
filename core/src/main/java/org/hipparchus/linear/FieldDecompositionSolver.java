@@ -43,7 +43,7 @@ public interface FieldDecompositionSolver<T extends FieldElement<T>> {
      * @return a vector X that minimizes the two norm of A &times; X - B
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the matrices dimensions do not match.
-     * @throws SingularMatrixException
+     * @throws MathIllegalArgumentException
      * if the decomposed matrix is singular.
      */
     FieldVector<T> solve(final FieldVector<T> b);
@@ -55,7 +55,7 @@ public interface FieldDecompositionSolver<T extends FieldElement<T>> {
      * @return a matrix X that minimizes the two norm of A &times; X - B
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the matrices dimensions do not match.
-     * @throws SingularMatrixException
+     * @throws MathIllegalArgumentException
      * if the decomposed matrix is singular.
      */
     FieldMatrix<T> solve(final FieldMatrix<T> b);
@@ -68,7 +68,7 @@ public interface FieldDecompositionSolver<T extends FieldElement<T>> {
 
     /** Get the inverse (or pseudo-inverse) of the decomposed matrix.
      * @return inverse matrix
-     * @throws SingularMatrixException
+     * @throws MathIllegalArgumentException
      * if the decomposed matrix is singular.
      */
     FieldMatrix<T> getInverse();

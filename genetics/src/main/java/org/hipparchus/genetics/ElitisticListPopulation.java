@@ -48,7 +48,7 @@ public class ElitisticListPopulation extends ListPopulation {
      */
     public ElitisticListPopulation(final List<Chromosome> chromosomes, final int populationLimit,
                                    final double elitismRate)
-        throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
 
         super(chromosomes, populationLimit);
         setElitismRate(elitismRate);

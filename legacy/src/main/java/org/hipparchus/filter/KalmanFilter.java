@@ -26,7 +26,6 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.NonSquareMatrixException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -328,11 +327,11 @@ public class KalmanFilter {
      *             if the measurement vector is {@code null}
      * @throws MathIllegalArgumentException
      *             if the dimension of the measurement vector does not fit
-     * @throws SingularMatrixException
+     * @throws MathIllegalArgumentException
      *             if the covariance matrix could not be inverted
      */
     public void correct(final double[] z)
-            throws MathIllegalArgumentException, NullArgumentException, SingularMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException {
         correct(new ArrayRealVector(z, false));
     }
 
@@ -345,11 +344,11 @@ public class KalmanFilter {
      *             if the measurement vector is {@code null}
      * @throws MathIllegalArgumentException
      *             if the dimension of the measurement vector does not fit
-     * @throws SingularMatrixException
+     * @throws MathIllegalArgumentException
      *             if the covariance matrix could not be inverted
      */
     public void correct(final RealVector z)
-            throws MathIllegalArgumentException, NullArgumentException, SingularMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException {
 
         // sanity checks
         MathUtils.checkNotNull(z);

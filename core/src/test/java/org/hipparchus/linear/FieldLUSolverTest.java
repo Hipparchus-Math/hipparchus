@@ -25,7 +25,6 @@ import org.hipparchus.linear.FieldDecompositionSolver;
 import org.hipparchus.linear.FieldLUDecomposition;
 import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.FieldVector;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.linear.SparseFieldVector;
 import org.junit.Assert;
 import org.junit.Test;
@@ -114,13 +113,13 @@ public class FieldLUSolverTest {
         try {
             solver.solve(b);
             Assert.fail("an exception should have been thrown");
-        } catch (SingularMatrixException ime) {
+        } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
         try {
             solver.solve(b.getColumnVector(0));
             Assert.fail("an exception should have been thrown");
-        } catch (SingularMatrixException ime) {
+        } catch (MathIllegalArgumentException ime) {
             // expected behavior
         }
     }

@@ -17,6 +17,8 @@
 
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+
 /**
  * Interface handling decomposition algorithms that can solve A &times; X = B.
  * <p>
@@ -44,9 +46,9 @@ public interface DecompositionSolver {
      * @return a vector X that minimizes the two norm of A &times; X - B
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the matrices dimensions do not match.
-     * @throws SingularMatrixException if the decomposed matrix is singular.
+     * @throws MathIllegalArgumentException if the decomposed matrix is singular.
      */
-    RealVector solve(final RealVector b) throws SingularMatrixException;
+    RealVector solve(final RealVector b) throws MathIllegalArgumentException;
 
     /**
      * Solve the linear equation A &times; X = B for matrices A.
@@ -58,9 +60,9 @@ public interface DecompositionSolver {
      * @return a matrix X that minimizes the two norm of A &times; X - B
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the matrices dimensions do not match.
-     * @throws SingularMatrixException if the decomposed matrix is singular.
+     * @throws MathIllegalArgumentException if the decomposed matrix is singular.
      */
-    RealMatrix solve(final RealMatrix b) throws SingularMatrixException;
+    RealMatrix solve(final RealMatrix b) throws MathIllegalArgumentException;
 
     /**
      * Check if the decomposed matrix is non-singular.
@@ -85,13 +87,13 @@ public interface DecompositionSolver {
      * Note however that some decompositions cannot compute a pseudo-inverse for all matrices.
      * For example, the {@link LUDecomposition} is not defined for non-square matrices to begin
      * with. The {@link QRDecomposition} can operate on non-square matrices, but will throw
-     * {@link SingularMatrixException} if the decomposed matrix is singular. Refer to the javadoc
+     * {@link MathIllegalArgumentException} if the decomposed matrix is singular. Refer to the javadoc
      * of specific decomposition implementations for more details.
      *
      * @return pseudo-inverse matrix (which is the inverse, if it exists),
      * if the decomposition can pseudo-invert the decomposed matrix
-     * @throws SingularMatrixException if the decomposed matrix is singular and the decomposition
+     * @throws MathIllegalArgumentException if the decomposed matrix is singular and the decomposition
      * can not compute a pseudo-inverse
      */
-    RealMatrix getInverse() throws SingularMatrixException;
+    RealMatrix getInverse() throws MathIllegalArgumentException;
 }

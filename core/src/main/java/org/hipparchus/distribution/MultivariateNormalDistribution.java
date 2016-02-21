@@ -21,7 +21,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.EigenDecomposition;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.SingularMatrixException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
@@ -69,15 +68,14 @@ public class MultivariateNormalDistribution
      * @param covariances Covariance matrix.
      * @throws MathIllegalArgumentException if the arrays length are
      * inconsistent.
-     * @throws SingularMatrixException if the eigenvalue decomposition cannot
+     * @throws MathIllegalArgumentException if the eigenvalue decomposition cannot
      * be performed on the provided covariance matrix.
      * @throws MathIllegalArgumentException if any of the eigenvalues is
      * negative.
      */
     public MultivariateNormalDistribution(final double[] means,
                                           final double[][] covariances)
-        throws SingularMatrixException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         this(new Well19937c(), means, covariances);
     }
 
@@ -94,7 +92,7 @@ public class MultivariateNormalDistribution
      * @param covariances Covariance matrix.
      * @throws MathIllegalArgumentException if the arrays length are
      * inconsistent.
-     * @throws SingularMatrixException if the eigenvalue decomposition cannot
+     * @throws MathIllegalArgumentException if the eigenvalue decomposition cannot
      * be performed on the provided covariance matrix.
      * @throws MathIllegalArgumentException if any of the eigenvalues is
      * negative.
@@ -102,8 +100,7 @@ public class MultivariateNormalDistribution
     public MultivariateNormalDistribution(RandomGenerator rng,
                                           final double[] means,
                                           final double[][] covariances)
-            throws SingularMatrixException,
-                   MathIllegalArgumentException {
+            throws MathIllegalArgumentException {
         super(rng, means.length);
 
         final int dim = means.length;

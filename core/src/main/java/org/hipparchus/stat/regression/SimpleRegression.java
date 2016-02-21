@@ -772,7 +772,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * estimate the regression parameters
      */
     @Override
-    public RegressionResults regress() throws MathIllegalArgumentException, MathIllegalArgumentException {
+    public RegressionResults regress() throws MathIllegalArgumentException {
         if (hasIntercept) {
             if (n < 3) {
                 throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);

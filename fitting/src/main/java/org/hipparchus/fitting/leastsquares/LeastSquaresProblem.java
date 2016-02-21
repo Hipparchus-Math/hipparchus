@@ -88,7 +88,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          *
          * @param threshold Singularity threshold.
          * @return the covariance matrix.
-         * @throws org.hipparchus.linear.SingularMatrixException
+         * @throws org.hipparchus.linear.MathIllegalArgumentException
          *          if the covariance matrix cannot be computed (singular problem).
          */
         RealMatrix getCovariances(double threshold);
@@ -102,7 +102,7 @@ public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresPro
          * @param covarianceSingularityThreshold Singularity threshold (see {@link
          *                                       #getCovariances(double) computeCovariances}).
          * @return an estimate of the standard deviation of the optimized parameters
-         * @throws org.hipparchus.linear.SingularMatrixException
+         * @throws org.hipparchus.linear.MathIllegalArgumentException
          *          if the covariance matrix cannot be computed.
          */
         RealVector getSigma(double covarianceSingularityThreshold);

@@ -324,10 +324,10 @@ public class DiagonalMatrix extends AbstractRealMatrix
      * use {@link #inverse(double)} if a different threshold is needed.
      *
      * @return the inverse of {@code m}
-     * @throws SingularMatrixException if the matrix is singular
+     * @throws MathIllegalArgumentException if the matrix is singular
      * @since 3.3
      */
-    public DiagonalMatrix inverse() throws SingularMatrixException {
+    public DiagonalMatrix inverse() throws MathIllegalArgumentException {
         return inverse(0);
     }
 
@@ -336,12 +336,12 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param threshold Singularity threshold.
      * @return the inverse of {@code m}
-     * @throws SingularMatrixException if the matrix is singular
+     * @throws MathIllegalArgumentException if the matrix is singular
      * @since 3.3
      */
-    public DiagonalMatrix inverse(double threshold) throws SingularMatrixException {
+    public DiagonalMatrix inverse(double threshold) throws MathIllegalArgumentException {
         if (isSingular(threshold)) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
 
         final double[] result = new double[data.length];

@@ -1022,14 +1022,14 @@ public class MatrixUtils {
         final SingularValueDecomposition aDec = new SingularValueDecomposition(a);
         final DecompositionSolver aSolver = aDec.getSolver();
         if (!aSolver.isNonSingular()) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
         final RealMatrix aInv = aSolver.getInverse();
 
         final SingularValueDecomposition dDec = new SingularValueDecomposition(d);
         final DecompositionSolver dSolver = dDec.getSolver();
         if (!dSolver.isNonSingular()) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
         final RealMatrix dInv = dSolver.getInverse();
 
@@ -1037,7 +1037,7 @@ public class MatrixUtils {
         final SingularValueDecomposition tmp1Dec = new SingularValueDecomposition(tmp1);
         final DecompositionSolver tmp1Solver = tmp1Dec.getSolver();
         if (!tmp1Solver.isNonSingular()) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
         final RealMatrix result00 = tmp1Solver.getInverse();
 
@@ -1045,7 +1045,7 @@ public class MatrixUtils {
         final SingularValueDecomposition tmp2Dec = new SingularValueDecomposition(tmp2);
         final DecompositionSolver tmp2Solver = tmp2Dec.getSolver();
         if (!tmp2Solver.isNonSingular()) {
-            throw new SingularMatrixException();
+            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
         }
         final RealMatrix result11 = tmp2Solver.getInverse();
 
@@ -1073,12 +1073,12 @@ public class MatrixUtils {
      * @param matrix Matrix whose inverse shall be computed
      * @return the inverse of {@code matrix}
      * @throws NullArgumentException if {@code matrix} is {@code null}
-     * @throws SingularMatrixException if m is singular
+     * @throws MathIllegalArgumentException if m is singular
      * @throws NonSquareMatrixException if matrix is not square
      * @since 3.3
      */
     public static RealMatrix inverse(RealMatrix matrix)
-            throws NullArgumentException, SingularMatrixException, NonSquareMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException, NonSquareMatrixException {
         return inverse(matrix, 0);
     }
 
@@ -1092,12 +1092,12 @@ public class MatrixUtils {
      * @param threshold Singularity threshold
      * @return the inverse of {@code m}
      * @throws NullArgumentException if {@code matrix} is {@code null}
-     * @throws SingularMatrixException if matrix is singular
+     * @throws MathIllegalArgumentException if matrix is singular
      * @throws NonSquareMatrixException if matrix is not square
      * @since 3.3
      */
     public static RealMatrix inverse(RealMatrix matrix, double threshold)
-            throws NullArgumentException, SingularMatrixException, NonSquareMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException, NonSquareMatrixException {
 
         MathUtils.checkNotNull(matrix);
 
