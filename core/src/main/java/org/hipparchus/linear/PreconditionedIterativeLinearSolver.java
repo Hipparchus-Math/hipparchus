@@ -81,7 +81,7 @@ public abstract class PreconditionedIterativeLinearSolver
      * @param x0 the initial guess of the solution
      * @return a new vector containing the solution
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} or {@code m} is not
+     * @throws MathIllegalArgumentException if {@code a} or {@code m} is not
      * square
      * @throws MathIllegalArgumentException if {@code m}, {@code b} or
      * {@code x0} have dimensions inconsistent with {@code a}
@@ -92,7 +92,7 @@ public abstract class PreconditionedIterativeLinearSolver
      */
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x0)
-        throws NullArgumentException, NonSquareOperatorException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, m, b, x0.copy());
@@ -101,7 +101,7 @@ public abstract class PreconditionedIterativeLinearSolver
     /** {@inheritDoc} */
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b)
-        throws NullArgumentException, NonSquareOperatorException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
@@ -113,7 +113,7 @@ public abstract class PreconditionedIterativeLinearSolver
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b,
                             final RealVector x0)
-        throws NullArgumentException, NonSquareOperatorException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, null, b, x0.copy());
@@ -131,20 +131,20 @@ public abstract class PreconditionedIterativeLinearSolver
      * @param b the right-hand side vector
      * @param x0 the initial guess of the solution
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} or {@code m} is not
+     * @throws MathIllegalArgumentException if {@code a} or {@code m} is not
      * square
      * @throws MathIllegalArgumentException if {@code m}, {@code b} or
      * {@code x0} have dimensions inconsistent with {@code a}
      */
     protected static void checkParameters(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x0)
-        throws NullArgumentException, NonSquareOperatorException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException {
         checkParameters(a, b, x0);
         if (m != null) {
             if (m.getColumnDimension() != m.getRowDimension()) {
-                throw new NonSquareOperatorException(m.getColumnDimension(),
-                                                     m.getRowDimension());
+                throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_OPERATOR,
+                                                       m.getColumnDimension(), m.getRowDimension());
             }
             if (m.getRowDimension() != a.getRowDimension()) {
                 throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -162,7 +162,7 @@ public abstract class PreconditionedIterativeLinearSolver
      * @param b the right-hand side vector
      * @return a new vector containing the solution
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} or {@code m} is not
+     * @throws MathIllegalArgumentException if {@code a} or {@code m} is not
      * square
      * @throws MathIllegalArgumentException if {@code m} or {@code b} have
      * dimensions inconsistent with {@code a}
@@ -172,7 +172,7 @@ public abstract class PreconditionedIterativeLinearSolver
      * has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(RealLinearOperator a, RealLinearOperator m,
-        RealVector b) throws NullArgumentException, NonSquareOperatorException,
+        RealVector b) throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
@@ -190,7 +190,7 @@ public abstract class PreconditionedIterativeLinearSolver
      * @return a reference to {@code x0} (shallow copy) updated with the
      * solution
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} or {@code m} is not
+     * @throws MathIllegalArgumentException if {@code a} or {@code m} is not
      * square
      * @throws MathIllegalArgumentException if {@code m}, {@code b} or
      * {@code x0} have dimensions inconsistent with {@code a}
@@ -201,14 +201,14 @@ public abstract class PreconditionedIterativeLinearSolver
      */
     public abstract RealVector solveInPlace(RealLinearOperator a,
         RealLinearOperator m, RealVector b, RealVector x0) throws
-        NullArgumentException, NonSquareOperatorException,
+        NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalStateException;
 
     /** {@inheritDoc} */
     @Override
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealVector b, final RealVector x0) throws
-        NullArgumentException, NonSquareOperatorException,
+        NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalStateException {
         return solveInPlace(a, null, b, x0);
     }

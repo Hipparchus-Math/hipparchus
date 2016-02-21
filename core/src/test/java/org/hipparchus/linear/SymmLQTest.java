@@ -27,7 +27,6 @@ import org.hipparchus.linear.IterativeLinearSolver;
 import org.hipparchus.linear.IterativeLinearSolverEvent;
 import org.hipparchus.linear.JacobiPreconditioner;
 import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.NonSquareOperatorException;
 import org.hipparchus.linear.PreconditionedIterativeLinearSolver;
 import org.hipparchus.linear.RealLinearOperator;
 import org.hipparchus.linear.RealVector;
@@ -226,7 +225,7 @@ public class SymmLQTest {
         saundersTest(50, true, true, 0.25, 0.10);
     }
 
-    @Test(expected = NonSquareOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSquareOperator() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 3);
         final IterativeLinearSolver solver;
@@ -331,7 +330,7 @@ public class SymmLQTest {
         }
     }
 
-    @Test(expected = NonSquareOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSquarePreconditioner() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
         final RealLinearOperator m = new RealLinearOperator() {

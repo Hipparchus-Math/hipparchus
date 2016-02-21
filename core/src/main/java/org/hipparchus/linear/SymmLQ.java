@@ -886,7 +886,7 @@ public class SymmLQ
     @Override
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b) throws
-        NullArgumentException, NonSquareOperatorException,
+        NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalStateException,
         MathIllegalArgumentException, MathIllegalArgumentException,
         IllConditionedOperatorException {
@@ -922,7 +922,7 @@ public class SymmLQ
      * @param shift the amount to be subtracted to all diagonal elements of A
      * @return a reference to {@code x} (shallow copy)
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} or {@code m} is not square
+     * @throws MathIllegalArgumentException if {@code a} or {@code m} is not square
      * @throws MathIllegalArgumentException if {@code m} or {@code b} have dimensions
      * inconsistent with {@code a}
      * @throws MathIllegalStateException at exhaustion of the iteration count,
@@ -938,7 +938,7 @@ public class SymmLQ
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final boolean goodb,
         final double shift) throws NullArgumentException,
-        NonSquareOperatorException, MathIllegalArgumentException,
+        MathIllegalArgumentException, MathIllegalArgumentException,
         MathIllegalStateException, MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException {
         MathUtils.checkNotNull(a);
@@ -960,7 +960,7 @@ public class SymmLQ
     @Override
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x)
-        throws NullArgumentException, NonSquareOperatorException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
@@ -977,7 +977,7 @@ public class SymmLQ
      */
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b)
-        throws NullArgumentException, NonSquareOperatorException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalArgumentException,
         IllConditionedOperatorException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
@@ -1010,7 +1010,7 @@ public class SymmLQ
      * @param shift the amount to be subtracted to all diagonal elements of A
      * @return a reference to {@code x}
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} is not square
+     * @throws MathIllegalArgumentException if {@code a} is not square
      * @throws MathIllegalArgumentException if {@code b} has dimensions
      * inconsistent with {@code a}
      * @throws MathIllegalStateException at exhaustion of the iteration count,
@@ -1023,7 +1023,7 @@ public class SymmLQ
      */
     public RealVector solve(final RealLinearOperator a, final RealVector b,
         final boolean goodb, final double shift) throws NullArgumentException,
-        NonSquareOperatorException, MathIllegalArgumentException,
+        MathIllegalArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         MathUtils.checkNotNull(a);
@@ -1043,7 +1043,7 @@ public class SymmLQ
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b,
         final RealVector x) throws NullArgumentException,
-        NonSquareOperatorException, MathIllegalArgumentException,
+        MathIllegalArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         MathUtils.checkNotNull(x);
@@ -1064,7 +1064,7 @@ public class SymmLQ
     @Override
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x)
-        throws NullArgumentException, NonSquareOperatorException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
@@ -1100,7 +1100,7 @@ public class SymmLQ
      * @param shift the amount to be subtracted to all diagonal elements of A
      * @return a reference to {@code x} (shallow copy).
      * @throws NullArgumentException if one of the parameters is {@code null}
-     * @throws NonSquareOperatorException if {@code a} or {@code m} is not square
+     * @throws MathIllegalArgumentException if {@code a} or {@code m} is not square
      * @throws MathIllegalArgumentException if {@code m}, {@code b} or {@code x}
      * have dimensions inconsistent with {@code a}.
      * @throws MathIllegalStateException at exhaustion of the iteration count,
@@ -1116,7 +1116,7 @@ public class SymmLQ
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b,
         final RealVector x, final boolean goodb, final double shift)
-        throws NullArgumentException, NonSquareOperatorException,
+        throws NullArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
@@ -1186,7 +1186,7 @@ public class SymmLQ
     @Override
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealVector b, final RealVector x) throws NullArgumentException,
-        NonSquareOperatorException, MathIllegalArgumentException,
+        MathIllegalArgumentException, MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         return solveInPlace(a, null, b, x, false, 0.);
