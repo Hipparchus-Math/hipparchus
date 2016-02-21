@@ -17,7 +17,7 @@
 
 package org.hipparchus.optim.nonlinear.scalar.gradient;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.optim.ConvergenceChecker;
@@ -331,7 +331,7 @@ public class NonLinearConjugateGradientOptimizer
     private void checkParameters() {
         if (getLowerBound() != null ||
             getUpperBound() != null) {
-            throw new MathRuntimeException(LocalizedFormats.CONSTRAINT);
+            throw new MathRuntimeException(LocalizedCoreFormats.CONSTRAINT);
         }
     }
 }

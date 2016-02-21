@@ -19,7 +19,7 @@ package org.hipparchus.ode;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -75,7 +75,7 @@ public class EquationsMapper implements Serializable {
     public void extractEquationData(double[] complete, double[] equationData)
         throws MathIllegalArgumentException {
         if (equationData.length != dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    equationData.length, dimension);
         }
         System.arraycopy(complete, firstIndex, equationData, 0, dimension);
@@ -91,7 +91,7 @@ public class EquationsMapper implements Serializable {
     public void insertEquationData(double[] equationData, double[] complete)
         throws MathIllegalArgumentException {
         if (equationData.length != dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    equationData.length, dimension);
         }
         System.arraycopy(equationData, 0, complete, firstIndex, dimension);

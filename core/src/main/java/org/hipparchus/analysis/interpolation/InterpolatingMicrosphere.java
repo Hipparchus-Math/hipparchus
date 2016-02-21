@@ -19,7 +19,7 @@ package org.hipparchus.analysis.interpolation;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
@@ -74,20 +74,20 @@ public class InterpolatingMicrosphere {
                                        double darkThreshold,
                                        double background) {
         if (dimension <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    dimension, 0);
         }
         if (size <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    size, 0);
         }
         if (maxDarkFraction < 0 ||
             maxDarkFraction > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    maxDarkFraction, 0, 1);
         }
         if (darkThreshold < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, darkThreshold, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, darkThreshold, 0);
         }
 
         this.dimension = dimension;
@@ -211,7 +211,7 @@ public class InterpolatingMicrosphere {
                         double exponent,
                         double noInterpolationTolerance) {
         if (exponent < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, exponent, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, exponent, 0);
         }
 
         clear();
@@ -251,10 +251,10 @@ public class InterpolatingMicrosphere {
     protected void add(double[] normal,
                        boolean copy) {
         if (microsphere.size() >= size) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, size);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, size);
         }
         if (normal.length > dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    normal.length, dimension);
         }
 

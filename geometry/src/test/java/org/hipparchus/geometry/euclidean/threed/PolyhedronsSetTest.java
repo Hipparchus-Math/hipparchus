@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.Localizable;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.PolygonsSet;
@@ -369,32 +371,32 @@ public class PolyhedronsSetTest {
 
     @Test
     public void testTooClose() throws IOException, ParseException {
-        checkError("pentomino-N-too-close.ply", LocalizedFormats.CLOSE_VERTICES);
+        checkError("pentomino-N-too-close.ply", LocalizedGeometryFormats.CLOSE_VERTICES);
     }
 
     @Test
     public void testHole() throws IOException, ParseException {
-        checkError("pentomino-N-hole.ply", LocalizedFormats.EDGE_CONNECTED_TO_ONE_FACET);
+        checkError("pentomino-N-hole.ply", LocalizedGeometryFormats.EDGE_CONNECTED_TO_ONE_FACET);
     }
 
     @Test
     public void testNonPlanar() throws IOException, ParseException {
-        checkError("pentomino-N-out-of-plane.ply", LocalizedFormats.OUT_OF_PLANE);
+        checkError("pentomino-N-out-of-plane.ply", LocalizedGeometryFormats.OUT_OF_PLANE);
     }
 
     @Test
     public void testOrientation() throws IOException, ParseException {
-        checkError("pentomino-N-bad-orientation.ply", LocalizedFormats.FACET_ORIENTATION_MISMATCH);
+        checkError("pentomino-N-bad-orientation.ply", LocalizedGeometryFormats.FACET_ORIENTATION_MISMATCH);
     }
 
     @Test
     public void testFacet2Vertices() throws IOException, ParseException {
         checkError(Arrays.asList(Vector3D.ZERO, Vector3D.PLUS_I, Vector3D.PLUS_J, Vector3D.PLUS_K),
                    Arrays.asList(new int[] { 0, 1, 2 }, new int[] {2, 3}),
-                   LocalizedFormats.WRONG_NUMBER_OF_POINTS);
+                   LocalizedCoreFormats.WRONG_NUMBER_OF_POINTS);
     }
 
-    private void checkError(final String resourceName, final LocalizedFormats expected) {
+    private void checkError(final String resourceName, final Localizable expected) {
         try {
             InputStream stream = getClass().getResourceAsStream(resourceName);
             PLYParser   parser = new PLYParser(stream);
@@ -408,7 +410,7 @@ public class PolyhedronsSetTest {
     }
 
     private void checkError(final List<Vector3D> vertices, final List<int[]> facets,
-                            final LocalizedFormats expected) {
+                            final Localizable expected) {
         try {
             new PolyhedronsSet(vertices, facets, 1.0e-10);
             Assert.fail("an exception should have been thrown");

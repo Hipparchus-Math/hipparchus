@@ -19,7 +19,7 @@ package org.hipparchus.distribution;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.RandomGenerator;
@@ -78,18 +78,18 @@ public class MixtureMultivariateRealDistribution<T extends MultivariateRealDistr
         for (int i = 0; i < numComp; i++) {
             final Pair<Double, T> comp = components.get(i);
             if (comp.getSecond().getDimension() != dim) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        comp.getSecond().getDimension(), dim);
             }
             if (comp.getFirst() < 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, comp.getFirst(), 0);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, comp.getFirst(), 0);
             }
             weightSum += comp.getFirst();
         }
 
         // Check for overflow.
         if (Double.isInfinite(weightSum)) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW);
         }
 
         // Store each distribution and its normalized weight.

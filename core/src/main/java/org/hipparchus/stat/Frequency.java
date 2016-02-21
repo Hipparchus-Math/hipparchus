@@ -28,7 +28,7 @@ import java.util.Map.Entry;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
@@ -186,7 +186,7 @@ public class Frequency implements Serializable {
         } catch (ClassCastException ex) {
             //TreeMap will throw ClassCastException if v is not comparable
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.INSTANCES_NOT_COMPARABLE_TO_EXISTING_VALUES,
+                  LocalizedCoreFormats.INSTANCES_NOT_COMPARABLE_TO_EXISTING_VALUES,
                   v.getClass().getName());
         }
     }
@@ -596,7 +596,7 @@ public class Frequency implements Serializable {
      * @since 3.1
      */
     public void merge(final Frequency other) throws NullArgumentException {
-        MathUtils.checkNotNull(other, LocalizedFormats.NULL_NOT_ALLOWED);
+        MathUtils.checkNotNull(other, LocalizedCoreFormats.NULL_NOT_ALLOWED);
 
         final Iterator<Map.Entry<Comparable<?>, Long>> iter = other.entrySetIterator();
         while (iter.hasNext()) {
@@ -615,7 +615,7 @@ public class Frequency implements Serializable {
      * @since 3.1
      */
     public void merge(final Collection<Frequency> others) throws NullArgumentException {
-        MathUtils.checkNotNull(others, LocalizedFormats.NULL_NOT_ALLOWED);
+        MathUtils.checkNotNull(others, LocalizedCoreFormats.NULL_NOT_ALLOWED);
 
         for (final Frequency freq : others) {
             merge(freq);

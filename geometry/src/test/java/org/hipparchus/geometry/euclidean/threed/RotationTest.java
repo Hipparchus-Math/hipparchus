@@ -17,7 +17,7 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -502,7 +502,7 @@ public class RotationTest {
                       r.getAngles(CardanOrders[i], convention);
                       Assert.fail("an exception should have been caught");
                   } catch (MathIllegalStateException cese) {
-                      Assert.assertEquals(LocalizedFormats.CARDAN_ANGLES_SINGULARITY, cese.getSpecifier());
+                      Assert.assertEquals(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY, cese.getSpecifier());
                   }
               }
           }
@@ -520,7 +520,7 @@ public class RotationTest {
                       r.getAngles(EulerOrders[i], convention);
                       Assert.fail("an exception should have been caught");
                   } catch (MathIllegalStateException cese) {
-                      Assert.assertEquals(LocalizedFormats.EULER_ANGLES_SINGULARITY, cese.getSpecifier());
+                      Assert.assertEquals(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY, cese.getSpecifier());
                   }
               }
           }

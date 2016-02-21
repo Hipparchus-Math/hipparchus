@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -125,7 +125,7 @@ class StorelessBivariateCovariance {
      */
     public double getResult() throws MathIllegalArgumentException {
         if (n < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION,
                                                 n, 2, true);
         }
         if (biasCorrected) {

@@ -25,7 +25,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Add;
 import org.hipparchus.analysis.function.Divide;
 import org.hipparchus.analysis.function.Multiply;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -171,7 +171,7 @@ public abstract class RealVector {
         throws MathIllegalArgumentException {
         int d = getDimension();
         if (d != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    d, n);
         }
     }
@@ -185,7 +185,7 @@ public abstract class RealVector {
     protected void checkIndex(final int index) throws MathIllegalArgumentException {
         if (index < 0 ||
             index >= getDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX,
                                           index, 0, getDimension() - 1);
         }
     }
@@ -203,16 +203,16 @@ public abstract class RealVector {
         throws MathIllegalArgumentException {
         final int dim = getDimension();
         if ((start < 0) || (start >= dim)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, start, 0,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX, start, 0,
                                           dim - 1);
         }
         if ((end < 0) || (end >= dim)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, end, 0,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX, end, 0,
                                           dim - 1);
         }
         if (end < start) {
             // TODO Use more specific error message
-            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 end, start, false);
         }
     }
@@ -327,7 +327,7 @@ public abstract class RealVector {
 
         if (norm == 0 ||
             vNorm == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
         return dotProduct(v) / (norm * vNorm);
     }
@@ -656,7 +656,7 @@ public abstract class RealVector {
         throws MathIllegalArgumentException, MathRuntimeException {
         final double norm2 = v.dotProduct(v);
         if (norm2 == 0.0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
         return v.mapMultiply(dotProduct(v) / v.dotProduct(v));
     }
@@ -700,7 +700,7 @@ public abstract class RealVector {
     public RealVector unitVector() throws MathRuntimeException {
         final double norm = getNorm();
         if (norm == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
         return mapDivide(norm);
     }
@@ -714,7 +714,7 @@ public abstract class RealVector {
     public void unitize() throws MathRuntimeException {
         final double norm = getNorm();
         if (norm == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
         mapDivideToSelf(getNorm());
     }
@@ -779,7 +779,7 @@ public abstract class RealVector {
              */
             @Override
             public void remove() throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
         };
     }
@@ -1093,7 +1093,7 @@ public abstract class RealVector {
     @Override
     public boolean equals(Object other)
         throws MathRuntimeException {
-        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+        throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
     }
 
     /**
@@ -1106,7 +1106,7 @@ public abstract class RealVector {
      */
     @Override
     public int hashCode() throws MathRuntimeException {
-        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+        throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
     }
 
     /**
@@ -1183,7 +1183,7 @@ public abstract class RealVector {
          */
         @Override
         public void remove() throws MathRuntimeException {
-            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+            throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
         }
     }
 
@@ -1224,7 +1224,7 @@ public abstract class RealVector {
             @Override
             public RealVector mapToSelf(UnivariateFunction function)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1262,7 +1262,7 @@ public abstract class RealVector {
                      */
                     @Override
                     public void remove() throws MathRuntimeException {
-                        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                        throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
                     }
                 };
             }
@@ -1298,7 +1298,7 @@ public abstract class RealVector {
                     @Override
                     public void remove()
                         throws MathRuntimeException {
-                        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                        throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
                     }
                 };
             }
@@ -1338,7 +1338,7 @@ public abstract class RealVector {
             @Override
             public RealVector mapAddToSelf(double d)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1356,7 +1356,7 @@ public abstract class RealVector {
             @Override
             public RealVector mapSubtractToSelf(double d)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1374,7 +1374,7 @@ public abstract class RealVector {
             @Override
             public RealVector mapMultiplyToSelf(double d)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1392,7 +1392,7 @@ public abstract class RealVector {
             @Override
             public RealVector mapDivideToSelf(double d)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1476,7 +1476,7 @@ public abstract class RealVector {
              */
             @Override
             public void unitize() throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1500,7 +1500,7 @@ public abstract class RealVector {
             @Override
             public void setEntry(int index, double value)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /**
@@ -1512,7 +1512,7 @@ public abstract class RealVector {
             @Override
             public void addToEntry(int index, double value)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1549,7 +1549,7 @@ public abstract class RealVector {
             @Override
             public void setSubVector(int index, RealVector w)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /**
@@ -1561,7 +1561,7 @@ public abstract class RealVector {
             @Override
             public void set(double value)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /** {@inheritDoc} */
@@ -1598,7 +1598,7 @@ public abstract class RealVector {
             @Override
             public RealVector combineToSelf(double a, double b, RealVector y)
                 throws MathRuntimeException {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
 
             /** An entry in the vector. */
@@ -1618,7 +1618,7 @@ public abstract class RealVector {
                 @Override
                 public void setValue(double value)
                     throws MathRuntimeException {
-                    throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                    throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
                 }
             }
         };

@@ -21,7 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -118,7 +118,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         this(parameters, order, value);
 
         if (index >= parameters) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                    index, parameters);
         }
 
@@ -205,7 +205,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         throws MathIllegalArgumentException {
         this(parameters, order);
         if (derivatives.length != data.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    derivatives.length, data.length);
         }
         System.arraycopy(derivatives, 0, data, 0, data.length);
@@ -610,7 +610,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     public DerivativeStructure compose(final double ... f)
         throws MathIllegalArgumentException {
         if (f.length != getOrder() + 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    f.length, getOrder() + 1);
         }
         final DerivativeStructure result = new DerivativeStructure(compiler);

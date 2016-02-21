@@ -19,7 +19,7 @@ package org.hipparchus.optim.linear;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedOptimFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
@@ -324,7 +324,7 @@ public class SimplexSolver extends LinearOptimizer {
         Integer pivotCol = getPivotColumn(tableau);
         Integer pivotRow = getPivotRow(tableau, pivotCol);
         if (pivotRow == null) {
-            throw new MathIllegalStateException(LocalizedFormats.UNBOUNDED_SOLUTION);
+            throw new MathIllegalStateException(LocalizedOptimFormats.UNBOUNDED_SOLUTION);
         }
 
         tableau.performRowOperations(pivotCol, pivotRow);
@@ -354,7 +354,7 @@ public class SimplexSolver extends LinearOptimizer {
 
         // if W is not zero then we have no feasible solution
         if (!Precision.equals(tableau.getEntry(0, tableau.getRhsOffset()), 0d, epsilon)) {
-            throw new MathIllegalStateException(LocalizedFormats.NO_FEASIBLE_SOLUTION);
+            throw new MathIllegalStateException(LocalizedOptimFormats.NO_FEASIBLE_SOLUTION);
         }
     }
 
@@ -400,7 +400,7 @@ public class SimplexSolver extends LinearOptimizer {
             final double[] coeff = solution.getPoint();
             for (int i = 0; i < coeff.length; i++) {
                 if (Precision.compareTo(coeff[i], 0, epsilon) < 0) {
-                    throw new MathIllegalStateException(LocalizedFormats.NO_FEASIBLE_SOLUTION);
+                    throw new MathIllegalStateException(LocalizedOptimFormats.NO_FEASIBLE_SOLUTION);
                 }
             }
         }

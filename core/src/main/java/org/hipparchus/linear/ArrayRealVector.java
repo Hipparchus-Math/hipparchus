@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -119,7 +119,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
             throw new NullArgumentException();
         }
         if (d.length < pos + size) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                    pos + size, d.length);
         }
         data = new double[size];
@@ -154,7 +154,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
             throw new NullArgumentException();
         }
         if (d.length < pos + size) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                    pos + size, d.length);
         }
         data = new double[size];
@@ -596,7 +596,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
         try {
             return data[index];
         } catch (IndexOutOfBoundsException e) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, index, 0,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX, index, 0,
                 getDimension() - 1);
         }
     }
@@ -641,7 +641,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     public RealVector getSubVector(int index, int n)
         throws MathIllegalArgumentException {
         if (n < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
         ArrayRealVector out = new ArrayRealVector(n);
         try {
@@ -670,7 +670,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
         try {
         data[index] += increment;
         } catch(IndexOutOfBoundsException e){
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX,
                                           index, 0, data.length - 1);
         }
     }
@@ -753,7 +753,7 @@ public class ArrayRealVector extends RealVector implements Serializable {
     protected void checkVectorDimensions(int n)
         throws MathIllegalArgumentException {
         if (data.length != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    data.length, n);
         }
     }

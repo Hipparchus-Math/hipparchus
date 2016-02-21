@@ -18,8 +18,9 @@ package org.hipparchus.geometry.euclidean.twod;
 
 import java.text.NumberFormat;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
@@ -79,7 +80,7 @@ public class Vector2D implements Vector<Euclidean2D> {
      */
     public Vector2D(double[] v) throws MathIllegalArgumentException {
         if (v.length != 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, 2);
         }
         this.x = v[0];
@@ -237,7 +238,7 @@ public class Vector2D implements Vector<Euclidean2D> {
     public Vector2D normalize() throws MathRuntimeException {
         double s = getNorm();
         if (s == 0) {
-            throw new MathRuntimeException(LocalizedFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
+            throw new MathRuntimeException(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
         }
         return scalarMultiply(1 / s);
     }
@@ -257,7 +258,7 @@ public class Vector2D implements Vector<Euclidean2D> {
 
         double normProduct = v1.getNorm() * v2.getNorm();
         if (normProduct == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
 
         double dot = v1.dotProduct(v2);

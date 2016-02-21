@@ -18,7 +18,8 @@ package org.hipparchus.geometry.euclidean.twod.hull;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.Line;
@@ -65,7 +66,7 @@ public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializ
         this.tolerance = tolerance;
 
         if (!isConvex(vertices)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NOT_CONVEX);
+            throw new MathIllegalArgumentException(LocalizedGeometryFormats.NOT_CONVEX);
         }
 
         this.vertices = vertices.clone();
@@ -160,7 +161,7 @@ public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializ
     @Override
     public Region<Euclidean2D> createRegion() throws MathIllegalArgumentException {
         if (vertices.length < 3) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DATA);
         }
         final RegionFactory<Euclidean2D> factory = new RegionFactory<Euclidean2D>();
         final Segment[] segments = retrieveLineSegments();

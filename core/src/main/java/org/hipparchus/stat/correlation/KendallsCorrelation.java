@@ -19,7 +19,7 @@ package org.hipparchus.stat.correlation;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
@@ -156,7 +156,7 @@ public class KendallsCorrelation {
             throws MathIllegalArgumentException {
 
         if (xArray.length != yArray.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xArray.length, yArray.length);
         }
 

@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 
@@ -219,7 +220,7 @@ public class JacobianMatrices {
             }
         }
 
-        throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, parameter);
+        throw new MathIllegalArgumentException(LocalizedODEFormats.UNKNOWN_PARAMETER, parameter);
 
     }
 
@@ -280,7 +281,7 @@ public class JacobianMatrices {
             i += stateDim;
         }
 
-        throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, pName);
+        throw new MathIllegalArgumentException(LocalizedODEFormats.UNKNOWN_PARAMETER, pName);
 
     }
 
@@ -329,7 +330,7 @@ public class JacobianMatrices {
         throws MathIllegalArgumentException {
         int arrayDimension = (array == null) ? 0 : Array.getLength(array);
         if (arrayDimension != expected) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    arrayDimension, expected);
         }
     }
@@ -439,7 +440,7 @@ public class JacobianMatrices {
             this.ode = ode;
             this.hY = hY.clone();
             if (hY.length != ode.getDimension()) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        ode.getDimension(), hY.length);
             }
         }
@@ -489,7 +490,7 @@ public class JacobianMatrices {
 
         /** Simple constructor. */
         public MismatchedEquations() {
-            super(LocalizedFormats.UNMATCHED_ODE_IN_EXPANDED_SET);
+            super(LocalizedODEFormats.UNMATCHED_ODE_IN_EXPANDED_SET);
         }
 
     }

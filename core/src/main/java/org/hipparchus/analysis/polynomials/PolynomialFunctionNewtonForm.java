@@ -18,7 +18,7 @@ package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
@@ -235,10 +235,10 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
         MathUtils.checkNotNull(a);
         MathUtils.checkNotNull(c);
         if (a.length == 0 || c.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
         if (a.length != c.length + 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ARRAY_SIZES_SHOULD_HAVE_DIFFERENCE_1,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ARRAY_SIZES_SHOULD_HAVE_DIFFERENCE_1,
                                                  a.length, c.length);
         }
     }

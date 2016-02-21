@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -91,7 +91,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
                                    final int columnDimension)
         throws MathIllegalArgumentException {
         if (rowDimension != columnDimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    rowDimension, columnDimension);
         }
 
@@ -312,7 +312,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
      */
     private void ensureZero(final double value) throws MathIllegalArgumentException {
         if (!Precision.equals(0.0, value, 1)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                    FastMath.abs(value), 0);
         }
     }
@@ -341,7 +341,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
      */
     public DiagonalMatrix inverse(double threshold) throws MathIllegalArgumentException {
         if (isSingular(threshold)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
         }
 
         final double[] result = new double[data.length];

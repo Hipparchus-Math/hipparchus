@@ -21,7 +21,7 @@ import org.hipparchus.ml.neuralnet.MapUtils;
 import org.hipparchus.ml.neuralnet.Neuron;
 import org.hipparchus.ml.neuralnet.twod.NeuronSquareMesh2D;
 import org.hipparchus.ml.distance.DistanceMeasure;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -74,7 +74,7 @@ public class SmoothedDataHistogram implements MapDataVisualization {
 
         final int mapSize = nR * nC;
         if (mapSize < smoothingBins) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    mapSize, smoothingBins);
         }
 

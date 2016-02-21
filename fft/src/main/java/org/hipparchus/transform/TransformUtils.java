@@ -19,7 +19,8 @@ package org.hipparchus.transform;
 import java.util.Arrays;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedFFTFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -123,13 +124,13 @@ public class TransformUtils {
         throws MathIllegalArgumentException {
 
         if (dataRI.length != 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    dataRI.length, 2);
         }
         final double[] dataR = dataRI[0];
         final double[] dataI = dataRI[1];
         if (dataR.length != dataI.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    dataI.length, dataR.length);
         }
 
@@ -155,9 +156,8 @@ public class TransformUtils {
 
         int index = Arrays.binarySearch(TransformUtils.POWERS_OF_TWO, n);
         if (index < 0) {
-            throw new MathIllegalArgumentException(
-                    LocalizedFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
-                    Integer.valueOf(n));
+            throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
+                                                   Integer.valueOf(n));
         }
         return index;
     }

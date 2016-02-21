@@ -16,7 +16,7 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomVectorGenerator;
@@ -81,7 +81,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
         super(optimizer.getConvergenceChecker());
 
         if (starts < 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    starts, 1);
         }
 
@@ -155,10 +155,10 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
             }
         }
         if (maxEvalIndex == -1) {
-            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+            throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
         }
         if (initialGuessIndex == -1) {
-            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+            throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
         }
 
         RuntimeException lastException = null;
@@ -184,7 +184,7 @@ public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
                     int attempts = 0;
                     while (s == null) {
                         if (attempts++ >= getMaxEvaluations()) {
-                            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED,
+                            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
                                                                 getMaxEvaluations());
                         }
                         s = generator.nextVector();

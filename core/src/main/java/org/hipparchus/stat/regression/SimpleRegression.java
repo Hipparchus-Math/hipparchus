@@ -19,7 +19,7 @@ package org.hipparchus.stat.regression;
 import java.io.Serializable;
 
 import org.hipparchus.distribution.TDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -256,7 +256,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     public void addData(final double[][] data) throws MathIllegalArgumentException {
         for (int i = 0; i < data.length; i++) {
             if( data[i].length < 2 ){
-               throw new MathIllegalArgumentException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,
+               throw new MathIllegalArgumentException(LocalizedCoreFormats.INVALID_REGRESSION_OBSERVATION,
                     data[i].length, 2);
             }
             addData(data[i][0], data[i][1]);
@@ -275,7 +275,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     public void addObservation(final double[] x,final double y)
             throws MathIllegalArgumentException {
         if( x == null || x.length == 0 ){
-            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_REGRESSION_OBSERVATION,x!=null?x.length:0, 1);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INVALID_REGRESSION_OBSERVATION,x!=null?x.length:0, 1);
         }
         addData( x[0], y );
     }
@@ -294,7 +294,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     public void addObservations(final double[][] x,final double[] y) throws MathIllegalArgumentException {
         if ((x == null) || (y == null) || (x.length != y.length)) {
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.DIMENSIONS_MISMATCH,
+                  LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                   (x == null) ? 0 : x.length,
                   (y == null) ? 0 : y.length);
         }
@@ -306,7 +306,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
         }
         if( !obsOk ){
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
+                  LocalizedCoreFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                   0, 1);
         }
         for( int i = 0 ; i < x.length ; i++){
@@ -691,7 +691,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
             return Double.NaN;
         }
         if (alpha >= 1 || alpha <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SIGNIFICANCE_LEVEL,
                                           alpha, 0, 1);
         }
         // No advertised MathIllegalArgumentException here - will return NaN above
@@ -775,7 +775,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     public RegressionResults regress() throws MathIllegalArgumentException {
         if (hasIntercept) {
             if (n < 3) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_ENOUGH_DATA_REGRESSION);
             }
             if (FastMath.abs(sumXX) > Precision.SAFE_MIN) {
                 final double[] params = new double[] { getIntercept(), getSlope() };
@@ -793,7 +793,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
             }
         } else {
             if (n < 2) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_DATA_REGRESSION);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_ENOUGH_DATA_REGRESSION);
             }
             if (!Double.isNaN(sumXX)) {
                 final double[] vcv = new double[] { getMeanSquareError() / sumXX };
@@ -820,30 +820,30 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     @Override
     public RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException {
         if (variablesToInclude == null || variablesToInclude.length == 0) {
-          throw new MathIllegalArgumentException(LocalizedFormats.ARRAY_ZERO_LENGTH_OR_NULL_NOT_ALLOWED);
+          throw new MathIllegalArgumentException(LocalizedCoreFormats.ARRAY_ZERO_LENGTH_OR_NULL_NOT_ALLOWED);
         }
         if (variablesToInclude.length > 2 || (variablesToInclude.length > 1 && !hasIntercept)) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.ARRAY_SIZE_EXCEEDS_MAX_VARIABLES,
+                    LocalizedCoreFormats.ARRAY_SIZE_EXCEEDS_MAX_VARIABLES,
                     (variablesToInclude.length > 1 && !hasIntercept) ? 1 : 2);
         }
 
         if (hasIntercept) {
             if (variablesToInclude.length == 2) {
                 if (variablesToInclude[0] == 1) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NOT_INCREASING_SEQUENCE);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_INCREASING_SEQUENCE);
                 } else if (variablesToInclude[0] != 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                            variablesToInclude[0], 0,1);
                 }
                 if (variablesToInclude[1] != 1) {
-                     throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                     throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                             variablesToInclude[0], 0,1);
                 }
                 return regress();
             }else{
                 if( variablesToInclude[0] != 1 && variablesToInclude[0] != 0 ) {
-                     throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                     throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                             variablesToInclude[0],0,1);
                 }
                 final double _mean = sumY * sumY / n;
@@ -879,7 +879,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
             }
         } else {
             if (variablesToInclude[0] != 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                        variablesToInclude[0], 0, 0);
             }
             return regress();

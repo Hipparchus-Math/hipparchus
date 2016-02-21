@@ -22,7 +22,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedLegacyFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ml.distance.DistanceMeasure;
@@ -200,7 +201,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         // number of clusters has to be smaller or equal the number of data points
         if (points.size() < k) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    points.size(), k);
         }
 
@@ -231,7 +232,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
                             newCenter = getFarthestPoint(clusters);
                             break;
                         default :
-                            throw new MathIllegalStateException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
+                            throw new MathIllegalStateException(LocalizedLegacyFormats.EMPTY_CLUSTER_IN_K_MEANS);
                     }
                     emptyCluster = true;
                 } else {
@@ -437,7 +438,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         // did we find at least one non-empty cluster ?
         if (selected == null) {
-            throw new MathIllegalStateException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
+            throw new MathIllegalStateException(LocalizedLegacyFormats.EMPTY_CLUSTER_IN_K_MEANS);
         }
 
         // extract a random point from the cluster
@@ -473,7 +474,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         // did we find at least one non-empty cluster ?
         if (selected == null) {
-            throw new MathIllegalStateException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
+            throw new MathIllegalStateException(LocalizedLegacyFormats.EMPTY_CLUSTER_IN_K_MEANS);
         }
 
         // extract a random point from the cluster
@@ -512,7 +513,7 @@ public class KMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T>
 
         // did we find at least one non-empty cluster ?
         if (selectedCluster == null) {
-            throw new MathIllegalStateException(LocalizedFormats.EMPTY_CLUSTER_IN_K_MEANS);
+            throw new MathIllegalStateException(LocalizedLegacyFormats.EMPTY_CLUSTER_IN_K_MEANS);
         }
 
         return selectedCluster.getPoints().remove(selectedPoint);

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.primes;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 import java.util.List;
@@ -72,7 +72,7 @@ public class Primes {
      */
     public static int nextPrime(int n) {
         if (n < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, n, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, n, 0);
         }
         if (n == 2) {
             return 2;
@@ -117,7 +117,7 @@ public class Primes {
     public static List<Integer> primeFactors(int n) {
 
         if (n < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, n, 2);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, n, 2);
         }
         return SmallPrimes.trialDivision(n);
 

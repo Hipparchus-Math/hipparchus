@@ -20,7 +20,7 @@ package org.hipparchus.primes;
 import java.util.HashSet;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.primes.Primes;
 import org.hipparchus.primes.SmallPrimes;
@@ -108,9 +108,9 @@ public class PrimesTest {
         Assert.assertEquals(Integer.MAX_VALUE, Primes.nextPrime(Integer.MAX_VALUE - 1));
         Assert.assertEquals(Integer.MAX_VALUE, Primes.nextPrime(Integer.MAX_VALUE));
 
-        assertNextPrimeException(Integer.MIN_VALUE, new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,Integer.MIN_VALUE,0));
-        assertNextPrimeException(-1, new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,-1,0));
-        assertNextPrimeException(-13, new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,-13,0));
+        assertNextPrimeException(Integer.MIN_VALUE, new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,Integer.MIN_VALUE,0));
+        assertNextPrimeException(-1, new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,-1,0));
+        assertNextPrimeException(-13, new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,-13,0));
     }
 
     @Test
@@ -157,7 +157,7 @@ public class PrimesTest {
     @Test
     public void testPrimeFactors() throws Exception {
         for (int i : BELOW_2) {
-            assertPrimeFactorsException(i, new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,i,2));
+            assertPrimeFactorsException(i, new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,i,2));
         }
         for (int i : NOT_PRIMES) {
             List<Integer> factors = Primes.primeFactors(i);

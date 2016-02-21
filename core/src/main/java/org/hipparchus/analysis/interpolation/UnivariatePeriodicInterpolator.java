@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -85,7 +85,7 @@ public class UnivariatePeriodicInterpolator
                                           double[] yval)
         throws MathIllegalArgumentException {
         if (xval.length < extend) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    xval.length, extend);
         }
 

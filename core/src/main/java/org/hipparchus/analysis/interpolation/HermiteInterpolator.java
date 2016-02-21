@@ -23,7 +23,7 @@ import java.util.List;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableVectorFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.CombinatoricsUtils;
@@ -103,7 +103,7 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
                 final double[] bottom1 = bottomDiagonal.get(n - (j + 1));
                 final double inv = 1.0 / (x - abscissae.get(n - (j + 1)));
                 if (Double.isInfinite(inv)) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
                 }
                 for (int k = 0; k < y.length; ++k) {
                     bottom1[k] = inv * (bottom0[k] - bottom1[k]);
@@ -224,7 +224,7 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
      */
     private void checkInterpolation() throws MathIllegalArgumentException {
         if (abscissae.isEmpty()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_INTERPOLATION_SAMPLE);
         }
     }
 

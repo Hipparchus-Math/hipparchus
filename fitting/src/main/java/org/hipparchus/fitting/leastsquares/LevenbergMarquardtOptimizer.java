@@ -18,7 +18,7 @@ package org.hipparchus.fitting.leastsquares;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFittingFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.linear.ArrayRealVector;
@@ -533,13 +533,13 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 if (FastMath.abs(actRed) <= TWO_EPS &&
                     preRed <= TWO_EPS &&
                     ratio <= 2.0) {
-                    throw new MathIllegalStateException(LocalizedFormats.TOO_SMALL_COST_RELATIVE_TOLERANCE,
+                    throw new MathIllegalStateException(LocalizedFittingFormats.TOO_SMALL_COST_RELATIVE_TOLERANCE,
                                                         costRelativeTolerance);
                 } else if (delta <= TWO_EPS * xNorm) {
-                    throw new MathIllegalStateException(LocalizedFormats.TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE,
+                    throw new MathIllegalStateException(LocalizedFittingFormats.TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE,
                                                         parRelativeTolerance);
                 } else if (maxCosine <= TWO_EPS) {
-                    throw new MathIllegalStateException(LocalizedFormats.TOO_SMALL_ORTHOGONALITY_TOLERANCE,
+                    throw new MathIllegalStateException(LocalizedFittingFormats.TOO_SMALL_ORTHOGONALITY_TOLERANCE,
                                                         orthoTolerance);
                 }
             }
@@ -971,7 +971,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                     norm2 += aki * aki;
                 }
                 if (Double.isInfinite(norm2) || Double.isNaN(norm2)) {
-                    throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN,
+                    throw new MathIllegalStateException(LocalizedFittingFormats.UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN,
                                                         nR, nC);
                 }
                 if (norm2 > ak2) {

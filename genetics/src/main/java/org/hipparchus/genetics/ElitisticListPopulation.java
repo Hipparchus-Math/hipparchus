@@ -19,7 +19,7 @@ package org.hipparchus.genetics;
 import java.util.Collections;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -100,7 +100,7 @@ public class ElitisticListPopulation extends ListPopulation {
      */
     public void setElitismRate(final double elitismRate) throws MathIllegalArgumentException {
         if (elitismRate < 0 || elitismRate > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ELITISM_RATE, elitismRate, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.ELITISM_RATE, elitismRate, 0, 1);
         }
         this.elitismRate = elitismRate;
     }

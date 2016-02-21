@@ -24,7 +24,7 @@ import java.util.HashSet;
 import org.hipparchus.distribution.EnumeratedRealDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -386,7 +386,7 @@ public class KolmogorovSmirnovTest {
      */
     public boolean kolmogorovSmirnovTest(RealDistribution distribution, double[] data, double alpha) {
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
         }
         return kolmogorovSmirnovTest(distribution, data) < alpha;
     }
@@ -623,7 +623,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         ret = sum * FastMath.sqrt(2 * FastMath.PI) / z;
 
@@ -644,7 +644,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         final double sqrtHalfPi = FastMath.sqrt(FastMath.PI / 2);
         // Instead of doubling sum, divide by 3 instead of 6
@@ -670,7 +670,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         double sum2 = 0;
         kTerm2 = 0;
@@ -683,7 +683,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         // Again, adjust coefficients instead of doubling sum, sum2
         ret += (sqrtHalfPi / n) * (sum / (36 * z2 * z2 * z2 * z) - sum2 / (18 * z2 * z));
@@ -708,7 +708,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         sum2 = 0;
         for (k = 1; k < MAXIMUM_PARTIAL_SUM_COUNT; k++) {
@@ -722,7 +722,7 @@ public class KolmogorovSmirnovTest {
             }
         }
         if (k == MAXIMUM_PARTIAL_SUM_COUNT) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, MAXIMUM_PARTIAL_SUM_COUNT);
         }
         return ret + (sqrtHalfPi / (sqrtN * n)) * (sum / (3240 * z6 * z4) +
                 + sum2 / (108 * z6));
@@ -747,7 +747,7 @@ public class KolmogorovSmirnovTest {
         final int m = 2 * k - 1;
         final double hDouble = k - n * d;
         if (hDouble >= 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                    hDouble, 1.0);
         }
         BigFraction h = null;
@@ -837,7 +837,7 @@ public class KolmogorovSmirnovTest {
         final int m = 2 * k - 1;
         final double h = k - n * d;
         if (h >= 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                    h, 1.0);
         }
         final double[][] Hdata = new double[m][m];
@@ -910,10 +910,10 @@ public class KolmogorovSmirnovTest {
      */
     private void checkArray(double[] array) {
         if (array == null) {
-            throw new NullArgumentException(LocalizedFormats.NULL_NOT_ALLOWED);
+            throw new NullArgumentException(LocalizedCoreFormats.NULL_NOT_ALLOWED);
         }
         if (array.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, array.length,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, array.length,
                                                 2);
         }
     }
@@ -950,7 +950,7 @@ public class KolmogorovSmirnovTest {
             i++;
         }
         if (i == maxIterations) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, maxIterations);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, maxIterations);
         }
         return partialSum * 2;
     }

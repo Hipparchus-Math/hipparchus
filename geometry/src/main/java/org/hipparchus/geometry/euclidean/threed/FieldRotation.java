@@ -21,10 +21,10 @@ import java.io.Serializable;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -149,7 +149,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
         final T norm = axis.getNorm();
         if (norm.getReal() == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NORM_FOR_ROTATION_AXIS);
+            throw new MathIllegalArgumentException(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_AXIS);
         }
 
         final T halfAngle = angle.multiply(convention == RotationConvention.VECTOR_OPERATOR ? -0.5 : 0.5);
@@ -198,7 +198,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         // dimension check
         if ((m.length != 3) || (m[0].length != 3) ||
                 (m[1].length != 3) || (m[2].length != 3)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ROTATION_MATRIX_DIMENSIONS,
+            throw new MathIllegalArgumentException(LocalizedGeometryFormats.ROTATION_MATRIX_DIMENSIONS,
                                                    m.length, m[0].length);
         }
 
@@ -212,7 +212,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         final T det =
                 ort[0][0].multiply(d0).subtract(ort[1][0].multiply(d1)).add(ort[2][0].multiply(d2));
         if (det.getReal() < 0.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT,
+            throw new MathIllegalArgumentException(LocalizedGeometryFormats.CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT,
                                                    det);
         }
 
@@ -295,7 +295,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
         final T normProduct = u.getNorm().multiply(v.getNorm());
         if (normProduct.getReal() == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR);
+            throw new MathRuntimeException(LocalizedGeometryFormats.ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR);
         }
 
         final T dot = FieldVector3D.dotProduct(u, v);
@@ -628,7 +628,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
                 if  ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getY().negate().atan2(v1.getZ()),
                                   v2.getZ().asin(),
@@ -644,7 +644,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
                 if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getZ().atan2(v1.getY()),
                                   v2.getY().asin().negate(),
@@ -660,7 +660,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
                 if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getX().atan2(v1.getZ()),
                                   v2.getZ().asin().negate(),
@@ -676,7 +676,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
                 if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getZ().negate().atan2(v1.getX()),
                                   v2.getX().asin(),
@@ -692,7 +692,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
                 if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getX().negate().atan2(v1.getY()),
                                   v2.getY().asin(),
@@ -708,7 +708,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
                 if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getY().atan2(v1.getX()),
                                   v2.getX().asin().negate(),
@@ -724,7 +724,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
                 if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getY().atan2(v1.getZ().negate()),
                                   v2.getX().acos(),
@@ -740,7 +740,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(1, 0, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(1, 0, 0));
                 if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getZ().atan2(v1.getY()),
                                   v2.getX().acos(),
@@ -756,7 +756,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
                 if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getX().atan2(v1.getZ()),
                                   v2.getY().acos(),
@@ -772,7 +772,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(0, 1, 0));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 1, 0));
                 if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getZ().atan2(v1.getX().negate()),
                                   v2.getY().acos(),
@@ -788,7 +788,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
                 if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getX().atan2(v1.getY().negate()),
                                   v2.getZ().acos(),
@@ -804,7 +804,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 final FieldVector3D<T> v1 = applyTo(vector(0, 0, 1));
                 final FieldVector3D<T> v2 = applyInverseTo(vector(0, 0, 1));
                 if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v1.getY().atan2(v1.getX()),
                                   v2.getZ().acos(),
@@ -822,7 +822,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
                 if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getY().negate().atan2(v2.getZ()),
                                   v2.getX().asin(),
@@ -838,7 +838,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
                 if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getZ().atan2(v2.getY()),
                                   v2.getX().asin().negate(),
@@ -854,7 +854,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
                 if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getX().atan2(v2.getZ()),
                                   v2.getY().asin().negate(),
@@ -870,7 +870,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
                 if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getZ().negate().atan2(v2.getX()),
                                   v2.getY().asin(),
@@ -886,7 +886,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
                 if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getX().negate().atan2(v2.getY()),
                                   v2.getZ().asin(),
@@ -902,7 +902,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
                 if  ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.CARDAN_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.CARDAN_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getY().atan2(v2.getX()),
                                   v2.getZ().asin().negate(),
@@ -918,7 +918,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
                 if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getY().atan2(v2.getZ().negate()),
                                   v2.getX().acos(),
@@ -934,7 +934,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_I);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_I);
                 if ((v2.getX().getReal() < -0.9999999999) || (v2.getX().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getZ().atan2(v2.getY()),
                                   v2.getX().acos(),
@@ -950,7 +950,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
                 if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getX().atan2(v2.getZ()),
                                   v2.getY().acos(),
@@ -966,7 +966,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_J);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_J);
                 if ((v2.getY().getReal() < -0.9999999999) || (v2.getY().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getZ().atan2(v2.getX().negate()),
                                   v2.getY().acos(),
@@ -982,7 +982,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
                 if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getX().atan2(v2.getY().negate()),
                                   v2.getZ().acos(),
@@ -998,7 +998,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
                 FieldVector3D<T> v1 = applyTo(Vector3D.PLUS_K);
                 FieldVector3D<T> v2 = applyInverseTo(Vector3D.PLUS_K);
                 if ((v2.getZ().getReal() < -0.9999999999) || (v2.getZ().getReal() > 0.9999999999)) {
-                    throw new MathIllegalStateException(LocalizedFormats.EULER_ANGLES_SINGULARITY);
+                    throw new MathIllegalStateException(LocalizedGeometryFormats.EULER_ANGLES_SINGULARITY);
                 }
                 return buildArray(v2.getY().atan2(v2.getX()),
                                   v2.getZ().acos(),
@@ -1625,7 +1625,7 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         }
 
         // the algorithm did not converge after 10 iterations
-        throw new MathIllegalArgumentException(LocalizedFormats.UNABLE_TO_ORTHOGONOLIZE_MATRIX,
+        throw new MathIllegalArgumentException(LocalizedGeometryFormats.UNABLE_TO_ORTHOGONOLIZE_MATRIX,
                                                i - 1);
 
     }

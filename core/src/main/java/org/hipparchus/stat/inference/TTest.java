@@ -17,7 +17,7 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.TDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -1120,7 +1120,7 @@ public class TTest {
         throws MathIllegalArgumentException {
 
         if (alpha <= 0 || alpha > 0.5) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SIGNIFICANCE_LEVEL,
                                           alpha, 0.0, 0.5);
         }
 
@@ -1141,7 +1141,7 @@ public class TTest {
         }
         if (data.length < 2) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
+                    LocalizedCoreFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
                     data.length, 2, true);
         }
 
@@ -1162,7 +1162,7 @@ public class TTest {
         }
         if (stat.getN() < 2) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
+                    LocalizedCoreFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
                     stat.getN(), 2, true);
         }
 

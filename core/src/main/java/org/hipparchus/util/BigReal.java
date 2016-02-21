@@ -25,7 +25,7 @@ import java.math.RoundingMode;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 
 /**
@@ -256,7 +256,7 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
             return new BigReal(d.divide(a.d, scale, roundingMode));
         } catch (ArithmeticException e) {
             // Division by zero has occurred
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NOT_ALLOWED);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
         }
     }
 
@@ -271,7 +271,7 @@ public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Seri
             return new BigReal(BigDecimal.ONE.divide(d, scale, roundingMode));
         } catch (ArithmeticException e) {
             // Division by zero has occurred
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NOT_ALLOWED);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
         }
     }
 

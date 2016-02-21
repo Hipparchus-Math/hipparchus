@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -77,23 +77,23 @@ public class PiecewiseBicubicSplineInterpolatingFunction
             yLen == 0 ||
             f.length == 0 ||
             f[0].length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
 
         if (xLen < MIN_NUM_POINTS ||
             yLen < MIN_NUM_POINTS ||
             f.length < MIN_NUM_POINTS ||
             f[0].length < MIN_NUM_POINTS) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DATA);
         }
 
         if (xLen != f.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xLen, f.length);
         }
 
         if (yLen != f[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    yLen, f[0].length);
         }
 
@@ -181,7 +181,7 @@ public class PiecewiseBicubicSplineInterpolatingFunction
         int r = Arrays.binarySearch(val, c);
 
         if (r == -1 || r == -val.length - 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    c, val[0], val[val.length - 1]);
         }
 

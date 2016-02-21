@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -77,7 +77,7 @@ public class GumbelDistribution extends AbstractRealDistribution {
         super(rng);
 
         if (beta <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SCALE, beta);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE, beta);
         }
 
         this.beta = beta;
@@ -121,7 +121,7 @@ public class GumbelDistribution extends AbstractRealDistribution {
     @Override
     public double inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0.0, 1.0);
         } else if (p == 0) {
             return Double.NEGATIVE_INFINITY;

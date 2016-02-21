@@ -20,7 +20,7 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -84,7 +84,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
                                               final int maximalOrder)
         throws MathIllegalArgumentException {
         if (maximalOrder < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    maximalOrder, 2);
         }
         this.field                 = relativeAccuracy.getField();
@@ -245,7 +245,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
                 nbPoints        = 3;
                 signChangeIndex = 2;
             } else {
-                throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_BRACKETING_INTERVAL,
                                                        x[0].getReal(), x[2].getReal(),
                                                        y[0].getReal(), y[2].getReal());
             }

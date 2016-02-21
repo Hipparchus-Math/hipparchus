@@ -18,7 +18,7 @@ package org.hipparchus.geometry.euclidean.twod.hull;
 
 import java.util.Collection;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
@@ -103,7 +103,7 @@ abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
                                     tolerance);
         } catch (MathIllegalArgumentException e) {
             // the hull vertices may not form a convex hull if the tolerance value is to large
-            throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED);
+            throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
         }
     }
 

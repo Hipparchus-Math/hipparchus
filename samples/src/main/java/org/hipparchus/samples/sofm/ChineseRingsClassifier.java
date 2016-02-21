@@ -38,7 +38,7 @@ import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 
 /**
@@ -235,7 +235,7 @@ public class ChineseRingsClassifier {
 
                     /** {@inheritDoc} */
                     public void remove() {
-                        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                        throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
                     }
                 };
             }
@@ -271,7 +271,7 @@ public class ChineseRingsClassifier {
 
             /** {@inheritDoc} */
             public void remove() {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
         };
     }

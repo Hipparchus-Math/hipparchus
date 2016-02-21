@@ -16,7 +16,7 @@
  */
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.optim.ConvergenceChecker;
@@ -113,11 +113,11 @@ public class PowellOptimizer
         super(checker);
 
         if (rel < MIN_RELATIVE_TOLERANCE) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    rel, MIN_RELATIVE_TOLERANCE);
         }
         if (abs <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    abs, 0);
         }
         relativeThreshold = rel;
@@ -294,7 +294,7 @@ public class PowellOptimizer
     private void checkParameters() {
         if (getLowerBound() != null ||
             getUpperBound() != null) {
-            throw new MathRuntimeException(LocalizedFormats.CONSTRAINT);
+            throw new MathRuntimeException(LocalizedCoreFormats.CONSTRAINT);
         }
     }
 }

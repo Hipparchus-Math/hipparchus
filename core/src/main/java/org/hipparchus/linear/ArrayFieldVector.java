@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -98,7 +98,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             field = d[0].getField();
             data = d.clone();
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
     }
 
@@ -142,7 +142,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(d);
         if (d.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         field = d[0].getField();
         data = copyArray ? d.clone() : d;
@@ -184,7 +184,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(d);
         if (d.length < pos + size) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                    pos + size, d.length);
         }
         field = d[0].getField();
@@ -207,7 +207,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             throws MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(d);
         if (d.length < pos + size) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                    pos + size, d.length);
         }
         this.field = field;
@@ -344,7 +344,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         MathUtils.checkNotNull(v1);
         MathUtils.checkNotNull(v2);
         if (v1.length + v2.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         data = MathArrays.buildArray(v1[0].getField(), v1.length + v2.length);
         System.arraycopy(v1, 0, data, 0, v1.length);
@@ -368,7 +368,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         MathUtils.checkNotNull(v1);
         MathUtils.checkNotNull(v2);
         if (v1.length + v2.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         data = MathArrays.buildArray(field, v1.length + v2.length);
         System.arraycopy(v1, 0, data, 0, v1.length);
@@ -543,7 +543,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             try {
                 out[i] = one.divide(data[i]);
             } catch (final MathRuntimeException e) {
-                throw new MathRuntimeException(LocalizedFormats.INDEX, i);
+                throw new MathRuntimeException(LocalizedCoreFormats.INDEX, i);
             }
         }
         return new ArrayFieldVector<T>(field, out, false);
@@ -557,7 +557,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             try {
                 data[i] = one.divide(data[i]);
             } catch (final MathRuntimeException e) {
-                throw new MathRuntimeException(LocalizedFormats.INDEX, i);
+                throw new MathRuntimeException(LocalizedCoreFormats.INDEX, i);
             }
         }
         return this;
@@ -609,7 +609,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
                 try {
                     out[i] = data[i].divide(v.getEntry(i));
                 } catch (final MathRuntimeException e) {
-                    throw new MathRuntimeException(LocalizedFormats.INDEX, i);
+                    throw new MathRuntimeException(LocalizedCoreFormats.INDEX, i);
                 }
             }
             return new ArrayFieldVector<T>(field, out, false);
@@ -632,7 +632,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             try {
                 out[i] = data[i].divide(v.data[i]);
             } catch (final MathRuntimeException e) {
-                throw new MathRuntimeException(LocalizedFormats.INDEX, i);
+                throw new MathRuntimeException(LocalizedCoreFormats.INDEX, i);
             }
         }
         return new ArrayFieldVector<T>(field, out, false);
@@ -779,7 +779,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     public FieldVector<T> getSubVector(int index, int n)
         throws MathIllegalArgumentException {
         if (n < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
         ArrayFieldVector<T> out = new ArrayFieldVector<T>(field, n);
         try {
@@ -867,7 +867,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     protected void checkVectorDimensions(int n)
         throws MathIllegalArgumentException {
         if (data.length != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    data.length, n);
         }
     }
@@ -1089,7 +1089,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      */
     private void checkIndex(final int index) throws MathIllegalArgumentException {
         if (index < 0 || index >= getDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX,
                                           index, 0, getDimension() - 1);
         }
     }
@@ -1107,15 +1107,15 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
         throws MathIllegalArgumentException {
         final int dim = getDimension();
         if ((start < 0) || (start >= dim)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, start, 0,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX, start, 0,
                                           dim - 1);
         }
         if ((end < 0) || (end >= dim)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, end, 0,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX, end, 0,
                                           dim - 1);
         }
         if (end < start) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 end, start, false);
         }
     }

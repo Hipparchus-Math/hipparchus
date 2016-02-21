@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.MatrixUtils;
@@ -148,7 +148,7 @@ public class StorelessCovariance extends Covariance {
 
         int length = data.length;
         if (length != dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    length, dimension);
         }
 
@@ -174,7 +174,7 @@ public class StorelessCovariance extends Covariance {
      */
     public void append(StorelessCovariance sc) throws MathIllegalArgumentException {
         if (sc.dimension != dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    sc.dimension, dimension);
         }
 
@@ -226,6 +226,6 @@ public class StorelessCovariance extends Covariance {
     @Override
     public int getN()
         throws MathRuntimeException {
-        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+        throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
     }
 }

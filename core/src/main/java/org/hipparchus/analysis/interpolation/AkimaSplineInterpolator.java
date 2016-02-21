@@ -18,7 +18,7 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -71,12 +71,12 @@ public class AkimaSplineInterpolator
         }
 
         if (xvals.length != yvals.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xvals.length, yvals.length);
         }
 
         if (xvals.length < MINIMUM_NUMBER_POINTS) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_POINTS,
                                                 xvals.length,
                                                 MINIMUM_NUMBER_POINTS, true);
         }
@@ -171,18 +171,18 @@ public class AkimaSplineInterpolator
                                                               double[] yvals,
                                                               double[] firstDerivatives) {
         if (xvals.length != yvals.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xvals.length, yvals.length);
         }
 
         if (xvals.length != firstDerivatives.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xvals.length, firstDerivatives.length);
         }
 
         final int minimumLength = 2;
         if (xvals.length < minimumLength) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_POINTS,
                                                 xvals.length, minimumLength,
                                                 true);
         }

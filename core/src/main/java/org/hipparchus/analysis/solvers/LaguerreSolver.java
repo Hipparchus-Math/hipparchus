@@ -19,7 +19,7 @@ package org.hipparchus.analysis.solvers;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexUtils;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -123,7 +123,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
             return laguerre(initial, max);
         }
 
-        throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+        throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_BRACKETING_INTERVAL,
                                                min, max, yMin, yMax);
     }
 
@@ -265,7 +265,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
             }
             final int n = coefficients.length - 1;
             if (n == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.POLYNOMIAL);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.POLYNOMIAL);
             }
             // Coefficients for deflated polynomial.
             final Complex c[] = new Complex[n + 1];
@@ -314,7 +314,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
 
             final int n = coefficients.length - 1;
             if (n == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.POLYNOMIAL);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.POLYNOMIAL);
             }
 
             final double absoluteAccuracy = getAbsoluteAccuracy();

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -114,11 +114,11 @@ public class PascalDistribution extends AbstractIntegerDistribution {
         super(rng);
 
         if (r <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SUCCESSES,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SUCCESSES,
                                                    r);
         }
         if (p < 0 || p > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         }
 

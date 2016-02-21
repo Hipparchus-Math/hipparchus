@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -123,7 +123,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
                               double inverseCumAccuracy) {
         super(rng);
         if (scale <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SCALE, scale);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE, scale);
         }
         this.scale = scale;
         this.median = median;
@@ -171,7 +171,7 @@ public class CauchyDistribution extends AbstractRealDistribution {
     public double inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
         double ret;
         if (p < 0 || p > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         } else if (p == 0) {
             ret = Double.NEGATIVE_INFINITY;

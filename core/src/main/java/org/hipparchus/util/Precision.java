@@ -19,7 +19,7 @@ package org.hipparchus.util;
 
 import java.math.BigDecimal;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
@@ -562,7 +562,7 @@ public class Precision {
         }
         case BigDecimal.ROUND_UNNECESSARY :
             if (unscaled != FastMath.floor(unscaled)) {
-                throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
+                throw new MathRuntimeException(LocalizedCoreFormats.ARITHMETIC_EXCEPTION);
             }
             break;
         case BigDecimal.ROUND_UP :
@@ -572,7 +572,7 @@ public class Precision {
             }
             break;
         default :
-            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_ROUNDING_METHOD,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INVALID_ROUNDING_METHOD,
                                                    roundingMethod,
                                                    "ROUND_CEILING", BigDecimal.ROUND_CEILING,
                                                    "ROUND_DOWN", BigDecimal.ROUND_DOWN,

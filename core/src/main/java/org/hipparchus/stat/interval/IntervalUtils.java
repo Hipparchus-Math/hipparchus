@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -153,17 +153,17 @@ public final class IntervalUtils {
      */
     static void checkParameters(int numberOfTrials, int numberOfSuccesses, double confidenceLevel) {
         if (numberOfTrials <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_TRIALS, numberOfTrials);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_TRIALS, numberOfTrials);
         }
         if (numberOfSuccesses < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NEGATIVE_NUMBER_OF_SUCCESSES, numberOfSuccesses);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_NUMBER_OF_SUCCESSES, numberOfSuccesses);
         }
         if (numberOfSuccesses > numberOfTrials) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE,
                                                 numberOfSuccesses, numberOfTrials, true);
         }
         if (confidenceLevel <= 0 || confidenceLevel >= 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
                                           confidenceLevel, 0, 1);
         }
     }

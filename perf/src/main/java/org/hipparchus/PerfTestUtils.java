@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
@@ -155,7 +155,7 @@ public class PerfTestUtils {
             }
         } catch (Exception e) {
             // Abort benchmarking if codes throw exceptions.
-            throw new MathIllegalStateException(LocalizedFormats.SIMPLE_MESSAGE, e.getMessage());
+            throw new MathIllegalStateException(LocalizedCoreFormats.SIMPLE_MESSAGE, e.getMessage());
         }
 
         final double normFactor = 1d / repeatChunk;
@@ -319,7 +319,7 @@ public class PerfTestUtils {
                                    String ellipsis) {
         final int ellSize = ellipsis.length();
         if (ellSize > maxLength - 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                    ellSize, maxLength - 2);
         }
 

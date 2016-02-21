@@ -18,7 +18,7 @@ package org.hipparchus.util;
 
 import java.io.PrintStream;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 
 /**
@@ -3749,7 +3749,7 @@ public class FastMath {
      */
     public static int toIntExact(final long n) throws MathRuntimeException {
         if (n < Integer.MIN_VALUE || n > Integer.MAX_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW);
         }
         return (int) n;
     }
@@ -3763,7 +3763,7 @@ public class FastMath {
     public static int incrementExact(final int n) throws MathRuntimeException {
 
         if (n == Integer.MAX_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, n, 1);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_ADDITION, n, 1);
         }
 
         return n + 1;
@@ -3779,7 +3779,7 @@ public class FastMath {
     public static long incrementExact(final long n) throws MathRuntimeException {
 
         if (n == Long.MAX_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, n, 1);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_ADDITION, n, 1);
         }
 
         return n + 1;
@@ -3795,7 +3795,7 @@ public class FastMath {
     public static int decrementExact(final int n) throws MathRuntimeException {
 
         if (n == Integer.MIN_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, n, 1);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_SUBTRACTION, n, 1);
         }
 
         return n - 1;
@@ -3811,7 +3811,7 @@ public class FastMath {
     public static long decrementExact(final long n) throws MathRuntimeException {
 
         if (n == Long.MIN_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, n, 1);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_SUBTRACTION, n, 1);
         }
 
         return n - 1;
@@ -3832,7 +3832,7 @@ public class FastMath {
 
         // check for overflow
         if ((a ^ b) >= 0 && (sum ^ b) < 0) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, a, b);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_ADDITION, a, b);
         }
 
         return sum;
@@ -3853,7 +3853,7 @@ public class FastMath {
 
         // check for overflow
         if ((a ^ b) >= 0 && (sum ^ b) < 0) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, a, b);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_ADDITION, a, b);
         }
 
         return sum;
@@ -3874,7 +3874,7 @@ public class FastMath {
 
         // check for overflow
         if ((a ^ b) < 0 && (sub ^ b) >= 0) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, a, b);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_SUBTRACTION, a, b);
         }
 
         return sub;
@@ -3895,7 +3895,7 @@ public class FastMath {
 
         // check for overflow
         if ((a ^ b) < 0 && (sub ^ b) >= 0) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, a, b);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_SUBTRACTION, a, b);
         }
 
         return sub;
@@ -3913,7 +3913,7 @@ public class FastMath {
         if (((b  >  0)  && (a > Integer.MAX_VALUE / b || a < Integer.MIN_VALUE / b)) ||
             ((b  < -1)  && (a > Integer.MIN_VALUE / b || a < Integer.MAX_VALUE / b)) ||
             ((b == -1)  && (a == Integer.MIN_VALUE))) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_MULTIPLICATION, a, b);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_MULTIPLICATION, a, b);
         }
         return a * b;
     }
@@ -3929,7 +3929,7 @@ public class FastMath {
         if (((b  >  0l)  && (a > Long.MAX_VALUE / b || a < Long.MIN_VALUE / b)) ||
             ((b  < -1l)  && (a > Long.MIN_VALUE / b || a < Long.MAX_VALUE / b)) ||
             ((b == -1l)  && (a == Long.MIN_VALUE))) {
-                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_MULTIPLICATION, a, b);
+                throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_MULTIPLICATION, a, b);
             }
             return a * b;
     }
@@ -3950,7 +3950,7 @@ public class FastMath {
     public static int floorDiv(final int a, final int b) throws MathRuntimeException {
 
         if (b == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
 
         final int m = a % b;
@@ -3980,7 +3980,7 @@ public class FastMath {
     public static long floorDiv(final long a, final long b) throws MathRuntimeException {
 
         if (b == 0l) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
 
         final long m = a % b;
@@ -4010,7 +4010,7 @@ public class FastMath {
     public static int floorMod(final int a, final int b) throws MathRuntimeException {
 
         if (b == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
 
         final int m = a % b;
@@ -4040,7 +4040,7 @@ public class FastMath {
     public static long floorMod(final long a, final long b) {
 
         if (b == 0l) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
 
         final long m = a % b;

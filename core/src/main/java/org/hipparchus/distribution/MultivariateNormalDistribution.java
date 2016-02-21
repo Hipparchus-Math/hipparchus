@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.EigenDecomposition;
@@ -106,13 +106,13 @@ public class MultivariateNormalDistribution
         final int dim = means.length;
 
         if (covariances.length != dim) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    covariances.length, dim);
         }
 
         for (int i = 0; i < dim; i++) {
             if (dim != covariances[i].length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        covariances[i].length, dim);
             }
         }
@@ -134,7 +134,7 @@ public class MultivariateNormalDistribution
 
         for (int i = 0; i < covMatEigenvalues.length; i++) {
             if (covMatEigenvalues[i] < 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX);
             }
         }
 
@@ -181,7 +181,7 @@ public class MultivariateNormalDistribution
     public double density(final double[] vals) throws MathIllegalArgumentException {
         final int dim = getDimension();
         if (vals.length != dim) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    vals.length, dim);
         }
 

@@ -17,7 +17,7 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -121,7 +121,7 @@ public class RectangularCholeskyDecomposition {
             if (c[ir][ir] <= small) {
 
                 if (r == 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX);
                 }
 
                 // check remaining diagonal elements
@@ -129,7 +129,7 @@ public class RectangularCholeskyDecomposition {
                     if (c[index[i]][index[i]] < -small) {
                         // there is at least one sufficiently negative diagonal element,
                         // the symmetric positive semidefinite matrix is wrong
-                        throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
+                        throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX);
                     }
                 }
 

@@ -19,7 +19,7 @@ package org.hipparchus.random;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -53,7 +53,7 @@ public class UncorrelatedRandomVectorGenerator
                                            double[] standardDeviation,
                                            NormalizedRandomGenerator generator) {
     if (mean.length != standardDeviation.length) {
-        throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+        throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                mean.length, standardDeviation.length);
     }
     this.mean              = mean.clone();

@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -139,11 +139,11 @@ public class ParetoDistribution extends AbstractRealDistribution {
         super(rng);
 
         if (scale <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SCALE, scale);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE, scale);
         }
 
         if (shape <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SHAPE, shape);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SHAPE, shape);
         }
 
         this.scale = scale;

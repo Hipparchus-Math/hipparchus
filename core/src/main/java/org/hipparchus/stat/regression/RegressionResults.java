@@ -19,7 +19,7 @@ package org.hipparchus.stat.regression;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -153,7 +153,7 @@ public class RegressionResults implements Serializable {
             return Double.NaN;
         }
         if (index < 0 || index >= this.parameters.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    index, 0, this.parameters.length - 1);
         }
         return this.parameters[index];
@@ -191,7 +191,7 @@ public class RegressionResults implements Serializable {
             return Double.NaN;
         }
         if (index < 0 || index >= this.parameters.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    index, 0, this.parameters.length - 1);
         }
         double var = this.getVcvElement(index, index);
@@ -245,11 +245,11 @@ public class RegressionResults implements Serializable {
             return Double.NaN;
         }
         if (i < 0 || i >= this.parameters.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    i, 0, this.parameters.length - 1);
         }
         if (j < 0 || j >= this.parameters.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    j, 0, this.parameters.length - 1);
         }
         return this.getVcvElement(i, j);

@@ -19,7 +19,7 @@ package org.hipparchus.ode;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** This abstract class provides boilerplate parameters list.
@@ -75,7 +75,7 @@ public abstract class AbstractParameterizable implements Parameterizable {
     public void complainIfNotSupported(final String name)
         throws MathIllegalArgumentException {
         if (!isSupported(name)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, name);
+            throw new MathIllegalArgumentException(LocalizedODEFormats.UNKNOWN_PARAMETER, name);
         }
     }
 

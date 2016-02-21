@@ -22,7 +22,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -118,11 +119,11 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
 
         // the size of the three lists must be equal
         if (representation.size() != l) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    representation.size(), l);
         }
         if (sortedRepr.size() != l) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    sortedRepr.size(), l);
         }
 
@@ -181,7 +182,7 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
 
         for (double val : chromosomeRepresentation) {
             if (val < 0 || val > 1) {
-                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                          val, 0, 1);
             }
         }
@@ -261,7 +262,7 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
         throws MathIllegalArgumentException {
 
         if (originalData.size() != permutedData.size()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    permutedData.size(), originalData.size());
         }
         int l = originalData.size();
@@ -272,7 +273,7 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
         for (int i=0; i<l; i++) {
             int index = origDataCopy.indexOf(permutedData.get(i));
             if (index == -1) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIFFERENT_ORIG_AND_PERMUTED_DATA);
+                throw new MathIllegalArgumentException(LocalizedGeneticsFormats.DIFFERENT_ORIG_AND_PERMUTED_DATA);
             }
             res[index] = (double) i / l;
             origDataCopy.set(index, null);

@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -165,7 +165,7 @@ public class LogNormalDistribution extends AbstractRealDistribution {
         super(rng);
 
         if (shape <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SHAPE, shape);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SHAPE, shape);
         }
 
         this.scale = scale;
@@ -261,7 +261,7 @@ public class LogNormalDistribution extends AbstractRealDistribution {
                               double x1)
         throws MathIllegalArgumentException {
         if (x0 > x1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                                                 x0, x1, true);
         }
         if (x0 <= 0 || x1 <= 0) {

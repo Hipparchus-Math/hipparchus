@@ -22,7 +22,7 @@ import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -124,7 +124,7 @@ public class ValueServer {
             case GAUSSIAN_MODE: return getNextGaussian();
             case CONSTANT_MODE: return mu;
             default: throw new MathIllegalStateException(
-                    LocalizedFormats.UNKNOWN_MODE,
+                    LocalizedCoreFormats.UNKNOWN_MODE,
                     mode,
                     "DIGEST_MODE",   DIGEST_MODE,   "REPLAY_MODE",      REPLAY_MODE,
                     "UNIFORM_MODE",  UNIFORM_MODE,  "EXPONENTIAL_MODE", EXPONENTIAL_MODE,
@@ -369,7 +369,7 @@ public class ValueServer {
     private double getNextDigest() throws MathIllegalStateException {
         if ((empiricalDistribution == null) ||
             (empiricalDistribution.getBinStats().size() == 0)) {
-            throw new MathIllegalStateException(LocalizedFormats.DIGEST_NOT_INITIALIZED);
+            throw new MathIllegalStateException(LocalizedCoreFormats.DIGEST_NOT_INITIALIZED);
         }
         return empiricalDistribution.getNextValue();
     }
@@ -403,7 +403,7 @@ public class ValueServer {
             closeReplayFile();
             resetReplayFile();
             if ((str = filePointer.readLine()) == null) {
-                throw new MathIllegalStateException(LocalizedFormats.URL_CONTAINS_NO_DATA,
+                throw new MathIllegalStateException(LocalizedCoreFormats.URL_CONTAINS_NO_DATA,
                                                     valuesFileURL);
             }
         }

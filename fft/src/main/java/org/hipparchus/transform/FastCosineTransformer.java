@@ -21,7 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFFTFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
@@ -141,9 +141,8 @@ public class FastCosineTransformer implements RealTransformer, Serializable {
 
         final int n = f.length - 1;
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
-            throw new MathIllegalArgumentException(
-                LocalizedFormats.NOT_POWER_OF_TWO_PLUS_ONE,
-                Integer.valueOf(f.length));
+            throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO_PLUS_ONE,
+                                                   Integer.valueOf(f.length));
         }
         if (n == 1) {       // trivial case
             transformed[0] = 0.5 * (f[0] + f[1]);

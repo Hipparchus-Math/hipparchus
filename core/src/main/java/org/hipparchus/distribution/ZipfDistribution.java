@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -99,11 +99,11 @@ public class ZipfDistribution extends AbstractIntegerDistribution {
         super(rng);
 
         if (numberOfElements <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSION,
                                                    numberOfElements);
         }
         if (exponent <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EXPONENT,
                                                    exponent);
         }
 

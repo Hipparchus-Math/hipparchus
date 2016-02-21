@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -78,15 +78,15 @@ public abstract class IterativeLinearSolver {
         MathUtils.checkNotNull(b);
         MathUtils.checkNotNull(x0);
         if (a.getRowDimension() != a.getColumnDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_OPERATOR,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_OPERATOR,
                                                    a.getRowDimension(), a.getColumnDimension());
         }
         if (b.getDimension() != a.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    b.getDimension(), a.getRowDimension());
         }
         if (x0.getDimension() != a.getColumnDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    x0.getDimension(), a.getColumnDimension());
         }
     }

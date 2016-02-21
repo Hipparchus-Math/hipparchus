@@ -16,7 +16,7 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -34,7 +34,7 @@ public class MaxIter implements OptimizationData {
      */
     public MaxIter(int max) {
         if (max <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    max, 0);
         }
 

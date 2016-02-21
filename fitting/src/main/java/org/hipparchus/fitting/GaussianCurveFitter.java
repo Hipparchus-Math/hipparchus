@@ -23,7 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.hipparchus.analysis.function.Gaussian;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
@@ -210,10 +210,10 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
          */
         public ParameterGuesser(Collection<WeightedObservedPoint> observations) {
             if (observations == null) {
-                throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+                throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
             }
             if (observations.size() < 3) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                        observations.size(), 3);
             }
 
@@ -345,7 +345,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                                        double y)
             throws MathIllegalArgumentException {
             if (idxStep == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
             }
             final WeightedObservedPoint[] twoPoints
                 = getInterpolationPointsForY(points, startIdx, idxStep, y);
@@ -382,7 +382,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
                                                                    double y)
             throws MathIllegalArgumentException {
             if (idxStep == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
             }
             for (int i = startIdx;
                  idxStep < 0 ? i + idxStep >= 0 : i + idxStep < points.length;
@@ -401,7 +401,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
             // Boundaries are replaced by dummy values because the raised
             // exception is caught and the message never displayed.
             // TODO: Exceptions should not be used for flow control.
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    y, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
         }
 

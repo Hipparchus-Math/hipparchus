@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -282,7 +282,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     public FieldVector<T> getSubVector(int index, int n)
         throws MathIllegalArgumentException {
         if (n < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
         checkIndex(index);
         checkIndex(index + n - 1);
@@ -524,7 +524,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      */
     private void checkIndex(final int index) throws MathIllegalArgumentException {
         if (index < 0 || index >= getDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    index, 0, getDimension() - 1);
         }
     }
@@ -542,15 +542,15 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
         throws MathIllegalArgumentException {
         final int dim = getDimension();
         if ((start < 0) || (start >= dim)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, start, 0,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX, start, 0,
                                           dim - 1);
         }
         if ((end < 0) || (end >= dim)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX, end, 0,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX, end, 0,
                                           dim - 1);
         }
         if (end < start) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 end, start, false);
         }
     }
@@ -564,7 +564,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
     protected void checkVectorDimensions(int n)
         throws MathIllegalArgumentException {
         if (getDimension() != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    getDimension(), n);
         }
     }

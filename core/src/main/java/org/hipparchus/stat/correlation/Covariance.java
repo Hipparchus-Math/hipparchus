@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
@@ -242,10 +242,10 @@ public class Covariance {
         int length = xArray.length;
         if (length != yArray.length) {
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.DIMENSIONS_MISMATCH, length, yArray.length);
+                  LocalizedCoreFormats.DIMENSIONS_MISMATCH, length, yArray.length);
         } else if (length < 2) {
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, length, 2);
+                  LocalizedCoreFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, length, 2);
         } else {
             double xMean = mean.evaluate(xArray);
             double yMean = mean.evaluate(yArray);
@@ -287,7 +287,7 @@ public class Covariance {
         int nCols = matrix.getColumnDimension();
         if (nRows < 2 || nCols < 1) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.INSUFFICIENT_ROWS_AND_COLUMNS,
+                    LocalizedCoreFormats.INSUFFICIENT_ROWS_AND_COLUMNS,
                     nRows, nCols);
         }
     }

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.hipparchus.distribution.FDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -248,7 +248,7 @@ public class OneWayAnova {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+                    LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                     alpha, 0, 0.5);
         }
         return anovaPValue(categoryData) < alpha;
@@ -277,14 +277,14 @@ public class OneWayAnova {
         if (!allowOneElementData) {
             // check if we have enough categories
             if (categoryData.size() < 2) {
-                throw new MathIllegalArgumentException(LocalizedFormats.TWO_OR_MORE_CATEGORIES_REQUIRED,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.TWO_OR_MORE_CATEGORIES_REQUIRED,
                                                      categoryData.size(), 2);
             }
 
             // check if each category has enough data
             for (final SummaryStatistics array : categoryData) {
                 if (array.getN() <= 1) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED,
                                                          (int) array.getN(), 2);
                 }
             }

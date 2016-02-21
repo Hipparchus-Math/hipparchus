@@ -17,7 +17,7 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -78,10 +78,10 @@ public class WilcoxonSignedRankTest {
         }
         if (x.length == 0 ||
             y.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         if (y.length != x.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    y.length, x.length);
         }
     }
@@ -120,7 +120,7 @@ public class WilcoxonSignedRankTest {
         }
 
         if (z.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
 
         final double[] zAbs = new double[z.length];
@@ -310,7 +310,7 @@ public class WilcoxonSignedRankTest {
         final double Wmax = wilcoxonSignedRank(x, y);
 
         if (exactPValue && N > 30) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE, N, 30);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE, N, 30);
         }
 
         if (exactPValue) {

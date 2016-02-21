@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -137,11 +137,11 @@ public class WeibullDistribution extends AbstractRealDistribution {
         super(rng);
 
         if (alpha <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SHAPE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SHAPE,
                                                    alpha);
         }
         if (beta <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SCALE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE,
                                                    beta);
         }
         scale = beta;
@@ -229,7 +229,7 @@ public class WeibullDistribution extends AbstractRealDistribution {
     public double inverseCumulativeProbability(double p) {
         double ret;
         if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0.0, 1.0);
         } else if (p == 0) {
             ret = 0.0;

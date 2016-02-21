@@ -21,7 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFFTFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
@@ -141,12 +141,12 @@ public class FastSineTransformer implements RealTransformer, Serializable {
 
         if (!ArithmeticUtils.isPowerOfTwo(f.length)) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
+                    LocalizedFFTFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
                     Integer.valueOf(f.length));
         }
         if (f[0] != 0.0) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.FIRST_ELEMENT_NOT_ZERO,
+                    LocalizedFFTFormats.FIRST_ELEMENT_NOT_ZERO,
                     Double.valueOf(f[0]));
         }
         final int n = f.length;

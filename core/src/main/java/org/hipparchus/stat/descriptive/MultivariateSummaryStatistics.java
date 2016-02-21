@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
@@ -628,7 +628,7 @@ public class MultivariateSummaryStatistics
     private void checkEmpty() throws MathIllegalStateException {
         if (n > 0) {
             throw new MathIllegalStateException(
-                    LocalizedFormats.VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC, n);
+                    LocalizedCoreFormats.VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC, n);
         }
     }
 
@@ -639,7 +639,7 @@ public class MultivariateSummaryStatistics
      */
     private void checkDimension(int dimension) throws MathIllegalArgumentException {
         if (dimension != k) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    dimension, k);
         }
     }

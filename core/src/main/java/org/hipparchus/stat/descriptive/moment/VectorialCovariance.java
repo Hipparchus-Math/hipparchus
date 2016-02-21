@@ -19,7 +19,7 @@ package org.hipparchus.stat.descriptive.moment;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -64,7 +64,7 @@ public class VectorialCovariance implements Serializable {
      */
     public void increment(double[] v) throws MathIllegalArgumentException {
         if (v.length != sums.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, sums.length);
         }
         int k = 0;

@@ -17,7 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
@@ -220,12 +221,12 @@ public abstract class AdaptiveStepsizeIntegrator
       mainSetDimension = equations.getPrimaryMapper().getDimension();
 
       if ((vecAbsoluteTolerance != null) && (vecAbsoluteTolerance.length != mainSetDimension)) {
-          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+          throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                  mainSetDimension, vecAbsoluteTolerance.length);
       }
 
       if ((vecRelativeTolerance != null) && (vecRelativeTolerance.length != mainSetDimension)) {
-          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+          throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                  mainSetDimension, vecRelativeTolerance.length);
       }
 
@@ -325,8 +326,8 @@ public abstract class AdaptiveStepsizeIntegrator
           if (acceptSmall) {
               filteredH = forward ? minStep : -minStep;
           } else {
-              throw new MathIllegalArgumentException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
-                                                  FastMath.abs(h), minStep, true);
+              throw new MathIllegalArgumentException(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
+                                                     FastMath.abs(h), minStep, true);
           }
       }
 

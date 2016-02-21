@@ -19,7 +19,7 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 
@@ -55,8 +55,7 @@ public abstract class BinaryChromosome extends AbstractListChromosome<Integer> {
     protected void checkValidity(List<Integer> chromosomeRepresentation) throws MathIllegalArgumentException {
         for (int i : chromosomeRepresentation) {
             if (i < 0 || i >1) {
-                throw new MathIllegalArgumentException(LocalizedFormats.INVALID_BINARY_DIGIT,
-                                                         i);
+                throw new MathIllegalArgumentException(LocalizedGeneticsFormats.INVALID_BINARY_DIGIT, i);
             }
         }
     }

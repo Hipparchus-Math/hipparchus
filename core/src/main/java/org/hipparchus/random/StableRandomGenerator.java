@@ -16,7 +16,7 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -62,12 +62,12 @@ public class StableRandomGenerator implements NormalizedRandomGenerator {
         }
 
         if (!(alpha > 0d && alpha <= 2d)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_LEFT,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_LEFT,
                     alpha, 0, 2);
         }
 
         if (!(beta >= -1d && beta <= 1d)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                     beta, -1, 1);
         }
 

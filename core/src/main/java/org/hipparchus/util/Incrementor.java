@@ -16,7 +16,7 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 
@@ -67,7 +67,7 @@ public class Incrementor {
                  /** {@inheritDoc} */
                  @Override
                 public void trigger(int max) throws MathIllegalStateException {
-                     throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
+                     throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
                  }
              });
     }

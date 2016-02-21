@@ -19,7 +19,7 @@ package org.hipparchus.ode;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 
@@ -76,7 +76,7 @@ class ParameterizedWrapper implements ParameterizedODE {
     public double getParameter(String name)
         throws MathIllegalArgumentException {
         if (!isSupported(name)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, name);
+            throw new MathIllegalArgumentException(LocalizedODEFormats.UNKNOWN_PARAMETER, name);
         }
         return Double.NaN;
     }

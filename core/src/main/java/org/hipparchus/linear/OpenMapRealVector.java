@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -350,7 +350,7 @@ public class OpenMapRealVector extends SparseRealVector
         throws MathIllegalArgumentException {
         checkIndex(index);
         if (n < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_ELEMENTS_SHOULD_BE_POSITIVE, n);
         }
         checkIndex(index + n - 1);
         OpenMapRealVector res = new OpenMapRealVector(n);
@@ -633,7 +633,7 @@ public class OpenMapRealVector extends SparseRealVector
     public void unitize() throws MathRuntimeException {
         double norm = getNorm();
         if (isDefaultValue(norm)) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
         Iterator iter = entries.iterator();
         while (iter.hasNext()) {

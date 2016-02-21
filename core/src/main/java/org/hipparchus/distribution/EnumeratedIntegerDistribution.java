@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -146,7 +146,7 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
      */
     private static List<Pair<Integer, Double>>  createDistribution(int[] singletons, double[] probabilities) {
         if (singletons.length != probabilities.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    probabilities.length, singletons.length);
         }
 

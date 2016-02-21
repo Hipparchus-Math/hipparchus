@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.euclidean.twod;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Vector;
@@ -505,7 +505,7 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
             c11 = MathArrays.linearCombination(cXX, cYY, -cYX, cXY);
 
             if (FastMath.abs(c11) < 1.0e-20) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NON_INVERTIBLE_TRANSFORM);
+                throw new MathIllegalArgumentException(LocalizedGeometryFormats.NON_INVERTIBLE_TRANSFORM);
             }
 
         }

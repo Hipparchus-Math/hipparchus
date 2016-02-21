@@ -20,7 +20,7 @@ package org.hipparchus.analysis.function;
 import java.util.Arrays;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -66,10 +66,10 @@ public class StepFunction implements UnivariateFunction {
         }
         if (x.length == 0 ||
             y.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         if (y.length != x.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    y.length, x.length);
         }
         MathArrays.checkOrder(x);

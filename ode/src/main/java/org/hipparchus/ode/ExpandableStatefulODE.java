@@ -19,7 +19,7 @@ package org.hipparchus.ode;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 
@@ -195,7 +195,7 @@ public class ExpandableStatefulODE {
 
         // safety checks
         if (primaryState.length != this.primaryState.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    primaryState.length, this.primaryState.length);
         }
 
@@ -233,7 +233,7 @@ public class ExpandableStatefulODE {
 
         // safety checks
         if (secondaryState.length != localArray.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    secondaryState.length, localArray.length);
         }
 
@@ -270,7 +270,7 @@ public class ExpandableStatefulODE {
 
         // safety checks
         if (completeState.length != getTotalDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    completeState.length, getTotalDimension());
         }
 

@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -76,7 +76,7 @@ public class UniformIntegerDistribution extends AbstractIntegerDistribution {
 
         if (lower > upper) {
             throw new MathIllegalArgumentException(
-                            LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+                            LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                             lower, upper, true);
         }
         this.lower = lower;

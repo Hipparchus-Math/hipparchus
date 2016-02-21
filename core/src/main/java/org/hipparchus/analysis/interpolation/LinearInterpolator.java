@@ -18,7 +18,7 @@ package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
@@ -44,12 +44,12 @@ public class LinearInterpolator implements UnivariateInterpolator {
     public PolynomialSplineFunction interpolate(double x[], double y[])
         throws MathIllegalArgumentException {
         if (x.length != y.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    x.length, y.length);
         }
 
         if (x.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_POINTS,
                                                 x.length, 2, true);
         }
 

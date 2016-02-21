@@ -16,7 +16,7 @@
  */
 package org.hipparchus.filter;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -155,7 +155,7 @@ public class KalmanFilter {
         }
 
         if (transitionMatrix.getColumnDimension() != stateEstimation.getDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    transitionMatrix.getColumnDimension(),
                                                    stateEstimation.getDimension());
         }
@@ -172,7 +172,7 @@ public class KalmanFilter {
 
         // A must be a square matrix
         if (!transitionMatrix.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                     transitionMatrix.getRowDimension(),
                                                     transitionMatrix.getColumnDimension());
         }
@@ -183,7 +183,7 @@ public class KalmanFilter {
             controlMatrix.getRowDimension() > 0 &&
             controlMatrix.getColumnDimension() > 0 &&
             controlMatrix.getRowDimension() != transitionMatrix.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    controlMatrix.getRowDimension(),
                                                    controlMatrix.getColumnDimension(),
                                                    transitionMatrix.getRowDimension(),
@@ -195,7 +195,7 @@ public class KalmanFilter {
 
         // column dimension of H must be equal to row dimension of A
         if (measurementMatrix.getColumnDimension() != transitionMatrix.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    measurementMatrix.getRowDimension(),
                                                    measurementMatrix.getColumnDimension(),
                                                    measurementMatrix.getRowDimension(),
@@ -204,7 +204,7 @@ public class KalmanFilter {
 
         // row dimension of R must be equal to row dimension of H
         if (measNoise.getRowDimension() != measurementMatrix.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    measNoise.getRowDimension(),
                                                    measNoise.getColumnDimension(),
                                                    measurementMatrix.getRowDimension(),
@@ -297,7 +297,7 @@ public class KalmanFilter {
         // sanity checks
         if (u != null &&
             u.getDimension() != controlMatrix.getColumnDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    u.getDimension(), controlMatrix.getColumnDimension());
         }
 
@@ -352,7 +352,7 @@ public class KalmanFilter {
         // sanity checks
         MathUtils.checkNotNull(z);
         if (z.getDimension() != measurementMatrix.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    z.getDimension(), measurementMatrix.getRowDimension());
         }
 

@@ -19,7 +19,7 @@ package org.hipparchus.stat.descriptive.moment;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -51,7 +51,7 @@ public class VectorialMean implements Serializable {
      */
     public void increment(double[] v) throws MathIllegalArgumentException {
         if (v.length != means.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, means.length);
         }
         for (int i = 0; i < v.length; ++i) {

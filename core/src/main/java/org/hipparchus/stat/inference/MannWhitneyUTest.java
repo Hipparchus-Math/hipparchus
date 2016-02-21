@@ -17,7 +17,7 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -76,7 +76,7 @@ public class MannWhitneyUTest {
         }
         if (x.length == 0 ||
             y.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
     }
 

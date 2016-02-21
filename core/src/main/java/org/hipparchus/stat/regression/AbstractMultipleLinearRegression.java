@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.regression;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -112,11 +112,11 @@ public abstract class AbstractMultipleLinearRegression implements
             throw new NullArgumentException();
         }
         if (data.length != nobs * (nvars + 1)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    data.length, nobs * (nvars + 1));
         }
         if (nobs <= nvars) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, nobs, nvars + 1);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, nobs, nvars + 1);
         }
         double[] y = new double[nobs];
         final int cols = noIntercept ? nvars: nvars + 1;
@@ -147,7 +147,7 @@ public abstract class AbstractMultipleLinearRegression implements
             throw new NullArgumentException();
         }
         if (y.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         this.yVector = new ArrayRealVector(y);
     }
@@ -182,7 +182,7 @@ public abstract class AbstractMultipleLinearRegression implements
             throw new NullArgumentException();
         }
         if (x.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         if (noIntercept) {
             this.xMatrix = new Array2DRowRealMatrix(x, true);
@@ -191,7 +191,7 @@ public abstract class AbstractMultipleLinearRegression implements
             final double[][] xAug = new double[x.length][nVars + 1];
             for (int i = 0; i < x.length; i++) {
                 if (x[i].length != nVars) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                            x[i].length, nVars);
                 }
                 xAug[i][0] = 1.0d;
@@ -224,15 +224,15 @@ public abstract class AbstractMultipleLinearRegression implements
             throw new NullArgumentException();
         }
         if (x.length != y.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    y.length, x.length);
         }
         if (x.length == 0) {  // Must be no y data either
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         if (x[0].length + 1 > x.length) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
+                    LocalizedCoreFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                     x.length, x[0].length);
         }
     }
@@ -249,11 +249,11 @@ public abstract class AbstractMultipleLinearRegression implements
      */
     protected void validateCovarianceData(double[][] x, double[][] covariance) {
         if (x.length != covariance.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    x.length, covariance.length);
         }
         if (covariance.length > 0 && covariance.length != covariance[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    covariance.length, covariance[0].length);
         }
     }

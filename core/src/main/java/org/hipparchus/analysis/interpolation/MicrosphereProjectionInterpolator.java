@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
@@ -108,7 +108,7 @@ public class MicrosphereProjectionInterpolator
                                              double noInterpolationTolerance)
         throws MathIllegalArgumentException {
         if (exponent < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, exponent, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, exponent, 0);
         }
 
         this.microsphere = microsphere;
@@ -132,10 +132,10 @@ public class MicrosphereProjectionInterpolator
             throw new NullArgumentException();
         }
         if (xval.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         if (xval.length != yval.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);
         }
         if (xval[0] == null) {
@@ -143,7 +143,7 @@ public class MicrosphereProjectionInterpolator
         }
         final int dimension = microsphere.getDimension();
         if (dimension != xval[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xval[0].length, dimension);
         }
 

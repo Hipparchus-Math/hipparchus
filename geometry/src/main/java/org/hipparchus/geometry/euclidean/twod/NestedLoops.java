@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
@@ -86,7 +86,7 @@ class NestedLoops {
         throws MathIllegalArgumentException {
 
         if (loop[0] == null) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUTLINE_BOUNDARY_LOOP_OPEN);
+            throw new MathIllegalArgumentException(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN);
         }
 
         this.loop       = loop;
@@ -155,7 +155,7 @@ class NestedLoops {
         RegionFactory<Euclidean2D> factory = new RegionFactory<Euclidean2D>();
         for (final NestedLoops child : surrounded) {
             if (!factory.intersection(node.polygon, child.polygon).isEmpty()) {
-                throw new MathIllegalArgumentException(LocalizedFormats.CROSSING_BOUNDARY_LOOPS);
+                throw new MathIllegalArgumentException(LocalizedGeometryFormats.CROSSING_BOUNDARY_LOOPS);
             }
         }
 

@@ -20,7 +20,7 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -133,7 +133,7 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
                 throw new NullArgumentException();
             }
             if (param.length != 3) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        param.length, 3);
             }
         }

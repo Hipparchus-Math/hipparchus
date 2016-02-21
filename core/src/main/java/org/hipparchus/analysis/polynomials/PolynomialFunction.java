@@ -22,7 +22,7 @@ import java.util.Arrays;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -67,7 +67,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
         MathUtils.checkNotNull(c);
         int n = c.length;
         if (n == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
         while ((n > 1) && (c[n - 1] == 0)) {
             --n;
@@ -129,7 +129,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;
         if (n == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
         double result = coefficients[n - 1];
         for (int j = n - 2; j >= 0; j--) {
@@ -150,7 +150,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;
         if (n == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
         DerivativeStructure result =
                 new DerivativeStructure(t.getFreeParameters(), t.getOrder(), coefficients[n - 1]);
@@ -260,7 +260,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
         MathUtils.checkNotNull(coefficients);
         int n = coefficients.length;
         if (n == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
         if (n == 1) {
             return new double[]{0};

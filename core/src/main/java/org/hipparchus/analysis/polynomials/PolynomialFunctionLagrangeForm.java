@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -314,11 +314,11 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
     public static boolean verifyInterpolationArray(double x[], double y[], boolean abort)
         throws MathIllegalArgumentException {
         if (x.length != y.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    x.length, y.length);
         }
         if (x.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.WRONG_NUMBER_OF_POINTS, 2, x.length, true);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.WRONG_NUMBER_OF_POINTS, 2, x.length, true);
         }
 
         return MathArrays.checkOrder(x, MathArrays.OrderDirection.INCREASING, true, abort);

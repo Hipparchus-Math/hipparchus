@@ -17,7 +17,7 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.ChiSquaredDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -77,11 +77,11 @@ public class ChiSquareTest {
         throws MathIllegalArgumentException {
 
         if (expected.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, 2);
         }
         if (expected.length != observed.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, observed.length);
         }
         MathArrays.checkPositive(expected);
@@ -201,7 +201,7 @@ public class ChiSquareTest {
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                                           alpha, 0, 0.5);
         }
         return chiSquareTest(expected, observed) < alpha;
@@ -353,7 +353,7 @@ public class ChiSquareTest {
         throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                                           alpha, 0, 0.5);
         }
         return chiSquareTest(counts) < alpha;
@@ -404,11 +404,11 @@ public class ChiSquareTest {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, 2);
         }
         if (observed1.length != observed2.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, observed2.length);
         }
 
@@ -427,7 +427,7 @@ public class ChiSquareTest {
         }
         // Ensure neither sample is uniformly 0
         if (countSum1 == 0 || countSum2 == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
         }
         // Compare and compute weight only if different
         unequalCounts = countSum1 != countSum2;
@@ -441,7 +441,7 @@ public class ChiSquareTest {
         double obs2 = 0.0d;
         for (int i = 0; i < observed1.length; i++) {
             if (observed1[i] == 0 && observed2[i] == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY, i);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY, i);
             } else {
                 obs1 = observed1[i];
                 obs2 = observed2[i];
@@ -559,7 +559,7 @@ public class ChiSquareTest {
 
         if (alpha <= 0 ||
             alpha > 0.5) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                                           alpha, 0, 0.5);
         }
         return chiSquareTestDataSetsComparison(observed1, observed2) < alpha;
@@ -579,12 +579,12 @@ public class ChiSquareTest {
         throws MathIllegalArgumentException, NullArgumentException {
 
         if (in.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    in.length, 2);
         }
 
         if (in[0].length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    in[0].length, 2);
         }
 

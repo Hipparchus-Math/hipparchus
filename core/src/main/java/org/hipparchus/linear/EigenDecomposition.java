@@ -18,7 +18,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -339,14 +339,14 @@ public class EigenDecomposition {
      */
     public RealMatrix getSquareRoot() {
         if (!isSymmetric) {
-            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+            throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
         }
 
         final double[] sqrtEigenValues = new double[realEigenvalues.length];
         for (int i = 0; i < realEigenvalues.length; i++) {
             final double eigen = realEigenvalues[i];
             if (eigen <= 0) {
-                throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+                throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
             }
             sqrtEigenValues[i] = FastMath.sqrt(eigen);
         }
@@ -370,7 +370,7 @@ public class EigenDecomposition {
      */
     public DecompositionSolver getSolver() {
         if (hasComplexEigenvalues()) {
-            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+            throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
         }
         return new Solver(realEigenvalues, imagEigenvalues, eigenvectors);
     }
@@ -415,12 +415,12 @@ public class EigenDecomposition {
         @Override
         public RealVector solve(final RealVector b) {
             if (!isNonSingular()) {
-                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
             }
 
             final int m = realEigenvalues.length;
             if (b.getDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        b.getDimension(), m);
             }
 
@@ -442,12 +442,12 @@ public class EigenDecomposition {
         public RealMatrix solve(RealMatrix b) {
 
             if (!isNonSingular()) {
-                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
             }
 
             final int m = realEigenvalues.length;
             if (b.getRowDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        b.getRowDimension(), m);
             }
 
@@ -523,7 +523,7 @@ public class EigenDecomposition {
         @Override
         public RealMatrix getInverse() {
             if (!isNonSingular()) {
-                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
             }
 
             final int m = realEigenvalues.length;
@@ -610,7 +610,7 @@ public class EigenDecomposition {
                 }
                 if (m != j) {
                     if (its == MAX_ITER) {
-                        throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED,
+                        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED,
                                                             MAX_ITER);
                     }
                     its++;
@@ -781,7 +781,7 @@ public class EigenDecomposition {
 
         // we can not handle a matrix with zero norm
         if (Precision.equals(norm, 0.0, EPSILON)) {
-           throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+           throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
 
         // Backsubstitute to find vectors of upper triangular form

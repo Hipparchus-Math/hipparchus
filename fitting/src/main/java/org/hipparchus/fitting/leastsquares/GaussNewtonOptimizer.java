@@ -16,7 +16,8 @@
  */
 package org.hipparchus.fitting.leastsquares;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedFittingFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -71,7 +72,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                             .getSolver()
                             .solve(jTr);
                 } catch (MathIllegalArgumentException e) {
-                    throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
+                    throw new MathIllegalStateException(LocalizedFittingFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
                 }
             }
         },
@@ -92,7 +93,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                             .getSolver()
                             .solve(residuals);
                 } catch (MathIllegalArgumentException e) {
-                    throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
+                    throw new MathIllegalStateException(LocalizedFittingFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
                 }
             }
         },
@@ -118,8 +119,8 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                             .getSolver()
                             .solve(jTr);
                 } catch (MathIllegalArgumentException e) {
-                    if (e.getSpecifier() == LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX) {
-                        throw new MathIllegalStateException(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
+                    if (e.getSpecifier() == LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX) {
+                        throw new MathIllegalStateException(LocalizedFittingFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
                     } else {
                         throw e;
                     }

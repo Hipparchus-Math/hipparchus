@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.spherical.oned;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.util.FastMath;
@@ -71,7 +71,7 @@ public class Arc {
             this.upper  = this.lower + (upper - lower);
             this.middle = 0.5 * (this.lower + this.upper);
         } else {
-            throw new MathIllegalArgumentException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ENDPOINTS_NOT_AN_INTERVAL,
                                                 lower, upper, true);
         }
     }

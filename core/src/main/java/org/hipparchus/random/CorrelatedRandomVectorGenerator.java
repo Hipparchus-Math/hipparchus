@@ -17,7 +17,7 @@
 
 package org.hipparchus.random;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RectangularCholeskyDecomposition;
@@ -89,7 +89,7 @@ public class CorrelatedRandomVectorGenerator
                                            NormalizedRandomGenerator generator) {
         int order = covariance.getRowDimension();
         if (mean.length != order) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    mean.length, order);
         }
         this.mean = mean.clone();

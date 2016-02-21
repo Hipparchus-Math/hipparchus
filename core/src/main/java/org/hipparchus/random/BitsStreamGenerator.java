@@ -18,7 +18,7 @@ package org.hipparchus.random;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -172,7 +172,7 @@ public abstract class BitsStreamGenerator
             } while (bits - val + (n - 1) < 0);
             return val;
         }
-        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+        throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                n, 0);
     }
 
@@ -206,7 +206,7 @@ public abstract class BitsStreamGenerator
             } while (bits - val + (n - 1) < 0);
             return val;
         }
-        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+        throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                n, 0);
     }
 

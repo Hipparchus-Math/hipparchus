@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.math.BigInteger;
 
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -180,7 +180,7 @@ public class Fraction
         double r0 = value;
         long a0 = (long)FastMath.floor(r0);
         if (FastMath.abs(a0) > overflow) {
-            throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW, value, a0, 1l);
+            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, a0, 1l);
         }
 
         // check for (almost) integer arguments, which should not go to iterations.
@@ -213,7 +213,7 @@ public class Fraction
                 if (epsilon == 0.0 && FastMath.abs(q1) < maxDenominator) {
                     break;
                 }
-                throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
+                throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
             }
 
             double convergent = (double)p2 / (double)q2;
@@ -230,7 +230,7 @@ public class Fraction
         } while (!stop);
 
         if (n >= maxIterations) {
-            throw new MathIllegalStateException(LocalizedFormats.FAILED_FRACTION_CONVERSION, value, maxIterations);
+            throw new MathIllegalStateException(LocalizedCoreFormats.FAILED_FRACTION_CONVERSION, value, maxIterations);
         }
 
         if (q2 < maxDenominator) {
@@ -261,13 +261,13 @@ public class Fraction
      */
     public Fraction(int num, int den) {
         if (den == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR_IN_FRACTION,
                                               num, den);
         }
         if (den < 0) {
             if (num == Integer.MIN_VALUE ||
                 den == Integer.MIN_VALUE) {
-                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_FRACTION,
+                throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION,
                                                   num, den);
             }
             num = -num;
@@ -412,7 +412,7 @@ public class Fraction
     @Override
     public Fraction negate() {
         if (numerator==Integer.MIN_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_FRACTION, numerator, denominator);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION, numerator, denominator);
         }
         return new Fraction(-numerator, denominator);
     }
@@ -486,7 +486,7 @@ public class Fraction
      */
     private Fraction addSub(Fraction fraction, boolean isAdd) {
         if (fraction == null) {
-            throw new NullArgumentException(LocalizedFormats.FRACTION);
+            throw new NullArgumentException(LocalizedCoreFormats.FRACTION);
         }
         // zero is identity for addition.
         if (numerator == 0) {
@@ -523,7 +523,7 @@ public class Fraction
         // result is (t/d2) / (u'/d1)(v'/d2)
         BigInteger w = t.divide(BigInteger.valueOf(d2));
         if (w.bitLength() > 31) {
-            throw new MathRuntimeException(LocalizedFormats.NUMERATOR_OVERFLOW_AFTER_MULTIPLY,
+            throw new MathRuntimeException(LocalizedCoreFormats.NUMERATOR_OVERFLOW_AFTER_MULTIPLY,
                                               w);
         }
         return new Fraction (w.intValue(),
@@ -544,7 +544,7 @@ public class Fraction
     @Override
     public Fraction multiply(Fraction fraction) {
         if (fraction == null) {
-            throw new NullArgumentException(LocalizedFormats.FRACTION);
+            throw new NullArgumentException(LocalizedCoreFormats.FRACTION);
         }
         if (numerator == 0 || fraction.numerator == 0) {
             return ZERO;
@@ -581,10 +581,10 @@ public class Fraction
     @Override
     public Fraction divide(Fraction fraction) {
         if (fraction == null) {
-            throw new NullArgumentException(LocalizedFormats.FRACTION);
+            throw new NullArgumentException(LocalizedCoreFormats.FRACTION);
         }
         if (fraction.numerator == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_FRACTION_TO_DIVIDE_BY,
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_FRACTION_TO_DIVIDE_BY,
                                               fraction.numerator, fraction.denominator);
         }
         return multiply(fraction.reciprocal());
@@ -624,7 +624,7 @@ public class Fraction
      */
     public static Fraction getReducedFraction(int numerator, int denominator) {
         if (denominator == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR_IN_FRACTION,
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR_IN_FRACTION,
                                               numerator, denominator);
         }
         if (numerator==0) {
@@ -637,7 +637,7 @@ public class Fraction
         if (denominator < 0) {
             if (numerator==Integer.MIN_VALUE ||
                     denominator==Integer.MIN_VALUE) {
-                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_FRACTION,
+                throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_FRACTION,
                                                   numerator, denominator);
             }
             numerator = -numerator;

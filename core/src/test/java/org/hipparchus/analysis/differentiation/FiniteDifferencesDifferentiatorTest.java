@@ -24,7 +24,7 @@ import org.hipparchus.analysis.UnivariateMatrixFunction;
 import org.hipparchus.analysis.UnivariateVectorFunction;
 import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.analysis.function.Sin;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -219,10 +219,10 @@ public class FiniteDifferencesDifferentiatorTest {
             @Override
             public double value(double x) {
                 if (x < 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                            x, 0);
                 } else if (x > 1) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                            x, 1);
                 } else {
                     return slope * x;
@@ -243,7 +243,7 @@ public class FiniteDifferencesDifferentiatorTest {
             missingBounds.value(tLow);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException nse) {
-            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_SMALL, nse.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_SMALL, nse.getSpecifier());
             Assert.assertEquals(-0.05, ((Double) nse.getParts()[0]).doubleValue(), 1.0e-10);
         } catch (Exception e) {
             Assert.fail("wrong exception caught: " + e.getClass().getName());
@@ -255,7 +255,7 @@ public class FiniteDifferencesDifferentiatorTest {
             missingBounds.value(tHigh);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException nle) {
-            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_LARGE, nle.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, nle.getSpecifier());
             Assert.assertEquals(1.05, ((Double) nle.getParts()[0]).doubleValue(), 1.0e-10);
         } catch (Exception e) {
             Assert.fail("wrong exception caught: " + e.getClass().getName());

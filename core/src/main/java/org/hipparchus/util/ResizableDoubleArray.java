@@ -19,7 +19,7 @@ package org.hipparchus.util;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -272,7 +272,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
                                 double ... data)
         throws MathIllegalArgumentException {
         if (initialCapacity <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_CAPACITY_NOT_POSITIVE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INITIAL_CAPACITY_NOT_POSITIVE,
                                                    initialCapacity);
         }
         checkContractExpand(contractionCriterion, expansionFactor);
@@ -388,7 +388,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      */
     public double substituteMostRecentElement(double value) throws MathIllegalStateException {
         if (numElements < 1) {
-            throw new MathIllegalStateException(LocalizedFormats.CANNOT_SUBSTITUTE_ELEMENT_FROM_EMPTY_ARRAY);
+            throw new MathIllegalStateException(LocalizedCoreFormats.CANNOT_SUBSTITUTE_ELEMENT_FROM_EMPTY_ARRAY);
         }
 
         final int substIndex = startIndex + (numElements - 1);
@@ -413,17 +413,17 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      */
     protected void checkContractExpand(double contraction, double expansion) throws MathIllegalArgumentException {
         if (contraction < expansion) {
-            throw new MathIllegalArgumentException(LocalizedFormats.CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR,
                                                    contraction, expansion);
         }
 
         if (contraction <= 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.CONTRACTION_CRITERIA_SMALLER_THAN_ONE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONTRACTION_CRITERIA_SMALLER_THAN_ONE,
                                                    contraction);
         }
 
         if (expansion <= 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EXPANSION_FACTOR_SMALLER_THAN_ONE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EXPANSION_FACTOR_SMALLER_THAN_ONE,
                                                    expansion);
         }
     }
@@ -503,11 +503,11 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
     private void discardExtremeElements(int i, boolean front) throws MathIllegalArgumentException {
         if (i > numElements) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY,
+                    LocalizedCoreFormats.TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY,
                     i, numElements);
        } else if (i < 0) {
            throw new MathIllegalArgumentException(
-                   LocalizedFormats.CANNOT_DISCARD_NEGATIVE_NUMBER_OF_ELEMENTS,
+                   LocalizedCoreFormats.CANNOT_DISCARD_NEGATIVE_NUMBER_OF_ELEMENTS,
                    i);
         } else {
             // "Subtract" this number of discarded from numElements
@@ -749,7 +749,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
     public void setNumElements(int i) throws MathIllegalArgumentException {
         // If index is negative thrown an error.
         if (i < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INDEX_NOT_POSITIVE, i);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INDEX_NOT_POSITIVE, i);
         }
 
         // Test the new num elements, check to see if the array needs to be

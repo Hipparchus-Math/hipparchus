@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -89,7 +89,7 @@ public class UniformRealDistribution extends AbstractRealDistribution {
         super(rng);
         if (lower >= upper) {
             throw new MathIllegalArgumentException(
-                            LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+                            LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                             lower, upper, false);
         }
 
@@ -123,7 +123,7 @@ public class UniformRealDistribution extends AbstractRealDistribution {
     public double inverseCumulativeProbability(final double p)
             throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         }
         return p * (upper - lower) + lower;

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.genetics;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -43,7 +43,7 @@ public class FixedGenerationCount implements StoppingCondition {
      */
     public FixedGenerationCount(final int maxGenerations) throws MathIllegalArgumentException {
         if (maxGenerations <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    maxGenerations, 1);
         }
         this.maxGenerations = maxGenerations;

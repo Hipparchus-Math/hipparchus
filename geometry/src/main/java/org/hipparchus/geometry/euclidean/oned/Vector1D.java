@@ -18,7 +18,7 @@ package org.hipparchus.geometry.euclidean.oned;
 
 import java.text.NumberFormat;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
@@ -197,7 +197,7 @@ public class Vector1D implements Vector<Euclidean1D> {
     public Vector1D normalize() throws MathRuntimeException {
         double s = getNorm();
         if (s == 0) {
-            throw new MathRuntimeException(LocalizedFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
+            throw new MathRuntimeException(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
         }
         return scalarMultiply(1 / s);
     }

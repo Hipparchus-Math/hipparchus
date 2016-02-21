@@ -36,7 +36,7 @@ import org.hipparchus.analysis.function.Pow;
 import org.hipparchus.analysis.function.Power;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -271,7 +271,7 @@ public class FunctionUtilsTest {
             f.value(new DerivativeStructure(1, 3, 0.0));
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_LARGE, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, e.getSpecifier());
             Assert.assertEquals(2, ((Integer) e.getParts()[1]).intValue());
             Assert.assertEquals(3, ((Integer) e.getParts()[0]).intValue());
         }
@@ -320,7 +320,7 @@ public class FunctionUtilsTest {
             mdf.value(new DerivativeStructure[] { new DerivativeStructure(1, 3, 0.0), new DerivativeStructure(1, 3, 0.0) });
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NUMBER_TOO_LARGE, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, e.getSpecifier());
             Assert.assertEquals(1, ((Integer) e.getParts()[1]).intValue());
             Assert.assertEquals(3, ((Integer) e.getParts()[0]).intValue());
         }

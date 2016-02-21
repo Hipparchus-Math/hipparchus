@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.Localizable;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -172,7 +172,7 @@ public final class MathUtils {
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Byte.MIN_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW);
         } else {
             return (byte) -magnitude; // Flip sign.
         }
@@ -195,7 +195,7 @@ public final class MathUtils {
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Short.MIN_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW);
         } else {
             return (short) -magnitude; // Flip sign.
         }
@@ -218,7 +218,7 @@ public final class MathUtils {
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Integer.MIN_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW);
         } else {
             return -magnitude; // Flip sign.
         }
@@ -241,7 +241,7 @@ public final class MathUtils {
             return magnitude;
         } else if (sign >= 0 &&
                    magnitude == Long.MIN_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW);
         } else {
             return -magnitude; // Flip sign.
         }
@@ -256,7 +256,7 @@ public final class MathUtils {
     public static void checkFinite(final double x)
         throws MathIllegalArgumentException {
         if (Double.isInfinite(x) || Double.isNaN(x)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NOT_FINITE_NUMBER, x);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_FINITE_NUMBER, x);
         }
     }
 
@@ -272,7 +272,7 @@ public final class MathUtils {
         for (int i = 0; i < val.length; i++) {
             final double x = val[i];
             if (Double.isInfinite(x) || Double.isNaN(x)) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NOT_FINITE_NUMBER, x);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_FINITE_NUMBER, x);
             }
         }
     }

@@ -19,7 +19,7 @@ package org.hipparchus.fitting.leastsquares;
 
 import java.io.IOException;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFittingFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.hipparchus.optim.SimpleVectorValueChecker;
@@ -56,7 +56,7 @@ public class GaussNewtonOptimizerWithQRTest
         try {
             super.testMoreEstimatedParametersUnsorted();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assert.assertEquals(LocalizedFittingFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 
@@ -93,7 +93,7 @@ public class GaussNewtonOptimizerWithQRTest
              */
             super.testCircleFittingBadInit();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assert.assertEquals(LocalizedFittingFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 
@@ -107,7 +107,7 @@ public class GaussNewtonOptimizerWithQRTest
              */
             super.testHahn1();
         } catch (MathIllegalStateException mise) {
-            Assert.assertEquals(LocalizedFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
+            Assert.assertEquals(LocalizedFittingFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, mise.getSpecifier());
         }
     }
 

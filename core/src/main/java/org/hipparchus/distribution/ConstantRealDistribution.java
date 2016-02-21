@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -60,7 +60,7 @@ public class ConstantRealDistribution extends AbstractRealDistribution {
     public double inverseCumulativeProbability(final double p)
             throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         }
         return value;

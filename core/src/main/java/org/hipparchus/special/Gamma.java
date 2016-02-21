@@ -16,7 +16,7 @@
  */
 package org.hipparchus.special;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.ContinuedFraction;
@@ -336,7 +336,7 @@ public class Gamma {
                 sum += an;
             }
             if (n >= maxIterations) {
-                throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, maxIterations);
+                throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, maxIterations);
             } else if (Double.isInfinite(sum)) {
                 ret = 1.0;
             } else {
@@ -541,11 +541,11 @@ public class Gamma {
     public static double invGamma1pm1(final double x) {
 
         if (x < -0.5) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    x, -0.5);
         }
         if (x > 1.5) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                    x, 1.5);
         }
 
@@ -637,11 +637,11 @@ public class Gamma {
         throws MathIllegalArgumentException {
 
         if (x < -0.5) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    x, -0.5);
         }
         if (x > 1.5) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                    x, 1.5);
         }
 

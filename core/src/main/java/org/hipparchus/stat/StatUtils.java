@@ -18,7 +18,7 @@ package org.hipparchus.stat;
 
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
@@ -677,11 +677,11 @@ public final class StatUtils {
 
         int n = sample1.length;
         if (n != sample2.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    n, sample2.length);
         }
         if (n <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION);
         }
         double result = 0;
         for (int i = 0; i < n; i++) {
@@ -725,11 +725,11 @@ public final class StatUtils {
         double diff = 0d;
         int n = sample1.length;
         if (n != sample2.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    n, sample2.length);
         }
         if (n < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    n, 2);
         }
         for (int i = 0; i < n; i++) {
@@ -792,7 +792,7 @@ public final class StatUtils {
      */
     public static double[] mode(double[] sample) throws MathIllegalArgumentException {
         if (sample == null) {
-            throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
         }
         return getMode(sample, 0, sample.length);
     }
@@ -822,15 +822,15 @@ public final class StatUtils {
      */
     public static double[] mode(double[] sample, final int begin, final int length) {
         if (sample == null) {
-            throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
         }
 
         if (begin < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, Integer.valueOf(begin));
         }
 
         if (length < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, Integer.valueOf(length));
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LENGTH, Integer.valueOf(length));
         }
 
         return getMode(sample, begin, length);

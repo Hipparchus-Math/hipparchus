@@ -15,7 +15,7 @@ package org.hipparchus.util;
 
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -260,38 +260,38 @@ public final class MathUtilsTest {
             MathUtils.checkFinite(Double.POSITIVE_INFINITY);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
         try {
             MathUtils.checkFinite(Double.NEGATIVE_INFINITY);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
         try {
             MathUtils.checkFinite(Double.NaN);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
 
         try {
             MathUtils.checkFinite(new double[] {0, -1, Double.POSITIVE_INFINITY, -2, 3});
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
         try {
             MathUtils.checkFinite(new double[] {1, Double.NEGATIVE_INFINITY, -2, 3});
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
         try {
             MathUtils.checkFinite(new double[] {4, 3, -1, Double.NaN, -2, 1});
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -309,7 +309,7 @@ public final class MathUtilsTest {
     public void testCheckNotNull2() {
         try {
             double[] array = null;
-            MathUtils.checkNotNull(array, LocalizedFormats.INPUT_ARRAY);
+            MathUtils.checkNotNull(array, LocalizedCoreFormats.INPUT_ARRAY);
         } catch (NullArgumentException e) {
             // Expected.
         }

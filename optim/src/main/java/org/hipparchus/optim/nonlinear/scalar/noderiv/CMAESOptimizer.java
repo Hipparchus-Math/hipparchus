@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -290,7 +290,7 @@ public class CMAESOptimizer
             throws MathIllegalArgumentException {
             for (int i = 0; i < s.length; i++) {
                 if (s[i] < 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, s[i], 0);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, s[i], 0);
                 }
             }
 
@@ -326,7 +326,7 @@ public class CMAESOptimizer
         public PopulationSize(int size)
             throws MathIllegalArgumentException {
             if (size <= 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                        size, 0);
             }
             lambda = size;
@@ -558,7 +558,7 @@ public class CMAESOptimizer
             final double[] init = getStartPoint();
 
             if (inputSigma.length != init.length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        inputSigma.length, init.length);
             }
 
@@ -567,7 +567,7 @@ public class CMAESOptimizer
 
             for (int i = 0; i < init.length; i++) {
                 if (inputSigma[i] > uB[i] - lB[i]) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                            inputSigma[i], 0, uB[i] - lB[i]);
                 }
             }
@@ -581,7 +581,7 @@ public class CMAESOptimizer
      */
     private void initializeCMA(double[] guess) {
         if (lambda <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    lambda, 0);
         }
         // initialize sigma

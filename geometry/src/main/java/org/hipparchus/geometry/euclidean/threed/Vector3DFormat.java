@@ -22,7 +22,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.VectorFormat;
@@ -131,7 +131,7 @@ public class Vector3DFormat extends VectorFormat<Euclidean3D> {
         ParsePosition parsePosition = new ParsePosition(0);
         Vector3D result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+            throw new MathIllegalStateException(LocalizedCoreFormats.CANNOT_PARSE_AS_TYPE,
                                                 source, parsePosition.getErrorIndex(),
                                                 Vector3D.class);
         }

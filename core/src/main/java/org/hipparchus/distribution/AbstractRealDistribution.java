@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
@@ -73,7 +73,7 @@ implements RealDistribution, Serializable {
     public double probability(double x0,
                               double x1) {
         if (x0 > x1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                                                 x0, x1, true);
         }
         return cumulativeProbability(x1) - cumulativeProbability(x0);
@@ -119,7 +119,7 @@ implements RealDistribution, Serializable {
          * the root.
          */
         if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         }
 
@@ -235,7 +235,7 @@ implements RealDistribution, Serializable {
     @Override
     public double[] sample(int sampleSize) {
         if (sampleSize <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES,
                     sampleSize);
         }
         double[] out = new double[sampleSize];

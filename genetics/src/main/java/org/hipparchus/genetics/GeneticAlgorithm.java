@@ -16,7 +16,7 @@
  */
 package org.hipparchus.genetics;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
@@ -71,12 +71,12 @@ public class GeneticAlgorithm {
                             final SelectionPolicy selectionPolicy) throws MathIllegalArgumentException {
 
         if (crossoverRate < 0 || crossoverRate > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.CROSSOVER_RATE,
-                                          crossoverRate, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.CROSSOVER_RATE,
+                                                   crossoverRate, 0, 1);
         }
         if (mutationRate < 0 || mutationRate > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.MUTATION_RATE,
-                                          mutationRate, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.MUTATION_RATE,
+                                                   mutationRate, 0, 1);
         }
         this.crossoverPolicy = crossoverPolicy;
         this.crossoverRate = crossoverRate;

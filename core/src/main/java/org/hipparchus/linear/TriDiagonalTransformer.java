@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -62,7 +62,7 @@ class TriDiagonalTransformer {
      */
     TriDiagonalTransformer(RealMatrix matrix) {
         if (!matrix.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
 

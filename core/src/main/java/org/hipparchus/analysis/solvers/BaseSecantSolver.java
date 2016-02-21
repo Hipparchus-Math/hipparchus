@@ -18,7 +18,7 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -195,7 +195,7 @@ public abstract class BaseSecantSolver
                     // Detect early that algorithm is stuck, instead of waiting
                     // for the maximum number of iterations to be exceeded.
                     if (x == x1) {
-                        throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED);
+                        throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
                     }
                     break;
                 default:

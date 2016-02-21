@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -55,7 +55,7 @@ public abstract class AbstractStorelessUnivariateStatistic
     @Override
     public double evaluate(final double[] values) throws MathIllegalArgumentException {
         if (values == null) {
-            throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
         }
         return evaluate(values, 0, values.length);
     }
@@ -130,7 +130,7 @@ public abstract class AbstractStorelessUnivariateStatistic
     @Override
     public void incrementAll(double[] values) throws MathIllegalArgumentException {
         if (values == null) {
-            throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
         }
         incrementAll(values, 0, values.length);
     }

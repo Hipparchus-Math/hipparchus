@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -88,24 +88,24 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
         super(rng);
 
         if (populationSize <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.POPULATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.POPULATION_SIZE,
                                                    populationSize);
         }
         if (numberOfSuccesses < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SUCCESSES,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SUCCESSES,
                                            numberOfSuccesses);
         }
         if (sampleSize < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES,
                                            sampleSize);
         }
 
         if (numberOfSuccesses > populationSize) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE,
                                                 numberOfSuccesses, populationSize, true);
         }
         if (sampleSize > populationSize) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE,
                                                 sampleSize, populationSize, true);
         }
 

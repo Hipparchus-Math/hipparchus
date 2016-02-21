@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hipparchus.analysis.function.HarmonicOscillator;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
@@ -256,7 +256,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
          */
         public ParameterGuesser(Collection<WeightedObservedPoint> observations) {
             if (observations.size() < 4) {
-                throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
                                                     observations.size(), 4, true);
             }
 
@@ -380,7 +380,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
                 // observations are sorted.
                 final double xRange = observations[last].getX() - observations[0].getX();
                 if (xRange == 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
                 }
                 aOmega[1] = 2 * Math.PI / xRange;
 
@@ -400,7 +400,7 @@ public class HarmonicCurveFitter extends AbstractCurveFitter {
                 if (c2 == 0) {
                     // In some ill-conditioned cases (cf. MATH-844), the guesser
                     // procedure cannot produce sensible results.
-                    throw new MathIllegalStateException(LocalizedFormats.ZERO_DENOMINATOR);
+                    throw new MathIllegalStateException(LocalizedCoreFormats.ZERO_DENOMINATOR);
                 }
 
                 aOmega[0] = FastMath.sqrt(c1 / c2);

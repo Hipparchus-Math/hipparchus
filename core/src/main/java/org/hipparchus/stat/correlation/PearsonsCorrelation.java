@@ -17,7 +17,7 @@
 package org.hipparchus.stat.correlation;
 
 import org.hipparchus.distribution.TDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
@@ -109,7 +109,7 @@ public class PearsonsCorrelation {
     public PearsonsCorrelation(Covariance covariance) {
         RealMatrix covarianceMatrix = covariance.getCovarianceMatrix();
         if (covarianceMatrix == null) {
-            throw new NullArgumentException(LocalizedFormats.COVARIANCE_MATRIX);
+            throw new NullArgumentException(LocalizedCoreFormats.COVARIANCE_MATRIX);
         }
         nObs = covariance.getN();
         correlationMatrix = covarianceToCorrelation(covarianceMatrix);
@@ -272,10 +272,10 @@ public class PearsonsCorrelation {
     public double correlation(final double[] xArray, final double[] yArray) {
         SimpleRegression regression = new SimpleRegression();
         if (xArray.length != yArray.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xArray.length, yArray.length);
         } else if (xArray.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION,
                                                    xArray.length, 2);
         } else {
             for(int i=0; i<xArray.length; i++) {
@@ -323,7 +323,7 @@ public class PearsonsCorrelation {
         int nRows = matrix.getRowDimension();
         int nCols = matrix.getColumnDimension();
         if (nRows < 2 || nCols < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_ROWS_AND_COLUMNS,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_ROWS_AND_COLUMNS,
                                                    nRows, nCols);
         }
     }

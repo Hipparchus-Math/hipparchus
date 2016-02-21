@@ -19,7 +19,7 @@ package org.hipparchus.analysis.integration;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.integration.gauss.GaussIntegrator;
 import org.hipparchus.analysis.integration.gauss.GaussIntegratorFactory;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
@@ -70,7 +70,7 @@ public class IterativeLegendreGaussIntegrator
         throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy, minimalIterationCount, maximalIterationCount);
         if (n <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS, n);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_POINTS, n);
         }
        numberOfPoints = n;
     }

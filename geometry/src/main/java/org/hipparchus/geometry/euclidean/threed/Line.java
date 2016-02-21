@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Vector;
@@ -82,7 +82,7 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
         final Vector3D delta = p2.subtract(p1);
         final double norm2 = delta.getNormSq();
         if (norm2 == 0.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NORM);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NORM);
         }
         this.direction = new Vector3D(1.0 / FastMath.sqrt(norm2), delta);
         zero = new Vector3D(1.0, p1, -p1.dotProduct(delta) / norm2, delta);

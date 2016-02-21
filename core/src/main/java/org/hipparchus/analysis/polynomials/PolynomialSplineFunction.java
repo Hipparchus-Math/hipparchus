@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -100,11 +100,11 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
             throw new NullArgumentException();
         }
         if (knots.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION,
                                                 2, knots.length, false);
         }
         if (knots.length - 1 != polynomials.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    polynomials.length, knots.length);
         }
         MathArrays.checkOrder(knots);
@@ -130,7 +130,7 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
     @Override
     public double value(double v) {
         if (v < knots[0] || v > knots[n]) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    v, knots[0], knots[n]);
         }
         int i = Arrays.binarySearch(knots, v);
@@ -167,7 +167,7 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
     public DerivativeStructure value(final DerivativeStructure t) {
         final double t0 = t.getValue();
         if (t0 < knots[0] || t0 > knots[n]) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    t0, knots[0], knots[n]);
         }
         int i = Arrays.binarySearch(knots, t0);

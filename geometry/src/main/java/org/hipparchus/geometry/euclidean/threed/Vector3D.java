@@ -20,8 +20,9 @@ package org.hipparchus.geometry.euclidean.threed;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
@@ -106,7 +107,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
      */
     public Vector3D(double[] v) throws MathIllegalArgumentException {
         if (v.length != 3) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, 3);
         }
         this.x = v[0];
@@ -308,7 +309,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
     public Vector3D normalize() throws MathRuntimeException {
         double s = getNorm();
         if (s == 0) {
-            throw new MathRuntimeException(LocalizedFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
+            throw new MathRuntimeException(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
         }
         return scalarMultiply(1 / s);
     }
@@ -332,7 +333,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
 
         double threshold = 0.6 * getNorm();
         if (threshold == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
 
         if (FastMath.abs(x) <= threshold) {
@@ -362,7 +363,7 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
 
         double normProduct = v1.getNorm() * v2.getNorm();
         if (normProduct == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
 
         double dot = v1.dotProduct(v2);

@@ -24,7 +24,7 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -265,7 +265,7 @@ public class MatrixUtils {
             throw new NullArgumentException();
         }
         if (data.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         return new ArrayFieldVector<T>(data[0].getField(), data, true);
     }
@@ -310,7 +310,7 @@ public class MatrixUtils {
         }
         final int nCols = rowData.length;
         if (nCols == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_COLUMN);
         }
         final FieldMatrix<T> m = createFieldMatrix(rowData[0].getField(), 1, nCols);
         for (int i = 0; i < nCols; ++i) {
@@ -359,7 +359,7 @@ public class MatrixUtils {
         }
         final int nRows = columnData.length;
         if (nRows == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_ROW);
         }
         final FieldMatrix<T> m = createFieldMatrix(columnData[0].getField(), nRows, 1);
         for (int i = 0; i < nRows; ++i) {
@@ -385,7 +385,7 @@ public class MatrixUtils {
         final int rows = matrix.getRowDimension();
         if (rows != matrix.getColumnDimension()) {
             if (raiseException) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                        rows, matrix.getColumnDimension());
             } else {
                 return false;
@@ -398,7 +398,7 @@ public class MatrixUtils {
                 if (FastMath.abs(mij - mji) >
                     FastMath.max(FastMath.abs(mij), FastMath.abs(mji)) * relativeTolerance) {
                     if (raiseException) {
-                        throw new MathIllegalArgumentException(LocalizedFormats.NON_SYMMETRIC_MATRIX,
+                        throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SYMMETRIC_MATRIX,
                                                                i, j, relativeTolerance);
                     } else {
                         return false;
@@ -463,7 +463,7 @@ public class MatrixUtils {
         throws MathIllegalArgumentException {
         if (row < 0 ||
             row >= m.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ROW_INDEX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ROW_INDEX,
                                           row, 0, m.getRowDimension() - 1);
         }
     }
@@ -478,7 +478,7 @@ public class MatrixUtils {
     public static void checkColumnIndex(final AnyMatrix m, final int column)
         throws MathIllegalArgumentException {
         if (column < 0 || column >= m.getColumnDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.COLUMN_INDEX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.COLUMN_INDEX,
                                            column, 0, m.getColumnDimension() - 1);
         }
     }
@@ -503,14 +503,14 @@ public class MatrixUtils {
         checkRowIndex(m, startRow);
         checkRowIndex(m, endRow);
         if (endRow < startRow) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 endRow, startRow, false);
         }
 
         checkColumnIndex(m, startColumn);
         checkColumnIndex(m, endColumn);
         if (endColumn < startColumn) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
                                                 endColumn, startColumn, false);
         }
 
@@ -541,10 +541,10 @@ public class MatrixUtils {
             throw new NullArgumentException();
         }
         if (selectedRows.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_SELECTED_ROW_INDEX_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_SELECTED_ROW_INDEX_ARRAY);
         }
         if (selectedColumns.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_SELECTED_COLUMN_INDEX_ARRAY);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_SELECTED_COLUMN_INDEX_ARRAY);
         }
 
         for (final int row : selectedRows) {
@@ -567,7 +567,7 @@ public class MatrixUtils {
         throws MathIllegalArgumentException {
         if ((left.getRowDimension()    != right.getRowDimension()) ||
             (left.getColumnDimension() != right.getColumnDimension())) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    left.getRowDimension(), left.getColumnDimension(),
                                                    right.getRowDimension(), right.getColumnDimension());
         }
@@ -585,7 +585,7 @@ public class MatrixUtils {
         throws MathIllegalArgumentException {
         if ((left.getRowDimension()    != right.getRowDimension()) ||
             (left.getColumnDimension() != right.getColumnDimension())) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    left.getRowDimension(), left.getColumnDimension(),
                                                    right.getRowDimension(), right.getColumnDimension());
         }
@@ -603,7 +603,7 @@ public class MatrixUtils {
         throws MathIllegalArgumentException {
 
         if (left.getColumnDimension() != right.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    left.getColumnDimension(), right.getRowDimension());
         }
     }
@@ -927,19 +927,19 @@ public class MatrixUtils {
         throws MathIllegalArgumentException, MathRuntimeException,
         MathIllegalArgumentException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    (rm == null) ? 0 : rm.getRowDimension(),
                                                    (b  == null) ? 0 : b.getDimension());
         }
         if( rm.getColumnDimension() != rm.getRowDimension() ){
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    rm.getRowDimension(), rm.getColumnDimension());
         }
         int rows = rm.getRowDimension();
         for( int i = 0 ; i < rows ; i++ ){
             double diag = rm.getEntry(i, i);
             if( FastMath.abs(diag) < Precision.SAFE_MIN ){
-                throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
+                throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
             }
             double bi = b.getEntry(i)/diag;
             b.setEntry(i,  bi );
@@ -972,19 +972,19 @@ public class MatrixUtils {
         throws MathIllegalArgumentException, MathRuntimeException,
         MathIllegalArgumentException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    (rm == null) ? 0 : rm.getRowDimension(),
                                                    (b  == null) ? 0 : b.getDimension());
         }
         if( rm.getColumnDimension() != rm.getRowDimension() ){
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    rm.getRowDimension(), rm.getColumnDimension());
         }
         int rows = rm.getRowDimension();
         for( int i = rows-1 ; i >-1 ; i-- ){
             double diag = rm.getEntry(i, i);
             if( FastMath.abs(diag) < Precision.SAFE_MIN ){
-                throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
+                throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
             }
             double bi = b.getEntry(i)/diag;
             b.setEntry(i,  bi );
@@ -1010,7 +1010,7 @@ public class MatrixUtils {
                                           int splitIndex) {
         final int n = m.getRowDimension();
         if (m.getColumnDimension() != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    m.getRowDimension(), m.getColumnDimension());
         }
 
@@ -1024,14 +1024,14 @@ public class MatrixUtils {
         final SingularValueDecomposition aDec = new SingularValueDecomposition(a);
         final DecompositionSolver aSolver = aDec.getSolver();
         if (!aSolver.isNonSingular()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
         }
         final RealMatrix aInv = aSolver.getInverse();
 
         final SingularValueDecomposition dDec = new SingularValueDecomposition(d);
         final DecompositionSolver dSolver = dDec.getSolver();
         if (!dSolver.isNonSingular()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
         }
         final RealMatrix dInv = dSolver.getInverse();
 
@@ -1039,7 +1039,7 @@ public class MatrixUtils {
         final SingularValueDecomposition tmp1Dec = new SingularValueDecomposition(tmp1);
         final DecompositionSolver tmp1Solver = tmp1Dec.getSolver();
         if (!tmp1Solver.isNonSingular()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
         }
         final RealMatrix result00 = tmp1Solver.getInverse();
 
@@ -1047,7 +1047,7 @@ public class MatrixUtils {
         final SingularValueDecomposition tmp2Dec = new SingularValueDecomposition(tmp2);
         final DecompositionSolver tmp2Solver = tmp2Dec.getSolver();
         if (!tmp2Solver.isNonSingular()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
         }
         final RealMatrix result11 = tmp2Solver.getInverse();
 
@@ -1104,7 +1104,7 @@ public class MatrixUtils {
         MathUtils.checkNotNull(matrix);
 
         if (!matrix.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
 

@@ -19,7 +19,7 @@ package org.hipparchus.util;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 
@@ -47,7 +47,7 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
         throws MathIllegalArgumentException, NullArgumentException {
 
         if (o == null) {
-            throw new NullArgumentException(LocalizedFormats.OBJECT_TRANSFORMATION);
+            throw new NullArgumentException(LocalizedCoreFormats.OBJECT_TRANSFORMATION);
         }
 
         if (o instanceof Number) {
@@ -57,7 +57,7 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
         try {
             return Double.parseDouble(o.toString());
         } catch (NumberFormatException e) {
-            throw new MathIllegalArgumentException(LocalizedFormats.CANNOT_TRANSFORM_TO_DOUBLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_TRANSFORM_TO_DOUBLE,
                                                    o.toString());
         }
     }

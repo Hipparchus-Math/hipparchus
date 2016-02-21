@@ -17,7 +17,7 @@
 package org.hipparchus.random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.StableRandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -95,7 +95,7 @@ public class StableRandomGeneratorTest {
             new StableRandomGenerator(rg, -1.0, 0.0);
             Assert.fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
             Assert.assertEquals(-1.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
@@ -106,7 +106,7 @@ public class StableRandomGeneratorTest {
             new StableRandomGenerator(rg, 3.0, 0.0);
             Assert.fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, e.getSpecifier());
             Assert.assertEquals(3.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
@@ -117,7 +117,7 @@ public class StableRandomGeneratorTest {
             new StableRandomGenerator(rg, 1.0, -2.0);
             Assert.fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
             Assert.assertEquals(-2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }
@@ -128,7 +128,7 @@ public class StableRandomGeneratorTest {
             new StableRandomGenerator(rg, 1.0, 2.0);
             Assert.fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE, e.getSpecifier());
             Assert.assertEquals(2.0, ((Double) e.getParts()[0]).doubleValue(), 1.0e-10);
         }
     }

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 
 /**
@@ -114,7 +114,7 @@ public class DefaultIterativeLinearSolverEvent extends IterativeLinearSolverEven
         if (r != null) {
             return r;
         }
-        throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+        throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
     }
 
     /** {@inheritDoc} */

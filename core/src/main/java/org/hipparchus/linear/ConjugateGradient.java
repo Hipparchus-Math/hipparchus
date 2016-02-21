@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -195,7 +195,7 @@ public class ConjugateGradient
             }
             final double rhoNext = r.dotProduct(z);
             if (check && (rhoNext <= 0.)) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NON_POSITIVE_DEFINITE_OPERATOR);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_POSITIVE_DEFINITE_OPERATOR);
             }
             if (manager.getIterations() == 2) {
                 p.setSubVector(0, z);
@@ -205,7 +205,7 @@ public class ConjugateGradient
             q = a.operate(p);
             final double pq = p.dotProduct(q);
             if (check && (pq <= 0.)) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NON_POSITIVE_DEFINITE_OPERATOR);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_POSITIVE_DEFINITE_OPERATOR);
             }
             final double alpha = rhoNext / pq;
             x.combineToSelf(1., alpha, p);

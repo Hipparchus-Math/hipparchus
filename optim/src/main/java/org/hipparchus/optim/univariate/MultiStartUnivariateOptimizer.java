@@ -20,7 +20,7 @@ package org.hipparchus.optim.univariate;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.MaxEval;
@@ -79,7 +79,7 @@ public class MultiStartUnivariateOptimizer
         super(optimizer.getConvergenceChecker());
 
         if (starts < 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    starts, 1);
         }
 
@@ -118,7 +118,7 @@ public class MultiStartUnivariateOptimizer
      */
     public UnivariatePointValuePair[] getOptima() {
         if (optima == null) {
-            throw new MathIllegalStateException(LocalizedFormats.NO_OPTIMUM_COMPUTED_YET);
+            throw new MathIllegalStateException(LocalizedCoreFormats.NO_OPTIMUM_COMPUTED_YET);
         }
         return optima.clone();
     }
@@ -158,10 +158,10 @@ public class MultiStartUnivariateOptimizer
             }
         }
         if (maxEvalIndex == -1) {
-            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+            throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
         }
         if (searchIntervalIndex == -1) {
-            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+            throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
         }
 
         RuntimeException lastException = null;

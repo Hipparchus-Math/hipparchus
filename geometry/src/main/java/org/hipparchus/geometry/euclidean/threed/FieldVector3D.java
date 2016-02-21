@@ -21,8 +21,9 @@ import java.io.Serializable;
 import java.text.NumberFormat;
 
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -70,7 +71,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      */
     public FieldVector3D(final T[] v) throws MathIllegalArgumentException {
         if (v.length != 3) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, 3);
         }
         this.x = v[0];
@@ -523,7 +524,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
     public FieldVector3D<T> normalize() throws MathRuntimeException {
         final T s = getNorm();
         if (s.getReal() == 0) {
-            throw new MathRuntimeException(LocalizedFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
+            throw new MathRuntimeException(LocalizedGeometryFormats.CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR);
         }
         return scalarMultiply(s.reciprocal());
     }
@@ -547,7 +548,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
         final double threshold = 0.6 * getNorm().getReal();
         if (threshold == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
 
         if (FastMath.abs(x.getReal()) <= threshold) {
@@ -580,7 +581,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
         if (normProduct.getReal() == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
 
         final T dot = dotProduct(v1, v2);
@@ -616,7 +617,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
 
         final T normProduct = v1.getNorm().multiply(v2.getNorm());
         if (normProduct.getReal() == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_NORM);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_NORM);
         }
 
         final T dot = dotProduct(v1, v2);

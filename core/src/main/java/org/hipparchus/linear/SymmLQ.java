@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -419,7 +419,7 @@ public class SymmLQ
             final double t = x.dotProduct(z);
             final double epsa = (s + MACH_PREC) * CBRT_MACH_PREC;
             if (FastMath.abs(s - t) > epsa) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NON_SELF_ADJOINT_OPERATOR);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SELF_ADJOINT_OPERATOR);
             }
         }
 
@@ -433,7 +433,7 @@ public class SymmLQ
          */
         private static void throwNPDLOException(final RealLinearOperator l,
             final RealVector v) throws MathIllegalArgumentException {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_POSITIVE_DEFINITE_OPERATOR);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_POSITIVE_DEFINITE_OPERATOR);
         }
 
         /**
@@ -769,14 +769,14 @@ public class SymmLQ
                 acond = gmax / FastMath.min(gmin, FastMath.abs(diag));
             }
             if (acond * MACH_PREC >= 0.1) {
-                throw new MathIllegalArgumentException(LocalizedFormats.ILL_CONDITIONED_OPERATOR, acond);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.ILL_CONDITIONED_OPERATOR, acond);
             }
             if (beta1 <= epsx) {
                 /*
                  * x has converged to an eigenvector of A corresponding to the
                  * eigenvalue shift.
                  */
-                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_OPERATOR);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_OPERATOR);
             }
             rnorm = FastMath.min(cgnorm, lqnorm);
             hasConverged = (cgnorm <= epsx) || (cgnorm <= epsr);

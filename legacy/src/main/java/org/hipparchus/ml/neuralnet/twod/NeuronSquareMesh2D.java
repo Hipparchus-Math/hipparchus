@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
@@ -112,11 +112,11 @@ public class NeuronSquareMesh2D
         numberOfColumns = featuresList[0].length;
 
         if (numberOfRows < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    numberOfRows, 2);
         }
         if (numberOfColumns < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    numberOfColumns, 2);
         }
 
@@ -171,11 +171,11 @@ public class NeuronSquareMesh2D
                               SquareNeighbourhood neighbourhoodType,
                               FeatureInitializer[] featureInit) {
         if (numRows < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    numRows, 2);
         }
         if (numCols < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    numCols, 2);
         }
 
@@ -307,12 +307,12 @@ public class NeuronSquareMesh2D
                             int j) {
         if (i < 0 ||
             i >= numberOfRows) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    i, 0, numberOfRows - 1);
         }
         if (j < 0 ||
             j >= numberOfColumns) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    j, 0, numberOfColumns - 1);
         }
 

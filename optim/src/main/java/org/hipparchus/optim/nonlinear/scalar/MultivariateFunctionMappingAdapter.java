@@ -20,7 +20,7 @@ import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Logit;
 import org.hipparchus.analysis.function.Sigmoid;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -100,13 +100,13 @@ public class MultivariateFunctionMappingAdapter
         MathUtils.checkNotNull(lower);
         MathUtils.checkNotNull(upper);
         if (lower.length != upper.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    lower.length, upper.length);
         }
         for (int i = 0; i < lower.length; ++i) {
             // note the following test is written in such a way it also fails for NaN
             if (!(upper[i] >= lower[i])) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                        upper[i], lower[i]);
             }
         }

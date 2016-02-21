@@ -16,7 +16,7 @@
  */
 package org.hipparchus.special;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.ContinuedFraction;
 import org.hipparchus.util.FastMath;
@@ -242,11 +242,11 @@ public class Beta {
         throws MathIllegalArgumentException {
 
         if ((a < 1.0) || (a > 2.0)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    a, 1.0, 2.0);
         }
         if ((b < 1.0) || (b > 2.0)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    b, 1.0, 2.0);
         }
 
@@ -277,11 +277,11 @@ public class Beta {
         throws MathIllegalArgumentException {
 
         if (a < 0.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    a, 0.0);
         }
         if (b < 10.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    b, 10.0);
         }
 
@@ -319,11 +319,11 @@ public class Beta {
         throws MathIllegalArgumentException {
 
         if ((a < 0) || (a > b)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    a, 0, b);
         }
         if (b < 10) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    b, 10);
         }
 
@@ -367,11 +367,11 @@ public class Beta {
                                                 final double q) {
 
         if (p < 10.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    p, 10.0);
         }
         if (q < 10.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    q, 10.0);
         }
 

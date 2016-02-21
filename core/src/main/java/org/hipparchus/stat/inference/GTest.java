@@ -17,7 +17,7 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.ChiSquaredDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
@@ -73,11 +73,11 @@ public class GTest {
             throws MathIllegalArgumentException {
 
         if (expected.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, 2);
         }
         if (expected.length != observed.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, observed.length);
         }
         MathArrays.checkPositive(expected);
@@ -233,7 +233,7 @@ public class GTest {
             throws MathIllegalArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                     alpha, 0, 0.5);
         }
         return gTest(expected, observed) < alpha;
@@ -343,11 +343,11 @@ public class GTest {
 
         // Make sure lengths are same
         if (observed1.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, 2);
         }
         if (observed1.length != observed2.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, observed2.length);
         }
 
@@ -365,7 +365,7 @@ public class GTest {
 
         for (int i = 0; i < observed1.length; i++) {
             if (observed1[i] == 0 && observed2[i] == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY, i);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY, i);
             } else {
                 countSum1 += observed1[i];
                 countSum2 += observed2[i];
@@ -376,7 +376,7 @@ public class GTest {
         }
         // Ensure neither sample is uniformly 0
         if (countSum1 == 0 || countSum2 == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
         }
         final long[] rowSums = {countSum1, countSum2};
         final double sum = (double) countSum1 + (double) countSum2;
@@ -526,7 +526,7 @@ public class GTest {
 
         if (alpha <= 0 || alpha > 0.5) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
+                    LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
         }
         return gTestDataSetsComparison(observed1, observed2) < alpha;
     }

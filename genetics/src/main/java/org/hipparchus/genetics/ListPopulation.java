@@ -22,7 +22,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 
@@ -67,11 +68,12 @@ public abstract class ListPopulation implements Population {
             throw new NullArgumentException();
         }
         if (populationLimit <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.POPULATION_LIMIT_NOT_POSITIVE, populationLimit);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.POPULATION_LIMIT_NOT_POSITIVE,
+                                                   populationLimit);
         }
         if (chromosomes.size() > populationLimit) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
-                                                chromosomes.size(), populationLimit, false);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
+                                                   chromosomes.size(), populationLimit, false);
         }
         this.populationLimit = populationLimit;
         this.chromosomes = new ArrayList<Chromosome>(populationLimit);
@@ -87,8 +89,8 @@ public abstract class ListPopulation implements Population {
      */
     public void addChromosomes(final Collection<Chromosome> chromosomeColl) throws MathIllegalArgumentException {
         if (chromosomes.size() + chromosomeColl.size() > populationLimit) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
-                                                chromosomes.size(), populationLimit, false);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
+                                                   chromosomes.size(), populationLimit, false);
         }
         this.chromosomes.addAll(chromosomeColl);
     }
@@ -120,8 +122,8 @@ public abstract class ListPopulation implements Population {
     @Override
     public void addChromosome(final Chromosome chromosome) throws MathIllegalArgumentException {
         if (chromosomes.size() >= populationLimit) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
-                                                chromosomes.size(), populationLimit, false);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE,
+                                                   chromosomes.size(), populationLimit, false);
         }
         this.chromosomes.add(chromosome);
     }
@@ -161,10 +163,11 @@ public abstract class ListPopulation implements Population {
      */
     public void setPopulationLimit(final int populationLimit) throws MathIllegalArgumentException {
         if (populationLimit <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.POPULATION_LIMIT_NOT_POSITIVE, populationLimit);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.POPULATION_LIMIT_NOT_POSITIVE,
+                                                   populationLimit);
         }
         if (populationLimit < chromosomes.size()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    populationLimit, chromosomes.size());
         }
         this.populationLimit = populationLimit;

@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -1205,7 +1205,7 @@ public class Complex implements FieldElement<Complex>, Serializable  {
     public List<Complex> nthRoot(int n) throws MathIllegalArgumentException {
 
         if (n <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.CANNOT_COMPUTE_NTH_ROOT_FOR_NEGATIVE_N,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_COMPUTE_NTH_ROOT_FOR_NEGATIVE_N,
                                            n);
         }
 

@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.CombinatoricsUtils;
@@ -539,7 +539,7 @@ public class DSCompiler {
 
         // safety check
         if (orders.length != getFreeParameters()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    orders.length, getFreeParameters());
         }
 
@@ -574,7 +574,7 @@ public class DSCompiler {
             // safety check
             ordersSum += derivativeOrder;
             if (ordersSum > order) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                        ordersSum, order);
             }
 
@@ -1810,11 +1810,11 @@ public class DSCompiler {
     public void checkCompatibility(final DSCompiler compiler)
         throws MathIllegalArgumentException {
         if (parameters != compiler.parameters) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    parameters, compiler.parameters);
         }
         if (order != compiler.order) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    order, compiler.order);
         }
     }

@@ -20,7 +20,7 @@ package org.hipparchus.dfp;
 import java.util.Arrays;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -2846,7 +2846,7 @@ public class Dfp implements RealFieldElement<Dfp> {
     public Dfp linearCombination(final Dfp[] a, final Dfp[] b)
         throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    a.length, b.length);
         }
         Dfp r = getZero();
@@ -2863,7 +2863,7 @@ public class Dfp implements RealFieldElement<Dfp> {
     public Dfp linearCombination(final double[] a, final Dfp[] b)
         throws MathIllegalArgumentException {
         if (a.length != b.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    a.length, b.length);
         }
         Dfp r = getZero();

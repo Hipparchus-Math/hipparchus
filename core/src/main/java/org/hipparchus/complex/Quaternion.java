@@ -19,7 +19,7 @@ package org.hipparchus.complex;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -87,7 +87,7 @@ public final class Quaternion implements Serializable {
                       final double[] v)
         throws MathIllegalArgumentException {
         if (v.length != 3) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, 3);
         }
         this.q0 = scalar;
@@ -252,7 +252,7 @@ public final class Quaternion implements Serializable {
         final double norm = getNorm();
 
         if (norm < Precision.SAFE_MIN) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NORM, norm);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NORM, norm);
         }
 
         return new Quaternion(q0 / norm,
@@ -363,7 +363,7 @@ public final class Quaternion implements Serializable {
     public Quaternion getInverse() {
         final double squareNorm = q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3;
         if (squareNorm < Precision.SAFE_MIN) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NORM, squareNorm);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NORM, squareNorm);
         }
 
         return new Quaternion(q0 / squareNorm,

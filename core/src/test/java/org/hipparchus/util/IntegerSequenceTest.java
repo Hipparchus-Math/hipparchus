@@ -16,7 +16,7 @@ package org.hipparchus.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.junit.Assert;
@@ -253,7 +253,7 @@ public class IntegerSequenceTest {
             = new IntegerSequence.Incrementor.MaxCountExceededCallback() {
                     /** {@inheritDoc} */
                     public void trigger(int max) {
-                        throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED,
+                        throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
                                                             max);
                     }
                 };

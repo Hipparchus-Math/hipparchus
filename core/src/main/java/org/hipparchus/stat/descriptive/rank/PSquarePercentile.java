@@ -30,7 +30,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.interpolation.LinearInterpolator;
 import org.hipparchus.analysis.interpolation.NevilleInterpolator;
 import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
@@ -119,7 +119,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
      */
     public PSquarePercentile(final double p) {
         if (p > 100 || p < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE, p, 0, 100);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE, p, 0, 100);
         }
         this.quantile = p / 100d;// always set it within (0,1]
     }
@@ -376,7 +376,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
                     initialFive == null ? -1 : initialFive.size();
             if (countObserved < PSQUARE_CONSTANT) {
                 throw new MathIllegalArgumentException(
-                        LocalizedFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
+                        LocalizedCoreFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
                         countObserved, PSQUARE_CONSTANT);
             }
             Collections.sort(initialFive);
@@ -493,7 +493,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         @Override
         public double estimate(final int index) {
             if (index < LOW || index > HIGH) {
-                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                        index, LOW, HIGH);
             }
             return markerArray[index].estimate();
@@ -552,7 +552,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         @Override
         public double height(final int markerIndex) {
             if (markerIndex >= markerArray.length || markerIndex <= 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                        markerIndex, 1, markerArray.length);
             }
             return markerArray[markerIndex].markerHeight;

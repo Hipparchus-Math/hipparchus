@@ -22,7 +22,7 @@ import java.io.ObjectInputStream;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
 
@@ -142,7 +142,7 @@ public class Neuron implements Serializable {
     public boolean compareAndSetFeatures(double[] expect,
                                          double[] update) {
         if (update.length != size) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    update.length, size);
         }
 
@@ -210,7 +210,7 @@ public class Neuron implements Serializable {
     private boolean containSameValues(double[] current,
                                       double[] expect) {
         if (expect.length != size) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    expect.length, size);
         }
 

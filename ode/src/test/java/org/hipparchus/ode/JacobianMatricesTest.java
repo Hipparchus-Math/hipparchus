@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.JacobianMatrices.MismatchedEquations;
@@ -97,7 +97,7 @@ public class JacobianMatricesTest {
             brusselator.setParameter(name, 3.0);
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException upe) {
-            Assert.assertEquals(LocalizedFormats.UNKNOWN_PARAMETER, upe.getSpecifier());
+            Assert.assertEquals(LocalizedODEFormats.UNKNOWN_PARAMETER, upe.getSpecifier());
             Assert.assertEquals(name, (String) upe.getParts()[0]);
         }
     }
@@ -530,7 +530,7 @@ public class JacobianMatricesTest {
             } else if (name.equals(OMEGA)) {
                 return omega;
             } else {
-                throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, name);
+                throw new MathIllegalArgumentException(LocalizedODEFormats.UNKNOWN_PARAMETER, name);
             }
         }
 
@@ -543,7 +543,7 @@ public class JacobianMatricesTest {
             } else if (name.equals(OMEGA)) {
                 omega = value;
             } else {
-                throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, name);
+                throw new MathIllegalArgumentException(LocalizedODEFormats.UNKNOWN_PARAMETER, name);
             }
         }
 

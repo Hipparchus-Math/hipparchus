@@ -19,7 +19,7 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -70,7 +70,7 @@ public class TournamentSelection implements SelectionPolicy {
      */
     private Chromosome tournament(final ListPopulation population) throws MathIllegalArgumentException {
         if (population.getPopulationSize() < this.arity) {
-            throw new MathIllegalArgumentException(LocalizedFormats.TOO_LARGE_TOURNAMENT_ARITY,
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.TOO_LARGE_TOURNAMENT_ARITY,
                                                    arity, population.getPopulationSize());
         }
         // auxiliary population

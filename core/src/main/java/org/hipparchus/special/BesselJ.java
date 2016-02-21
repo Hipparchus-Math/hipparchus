@@ -18,7 +18,7 @@
 package org.hipparchus.special;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
@@ -163,11 +163,11 @@ public class BesselJ
         if (res.nVals >= nb) {
             return res.vals[n];
         } else if (res.nVals < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.BESSEL_FUNCTION_BAD_ARGUMENT,order, x);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.BESSEL_FUNCTION_BAD_ARGUMENT,order, x);
         } else if (FastMath.abs(res.vals[res.nVals - 1]) < 1e-100) {
             return res.vals[n]; // underflow; return value (will be zero)
         }
-        throw new MathIllegalStateException(LocalizedFormats.BESSEL_FUNCTION_FAILED_CONVERGENCE, order, x);
+        throw new MathIllegalStateException(LocalizedCoreFormats.BESSEL_FUNCTION_FAILED_CONVERGENCE, order, x);
     }
 
     /**

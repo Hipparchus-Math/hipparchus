@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 import org.hipparchus.analysis.polynomials.PolynomialSplineFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -142,11 +142,11 @@ public class LoessInterpolator
         throws MathIllegalArgumentException {
         if (bandwidth < 0 ||
             bandwidth > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.BANDWIDTH, bandwidth, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.BANDWIDTH, bandwidth, 0, 1);
         }
         this.bandwidth = bandwidth;
         if (robustnessIters < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ROBUSTNESS_ITERATIONS, robustnessIters);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ROBUSTNESS_ITERATIONS, robustnessIters);
         }
         this.robustnessIters = robustnessIters;
         this.accuracy = accuracy;
@@ -204,14 +204,14 @@ public class LoessInterpolator
                                  final double[] weights)
         throws MathIllegalArgumentException {
         if (xval.length != yval.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);
         }
 
         final int n = xval.length;
 
         if (n == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
 
         checkAllFiniteReal(xval);
@@ -231,7 +231,7 @@ public class LoessInterpolator
         int bandwidthInPoints = (int) (bandwidth * n);
 
         if (bandwidthInPoints < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.BANDWIDTH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.BANDWIDTH,
                                                 bandwidthInPoints, 2, true);
         }
 
@@ -368,7 +368,7 @@ public class LoessInterpolator
     public final double[] smooth(final double[] xval, final double[] yval)
         throws MathIllegalArgumentException {
         if (xval.length != yval.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, yval.length);
         }
 

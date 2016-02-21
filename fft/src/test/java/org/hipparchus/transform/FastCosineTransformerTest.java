@@ -22,7 +22,7 @@ import java.util.Collection;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.transform.DctNormalization;
@@ -154,7 +154,7 @@ public final class FastCosineTransformerTest
             } else if (normalization == DctNormalization.ORTHOGONAL_DCT_I) {
                 s = FastMath.sqrt(2.0 / (n - 1.0));
             } else {
-                throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+                throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
             }
         } else if (type == TransformType.INVERSE) {
             if (normalization == DctNormalization.STANDARD_DCT_I) {
@@ -162,14 +162,14 @@ public final class FastCosineTransformerTest
             } else if (normalization == DctNormalization.ORTHOGONAL_DCT_I) {
                 s = FastMath.sqrt(2.0 / (n - 1.0));
             } else {
-                throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+                throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
             }
         } else {
             /*
              * Should never occur. This clause is a safeguard in case other
              * types are used to TransformType (which should not be done).
              */
-            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+            throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
         }
         TransformUtils.scaleArray(y, s);
         return y;

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
@@ -107,7 +107,7 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
         }
 
         if(y0 * y1 > 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_BRACKETING_INTERVAL,
                                                    x0, x1, y0, y1);
         }
 

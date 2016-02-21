@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 
@@ -99,14 +99,14 @@ public class Network
             long[][] neighbourIdList) {
         final int numNeurons = neuronList.length;
         if (numNeurons != neighbourIdList.length) {
-            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+            throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
         }
 
         for (int i = 0; i < numNeurons; i++) {
             final Neuron n = neuronList[i];
             final long id = n.getIdentifier();
             if (id >= nextId) {
-                throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+                throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
             }
             neuronMap.put(id, n);
             linkMap.put(id, new HashSet<Long>());
@@ -117,7 +117,7 @@ public class Network
             final Set<Long> aLinks = linkMap.get(aId);
             for (Long bId : neighbourIdList[i]) {
                 if (neuronMap.get(bId) == null) {
-                    throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+                    throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
                 }
                 addLinkToLinkSet(aLinks, bId);
             }
@@ -198,7 +198,7 @@ public class Network
      */
     public long createNeuron(double[] features) {
         if (features.length != featureSize) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    features.length, featureSize);
         }
 

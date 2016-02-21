@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -85,16 +85,16 @@ public class TriangularDistribution extends AbstractRealDistribution {
 
         if (a >= b) {
             throw new MathIllegalArgumentException(
-                            LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+                            LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                             a, b, false);
         }
         if (c < a) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.NUMBER_TOO_SMALL, c, a, true);
+                    LocalizedCoreFormats.NUMBER_TOO_SMALL, c, a, true);
         }
         if (c > b) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.NUMBER_TOO_LARGE, c, b, true);
+                    LocalizedCoreFormats.NUMBER_TOO_LARGE, c, b, true);
         }
 
         this.a = a;
@@ -262,7 +262,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
     public double inverseCumulativeProbability(double p)
         throws MathIllegalArgumentException {
         if (p < 0 || p > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         }
         if (p == 0) {

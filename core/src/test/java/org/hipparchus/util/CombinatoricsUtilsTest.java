@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.junit.Assert;
@@ -353,7 +353,7 @@ public class CombinatoricsUtilsTest {
                 binomialCoefficient(n - 1, k));
         }
         if (result == -1) {
-            throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
+            throw new MathRuntimeException(LocalizedCoreFormats.ARITHMETIC_EXCEPTION);
         }
         for (int i = binomialCache.size(); i < n + 1; i++) {
             binomialCache.add(new HashMap<Integer, Long>());

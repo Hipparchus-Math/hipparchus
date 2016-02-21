@@ -38,7 +38,7 @@ import org.hipparchus.distribution.TDistribution;
 import org.hipparchus.distribution.UniformIntegerDistribution;
 import org.hipparchus.distribution.WeibullDistribution;
 import org.hipparchus.distribution.ZipfDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.MathArrays;
@@ -158,7 +158,7 @@ public class RandomDataGenerator implements Serializable {
      */
     public String nextHexString(int len) throws MathIllegalArgumentException {
         if (len <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, len);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LENGTH, len);
         }
 
         // Get a random number generator
@@ -225,7 +225,7 @@ public class RandomDataGenerator implements Serializable {
      */
     public long nextLong(final long lower, final long upper) throws MathIllegalArgumentException {
         if (lower >= upper) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                                                 lower, upper, false);
         }
         final long max = (upper - lower) + 1;
@@ -276,7 +276,7 @@ public class RandomDataGenerator implements Serializable {
             } while (bits - val + (n - 1) < 0);
             return val;
         }
-        throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+        throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                n, 0);
     }
 
@@ -306,7 +306,7 @@ public class RandomDataGenerator implements Serializable {
      */
     public String nextSecureHexString(int len) throws MathIllegalArgumentException {
         if (len <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, len);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LENGTH, len);
         }
 
         // Get SecureRandom and setup Digest provider
@@ -396,7 +396,7 @@ public class RandomDataGenerator implements Serializable {
      */
     public long nextSecureLong(final long lower, final long upper) throws MathIllegalArgumentException {
         if (lower >= upper) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                                                 lower, upper, false);
         }
         final RandomGenerator rng = getSecRan();
@@ -462,7 +462,7 @@ public class RandomDataGenerator implements Serializable {
      */
     public double nextGaussian(double mu, double sigma) throws MathIllegalArgumentException {
         if (sigma <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.STANDARD_DEVIATION, sigma);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.STANDARD_DEVIATION, sigma);
         }
         return sigma * getRandomGenerator().nextGaussian() + mu;
     }
@@ -712,19 +712,19 @@ public class RandomDataGenerator implements Serializable {
         throws MathIllegalArgumentException {
 
         if (lower >= upper) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
                                                 lower, upper, false);
         }
 
         if (Double.isInfinite(lower)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_BOUND, lower);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INFINITE_BOUND, lower);
         }
         if (Double.isInfinite(upper)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_BOUND, upper);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INFINITE_BOUND, upper);
         }
 
         if (Double.isNaN(lower) || Double.isNaN(upper)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_NOT_ALLOWED);
         }
 
         final RandomGenerator generator = getRandomGenerator();
@@ -760,11 +760,11 @@ public class RandomDataGenerator implements Serializable {
     public int[] nextPermutation(int n, int k)
         throws MathIllegalArgumentException {
         if (k > n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.PERMUTATION_EXCEEDS_N,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.PERMUTATION_EXCEEDS_N,
                                                 k, n, true);
         }
         if (k <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.PERMUTATION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.PERMUTATION_SIZE,
                                                    k);
         }
 
@@ -799,11 +799,11 @@ public class RandomDataGenerator implements Serializable {
 
         int len = c.size();
         if (k > len) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE,
                                                 k, len, true);
         }
         if (k <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES, k);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES, k);
         }
 
         Object[] objects = c.toArray();

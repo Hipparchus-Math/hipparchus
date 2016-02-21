@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
@@ -216,7 +216,7 @@ public class NaturalRanking implements RankingAlgorithm {
             case FAILED:
                 nanPositions = getNanPositions(ranks);
                 if (nanPositions.size() > 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_NOT_ALLOWED);
                 }
                 break;
             default: // this should not happen unless NaNStrategy enum is changed

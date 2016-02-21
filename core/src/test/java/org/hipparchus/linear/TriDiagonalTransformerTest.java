@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -47,7 +47,7 @@ public class TriDiagonalTransformerTest {
             new TriDiagonalTransformer(MatrixUtils.createRealMatrix(new double[3][2]));
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException ime) {
-            Assert.assertEquals(LocalizedFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 

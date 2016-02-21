@@ -19,7 +19,7 @@ package org.hipparchus.analysis.polynomials;
 import java.util.Arrays;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.junit.Assert;
@@ -174,7 +174,7 @@ public class PolynomialSplineFunctionTest {
      */
      protected int findKnot(double[] knots, double x) {
          if (x < knots[0] || x >= knots[knots.length -1]) {
-             throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+             throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                     x, knots[0], knots[knots.length -1]);
          }
          for (int i = 0; i < knots.length; i++) {
@@ -182,7 +182,7 @@ public class PolynomialSplineFunctionTest {
                  return i - 1;
              }
          }
-         throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+         throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
      }
 }
 

@@ -28,7 +28,7 @@ import java.util.TreeSet;
 
 import org.hipparchus.Field;
 import org.hipparchus.distribution.UniformIntegerDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -395,7 +395,7 @@ public class MathArrays {
             return true;
         } else {
             if (abort) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        a.length, b.length);
             }
             return false;
@@ -434,7 +434,7 @@ public class MathArrays {
             return true;
         } else {
             if (abort) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        a.length, b.length);
             }
             return false;
@@ -514,11 +514,11 @@ public class MathArrays {
         if (abort) {
             throw new MathIllegalArgumentException(dir == MathArrays.OrderDirection.INCREASING ?
                                                     (strict ?
-                                                     LocalizedFormats.NOT_STRICTLY_INCREASING_SEQUENCE :
-                                                     LocalizedFormats.NOT_INCREASING_SEQUENCE) :
+                                                     LocalizedCoreFormats.NOT_STRICTLY_INCREASING_SEQUENCE :
+                                                     LocalizedCoreFormats.NOT_INCREASING_SEQUENCE) :
                                                     (strict ?
-                                                     LocalizedFormats.NOT_STRICTLY_DECREASING_SEQUENCE :
-                                                     LocalizedFormats.NOT_DECREASING_SEQUENCE),
+                                                     LocalizedCoreFormats.NOT_STRICTLY_DECREASING_SEQUENCE :
+                                                     LocalizedCoreFormats.NOT_DECREASING_SEQUENCE),
                                                     val[index], previous, index, index - 1);
         } else {
             return false;
@@ -564,7 +564,7 @@ public class MathArrays {
         for (int i = 1; i < in.length; i++) {
             if (in[i].length != in[0].length) {
                 throw new MathIllegalArgumentException(
-                        LocalizedFormats.DIFFERENT_ROWS_LENGTHS,
+                        LocalizedCoreFormats.DIFFERENT_ROWS_LENGTHS,
                         in[i].length, in[0].length);
             }
         }
@@ -582,7 +582,7 @@ public class MathArrays {
         throws MathIllegalArgumentException {
         for (int i = 0; i < in.length; i++) {
             if (in[i] <= 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                        in[i], 0);
             }
         }
@@ -599,7 +599,7 @@ public class MathArrays {
         throws MathIllegalArgumentException {
         for(int i = 0; i < in.length; i++) {
             if (Double.isNaN(in[i])) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_NOT_ALLOWED);
             }
         }
     }
@@ -615,7 +615,7 @@ public class MathArrays {
         throws MathIllegalArgumentException {
         for (int i = 0; i < in.length; i++) {
             if (in[i] < 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, in[i], 0);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, in[i], 0);
             }
         }
     }
@@ -632,7 +632,7 @@ public class MathArrays {
         for (int i = 0; i < in.length; i ++) {
             for (int j = 0; j < in[i].length; j++) {
                 if (in[i][j] < 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, in[i][j], 0);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, in[i][j], 0);
                 }
             }
         }
@@ -839,7 +839,7 @@ public class MathArrays {
                 throw new NullArgumentException();
             }
             if (y.length != len) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        y.length, len);
             }
         }
@@ -1437,24 +1437,24 @@ public class MathArrays {
     public static double[] normalizeArray(double[] values, double normalizedSum)
         throws MathIllegalArgumentException, MathRuntimeException {
         if (Double.isInfinite(normalizedSum)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NORMALIZE_INFINITE);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NORMALIZE_INFINITE);
         }
         if (Double.isNaN(normalizedSum)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NORMALIZE_NAN);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NORMALIZE_NAN);
         }
         double sum = 0d;
         final int len = values.length;
         double[] out = new double[len];
         for (int i = 0; i < len; i++) {
             if (Double.isInfinite(values[i])) {
-                throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_ARRAY_ELEMENT, values[i], i);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.INFINITE_ARRAY_ELEMENT, values[i], i);
             }
             if (!Double.isNaN(values[i])) {
                 sum += values[i];
             }
         }
         if (sum == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ARRAY_SUMS_TO_ZERO);
+            throw new MathRuntimeException(LocalizedCoreFormats.ARRAY_SUMS_TO_ZERO);
         }
         for (int i = 0; i < len; i++) {
             if (Double.isNaN(values[i])) {
@@ -1542,7 +1542,7 @@ public class MathArrays {
         final int hLen = h.length;
 
         if (xLen == 0 || hLen == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
 
         // initialize the output array
@@ -1753,19 +1753,19 @@ public class MathArrays {
             final int length, final boolean allowEmpty) throws MathIllegalArgumentException {
 
         if (values == null) {
-            throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
         }
 
         if (begin < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.START_POSITION, Integer.valueOf(begin));
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, Integer.valueOf(begin));
         }
 
         if (length < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, Integer.valueOf(length));
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LENGTH, Integer.valueOf(length));
         }
 
         if (begin + length > values.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
                     Integer.valueOf(begin + length), Integer.valueOf(values.length), true);
         }
 
@@ -1851,7 +1851,7 @@ public class MathArrays {
             final int begin, final int length, final boolean allowEmpty) throws MathIllegalArgumentException {
 
         if (weights == null || values == null) {
-            throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
         }
 
         checkEqualLength(weights, values);
@@ -1860,13 +1860,13 @@ public class MathArrays {
         for (int i = begin; i < begin + length; i++) {
             final double weight = weights[i];
             if (Double.isNaN(weight)) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NAN_ELEMENT_AT_INDEX, Integer.valueOf(i));
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_ELEMENT_AT_INDEX, Integer.valueOf(i));
             }
             if (Double.isInfinite(weight)) {
-                throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_ARRAY_ELEMENT, Double.valueOf(weight), Integer.valueOf(i));
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.INFINITE_ARRAY_ELEMENT, Double.valueOf(weight), Integer.valueOf(i));
             }
             if (weight < 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NEGATIVE_ELEMENT_AT_INDEX, Integer.valueOf(i), Double.valueOf(weight));
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NEGATIVE_ELEMENT_AT_INDEX, Integer.valueOf(i), Double.valueOf(weight));
             }
             if (!containsPositiveWeight && weight > 0.0) {
                 containsPositiveWeight = true;
@@ -1874,7 +1874,7 @@ public class MathArrays {
         }
 
         if (!containsPositiveWeight) {
-            throw new MathIllegalArgumentException(LocalizedFormats.WEIGHT_AT_LEAST_ONE_NON_ZERO);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.WEIGHT_AT_LEAST_ONE_NON_ZERO);
         }
 
         return verifyValues(values, begin, length, allowEmpty);

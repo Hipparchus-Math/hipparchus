@@ -17,7 +17,7 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
@@ -68,7 +68,7 @@ class SchurTransformer {
      */
     SchurTransformer(final RealMatrix matrix) {
         if (!matrix.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
@@ -203,7 +203,7 @@ class SchurTransformer {
 
                 // stop transformation after too many iterations
                 if (++iteration > MAX_ITERATIONS) {
-                    throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED,
+                    throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED,
                                                         MAX_ITERATIONS);
                 }
 

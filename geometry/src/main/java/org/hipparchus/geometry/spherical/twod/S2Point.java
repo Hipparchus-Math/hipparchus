@@ -17,7 +17,7 @@
 package org.hipparchus.geometry.spherical.twod;
 
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
@@ -117,7 +117,7 @@ public class S2Point implements Point<Sphere2D> {
        throws MathIllegalArgumentException {
 
         if (phi < 0 || phi > FastMath.PI) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    phi, 0, FastMath.PI);
         }
 

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Incrementor;
 
@@ -86,7 +86,7 @@ public abstract class AbstractOptimizationProblem<PAIR>
          */
         @Override
         public void trigger(int max) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
         }
     }
 
@@ -100,7 +100,7 @@ public abstract class AbstractOptimizationProblem<PAIR>
          */
         @Override
         public void trigger(int max) {
-            throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
         }
     }
 

@@ -19,7 +19,7 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -38,7 +38,7 @@ public class RandomKeyMutation implements MutationPolicy {
     @Override
     public Chromosome mutate(final Chromosome original) throws MathIllegalArgumentException {
         if (!(original instanceof RandomKey<?>)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.RANDOMKEY_MUTATION_WRONG_CLASS,
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.RANDOMKEY_MUTATION_WRONG_CLASS,
                                                    original.getClass().getSimpleName());
         }
 

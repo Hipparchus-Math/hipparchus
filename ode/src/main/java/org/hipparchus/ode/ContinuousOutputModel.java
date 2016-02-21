@@ -21,7 +21,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.StepHandler;
@@ -138,13 +139,13 @@ public class ContinuousOutputModel
     } else {
 
       if (getInterpolatedState().length != model.getInterpolatedState().length) {
-          throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+          throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                  model.getInterpolatedState().length,
                                                  getInterpolatedState().length);
       }
 
       if (forward ^ model.forward) {
-          throw new MathIllegalArgumentException(LocalizedFormats.PROPAGATION_DIRECTION_MISMATCH);
+          throw new MathIllegalArgumentException(LocalizedODEFormats.PROPAGATION_DIRECTION_MISMATCH);
       }
 
       final StepInterpolator lastInterpolator = steps.get(index);
@@ -153,7 +154,7 @@ public class ContinuousOutputModel
       final double step = current - previous;
       final double gap = model.getInitialTime() - current;
       if (FastMath.abs(gap) > 1.0e-3 * FastMath.abs(step)) {
-        throw new MathIllegalArgumentException(LocalizedFormats.HOLE_BETWEEN_MODELS_TIME_RANGES,
+        throw new MathIllegalArgumentException(LocalizedODEFormats.HOLE_BETWEEN_MODELS_TIME_RANGES,
                                                FastMath.abs(gap));
       }
 

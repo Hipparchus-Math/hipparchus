@@ -18,7 +18,7 @@ package org.hipparchus.util;
 
 import java.io.PrintStream;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Class used to compute the classical functions tables.
@@ -652,7 +652,7 @@ class FastMathCalc {
     private static void checkLen(int expectedLen, int actual)
         throws MathIllegalArgumentException {
         if (expectedLen != actual) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    actual, expectedLen);
         }
     }

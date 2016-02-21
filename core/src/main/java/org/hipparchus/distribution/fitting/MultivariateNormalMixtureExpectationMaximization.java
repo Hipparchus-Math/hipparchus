@@ -22,7 +22,7 @@ import java.util.List;
 
 import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
 import org.hipparchus.distribution.MultivariateNormalDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -82,7 +82,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
     public MultivariateNormalMixtureExpectationMaximization(double[][] data)
         throws MathIllegalArgumentException {
         if (data.length < 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    data.length, 1);
         }
 
@@ -91,11 +91,11 @@ public class MultivariateNormalMixtureExpectationMaximization {
         for (int i = 0; i < data.length; i++) {
             if (data[i].length != data[0].length) {
                 // Jagged arrays not allowed
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        data[i].length, data[0].length);
             }
             if (data[i].length < 2) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                     data[i].length, 2, true);
             }
             this.data[i] = MathArrays.copyOf(data[i], data[i].length);
@@ -129,12 +129,12 @@ public class MultivariateNormalMixtureExpectationMaximization {
                     final double threshold)
             throws MathIllegalArgumentException {
         if (maxIterations < 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    maxIterations, 1);
         }
 
         if (threshold < Double.MIN_VALUE) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    threshold, Double.MIN_VALUE);
         }
 
@@ -149,7 +149,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
             = initialMixture.getComponents().get(0).getSecond().getMeans().length;
 
         if (numMeanColumns != numCols) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    numMeanColumns, numCols);
         }
 
@@ -250,7 +250,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
 
         if (FastMath.abs(previousLogLikelihood - logLikelihood) > threshold) {
             // Did not converge before the maximum number of iterations
-            throw new MathIllegalStateException(LocalizedFormats.CONVERGENCE_FAILED);
+            throw new MathIllegalStateException(LocalizedCoreFormats.CONVERGENCE_FAILED);
         }
     }
 
@@ -298,15 +298,15 @@ public class MultivariateNormalMixtureExpectationMaximization {
                                                                  final int numComponents)
         throws MathIllegalArgumentException {
         if (data.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    data.length, 2);
         }
         if (numComponents < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    numComponents, 2);
         }
         if (numComponents > data.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                    numComponents, data.length);
         }
 

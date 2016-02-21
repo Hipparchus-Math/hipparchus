@@ -20,7 +20,7 @@ package org.hipparchus.linear;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -162,7 +162,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
             final int iHeight = blockHeight(iBlock);
             for (int jBlock = 0; jBlock < blockColumns; ++jBlock, ++index) {
                 if (blockData[index].length != iHeight * blockWidth(jBlock)) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                            blockData[index].length,
                                                            iHeight * blockWidth(jBlock));
                 }
@@ -205,7 +205,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
         for (int i = 0; i < rawData.length; ++i) {
             final int length = rawData[i].length;
             if (length != columns) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        columns, length);
             }
         }
@@ -790,14 +790,14 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
         MathUtils.checkNotNull(subMatrix);
         final int refLength = subMatrix[0].length;
         if (refLength == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_COLUMN);
         }
         final int endRow = row + subMatrix.length - 1;
         final int endColumn = column + refLength - 1;
         MatrixUtils.checkSubMatrixIndex(this, row, endRow, column, endColumn);
         for (final double[] subRow : subMatrix) {
             if (subRow.length != refLength) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        refLength, subRow.length);
             }
         }
@@ -893,7 +893,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
         final int nCols = getColumnDimension();
         if ((matrix.getRowDimension() != 1) ||
             (matrix.getColumnDimension() != nCols)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    matrix.getRowDimension(), matrix.getColumnDimension(),
                                                    1, nCols);
         }
@@ -977,7 +977,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
         final int nRows = getRowDimension();
         if ((matrix.getRowDimension() != nRows) ||
             (matrix.getColumnDimension() != 1)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    matrix.getRowDimension(), matrix.getColumnDimension(),
                                                    nRows, 1);
         }
@@ -1095,7 +1095,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
         MatrixUtils.checkRowIndex(this, row);
         final int nCols = getColumnDimension();
         if (array.length != nCols) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    1, array.length,
                                                    1, nCols);
         }
@@ -1141,7 +1141,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
         MatrixUtils.checkColumnIndex(this, column);
         final int nRows = getRowDimension();
         if (array.length != nRows) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    array.length, 1,
                                                    nRows, 1);
         }
@@ -1263,7 +1263,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     public double[] operate(final double[] v)
         throws MathIllegalArgumentException {
         if (v.length != columns) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, columns);
         }
         final double[] out = new double[rows];
@@ -1304,7 +1304,7 @@ public class BlockRealMatrix extends AbstractRealMatrix implements Serializable 
     public double[] preMultiply(final double[] v)
         throws MathIllegalArgumentException {
         if (v.length != rows) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, rows);
         }
         final double[] out = new double[columns];

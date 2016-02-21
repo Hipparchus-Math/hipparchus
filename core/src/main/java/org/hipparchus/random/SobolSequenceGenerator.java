@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -89,7 +89,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      */
     public SobolSequenceGenerator(final int dimension) throws MathIllegalArgumentException {
         if (dimension < 1 || dimension > MAX_DIMENSION) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    dimension, 1, MAX_DIMENSION);
         }
 
@@ -157,7 +157,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
             throws MathIllegalArgumentException, MathIllegalStateException, IOException {
 
         if (dimension < 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    dimension, 1);
         }
 
@@ -170,7 +170,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
         // initialize the other dimensions with direction numbers from the stream
         int lastDimension = initFromStream(is);
         if (lastDimension < dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    dimension, 1, lastDimension);
         }
     }
@@ -222,7 +222,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
                         return dim;
                     }
                 } catch (NoSuchElementException|NumberFormatException e) {
-                    throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE,
+                    throw new MathIllegalStateException(LocalizedCoreFormats.CANNOT_PARSE,
                                                         line, lineNumber);
                 }
                 lineNumber++;

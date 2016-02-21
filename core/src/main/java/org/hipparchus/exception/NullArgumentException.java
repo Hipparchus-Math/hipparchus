@@ -48,7 +48,7 @@ public class NullArgumentException extends NullPointerException
      * Default constructor.
      */
     public NullArgumentException() {
-        this(LocalizedFormats.NULL_NOT_ALLOWED);
+        this(LocalizedCoreFormats.NULL_NOT_ALLOWED);
     }
 
     /** Simple constructor.

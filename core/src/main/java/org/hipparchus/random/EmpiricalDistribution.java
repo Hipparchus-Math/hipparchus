@@ -32,7 +32,7 @@ import org.hipparchus.distribution.AbstractRealDistribution;
 import org.hipparchus.distribution.ConstantRealDistribution;
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -189,7 +189,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
                                   RandomDataGenerator randomData) {
         super(randomData.getRandomGenerator());
         if (binCount <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    binCount, 0);
         }
         this.binCount = binCount;
@@ -239,7 +239,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             DataAdapter da = new StreamDataAdapter(in);
             da.computeStats();
             if (sampleStats.getN() == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.URL_CONTAINS_NO_DATA, url);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.URL_CONTAINS_NO_DATA, url);
             }
             // new adapter for the second pass
             in = new BufferedReader(new InputStreamReader(url.openStream(), charset));
@@ -454,7 +454,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     public double getNextValue() throws MathIllegalStateException {
 
         if (!loaded) {
-            throw new MathIllegalStateException(LocalizedFormats.DISTRIBUTION_NOT_LOADED);
+            throw new MathIllegalStateException(LocalizedCoreFormats.DISTRIBUTION_NOT_LOADED);
         }
 
         return sample();
@@ -655,7 +655,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     @Override
     public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         }
 

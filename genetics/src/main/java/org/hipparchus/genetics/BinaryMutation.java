@@ -19,7 +19,7 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -39,7 +39,7 @@ public class BinaryMutation implements MutationPolicy {
     @Override
     public Chromosome mutate(Chromosome original) throws MathIllegalArgumentException {
         if (!(original instanceof BinaryChromosome)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_BINARY_CHROMOSOME);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.INVALID_BINARY_CHROMOSOME);
         }
 
         BinaryChromosome origChrom = (BinaryChromosome) original;

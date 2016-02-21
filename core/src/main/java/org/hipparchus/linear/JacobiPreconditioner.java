@@ -17,7 +17,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.analysis.function.Sqrt;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
@@ -62,7 +62,7 @@ public class JacobiPreconditioner extends RealLinearOperator {
         throws MathIllegalArgumentException {
         final int n = a.getColumnDimension();
         if (a.getRowDimension() != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_OPERATOR,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_OPERATOR,
                                                    a.getRowDimension(), n);
         }
         final double[] diag = new double[n];

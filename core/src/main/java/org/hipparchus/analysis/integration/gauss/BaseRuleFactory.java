@@ -19,7 +19,7 @@ package org.hipparchus.analysis.integration.gauss;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Pair;
 
@@ -55,7 +55,7 @@ public abstract class BaseRuleFactory<T extends Number> {
         throws MathIllegalArgumentException {
 
         if (numberOfPoints <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_POINTS,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_POINTS,
                                                    numberOfPoints);
         }
 
@@ -109,7 +109,7 @@ public abstract class BaseRuleFactory<T extends Number> {
      */
     protected void addRule(Pair<T[], T[]> rule) throws MathIllegalArgumentException {
         if (rule.getFirst().length != rule.getSecond().length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    rule.getFirst().length,
                                                    rule.getSecond().length);
         }

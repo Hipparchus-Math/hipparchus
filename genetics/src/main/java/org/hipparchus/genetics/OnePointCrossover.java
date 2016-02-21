@@ -19,7 +19,8 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 
@@ -79,7 +80,7 @@ public class OnePointCrossover<T> implements CrossoverPolicy {
         throws MathIllegalArgumentException {
 
         if (! (first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
         }
         return crossover((AbstractListChromosome<T>) first, (AbstractListChromosome<T>) second);
     }
@@ -97,7 +98,7 @@ public class OnePointCrossover<T> implements CrossoverPolicy {
                                      final AbstractListChromosome<T> second) throws MathIllegalArgumentException {
         final int length = first.getLength();
         if (length != second.getLength()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    second.getLength(), length);
         }
 

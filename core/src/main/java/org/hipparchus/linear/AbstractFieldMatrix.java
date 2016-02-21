@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -69,11 +69,11 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
                                   final int columnDimension)
         throws MathIllegalArgumentException {
         if (rowDimension <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSION,
                                                    rowDimension);
         }
         if (columnDimension <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSION,
                                                    columnDimension);
         }
         this.field = field;
@@ -94,10 +94,10 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
             throw new NullArgumentException();
         }
         if (d.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_ROW);
         }
         if (d[0].length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_COLUMN);
         }
         return d[0][0].getField();
     }
@@ -113,7 +113,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     protected static <T extends FieldElement<T>> Field<T> extractField(final T[] d)
         throws MathIllegalArgumentException {
         if (d.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_ROW);
         }
         return d[0].getField();
     }
@@ -238,11 +238,11 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldMatrix<T> power(final int p) throws MathIllegalArgumentException {
         if (p < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, p, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, p, 0);
         }
 
         if (!isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    getRowDimension(), getColumnDimension());
         }
 
@@ -365,7 +365,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         final int rowsCount    = endRow + 1 - startRow;
         final int columnsCount = endColumn + 1 - startColumn;
         if ((destination.length < rowsCount) || (destination[0].length < columnsCount)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    destination.length, destination[0].length,
                                                    rowsCount, columnsCount);
         }
@@ -406,7 +406,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         checkSubMatrixIndex(selectedRows, selectedColumns);
         if ((destination.length < selectedRows.length) ||
             (destination[0].length < selectedColumns.length)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    destination.length, destination[0].length,
                                                    selectedRows.length, selectedColumns.length);
         }
@@ -431,17 +431,17 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         }
         final int nRows = subMatrix.length;
         if (nRows == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_ROW);
         }
 
         final int nCols = subMatrix[0].length;
         if (nCols == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_COLUMN);
         }
 
         for (int r = 1; r < nRows; ++r) {
             if (subMatrix[r].length != nCols) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        nCols, subMatrix[r].length);
             }
         }
@@ -480,7 +480,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         final int nCols = getColumnDimension();
         if ((matrix.getRowDimension() != 1) ||
             (matrix.getColumnDimension() != nCols)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    matrix.getRowDimension(), matrix.getColumnDimension(),
                                                    1, nCols);
         }
@@ -514,7 +514,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         final int nRows = getRowDimension();
         if ((matrix.getRowDimension() != nRows) ||
             (matrix.getColumnDimension() != 1)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    matrix.getRowDimension(), matrix.getColumnDimension(),
                                                    nRows, 1);
         }
@@ -538,7 +538,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if (vector.getDimension() != nCols) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    1, vector.getDimension(),
                                                    1, nCols);
         }
@@ -563,7 +563,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if (vector.getDimension() != nRows) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    vector.getDimension(), 1,
                                                    nRows, 1);
         }
@@ -594,7 +594,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         checkRowIndex(row);
         final int nCols = getColumnDimension();
         if (array.length != nCols) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    1, array.length, 1, nCols);
         }
         for (int i = 0; i < nCols; ++i) {
@@ -624,7 +624,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         checkColumnIndex(column);
         final int nRows = getRowDimension();
         if (array.length != nRows) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    array.length, 1, nRows, 1);
         }
         for (int i = 0; i < nRows; ++i) {
@@ -685,7 +685,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
         if (nRows != nCols) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    nRows, nCols);
        }
         T trace = field.getZero();
@@ -702,7 +702,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
         if (v.length != nCols) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, nCols);
         }
 
@@ -728,7 +728,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
             final int nRows = getRowDimension();
             final int nCols = getColumnDimension();
             if (v.getDimension() != nCols) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        v.getDimension(), nCols);
             }
 
@@ -752,7 +752,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
         if (v.length != nRows) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, nRows);
         }
 
@@ -778,7 +778,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
             final int nRows = getRowDimension();
             final int nCols = getColumnDimension();
             if (v.getDimension() != nRows) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        v.getDimension(), nRows);
             }
 
@@ -1048,7 +1048,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
      */
     protected void checkRowIndex(final int row) throws MathIllegalArgumentException {
         if (row < 0 || row >= getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ROW_INDEX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ROW_INDEX,
                                           row, 0, getRowDimension() - 1);
         }
     }
@@ -1062,7 +1062,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     protected void checkColumnIndex(final int column)
         throws MathIllegalArgumentException {
         if (column < 0 || column >= getColumnDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.COLUMN_INDEX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.COLUMN_INDEX,
                                           column, 0, getColumnDimension() - 1);
         }
     }
@@ -1085,14 +1085,14 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         checkRowIndex(startRow);
         checkRowIndex(endRow);
         if (endRow < startRow) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_ROW_AFTER_FINAL_ROW,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INITIAL_ROW_AFTER_FINAL_ROW,
                                                 endRow, startRow, true);
         }
 
         checkColumnIndex(startColumn);
         checkColumnIndex(endColumn);
         if (endColumn < startColumn) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INITIAL_COLUMN_AFTER_FINAL_COLUMN,
                                                 endColumn, startColumn, true);
         }
     }
@@ -1115,7 +1115,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         }
         if (selectedRows.length == 0 ||
             selectedColumns.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
 
         for (final int row : selectedRows) {
@@ -1137,7 +1137,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         throws MathIllegalArgumentException {
         if ((getRowDimension() != m.getRowDimension()) ||
             (getColumnDimension() != m.getColumnDimension())) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    m.getRowDimension(), m.getColumnDimension(),
                                                    getRowDimension(), getColumnDimension());
         }
@@ -1154,7 +1154,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         throws MathIllegalArgumentException {
         if ((getRowDimension() != m.getRowDimension()) ||
             (getColumnDimension() != m.getColumnDimension())) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH_2x2,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
                                                    m.getRowDimension(), m.getColumnDimension(),
                                                    getRowDimension(), getColumnDimension());
         }
@@ -1170,7 +1170,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     protected void checkMultiplicationCompatible(final FieldMatrix<T> m)
         throws MathIllegalArgumentException {
         if (getColumnDimension() != m.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    m.getRowDimension(), getColumnDimension());
         }
     }

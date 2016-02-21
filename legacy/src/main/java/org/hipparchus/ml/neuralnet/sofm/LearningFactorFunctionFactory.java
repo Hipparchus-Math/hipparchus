@@ -17,7 +17,7 @@
 
 package org.hipparchus.ml.neuralnet.sofm;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.neuralnet.sofm.util.ExponentialDecayFunction;
 import org.hipparchus.ml.neuralnet.sofm.util.QuasiSigmoidDecayFunction;
@@ -60,7 +60,7 @@ public class LearningFactorFunctionFactory {
                                                           final long numCall) {
         if (initValue <= 0 ||
             initValue > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    initValue, 0, 1);
         }
 
@@ -103,7 +103,7 @@ public class LearningFactorFunctionFactory {
                                                            final long numCall) {
         if (initValue <= 0 ||
             initValue > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    initValue, 0, 1);
         }
 

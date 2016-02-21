@@ -22,7 +22,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -63,7 +63,7 @@ public class ComplexFormat {
      */
     public ComplexFormat(NumberFormat format) throws NullArgumentException {
         if (format == null) {
-            throw new NullArgumentException(LocalizedFormats.IMAGINARY_FORMAT);
+            throw new NullArgumentException(LocalizedCoreFormats.IMAGINARY_FORMAT);
         }
         this.imaginaryCharacter = DEFAULT_IMAGINARY_CHARACTER;
         this.imaginaryFormat = format;
@@ -81,10 +81,10 @@ public class ComplexFormat {
     public ComplexFormat(NumberFormat realFormat, NumberFormat imaginaryFormat)
         throws NullArgumentException {
         if (imaginaryFormat == null) {
-            throw new NullArgumentException(LocalizedFormats.IMAGINARY_FORMAT);
+            throw new NullArgumentException(LocalizedCoreFormats.IMAGINARY_FORMAT);
         }
         if (realFormat == null) {
-            throw new NullArgumentException(LocalizedFormats.REAL_FORMAT);
+            throw new NullArgumentException(LocalizedCoreFormats.REAL_FORMAT);
         }
 
         this.imaginaryCharacter = DEFAULT_IMAGINARY_CHARACTER;
@@ -145,13 +145,13 @@ public class ComplexFormat {
             throw new NullArgumentException();
         }
         if (imaginaryCharacter.length() == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         if (imaginaryFormat == null) {
-            throw new NullArgumentException(LocalizedFormats.IMAGINARY_FORMAT);
+            throw new NullArgumentException(LocalizedCoreFormats.IMAGINARY_FORMAT);
         }
         if (realFormat == null) {
-            throw new NullArgumentException(LocalizedFormats.REAL_FORMAT);
+            throw new NullArgumentException(LocalizedCoreFormats.REAL_FORMAT);
         }
 
         this.imaginaryCharacter = imaginaryCharacter;
@@ -273,7 +273,7 @@ public class ComplexFormat {
             ret = format(new Complex(((Number)obj).doubleValue(), 0.0),
                          toAppendTo, pos);
         } else {
-            throw new MathIllegalArgumentException(LocalizedFormats.CANNOT_FORMAT_INSTANCE_AS_COMPLEX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_INSTANCE_AS_COMPLEX,
                                                    obj.getClass().getName());
         }
 
@@ -350,7 +350,7 @@ public class ComplexFormat {
         ParsePosition parsePosition = new ParsePosition(0);
         Complex result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+            throw new MathIllegalStateException(LocalizedCoreFormats.CANNOT_PARSE_AS_TYPE,
                                                 source, parsePosition.getErrorIndex(),
                                                 Complex.class);
         }

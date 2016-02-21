@@ -18,7 +18,7 @@ package org.hipparchus.util;
 
 import java.util.Iterator;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -133,7 +133,7 @@ public class IntegerSequence {
                     /** {@inheritDoc} */
                     @Override
                     public void trigger(int max) throws MathIllegalStateException {
-                        throw new MathIllegalStateException(LocalizedFormats.MAX_COUNT_EXCEEDED, max);
+                        throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
                     }
                 };
 
@@ -237,7 +237,7 @@ public class IntegerSequence {
          */
         public Incrementor withIncrement(int step) {
             if (step == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
             }
             return new Incrementor(this.init,
                                    this.maximalCount,
@@ -314,7 +314,7 @@ public class IntegerSequence {
          */
         public void increment(int nTimes) throws MathIllegalStateException {
             if (nTimes <= 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                        nTimes, 0);
             }
 
@@ -363,7 +363,7 @@ public class IntegerSequence {
          */
         @Override
         public void remove() {
-            throw new MathRuntimeException(LocalizedFormats.UNSUPPORTED_OPERATION);
+            throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
         }
     }
 }

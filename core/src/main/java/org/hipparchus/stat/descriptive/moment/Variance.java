@@ -18,7 +18,7 @@ package org.hipparchus.stat.descriptive.moment;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
@@ -227,7 +227,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
     @Override
     public double evaluate(final double[] values) throws MathIllegalArgumentException {
         if (values == null) {
-            throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
         }
         return evaluate(values, 0, values.length);
     }

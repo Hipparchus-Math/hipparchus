@@ -18,7 +18,7 @@ package org.hipparchus.analysis.solvers;
 
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -80,7 +80,7 @@ public class BracketingNthOrderBrentSolver
         throws MathIllegalArgumentException {
         super(absoluteAccuracy);
         if (maximalOrder < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    maximalOrder, 2);
         }
         this.maximalOrder = maximalOrder;
@@ -101,7 +101,7 @@ public class BracketingNthOrderBrentSolver
         throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy);
         if (maximalOrder < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    maximalOrder, 2);
         }
         this.maximalOrder = maximalOrder;
@@ -124,7 +124,7 @@ public class BracketingNthOrderBrentSolver
         throws MathIllegalArgumentException {
         super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy);
         if (maximalOrder < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    maximalOrder, 2);
         }
         this.maximalOrder = maximalOrder;
@@ -188,7 +188,7 @@ public class BracketingNthOrderBrentSolver
                 nbPoints        = 3;
                 signChangeIndex = 2;
             } else {
-                throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_BRACKETING_INTERVAL,
                                                        x[0], x[2], y[0], y[2]);
             }
 

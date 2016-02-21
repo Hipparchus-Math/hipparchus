@@ -16,7 +16,7 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 
 /**
@@ -151,10 +151,10 @@ public abstract class ContinuedFraction {
             hN = hPrev * deltaN;
 
             if (Double.isInfinite(hN)) {
-                throw new MathIllegalStateException(LocalizedFormats.CONTINUED_FRACTION_INFINITY_DIVERGENCE, x);
+                throw new MathIllegalStateException(LocalizedCoreFormats.CONTINUED_FRACTION_INFINITY_DIVERGENCE, x);
             }
             if (Double.isNaN(hN)) {
-                throw new MathIllegalStateException(LocalizedFormats.CONTINUED_FRACTION_NAN_DIVERGENCE, x);
+                throw new MathIllegalStateException(LocalizedCoreFormats.CONTINUED_FRACTION_NAN_DIVERGENCE, x);
             }
 
             if (FastMath.abs(deltaN - 1.0) < epsilon) {
@@ -168,7 +168,7 @@ public abstract class ContinuedFraction {
         }
 
         if (n >= maxIterations) {
-            throw new MathIllegalStateException(LocalizedFormats.NON_CONVERGENT_CONTINUED_FRACTION,
+            throw new MathIllegalStateException(LocalizedCoreFormats.NON_CONVERGENT_CONTINUED_FRACTION,
                                                 maxIterations, x);
         }
 

@@ -23,7 +23,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -146,7 +146,7 @@ public class IterativeLegendreGaussIntegratorTest {
             Assert.fail("expected MathIllegalStateException");
         } catch (MathIllegalStateException tmee) {
             // expected
-            Assert.assertEquals(LocalizedFormats.MAX_COUNT_EXCEEDED, tmee.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, tmee.getSpecifier());
             Assert.assertEquals(1000, ((Integer) tmee.getParts()[0]).intValue());
         }
 

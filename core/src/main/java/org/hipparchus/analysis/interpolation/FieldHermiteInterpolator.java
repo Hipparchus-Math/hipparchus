@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -110,7 +110,7 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
             for (int j = i; j < n; ++j) {
                 final T[] bottom1 = bottomDiagonal.get(n - (j + 1));
                 if (x.equals(abscissae.get(n - (j + 1)))) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO, x);
                 }
                 final T inv = x.subtract(abscissae.get(n - (j + 1))).reciprocal();
                 for (int k = 0; k < y.length; ++k) {
@@ -140,7 +140,7 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
         // safety check
         MathUtils.checkNotNull(x);
         if (abscissae.isEmpty()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_INTERPOLATION_SAMPLE);
         }
 
         final T[] value = MathArrays.buildArray(x.getField(), topDiagonal.get(0).length);
@@ -171,7 +171,7 @@ public class FieldHermiteInterpolator<T extends FieldElement<T>> {
         // safety check
         MathUtils.checkNotNull(x);
         if (abscissae.isEmpty()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EMPTY_INTERPOLATION_SAMPLE);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_INTERPOLATION_SAMPLE);
         }
 
         final T zero = x.getField().getZero();

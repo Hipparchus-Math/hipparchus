@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.FieldStepHandler;
@@ -138,7 +139,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
             }
 
             if (forward ^ model.forward) {
-                throw new MathIllegalArgumentException(LocalizedFormats.PROPAGATION_DIRECTION_MISMATCH);
+                throw new MathIllegalArgumentException(LocalizedODEFormats.PROPAGATION_DIRECTION_MISMATCH);
             }
 
             final FieldStepInterpolator<T> lastInterpolator = steps.get(index);
@@ -147,7 +148,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
             final T step = current.subtract(previous);
             final T gap = model.getInitialTime().subtract(current);
             if (gap.abs().subtract(step.abs().multiply(1.0e-3)).getReal() > 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.HOLE_BETWEEN_MODELS_TIME_RANGES,
+                throw new MathIllegalArgumentException(LocalizedODEFormats.HOLE_BETWEEN_MODELS_TIME_RANGES,
                                                        gap.abs().getReal());
             }
 
@@ -170,7 +171,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
     private void checkDimensionsEquality(final int d1, final int d2)
         throws MathIllegalArgumentException {
         if (d1 != d2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    d2, d1);
         }
     }

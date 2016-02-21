@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.genetics.AbstractListChromosome;
 import org.hipparchus.genetics.Chromosome;
@@ -141,7 +141,7 @@ public class HelloWorldExample {
         protected void checkValidity(List<Character> repr) throws MathIllegalArgumentException {
             for (char c : repr) {
                 if (c < 32 || c > 126) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
+                    throw new MathIllegalArgumentException(LocalizedGeneticsFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
                 }
             }
         }

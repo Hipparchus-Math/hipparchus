@@ -24,7 +24,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 
@@ -173,7 +173,7 @@ public class BigFractionFormat extends AbstractFormat implements Serializable {
             ret = format(new BigFraction(((Number) obj).doubleValue()),
                          toAppendTo, pos);
         } else {
-            throw new MathIllegalArgumentException(LocalizedFormats.CANNOT_FORMAT_OBJECT_TO_FRACTION);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_FORMAT_OBJECT_TO_FRACTION);
         }
 
         return ret;
@@ -191,7 +191,7 @@ public class BigFractionFormat extends AbstractFormat implements Serializable {
         final ParsePosition parsePosition = new ParsePosition(0);
         final BigFraction result = parse(source, parsePosition);
         if (parsePosition.getIndex() == 0) {
-            throw new MathIllegalStateException(LocalizedFormats.CANNOT_PARSE_AS_TYPE,
+            throw new MathIllegalStateException(LocalizedCoreFormats.CANNOT_PARSE_AS_TYPE,
                                                 source, parsePosition.getErrorIndex(),
                                                 BigFraction.class);
         }

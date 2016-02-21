@@ -17,7 +17,7 @@
 
 package org.hipparchus.complex;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -61,7 +61,7 @@ public class ComplexUtils {
     public static Complex polar2Complex(double r, double theta) throws MathIllegalArgumentException {
         if (r < 0) {
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.NEGATIVE_COMPLEX_MODULE, r);
+                  LocalizedCoreFormats.NEGATIVE_COMPLEX_MODULE, r);
         }
         return new Complex(r * FastMath.cos(theta), r * FastMath.sin(theta));
     }

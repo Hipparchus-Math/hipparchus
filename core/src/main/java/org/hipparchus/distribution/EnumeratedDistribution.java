@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
@@ -119,13 +119,13 @@ public class EnumeratedDistribution<T> implements Serializable {
             singletons.add(sample.getKey());
             final double p = sample.getValue();
             if (p < 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, p, 0);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, p, 0);
             }
             if (Double.isInfinite(p)) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NOT_FINITE_NUMBER, p);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_FINITE_NUMBER, p);
             }
             if (Double.isNaN(p)) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NAN_NOT_ALLOWED);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_NOT_ALLOWED);
             }
             probs[i] = p;
         }
@@ -229,7 +229,7 @@ public class EnumeratedDistribution<T> implements Serializable {
      */
     public Object[] sample(int sampleSize) throws MathIllegalArgumentException {
         if (sampleSize <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES,
                     sampleSize);
         }
 
@@ -258,11 +258,11 @@ public class EnumeratedDistribution<T> implements Serializable {
      */
     public T[] sample(int sampleSize, final T[] array) throws MathIllegalArgumentException {
         if (sampleSize <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_SAMPLES, sampleSize);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES, sampleSize);
         }
 
         if (array == null) {
-            throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
         }
 
         T[] out;

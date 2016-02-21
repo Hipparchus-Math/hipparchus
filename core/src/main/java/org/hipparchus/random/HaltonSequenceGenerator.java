@@ -16,7 +16,7 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
@@ -106,12 +106,12 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
         MathUtils.checkNotNull(bases);
 
         if (dimension < 1 || dimension > bases.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    dimension, 1, PRIMES.length);
         }
 
         if (weights != null && weights.length != bases.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    weights.length, bases.length);
         }
 

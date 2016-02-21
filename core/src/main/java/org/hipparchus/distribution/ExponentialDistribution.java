@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -156,7 +156,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
         super(rng);
 
         if (mean <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.MEAN, mean);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.MEAN, mean);
         }
         this.mean = mean;
         logMean = FastMath.log(mean);
@@ -220,7 +220,7 @@ public class ExponentialDistribution extends AbstractRealDistribution {
         double ret;
 
         if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0.0, 1.0);
         } else if (p == 1.0) {
             ret = Double.POSITIVE_INFINITY;

@@ -17,7 +17,7 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -1061,23 +1061,23 @@ public final class Array2DRowRealMatrixTest {
     /** extracts the l  and u matrices from compact lu representation */
     protected void splitLU(RealMatrix lu, double[][] lowerData, double[][] upperData) {
         if (!lu.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    lu.getRowDimension(), lu.getColumnDimension());
         }
         if (lowerData.length != lowerData[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    lowerData.length, lowerData[0].length);
         }
         if (upperData.length != upperData[0].length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    upperData.length, upperData[0].length);
         }
         if (lowerData.length != upperData.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    lowerData.length, upperData.length);
         }
         if (lowerData.length != lu.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    lowerData.length, lu.getRowDimension());
         }
 
@@ -1101,11 +1101,11 @@ public final class Array2DRowRealMatrixTest {
     /** Returns the result of applying the given row permutation to the matrix */
     protected RealMatrix permuteRows(RealMatrix matrix, int[] permutation) {
         if (!matrix.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
         if (matrix.getRowDimension() != permutation.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    matrix.getRowDimension(), permutation.length);
         }
 

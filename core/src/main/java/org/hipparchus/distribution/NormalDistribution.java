@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -137,7 +137,7 @@ public class NormalDistribution extends AbstractRealDistribution {
         super(rng);
 
         if (sd <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.STANDARD_DEVIATION, sd);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.STANDARD_DEVIATION, sd);
         }
 
         this.mean = mean;
@@ -200,7 +200,7 @@ public class NormalDistribution extends AbstractRealDistribution {
     @Override
     public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
         if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         }
         return mean + standardDeviation * SQRT2 * Erf.erfInv(2 * p - 1);
@@ -212,7 +212,7 @@ public class NormalDistribution extends AbstractRealDistribution {
                               double x1)
         throws MathIllegalArgumentException {
         if (x0 > x1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                                                 x0, x1, true);
         }
         final double denom = standardDeviation * SQRT2;

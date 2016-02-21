@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -180,7 +180,7 @@ public class LoessInterpolatorTest {
             new LoessInterpolator().smooth(new double[] {1,2,Double.NaN}, new double[] {3,4,5});
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -189,7 +189,7 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {1,2,Double.POSITIVE_INFINITY}, new double[] {3,4,5});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -198,7 +198,7 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {1,2,Double.NEGATIVE_INFINITY}, new double[] {3,4,5});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -207,7 +207,7 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.NaN});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -216,7 +216,7 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.POSITIVE_INFINITY});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 
@@ -225,7 +225,7 @@ public class LoessInterpolatorTest {
         try {
             new LoessInterpolator().smooth(new double[] {3,4,5}, new double[] {1,2,Double.NEGATIVE_INFINITY});
         } catch (MathIllegalArgumentException e) {
-            Assert.assertEquals(LocalizedFormats.NOT_FINITE_NUMBER, e.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NOT_FINITE_NUMBER, e.getSpecifier());
         }
     }
 

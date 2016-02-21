@@ -21,7 +21,7 @@ import java.io.Serializable;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -153,15 +153,15 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
             MathUtils.checkNotNull(d);
             final int nRows = d.length;
             if (nRows == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_ROW);
             }
             final int nCols = d[0].length;
             if (nCols == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_COLUMN);
             }
             for (int r = 1; r < nRows; r++) {
                 if (d[r].length != nCols) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                            nCols, d[r].length);
                 }
             }
@@ -325,24 +325,24 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
         throws MathIllegalArgumentException, NullArgumentException {
         if (data == null) {
             if (row > 0) {
-                throw new MathIllegalStateException(LocalizedFormats.FIRST_ROWS_NOT_INITIALIZED_YET, row);
+                throw new MathIllegalStateException(LocalizedCoreFormats.FIRST_ROWS_NOT_INITIALIZED_YET, row);
             }
             if (column > 0) {
-                throw new MathIllegalStateException(LocalizedFormats.FIRST_COLUMNS_NOT_INITIALIZED_YET, column);
+                throw new MathIllegalStateException(LocalizedCoreFormats.FIRST_COLUMNS_NOT_INITIALIZED_YET, column);
             }
             final int nRows = subMatrix.length;
             if (nRows == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_ROW);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_ROW);
             }
 
             final int nCols = subMatrix[0].length;
             if (nCols == 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.AT_LEAST_ONE_COLUMN);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_COLUMN);
             }
             data = MathArrays.buildArray(getField(), subMatrix.length, nCols);
             for (int i = 0; i < data.length; ++i) {
                 if (subMatrix[i].length != nCols) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                            nCols, subMatrix[i].length);
                 }
                 System.arraycopy(subMatrix[i], 0, data[i + row], column, nCols);
@@ -411,7 +411,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
         final int nRows = this.getRowDimension();
         final int nCols = this.getColumnDimension();
         if (v.length != nCols) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, nCols);
         }
         final T[] out = MathArrays.buildArray(getField(), nRows);
@@ -432,7 +432,7 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
         if (v.length != nRows) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    v.length, nRows);
         }
 

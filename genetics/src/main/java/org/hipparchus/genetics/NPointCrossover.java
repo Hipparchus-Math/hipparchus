@@ -19,7 +19,8 @@ package org.hipparchus.genetics;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 
@@ -62,7 +63,7 @@ public class NPointCrossover<T> implements CrossoverPolicy {
      */
     public NPointCrossover(final int crossoverPoints) throws MathIllegalArgumentException {
         if (crossoverPoints <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    crossoverPoints, 0);
         }
         this.crossoverPoints = crossoverPoints;
@@ -107,7 +108,7 @@ public class NPointCrossover<T> implements CrossoverPolicy {
         throws MathIllegalArgumentException {
 
         if (!(first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
         }
         return mate((AbstractListChromosome<T>) first, (AbstractListChromosome<T>) second);
     }
@@ -127,11 +128,11 @@ public class NPointCrossover<T> implements CrossoverPolicy {
 
         final int length = first.getLength();
         if (length != second.getLength()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    second.getLength(), length);
         }
         if (crossoverPoints >= length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                    crossoverPoints, length);
         }
 

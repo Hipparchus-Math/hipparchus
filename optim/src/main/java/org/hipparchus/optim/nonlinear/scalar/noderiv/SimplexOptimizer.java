@@ -19,7 +19,7 @@ package org.hipparchus.optim.nonlinear.scalar.noderiv;
 import java.util.Comparator;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.optim.ConvergenceChecker;
@@ -219,7 +219,7 @@ public class SimplexOptimizer extends MultivariateOptimizer {
         }
         if (getLowerBound() != null ||
             getUpperBound() != null) {
-            throw new MathRuntimeException(LocalizedFormats.CONSTRAINT);
+            throw new MathRuntimeException(LocalizedCoreFormats.CONSTRAINT);
         }
     }
 }

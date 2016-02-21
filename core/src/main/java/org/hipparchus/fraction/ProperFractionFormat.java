@@ -20,7 +20,7 @@ import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -224,7 +224,7 @@ public class ProperFractionFormat extends FractionFormat {
      */
     public void setWholeFormat(NumberFormat format) {
         if (format == null) {
-            throw new NullArgumentException(LocalizedFormats.WHOLE_FORMAT);
+            throw new NullArgumentException(LocalizedCoreFormats.WHOLE_FORMAT);
         }
         this.wholeFormat = format;
     }

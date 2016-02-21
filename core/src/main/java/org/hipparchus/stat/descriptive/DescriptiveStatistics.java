@@ -20,7 +20,7 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -180,7 +180,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
         try {
             eDA.discardMostRecentElements(1);
         } catch (MathIllegalArgumentException ex) {
-            throw new MathIllegalStateException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalStateException(LocalizedCoreFormats.NO_DATA);
         }
     }
 
@@ -375,7 +375,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
     public void setWindowSize(int windowSize) throws MathIllegalArgumentException {
         if (windowSize < 1 && windowSize != INFINITE_WINDOW) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.NOT_POSITIVE_WINDOW_SIZE, windowSize);
+                    LocalizedCoreFormats.NOT_POSITIVE_WINDOW_SIZE, windowSize);
         }
 
         this.windowSize = windowSize;
@@ -453,11 +453,11 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
                                 new Object[] {Double.valueOf(p)});
             } catch (NoSuchMethodException e1) { // Setter guard should prevent
                 throw new MathIllegalStateException(
-                      LocalizedFormats.PERCENTILE_IMPLEMENTATION_UNSUPPORTED_METHOD,
+                      LocalizedCoreFormats.PERCENTILE_IMPLEMENTATION_UNSUPPORTED_METHOD,
                       percentileImpl.getClass().getName(), SET_QUANTILE_METHOD_NAME);
             } catch (IllegalAccessException e2) {
                 throw new MathIllegalStateException(
-                      LocalizedFormats.PERCENTILE_IMPLEMENTATION_CANNOT_ACCESS_METHOD,
+                      LocalizedCoreFormats.PERCENTILE_IMPLEMENTATION_CANNOT_ACCESS_METHOD,
                       SET_QUANTILE_METHOD_NAME, percentileImpl.getClass().getName());
             } catch (InvocationTargetException e3) {
                 throw new IllegalStateException(e3.getCause());
@@ -642,11 +642,11 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
                             new Object[] {Double.valueOf(50.0d)});
         } catch (NoSuchMethodException e1) {
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.PERCENTILE_IMPLEMENTATION_UNSUPPORTED_METHOD,
+                  LocalizedCoreFormats.PERCENTILE_IMPLEMENTATION_UNSUPPORTED_METHOD,
                   percentileImpl.getClass().getName(), SET_QUANTILE_METHOD_NAME);
         } catch (IllegalAccessException e2) {
             throw new MathIllegalArgumentException(
-                  LocalizedFormats.PERCENTILE_IMPLEMENTATION_CANNOT_ACCESS_METHOD,
+                  LocalizedCoreFormats.PERCENTILE_IMPLEMENTATION_CANNOT_ACCESS_METHOD,
                   SET_QUANTILE_METHOD_NAME, percentileImpl.getClass().getName());
         } catch (InvocationTargetException e3) {
             throw new IllegalArgumentException(e3.getCause());

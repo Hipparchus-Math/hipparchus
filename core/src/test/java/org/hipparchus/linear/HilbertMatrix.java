@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealLinearOperator;
@@ -54,7 +54,7 @@ public class HilbertMatrix
     @Override
     public RealVector operate(final RealVector x) {
         if (x.getDimension() != n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    x.getDimension(), n);
         }
         final double[] y = new double[n];

@@ -17,7 +17,7 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -115,9 +115,8 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
         super(name, minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
 
         if (nSteps < 2) {
-            throw new MathIllegalArgumentException(
-                  LocalizedFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
-                  nSteps, 2, true);
+            throw new MathIllegalArgumentException(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+                                                   nSteps, 2, true);
         }
 
         starter = new DormandPrince853Integrator(minStep, maxStep,
@@ -246,7 +245,7 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
             }
 
             // we should not reach this step
-            throw new MathIllegalStateException(LocalizedFormats.MULTISTEP_STARTER_STOPPED_EARLY);
+            throw new MathIllegalStateException(LocalizedODEFormats.MULTISTEP_STARTER_STOPPED_EARLY);
 
         } catch (InitializationCompletedMarkerException icme) { // NOPMD
             // this is the expected nominal interruption of the start integrator

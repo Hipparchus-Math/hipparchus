@@ -22,7 +22,8 @@ import java.lang.reflect.Array;
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.complex.Complex;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedFFTFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.ArithmeticUtils;
@@ -212,21 +213,20 @@ public class FastFourierTransformer implements Serializable {
         final DftNormalization normalization, final TransformType type) {
 
         if (dataRI.length != 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    dataRI.length, 2);
         }
         final double[] dataR = dataRI[0];
         final double[] dataI = dataRI[1];
         if (dataR.length != dataI.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    dataI.length, dataR.length);
         }
 
         final int n = dataR.length;
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
-            throw new MathIllegalArgumentException(
-                LocalizedFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
-                Integer.valueOf(n));
+            throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO_CONSIDER_PADDING,
+                                                   Integer.valueOf(n));
         }
 
         if (n == 1) {
@@ -554,13 +554,13 @@ public class FastFourierTransformer implements Serializable {
 
             if (vector == null) {
                 if (dimensionSize.length > 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                            0, dimensionSize.length);
                 }
                 return null;
             }
             if (vector.length != dimensionSize.length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        vector.length, dimensionSize.length);
             }
 
@@ -585,13 +585,13 @@ public class FastFourierTransformer implements Serializable {
 
             if (vector == null) {
                 if (dimensionSize.length > 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                            0, dimensionSize.length);
                 }
                 return null;
             }
             if (vector.length != dimensionSize.length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        vector.length, dimensionSize.length);
             }
 

@@ -18,7 +18,7 @@ package org.hipparchus.complex;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
@@ -87,7 +87,7 @@ public class RootsOfUnity implements Serializable {
 
         if (omegaCount == 0) {
             throw new MathIllegalStateException(
-                    LocalizedFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
         }
         return isCounterClockWise;
     }
@@ -115,7 +115,7 @@ public class RootsOfUnity implements Serializable {
 
         if (n == 0) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.CANNOT_COMPUTE_0TH_ROOT_OF_UNITY);
+                    LocalizedCoreFormats.CANNOT_COMPUTE_0TH_ROOT_OF_UNITY);
         }
 
         isCounterClockWise = n > 0;
@@ -161,11 +161,11 @@ public class RootsOfUnity implements Serializable {
 
         if (omegaCount == 0) {
             throw new MathIllegalStateException(
-                    LocalizedFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
         }
         if ((k < 0) || (k >= omegaCount)) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                    LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
                     Integer.valueOf(k),
                     Integer.valueOf(0),
                     Integer.valueOf(omegaCount - 1));
@@ -188,11 +188,11 @@ public class RootsOfUnity implements Serializable {
 
         if (omegaCount == 0) {
             throw new MathIllegalStateException(
-                    LocalizedFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
         }
         if ((k < 0) || (k >= omegaCount)) {
             throw new MathIllegalArgumentException(
-                    LocalizedFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                    LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
                     Integer.valueOf(k),
                     Integer.valueOf(0),
                     Integer.valueOf(omegaCount - 1));

@@ -20,7 +20,7 @@ package org.hipparchus.ml.neuralnet.oned;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
 import org.hipparchus.ml.neuralnet.Network;
@@ -61,7 +61,7 @@ public class NeuronString implements Serializable {
         size = featuresList.length;
 
         if (size < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    size, 2);
         }
 
@@ -103,7 +103,7 @@ public class NeuronString implements Serializable {
                         boolean wrap,
                         FeatureInitializer[] featureInit) {
         if (num < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    num, 2);
         }
 
@@ -160,7 +160,7 @@ public class NeuronString implements Serializable {
     public double[] getFeatures(int i) {
         if (i < 0 ||
             i >= size) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    i, 0, size - 1);
         }
 

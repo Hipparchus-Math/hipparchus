@@ -19,7 +19,7 @@ package org.hipparchus.util;
 
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -189,7 +189,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
         uniCounterOffset[last] = 0;
 
         if (tS <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    tS, 0);
         }
 
@@ -226,7 +226,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
     public int[] getCounts(int index) throws MathIllegalArgumentException {
         if (index < 0 ||
             index >= totalSize) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    index, 0, totalSize);
         }
 
@@ -264,7 +264,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
     public int getCount(int ... c)
         throws MathIllegalArgumentException {
         if (c.length != dimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    c.length, dimension);
         }
         int count = 0;
@@ -272,7 +272,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
             final int index = c[i];
             if (index < 0 ||
                 index >= size[i]) {
-                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                        index, 0, size[i] - 1);
             }
             count += uniCounterOffset[i] * c[i];

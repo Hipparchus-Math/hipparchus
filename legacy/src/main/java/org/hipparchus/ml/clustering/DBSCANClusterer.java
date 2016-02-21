@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.ml.distance.DistanceMeasure;
@@ -99,10 +99,10 @@ public class DBSCANClusterer<T extends Clusterable> extends Clusterer<T> {
         super(measure);
 
         if (eps < 0.0d) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, eps, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, eps, 0);
         }
         if (minPts < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, minPts, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, minPts, 0);
         }
         this.eps = eps;
         this.minPts = minPts;

@@ -20,7 +20,7 @@ package org.hipparchus.analysis.function;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -131,7 +131,7 @@ public class Logit implements UnivariateDifferentiableFunction {
                 throw new NullArgumentException();
             }
             if (param.length != 2) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        param.length, 2);
             }
         }
@@ -149,7 +149,7 @@ public class Logit implements UnivariateDifferentiableFunction {
                                 double hi)
         throws MathIllegalArgumentException {
         if (x < lo || x > hi) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    x, lo, hi);
         }
         return FastMath.log((x - lo) / (hi - x));
@@ -164,7 +164,7 @@ public class Logit implements UnivariateDifferentiableFunction {
         throws MathIllegalArgumentException {
         final double x = t.getValue();
         if (x < lo || x > hi) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    x, lo, hi);
         }
         double[] f = new double[t.getOrder() + 1];

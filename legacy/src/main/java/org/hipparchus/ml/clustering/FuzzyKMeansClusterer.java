@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.MatrixUtils;
@@ -143,7 +143,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
         super(measure);
 
         if (fuzziness <= 1.0d) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    fuzziness, 1.0);
         }
         this.k = k;
@@ -209,7 +209,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
      */
     public RealMatrix getMembershipMatrix() {
         if (membershipMatrix == null) {
-            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+            throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
         }
         return MatrixUtils.createRealMatrix(membershipMatrix);
     }
@@ -240,7 +240,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
      */
     public double getObjectiveFunctionValue() {
         if (points == null || clusters == null) {
-            throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
+            throw new MathIllegalStateException(LocalizedCoreFormats.ILLEGAL_STATE);
         }
 
         int i = 0;
@@ -276,7 +276,7 @@ public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 
         // number of clusters has to be smaller or equal the number of data points
         if (size < k) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    size, k);
         }
 

@@ -19,7 +19,7 @@ package org.hipparchus.util;
 import java.math.BigInteger;
 
 import org.hipparchus.exception.Localizable;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
@@ -49,7 +49,7 @@ public final class ArithmeticUtils {
             throws MathRuntimeException {
         long s = (long)x + (long)y;
         if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, x, y);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_ADDITION, x, y);
         }
         return (int)s;
     }
@@ -64,7 +64,7 @@ public final class ArithmeticUtils {
      * @since 1.2
      */
     public static long addAndCheck(long a, long b) throws MathRuntimeException {
-        return addAndCheck(a, b, LocalizedFormats.OVERFLOW_IN_ADDITION);
+        return addAndCheck(a, b, LocalizedCoreFormats.OVERFLOW_IN_ADDITION);
     }
 
     /**
@@ -102,7 +102,7 @@ public final class ArithmeticUtils {
             b == 0) {
             if (a == Integer.MIN_VALUE ||
                 b == Integer.MIN_VALUE) {
-                throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
+                throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_32_BITS,
                                                   p, q);
             }
             return FastMath.abs(a + b);
@@ -129,7 +129,7 @@ public final class ArithmeticUtils {
         }
         if (useLong) {
             if(al == bl) {
-                throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
+                throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_32_BITS,
                                                   p, q);
             }
             long blbu = bl;
@@ -137,7 +137,7 @@ public final class ArithmeticUtils {
             al = blbu % al;
             if (al == 0) {
                 if (bl > Integer.MAX_VALUE) {
-                    throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_32_BITS,
+                    throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_32_BITS,
                                                       p, q);
                 }
                 return (int) bl;
@@ -240,7 +240,7 @@ public final class ArithmeticUtils {
         long v = q;
         if ((u == 0) || (v == 0)) {
             if ((u == Long.MIN_VALUE) || (v == Long.MIN_VALUE)){
-                throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_64_BITS,
+                throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_64_BITS,
                                                   p, q);
             }
             return FastMath.abs(u) + FastMath.abs(v);
@@ -265,7 +265,7 @@ public final class ArithmeticUtils {
             k++; // cast out twos.
         }
         if (k == 63) {
-            throw new MathRuntimeException(LocalizedFormats.GCD_OVERFLOW_64_BITS,
+            throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_64_BITS,
                                               p, q);
         }
         // B2. Initialize: u and v have been divided by 2^k and at least
@@ -321,7 +321,7 @@ public final class ArithmeticUtils {
         }
         int lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
         if (lcm == Integer.MIN_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.LCM_OVERFLOW_32_BITS,
+            throw new MathRuntimeException(LocalizedCoreFormats.LCM_OVERFLOW_32_BITS,
                                               a, b);
         }
         return lcm;
@@ -355,7 +355,7 @@ public final class ArithmeticUtils {
         }
         long lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
         if (lcm == Long.MIN_VALUE){
-            throw new MathRuntimeException(LocalizedFormats.LCM_OVERFLOW_64_BITS,
+            throw new MathRuntimeException(LocalizedCoreFormats.LCM_OVERFLOW_64_BITS,
                                               a, b);
         }
         return lcm;
@@ -374,7 +374,7 @@ public final class ArithmeticUtils {
     public static int mulAndCheck(int x, int y) throws MathRuntimeException {
         long m = ((long)x) * ((long)y);
         if (m < Integer.MIN_VALUE || m > Integer.MAX_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
+            throw new MathRuntimeException(LocalizedCoreFormats.ARITHMETIC_EXCEPTION);
         }
         return (int)m;
     }
@@ -401,14 +401,14 @@ public final class ArithmeticUtils {
                     if (a >= Long.MAX_VALUE / b) {
                         ret = a * b;
                     } else {
-                        throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
+                        throw new MathRuntimeException(LocalizedCoreFormats.ARITHMETIC_EXCEPTION);
                     }
                 } else if (b > 0) {
                     // check for negative overflow with negative a, positive b
                     if (Long.MIN_VALUE / b <= a) {
                         ret = a * b;
                     } else {
-                        throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
+                        throw new MathRuntimeException(LocalizedCoreFormats.ARITHMETIC_EXCEPTION);
 
                     }
                 } else {
@@ -423,7 +423,7 @@ public final class ArithmeticUtils {
                 if (a <= Long.MAX_VALUE / b) {
                     ret = a * b;
                 } else {
-                    throw new MathRuntimeException(LocalizedFormats.ARITHMETIC_EXCEPTION);
+                    throw new MathRuntimeException(LocalizedCoreFormats.ARITHMETIC_EXCEPTION);
                 }
             } else {
                 // assert a == 0
@@ -446,7 +446,7 @@ public final class ArithmeticUtils {
     public static int subAndCheck(int x, int y) throws MathRuntimeException {
         long s = (long)x - (long)y;
         if (s < Integer.MIN_VALUE || s > Integer.MAX_VALUE) {
-            throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_SUBTRACTION, x, y);
+            throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_SUBTRACTION, x, y);
         }
         return (int)s;
     }
@@ -467,11 +467,11 @@ public final class ArithmeticUtils {
             if (a < 0) {
                 ret = a - b;
             } else {
-                throw new MathRuntimeException(LocalizedFormats.OVERFLOW_IN_ADDITION, a, -b);
+                throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_ADDITION, a, -b);
             }
         } else {
             // use additive inverse
-            ret = addAndCheck(a, -b, LocalizedFormats.OVERFLOW_IN_ADDITION);
+            ret = addAndCheck(a, -b, LocalizedCoreFormats.OVERFLOW_IN_ADDITION);
         }
         return ret;
     }
@@ -490,7 +490,7 @@ public final class ArithmeticUtils {
         throws MathIllegalArgumentException,
                MathRuntimeException {
         if (e < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EXPONENT, e);
         }
 
         int exp = e;
@@ -526,7 +526,7 @@ public final class ArithmeticUtils {
         throws MathIllegalArgumentException,
                MathRuntimeException {
         if (e < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EXPONENT, e);
         }
 
         int exp = e;
@@ -558,7 +558,7 @@ public final class ArithmeticUtils {
      */
     public static BigInteger pow(final BigInteger k, int e) throws MathIllegalArgumentException {
         if (e < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EXPONENT, e);
         }
 
         return k.pow(e);
@@ -574,7 +574,7 @@ public final class ArithmeticUtils {
      */
     public static BigInteger pow(final BigInteger k, long e) throws MathIllegalArgumentException {
         if (e < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EXPONENT, e);
         }
 
         BigInteger result = BigInteger.ONE;
@@ -601,7 +601,7 @@ public final class ArithmeticUtils {
      */
     public static BigInteger pow(final BigInteger k, BigInteger e) throws MathIllegalArgumentException {
         if (e.compareTo(BigInteger.ZERO) < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.EXPONENT, e);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EXPONENT, e);
         }
 
         BigInteger result = BigInteger.ONE;

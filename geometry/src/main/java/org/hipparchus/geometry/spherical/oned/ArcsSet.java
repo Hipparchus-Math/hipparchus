@@ -22,7 +22,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
@@ -133,7 +134,7 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
             // the tree must cover the whole circle
             return new BSPTree<Sphere1D>(Boolean.TRUE);
         } else  if (lower > upper) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ENDPOINTS_NOT_AN_INTERVAL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ENDPOINTS_NOT_AN_INTERVAL,
                                                 lower, upper, true);
         }
 
@@ -950,7 +951,7 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
         /** Simple constructor.
          */
         public InconsistentStateAt2PiWrapping() {
-            super(LocalizedFormats.INCONSISTENT_STATE_AT_2_PI_WRAPPING);
+            super(LocalizedGeometryFormats.INCONSISTENT_STATE_AT_2_PI_WRAPPING);
         }
 
     }

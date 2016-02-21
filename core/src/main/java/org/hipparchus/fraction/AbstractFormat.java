@@ -23,7 +23,7 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.util.Locale;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.NullArgumentException;
 
 /**
@@ -117,7 +117,7 @@ public abstract class AbstractFormat extends NumberFormat implements Serializabl
      */
     public void setDenominatorFormat(final NumberFormat format) {
         if (format == null) {
-            throw new NullArgumentException(LocalizedFormats.DENOMINATOR_FORMAT);
+            throw new NullArgumentException(LocalizedCoreFormats.DENOMINATOR_FORMAT);
         }
         this.denominatorFormat = format;
     }
@@ -129,7 +129,7 @@ public abstract class AbstractFormat extends NumberFormat implements Serializabl
      */
     public void setNumeratorFormat(final NumberFormat format) {
         if (format == null) {
-            throw new NullArgumentException(LocalizedFormats.NUMERATOR_FORMAT);
+            throw new NullArgumentException(LocalizedCoreFormats.NUMERATOR_FORMAT);
         }
         this.numeratorFormat = format;
     }

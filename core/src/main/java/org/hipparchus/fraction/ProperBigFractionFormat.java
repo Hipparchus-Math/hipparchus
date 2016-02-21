@@ -21,7 +21,7 @@ import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.text.ParsePosition;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.NullArgumentException;
 
 /**
@@ -231,7 +231,7 @@ public class ProperBigFractionFormat extends BigFractionFormat {
      */
     public void setWholeFormat(final NumberFormat format) {
         if (format == null) {
-            throw new NullArgumentException(LocalizedFormats.WHOLE_FORMAT);
+            throw new NullArgumentException(LocalizedCoreFormats.WHOLE_FORMAT);
         }
         this.wholeFormat = format;
     }

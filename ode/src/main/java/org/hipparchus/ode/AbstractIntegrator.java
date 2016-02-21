@@ -28,7 +28,8 @@ import java.util.TreeSet;
 
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.EventHandler;
@@ -238,11 +239,11 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (y0.length != equations.getDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    y0.length, equations.getDimension());
         }
         if (y.length != equations.getDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    y.length, equations.getDimension());
         }
 
@@ -463,8 +464,8 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
                                                                   FastMath.abs(t)));
         final double dt = FastMath.abs(equations.getTime() - t);
         if (dt <= threshold) {
-            throw new MathIllegalArgumentException(LocalizedFormats.TOO_SMALL_INTEGRATION_INTERVAL,
-                                                dt, threshold, false);
+            throw new MathIllegalArgumentException(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL,
+                                                   dt, threshold, false);
         }
 
     }

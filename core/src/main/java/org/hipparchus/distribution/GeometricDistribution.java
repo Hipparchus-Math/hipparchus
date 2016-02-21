@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -68,7 +68,7 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
         super(rng);
 
         if (p <= 0 || p > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_LEFT, p, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, p, 0, 1);
         }
 
         probabilityOfSuccess = p;
@@ -179,7 +179,7 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
     @Override
     public int inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
         if (p < 0 || p > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         }
         if (p == 1) {

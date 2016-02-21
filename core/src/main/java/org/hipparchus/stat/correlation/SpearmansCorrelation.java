@@ -17,7 +17,7 @@
 
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
@@ -67,7 +67,7 @@ public class SpearmansCorrelation {
 
         if (rankingAlgorithm instanceof NaturalRanking &&
             NaNStrategy.REMOVED == ((NaturalRanking) rankingAlgorithm).getNanStrategy()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NOT_SUPPORTED_NAN_STRATEGY,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_SUPPORTED_NAN_STRATEGY,
                                                    NaNStrategy.REMOVED);
         }
 
@@ -101,7 +101,7 @@ public class SpearmansCorrelation {
 
         if (rankingAlgorithm instanceof NaturalRanking &&
             NaNStrategy.REMOVED == ((NaturalRanking) rankingAlgorithm).getNanStrategy()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NOT_SUPPORTED_NAN_STRATEGY,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_SUPPORTED_NAN_STRATEGY,
                                                    NaNStrategy.REMOVED);
         }
 
@@ -173,10 +173,10 @@ public class SpearmansCorrelation {
      */
     public double correlation(final double[] xArray, final double[] yArray) {
         if (xArray.length != yArray.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xArray.length, yArray.length);
         } else if (xArray.length < 2) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INSUFFICIENT_DIMENSION,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION,
                                                    xArray.length, 2);
         } else {
             return new PearsonsCorrelation().correlation(rankingAlgorithm.rank(xArray),

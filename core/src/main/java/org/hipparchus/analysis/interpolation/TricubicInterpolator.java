@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.interpolation;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
@@ -37,10 +37,10 @@ public class TricubicInterpolator
                                                      final double[][][] fval)
         throws MathIllegalArgumentException {
         if (xval.length == 0 || yval.length == 0 || zval.length == 0 || fval.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         if (xval.length != fval.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    xval.length, fval.length);
         }
 
@@ -63,7 +63,7 @@ public class TricubicInterpolator
 
         for (int i = 1; i < xLen - 1; i++) {
             if (yval.length != fval[i].length) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        yval.length, fval[i].length);
             }
 
@@ -77,7 +77,7 @@ public class TricubicInterpolator
 
             for (int j = 1; j < yLen - 1; j++) {
                 if (zval.length != fval[i][j].length) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                            zval.length, fval[i][j].length);
                 }
 

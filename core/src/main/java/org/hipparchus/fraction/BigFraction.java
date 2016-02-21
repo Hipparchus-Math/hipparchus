@@ -21,7 +21,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -117,10 +117,10 @@ public class BigFraction
      * @throws NullArgumentException if either of the arguments is null
      */
     public BigFraction(BigInteger num, BigInteger den) {
-        MathUtils.checkNotNull(num, LocalizedFormats.NUMERATOR);
-        MathUtils.checkNotNull(den, LocalizedFormats.DENOMINATOR);
+        MathUtils.checkNotNull(num, LocalizedCoreFormats.NUMERATOR);
+        MathUtils.checkNotNull(den, LocalizedCoreFormats.DENOMINATOR);
         if (den.signum() == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
         if (num.signum() == 0) {
             numerator   = BigInteger.ZERO;
@@ -170,10 +170,10 @@ public class BigFraction
      */
     public BigFraction(final double value) throws MathIllegalArgumentException {
         if (Double.isNaN(value)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NAN_VALUE_CONVERSION);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_VALUE_CONVERSION);
         }
         if (Double.isInfinite(value)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INFINITE_VALUE_CONVERSION);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INFINITE_VALUE_CONVERSION);
         }
 
         // compute m and k such that value = m * 2^k
@@ -273,7 +273,7 @@ public class BigFraction
         long a0 = (long) FastMath.floor(r0);
 
         if (FastMath.abs(a0) > overflow) {
-            throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW,
+            throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW,
                                                 value, a0, 1l);
         }
 
@@ -307,7 +307,7 @@ public class BigFraction
                 if (epsilon == 0.0 && FastMath.abs(q1) < maxDenominator) {
                     break;
                 }
-                throw new MathIllegalStateException(LocalizedFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
+                throw new MathIllegalStateException(LocalizedCoreFormats.FRACTION_CONVERSION_OVERFLOW, value, p2, q2);
             }
 
             final double convergent = (double) p2 / (double) q2;
@@ -326,7 +326,7 @@ public class BigFraction
         } while (!stop);
 
         if (n >= maxIterations) {
-            throw new MathIllegalStateException(LocalizedFormats.FAILED_FRACTION_CONVERSION, value, maxIterations);
+            throw new MathIllegalStateException(LocalizedCoreFormats.FAILED_FRACTION_CONVERSION, value, maxIterations);
         }
 
         if (q2 < maxDenominator) {
@@ -520,7 +520,7 @@ public class BigFraction
      */
     @Override
     public BigFraction add(final BigFraction fraction) {
-        MathUtils.checkNotNull(fraction, LocalizedFormats.FRACTION);
+        MathUtils.checkNotNull(fraction, LocalizedCoreFormats.FRACTION);
         if (fraction.numerator.signum() == 0) {
             return this;
         }
@@ -643,7 +643,7 @@ public class BigFraction
     public BigFraction divide(final BigInteger bg) {
         MathUtils.checkNotNull(bg);
         if (bg.signum() == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
         if (numerator.signum() == 0) {
             return ZERO;
@@ -692,9 +692,9 @@ public class BigFraction
      */
     @Override
     public BigFraction divide(final BigFraction fraction) {
-        MathUtils.checkNotNull(fraction, LocalizedFormats.FRACTION);
+        MathUtils.checkNotNull(fraction, LocalizedCoreFormats.FRACTION);
         if (fraction.numerator.signum() == 0) {
-            throw new MathRuntimeException(LocalizedFormats.ZERO_DENOMINATOR);
+            throw new MathRuntimeException(LocalizedCoreFormats.ZERO_DENOMINATOR);
         }
         if (numerator.signum() == 0) {
             return ZERO;
@@ -953,7 +953,7 @@ public class BigFraction
      */
     @Override
     public BigFraction multiply(final BigFraction fraction) {
-        MathUtils.checkNotNull(fraction, LocalizedFormats.FRACTION);
+        MathUtils.checkNotNull(fraction, LocalizedCoreFormats.FRACTION);
         if (numerator.signum() == 0 ||
             fraction.numerator.signum() == 0) {
             return ZERO;
@@ -1170,7 +1170,7 @@ public class BigFraction
      */
     @Override
     public BigFraction subtract(final BigFraction fraction) {
-        MathUtils.checkNotNull(fraction, LocalizedFormats.FRACTION);
+        MathUtils.checkNotNull(fraction, LocalizedCoreFormats.FRACTION);
         if (fraction.numerator.signum() == 0) {
             return this;
         }

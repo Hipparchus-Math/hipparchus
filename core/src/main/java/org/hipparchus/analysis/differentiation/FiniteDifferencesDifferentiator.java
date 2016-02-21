@@ -21,7 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.UnivariateMatrixFunction;
 import org.hipparchus.analysis.UnivariateVectorFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -141,20 +141,20 @@ public class FiniteDifferencesDifferentiator
             throws MathIllegalArgumentException {
 
         if (nbPoints <= 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    stepSize, 1);
         }
         this.nbPoints = nbPoints;
 
         if (stepSize <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    stepSize, 0);
         }
         this.stepSize = stepSize;
 
         halfSampleSpan = 0.5 * stepSize * (nbPoints - 1);
         if (2 * halfSampleSpan >= tUpper - tLower) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                    2 * halfSampleSpan, tUpper - tLower);
         }
         final double safety = FastMath.ulp(halfSampleSpan);
@@ -259,7 +259,7 @@ public class FiniteDifferencesDifferentiator
 
                 // check we can achieve the requested derivation order with the sample
                 if (t.getOrder() >= nbPoints) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                            t.getOrder(), nbPoints);
                 }
 
@@ -303,7 +303,7 @@ public class FiniteDifferencesDifferentiator
 
                 // check we can achieve the requested derivation order with the sample
                 if (t.getOrder() >= nbPoints) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                            t.getOrder(), nbPoints);
                 }
 
@@ -358,7 +358,7 @@ public class FiniteDifferencesDifferentiator
 
                 // check we can achieve the requested derivation order with the sample
                 if (t.getOrder() >= nbPoints) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                            t.getOrder(), nbPoints);
                 }
 

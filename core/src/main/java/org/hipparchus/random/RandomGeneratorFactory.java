@@ -18,7 +18,7 @@ package org.hipparchus.random;
 
 import java.util.Random;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -76,7 +76,7 @@ public class RandomGeneratorFactory {
             @Override
             public int nextInt(int n) {
                 if (n <= 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                            n, 0);
                 }
                 return rng.nextInt(n);

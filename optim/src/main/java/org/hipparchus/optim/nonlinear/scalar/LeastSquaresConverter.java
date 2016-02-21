@@ -19,7 +19,7 @@ package org.hipparchus.optim.nonlinear.scalar;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.RealMatrix;
 
@@ -112,7 +112,7 @@ public class LeastSquaresConverter implements MultivariateFunction {
                                  final double[] observations,
                                  final double[] weights) {
         if (observations.length != weights.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    observations.length, weights.length);
         }
         this.function     = function;
@@ -147,7 +147,7 @@ public class LeastSquaresConverter implements MultivariateFunction {
                                  final double[] observations,
                                  final RealMatrix scale) {
         if (observations.length != scale.getColumnDimension()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    observations.length, scale.getColumnDimension());
         }
         this.function     = function;
@@ -162,7 +162,7 @@ public class LeastSquaresConverter implements MultivariateFunction {
         // compute residuals
         final double[] residuals = function.value(point);
         if (residuals.length != observations.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    residuals.length, observations.length);
         }
         for (int i = 0; i < residuals.length; ++i) {

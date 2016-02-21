@@ -19,7 +19,7 @@ package org.hipparchus.geometry.partitioning;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
@@ -87,7 +87,7 @@ public class RegionFactory<S extends Space> {
                         case PLUS :
                         // the hyperplane is outside of the current convex zone,
                         // the input hyperplanes are inconsistent
-                        throw new MathIllegalArgumentException(LocalizedFormats.NOT_CONVEX_HYPERPLANES);
+                        throw new MathIllegalArgumentException(LocalizedGeometryFormats.NOT_CONVEX_HYPERPLANES);
                         default :
                             s = split.getMinus();
                     }

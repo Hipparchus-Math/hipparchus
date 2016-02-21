@@ -21,7 +21,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import org.hipparchus.analysis.MultivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedOptimFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.optim.OptimizationData;
@@ -94,7 +95,7 @@ public abstract class AbstractSimplex implements OptimizationData {
             throw new NullArgumentException();
         }
         if (steps.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.ZERO_NOT_ALLOWED);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ZERO_NOT_ALLOWED);
         }
         dimension = steps.length;
 
@@ -105,7 +106,7 @@ public abstract class AbstractSimplex implements OptimizationData {
             final double[] vertexI = startConfiguration[i];
             for (int j = 0; j < i + 1; j++) {
                 if (steps[j] == 0) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.EQUAL_VERTICES_IN_SIMPLEX);
+                    throw new MathIllegalArgumentException(LocalizedOptimFormats.EQUAL_VERTICES_IN_SIMPLEX);
                 }
                 System.arraycopy(steps, 0, vertexI, 0, j + 1);
             }
@@ -126,7 +127,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      */
     protected AbstractSimplex(final double[][] referenceSimplex) {
         if (referenceSimplex.length <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SIMPLEX_NEED_ONE_POINT,
+            throw new MathIllegalArgumentException(LocalizedOptimFormats.SIMPLEX_NEED_ONE_POINT,
                                                    referenceSimplex.length);
         }
         dimension = referenceSimplex.length - 1;
@@ -142,7 +143,7 @@ public abstract class AbstractSimplex implements OptimizationData {
 
             // Safety checks.
             if (refI.length != dimension) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        refI.length, dimension);
             }
             for (int j = 0; j < i; j++) {
@@ -155,7 +156,7 @@ public abstract class AbstractSimplex implements OptimizationData {
                     }
                 }
                 if (allEquals) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.EQUAL_VERTICES_IN_SIMPLEX,
+                    throw new MathIllegalArgumentException(LocalizedOptimFormats.EQUAL_VERTICES_IN_SIMPLEX,
                                                            i, j);
                 }
             }
@@ -211,7 +212,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      */
     public void build(final double[] startPoint) {
         if (dimension != startPoint.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    dimension, startPoint.length);
         }
 
@@ -292,7 +293,7 @@ public abstract class AbstractSimplex implements OptimizationData {
     public PointValuePair getPoint(int index) {
         if (index < 0 ||
             index >= simplex.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    index, 0, simplex.length - 1);
         }
         return simplex[index];
@@ -308,7 +309,7 @@ public abstract class AbstractSimplex implements OptimizationData {
     protected void setPoint(int index, PointValuePair point) {
         if (index < 0 ||
             index >= simplex.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    index, 0, simplex.length - 1);
         }
         simplex[index] = point;
@@ -322,7 +323,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      */
     protected void setPoints(PointValuePair[] points) {
         if (points.length != simplex.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    points.length, simplex.length);
         }
         simplex = points;

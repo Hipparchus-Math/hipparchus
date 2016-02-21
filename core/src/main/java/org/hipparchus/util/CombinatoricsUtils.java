@@ -19,7 +19,7 @@ package org.hipparchus.util;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.special.Gamma;
@@ -283,10 +283,10 @@ public final class CombinatoricsUtils {
      */
     public static long factorial(final int n) throws MathIllegalArgumentException {
         if (n < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER, n);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.FACTORIAL_NEGATIVE_PARAMETER, n);
         }
         if (n > 20) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE, n, 20);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE, n, 20);
         }
         return FACTORIALS[n];
     }
@@ -306,7 +306,7 @@ public final class CombinatoricsUtils {
      */
     public static double factorialDouble(final int n) throws MathIllegalArgumentException {
         if (n < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.FACTORIAL_NEGATIVE_PARAMETER,
                                            n);
         }
         if (n < 21) {
@@ -348,10 +348,10 @@ public final class CombinatoricsUtils {
     public static long stirlingS2(final int n, final int k)
         throws MathIllegalArgumentException, MathRuntimeException {
         if (k < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, k, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, k, 0);
         }
         if (k > n) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                    k, n);
         }
 
@@ -403,7 +403,7 @@ public final class CombinatoricsUtils {
                     sum += sign * binomialCoefficient(k, j) * ArithmeticUtils.pow(j, n);
                     if (sum < 0) {
                         // there was an overflow somewhere
-                        throw new MathRuntimeException(LocalizedFormats.ARGUMENT_OUTSIDE_DOMAIN,
+                        throw new MathRuntimeException(LocalizedCoreFormats.ARGUMENT_OUTSIDE_DOMAIN,
                                                           n, 0, stirlingS2.length - 1);
                     }
                 }
@@ -449,11 +449,11 @@ public final class CombinatoricsUtils {
                                      final int k)
         throws MathIllegalArgumentException {
         if (n < k) {
-            throw new MathIllegalArgumentException(LocalizedFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
                                                 k, n, true);
         }
         if (n < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.BINOMIAL_NEGATIVE_PARAMETER, n);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.BINOMIAL_NEGATIVE_PARAMETER, n);
         }
     }
 
@@ -480,7 +480,7 @@ public final class CombinatoricsUtils {
         private FactorialLog(int numValues,
                              double[] cache) {
             if (numValues < 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, numValues, 0);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, numValues, 0);
             }
 
             LOG_FACTORIALS = new double[numValues];
@@ -530,7 +530,7 @@ public final class CombinatoricsUtils {
          */
         public double value(final int n) {
             if (n < 0) {
-                throw new MathIllegalArgumentException(LocalizedFormats.FACTORIAL_NEGATIVE_PARAMETER,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.FACTORIAL_NEGATIVE_PARAMETER,
                                                n);
             }
 

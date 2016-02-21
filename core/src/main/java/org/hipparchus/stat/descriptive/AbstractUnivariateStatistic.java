@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -96,19 +96,19 @@ public abstract class AbstractUnivariateStatistic
     public void setData(final double[] values, final int begin, final int length)
             throws MathIllegalArgumentException {
         if (values == null) {
-            throw new NullArgumentException(LocalizedFormats.INPUT_ARRAY);
+            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
         }
 
         if (begin < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.START_POSITION, begin);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, begin);
         }
 
         if (length < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.LENGTH, length);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LENGTH, length);
         }
 
         if (begin + length > values.length) {
-            throw new MathIllegalArgumentException(LocalizedFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SUBARRAY_ENDS_AFTER_ARRAY_END,
                                                 begin + length, values.length, true);
         }
         storedData = new double[length];

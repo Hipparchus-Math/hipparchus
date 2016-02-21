@@ -19,7 +19,7 @@ package org.hipparchus.geometry.euclidean.oned;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
 
@@ -94,7 +94,7 @@ public class Euclidean1D implements Serializable, Space {
         /** Simple constructor.
          */
         public NoSubSpaceException() {
-            super(LocalizedFormats.NOT_SUPPORTED_IN_DIMENSION_N, 1);
+            super(LocalizedGeometryFormats.NOT_SUPPORTED_IN_DIMENSION_N, 1);
         }
 
     }

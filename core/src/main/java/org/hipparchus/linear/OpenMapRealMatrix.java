@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.OpenIntToDoubleHashMap;
 
@@ -62,7 +62,7 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
         long lRow = rowDimension;
         long lCol = columnDimension;
         if (lRow * lCol >= Integer.MAX_VALUE) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                    lRow * lCol, Integer.MAX_VALUE);
         }
         this.rows = rowDimension;

@@ -18,7 +18,7 @@ package org.hipparchus.stat.descriptive;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
@@ -673,7 +673,7 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     private void checkEmpty() throws MathIllegalStateException {
         if (n > 0) {
             throw new MathIllegalStateException(
-                LocalizedFormats.VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC, n);
+                LocalizedCoreFormats.VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC, n);
         }
     }
 

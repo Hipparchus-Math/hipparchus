@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -73,11 +73,11 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
         super(rng);
 
         if (trials < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_OF_TRIALS,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_TRIALS,
                                            trials);
         }
         if (p < 0 || p > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    p, 0, 1);
         }
 

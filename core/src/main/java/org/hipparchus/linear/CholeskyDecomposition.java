@@ -17,7 +17,7 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -105,7 +105,7 @@ public class CholeskyDecomposition {
                                      final double relativeSymmetryThreshold,
                                      final double absolutePositivityThreshold) {
         if (!matrix.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
@@ -126,7 +126,7 @@ public class CholeskyDecomposition {
                 final double maxDelta =
                     relativeSymmetryThreshold * FastMath.max(FastMath.abs(lIJ), FastMath.abs(lJI));
                 if (FastMath.abs(lIJ - lJI) > maxDelta) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NON_SYMMETRIC_MATRIX,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SYMMETRIC_MATRIX,
                                                            i, j, relativeSymmetryThreshold);
                 }
                 lJ[i] = 0;
@@ -140,7 +140,7 @@ public class CholeskyDecomposition {
 
             // check diagonal element
             if (ltI[i] <= absolutePositivityThreshold) {
-                throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_DEFINITE_MATRIX);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX);
             }
 
             ltI[i] = FastMath.sqrt(ltI[i]);
@@ -229,7 +229,7 @@ public class CholeskyDecomposition {
         public RealVector solve(final RealVector b) {
             final int m = lTData.length;
             if (b.getDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        b.getDimension(), m);
             }
 
@@ -262,7 +262,7 @@ public class CholeskyDecomposition {
         public RealMatrix solve(RealMatrix b) {
             final int m = lTData.length;
             if (b.getRowDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        b.getRowDimension(), m);
             }
 

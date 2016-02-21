@@ -19,7 +19,7 @@ package org.hipparchus.ode;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -122,9 +122,8 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
         super(field, name, minStep, maxStep, scalAbsoluteTolerance, scalRelativeTolerance);
 
         if (nSteps < 2) {
-            throw new MathIllegalArgumentException(
-                  LocalizedFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
-                  nSteps, 2, true);
+            throw new MathIllegalArgumentException(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS,
+                                                   nSteps, 2, true);
         }
 
         starter = new DormandPrince853FieldIntegrator<T>(field, minStep, maxStep,
@@ -236,7 +235,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
             starter.integrate(equations, initialState, t);
 
             // we should not reach this step
-            throw new MathIllegalStateException(LocalizedFormats.MULTISTEP_STARTER_STOPPED_EARLY);
+            throw new MathIllegalStateException(LocalizedODEFormats.MULTISTEP_STARTER_STOPPED_EARLY);
 
         } catch (InitializationCompletedMarkerException icme) { // NOPMD
             // this is the expected nominal interruption of the start integrator

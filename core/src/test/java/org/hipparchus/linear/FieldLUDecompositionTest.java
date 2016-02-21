@@ -20,7 +20,7 @@ package org.hipparchus.linear;
 import org.junit.Test;
 import org.junit.Assert;
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
@@ -84,7 +84,7 @@ public class FieldLUDecompositionTest {
             }));
             Assert.fail("Expected MathIllegalArgumentException");
         } catch (MathIllegalArgumentException ime) {
-            Assert.assertEquals(LocalizedFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
+            Assert.assertEquals(LocalizedCoreFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -100,11 +100,11 @@ public class NakagamiDistribution extends AbstractRealDistribution {
         super(rng);
 
         if (mu < 0.5) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    mu, 0.5);
         }
         if (omega <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_SCALE, omega);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_SCALE, omega);
         }
 
         this.mu = mu;

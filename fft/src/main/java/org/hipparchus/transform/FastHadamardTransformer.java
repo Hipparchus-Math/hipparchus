@@ -20,7 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedFFTFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.ArithmeticUtils;
 
@@ -233,9 +233,8 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
         final int halfN = n / 2;
 
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
-            throw new MathIllegalArgumentException(
-                    LocalizedFormats.NOT_POWER_OF_TWO,
-                    Integer.valueOf(n));
+            throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO,
+                                                   Integer.valueOf(n));
         }
 
         /*
@@ -284,9 +283,8 @@ public class FastHadamardTransformer implements RealTransformer, Serializable {
         final int halfN = n / 2;
 
         if (!ArithmeticUtils.isPowerOfTwo(n)) {
-            throw new MathIllegalArgumentException(
-                    LocalizedFormats.NOT_POWER_OF_TWO,
-                    Integer.valueOf(n));
+            throw new MathIllegalArgumentException(LocalizedFFTFormats.NOT_POWER_OF_TWO,
+                                                   Integer.valueOf(n));
         }
 
         /*

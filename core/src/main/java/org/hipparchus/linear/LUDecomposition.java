@@ -17,7 +17,7 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
@@ -85,7 +85,7 @@ public class LUDecomposition {
      */
     public LUDecomposition(RealMatrix matrix, double singularityThreshold) {
         if (!matrix.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
@@ -293,11 +293,11 @@ public class LUDecomposition {
         public RealVector solve(RealVector b) {
             final int m = pivot.length;
             if (b.getDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        b.getDimension(), m);
             }
             if (singular) {
-                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
             }
 
             final double[] bp = new double[m];
@@ -333,11 +333,11 @@ public class LUDecomposition {
 
             final int m = pivot.length;
             if (b.getRowDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        b.getRowDimension(), m);
             }
             if (singular) {
-                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
             }
 
             final int nColB = b.getColumnDimension();

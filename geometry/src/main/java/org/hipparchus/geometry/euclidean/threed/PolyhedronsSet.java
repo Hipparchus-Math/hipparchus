@@ -21,7 +21,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
@@ -191,7 +192,7 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
             final Vector3D vi = vertices.get(i);
             for (int j = i + 1; j < vertices.size(); ++j) {
                 if (Vector3D.distance(vi, vertices.get(j)) <= tolerance) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.CLOSE_VERTICES,
+                    throw new MathIllegalArgumentException(LocalizedGeometryFormats.CLOSE_VERTICES,
                                                            vi.getX(), vi.getY(), vi.getZ());
                 }
             }
@@ -217,7 +218,7 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
                     if (!found) {
                         final Vector3D start = vertices.get(vA);
                         final Vector3D end   = vertices.get(vB);
-                        throw new MathIllegalArgumentException(LocalizedFormats.EDGE_CONNECTED_TO_ONE_FACET,
+                        throw new MathIllegalArgumentException(LocalizedGeometryFormats.EDGE_CONNECTED_TO_ONE_FACET,
                                                                start.getX(), start.getY(), start.getZ(),
                                                                end.getX(),   end.getY(),   end.getZ());
                     }
@@ -238,7 +239,7 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
             for (int i = 0 ; i < facet.length; ++i) {
                 final Vector3D v = vertices.get(facet[i]);
                 if (!plane.contains(v)) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_PLANE,
+                    throw new MathIllegalArgumentException(LocalizedGeometryFormats.OUT_OF_PLANE,
                                                            v.getX(), v.getY(), v.getZ());
                 }
                 two2Points[i] = plane.toSubSpace(v);
@@ -267,7 +268,7 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
         int maxFacets  = 0;
         for (final int[] facet : facets) {
             if (facet.length < 3) {
-                throw new MathIllegalArgumentException(LocalizedFormats.WRONG_NUMBER_OF_POINTS,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.WRONG_NUMBER_OF_POINTS,
                                                     3, facet.length, true);
             }
             for (final int index : facet) {
@@ -330,7 +331,7 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
                     if (successors[v][l] == successors[v][k]) {
                         final Vector3D start = vertices.get(v);
                         final Vector3D end   = vertices.get(successors[v][k]);
-                        throw new MathIllegalArgumentException(LocalizedFormats.FACET_ORIENTATION_MISMATCH,
+                        throw new MathIllegalArgumentException(LocalizedGeometryFormats.FACET_ORIENTATION_MISMATCH,
                                                                start.getX(), start.getY(), start.getZ(),
                                                                end.getX(),   end.getY(),   end.getZ());
                     }

@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
@@ -84,7 +84,7 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
      */
     public FieldLUDecomposition(FieldMatrix<T> matrix) {
         if (!matrix.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
@@ -304,11 +304,11 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
 
                 final int m = pivot.length;
                 if (b.getDimension() != m) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                            b.getDimension(), m);
                 }
                 if (singular) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
                 }
 
                 // Apply permutations to b
@@ -350,11 +350,11 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
             final int m = pivot.length;
             final int length = b.getDimension();
             if (length != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        length, m);
             }
             if (singular) {
-                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
             }
 
             // Apply permutations to b
@@ -388,11 +388,11 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
         public FieldMatrix<T> solve(FieldMatrix<T> b) {
             final int m = pivot.length;
             if (b.getRowDimension() != m) {
-                throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                        b.getRowDimension(), m);
             }
             if (singular) {
-                throw new MathIllegalArgumentException(LocalizedFormats.SINGULAR_MATRIX);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
             }
 
             final int nColB = b.getColumnDimension();

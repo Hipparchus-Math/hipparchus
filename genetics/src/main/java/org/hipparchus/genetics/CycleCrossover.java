@@ -21,7 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -103,7 +104,7 @@ public class CycleCrossover<T> implements CrossoverPolicy {
         throws MathIllegalArgumentException {
 
         if (!(first instanceof AbstractListChromosome<?> && second instanceof AbstractListChromosome<?>)) {
-            throw new MathIllegalArgumentException(LocalizedFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
+            throw new MathIllegalArgumentException(LocalizedGeneticsFormats.INVALID_FIXED_LENGTH_CHROMOSOME);
         }
         return mate((AbstractListChromosome<T>) first, (AbstractListChromosome<T>) second);
     }
@@ -121,7 +122,7 @@ public class CycleCrossover<T> implements CrossoverPolicy {
 
         final int length = first.getLength();
         if (length != second.getLength()) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    second.getLength(), length);
         }
 

@@ -19,7 +19,8 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractFieldIntegrator;
@@ -229,12 +230,12 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
         mainSetDimension = eqn.getStateDimension();
 
         if (vecAbsoluteTolerance != null && vecAbsoluteTolerance.length != mainSetDimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    mainSetDimension, vecAbsoluteTolerance.length);
         }
 
         if (vecRelativeTolerance != null && vecRelativeTolerance.length != mainSetDimension) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    mainSetDimension, vecRelativeTolerance.length);
         }
 
@@ -329,8 +330,8 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
             if (acceptSmall) {
                 filteredH = forward ? minStep : minStep.negate();
             } else {
-                throw new MathIllegalArgumentException(LocalizedFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
-                                                    h.abs().getReal(), minStep.getReal(), true);
+                throw new MathIllegalArgumentException(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION,
+                                                       h.abs().getReal(), minStep.getReal(), true);
             }
         }
 

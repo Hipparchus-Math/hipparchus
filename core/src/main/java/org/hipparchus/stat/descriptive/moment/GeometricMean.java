@@ -18,7 +18,7 @@ package org.hipparchus.stat.descriptive.moment;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -201,7 +201,7 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
     private void checkEmpty() throws MathIllegalStateException {
         if (getN() > 0) {
             throw new MathIllegalStateException(
-                    LocalizedFormats.VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC,
+                    LocalizedCoreFormats.VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC,
                     getN());
         }
     }

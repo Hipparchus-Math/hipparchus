@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Comparator;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ml.distance.DistanceMeasure;
 import org.hipparchus.ml.neuralnet.twod.NeuronSquareMesh2D;
@@ -252,7 +252,7 @@ public class MapUtils {
         }
 
         if (count == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
 
         return d / count;
@@ -285,7 +285,7 @@ public class MapUtils {
         }
 
         if (count == 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
 
         return ((double) notAdjacentCount) / count;

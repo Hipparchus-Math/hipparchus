@@ -17,7 +17,7 @@
 package org.hipparchus.stat.inference;
 
 import org.hipparchus.distribution.BinomialDistribution;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
@@ -100,18 +100,18 @@ public class BinomialTest {
     public double binomialTest(int numberOfTrials, int numberOfSuccesses, double probability,
                                AlternativeHypothesis alternativeHypothesis) {
         if (numberOfTrials < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, numberOfTrials, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, numberOfTrials, 0);
         }
         if (numberOfSuccesses < 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, numberOfSuccesses, 0);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, numberOfSuccesses, 0);
         }
         if (probability < 0 || probability > 1) {
-            throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    probability, 0, 1);
         }
         if (numberOfTrials < numberOfSuccesses) {
             throw new MathIllegalArgumentException(
-                LocalizedFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
+                LocalizedCoreFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
                 numberOfTrials, numberOfSuccesses);
         }
         if (alternativeHypothesis == null) {

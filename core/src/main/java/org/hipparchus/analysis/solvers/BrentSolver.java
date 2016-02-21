@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.solvers;
 
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
@@ -127,7 +127,7 @@ public class BrentSolver extends AbstractUnivariateSolver {
             return brent(initial, max, yInitial, yMax);
         }
 
-        throw new MathIllegalArgumentException(LocalizedFormats.NOT_BRACKETING_INTERVAL,
+        throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_BRACKETING_INTERVAL,
                                                min, max, yMin, yMax);
     }
 

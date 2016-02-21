@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -137,11 +137,11 @@ public class FDistribution extends AbstractRealDistribution {
         super(rng);
 
         if (numeratorDegreesOfFreedom <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DEGREES_OF_FREEDOM,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DEGREES_OF_FREEDOM,
                                                    numeratorDegreesOfFreedom);
         }
         if (denominatorDegreesOfFreedom <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.DEGREES_OF_FREEDOM,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DEGREES_OF_FREEDOM,
                                                    denominatorDegreesOfFreedom);
         }
         this.numeratorDegreesOfFreedom = numeratorDegreesOfFreedom;

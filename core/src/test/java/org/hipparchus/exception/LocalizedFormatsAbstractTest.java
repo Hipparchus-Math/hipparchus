@@ -17,35 +17,66 @@
 package org.hipparchus.exception;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-import org.hipparchus.exception.LocalizedFormats;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class LocalizedFormatsTest {
+public abstract class LocalizedFormatsAbstractTest {
+
+    protected abstract Class<? extends Enum<?>> getFormatsClass();
+    protected abstract int getExpectedNumber();
+
+    private Localizable[] getValues() {
+        Localizable[] localizable = null;
+        try {
+            Object[] a = (Object[]) getFormatsClass().getMethod("values").invoke(null);
+            localizable = new Localizable[a.length];
+            for (int i = 0; i < a.length; ++i) {
+                localizable[i] = (Localizable) a[i];
+            }
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException |
+                        IllegalArgumentException | InvocationTargetException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
+        return localizable;
+    }
+
+    private Localizable valueOf(String s) {
+        Localizable localizable = null;
+        try {
+            localizable = (Localizable) getFormatsClass().getMethod("valueOf", String.class).invoke(null, s);
+        } catch (IllegalArgumentException iae) {
+            localizable = null;
+        } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
+        return localizable;
+    }
 
     @Test
     public void testMessageNumber() {
-        Assert.assertEquals(327, LocalizedFormats.values().length);
+        Assert.assertEquals(getExpectedNumber(), getValues().length);
     }
 
     @Test
     public void testAllKeysPresentInPropertiesFiles() {
-        final String path = LocalizedFormats.class.getName().replaceAll("\\.", "/");
+        Class<? extends Enum<?>> c = getFormatsClass();
+        final String path = c.getName().replaceAll("\\.", "/");
         for (final String language : new String[] { "fr" } ) {
             ResourceBundle bundle =
-                ResourceBundle.getBundle("assets/" + path, new Locale(language));
-            for (LocalizedFormats message : LocalizedFormats.values()) {
+                ResourceBundle.getBundle("assets/" + path, new Locale(language), c.getClassLoader());
+            for (Localizable message : getValues()) {
                 final String messageKey = message.toString();
                 boolean keyPresent = false;
                 for (final Enumeration<String> keys = bundle.getKeys(); keys.hasMoreElements();) {
                     keyPresent |= messageKey.equals(keys.nextElement());
                 }
-                Assert.assertTrue("missing key \"" + message.name() + "\" for language " + language,
+                Assert.assertTrue("missing key \"" + message.toString() + "\" for language " + language,
                                   keyPresent);
             }
             Assert.assertEquals(language, bundle.getLocale().getLanguage());
@@ -55,14 +86,15 @@ public class LocalizedFormatsTest {
 
     @Test
     public void testAllPropertiesCorrespondToKeys() {
-        final String path = LocalizedFormats.class.getName().replaceAll("\\.", "/");
+        Class<? extends Enum<?>> c = getFormatsClass();
+        final String path = c.getName().replaceAll("\\.", "/");
         for (final String language : new String[] { "fr" } ) {
             ResourceBundle bundle =
-                ResourceBundle.getBundle("assets/" + path, new Locale(language));
+                ResourceBundle.getBundle("assets/" + path, new Locale(language), c.getClassLoader());
             for (final Enumeration<String> keys = bundle.getKeys(); keys.hasMoreElements();) {
                 final String propertyKey = keys.nextElement();
                 try {
-                    Assert.assertNotNull(LocalizedFormats.valueOf(propertyKey));
+                    Assert.assertNotNull(valueOf(propertyKey));
                 } catch (IllegalArgumentException iae) {
                     Assert.fail("unknown key \"" + propertyKey + "\" in language " + language);
                 }
@@ -74,15 +106,15 @@ public class LocalizedFormatsTest {
 
     @Test
     public void testNoMissingFrenchTranslation() {
-        for (LocalizedFormats message : LocalizedFormats.values()) {
+        for (Localizable message : getValues()) {
             String translated = message.getLocalizedString(Locale.FRENCH);
-            Assert.assertFalse(message.name(), translated.toLowerCase().contains("missing translation"));
+            Assert.assertFalse(message.toString(), translated.toLowerCase().contains("missing translation"));
         }
     }
 
     @Test
     public void testNoOpEnglishTranslation() {
-        for (LocalizedFormats message : LocalizedFormats.values()) {
+        for (Localizable message : getValues()) {
             String translated = message.getLocalizedString(Locale.ENGLISH);
             Assert.assertEquals(message.getSourceString(), translated);
         }
@@ -92,10 +124,10 @@ public class LocalizedFormatsTest {
     public void testVariablePartsConsistency() {
         for (final String language : new String[] { "fr" } ) {
             Locale locale = new Locale(language);
-            for (LocalizedFormats message : LocalizedFormats.values()) {
+            for (Localizable message : getValues()) {
                 MessageFormat source     = new MessageFormat(message.getSourceString());
                 MessageFormat translated = new MessageFormat(message.getLocalizedString(locale));
-                Assert.assertEquals(message.name() + " (" + language + ")",
+                Assert.assertEquals(message.toString() + " (" + language + ")",
                                     source.getFormatsByArgumentIndex().length,
                                     translated.getFormatsByArgumentIndex().length);
             }

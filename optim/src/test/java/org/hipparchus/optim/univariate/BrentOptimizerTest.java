@@ -22,7 +22,7 @@ import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.StepFunction;
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.ConvergenceChecker;
@@ -86,10 +86,10 @@ public final class BrentOptimizerTest {
         UnivariateFunction f = new UnivariateFunction() {
             public double value(double x) {
                 if (x < lower) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                            x, lower);
                 } else if (x > upper) {
-                    throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_LARGE,
+                    throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
                                                            x, upper);
                 } else {
                     return x;

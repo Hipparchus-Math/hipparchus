@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -123,7 +123,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
         super(rng);
 
         if (p <= 0) {
-            throw new MathIllegalArgumentException(LocalizedFormats.MEAN, p);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.MEAN, p);
         }
         mean = p;
         this.epsilon = epsilon;
