@@ -149,7 +149,6 @@ public class ConjugateGradient
                                    final RealVector b,
                                    final RealVector x0)
         throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException,
         MathIllegalStateException {
         checkParameters(a, m, b, x0);
         final IterationManager manager = getIterationManager();

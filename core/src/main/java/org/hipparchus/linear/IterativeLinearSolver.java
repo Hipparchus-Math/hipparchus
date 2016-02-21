@@ -73,8 +73,7 @@ public abstract class IterativeLinearSolver {
      */
     protected static void checkParameters(final RealLinearOperator a,
         final RealVector b, final RealVector x0) throws
-        MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException {
+        MathIllegalArgumentException, NullArgumentException {
         MathUtils.checkNotNull(a);
         MathUtils.checkNotNull(b);
         MathUtils.checkNotNull(x0);
@@ -118,8 +117,7 @@ public abstract class IterativeLinearSolver {
      * has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(final RealLinearOperator a, final RealVector b)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         x.set(0.);
@@ -144,8 +142,7 @@ public abstract class IterativeLinearSolver {
      * has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(RealLinearOperator a, RealVector b, RealVector x0)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, b, x0.copy());
     }
@@ -169,6 +166,5 @@ public abstract class IterativeLinearSolver {
      * has been set at construction of the {@link IterationManager}
      */
     public abstract RealVector solveInPlace(RealLinearOperator a, RealVector b,
-        RealVector x0) throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException;
+        RealVector x0) throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException;
 }

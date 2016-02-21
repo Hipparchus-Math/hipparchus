@@ -92,8 +92,7 @@ public abstract class PreconditionedIterativeLinearSolver
      */
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x0)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, m, b, x0.copy());
     }
@@ -101,8 +100,7 @@ public abstract class PreconditionedIterativeLinearSolver
     /** {@inheritDoc} */
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         x.set(0.);
@@ -113,8 +111,7 @@ public abstract class PreconditionedIterativeLinearSolver
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b,
                             final RealVector x0)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(x0);
         return solveInPlace(a, null, b, x0.copy());
     }
@@ -138,8 +135,7 @@ public abstract class PreconditionedIterativeLinearSolver
      */
     protected static void checkParameters(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x0)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException {
+        throws MathIllegalArgumentException, NullArgumentException {
         checkParameters(a, b, x0);
         if (m != null) {
             if (m.getColumnDimension() != m.getRowDimension()) {
@@ -172,8 +168,7 @@ public abstract class PreconditionedIterativeLinearSolver
      * has been set at construction of the {@link IterationManager}
      */
     public RealVector solve(RealLinearOperator a, RealLinearOperator m,
-        RealVector b) throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        RealVector b) throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         return solveInPlace(a, m, b, x);
@@ -201,15 +196,13 @@ public abstract class PreconditionedIterativeLinearSolver
      */
     public abstract RealVector solveInPlace(RealLinearOperator a,
         RealLinearOperator m, RealVector b, RealVector x0) throws
-        MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException;
+        MathIllegalArgumentException, NullArgumentException, MathIllegalStateException;
 
     /** {@inheritDoc} */
     @Override
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealVector b, final RealVector x0) throws
-        MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException {
+        MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         return solveInPlace(a, null, b, x0);
     }
 }

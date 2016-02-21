@@ -5,6 +5,7 @@
 CardanEulerSingularityException        MathIllegalStateException
 ConvergenceException                   MathIllegalStateException
 DimensionMismatchException             MathIllegalArgumentException
+IllConditionedOperatorException        MathIllegalArgumentException
 InsufficientDataException              MathIllegalArgumentException
 InvalidRepresentationException         MathIllegalArgumentException
 MathArithmeticException                MathRuntimeException
