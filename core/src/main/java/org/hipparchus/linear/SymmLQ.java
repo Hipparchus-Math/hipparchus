@@ -129,7 +129,7 @@ import org.hipparchus.util.MathUtils;
  * </ul>
  * </p>
  * <p>
- * {@link NonPositiveDefiniteOperatorException} might also be thrown in case the
+ * {@link MathIllegalArgumentException} might also be thrown in case the
  * preconditioner is not positive definite. The relevant keys to the
  * {@link ExceptionContext} are
  * <ul>
@@ -424,16 +424,16 @@ public class SymmLQ
         }
 
         /**
-         * Throws a new {@link NonPositiveDefiniteOperatorException} with
+         * Throws a new {@link MathIllegalArgumentException} with
          * appropriate context.
          *
          * @param l the offending linear operator
          * @param v the offending vector
-         * @throws NonPositiveDefiniteOperatorException in any circumstances
+         * @throws MathIllegalArgumentException in any circumstances
          */
         private static void throwNPDLOException(final RealLinearOperator l,
-            final RealVector v) throws NonPositiveDefiniteOperatorException {
-            throw new NonPositiveDefiniteOperatorException();
+            final RealVector v) throws MathIllegalArgumentException {
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_POSITIVE_DEFINITE_OPERATOR);
         }
 
         /**
@@ -879,7 +879,7 @@ public class SymmLQ
      *
      * @throws NonSelfAdjointOperatorException if {@link #getCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
-     * @throws NonPositiveDefiniteOperatorException if {@code m} is not
+     * @throws MathIllegalArgumentException if {@code m} is not
      * positive definite
      * @throws IllConditionedOperatorException if {@code a} is ill-conditioned
      */
@@ -888,7 +888,7 @@ public class SymmLQ
         final RealLinearOperator m, final RealVector b) throws
         NullArgumentException, NonSquareOperatorException,
         MathIllegalArgumentException, MathIllegalStateException,
-        NonSelfAdjointOperatorException, NonPositiveDefiniteOperatorException,
+        NonSelfAdjointOperatorException, MathIllegalArgumentException,
         IllConditionedOperatorException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
@@ -931,7 +931,7 @@ public class SymmLQ
      * has been set at construction of the {@link IterationManager}
      * @throws NonSelfAdjointOperatorException if {@link #getCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
-     * @throws NonPositiveDefiniteOperatorException if {@code m} is not
+     * @throws MathIllegalArgumentException if {@code m} is not
      * positive definite
      * @throws IllConditionedOperatorException if {@code a} is ill-conditioned
      */
@@ -940,7 +940,7 @@ public class SymmLQ
         final double shift) throws NullArgumentException,
         NonSquareOperatorException, MathIllegalArgumentException,
         MathIllegalStateException, NonSelfAdjointOperatorException,
-        NonPositiveDefiniteOperatorException, IllConditionedOperatorException {
+        MathIllegalArgumentException, IllConditionedOperatorException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         return solveInPlace(a, m, b, x, goodb, shift);
@@ -953,7 +953,7 @@ public class SymmLQ
      * as an initial guess (<a href="#initguess">more</a>)
      * @throws NonSelfAdjointOperatorException if {@link #getCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
-     * @throws NonPositiveDefiniteOperatorException if {@code m} is not positive
+     * @throws MathIllegalArgumentException if {@code m} is not positive
      * definite
      * @throws IllConditionedOperatorException if {@code a} is ill-conditioned
      */
@@ -962,7 +962,7 @@ public class SymmLQ
         final RealLinearOperator m, final RealVector b, final RealVector x)
         throws NullArgumentException, NonSquareOperatorException,
         MathIllegalArgumentException, NonSelfAdjointOperatorException,
-        NonPositiveDefiniteOperatorException, IllConditionedOperatorException,
+        MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         MathUtils.checkNotNull(x);
         return solveInPlace(a, m, b, x.copy(), false, 0.);
@@ -1057,7 +1057,7 @@ public class SymmLQ
      * not be considered as an initial guess (<a href="#initguess">more</a>)
      * @throws NonSelfAdjointOperatorException if {@link #getCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
-     * @throws NonPositiveDefiniteOperatorException if {@code m} is not
+     * @throws MathIllegalArgumentException if {@code m} is not
      * positive definite
      * @throws IllConditionedOperatorException if {@code a} is ill-conditioned
      */
@@ -1066,7 +1066,7 @@ public class SymmLQ
         final RealLinearOperator m, final RealVector b, final RealVector x)
         throws NullArgumentException, NonSquareOperatorException,
         MathIllegalArgumentException, NonSelfAdjointOperatorException,
-        NonPositiveDefiniteOperatorException, IllConditionedOperatorException,
+        MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         return solveInPlace(a, m, b, x, false, 0.);
     }
@@ -1109,7 +1109,7 @@ public class SymmLQ
      * has been set at construction of the {@link IterationManager}
      * @throws NonSelfAdjointOperatorException if {@link #getCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
-     * @throws NonPositiveDefiniteOperatorException if {@code m} is not positive
+     * @throws MathIllegalArgumentException if {@code m} is not positive
      * definite
      * @throws IllConditionedOperatorException if {@code a} is ill-conditioned
      */
@@ -1118,7 +1118,7 @@ public class SymmLQ
         final RealVector x, final boolean goodb, final double shift)
         throws NullArgumentException, NonSquareOperatorException,
         MathIllegalArgumentException, NonSelfAdjointOperatorException,
-        NonPositiveDefiniteOperatorException, IllConditionedOperatorException,
+        MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         checkParameters(a, m, b, x);
 

@@ -27,7 +27,6 @@ import org.hipparchus.linear.ConjugateGradient;
 import org.hipparchus.linear.IterativeLinearSolver;
 import org.hipparchus.linear.IterativeLinearSolverEvent;
 import org.hipparchus.linear.JacobiPreconditioner;
-import org.hipparchus.linear.NonPositiveDefiniteOperatorException;
 import org.hipparchus.linear.NonSquareOperatorException;
 import org.hipparchus.linear.PreconditionedIterativeLinearSolver;
 import org.hipparchus.linear.RealLinearOperator;
@@ -70,7 +69,7 @@ public class ConjugateGradientTest {
         solver.solve(a, b, x);
     }
 
-    @Test(expected = NonPositiveDefiniteOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonPositiveDefiniteLinearOperator() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
         a.setEntry(0, 0, -1.);
@@ -279,7 +278,7 @@ public class ConjugateGradientTest {
         solver.solve(a, m, b);
     }
 
-    @Test(expected = NonPositiveDefiniteOperatorException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonPositiveDefinitePreconditioner() {
         final Array2DRowRealMatrix a = new Array2DRowRealMatrix(2, 2);
         a.setEntry(0, 0, 1d);
