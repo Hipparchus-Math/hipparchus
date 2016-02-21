@@ -18,15 +18,15 @@
 package org.hipparchus.optim.nonlinear.scalar.gradient;
 
 import org.hipparchus.exception.LocalizedFormats;
-import org.hipparchus.exception.MathInternalError;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.GradientMultivariateOptimizer;
 import org.hipparchus.optim.nonlinear.scalar.LineSearch;
+import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
 
 
 /**
@@ -236,7 +236,7 @@ public class NonLinearConjugateGradientOptimizer
                 break;
             default:
                 // Should never happen.
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
             steepestDescent = newSteepestDescent;
 

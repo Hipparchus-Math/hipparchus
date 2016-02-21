@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
@@ -1795,7 +1794,7 @@ public class DSCompiler {
                         CombinatoricsUtils.factorial(orders[k]);
                     } catch (MathIllegalArgumentException e) {
                         // this cannot happen
-                        throw new MathInternalError(e);
+                        throw MathRuntimeException.createInternalError(e);
                     }
                 }
             }

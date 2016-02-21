@@ -25,7 +25,7 @@ import org.hipparchus.analysis.function.Sinc;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -171,11 +171,9 @@ public final class FastSineTransformerTest extends RealTransformerAbstractTest {
                 throw new MathIllegalStateException(LocalizedFormats.ILLEGAL_STATE);
             }
         } else {
-            /*
-             * Should never occur. This clause is a safeguard in case other
-             * types are used to TransformType (which should not be done).
-             */
-            throw new MathInternalError();
+             // Should never occur. This clause is a safeguard in case other
+             // types are used to TransformType (which should not be done).
+            throw MathRuntimeException.createInternalError();
         }
         TransformUtils.scaleArray(y, s);
         return y;

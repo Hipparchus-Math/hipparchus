@@ -30,7 +30,6 @@ import org.hipparchus.Field;
 import org.hipparchus.distribution.UniformIntegerDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
@@ -358,7 +357,7 @@ public class MathArrays {
                 break;
             default:
                 // Should never happen.
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
 
             previous = val[i];
@@ -500,7 +499,7 @@ public class MathArrays {
                 break;
             default:
                 // Should never happen.
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
 
             previous = val[index];
@@ -1644,7 +1643,7 @@ public class MathArrays {
         }
             break;
         default:
-            throw new MathInternalError(); // Should never happen.
+            throw MathRuntimeException.createInternalError(); // Should never happen.
         }
     }
 

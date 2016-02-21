@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.partitioning.AbstractRegion;
 import org.hipparchus.geometry.partitioning.BSPTree;
@@ -660,7 +660,7 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
                 }
                 if (end == null) {
                     // this should never happen
-                    throw new MathInternalError();
+                    throw MathRuntimeException.createInternalError();
                 }
 
                 // we have identified the last arc
@@ -799,7 +799,7 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
         final BSPTree<Sphere1D> node = tree.getCell(limit.getLocation(), getTolerance());
         if (node.getCut() != null) {
             // this should never happen
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         }
 
         node.insertCut(limit);

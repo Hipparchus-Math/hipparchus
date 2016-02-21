@@ -35,7 +35,7 @@ import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
@@ -212,7 +212,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             fillBinStats(new ArrayDataAdapter(in));
         } catch (IOException ex) {
             // Can't happen
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         }
         loaded = true;
 

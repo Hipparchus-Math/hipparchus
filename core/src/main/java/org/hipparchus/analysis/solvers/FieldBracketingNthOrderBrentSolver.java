@@ -22,7 +22,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.IntegerSequence;
 import org.hipparchus.util.MathArrays;
@@ -289,7 +289,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
                     return yA.getReal() < 0 ? xB : xA;
                 default :
                     // this should never happen
-                    throw new MathInternalError(null);
+                    throw new MathRuntimeException(null);
                 }
             }
 

@@ -40,7 +40,7 @@ import org.hipparchus.distribution.WeibullDistribution;
 import org.hipparchus.distribution.ZipfDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -316,7 +316,7 @@ public class RandomDataGenerator implements Serializable {
             alg = MessageDigest.getInstance("SHA-1");
         } catch (NoSuchAlgorithmException ex) {
             // this should never happen
-            throw new MathInternalError(ex);
+            throw MathRuntimeException.createInternalError(ex);
         }
         alg.reset();
 

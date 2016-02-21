@@ -19,7 +19,7 @@ package org.hipparchus.geometry.partitioning;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
 
 /** Cut sub-hyperplanes characterization with respect to inside/outside cells.
@@ -102,7 +102,7 @@ class Characterization<S extends Space> {
                 break;
             default:
                 // this should not happen
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
         }
     }

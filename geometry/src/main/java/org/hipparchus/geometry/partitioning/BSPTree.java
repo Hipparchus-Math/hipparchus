@@ -19,7 +19,7 @@ package org.hipparchus.geometry.partitioning;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.util.FastMath;
@@ -276,7 +276,7 @@ public class BSPTree<S extends Space> {
                 plus.visit(visitor);
                 break;
             default:
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
             }
 
         }

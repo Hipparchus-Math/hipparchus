@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.random.RandomDataGenerator;
@@ -220,7 +220,7 @@ public class NaturalRanking implements RankingAlgorithm {
                 }
                 break;
             default: // this should not happen unless NaNStrategy enum is changed
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
         }
 
         // Sort the IntDoublePairs
@@ -369,7 +369,7 @@ public class NaturalRanking implements RankingAlgorithm {
                 }
                 break;
             default: // this should not happen unless TiesStrategy enum is changed
-                throw new MathInternalError();
+                throw MathRuntimeException.createInternalError();
         }
     }
 

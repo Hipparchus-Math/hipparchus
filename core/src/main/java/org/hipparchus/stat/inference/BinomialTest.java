@@ -19,7 +19,7 @@ package org.hipparchus.stat.inference;
 import org.hipparchus.distribution.BinomialDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 
 /**
@@ -153,7 +153,7 @@ public class BinomialTest {
             return pTotal;
         default:
             // this should never happen
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         }
     }
 }

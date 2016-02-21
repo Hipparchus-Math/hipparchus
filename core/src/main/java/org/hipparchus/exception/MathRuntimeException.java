@@ -27,6 +27,9 @@ public class MathRuntimeException extends RuntimeException implements LocalizedE
     /** Serializable version Id. */
     private static final long serialVersionUID = 20160217L;
 
+    /** URL for reporting problems for internal errors. */
+    private static final String REPORT_URL = "https://www.orekit.org/forge/projects/hipparchus/issues";
+
     /** Format specifier (to be translated). */
     private final Localizable specifier;
 
@@ -52,6 +55,19 @@ public class MathRuntimeException extends RuntimeException implements LocalizedE
         super(cause);
         this.specifier = specifier;
         this.parts     = (parts == null) ? new Object[0] : parts.clone();
+    }
+
+    /** Create an exception for an internal error.
+     */
+    public static MathRuntimeException createInternalError() {
+        return new MathRuntimeException(LocalizedFormats.INTERNAL_ERROR, REPORT_URL);
+    }
+
+    /** Create an exception for an internal error.
+     * @param cause root cause
+     */
+    public static MathRuntimeException createInternalError(final Throwable cause) {
+        return new MathRuntimeException(cause, LocalizedFormats.INTERNAL_ERROR, REPORT_URL);
     }
 
     /** {@inheritDoc} */

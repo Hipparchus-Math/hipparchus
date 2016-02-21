@@ -9,6 +9,7 @@ InsufficientDataException              MathIllegalArgumentException
 InvalidRepresentationException         MathIllegalArgumentException
 MathArithmeticException                MathRuntimeException
 MathIllegalNumberException             MathIllegalArgumentException
+MathInternalError                      MathRuntimeException
 MathParseException                     MathIllegalStateException
 MathUnsupportedOperationException      MathRuntimeException
 MatrixDimensionMismatchException       MathIllegalArgumentException

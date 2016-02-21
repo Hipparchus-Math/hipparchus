@@ -28,7 +28,7 @@ import java.util.StringTokenizer;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -96,7 +96,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
         // initialize the other dimensions with direction numbers from a resource
         final InputStream is = getClass().getResourceAsStream(RESOURCE_NAME);
         if (is == null) {
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         }
 
         this.dimension = dimension;
@@ -109,10 +109,10 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
             initFromStream(is);
         } catch (IOException e) {
             // the internal resource file could not be read -> should not happen
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         } catch (MathIllegalStateException e) {
             // the internal resource file could not be parsed -> should not happen
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         } finally {
             try {
                 is.close();

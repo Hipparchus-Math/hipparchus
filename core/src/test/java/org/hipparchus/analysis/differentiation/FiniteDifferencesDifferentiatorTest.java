@@ -26,7 +26,7 @@ import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -172,7 +172,7 @@ public class FiniteDifferencesDifferentiatorTest {
                     public double value(double x) {
                         // this exception should not be thrown because wrong order
                         // should be detected before function call
-                        throw new MathInternalError();
+                        throw MathRuntimeException.createInternalError();
                     }
                 });
         f.value(new DerivativeStructure(1, 3, 0, 1.0));
@@ -186,7 +186,7 @@ public class FiniteDifferencesDifferentiatorTest {
                     public double[] value(double x) {
                         // this exception should not be thrown because wrong order
                         // should be detected before function call
-                        throw new MathInternalError();
+                        throw MathRuntimeException.createInternalError();
                     }
                 });
         f.value(new DerivativeStructure(1, 3, 0, 1.0));
@@ -200,7 +200,7 @@ public class FiniteDifferencesDifferentiatorTest {
                     public double[][] value(double x) {
                         // this exception should not be thrown because wrong order
                         // should be detected before function call
-                        throw new MathInternalError();
+                        throw MathRuntimeException.createInternalError();
                     }
                 });
         f.value(new DerivativeStructure(1, 3, 0, 1.0));

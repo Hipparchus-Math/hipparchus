@@ -27,7 +27,6 @@ import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathInternalError;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fraction.BigFraction;
@@ -1167,7 +1166,7 @@ public class KolmogorovSmirnovTest {
            ct++;
        } while (ties && ct < 1000);
        if (ties) {
-           throw new MathInternalError(); // Should never happen
+           throw MathRuntimeException.createInternalError(); // Should never happen
        }
     }
 

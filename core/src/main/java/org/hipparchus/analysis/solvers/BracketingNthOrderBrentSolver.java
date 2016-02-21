@@ -21,7 +21,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -227,7 +227,7 @@ public class BracketingNthOrderBrentSolver
                     return (yA <  0) ? xB : xA;
                 default :
                     // this should never happen
-                    throw new MathInternalError();
+                    throw MathRuntimeException.createInternalError();
                 }
             }
 

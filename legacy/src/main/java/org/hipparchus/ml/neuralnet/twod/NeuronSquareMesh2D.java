@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ml.neuralnet.FeatureInitializer;
 import org.hipparchus.ml.neuralnet.Network;
 import org.hipparchus.ml.neuralnet.Neuron;
@@ -379,7 +379,7 @@ public class NeuronSquareMesh2D
             break;
         default:
             // Should never happen.
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         }
         int colIndex = col + colOffset;
         if (wrapColumns) {
@@ -403,7 +403,7 @@ public class NeuronSquareMesh2D
             break;
         default:
             // Should never happen.
-            throw new MathInternalError();
+            throw MathRuntimeException.createInternalError();
         }
         int rowIndex = row + rowOffset;
         if (wrapRows) {
@@ -545,7 +545,7 @@ public class NeuronSquareMesh2D
                     break;
 
                 default:
-                    throw new MathInternalError(); // Cannot happen.
+                    throw MathRuntimeException.createInternalError(); // Cannot happen.
                 }
 
                 final Neuron aNeuron = network.getNeuron(identifiers[i][j]);

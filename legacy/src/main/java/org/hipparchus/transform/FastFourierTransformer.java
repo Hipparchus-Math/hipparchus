@@ -24,7 +24,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -184,13 +184,11 @@ public class FastFourierTransformer implements Serializable {
                 }
                 break;
             default:
-                /*
-                 * This should never occur in normal conditions. However this
-                 * clause has been added as a safeguard if other types of
-                 * normalizations are ever implemented, and the corresponding
-                 * test is forgotten in the present switch.
-                 */
-                throw new MathInternalError();
+                // This should never occur in normal conditions. However this
+                // clause has been added as a safeguard if other types of
+                // normalizations are ever implemented, and the corresponding
+                // test is forgotten in the present switch.
+                throw MathRuntimeException.createInternalError();
         }
     }
 

@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 
 import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathInternalError;
+import org.hipparchus.exception.MathRuntimeException;
 
 /**
  * Utility to create <a href="http://en.wikipedia.org/wiki/Combination">
@@ -140,7 +140,7 @@ public class Combinations implements Iterable<int[]> {
         case LEXICOGRAPHIC:
             return new LexicographicIterator(n, k);
         default:
-            throw new MathInternalError(); // Should never happen.
+            throw MathRuntimeException.createInternalError(); // Should never happen.
         }
     }
 
