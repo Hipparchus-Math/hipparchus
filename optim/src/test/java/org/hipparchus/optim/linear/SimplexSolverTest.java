@@ -33,7 +33,6 @@ import org.hipparchus.optim.linear.PivotSelectionRule;
 import org.hipparchus.optim.linear.Relationship;
 import org.hipparchus.optim.linear.SimplexSolver;
 import org.hipparchus.optim.linear.SolutionCallback;
-import org.hipparchus.optim.linear.UnboundedSolutionException;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.util.Precision;
 import org.junit.Test;
@@ -568,7 +567,7 @@ public class SimplexSolverTest {
                         GoalType.MAXIMIZE, new NonNegativeConstraint(false));
     }
 
-    @Test(expected = UnboundedSolutionException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void testUnboundedSolution() {
         LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 15, 10 }, 0);
         Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();

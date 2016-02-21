@@ -313,18 +313,18 @@ public class SimplexSolver extends LinearOptimizer {
      *
      * @param tableau Simple tableau for the problem.
      * @throws MathIllegalStateException if the allowed number of iterations has been exhausted.
-     * @throws UnboundedSolutionException if the model is found not to have a bounded solution.
+     * @throws MathIllegalStateException if the model is found not to have a bounded solution.
      */
     protected void doIteration(final SimplexTableau tableau)
         throws MathIllegalStateException,
-               UnboundedSolutionException {
+               MathIllegalStateException {
 
         incrementIterationCount();
 
         Integer pivotCol = getPivotColumn(tableau);
         Integer pivotRow = getPivotRow(tableau, pivotCol);
         if (pivotRow == null) {
-            throw new UnboundedSolutionException();
+            throw new MathIllegalStateException();
         }
 
         tableau.performRowOperations(pivotCol, pivotRow);
@@ -335,12 +335,12 @@ public class SimplexSolver extends LinearOptimizer {
      *
      * @param tableau Simple tableau for the problem.
      * @throws MathIllegalStateException if the allowed number of iterations has been exhausted.
-     * @throws UnboundedSolutionException if the model is found not to have a bounded solution.
+     * @throws MathIllegalStateException if the model is found not to have a bounded solution.
      * @throws NoFeasibleSolutionException if there is no feasible solution?
      */
     protected void solvePhase1(final SimplexTableau tableau)
         throws MathIllegalStateException,
-               UnboundedSolutionException,
+               MathIllegalStateException,
                NoFeasibleSolutionException {
 
         // make sure we're in Phase 1
@@ -362,7 +362,7 @@ public class SimplexSolver extends LinearOptimizer {
     @Override
     public PointValuePair doOptimize()
         throws MathIllegalStateException,
-               UnboundedSolutionException,
+               MathIllegalStateException,
                NoFeasibleSolutionException {
 
         // reset the tableau to indicate a non-feasible solution in case
