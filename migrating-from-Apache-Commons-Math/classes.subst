@@ -22,6 +22,7 @@ NonSelfAdjointOperatorException        MathIllegalArgumentException
 NonMonotonicSequenceException          MathIllegalArgumentException
 NonPositiveDefiniteMatrixException     MathIllegalArgumentException
 NonPositiveDefiniteOperatorException   MathIllegalArgumentException
+NonSymmetricMatrixException            MathIllegalArgumentException
 NotANumberException                    MathIllegalArgumentException
 NotARotationMatrixException            MathIllegalArgumentException
 NotPositiveException                   MathIllegalArgumentException

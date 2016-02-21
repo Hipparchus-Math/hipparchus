@@ -74,7 +74,7 @@ public class CholeskyDecomposition {
      * </p>
      * @param matrix the matrix to decompose
      * @throws NonSquareMatrixException if the matrix is not square.
-     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
+     * @throws MathIllegalArgumentException if the matrix is not symmetric.
      * @throws NonPositiveDefiniteMatrixException if the matrix is not
      * strictly positive definite.
      * @see #CholeskyDecomposition(RealMatrix, double, double)
@@ -94,7 +94,7 @@ public class CholeskyDecomposition {
      * @param absolutePositivityThreshold threshold below which diagonal
      * elements are considered null and matrix not positive definite
      * @throws NonSquareMatrixException if the matrix is not square.
-     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
+     * @throws MathIllegalArgumentException if the matrix is not symmetric.
      * @throws MathIllegalArgumentException if the matrix is not
      * strictly positive definite.
      * @see #CholeskyDecomposition(RealMatrix)
@@ -126,7 +126,8 @@ public class CholeskyDecomposition {
                 final double maxDelta =
                     relativeSymmetryThreshold * FastMath.max(FastMath.abs(lIJ), FastMath.abs(lJI));
                 if (FastMath.abs(lIJ - lJI) > maxDelta) {
-                    throw new NonSymmetricMatrixException(i, j, relativeSymmetryThreshold);
+                    throw new MathIllegalArgumentException(LocalizedFormats.NON_SYMMETRIC_MATRIX,
+                                                           i, j, relativeSymmetryThreshold);
                 }
                 lJ[i] = 0;
            }

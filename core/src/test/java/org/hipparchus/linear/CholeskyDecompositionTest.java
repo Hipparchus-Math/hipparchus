@@ -49,7 +49,7 @@ public class CholeskyDecompositionTest {
     }
 
     /** test non-symmetric matrix */
-    @Test(expected = NonSymmetricMatrixException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNotSymmetricMatrixException() {
         double[][] changed = testData.clone();
         changed[0][changed[0].length - 1] += 1.0e-5;

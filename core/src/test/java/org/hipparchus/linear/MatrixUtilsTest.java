@@ -437,7 +437,7 @@ public final class MatrixUtilsTest {
         MatrixUtils.checkSymmetric(MatrixUtils.createRealMatrix(dataSym), Math.ulp(1d));
     }
 
-    @Test(expected=NonSymmetricMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testCheckSymmetric2() {
         final double[][] dataNonSym = {
             { 1, 2, -3 },

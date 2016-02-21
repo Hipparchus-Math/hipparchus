@@ -377,7 +377,7 @@ public class MatrixUtils {
      * the matrix is not symmetric.
      * @return {@code true} if {@code matrix} is symmetric.
      * @throws NonSquareMatrixException if the matrix is not square.
-     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
+     * @throws MathIllegalArgumentException if the matrix is not symmetric.
      */
     private static boolean isSymmetricInternal(RealMatrix matrix,
                                                double relativeTolerance,
@@ -397,7 +397,8 @@ public class MatrixUtils {
                 if (FastMath.abs(mij - mji) >
                     FastMath.max(FastMath.abs(mij), FastMath.abs(mji)) * relativeTolerance) {
                     if (raiseException) {
-                        throw new NonSymmetricMatrixException(i, j, relativeTolerance);
+                        throw new MathIllegalArgumentException(LocalizedFormats.NON_SYMMETRIC_MATRIX,
+                                                               i, j, relativeTolerance);
                     } else {
                         return false;
                     }
@@ -413,7 +414,7 @@ public class MatrixUtils {
      * @param matrix Matrix to check.
      * @param eps Relative tolerance.
      * @throws NonSquareMatrixException if the matrix is not square.
-     * @throws NonSymmetricMatrixException if the matrix is not symmetric.
+     * @throws MathIllegalArgumentException if the matrix is not symmetric.
      * @since 3.1
      */
     public static void checkSymmetric(RealMatrix matrix,
