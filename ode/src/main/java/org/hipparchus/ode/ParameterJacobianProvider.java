@@ -39,10 +39,10 @@ public interface ParameterJacobianProvider extends Parameterizable {
      * ODE with respect to the parameter
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
-     * @exception UnknownParameterException if the parameter is not supported
+     * @exception MathIllegalArgumentException if the parameter is not supported
      */
     void computeParameterJacobian(double t, double[] y, double[] yDot,
                                   String paramName, double[] dFdP)
-        throws MathIllegalArgumentException, MathIllegalStateException, UnknownParameterException;
+        throws MathIllegalArgumentException, MathIllegalStateException, MathIllegalArgumentException;
 
 }

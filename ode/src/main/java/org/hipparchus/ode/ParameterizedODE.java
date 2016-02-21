@@ -16,6 +16,7 @@
  */
 package org.hipparchus.ode;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Interface to compute by finite difference Jacobian matrix for some parameter
  *  when computing {@link JacobianMatrices partial derivatives equations}.
@@ -28,15 +29,15 @@ public interface ParameterizedODE extends Parameterizable {
     /** Get parameter value from its name.
      * @param name parameter name
      * @return parameter value
-     * @exception UnknownParameterException if parameter is not supported
+     * @exception MathIllegalArgumentException if parameter is not supported
      */
-    double getParameter(String name) throws UnknownParameterException;
+    double getParameter(String name) throws MathIllegalArgumentException;
 
     /** Set the value for a given parameter.
      * @param name parameter name
      * @param value parameter value
-     * @exception UnknownParameterException if parameter is not supported
+     * @exception MathIllegalArgumentException if parameter is not supported
      */
-    void setParameter(String name, double value) throws UnknownParameterException;
+    void setParameter(String name, double value) throws MathIllegalArgumentException;
 
 }

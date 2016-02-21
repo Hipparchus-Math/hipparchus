@@ -17,6 +17,7 @@
 
 package org.hipparchus.ode;
 
+import org.hipparchus.exception.LocalizedFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.JacobianMatrices.MismatchedEquations;
@@ -62,7 +63,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testHighAccuracyExternalDifferentiation()
-        throws MathIllegalArgumentException, MathIllegalStateException, UnknownParameterException {
+        throws MathIllegalArgumentException, MathIllegalStateException, MathIllegalArgumentException {
         FirstOrderIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
         double hP = 1.0e-12;
@@ -95,16 +96,16 @@ public class JacobianMatricesTest {
             ParamBrusselator brusselator = new ParamBrusselator(2.9);
             brusselator.setParameter(name, 3.0);
             Assert.fail("an exception should have been thrown");
-        } catch (UnknownParameterException upe) {
-            Assert.assertTrue(upe.getMessage().contains(name));
-            Assert.assertEquals(name, upe.getName());
+        } catch (MathIllegalArgumentException upe) {
+            Assert.assertEquals(LocalizedFormats.UNKNOWN_PARAMETER, upe.getSpecifier());
+            Assert.assertEquals(name, (String) upe.getParts()[0]);
         }
     }
 
     @Test
     public void testInternalDifferentiation()
                     throws MathIllegalArgumentException, MathIllegalStateException,
-                    UnknownParameterException, MismatchedEquations {
+                    MathIllegalArgumentException, MismatchedEquations {
         AbstractIntegrator integ =
                         new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         double hP = 1.0e-12;
@@ -149,7 +150,7 @@ public class JacobianMatricesTest {
     public void testAnalyticalDifferentiation()
         throws MathIllegalArgumentException, MathIllegalStateException,
                MathIllegalArgumentException,
-               UnknownParameterException, MismatchedEquations {
+               MathIllegalArgumentException, MismatchedEquations {
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         SummaryStatistics residualsP0 = new SummaryStatistics();
@@ -189,7 +190,7 @@ public class JacobianMatricesTest {
     public void testFinalResult()
         throws MathIllegalArgumentException, MathIllegalStateException,
                MathIllegalArgumentException,
-               UnknownParameterException, MismatchedEquations {
+               MathIllegalArgumentException, MismatchedEquations {
 
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
@@ -245,7 +246,7 @@ public class JacobianMatricesTest {
     public void testParameterizable()
         throws MathIllegalArgumentException, MathIllegalStateException,
                MathIllegalArgumentException,
-               UnknownParameterException, MismatchedEquations {
+               MathIllegalArgumentException, MismatchedEquations {
 
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
@@ -373,14 +374,14 @@ public class JacobianMatricesTest {
 
         /** {@inheritDoc} */
         public double getParameter(final String name)
-            throws UnknownParameterException {
+            throws MathIllegalArgumentException {
             complainIfNotSupported(name);
             return b;
         }
 
         /** {@inheritDoc} */
         public void setParameter(final String name, final double value)
-            throws UnknownParameterException {
+            throws MathIllegalArgumentException {
             complainIfNotSupported(name);
             b = value;
         }
@@ -441,7 +442,7 @@ public class JacobianMatricesTest {
 
         public void computeParameterJacobian(double t, double[] y, double[] yDot,
                                              String paramName, double[] dFdP)
-            throws UnknownParameterException {
+            throws MathIllegalArgumentException {
             complainIfNotSupported(paramName);
             if (paramName.equals(CX)) {
                 dFdP[0] = 0;
@@ -528,7 +529,7 @@ public class JacobianMatricesTest {
         }
 
         public double getParameter(final String name)
-            throws UnknownParameterException {
+            throws MathIllegalArgumentException {
             if (name.equals(CX)) {
                 return cx;
             } else if (name.equals(CY)) {
@@ -536,12 +537,12 @@ public class JacobianMatricesTest {
             } else if (name.equals(OMEGA)) {
                 return omega;
             } else {
-                throw new UnknownParameterException(name);
+                throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, name);
             }
         }
 
         public void setParameter(final String name, final double value)
-            throws UnknownParameterException {
+            throws MathIllegalArgumentException {
             if (name.equals(CX)) {
                 cx = value;
             } else if (name.equals(CY)) {
@@ -549,7 +550,7 @@ public class JacobianMatricesTest {
             } else if (name.equals(OMEGA)) {
                 omega = value;
             } else {
-                throw new UnknownParameterException(name);
+                throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, name);
             }
         }
 

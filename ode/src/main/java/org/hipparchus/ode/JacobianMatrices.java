@@ -206,10 +206,10 @@ public class JacobianMatrices {
      * @param parameter parameter to consider for Jacobian processing
      * @param hP step for Jacobian finite difference computation w.r.t. the specified parameter
      * @see ParameterizedODE
-     * @exception UnknownParameterException if the parameter is not supported
+     * @exception MathIllegalArgumentException if the parameter is not supported
      */
     public void setParameterStep(final String parameter, final double hP)
-        throws UnknownParameterException {
+        throws MathIllegalArgumentException {
 
         for (ParameterConfiguration param: selectedParameters) {
             if (parameter.equals(param.getParameterName())) {
@@ -219,7 +219,7 @@ public class JacobianMatrices {
             }
         }
 
-        throw new UnknownParameterException(parameter);
+        throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, parameter);
 
     }
 
@@ -258,11 +258,11 @@ public class JacobianMatrices {
      * </p>
      * @param pName parameter name
      * @param dYdP initial Jacobian column vector with respect to the parameter
-     * @exception UnknownParameterException if a parameter is not supported
+     * @exception MathIllegalArgumentException if a parameter is not supported
      * @throws MathIllegalArgumentException if the column vector does not match state dimension
      */
     public void setInitialParameterJacobian(final String pName, final double[] dYdP)
-        throws UnknownParameterException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalArgumentException {
 
         // Check dimensions
         checkDimension(stateDim, dYdP);
@@ -280,7 +280,7 @@ public class JacobianMatrices {
             i += stateDim;
         }
 
-        throw new UnknownParameterException(pName);
+        throw new MathIllegalArgumentException(LocalizedFormats.UNKNOWN_PARAMETER, pName);
 
     }
 
