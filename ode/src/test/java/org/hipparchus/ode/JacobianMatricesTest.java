@@ -63,7 +63,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testHighAccuracyExternalDifferentiation()
-        throws MathIllegalArgumentException, MathIllegalStateException, MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         FirstOrderIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
         double hP = 1.0e-12;
@@ -104,8 +104,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testInternalDifferentiation()
-                    throws MathIllegalArgumentException, MathIllegalStateException,
-                    MathIllegalArgumentException, MismatchedEquations {
+                    throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
         AbstractIntegrator integ =
                         new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         double hP = 1.0e-12;
@@ -148,8 +147,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testAnalyticalDifferentiation()
-        throws MathIllegalArgumentException, MathIllegalStateException,
-               MathIllegalArgumentException, MismatchedEquations {
+        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         SummaryStatistics residualsP0 = new SummaryStatistics();
@@ -187,8 +185,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testFinalResult()
-        throws MathIllegalArgumentException, MathIllegalStateException,
-               MathIllegalArgumentException, MismatchedEquations {
+        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
 
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
@@ -242,8 +239,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testParameterizable()
-        throws MathIllegalArgumentException, MathIllegalStateException,
-               MathIllegalArgumentException, MismatchedEquations {
+        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
 
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });

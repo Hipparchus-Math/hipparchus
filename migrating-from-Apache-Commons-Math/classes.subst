@@ -23,6 +23,7 @@ NonMonotonicSequenceException          MathIllegalArgumentException
 NonPositiveDefiniteMatrixException     MathIllegalArgumentException
 NonPositiveDefiniteOperatorException   MathIllegalArgumentException
 NonSquareOperatorException             MathIllegalArgumentException
+NonSquareMatrixException               MathIllegalArgumentException
 NonSymmetricMatrixException            MathIllegalArgumentException
 NotANumberException                    MathIllegalArgumentException
 NotARotationMatrixException            MathIllegalArgumentException

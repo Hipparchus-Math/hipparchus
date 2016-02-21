@@ -168,13 +168,14 @@ public abstract class AbstractRealMatrix
     /** {@inheritDoc} */
     @Override
     public RealMatrix power(final int p)
-        throws MathIllegalArgumentException, NonSquareMatrixException {
+        throws MathIllegalArgumentException {
         if (p < 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NOT_POSITIVE_EXPONENT, p);
         }
 
         if (!isSquare()) {
-            throw new NonSquareMatrixException(getRowDimension(), getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   getRowDimension(), getColumnDimension());
         }
 
         if (p == 0) {
@@ -687,11 +688,12 @@ public abstract class AbstractRealMatrix
 
     /** {@inheritDoc} */
     @Override
-    public double getTrace() throws NonSquareMatrixException {
+    public double getTrace() throws MathIllegalArgumentException {
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
         if (nRows != nCols) {
-            throw new NonSquareMatrixException(nRows, nCols);
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   nRows, nCols);
        }
         double trace = 0;
         for (int i = 0; i < nRows; ++i) {

@@ -120,10 +120,10 @@ public interface RealMatrix extends AnyMatrix {
      * @param p raise {@code this} to power {@code p}
      * @return {@code this^p}
      * @throws MathIllegalArgumentException if {@code p < 0}
-     * @throws NonSquareMatrixException if the matrix is not square
+     * @throws MathIllegalArgumentException if the matrix is not square
      */
     RealMatrix power(final int p)
-        throws MathIllegalArgumentException, NonSquareMatrixException;
+        throws MathIllegalArgumentException;
 
     /**
      * Returns matrix entries as a two-dimensional array.
@@ -460,9 +460,9 @@ public interface RealMatrix extends AnyMatrix {
      * trace</a> of the matrix (the sum of the elements on the main diagonal).
      *
      * @return the trace.
-     * @throws NonSquareMatrixException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not square.
      */
-    double getTrace() throws NonSquareMatrixException;
+    double getTrace() throws MathIllegalArgumentException;
 
     /**
      * Returns the result of multiplying this by the vector {@code v}.

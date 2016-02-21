@@ -91,9 +91,7 @@ public class BrentSolver extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws MathIllegalArgumentException,
-               MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         double min = getMin();
         double max = getMax();
         final double initial = getStartValue();

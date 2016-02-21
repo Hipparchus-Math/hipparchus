@@ -70,7 +70,7 @@ public class LUDecomposition {
      * threshold.
      *
      * @param matrix Matrix to decompose.
-     * @throws NonSquareMatrixException if matrix is not square.
+     * @throws MathIllegalArgumentException if matrix is not square.
      */
     public LUDecomposition(RealMatrix matrix) {
         this(matrix, DEFAULT_TOO_SMALL);
@@ -81,12 +81,12 @@ public class LUDecomposition {
      * @param matrix The matrix to decompose.
      * @param singularityThreshold threshold (based on partial row norm)
      * under which a matrix is considered singular
-     * @throws NonSquareMatrixException if matrix is not square
+     * @throws MathIllegalArgumentException if matrix is not square
      */
     public LUDecomposition(RealMatrix matrix, double singularityThreshold) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         final int m = matrix.getColumnDimension();

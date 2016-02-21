@@ -43,6 +43,6 @@ public interface ParameterJacobianProvider extends Parameterizable {
      */
     void computeParameterJacobian(double t, double[] y, double[] yDot,
                                   String paramName, double[] dFdP)
-        throws MathIllegalArgumentException, MathIllegalStateException, MathIllegalArgumentException;
+        throws MathIllegalArgumentException, MathIllegalStateException;
 
 }

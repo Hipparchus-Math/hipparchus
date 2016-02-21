@@ -376,7 +376,7 @@ public class MatrixUtils {
      * @param raiseException If {@code true}, an exception will be raised if
      * the matrix is not symmetric.
      * @return {@code true} if {@code matrix} is symmetric.
-     * @throws NonSquareMatrixException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not square.
      * @throws MathIllegalArgumentException if the matrix is not symmetric.
      */
     private static boolean isSymmetricInternal(RealMatrix matrix,
@@ -385,7 +385,8 @@ public class MatrixUtils {
         final int rows = matrix.getRowDimension();
         if (rows != matrix.getColumnDimension()) {
             if (raiseException) {
-                throw new NonSquareMatrixException(rows, matrix.getColumnDimension());
+                throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                       rows, matrix.getColumnDimension());
             } else {
                 return false;
             }
@@ -413,7 +414,7 @@ public class MatrixUtils {
      *
      * @param matrix Matrix to check.
      * @param eps Relative tolerance.
-     * @throws NonSquareMatrixException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not square.
      * @throws MathIllegalArgumentException if the matrix is not symmetric.
      * @since 3.1
      */
@@ -918,21 +919,21 @@ public class MatrixUtils {
      * @param b  RealVector this is overwritten
      * @throws MathIllegalArgumentException if the matrix and vector are not
      * conformable
-     * @throws NonSquareMatrixException if the matrix {@code rm} is not square
+     * @throws MathIllegalArgumentException if the matrix {@code rm} is not square
      * @throws MathRuntimeException if the absolute value of one of the diagonal
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveLowerTriangularSystem(RealMatrix rm, RealVector b)
         throws MathIllegalArgumentException, MathRuntimeException,
-        NonSquareMatrixException {
+        MathIllegalArgumentException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    (rm == null) ? 0 : rm.getRowDimension(),
                                                    (b  == null) ? 0 : b.getDimension());
         }
         if( rm.getColumnDimension() != rm.getRowDimension() ){
-            throw new NonSquareMatrixException(rm.getRowDimension(),
-                                               rm.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   rm.getRowDimension(), rm.getColumnDimension());
         }
         int rows = rm.getRowDimension();
         for( int i = 0 ; i < rows ; i++ ){
@@ -962,22 +963,22 @@ public class MatrixUtils {
      * @param b  RealVector this is overwritten
      * @throws MathIllegalArgumentException if the matrix and vector are not
      * conformable
-     * @throws NonSquareMatrixException if the matrix {@code rm} is not
+     * @throws MathIllegalArgumentException if the matrix {@code rm} is not
      * square
      * @throws MathRuntimeException if the absolute value of one of the diagonal
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveUpperTriangularSystem(RealMatrix rm, RealVector b)
         throws MathIllegalArgumentException, MathRuntimeException,
-        NonSquareMatrixException {
+        MathIllegalArgumentException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
                                                    (rm == null) ? 0 : rm.getRowDimension(),
                                                    (b  == null) ? 0 : b.getDimension());
         }
         if( rm.getColumnDimension() != rm.getRowDimension() ){
-            throw new NonSquareMatrixException(rm.getRowDimension(),
-                                               rm.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   rm.getRowDimension(), rm.getColumnDimension());
         }
         int rows = rm.getRowDimension();
         for( int i = rows-1 ; i >-1 ; i-- ){
@@ -1003,14 +1004,14 @@ public class MatrixUtils {
      * The element corresponding to this index will part of the
      * upper-left sub-matrix.
      * @return the inverse of {@code m}.
-     * @throws NonSquareMatrixException if {@code m} is not square.
+     * @throws MathIllegalArgumentException if {@code m} is not square.
      */
     public static RealMatrix blockInverse(RealMatrix m,
                                           int splitIndex) {
         final int n = m.getRowDimension();
         if (m.getColumnDimension() != n) {
-            throw new NonSquareMatrixException(m.getRowDimension(),
-                                               m.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   m.getRowDimension(), m.getColumnDimension());
         }
 
         final int splitIndex1 = splitIndex + 1;
@@ -1075,11 +1076,11 @@ public class MatrixUtils {
      * @return the inverse of {@code matrix}
      * @throws NullArgumentException if {@code matrix} is {@code null}
      * @throws MathIllegalArgumentException if m is singular
-     * @throws NonSquareMatrixException if matrix is not square
+     * @throws MathIllegalArgumentException if matrix is not square
      * @since 3.3
      */
     public static RealMatrix inverse(RealMatrix matrix)
-            throws MathIllegalArgumentException, NullArgumentException, NonSquareMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException {
         return inverse(matrix, 0);
     }
 
@@ -1094,17 +1095,17 @@ public class MatrixUtils {
      * @return the inverse of {@code m}
      * @throws NullArgumentException if {@code matrix} is {@code null}
      * @throws MathIllegalArgumentException if matrix is singular
-     * @throws NonSquareMatrixException if matrix is not square
+     * @throws MathIllegalArgumentException if matrix is not square
      * @since 3.3
      */
     public static RealMatrix inverse(RealMatrix matrix, double threshold)
-            throws MathIllegalArgumentException, NullArgumentException, NonSquareMatrixException {
+            throws MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(matrix);
 
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         if (matrix instanceof DiagonalMatrix) {

@@ -43,7 +43,7 @@ public class CholeskyDecompositionTest {
     }
 
     /** test non-square matrix */
-    @Test(expected = NonSquareMatrixException.class)
+    @Test(expected = MathIllegalArgumentException.class)
     public void testNonSquare() {
         new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[3][2]));
     }

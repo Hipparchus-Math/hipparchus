@@ -143,8 +143,7 @@ public class BracketingNthOrderBrentSolver
      */
     @Override
     protected double doSolve()
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         // prepare arrays with the first points
         final double[] x = new double[maximalOrder + 1];
         final double[] y = new double[maximalOrder + 1];
@@ -393,8 +392,7 @@ public class BracketingNthOrderBrentSolver
     @Override
     public double solve(int maxEval, UnivariateFunction f, double min,
                         double max, AllowedSolution allowedSolution)
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         this.allowed = allowedSolution;
         return super.solve(maxEval, f, min, max);
     }
@@ -404,8 +402,7 @@ public class BracketingNthOrderBrentSolver
     public double solve(int maxEval, UnivariateFunction f, double min,
                         double max, double startValue,
                         AllowedSolution allowedSolution)
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         this.allowed = allowedSolution;
         return super.solve(maxEval, f, min, max, startValue);
     }

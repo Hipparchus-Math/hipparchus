@@ -17,6 +17,8 @@
 
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -54,12 +56,12 @@ class HessenbergTransformer {
      * Build the transformation to Hessenberg form of a general matrix.
      *
      * @param matrix matrix to transform
-     * @throws NonSquareMatrixException if the matrix is not square
+     * @throws MathIllegalArgumentException if the matrix is not square
      */
     HessenbergTransformer(final RealMatrix matrix) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                    matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         final int m = matrix.getRowDimension();

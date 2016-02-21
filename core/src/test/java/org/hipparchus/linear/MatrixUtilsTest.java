@@ -453,7 +453,7 @@ public final class MatrixUtilsTest {
         MatrixUtils.inverse(m);
     }
 
-    @Test(expected=NonSquareMatrixException.class)
+    @Test(expected=MathIllegalArgumentException.class)
     public void testInverseNonSquare() {
         RealMatrix m = MatrixUtils.createRealMatrix(testData3x4);
         MatrixUtils.inverse(m);

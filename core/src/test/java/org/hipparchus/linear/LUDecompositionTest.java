@@ -17,12 +17,10 @@
 
 package org.hipparchus.linear;
 
-import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.NonSquareMatrixException;
-import org.hipparchus.linear.RealMatrix;
-import org.junit.Test;
+import org.hipparchus.exception.LocalizedFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class LUDecompositionTest {
     private double[][] testData = {
@@ -76,9 +74,9 @@ public class LUDecompositionTest {
     public void testNonSquare() {
         try {
             new LUDecomposition(MatrixUtils.createRealMatrix(new double[3][2]));
-            Assert.fail("Expecting NonSquareMatrixException");
-        } catch (NonSquareMatrixException ime) {
-            // expected behavior
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ime) {
+            Assert.assertEquals(LocalizedFormats.NON_SQUARE_MATRIX, ime.getSpecifier());
         }
     }
 

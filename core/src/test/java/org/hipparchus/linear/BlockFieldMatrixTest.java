@@ -352,8 +352,8 @@ public final class BlockFieldMatrixTest {
         m = new BlockFieldMatrix<Fraction>(testData2);
         try {
             m.getTrace();
-            Assert.fail("Expecting NonSquareMatrixException");
-        } catch (NonSquareMatrixException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }

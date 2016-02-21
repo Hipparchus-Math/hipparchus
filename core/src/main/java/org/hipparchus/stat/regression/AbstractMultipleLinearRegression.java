@@ -21,7 +21,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.NonSquareMatrixException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.stat.descriptive.moment.Variance;
@@ -246,7 +245,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * @param covariance the [n,n] array representing the covariance matrix
      * @throws MathIllegalArgumentException if the number of rows in x is not equal
      * to the number of rows in covariance
-     * @throws NonSquareMatrixException if the covariance matrix is not square
+     * @throws MathIllegalArgumentException if the covariance matrix is not square
      */
     protected void validateCovarianceData(double[][] x, double[][] covariance) {
         if (x.length != covariance.length) {
@@ -254,7 +253,8 @@ public abstract class AbstractMultipleLinearRegression implements
                                                    x.length, covariance.length);
         }
         if (covariance.length > 0 && covariance.length != covariance[0].length) {
-            throw new NonSquareMatrixException(covariance.length, covariance[0].length);
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   covariance.length, covariance[0].length);
         }
     }
 

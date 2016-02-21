@@ -80,12 +80,12 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
     /**
      * Calculates the LU-decomposition of the given matrix.
      * @param matrix The matrix to decompose.
-     * @throws NonSquareMatrixException if matrix is not square
+     * @throws MathIllegalArgumentException if matrix is not square
      */
     public FieldLUDecomposition(FieldMatrix<T> matrix) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         final int m = matrix.getColumnDimension();

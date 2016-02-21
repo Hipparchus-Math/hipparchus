@@ -87,8 +87,7 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      */
     @Override
     public double doSolve()
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         final double min = getMin();
         final double max = getMax();
         final double initial = getStartValue();

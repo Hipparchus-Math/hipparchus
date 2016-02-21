@@ -81,8 +81,7 @@ public class MullerSolver2 extends AbstractUnivariateSolver {
      */
     @Override
     protected double doSolve()
-        throws MathIllegalStateException,
-               MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         final double min = getMin();
         final double max = getMax();
 

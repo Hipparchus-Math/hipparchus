@@ -236,14 +236,14 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public FieldMatrix<T> power(final int p) throws NonSquareMatrixException,
-    MathIllegalArgumentException {
+    public FieldMatrix<T> power(final int p) throws MathIllegalArgumentException {
         if (p < 0) {
             throw new MathIllegalArgumentException(LocalizedFormats.NUMBER_TOO_SMALL, p, 0);
         }
 
         if (!isSquare()) {
-            throw new NonSquareMatrixException(getRowDimension(), getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   getRowDimension(), getColumnDimension());
         }
 
         if (p == 0) {
@@ -681,11 +681,12 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public T getTrace() throws NonSquareMatrixException {
+    public T getTrace() throws MathIllegalArgumentException {
         final int nRows = getRowDimension();
         final int nCols = getColumnDimension();
         if (nRows != nCols) {
-            throw new NonSquareMatrixException(nRows, nCols);
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   nRows, nCols);
        }
         T trace = field.getZero();
         for (int i = 0; i < nRows; ++i) {

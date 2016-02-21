@@ -259,8 +259,8 @@ public final class Array2DRowRealMatrixTest {
         try {
             Array2DRowRealMatrix mNotSquare = new Array2DRowRealMatrix(testData2T);
             mNotSquare.power(2);
-            Assert.fail("Expecting NonSquareMatrixException");
-        } catch (NonSquareMatrixException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
 
@@ -280,8 +280,8 @@ public final class Array2DRowRealMatrixTest {
         m = new Array2DRowRealMatrix(testData2);
         try {
             m.getTrace();
-            Assert.fail("Expecting NonSquareMatrixException");
-        } catch (NonSquareMatrixException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
@@ -1061,7 +1061,8 @@ public final class Array2DRowRealMatrixTest {
     /** extracts the l  and u matrices from compact lu representation */
     protected void splitLU(RealMatrix lu, double[][] lowerData, double[][] upperData) {
         if (!lu.isSquare()) {
-            throw new NonSquareMatrixException(lu.getRowDimension(), lu.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   lu.getRowDimension(), lu.getColumnDimension());
         }
         if (lowerData.length != lowerData[0].length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -1100,8 +1101,8 @@ public final class Array2DRowRealMatrixTest {
     /** Returns the result of applying the given row permutation to the matrix */
     protected RealMatrix permuteRows(RealMatrix matrix, int[] permutation) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
         if (matrix.getRowDimension() != permutation.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

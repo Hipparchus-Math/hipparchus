@@ -225,8 +225,8 @@ public final class FieldMatrixImplTest {
         try {
             FieldMatrix<Fraction> mNotSquare = new Array2DRowFieldMatrix<Fraction>(testData2T);
             mNotSquare.power(2);
-            Assert.fail("Expecting NonSquareMatrixException");
-        } catch (NonSquareMatrixException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
 
@@ -246,8 +246,8 @@ public final class FieldMatrixImplTest {
         m = new Array2DRowFieldMatrix<Fraction>(testData2);
         try {
             m.getTrace();
-            Assert.fail("Expecting NonSquareMatrixException");
-        } catch (NonSquareMatrixException ex) {
+            Assert.fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
             // ignored
         }
     }
@@ -1047,7 +1047,8 @@ public final class FieldMatrixImplTest {
                            Fraction[][] lowerData,
                            Fraction[][] upperData) {
         if (!lu.isSquare()) {
-            throw new NonSquareMatrixException(lu.getRowDimension(), lu.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   lu.getRowDimension(), lu.getColumnDimension());
         }
         if (lowerData.length != lowerData[0].length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,
@@ -1085,8 +1086,8 @@ public final class FieldMatrixImplTest {
     /** Returns the result of applying the given row permutation to the matrix */
     protected FieldMatrix<Fraction> permuteRows(FieldMatrix<Fraction> matrix, int[] permutation) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
         if (matrix.getRowDimension() != permutation.length) {
             throw new MathIllegalArgumentException(LocalizedFormats.DIMENSIONS_MISMATCH,

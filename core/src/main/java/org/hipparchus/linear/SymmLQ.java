@@ -886,9 +886,8 @@ public class SymmLQ
     @Override
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b) throws
-        NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MathIllegalStateException,
-        MathIllegalArgumentException, MathIllegalArgumentException,
+        MathIllegalArgumentException, NullArgumentException,
+        MathIllegalArgumentException, MathIllegalStateException, MathIllegalArgumentException,
         IllConditionedOperatorException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
@@ -937,9 +936,7 @@ public class SymmLQ
      */
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final boolean goodb,
-        final double shift) throws NullArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalStateException, MathIllegalArgumentException,
+        final double shift) throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException, MathIllegalStateException,
         MathIllegalArgumentException, IllConditionedOperatorException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
@@ -960,8 +957,8 @@ public class SymmLQ
     @Override
     public RealVector solve(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
+        MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         MathUtils.checkNotNull(x);
@@ -977,8 +974,8 @@ public class SymmLQ
      */
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
+        MathIllegalArgumentException,
         IllConditionedOperatorException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
@@ -1022,9 +1019,7 @@ public class SymmLQ
      * @throws IllConditionedOperatorException if {@code a} is ill-conditioned
      */
     public RealVector solve(final RealLinearOperator a, final RealVector b,
-        final boolean goodb, final double shift) throws NullArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, IllConditionedOperatorException,
+        final boolean goodb, final double shift) throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
@@ -1042,9 +1037,7 @@ public class SymmLQ
      */
     @Override
     public RealVector solve(final RealLinearOperator a, final RealVector b,
-        final RealVector x) throws NullArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, IllConditionedOperatorException,
+        final RealVector x) throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         MathUtils.checkNotNull(x);
         return solveInPlace(a, null, b, x.copy(), false, 0.);
@@ -1064,8 +1057,8 @@ public class SymmLQ
     @Override
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b, final RealVector x)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
+        MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         return solveInPlace(a, m, b, x, false, 0.);
@@ -1116,8 +1109,8 @@ public class SymmLQ
     public RealVector solveInPlace(final RealLinearOperator a,
         final RealLinearOperator m, final RealVector b,
         final RealVector x, final boolean goodb, final double shift)
-        throws NullArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException,
+        throws MathIllegalArgumentException, NullArgumentException,
+        MathIllegalArgumentException,
         MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         checkParameters(a, m, b, x);
@@ -1185,9 +1178,7 @@ public class SymmLQ
      */
     @Override
     public RealVector solveInPlace(final RealLinearOperator a,
-        final RealVector b, final RealVector x) throws NullArgumentException,
-        MathIllegalArgumentException, MathIllegalArgumentException,
-        MathIllegalArgumentException, IllConditionedOperatorException,
+        final RealVector b, final RealVector x) throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException, IllConditionedOperatorException,
         MathIllegalStateException {
         return solveInPlace(a, null, b, x, false, 0.);
     }

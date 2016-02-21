@@ -73,7 +73,7 @@ public class CholeskyDecomposition {
      * #DEFAULT_ABSOLUTE_POSITIVITY_THRESHOLD}
      * </p>
      * @param matrix the matrix to decompose
-     * @throws NonSquareMatrixException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not square.
      * @throws MathIllegalArgumentException if the matrix is not symmetric.
      * @throws NonPositiveDefiniteMatrixException if the matrix is not
      * strictly positive definite.
@@ -93,7 +93,7 @@ public class CholeskyDecomposition {
      * elements are considered too different and matrix not symmetric
      * @param absolutePositivityThreshold threshold below which diagonal
      * elements are considered null and matrix not positive definite
-     * @throws NonSquareMatrixException if the matrix is not square.
+     * @throws MathIllegalArgumentException if the matrix is not square.
      * @throws MathIllegalArgumentException if the matrix is not symmetric.
      * @throws MathIllegalArgumentException if the matrix is not
      * strictly positive definite.
@@ -105,8 +105,8 @@ public class CholeskyDecomposition {
                                      final double relativeSymmetryThreshold,
                                      final double absolutePositivityThreshold) {
         if (!matrix.isSquare()) {
-            throw new NonSquareMatrixException(matrix.getRowDimension(),
-                                               matrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         final int order = matrix.getRowDimension();

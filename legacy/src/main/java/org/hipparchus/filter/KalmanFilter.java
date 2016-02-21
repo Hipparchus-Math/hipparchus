@@ -23,7 +23,6 @@ import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.CholeskyDecomposition;
 import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.NonSquareMatrixException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.MathUtils;
@@ -107,7 +106,7 @@ public class KalmanFilter {
      *            the model defining the given measurement characteristics
      * @throws NullArgumentException
      *             if any of the given inputs is null (except for the control matrix)
-     * @throws NonSquareMatrixException
+     * @throws MathIllegalArgumentException
      *             if the transition matrix is non square
      * @throws MathIllegalArgumentException
      *             if the column dimension of the transition matrix does not match the dimension of the
@@ -116,7 +115,7 @@ public class KalmanFilter {
      *             if the matrix dimensions do not fit together
      */
     public KalmanFilter(final ProcessModel process, final MeasurementModel measurement)
-            throws NullArgumentException, NonSquareMatrixException, MathIllegalArgumentException {
+            throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException {
 
         MathUtils.checkNotNull(process);
         MathUtils.checkNotNull(measurement);
@@ -173,9 +172,9 @@ public class KalmanFilter {
 
         // A must be a square matrix
         if (!transitionMatrix.isSquare()) {
-            throw new NonSquareMatrixException(
-                    transitionMatrix.getRowDimension(),
-                    transitionMatrix.getColumnDimension());
+            throw new MathIllegalArgumentException(LocalizedFormats.NON_SQUARE_MATRIX,
+                                                    transitionMatrix.getRowDimension(),
+                                                    transitionMatrix.getColumnDimension());
         }
 
         // row dimension of B must be equal to A
