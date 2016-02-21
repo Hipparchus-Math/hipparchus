@@ -18,6 +18,7 @@ ModelSpecificationException        MathIllegalArgumentException
 MultiDimensionMismatchException    MathIllegalArgumentException
 NoBracketingException              MathIllegalArgumentException
 NoDataException                    MathIllegalArgumentException
+NoFeasibleSolutionException        MathIllegalStateException
 NonMonotonicSequenceException      MathIllegalArgumentException
 NonPositiveDefiniteMatrixException MathIllegalArgumentException
 NotANumberException                MathIllegalArgumentException

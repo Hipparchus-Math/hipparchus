@@ -43,7 +43,7 @@ import org.hipparchus.util.Precision;
  * </ul>
  * <p>
  * <b>Note:</b> Depending on the problem definition, the default convergence criteria
- * may be too strict, resulting in {@link NoFeasibleSolutionException} or
+ * may be too strict, resulting in {@link MathIllegalStateException} or
  * {@link MathIllegalStateException}. In such a case it is advised to adjust these
  * criteria with more appropriate values, e.g. relaxing the epsilon value.
  * <p>
@@ -336,12 +336,12 @@ public class SimplexSolver extends LinearOptimizer {
      * @param tableau Simple tableau for the problem.
      * @throws MathIllegalStateException if the allowed number of iterations has been exhausted.
      * @throws MathIllegalStateException if the model is found not to have a bounded solution.
-     * @throws NoFeasibleSolutionException if there is no feasible solution?
+     * @throws MathIllegalStateException if there is no feasible solution?
      */
     protected void solvePhase1(final SimplexTableau tableau)
         throws MathIllegalStateException,
                MathIllegalStateException,
-               NoFeasibleSolutionException {
+               MathIllegalStateException {
 
         // make sure we're in Phase 1
         if (tableau.getNumArtificialVariables() == 0) {
@@ -354,7 +354,7 @@ public class SimplexSolver extends LinearOptimizer {
 
         // if W is not zero then we have no feasible solution
         if (!Precision.equals(tableau.getEntry(0, tableau.getRhsOffset()), 0d, epsilon)) {
-            throw new NoFeasibleSolutionException();
+            throw new MathIllegalStateException(LocalizedFormats.NO_FEASIBLE_SOLUTION);
         }
     }
 
@@ -363,7 +363,7 @@ public class SimplexSolver extends LinearOptimizer {
     public PointValuePair doOptimize()
         throws MathIllegalStateException,
                MathIllegalStateException,
-               NoFeasibleSolutionException {
+               MathIllegalStateException {
 
         // reset the tableau to indicate a non-feasible solution in case
         // we do not pass phase 1 successfully
@@ -400,7 +400,7 @@ public class SimplexSolver extends LinearOptimizer {
             final double[] coeff = solution.getPoint();
             for (int i = 0; i < coeff.length; i++) {
                 if (Precision.compareTo(coeff[i], 0, epsilon) < 0) {
-                    throw new NoFeasibleSolutionException();
+                    throw new MathIllegalStateException(LocalizedFormats.NO_FEASIBLE_SOLUTION);
                 }
             }
         }

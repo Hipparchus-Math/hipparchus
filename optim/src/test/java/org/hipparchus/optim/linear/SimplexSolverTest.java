@@ -27,7 +27,6 @@ import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.linear.LinearConstraint;
 import org.hipparchus.optim.linear.LinearConstraintSet;
 import org.hipparchus.optim.linear.LinearObjectiveFunction;
-import org.hipparchus.optim.linear.NoFeasibleSolutionException;
 import org.hipparchus.optim.linear.NonNegativeConstraint;
 import org.hipparchus.optim.linear.PivotSelectionRule;
 import org.hipparchus.optim.linear.Relationship;
@@ -168,7 +167,7 @@ public class SimplexSolverTest {
 
     }
 
-    @Test(expected = NoFeasibleSolutionException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void testMath434UnfeasibleSolution() {
         double epsilon = 1e-6;
 
@@ -309,7 +308,7 @@ public class SimplexSolverTest {
         Assert.assertEquals(0, solution.getPoint()[1], .0000001);
     }
 
-    @Test(expected=NoFeasibleSolutionException.class)
+    @Test(expected=MathIllegalStateException.class)
     public void testMath290LEQ() {
         LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 1, 5 }, 0 );
         Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
@@ -555,7 +554,7 @@ public class SimplexSolverTest {
         Assert.assertEquals(12.0, solution.getValue(), 0.0);
     }
 
-    @Test(expected = NoFeasibleSolutionException.class)
+    @Test(expected = MathIllegalStateException.class)
     public void testInfeasibleSolution() {
         LinearObjectiveFunction f = new LinearObjectiveFunction(new double[] { 15 }, 0);
         Collection<LinearConstraint> constraints = new ArrayList<LinearConstraint>();
