@@ -24,9 +24,9 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.genetics.AbstractListChromosome;
 import org.hipparchus.genetics.Chromosome;
-import org.hipparchus.genetics.InvalidRepresentationException;
 
 /**
  * A simple chromosome representing a list of polygons.
@@ -51,7 +51,7 @@ public class PolygonChromosome extends AbstractListChromosome<Polygon> {
     }
 
     @Override
-    protected void checkValidity(List<Polygon> chromosomeRepresentation) throws InvalidRepresentationException {
+    protected void checkValidity(List<Polygon> chromosomeRepresentation) throws MathIllegalArgumentException {
         // do nothing
     }
 

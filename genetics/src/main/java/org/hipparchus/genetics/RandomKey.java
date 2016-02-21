@@ -66,9 +66,9 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
      * Constructor.
      *
      * @param representation list of [0,1] values representing the permutation
-     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome
+     * @throws MathIllegalArgumentException iff the <code>representation</code> can not represent a valid chromosome
      */
-    public RandomKey(final List<Double> representation) throws InvalidRepresentationException {
+    public RandomKey(final List<Double> representation) throws MathIllegalArgumentException {
         super(representation);
         // store the sorted representation
         List<Double> sortedRepr = new ArrayList<Double> (getRepresentation());
@@ -84,9 +84,9 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
      * Constructor.
      *
      * @param representation array of [0,1] values representing the permutation
-     * @throws InvalidRepresentationException iff the <code>representation</code> can not represent a valid chromosome
+     * @throws MathIllegalArgumentException iff the <code>representation</code> can not represent a valid chromosome
      */
-    public RandomKey(final Double[] representation) throws InvalidRepresentationException {
+    public RandomKey(final Double[] representation) throws MathIllegalArgumentException {
         this(Arrays.asList(representation));
     }
 
@@ -177,11 +177,11 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
      */
     @Override
     protected void checkValidity(final List<Double> chromosomeRepresentation)
-        throws InvalidRepresentationException {
+        throws MathIllegalArgumentException {
 
         for (double val : chromosomeRepresentation) {
             if (val < 0 || val > 1) {
-                throw new InvalidRepresentationException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
+                throw new MathIllegalArgumentException(LocalizedFormats.OUT_OF_RANGE_SIMPLE,
                                                          val, 0, 1);
             }
         }
