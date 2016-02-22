@@ -391,7 +391,7 @@
     <hipparchus.maven-checkstyle-plugin.version>2.15</hipparchus.maven-checkstyle-plugin.version>
     <hipparchus.checkstyle.version>6.6</hipparchus.checkstyle.version>
     <hipparchus.maven-clean-plugin.version>2.6.1</hipparchus.maven-clean-plugin.version>
-    <hipparchus.maven-compiler-plugin.version>3.3</hipparchus.maven-compiler-plugin.version>
+    <hipparchus.maven-compiler-plugin.version>3.5.1</hipparchus.maven-compiler-plugin.version>
     <hipparchus.maven-javadoc-plugin.version>2.10.3</hipparchus.maven-javadoc-plugin.version>
     <hipparchus.maven-jar-plugin.version>2.6</hipparchus.maven-jar-plugin.version>
     <hipparchus.maven-jxr-plugin.version>2.5</hipparchus.maven-jxr-plugin.version>
