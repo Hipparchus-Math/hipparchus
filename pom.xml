@@ -37,6 +37,17 @@
       <url>https://www.orekit.org/forge/projects/hipparchus/issues</url>
   </issueManagement>
 
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+  </distributionManagement>
+
   <developers>
     <developer>
       <name>Otmar Ertl</name>
@@ -424,11 +435,19 @@
     <hipparchus.maven-surefire-plugin.version>2.18.1</hipparchus.maven-surefire-plugin.version>
     <hipparchus.maven-surefire-report-plugin.version>2.18.1</hipparchus.maven-surefire-report-plugin.version>
     <hipparchus.jgit.buildnumber.version>1.2.10</hipparchus.jgit.buildnumber.version>
+    <hipparchus.maven-release-plugin.version>2.5.3</hipparchus.maven-release-plugin.version>
+    <hipparchus.wagon-ssh.version>2.10</hipparchus.wagon-ssh.version>
+    <hipparchus.wagon-maven-plugin.version>1.0</hipparchus.wagon-maven-plugin.version>
+    <hipparchus.nexus-staging-maven-plugin.version>1.6.6</hipparchus.nexus-staging-maven-plugin.version>
+    <hipparchus.maven-gpg-plugin.version>1.6</hipparchus.maven-gpg-plugin.version>
     <hipparchus.rat.version>0.11</hipparchus.rat.version>
     <hipparchus.junit.version>4.12</hipparchus.junit.version>
     <hipparchus.compiler.source>1.8</hipparchus.compiler.source>
     <hipparchus.compiler.target>1.8</hipparchus.compiler.target>
     <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
+    <hipparchus.staging.id>hipparchus-staging</hipparchus.staging.id>
+    <hipparchus.staging.url>scp://www.hipparchus.org/</hipparchus.staging.url>
+    <hipparchus.staging.directory>/home/hipparchus/staging/</hipparchus.staging.directory>
   </properties>
 
   <modules>
@@ -447,7 +466,20 @@
   </modules>
 
   <build>
-      <plugins>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>${hipparchus.wagon-ssh.version}</version>
+      </extension>
+    </extensions>
+
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>wagon-maven-plugin</artifactId>
+        <version>${hipparchus.wagon-maven-plugin.version}</version>
+      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -675,6 +707,17 @@
         <artifactId>maven-site-plugin</artifactId>
         <version>${hipparchus.maven-site-plugin.version}</version>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>${hipparchus.maven-release-plugin.version}</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <useReleaseProfile>false</useReleaseProfile>
+          <releaseProfiles>release</releaseProfiles>
+          <goals>deploy</goals>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 
@@ -845,6 +888,64 @@
             </executions>
             <configuration>
             </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${hipparchus.maven-source-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${hipparchus.maven-javadoc-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>${hipparchus.nexus-staging-maven-plugin.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+           </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${hipparchus.maven-gpg-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>

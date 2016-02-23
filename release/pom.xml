@@ -100,7 +100,26 @@
             <goals>
               <goal>single</goal>
             </goals>
-            <phase>package</phase>
+            <phase>verify</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>wagon-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>upload-distribution</id>
+            <phase>deploy</phase>
+            <goals>
+              <goal>upload</goal>
+            </goals>
+            <configuration>
+              <fromDir>${project.build.outputDirectory}</fromDir>
+              <includes>hipparchus-${project.version}-bin.*,hipparchus-${project.version}-src.*</includes>
+              <serverId>${hipparchus.staging.id}</serverId>
+              <url>${hipparchus.staging.url}</url>
+              <toDir>${hipparchus.staging.directory}</toDir>
+            </configuration>
           </execution>
         </executions>
       </plugin>
