@@ -384,6 +384,11 @@
         <artifactId>hipparchus-migration</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-release</artifactId>
+        <version>${project.version}</version>
+      </dependency>
 
       <dependency>
         <groupId>junit</groupId>
@@ -438,6 +443,7 @@
       <module>legacy</module>
       <module>migration</module>
       <module>fft</module> <!-- marked for deletion -->
+      <module>release</module>
   </modules>
 
   <build>
@@ -663,6 +669,11 @@
           <enableRulesSummary>false</enableRulesSummary>
           <headerLocation>${basedir}/license-header.txt</headerLocation>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${hipparchus.maven-site-plugin.version}</version>
       </plugin>
     </plugins>
   </build>
