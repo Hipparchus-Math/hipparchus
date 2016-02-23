@@ -21,8 +21,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 import org.hipparchus.exception.Localizable;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedCoreFormats.UTF8Control;
+import org.hipparchus.exception.UTF8Control;
 
 /**
  * Enumeration for localized messages formats used in exceptions messages.
@@ -91,7 +90,7 @@ public enum LocalizedGeometryFormats implements Localizable {
         try {
             final String path = LocalizedGeometryFormats.class.getName().replaceAll("\\.", "/");
             ResourceBundle bundle =
-                    ResourceBundle.getBundle("assets/" + path, locale, new LocalizedCoreFormats.UTF8Control());
+                    ResourceBundle.getBundle("assets/" + path, locale, new UTF8Control());
             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
                 final String translated = bundle.getString(name());
                 if ((translated != null) &&
