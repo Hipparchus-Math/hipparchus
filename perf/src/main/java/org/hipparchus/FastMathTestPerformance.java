@@ -20,7 +20,6 @@ import org.hipparchus.util.FastMath;
 
 /**
  * Performance benchmark for FastMath.
- * 
  */
 public class FastMathTestPerformance {
     private static final int RUNS = Integer.parseInt(System.getProperty("testRuns","10000000"));
