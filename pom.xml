@@ -417,7 +417,7 @@
     <hipparchus.maven-jxr-plugin.version>2.5</hipparchus.maven-jxr-plugin.version>
     <hipparchus.maven-plantuml-plugin.version>7940</hipparchus.maven-plantuml-plugin.version>
     <hipparchus.maven-project-info-reports-plugin.version>2.8</hipparchus.maven-project-info-reports-plugin.version>
-    <hipparchus.maven-pmd-plugin>3.5</hipparchus.maven-pmd-plugin>
+    <hipparchus.maven-pmd-plugin.version>3.5</hipparchus.maven-pmd-plugin.version>
     <hipparchus.maven-resources-plugin.version>2.7</hipparchus.maven-resources-plugin.version>
     <hipparchus.maven-site-plugin.version>3.4</hipparchus.maven-site-plugin.version>
     <hipparchus.maven-source-plugin.version>2.4</hipparchus.maven-source-plugin.version>
@@ -523,7 +523,7 @@
         </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>${hipparchus.maven-pmd-plugin}</version>
+        <version>${hipparchus.maven-pmd-plugin.version}</version>
         <configuration>
           <targetJdk>${maven.compiler.target}</targetJdk>
           <skipEmptyReport>false</skipEmptyReport>
