@@ -19,8 +19,8 @@ package org.hipparchus.fitting.leastsquares;
 
 import java.io.IOException;
 
-import org.hipparchus.exception.LocalizedFittingFormats;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.fitting.LocalizedFittingFormats;
 import org.hipparchus.fitting.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.hipparchus.optim.SimpleVectorValueChecker;
 import org.junit.Assert;

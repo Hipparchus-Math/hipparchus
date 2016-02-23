@@ -17,7 +17,6 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;

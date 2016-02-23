@@ -14,11 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception;
+package org.hipparchus.genetics;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import org.hipparchus.exception.Localizable;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedCoreFormats.UTF8Control;
 
 /**
  * Enumeration for localized messages formats used in exceptions messages.
@@ -35,19 +39,22 @@ import java.util.ResourceBundle;
  * </p>
  * @since 2.2
  */
-public enum LocalizedODEFormats implements Localizable {
+public enum LocalizedGeneticsFormats implements Localizable {
 
     // CHECKSTYLE: stop MultipleVariableDeclarations
     // CHECKSTYLE: stop JavadocVariable
 
-    HOLE_BETWEEN_MODELS_TIME_RANGES("{0} wide hole between models time ranges"),
-    INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS("multistep method needs at least {0} previous steps, got {1}"),
-    MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION("minimal step size ({1,number,0.00E00}) reached, integration needs {0,number,0.00E00}"),
-    MULTISTEP_STARTER_STOPPED_EARLY("multistep integrator starter stopped early, maybe too large step size"),
-    PROPAGATION_DIRECTION_MISMATCH("propagation direction mismatch"),
-    TOO_SMALL_INTEGRATION_INTERVAL("too small integration interval: length = {0}"),
-    UNKNOWN_PARAMETER("unknown parameter {0}"),
-    UNMATCHED_ODE_IN_EXPANDED_SET("ode does not match the main ode set in the extended set");
+    CROSSOVER_RATE("crossover rate ({0})"),
+    DIFFERENT_ORIG_AND_PERMUTED_DATA("original and permuted data must contain the same elements"),
+    ELITISM_RATE("elitism rate ({0})"),
+    INVALID_BINARY_CHROMOSOME("binary mutation works on BinaryChromosome only"),
+    INVALID_FIXED_LENGTH_CHROMOSOME("one-point crossover only works with fixed-length chromosomes"),
+    INVALID_BINARY_DIGIT("invalid binary digit: {0}"),
+    LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE("list of chromosomes bigger than maxPopulationSize"),
+    MUTATION_RATE("mutation rate ({0})"),
+    POPULATION_LIMIT_NOT_POSITIVE("population limit has to be positive"),
+    RANDOMKEY_MUTATION_WRONG_CLASS("RandomKeyMutation works only with RandomKeys, not {0}"),
+    TOO_LARGE_TOURNAMENT_ARITY("tournament arity ({0}) cannot be bigger than population size ({1})");
 
     // CHECKSTYLE: resume JavadocVariable
     // CHECKSTYLE: resume MultipleVariableDeclarations
@@ -60,7 +67,7 @@ public enum LocalizedODEFormats implements Localizable {
      * @param sourceFormat source English format to use when no
      * localized version is available
      */
-    LocalizedODEFormats(final String sourceFormat) {
+    LocalizedGeneticsFormats(final String sourceFormat) {
         this.sourceFormat = sourceFormat;
     }
 
@@ -74,7 +81,7 @@ public enum LocalizedODEFormats implements Localizable {
     @Override
     public String getLocalizedString(final Locale locale) {
         try {
-            final String path = LocalizedODEFormats.class.getName().replaceAll("\\.", "/");
+            final String path = LocalizedGeneticsFormats.class.getName().replaceAll("\\.", "/");
             ResourceBundle bundle =
                     ResourceBundle.getBundle("assets/" + path, locale, new LocalizedCoreFormats.UTF8Control());
             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {

@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.StepHandler;

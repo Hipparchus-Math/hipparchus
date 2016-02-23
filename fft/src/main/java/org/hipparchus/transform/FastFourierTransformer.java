@@ -23,7 +23,6 @@ import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedFFTFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.ArithmeticUtils;

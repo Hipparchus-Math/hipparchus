@@ -14,11 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception;
+package org.hipparchus.fitting;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import org.hipparchus.exception.Localizable;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedCoreFormats.UTF8Control;
 
 /**
  * Enumeration for localized messages formats used in exceptions messages.

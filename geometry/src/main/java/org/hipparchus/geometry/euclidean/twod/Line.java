@@ -16,8 +16,8 @@
  */
 package org.hipparchus.geometry.euclidean.twod;
 
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Vector;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;

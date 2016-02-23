@@ -19,8 +19,8 @@ package org.hipparchus.geometry.euclidean.oned;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Space;
 
 /**

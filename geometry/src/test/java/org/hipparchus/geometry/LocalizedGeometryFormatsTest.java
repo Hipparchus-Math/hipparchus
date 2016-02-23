@@ -14,18 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception;
+package org.hipparchus.geometry;
 
-public class LocalizedLegacyFormatsTest extends LocalizedFormatsAbstractTest {
+import org.hipparchus.exception.LocalizedFormatsAbstractTest;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
+
+public class LocalizedGeometryFormatsTest extends LocalizedFormatsAbstractTest {
 
     @Override
-    protected Class<LocalizedLegacyFormats> getFormatsClass() {
-        return LocalizedLegacyFormats.class;
+    protected Class<LocalizedGeometryFormats> getFormatsClass() {
+        return LocalizedGeometryFormats.class;
     }
 
     @Override
     protected int getExpectedNumber() {
-        return 1;
+        return 19;
     }
 
 }

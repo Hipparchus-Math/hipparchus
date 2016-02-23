@@ -22,8 +22,8 @@ import java.util.Collection;
 import java.util.List;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;

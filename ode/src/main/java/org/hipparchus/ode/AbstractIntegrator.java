@@ -29,7 +29,6 @@ import java.util.TreeSet;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.EventHandler;

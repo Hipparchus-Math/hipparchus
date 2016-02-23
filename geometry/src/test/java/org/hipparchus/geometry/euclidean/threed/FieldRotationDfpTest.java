@@ -19,10 +19,10 @@ package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;

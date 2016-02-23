@@ -19,7 +19,6 @@ package org.hipparchus.genetics;
 import java.util.Collections;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;

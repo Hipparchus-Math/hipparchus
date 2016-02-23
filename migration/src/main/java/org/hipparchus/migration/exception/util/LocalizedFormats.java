@@ -20,14 +20,14 @@ import java.util.Locale;
 
 import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedFFTFormats;
-import org.hipparchus.exception.LocalizedFittingFormats;
-import org.hipparchus.exception.LocalizedGeneticsFormats;
-import org.hipparchus.exception.LocalizedGeometryFormats;
-import org.hipparchus.exception.LocalizedLegacyFormats;
-import org.hipparchus.exception.LocalizedMigrationFormats;
-import org.hipparchus.exception.LocalizedODEFormats;
-import org.hipparchus.exception.LocalizedOptimFormats;
+import org.hipparchus.fitting.LocalizedFittingFormats;
+import org.hipparchus.genetics.LocalizedGeneticsFormats;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
+import org.hipparchus.migration.LocalizedMigrationFormats;
+import org.hipparchus.ml.LocalizedMLFormats;
+import org.hipparchus.ode.LocalizedODEFormats;
+import org.hipparchus.optim.LocalizedOptimFormats;
+import org.hipparchus.transform.LocalizedFFTFormats;
 
 /**
  * Enumeration for localized messages formats used in exceptions messages.
@@ -45,7 +45,7 @@ import org.hipparchus.exception.LocalizedOptimFormats;
  * @deprecated this class is only meant as a migration help from Apache Commons Math,
  * it is really replaced by {@link LocalizedCoreFormats}, {@link LocalizedFFTFormats},
  * {@link LocalizedFittingFormats}, {@link LocalizedGeneticsFormats},
- * {@link LocalizedGeometryFormats} and {@link LocalizedLegacyFormats}
+ * {@link LocalizedGeometryFormats} and {@link LocalizedMLFormats}
  */
 @Deprecated
 public enum LocalizedFormats implements Localizable {
@@ -106,7 +106,7 @@ public enum LocalizedFormats implements Localizable {
     DUPLICATED_ABSCISSA_DIVISION_BY_ZERO(LocalizedCoreFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO),
     EDGE_CONNECTED_TO_ONE_FACET(LocalizedGeometryFormats.EDGE_CONNECTED_TO_ONE_FACET),
     ELITISM_RATE(LocalizedGeneticsFormats.ELITISM_RATE),
-    EMPTY_CLUSTER_IN_K_MEANS(LocalizedLegacyFormats.EMPTY_CLUSTER_IN_K_MEANS),
+    EMPTY_CLUSTER_IN_K_MEANS(LocalizedMLFormats.EMPTY_CLUSTER_IN_K_MEANS),
     EMPTY_INTERPOLATION_SAMPLE(LocalizedCoreFormats.EMPTY_INTERPOLATION_SAMPLE),
     EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY),
     EMPTY_SELECTED_COLUMN_INDEX_ARRAY(LocalizedCoreFormats.EMPTY_SELECTED_COLUMN_INDEX_ARRAY),

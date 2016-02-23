@@ -18,10 +18,10 @@
 package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;

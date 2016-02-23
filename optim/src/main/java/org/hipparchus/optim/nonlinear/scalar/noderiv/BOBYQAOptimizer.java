@@ -18,12 +18,12 @@
 package org.hipparchus.optim.nonlinear.scalar.noderiv;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedOptimFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealVector;
+import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;

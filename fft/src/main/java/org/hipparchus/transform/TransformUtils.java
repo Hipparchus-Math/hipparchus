@@ -20,7 +20,6 @@ import java.util.Arrays;
 
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedFFTFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**

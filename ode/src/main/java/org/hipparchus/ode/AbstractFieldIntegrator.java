@@ -30,7 +30,6 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
-import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.events.FieldEventHandler;

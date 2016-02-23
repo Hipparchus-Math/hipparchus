@@ -22,9 +22,9 @@ import java.text.NumberFormat;
 
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 

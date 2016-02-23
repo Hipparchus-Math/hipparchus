@@ -17,10 +17,10 @@
 package org.hipparchus.fitting.leastsquares;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedFittingFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.fitting.LocalizedFittingFormats;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.CholeskyDecomposition;

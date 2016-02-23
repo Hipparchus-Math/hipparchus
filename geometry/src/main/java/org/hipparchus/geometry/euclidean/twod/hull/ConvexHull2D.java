@@ -19,8 +19,8 @@ package org.hipparchus.geometry.euclidean.twod.hull;
 import java.io.Serializable;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 import org.hipparchus.geometry.euclidean.twod.Line;
 import org.hipparchus.geometry.euclidean.twod.Segment;

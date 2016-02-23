@@ -14,18 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception;
+package org.hipparchus.fitting;
 
-public class LocalizedODEFormatsTest extends LocalizedFormatsAbstractTest {
+import org.hipparchus.exception.LocalizedFormatsAbstractTest;
+import org.hipparchus.fitting.LocalizedFittingFormats;
+
+public class LocalizedFittingFormatsTest extends LocalizedFormatsAbstractTest {
 
     @Override
-    protected Class<LocalizedODEFormats> getFormatsClass() {
-        return LocalizedODEFormats.class;
+    protected Class<LocalizedFittingFormats> getFormatsClass() {
+        return LocalizedFittingFormats.class;
     }
 
     @Override
     protected int getExpectedNumber() {
-        return 8;
+        return 6;
     }
 
 }

@@ -1,3 +1,4 @@
+package org.hipparchus.migration;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -14,18 +15,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception;
 
-public class LocalizedFittingFormatsTest extends LocalizedFormatsAbstractTest {
+
+
+import org.hipparchus.exception.LocalizedFormatsAbstractTest;
+import org.hipparchus.migration.LocalizedMigrationFormats;
+
+@Deprecated
+public class LocalizedMigrationFormatsTest extends LocalizedFormatsAbstractTest {
 
     @Override
-    protected Class<LocalizedFittingFormats> getFormatsClass() {
-        return LocalizedFittingFormats.class;
+    protected Class<LocalizedMigrationFormats> getFormatsClass() {
+        return LocalizedMigrationFormats.class;
     }
 
     @Override
     protected int getExpectedNumber() {
-        return 6;
+        return 74;
     }
 
 }

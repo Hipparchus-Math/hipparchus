@@ -14,18 +14,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception;
+package org.hipparchus.optim;
 
-public class LocalizedFFTFormatsTest extends LocalizedFormatsAbstractTest {
+import org.hipparchus.exception.LocalizedFormatsAbstractTest;
+import org.hipparchus.optim.LocalizedOptimFormats;
+
+public class LocalizedOptimFormatsTest extends LocalizedFormatsAbstractTest {
 
     @Override
-    protected Class<LocalizedFFTFormats> getFormatsClass() {
-        return LocalizedFFTFormats.class;
+    protected Class<LocalizedOptimFormats> getFormatsClass() {
+        return LocalizedOptimFormats.class;
     }
 
     @Override
     protected int getExpectedNumber() {
-        return 4;
+        return 5;
     }
 
 }

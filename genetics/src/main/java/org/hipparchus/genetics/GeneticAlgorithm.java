@@ -16,7 +16,6 @@
  */
 package org.hipparchus.genetics;
 
-import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;

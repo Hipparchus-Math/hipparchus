@@ -22,9 +22,9 @@ import java.util.Comparator;
 
 import org.hipparchus.analysis.MultivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedOptimFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
 

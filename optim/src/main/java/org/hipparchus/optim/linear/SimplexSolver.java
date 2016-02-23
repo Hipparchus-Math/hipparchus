@@ -19,8 +19,8 @@ package org.hipparchus.optim.linear;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.exception.LocalizedOptimFormats;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.util.FastMath;

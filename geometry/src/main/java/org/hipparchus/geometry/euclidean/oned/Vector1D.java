@@ -18,8 +18,8 @@ package org.hipparchus.geometry.euclidean.oned;
 
 import java.text.NumberFormat;
 
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.Vector;

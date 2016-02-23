@@ -18,11 +18,11 @@
 package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.ExpandableStatefulODE;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.util.FastMath;
 
 /**

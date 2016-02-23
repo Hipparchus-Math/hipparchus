@@ -14,11 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception;
+package org.hipparchus.ml;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import org.hipparchus.exception.Localizable;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedCoreFormats.UTF8Control;
 
 /**
  * Enumeration for localized messages formats used in exceptions messages.
@@ -35,22 +39,12 @@ import java.util.ResourceBundle;
  * </p>
  * @since 2.2
  */
-public enum LocalizedGeneticsFormats implements Localizable {
+public enum LocalizedMLFormats implements Localizable {
 
     // CHECKSTYLE: stop MultipleVariableDeclarations
     // CHECKSTYLE: stop JavadocVariable
 
-    CROSSOVER_RATE("crossover rate ({0})"),
-    DIFFERENT_ORIG_AND_PERMUTED_DATA("original and permuted data must contain the same elements"),
-    ELITISM_RATE("elitism rate ({0})"),
-    INVALID_BINARY_CHROMOSOME("binary mutation works on BinaryChromosome only"),
-    INVALID_FIXED_LENGTH_CHROMOSOME("one-point crossover only works with fixed-length chromosomes"),
-    INVALID_BINARY_DIGIT("invalid binary digit: {0}"),
-    LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE("list of chromosomes bigger than maxPopulationSize"),
-    MUTATION_RATE("mutation rate ({0})"),
-    POPULATION_LIMIT_NOT_POSITIVE("population limit has to be positive"),
-    RANDOMKEY_MUTATION_WRONG_CLASS("RandomKeyMutation works only with RandomKeys, not {0}"),
-    TOO_LARGE_TOURNAMENT_ARITY("tournament arity ({0}) cannot be bigger than population size ({1})");
+    EMPTY_CLUSTER_IN_K_MEANS("empty cluster in k-means");
 
     // CHECKSTYLE: resume JavadocVariable
     // CHECKSTYLE: resume MultipleVariableDeclarations
@@ -63,7 +57,7 @@ public enum LocalizedGeneticsFormats implements Localizable {
      * @param sourceFormat source English format to use when no
      * localized version is available
      */
-    LocalizedGeneticsFormats(final String sourceFormat) {
+    LocalizedMLFormats(final String sourceFormat) {
         this.sourceFormat = sourceFormat;
     }
 
@@ -77,7 +71,7 @@ public enum LocalizedGeneticsFormats implements Localizable {
     @Override
     public String getLocalizedString(final Locale locale) {
         try {
-            final String path = LocalizedGeneticsFormats.class.getName().replaceAll("\\.", "/");
+            final String path = LocalizedMLFormats.class.getName().replaceAll("\\.", "/");
             ResourceBundle bundle =
                     ResourceBundle.getBundle("assets/" + path, locale, new LocalizedCoreFormats.UTF8Control());
             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {

@@ -23,12 +23,12 @@ import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.hipparchus.exception.LocalizedGeneticsFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.genetics.AbstractListChromosome;
 import org.hipparchus.genetics.Chromosome;
 import org.hipparchus.genetics.ElitisticListPopulation;
 import org.hipparchus.genetics.GeneticAlgorithm;
+import org.hipparchus.genetics.LocalizedGeneticsFormats;
 import org.hipparchus.genetics.MutationPolicy;
 import org.hipparchus.genetics.OnePointCrossover;
 import org.hipparchus.genetics.Population;

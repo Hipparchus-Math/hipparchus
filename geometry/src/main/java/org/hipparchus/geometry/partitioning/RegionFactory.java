@@ -19,8 +19,8 @@ package org.hipparchus.geometry.partitioning;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.partitioning.BSPTree.VanishingCutHandler;

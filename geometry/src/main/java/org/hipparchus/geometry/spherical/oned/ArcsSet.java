@@ -23,9 +23,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.partitioning.AbstractRegion;
 import org.hipparchus.geometry.partitioning.BSPTree;

@@ -19,7 +19,6 @@ package org.hipparchus.ode;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.exception.LocalizedODEFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** This abstract class provides boilerplate parameters list.

@@ -17,10 +17,10 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.exception.LocalizedGeometryFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;

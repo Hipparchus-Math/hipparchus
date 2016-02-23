@@ -14,11 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.exception;
+package org.hipparchus.ode;
 
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+
+import org.hipparchus.exception.Localizable;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.LocalizedCoreFormats.UTF8Control;
 
 /**
  * Enumeration for localized messages formats used in exceptions messages.
@@ -35,12 +39,19 @@ import java.util.ResourceBundle;
  * </p>
  * @since 2.2
  */
-public enum LocalizedLegacyFormats implements Localizable {
+public enum LocalizedODEFormats implements Localizable {
 
     // CHECKSTYLE: stop MultipleVariableDeclarations
     // CHECKSTYLE: stop JavadocVariable
 
-    EMPTY_CLUSTER_IN_K_MEANS("empty cluster in k-means");
+    HOLE_BETWEEN_MODELS_TIME_RANGES("{0} wide hole between models time ranges"),
+    INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS("multistep method needs at least {0} previous steps, got {1}"),
+    MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION("minimal step size ({1,number,0.00E00}) reached, integration needs {0,number,0.00E00}"),
+    MULTISTEP_STARTER_STOPPED_EARLY("multistep integrator starter stopped early, maybe too large step size"),
+    PROPAGATION_DIRECTION_MISMATCH("propagation direction mismatch"),
+    TOO_SMALL_INTEGRATION_INTERVAL("too small integration interval: length = {0}"),
+    UNKNOWN_PARAMETER("unknown parameter {0}"),
+    UNMATCHED_ODE_IN_EXPANDED_SET("ode does not match the main ode set in the extended set");
 
     // CHECKSTYLE: resume JavadocVariable
     // CHECKSTYLE: resume MultipleVariableDeclarations
@@ -53,7 +64,7 @@ public enum LocalizedLegacyFormats implements Localizable {
      * @param sourceFormat source English format to use when no
      * localized version is available
      */
-    LocalizedLegacyFormats(final String sourceFormat) {
+    LocalizedODEFormats(final String sourceFormat) {
         this.sourceFormat = sourceFormat;
     }
 
@@ -67,7 +78,7 @@ public enum LocalizedLegacyFormats implements Localizable {
     @Override
     public String getLocalizedString(final Locale locale) {
         try {
-            final String path = LocalizedLegacyFormats.class.getName().replaceAll("\\.", "/");
+            final String path = LocalizedODEFormats.class.getName().replaceAll("\\.", "/");
             ResourceBundle bundle =
                     ResourceBundle.getBundle("assets/" + path, locale, new LocalizedCoreFormats.UTF8Control());
             if (bundle.getLocale().getLanguage().equals(locale.getLanguage())) {
