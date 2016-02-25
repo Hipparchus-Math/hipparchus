@@ -33,7 +33,7 @@ import org.hipparchus.util.FastMath;
  * <ul>
  *   <li>a {@link #getLT() getLT} method has been added,</li>
  *   <li>the {@code isspd} method has been removed, since the constructor of
- *   this class throws a {@link NonPositiveDefiniteMatrixException} when a
+ *   this class throws a {@link MathIllegalArgumentException} when a
  *   matrix cannot be decomposed,</li>
  *   <li>a {@link #getDeterminant() getDeterminant} method has been added,</li>
  *   <li>the {@code solve} method has been replaced by a {@link #getSolver()
@@ -75,7 +75,7 @@ public class CholeskyDecomposition {
      * @param matrix the matrix to decompose
      * @throws MathIllegalArgumentException if the matrix is not square.
      * @throws MathIllegalArgumentException if the matrix is not symmetric.
-     * @throws NonPositiveDefiniteMatrixException if the matrix is not
+     * @throws MathIllegalArgumentException if the matrix is not
      * strictly positive definite.
      * @see #CholeskyDecomposition(RealMatrix, double, double)
      * @see #DEFAULT_RELATIVE_SYMMETRY_THRESHOLD

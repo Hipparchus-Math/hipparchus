@@ -151,7 +151,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
          *                  columns.
          * @param residuals the computed residuals, r.
          * @return the solution x, to the linear least squares problem Jx=r.
-         * @throws ConvergenceException if the matrix properties (e.g. singular) do not
+         * @throws MathIllegalStateException if the matrix properties (e.g. singular) do not
          *                              permit a solution.
          */
         protected abstract RealVector solve(RealMatrix jacobian,
@@ -160,7 +160,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
 
     /**
      * The singularity threshold for matrix decompositions. Determines when a {@link
-     * ConvergenceException} is thrown. The current value was the default value for {@link
+     * MathIllegalStateException} is thrown. The current value was the default value for {@link
      * LUDecomposition}.
      */
     private static final double SINGULARITY_THRESHOLD = 1e-11;

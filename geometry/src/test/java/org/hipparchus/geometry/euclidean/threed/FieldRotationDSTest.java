@@ -453,7 +453,7 @@ public class FieldRotationDSTest {
                 { 0.0, 1.0, 0.0 },
                 { 1.0, 0.0, 0.0 }
             }, 1.0e-7);
-            Assert.fail("Expecting NotARotationMatrixException");
+            Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
@@ -464,7 +464,7 @@ public class FieldRotationDSTest {
                 {  0.821760, -0.184320,  0.539200 },
                 { -0.354816,  0.574912,  0.737280 }
             }, 1.0e-7);
-            Assert.fail("Expecting NotARotationMatrixException");
+            Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }
@@ -475,7 +475,7 @@ public class FieldRotationDSTest {
                 { -0.4,  0.6,  0.7 },
                 {  0.8, -0.2,  0.5 }
             }, 1.0e-15);
-            Assert.fail("Expecting NotARotationMatrixException");
+            Assert.fail("Expecting MathIllegalArgumentException");
         } catch (MathIllegalArgumentException nrme) {
             // expected behavior
         }

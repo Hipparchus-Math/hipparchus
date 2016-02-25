@@ -38,7 +38,7 @@ package org.hipparchus.analysis.solvers;
  * the finite/limited precision of Java's {@link Double double} type, which is
  * used in this implementation, the algorithm may get stuck in a situation
  * where it no longer makes any progress. Such cases are detected and result
- * in a {@code ConvergenceException} exception being thrown. In other words,
+ * in a {@code MathIllegalStateException} exception being thrown. In other words,
  * the algorithm theoretically guarantees convergence, but the implementation
  * does not.</p>
  *

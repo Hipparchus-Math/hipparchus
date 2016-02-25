@@ -90,7 +90,7 @@ public class MultivariateNormalMixtureExpectationMaximizationTest {
 
     @Test(expected = MathIllegalStateException.class)
     public void testConvergenceException() {
-        // ConvergenceException thrown if fit terminates before threshold met
+        // MathIllegalStateException thrown if fit terminates before threshold met
         double[][] data = getTestSamples();
         MultivariateNormalMixtureExpectationMaximization fitter
             = new MultivariateNormalMixtureExpectationMaximization(data);

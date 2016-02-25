@@ -115,7 +115,7 @@ public abstract class ContinuedFraction {
      * @param epsilon maximum error allowed.
      * @param maxIterations maximum number of convergents
      * @return the value of the continued fraction evaluated at x.
-     * @throws ConvergenceException if the algorithm fails to converge.
+     * @throws MathIllegalStateException if the algorithm fails to converge.
      * @throws MathIllegalStateException if maximal number of iterations is reached
      */
     public double evaluate(double x, double epsilon, int maxIterations)
