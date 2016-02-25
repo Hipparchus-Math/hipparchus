@@ -33,8 +33,8 @@
   </scm>
 
   <issueManagement>
-      <system>Redmine</system>
-      <url>https://www.orekit.org/forge/projects/hipparchus/issues</url>
+    <system>Redmine</system>
+    <url>https://www.orekit.org/forge/projects/hipparchus/issues</url>
   </issueManagement>
 
   <distributionManagement>
@@ -406,17 +406,22 @@
         <artifactId>junit</artifactId>
         <version>4.12</version>
         <scope>test</scope>
-      </dependency>    
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <!-- Project specific plugin versions -->
+
     <hipparchus.findbugs-maven-plugin.version>3.0.1</hipparchus.findbugs-maven-plugin.version>
     <hipparchus.jacoco-maven-plugin.version>0.7.4.201502262128</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>2.5.4</hipparchus.maven-assembly-plugin.version>
-    <hipparchus.maven-bundle-plugin.version>2.5.4</hipparchus.maven-bundle-plugin.version>
+    <hipparchus.maven-bundle-plugin.version>3.0.1</hipparchus.maven-bundle-plugin.version>
     <hipparchus.build-helper-maven-plugin>1.7</hipparchus.build-helper-maven-plugin>
     <hipparchus.maven-changes-plugin.version>2.11</hipparchus.maven-changes-plugin.version>
     <hipparchus.maven-checkstyle-plugin.version>2.15</hipparchus.maven-checkstyle-plugin.version>
@@ -442,27 +447,28 @@
     <hipparchus.maven-gpg-plugin.version>1.6</hipparchus.maven-gpg-plugin.version>
     <hipparchus.rat.version>0.11</hipparchus.rat.version>
     <hipparchus.junit.version>4.12</hipparchus.junit.version>
-    <hipparchus.compiler.source>1.8</hipparchus.compiler.source>
-    <hipparchus.compiler.target>1.8</hipparchus.compiler.target>
-    <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
+    <hipparchus.implementation.build>${git.revision};
+      ${maven.build.timestamp}</hipparchus.implementation.build>
+
+    <!-- old Apache staging properties - to be removed -->
     <hipparchus.staging.id>hipparchus-staging</hipparchus.staging.id>
     <hipparchus.staging.url>scp://www.hipparchus.org/</hipparchus.staging.url>
     <hipparchus.staging.directory>/home/hipparchus/staging/</hipparchus.staging.directory>
   </properties>
 
   <modules>
-      <module>core</module>
-      <module>geometry</module>
-      <module>genetics</module>
-      <module>ode</module>
-      <module>optim</module>
-      <module>fitting</module>
-      <module>perf</module>
-      <module>samples</module>
-      <module>legacy</module>
-      <module>migration</module>
-      <module>fft</module> <!-- marked for deletion -->
-      <module>release</module>
+    <module>core</module>
+    <module>geometry</module>
+    <module>genetics</module>
+    <module>ode</module>
+    <module>optim</module>
+    <module>fitting</module>
+    <module>perf</module>
+    <module>samples</module>
+    <module>legacy</module>
+    <module>migration</module>
+    <module>fft</module> <!-- marked for deletion -->
+    <module>release</module>
   </modules>
 
   <build>
@@ -474,241 +480,247 @@
       </extension>
     </extensions>
 
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${hipparchus.maven-assembly-plugin.version}</version>
+          <configuration>
+            <descriptors>
+              <descriptor>src/main/assembly/src.xml</descriptor>
+              <descriptor>src/main/assembly/bin.xml</descriptor>
+            </descriptors>
+            <!-- There are a lot of long file names. Suppress the warnings. -->
+            <tarLongFileMode>gnu</tarLongFileMode>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-changes-plugin</artifactId>
+          <version>${hipparchus.maven-changes-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${hipparchus.maven-checkstyle-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${hipparchus.checkstyle.version}</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <configLocation>${basedir}/checkstyle.xml</configLocation>
+            <enableRulesSummary>false</enableRulesSummary>
+            <headerLocation>${basedir}/license-header.txt</headerLocation>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${hipparchus.maven-clean-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${hipparchus.maven-compiler-plugin.version}</version>
+          <configuration>
+            <source>${maven.compiler.source}</source>
+            <target>${maven.compiler.target}</target>
+            <compilerArgument>-Xlint:deprecation</compilerArgument>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${hipparchus.maven-jar-plugin.version}</version>
+          <configuration>
+            <archive>
+              <manifestFile>${project.build.directory}/osgi/MANIFEST.MF</manifestFile>
+              <manifestEntries>
+                <Implementation-Build>${hipparchus.implementation.build}</Implementation-Build>
+                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
+                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
+              </manifestEntries>
+            </archive>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>jar</goal>
+                <goal>test-jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- MathJax -->
+        <plugin>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${hipparchus.maven-javadoc-plugin.version}</version>
+          <configuration>
+            <additionalparam>-header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jxr-plugin</artifactId>
+          <version>${hipparchus.maven-jxr-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>${hipparchus.maven-pmd-plugin.version}</version>
+          <configuration>
+            <targetJdk>${maven.compiler.target}</targetJdk>
+            <skipEmptyReport>false</skipEmptyReport>
+            <rulesets>
+              <ruleset>${basedir}/pmd-ruleset.xml</ruleset>
+            </rulesets>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${hipparchus.maven-surefire-plugin.version}</version>
+          <configuration>
+            <includes>
+              <include>**/*Test.java</include>
+            </includes>
+            <excludes>
+              <exclude>**/*AbstractTest.java</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${hipparchus.maven-resources-plugin.version}</version>
+          <executions>
+            <execution>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>.</directory>
+                    <includes>
+                      <include>LICENSE.txt</include>
+                      <include>NOTICE.txt</include>
+                    </includes>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>${hipparchus.maven-bundle-plugin.version}</version>
+          <extensions>true</extensions>
+          <configuration>
+            <archive>
+              <forced>true</forced>
+            </archive>
+            <manifestLocation>${project.build.directory}/osgi</manifestLocation>
+            <instructions>
+              <Export-Package>{local-packages};version=${project.version};-noimport:=true</Export-Package>
+              <Bundle-DocURL>${project.url}</Bundle-DocURL>
+            </instructions>
+          </configuration>
+          <executions>
+            <execution>
+              <id>bundle-manifest</id>
+              <phase>process-classes</phase>
+              <goals>
+                <goal>manifest</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${hipparchus.jacoco-maven-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>prepare-agent</id>
+              <phase>process-test-classes</phase>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>report</id>
+              <phase>site</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>check</id>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <rule>
+                    <element>BUNDLE</element>
+                    <limits>
+                      <limit>
+                        <counter>CLASS</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>1.00</minimum>
+                      </limit>
+                      <limit>
+                        <counter>INSTRUCTION</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.90</minimum>
+                      </limit>
+                      <limit>
+                        <counter>METHOD</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.95</minimum>
+                      </limit>
+                      <limit>
+                        <counter>BRANCH</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.85</minimum>
+                      </limit>
+                      <limit>
+                        <counter>COMPLEXITY</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.85</minimum>
+                      </limit>
+                      <limit>
+                        <counter>LINE</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.90</minimum>
+                      </limit>
+                    </limits>
+                  </rule>
+                </rules>
+                <haltOnFailure>false</haltOnFailure>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+        
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>wagon-maven-plugin</artifactId>
+          <version>${hipparchus.wagon-maven-plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
     <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>wagon-maven-plugin</artifactId>
-        <version>${hipparchus.wagon-maven-plugin.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${hipparchus.maven-compiler-plugin.version}</version>
-        <configuration>
-          <source>${hipparchus.compiler.source}</source>
-          <target>${hipparchus.compiler.target}</target>
-          <compilerArgument>-Xlint:deprecation</compilerArgument>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <version>${hipparchus.maven-assembly-plugin.version}</version>
-        <configuration>
-          <descriptors>
-            <descriptor>src/main/assembly/src.xml</descriptor>
-            <descriptor>src/main/assembly/bin.xml</descriptor>
-          </descriptors>
-          <!-- There are a lot of long file names. Suppress the warnings. -->
-          <tarLongFileMode>gnu</tarLongFileMode>
-        </configuration>
-      </plugin>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>${hipparchus.maven-bundle-plugin.version}</version>
-        <extensions>true</extensions>
-        <configuration>
-          <archive>
-            <forced>true</forced>
-          </archive>
-          <manifestLocation>${project.build.directory}/osgi</manifestLocation>
-          <instructions>
-            <Export-Package>org.hipparchus.*;version=${project.version};-noimport:=true</Export-Package>
-            <Bundle-DocURL>${project.url}</Bundle-DocURL>
-          </instructions>
-        </configuration>
-        <executions>
-          <execution>
-            <id>bundle-manifest</id>
-            <phase>process-classes</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-changes-plugin</artifactId>
-        <version>${hipparchus.maven-changes-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jxr-plugin</artifactId>
-        <version>${hipparchus.maven-jxr-plugin.version}</version>
-      </plugin>
-      <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-surefire-plugin</artifactId>
-          <version>${hipparchus.maven-surefire-plugin.version}</version>
-            <configuration>
-              <includes>
-                <include>**/*Test.java</include>
-                <include>**/*TestBinary.java</include>
-                <include>**/*TestPermutations.java</include>
-              </includes>
-              <excludes>
-                <exclude>**/*AbstractTest.java</exclude>
-              </excludes>
-          </configuration>
-        </plugin>
-      <plugin>
-        <artifactId>maven-pmd-plugin</artifactId>
-        <version>${hipparchus.maven-pmd-plugin.version}</version>
-        <configuration>
-          <targetJdk>${maven.compiler.target}</targetJdk>
-          <skipEmptyReport>false</skipEmptyReport>
-          <rulesets>
-            <ruleset>${basedir}/pmd-ruleset.xml</ruleset>
-          </rulesets>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>${hipparchus.maven-resources-plugin.version}</version>
-        <executions>
-          <execution>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>.</directory>
-                  <includes>
-                    <include>LICENSE.txt</include>
-                    <include>NOTICE.txt</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-        <version>${hipparchus.maven-clean-plugin.version}</version>
-      </plugin>
-      <!--  MathJax -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${hipparchus.maven-javadoc-plugin.version}</version>
-        <configuration>
-          <additionalparam>-header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>${hipparchus.jacoco-maven-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>prepare-agent</id>
-            <phase>process-test-classes</phase>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>report</id>
-            <phase>site</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>check</id>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <rule>
-                  <element>BUNDLE</element>
-                  <limits>
-                    <limit>
-                      <counter>CLASS</counter>
-                      <value>COVEREDRATIO</value>
-                      <minimum>1.00</minimum>
-                    </limit>
-                    <limit>
-                      <counter>INSTRUCTION</counter>
-                      <value>COVEREDRATIO</value>
-                      <minimum>0.90</minimum>
-                    </limit>
-                    <limit>
-                      <counter>METHOD</counter>
-                      <value>COVEREDRATIO</value>
-                      <minimum>0.95</minimum>
-                    </limit>
-                    <limit>
-                      <counter>BRANCH</counter>
-                      <value>COVEREDRATIO</value>
-                      <minimum>0.85</minimum>
-                    </limit>
-                    <limit>
-                      <counter>COMPLEXITY</counter>
-                      <value>COVEREDRATIO</value>
-                      <minimum>0.85</minimum>
-                    </limit>
-                    <limit>
-                      <counter>LINE</counter>
-                      <value>COVEREDRATIO</value>
-                      <minimum>0.90</minimum>
-                    </limit>
-                  </limits>
-                </rule>
-              </rules>
-              <haltOnFailure>false</haltOnFailure>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-jar-plugin</artifactId>
-        <version>${hipparchus.maven-jar-plugin.version}</version>
-        <configuration>
-          <archive>
-            <manifestFile>${project.build.directory}/osgi/MANIFEST.MF</manifestFile>
-            <manifestEntries>
-              <Implementation-Build>${hipparchus.implementation.build}</Implementation-Build>
-              <X-Compile-Source-JDK>${hipparchus.compiler.source}</X-Compile-Source-JDK>
-              <X-Compile-Target-JDK>${hipparchus.compiler.target}</X-Compile-Target-JDK>
-            </manifestEntries>
-          </archive>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${hipparchus.maven-checkstyle-plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>${hipparchus.checkstyle.version}</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <configLocation>${basedir}/checkstyle.xml</configLocation>
-          <enableRulesSummary>false</enableRulesSummary>
-          <headerLocation>${basedir}/license-header.txt</headerLocation>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>${hipparchus.maven-site-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>${hipparchus.maven-release-plugin.version}</version>
         <configuration>
@@ -741,7 +753,7 @@
           <threshold>Normal</threshold>
           <effort>Default</effort>
           <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
-       </configuration>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -761,11 +773,13 @@
         <configuration>
           <excludes>
 
-            <!-- MANIFEST files cannot have any comments, so we can't put license header -->
+            <!-- MANIFEST files cannot have any comments, so we can't put 
+              license header -->
             <exclude>src/test/maxima/special/RealFunctionValidation/MANIFEST.txt</exclude>
 
-            <!-- the following are test data files with specific syntax that cannot include
-                 Apache header (and the contained data is public, it is not owned by Apache) -->
+            <!-- the following are test data files with specific syntax that 
+              cannot include Apache header (and the contained data is public, it is not 
+              owned by Apache) -->
             <exclude>src/test/resources/org/hipparchus/random/testData.txt</exclude>
             <exclude>src/test/resources/org/hipparchus/random/emptyFile.txt</exclude>
             <exclude>src/test/resources/org/hipparchus/stat/data/PiDigits.txt</exclude>
@@ -784,15 +798,15 @@
             <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-too-close.ply</exclude>
             <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N.ply</exclude>
 
-            <!-- direction numbers for Sobol generation from Frances Y. Kuo and Stephen Joe,
-                 available under a BSD-style license (see LICENSE.txt) -->
+            <!-- direction numbers for Sobol generation from Frances Y. Kuo 
+              and Stephen Joe, available under a BSD-style license (see LICENSE.txt) -->
             <exclude>src/main/resources/assets/org/hipparchus/random/new-joe-kuo-6.1000</exclude>
 
             <!-- text file explaining reference to a public domain image -->
             <exclude>src/userguide/resources/references.txt</exclude>
 
-            <!-- version 0.8 of apache-rat-plugin does not exclude properly
-                 some default development tools files (see RAT-126) -->
+            <!-- version 0.8 of apache-rat-plugin does not exclude properly 
+              some default development tools files (see RAT-126) -->
             <exclude>bin/**</exclude>
             <exclude>.gitignore</exclude>
             <exclude>.git/**</exclude>
@@ -810,7 +824,7 @@
           <threshold>Normal</threshold>
           <effort>Default</effort>
           <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
-       </configuration>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -844,8 +858,10 @@
           <reportSet>
             <reports>
               <report>pmd</report>
-              <!-- As of 3.x series, the cpd report sees (correctly) numerous duplications -->
-              <!-- This is due to packages being renamed, and the old name still needs to be -->
+              <!-- As of 3.x series, the cpd report sees (correctly) numerous 
+                duplications -->
+              <!-- This is due to packages being renamed, and the old name 
+                still needs to be -->
               <!-- available for compatibility. They will be removed in 4.0 -->
               <!-- So we temporarily disable the CPD report -->
               <!-- <report>cpd</report> -->
@@ -853,12 +869,14 @@
           </reportSet>
         </reportSets>
       </plugin>
-      <!--  MathJax -->
+      <!-- MathJax -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <configuration>
-          <additionalparam>-header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
+          <additionalparam>-header &apos;&lt;script
+            type=&quot;text/javascript&quot;
+            src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
         </configuration>
       </plugin>
     </plugins>
@@ -931,7 +949,7 @@
               <serverId>ossrh</serverId>
               <nexusUrl>https://oss.sonatype.org/</nexusUrl>
               <autoReleaseAfterClose>false</autoReleaseAfterClose>
-           </configuration>
+            </configuration>
           </plugin>
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
