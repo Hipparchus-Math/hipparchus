@@ -28,23 +28,32 @@
     <section name="14 Least squares">
       <subsection name="14.1 Overview">
         <p>
-          The least squares package fits a parametric model to a set of observed
+          The least squares package fits a non-linear parametric model to a set of observed
           values by minimizing a cost function with a specific form.
-          The fitting basically consists in finding the values
-          for some parameters p<sub>k</sub> such that a cost function
-          J = sum(w<sub>i</sub>(target<sub>i</sub> - model<sub>i</sub>)<sup>2</sup>) is
-          minimized. The various (target<sub>i</sub> - model<sub>i</sub>(p<sub>k</sub>))
-          terms are called residuals. They represent the deviation between a set of
-          target values target<sub>i</sub> and theoretical values computed from
-          models model<sub>i</sub> depending on free parameters p<sub>k</sub>.
-          The w<sub>i</sub> factors are weights. One classical use case is when the
-          target values are experimental observations or measurements.
+          The fitting consists in finding the values
+          for some parameters \( \mathbf{p} \) that minimize a cost function
+          $$ J = \sum_i w_i(o_i - f_i)^2 $$ where \( w_i \) are the weights, \( o_i \) are the
+          observed values and \( f_i = f_i( \mathbf{p} ) \) are the values computed from the model.
+          The various \( r_i = o_i - f_i \)
+          terms are the residuals which quantify the deviation between the set of
+          observed values and theoretical values computed from
+          measurement models depending on the free parameters.
+        </p>
+        <p>
+          Amoung other properties, the non-linear least squares is the
+          Maximum Likelihood Estimator (MLE) if the observations have normally
+          distributed errors and the weights are set to the reciprocal of their
+          variance. That is $$ o_i = N(f_i(\mathbf{p}), \sigma) $$ and
+          $$ w_i = \frac{1}{\sigma^2} $$ where \( N(\mu, \sigma) \) denotes a normal distribution
+          with mean \( \mu \) and standard deviation \( \sigma \). For more on non-linear least
+          squares, its theory, and its properties the reader is encouraged to consult a text book
+          such as [<a href="#ref1">1</a>].
         </p>
         <p>
           Two engines devoted to least-squares problems are available. The first one is
-          based on the <a href="../apidocs/org.hipparchus/fitting/leastsquares/GaussNewtonOptimizer.html">
+          based on the <a href="../apidocs/org/hipparchus/fitting/leastsquares/GaussNewtonOptimizer.html">
           Gauss-Newton</a> method. The second one is the <a
-          href="../apidocs/org.hipparchus/fitting/leastsquares/LevenbergMarquardtOptimizer.html">
+          href="../apidocs/org/hipparchus/fitting/leastsquares/LevenbergMarquardtOptimizer.html">
           Levenberg-Marquardt</a> method.
         </p>
       </subsection>
@@ -54,26 +63,34 @@
         <p>
           In order to solve a least-squares fitting problem, the user must provide the following elements:
           <ul>
-           <li>a mean to evaluate all the components of the model for a given set of parameters:
-               model<sub>i</sub> = f<sub>i</sub>(p<sub>1</sub>, p<sub>2</sub>, ... p<sub>k</sub>),
-               this is code</li>
-           <li>the target (or observed) components: target<sub>i</sub>, this is data</li>
-           <li>the start values for all p<sub>k</sub> parameters: s<sub>k</sub>, this is data</li>
-           <li>optionally a validator for the p<sub>k</sub> parameters, this is code</li>
-           <li>optionally the weight for sample point i: w<sub>i</sub>, this is data and defaults to 1.0 if not provided</li>
-           <li>a maximum number of iterations, this is data</li>
-           <li>a maximum number of evaluations, this is data</li>
-           <li>a convergence criterion, this is code</li>
+           <li>
+             an implementation of the measurement model \( \mathbf{f}(\mathbf{p}) \) and its
+             Jacobian, \( \frac{\partial\mathbf{f}}{\partial\mathbf{p}} \). This is best done by
+             implementing
+             <a href="../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html">MultivariateJacobianFunction</a>. </li>
+           <li>the observed (or target) values:  \( \mathbf{o} \).</li>
+           <li>the start values for all parameters: \( \mathbf{s} \).</li>
+           <li>
+             optionally a validator for the parameters \( \mathbf{p} \). This is an implementation
+             of
+             <a href="../apidocs/org/hipparchus/fitting/leastsquares/ParameterValidator.html">ParameterValidator</a>. </li>
+           <li>optionally weights for sample point: \( \mathbf{w} \), this defaults to 1.0 if not provided.</li>
+           <li>a maximum number of iterations.</li>
+           <li>a maximum number of model evaluations, which may be different than iterations for Levenberg-Marquardt.</li>
+           <li>
+             a convergence criterion, which is an implementation of
+             <a href="../apidocs/org/hipparchus/optim/ConvergenceChecker.html">ConvergenceChecker&lt;Evaluation&gt;</a>
+           </li>
           </ul>
         </p>
         <p>
           The elements of the list above can be provided as an implementation of the
-          <a href="../apidocs/org.hipparchus/fitting/leastsquares/LeastSquaresProblem.html">
-          LeastSquaresProblem</a> interface. However, this is cumbersome to do directly, so some helper
-          classes are available. The first helper is a mutable builder:
-          <a href="../apidocs/org.hipparchus/fitting/leastsquares/LeastSquaresBuilder.html">
+          <a href="../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresProblem.html">
+          LeastSquaresProblem</a> interface. However, this may be cumbersome to do directly, so some
+          helper classes are available. The first helper is a mutable builder:
+          <a href="../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresBuilder.html">
           LeastSquaresBuilder</a>. The second helper is an utility factory:
-          <a href="../apidocs/org.hipparchus/fitting/leastsquares/LeastSquaresFactory.html">
+          <a href="../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresFactory.html">
           LeastSquaresFactory</a>.
         </p>
         <p>
@@ -92,31 +109,30 @@
 
       <subsection name="14.3 Model Function">
         <p>
-          The model function is used by the least squares engine to evaluate the model components
-          model<sub>i</sub> given some test parameters p<sub>k</sub>. It is therefore a multivariate
-          function (it depends on the various p<sub>k</sub>) and it is vector-valued (it has several
-          components model<sub>i</sub>). There must be exactly one component model<sub>i</sub> for
-          each target (or observed) component target<sub>i</sub>, otherwise some residuals to be
-          squared and summed could not be computed. In order for the problem to be well defined, the
-          number of parameters p<sub>k</sub> must be less than the number of components model<sub>i</sub>.
+          The model function is used by the least squares engine to evaluate the model
+          \( \mathbf{f}(\mathbf{p}) \). It is therefore a multivariate
+          function (it depends on the various \( p_k \)) and it is vector-valued (it has several
+          components \( f_i \)). There must be exactly one model function \( f_i \) for
+          each observed (or target) value \( o_i \). In order for the problem to be well defined, the
+          number of parameters must be less than the number of observations.
           Failing to ensure this may lead to the engine throwing an exception as the underlying linear
           algebra operations may encounter singular matrices. It is not unusual to have a large number
-          of components (several thousands) and only a dozen parameters. There are no limitations on these
+          of observations (several thousands) and only a dozen parameters. There are no limitations on these
           numbers, though.
         </p>
         <p>
-          As the least squares engine needs to create Jacobians matrices for the model function, both
-          its value and its derivatives <em>with respect to the p<sub>k</sub> parameters</em> must
-          be available. There are two ways to provide this:
+          As the least squares engine uses the Jacobians matrices of the model function, both
+          its value and its derivatives <em>with respect to the parameters, \( \mathbf{p} \)</em>,
+          must be available. There are two ways to provide this:
           <ul>
             <li>provide one
-            <a href="../apidocs/org.hipparchus/analysis/MultivariateVectorFunction.html">MultivariateVectorFunction</a>
-            instance for computing the components values and one
-            <a href="../apidocs/org.hipparchus/analysis/MultivariateMatrixFunction.html">MultivariateMatrixFunction</a>
-            instance for computing the components derivatives (i.e. the Jacobian matrix) with
+            <a href="../apidocs/org/hipparchus/analysis/MultivariateVectorFunction.html">MultivariateVectorFunction</a>
+            instance for computing the model values and one
+            <a href="../apidocs/org/hipparchus/analysis/MultivariateMatrixFunction.html">MultivariateMatrixFunction</a>
+            instance for computing the model derivatives (i.e. the Jacobian matrix) with
             respect to the parameters,</li>
             <li>or provide one
-            <a href="../apidocs/org.hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html">MultivariateJacobianFunction</a>
+            <a href="../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html">MultivariateJacobianFunction</a>
             instance for computing both the components values and their derivatives simultaneously.</li>
           </ul>
           The first alternative is best suited for models which are not computationally intensive
@@ -126,19 +142,20 @@
         </p>
         <p>
           The <code>point</code> parameter of the <code>value</code> methods in the
-          <a href="../apidocs/org.hipparchus/analysis/MultivariateVectorFunction.html">MultivariateVectorFunction</a>,
-          <a href="../apidocs/org.hipparchus/analysis/MultivariateMatrixFunction.html">MultivariateMatrixFunction</a>,
-          or <a href="../apidocs/org.hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html">MultivariateJacobianFunction</a>
-          interfaces will contain the parameters p<sub>k</sub>. The values will be the model components
-          model<sub>i</sub> and the derivatives will be the derivatives of the model components
-          with respect to the parameters dmodel<sub>i</sub>/dp<sub>k</sub>.
+          <a href="../apidocs/org/hipparchus/analysis/MultivariateVectorFunction.html">MultivariateVectorFunction</a>,
+          <a href="../apidocs/org/hipparchus/analysis/MultivariateMatrixFunction.html">MultivariateMatrixFunction</a>,
+          or <a href="../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html">MultivariateJacobianFunction</a>
+          interfaces will contain the parameter vector \( \mathbf{p} \). The values will be the
+          model values \( \mathbf{f}(\mathbf{p}) \) and the derivatives will be the derivatives of
+          the model values with respect to the parameters
+          \( \frac{\partial\mathbf{f}(\mathbf{p})}{\partial\mathbf{p}} \).
         </p>
         <p>
           There are no requirements on how to compute value and derivatives. The
-          <a href="../apidocs/org.hipparchus/analysis/differentiation/DerivativeStructure.html">
-          DerivativeStructure</a> class may be useful to compute analytically derivatives in
-          difficult cases, but this class is not mandated by the API which only expects the derivatives
-          as a Jacobian matrix containing primitive double entries.
+          <a href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
+          DerivativeStructure</a> class may be useful to compute analytical derivatives without
+          pencil and paper, but this class is not mandated by the API which only expects the
+          derivatives as a Jacobian matrix containing primitive double entries.
         </p>
         <p>
           One non-obvious feature provided by both the builder and the factory is lazy evaluation. This feature
@@ -148,7 +165,7 @@
           if the model functions are themselves separated, i.e. it can be used only with the first
           alternative above. Setting up the <code>lazyEvaluation</code> flag to <code>true</code> in the builder
           or factory and setting up the model function as one
-          <a href="../apidocs/org.hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html">MultivariateJacobianFunction</a>
+          <a href="../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html">MultivariateJacobianFunction</a>
           instance at the same time will trigger an illegal state exception telling that the model function
           misses required functionality.
         </p>
@@ -165,7 +182,7 @@
        </p>
        <p>
          Both ways are achieved by setting up a
-         <a href="../apidocs/org.hipparchus/fitting/leastsquares/ParameterValidator.html">ParameterValidator</a>
+         <a href="../apidocs/org/hipparchus/fitting/leastsquares/ParameterValidator.html">ParameterValidator</a>
          instance. The input of the value and jacobian model functions will always be the output of
          the parameter validator if one exists.
        </p>
@@ -200,7 +217,7 @@
         </p>
         <p>
           The maximum number of iterations refers to the engine algorithm main loop, whereas the
-          maximum number of iterations refers to the number of calls to the model method. Some
+          maximum number of evaluations refers to the number of calls to evaluate the model. Some
           algorithms (like Levenberg-Marquardt) have two embedded loops, with iteration number
           being incremented at outer loop level, but a new evaluation being done at each inner
           loop. In this case, the number of evaluations will be greater than the number of iterations.
@@ -214,30 +231,31 @@
           is probably safe and prevents infinite loops. If the least squares solver needs several
           hundreds of evaluations, it would probably be safer to set the maximum value to 10000 or
           even 1000000 to avoid failures in slightly more demanding cases. Very fine tuning of
-          these maximum numbers is often worthless, they are only intended as safeguards.
+          these maximum numbers is often worthless, they are only intended as safeguards. One can
+          think of these parameters as the divergence criteria.
         </p>
         <p>
           Convergence checking is delegated to a dedicated interface from the <code>optim</code>
-          package: <a href="../apidocs/org.hipparchus/optim/ConvergenceChecker.html">
+          package: <a href="../apidocs/org/hipparchus/optim/ConvergenceChecker.html">
           ConvergenceChecker</a>, parameterized with either the specific
-          <a href="../apidocs/org.hipparchus/fitting/leastsquares/LeastSquaresProblem.Evaluation.html">Evaluation</a>
+          <a href="../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresProblem.Evaluation.html">Evaluation</a>
           class used for least squares problems or the general
-          <a href="../apidocs/org.hipparchus/optim/PointVectorValuePair.html">PointVectorValuePair</a>.
+          <a href="../apidocs/org/hipparchus/optim/PointVectorValuePair.html">PointVectorValuePair</a>.
           Each time convergence is checked, both the previous
           and the current evaluations of the least squares problem are provided, so the checker can
-          compare them and decide whereas convergence has been reached or not. The predefined convergence
+          compare them and decide whether convergence has been reached or not. The predefined convergence
           checker implementations that can be useful for least squares fitting are:
           <ul>
-            <li><a href="../apidocs/org.hipparchus/fitting/leastsquares/EvaluationRmsChecker.html">EvaluationRmsChecker</a>,
+            <li><a href="../apidocs/org/hipparchus/fitting/leastsquares/EvaluationRmsChecker.html">EvaluationRmsChecker</a>,
             which uses only the normalized cost (square-root of the sum of squared of the residuals,
             divided by the number of measurements),</li>
-            <li><a href="../apidocs/org.hipparchus/optim/SimpleVectorValueChecker.html">SimpleVectorValueChecker</a>,
-            which uses the model components themselves (<em>not</em> the residuals),</li>
-            <li><a href="../apidocs/org.hipparchus/optim/SimplePointChecker.html">SimplePointChecker&lt;PointVectorValuePair&gt;</a>,
+            <li><a href="../apidocs/org/hipparchus/optim/SimpleVectorValueChecker.html">SimpleVectorValueChecker</a>,
+            which uses the model values themselves (<em>not</em> the residuals),</li>
+            <li><a href="../apidocs/org/hipparchus/optim/SimplePointChecker.html">SimplePointChecker&lt;PointVectorValuePair&gt;</a>,
             which uses the parameters.</li>
           </ul>
           Of course, users can also provide their own implementation of the
-          <a href="../apidocs/org.hipparchus/optim/ConvergenceChecker.html">ConvergenceChecker</a>
+          <a href="../apidocs/org/hipparchus/optim/ConvergenceChecker.html">ConvergenceChecker</a>
           interface.
         </p>
       </subsection>
@@ -247,9 +265,9 @@
           Once the least squares problem has been created, using either the builder or the factory,
           it is passed to an optimization engine for solving. Two engines devoted to least-squares
           problems are available. The first one is
-          based on the <a href="../apidocs/org.hipparchus/fitting/leastsquares/GaussNewtonOptimizer.html">
+          based on the <a href="../apidocs/org/hipparchus/fitting/leastsquares/GaussNewtonOptimizer.html">
           Gauss-Newton</a> method. The second one is the <a
-          href="../apidocs/org.hipparchus/fitting/leastsquares/LevenbergMarquardtOptimizer.html">
+          href="../apidocs/org/hipparchus/fitting/leastsquares/LevenbergMarquardtOptimizer.html">
           Levenberg-Marquardt</a> method. For both increased readability and in order to leverage
           possible future changes in the configuration, it is recommended to use the fluent-style API to
           build and configure the optimizers. This means creating a first temporary version of the optimizer
@@ -271,7 +289,7 @@
         </p>
         <source>
   LeastSquaresOptimizer optimizer = new GaussNewtonOptimizer().
-                                    withwithDecomposition(GaussNewtonOptimizer.Decomposition.QR);
+                                    withDecomposition(GaussNewtonOptimizer.Decomposition.SVD);
         </source>
 
       </subsection>
@@ -287,12 +305,12 @@
 
         <p>
           The <a
-          href="../apidocs/org.hipparchus/fitting/leastsquares/LeastSquaresOptimizer.Optimum.html">
+          href="../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresOptimizer.Optimum.html">
           LeastSquaresOptimizer.Optimum</a> class is a specialized
-          <a href="../apidocs/org.hipparchus/fitting/leastsquares/LeastSquaresProblem.Evaluation.html">Evaluation</a>
+          <a href="../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresProblem.Evaluation.html">Evaluation</a>
           with additional methods te retrieve the number of evaluations and number of iterations performed.
           The most important methods are inherited from the
-          <a href="../apidocs/org.hipparchus/fitting/leastsquares/LeastSquaresProblem.Evaluation.html">Evaluation</a>
+          <a href="../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresProblem.Evaluation.html">Evaluation</a>
           class and correspond to the point (i.e. the parameters), cost, Jacobian, RMS, covariance ...
         </p>
       </subsection>
@@ -326,12 +344,13 @@
 
           for (int i = 0; i &lt; observedPoints.length; ++i) {
               Vector2D o = observedPoints[i];
-              double modelI = Vector2D.distance(o, center);
+              Vector2D diff = center.subtract(o);
+              double modelI = diff.getNorm();
               value.setEntry(i, modelI);
               // derivative with respect to p0 = x center
-              jacobian.setEntry(i, 0, (center.getX() - o.getX()) / modelI);
+              jacobian.setEntry(i, 0, diff.getX() / modelI);
               // derivative with respect to p1 = y center
-              jacobian.setEntry(i, 1, (center.getX() - o.getX()) / modelI);
+              jacobian.setEntry(i, 1, diff.getY() / modelI);
           }
 
           return new Pair&lt;RealVector, RealMatrix&gt;(value, jacobian);
@@ -362,5 +381,11 @@
       </subsection>
 
      </section>
+    <section name="References">
+      <p>
+        <a name="ref1"/>[1] Crassidis, John L., and John L. Junkins. Optimal estimation of dynamic
+        systems. Boca Raton, FL: CRC Press, 2012.
+      </p>
+    </section>
   </body>
 </document>
