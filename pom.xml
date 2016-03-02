@@ -46,6 +46,10 @@
       <id>ossrh</id>
       <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
     </repository>
+    <site>
+      <id>publishedSite</id>
+      <url>https://hipparchus.org/static</url>
+    </site>
   </distributionManagement>
 
   <developers>
@@ -435,7 +439,7 @@
     <hipparchus.maven-project-info-reports-plugin.version>2.8</hipparchus.maven-project-info-reports-plugin.version>
     <hipparchus.maven-pmd-plugin.version>3.5</hipparchus.maven-pmd-plugin.version>
     <hipparchus.maven-resources-plugin.version>2.7</hipparchus.maven-resources-plugin.version>
-    <hipparchus.maven-site-plugin.version>3.4</hipparchus.maven-site-plugin.version>
+    <hipparchus.maven-site-plugin.version>3.5</hipparchus.maven-site-plugin.version>
     <hipparchus.maven-source-plugin.version>2.4</hipparchus.maven-source-plugin.version>
     <hipparchus.maven-surefire-plugin.version>2.18.1</hipparchus.maven-surefire-plugin.version>
     <hipparchus.maven-surefire-report-plugin.version>2.18.1</hipparchus.maven-surefire-report-plugin.version>
@@ -554,7 +558,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${hipparchus.maven-javadoc-plugin.version}</version>
           <configuration>
-            <additionalparam>-header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
+            <additionalparam>-Xdoclint:none -header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
           </configuration>
         </plugin>
         <plugin>
@@ -719,6 +723,22 @@
       <plugin>
         <artifactId>maven-site-plugin</artifactId>
         <version>${hipparchus.maven-site-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>aggregateSite</id>
+            <goals>
+              <goal>stage</goal>
+            </goals>
+            <phase>site</phase>
+          </execution>
+          <execution>
+            <id>attachSiteDescriptor</id>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>attach-descriptor</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-release-plugin</artifactId>
@@ -773,12 +793,12 @@
         <configuration>
           <excludes>
 
-            <!-- MANIFEST files cannot have any comments, so we can't put 
+            <!-- MANIFEST files cannot have any comments, so we can't put
               license header -->
             <exclude>src/test/maxima/special/RealFunctionValidation/MANIFEST.txt</exclude>
 
-            <!-- the following are test data files with specific syntax that 
-              cannot include Apache header (and the contained data is public, it is not 
+            <!-- the following are test data files with specific syntax that
+              cannot include Apache header (and the contained data is public, it is not
               owned by Apache) -->
             <exclude>src/test/resources/org/hipparchus/random/testData.txt</exclude>
             <exclude>src/test/resources/org/hipparchus/random/emptyFile.txt</exclude>
@@ -798,14 +818,14 @@
             <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-too-close.ply</exclude>
             <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N.ply</exclude>
 
-            <!-- direction numbers for Sobol generation from Frances Y. Kuo 
+            <!-- direction numbers for Sobol generation from Frances Y. Kuo
               and Stephen Joe, available under a BSD-style license (see LICENSE.txt) -->
             <exclude>src/main/resources/assets/org/hipparchus/random/new-joe-kuo-6.1000</exclude>
 
             <!-- text file explaining reference to a public domain image -->
             <exclude>src/userguide/resources/references.txt</exclude>
 
-            <!-- version 0.8 of apache-rat-plugin does not exclude properly 
+            <!-- version 0.8 of apache-rat-plugin does not exclude properly
               some default development tools files (see RAT-126) -->
             <exclude>bin/**</exclude>
             <exclude>.gitignore</exclude>
@@ -829,7 +849,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${math.checkstyle.version}</version>
+        <version>${hipparchus.maven-checkstyle-plugin.version}</version>
         <configuration>
           <configLocation>${basedir}/checkstyle.xml</configLocation>
           <enableRulesSummary>false</enableRulesSummary>
@@ -846,7 +866,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
-        <version>${math.pmd.version}</version>
+        <version>${hipparchus.maven-pmd-plugin.version}</version>
         <configuration>
           <targetJdk>${maven.compiler.target}</targetJdk>
           <skipEmptyReport>false</skipEmptyReport>
@@ -858,9 +878,9 @@
           <reportSet>
             <reports>
               <report>pmd</report>
-              <!-- As of 3.x series, the cpd report sees (correctly) numerous 
+              <!-- As of 3.x series, the cpd report sees (correctly) numerous
                 duplications -->
-              <!-- This is due to packages being renamed, and the old name 
+              <!-- This is due to packages being renamed, and the old name
                 still needs to be -->
               <!-- available for compatibility. They will be removed in 4.0 -->
               <!-- So we temporarily disable the CPD report -->
@@ -873,10 +893,9 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${hipparchus.maven-javadoc-plugin.version}</version>
         <configuration>
-          <additionalparam>-header &apos;&lt;script
-            type=&quot;text/javascript&quot;
-            src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
+          <additionalparam>-Xdoclint:none -header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
         </configuration>
       </plugin>
     </plugins>
