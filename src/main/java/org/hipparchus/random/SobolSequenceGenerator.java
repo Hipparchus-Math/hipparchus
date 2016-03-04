@@ -65,7 +65,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
     private static final int MAX_DIMENSION = 1000;
 
     /** The resource containing the direction numbers. */
-    private static final String RESOURCE_NAME = "/assets/org.hipparchus/random/new-joe-kuo-6.1000";
+    private static final String RESOURCE_NAME = "/assets/org/hipparchus/random/new-joe-kuo-6.1000";
 
     /** Character set for file input. */
     private static final String FILE_CHARSET = "US-ASCII";
