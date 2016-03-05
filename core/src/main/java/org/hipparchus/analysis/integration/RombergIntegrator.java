@@ -105,7 +105,7 @@ public class RombergIntegrator extends BaseAbstractUnivariateIntegrator {
 
         TrapezoidIntegrator qtrap = new TrapezoidIntegrator();
         currentRow[0] = qtrap.stage(this, 0);
-        iterations.incrementCount();
+        iterations.increment();
         double olds = currentRow[0];
         while (true) {
 
@@ -117,7 +117,7 @@ public class RombergIntegrator extends BaseAbstractUnivariateIntegrator {
             currentRow = tmpRow;
 
             currentRow[0] = qtrap.stage(this, i);
-            iterations.incrementCount();
+            iterations.increment();
             for (int j = 1; j <= i; j++) {
                 // Richardson extrapolation coefficient
                 final double r = (1L << (2 * j)) - 1;

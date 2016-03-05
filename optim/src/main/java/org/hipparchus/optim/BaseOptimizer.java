@@ -16,7 +16,6 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Incrementor;
 
@@ -34,9 +33,9 @@ import org.hipparchus.util.Incrementor;
  */
 public abstract class BaseOptimizer<PAIR> {
     /** Evaluations counter. */
-    protected final Incrementor evaluations;
+    protected Incrementor evaluations;
     /** Iterations counter. */
-    protected final Incrementor iterations;
+    protected Incrementor iterations;
     /** Convergence checker. */
     private final ConvergenceChecker<PAIR> checker;
 
@@ -57,8 +56,8 @@ public abstract class BaseOptimizer<PAIR> {
                             int maxIter) {
         this.checker = checker;
 
-        evaluations = new Incrementor(maxEval, new MaxEvalCallback());
-        iterations = new Incrementor(maxIter, new MaxIterCallback());
+        evaluations = new Incrementor(maxEval);
+        iterations  = new Incrementor(maxIter);
     }
 
     /**
@@ -146,8 +145,8 @@ public abstract class BaseOptimizer<PAIR> {
         parseOptimizationData(optData);
 
         // Reset counters.
-        evaluations.resetCount();
-        iterations.resetCount();
+        evaluations.reset();
+        iterations.reset();
         // Perform optimization.
         return doOptimize();
     }
@@ -164,8 +163,8 @@ public abstract class BaseOptimizer<PAIR> {
     public PAIR optimize()
         throws MathIllegalStateException {
         // Reset counters.
-        evaluations.resetCount();
-        iterations.resetCount();
+        evaluations.reset();
+        iterations.reset();
         // Perform optimization.
         return doOptimize();
     }
@@ -186,7 +185,7 @@ public abstract class BaseOptimizer<PAIR> {
      */
     protected void incrementEvaluationCount()
         throws MathIllegalStateException {
-        evaluations.incrementCount();
+        evaluations.increment();
     }
 
     /**
@@ -197,7 +196,7 @@ public abstract class BaseOptimizer<PAIR> {
      */
     protected void incrementIterationCount()
         throws MathIllegalStateException {
-        iterations.incrementCount();
+        iterations.increment();
     }
 
     /**
@@ -216,45 +215,13 @@ public abstract class BaseOptimizer<PAIR> {
         // not provided in the argument list.
         for (OptimizationData data : optData) {
             if (data instanceof MaxEval) {
-                evaluations.setMaximalCount(((MaxEval) data).getMaxEval());
+                evaluations = evaluations.withMaximalCount(((MaxEval) data).getMaxEval());
                 continue;
             }
             if (data instanceof MaxIter) {
-                iterations.setMaximalCount(((MaxIter) data).getMaxIter());
+                iterations = iterations.withMaximalCount(((MaxIter) data).getMaxIter());
                 continue;
             }
-        }
-    }
-
-    /**
-     * Defines the action to perform when reaching the maximum number
-     * of evaluations.
-     */
-    private static class MaxEvalCallback
-        implements  Incrementor.MaxCountExceededCallback {
-        /**
-         * {@inheritDoc}
-         * @throws MathIllegalStateException
-         */
-        @Override
-        public void trigger(int max) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
-        }
-    }
-
-    /**
-     * Defines the action to perform when reaching the maximum number
-     * of evaluations.
-     */
-    private static class MaxIterCallback
-        implements Incrementor.MaxCountExceededCallback {
-        /**
-         * {@inheritDoc}
-         * @throws MathIllegalStateException
-         */
-        @Override
-        public void trigger(int max) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
         }
     }
 }

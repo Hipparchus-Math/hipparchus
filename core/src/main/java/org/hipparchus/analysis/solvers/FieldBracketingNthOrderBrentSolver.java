@@ -24,7 +24,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.IntegerSequence;
+import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
@@ -67,7 +67,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
     private final T relativeAccuracy;
 
     /** Evaluations counter. */
-    private IntegerSequence.Incrementor evaluations;
+    private Incrementor evaluations;
 
     /**
      * Construct a solver.
@@ -92,7 +92,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
         this.absoluteAccuracy      = absoluteAccuracy;
         this.relativeAccuracy      = relativeAccuracy;
         this.functionValueAccuracy = functionValueAccuracy;
-        this.evaluations           = IntegerSequence.Incrementor.create();
+        this.evaluations           = new Incrementor();
     }
 
     /** Get the maximal order.
@@ -195,7 +195,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
         MathUtils.checkNotNull(f);
 
         // Reset.
-        evaluations = evaluations.withMaximalCount(maxEval).withStart(0);
+        evaluations = evaluations.withMaximalCount(maxEval);
         T zero = field.getZero();
         T nan  = zero.add(Double.NaN);
 

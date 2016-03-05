@@ -226,12 +226,12 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
         // iterate until convergence is reached
         Evaluation current = null;
         while (true) {
-            iterationCounter.incrementCount();
+            iterationCounter.increment();
 
             // evaluate the objective function and its jacobian
             Evaluation previous = current;
             // Value of the objective function at "currentPoint".
-            evaluationCounter.incrementCount();
+            evaluationCounter.increment();
             current = lsp.evaluate(currentPoint);
             final RealVector currentResiduals = current.getResiduals();
             final RealMatrix weightedJacobian = current.getJacobian();

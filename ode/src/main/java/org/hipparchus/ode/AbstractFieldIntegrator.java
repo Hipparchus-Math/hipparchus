@@ -37,7 +37,7 @@ import org.hipparchus.ode.events.FieldEventState;
 import org.hipparchus.ode.sampling.AbstractFieldStepInterpolator;
 import org.hipparchus.ode.sampling.FieldStepHandler;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.IntegerSequence;
+import org.hipparchus.util.Incrementor;
 
 /**
  * Base class managing common boilerplate for all integrators.
@@ -80,7 +80,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     private final String name;
 
     /** Counter for number of evaluations. */
-    private IntegerSequence.Incrementor evaluations;
+    private Incrementor evaluations;
 
     /** Differential equations to integrate. */
     private transient FieldExpandableODE<T> equations;
@@ -97,7 +97,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
         stepSize          = null;
         eventsStates      = new ArrayList<FieldEventState<T>>();
         statesInitialized = false;
-        evaluations       = IntegerSequence.Incrementor.create().withMaximalCount(Integer.MAX_VALUE);
+        evaluations       = new Incrementor();
     }
 
     /** Get the field to which state vector elements belong.
@@ -213,7 +213,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
                                                             final T t0, final T[] y0, final T t) {
 
         this.equations = eqn;
-        evaluations    = evaluations.withStart(0);
+        evaluations    = evaluations.withCount(0);
 
         // initialize ODE
         eqn.init(t0, y0, t);
@@ -248,7 +248,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     /** Get the evaluations counter.
      * @return evaluations counter
      */
-    protected IntegerSequence.Incrementor getEvaluationsCounter() {
+    protected Incrementor getEvaluationsCounter() {
         return evaluations;
     }
 
@@ -440,7 +440,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
         this.stepStart = stepStart;
     }
 
-    /** Getcurrent step start.
+    /** Get current step start.
      * @return current step start
      */
     protected FieldODEStateAndDerivative<T> getStepStart() {

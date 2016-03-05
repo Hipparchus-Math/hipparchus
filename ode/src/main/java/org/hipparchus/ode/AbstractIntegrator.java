@@ -36,7 +36,7 @@ import org.hipparchus.ode.events.EventState;
 import org.hipparchus.ode.sampling.AbstractStepInterpolator;
 import org.hipparchus.ode.sampling.StepHandler;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.IntegerSequence;
+import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.Precision;
 
 /**
@@ -70,7 +70,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
     private final String name;
 
     /** Counter for number of evaluations. */
-    private IntegerSequence.Incrementor evaluations;
+    private Incrementor evaluations;
 
     /** Differential equations to integrate. */
     private transient ExpandableStatefulODE expandable;
@@ -85,7 +85,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
         stepSize  = Double.NaN;
         eventsStates = new ArrayList<EventState>();
         statesInitialized = false;
-        evaluations = IntegerSequence.Incrementor.create().withMaximalCount(Integer.MAX_VALUE);
+        evaluations = new Incrementor();
     }
 
     /** Build an instance with a null name.
@@ -193,7 +193,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
      */
     protected void initIntegration(final double t0, final double[] y0, final double t) {
 
-        evaluations = evaluations.withStart(0);
+        evaluations = evaluations.withCount(0);
 
         for (final EventState state : eventsStates) {
             state.setExpandable(expandable);
@@ -227,7 +227,7 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
      * @return evaluations counter
      * @since 3.6
      */
-    protected IntegerSequence.Incrementor getCounter() {
+    protected Incrementor getCounter() {
         return evaluations;
     }
 

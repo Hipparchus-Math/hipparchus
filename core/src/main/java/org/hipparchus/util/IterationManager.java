@@ -26,7 +26,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * algorithms. The maximum number of iterations can be set, and methods are
  * provided to monitor the current iteration count. A lightweight event
  * framework is also provided.
- *
  */
 public class IterationManager {
 
@@ -43,7 +42,7 @@ public class IterationManager {
      */
     public IterationManager(final int maxIterations) {
         this.iterations = new Incrementor(maxIterations);
-        this.listeners = new CopyOnWriteArrayList<IterationListener>();
+        this.listeners  = new CopyOnWriteArrayList<IterationListener>();
     }
 
     /**
@@ -147,7 +146,7 @@ public class IterationManager {
      */
     public void incrementIterationCount()
         throws MathIllegalStateException {
-        iterations.incrementCount();
+        iterations.increment();
     }
 
     /**
@@ -167,6 +166,6 @@ public class IterationManager {
      * initial phase.
      */
     public void resetIterationCount() {
-        iterations.resetCount();
+        iterations.reset();
     }
 }

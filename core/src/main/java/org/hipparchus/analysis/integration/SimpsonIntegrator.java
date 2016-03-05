@@ -108,7 +108,7 @@ public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
         double oldt = qtrap.stage(this, 0);
         while (true) {
             final double t = qtrap.stage(this, iterations.getCount());
-            iterations.incrementCount();
+            iterations.increment();
             final double s = (4 * t - oldt) / 3.0;
             if (iterations.getCount() >= getMinimalIterationCount()) {
                 final double delta = FastMath.abs(s - olds);

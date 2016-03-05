@@ -57,7 +57,7 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
     private final int minimalIterationCount;
 
     /** The functions evaluation count. */
-    private final Incrementor evaluations;
+    private Incrementor evaluations;
 
     /** Function to integrate. */
     private UnivariateFunction function;
@@ -123,8 +123,7 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
                                                    maximalIterationCount, minimalIterationCount);
         }
         this.minimalIterationCount = minimalIterationCount;
-        this.iterations            = new Incrementor();
-        iterations.setMaximalCount(maximalIterationCount);
+        this.iterations            = new Incrementor(maximalIterationCount);
 
         // prepare evaluations counter, but do not set it yet
         evaluations = new Incrementor();
@@ -217,7 +216,7 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
      */
     protected double computeObjectiveValue(final double point)
         throws MathIllegalStateException {
-        evaluations.incrementCount();
+        evaluations.increment();
         return function.value(point);
     }
 
@@ -246,10 +245,8 @@ public abstract class BaseAbstractUnivariateIntegrator implements UnivariateInte
         min = lower;
         max = upper;
         function = f;
-        evaluations.setMaximalCount(maxEval);
-        evaluations.resetCount();
-        iterations.resetCount();
-
+        evaluations = evaluations.withMaximalCount(maxEval);
+        iterations.reset();
     }
 
     /** {@inheritDoc} */

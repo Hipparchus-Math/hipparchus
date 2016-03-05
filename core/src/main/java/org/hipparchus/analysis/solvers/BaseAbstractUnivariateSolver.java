@@ -49,7 +49,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
     /** Relative accuracy. */
     private final double relativeAccuracy;
     /** Evaluations counter. */
-    private final Incrementor evaluations = new Incrementor();
+    private Incrementor evaluations = new Incrementor();
     /** Lower end of search interval. */
     private double searchMin;
     /** Higher end of search interval. */
@@ -187,8 +187,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
         searchMax = max;
         searchStart = startValue;
         function = f;
-        evaluations.setMaximalCount(maxEval);
-        evaluations.resetCount();
+        evaluations = evaluations.withMaximalCount(maxEval);
     }
 
     /** {@inheritDoc} */
@@ -312,6 +311,6 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      */
     protected void incrementEvaluationCount()
         throws MathIllegalStateException {
-        evaluations.incrementCount();
+        evaluations.increment();
     }
 }

@@ -144,7 +144,7 @@ public class TrapezoidIntegrator extends BaseAbstractUnivariateIntegrator {
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         double oldt = stage(this, 0);
-        iterations.incrementCount();
+        iterations.increment();
         while (true) {
             final int i = iterations.getCount();
             final double t = stage(this, i);
@@ -157,7 +157,7 @@ public class TrapezoidIntegrator extends BaseAbstractUnivariateIntegrator {
                 }
             }
             oldt = t;
-            iterations.incrementCount();
+            iterations.increment();
         }
 
     }

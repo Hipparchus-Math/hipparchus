@@ -22,7 +22,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.IntegerSequence.Incrementor;
+import org.hipparchus.util.Incrementor;
 
 /**
  * Provide an interval that brackets a local optimum of a function.
@@ -217,14 +217,14 @@ public class BracketFinder {
     }
 
     /**
-     * @return the number of evalutations.
+     * @return the number of evaluations.
      */
     public int getMaxEvaluations() {
         return maxEvaluations;
     }
 
     /**
-     * @return the number of evalutations.
+     * @return the number of evaluations.
      */
     public int getEvaluations() {
         return evaluations;
@@ -292,7 +292,7 @@ public class BracketFinder {
          */
         FunctionEvaluator(UnivariateFunction func) {
             this.func = func;
-            inc = Incrementor.create().withMaximalCount(maxEvaluations);
+            inc = new Incrementor(maxEvaluations);
             evaluations = 0;
         }
 
@@ -303,14 +303,8 @@ public class BracketFinder {
          * exceeded.
          */
         double value(double x) {
-            try {
-                inc.increment();
-                evaluations = inc.getCount();
-            } catch (MathIllegalStateException e) {
-                throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED,
-                                                    inc.getMaximalCount());
-            }
-
+            inc.increment();
+            evaluations = inc.getCount();
             return func.value(x);
         }
     }

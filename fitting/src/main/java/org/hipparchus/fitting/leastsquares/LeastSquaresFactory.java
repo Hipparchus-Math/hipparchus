@@ -230,7 +230,7 @@ public class LeastSquaresFactory {
             /** {@inheritDoc} */
             @Override
             public Evaluation evaluate(final RealVector point) {
-                counter.incrementCount();
+                counter.increment();
                 return super.evaluate(point);
             }
 

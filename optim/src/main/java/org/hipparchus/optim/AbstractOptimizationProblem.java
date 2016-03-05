@@ -16,8 +16,6 @@
  */
 package org.hipparchus.optim;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Incrementor;
 
 /**
@@ -30,11 +28,6 @@ import org.hipparchus.util.Incrementor;
  */
 public abstract class AbstractOptimizationProblem<PAIR>
         implements OptimizationProblem<PAIR> {
-
-    /** Callback to use for the evaluation counter. */
-    private static final MaxEvalCallback MAX_EVAL_CALLBACK = new MaxEvalCallback();
-    /** Callback to use for the iteration counter. */
-    private static final MaxIterCallback MAX_ITER_CALLBACK = new MaxIterCallback();
 
     /** max evaluations */
     private final int maxEvaluations;
@@ -61,13 +54,13 @@ public abstract class AbstractOptimizationProblem<PAIR>
     /** {@inheritDoc} */
     @Override
     public Incrementor getEvaluationCounter() {
-        return new Incrementor(this.maxEvaluations, MAX_EVAL_CALLBACK);
+        return new Incrementor(this.maxEvaluations);
     }
 
     /** {@inheritDoc} */
     @Override
     public Incrementor getIterationCounter() {
-        return new Incrementor(this.maxIterations, MAX_ITER_CALLBACK);
+        return new Incrementor(this.maxIterations);
     }
 
     /** {@inheritDoc} */
@@ -75,33 +68,4 @@ public abstract class AbstractOptimizationProblem<PAIR>
     public ConvergenceChecker<PAIR> getConvergenceChecker() {
         return checker;
     }
-
-    /** Defines the action to perform when reaching the maximum number of evaluations. */
-    private static class MaxEvalCallback
-            implements Incrementor.MaxCountExceededCallback {
-        /**
-         * {@inheritDoc}
-         *
-         * @throws MathIllegalStateException
-         */
-        @Override
-        public void trigger(int max) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
-        }
-    }
-
-    /** Defines the action to perform when reaching the maximum number of evaluations. */
-    private static class MaxIterCallback
-            implements Incrementor.MaxCountExceededCallback {
-        /**
-         * {@inheritDoc}
-         *
-         * @throws MathIllegalStateException
-         */
-        @Override
-        public void trigger(int max) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
-        }
-    }
-
 }

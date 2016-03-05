@@ -147,7 +147,7 @@ public class MidPointIntegrator extends BaseAbstractUnivariateIntegrator {
         double oldt = diff * computeObjectiveValue(midPoint);
 
         while (true) {
-            iterations.incrementCount();
+            iterations.increment();
             final int i = iterations.getCount();
             final double t = stage(i, oldt, min, diff);
             if (i >= getMinimalIterationCount()) {

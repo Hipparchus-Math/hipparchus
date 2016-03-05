@@ -324,7 +324,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 
 
         // Evaluate the function at the starting point and calculate its norm.
-        evaluationCounter.incrementCount();
+        evaluationCounter.increment();
         //value will be reassigned in the loop
         Evaluation current = problem.evaluate(problem.getStart());
         double[] currentResiduals = current.getResiduals().toArray();
@@ -334,7 +334,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
         // Outer loop.
         boolean firstIteration = true;
         while (true) {
-            iterationCounter.incrementCount();
+            iterationCounter.increment();
 
             final Evaluation previous = current;
 
@@ -442,7 +442,7 @@ public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
                 }
 
                 // Evaluate the function at x + p and calculate its norm.
-                evaluationCounter.incrementCount();
+                evaluationCounter.increment();
                 current = problem.evaluate(new ArrayRealVector(currentPoint));
                 currentResiduals = current.getResiduals().toArray();
                 currentCost = current.getCost();

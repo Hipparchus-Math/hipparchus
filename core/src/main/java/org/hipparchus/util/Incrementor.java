@@ -17,6 +17,7 @@
 package org.hipparchus.util;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 
@@ -27,77 +28,129 @@ import org.hipparchus.exception.NullArgumentException;
  * However, the user is able to override this behaviour by defining a
  * custom {@link MaxCountExceededCallback callback}, in order to e.g.
  * select which exception must be thrown.
- *
- * @since 3.0
- *
- * @deprecated Use {@link IntegerSequence.Incrementor} instead.
  */
-@Deprecated
 public class Incrementor {
-    /**
-     * Upper limit for the counter.
-     */
-    private int maximalCount;
-    /**
-     * Current count.
-     */
-    private int count = 0;
-    /**
-     * Function called at counter exhaustion.
-     */
+    /** Default callback. */
+    private static final MaxCountExceededCallback DEFAULT_CALLBACK =
+        (int max) -> {
+            throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
+        };
+
+    /** Upper limit for the counter. */
+    private final int maximalCount;
+    /** Function called at counter exhaustion. */
     private final MaxCountExceededCallback maxCountCallback;
+    /** Current count. */
+    private int count = 0;
 
     /**
-     * Default constructor.
-     * For the new instance to be useful, the maximal count must be set
-     * by calling {@link #setMaximalCount(int) setMaximalCount}.
+     * Defines a method to be called at counter exhaustion.
+     * The {@link #trigger(int) trigger} method should usually throw an exception.
+     */
+    public interface MaxCountExceededCallback {
+        /**
+         * Function called when the maximal count has been reached.
+         *
+         * @param maximalCount Maximal count.
+         * @throws MathIllegalStateException at counter exhaustion
+         */
+        void trigger(int maximalCount) throws MathIllegalStateException;
+    }
+
+    /**
+     * Creates an Incrementor.
+     * <p>
+     * The maximal value will be set to {@link Integer.MAX_VALUE}.
      */
     public Incrementor() {
-        this(0);
+        this(Integer.MAX_VALUE);
     }
 
     /**
-     * Defines a maximal count.
+     * Creates an Incrementor.
      *
      * @param max Maximal count.
+     * @throws MathIllegalArgumentException if {@code max} is negative.
      */
     public Incrementor(int max) {
-        this(max,
-             new MaxCountExceededCallback() {
-                 /** {@inheritDoc} */
-                 @Override
-                public void trigger(int max) throws MathIllegalStateException {
-                     throw new MathIllegalStateException(LocalizedCoreFormats.MAX_COUNT_EXCEEDED, max);
-                 }
-             });
+        this(max, DEFAULT_CALLBACK);
     }
 
     /**
-     * Defines a maximal count and a callback method to be triggered at
-     * counter exhaustion.
+     * Creates an Incrementor.
      *
      * @param max Maximal count.
      * @param cb Function to be called when the maximal count has been reached.
-     * @throws NullArgumentException if {@code cb} is {@code null}
+     * @throws NullArgumentException if {@code cb} is {@code null}.
+     * @throws MathIllegalArgumentException if {@code max} is negative.
      */
-    public Incrementor(int max, MaxCountExceededCallback cb)
+    public Incrementor(int max,
+                        MaxCountExceededCallback cb)
         throws NullArgumentException {
-        if (cb == null){
-            throw new NullArgumentException();
-        }
-        maximalCount = max;
-        maxCountCallback = cb;
+        this(0, max, cb);
     }
 
     /**
-     * Sets the upper limit for the counter.
-     * This does not automatically reset the current count to zero (see
-     * {@link #resetCount()}).
+     * Creates an Incrementor.
      *
-     * @param max Upper limit of the counter.
+     * @param count Initial counter value.
+     * @param max Maximal count.
+     * @param cb Function to be called when the maximal count has been reached.
+     * @throws NullArgumentException if {@code cb} is {@code null}.
+     * @throws MathIllegalArgumentException if {@code max} is negative.
      */
-    public void setMaximalCount(int max) {
-        maximalCount = max;
+    private Incrementor(int count,
+                        int max,
+                        MaxCountExceededCallback cb)
+        throws NullArgumentException {
+        if (cb == null) {
+            throw new NullArgumentException();
+        }
+        if (max < 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, max, 0);
+        }
+        this.maximalCount = max;
+        this.maxCountCallback = cb;
+        this.count = count;
+    }
+
+    /**
+     * Creates a new instance and set the counter to the given value.
+     *
+     * @param count Value of the counter.
+     * @return a new instance.
+     */
+    public Incrementor withCount(int count) {
+        return new Incrementor(count,
+                               this.maximalCount,
+                               this.maxCountCallback);
+    }
+
+    /**
+     * Creates a new instance with a given maximal count.
+     * The counter is reset to 0.
+     *
+     * @param max Maximal count.
+     * @return a new instance.
+     * @throws MathIllegalArgumentException if {@code max} is negative.
+     */
+    public Incrementor withMaximalCount(int max) {
+        return new Incrementor(0,
+                               max,
+                               this.maxCountCallback);
+    }
+
+    /**
+     * Creates a new instance with a given callback.
+     * The counter is reset to 0.
+     *
+     * @param cb Callback to be called at counter exhaustion.
+     * @return a new instance.
+     */
+    public Incrementor withCallback(MaxCountExceededCallback cb) {
+        return new Incrementor(0,
+                               this.maximalCount,
+                               cb);
     }
 
     /**
@@ -119,43 +172,62 @@ public class Incrementor {
     }
 
     /**
-     * Checks whether a single increment is allowed.
+     * Checks whether incrementing the counter {@code nTimes} is allowed.
      *
-     * @return {@code false} if the next call to {@link #incrementCount(int)
-     * incrementCount} will trigger a {@code MathIllegalStateException},
+     * @return {@code false} if calling {@link #increment()}
+     * will trigger a {@code MathIllegalStateException},
      * {@code true} otherwise.
      */
     public boolean canIncrement() {
-        return count < maximalCount;
+        return canIncrement(1);
+    }
+
+    /**
+     * Checks whether incrementing the counter several times is allowed.
+     *
+     * @param nTimes Number of increments.
+     * @return {@code false} if calling {@link #increment(int)
+     * increment(nTimes)} would call the {@link MaxCountExceededCallback callback}
+     * {@code true} otherwise.
+     * @throws MathIllegalArgumentException if {@nTimes} is negative.
+     */
+    public boolean canIncrement(int nTimes) {
+        if (nTimes < 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
+                                                   nTimes, 0);
+        }
+        return count + nTimes <= maximalCount;
     }
 
     /**
      * Performs multiple increments.
-     * See the other {@link #incrementCount() incrementCount} method).
      *
-     * @param value Number of increments.
-     * @throws MathIllegalStateException at counter exhaustion.
+     * @param nTimes Number of increments.
+     * @throws MathIllegalArgumentException if {@code nTimes} is negative.
+     *
+     * @see #increment()
      */
-    public void incrementCount(int value) throws MathIllegalStateException {
-        for (int i = 0; i < value; i++) {
-            incrementCount();
+    public void increment(int nTimes) {
+        if (nTimes < 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
+                                                   nTimes, 0);
+        }
+
+        for (int i = 0; i < nTimes; i++) {
+            increment();
         }
     }
 
     /**
-     * Adds one to the current iteration count.
+     * Adds the increment value to the current iteration count.
      * At counter exhaustion, this method will call the
      * {@link MaxCountExceededCallback#trigger(int) trigger} method of the
      * callback object passed to the
-     * {@link #Incrementor(int,MaxCountExceededCallback) constructor}.
-     * If not explictly set, a default callback is used that will throw
-     * a {@code MathIllegalStateException}.
+     * {@link #withCallback(MaxCountExceededCallback)} method.
      *
-     * @throws MathIllegalStateException at counter exhaustion, unless a
-     * custom {@link MaxCountExceededCallback callback} has been set at
-     * construction.
+     * @see #increment(int)
      */
-    public void incrementCount() throws MathIllegalStateException {
+    public void increment() {
         if (++count > maximalCount) {
             maxCountCallback.trigger(maximalCount);
         }
@@ -164,21 +236,7 @@ public class Incrementor {
     /**
      * Resets the counter to 0.
      */
-    public void resetCount() {
+    public void reset() {
         count = 0;
-    }
-
-    /**
-     * Defines a method to be called at counter exhaustion.
-     * The {@link #trigger(int) trigger} method should usually throw an exception.
-     */
-    public interface MaxCountExceededCallback {
-        /**
-         * Function called when the maximal count has been reached.
-         *
-         * @param maximalCount Maximal count.
-         * @throws MathIllegalStateException at counter exhaustion
-         */
-        void trigger(int maximalCount) throws MathIllegalStateException;
     }
 }
