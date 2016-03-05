@@ -24,10 +24,8 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 
 /**
- * A helper class for the computation and caching of the {@code n}-th roots of
- * unity.
- *
- * @since 3.0
+ * A helper class for the computation and caching of the {@code n}-th roots
+ * of unity.
  */
 public class RootsOfUnity implements Serializable {
 
@@ -64,7 +62,6 @@ public class RootsOfUnity implements Serializable {
      * Build an engine for computing the {@code n}-th roots of unity.
      */
     public RootsOfUnity() {
-
         omegaCount = 0;
         omegaReal = null;
         omegaImaginaryCounterClockwise = null;
@@ -77,10 +74,8 @@ public class RootsOfUnity implements Serializable {
      * positive value of its argument {@code n}. If {@code true}, then
      * counter-clockwise ordering of the roots of unity should be used.
      *
-     * @return {@code true} if the roots of unity are stored in
-     * counter-clockwise order
-     * @throws MathIllegalStateException if no roots of unity have been computed
-     * yet
+     * @return {@code true} if the roots of unity are stored in counter-clockwise order
+     * @throws MathIllegalStateException if no roots of unity have been computed yet
      */
     public synchronized boolean isCounterClockWise()
             throws MathIllegalStateException {
@@ -93,19 +88,17 @@ public class RootsOfUnity implements Serializable {
     }
 
     /**
+     * Computes the {@code n}-th roots of unity.
      * <p>
-     * Computes the {@code n}-th roots of unity. The roots are stored in
-     * {@code omega[]}, such that {@code omega[k] = w ^ k}, where
-     * {@code k = 0, ..., n - 1}, {@code w = exp(2 * pi * i / n)} and
+     * The roots are stored in {@code omega[]}, such that {@code omega[k] = w ^ k},
+     * where {@code k = 0, ..., n - 1}, {@code w = exp(2 * pi * i / n)} and
      * {@code i = sqrt(-1)}.
-     * </p>
      * <p>
      * Note that {@code n} can be positive of negative
-     * </p>
      * <ul>
      * <li>{@code abs(n)} is always the number of roots of unity.</li>
      * <li>If {@code n > 0}, then the roots are stored in counter-clockwise order.</li>
-     * <li>If {@code n < 0}, then the roots are stored in clockwise order.</p>
+     * <li>If {@code n < 0}, then the roots are stored in clockwise order.</li>
      * </ul>
      *
      * @param n the (signed) number of roots of unity to be computed
@@ -152,8 +145,7 @@ public class RootsOfUnity implements Serializable {
      *
      * @param k index of the {@code n}-th root of unity
      * @return real part of the {@code k}-th {@code n}-th root of unity
-     * @throws MathIllegalStateException if no roots of unity have been
-     * computed yet
+     * @throws MathIllegalStateException if no roots of unity have been computed yet
      * @throws MathIllegalArgumentException if {@code k} is out of range
      */
     public synchronized double getReal(int k)
@@ -179,8 +171,7 @@ public class RootsOfUnity implements Serializable {
      *
      * @param k index of the {@code n}-th root of unity
      * @return imaginary part of the {@code k}-th {@code n}-th root of unity
-     * @throws MathIllegalStateException if no roots of unity have been
-     * computed yet
+     * @throws MathIllegalStateException if no roots of unity have been computed yet
      * @throws MathIllegalArgumentException if {@code k} is out of range
      */
     public synchronized double getImaginary(int k)
@@ -203,8 +194,9 @@ public class RootsOfUnity implements Serializable {
     }
 
     /**
-     * Returns the number of roots of unity currently stored. If
-     * {@link #computeRoots(int)} was called with {@code n}, then this method
+     * Returns the number of roots of unity currently stored.
+     * <p>
+     * If {@link #computeRoots(int)} was called with {@code n}, then this method
      * returns {@code abs(n)}. If no roots of unity have been computed yet, this
      * method returns 0.
      *

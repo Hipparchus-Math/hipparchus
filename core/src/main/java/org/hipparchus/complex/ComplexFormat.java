@@ -32,7 +32,6 @@ import org.hipparchus.util.CompositeFormat;
  * Formats a Complex number in cartesian format "Re(c) + Im(c)i".  'i' can
  * be replaced with 'j' (or anything else), and the number format for both real
  * and imaginary parts can be configured.
- *
  */
 public class ComplexFormat {
 

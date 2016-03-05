@@ -22,9 +22,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 
 /**
- * Static implementations of common
- * {@link org.hipparchus.complex.Complex} utilities functions.
- *
+ * Static implementations of common {@link Complex} utilities functions.
  */
 public class ComplexUtils {
 
@@ -56,7 +54,6 @@ public class ComplexUtils {
      * @param theta  the argument of the complex number to create
      * @return <code>r&middot;e<sup>i&middot;theta</sup></code>
      * @throws MathIllegalArgumentException if {@code r} is negative.
-     * @since 1.1
      */
     public static Complex polar2Complex(double r, double theta) throws MathIllegalArgumentException {
         if (r < 0) {
@@ -69,11 +66,8 @@ public class ComplexUtils {
     /**
      * Convert an array of primitive doubles to an array of {@code Complex} objects.
      *
-     * @param real Array of numbers to be converted to their {@code Complex}
-     * equivalent.
+     * @param real Array of numbers to be converted to their {@code Complex} equivalent.
      * @return an array of {@code Complex} objects.
-     *
-     * @since 3.1
      */
     public static Complex[] convertToComplex(double[] real) {
         final Complex c[] = new Complex[real.length];

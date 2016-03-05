@@ -42,15 +42,15 @@ import org.hipparchus.util.Precision;
  *  <li>{@code 1 + NaNi}</li>
  *  <li>{@code NaN + i}</li>
  *  <li>{@code NaN + NaNi}</li>
- * </ul><p>
+ * </ul>
+ * <p>
  * Note that this contradicts the IEEE-754 standard for floating
  * point numbers (according to which the test {@code x == x} must fail if
  * {@code x} is {@code NaN}). The method
  * {@link org.hipparchus.util.Precision#equals(double,double,int)
  * equals for primitive double} in {@link org.hipparchus.util.Precision}
  * conforms with IEEE-754 while this class conforms with the standard behavior
- * for Java object types.</p>
- *
+ * for Java object types.
  */
 public class Complex implements FieldElement<Complex>, Serializable  {
     /** The square root of -1. A number representing "0.0 + 1.0i" */
@@ -67,7 +67,7 @@ public class Complex implements FieldElement<Complex>, Serializable  {
     public static final Complex ZERO = new Complex(0.0, 0.0);
 
     /** Serializable version identifier */
-    private static final long serialVersionUID = -6195664516687396620L;
+    private static final long serialVersionUID = 20160305L;
 
     /** The imaginary part. */
     private final double imaginary;
@@ -353,7 +353,7 @@ public class Complex implements FieldElement<Complex>, Serializable  {
                 return isNaN;
             } else {
                 return MathUtils.equals(real, c.real) &&
-                    MathUtils.equals(imaginary, c.imaginary);
+                       MathUtils.equals(imaginary, c.imaginary);
             }
         }
         return false;
@@ -374,11 +374,10 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * and {@code y}.
      *
      * @see Precision#equals(double,double,int)
-     * @since 3.3
      */
     public static boolean equals(Complex x, Complex y, int maxUlps) {
         return Precision.equals(x.real, y.real, maxUlps) &&
-            Precision.equals(x.imaginary, y.imaginary, maxUlps);
+               Precision.equals(x.imaginary, y.imaginary, maxUlps);
     }
 
     /**
@@ -388,8 +387,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * @param x First value (cannot be {@code null}).
      * @param y Second value (cannot be {@code null}).
      * @return {@code true} if the values are equal.
-     *
-     * @since 3.3
      */
     public static boolean equals(Complex x, Complex y) {
         return equals(x, y, 1);
@@ -408,11 +405,10 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * numbers or they are within range of each other.
      *
      * @see Precision#equals(double,double,double)
-     * @since 3.3
      */
     public static boolean equals(Complex x, Complex y, double eps) {
         return Precision.equals(x.real, y.real, eps) &&
-            Precision.equals(x.imaginary, y.imaginary, eps);
+               Precision.equals(x.imaginary, y.imaginary, eps);
     }
 
     /**
@@ -428,12 +424,12 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * numbers or they are within range of each other.
      *
      * @see Precision#equalsWithRelativeTolerance(double,double,double)
-     * @since 3.3
      */
-    public static boolean equalsWithRelativeTolerance(Complex x, Complex y,
+    public static boolean equalsWithRelativeTolerance(Complex x,
+                                                      Complex y,
                                                       double eps) {
         return Precision.equalsWithRelativeTolerance(x.real, y.real, eps) &&
-            Precision.equalsWithRelativeTolerance(x.imaginary, y.imaginary, eps);
+               Precision.equalsWithRelativeTolerance(x.imaginary, y.imaginary, eps);
     }
 
     /**
@@ -646,7 +642,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * input argument is {@code NaN} or infinite.
      *
      * @return the inverse cosine of this complex number.
-     * @since 1.2
      */
     public Complex acos() {
         if (isNaN) {
@@ -668,7 +663,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * input argument is {@code NaN} or infinite.</p>
      *
      * @return the inverse sine of this complex number.
-     * @since 1.2
      */
     public Complex asin() {
         if (isNaN) {
@@ -690,7 +684,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * input argument is {@code NaN} or infinite.</p>
      *
      * @return the inverse tangent of this complex number
-     * @since 1.2
      */
     public Complex atan() {
         if (isNaN) {
@@ -698,7 +691,7 @@ public class Complex implements FieldElement<Complex>, Serializable  {
         }
 
         return this.add(I).divide(I.subtract(this)).log()
-                .multiply(I.divide(createComplex(2.0, 0.0)));
+                   .multiply(I.divide(createComplex(2.0, 0.0)));
     }
 
     /**
@@ -728,7 +721,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * </pre>
      *
      * @return the cosine of this complex number.
-     * @since 1.2
      */
     public Complex cos() {
         if (isNaN) {
@@ -768,7 +760,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * </pre>
      *
      * @return the hyperbolic cosine of this complex number.
-     * @since 1.2
      */
     public Complex cosh() {
         if (isNaN) {
@@ -809,7 +800,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * </pre>
      *
      * @return <code><i>e</i><sup>this</sup></code>.
-     * @since 1.2
      */
     public Complex exp() {
         if (isNaN) {
@@ -854,7 +844,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      *
      * @return the value <code>ln &nbsp; this</code>, the natural logarithm
      * of {@code this}.
-     * @since 1.2
      */
     public Complex log() {
         if (isNaN) {
@@ -883,7 +872,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * @param  x exponent to which this {@code Complex} is to be raised.
      * @return <code> this<sup>x</sup></code>.
      * @throws NullArgumentException if x is {@code null}.
-     * @since 1.2
      */
     public Complex pow(Complex x)
         throws NullArgumentException {
@@ -932,7 +920,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * </pre>
      *
      * @return the sine of this complex number.
-     * @since 1.2
      */
     public Complex sin() {
         if (isNaN) {
@@ -972,7 +959,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * </pre>
      *
      * @return the hyperbolic sine of {@code this}.
-     * @since 1.2
      */
     public Complex sinh() {
         if (isNaN) {
@@ -980,7 +966,7 @@ public class Complex implements FieldElement<Complex>, Serializable  {
         }
 
         return createComplex(FastMath.sinh(real) * FastMath.cos(imaginary),
-            FastMath.cosh(real) * FastMath.sin(imaginary));
+                             FastMath.cosh(real) * FastMath.sin(imaginary));
     }
 
     /**
@@ -1015,7 +1001,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * </pre>
      *
      * @return the square root of {@code this}.
-     * @since 1.2
      */
     public Complex sqrt() {
         if (isNaN) {
@@ -1050,7 +1035,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * infinite or NaN values returned in parts of the result.
      *
      * @return the square root of <code>1 - this<sup>2</sup></code>.
-     * @since 1.2
      */
     public Complex sqrt1z() {
         return createComplex(1.0, 0.0).subtract(this.multiply(this)).sqrt();
@@ -1086,7 +1070,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * </pre>
      *
      * @return the tangent of {@code this}.
-     * @since 1.2
      */
     public Complex tan() {
         if (isNaN || Double.isInfinite(real)) {
@@ -1137,7 +1120,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * </pre>
      *
      * @return the hyperbolic tangent of {@code this}.
-     * @since 1.2
      */
     public Complex tanh() {
         if (isNaN || Double.isInfinite(imaginary)) {
@@ -1200,13 +1182,12 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * @param n Degree of root.
      * @return a List of all {@code n}-th roots of {@code this}.
      * @throws MathIllegalArgumentException if {@code n <= 0}.
-     * @since 2.0
      */
     public List<Complex> nthRoot(int n) throws MathIllegalArgumentException {
 
         if (n <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.CANNOT_COMPUTE_NTH_ROOT_FOR_NEGATIVE_N,
-                                           n);
+                                                   n);
         }
 
         final List<Complex> result = new ArrayList<Complex>();
@@ -1244,7 +1225,7 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * @param realPart Real part.
      * @param imaginaryPart Imaginary part.
      * @return a new complex number instance.
-     * @since 1.2
+     *
      * @see #valueOf(double, double)
      */
     protected Complex createComplex(double realPart,
@@ -1287,7 +1268,6 @@ public class Complex implements FieldElement<Complex>, Serializable  {
      * deserialize properly.
      *
      * @return A Complex instance with all fields resolved.
-     * @since 2.0
      */
     protected final Object readResolve() {
         return createComplex(real, imaginary);

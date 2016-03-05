@@ -26,14 +26,13 @@ import org.hipparchus.FieldElement;
  * Representation of the complex numbers field.
  * <p>
  * This class is a singleton.
- * </p>
+ *
  * @see Complex
- * @since 2.0
  */
 public class ComplexField implements Field<Complex>, Serializable {
 
     /** Serializable version identifier. */
-    private static final long serialVersionUID = -6130362688700788798L;
+    private static final long serialVersionUID = 20160305L;
 
     /** Private constructor for the singleton.
      */
