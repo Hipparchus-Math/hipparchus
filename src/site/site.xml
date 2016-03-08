@@ -77,7 +77,13 @@
       <item name="Machine Learning"        href="/userguide/ml.html"/>
       <item name="Exceptions"              href="/userguide/exceptions.html"/>
     </menu>
-    
+
+    <menu ref="parent" inherit="bottom" />
+
+    <menu ref="modules"/>
+
+    <menu ref="reports" inherit="bottom"/>
+
     <head>
       <![CDATA[<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>]]>
     </head>

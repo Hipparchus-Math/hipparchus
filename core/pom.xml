@@ -26,6 +26,7 @@
 
   <properties>
     <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
+    <hipparchusParentDir>${basedir}/..</hipparchusParentDir>
   </properties>
 
   <build/>

@@ -32,6 +32,10 @@
   <name>Hipparchus::Fast Fourier Transforms</name>
   <description>The Hipparchus fft module</description>
 
+  <properties>
+    <hipparchusParentDir>${basedir}/..</hipparchusParentDir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.hipparchus</groupId>

@@ -48,7 +48,7 @@
     </repository>
     <site>
       <id>publishedSite</id>
-      <url>https://hipparchus.org/static</url>
+      <url>https://hipparchus.org/static/</url>
     </site>
   </distributionManagement>
 
@@ -420,6 +420,9 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
 
+    <!-- Root Hipparchus directory so sub-modules can refer to files in the parent directory. -->
+    <hipparchusParentDir>${basedir}</hipparchusParentDir>
+
     <!-- Project specific plugin versions -->
 
     <hipparchus.findbugs-maven-plugin.version>3.0.1</hipparchus.findbugs-maven-plugin.version>
@@ -453,7 +456,6 @@
     <hipparchus.junit.version>4.12</hipparchus.junit.version>
     <hipparchus.implementation.build>${git.revision};
       ${maven.build.timestamp}</hipparchus.implementation.build>
-    <hipparchus.build-tools.version>1.0-SNAPSHOT</hipparchus.build-tools.version>
 
     <!-- old Apache staging properties - to be removed -->
     <hipparchus.staging.id>hipparchus-staging</hipparchus.staging.id>
@@ -462,7 +464,6 @@
   </properties>
 
   <modules>
-    <module>build-tools</module>
     <module>core</module>
     <module>geometry</module>
     <module>genetics</module>
@@ -698,54 +699,49 @@
             <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
           </configuration>
         </plugin>
+        <plugin>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>${hipparchus.maven-pmd-plugin.version}</version>
+          <configuration>
+            <targetJdk>${maven.compiler.target}</targetJdk>
+            <skipEmptyReport>false</skipEmptyReport>
+            <rulesets>
+              <ruleset>${hipparchusParentDir}/pmd-ruleset.xml</ruleset>
+            </rulesets>
+          </configuration>
+        </plugin>
+        <plugin>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${hipparchus.maven-checkstyle-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${hipparchus.checkstyle.version}</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <configLocation>${hipparchusParentDir}/checkstyle.xml</configLocation>
+            <enableRulesSummary>false</enableRulesSummary>
+            <headerLocation>${hipparchusParentDir}/license-header.txt</headerLocation>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${hipparchus.maven-site-plugin.version}</version>
+        </plugin>
       </plugins>
     </pluginManagement>
 
     <plugins>
       <plugin>
-        <artifactId>maven-pmd-plugin</artifactId>
-        <version>${hipparchus.maven-pmd-plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>org.hipparchus</groupId>
-            <artifactId>hipparchus-build-tools</artifactId>
-            <version>${hipparchus.build-tools.version}</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <targetJdk>${maven.compiler.target}</targetJdk>
-          <skipEmptyReport>false</skipEmptyReport>
-          <rulesets>
-            <ruleset>hipparchus-build-tools/pmd-ruleset.xml</ruleset>
-          </rulesets>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${hipparchus.maven-checkstyle-plugin.version}</version>
-        <dependencies>
-          <dependency>
-            <groupId>com.puppycrawl.tools</groupId>
-            <artifactId>checkstyle</artifactId>
-            <version>${hipparchus.checkstyle.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.hipparchus</groupId>
-            <artifactId>hipparchus-build-tools</artifactId>
-            <version>${hipparchus.build-tools.version}</version>
-          </dependency>
-        </dependencies>
-        <configuration>
-          <configLocation>hipparchus-build-tools/checkstyle.xml</configLocation>
-          <enableRulesSummary>false</enableRulesSummary>
-          <headerLocation>hipparchus-build-tools/license-header.txt</headerLocation>
-        </configuration>
-      </plugin>
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <version>${hipparchus.maven-bundle-plugin.version}</version>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>${hipparchus.maven-site-plugin.version}</version>
         <executions>
@@ -794,12 +790,6 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>findbugs-maven-plugin</artifactId>
         <version>${hipparchus.findbugs-maven-plugin.version}</version>
-        <configuration>
-          <threshold>Normal</threshold>
-          <effort>Default</effort>
-          <!-- each project has their own findbugs exclude filter -->
-          <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -866,12 +856,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>${hipparchus.maven-checkstyle-plugin.version}</version>
-        <configuration>
-          <configLocation>hipparchus-build-tools/checkstyle.xml</configLocation>
-          <enableRulesSummary>false</enableRulesSummary>
-          <includeResources>false</includeResources>
-          <headerLocation>hipparchus-build-tools/license-header.txt</headerLocation>
-        </configuration>
         <reportSets>
           <reportSet>
             <reports>
@@ -883,13 +867,6 @@
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
         <version>${hipparchus.maven-pmd-plugin.version}</version>
-        <configuration>
-          <targetJdk>${maven.compiler.target}</targetJdk>
-          <skipEmptyReport>false</skipEmptyReport>
-          <rulesets>
-            <ruleset>hipparchus-build-tools/pmd-ruleset.xml</ruleset>
-          </rulesets>
-        </configuration>
         <reportSets>
           <reportSet>
             <reports>
@@ -910,9 +887,6 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>${hipparchus.maven-javadoc-plugin.version}</version>
-        <configuration>
-          <additionalparam>-Xdoclint:none -header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
-        </configuration>
       </plugin>
     </plugins>
   </reporting>

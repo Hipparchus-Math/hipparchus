@@ -32,6 +32,10 @@
   <name>Hipparchus::Samples</name>
   <description>The Hipparchus samples module</description>
 
+  <properties>
+    <hipparchusParentDir>${basedir}/..</hipparchusParentDir>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.hipparchus</groupId>
