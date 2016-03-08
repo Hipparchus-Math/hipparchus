@@ -320,7 +320,10 @@
           The following simple example shows how to find the center of a circle of known radius to
           to best fit observed 2D points. It is a simplified version of one of the JUnit test cases.
           In the complete test case, both the circle center and its radius are fitted, here the
-          radius is fixed.
+          radius is fixed. From the optimizer's perspective the parameters are the location (x, y)
+          of the center of the circle, the observed values are all the assumed radius of the circle:
+          70.0 and the computed values are the distance from each of the observedPoints to center of
+          the circle (as given by the current value of the parameters).
         </p>
         <source>
   final double radius = 70.0;
