@@ -490,6 +490,7 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-assembly-plugin</artifactId>
           <version>${hipparchus.maven-assembly-plugin.version}</version>
           <configuration>
@@ -502,14 +503,17 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-changes-plugin</artifactId>
           <version>${hipparchus.maven-changes-plugin.version}</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-clean-plugin</artifactId>
           <version>${hipparchus.maven-clean-plugin.version}</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>${hipparchus.maven-compiler-plugin.version}</version>
           <configuration>
@@ -519,6 +523,7 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>${hipparchus.maven-jar-plugin.version}</version>
           <configuration>
@@ -542,6 +547,7 @@
         </plugin>
         <!-- MathJax -->
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${hipparchus.maven-javadoc-plugin.version}</version>
           <configuration>
@@ -549,10 +555,12 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jxr-plugin</artifactId>
           <version>${hipparchus.maven-jxr-plugin.version}</version>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
           <version>${hipparchus.maven-surefire-plugin.version}</version>
           <configuration>
@@ -565,6 +573,7 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-resources-plugin</artifactId>
           <version>${hipparchus.maven-resources-plugin.version}</version>
           <executions>
@@ -700,6 +709,7 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-pmd-plugin</artifactId>
           <version>${hipparchus.maven-pmd-plugin.version}</version>
           <configuration>
@@ -711,6 +721,7 @@
           </configuration>
         </plugin>
         <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-checkstyle-plugin</artifactId>
           <version>${hipparchus.maven-checkstyle-plugin.version}</version>
           <dependencies>
@@ -730,6 +741,22 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${hipparchus.maven-site-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>aggregateSite</id>
+              <goals>
+                <goal>stage</goal>
+              </goals>
+              <phase>site</phase>
+            </execution>
+            <execution>
+              <id>attachSiteDescriptor</id>
+              <phase>pre-site</phase>
+              <goals>
+                <goal>attach-descriptor</goal>
+              </goals>
+            </execution>
+          </executions>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -738,30 +765,13 @@
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>${hipparchus.maven-bundle-plugin.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <version>${hipparchus.maven-site-plugin.version}</version>
-        <executions>
-          <execution>
-            <id>aggregateSite</id>
-            <goals>
-              <goal>stage</goal>
-            </goals>
-            <phase>site</phase>
-          </execution>
-          <execution>
-            <id>attachSiteDescriptor</id>
-            <phase>pre-site</phase>
-            <goals>
-              <goal>attach-descriptor</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-release-plugin</artifactId>
         <version>${hipparchus.maven-release-plugin.version}</version>
         <configuration>
@@ -883,11 +893,12 @@
         </reportSets>
       </plugin>
       <!-- MathJax -->
+      <!-- Disable, must be enabled only in modules     
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>${hipparchus.maven-javadoc-plugin.version}</version>
-      </plugin>
+      </plugin> -->
     </plugins>
   </reporting>
 
