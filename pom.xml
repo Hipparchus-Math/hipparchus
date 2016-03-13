@@ -691,7 +691,7 @@
             </execution>
           </executions>
         </plugin>
-        
+
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>wagon-maven-plugin</artifactId>
@@ -705,7 +705,7 @@
             <threshold>Normal</threshold>
             <effort>Default</effort>
             <!-- each project has their own findbugs exclude filter -->
-            <excludeFilterFile>${basedir}/findbugs-exclude-filter.xml</excludeFilterFile>
+            <excludeFilterFile>${basedir}/src/conf/findbugs-exclude-filter.xml</excludeFilterFile>
           </configuration>
         </plugin>
         <plugin>
@@ -797,22 +797,6 @@
         <version>${hipparchus.maven-project-info-reports-plugin.version}</version>
       </plugin>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>findbugs-maven-plugin</artifactId>
-        <version>${hipparchus.findbugs-maven-plugin.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${hipparchus.maven-surefire-plugin.version}</version>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-report-plugin</artifactId>
-        <version>${hipparchus.maven-surefire-report-plugin.version}</version>
-      </plugin>
-
-      <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <version>${hipparchus.rat.version}</version>
@@ -863,18 +847,6 @@
         </configuration>
       </plugin>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-checkstyle-plugin</artifactId>
-        <version>${hipparchus.maven-checkstyle-plugin.version}</version>
-        <reportSets>
-          <reportSet>
-            <reports>
-              <report>checkstyle</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
         <version>${hipparchus.maven-pmd-plugin.version}</version>
         <reportSets>
@@ -893,12 +865,6 @@
         </reportSets>
       </plugin>
       <!-- MathJax -->
-      <!-- Disable, must be enabled only in modules     
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${hipparchus.maven-javadoc-plugin.version}</version>
-      </plugin> -->
     </plugins>
   </reporting>
 

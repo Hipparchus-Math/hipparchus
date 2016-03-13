@@ -75,4 +75,15 @@
       <version>3.1</version>
     </dependency>
   </dependencies>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>${hipparchus.maven-jxr-plugin.version}</version>
+      </plugin>
+    </plugins>
+  </reporting>
+
 </project>
