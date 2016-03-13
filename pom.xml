@@ -716,7 +716,7 @@
             <targetJdk>${maven.compiler.target}</targetJdk>
             <skipEmptyReport>false</skipEmptyReport>
             <rulesets>
-              <ruleset>${hipparchusParentDir}/pmd-ruleset.xml</ruleset>
+              <ruleset>${hipparchusParentDir}/src/conf/pmd-ruleset.xml</ruleset>
             </rulesets>
           </configuration>
         </plugin>
@@ -732,9 +732,9 @@
             </dependency>
           </dependencies>
           <configuration>
-            <configLocation>${hipparchusParentDir}/checkstyle.xml</configLocation>
+            <configLocation>${hipparchusParentDir}/src/conf/checkstyle.xml</configLocation>
             <enableRulesSummary>false</enableRulesSummary>
-            <headerLocation>${hipparchusParentDir}/license-header.txt</headerLocation>
+            <headerLocation>${hipparchusParentDir}/src/conf/license-header.txt</headerLocation>
           </configuration>
         </plugin>
         <plugin>
