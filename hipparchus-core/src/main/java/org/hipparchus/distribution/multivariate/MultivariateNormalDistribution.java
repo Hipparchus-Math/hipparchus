@@ -24,7 +24,6 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
 
 /**
  * Implementation of the multivariate normal (Gaussian) distribution.
@@ -115,7 +114,7 @@ public class MultivariateNormalDistribution
             }
         }
 
-        this.means = MathArrays.copyOf(means);
+        this.means = means.clone();
 
         covarianceMatrix = new Array2DRowRealMatrix(covariances);
 
@@ -162,7 +161,7 @@ public class MultivariateNormalDistribution
      * @return the mean vector.
      */
     public double[] getMeans() {
-        return MathArrays.copyOf(means);
+        return means.clone();
     }
 
     /**

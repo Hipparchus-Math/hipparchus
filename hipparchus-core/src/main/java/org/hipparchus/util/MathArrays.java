@@ -47,7 +47,7 @@ public class MathArrays {
     private MathArrays() {}
 
     /**
-     * Real-valued function that operate on an array or a part of it.
+     * Real-valued function that operates on an array or a part of it.
      * @since 3.1
      */
     public interface Function {
@@ -851,23 +851,24 @@ public class MathArrays {
         }
 
         // Create comparators for increasing and decreasing orders.
-        final Comparator<PairDoubleInteger> comp
-            = dir == MathArrays.OrderDirection.INCREASING ?
+        final Comparator<PairDoubleInteger> comp =
+            dir == MathArrays.OrderDirection.INCREASING ?
             new Comparator<PairDoubleInteger>() {
-            /** {@inheritDoc} */
-            @Override
-            public int compare(PairDoubleInteger o1,
-                               PairDoubleInteger o2) {
-                return Double.compare(o1.getKey(), o2.getKey());
-            }
-        } : new Comparator<PairDoubleInteger>() {
-            /** {@inheritDoc} */
-            @Override
-            public int compare(PairDoubleInteger o1,
-                               PairDoubleInteger o2) {
-                return Double.compare(o2.getKey(), o1.getKey());
-            }
-        };
+                /** {@inheritDoc} */
+                @Override
+                public int compare(PairDoubleInteger o1,
+                                   PairDoubleInteger o2) {
+                    return Double.compare(o1.getKey(), o2.getKey());
+                }
+            } :
+            new Comparator<PairDoubleInteger>() {
+                /** {@inheritDoc} */
+                @Override
+                public int compare(PairDoubleInteger o1,
+                                   PairDoubleInteger o2) {
+                    return Double.compare(o2.getKey(), o1.getKey());
+                }
+            };
 
         // Sort.
         Collections.sort(list, comp);
@@ -894,71 +895,6 @@ public class MathArrays {
             }
         }
     }
-
-    /**
-     * Creates a copy of the {@code source} array.
-     *
-     * @param source Array to be copied.
-     * @return the copied array.
-     */
-     public static int[] copyOf(int[] source) {
-         return copyOf(source, source.length);
-     }
-
-    /**
-     * Creates a copy of the {@code source} array.
-     *
-     * @param source Array to be copied.
-     * @return the copied array.
-     */
-     public static double[] copyOf(double[] source) {
-         return copyOf(source, source.length);
-     }
-
-    /**
-     * Creates a copy of the {@code source} array.
-     *
-     * @param source Array to be copied.
-     * @param len Number of entries to copy. If smaller then the source
-     * length, the copy will be truncated, if larger it will padded with
-     * zeroes.
-     * @return the copied array.
-     */
-    public static int[] copyOf(int[] source, int len) {
-         final int[] output = new int[len];
-         System.arraycopy(source, 0, output, 0, FastMath.min(len, source.length));
-         return output;
-     }
-
-    /**
-     * Creates a copy of the {@code source} array.
-     *
-     * @param source Array to be copied.
-     * @param len Number of entries to copy. If smaller then the source
-     * length, the copy will be truncated, if larger it will padded with
-     * zeroes.
-     * @return the copied array.
-     */
-    public static double[] copyOf(double[] source, int len) {
-         final double[] output = new double[len];
-         System.arraycopy(source, 0, output, 0, FastMath.min(len, source.length));
-         return output;
-     }
-
-    /**
-     * Creates a copy of the {@code source} array.
-     *
-     * @param source Array to be copied.
-     * @param from Initial index of the range to be copied, inclusive.
-     * @param to Final index of the range to be copied, exclusive. (This index may lie outside the array.)
-     * @return the copied array.
-     */
-    public static double[] copyOfRange(double[] source, int from, int to) {
-        final int len = to - from;
-        final double[] output = new double[len];
-        System.arraycopy(source, from, output, 0, FastMath.min(len, source.length - from));
-        return output;
-     }
 
     /**
      * Compute a linear combination accurately.
@@ -1668,6 +1604,7 @@ public class MathArrays {
     public static int[] natural(int n) {
         return sequence(n, 0, 1);
     }
+
     /**
      * Returns an array of {@code size} integers starting at {@code start},
      * skipping {@code stride} numbers.
@@ -1690,6 +1627,7 @@ public class MathArrays {
         }
         return a;
     }
+
     /**
      * This method is used
      * to verify that the input parameters designate a subarray of positive length.
@@ -1761,7 +1699,6 @@ public class MathArrays {
         }
 
         return true;
-
     }
 
     /**

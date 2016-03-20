@@ -27,7 +27,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
 
 /**
  * Implements the Fast Fourier Transform for transformation of one-dimensional
@@ -365,12 +364,8 @@ public class FastFourierTransformer implements Serializable {
      * @throws MathIllegalArgumentException if the length of the data array is not a power of two
      */
     public Complex[] transform(final double[] f, final TransformType type) {
-        final double[][] dataRI = new double[][] {
-            MathArrays.copyOf(f, f.length), new double[f.length]
-        };
-
+        final double[][] dataRI = new double[][] { f.clone(), new double[f.length] };
         transformInPlace(dataRI, normalization, type);
-
         return TransformUtils.createComplexArray(dataRI);
     }
 

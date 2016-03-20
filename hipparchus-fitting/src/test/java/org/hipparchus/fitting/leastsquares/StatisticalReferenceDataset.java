@@ -22,7 +22,6 @@ import java.util.ArrayList;
 
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
-import org.hipparchus.util.MathArrays;
 
 /**
  * This class gives access to the statistical reference datasets provided by the
@@ -196,9 +195,7 @@ public abstract class StatisticalReferenceDataset {
      * @return the array of data points.
      */
     public double[][] getData() {
-        return new double[][] {
-            MathArrays.copyOf(x), MathArrays.copyOf(y)
-        };
+        return new double[][] { x.clone(), y.clone() };
     }
 
     /**
@@ -236,7 +233,7 @@ public abstract class StatisticalReferenceDataset {
      * @return the values of the parameters
      */
     public double[] getParameters() {
-        return MathArrays.copyOf(a);
+        return a.clone();
     }
 
     /**
@@ -250,12 +247,12 @@ public abstract class StatisticalReferenceDataset {
     }
 
     /**
-     * Reurns the certified values of the standard deviations of the parameters.
+     * Returns the certified values of the standard deviations of the parameters.
      *
      * @return the standard deviations of the parameters
      */
     public double[] getParametersStandardDeviations() {
-        return MathArrays.copyOf(sigA);
+        return sigA.clone();
     }
 
     /**
@@ -295,7 +292,7 @@ public abstract class StatisticalReferenceDataset {
      * @return the starting point
      */
     public double[] getStartingPoint(final int i) {
-        return MathArrays.copyOf(startingValues[i]);
+        return startingValues[i].clone();
     }
 
     /**

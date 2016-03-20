@@ -370,9 +370,9 @@ public class Combinations implements Iterable<int[]> {
             }
 
             // Method "lexNorm" works with ordered arrays.
-            final int[] c1s = MathArrays.copyOf(c1);
+            final int[] c1s = c1.clone();
             Arrays.sort(c1s);
-            final int[] c2s = MathArrays.copyOf(c2);
+            final int[] c2s = c2.clone();
             Arrays.sort(c2s);
 
             final long v1 = lexNorm(c1s);

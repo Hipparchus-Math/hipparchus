@@ -35,7 +35,6 @@ import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
 
 /**
  * An implementation of the active Covariance Matrix Adaptation Evolution Strategy (CMA-ES)
@@ -429,9 +428,9 @@ public class CMAESOptimizer
             final int[] arindex = sortedIndices(fitness);
             // Calculate new xmean, this is selection and recombination
             final RealMatrix xold = xmean; // for speed up of Eq. (2) and (3)
-            final RealMatrix bestArx = selectColumns(arx, MathArrays.copyOf(arindex, mu));
+            final RealMatrix bestArx = selectColumns(arx, Arrays.copyOf(arindex, mu));
             xmean = bestArx.multiply(weights);
-            final RealMatrix bestArz = selectColumns(arz, MathArrays.copyOf(arindex, mu));
+            final RealMatrix bestArz = selectColumns(arz, Arrays.copyOf(arindex, mu));
             final RealMatrix zmean = bestArz.multiply(weights);
             final boolean hsig = updateEvolutionPaths(zmean, xold);
             if (diagonalOnly <= 0) {
@@ -730,7 +729,7 @@ public class CMAESOptimizer
                 final double negalphaold = 0.5;
                 // prepare vectors, compute negative updating matrix Cneg
                 final int[] arReverseIndex = reverse(arindex);
-                RealMatrix arzneg = selectColumns(arz, MathArrays.copyOf(arReverseIndex, mu));
+                RealMatrix arzneg = selectColumns(arz, Arrays.copyOf(arReverseIndex, mu));
                 RealMatrix arnorms = sqrt(sumRows(square(arzneg)));
                 final int[] idxnorms = sortedIndices(arnorms.getRow(0));
                 final RealMatrix arnormsSorted = selectColumns(arnorms, idxnorms);

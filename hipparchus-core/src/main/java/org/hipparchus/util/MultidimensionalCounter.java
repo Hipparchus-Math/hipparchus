@@ -136,7 +136,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
          * @return the indices within the multidimensional counter.
          */
         public int[] getCounts() {
-            return MathArrays.copyOf(counter);
+            return counter.clone();
         }
 
         /**
@@ -170,9 +170,9 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      * @throws MathIllegalArgumentException if one of the sizes is
      * negative or zero.
      */
-    public MultidimensionalCounter(int ... size) throws MathIllegalArgumentException {
+    public MultidimensionalCounter(int... size) throws MathIllegalArgumentException {
         dimension = size.length;
-        this.size = MathArrays.copyOf(size);
+        this.size = size.clone();
 
         uniCounterOffset = new int[dimension];
 
@@ -294,7 +294,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      * @return the sizes of the multidimensional counter in each dimension.
      */
     public int[] getSizes() {
-        return MathArrays.copyOf(size);
+        return size.clone();
     }
 
     /**

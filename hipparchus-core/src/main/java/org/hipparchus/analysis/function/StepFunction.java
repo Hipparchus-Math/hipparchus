@@ -74,8 +74,8 @@ public class StepFunction implements UnivariateFunction {
         }
         MathArrays.checkOrder(x);
 
-        abscissa = MathArrays.copyOf(x);
-        ordinate = MathArrays.copyOf(y);
+        abscissa = x.clone();
+        ordinate = y.clone();
     }
 
     /** {@inheritDoc} */

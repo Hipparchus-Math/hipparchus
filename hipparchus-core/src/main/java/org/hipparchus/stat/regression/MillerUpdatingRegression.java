@@ -21,7 +21,6 @@ import java.util.Arrays;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
 
 /**
@@ -177,7 +176,7 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
                     x.length, nvars);
         }
         if (!this.hasIntercept) {
-            include(MathArrays.copyOf(x, x.length), 1.0, y);
+            include(x.clone(), 1.0, y);
         } else {
             final double[] tmp = new double[x.length + 1];
             System.arraycopy(x, 0, tmp, 1, x.length);
@@ -898,7 +897,7 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      * @return int[] with the current order of the regressors
      */
     public int[] getOrderOfRegressors(){
-        return MathArrays.copyOf(vorder);
+        return vorder.clone();
     }
 
     /**

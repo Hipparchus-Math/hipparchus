@@ -26,7 +26,6 @@ import org.hipparchus.optim.nonlinear.scalar.LineSearch;
 import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
 import org.hipparchus.optim.univariate.UnivariatePointValuePair;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
 
 /**
  * Powell's algorithm.
@@ -193,7 +192,7 @@ public class PowellOptimizer
             double alphaMin = 0;
 
             for (int i = 0; i < n; i++) {
-                final double[] d = MathArrays.copyOf(direc[i]);
+                final double[] d = direc[i].clone();
 
                 fX2 = fVal;
 

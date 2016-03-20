@@ -30,7 +30,6 @@ import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.CentralPivotingStrategy;
 import org.hipparchus.util.KthSelector;
-import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MedianOf3PivotingStrategy;
 import org.hipparchus.util.PivotingStrategyInterface;
 import org.hipparchus.util.RandomPivotingStrategy;
@@ -627,7 +626,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     public void testAllEstimationTechniquesOnlyLimits() {
         final int N=testArray.length;
 
-        final double[] input=MathArrays.copyOf(testArray);
+        final double[] input = testArray.clone();
         Arrays.sort(input);
         final double min = input[0];
         final double max=input[input.length-1];

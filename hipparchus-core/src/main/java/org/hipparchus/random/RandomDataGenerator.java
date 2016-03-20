@@ -22,6 +22,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.hipparchus.distribution.continuous.BetaDistribution;
@@ -764,7 +765,7 @@ public class RandomDataGenerator implements Serializable {
         MathArrays.shuffle(index, getRandomGenerator());
 
         // Return a new array containing the first "k" entries of "index".
-        return MathArrays.copyOf(index, k);
+        return Arrays.copyOf(index, k);
     }
 
     /**

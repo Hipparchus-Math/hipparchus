@@ -87,7 +87,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                     data[i].length, 2, true);
             }
-            this.data[i] = MathArrays.copyOf(data[i], data[i].length);
+            this.data[i] = data[i].clone();
         }
     }
 

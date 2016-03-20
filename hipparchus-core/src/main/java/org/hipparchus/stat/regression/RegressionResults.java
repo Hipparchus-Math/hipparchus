@@ -22,7 +22,6 @@ import java.util.Arrays;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
 
 /**
  * Results of a Multiple Linear Regression model fit.
@@ -99,10 +98,10 @@ public class RegressionResults implements Serializable {
             final boolean containsConstant,
             final boolean copyData) {
         if (copyData) {
-            this.parameters = MathArrays.copyOf(parameters);
+            this.parameters = parameters.clone();
             this.varCovData = new double[varcov.length][];
             for (int i = 0; i < varcov.length; i++) {
-                this.varCovData[i] = MathArrays.copyOf(varcov[i]);
+                this.varCovData[i] = varcov[i].clone();
             }
         } else {
             this.parameters = parameters;
@@ -173,7 +172,7 @@ public class RegressionResults implements Serializable {
         if (this.parameters == null) {
             return null;
         }
-        return MathArrays.copyOf(parameters);
+        return parameters.clone();
     }
 
     /**

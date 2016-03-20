@@ -22,7 +22,6 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
 
 /**
  * This class provides computation methods related to Bessel
@@ -205,7 +204,7 @@ public class BesselJ
          * @param n count of valid values
          */
         public BesselJResult(double[] b, int n) {
-            vals = MathArrays.copyOf(b, b.length);
+            vals = b.clone();
             nVals = n;
         }
 
@@ -213,7 +212,7 @@ public class BesselJ
          * @return the computed function values
          */
         public double[] getVals() {
-            return MathArrays.copyOf(vals, vals.length);
+            return vals.clone();
         }
 
         /**
@@ -373,8 +372,7 @@ public class BesselJ
                     capq = (capq + 1) * ((gnu * gnu) - 1) * (0.125 / x);
                     b[i - 1] = xc * (capp * vcos - capq * vsin);
                     if (nb == 1) {
-                        return new BesselJResult(MathArrays.copyOf(b, b.length),
-                                                 ncalc);
+                        return new BesselJResult(b.clone(), ncalc);
                     }
                     t = vsin;
                     vsin = -vcos;
@@ -644,6 +642,6 @@ public class BesselJ
             }
             ncalc = FastMath.min(nb, 0) - 1;
         }
-        return new BesselJResult(MathArrays.copyOf(b, b.length), ncalc);
+        return new BesselJResult(b.clone(), ncalc);
     }
 }

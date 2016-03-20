@@ -50,10 +50,8 @@ import org.hipparchus.analysis.function.Ulp;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
 import org.junit.Test;
-
 
 public abstract class RealVectorAbstractTest {
 
@@ -214,7 +212,7 @@ public abstract class RealVectorAbstractTest {
     public void testSetEntry() {
         final double x = getPreferredEntryValue();
         final double[] data = {x, 1d, 2d, x, x};
-        final double[] expected = MathArrays.copyOf(data);
+        final double[] expected = data.clone();
         final RealVector actual = create(data);
 
         /*
@@ -261,7 +259,7 @@ public abstract class RealVectorAbstractTest {
         final double x = getPreferredEntryValue();
         final double[] data1 = {x, 1d, 2d, x, x};
 
-        final double[] expected = MathArrays.copyOf(data1);
+        final double[] expected = data1.clone();
         final RealVector actual = create(data1);
 
         /*
