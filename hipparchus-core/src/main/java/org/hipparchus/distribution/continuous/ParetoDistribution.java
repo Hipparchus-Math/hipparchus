@@ -44,20 +44,13 @@ import org.hipparchus.util.FastMath;
  */
 public class ParetoDistribution extends AbstractRealDistribution {
 
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
-
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20130424L;
 
     /** The scale parameter of this distribution. */
     private final double scale;
-
     /** The shape parameter of this distribution. */
     private final double shape;
-
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
 
     /**
      * Create a Pareto distribution with a scale of {@code 1} and a shape of {@code 1}.
@@ -82,7 +75,7 @@ public class ParetoDistribution extends AbstractRealDistribution {
      */
     public ParetoDistribution(double scale, double shape)
         throws MathIllegalArgumentException {
-        this(scale, shape, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(scale, shape, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -116,7 +109,7 @@ public class ParetoDistribution extends AbstractRealDistribution {
      */
     public ParetoDistribution(RandomGenerator rng, double scale, double shape)
         throws MathIllegalArgumentException {
-        this(rng, scale, shape, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(rng, scale, shape, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -133,7 +126,7 @@ public class ParetoDistribution extends AbstractRealDistribution {
                               double shape,
                               double inverseCumAccuracy)
         throws MathIllegalArgumentException {
-        super(rng);
+        super(rng, inverseCumAccuracy);
 
         if (scale <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE, scale);
@@ -145,7 +138,6 @@ public class ParetoDistribution extends AbstractRealDistribution {
 
         this.scale = scale;
         this.shape = shape;
-        this.solverAbsoluteAccuracy = inverseCumAccuracy;
     }
 
     /**
@@ -211,12 +203,6 @@ public class ParetoDistribution extends AbstractRealDistribution {
             return 0;
         }
         return 1 - FastMath.pow(scale / x, shape);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

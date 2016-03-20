@@ -98,7 +98,7 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
     @Override
     public void setUp() {
         super.setUp();
-        setTolerance(LogNormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        setTolerance(1e-9);
     }
 
     //---------------------------- Additional test cases -------------------------

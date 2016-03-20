@@ -87,7 +87,7 @@ public class ParetoDistributionTest extends RealDistributionAbstractTest {
     @Override
     public void setUp() {
         super.setUp();
-        setTolerance(ParetoDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        setTolerance(1e-9);
     }
 
     //---------------------------- Additional test cases -------------------------

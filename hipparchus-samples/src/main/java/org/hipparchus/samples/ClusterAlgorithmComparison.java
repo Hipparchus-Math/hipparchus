@@ -64,7 +64,7 @@ public class ClusterAlgorithmComparison {
             throw new IllegalArgumentException();
         }
         
-        NormalDistribution dist = new NormalDistribution(random, 0.0, noise, 1e-9);
+        NormalDistribution dist = new NormalDistribution(random, 0.0, noise);
 
         List<Vector2D> points = new ArrayList<Vector2D>();
         double range = 2.0 * FastMath.PI;
@@ -85,7 +85,7 @@ public class ClusterAlgorithmComparison {
     }
 
     public static List<Vector2D> makeMoons(int samples, boolean shuffle, double noise, RandomGenerator random) {
-        NormalDistribution dist = new NormalDistribution(random, 0.0, noise, 1e-9);
+        NormalDistribution dist = new NormalDistribution(random, 0.0, noise);
 
         int nSamplesOut = samples / 2;
         int nSamplesIn = samples - nSamplesOut;
@@ -114,7 +114,7 @@ public class ClusterAlgorithmComparison {
     public static List<Vector2D> makeBlobs(int samples, int centers, double clusterStd,
                                            double min, double max, boolean shuffle, RandomGenerator random) {
 
-        NormalDistribution dist = new NormalDistribution(random, 0.0, clusterStd, 1e-9);
+        NormalDistribution dist = new NormalDistribution(random, 0.0, clusterStd);
 
         double range = max - min;
         Vector2D[] centerPoints = new Vector2D[centers];

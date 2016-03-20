@@ -18,7 +18,6 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.distribution.continuous.CauchyDistribution;
-import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,7 +28,7 @@ import org.junit.Test;
 public class CauchyDistributionTest extends RealDistributionAbstractTest {
 
     // --------------------- Override tolerance  --------------
-    protected double defaultTolerance = NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY;
+    protected double defaultTolerance = 1e-9;
     @Override
     public void setUp() {
         super.setUp();
@@ -62,8 +61,12 @@ public class CauchyDistributionTest extends RealDistributionAbstractTest {
     /** Creates the default probability density test expected values */
     @Override
     public double[] makeDensityTestValues() {
-        return new double[] {1.49599158008e-06, 0.000149550440335, 0.000933076881878, 0.00370933207799, 0.0144742330437,
-                1.49599158008e-06, 0.000149550440335, 0.000933076881878, 0.00370933207799, 0.0144742330437};
+        return new double[] {
+            1.49599158008e-06, 0.000149550440335, 0.000933076881878,
+            0.00370933207799,  0.0144742330437,   1.49599158008e-06,
+            0.000149550440335, 0.000933076881878, 0.00370933207799,
+            0.0144742330437
+        };
     }
 
     //---------------------------- Additional test cases -------------------------

@@ -32,7 +32,7 @@ import org.hipparchus.util.MathUtils;
 public class GumbelDistribution extends AbstractRealDistribution {
 
     /** Serializable version identifier. */
-    private static final long serialVersionUID = 20141003;
+    private static final long serialVersionUID = 20141003L;
 
     /**
      * Approximation of Euler's constant
@@ -79,7 +79,7 @@ public class GumbelDistribution extends AbstractRealDistribution {
         }
 
         this.beta = beta;
-        this.mu = mu;
+        this.mu   = mu;
     }
 
     /**

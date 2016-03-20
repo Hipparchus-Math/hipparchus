@@ -26,14 +26,10 @@ import org.hipparchus.random.Well19937c;
  * @see <a href="http://mathworld.wolfram.com/Chi-SquaredDistribution.html">Chi-squared Distribution (MathWorld)</a>
  */
 public class ChiSquaredDistribution extends AbstractRealDistribution {
-    /** Default inverse cumulative probability accuracy */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier */
     private static final long serialVersionUID = 20160320L;
     /** Internal Gamma distribution. */
     private final GammaDistribution gamma;
-    /** Inverse cumulative probability accuracy */
-    private final double solverAbsoluteAccuracy;
 
     /**
      * Create a Chi-Squared distribution with the given degrees of freedom.
@@ -41,7 +37,7 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
      * @param degreesOfFreedom Degrees of freedom.
      */
     public ChiSquaredDistribution(double degreesOfFreedom) {
-        this(degreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(degreesOfFreedom, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -58,7 +54,7 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
      * @param degreesOfFreedom Degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      */
     public ChiSquaredDistribution(double degreesOfFreedom,
                                   double inverseCumAccuracy) {
@@ -72,7 +68,7 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
      * @param degreesOfFreedom Degrees of freedom.
      */
     public ChiSquaredDistribution(RandomGenerator rng, double degreesOfFreedom) {
-        this(rng, degreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(rng, degreesOfFreedom, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -83,15 +79,14 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
      * @param degreesOfFreedom Degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      */
     public ChiSquaredDistribution(RandomGenerator rng,
                                   double degreesOfFreedom,
                                   double inverseCumAccuracy) {
-        super(rng);
+        super(rng, inverseCumAccuracy);
 
         gamma = new GammaDistribution(degreesOfFreedom / 2, 2);
-        solverAbsoluteAccuracy = inverseCumAccuracy;
     }
 
     /**
@@ -119,12 +114,6 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
     @Override
     public double cumulativeProbability(double x)  {
         return gamma.cumulativeProbability(x);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

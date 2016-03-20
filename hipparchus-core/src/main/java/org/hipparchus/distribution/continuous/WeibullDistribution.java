@@ -34,20 +34,15 @@ import org.hipparchus.util.FastMath;
  * @see <a href="http://mathworld.wolfram.com/WeibullDistribution.html">Weibull distribution (MathWorld)</a>
  */
 public class WeibullDistribution extends AbstractRealDistribution {
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160320L;
     /** The shape parameter. */
     private final double shape;
     /** The scale parameter. */
     private final double scale;
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
 
     /**
-     * Create a Weibull distribution with the given shape and scale and a
-     * location equal to zero.
+     * Create a Weibull distribution with the given shape and scale.
      * <p>
      * <b>Note:</b> this constructor will implicitly create an instance of
      * {@link Well19937c} as random generator to be used for sampling only (see
@@ -58,34 +53,10 @@ public class WeibullDistribution extends AbstractRealDistribution {
      *
      * @param alpha Shape parameter.
      * @param beta Scale parameter.
-     * @throws MathIllegalArgumentException if {@code alpha <= 0} or
-     * {@code beta <= 0}.
-     */
-    public WeibullDistribution(double alpha, double beta)
-        throws MathIllegalArgumentException {
-        this(alpha, beta, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Create a Weibull distribution with the given shape, scale and inverse
-     * cumulative probability accuracy and a location equal to zero.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
-     *
-     * @param alpha Shape parameter.
-     * @param beta Scale parameter.
-     * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code alpha <= 0} or {@code beta <= 0}.
      */
-    public WeibullDistribution(double alpha, double beta,
-                               double inverseCumAccuracy) {
-        this(new Well19937c(), alpha, beta, inverseCumAccuracy);
+    public WeibullDistribution(double alpha, double beta) {
+        this(new Well19937c(), alpha, beta);
     }
 
     /**
@@ -94,27 +65,11 @@ public class WeibullDistribution extends AbstractRealDistribution {
      * @param rng Random number generator.
      * @param alpha Shape parameter.
      * @param beta Scale parameter.
-     * @throws MathIllegalArgumentException if {@code alpha <= 0} or {@code beta <= 0}.
-     */
-    public WeibullDistribution(RandomGenerator rng, double alpha, double beta)
-        throws MathIllegalArgumentException {
-        this(rng, alpha, beta, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Creates a Weibull distribution.
-     *
-     * @param rng Random number generator.
-     * @param alpha Shape parameter.
-     * @param beta Scale parameter.
-     * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code alpha <= 0} or {@code beta <= 0}.
      */
     public WeibullDistribution(RandomGenerator rng,
                                double alpha,
-                               double beta,
-                               double inverseCumAccuracy)
+                               double beta)
         throws MathIllegalArgumentException {
         super(rng);
 
@@ -128,7 +83,6 @@ public class WeibullDistribution extends AbstractRealDistribution {
         }
         scale = beta;
         shape = alpha;
-        solverAbsoluteAccuracy = inverseCumAccuracy;
     }
 
     /**
@@ -221,17 +175,6 @@ public class WeibullDistribution extends AbstractRealDistribution {
             ret = scale * FastMath.pow(-FastMath.log1p(-p), 1.0 / shape);
         }
         return ret;
-    }
-
-    /**
-     * Return the absolute accuracy setting of the solver used to estimate
-     * inverse cumulative probabilities.
-     *
-     * @return the solver absolute accuracy.
-     */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

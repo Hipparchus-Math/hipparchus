@@ -31,8 +31,6 @@ import org.hipparchus.util.FastMath;
  * @see <a href="http://mathworld.wolfram.com/NormalDistribution.html">Normal distribution (MathWorld)</a>
  */
 public class NormalDistribution extends AbstractRealDistribution {
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160320L;
     /** &radic;(2) */
@@ -43,8 +41,6 @@ public class NormalDistribution extends AbstractRealDistribution {
     private final double standardDeviation;
     /** The value of {@code log(sd) + 0.5*log(2*pi)} stored for faster computation. */
     private final double logStandardDeviationPlusHalfLog2Pi;
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
 
     /**
      * Create a normal distribution with mean equal to zero and standard
@@ -62,7 +58,7 @@ public class NormalDistribution extends AbstractRealDistribution {
     }
 
     /**
-     * Create a normal distribution using the given mean and standard deviation.
+     * Create a normal distribution using the given mean, standard deviation.
      * <p>
      * <b>Note:</b> this constructor will implicitly create an instance of
      * {@link Well19937c} as random generator to be used for sampling only (see
@@ -77,28 +73,7 @@ public class NormalDistribution extends AbstractRealDistribution {
      */
     public NormalDistribution(double mean, double sd)
         throws MathIllegalArgumentException {
-        this(mean, sd, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Create a normal distribution using the given mean, standard deviation and
-     * inverse cumulative distribution accuracy.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
-     *
-     * @param mean Mean for this distribution.
-     * @param sd Standard deviation for this distribution.
-     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
-     * @throws MathIllegalArgumentException if {@code sd <= 0}.
-     */
-    public NormalDistribution(double mean, double sd, double inverseCumAccuracy)
-        throws MathIllegalArgumentException {
-        this(new Well19937c(), mean, sd, inverseCumAccuracy);
+        this(new Well19937c(), mean, sd);
     }
 
     /**
@@ -107,26 +82,11 @@ public class NormalDistribution extends AbstractRealDistribution {
      * @param rng Random number generator.
      * @param mean Mean for this distribution.
      * @param sd Standard deviation for this distribution.
-     * @throws MathIllegalArgumentException if {@code sd <= 0}.
-     */
-    public NormalDistribution(RandomGenerator rng, double mean, double sd)
-        throws MathIllegalArgumentException {
-        this(rng, mean, sd, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Creates a normal distribution.
-     *
-     * @param rng Random number generator.
-     * @param mean Mean for this distribution.
-     * @param sd Standard deviation for this distribution.
-     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
      * @throws MathIllegalArgumentException if {@code sd <= 0}.
      */
     public NormalDistribution(RandomGenerator rng,
                               double mean,
-                              double sd,
-                              double inverseCumAccuracy)
+                              double sd)
         throws MathIllegalArgumentException {
         super(rng);
 
@@ -135,9 +95,9 @@ public class NormalDistribution extends AbstractRealDistribution {
         }
 
         this.mean = mean;
-        standardDeviation = sd;
-        logStandardDeviationPlusHalfLog2Pi = FastMath.log(sd) + 0.5 * FastMath.log(2 * FastMath.PI);
-        solverAbsoluteAccuracy = inverseCumAccuracy;
+        this.standardDeviation = sd;
+        this.logStandardDeviationPlusHalfLog2Pi =
+                FastMath.log(sd) + 0.5 * FastMath.log(2 * FastMath.PI);
     }
 
     /**
@@ -211,12 +171,6 @@ public class NormalDistribution extends AbstractRealDistribution {
         final double v0 = (x0 - mean) / denom;
         final double v1 = (x1 - mean) / denom;
         return 0.5 * Erf.erf(v0, v1);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

@@ -38,8 +38,6 @@ public class TriangularDistribution extends AbstractRealDistribution {
     private final double b;
     /** Mode of this distribution. */
     private final double c;
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
 
     /**
      * Creates a triangular real distribution using the given lower limit,
@@ -97,7 +95,6 @@ public class TriangularDistribution extends AbstractRealDistribution {
         this.a = a;
         this.c = c;
         this.b = b;
-        solverAbsoluteAccuracy = FastMath.max(FastMath.ulp(a), FastMath.ulp(b));
     }
 
     /**
@@ -107,24 +104,6 @@ public class TriangularDistribution extends AbstractRealDistribution {
      */
     public double getMode() {
         return c;
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * <p>
-     * For this distribution, the returned value is not really meaningful,
-     * since exact formulas are implemented for the computation of the
-     * {@link #inverseCumulativeProbability(double)} (no solver is invoked).
-     * </p>
-     * <p>
-     * For lower limit {@code a} and upper limit {@code b}, the current
-     * implementation returns {@code max(ulp(a), ulp(b)}.
-     * </p>
-     */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

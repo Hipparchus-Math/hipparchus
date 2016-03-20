@@ -800,8 +800,8 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             return new ConstantRealDistribution(bStats.getMean());
         } else {
             return new NormalDistribution(randomData.getRandomGenerator(),
-                bStats.getMean(), bStats.getStandardDeviation(),
-                NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+                                          bStats.getMean(),
+                                          bStats.getStandardDeviation());
         }
     }
 }

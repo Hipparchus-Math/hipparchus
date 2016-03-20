@@ -31,16 +31,12 @@ import org.hipparchus.util.FastMath;
  * @see <a href="http://mathworld.wolfram.com/F-Distribution.html">F-distribution (MathWorld)</a>
  */
 public class FDistribution extends AbstractRealDistribution {
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160320L;
     /** The numerator degrees of freedom. */
     private final double numeratorDegreesOfFreedom;
     /** The numerator degrees of freedom. */
     private final double denominatorDegreesOfFreedom;
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
     /** Cached numerical variance */
     private final double numericalVariance;
 
@@ -64,7 +60,7 @@ public class FDistribution extends AbstractRealDistribution {
                          double denominatorDegreesOfFreedom)
         throws MathIllegalArgumentException {
         this(numeratorDegreesOfFreedom, denominatorDegreesOfFreedom,
-             DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+             DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -107,7 +103,7 @@ public class FDistribution extends AbstractRealDistribution {
                          double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom)
         throws MathIllegalArgumentException {
-        this(rng, numeratorDegreesOfFreedom, denominatorDegreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(rng, numeratorDegreesOfFreedom, denominatorDegreesOfFreedom, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -126,7 +122,7 @@ public class FDistribution extends AbstractRealDistribution {
                          double denominatorDegreesOfFreedom,
                          double inverseCumAccuracy)
         throws MathIllegalArgumentException {
-        super(rng);
+        super(rng, inverseCumAccuracy);
 
         if (numeratorDegreesOfFreedom <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DEGREES_OF_FREEDOM,
@@ -136,10 +132,9 @@ public class FDistribution extends AbstractRealDistribution {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DEGREES_OF_FREEDOM,
                                                    denominatorDegreesOfFreedom);
         }
-        this.numeratorDegreesOfFreedom = numeratorDegreesOfFreedom;
+        this.numeratorDegreesOfFreedom   = numeratorDegreesOfFreedom;
         this.denominatorDegreesOfFreedom = denominatorDegreesOfFreedom;
-        this.solverAbsoluteAccuracy = inverseCumAccuracy;
-        this.numericalVariance = calculateNumericalVariance();
+        this.numericalVariance           = calculateNumericalVariance();
     }
 
     /**
@@ -208,12 +203,6 @@ public class FDistribution extends AbstractRealDistribution {
      */
     public double getDenominatorDegreesOfFreedom() {
         return denominatorDegreesOfFreedom;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

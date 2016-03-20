@@ -124,10 +124,8 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
         this.maxIterations = maxIterations;
 
         // Use the same RNG instance as the parent class.
-        normal = new NormalDistribution(rng, p, FastMath.sqrt(p),
-                                        NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-        exponential = new ExponentialDistribution(rng, 1,
-                                                  ExponentialDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        normal      = new NormalDistribution(rng, p, FastMath.sqrt(p));
+        exponential = new ExponentialDistribution(rng, 1);
     }
 
     /**

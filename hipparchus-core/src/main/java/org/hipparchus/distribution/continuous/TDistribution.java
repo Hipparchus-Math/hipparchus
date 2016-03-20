@@ -31,14 +31,10 @@ import org.hipparchus.util.FastMath;
  * @see "<a href='http://mathworld.wolfram.com/Studentst-Distribution.html'>Student's t-distribution (MathWorld)</a>"
  */
 public class TDistribution extends AbstractRealDistribution {
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier */
     private static final long serialVersionUID = 20160320L;
     /** The degrees of freedom. */
     private final double degreesOfFreedom;
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
     /** Static computation factor based on degreesOfFreedom. */
     private final double factor;
 
@@ -57,7 +53,7 @@ public class TDistribution extends AbstractRealDistribution {
      */
     public TDistribution(double degreesOfFreedom)
         throws MathIllegalArgumentException {
-        this(degreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(degreesOfFreedom, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -74,7 +70,7 @@ public class TDistribution extends AbstractRealDistribution {
      * @param degreesOfFreedom Degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates
-     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * (defaults to {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code degreesOfFreedom <= 0}
      */
     public TDistribution(double degreesOfFreedom, double inverseCumAccuracy)
@@ -91,7 +87,7 @@ public class TDistribution extends AbstractRealDistribution {
      */
     public TDistribution(RandomGenerator rng, double degreesOfFreedom)
         throws MathIllegalArgumentException {
-        this(rng, degreesOfFreedom, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(rng, degreesOfFreedom, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -101,21 +97,20 @@ public class TDistribution extends AbstractRealDistribution {
      * @param degreesOfFreedom Degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates
-     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * (defaults to {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code degreesOfFreedom <= 0}
      */
     public TDistribution(RandomGenerator rng,
                          double degreesOfFreedom,
                          double inverseCumAccuracy)
         throws MathIllegalArgumentException {
-        super(rng);
+        super(rng, inverseCumAccuracy);
 
         if (degreesOfFreedom <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DEGREES_OF_FREEDOM,
                                                    degreesOfFreedom);
         }
         this.degreesOfFreedom = degreesOfFreedom;
-        solverAbsoluteAccuracy = inverseCumAccuracy;
 
         final double n = degreesOfFreedom;
         final double nPlus1Over2 = (n + 1) / 2;
@@ -167,12 +162,6 @@ public class TDistribution extends AbstractRealDistribution {
         }
 
         return ret;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

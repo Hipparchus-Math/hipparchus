@@ -30,8 +30,6 @@ import org.hipparchus.util.FastMath;
  * @see <a href="http://mathworld.wolfram.com/GammaDistribution.html">Gamma distribution (MathWorld)</a>
  */
 public class GammaDistribution extends AbstractRealDistribution {
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20120524L;
     /** The shape parameter. */
@@ -91,8 +89,6 @@ public class GammaDistribution extends AbstractRealDistribution {
      * {@code log(y) >= maxLogY}, the natural calculation overflows.
      */
     private final double maxLogY;
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
 
     /**
      * Creates a new gamma distribution with specified values of the shape and
@@ -111,7 +107,7 @@ public class GammaDistribution extends AbstractRealDistribution {
      * {@code scale <= 0}.
      */
     public GammaDistribution(double shape, double scale) throws MathIllegalArgumentException {
-        this(shape, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(shape, scale, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -129,7 +125,7 @@ public class GammaDistribution extends AbstractRealDistribution {
      * @param scale the scale parameter
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code shape <= 0} or
      * {@code scale <= 0}.
      */
@@ -149,7 +145,7 @@ public class GammaDistribution extends AbstractRealDistribution {
      */
     public GammaDistribution(RandomGenerator rng, double shape, double scale)
         throws MathIllegalArgumentException {
-        this(rng, shape, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(rng, shape, scale, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -160,7 +156,7 @@ public class GammaDistribution extends AbstractRealDistribution {
      * @param scale the scale parameter
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code shape <= 0} or
      * {@code scale <= 0}.
      */
@@ -169,7 +165,7 @@ public class GammaDistribution extends AbstractRealDistribution {
                              final double scale,
                              final double inverseCumAccuracy)
         throws MathIllegalArgumentException {
-        super(rng);
+        super(rng, inverseCumAccuracy);
 
         if (shape <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SHAPE, shape);
@@ -180,7 +176,6 @@ public class GammaDistribution extends AbstractRealDistribution {
 
         this.shape = shape;
         this.scale = scale;
-        this.solverAbsoluteAccuracy = inverseCumAccuracy;
         this.shiftedShape = shape + Gamma.LANCZOS_G + 0.5;
         final double aux = FastMath.E / (2.0 * FastMath.PI * shiftedShape);
         this.densityPrefactor2 = shape * FastMath.sqrt(aux) / Gamma.lanczos(shape);
@@ -326,12 +321,6 @@ public class GammaDistribution extends AbstractRealDistribution {
         }
 
         return ret;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

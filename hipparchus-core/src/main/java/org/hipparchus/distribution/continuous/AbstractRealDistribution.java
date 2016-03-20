@@ -35,7 +35,7 @@ public abstract class AbstractRealDistribution
     implements RealDistribution, Serializable {
 
     /** Default absolute accuracy for inverse cumulative computation. */
-    public static final double SOLVER_DEFAULT_ABSOLUTE_ACCURACY = 1e-6;
+    protected static final double DEFAULT_SOLVER_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier */
     private static final long serialVersionUID = 20160320L;
 
@@ -44,11 +44,25 @@ public abstract class AbstractRealDistribution
      */
     protected final RandomGenerator random;
 
+    /** Inverse cumulative probability accuracy. */
+    private final double solverAbsoluteAccuracy;
+
     /**
      * @param rng Random number generator.
      */
-    protected AbstractRealDistribution(RandomGenerator rng) {
-        random = rng;
+    protected AbstractRealDistribution(final RandomGenerator rng) {
+        this(rng, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
+    }
+
+    /**
+     * @param rng Random number generator.
+     * @param solverAbsoluteAccuracy the absolute accuracy to use when
+     * computing the inverse cumulative probability.
+     */
+    protected AbstractRealDistribution(final RandomGenerator rng,
+                                       final double solverAbsoluteAccuracy) {
+        this.random = rng;
+        this.solverAbsoluteAccuracy = solverAbsoluteAccuracy;
     }
 
     /**
@@ -200,7 +214,7 @@ public abstract class AbstractRealDistribution
      * @return the maximum absolute error in inverse cumulative probability estimates
      */
     protected double getSolverAbsoluteAccuracy() {
-        return SOLVER_DEFAULT_ABSOLUTE_ACCURACY;
+        return solverAbsoluteAccuracy;
     }
 
     /** {@inheritDoc} */

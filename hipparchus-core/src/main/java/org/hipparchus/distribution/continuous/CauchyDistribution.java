@@ -29,16 +29,12 @@ import org.hipparchus.util.FastMath;
  * @see <a href="http://mathworld.wolfram.com/CauchyDistribution.html">Cauchy Distribution (MathWorld)</a>
  */
 public class CauchyDistribution extends AbstractRealDistribution {
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier */
     private static final long serialVersionUID = 20160320L;
     /** The median of this distribution. */
     private final double median;
     /** The scale of this distribution. */
     private final double scale;
-    /** Inverse cumulative probability accuracy */
-    private final double solverAbsoluteAccuracy;
 
     /**
      * Creates a Cauchy distribution with the median equal to zero and scale
@@ -60,31 +56,10 @@ public class CauchyDistribution extends AbstractRealDistribution {
      *
      * @param median Median for this distribution.
      * @param scale Scale parameter for this distribution.
-     */
-    public CauchyDistribution(double median, double scale) {
-        this(median, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Creates a Cauchy distribution using the given median and scale.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
-     *
-     * @param median Median for this distribution.
-     * @param scale Scale parameter for this distribution.
-     * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates
-     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code scale <= 0}.
      */
-    public CauchyDistribution(double median, double scale,
-                              double inverseCumAccuracy) {
-        this(new Well19937c(), median, scale, inverseCumAccuracy);
+    public CauchyDistribution(double median, double scale) {
+        this(new Well19937c(), median, scale);
     }
 
     /**
@@ -96,31 +71,14 @@ public class CauchyDistribution extends AbstractRealDistribution {
      * @throws MathIllegalArgumentException if {@code scale <= 0}.
      */
     public CauchyDistribution(RandomGenerator rng, double median, double scale) {
-        this(rng, median, scale, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Creates a Cauchy distribution.
-     *
-     * @param rng Random number generator.
-     * @param median Median for this distribution.
-     * @param scale Scale parameter for this distribution.
-     * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates
-     * (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws MathIllegalArgumentException if {@code scale <= 0}.
-     */
-    public CauchyDistribution(RandomGenerator rng,
-                              double median,
-                              double scale,
-                              double inverseCumAccuracy) {
         super(rng);
+
         if (scale <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE, scale);
         }
+
         this.scale = scale;
         this.median = median;
-        solverAbsoluteAccuracy = inverseCumAccuracy;
     }
 
     /** {@inheritDoc} */
@@ -174,12 +132,6 @@ public class CauchyDistribution extends AbstractRealDistribution {
             ret = median + scale * FastMath.tan(FastMath.PI * (p - .5));
         }
         return ret;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

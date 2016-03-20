@@ -30,7 +30,7 @@ import org.hipparchus.util.FastMath;
 public class LaplaceDistribution extends AbstractRealDistribution {
 
     /** Serializable version identifier. */
-    private static final long serialVersionUID = 20141003;
+    private static final long serialVersionUID = 20141003L;
 
     /** The location parameter. */
     private final double mu;
@@ -70,7 +70,7 @@ public class LaplaceDistribution extends AbstractRealDistribution {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_SCALE, beta);
         }
 
-        this.mu = mu;
+        this.mu   = mu;
         this.beta = beta;
     }
 

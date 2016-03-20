@@ -59,7 +59,7 @@ public class NormalDistributionTest extends RealDistributionAbstractTest {
     }
 
     // --------------------- Override tolerance  --------------
-    protected double defaultTolerance = NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY;
+    protected double defaultTolerance = 1e-9;
     @Override
     public void setUp() {
         super.setUp();

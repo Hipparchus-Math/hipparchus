@@ -47,8 +47,6 @@ import org.hipparchus.util.FastMath;
  * Log Normal distribution (MathWorld)</a>
  */
 public class LogNormalDistribution extends AbstractRealDistribution {
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20120112;
@@ -66,9 +64,6 @@ public class LogNormalDistribution extends AbstractRealDistribution {
     private final double shape;
     /** The value of {@code log(shape) + 0.5 * log(2*PI)} stored for faster computation. */
     private final double logShapePlusHalfLog2Pi;
-
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
 
     /**
      * Create a log-normal distribution, where the mean and standard deviation
@@ -104,7 +99,7 @@ public class LogNormalDistribution extends AbstractRealDistribution {
      */
     public LogNormalDistribution(double scale, double shape)
         throws MathIllegalArgumentException {
-        this(scale, shape, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(scale, shape, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -138,7 +133,7 @@ public class LogNormalDistribution extends AbstractRealDistribution {
      */
     public LogNormalDistribution(RandomGenerator rng, double scale, double shape)
         throws MathIllegalArgumentException {
-        this(rng, scale, shape, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(rng, scale, shape, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -155,7 +150,7 @@ public class LogNormalDistribution extends AbstractRealDistribution {
                                  double shape,
                                  double inverseCumAccuracy)
         throws MathIllegalArgumentException {
-        super(rng);
+        super(rng, inverseCumAccuracy);
 
         if (shape <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SHAPE, shape);
@@ -164,7 +159,6 @@ public class LogNormalDistribution extends AbstractRealDistribution {
         this.scale = scale;
         this.shape = shape;
         this.logShapePlusHalfLog2Pi = FastMath.log(shape) + 0.5 * FastMath.log(2 * FastMath.PI);
-        this.solverAbsoluteAccuracy = inverseCumAccuracy;
     }
 
     /**
@@ -263,12 +257,6 @@ public class LogNormalDistribution extends AbstractRealDistribution {
         final double v0 = (FastMath.log(x0) - scale) / denom;
         final double v1 = (FastMath.log(x1) - scale) / denom;
         return 0.5 * Erf.erf(v0, v1);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

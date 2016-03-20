@@ -487,8 +487,7 @@ public class RandomDataGenerator implements Serializable {
      * @throws MathIllegalArgumentException if {@code mean <= 0}.
      */
     public double nextExponential(double mean) throws MathIllegalArgumentException {
-        return new ExponentialDistribution(getRandomGenerator(), mean,
-                ExponentialDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
+        return new ExponentialDistribution(getRandomGenerator(), mean).sample();
     }
 
     /**
@@ -514,8 +513,7 @@ public class RandomDataGenerator implements Serializable {
      * {@code scale <= 0}.
      */
     public double nextGamma(double shape, double scale) throws MathIllegalArgumentException {
-        return new GammaDistribution(getRandomGenerator(),shape, scale,
-                GammaDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
+        return new GammaDistribution(getRandomGenerator(),shape, scale).sample();
     }
 
     /**
@@ -557,8 +555,7 @@ public class RandomDataGenerator implements Serializable {
      * @throws MathIllegalArgumentException if {@code df <= 0}
      */
     public double nextT(double df) throws MathIllegalArgumentException {
-        return new TDistribution(getRandomGenerator(), df,
-                TDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
+        return new TDistribution(getRandomGenerator(), df).sample();
     }
 
     /**
@@ -571,8 +568,7 @@ public class RandomDataGenerator implements Serializable {
      * {@code scale <= 0}.
      */
     public double nextWeibull(double shape, double scale) throws MathIllegalArgumentException {
-        return new WeibullDistribution(getRandomGenerator(), shape, scale,
-                WeibullDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
+        return new WeibullDistribution(getRandomGenerator(), shape, scale).sample();
     }
 
     /**
@@ -596,8 +592,7 @@ public class RandomDataGenerator implements Serializable {
      * @return random value sampled from the beta(alpha, beta) distribution
      */
     public double nextBeta(double alpha, double beta) {
-        return new BetaDistribution(getRandomGenerator(), alpha, beta,
-                BetaDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
+        return new BetaDistribution(getRandomGenerator(), alpha, beta).sample();
     }
 
     /**
@@ -619,8 +614,7 @@ public class RandomDataGenerator implements Serializable {
      * @return random value sampled from the Cauchy(median, scale) distribution
      */
     public double nextCauchy(double median, double scale) {
-        return new CauchyDistribution(getRandomGenerator(), median, scale,
-                CauchyDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
+        return new CauchyDistribution(getRandomGenerator(), median, scale).sample();
     }
 
     /**
@@ -630,8 +624,7 @@ public class RandomDataGenerator implements Serializable {
      * @return random value sampled from the ChiSquare(df) distribution
      */
     public double nextChiSquare(double df) {
-        return new ChiSquaredDistribution(getRandomGenerator(), df,
-                ChiSquaredDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
+        return new ChiSquaredDistribution(getRandomGenerator(), df).sample();
     }
 
     /**
@@ -644,8 +637,7 @@ public class RandomDataGenerator implements Serializable {
      * {@code numeratorDf <= 0} or {@code denominatorDf <= 0}.
      */
     public double nextF(double numeratorDf, double denominatorDf) throws MathIllegalArgumentException {
-        return new FDistribution(getRandomGenerator(), numeratorDf, denominatorDf,
-                FDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY).sample();
+        return new FDistribution(getRandomGenerator(), numeratorDf, denominatorDf).sample();
     }
 
     /**

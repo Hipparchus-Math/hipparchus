@@ -17,7 +17,6 @@
 package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.distribution.discrete.PascalDistribution;
 import org.junit.Assert;
 import org.junit.Test;
@@ -28,7 +27,7 @@ import org.junit.Test;
 public class PascalDistributionTest extends IntegerDistributionAbstractTest {
 
     // --------------------- Override tolerance  --------------
-    protected double defaultTolerance = NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY;
+    protected double defaultTolerance = 1e-9;
     @Override
     public void setUp() {
         super.setUp();

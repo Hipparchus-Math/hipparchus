@@ -32,7 +32,7 @@ import org.hipparchus.util.MathUtils;
 public class LogisticDistribution extends AbstractRealDistribution {
 
     /** Serializable version identifier. */
-    private static final long serialVersionUID = 20141003;
+    private static final long serialVersionUID = 20141003L;
 
     /** The location parameter. */
     private final double mu;
@@ -69,7 +69,8 @@ public class LogisticDistribution extends AbstractRealDistribution {
         super(rng);
 
         if (s <= 0.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_SCALE, s);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_SCALE,
+                                                   s);
         }
 
         this.mu = mu;

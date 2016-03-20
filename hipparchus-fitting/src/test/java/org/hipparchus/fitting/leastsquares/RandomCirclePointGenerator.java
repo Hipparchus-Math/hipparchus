@@ -54,10 +54,8 @@ public class RandomCirclePointGenerator {
                                       long seed) {
         final RandomGenerator rng = new Well44497b(seed);
         this.radius = radius;
-        cX = new NormalDistribution(rng, x, xSigma,
-                                    NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-        cY = new NormalDistribution(rng, y, ySigma,
-                                    NormalDistribution.DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        cX = new NormalDistribution(rng, x, xSigma);
+        cY = new NormalDistribution(rng, y, ySigma);
         tP = new UniformRealDistribution(rng, 0, MathUtils.TWO_PI);
     }
 

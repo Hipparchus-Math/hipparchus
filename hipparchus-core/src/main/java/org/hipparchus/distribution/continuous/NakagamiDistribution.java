@@ -30,9 +30,6 @@ import org.hipparchus.util.FastMath;
  */
 public class NakagamiDistribution extends AbstractRealDistribution {
 
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
-
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20141003;
 
@@ -40,8 +37,6 @@ public class NakagamiDistribution extends AbstractRealDistribution {
     private final double mu;
     /** The scale parameter. */
     private final double omega;
-    /** Inverse cumulative probability accuracy. */
-    private final double inverseAbsoluteAccuracy;
 
     /**
      * Build a new instance.
@@ -59,7 +54,7 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
     public NakagamiDistribution(double mu, double omega) {
-        this(mu, omega, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(mu, omega, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -75,7 +70,7 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @param mu shape parameter
      * @param omega scale parameter (must be positive)
      * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * cumulative probability estimates (defaults to {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code mu < 0.5}
      * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
@@ -90,12 +85,15 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @param mu shape parameter
      * @param omega scale parameter (must be positive)
      * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * cumulative probability estimates (defaults to {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code mu < 0.5}
      * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
-    public NakagamiDistribution(RandomGenerator rng, double mu, double omega, double inverseAbsoluteAccuracy) {
-        super(rng);
+    public NakagamiDistribution(RandomGenerator rng,
+                                double mu,
+                                double omega,
+                                double inverseAbsoluteAccuracy) {
+        super(rng, inverseAbsoluteAccuracy);
 
         if (mu < 0.5) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
@@ -107,7 +105,6 @@ public class NakagamiDistribution extends AbstractRealDistribution {
 
         this.mu = mu;
         this.omega = omega;
-        this.inverseAbsoluteAccuracy = inverseAbsoluteAccuracy;
     }
 
     /**
@@ -126,12 +123,6 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      */
     public double getScale() {
         return omega;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return inverseAbsoluteAccuracy;
     }
 
     /** {@inheritDoc} */

@@ -31,10 +31,6 @@ import org.hipparchus.util.Precision;
  * @see <a href="http://en.wikipedia.org/wiki/Beta_distribution">Beta distribution</a>
  */
 public class BetaDistribution extends AbstractRealDistribution {
-    /**
-     * Default inverse cumulative probability accuracy.
-     */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160320L;
     /** First shape parameter. */
@@ -43,8 +39,6 @@ public class BetaDistribution extends AbstractRealDistribution {
     private final double beta;
     /** Normalizing factor used in density computations. */
     private final double z;
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
 
     /**
      * Build a new instance.
@@ -60,7 +54,7 @@ public class BetaDistribution extends AbstractRealDistribution {
      * @param beta Second shape parameter (must be positive).
      */
     public BetaDistribution(double alpha, double beta) {
-        this(alpha, beta, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(alpha, beta, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -77,7 +71,7 @@ public class BetaDistribution extends AbstractRealDistribution {
      * @param beta Second shape parameter (must be positive).
      * @param inverseCumAccuracy Maximum absolute error in inverse
      * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      */
     public BetaDistribution(double alpha, double beta, double inverseCumAccuracy) {
         this(new Well19937c(), alpha, beta, inverseCumAccuracy);
@@ -91,7 +85,7 @@ public class BetaDistribution extends AbstractRealDistribution {
      * @param beta Second shape parameter (must be positive).
      */
     public BetaDistribution(RandomGenerator rng, double alpha, double beta) {
-        this(rng, alpha, beta, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
+        this(rng, alpha, beta, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
@@ -102,21 +96,19 @@ public class BetaDistribution extends AbstractRealDistribution {
      * @param beta Second shape parameter (must be positive).
      * @param inverseCumAccuracy Maximum absolute error in inverse
      * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
+     * {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
      */
     public BetaDistribution(RandomGenerator rng,
                             double alpha,
                             double beta,
                             double inverseCumAccuracy) {
-        super(rng);
+        super(rng, inverseCumAccuracy);
 
         this.alpha = alpha;
         this.beta  = beta;
         this.z     = Gamma.logGamma(alpha)
                         + Gamma.logGamma(beta)
                         - Gamma.logGamma(alpha + beta);
-
-        solverAbsoluteAccuracy = inverseCumAccuracy;
     }
 
     /**
@@ -178,17 +170,6 @@ public class BetaDistribution extends AbstractRealDistribution {
         } else {
             return Beta.regularizedBeta(x, alpha, beta);
         }
-    }
-
-    /**
-     * Return the absolute accuracy setting of the solver used to estimate
-     * inverse cumulative probabilities.
-     *
-     * @return the solver absolute accuracy.
-     */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**

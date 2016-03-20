@@ -31,8 +31,6 @@ import org.hipparchus.util.ResizableDoubleArray;
  * @see <a href="http://mathworld.wolfram.com/ExponentialDistribution.html">Exponential distribution (MathWorld)</a>
  */
 public class ExponentialDistribution extends AbstractRealDistribution {
-    /** Default inverse cumulative probability accuracy. */
-    public static final double DEFAULT_INVERSE_ABSOLUTE_ACCURACY = 1e-9;
     /** Serializable version identifier */
     private static final long serialVersionUID = 20160320L;
     /**
@@ -53,8 +51,6 @@ public class ExponentialDistribution extends AbstractRealDistribution {
     private final double mean;
     /** The logarithm of the mean, stored to reduce computing time. **/
     private final double logMean;
-    /** Inverse cumulative probability accuracy. */
-    private final double solverAbsoluteAccuracy;
 
     /**
      * Initialize tables.
@@ -95,30 +91,11 @@ public class ExponentialDistribution extends AbstractRealDistribution {
      * as random generator via the appropriate constructors to avoid the
      * additional initialisation overhead.
      *
-     * @param mean mean of this distribution.
+     * @param mean Mean of this distribution.
+     * @throws MathIllegalArgumentException if {@code mean <= 0}.
      */
     public ExponentialDistribution(double mean) {
-        this(mean, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Create an exponential distribution with the given mean.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
-     *
-     * @param mean Mean of this distribution.
-     * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
-     * @throws MathIllegalArgumentException if {@code mean <= 0}.
-     */
-    public ExponentialDistribution(double mean, double inverseCumAccuracy) {
-        this(new Well19937c(), mean, inverseCumAccuracy);
+        this(new Well19937c(), mean);
     }
 
     /**
@@ -126,35 +103,19 @@ public class ExponentialDistribution extends AbstractRealDistribution {
      *
      * @param rng Random number generator.
      * @param mean Mean of this distribution.
-     * @throws MathIllegalArgumentException if {@code mean <= 0}.
-     */
-    public ExponentialDistribution(RandomGenerator rng, double mean)
-        throws MathIllegalArgumentException {
-        this(rng, mean, DEFAULT_INVERSE_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Creates an exponential distribution.
-     *
-     * @param rng Random number generator.
-     * @param mean Mean of this distribution.
-     * @param inverseCumAccuracy Maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_INVERSE_ABSOLUTE_ACCURACY}).
      * @throws MathIllegalArgumentException if {@code mean <= 0}.
      */
     public ExponentialDistribution(RandomGenerator rng,
-                                   double mean,
-                                   double inverseCumAccuracy)
+                                   double mean)
         throws MathIllegalArgumentException {
         super(rng);
 
         if (mean <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.MEAN, mean);
         }
-        this.mean = mean;
-        logMean = FastMath.log(mean);
-        solverAbsoluteAccuracy = inverseCumAccuracy;
+
+        this.mean    = mean;
+        this.logMean = FastMath.log(mean);
     }
 
     /**
@@ -273,12 +234,6 @@ public class ExponentialDistribution extends AbstractRealDistribution {
         } while (u > EXPONENTIAL_SA_QI[i]); // Ensured to exit since EXPONENTIAL_SA_QI[MAX] = 1
 
         return mean * (a + umin * EXPONENTIAL_SA_QI[0]);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected double getSolverAbsoluteAccuracy() {
-        return solverAbsoluteAccuracy;
     }
 
     /**
