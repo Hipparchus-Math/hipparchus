@@ -24,9 +24,9 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import org.hipparchus.distribution.LogNormalDistribution;
-import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.RealDistribution;
+import org.hipparchus.distribution.continuous.LogNormalDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;

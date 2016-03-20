@@ -18,7 +18,7 @@
 package org.hipparchus.stat.regression;
 import java.io.Serializable;
 
-import org.hipparchus.distribution.TDistribution;
+import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;

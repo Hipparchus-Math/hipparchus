@@ -33,14 +33,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.hipparchus.distribution.BinomialDistribution;
-import org.hipparchus.distribution.GeometricDistribution;
-import org.hipparchus.distribution.HypergeometricDistribution;
 import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.PascalDistribution;
-import org.hipparchus.distribution.PoissonDistribution;
-import org.hipparchus.distribution.UniformIntegerDistribution;
-import org.hipparchus.distribution.ZipfDistribution;
+import org.hipparchus.distribution.discrete.BinomialDistribution;
+import org.hipparchus.distribution.discrete.GeometricDistribution;
+import org.hipparchus.distribution.discrete.HypergeometricDistribution;
+import org.hipparchus.distribution.discrete.PascalDistribution;
+import org.hipparchus.distribution.discrete.PoissonDistribution;
+import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
+import org.hipparchus.distribution.discrete.ZipfDistribution;
 import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 
 import com.xeiam.xchart.Chart;

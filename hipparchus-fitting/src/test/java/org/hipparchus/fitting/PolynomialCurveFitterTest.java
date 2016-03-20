@@ -21,7 +21,7 @@ import java.util.Random;
 import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.UniformRealDistribution;
+import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;

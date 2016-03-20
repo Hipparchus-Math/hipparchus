@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
-import org.hipparchus.distribution.MultivariateNormalDistribution;
+import org.hipparchus.distribution.multivariate.MixtureMultivariateNormalDistribution;
+import org.hipparchus.distribution.multivariate.MultivariateNormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;

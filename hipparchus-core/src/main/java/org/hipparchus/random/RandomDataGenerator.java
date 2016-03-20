@@ -24,20 +24,20 @@ import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 import java.util.Collection;
 
-import org.hipparchus.distribution.BetaDistribution;
-import org.hipparchus.distribution.BinomialDistribution;
-import org.hipparchus.distribution.CauchyDistribution;
-import org.hipparchus.distribution.ChiSquaredDistribution;
-import org.hipparchus.distribution.ExponentialDistribution;
-import org.hipparchus.distribution.FDistribution;
-import org.hipparchus.distribution.GammaDistribution;
-import org.hipparchus.distribution.HypergeometricDistribution;
-import org.hipparchus.distribution.PascalDistribution;
-import org.hipparchus.distribution.PoissonDistribution;
-import org.hipparchus.distribution.TDistribution;
-import org.hipparchus.distribution.UniformIntegerDistribution;
-import org.hipparchus.distribution.WeibullDistribution;
-import org.hipparchus.distribution.ZipfDistribution;
+import org.hipparchus.distribution.continuous.BetaDistribution;
+import org.hipparchus.distribution.continuous.CauchyDistribution;
+import org.hipparchus.distribution.continuous.ChiSquaredDistribution;
+import org.hipparchus.distribution.continuous.ExponentialDistribution;
+import org.hipparchus.distribution.continuous.FDistribution;
+import org.hipparchus.distribution.continuous.GammaDistribution;
+import org.hipparchus.distribution.continuous.TDistribution;
+import org.hipparchus.distribution.continuous.WeibullDistribution;
+import org.hipparchus.distribution.discrete.BinomialDistribution;
+import org.hipparchus.distribution.discrete.HypergeometricDistribution;
+import org.hipparchus.distribution.discrete.PascalDistribution;
+import org.hipparchus.distribution.discrete.PoissonDistribution;
+import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
+import org.hipparchus.distribution.discrete.ZipfDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -493,7 +493,7 @@ public class RandomDataGenerator implements Serializable {
 
     /**
      * <p>Generates a random value from the
-     * {@link org.hipparchus.distribution.GammaDistribution Gamma Distribution}.</p>
+     * {@link org.hipparchus.distribution.continuous.GammaDistribution Gamma Distribution}.</p>
      *
      * <p>This implementation uses the following algorithms: </p>
      *

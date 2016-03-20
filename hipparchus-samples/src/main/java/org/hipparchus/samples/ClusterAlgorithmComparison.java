@@ -34,7 +34,7 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.hipparchus.distribution.NormalDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.ml.clustering.CentroidCluster;
 import org.hipparchus.ml.clustering.Cluster;

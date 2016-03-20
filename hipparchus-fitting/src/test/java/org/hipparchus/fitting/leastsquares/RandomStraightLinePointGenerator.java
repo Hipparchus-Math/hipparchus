@@ -19,9 +19,9 @@ package org.hipparchus.fitting.leastsquares;
 
 import java.awt.geom.Point2D;
 
-import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.UniformRealDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
+import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well44497b;
 

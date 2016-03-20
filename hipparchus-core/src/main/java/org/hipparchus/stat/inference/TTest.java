@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.inference;
 
-import org.hipparchus.distribution.TDistribution;
+import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -46,7 +46,7 @@ import org.hipparchus.util.FastMath;
  * <p>
  * Input to tests can be either <code>double[]</code> arrays or
  * {@link StatisticalSummary} instances.</p><p>
- * Uses commons-math {@link org.hipparchus.distribution.TDistribution}
+ * Uses commons-math {@link org.hipparchus.distribution.continuous.TDistribution}
  * implementation to estimate exact p-values.</p>
  *
  */

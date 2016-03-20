@@ -20,7 +20,7 @@ import java.util.Arrays;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.UniformRealDistribution;
+import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.Frequency;
 import org.hipparchus.stat.inference.KolmogorovSmirnovTest;

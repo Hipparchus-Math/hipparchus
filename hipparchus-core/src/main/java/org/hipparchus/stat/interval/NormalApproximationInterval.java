@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.hipparchus.distribution.NormalDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.util.FastMath;
 
 /**

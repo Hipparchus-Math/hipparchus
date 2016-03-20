@@ -31,7 +31,7 @@ import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
 
 /**
- * <p>A generic implementation of a
+ * A generic implementation of a
  * <a href="http://en.wikipedia.org/wiki/Probability_distribution#Discrete_probability_distribution">
  * discrete probability distribution (Wikipedia)</a> over a finite sample space,
  * based on an enumerated list of &lt;value, probability&gt; pairs.  Input probabilities must all be non-negative,
@@ -45,7 +45,6 @@ import org.hipparchus.util.Pair;
  * pmf will assign mass of 0.5 to null, 0.3 to "dog" and 0.2 to null.</p>
  *
  * @param <T> type of the elements in the sample space.
- * @since 3.2
  */
 public class EnumeratedDistribution<T> implements Serializable {
 
@@ -161,7 +160,7 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @param x the point at which the PMF is evaluated
      * @return the value of the probability mass function at {@code x}
      */
-    double probability(final T x) {
+    public double probability(final T x) {
         double probability = 0;
 
         for (int i = 0; i < probabilities.length; i++) {

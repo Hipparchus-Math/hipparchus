@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 /**
- * Implementations of common discrete and continuous distributions.
+ * Interfaces and implementations of common discrete and
+ * continuous distributions.
  */
 package org.hipparchus.distribution;

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.inference;
 
-import org.hipparchus.distribution.ChiSquaredDistribution;
+import org.hipparchus.distribution.continuous.ChiSquaredDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;

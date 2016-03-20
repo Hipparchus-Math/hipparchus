@@ -19,7 +19,7 @@ package org.hipparchus.stat.inference;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.distribution.NormalDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.SummaryStatistics;

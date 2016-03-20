@@ -17,7 +17,7 @@
 package org.hipparchus.util;
 
 import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.UniformIntegerDistribution;
+import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.ResizableDoubleArray.ExpansionMode;

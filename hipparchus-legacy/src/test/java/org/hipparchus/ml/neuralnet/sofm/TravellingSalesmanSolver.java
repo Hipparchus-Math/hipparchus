@@ -29,7 +29,7 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Constant;
 import org.hipparchus.analysis.function.HarmonicOscillator;
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.UniformRealDistribution;
+import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ml.distance.DistanceMeasure;

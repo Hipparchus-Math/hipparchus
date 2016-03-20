@@ -17,7 +17,7 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
-import org.hipparchus.distribution.UniformRealDistribution;
+import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;

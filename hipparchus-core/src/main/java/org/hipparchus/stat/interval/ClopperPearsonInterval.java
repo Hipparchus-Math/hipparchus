@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.hipparchus.distribution.FDistribution;
+import org.hipparchus.distribution.continuous.FDistribution;
 
 /**
  * Implements the Clopper-Pearson method for creating a binomial proportion confidence interval.

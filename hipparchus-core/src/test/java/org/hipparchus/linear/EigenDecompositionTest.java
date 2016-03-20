@@ -20,7 +20,7 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.hipparchus.distribution.NormalDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.EigenDecomposition;

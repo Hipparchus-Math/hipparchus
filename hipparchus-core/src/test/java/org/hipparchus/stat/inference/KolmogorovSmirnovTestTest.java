@@ -21,8 +21,8 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.distribution.NormalDistribution;
-import org.hipparchus.distribution.UniformRealDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
+import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.CombinatoricsUtils;

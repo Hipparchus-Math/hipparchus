@@ -28,10 +28,10 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.distribution.AbstractRealDistribution;
-import org.hipparchus.distribution.ConstantRealDistribution;
-import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.RealDistribution;
+import org.hipparchus.distribution.continuous.AbstractRealDistribution;
+import org.hipparchus.distribution.continuous.ConstantRealDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -557,15 +557,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     }
 
     // Distribution methods ---------------------------
-
-    /**
-     * {@inheritDoc}
-     * @since 3.1
-     */
-    @Override
-    public double probability(double x) {
-        return 0;
-    }
 
     /**
      * {@inheritDoc}

@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.distribution.MixtureMultivariateNormalDistribution;
-import org.hipparchus.distribution.MultivariateNormalDistribution;
+import org.hipparchus.distribution.multivariate.MixtureMultivariateNormalDistribution;
+import org.hipparchus.distribution.multivariate.MultivariateNormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -45,28 +45,17 @@ import org.hipparchus.util.Pair;
  * (see the JUnit test cases) but it is <strong>not</strong> based on Mixtools code at all.
  * The discussion of the origin of this class can be seen in the comments of the <a
  * href="https://issues.apache.org/jira/browse/MATH-817">MATH-817</a> JIRA issue.
- * @since 3.2
  */
 public class MultivariateNormalMixtureExpectationMaximization {
-    /**
-     * Default maximum number of iterations allowed per fitting process.
-     */
+    /** Default maximum number of iterations allowed per fitting process. */
     private static final int DEFAULT_MAX_ITERATIONS = 1000;
-    /**
-     * Default convergence threshold for fitting.
-     */
+    /** Default convergence threshold for fitting. */
     private static final double DEFAULT_THRESHOLD = 1E-5;
-    /**
-     * The data to fit.
-     */
+    /** The data to fit. */
     private final double[][] data;
-    /**
-     * The model fit against the data.
-     */
+    /** The model fit against the data. */
     private MixtureMultivariateNormalDistribution fittedModel;
-    /**
-     * The log likelihood of the data given the fitted model.
-     */
+    /** The log likelihood of the data given the fitted model. */
     private double logLikelihood = 0d;
 
     /**
@@ -75,9 +64,9 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * @param data Data to use in fitting procedure
      * @throws MathIllegalArgumentException if data has no rows
      * @throws MathIllegalArgumentException if rows of data have different numbers
-     *             of columns
+     * of columns
      * @throws MathIllegalArgumentException if the number of columns in the data is
-     *             less than 2
+     * less than 2
      */
     public MultivariateNormalMixtureExpectationMaximization(double[][] data)
         throws MathIllegalArgumentException {
@@ -113,21 +102,21 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * initialization would work.
      *
      * @param initialMixture Model containing initial values of weights and
-     *            multivariate normals
+     * multivariate normals
      * @param maxIterations Maximum iterations allowed for fit
      * @param threshold Convergence threshold computed as difference in
-     *             logLikelihoods between successive iterations
+     * logLikelihoods between successive iterations
      * @throws MathIllegalArgumentException if any component's covariance matrix is
-     *             singular during fitting
+     * singular during fitting
      * @throws MathIllegalArgumentException if numComponents is less than one
-     *             or threshold is less than Double.MIN_VALUE
+     * or threshold is less than Double.MIN_VALUE
      * @throws MathIllegalArgumentException if initialMixture mean vector and data
-     *             number of columns are not equal
+     * number of columns are not equal
      */
     public void fit(final MixtureMultivariateNormalDistribution initialMixture,
                     final int maxIterations,
                     final double threshold)
-            throws MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (maxIterations < 1) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    maxIterations, 1);
@@ -265,11 +254,11 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * initialization would work.
      *
      * @param initialMixture Model containing initial values of weights and
-     *            multivariate normals
+     * multivariate normals
      * @throws MathIllegalArgumentException if any component's covariance matrix is
-     *             singular during fitting
+     * singular during fitting
      * @throws MathIllegalArgumentException if numComponents is less than one or
-     *             threshold is less than Double.MIN_VALUE
+     * threshold is less than Double.MIN_VALUE
      */
     public void fit(MixtureMultivariateNormalDistribution initialMixture)
         throws MathIllegalArgumentException {
@@ -292,7 +281,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
      * @throws MathIllegalArgumentException if {@code numComponents < 2}.
      * @throws MathIllegalArgumentException if data has less than 2 rows
      * @throws MathIllegalArgumentException if rows of data have different numbers
-     *             of columns
+     * of columns
      */
     public static MixtureMultivariateNormalDistribution estimate(final double[][] data,
                                                                  final int numComponents)

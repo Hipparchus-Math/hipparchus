@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.distribution.TDistribution;
+import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;

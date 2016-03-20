@@ -21,9 +21,9 @@ import java.util.List;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.UniformIntegerDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
+import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.WeightedEvaluation;
 import org.hipparchus.util.FastMath;

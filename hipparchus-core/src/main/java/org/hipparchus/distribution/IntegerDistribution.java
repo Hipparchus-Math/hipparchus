@@ -19,7 +19,7 @@ package org.hipparchus.distribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
- * Interface for distributions on the integers.
+ * Interface for discrete distributions.
  */
 public interface IntegerDistribution {
 
@@ -35,7 +35,6 @@ public interface IntegerDistribution {
      *
      * @param x the point at which the PMF is evaluated
      * @return the logarithm of the value of the probability mass function at {@code x}
-     * @since 4.0
      */
     double logProbability(int x);
 
@@ -60,8 +59,6 @@ public interface IntegerDistribution {
      * will take a value between {@code x0} and {@code x1},
      * excluding the lower and including the upper endpoint
      * @throws MathIllegalArgumentException if {@code x0 > x1}
-     *
-     * @since 4.0, was previously named cumulativeProbability
      */
     double probability(int x0, int x1) throws MathIllegalArgumentException;
 
@@ -147,7 +144,6 @@ public interface IntegerDistribution {
      * Reseed the random generator used to generate samples.
      *
      * @param seed the new seed
-     * @since 3.0
      */
     void reseedRandomGenerator(long seed);
 
@@ -155,7 +151,6 @@ public interface IntegerDistribution {
      * Generate a random value sampled from this distribution.
      *
      * @return a random value
-     * @since 3.0
      */
     int sample();
 
@@ -166,7 +161,6 @@ public interface IntegerDistribution {
      * @return an array representing the random sample
      * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if {@code sampleSize} is not positive
-     * @since 3.0
      */
     int[] sample(int sampleSize);
 }

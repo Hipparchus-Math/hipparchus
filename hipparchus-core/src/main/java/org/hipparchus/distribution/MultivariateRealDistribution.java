@@ -19,13 +19,11 @@ package org.hipparchus.distribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
- * Base interface for multivariate distributions on the reals.
+ * Base interface for multivariate continuous distributions.
  *
  * This is based largely on the RealDistribution interface, but cumulative
  * distribution functions are not required because they are often quite
  * difficult to compute for multivariate distributions.
- *
- * @since 3.1
  */
 public interface MultivariateRealDistribution {
     /**

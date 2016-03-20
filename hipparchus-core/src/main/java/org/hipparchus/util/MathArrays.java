@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.hipparchus.Field;
-import org.hipparchus.distribution.UniformIntegerDistribution;
+import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;

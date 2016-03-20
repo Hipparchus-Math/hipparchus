@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 
 import java.util.Random;
 
-import org.hipparchus.distribution.NormalDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;

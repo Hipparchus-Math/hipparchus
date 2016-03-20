@@ -18,7 +18,7 @@ package org.hipparchus.stat.descriptive.rank;
 
 import java.util.Arrays;
 
-import org.hipparchus.distribution.NormalDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;

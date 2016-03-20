@@ -21,7 +21,7 @@ import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.UniformRealDistribution;
+import org.hipparchus.distribution.continuous.UniformRealDistribution;
 
 /**
  * Class that creates two intertwined rings.

@@ -17,7 +17,7 @@
 package org.hipparchus.stat.correlation;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.distribution.TDistribution;
+import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;

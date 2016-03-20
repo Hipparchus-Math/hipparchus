@@ -19,7 +19,7 @@ package org.hipparchus.stat.inference;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.distribution.FDistribution;
+import org.hipparchus.distribution.continuous.FDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -35,7 +35,7 @@ import org.hipparchus.util.MathUtils;
  * computer programmers).  When two categories are given, this is equivalent to
  * the {@link org.hipparchus.stat.inference.TTest}.
  * </p><p>
- * Uses the {@link org.hipparchus.distribution.FDistribution
+ * Uses the {@link org.hipparchus.distribution.continuous.FDistribution
  * commons-math F Distribution implementation} to estimate exact p-values.</p>
  * <p>This implementation is based on a description at
  * http://faculty.vassar.edu/lowry/ch13pt1.html</p>
@@ -101,7 +101,7 @@ public class OneWayAnova {
      * <code>categoryData</code> collection and each of these arrays must
      * contain at least two values.</li></ul></p><p>
      * This implementation uses the
-     * {@link org.hipparchus.distribution.FDistribution
+     * {@link org.hipparchus.distribution.continuous.FDistribution
      * commons-math F Distribution implementation} to estimate the exact
      * p-value, using the formula<pre>
      *   p = 1 - cumulativeProbability(F)</pre>
@@ -140,7 +140,7 @@ public class OneWayAnova {
      * <code>categoryData</code> collection and each of these statistics must
      * contain at least two values.</li></ul></p><p>
      * This implementation uses the
-     * {@link org.hipparchus.distribution.FDistribution
+     * {@link org.hipparchus.distribution.continuous.FDistribution
      * commons-math F Distribution implementation} to estimate the exact
      * p-value, using the formula<pre>
      *   p = 1 - cumulativeProbability(F)</pre>
@@ -221,7 +221,7 @@ public class OneWayAnova {
      * <li>alpha must be strictly greater than 0 and less than or equal to 0.5.
      * </li></ul></p><p>
      * This implementation uses the
-     * {@link org.hipparchus.distribution.FDistribution
+     * {@link org.hipparchus.distribution.continuous.FDistribution
      * commons-math F Distribution implementation} to estimate the exact
      * p-value, using the formula<pre>
      *   p = 1 - cumulativeProbability(F)</pre>

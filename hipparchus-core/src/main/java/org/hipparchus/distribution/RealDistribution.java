@@ -16,24 +16,13 @@
  */
 package org.hipparchus.distribution;
 
+import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
- * Base interface for distributions on the reals.
- *
- * @since 3.0
+ * Base interface for continuous distributions.
  */
 public interface RealDistribution {
-    /**
-     * For a random variable {@code X} whose values are distributed according
-     * to this distribution, this method returns {@code P(X = x)}. In other
-     * words, this method represents the probability mass function (PMF)
-     * for the distribution.
-     *
-     * @param x the point at which the PMF is evaluated
-     * @return the value of the probability mass function at point {@code x}
-     */
-    double probability(double x);
 
     /**
      * For a random variable {@code X} whose values are distributed according
@@ -45,8 +34,6 @@ public interface RealDistribution {
      * takes a value between {@code x0} and {@code x1},
      * excluding the lower and including the upper endpoint
      * @throws MathIllegalArgumentException if {@code x0 > x1}
-     *
-     * @since 4.0, was previously named cumulativeProbability
      */
     double probability(double x0, double x1) throws MathIllegalArgumentException;
 
@@ -77,7 +64,6 @@ public interface RealDistribution {
      *
      * @param x the point at which the PDF is evaluated
      * @return the logarithm of the value of the probability density function at point {@code x}
-     * @since 4.0
      */
     double logDensity(double x);
 
