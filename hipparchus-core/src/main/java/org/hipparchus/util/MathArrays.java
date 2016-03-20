@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.TreeSet;
 
 import org.hipparchus.Field;
-import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -1612,36 +1611,24 @@ public class MathArrays {
                                Position pos,
                                RandomGenerator rng) {
         switch (pos) {
-        case TAIL: {
-            for (int i = list.length - 1; i >= start; i--) {
-                final int target;
-                if (i == start) {
-                    target = start;
-                } else {
-                    // MathIllegalArgumentException cannot occur.
-                    target = new UniformIntegerDistribution(rng, start, i).sample();
-                }
+        case TAIL:
+            for (int i = list.length - 1; i > start; i--) {
+                final int target = start + rng.nextInt(i - start + 1);
                 final int temp = list[target];
                 list[target] = list[i];
                 list[i] = temp;
             }
-        }
             break;
-        case HEAD: {
-            for (int i = 0; i <= start; i++) {
-                final int target;
-                if (i == start) {
-                    target = start;
-                } else {
-                    // MathIllegalArgumentException cannot occur.
-                    target = new UniformIntegerDistribution(rng, i, start).sample();
-                }
+
+        case HEAD:
+            for (int i = 0; i < start; i++) {
+                final int target = i + rng.nextInt(start - i + 1);
                 final int temp = list[target];
                 list[target] = list[i];
                 list[i] = temp;
             }
-        }
             break;
+
         default:
             throw MathRuntimeException.createInternalError(); // Should never happen.
         }
