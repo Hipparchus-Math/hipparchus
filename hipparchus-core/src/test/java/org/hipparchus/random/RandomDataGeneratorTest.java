@@ -45,6 +45,7 @@ import org.hipparchus.distribution.discrete.ZipfDistributionTest;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.stat.Frequency;
+import org.hipparchus.stat.LongFrequency;
 import org.hipparchus.stat.inference.ChiSquareTest;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -134,7 +135,7 @@ public class RandomDataGeneratorTest {
     }
 
     private void checkNextIntUniform(int min, int max) {
-        final Frequency freq = new Frequency();
+        final LongFrequency freq = new LongFrequency();
         for (int i = 0; i < smallSampleSize; i++) {
             final int value = randomData.nextInt(min, max);
             Assert.assertTrue("nextInt range", (value >= min) && (value <= max));
@@ -208,7 +209,7 @@ public class RandomDataGeneratorTest {
     }
 
     private void checkNextLongUniform(long min, long max) {
-        final Frequency freq = new Frequency();
+        final LongFrequency freq = new LongFrequency();
         for (int i = 0; i < smallSampleSize; i++) {
             final long value = randomData.nextLong(min, max);
             Assert.assertTrue("nextLong range: " + value + " " + min + " " + max,
@@ -284,7 +285,7 @@ public class RandomDataGeneratorTest {
     }
 
     private void checkNextSecureLongUniform(int min, int max) {
-        final Frequency freq = new Frequency();
+        final LongFrequency freq = new LongFrequency();
         for (int i = 0; i < smallSampleSize; i++) {
             final long value = randomData.nextSecureLong(min, max);
             Assert.assertTrue("nextLong range", (value >= min) && (value <= max));
@@ -341,7 +342,7 @@ public class RandomDataGeneratorTest {
     }
 
     private void checkNextSecureIntUniform(int min, int max) {
-        final Frequency freq = new Frequency();
+        final LongFrequency freq = new LongFrequency();
         for (int i = 0; i < smallSampleSize; i++) {
             final int value = randomData.nextSecureInt(min, max);
             Assert.assertTrue("nextInt range", (value >= min) && (value <= max));
@@ -391,7 +392,7 @@ public class RandomDataGeneratorTest {
         final double mean = 4.0d;
         final int len = 5;
         PoissonDistribution poissonDistribution = new PoissonDistribution(mean);
-        Frequency f = new Frequency();
+        LongFrequency f = new LongFrequency();
         randomData.reSeed(1000);
         for (int i = 0; i < largeSampleSize; i++) {
             f.addValue(randomData.nextPoisson(mean));
@@ -440,7 +441,7 @@ public class RandomDataGeneratorTest {
         final int minExpectedCount = 7;     // Minimum size of expected bin count
         long maxObservedValue = 0;
         final double alpha = 0.001;         // Probability of false failure
-        Frequency frequency = new Frequency();
+        LongFrequency frequency = new LongFrequency();
         for (int i = 0; i < sampleSize; i++) {
             long value = randomData.nextPoisson(mean);
             if (value > maxObservedValue) {
@@ -583,7 +584,7 @@ public class RandomDataGeneratorTest {
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
-        Frequency f = new Frequency();
+        Frequency<String> f = new Frequency<>();
         for (int i = 0; i < smallSampleSize; i++) {
             hexString = randomData.nextHexString(100);
             if (hexString.length() != 100) {
@@ -632,7 +633,7 @@ public class RandomDataGeneratorTest {
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
-        Frequency f = new Frequency();
+        Frequency<String> f = new Frequency<>();
         for (int i = 0; i < smallSampleSize; i++) {
             hexString = randomData.nextSecureHexString(100);
             if (hexString.length() != 100) {
@@ -723,7 +724,7 @@ public class RandomDataGeneratorTest {
             binBounds[i] = binBounds[i - 1] + binSize;  // + instead of * to avoid overflow in extreme case
         }
 
-        final Frequency freq = new Frequency();
+        final LongFrequency freq = new LongFrequency();
         for (int i = 0; i < smallSampleSize; i++) {
             final double value = randomData.nextUniform(min, max);
             Assert.assertTrue("nextUniform range", (value > min) && (value < max));

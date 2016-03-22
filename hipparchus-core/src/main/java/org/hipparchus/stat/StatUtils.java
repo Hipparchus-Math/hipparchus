@@ -16,6 +16,7 @@
  */
 package org.hipparchus.stat;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -846,21 +847,17 @@ public final class StatUtils {
      */
     private static double[] getMode(double[] values, final int begin, final int length) {
         // Add the values to the frequency table
-        Frequency freq = new Frequency();
-        for (int i = begin; i < begin + length; i++) {
-            final double value = values[i];
-            if (!Double.isNaN(value)) {
-                freq.addValue(Double.valueOf(value));
-            }
-        }
-        List<Comparable<?>> list = freq.getMode();
+        Frequency<Double> freq = new Frequency<>();
+
+        Arrays.stream(values, begin, begin + length)
+              .filter(d -> !Double.isNaN(d))
+              .forEach(freq::addValue);
+        
+        List<Double> list = freq.getMode();
         // Convert the list to an array of primitive double
-        double[] modes = new double[list.size()];
-        int i = 0;
-        for(Comparable<?> c : list) {
-            modes[i++] = ((Double) c).doubleValue();
-        }
-        return modes;
+        return list.stream()
+                   .mapToDouble(Double::doubleValue)
+                   .toArray();
     }
 
 }

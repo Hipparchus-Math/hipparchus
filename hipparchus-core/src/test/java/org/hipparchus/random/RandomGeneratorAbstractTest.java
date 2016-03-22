@@ -23,6 +23,7 @@ import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.Frequency;
+import org.hipparchus.stat.LongFrequency;
 import org.hipparchus.stat.inference.KolmogorovSmirnovTest;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -168,7 +169,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         long q2 = 2 *  q1;
         long q3 = 3 * q1;
 
-        Frequency freq = new Frequency();
+        LongFrequency freq = new LongFrequency();
         long val = 0;
         int value = 0;
         for (int i=0; i<smallSampleSize; i++) {
@@ -194,7 +195,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
          * Change to 11.34 for alpha = .01
          */
         Assert.assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                testStatistic.chiSquare(expected,observed) < 16.27);
+                          testStatistic.chiSquare(expected,observed) < 16.27);
     }
 
     @Test
@@ -218,7 +219,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
 
     @Test
     public void testNextFloatDirect() {
-        Frequency freq = new Frequency();
+        LongFrequency freq = new LongFrequency();
         float val = 0;
         int value = 0;
         for (int i=0; i<smallSampleSize; i++) {

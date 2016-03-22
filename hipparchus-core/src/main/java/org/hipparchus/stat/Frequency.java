@@ -18,63 +18,39 @@ package org.hipparchus.stat;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.SortedMap;
+import java.util.stream.Collectors;
+import java.util.NavigableMap;
+import java.util.Objects;
 import java.util.TreeMap;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
 
 /**
- * Maintains a frequency distribution.
- * <p>
- * Accepts int, long, char or Comparable values.  New values added must be
- * comparable to those that have been added, otherwise the add method will
- * throw an IllegalArgumentException.</p>
- * <p>
- * Integer values (int, long, Integer, Long) are not distinguished by type --
- * i.e. <code>addValue(Long.valueOf(2)), addValue(2), addValue(2l)</code> all have
- * the same effect (similarly for arguments to <code>getCount,</code> etc.).</p>
- * <p>NOTE: byte and short values will be implicitly converted to int values
- * by the compiler, thus there are no explicit overloaded methods for these
- * primitive types.</p>
- * <p>
- * char values are converted by <code>addValue</code> to Character instances.
- * As such, these values are not comparable to integral values, so attempts
- * to combine integral types with chars in a frequency distribution will fail.
- * </p>
- * <p>
- * Float is not coerced to Double.
- * Since they are not Comparable with each other the user must do any necessary coercion.
- * Float.NaN and Double.NaN are not treated specially; they may occur in input and will
- * occur in output if appropriate.
- * </b>
+ * Maintains a frequency distribution of Comparable values.
  * <p>
  * The values are ordered using the default (natural order), unless a
- * <code>Comparator</code> is supplied in the constructor.</p>
- *
+ * {@code Comparator} is supplied in the constructor.
  */
-public class Frequency implements Serializable {
+public class Frequency<T extends Comparable<T>> implements Serializable {
 
     /** Serializable version identifier */
-    private static final long serialVersionUID = -3845586908418844111L;
+    private static final long serialVersionUID = 20160322L;
 
     /** underlying collection */
-    private final SortedMap<Comparable<?>, Long> freqTable;
+    private final NavigableMap<T, Long> freqTable;
 
     /**
      * Default constructor.
      */
     public Frequency() {
-        freqTable = new TreeMap<Comparable<?>, Long>();
+        freqTable = new TreeMap<>();
     }
 
     /**
@@ -82,164 +58,28 @@ public class Frequency implements Serializable {
      *
      * @param comparator Comparator used to order values
      */
-    @SuppressWarnings("unchecked") // TODO is the cast OK?
-    public Frequency(Comparator<?> comparator) {
-        freqTable = new TreeMap<Comparable<?>, Long>((Comparator<? super Comparable<?>>) comparator);
-    }
-
-    /**
-     * Return a string representation of this frequency distribution.
-     *
-     * @return a string representation.
-     */
-    @Override
-    public String toString() {
-        NumberFormat nf = NumberFormat.getPercentInstance();
-        StringBuilder outBuffer = new StringBuilder();
-        outBuffer.append("Value \t Freq. \t Pct. \t Cum Pct. \n");
-        Iterator<Comparable<?>> iter = freqTable.keySet().iterator();
-        while (iter.hasNext()) {
-            Comparable<?> value = iter.next();
-            outBuffer.append(value);
-            outBuffer.append('\t');
-            outBuffer.append(getCount(value));
-            outBuffer.append('\t');
-            outBuffer.append(nf.format(getPct(value)));
-            outBuffer.append('\t');
-            outBuffer.append(nf.format(getCumPct(value)));
-            outBuffer.append('\n');
-        }
-        return outBuffer.toString();
+    public Frequency(Comparator<? super T> comparator) {
+        freqTable = new TreeMap<>(comparator);
     }
 
     /**
      * Adds 1 to the frequency count for v.
-     * <p>
-     * If other objects have already been added to this Frequency, v must
-     * be comparable to those that have already been added.
-     * </p>
      *
      * @param v the value to add.
-     * @throws MathIllegalArgumentException if <code>v</code> is not comparable with previous entries
      */
-    public void addValue(Comparable<?> v) throws MathIllegalArgumentException {
+    public void addValue(T v) {
         incrementValue(v, 1);
     }
 
     /**
-     * Adds 1 to the frequency count for v.
-     *
-     * @param v the value to add.
-     * @throws MathIllegalArgumentException if the table contains entries not
-     * comparable to Long
-     */
-    public void addValue(int v) throws MathIllegalArgumentException {
-        addValue(Long.valueOf(v));
-    }
-
-    /**
-     * Adds 1 to the frequency count for v.
-     *
-     * @param v the value to add.
-     * @throws MathIllegalArgumentException if the table contains entries not
-     * comparable to Long
-     */
-    public void addValue(long v) throws MathIllegalArgumentException {
-        addValue(Long.valueOf(v));
-    }
-
-    /**
-     * Adds 1 to the frequency count for v.
-     *
-     * @param v the value to add.
-     * @throws MathIllegalArgumentException if the table contains entries not
-     * comparable to Char
-     */
-    public void addValue(char v) throws MathIllegalArgumentException {
-        addValue(Character.valueOf(v));
-    }
-
-    /**
      * Increments the frequency count for v.
-     * <p>
-     * If other objects have already been added to this Frequency, v must
-     * be comparable to those that have already been added.
-     * </p>
      *
      * @param v the value to add.
      * @param increment the amount by which the value should be incremented
-     * @throws MathIllegalArgumentException if <code>v</code> is not comparable with previous entries
-     * @since 3.1
      */
-    public void incrementValue(Comparable<?> v, long increment) throws MathIllegalArgumentException {
-        Comparable<?> obj = v;
-        if (v instanceof Integer) {
-            obj = Long.valueOf(((Integer) v).longValue());
-        }
-        try {
-            Long count = freqTable.get(obj);
-            if (count == null) {
-                freqTable.put(obj, Long.valueOf(increment));
-            } else {
-                freqTable.put(obj, Long.valueOf(count.longValue() + increment));
-            }
-        } catch (ClassCastException ex) {
-            //TreeMap will throw ClassCastException if v is not comparable
-            throw new MathIllegalArgumentException(
-                  LocalizedCoreFormats.INSTANCES_NOT_COMPARABLE_TO_EXISTING_VALUES,
-                  v.getClass().getName());
-        }
-    }
-
-    /**
-     * Increments the frequency count for v.
-     * <p>
-     * If other objects have already been added to this Frequency, v must
-     * be comparable to those that have already been added.
-     * </p>
-     *
-     * @param v the value to add.
-     * @param increment the amount by which the value should be incremented
-     * @throws MathIllegalArgumentException if the table contains entries not
-     * comparable to Long
-     * @since 3.3
-     */
-    public void incrementValue(int v, long increment) throws MathIllegalArgumentException {
-        incrementValue(Long.valueOf(v), increment);
-    }
-
-    /**
-     * Increments the frequency count for v.
-     * <p>
-     * If other objects have already been added to this Frequency, v must
-     * be comparable to those that have already been added.
-     * </p>
-     *
-     * @param v the value to add.
-     * @param increment the amount by which the value should be incremented
-     * @throws MathIllegalArgumentException if the table contains entries not
-     * comparable to Long
-     * @since 3.3
-     */
-    public void incrementValue(long v, long increment) throws MathIllegalArgumentException {
-        incrementValue(Long.valueOf(v), increment);
-    }
-
-    /**
-     * Increments the frequency count for v.
-     * <p>
-     * If other objects have already been added to this Frequency, v must
-     * be comparable to those that have already been added.
-     * </p>
-     *
-     * @param v the value to add.
-     * @param increment the amount by which the value should be incremented
-     * @throws MathIllegalArgumentException if the table contains entries not
-     * comparable to Char
-     * @since 3.3
-     */
-    public void incrementValue(char v, long increment) throws MathIllegalArgumentException {
-        incrementValue(Character.valueOf(v), increment);
+    public void incrementValue(T v, long increment) {
+        Long count = freqTable.getOrDefault(v, Long.valueOf(0));
+        freqTable.put(v, Long.valueOf(count.longValue() + increment));
     }
 
     /** Clears the frequency table */
@@ -249,14 +89,10 @@ public class Frequency implements Serializable {
 
     /**
      * Returns an Iterator over the set of values that have been added.
-     * <p>
-     * If added values are integral (i.e., integers, longs, Integers, or Longs),
-     * they are converted to Longs when they are added, so the objects returned
-     * by the Iterator will in this case be Longs.</p>
      *
      * @return values Iterator
      */
-    public Iterator<Comparable<?>> valuesIterator() {
+    public Iterator<T> valuesIterator() {
         return freqTable.keySet().iterator();
     }
 
@@ -265,15 +101,10 @@ public class Frequency implements Serializable {
      * Using the entry set to iterate is more efficient in the case where you
      * need to access respective counts as well as values, since it doesn't
      * require a "get" for every key...the value is provided in the Map.Entry.
-     * <p>
-     * If added values are integral (i.e., integers, longs, Integers, or Longs),
-     * they are converted to Longs when they are added, so the values of the
-     * map entries returned by the Iterator will in this case be Longs.</p>
      *
      * @return entry set Iterator
-     * @since 3.1
      */
-    public Iterator<Map.Entry<Comparable<?>, Long>> entrySetIterator() {
+    public Iterator<Map.Entry<T, Long>> entrySetIterator() {
         return freqTable.entrySet().iterator();
     }
 
@@ -285,12 +116,10 @@ public class Frequency implements Serializable {
      * @return the total frequency count.
      */
     public long getSumFreq() {
-        long result = 0;
-        Iterator<Long> iterator = freqTable.values().iterator();
-        while (iterator.hasNext())  {
-            result += iterator.next().longValue();
-        }
-        return result;
+        return freqTable.values()
+                        .stream()
+                        .mapToLong(Long::longValue)
+                        .sum();
     }
 
     /**
@@ -300,50 +129,8 @@ public class Frequency implements Serializable {
      * @param v the value to lookup.
      * @return the frequency of v.
      */
-    public long getCount(Comparable<?> v) {
-        if (v instanceof Integer) {
-            return getCount(((Integer) v).longValue());
-        }
-        long result = 0;
-        try {
-            Long count =  freqTable.get(v);
-            if (count != null) {
-                result = count.longValue();
-            }
-        } catch (ClassCastException ex) { // NOPMD
-            // ignore and return 0 -- ClassCastException will be thrown if value is not comparable
-        }
-        return result;
-    }
-
-    /**
-     * Returns the number of values equal to v.
-     *
-     * @param v the value to lookup.
-     * @return the frequency of v.
-     */
-    public long getCount(int v) {
-        return getCount(Long.valueOf(v));
-    }
-
-    /**
-     * Returns the number of values equal to v.
-     *
-     * @param v the value to lookup.
-     * @return the frequency of v.
-     */
-    public long getCount(long v) {
-        return getCount(Long.valueOf(v));
-    }
-
-    /**
-     * Returns the number of values equal to v.
-     *
-     * @param v the value to lookup.
-     * @return the frequency of v.
-     */
-    public long getCount(char v) {
-        return getCount(Character.valueOf(v));
+    public long getCount(T v) {
+        return freqTable.getOrDefault(v, 0L);
     }
 
     /**
@@ -360,14 +147,12 @@ public class Frequency implements Serializable {
      * Returns the percentage of values that are equal to v
      * (as a proportion between 0 and 1).
      * <p>
-     * Returns <code>Double.NaN</code> if no values have been added.
-     * Returns 0 if at least one value has been added, but v is not comparable
-     * to the values set.</p>
+     * Returns {@code Double.NaN} if no values have been added.
      *
      * @param v the value to lookup
      * @return the proportion of values equal to v
      */
-    public double getPct(Comparable<?> v) {
+    public double getPct(T v) {
         final long sumFreq = getSumFreq();
         if (sumFreq == 0) {
             return Double.NaN;
@@ -375,126 +160,33 @@ public class Frequency implements Serializable {
         return (double) getCount(v) / (double) sumFreq;
     }
 
-    /**
-     * Returns the percentage of values that are equal to v
-     * (as a proportion between 0 and 1).
-     *
-     * @param v the value to lookup
-     * @return the proportion of values equal to v
-     */
-    public double getPct(int v) {
-        return getPct(Long.valueOf(v));
-    }
-
-    /**
-     * Returns the percentage of values that are equal to v
-     * (as a proportion between 0 and 1).
-     *
-     * @param v the value to lookup
-     * @return the proportion of values equal to v
-     */
-    public double getPct(long v) {
-        return getPct(Long.valueOf(v));
-    }
-
-    /**
-     * Returns the percentage of values that are equal to v
-     * (as a proportion between 0 and 1).
-     *
-     * @param v the value to lookup
-     * @return the proportion of values equal to v
-     */
-    public double getPct(char v) {
-        return getPct(Character.valueOf(v));
-    }
-
     //-----------------------------------------------------------------------------------------
 
     /**
      * Returns the cumulative frequency of values less than or equal to v.
-     * <p>
-     * Returns 0 if v is not comparable to the values set.</p>
      *
      * @param v the value to lookup.
      * @return the proportion of values equal to v
      */
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public long getCumFreq(Comparable<?> v) {
+    public long getCumFreq(T v) {
         if (getSumFreq() == 0) {
             return 0;
         }
-        if (v instanceof Integer) {
-            return getCumFreq(((Integer) v).longValue());
-        }
-        Comparator<Comparable<?>> c = (Comparator<Comparable<?>>) freqTable.comparator();
-        if (c == null) {
-            c = new NaturalComparator();
-        }
-        long result = 0;
 
-        try {
-            Long value = freqTable.get(v);
-            if (value != null) {
-                result = value.longValue();
-            }
-        } catch (ClassCastException ex) {
-            return result;   // v is not comparable
+        NavigableMap<T, Long> headMap = freqTable.headMap(v, true);
+
+        if (headMap.isEmpty()) {
+            // v is less than first value
+            return 0;
+        } else if (headMap.size() == freqTable.size()) {
+            // v is greater than or equal to last value
+            return getSumFreq();
         }
 
-        if (c.compare(v, freqTable.firstKey()) < 0) {
-            return 0;  // v is comparable, but less than first value
-        }
-
-        if (c.compare(v, freqTable.lastKey()) >= 0) {
-            return getSumFreq();    // v is comparable, but greater than the last value
-        }
-
-        Iterator<Comparable<?>> values = valuesIterator();
-        while (values.hasNext()) {
-            Comparable<?> nextValue = values.next();
-            if (c.compare(v, nextValue) > 0) {
-                result += getCount(nextValue);
-            } else {
-                return result;
-            }
-        }
-        return result;
-    }
-
-     /**
-     * Returns the cumulative frequency of values less than or equal to v.
-     * <p>
-     * Returns 0 if v is not comparable to the values set.</p>
-     *
-     * @param v the value to lookup
-     * @return the proportion of values equal to v
-     */
-    public long getCumFreq(int v) {
-        return getCumFreq(Long.valueOf(v));
-    }
-
-     /**
-     * Returns the cumulative frequency of values less than or equal to v.
-     * <p>
-     * Returns 0 if v is not comparable to the values set.</p>
-     *
-     * @param v the value to lookup
-     * @return the proportion of values equal to v
-     */
-    public long getCumFreq(long v) {
-        return getCumFreq(Long.valueOf(v));
-    }
-
-    /**
-     * Returns the cumulative frequency of values less than or equal to v.
-     * <p>
-     * Returns 0 if v is not comparable to the values set.</p>
-     *
-     * @param v the value to lookup
-     * @return the proportion of values equal to v
-     */
-    public long getCumFreq(char v) {
-        return getCumFreq(Character.valueOf(v));
+        return headMap.values()
+                      .stream()
+                      .mapToLong(Long::longValue)
+                      .sum();
     }
 
     //----------------------------------------------------------------------------------------------
@@ -503,14 +195,12 @@ public class Frequency implements Serializable {
      * Returns the cumulative percentage of values less than or equal to v
      * (as a proportion between 0 and 1).
      * <p>
-     * Returns <code>Double.NaN</code> if no values have been added.
-     * Returns 0 if at least one value has been added, but v is not comparable
-     * to the values set.</p>
+     * Returns {@code Double.NaN} if no values have been added.
      *
      * @param v the value to lookup
      * @return the proportion of values less than or equal to v
      */
-    public double getCumPct(Comparable<?> v) {
+    public double getCumPct(T v) {
         final long sumFreq = getSumFreq();
         if (sumFreq == 0) {
             return Double.NaN;
@@ -519,69 +209,24 @@ public class Frequency implements Serializable {
     }
 
     /**
-     * Returns the cumulative percentage of values less than or equal to v
-     * (as a proportion between 0 and 1).
-     * <p>
-     * Returns 0 if v is not comparable to the values set.</p>
-     *
-     * @param v the value to lookup
-     * @return the proportion of values less than or equal to v
-     */
-    public double getCumPct(int v) {
-        return getCumPct(Long.valueOf(v));
-    }
-
-    /**
-     * Returns the cumulative percentage of values less than or equal to v
-     * (as a proportion between 0 and 1).
-     * <p>
-     * Returns 0 if v is not comparable to the values set.</p>
-     *
-     * @param v the value to lookup
-     * @return the proportion of values less than or equal to v
-     */
-    public double getCumPct(long v) {
-        return getCumPct(Long.valueOf(v));
-    }
-
-    /**
-     * Returns the cumulative percentage of values less than or equal to v
-     * (as a proportion between 0 and 1).
-     * <p>
-     * Returns 0 if v is not comparable to the values set.</p>
-     *
-     * @param v the value to lookup
-     * @return the proportion of values less than or equal to v
-     */
-    public double getCumPct(char v) {
-        return getCumPct(Character.valueOf(v));
-    }
-
-    /**
      * Returns the mode value(s) in comparator order.
      *
      * @return a list containing the value(s) which appear most often.
-     * @since 3.3
      */
-    public List<Comparable<?>> getMode() {
-        long mostPopular = 0; // frequencies are always positive
+    public List<T> getMode() {
+        // Get the max count first
+        final long mostPopular =
+                freqTable.values()
+                         .stream()
+                         .mapToLong(Long::longValue)
+                         .max()
+                         .orElse(0L);
 
-        // Get the max count first, so we avoid having to recreate the List each time
-        for(Long l : freqTable.values()) {
-            long frequency = l.longValue();
-            if (frequency > mostPopular) {
-                mostPopular = frequency;
-            }
-        }
-
-        List<Comparable<?>> modeList = new ArrayList<Comparable<?>>();
-        for (Entry<Comparable<?>, Long> ent : freqTable.entrySet()) {
-            long frequency = ent.getValue().longValue();
-            if (frequency == mostPopular) {
-               modeList.add(ent.getKey());
-            }
-        }
-        return modeList;
+        return freqTable.entrySet()
+                        .stream()
+                        .filter(entry -> entry.getValue() == mostPopular)
+                        .map(entry -> entry.getKey())
+                        .collect(Collectors.toList());
     }
 
     //----------------------------------------------------------------------------------------------
@@ -593,14 +238,13 @@ public class Frequency implements Serializable {
      *
      * @param other the other {@link Frequency} object to be merged
      * @throws NullArgumentException if {@code other} is null
-     * @since 3.1
      */
-    public void merge(final Frequency other) throws NullArgumentException {
+    public void merge(final Frequency<? extends T> other) throws NullArgumentException {
         MathUtils.checkNotNull(other, LocalizedCoreFormats.NULL_NOT_ALLOWED);
 
-        final Iterator<Map.Entry<Comparable<?>, Long>> iter = other.entrySetIterator();
+        Iterator<? extends Map.Entry<? extends T, Long>> iter = other.entrySetIterator();
         while (iter.hasNext()) {
-            final Map.Entry<Comparable<?>, Long> entry = iter.next();
+            final Map.Entry<? extends T, Long> entry = iter.next();
             incrementValue(entry.getKey(), entry.getValue().longValue());
         }
     }
@@ -612,12 +256,12 @@ public class Frequency implements Serializable {
      *
      * @param others the other {@link Frequency} objects to be merged
      * @throws NullArgumentException if the collection is null
-     * @since 3.1
      */
-    public void merge(final Collection<Frequency> others) throws NullArgumentException {
+    public void merge(final Collection<? extends Frequency<? extends T>> others)
+        throws NullArgumentException {
         MathUtils.checkNotNull(others, LocalizedCoreFormats.NULL_NOT_ALLOWED);
 
-        for (final Frequency freq : others) {
+        for (final Frequency<? extends T> freq : others) {
             merge(freq);
         }
     }
@@ -625,33 +269,28 @@ public class Frequency implements Serializable {
     //----------------------------------------------------------------------------------------------
 
     /**
-     * A Comparator that compares comparable objects using the
-     * natural order.  Copied from Commons Collections ComparableComparator.
-     * @param <T> the type of the objects compared
+     * Return a string representation of this frequency distribution.
+     *
+     * @return a string representation.
      */
-    private static class NaturalComparator<T extends Comparable<T>> implements Comparator<Comparable<T>>, Serializable {
-
-        /** Serializable version identifier */
-        private static final long serialVersionUID = -3852193713161395148L;
-
-        /**
-         * Compare the two {@link Comparable Comparable} arguments.
-         * This method is equivalent to:
-         * <pre>(({@link Comparable Comparable})o1).{@link Comparable#compareTo compareTo}(o2)</pre>
-         *
-         * @param  o1 the first object
-         * @param  o2 the second object
-         * @return  result of comparison
-         * @throws NullPointerException when <i>o1</i> is <code>null</code>,
-         *         or when <code>((Comparable)o1).compareTo(o2)</code> does
-         * @throws ClassCastException when <i>o1</i> is not a {@link Comparable Comparable},
-         *         or when <code>((Comparable)o1).compareTo(o2)</code> does
-         */
-        @Override
-        @SuppressWarnings("unchecked") // cast to (T) may throw ClassCastException, see Javadoc
-        public int compare(Comparable<T> o1, Comparable<T> o2) {
-            return o1.compareTo((T) o2);
+    @Override
+    public String toString() {
+        NumberFormat nf = NumberFormat.getPercentInstance();
+        StringBuilder outBuffer = new StringBuilder();
+        outBuffer.append("Value \tFreq. \tPct. \tCum Pct. \n");
+        Iterator<T> iter = freqTable.keySet().iterator();
+        while (iter.hasNext()) {
+            T value = iter.next();
+            outBuffer.append(value);
+            outBuffer.append('\t');
+            outBuffer.append(getCount(value));
+            outBuffer.append('\t');
+            outBuffer.append(nf.format(getPct(value)));
+            outBuffer.append('\t');
+            outBuffer.append(nf.format(getCumPct(value)));
+            outBuffer.append('\n');
         }
+        return outBuffer.toString();
     }
 
     /** {@inheritDoc} */
@@ -673,15 +312,8 @@ public class Frequency implements Serializable {
         if (!(obj instanceof Frequency)) {
             return false;
         }
-        Frequency other = (Frequency) obj;
-        if (freqTable == null) {
-            if (other.freqTable != null) {
-                return false;
-            }
-        } else if (!freqTable.equals(other.freqTable)) {
-            return false;
-        }
-        return true;
+        Frequency<?> other = (Frequency<?>) obj;
+        return Objects.equals(freqTable, other.freqTable);
     }
 
 }
