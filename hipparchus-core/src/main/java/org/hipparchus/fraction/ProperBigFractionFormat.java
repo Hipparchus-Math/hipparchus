@@ -25,22 +25,20 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.NullArgumentException;
 
 /**
- * Formats a BigFraction number in proper format.  The number format for each of
- * the whole number, numerator and, denominator can be configured.
+ * Formats a BigFraction number in proper format. The number format
+ * for each of the whole number, numerator and, denominator can be configured.
  * <p>
  * Minus signs are only allowed in the whole number part - i.e.,
  * "-3 1/2" is legitimate and denotes -7/2, but "-3 -1/2" is invalid and
- * will result in a <code>ParseException</code>.</p>
- *
- * @since 1.1
+ * will result in a <code>ParseException</code>.
  */
 public class ProperBigFractionFormat extends BigFractionFormat {
 
     /** Serializable version identifier */
-    private static final long serialVersionUID = -6337346779577272307L;
+    private static final long serialVersionUID = 20160323L;
 
     /** The format used for the whole number. */
-    private NumberFormat wholeFormat;
+    private final NumberFormat wholeFormat;
 
     /**
      * Create a proper formatting instance with the default number format for
@@ -53,8 +51,8 @@ public class ProperBigFractionFormat extends BigFractionFormat {
     /**
      * Create a proper formatting instance with a custom number format for the
      * whole, numerator, and denominator.
-     * @param format the custom format for the whole, numerator, and
-     *        denominator.
+     * @param format the custom format for the whole, numerator, and denominator.
+     * @throws NullArgumentException if the provided format is null.
      */
     public ProperBigFractionFormat(final NumberFormat format) {
         this(format, (NumberFormat)format.clone(), (NumberFormat)format.clone());
@@ -66,12 +64,17 @@ public class ProperBigFractionFormat extends BigFractionFormat {
      * @param wholeFormat the custom format for the whole.
      * @param numeratorFormat the custom format for the numerator.
      * @param denominatorFormat the custom format for the denominator.
+     * @throws NullArgumentException if either provided format is null.
      */
     public ProperBigFractionFormat(final NumberFormat wholeFormat,
                                    final NumberFormat numeratorFormat,
                                    final NumberFormat denominatorFormat) {
         super(numeratorFormat, denominatorFormat);
-        setWholeFormat(wholeFormat);
+
+        if (wholeFormat == null) {
+            throw new NullArgumentException(LocalizedCoreFormats.WHOLE_FORMAT);
+        }
+        this.wholeFormat = wholeFormat;
     }
 
     /**
@@ -86,7 +89,8 @@ public class ProperBigFractionFormat extends BigFractionFormat {
      */
     @Override
     public StringBuffer format(final BigFraction fraction,
-                               final StringBuffer toAppendTo, final FieldPosition pos) {
+                               final StringBuffer toAppendTo,
+                               final FieldPosition pos) {
 
         pos.setBeginIndex(0);
         pos.setEndIndex(0);
@@ -222,17 +226,5 @@ public class ProperBigFractionFormat extends BigFractionFormat {
 
         return new BigFraction(num, den);
 
-    }
-
-    /**
-     * Modify the whole format.
-     * @param format The new whole format value.
-     * @throws NullArgumentException if {@code format} is {@code null}.
-     */
-    public void setWholeFormat(final NumberFormat format) {
-        if (format == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.WHOLE_FORMAT);
-        }
-        this.wholeFormat = format;
     }
 }

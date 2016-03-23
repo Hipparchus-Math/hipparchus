@@ -28,18 +28,17 @@ import org.hipparchus.exception.NullArgumentException;
 
 /**
  * Common part shared by both {@link FractionFormat} and {@link BigFractionFormat}.
- * @since 2.0
  */
-public abstract class AbstractFormat extends NumberFormat implements Serializable {
+abstract class AbstractFormat extends NumberFormat implements Serializable {
 
     /** Serializable version identifier. */
-    private static final long serialVersionUID = -6981118387974191891L;
+    private static final long serialVersionUID = 20160323L;
 
     /** The format used for the denominator. */
-    private NumberFormat denominatorFormat;
+    private final NumberFormat denominatorFormat;
 
     /** The format used for the numerator. */
-    private NumberFormat numeratorFormat;
+    private final NumberFormat numeratorFormat;
 
     /**
      * Create an improper formatting instance with the default number format
@@ -53,6 +52,7 @@ public abstract class AbstractFormat extends NumberFormat implements Serializabl
      * Create an improper formatting instance with a custom number format for
      * both the numerator and denominator.
      * @param format the custom format for both the numerator and denominator.
+     * @throws NullArgumentException if the provided format is null.
      */
     protected AbstractFormat(final NumberFormat format) {
         this(format, (NumberFormat) format.clone());
@@ -63,9 +63,18 @@ public abstract class AbstractFormat extends NumberFormat implements Serializabl
      * the numerator and a custom number format for the denominator.
      * @param numeratorFormat the custom format for the numerator.
      * @param denominatorFormat the custom format for the denominator.
+     * @throws NullArgumentException if either provided format is null.
      */
     protected AbstractFormat(final NumberFormat numeratorFormat,
                              final NumberFormat denominatorFormat) {
+        if (numeratorFormat == null) {
+            throw new NullArgumentException(LocalizedCoreFormats.NUMERATOR_FORMAT);
+        }
+
+        if (denominatorFormat == null) {
+            throw new NullArgumentException(LocalizedCoreFormats.DENOMINATOR_FORMAT);
+        }
+
         this.numeratorFormat   = numeratorFormat;
         this.denominatorFormat = denominatorFormat;
     }
@@ -108,30 +117,6 @@ public abstract class AbstractFormat extends NumberFormat implements Serializabl
      */
     public NumberFormat getNumeratorFormat() {
         return numeratorFormat;
-    }
-
-    /**
-     * Modify the denominator format.
-     * @param format the new denominator format value.
-     * @throws NullArgumentException if {@code format} is {@code null}.
-     */
-    public void setDenominatorFormat(final NumberFormat format) {
-        if (format == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.DENOMINATOR_FORMAT);
-        }
-        this.denominatorFormat = format;
-    }
-
-    /**
-     * Modify the numerator format.
-     * @param format the new numerator format value.
-     * @throws NullArgumentException if {@code format} is {@code null}.
-     */
-    public void setNumeratorFormat(final NumberFormat format) {
-        if (format == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.NUMERATOR_FORMAT);
-        }
-        this.numeratorFormat = format;
     }
 
     /**

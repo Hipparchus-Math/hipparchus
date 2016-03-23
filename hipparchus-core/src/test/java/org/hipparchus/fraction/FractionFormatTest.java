@@ -17,13 +17,11 @@
 
 package org.hipparchus.fraction;
 
-import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionFormat;
-import org.hipparchus.fraction.ProperFractionFormat;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Before;
@@ -294,52 +292,6 @@ public class FractionFormatTest {
         } catch (MathIllegalStateException ex) {
             // expected
         }
-    }
-
-    @Test
-    public void testNumeratorFormat() {
-        NumberFormat old = properFormat.getNumeratorFormat();
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setParseIntegerOnly(true);
-        properFormat.setNumeratorFormat(nf);
-        Assert.assertEquals(nf, properFormat.getNumeratorFormat());
-        properFormat.setNumeratorFormat(old);
-
-        old = improperFormat.getNumeratorFormat();
-        nf = NumberFormat.getInstance();
-        nf.setParseIntegerOnly(true);
-        improperFormat.setNumeratorFormat(nf);
-        Assert.assertEquals(nf, improperFormat.getNumeratorFormat());
-        improperFormat.setNumeratorFormat(old);
-    }
-
-    @Test
-    public void testDenominatorFormat() {
-        NumberFormat old = properFormat.getDenominatorFormat();
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setParseIntegerOnly(true);
-        properFormat.setDenominatorFormat(nf);
-        Assert.assertEquals(nf, properFormat.getDenominatorFormat());
-        properFormat.setDenominatorFormat(old);
-
-        old = improperFormat.getDenominatorFormat();
-        nf = NumberFormat.getInstance();
-        nf.setParseIntegerOnly(true);
-        improperFormat.setDenominatorFormat(nf);
-        Assert.assertEquals(nf, improperFormat.getDenominatorFormat());
-        improperFormat.setDenominatorFormat(old);
-    }
-
-    @Test
-    public void testWholeFormat() {
-        ProperFractionFormat format = (ProperFractionFormat)properFormat;
-
-        NumberFormat old = format.getWholeFormat();
-        NumberFormat nf = NumberFormat.getInstance();
-        nf.setParseIntegerOnly(true);
-        format.setWholeFormat(nf);
-        Assert.assertEquals(nf, format.getWholeFormat());
-        format.setWholeFormat(old);
     }
 
     @Test

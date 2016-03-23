@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 /**
- *
- *    Fraction number type and fraction number formatting.
- *
+ * Fraction number type and fraction number formatting.
  */
 package org.hipparchus.fraction;
