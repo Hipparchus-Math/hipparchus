@@ -75,7 +75,6 @@ INFINITE_VALUE_CONVERSION = les valeurs infinies ne peuvent être converties
 INITIAL_CAPACITY_NOT_POSITIVE = la capacité initiale ({0}) n''est pas positive
 INITIAL_COLUMN_AFTER_FINAL_COLUMN = colonne initiale {1} après la colonne finale {0}
 INITIAL_ROW_AFTER_FINAL_ROW = ligne initiale {1} après la ligne finale {0}
-INSTANCES_NOT_COMPARABLE_TO_EXISTING_VALUES = l''instance de la classe {0} n''est pas comparable aux valeurs existantes
 INSUFFICIENT_DATA = données insuffisantes
 INSUFFICIENT_DATA_FOR_T_STATISTIC = deux valeurs ou plus sont nécessaires pour la statistique t, il y en a {0}
 INSUFFICIENT_DIMENSION = dimension {0} insuffisante, elle devrait être au moins {1}
