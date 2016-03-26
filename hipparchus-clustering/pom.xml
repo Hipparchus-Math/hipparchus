@@ -27,10 +27,10 @@
     <relativePath>../</relativePath>
   </parent>
 
-  <artifactId>hipparchus-migration</artifactId>
+  <artifactId>hipparchus-clustering</artifactId>
   <packaging>jar</packaging>
-  <name>Hipparchus::Migration Code</name>
-  <description>The Hipparchus migration module</description>
+  <name>Hipparchus::Cluster Algorithms</name>
+  <description>The Hipparchus clustering module</description>
 
   <properties>
     <hipparchusParentDir>${basedir}/..</hipparchusParentDir>
@@ -40,34 +40,6 @@
     <dependency>
       <groupId>org.hipparchus</groupId>
       <artifactId>hipparchus-core</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hipparchus</groupId>
-      <artifactId>hipparchus-geometry</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hipparchus</groupId>
-      <artifactId>hipparchus-genetics</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hipparchus</groupId>
-      <artifactId>hipparchus-fft</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hipparchus</groupId>
-      <artifactId>hipparchus-fitting</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hipparchus</groupId>
-      <artifactId>hipparchus-ode</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hipparchus</groupId>
-      <artifactId>hipparchus-optim</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hipparchus</groupId>
-      <artifactId>hipparchus-clustering</artifactId>
     </dependency>
 
     <!-- Test dependencies -->

@@ -391,7 +391,7 @@
       </dependency>
       <dependency>
         <groupId>org.hipparchus</groupId>
-        <artifactId>hipparchus-legacy</artifactId>
+        <artifactId>hipparchus-clustering</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
@@ -473,7 +473,7 @@
     <module>hipparchus-perf</module>
     <module>hipparchus-samples</module>
     <module>hipparchus-fft</module> <!-- marked for deletion -->
-    <module>hipparchus-legacy</module>
+    <module>hipparchus-clustering</module>
     <module>hipparchus-migration</module>
     <module>hipparchus-release</module>
   </modules>

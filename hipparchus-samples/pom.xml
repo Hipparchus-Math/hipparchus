@@ -51,7 +51,7 @@
     </dependency>
     <dependency>
       <groupId>org.hipparchus</groupId>
-      <artifactId>hipparchus-legacy</artifactId>
+      <artifactId>hipparchus-clustering</artifactId>
     </dependency>
 
     <dependency>

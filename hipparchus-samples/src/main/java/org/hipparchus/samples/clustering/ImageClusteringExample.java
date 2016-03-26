@@ -41,9 +41,9 @@ import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 
-import org.hipparchus.ml.clustering.CentroidCluster;
-import org.hipparchus.ml.clustering.Clusterable;
-import org.hipparchus.ml.clustering.KMeansPlusPlusClusterer;
+import org.hipparchus.clustering.CentroidCluster;
+import org.hipparchus.clustering.Clusterable;
+import org.hipparchus.clustering.KMeansPlusPlusClusterer;
 import org.hipparchus.samples.ExampleUtils;
 import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 

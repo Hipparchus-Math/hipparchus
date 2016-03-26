@@ -24,7 +24,7 @@ import org.hipparchus.fitting.LocalizedFittingFormats;
 import org.hipparchus.genetics.LocalizedGeneticsFormats;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.migration.LocalizedMigrationFormats;
-import org.hipparchus.ml.LocalizedMLFormats;
+import org.hipparchus.clustering.LocalizedClusteringFormats;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.transform.LocalizedFFTFormats;
@@ -106,7 +106,7 @@ public enum LocalizedFormats implements Localizable {
     DUPLICATED_ABSCISSA_DIVISION_BY_ZERO(LocalizedCoreFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO),
     EDGE_CONNECTED_TO_ONE_FACET(LocalizedGeometryFormats.EDGE_CONNECTED_TO_ONE_FACET),
     ELITISM_RATE(LocalizedGeneticsFormats.ELITISM_RATE),
-    EMPTY_CLUSTER_IN_K_MEANS(LocalizedMLFormats.EMPTY_CLUSTER_IN_K_MEANS),
+    EMPTY_CLUSTER_IN_K_MEANS(LocalizedClusteringFormats.EMPTY_CLUSTER_IN_K_MEANS),
     EMPTY_INTERPOLATION_SAMPLE(LocalizedCoreFormats.EMPTY_INTERPOLATION_SAMPLE),
     EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY),
     EMPTY_SELECTED_COLUMN_INDEX_ARRAY(LocalizedCoreFormats.EMPTY_SELECTED_COLUMN_INDEX_ARRAY),
