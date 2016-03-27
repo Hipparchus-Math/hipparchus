@@ -40,8 +40,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  *  <li>...</li>
  *  <li>(1, 3, 2) corresponds to 23</li>
  * </ul>
- *
- * @since 2.2
  */
 public class MultidimensionalCounter implements Iterable<Integer> {
     /**

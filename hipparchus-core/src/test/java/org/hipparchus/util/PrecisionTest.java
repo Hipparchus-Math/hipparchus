@@ -25,7 +25,6 @@ import org.junit.Test;
 
 /**
  * Test cases for the {@link Precision} class.
- *
  */
 public class PrecisionTest {
     @Test

@@ -29,7 +29,6 @@ import org.junit.Test;
 
 /**
  * Test cases for the {@link ArithmeticUtils} class.
- *
  */
 public class ArithmeticUtilsTest {
 

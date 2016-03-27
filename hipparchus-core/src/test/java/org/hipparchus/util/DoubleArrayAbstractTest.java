@@ -23,8 +23,7 @@ import org.junit.Test;
 
 
 /**
- * This class contains test cases for the ExpandableDoubleArray.
- *
+ * This class contains test cases for DoubleArray.
  */
 public abstract class DoubleArrayAbstractTest {
 

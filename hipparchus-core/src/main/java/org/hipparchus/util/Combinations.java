@@ -27,11 +27,11 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 
 /**
- * Utility to create <a href="http://en.wikipedia.org/wiki/Combination">
- * combinations</a> {@code (n, k)} of {@code k} elements in a set of
- * {@code n} elements.
- *
- * @since 3.3
+ * Utility to create combinations {@code (n, k)} of {@code k} elements
+ * in a set of {@code n} elements.
+ * 
+ * @see <a href="http://en.wikipedia.org/wiki/Combination">
+ * Combination @ Wikipedia</a>
  */
 public class Combinations implements Iterable<int[]> {
     /** Size of the set from which combinations are drawn. */
@@ -172,8 +172,6 @@ public class Combinations implements Iterable<int[]> {
      * The degenerate cases {@code k == 0} and {@code k == n} are NOT handled by this
      * implementation.  If constructor arguments satisfy {@code k == 0}
      * or {@code k >= n}, no exception is generated, but the iterator is empty.
-     * </p>
-     *
      */
     private static class LexicographicIterator implements Iterator<int[]> {
         /** Size of subsets returned by the iterator */
@@ -185,7 +183,6 @@ public class Combinations implements Iterable<int[]> {
          * <p>
          * Note that c[0] is "wasted" but this makes it a little easier to
          * follow the code.
-         * </p>
          */
         private final int[] c;
 
@@ -200,7 +197,6 @@ public class Combinations implements Iterable<int[]> {
          * <p>
          * NOTE: If {@code k === 0} or {@code k >= n}, the Iterator will be empty
          * (that is, {@link #hasNext()} will return {@code false} immediately.
-         * </p>
          *
          * @param n size of the set from which subsets are enumerated
          * @param k size of the subsets to enumerate

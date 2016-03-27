@@ -20,8 +20,8 @@ import org.hipparchus.util.ContinuedFraction;
 import org.junit.Assert;
 import org.junit.Test;
 
-
 /**
+ * Tests for ContinuedFraction.
  */
 public class ContinuedFractionTest {
 

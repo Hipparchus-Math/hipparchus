@@ -22,15 +22,12 @@ import org.hipparchus.exception.MathIllegalStateException;
 /**
  * Provides a generic means to evaluate continued fractions.  Subclasses simply
  * provided the a and b coefficients to evaluate the continued fraction.
- *
  * <p>
  * References:
  * <ul>
  * <li><a href="http://mathworld.wolfram.com/ContinuedFraction.html">
  * Continued Fraction</a></li>
  * </ul>
- * </p>
- *
  */
 public abstract class ContinuedFraction {
     /** Maximum allowed numerical error. */

@@ -26,7 +26,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Some useful, arithmetics related, additions to the built-in functions in
  * {@link Math}.
- *
  */
 public final class ArithmeticUtils {
 
@@ -43,7 +42,6 @@ public final class ArithmeticUtils {
      * @return the sum {@code x+y}
      * @throws MathRuntimeException if the result can not be represented
      * as an {@code int}.
-     * @since 1.1
      */
     public static int addAndCheck(int x, int y)
             throws MathRuntimeException {
@@ -61,7 +59,6 @@ public final class ArithmeticUtils {
      * @param b an addend
      * @return the sum {@code a+b}
      * @throws MathRuntimeException if the result can not be represented as an long
-     * @since 1.2
      */
     public static long addAndCheck(long a, long b) throws MathRuntimeException {
         return addAndCheck(a, b, LocalizedCoreFormats.OVERFLOW_IN_ADDITION);
@@ -93,7 +90,6 @@ public final class ArithmeticUtils {
      * @return the greatest common divisor (never negative).
      * @throws MathRuntimeException if the result cannot be represented as
      * a non-negative {@code int} value.
-     * @since 1.1
      */
     public static int gcd(int p, int q) throws MathRuntimeException {
         int a = p;
@@ -103,7 +99,7 @@ public final class ArithmeticUtils {
             if (a == Integer.MIN_VALUE ||
                 b == Integer.MIN_VALUE) {
                 throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_32_BITS,
-                                                  p, q);
+                                               p, q);
             }
             return FastMath.abs(a + b);
         }
@@ -130,7 +126,7 @@ public final class ArithmeticUtils {
         if (useLong) {
             if(al == bl) {
                 throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_32_BITS,
-                                                  p, q);
+                                               p, q);
             }
             long blbu = bl;
             bl = al;
@@ -138,7 +134,7 @@ public final class ArithmeticUtils {
             if (al == 0) {
                 if (bl > Integer.MAX_VALUE) {
                     throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_32_BITS,
-                                                      p, q);
+                                                   p, q);
                 }
                 return (int) bl;
             }
@@ -159,7 +155,7 @@ public final class ArithmeticUtils {
      * and modulo operations.
      * See Knuth 4.5.2 algorithm B.
      * The algorithm is due to Josef Stein (1961).
-     * <br/>
+     * <p>
      * Special cases:
      * <ul>
      *  <li>The result of {@code gcd(x, x)}, {@code gcd(0, x)} and
@@ -207,12 +203,11 @@ public final class ArithmeticUtils {
     }
 
     /**
-     * <p>
      * Gets the greatest common divisor of the absolute value of two numbers,
      * using the "binary gcd" method which avoids division and modulo
      * operations. See Knuth 4.5.2 algorithm B. This algorithm is due to Josef
      * Stein (1961).
-     * </p>
+     * <p>
      * Special cases:
      * <ul>
      * <li>The invocations
@@ -233,7 +228,6 @@ public final class ArithmeticUtils {
      * @return the greatest common divisor, never negative.
      * @throws MathRuntimeException if the result cannot be represented as
      * a non-negative {@code long} value.
-     * @since 2.1
      */
     public static long gcd(final long p, final long q) throws MathRuntimeException {
         long u = p;
@@ -241,7 +235,7 @@ public final class ArithmeticUtils {
         if ((u == 0) || (v == 0)) {
             if ((u == Long.MIN_VALUE) || (v == Long.MIN_VALUE)){
                 throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_64_BITS,
-                                                  p, q);
+                                               p, q);
             }
             return FastMath.abs(u) + FastMath.abs(v);
         }
@@ -266,7 +260,7 @@ public final class ArithmeticUtils {
         }
         if (k == 63) {
             throw new MathRuntimeException(LocalizedCoreFormats.GCD_OVERFLOW_64_BITS,
-                                              p, q);
+                                           p, q);
         }
         // B2. Initialize: u and v have been divided by 2^k and at least
         // one is odd.
@@ -294,10 +288,9 @@ public final class ArithmeticUtils {
     }
 
     /**
-     * <p>
      * Returns the least common multiple of the absolute value of two numbers,
      * using the formula {@code lcm(a,b) = (a / gcd(a,b)) * b}.
-     * </p>
+     * <p>
      * Special cases:
      * <ul>
      * <li>The invocations {@code lcm(Integer.MIN_VALUE, n)} and
@@ -313,7 +306,6 @@ public final class ArithmeticUtils {
      * @return the least common multiple, never negative.
      * @throws MathRuntimeException if the result cannot be represented as
      * a non-negative {@code int} value.
-     * @since 1.1
      */
     public static int lcm(int a, int b) throws MathRuntimeException {
         if (a == 0 || b == 0){
@@ -322,16 +314,15 @@ public final class ArithmeticUtils {
         int lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
         if (lcm == Integer.MIN_VALUE) {
             throw new MathRuntimeException(LocalizedCoreFormats.LCM_OVERFLOW_32_BITS,
-                                              a, b);
+                                           a, b);
         }
         return lcm;
     }
 
     /**
-     * <p>
      * Returns the least common multiple of the absolute value of two numbers,
      * using the formula {@code lcm(a,b) = (a / gcd(a,b)) * b}.
-     * </p>
+     * <p>
      * Special cases:
      * <ul>
      * <li>The invocations {@code lcm(Long.MIN_VALUE, n)} and
@@ -347,7 +338,6 @@ public final class ArithmeticUtils {
      * @return the least common multiple, never negative.
      * @throws MathRuntimeException if the result cannot be represented
      * as a non-negative {@code long} value.
-     * @since 2.1
      */
     public static long lcm(long a, long b) throws MathRuntimeException {
         if (a == 0 || b == 0){
@@ -356,7 +346,7 @@ public final class ArithmeticUtils {
         long lcm = FastMath.abs(ArithmeticUtils.mulAndCheck(a / gcd(a, b), b));
         if (lcm == Long.MIN_VALUE){
             throw new MathRuntimeException(LocalizedCoreFormats.LCM_OVERFLOW_64_BITS,
-                                              a, b);
+                                           a, b);
         }
         return lcm;
     }
@@ -369,7 +359,6 @@ public final class ArithmeticUtils {
      * @return the product {@code x * y}.
      * @throws MathRuntimeException if the result can not be
      * represented as an {@code int}.
-     * @since 1.1
      */
     public static int mulAndCheck(int x, int y) throws MathRuntimeException {
         long m = ((long)x) * ((long)y);
@@ -387,7 +376,6 @@ public final class ArithmeticUtils {
      * @return the product {@code a * b}.
      * @throws MathRuntimeException if the result can not be represented
      * as a {@code long}.
-     * @since 1.2
      */
     public static long mulAndCheck(long a, long b) throws MathRuntimeException {
         long ret;
@@ -441,7 +429,6 @@ public final class ArithmeticUtils {
      * @return the difference {@code x - y}.
      * @throws MathRuntimeException if the result can not be represented
      * as an {@code int}.
-     * @since 1.1
      */
     public static int subAndCheck(int x, int y) throws MathRuntimeException {
         long s = (long)x - (long)y;
@@ -459,7 +446,6 @@ public final class ArithmeticUtils {
      * @return the difference {@code a - b}.
      * @throws MathRuntimeException if the result can not be represented as a
      * {@code long}.
-     * @since 1.2
      */
     public static long subAndCheck(long a, long b) throws MathRuntimeException {
         long ret;
@@ -626,7 +612,6 @@ public final class ArithmeticUtils {
      * @return the sum {@code a + b}.
      * @throws MathRuntimeException if the result cannot be represented
      * as a {@code long}.
-     * @since 1.2
      */
      private static long addAndCheck(long a, long b, Localizable pattern) throws MathRuntimeException {
          final long result = a + b;
@@ -650,14 +635,13 @@ public final class ArithmeticUtils {
      * Returns the unsigned remainder from dividing the first argument
      * by the second where each argument and the result is interpreted
      * as an unsigned value.
-     * <p>This method does not use the {@code long} datatype.</p>
+     * <p>
+     * This method does not use the {@code long} datatype.
      *
      * @param dividend the value to be divided
      * @param divisor the value doing the dividing
      * @return the unsigned remainder of the first argument divided by
      * the second argument.
-     *
-     * @since 4.0
      */
     public static int remainderUnsigned(int dividend, int divisor) {
         if (divisor >= 0) {
@@ -680,14 +664,13 @@ public final class ArithmeticUtils {
      * Returns the unsigned remainder from dividing the first argument
      * by the second where each argument and the result is interpreted
      * as an unsigned value.
-     * <p>This method does not use the {@code BigInteger} datatype.</p>
+     * <p>
+     * This method does not use the {@code BigInteger} datatype.
      *
      * @param dividend the value to be divided
      * @param divisor the value doing the dividing
      * @return the unsigned remainder of the first argument divided by
      * the second argument.
-     *
-     * @since 4.0
      */
     public static long remainderUnsigned(long dividend, long divisor) {
         if (divisor >= 0L) {
@@ -710,19 +693,19 @@ public final class ArithmeticUtils {
      * Returns the unsigned quotient of dividing the first argument by
      * the second where each argument and the result is interpreted as
      * an unsigned value.
-     * <p>Note that in two's complement arithmetic, the three other
+     * <p>
+     * Note that in two's complement arithmetic, the three other
      * basic arithmetic operations of add, subtract, and multiply are
      * bit-wise identical if the two operands are regarded as both
      * being signed or both being unsigned. Therefore separate {@code
-     * addUnsigned}, etc. methods are not provided.</p>
-     * <p>This method does not use the {@code long} datatype.</p>
+     * addUnsigned}, etc. methods are not provided.
+     * <p>
+     * This method does not use the {@code long} datatype.
      *
      * @param dividend the value to be divided
      * @param divisor the value doing the dividing
      * @return the unsigned quotient of the first argument divided by
      * the second argument
-     *
-     * @since 4.0
      */
     public static int divideUnsigned(int dividend, int divisor) {
         if (divisor >= 0) {
@@ -745,19 +728,19 @@ public final class ArithmeticUtils {
      * Returns the unsigned quotient of dividing the first argument by
      * the second where each argument and the result is interpreted as
      * an unsigned value.
-     * <p>Note that in two's complement arithmetic, the three other
+     * <p>
+     * Note that in two's complement arithmetic, the three other
      * basic arithmetic operations of add, subtract, and multiply are
      * bit-wise identical if the two operands are regarded as both
      * being signed or both being unsigned. Therefore separate {@code
-     * addUnsigned}, etc. methods are not provided.</p>
-     * <p>This method does not use the {@code BigInteger} datatype.</p>
+     * addUnsigned}, etc. methods are not provided.
+     * <p>
+     * This method does not use the {@code BigInteger} datatype.
      *
      * @param dividend the value to be divided
      * @param divisor the value doing the dividing
      * @return the unsigned quotient of the first argument divided by
      * the second argument.
-     *
-     * @since 4.0
      */
     public static long divideUnsigned(long dividend, long divisor) {
         if (divisor >= 0L) {

@@ -20,9 +20,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Subclasses implementing this interface can transform Objects to doubles.
- *
- * No longer extends Serializable since 2.0
- *
  */
 public interface NumberTransformer {
 

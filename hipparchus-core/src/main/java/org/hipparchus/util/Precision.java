@@ -25,20 +25,15 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Utilities for comparing numbers.
- *
- * @since 3.0
  */
 public class Precision {
     /**
-     * <p>
      * Largest double-precision floating-point number such that
      * {@code 1 + EPSILON} is numerically equal to 1. This value is an upper
      * bound on the relative error due to rounding real numbers to double
      * precision floating-point numbers.
-     * </p>
      * <p>
      * In IEEE 754 arithmetic, this is 2<sup>-53</sup>.
-     * </p>
      *
      * @see <a href="http://en.wikipedia.org/wiki/Machine_epsilon">Machine epsilon</a>
      */
@@ -157,7 +152,6 @@ public class Precision {
      * @param x first value
      * @param y second value
      * @return {@code true} if the values are equal or both are NaN.
-     * @since 2.2
      */
     public static boolean equalsIncludingNaN(float x, float y) {
         return (x != x || y != y) ? !(x != x ^ y != y) : equals(x, y, 1);
@@ -172,7 +166,6 @@ public class Precision {
      * @param y second value
      * @param eps the amount of absolute error to allow.
      * @return {@code true} if the values are equal or within range of each other.
-     * @since 2.2
      */
     public static boolean equals(float x, float y, float eps) {
         return equals(x, y, 1) || FastMath.abs(y - x) <= eps;
@@ -187,7 +180,6 @@ public class Precision {
      * @param eps the amount of absolute error to allow.
      * @return {@code true} if the values are equal or within range of each other,
      * or both are NaN.
-     * @since 2.2
      */
     public static boolean equalsIncludingNaN(float x, float y, float eps) {
         return equalsIncludingNaN(x, y) || (FastMath.abs(y - x) <= eps);
@@ -209,7 +201,6 @@ public class Precision {
      * values between {@code x} and {@code y}.
      * @return {@code true} if there are fewer than {@code maxUlps} floating
      * point values between {@code x} and {@code y}.
-     * @since 2.2
      */
     public static boolean equals(final float x, final float y, final int maxUlps) {
 
@@ -254,7 +245,6 @@ public class Precision {
      * values between {@code x} and {@code y}.
      * @return {@code true} if both arguments are NaN or if there are less than
      * {@code maxUlps} floating point values between {@code x} and {@code y}.
-     * @since 2.2
      */
     public static boolean equalsIncludingNaN(float x, float y, int maxUlps) {
         return (x != x || y != y) ? !(x != x ^ y != y) : equals(x, y, maxUlps);
@@ -279,7 +269,6 @@ public class Precision {
      * @param x first value
      * @param y second value
      * @return {@code true} if the values are equal or both are NaN.
-     * @since 2.2
      */
     public static boolean equalsIncludingNaN(double x, double y) {
         return (x != x || y != y) ? !(x != x ^ y != y) : equals(x, y, 1);
@@ -312,7 +301,6 @@ public class Precision {
      * @param eps Amount of allowed relative error.
      * @return {@code true} if the values are two adjacent floating point
      * numbers or they are within range of each other.
-     * @since 3.1
      */
     public static boolean equalsWithRelativeTolerance(double x, double y, double eps) {
         if (equals(x, y, 1)) {
@@ -334,7 +322,6 @@ public class Precision {
      * @param eps the amount of absolute error to allow.
      * @return {@code true} if the values are equal or within range of each other,
      * or both are NaN.
-     * @since 2.2
      */
     public static boolean equalsIncludingNaN(double x, double y, double eps) {
         return equalsIncludingNaN(x, y) || (FastMath.abs(y - x) <= eps);
@@ -404,7 +391,6 @@ public class Precision {
      * values between {@code x} and {@code y}.
      * @return {@code true} if both arguments are NaN or if there are less than
      * {@code maxUlps} floating point values between {@code x} and {@code y}.
-     * @since 2.2
      */
     public static boolean equalsIncludingNaN(double x, double y, int maxUlps) {
         return (x != x || y != y) ? !(x != x ^ y != y) : equals(x, y, maxUlps);
@@ -417,7 +403,6 @@ public class Precision {
      * @param x Value to round.
      * @param scale Number of digits to the right of the decimal point.
      * @return the rounded value.
-     * @since 1.1 (previously in {@code MathUtils}, moved as of version 3.0)
      */
     public static double round(double x, int scale) {
         return round(x, scale, BigDecimal.ROUND_HALF_UP);
@@ -438,7 +423,6 @@ public class Precision {
      * and the specified scaling operation would require rounding.
      * @throws IllegalArgumentException if {@code roundingMethod} does not
      * represent a valid rounding mode.
-     * @since 1.1 (previously in {@code MathUtils}, moved as of version 3.0)
      */
     public static double round(double x, int scale, int roundingMethod) {
         try {
@@ -463,7 +447,6 @@ public class Precision {
      * @param x Value to round.
      * @param scale Number of digits to the right of the decimal point.
      * @return the rounded value.
-     * @since 1.1 (previously in {@code MathUtils}, moved as of version 3.0)
      */
     public static float round(float x, int scale) {
         return round(x, scale, BigDecimal.ROUND_HALF_UP);
@@ -478,7 +461,6 @@ public class Precision {
      * @param scale Number of digits to the right of the decimal point.
      * @param roundingMethod Rounding method as defined in {@link BigDecimal}.
      * @return the rounded value.
-     * @since 1.1 (previously in {@code MathUtils}, moved as of version 3.0)
      * @throws MathRuntimeException if an exact operation is required but result is not exact
      * @throws MathIllegalArgumentException if {@code roundingMethod} is not a valid rounding method.
      */
@@ -500,7 +482,6 @@ public class Precision {
      * @return the rounded value.
      * @throws MathRuntimeException if an exact operation is required but result is not exact
      * @throws MathIllegalArgumentException if {@code roundingMethod} is not a valid rounding method.
-     * @since 1.1 (previously in {@code MathUtils}, moved as of version 3.0)
      */
     private static double roundUnscaled(double unscaled,
                                         double sign,

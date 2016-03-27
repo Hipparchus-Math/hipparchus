@@ -21,7 +21,6 @@ package org.hipparchus.util;
  * Provides a standard interface for double arrays.  Allows different
  * array implementations to support various storage mechanisms
  * such as automatic expansion, contraction, and array "rolling".
- *
  */
 public interface DoubleArray {
 

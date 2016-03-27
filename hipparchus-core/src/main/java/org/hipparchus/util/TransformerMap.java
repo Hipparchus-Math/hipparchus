@@ -26,31 +26,28 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * This TansformerMap automates the transformation of mixed object types.
+ * <p>
  * It provides a means to set NumberTransformers that will be selected
  * based on the Class of the object handed to the Maps
- * <code>double transform(Object o)</code> method.
+ * {@code double transform(Object)} method.
  */
 public class TransformerMap implements NumberTransformer, Serializable {
 
     /** Serializable version identifier */
-    private static final long serialVersionUID = 4605318041528645258L;
+    private static final long serialVersionUID = 20160327L;
 
-    /**
-     * A default Number Transformer for Numbers and numeric Strings.
-     */
-    private NumberTransformer defaultTransformer = null;
+    /** A default Number Transformer for Numbers and numeric Strings. */
+    private final NumberTransformer defaultTransformer;
 
-    /**
-     * The internal Map.
-     */
-    private Map<Class<?>, NumberTransformer> map = null;
+    /** The internal Map. */
+    private final Map<Class<?>, NumberTransformer> map;
 
     /**
      * Build a map containing only the default transformer.
      */
     public TransformerMap() {
         map = new HashMap<Class<?>, NumberTransformer>();
-        defaultTransformer = new DefaultTransformer();
+        defaultTransformer = DefaultTransformer.getInstance();
     }
 
     /**

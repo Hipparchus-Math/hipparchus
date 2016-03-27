@@ -19,7 +19,6 @@ package org.hipparchus.util;
 
 /**
  * Utility class for loading tabulated data used by {@link FastMath}.
- *
  */
 class FastMathLiteralArrays {
     /** Exponential evaluated at integer values,

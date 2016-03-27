@@ -28,11 +28,30 @@ import org.hipparchus.exception.NullArgumentException;
  * provides some simple conversion capabilities to turn any java.lang.Number
  * into a primitive double or to turn a String representation of a Number into
  * a double.
+ * <p>
+ * This class is a singleton.
  */
 public class DefaultTransformer implements NumberTransformer, Serializable {
 
     /** Serializable version identifier */
-    private static final long serialVersionUID = 4019938025047800455L;
+    private static final long serialVersionUID = 20160327L;
+
+    /** Static instance */
+    private static final DefaultTransformer INSTANCE = new DefaultTransformer();
+
+    /**
+     * Factory returning the singleton instance.
+     *
+     * @return the singleton instance
+     */
+    public static DefaultTransformer getInstance() {
+        return DefaultTransformer.INSTANCE;
+    }
+
+    /**
+     * Class is a singleton, prevent instantiation.
+     */
+    private DefaultTransformer() {}
 
     /**
      * @param o  the object that gets transformed.
@@ -62,20 +81,8 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
         }
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public boolean equals(Object other) {
-        if (this == other) {
-            return true;
-        }
-        return other instanceof DefaultTransformer;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int hashCode() {
-        // some arbitrary number ...
-        return 401993047;
+    private Object readResolve() {
+        return INSTANCE;
     }
 
 }

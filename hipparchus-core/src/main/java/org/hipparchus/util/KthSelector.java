@@ -24,9 +24,8 @@ import org.hipparchus.exception.NullArgumentException;
 
 /**
  * A Simple K<sup>th</sup> selector implementation to pick up the
- * K<sup>th</sup> ordered element from a work array containing the input
- * numbers.
- * @since 3.4
+ * K<sup>th</sup> ordered element from a work array containing the
+ * input numbers.
  */
 public class KthSelector implements Serializable {
 

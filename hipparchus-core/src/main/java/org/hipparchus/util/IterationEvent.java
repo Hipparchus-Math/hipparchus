@@ -21,10 +21,9 @@ import java.util.EventObject;
 /**
  * The root class from which all events occurring while running an
  * {@link IterationManager} should be derived.
- *
  */
 public class IterationEvent extends EventObject {
-    /** */
+    /** Serializable UID. */
     private static final long serialVersionUID = 20120128L;
 
     /** The number of iterations performed so far. */

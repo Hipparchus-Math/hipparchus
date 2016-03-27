@@ -16,17 +16,16 @@
  */
 package org.hipparchus.util;
 
+
 /**
  * Generic pair.
- * <br/>
+ * <p>
  * Although the instances of this class are immutable, it is impossible
  * to ensure that the references passed to the constructor will not be
  * modified by the caller.
  *
  * @param <K> Key type.
  * @param <V> Value type.
- *
- * @since 3.0
  */
 public class Pair<K, V> {
     /** Key. */
@@ -77,7 +76,6 @@ public class Pair<K, V> {
      * Get the first element of the pair.
      *
      * @return the first element of the pair.
-     * @since 3.1
      */
     public K getFirst() {
         return key;
@@ -87,7 +85,6 @@ public class Pair<K, V> {
      * Get the second element of the pair.
      *
      * @return the second element of the pair.
-     * @since 3.1
      */
     public V getSecond() {
         return value;
@@ -107,15 +104,12 @@ public class Pair<K, V> {
         }
         if (!(o instanceof Pair)) {
             return false;
-        } else {
-            Pair<?, ?> oP = (Pair<?, ?>) o;
-            return (key == null ?
-                    oP.key == null :
-                    key.equals(oP.key)) &&
-                (value == null ?
-                 oP.value == null :
-                 value.equals(oP.value));
         }
+        Pair<?, ?> other = (Pair<?, ?>) o;
+        return (key == null ? other.key == null :
+                              key.equals(other.key)) &&
+               (value == null ? other.value == null :
+                                value.equals(other.value));
     }
 
     /**
@@ -148,7 +142,6 @@ public class Pair<K, V> {
      * @param k First element of the pair.
      * @param v Second element of the pair.
      * @return a new {@code Pair} containing {@code k} and {@code v}.
-     * @since 3.3
      */
     public static <K, V> Pair<K, V> create(K k, V v) {
         return new Pair<K, V>(k, v);

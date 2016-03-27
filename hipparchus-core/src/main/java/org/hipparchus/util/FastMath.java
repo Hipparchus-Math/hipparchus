@@ -30,13 +30,11 @@ import org.hipparchus.exception.MathRuntimeException;
  * {@code Math.cbrt(y)}), user can directly change the class and use the
  * methods as is (using {@code FastMath.sin(x)} or {@code FastMath.cbrt(y)}
  * in the previous example).
- * </p>
  * <p>
  * FastMath speed is achieved by relying heavily on optimizing compilers
  * to native code present in many JVMs today and use of large tables.
  * The larger tables are lazily initialized on first use, so that the setup
  * time does not penalize methods that don't need them.
- * </p>
  * <p>
  * Note that FastMath is
  * extensively used inside Apache Commons Math, so by calling some algorithms,
@@ -45,7 +43,6 @@ import org.hipparchus.exception.MathRuntimeException;
  * Performance figures for a specific JVM and hardware can be evaluated by
  * running the FastMathTestPerformance tests in the test directory of the source
  * distribution.
- * </p>
  * <p>
  * FastMath accuracy should be mostly independent of the JVM as it relies only
  * on IEEE-754 basic operations and on embedded tables. Almost all operations
@@ -54,7 +51,6 @@ import org.hipparchus.exception.MathRuntimeException;
  * guarantee for <em>every</em> double numbers input (see William Kahan's <a
  * href="http://en.wikipedia.org/wiki/Rounding#The_table-maker.27s_dilemma">Table
  * Maker's Dilemma</a>).
- * </p>
  * <p>
  * FastMath additionally implements the following methods not found in Math/StrictMath:
  * <ul>
@@ -76,8 +72,6 @@ import org.hipparchus.exception.MathRuntimeException;
  * <li>{@link #nextUp(float)}</li>
  * <li>{@link #scalb(float, int)}</li>
  * </ul>
- * </p>
- * @since 2.2
  */
 public class FastMath {
     /** Archimede's constant PI, ratio of circle circumference to diameter. */
@@ -817,7 +811,6 @@ public class FastMath {
     /** Compute next number towards negative infinity.
      * @param a number to which neighbor should be computed
      * @return neighbor of a towards negative infinity
-     * @since 3.4
      */
     public static double nextDown(final double a) {
         return nextAfter(a, Double.NEGATIVE_INFINITY);
@@ -826,7 +819,6 @@ public class FastMath {
     /** Compute next number towards negative infinity.
      * @param a number to which neighbor should be computed
      * @return neighbor of a towards negative infinity
-     * @since 3.4
      */
     public static float nextDown(final float a) {
         return nextAfter(a, Float.NEGATIVE_INFINITY);
@@ -1458,7 +1450,6 @@ public class FastMath {
      * @param x Argument, must be greater than 0.
      * @return the value of the logarithm, i.e. the number {@code y} such that
      * <code>base<sup>y</sup> = x</code>.
-     * @since 1.2 (previously in {@code MathUtils}, moved as of version 3.0)
      */
     public static double log(double base, double x) {
         return log(x) / log(base);
@@ -1613,12 +1604,10 @@ public class FastMath {
      * @param d Number to raise.
      * @param e Exponent.
      * @return d<sup>e</sup>
-     * @since 3.1
      */
     public static double pow(double d, int e) {
         return pow(d, (long) e);
     }
-
 
     /**
      * Raise a double to a long power.
@@ -1626,7 +1615,6 @@ public class FastMath {
      * @param d Number to raise.
      * @param e Exponent.
      * @return d<sup>e</sup>
-     * @since 3.6
      */
     public static double pow(double d, long e) {
         if (e == 0) {
@@ -1720,7 +1708,6 @@ public class FastMath {
         /** Computes this^e.
          * @param e exponent (beware, here it MUST be > 0; the only exclusion is Long.MIN_VALUE)
          * @return d^e, split in high and low bits
-         * @since 3.6
          */
         private Split pow(final long e) {
 
@@ -3745,7 +3732,6 @@ public class FastMath {
      * @param n number to convert to int
      * @return integer with same valie as n if no overflows occur
      * @exception MathRuntimeException if n cannot fit into an int
-     * @since 3.4
      */
     public static int toIntExact(final long n) throws MathRuntimeException {
         if (n < Integer.MIN_VALUE || n > Integer.MAX_VALUE) {
@@ -3758,7 +3744,6 @@ public class FastMath {
      * @param n number to increment
      * @return n+1 if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static int incrementExact(final int n) throws MathRuntimeException {
 
@@ -3774,7 +3759,6 @@ public class FastMath {
      * @param n number to increment
      * @return n+1 if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static long incrementExact(final long n) throws MathRuntimeException {
 
@@ -3790,7 +3774,6 @@ public class FastMath {
      * @param n number to decrement
      * @return n-1 if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static int decrementExact(final int n) throws MathRuntimeException {
 
@@ -3806,7 +3789,6 @@ public class FastMath {
      * @param n number to decrement
      * @return n-1 if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static long decrementExact(final long n) throws MathRuntimeException {
 
@@ -3823,7 +3805,6 @@ public class FastMath {
      * @param b second number to add
      * @return a+b if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static int addExact(final int a, final int b) throws MathRuntimeException {
 
@@ -3844,7 +3825,6 @@ public class FastMath {
      * @param b second number to add
      * @return a+b if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static long addExact(final long a, final long b) throws MathRuntimeException {
 
@@ -3865,7 +3845,6 @@ public class FastMath {
      * @param b second number to subtract from a
      * @return a-b if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static int subtractExact(final int a, final int b) {
 
@@ -3886,7 +3865,6 @@ public class FastMath {
      * @param b second number to subtract from a
      * @return a-b if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static long subtractExact(final long a, final long b) {
 
@@ -3907,7 +3885,6 @@ public class FastMath {
      * @param b second number to multiply
      * @return a*b if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static int multiplyExact(final int a, final int b) {
         if (((b  >  0)  && (a > Integer.MAX_VALUE / b || a < Integer.MIN_VALUE / b)) ||
@@ -3923,7 +3900,6 @@ public class FastMath {
      * @param b second number to multiply
      * @return a*b if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
-     * @since 3.4
      */
     public static long multiplyExact(final long a, final long b) {
         if (((b  >  0l)  && (a > Long.MAX_VALUE / b || a < Long.MIN_VALUE / b)) ||
@@ -3939,13 +3915,12 @@ public class FastMath {
      * This methods returns the same value as integer division when
      * a and b are same signs, but returns a different value when
      * they are opposite (i.e. q is negative).
-     * </p>
+     *
      * @param a dividend
      * @param b divisor
      * @return q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
      * @exception MathRuntimeException if b == 0
      * @see #floorMod(int, int)
-     * @since 3.4
      */
     public static int floorDiv(final int a, final int b) throws MathRuntimeException {
 
@@ -3969,13 +3944,12 @@ public class FastMath {
      * This methods returns the same value as integer division when
      * a and b are same signs, but returns a different value when
      * they are opposite (i.e. q is negative).
-     * </p>
+     *
      * @param a dividend
      * @param b divisor
      * @return q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
      * @exception MathRuntimeException if b == 0
      * @see #floorMod(long, long)
-     * @since 3.4
      */
     public static long floorDiv(final long a, final long b) throws MathRuntimeException {
 
@@ -4005,7 +3979,6 @@ public class FastMath {
      * @return r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
      * @exception MathRuntimeException if b == 0
      * @see #floorDiv(int, int)
-     * @since 3.4
      */
     public static int floorMod(final int a, final int b) throws MathRuntimeException {
 
@@ -4035,7 +4008,6 @@ public class FastMath {
      * @return r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
      * @exception MathRuntimeException if b == 0
      * @see #floorDiv(long, long)
-     * @since 3.4
      */
     public static long floorMod(final long a, final long b) {
 

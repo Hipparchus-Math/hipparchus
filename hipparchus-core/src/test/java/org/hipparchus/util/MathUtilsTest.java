@@ -25,7 +25,6 @@ import org.junit.Test;
 
 /**
  * Test cases for the MathUtils class.
- *
  */
 public final class MathUtilsTest {
     @Test

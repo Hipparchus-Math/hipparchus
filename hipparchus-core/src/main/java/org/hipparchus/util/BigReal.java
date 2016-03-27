@@ -33,8 +33,6 @@ import org.hipparchus.exception.MathRuntimeException;
  * <p>
  * This class is a simple wrapper around the standard <code>BigDecimal</code>
  * in order to implement the {@link FieldElement} interface.
- * </p>
- * @since 2.0
  */
 public class BigReal implements FieldElement<BigReal>, Comparable<BigReal>, Serializable {
 

@@ -27,25 +27,21 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * Tests for DefaultTransformer.
  */
 public class DefaultTransformerTest {
-    /**
-     *
-     */
+
     @Test
     public void testTransformDouble() throws Exception {
         double expected = 1.0;
         Double input = Double.valueOf(expected);
-        DefaultTransformer t = new DefaultTransformer();
+        DefaultTransformer t = DefaultTransformer.getInstance();
         Assert.assertEquals(expected, t.transform(input), 1.0e-4);
     }
 
-    /**
-     *
-     */
     @Test
     public void testTransformNull() throws Exception {
-        DefaultTransformer t = new DefaultTransformer();
+        DefaultTransformer t = DefaultTransformer.getInstance();
         try {
             t.transform(null);
             Assert.fail("Expecting NullArgumentException");
@@ -54,52 +50,47 @@ public class DefaultTransformerTest {
         }
     }
 
-    /**
-     *
-     */
     @Test
     public void testTransformInteger() throws Exception {
         double expected = 1.0;
         Integer input = Integer.valueOf(1);
-        DefaultTransformer t = new DefaultTransformer();
+        DefaultTransformer t = DefaultTransformer.getInstance();
         Assert.assertEquals(expected, t.transform(input), 1.0e-4);
     }
 
-    /**
-     *
-     */
     @Test
     public void testTransformBigDecimal() throws Exception {
         double expected = 1.0;
         BigDecimal input = new BigDecimal("1.0");
-        DefaultTransformer t = new DefaultTransformer();
+        DefaultTransformer t = DefaultTransformer.getInstance();
         Assert.assertEquals(expected, t.transform(input), 1.0e-4);
     }
 
-    /**
-     *
-     */
     @Test
     public void testTransformString() throws Exception {
         double expected = 1.0;
         String input = "1.0";
-        DefaultTransformer t = new DefaultTransformer();
+        DefaultTransformer t = DefaultTransformer.getInstance();
         Assert.assertEquals(expected, t.transform(input), 1.0e-4);
     }
 
-    /**
-     *
-     */
     @Test(expected=MathIllegalArgumentException.class)
     public void testTransformObject(){
         Boolean input = Boolean.TRUE;
-        DefaultTransformer t = new DefaultTransformer();
+        DefaultTransformer t = DefaultTransformer.getInstance();
         t.transform(input);
     }
 
     @Test
     public void testSerial() {
-        Assert.assertEquals(new DefaultTransformer(), TestUtils.serializeAndRecover(new DefaultTransformer()));
+        Assert.assertEquals(DefaultTransformer.getInstance(),
+                            TestUtils.serializeAndRecover(DefaultTransformer.getInstance()));
+    }
+    
+    @Test
+    public void testEquals() {
+        Assert.assertEquals(DefaultTransformer.getInstance(),
+                            DefaultTransformer.getInstance());
     }
 
 }

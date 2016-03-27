@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @see MedianOf3PivotingStrategy
  * @see RandomPivotingStrategy
  * @see CentralPivotingStrategy
- * @since 3.4
  */
 public interface PivotingStrategyInterface {
 

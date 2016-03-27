@@ -21,8 +21,8 @@ import java.io.PrintStream;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
-/** Class used to compute the classical functions tables.
- * @since 3.0
+/**
+ * Class used to compute the classical functions tables.
  */
 class FastMathCalc {
 

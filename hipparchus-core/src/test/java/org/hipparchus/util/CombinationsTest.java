@@ -25,7 +25,6 @@ import org.junit.Test;
 
 /**
  * Tests for the {@link Combinations} class.
- *
  */
 public class CombinationsTest {
     @Test

@@ -25,8 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * This class wraps a {@code double} value in an object. It is similar to the
  * standard class {@link Double}, while also implementing the
  * {@link RealFieldElement} interface.
- *
- * @since 3.1
  */
 public class Decimal64 extends Number
                        implements RealFieldElement<Decimal64>, Comparable<Decimal64> {
@@ -312,161 +310,121 @@ public class Decimal64 extends Number
         return Double.isNaN(value);
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public double getReal() {
         return value;
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 add(final double a) {
         return new Decimal64(value + a);
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 subtract(final double a) {
         return new Decimal64(value - a);
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 multiply(final double a) {
         return new Decimal64(value * a);
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 divide(final double a) {
         return new Decimal64(value / a);
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 remainder(final double a) {
         return new Decimal64(FastMath.IEEEremainder(value, a));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 remainder(final Decimal64 a) {
         return new Decimal64(FastMath.IEEEremainder(value, a.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 abs() {
         return new Decimal64(FastMath.abs(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 ceil() {
         return new Decimal64(FastMath.ceil(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 floor() {
         return new Decimal64(FastMath.floor(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 rint() {
         return new Decimal64(FastMath.rint(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public long round() {
         return FastMath.round(value);
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 signum() {
         return new Decimal64(FastMath.signum(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 copySign(final Decimal64 sign) {
         return new Decimal64(FastMath.copySign(value, sign.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 copySign(final double sign) {
         return new Decimal64(FastMath.copySign(value, sign));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 scalb(final int n) {
         return new Decimal64(FastMath.scalb(value, n));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 hypot(final Decimal64 y) {
         return new Decimal64(FastMath.hypot(value, y.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 sqrt() {
         return new Decimal64(FastMath.sqrt(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 cbrt() {
         return new Decimal64(FastMath.cbrt(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 rootN(final int n) {
         if (value < 0) {
@@ -476,57 +434,43 @@ public class Decimal64 extends Number
         }
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 pow(final double p) {
         return new Decimal64(FastMath.pow(value, p));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 pow(final int n) {
         return new Decimal64(FastMath.pow(value, n));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 pow(final Decimal64 e) {
         return new Decimal64(FastMath.pow(value, e.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 exp() {
         return new Decimal64(FastMath.exp(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 expm1() {
         return new Decimal64(FastMath.expm1(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 log() {
         return new Decimal64(FastMath.log(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 log1p() {
         return new Decimal64(FastMath.log1p(value));
@@ -534,120 +478,91 @@ public class Decimal64 extends Number
 
     /** Base 10 logarithm.
      * @return base 10 logarithm of the instance
-     * @since 3.2
      */
     @Override
     public Decimal64 log10() {
         return new Decimal64(FastMath.log10(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 cos() {
         return new Decimal64(FastMath.cos(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 sin() {
         return new Decimal64(FastMath.sin(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 tan() {
         return new Decimal64(FastMath.tan(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 acos() {
         return new Decimal64(FastMath.acos(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 asin() {
         return new Decimal64(FastMath.asin(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 atan() {
         return new Decimal64(FastMath.atan(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 atan2(final Decimal64 x) {
         return new Decimal64(FastMath.atan2(value, x.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 cosh() {
         return new Decimal64(FastMath.cosh(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 sinh() {
         return new Decimal64(FastMath.sinh(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 tanh() {
         return new Decimal64(FastMath.tanh(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 acosh() {
         return new Decimal64(FastMath.acosh(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 asinh() {
         return new Decimal64(FastMath.asinh(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 atanh() {
         return new Decimal64(FastMath.atanh(value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 linearCombination(final Decimal64[] a, final Decimal64[] b)
         throws MathIllegalArgumentException {
@@ -664,9 +579,7 @@ public class Decimal64 extends Number
         return new Decimal64(MathArrays.linearCombination(aDouble, bDouble));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 linearCombination(final double[] a, final Decimal64[] b)
         throws MathIllegalArgumentException {
@@ -681,9 +594,7 @@ public class Decimal64 extends Number
         return new Decimal64(MathArrays.linearCombination(a, bDouble));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 linearCombination(final Decimal64 a1, final Decimal64 b1,
                                        final Decimal64 a2, final Decimal64 b2) {
@@ -691,9 +602,7 @@ public class Decimal64 extends Number
                                                           a2.value, b2.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 linearCombination(final double a1, final Decimal64 b1,
                                        final double a2, final Decimal64 b2) {
@@ -701,9 +610,7 @@ public class Decimal64 extends Number
                                                           a2, b2.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 linearCombination(final Decimal64 a1, final Decimal64 b1,
                                        final Decimal64 a2, final Decimal64 b2,
@@ -713,9 +620,7 @@ public class Decimal64 extends Number
                                                           a3.value, b3.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 linearCombination(final double a1, final Decimal64 b1,
                                        final double a2, final Decimal64 b2,
@@ -725,9 +630,7 @@ public class Decimal64 extends Number
                                                           a3, b3.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 linearCombination(final Decimal64 a1, final Decimal64 b1,
                                        final Decimal64 a2, final Decimal64 b2,
@@ -739,9 +642,7 @@ public class Decimal64 extends Number
                                                           a4.value, b4.value));
     }
 
-    /** {@inheritDoc}
-     * @since 3.2
-     */
+    /** {@inheritDoc} */
     @Override
     public Decimal64 linearCombination(final double a1, final Decimal64 b1,
                                        final double a2, final Decimal64 b2,

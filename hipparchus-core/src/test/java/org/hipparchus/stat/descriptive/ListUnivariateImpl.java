@@ -55,7 +55,7 @@ public class ListUnivariateImpl extends DescriptiveStatistics implements Seriali
      * @param list The list that will back this DescriptiveStatistics
      */
     public ListUnivariateImpl(List<Object> list) {
-        this(list, new DefaultTransformer());
+        this(list, DefaultTransformer.getInstance());
     }
 
     /**

@@ -26,14 +26,13 @@ import org.hipparchus.FieldElement;
  * Representation of real numbers with arbitrary precision field.
  * <p>
  * This class is a singleton.
- * </p>
+ *
  * @see BigReal
- * @since 2.0
  */
 public class BigRealField implements Field<BigReal>, Serializable  {
 
     /** Serializable version identifier */
-    private static final long serialVersionUID = 4756431066541037559L;
+    private static final long serialVersionUID = 20160327L;
 
     /** Private constructor for the singleton.
      */

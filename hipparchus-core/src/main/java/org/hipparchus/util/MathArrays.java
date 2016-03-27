@@ -36,8 +36,6 @@ import org.hipparchus.random.Well19937c;
 
 /**
  * Arrays utilities.
- *
- * @since 3.0
  */
 public class MathArrays {
 
@@ -48,7 +46,6 @@ public class MathArrays {
 
     /**
      * Real-valued function that operates on an array or a part of it.
-     * @since 3.1
      */
     public interface Function {
         /**
@@ -75,7 +72,6 @@ public class MathArrays {
      * @param arr Array to scale.
      * @param val Scalar.
      * @return scaled copy of array with each entry multiplied by val.
-     * @since 3.2
      */
     public static double[] scale(double val, final double[] arr) {
         double[] newArr = new double[arr.length];
@@ -86,13 +82,12 @@ public class MathArrays {
     }
 
     /**
-     * <p>Multiply each element of an array by a value.</p>
-     *
-     * <p>The array is modified in place (no copy is created).</p>
+     * Multiply each element of an array by a value.
+     * <p>
+     * The array is modified in place (no copy is created).
      *
      * @param arr Array to scale
      * @param val Scalar
-     * @since 3.2
      */
     public static void scaleInPlace(double val, final double[] arr) {
         for (int i = 0; i < arr.length; i++) {
@@ -108,7 +103,6 @@ public class MathArrays {
      * @param b Second term of the addition.
      * @return a new array {@code r} where {@code r[i] = a[i] + b[i]}.
      * @throws MathIllegalArgumentException if the array lengths differ.
-     * @since 3.1
      */
     public static double[] ebeAdd(double[] a, double[] b)
         throws MathIllegalArgumentException {
@@ -128,7 +122,6 @@ public class MathArrays {
      * @param b Element to be subtracted.
      * @return a new array {@code r} where {@code r[i] = a[i] - b[i]}.
      * @throws MathIllegalArgumentException if the array lengths differ.
-     * @since 3.1
      */
     public static double[] ebeSubtract(double[] a, double[] b)
         throws MathIllegalArgumentException {
@@ -148,7 +141,6 @@ public class MathArrays {
      * @param b Second factor of the multiplication.
      * @return a new array {@code r} where {@code r[i] = a[i] * b[i]}.
      * @throws MathIllegalArgumentException if the array lengths differ.
-     * @since 3.1
      */
     public static double[] ebeMultiply(double[] a, double[] b)
         throws MathIllegalArgumentException {
@@ -168,7 +160,6 @@ public class MathArrays {
      * @param b Denominator of the division.
      * @return a new array {@code r} where {@code r[i] = a[i] / b[i]}.
      * @throws MathIllegalArgumentException if the array lengths differ.
-     * @since 3.1
      */
     public static double[] ebeDivide(double[] a, double[] b)
         throws MathIllegalArgumentException {
@@ -190,7 +181,7 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distance1(double[] p1, double[] p2)
-    throws MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         double sum = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -208,7 +199,7 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static int distance1(int[] p1, int[] p2)
-    throws MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         int sum = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -226,7 +217,7 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distance(double[] p1, double[] p2)
-    throws MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         double sum = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -242,7 +233,6 @@ public class MathArrays {
      * @param v1 Cartesian coordinates of the first vector.
      * @param v2 Cartesian coordinates of the second vector.
      * @return the cosine of the angle between the vectors.
-     * @since 3.6
      */
     public static double cosAngle(double[] v1, double[] v2) {
         return linearCombination(v1, v2) / (safeNorm(v1) * safeNorm(v2));
@@ -257,14 +247,14 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distance(int[] p1, int[] p2)
-    throws MathIllegalArgumentException {
-      checkEqualLength(p1, p2);
-      double sum = 0;
-      for (int i = 0; i < p1.length; i++) {
-          final double dp = p1[i] - p2[i];
-          sum += dp * dp;
-      }
-      return FastMath.sqrt(sum);
+        throws MathIllegalArgumentException {
+        checkEqualLength(p1, p2);
+        double sum = 0;
+        for (int i = 0; i < p1.length; i++) {
+            final double dp = p1[i] - p2[i];
+            sum += dp * dp;
+        }
+        return FastMath.sqrt(sum);
     }
 
     /**
@@ -276,7 +266,7 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static double distanceInf(double[] p1, double[] p2)
-    throws MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         double max = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -294,7 +284,7 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if the array lengths differ.
      */
     public static int distanceInf(int[] p1, int[] p2)
-    throws MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         checkEqualLength(p1, p2);
         int max = 0;
         for (int i = 0; i < p1.length; i++) {
@@ -322,9 +312,9 @@ public class MathArrays {
      * @param strict Whether the order should be strict.
      * @return {@code true} if sorted, {@code false} otherwise.
      */
-    public static  <T extends Comparable<? super T>> boolean isMonotonic(T[] val,
-                                      OrderDirection dir,
-                                      boolean strict) {
+    public static <T extends Comparable<? super T>> boolean isMonotonic(T[] val,
+                                                                        OrderDirection dir,
+                                                                        boolean strict) {
         T previous = val[0];
         final int max = val.length;
         for (int i = 1; i < max; i++) {
@@ -385,7 +375,6 @@ public class MathArrays {
      * @return {@code true} if the arrays have the same length.
      * @throws MathIllegalArgumentException if the lengths differ and
      * {@code abort} is {@code true}.
-     * @since 3.6
      */
     public static boolean checkEqualLength(double[] a,
                                            double[] b,
@@ -407,13 +396,11 @@ public class MathArrays {
      * @param a Array.
      * @param b Array.
      * @throws MathIllegalArgumentException if the lengths differ.
-     * @since 3.6
      */
     public static void checkEqualLength(double[] a,
                                         double[] b) {
         checkEqualLength(a, b, true);
     }
-
 
     /**
      * Check that both arrays have the same length.
@@ -424,7 +411,6 @@ public class MathArrays {
      * @return {@code true} if the arrays have the same length.
      * @throws MathIllegalArgumentException if the lengths differ and
      * {@code abort} is {@code true}.
-     * @since 3.6
      */
     public static boolean checkEqualLength(int[] a,
                                            int[] b,
@@ -446,7 +432,6 @@ public class MathArrays {
      * @param a Array.
      * @param b Array.
      * @throws MathIllegalArgumentException if the lengths differ.
-     * @since 3.6
      */
     public static void checkEqualLength(int[] a,
                                         int[] b) {
@@ -531,7 +516,6 @@ public class MathArrays {
      * @param dir Ordering direction.
      * @param strict Whether the order should be strict.
      * @throws MathIllegalArgumentException if the array is not sorted.
-     * @since 2.2
      */
     public static void checkOrder(double[] val, OrderDirection dir,
                                   boolean strict) throws MathIllegalArgumentException {
@@ -543,7 +527,6 @@ public class MathArrays {
      *
      * @param val Values.
      * @throws MathIllegalArgumentException if the array is not sorted.
-     * @since 2.2
      */
     public static void checkOrder(double[] val) throws MathIllegalArgumentException {
         checkOrder(val, OrderDirection.INCREASING, true);
@@ -555,7 +538,6 @@ public class MathArrays {
      * @param in array to be tested
      * @throws NullArgumentException if input array is null
      * @throws MathIllegalArgumentException if input array is not rectangular
-     * @since 3.1
      */
     public static void checkRectangular(final long[][] in)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -575,7 +557,6 @@ public class MathArrays {
      * @param in Array to be tested
      * @throws MathIllegalArgumentException if any entries of the array are not
      * strictly positive.
-     * @since 3.1
      */
     public static void checkPositive(final double[] in)
         throws MathIllegalArgumentException {
@@ -592,7 +573,6 @@ public class MathArrays {
      *
      * @param in Array to be tested.
      * @throws MathIllegalArgumentException if an entry is {@code NaN}.
-     * @since 3.4
      */
     public static void checkNotNaN(final double[] in)
         throws MathIllegalArgumentException {
@@ -608,7 +588,6 @@ public class MathArrays {
      *
      * @param in Array to be tested
      * @throws MathIllegalArgumentException if any array entries are less than 0.
-     * @since 3.1
      */
     public static void checkNonNegative(final long[] in)
         throws MathIllegalArgumentException {
@@ -624,7 +603,6 @@ public class MathArrays {
      *
      * @param in Array to be tested
      * @throws MathIllegalArgumentException if any array entries are less than 0.
-     * @since 3.1
      */
     public static void checkNonNegative(final long[][] in)
         throws MathIllegalArgumentException {
@@ -695,7 +673,6 @@ public class MathArrays {
      *
      * @param v Vector of doubles.
      * @return the 2-norm of the vector.
-     * @since 2.2
      */
     public static double safeNorm(double[] v) {
         double rdwarf = 3.834e-20;
@@ -766,9 +743,8 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if any {@code y} is not the same
      * size as {@code x}.
      * @throws NullArgumentException if {@code x} or any {@code y} is null.
-     * @since 3.0
      */
-    public static void sortInPlace(double[] x, double[] ... yList)
+    public static void sortInPlace(double[] x, double[]... yList)
         throws MathIllegalArgumentException, NullArgumentException {
         sortInPlace(x, OrderDirection.INCREASING, yList);
     }
@@ -817,11 +793,10 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if any {@code y} is not the same
      * size as {@code x}.
      * @throws NullArgumentException if {@code x} or any {@code y} is null
-     * @since 3.0
      */
     public static void sortInPlace(double[] x,
                                    final OrderDirection dir,
-                                   double[] ... yList)
+                                   double[]... yList)
         throws MathIllegalArgumentException, NullArgumentException {
 
         // Consistency checks.
@@ -1278,7 +1253,6 @@ public class MathArrays {
      * @param y second array
      * @return true if the values are both null or have same dimension and
      * equal elements
-     * @since 2.2
      */
     public static boolean equalsIncludingNaN(float[] x, float[] y) {
         if ((x == null) || (y == null)) {
@@ -1329,7 +1303,6 @@ public class MathArrays {
      * @param y Second array.
      * @return {@code true} if the values are both {@code null} or have same
      * dimension and equal elements.
-     * @since 2.2
      */
     public static boolean equalsIncludingNaN(double[] x, double[] y) {
         if ((x == null) || (y == null)) {
@@ -1367,7 +1340,6 @@ public class MathArrays {
      * @throws MathRuntimeException if the input array contains infinite
      * elements or sums to zero.
      * @throws MathIllegalArgumentException if the target sum is infinite or {@code NaN}.
-     * @since 2.1
      */
     public static double[] normalizeArray(double[] values, double normalizedSum)
         throws MathIllegalArgumentException, MathRuntimeException {
@@ -1409,7 +1381,6 @@ public class MathArrays {
      * @param field field to which array elements belong
      * @param length of the array
      * @return a new array
-     * @since 3.2
      */
     public static <T> T[] buildArray(final Field<T> field, final int length) {
         @SuppressWarnings("unchecked") // OK because field must be correct class
@@ -1428,7 +1399,6 @@ public class MathArrays {
      * @param columns number of columns (may be negative to build partial
      * arrays in the same way <code>new Field[rows][]</code> works)
      * @return a new array
-     * @since 3.2
      */
     @SuppressWarnings("unchecked")
     public static <T> T[][] buildArray(final Field<T> field, final int rows, final int columns) {
@@ -1465,8 +1435,6 @@ public class MathArrays {
      * This array's length will be {@code x.length + h.length - 1}.
      * @throws NullArgumentException if either {@code x} or {@code h} is {@code null}.
      * @throws MathIllegalArgumentException if either {@code x} or {@code h} is empty.
-     *
-     * @since 3.3
      */
     public static double[] convolve(double[] x, double[] h)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -1615,8 +1583,6 @@ public class MathArrays {
      * @return an array whose entries are the numbers
      * {@code start, start + stride, ..., start + (size - 1) * stride}.
      * If {@code size == 0}, the returned array is empty.
-     *
-     * @since 3.4
      */
     public static int[] sequence(int size,
                                  int start,
@@ -1646,7 +1612,6 @@ public class MathArrays {
      * @param length the number of elements to include
      * @return true if the parameters are valid and designate a subarray of positive length
      * @throws MathIllegalArgumentException if the indices are invalid or the array is null
-     * @since 3.3
      */
     public static boolean verifyValues(final double[] values, final int begin, final int length)
             throws MathIllegalArgumentException {
@@ -1672,7 +1637,6 @@ public class MathArrays {
      * @param allowEmpty if <code>true</code> then zero length arrays are allowed
      * @return true if the parameters are valid
      * @throws MathIllegalArgumentException if the indices are invalid or the array is null
-     * @since 3.3
      */
     public static boolean verifyValues(final double[] values, final int begin,
             final int length, final boolean allowEmpty) throws MathIllegalArgumentException {
@@ -1720,7 +1684,7 @@ public class MathArrays {
      * </li>
      * <li>returns <code>false</li> if the array is non-null, but
      * <code>length</code> is 0.
-     * </ul></p>
+     * </ul>
      *
      * @param values the input array
      * @param weights the weights array
@@ -1728,7 +1692,6 @@ public class MathArrays {
      * @param length the number of elements to include
      * @return true if the parameters are valid and designate a subarray of positive length
      * @throws MathIllegalArgumentException if the indices are invalid or the array is null
-     * @since 3.3
      */
     public static boolean verifyValues(
         final double[] values,
@@ -1757,7 +1720,7 @@ public class MathArrays {
      * </li>
      * <li>returns <code>false</li> if the array is non-null, but
      * <code>length</code> is 0 unless <code>allowEmpty</code> is <code>true</code>.
-     * </ul></p>
+     * </ul>
      *
      * @param values the input array.
      * @param weights the weights array.
@@ -1769,7 +1732,6 @@ public class MathArrays {
      * @throws MathIllegalArgumentException if the array indices are not valid,
      * the weights array contains NaN, infinite or negative elements, or there
      * are no positive weights.
-     * @since 3.3
      */
     public static boolean verifyValues(final double[] values, final double[] weights,
             final int begin, final int length, final boolean allowEmpty) throws MathIllegalArgumentException {
@@ -1813,9 +1775,8 @@ public class MathArrays {
      * @param x list of double[] arrays to concatenate
      * @return a new array consisting of the entries of the argument arrays
      * @throws NullPointerException if any of the arrays are null
-     * @since 3.6
      */
-    public static double[] concatenate(double[] ...x) {
+    public static double[] concatenate(double[]... x) {
         int combinedLength = 0;
         for (double[] a : x) {
             combinedLength += a.length;
@@ -1843,7 +1804,6 @@ public class MathArrays {
      * @param data array to scan
      * @return descending list of values included in the input array
      * @throws NullPointerException if data is null
-     * @since 3.6
      */
     public static double[] unique(double[] data) {
         TreeSet<Double> values = new TreeSet<Double>();

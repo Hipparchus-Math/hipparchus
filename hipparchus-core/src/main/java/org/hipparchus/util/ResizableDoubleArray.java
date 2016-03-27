@@ -73,7 +73,7 @@ import org.hipparchus.exception.NullArgumentException;
  */
 public class ResizableDoubleArray implements DoubleArray, Serializable {
     /** Serializable version identifier. */
-    private static final long serialVersionUID = -3485529955529426875L;
+    private static final long serialVersionUID = 20160327L;
 
     /** Default value for initial capacity. */
     private static final int DEFAULT_INITIAL_CAPACITY = 16;
@@ -90,7 +90,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
     /**
      * The contraction criteria determines when the internal array will be
      * contracted to fit the number of elements contained in the element
-     *  array + 1.
+     * array + 1.
      */
     private final double contractionCriterion;
 
@@ -127,10 +127,7 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      */
     private int startIndex = 0;
 
-    /**
-     * Specification of expansion algorithm.
-     * @since 3.1
-     */
+    /** Specification of expansion algorithm. */
     public enum ExpansionMode {
         /** Multiplicative expansion mode. */
         MULTIPLICATIVE,
@@ -183,12 +180,10 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * </ul>
      *
      * @param initialArray initial array
-     * @since 2.2
      */
     public ResizableDoubleArray(double[] initialArray) {
         this(initialArray == null || initialArray.length == 0 ?
-              DEFAULT_INITIAL_CAPACITY :
-              initialArray.length,
+             DEFAULT_INITIAL_CAPACITY : initialArray.length,
              DEFAULT_EXPANSION_FACTOR,
              DEFAULT_CONTRACTION_DELTA + DEFAULT_EXPANSION_FACTOR,
              DEFAULT_EXPANSION_MODE,
@@ -215,7 +210,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @param initialCapacity Initial size of the internal storage array.
      * @param expansionFactor The array will be expanded based on this parameter.
      * @throws MathIllegalArgumentException if parameters are not valid.
-     * @since 3.1
      */
     public ResizableDoubleArray(int initialCapacity, double expansionFactor) throws MathIllegalArgumentException {
         this(initialCapacity, expansionFactor, DEFAULT_CONTRACTION_DELTA + expansionFactor);
@@ -239,7 +233,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @param expansionFactor The array will be expanded based on this parameter.
      * @param contractionCriterion Contraction criterion.
      * @throws MathIllegalArgumentException if the parameters are not valid.
-     * @since 3.1
      */
     public ResizableDoubleArray(int initialCapacity, double expansionFactor, double contractionCriterion)
         throws MathIllegalArgumentException {
@@ -298,7 +291,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param original array to copy
      * @exception NullArgumentException if original is null
-     * @since 2.0
      */
     public ResizableDoubleArray(final ResizableDoubleArray original)
         throws NullArgumentException {
@@ -329,7 +321,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * Adds several element to the end of this expandable array.
      *
      * @param values Values to be added to end of array.
-     * @since 2.2
      */
     @Override
     public void addElements(final double[] values) {
@@ -384,7 +375,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @param value New value to substitute for the most recently added value
      * @return the value that has been replaced in the array.
      * @throws MathIllegalStateException if the array is empty
-     * @since 2.0
      */
     public double substituteMostRecentElement(double value) throws MathIllegalStateException {
         if (numElements < 1) {
@@ -409,9 +399,10 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @throws MathIllegalArgumentException if {@code contraction < expansion}.
      * @throws MathIllegalArgumentException if {@code contraction <= 1}.
      * @throws MathIllegalArgumentException if {@code expansion <= 1 }.
-     * @since 3.1
      */
-    protected void checkContractExpand(double contraction, double expansion) throws MathIllegalArgumentException {
+    protected void checkContractExpand(double contraction, double expansion)
+        throws MathIllegalArgumentException {
+
         if (contraction < expansion) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.CONTRACTION_CRITERIA_SMALLER_THAN_EXPANSION_FACTOR,
                                                    contraction, expansion);
@@ -461,7 +452,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param i  the number of elements to discard from the front of the array
      * @throws MathIllegalArgumentException if i is greater than numElements.
-     * @since 2.0
      */
     public void discardFrontElements(int i) throws MathIllegalArgumentException {
         discardExtremeElements(i,true);
@@ -476,7 +466,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param i  the number of elements to discard from the end of the array
      * @throws MathIllegalArgumentException if i is greater than numElements.
-     * @since 2.0
      */
     public void discardMostRecentElements(int i) throws MathIllegalArgumentException {
         discardExtremeElements(i,false);
@@ -498,7 +487,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * of the array, false if elements are to be discarded from the end
      * of the array
      * @throws MathIllegalArgumentException if i is greater than numElements.
-     * @since 2.0
      */
     private void discardExtremeElements(int i, boolean front) throws MathIllegalArgumentException {
         if (i > numElements) {
@@ -571,7 +559,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * number of excess storage locations is compared to {@code contractionFactor}.
      *
      * @return the contraction criterion used to reclaim memory.
-     * @since 3.1
      */
     public double getContractionCriterion() {
         return contractionCriterion;
@@ -644,7 +631,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * elements actually stored}.
      *
      * @return the length of the internal array.
-     * @since 3.1
      */
     public int getCapacity() {
         return internalArray.length;
@@ -678,7 +664,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * returns a copy of this array's addressable elements.
      *
      * @return the internal storage array used by this object.
-     * @since 3.1
      */
     protected double[] getArrayRef() {
         return internalArray;
@@ -694,7 +679,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *               {@link #getStartIndex()} + {@link #getNumElements()} - 1].
      *
      * @return the start index.
-     * @since 3.1
      */
     protected int getStartIndex() {
         return startIndex;
@@ -705,7 +689,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param f Function to be applied on this array.
      * @return the result.
-     * @since 3.1
      */
     public double compute(MathArrays.Function f) {
         return f.evaluate(internalArray, startIndex, numElements);
@@ -783,7 +766,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @return a new ResizableDoubleArray with the same data and configuration
      * properties as this
-     * @since 2.0
      */
     public ResizableDoubleArray copy() {
         return new ResizableDoubleArray(this);
@@ -796,7 +778,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @param object object to be compared for equality with this
      * @return true iff object is a ResizableDoubleArray with the same data and
      * properties as this
-     * @since 2.0
      */
     @Override
     public boolean equals(Object object) {
@@ -824,7 +805,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * Returns a hash code consistent with equals.
      *
      * @return the hash code representing this {@code ResizableDoubleArray}.
-     * @since 2.0
      */
     @Override
     public int hashCode() {
