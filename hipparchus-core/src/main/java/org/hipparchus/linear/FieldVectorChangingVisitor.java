@@ -24,7 +24,6 @@ import org.hipparchus.FieldElement;
  * visited.
  *
  * @param <T> the type of the field elements
- * @since 3.3
  */
 public interface FieldVectorChangingVisitor<T extends FieldElement<?>> {
     /**

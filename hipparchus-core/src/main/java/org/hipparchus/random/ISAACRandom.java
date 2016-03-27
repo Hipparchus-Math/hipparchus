@@ -39,7 +39,6 @@ import org.hipparchus.util.FastMath;
  * @see  <a href="http://burtleburtle.net/bob/rand/isaacafa.html">
  * ISAAC: a fast cryptographic pseudo-random number generator</a>
  *
- * @since 3.0
  */
 public class ISAACRandom extends BitsStreamGenerator implements Serializable {
     /** Serializable version identifier */

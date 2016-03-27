@@ -23,7 +23,6 @@ import org.hipparchus.analysis.MultivariateVectorFunction;
  * The vectorial components of the function represent the derivatives
  * with respect to each function parameters.
  * </p>
- * @since 3.1
  */
 public class GradientFunction implements MultivariateVectorFunction {
 

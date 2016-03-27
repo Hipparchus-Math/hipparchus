@@ -39,7 +39,6 @@ import org.hipparchus.util.MathUtils;
  * This class implements both the loess method and serves as an interpolation
  * adapter to it, allowing one to build a spline on the obtained loess fit.</p>
  *
- * @since 2.0
  */
 public class LoessInterpolator
     implements UnivariateInterpolator, Serializable {
@@ -49,7 +48,6 @@ public class LoessInterpolator
     public static final int DEFAULT_ROBUSTNESS_ITERS = 2;
     /**
      * Default value for accuracy.
-     * @since 2.1
      */
     public static final double DEFAULT_ACCURACY = 1e-12;
     /** serializable version identifier. */
@@ -136,7 +134,6 @@ public class LoessInterpolator
      * @throws MathIllegalArgumentException if bandwidth does not lie in the interval [0,1].
      * @throws MathIllegalArgumentException if {@code robustnessIters} is negative.
      * @see #LoessInterpolator(double, int)
-     * @since 2.1
      */
     public LoessInterpolator(double bandwidth, int robustnessIters, double accuracy)
         throws MathIllegalArgumentException {
@@ -198,7 +195,6 @@ public class LoessInterpolator
      * @throws MathIllegalArgumentException if the bandwidth is too small to
      * accomodate the size of the input data (i.e. the bandwidth must be
      * larger than 2/n).
-     * @since 2.1
      */
     public final double[] smooth(final double[] xval, final double[] yval,
                                  final double[] weights)

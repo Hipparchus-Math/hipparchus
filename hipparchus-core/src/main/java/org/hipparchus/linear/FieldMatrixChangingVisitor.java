@@ -23,7 +23,6 @@ import org.hipparchus.FieldElement;
  * Interface defining a visitor for matrix entries.
  *
  * @param <T> the type of the field elements
- * @since 2.0
  */
 public interface FieldMatrixChangingVisitor<T extends FieldElement<?>> {
     /**

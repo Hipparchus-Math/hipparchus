@@ -33,7 +33,6 @@ import org.hipparchus.util.OpenIntToDoubleHashMap;
  *  Some operations (that involve {@code NaN} and/or infinities) may
  *  thus give incorrect results.
  * </p>
- * @since 2.0
  */
 public class OpenMapRealMatrix extends AbstractRealMatrix
     implements SparseRealMatrix, Serializable {

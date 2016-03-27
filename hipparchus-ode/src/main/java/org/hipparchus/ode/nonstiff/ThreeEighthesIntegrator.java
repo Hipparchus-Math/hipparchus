@@ -39,7 +39,6 @@ package org.hipparchus.ode.nonstiff;
  * @see GillIntegrator
  * @see MidpointIntegrator
  * @see LutherIntegrator
- * @since 1.2
  */
 
 public class ThreeEighthesIntegrator extends RungeKuttaIntegrator {

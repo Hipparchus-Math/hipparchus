@@ -49,7 +49,6 @@ import org.hipparchus.linear.RealMatrix;
   *
  * @see MultivariateFunction
  * @see MultivariateVectorFunction
- * @since 2.0
  */
 
 public class LeastSquaresConverter implements MultivariateFunction {

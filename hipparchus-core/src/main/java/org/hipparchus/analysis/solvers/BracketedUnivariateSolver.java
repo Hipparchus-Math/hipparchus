@@ -41,7 +41,6 @@ import org.hipparchus.analysis.UnivariateFunction;
  * @param <FUNC> Type of function to solve.
  *
  * @see AllowedSolution
- * @since 3.0
  */
 public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
     extends BaseUnivariateSolver<FUNC> {

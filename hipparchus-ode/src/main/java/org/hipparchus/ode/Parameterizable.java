@@ -20,7 +20,6 @@ import java.util.Collection;
 
 /** This interface enables to process any parameterizable object.
  *
- * @since 3.0
  */
 
 public interface Parameterizable {

@@ -25,7 +25,6 @@ import org.hipparchus.optim.OptimizationData;
  * <br/>
  * Immutable class.
  *
- * @since 3.1
  */
 public class SearchInterval implements OptimizationData {
     /** Lower bound. */

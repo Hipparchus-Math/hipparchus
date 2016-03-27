@@ -28,7 +28,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @param <PAIR> Type of the point/value pair returned by the optimization
  * algorithm.
  *
- * @since 3.1
  */
 public abstract class BaseMultivariateOptimizer<PAIR>
     extends BaseOptimizer<PAIR> {

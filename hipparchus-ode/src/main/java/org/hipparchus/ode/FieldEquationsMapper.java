@@ -32,7 +32,6 @@ import org.hipparchus.util.MathArrays;
  * </p>
  * @see FieldExpandableODE
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Serializable {
 

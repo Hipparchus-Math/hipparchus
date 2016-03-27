@@ -42,7 +42,6 @@ import org.hipparchus.util.FastMath;
  *  volume 6, no 1, 1980, pp. 19-26
  * </pre></p>
  *
- * @since 1.2
  */
 
 public class DormandPrince54Integrator extends EmbeddedRungeKuttaIntegrator {

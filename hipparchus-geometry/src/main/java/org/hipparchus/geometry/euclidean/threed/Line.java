@@ -36,7 +36,6 @@ import org.hipparchus.util.Precision;
  * which is closest to the origin. Abscissa increases in the line
  * direction.</p>
 
- * @since 3.0
  */
 public class Line implements Embedding<Euclidean3D, Euclidean1D> {
 
@@ -54,7 +53,6 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
      * @param p2 second point belonging to the line (this can be any point, different from p1)
      * @param tolerance tolerance below which points are considered identical
      * @exception MathIllegalArgumentException if the points are equal
-     * @since 3.3
      */
     public Line(final Vector3D p1, final Vector3D p2, final double tolerance)
         throws MathIllegalArgumentException {
@@ -90,7 +88,6 @@ public class Line implements Embedding<Euclidean3D, Euclidean1D> {
 
     /** Get the tolerance below which points are considered identical.
      * @return tolerance below which points are considered identical
-     * @since 3.3
      */
     public double getTolerance() {
         return tolerance;

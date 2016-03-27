@@ -43,13 +43,11 @@ public class MatrixUtils {
 
     /**
      * The default format for {@link RealMatrix} objects.
-     * @since 3.1
      */
     public static final RealMatrixFormat DEFAULT_FORMAT = RealMatrixFormat.getInstance();
 
     /**
      * A format for {@link RealMatrix} objects compatible with octave.
-     * @since 3.1
      */
     public static final RealMatrixFormat OCTAVE_FORMAT = new RealMatrixFormat("[", "]", "", "", "; ", ", ");
 
@@ -91,7 +89,6 @@ public class MatrixUtils {
      * @param columns number of columns of the matrix
      * @return  FieldMatrix with specified dimensions
      * @see #createFieldMatrix(FieldElement[][])
-     * @since 2.0
      */
     public static <T extends FieldElement<T>> FieldMatrix<T> createFieldMatrix(final Field<T> field,
                                                                                final int rows,
@@ -147,7 +144,6 @@ public class MatrixUtils {
      * @throws NullArgumentException if either {@code data} or {@code data[0]}
      * is {@code null}.
      * @see #createFieldMatrix(Field, int, int)
-     * @since 2.0
      */
     public static <T extends FieldElement<T>> FieldMatrix<T> createFieldMatrix(T[][] data)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -165,7 +161,6 @@ public class MatrixUtils {
      * @param dimension dimension of identity matrix to generate
      * @return identity matrix
      * @throws IllegalArgumentException if dimension is not positive
-     * @since 1.1
      */
     public static RealMatrix createRealIdentityMatrix(int dimension) {
         final RealMatrix m = createRealMatrix(dimension, dimension);
@@ -183,7 +178,6 @@ public class MatrixUtils {
      * @param dimension dimension of identity matrix to generate
      * @return identity matrix
      * @throws IllegalArgumentException if dimension is not positive
-     * @since 2.0
      */
     public static <T extends FieldElement<T>> FieldMatrix<T>
         createFieldIdentityMatrix(final Field<T> field, final int dimension) {
@@ -204,7 +198,6 @@ public class MatrixUtils {
      * @param diagonal diagonal elements of the matrix (the array elements
      * will be copied)
      * @return diagonal matrix
-     * @since 2.0
      */
     public static RealMatrix createRealDiagonalMatrix(final double[] diagonal) {
         final RealMatrix m = createRealMatrix(diagonal.length, diagonal.length);
@@ -221,7 +214,6 @@ public class MatrixUtils {
      * @param diagonal diagonal elements of the matrix (the array elements
      * will be copied)
      * @return diagonal matrix
-     * @since 2.0
      */
     public static <T extends FieldElement<T>> FieldMatrix<T>
         createFieldDiagonalMatrix(final T[] diagonal) {
@@ -416,7 +408,6 @@ public class MatrixUtils {
      * @param eps Relative tolerance.
      * @throws MathIllegalArgumentException if the matrix is not square.
      * @throws MathIllegalArgumentException if the matrix is not symmetric.
-     * @since 3.1
      */
     public static void checkSymmetric(RealMatrix matrix,
                                       double eps) {
@@ -429,7 +420,6 @@ public class MatrixUtils {
      * @param matrix Matrix to check.
      * @param eps Relative tolerance.
      * @return {@code true} if {@code matrix} is symmetric.
-     * @since 3.1
      */
     public static boolean isSymmetric(RealMatrix matrix,
                                       double eps) {
@@ -1077,7 +1067,6 @@ public class MatrixUtils {
      * @throws NullArgumentException if {@code matrix} is {@code null}
      * @throws MathIllegalArgumentException if m is singular
      * @throws MathIllegalArgumentException if matrix is not square
-     * @since 3.3
      */
     public static RealMatrix inverse(RealMatrix matrix)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -1096,7 +1085,6 @@ public class MatrixUtils {
      * @throws NullArgumentException if {@code matrix} is {@code null}
      * @throws MathIllegalArgumentException if matrix is singular
      * @throws MathIllegalArgumentException if matrix is not square
-     * @since 3.3
      */
     public static RealMatrix inverse(RealMatrix matrix, double threshold)
             throws MathIllegalArgumentException, NullArgumentException {

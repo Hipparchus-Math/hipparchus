@@ -25,7 +25,6 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  *
  * @see HighamHall54Integrator
  *
- * @since 1.2
  */
 
 class HighamHall54StepInterpolator

@@ -49,7 +49,6 @@ import org.hipparchus.util.FastMath;
  * the step.</p>
  *
  * @see GillIntegrator
- * @since 1.2
  */
 
 class GillStepInterpolator

@@ -91,7 +91,6 @@ import org.hipparchus.util.MathArrays;
  *
  * @see Vector3D
  * @see RotationOrder
- * @since 1.2
  */
 
 public class Rotation implements Serializable {
@@ -172,7 +171,6 @@ public class Rotation implements Serializable {
    * @param angle rotation angle
    * @param convention convention to use for the semantics of the angle
    * @exception MathIllegalArgumentException if the axis norm is zero
-   * @since 3.6
    */
   public Rotation(final Vector3D axis, final double angle, final RotationConvention convention)
       throws MathIllegalArgumentException {
@@ -397,7 +395,6 @@ public class Rotation implements Serializable {
    * @param alpha1 angle of the first elementary rotation
    * @param alpha2 angle of the second elementary rotation
    * @param alpha3 angle of the third elementary rotation
-   * @since 3.6
    */
   public Rotation(RotationOrder order, RotationConvention convention,
                   double alpha1, double alpha2, double alpha3) {
@@ -534,7 +531,6 @@ public class Rotation implements Serializable {
    * @param convention convention to use for the semantics of the angle
    * @return normalized axis of the rotation
    * @see #Rotation(Vector3D, double, RotationConvention)
-   * @since 3.6
    */
   public Vector3D getAxis(final RotationConvention convention) {
     final double squaredSine = q1 * q1 + q2 * q2 + q3 * q3;
@@ -619,7 +615,6 @@ public class Rotation implements Serializable {
    * @return an array of three angles, in the order specified by the set
    * @exception MathIllegalStateException if the rotation is
    * singular with respect to the angles set specified
-   * @since 3.6
    */
   public double[] getAngles(RotationOrder order, RotationConvention convention)
       throws MathIllegalStateException {

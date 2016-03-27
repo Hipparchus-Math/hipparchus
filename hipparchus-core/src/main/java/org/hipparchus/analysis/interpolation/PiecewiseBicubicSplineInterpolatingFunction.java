@@ -34,7 +34,6 @@ import org.hipparchus.util.MathArrays;
  * insufficient data will raise an exception when the
  * {@link #value(double,double) value} method is called.
  *
- * @since 3.4
  */
 public class PiecewiseBicubicSplineInterpolatingFunction
     implements BivariateFunction {
@@ -149,7 +148,6 @@ public class PiecewiseBicubicSplineInterpolatingFunction
      * @param x First coordinate.
      * @param y Second coordinate.
      * @return {@code true} if (x, y) is a valid point.
-     * @since 3.3
      */
     public boolean isValidPoint(double x,
                                 double y) {

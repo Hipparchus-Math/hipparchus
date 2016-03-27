@@ -25,7 +25,6 @@ import org.hipparchus.util.Pair;
  * Class that provides different ways to compute the nodes and weights to be
  * used by the {@link GaussIntegrator Gaussian integration rule}.
  *
- * @since 3.1
  */
 public class GaussIntegratorFactory {
     /** Generator of Gauss-Legendre integrators. */

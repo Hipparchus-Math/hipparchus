@@ -311,7 +311,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * Double.NaN is returned if no values have been added.
      * </p>
      * @return the sum of logs
-     * @since 1.2
      */
     public double getSumOfLogs() {
         return sumLogImpl.getResult();
@@ -326,7 +325,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * returns <code>0</code> if there is just one value in the data set.</p>
      * <p>
      * @return second central moment statistic
-     * @since 2.0
      */
     public double getSecondMoment() {
         return secondMoment.getResult();
@@ -336,7 +334,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * Generates a text report displaying summary statistics from values that
      * have been added.
      * @return String with line feeds displaying statistics
-     * @since 1.2
      */
     @Override
     public String toString() {
@@ -428,7 +425,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Returns the currently configured Sum implementation
      * @return the StorelessUnivariateStatistic implementing the sum
-     * @since 1.2
      */
     public StorelessUnivariateStatistic getSumImpl() {
         return sumImpl;
@@ -447,7 +443,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @param sumImpl the StorelessUnivariateStatistic instance to use for
      *        computing the Sum
      * @throws MathIllegalStateException if data has already been added (i.e if n >0)
-     * @since 1.2
      */
     public void setSumImpl(StorelessUnivariateStatistic sumImpl)
     throws MathIllegalStateException {
@@ -458,7 +453,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Returns the currently configured sum of squares implementation
      * @return the StorelessUnivariateStatistic implementing the sum of squares
-     * @since 1.2
      */
     public StorelessUnivariateStatistic getSumsqImpl() {
         return sumsqImpl;
@@ -477,7 +471,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @param sumsqImpl the StorelessUnivariateStatistic instance to use for
      *        computing the sum of squares
      * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     * @since 1.2
      */
     public void setSumsqImpl(StorelessUnivariateStatistic sumsqImpl)
     throws MathIllegalStateException {
@@ -488,7 +481,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Returns the currently configured minimum implementation
      * @return the StorelessUnivariateStatistic implementing the minimum
-     * @since 1.2
      */
     public StorelessUnivariateStatistic getMinImpl() {
         return minImpl;
@@ -507,7 +499,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @param minImpl the StorelessUnivariateStatistic instance to use for
      *        computing the minimum
      * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     * @since 1.2
      */
     public void setMinImpl(StorelessUnivariateStatistic minImpl)
     throws MathIllegalStateException {
@@ -518,7 +509,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Returns the currently configured maximum implementation
      * @return the StorelessUnivariateStatistic implementing the maximum
-     * @since 1.2
      */
     public StorelessUnivariateStatistic getMaxImpl() {
         return maxImpl;
@@ -537,7 +527,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @param maxImpl the StorelessUnivariateStatistic instance to use for
      *        computing the maximum
      * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     * @since 1.2
      */
     public void setMaxImpl(StorelessUnivariateStatistic maxImpl)
     throws MathIllegalStateException {
@@ -548,7 +537,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Returns the currently configured sum of logs implementation
      * @return the StorelessUnivariateStatistic implementing the log sum
-     * @since 1.2
      */
     public StorelessUnivariateStatistic getSumLogImpl() {
         return sumLogImpl;
@@ -567,7 +555,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @param sumLogImpl the StorelessUnivariateStatistic instance to use for
      *        computing the log sum
      * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     * @since 1.2
      */
     public void setSumLogImpl(StorelessUnivariateStatistic sumLogImpl)
     throws MathIllegalStateException {
@@ -579,7 +566,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Returns the currently configured geometric mean implementation
      * @return the StorelessUnivariateStatistic implementing the geometric mean
-     * @since 1.2
      */
     public StorelessUnivariateStatistic getGeoMeanImpl() {
         return geoMeanImpl;
@@ -598,7 +584,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @param geoMeanImpl the StorelessUnivariateStatistic instance to use for
      *        computing the geometric mean
      * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     * @since 1.2
      */
     public void setGeoMeanImpl(StorelessUnivariateStatistic geoMeanImpl)
     throws MathIllegalStateException {
@@ -609,7 +594,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Returns the currently configured mean implementation
      * @return the StorelessUnivariateStatistic implementing the mean
-     * @since 1.2
      */
     public StorelessUnivariateStatistic getMeanImpl() {
         return meanImpl;
@@ -628,7 +612,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @param meanImpl the StorelessUnivariateStatistic instance to use for
      *        computing the mean
      * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     * @since 1.2
      */
     public void setMeanImpl(StorelessUnivariateStatistic meanImpl)
     throws MathIllegalStateException {
@@ -639,7 +622,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Returns the currently configured variance implementation
      * @return the StorelessUnivariateStatistic implementing the variance
-     * @since 1.2
      */
     public StorelessUnivariateStatistic getVarianceImpl() {
         return varianceImpl;
@@ -658,7 +640,6 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @param varianceImpl the StorelessUnivariateStatistic instance to use for
      *        computing the variance
      * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     * @since 1.2
      */
     public void setVarianceImpl(StorelessUnivariateStatistic varianceImpl)
     throws MathIllegalStateException {

@@ -53,14 +53,12 @@ import org.hipparchus.util.FastMath;
 public class Gamma {
     /**
      * <a href="http://en.wikipedia.org/wiki/Euler-Mascheroni_constant">Euler-Mascheroni constant</a>
-     * @since 2.0
      */
     public static final double GAMMA = 0.577215664901532860606512090082;
 
     /**
      * The value of the {@code g} constant in the Lanczos approximation, see
      * {@link #lanczos(double)}.
-     * @since 3.1
      */
     public static final double LANCZOS_G = 607.0 / 128.0;
 
@@ -441,7 +439,6 @@ public class Gamma {
      * @return digamma(x) to within 10-8 relative or absolute error whichever is smaller.
      * @see <a href="http://en.wikipedia.org/wiki/Digamma_function">Digamma</a>
      * @see <a href="http://www.uv.es/~bernardo/1976AppStatist.pdf">Bernardo&apos;s original article </a>
-     * @since 2.0
      */
     public static double digamma(double x) {
         if (Double.isNaN(x) || Double.isInfinite(x)) {
@@ -475,7 +472,6 @@ public class Gamma {
      * @return trigamma(x) to within 10-8 relative or absolute error whichever is smaller
      * @see <a href="http://en.wikipedia.org/wiki/Trigamma_function">Trigamma</a>
      * @see Gamma#digamma(double)
-     * @since 2.0
      */
     public static double trigamma(double x) {
         if (Double.isNaN(x) || Double.isInfinite(x)) {
@@ -516,7 +512,6 @@ public class Gamma {
      * equations (1) through (5), and Paul Godfrey's
      * <a href="http://my.fit.edu/~gabdo/gamma.txt">Note on the computation
      * of the convergent Lanczos complex Gamma approximation</a>
-     * @since 3.1
      */
     public static double lanczos(final double x) {
         double sum = 0.0;
@@ -536,7 +531,6 @@ public class Gamma {
      * @return The value of {@code 1.0 / Gamma(1.0 + x) - 1.0}.
      * @throws MathIllegalArgumentException if {@code x < -0.5}
      * @throws MathIllegalArgumentException if {@code x > 1.5}
-     * @since 3.1
      */
     public static double invGamma1pm1(final double x) {
 
@@ -631,7 +625,6 @@ public class Gamma {
      * @return The value of {@code log(Gamma(1 + x))}.
      * @throws MathIllegalArgumentException if {@code x < -0.5}.
      * @throws MathIllegalArgumentException if {@code x > 1.5}.
-     * @since 3.1
      */
     public static double logGamma1p(final double x)
         throws MathIllegalArgumentException {
@@ -656,7 +649,6 @@ public class Gamma {
      *
      * @param x Argument.
      * @return the value of {@code Gamma(x)}.
-     * @since 3.1
      */
     public static double gamma(final double x) {
 

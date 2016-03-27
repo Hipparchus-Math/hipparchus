@@ -23,7 +23,6 @@ package org.hipparchus;
  * </p>
  * @param <T> the type of the field elements
  * @see FieldElement
- * @since 2.0
  */
 public interface Field<T> {
 

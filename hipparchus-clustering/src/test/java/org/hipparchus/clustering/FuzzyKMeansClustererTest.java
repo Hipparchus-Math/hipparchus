@@ -37,7 +37,6 @@ import org.junit.Test;
 /**
  * Test cases for FuzzyKMeansClusterer.
  *
- * @since 3.3
  */
 public class FuzzyKMeansClustererTest {
 

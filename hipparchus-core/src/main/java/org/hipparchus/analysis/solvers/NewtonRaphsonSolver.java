@@ -27,7 +27,6 @@ import org.hipparchus.util.FastMath;
  * Newton's Method</a> for finding zeros of real univariate differentiable
  * functions.
  *
- * @since 3.1
  */
 public class NewtonRaphsonSolver extends AbstractUnivariateDifferentiableSolver {
     /** Default absolute accuracy. */

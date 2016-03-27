@@ -52,7 +52,6 @@ public class IterationManager {
      * @param callBack the function to be called when the maximum number of
      * iterations has been reached
      * @throws org.hipparchus.exception.NullArgumentException if {@code callBack} is {@code null}
-     * @since 3.1
      */
     public IterationManager(final int maxIterations,
                             final Incrementor.MaxCountExceededCallback callBack) {

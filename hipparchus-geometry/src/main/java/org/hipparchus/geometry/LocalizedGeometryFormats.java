@@ -36,7 +36,6 @@ import org.hipparchus.exception.UTF8Control;
  * localized properties files, and as a default format if some
  * translation is missing.
  * </p>
- * @since 2.2
  */
 public enum LocalizedGeometryFormats implements Localizable {
 

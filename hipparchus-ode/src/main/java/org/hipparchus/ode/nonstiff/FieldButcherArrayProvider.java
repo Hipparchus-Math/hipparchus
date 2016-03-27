@@ -23,7 +23,6 @@ import org.hipparchus.RealFieldElement;
  * @see RungeKuttaFieldIntegrator
  * @see EmbeddedRungeKuttaFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public interface FieldButcherArrayProvider<T extends RealFieldElement<T>> {

@@ -23,7 +23,6 @@ package org.hipparchus.ode.sampling;
  * @see FieldStepNormalizer
  * @see StepNormalizer
  * @see StepNormalizerBounds
- * @since 3.0
  */
 public enum StepNormalizerMode {
     /**

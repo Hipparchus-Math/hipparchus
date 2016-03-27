@@ -27,7 +27,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * chromosomes without replacement from the population, and then selecting the
  * fittest chromosome among them.
  *
- * @since 2.0
  */
 public class TournamentSelection implements SelectionPolicy {
 

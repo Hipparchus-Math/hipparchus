@@ -19,7 +19,6 @@ package org.hipparchus.dfp;
 
 /** Mathematical routines for use with {@link Dfp}.
  * The constants are defined in {@link DfpField}
- * @since 2.2
  */
 public class DfpMath {
 

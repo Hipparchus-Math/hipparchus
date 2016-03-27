@@ -29,7 +29,6 @@ import org.hipparchus.util.FastMath;
  * integration scheme.</p>
  *
  * @see LutherIntegrator
- * @since 3.3
  */
 
 class LutherStepInterpolator extends RungeKuttaStepInterpolator {

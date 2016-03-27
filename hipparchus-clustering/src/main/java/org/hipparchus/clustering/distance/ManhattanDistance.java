@@ -22,7 +22,6 @@ import org.hipparchus.util.MathArrays;
 /**
  * Calculates the L<sub>1</sub> (sum of abs) distance between two points.
  *
- * @since 3.2
  */
 public class ManhattanDistance implements DistanceMeasure {
 

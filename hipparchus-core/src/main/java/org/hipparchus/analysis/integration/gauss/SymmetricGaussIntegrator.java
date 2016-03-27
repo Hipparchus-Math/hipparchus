@@ -25,7 +25,6 @@ import org.hipparchus.util.Pair;
  * method assuming that the integral is symmetric about 0.
  * This allows to reduce numerical errors.
  *
- * @since 3.3
  */
 public class SymmetricGaussIntegrator extends GaussIntegrator {
     /**

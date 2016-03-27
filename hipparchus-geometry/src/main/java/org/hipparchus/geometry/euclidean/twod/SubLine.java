@@ -34,7 +34,6 @@ import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.util.FastMath;
 
 /** This class represents a sub-hyperplane for {@link Line}.
- * @since 3.0
  */
 public class SubLine extends AbstractSubHyperplane<Euclidean2D, Euclidean1D> {
 
@@ -51,7 +50,6 @@ public class SubLine extends AbstractSubHyperplane<Euclidean2D, Euclidean1D> {
      * @param start start point
      * @param end end point
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public SubLine(final Vector2D start, final Vector2D end, final double tolerance) {
         super(new Line(start, end, tolerance), buildIntervalSet(start, end, tolerance));

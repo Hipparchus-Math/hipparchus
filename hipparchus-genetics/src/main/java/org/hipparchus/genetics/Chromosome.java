@@ -22,7 +22,6 @@ package org.hipparchus.genetics;
  * The chromosomes are IMMUTABLE, and so their fitness is also immutable and
  * therefore it can be cached.
  *
- * @since 2.0
  */
 public abstract class Chromosome implements Comparable<Chromosome>,Fitness {
     /** Value assigned when no fitness has been computed yet. */

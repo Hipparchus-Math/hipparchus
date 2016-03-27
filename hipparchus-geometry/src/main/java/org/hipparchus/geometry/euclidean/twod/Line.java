@@ -56,7 +56,6 @@ import org.hipparchus.util.MathUtils;
  * left half plane is the set of points with negative offsets and the
  * right half plane is the set of points with positive offsets.</p>
 
- * @since 3.0
  */
 public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euclidean1D> {
 
@@ -83,7 +82,6 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      * @param p1 first point
      * @param p2 second point
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public Line(final Vector2D p1, final Vector2D p2, final double tolerance) {
         reset(p1, p2);
@@ -94,7 +92,6 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      * @param p point belonging to the line
      * @param angle angle of the line with respect to abscissa axis
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public Line(final Vector2D p, final double angle, final double tolerance) {
         reset(p, angle);
@@ -107,7 +104,6 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      * @param sin sine of the angle
      * @param originOffset offset of the origin
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     private Line(final double angle, final double cos, final double sin,
                  final double originOffset, final double tolerance) {
@@ -269,7 +265,6 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
     }
 
     /** {@inheritDoc}
-     * @since 3.3
      */
     @Override
     public Point<Euclidean2D> project(Point<Euclidean2D> point) {
@@ -277,7 +272,6 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
     }
 
     /** {@inheritDoc}
-     * @since 3.3
      */
     @Override
     public double getTolerance() {
@@ -364,7 +358,6 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      *
      * @param p to check
      * @return distance between the instance and the point
-     * @since 3.1
      */
     public double distance(final Vector2D p) {
         return FastMath.abs(getOffset(p));
@@ -431,7 +424,6 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      * org.hipparchus.geometry.partitioning.SubHyperplane
      * SubHyperplane} instances
      * @exception MathIllegalArgumentException if the transform is non invertible
-     * @since 4.0
      */
     public static Transform<Euclidean2D, Euclidean1D> getTransform(final double cXX,
                                                                    final double cYX,
@@ -487,7 +479,6 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
          * @param cX1 transform addendum for output abscissa
          * @param cY1 transform addendum for output ordinate
          * @exception MathIllegalArgumentException if the transform is non invertible
-         * @since 4.0
          */
         LineTransform(final double cXX, final double cYX, final double cXY,
                       final double cYY, final double cX1, final double cY1)

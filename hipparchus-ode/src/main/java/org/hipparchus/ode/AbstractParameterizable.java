@@ -23,7 +23,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** This abstract class provides boilerplate parameters list.
  *
- * @since 3.0
  */
 
 public abstract class AbstractParameterizable implements Parameterizable {

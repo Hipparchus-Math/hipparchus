@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * Power function.
  *
- * @since 3.0
  */
 public class Pow implements BivariateFunction {
     /** {@inheritDoc} */

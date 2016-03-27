@@ -46,7 +46,6 @@ import org.hipparchus.util.MathArrays;
  * @see ThreeEighthesFieldIntegrator
  * @see LutherFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public class GillFieldIntegrator<T extends RealFieldElement<T>>

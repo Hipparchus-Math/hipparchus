@@ -31,7 +31,6 @@ import org.hipparchus.util.MathArrays;
  *  <em>Int. J. Numer. Meth. Eng</em> 2005; <b>63</b>:455-471<br>
  * </blockquote>
  *
- * @since 3.4.
  */
 public class TricubicInterpolatingFunction
     implements TrivariateFunction {

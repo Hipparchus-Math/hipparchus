@@ -22,7 +22,6 @@ import org.hipparchus.util.MathArrays;
 /**
  * Calculates the L<sub>2</sub> (Euclidean) distance between two points.
  *
- * @since 3.2
  */
 public class EuclideanDistance implements DistanceMeasure {
 

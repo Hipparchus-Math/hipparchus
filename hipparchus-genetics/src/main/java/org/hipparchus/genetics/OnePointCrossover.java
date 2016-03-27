@@ -44,7 +44,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * is parameterized by T. Moreover, the chromosomes must have same lengths.
  *
  * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
- * @since 2.0
  *
  */
 public class OnePointCrossover<T> implements CrossoverPolicy {

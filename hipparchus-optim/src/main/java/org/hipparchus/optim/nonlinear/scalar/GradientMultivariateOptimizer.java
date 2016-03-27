@@ -27,7 +27,6 @@ import org.hipparchus.optim.PointValuePair;
  * differentiable functions.
  * It contains boiler-plate code for dealing with gradient evaluation.
  *
- * @since 3.1
  */
 public abstract class GradientMultivariateOptimizer
     extends MultivariateOptimizer {

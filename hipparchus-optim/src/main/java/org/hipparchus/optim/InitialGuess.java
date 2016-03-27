@@ -22,7 +22,6 @@ package org.hipparchus.optim;
  * <br/>
  * Immutable class.
  *
- * @since 3.1
  */
 public class InitialGuess implements OptimizationData {
     /** Initial guess. */

@@ -28,7 +28,6 @@ import org.hipparchus.ode.sampling.StepHandler;
  * for first and second order differential equations.
  * @see FirstOrderIntegrator
  * @see SecondOrderIntegrator
- * @since 2.0
  */
 public interface ODEIntegrator  {
 
@@ -43,7 +42,6 @@ public interface ODEIntegrator  {
      * @param handler handler for the accepted steps
      * @see #getStepHandlers()
      * @see #clearStepHandlers()
-     * @since 2.0
      */
     void addStepHandler(StepHandler handler);
 
@@ -51,14 +49,12 @@ public interface ODEIntegrator  {
      * @return an unmodifiable collection of the added events handlers
      * @see #addStepHandler(StepHandler)
      * @see #clearStepHandlers()
-     * @since 2.0
      */
     Collection<StepHandler> getStepHandlers();
 
     /** Remove all the step handlers that have been added to the integrator.
      * @see #addStepHandler(StepHandler)
      * @see #getStepHandlers()
-     * @since 2.0
      */
     void clearStepHandlers();
 

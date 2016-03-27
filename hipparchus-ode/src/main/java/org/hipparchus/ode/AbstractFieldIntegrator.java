@@ -42,7 +42,6 @@ import org.hipparchus.util.Incrementor;
 /**
  * Base class managing common boilerplate for all integrators.
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> implements FirstOrderFieldIntegrator<T> {
 

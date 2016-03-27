@@ -88,7 +88,6 @@ import org.hipparchus.util.FastMath;
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</strong></td></tr>
  * </table>
  *
- * @since 1.2
  */
 
 public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {

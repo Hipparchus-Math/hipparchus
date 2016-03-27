@@ -61,7 +61,6 @@ import org.hipparchus.util.Precision;
  * for many problems, but may need to be adjusted in case of very small coefficients
  * used in either the {@link LinearConstraint} or {@link LinearObjectiveFunction}.
  *
- * @since 2.0
  */
 public class SimplexSolver extends LinearOptimizer {
     /** Default amount of error to accept in floating point comparisons (as ulps). */

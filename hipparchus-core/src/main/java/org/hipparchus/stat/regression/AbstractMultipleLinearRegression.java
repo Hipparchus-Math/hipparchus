@@ -28,7 +28,6 @@ import org.hipparchus.util.FastMath;
 
 /**
  * Abstract base class for implementations of MultipleLinearRegression.
- * @since 2.0
  */
 public abstract class AbstractMultipleLinearRegression implements
         MultipleLinearRegression {
@@ -58,7 +57,6 @@ public abstract class AbstractMultipleLinearRegression implements
 
     /**
      * @return true if the model has no intercept term; false otherwise
-     * @since 2.2
      */
     public boolean isNoIntercept() {
         return noIntercept;
@@ -66,7 +64,6 @@ public abstract class AbstractMultipleLinearRegression implements
 
     /**
      * @param noIntercept true means the model is to be estimated without an intercept term
-     * @since 2.2
      */
     public void setNoIntercept(boolean noIntercept) {
         this.noIntercept = noIntercept;
@@ -312,7 +309,6 @@ public abstract class AbstractMultipleLinearRegression implements
      * Estimates the variance of the error.
      *
      * @return estimate of the error variance
-     * @since 2.2
      */
     public double estimateErrorVariance() {
         return calculateErrorVariance();
@@ -323,7 +319,6 @@ public abstract class AbstractMultipleLinearRegression implements
      * Estimates the standard error of the regression.
      *
      * @return regression standard error
-     * @since 2.2
      */
     public double estimateRegressionStandardError() {
         return FastMath.sqrt(estimateErrorVariance());
@@ -363,7 +358,6 @@ public abstract class AbstractMultipleLinearRegression implements
      * matrix X.
      *
      * @return error variance estimate
-     * @since 2.2
      */
     protected double calculateErrorVariance() {
         RealVector residuals = calculateResiduals();

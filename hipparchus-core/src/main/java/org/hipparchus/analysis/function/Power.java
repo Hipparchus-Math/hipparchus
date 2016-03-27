@@ -24,7 +24,6 @@ import org.hipparchus.util.FastMath;
 /**
  * Power function.
  *
- * @since 3.0
  */
 public class Power implements UnivariateDifferentiableFunction {
     /** Power. */
@@ -44,7 +43,6 @@ public class Power implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {

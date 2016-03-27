@@ -66,7 +66,6 @@ import org.hipparchus.util.Precision;
  * {@link SynchronizedMultivariateSummaryStatistics} if concurrent access from multiple
  * threads is required.</p>
  *
- * @since 1.2
  */
 public class MultivariateSummaryStatistics
     implements StatisticalMultivariateSummary, Serializable {

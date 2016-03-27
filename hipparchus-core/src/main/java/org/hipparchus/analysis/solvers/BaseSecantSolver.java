@@ -44,7 +44,6 @@ import org.hipparchus.util.FastMath;
  * bracketing method, so it is not implemented here. It has a separate
  * implementation.</p>
  *
- * @since 3.0
  */
 public abstract class BaseSecantSolver
     extends AbstractUnivariateSolver

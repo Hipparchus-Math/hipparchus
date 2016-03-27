@@ -118,7 +118,6 @@ import org.hipparchus.util.MathArrays;
  *   double dPdZdZ = product[compiler.getPartialDerivativeIndex(0, 0, 2)];
  * </pre>
  * @see DerivativeStructure
- * @since 3.1
  */
 public class DSCompiler {
 
@@ -840,7 +839,6 @@ public class DSCompiler {
      * power the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
-     * @since 3.3
      */
     public void pow(final double a,
                     final double[] operand, final int operandOffset,

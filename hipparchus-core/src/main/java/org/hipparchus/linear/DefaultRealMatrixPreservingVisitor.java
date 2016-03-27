@@ -24,7 +24,6 @@ package org.hipparchus.linear;
  * methods. This class provides default implementations that do nothing.
  * </p>
  *
- * @since 2.0
  */
 public class DefaultRealMatrixPreservingVisitor implements RealMatrixPreservingVisitor {
     /** {@inheritDoc} */

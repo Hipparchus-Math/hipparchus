@@ -37,7 +37,6 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
 /** This class represents a 2D region: a set of polygons.
- * @since 3.0
  */
 public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
 
@@ -46,7 +45,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
 
     /** Build a polygons set representing the whole plane.
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public PolygonsSet(final double tolerance) {
         super(tolerance);
@@ -71,7 +69,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
      * </p>
      * @param tree inside/outside BSP tree representing the region
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public PolygonsSet(final BSPTree<Euclidean2D> tree, final double tolerance) {
         super(tree, tolerance);
@@ -97,7 +94,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
      * @param boundary collection of boundary elements, as a
      * collection of {@link SubHyperplane SubHyperplane} objects
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public PolygonsSet(final Collection<SubHyperplane<Euclidean2D>> boundary, final double tolerance) {
         super(boundary, tolerance);
@@ -109,7 +105,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
      * @param yMin low bound along the y direction
      * @param yMax high bound along the y direction
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public PolygonsSet(final double xMin, final double xMax,
                        final double yMin, final double yMax,

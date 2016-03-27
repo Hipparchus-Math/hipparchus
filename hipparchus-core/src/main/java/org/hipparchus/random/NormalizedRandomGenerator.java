@@ -21,7 +21,6 @@ package org.hipparchus.random;
  * This interface represent a normalized random generator for
  * scalars.
  * Normalized generator provide null mean and unit standard deviation scalars.
- * @since 1.2
  */
 public interface NormalizedRandomGenerator {
 

@@ -27,7 +27,6 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
 /** Visitor computing geometrical properties.
- * @since 3.3
  */
 class PropertiesComputer implements BSPTreeVisitor<Sphere2D> {
 

@@ -22,7 +22,6 @@ import java.util.Random;
  * Extension of <code>java.util.Random</code> wrapping a
  * {@link RandomGenerator}.
  *
- * @since 1.1
  */
 public class RandomAdaptor extends Random implements RandomGenerator {
 

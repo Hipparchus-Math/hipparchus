@@ -31,7 +31,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * UnivariateDifferentiableSolver}.
  * @param <FUNC> Type of function to solve.
  *
- * @since 3.0
  * @see UnivariateSolver
  * @see PolynomialSolver
  * @see UnivariateDifferentiableSolver

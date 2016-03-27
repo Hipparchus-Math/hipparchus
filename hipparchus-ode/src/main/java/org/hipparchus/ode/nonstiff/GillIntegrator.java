@@ -41,7 +41,6 @@ import org.hipparchus.util.FastMath;
  * @see MidpointIntegrator
  * @see ThreeEighthesIntegrator
  * @see LutherIntegrator
- * @since 1.2
  */
 
 public class GillIntegrator extends RungeKuttaIntegrator {

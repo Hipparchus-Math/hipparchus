@@ -56,7 +56,6 @@ import org.hipparchus.util.MathUtils;
  * ISBN 3-540-56670-8).</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public class DormandPrince853FieldIntegrator<T extends RealFieldElement<T>>

@@ -54,7 +54,6 @@ import org.hipparchus.util.FastMath;
  * Order 1 Crossover Operator</a>
  *
  * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
- * @since 3.1
  */
 public class OrderedCrossover<T> implements CrossoverPolicy {
 

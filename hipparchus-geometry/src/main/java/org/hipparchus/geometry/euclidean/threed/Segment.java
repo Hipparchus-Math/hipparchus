@@ -18,7 +18,6 @@ package org.hipparchus.geometry.euclidean.threed;
 
 
 /** Simple container for a two-points segment.
- * @since 3.0
  */
 public class Segment {
 

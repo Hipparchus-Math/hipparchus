@@ -31,7 +31,6 @@ import org.hipparchus.ode.MultistepFieldIntegrator;
 /** Base class for {@link AdamsBashforthFieldIntegrator Adams-Bashforth} and
  * {@link AdamsMoultonFieldIntegrator Adams-Moulton} integrators.
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public abstract class AdamsFieldIntegrator<T extends RealFieldElement<T>> extends MultistepFieldIntegrator<T> {
 

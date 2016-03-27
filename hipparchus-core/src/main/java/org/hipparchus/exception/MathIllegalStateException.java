@@ -21,7 +21,6 @@ package org.hipparchus.exception;
  * throwing the exception is in a state that does not comply with
  * the set of states that it is designed to be in.
  *
- * @since 2.2
  */
 public class MathIllegalStateException extends MathRuntimeException {
     /** Serializable version Id. */

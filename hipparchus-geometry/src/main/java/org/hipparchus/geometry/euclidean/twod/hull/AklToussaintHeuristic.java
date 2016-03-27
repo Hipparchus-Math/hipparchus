@@ -35,7 +35,6 @@ import org.hipparchus.geometry.euclidean.twod.Vector2D;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Convex_hull_algorithms#Akl-Toussaint_heuristic">
  * Akl-Toussaint heuristic (Wikipedia)</a>
- * @since 3.3
  */
 public final class AklToussaintHeuristic {
 

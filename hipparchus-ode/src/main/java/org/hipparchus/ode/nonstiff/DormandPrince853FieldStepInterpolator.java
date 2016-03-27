@@ -31,7 +31,6 @@ import org.hipparchus.util.MathArrays;
  * @see DormandPrince853FieldIntegrator
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class DormandPrince853FieldStepInterpolator<T extends RealFieldElement<T>>

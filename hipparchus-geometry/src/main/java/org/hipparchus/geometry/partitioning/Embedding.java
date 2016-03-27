@@ -45,7 +45,6 @@ import org.hipparchus.geometry.Space;
  * @param <T> Type of the embedded sub-space.
 
  * @see Hyperplane
- * @since 3.0
  */
 public interface Embedding<S extends Space, T extends Space> {
 

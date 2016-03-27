@@ -34,7 +34,6 @@ import org.hipparchus.util.Precision;
 /**
  * This class represents a convex hull in an two-dimensional euclidean space.
  *
- * @since 3.3
  */
 public class ConvexHull2D implements ConvexHull<Euclidean2D, Vector2D>, Serializable {
 

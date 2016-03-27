@@ -40,7 +40,6 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
 /** This class represents a region on the 2-sphere: a set of spherical polygons.
- * @since 3.3
  */
 public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 

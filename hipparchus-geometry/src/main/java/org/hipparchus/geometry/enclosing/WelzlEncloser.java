@@ -38,7 +38,6 @@ import org.hipparchus.geometry.Space;
  * </p>
  * @param <S> Space type.
  * @param <P> Point type.
- * @since 3.3
  */
 public class WelzlEncloser<S extends Space, P extends Point<S>> implements Encloser<S, P> {
 

@@ -43,7 +43,6 @@ import org.hipparchus.geometry.partitioning.SubHyperplane;
  * internal loops is computed as the reverse of the orientation of
  * their immediate surrounding loop.</p>
 
- * @since 3.0
  */
 class NestedLoops {
 
@@ -68,7 +67,6 @@ class NestedLoops {
      * loop by itself, the outermost loops are in the root tree child
      * nodes.</p>
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     NestedLoops(final double tolerance) {
         this.surrounded = new ArrayList<NestedLoops>();
@@ -80,7 +78,6 @@ class NestedLoops {
      * @param loop boundary loop (will be reversed in place if needed)
      * @param tolerance tolerance below which points are considered identical
      * @exception MathIllegalArgumentException if an outline has an open boundary loop
-     * @since 3.3
      */
     private NestedLoops(final Vector2D[] loop, final double tolerance)
         throws MathIllegalArgumentException {

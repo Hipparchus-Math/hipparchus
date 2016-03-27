@@ -40,7 +40,6 @@ package org.hipparchus.ode.nonstiff;
  * @see MidpointIntegrator
  * @see ThreeEighthesIntegrator
  * @see LutherIntegrator
- * @since 1.2
  */
 
 public class ClassicalRungeKuttaIntegrator extends RungeKuttaIntegrator {

@@ -37,7 +37,6 @@ import org.hipparchus.linear.RealVector;
  * <pre>
  * Var(b)=(X' Omega^-1 X)^-1
  * </pre>
- * @since 2.0
  */
 public class GLSMultipleLinearRegression extends AbstractMultipleLinearRegression {
 
@@ -122,7 +121,6 @@ public class GLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * matrix X.
      *
      * @return error variance
-     * @since 2.2
      */
     @Override
     protected double calculateErrorVariance() {

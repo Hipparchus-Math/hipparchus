@@ -25,7 +25,6 @@ import org.hipparchus.analysis.MultivariateMatrixFunction;
  * value and the number of columns is equal to the number of free parameters of
  * the underlying function.
  * </p>
- * @since 3.1
  */
 public class JacobianFunction implements MultivariateMatrixFunction {
 

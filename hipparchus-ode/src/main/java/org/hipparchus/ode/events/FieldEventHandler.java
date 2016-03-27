@@ -48,7 +48,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * including fixed step ones).</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public interface FieldEventHandler<T extends RealFieldElement<T>>  {
 

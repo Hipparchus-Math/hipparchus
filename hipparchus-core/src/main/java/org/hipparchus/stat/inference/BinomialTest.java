@@ -29,7 +29,6 @@ import org.hipparchus.exception.NullArgumentException;
  * theoretically expected distribution of observations into two categories.
  *
  * @see <a href="http://en.wikipedia.org/wiki/Binomial_test">Binomial test (Wikipedia)</a>
- * @since 3.3
  */
 public class BinomialTest {
 

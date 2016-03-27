@@ -27,7 +27,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * Chromosome represented by an immutable list of a fixed length.
  *
  * @param <T> type of the representation list
- * @since 2.0
  */
 public abstract class AbstractListChromosome<T> extends Chromosome {
 
@@ -56,7 +55,6 @@ public abstract class AbstractListChromosome<T> extends Chromosome {
      * Constructor.
      * @param representation inner representation of the chromosome
      * @param copyList if {@code true}, the representation will be copied, otherwise it will be referenced.
-     * @since 3.3
      */
     public AbstractListChromosome(final List<T> representation, final boolean copyList) {
         checkValidity(representation);

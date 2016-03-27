@@ -29,7 +29,6 @@ import org.hipparchus.util.FastMath;
  * <a href="http://en.wikipedia.org/wiki/Generalised_logistic_function">
  *  Generalised logistic</a> function.
  *
- * @since 3.0
  */
 public class Logistic implements UnivariateDifferentiableFunction {
     /** Lower asymptote. */
@@ -208,7 +207,6 @@ public class Logistic implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {

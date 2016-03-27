@@ -82,7 +82,6 @@ import org.hipparchus.util.FastMath;
  *
  * @see StepHandler
  * @see StepInterpolator
- * @since 1.2
  */
 
 public class ContinuousOutputModel
@@ -365,7 +364,6 @@ public class ContinuousOutputModel
    * @see #getInterpolatedState()
    * @see #getInterpolatedSecondaryState(int)
    * @see #getInterpolatedSecondaryDerivatives(int)
-   * @since 3.4
    */
   public double[] getInterpolatedDerivatives() throws MathIllegalStateException {
     return steps.get(index).getInterpolatedDerivatives();
@@ -385,7 +383,6 @@ public class ContinuousOutputModel
    * @see #getInterpolatedState()
    * @see #getInterpolatedDerivatives()
    * @see #getInterpolatedSecondaryDerivatives(int)
-   * @since 3.2
    * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
   public double[] getInterpolatedSecondaryState(final int secondaryStateIndex)
@@ -407,7 +404,6 @@ public class ContinuousOutputModel
    * @see #getInterpolatedState()
    * @see #getInterpolatedDerivatives()
    * @see #getInterpolatedSecondaryState(int)
-   * @since 3.4
    * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
   public double[] getInterpolatedSecondaryDerivatives(final int secondaryStateIndex)

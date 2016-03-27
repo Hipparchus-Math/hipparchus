@@ -50,7 +50,6 @@ import org.hipparchus.util.CompositeFormat;
  * disabled to prevent problems when parsing (e.g. 1,345.34 would be a valid number
  * but conflicts with the default column separator).</p>
  *
- * @since 3.1
  */
 public class RealMatrixFormat {
 

@@ -23,7 +23,6 @@ import org.hipparchus.optim.PointValuePair;
  * A callback object that can be provided to a linear optimizer to keep track
  * of the best solution found.
  *
- * @since 3.3
  */
 public class SolutionCallback implements OptimizationData {
     /** The SimplexTableau used by the SimplexSolver. */

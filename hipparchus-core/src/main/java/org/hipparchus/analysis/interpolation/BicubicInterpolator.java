@@ -35,7 +35,6 @@ import org.hipparchus.util.MathArrays;
  *  indicate points where the interpolation will be inaccurate.
  * </p>
  *
- * @since 3.4
  */
 public class BicubicInterpolator
     implements BivariateGridInterpolator {

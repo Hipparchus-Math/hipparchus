@@ -32,7 +32,6 @@ import org.hipparchus.geometry.spherical.oned.ArcsSet;
 import org.hipparchus.geometry.spherical.oned.S1Point;
 
 /** Visitor building edges.
- * @since 3.3
  */
 class EdgesBuilder implements BSPTreeVisitor<Sphere2D> {
 

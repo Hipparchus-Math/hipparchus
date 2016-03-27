@@ -46,7 +46,6 @@ import org.hipparchus.util.MathArrays;
  * @see FieldSecondaryEquations
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public class FieldExpandableODE<T extends RealFieldElement<T>> {

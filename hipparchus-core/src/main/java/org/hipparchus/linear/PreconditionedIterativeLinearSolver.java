@@ -46,7 +46,6 @@ import org.hipparchus.util.MathUtils;
  * preconditioner M, as a {@link RealLinearOperator}.
  * </p>
  *
- * @since 3.0
  */
 public abstract class PreconditionedIterativeLinearSolver
     extends IterativeLinearSolver {

@@ -29,7 +29,6 @@ import org.hipparchus.util.FastMath;
  * <p>
  * The function should be continuous but not necessarily smooth.</p>
  *
- * @since 1.2
  */
 public class RiddersSolver extends AbstractUnivariateSolver {
     /** Default absolute accuracy. */

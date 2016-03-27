@@ -51,7 +51,6 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  * step.</p>
  *
  * @see ThreeEighthesIntegrator
- * @since 1.2
  */
 
 class ThreeEighthesStepInterpolator

@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * Arc-tangent function.
  *
- * @since 3.0
  */
 public class Atan2 implements BivariateFunction {
     /** {@inheritDoc} */

@@ -25,7 +25,6 @@ import org.hipparchus.RealFieldElement;
  * @see FieldSecondaryEquations
  * @see FirstOrderFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public class FieldODEStateAndDerivative<T extends RealFieldElement<T>> extends FieldODEState<T> {

@@ -30,7 +30,6 @@ import org.hipparchus.util.FastMath;
  * <p/>
  * TODO cache results?
  *
- * @since 3.3
  */
 public abstract class AbstractEvaluation implements Evaluation {
 

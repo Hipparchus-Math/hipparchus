@@ -44,7 +44,6 @@ import org.hipparchus.util.Precision;
  * org.hipparchus.geometry.partitioning.Region Region}
  * interface, but its use is discouraged.
  * </p>
- * @since 3.3
  */
 public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Iterable<double[]> {
 
@@ -475,7 +474,6 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
     }
 
     /** {@inheritDoc}
-     * @since 3.3
      */
     @Override
     public BoundaryProjection<Sphere1D> projectToBoundary(final Point<Sphere1D> point) {
@@ -918,7 +916,6 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
          * {@link Side#BOTH} if both {@link #getPlus()} and {@link #getMinus()}
          * return non-null or {@link Side#HYPER} if both {@link #getPlus()} and
          * {@link #getMinus()} return null
-         * @since 3.6
          */
         public Side getSide() {
             if (plus != null) {

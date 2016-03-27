@@ -18,7 +18,6 @@
 package org.hipparchus.ode.events;
 
 /** Enumerate for actions to be performed when an event occurs during ODE integration.
- * @since 3.6
  */
 public enum Action {
 

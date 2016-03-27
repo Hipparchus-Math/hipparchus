@@ -24,7 +24,6 @@ import org.hipparchus.util.FastMath;
 
 /** Base class for random number generators that generates bits streams.
  *
- * @since 2.0
  */
 public abstract class BitsStreamGenerator
     implements RandomGenerator,

@@ -397,7 +397,6 @@ public class ChiSquareTest {
      * @throws MathIllegalArgumentException if either all counts of <code>observed1</code> or
      * <code>observed2</code> are zero, or if the count at some index is zero
      * for both arrays
-     * @since 1.2
      */
     public double chiSquareDataSetsComparison(long[] observed1, long[] observed2)
         throws MathIllegalArgumentException {
@@ -496,7 +495,6 @@ public class ChiSquareTest {
      * <code>observed2</code> are zero, or if the count at the same index is zero
      * for both arrays
      * @throws MathIllegalStateException if an error occurs computing the p-value
-     * @since 1.2
      */
     public double chiSquareTestDataSetsComparison(long[] observed1, long[] observed2)
         throws MathIllegalArgumentException,
@@ -550,7 +548,6 @@ public class ChiSquareTest {
      * for both arrays
      * @throws MathIllegalArgumentException if <code>alpha</code> is not in the range (0, 0.5]
      * @throws MathIllegalStateException if an error occurs performing the test
-     * @since 1.2
      */
     public boolean chiSquareTestDataSetsComparison(final long[] observed1,
                                                    final long[] observed2,

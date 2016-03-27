@@ -29,7 +29,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @see HighamHall54FieldIntegrator
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class HighamHall54FieldStepInterpolator<T extends RealFieldElement<T>>

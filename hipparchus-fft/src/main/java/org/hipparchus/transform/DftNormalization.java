@@ -22,7 +22,6 @@ package org.hipparchus.transform;
  * normalizations is detailed below.
  *
  * @see FastFourierTransformer
- * @since 3.0
  */
 public enum DftNormalization {
     /**

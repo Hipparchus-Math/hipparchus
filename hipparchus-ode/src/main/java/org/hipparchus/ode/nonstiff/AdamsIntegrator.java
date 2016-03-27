@@ -26,7 +26,6 @@ import org.hipparchus.ode.MultistepIntegrator;
 
 /** Base class for {@link AdamsBashforthIntegrator Adams-Bashforth} and
  * {@link AdamsMoultonIntegrator Adams-Moulton} integrators.
- * @since 2.0
  */
 public abstract class AdamsIntegrator extends MultistepIntegrator {
 

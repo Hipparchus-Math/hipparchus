@@ -21,7 +21,6 @@ package org.hipparchus.random;
  * Interface extracted from <code>java.util.Random</code>.  This interface is
  * implemented by {@link AbstractRandomGenerator}.
  *
- * @since 1.1
  */
 public interface RandomGenerator {
 

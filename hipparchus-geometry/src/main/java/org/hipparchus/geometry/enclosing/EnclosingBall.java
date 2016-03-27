@@ -27,7 +27,6 @@ import org.hipparchus.geometry.Space;
  * @see Space
  * @see Point
  * @see Encloser
- * @since 3.3
  */
 public class EnclosingBall<S extends Space, P extends Point<S>> implements Serializable {
 

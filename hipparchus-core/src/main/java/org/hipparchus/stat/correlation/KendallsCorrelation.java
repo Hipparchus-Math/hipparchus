@@ -66,7 +66,6 @@ import org.hipparchus.util.Pair;
  * @see <a href="http://www.jstor.org/stable/2282833">A Computer
  * Method for Calculating Kendall's Tau with Ungrouped Data</a>
  *
- * @since 3.3
  */
 public class KendallsCorrelation {
 

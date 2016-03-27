@@ -26,7 +26,6 @@ import org.hipparchus.optim.nonlinear.scalar.GoalType;
 /**
  * Base class for a univariate scalar function optimizer.
  *
- * @since 3.1
  */
 public abstract class UnivariateOptimizer
     extends BaseOptimizer<UnivariatePointValuePair> {

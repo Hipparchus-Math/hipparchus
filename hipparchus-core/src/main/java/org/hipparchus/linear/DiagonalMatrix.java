@@ -28,7 +28,6 @@ import org.hipparchus.util.Precision;
 /**
  * Implementation of a diagonal matrix.
  *
- * @since 3.1.1
  */
 public class DiagonalMatrix extends AbstractRealMatrix
     implements Serializable {
@@ -325,7 +324,6 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @return the inverse of {@code m}
      * @throws MathIllegalArgumentException if the matrix is singular
-     * @since 3.3
      */
     public DiagonalMatrix inverse() throws MathIllegalArgumentException {
         return inverse(0);
@@ -337,7 +335,6 @@ public class DiagonalMatrix extends AbstractRealMatrix
      * @param threshold Singularity threshold.
      * @return the inverse of {@code m}
      * @throws MathIllegalArgumentException if the matrix is singular
-     * @since 3.3
      */
     public DiagonalMatrix inverse(double threshold) throws MathIllegalArgumentException {
         if (isSingular(threshold)) {
@@ -356,7 +353,6 @@ public class DiagonalMatrix extends AbstractRealMatrix
      *
      * @param threshold Singularity threshold.
      * @return {@code true} if the matrix is singular, {@code false} otherwise
-     * @since 3.3
      */
     public boolean isSingular(double threshold) {
         for (int i = 0; i < data.length; i++) {

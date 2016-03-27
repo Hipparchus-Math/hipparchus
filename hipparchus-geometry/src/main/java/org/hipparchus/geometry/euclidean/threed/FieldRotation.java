@@ -35,7 +35,6 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  * @see FieldVector3D
  * @see RotationOrder
- * @since 3.2
  */
 
 public class FieldRotation<T extends RealFieldElement<T>> implements Serializable {
@@ -142,7 +141,6 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * @param angle rotation angle.
      * @param convention convention to use for the semantics of the angle
      * @exception MathIllegalArgumentException if the axis norm is zero
-     * @since 3.6
      */
     public FieldRotation(final FieldVector3D<T> axis, final T angle, final RotationConvention convention)
         throws MathIllegalArgumentException {
@@ -368,7 +366,6 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * @param alpha1 angle of the first elementary rotation
      * @param alpha2 angle of the second elementary rotation
      * @param alpha3 angle of the third elementary rotation
-     * @since 3.6
      */
     public FieldRotation(final RotationOrder order, final RotationConvention convention,
                          final T alpha1, final T alpha2, final T alpha3) {
@@ -502,7 +499,6 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * @param convention convention to use for the semantics of the angle
      * @return normalized axis of the rotation
      * @see #FieldRotation(FieldVector3D, RealFieldElement)
-     * @since 3.6
      */
     public FieldVector3D<T> getAxis(final RotationConvention convention) {
         final T squaredSine = q1.multiply(q1).add(q2.multiply(q2)).add(q3.multiply(q3));
@@ -612,7 +608,6 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      * @return an array of three angles, in the order specified by the set
      * @exception MathIllegalStateException if the rotation is
      * singular with respect to the angles set specified
-     * @since 3.6
      */
     public T[] getAngles(final RotationOrder order, RotationConvention convention)
         throws MathIllegalStateException {

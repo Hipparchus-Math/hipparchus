@@ -30,7 +30,6 @@ import org.junit.Test;
 /**
  * Test cases for NaturalRanking class
  *
- * @since 2.0
  */
 public class NaturalRankingTest {
 

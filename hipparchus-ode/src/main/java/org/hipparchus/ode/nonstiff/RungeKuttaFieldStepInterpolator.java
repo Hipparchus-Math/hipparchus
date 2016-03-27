@@ -31,7 +31,6 @@ import org.hipparchus.util.MathArrays;
  * @see EmbeddedRungeKuttaFieldIntegrator
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 abstract class RungeKuttaFieldStepInterpolator<T extends RealFieldElement<T>>

@@ -45,7 +45,6 @@ import org.hipparchus.util.FastMath;
  * @see <a href="http://mathworld.wolfram.com/QRDecomposition.html">MathWorld</a>
  * @see <a href="http://en.wikipedia.org/wiki/QR_decomposition">Wikipedia</a>
  *
- * @since 3.2
  */
 public class RRQRDecomposition extends QRDecomposition {
 

@@ -24,7 +24,6 @@ import org.hipparchus.optim.PointValuePair;
 /**
  * This class implements the Nelder-Mead simplex algorithm.
  *
- * @since 3.0
  */
 public class NelderMeadSimplex extends AbstractSimplex {
     /** Default value for {@link #rho}: {@value}. */

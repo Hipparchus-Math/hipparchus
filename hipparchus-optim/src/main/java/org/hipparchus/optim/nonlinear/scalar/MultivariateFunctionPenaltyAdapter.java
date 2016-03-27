@@ -62,7 +62,6 @@ import org.hipparchus.util.MathUtils;
  *
  * @see MultivariateFunctionMappingAdapter
  *
- * @since 3.0
  */
 public class MultivariateFunctionPenaltyAdapter
     implements MultivariateFunction {

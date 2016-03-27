@@ -39,7 +39,6 @@ import org.hipparchus.util.FastMath;
  * proposed step.</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public class FieldEventState<T extends RealFieldElement<T>> {
 

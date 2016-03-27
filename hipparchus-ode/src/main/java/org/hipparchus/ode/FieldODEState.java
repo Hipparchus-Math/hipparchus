@@ -28,7 +28,6 @@ import org.hipparchus.util.MathArrays;
  * @see FirstOrderFieldIntegrator
  * @see FieldODEStateAndDerivative
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public class FieldODEState<T extends RealFieldElement<T>> {

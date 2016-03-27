@@ -60,7 +60,6 @@ import org.hipparchus.util.FastMath;
 
  * @param <S> Type of the space.
 
- * @since 3.0
  */
 public class BSPTree<S extends Space> {
 
@@ -521,7 +520,6 @@ public class BSPTree<S extends Space> {
      * setting
      * </p>
      * @param <S> Type of the space.
-     * @since 3.4
      */
     public interface VanishingCutHandler<S extends Space> {
 
@@ -628,7 +626,6 @@ public class BSPTree<S extends Space> {
      * @param vanishingHandler handler to use for handling very rare corner
      * cases of vanishing cut sub-hyperplanes in internal nodes during merging
      * @see LeafMerger
-     * @since 3.4
      */
     public void insertInTree(final BSPTree<S> parentTree, final boolean isPlusChild,
                              final VanishingCutHandler<S> vanishingHandler) {
@@ -703,7 +700,6 @@ public class BSPTree<S extends Space> {
      * @return a new tree (the original tree is left untouched) containing
      * a single branch with the cell as a leaf node, and other leaf nodes
      * as the remnants of the pruned branches
-     * @since 3.3
      */
     public BSPTree<S> pruneAroundConvexCell(final Object cellAttribute,
                                             final Object otherLeafsAttributes,

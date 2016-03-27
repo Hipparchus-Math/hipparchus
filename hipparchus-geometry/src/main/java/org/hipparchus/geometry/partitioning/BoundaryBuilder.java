@@ -24,7 +24,6 @@ import org.hipparchus.geometry.Space;
  * at each internal node.
  * </p>
  * @param <S> Type of the space.
- * @since 3.4
  */
 class BoundaryBuilder<S extends Space> implements BSPTreeVisitor<S> {
 

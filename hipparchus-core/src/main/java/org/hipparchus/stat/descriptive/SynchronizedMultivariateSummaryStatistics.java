@@ -29,7 +29,6 @@ import org.hipparchus.linear.RealMatrix;
  * methods atomic operations for a single instance.  That is to say, as one
  * thread is computing a statistic from the instance, no other thread can modify
  * the instance nor compute another statistic.
- * @since 1.2
  */
 public class SynchronizedMultivariateSummaryStatistics
     extends MultivariateSummaryStatistics {

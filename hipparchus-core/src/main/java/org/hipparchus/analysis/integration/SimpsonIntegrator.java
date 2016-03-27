@@ -30,7 +30,6 @@ import org.hipparchus.util.FastMath;
  * This implementation employs the basic trapezoid rule to calculate Simpson's
  * rule.</p>
  *
- * @since 1.2
  */
 public class SimpsonIntegrator extends BaseAbstractUnivariateIntegrator {
 

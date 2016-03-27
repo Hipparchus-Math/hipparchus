@@ -41,7 +41,6 @@ import org.hipparchus.RealFieldElement;
  * @see FirstOrderFieldIntegrator
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public interface FirstOrderFieldDifferentialEquations<T extends RealFieldElement<T>> {

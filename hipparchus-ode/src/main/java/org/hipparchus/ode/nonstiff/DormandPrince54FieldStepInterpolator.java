@@ -29,7 +29,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @see DormandPrince54Integrator
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class DormandPrince54FieldStepInterpolator<T extends RealFieldElement<T>>

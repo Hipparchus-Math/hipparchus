@@ -160,7 +160,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * @param binCount number of bins. Must be strictly positive.
      * @param generator random data generator (may be null, resulting in default JDK generator)
      * @throws MathIllegalArgumentException if {@code binCount <= 0}.
-     * @since 3.0
      */
     public EmpiricalDistribution(int binCount, RandomGenerator generator) {
         this(binCount, new RandomDataGenerator(generator));
@@ -171,7 +170,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * provided {@link RandomGenerator} as the source of random data.
      *
      * @param generator random data generator (may be null, resulting in default JDK generator)
-     * @since 3.0
      */
     public EmpiricalDistribution(RandomGenerator generator) {
         this(DEFAULT_BIN_COUNT, generator);
@@ -503,7 +501,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * bounds now returned by {@link #getGeneratorUpperBounds()}.</p>
      *
      * @return array of bin upper bounds
-     * @since 2.1
      */
     public double[] getUpperBounds() {
         double[] binUpperBounds = new double[binCount];
@@ -525,7 +522,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * <p>In versions 1.0-2.0 of commons-math, this array was (incorrectly) returned
      * by {@link #getUpperBounds()}.</p>
      *
-     * @since 2.1
      * @return array of upper bounds of subintervals used in data generation
      * @throws NullPointerException unless a {@code load} method has been
      * called beforehand.
@@ -550,7 +546,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * Reseeds the random number generator used by {@link #getNextValue()}.
      *
      * @param seed random generator seed
-     * @since 3.0
      */
     public void reSeed(long seed) {
         randomData.reSeed(seed);
@@ -570,7 +565,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * integral of the kernel density over B).</li>
      * <li>Return k(x) * P(B) / K(B), where k is the within-bin kernel density
      * and P(B) is the mass of B.</li></ol></p>
-     * @since 3.1
      */
     @Override
     public double density(double x) {
@@ -595,7 +589,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * If K is a constant distribution, we return P(B-) + P(B) (counting the full
      * mass of B).</p>
      *
-     * @since 3.1
      */
     @Override
     public double cumulativeProbability(double x) {
@@ -641,7 +634,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *    K(B-) + pCrit * K(B) / P(B) </li>
      *  </ol></p>
      *
-     * @since 3.1
      */
     @Override
     public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
@@ -679,7 +671,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public double getNumericalMean() {
@@ -688,7 +679,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public double getNumericalVariance() {
@@ -697,7 +687,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public double getSupportLowerBound() {
@@ -706,7 +695,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public double getSupportUpperBound() {
@@ -715,7 +703,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public boolean isSupportConnected() {
@@ -724,7 +711,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public void reseedRandomGenerator(long seed) {

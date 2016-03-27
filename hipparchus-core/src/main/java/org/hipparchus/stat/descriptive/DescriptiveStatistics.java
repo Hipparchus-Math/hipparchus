@@ -511,7 +511,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured mean implementation.
      *
      * @return the UnivariateStatistic implementing the mean
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getMeanImpl() {
         return meanImpl;
@@ -522,7 +521,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param meanImpl the UnivariateStatistic instance to use
      * for computing the mean
-     * @since 1.2
      */
     public synchronized void setMeanImpl(UnivariateStatistic meanImpl) {
         this.meanImpl = meanImpl;
@@ -532,7 +530,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured geometric mean implementation.
      *
      * @return the UnivariateStatistic implementing the geometric mean
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getGeometricMeanImpl() {
         return geometricMeanImpl;
@@ -543,7 +540,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param geometricMeanImpl the UnivariateStatistic instance to use
      * for computing the geometric mean
-     * @since 1.2
      */
     public synchronized void setGeometricMeanImpl(
             UnivariateStatistic geometricMeanImpl) {
@@ -554,7 +550,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured kurtosis implementation.
      *
      * @return the UnivariateStatistic implementing the kurtosis
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getKurtosisImpl() {
         return kurtosisImpl;
@@ -565,7 +560,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param kurtosisImpl the UnivariateStatistic instance to use
      * for computing the kurtosis
-     * @since 1.2
      */
     public synchronized void setKurtosisImpl(UnivariateStatistic kurtosisImpl) {
         this.kurtosisImpl = kurtosisImpl;
@@ -575,7 +569,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured maximum implementation.
      *
      * @return the UnivariateStatistic implementing the maximum
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getMaxImpl() {
         return maxImpl;
@@ -586,7 +579,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param maxImpl the UnivariateStatistic instance to use
      * for computing the maximum
-     * @since 1.2
      */
     public synchronized void setMaxImpl(UnivariateStatistic maxImpl) {
         this.maxImpl = maxImpl;
@@ -596,7 +588,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured minimum implementation.
      *
      * @return the UnivariateStatistic implementing the minimum
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getMinImpl() {
         return minImpl;
@@ -607,7 +598,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param minImpl the UnivariateStatistic instance to use
      * for computing the minimum
-     * @since 1.2
      */
     public synchronized void setMinImpl(UnivariateStatistic minImpl) {
         this.minImpl = minImpl;
@@ -617,7 +607,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured percentile implementation.
      *
      * @return the UnivariateStatistic implementing the percentile
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getPercentileImpl() {
         return percentileImpl;
@@ -632,7 +621,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @param percentileImpl the percentileImpl to set
      * @throws MathIllegalArgumentException if the supplied implementation does not
      *  provide a <code>setQuantile</code> method
-     * @since 1.2
      */
     public synchronized void setPercentileImpl(UnivariateStatistic percentileImpl)
     throws MathIllegalArgumentException {
@@ -658,7 +646,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured skewness implementation.
      *
      * @return the UnivariateStatistic implementing the skewness
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getSkewnessImpl() {
         return skewnessImpl;
@@ -669,7 +656,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param skewnessImpl the UnivariateStatistic instance to use
      * for computing the skewness
-     * @since 1.2
      */
     public synchronized void setSkewnessImpl(
             UnivariateStatistic skewnessImpl) {
@@ -680,7 +666,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured variance implementation.
      *
      * @return the UnivariateStatistic implementing the variance
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getVarianceImpl() {
         return varianceImpl;
@@ -691,7 +676,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param varianceImpl the UnivariateStatistic instance to use
      * for computing the variance
-     * @since 1.2
      */
     public synchronized void setVarianceImpl(
             UnivariateStatistic varianceImpl) {
@@ -702,7 +686,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured sum of squares implementation.
      *
      * @return the UnivariateStatistic implementing the sum of squares
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getSumsqImpl() {
         return sumsqImpl;
@@ -713,7 +696,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param sumsqImpl the UnivariateStatistic instance to use
      * for computing the sum of squares
-     * @since 1.2
      */
     public synchronized void setSumsqImpl(UnivariateStatistic sumsqImpl) {
         this.sumsqImpl = sumsqImpl;
@@ -723,7 +705,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * Returns the currently configured sum implementation.
      *
      * @return the UnivariateStatistic implementing the sum
-     * @since 1.2
      */
     public synchronized UnivariateStatistic getSumImpl() {
         return sumImpl;
@@ -734,7 +715,6 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param sumImpl the UnivariateStatistic instance to use
      * for computing the sum
-     * @since 1.2
      */
     public synchronized void setSumImpl(UnivariateStatistic sumImpl) {
         this.sumImpl = sumImpl;

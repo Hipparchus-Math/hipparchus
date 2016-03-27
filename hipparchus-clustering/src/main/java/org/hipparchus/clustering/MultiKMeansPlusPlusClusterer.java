@@ -29,7 +29,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * A wrapper around a k-means++ clustering algorithm which performs multiple trials
  * and returns the best solution.
  * @param <T> type of the points to cluster
- * @since 3.2
  */
 public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Clusterer<T> {
 
@@ -55,7 +54,6 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
      * @param clusterer the k-means clusterer to use
      * @param numTrials number of trial runs
      * @param evaluator the cluster evaluator to use
-     * @since 3.3
      */
     public MultiKMeansPlusPlusClusterer(final KMeansPlusPlusClusterer<T> clusterer,
                                         final int numTrials,
@@ -85,7 +83,6 @@ public class MultiKMeansPlusPlusClusterer<T extends Clusterable> extends Cluster
     /**
      * Returns the {@link ClusterEvaluator} used to determine the "best" clustering.
      * @return the used {@link ClusterEvaluator}
-     * @since 3.3
      */
     public ClusterEvaluator<T> getClusterEvaluator() {
        return evaluator;

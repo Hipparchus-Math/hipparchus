@@ -50,7 +50,6 @@ import org.hipparchus.util.FastMath;
  * <i>Solving Ordinary Differential Equations</i> (Springer-Verlag,
  * ISBN 3-540-56670-8).</p>
  *
- * @since 1.2
  */
 
 public class DormandPrince853Integrator extends EmbeddedRungeKuttaIntegrator {

@@ -40,7 +40,6 @@ import org.hipparchus.util.FastMath;
  * local properties only when part of a line is used to define part of
  * a spherical polygon boundary.</p>
 
- * @since 3.3
  */
 public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1D> {
 

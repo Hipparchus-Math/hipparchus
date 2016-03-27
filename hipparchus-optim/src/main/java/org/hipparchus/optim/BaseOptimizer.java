@@ -29,7 +29,6 @@ import org.hipparchus.util.Incrementor;
  * @param <PAIR> Type of the point/value pair returned by the optimization
  * algorithm.
  *
- * @since 3.1
  */
 public abstract class BaseOptimizer<PAIR> {
     /** Evaluations counter. */

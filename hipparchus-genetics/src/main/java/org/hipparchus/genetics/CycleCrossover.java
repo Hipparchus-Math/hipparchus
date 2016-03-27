@@ -59,7 +59,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * Cycle Crossover Operator</a>
  *
  * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
- * @since 3.1
  */
 public class CycleCrossover<T> implements CrossoverPolicy {
 

@@ -24,7 +24,6 @@ import org.hipparchus.util.Incrementor;
  * iterations of the algorithm, and storing the convergence checker.
  *
  * @param <PAIR> Type of the point/value pair returned by the optimization algorithm.
- * @since 3.3
  */
 public abstract class AbstractOptimizationProblem<PAIR>
         implements OptimizationProblem<PAIR> {

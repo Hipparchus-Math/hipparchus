@@ -33,7 +33,6 @@ package org.hipparchus.stat.ranking;
  * between the values returned by the MINIMUM and MAXIMUM strategies.</li>
  * </ul>
  *
- * @since 2.0
  */
 public enum TiesStrategy {
 

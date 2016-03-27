@@ -44,7 +44,6 @@ package org.hipparchus.ode.events;
  * error (this event handling feature is available for all integrators,
  * including fixed step ones).</p>
  *
- * @since 1.2
  */
 
 public interface EventHandler  {

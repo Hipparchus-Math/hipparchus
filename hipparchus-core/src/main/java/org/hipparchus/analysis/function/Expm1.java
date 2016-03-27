@@ -24,7 +24,6 @@ import org.hipparchus.util.FastMath;
 /**
  * <code>e<sup>x</sup>-1</code> function.
  *
- * @since 3.0
  */
 public class Expm1 implements UnivariateDifferentiableFunction {
     /** {@inheritDoc} */
@@ -34,7 +33,6 @@ public class Expm1 implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {

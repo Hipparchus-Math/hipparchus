@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * {@code rint} function.
  *
- * @since 3.0
  */
 public class Rint implements UnivariateFunction {
     /** {@inheritDoc} */

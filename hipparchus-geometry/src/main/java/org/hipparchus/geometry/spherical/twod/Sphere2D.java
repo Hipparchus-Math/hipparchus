@@ -30,7 +30,6 @@ import org.hipparchus.geometry.spherical.oned.Sphere1D;
  * MathWorld), i.e. the 2-sphere is the two-dimensional surface
  * defined in 3D as x<sup>2</sup>+y<sup>2</sup>+z<sup>2</sup>=1.
  * </p>
- * @since 3.3
  */
 public class Sphere2D implements Serializable, Space {
 

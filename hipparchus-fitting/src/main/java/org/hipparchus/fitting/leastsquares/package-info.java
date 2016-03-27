@@ -34,6 +34,5 @@
  * org.hipparchus.fitting.leastsquares.LeastSquaresBuilder builder} or it can
  * be created at once using a {@link org.hipparchus.fitting.leastsquares.LeastSquaresFactory
  * factory}.
- * @since 3.3
  */
 package org.hipparchus.fitting.leastsquares;

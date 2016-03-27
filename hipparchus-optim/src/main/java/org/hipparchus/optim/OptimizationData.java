@@ -23,6 +23,5 @@ package org.hipparchus.optim;
  * arguments and perform the appropriate cast in order to access the data
  * they need.
  *
- * @since 3.1
  */
 public interface OptimizationData {}

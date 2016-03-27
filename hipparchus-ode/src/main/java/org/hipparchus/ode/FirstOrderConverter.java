@@ -50,7 +50,6 @@ package org.hipparchus.ode;
  * @see FirstOrderIntegrator
  * @see FirstOrderDifferentialEquations
  * @see SecondOrderDifferentialEquations
- * @since 1.2
  */
 
 public class FirstOrderConverter implements FirstOrderDifferentialEquations {

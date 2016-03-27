@@ -38,7 +38,6 @@ import org.hipparchus.util.FastMath;
  * <a href="http://en.wikipedia.org/w/index.php?title=Numerical_integration#Integrals_over_infinite_intervals">
  *  here</a> should be avoided when using this class.
  *
- * @since 3.1
  */
 
 public class IterativeLegendreGaussIntegrator

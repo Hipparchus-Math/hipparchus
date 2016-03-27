@@ -36,7 +36,6 @@ import org.hipparchus.optim.OptimizationProblem;
  * @see LeastSquaresFactory
  * @see LeastSquaresAdapter
  *
- * @since 3.3
  */
 public interface LeastSquaresProblem extends OptimizationProblem<LeastSquaresProblem.Evaluation> {
 

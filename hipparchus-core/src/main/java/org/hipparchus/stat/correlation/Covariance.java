@@ -40,7 +40,6 @@ import org.hipparchus.stat.descriptive.moment.Variance;
  *
  * <p>Non-bias-corrected estimates use <code>n</code> in place of <code>n - 1</code>
  *
- * @since 2.0
  */
 public class Covariance {
 

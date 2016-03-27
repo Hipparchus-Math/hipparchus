@@ -31,7 +31,6 @@ import org.hipparchus.util.MathUtils;
 /**
  * This class implements the {@link FieldVector} interface with a {@link FieldElement} array.
  * @param <T> the type of the field elements
- * @since 2.0
  */
 public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<T>, Serializable {
     /** Serializable version identifier. */
@@ -266,7 +265,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param v2 Second vector (will be put at back of the new vector).
      * @throws NullArgumentException if {@code v1} or {@code v2} is
      * {@code null}.
-     * @since 3.2
      */
     public ArrayFieldVector(FieldVector<T> v1, FieldVector<T> v2)
             throws NullArgumentException {
@@ -289,7 +287,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param v2 Second vector (will be put at back of the new vector).
      * @throws NullArgumentException if {@code v1} or {@code v2} is
      * {@code null}.
-     * @since 3.2
      */
     public ArrayFieldVector(FieldVector<T> v1, T[] v2)
             throws NullArgumentException {
@@ -310,7 +307,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param v2 Second vector (will be put at back of the new vector).
      * @throws NullArgumentException if {@code v1} or {@code v2} is
      * {@code null}.
-     * @since 3.2
      */
     public ArrayFieldVector(T[] v1, FieldVector<T> v2)
             throws NullArgumentException {
@@ -880,7 +876,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * vector
      * @return the value returned by {@link FieldVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorPreservingVisitor<T> visitor) {
         final int dim = getDimension();
@@ -902,7 +897,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorPreservingVisitor<T> visitor,
                                 final int start, final int end)
@@ -925,7 +919,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * vector
      * @return the value returned by {@link FieldVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorPreservingVisitor<T> visitor) {
         return walkInDefaultOrder(visitor);
@@ -944,7 +937,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorPreservingVisitor<T> visitor,
                                   final int start, final int end)
@@ -960,7 +952,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * of this vector
      * @return the value returned by {@link FieldVectorChangingVisitor#end()}
      * at the end of the walk
-     * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorChangingVisitor<T> visitor) {
         final int dim = getDimension();
@@ -982,7 +973,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorChangingVisitor<T> visitor,
                                 final int start, final int end)
@@ -1005,7 +995,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * vector
      * @return the value returned by {@link FieldVectorChangingVisitor#end()}
      * at the end of the walk
-     * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorChangingVisitor<T> visitor) {
         return walkInDefaultOrder(visitor);
@@ -1024,7 +1013,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorChangingVisitor<T> visitor,
                                   final int start, final int end)
@@ -1101,7 +1089,6 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @param end the index of the last entry of the subvector (inclusive)
      * @throws MathIllegalArgumentException if {@code start} of {@code end} are not valid
      * @throws MathIllegalArgumentException if {@code end < start}
-     * @since 3.3
      */
     private void checkIndices(final int start, final int end)
         throws MathIllegalArgumentException {

@@ -36,7 +36,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * method.
  * </p>
  * @see ExpandableStatefulODE
- * @since 3.0
  */
 public interface SecondaryEquations {
 

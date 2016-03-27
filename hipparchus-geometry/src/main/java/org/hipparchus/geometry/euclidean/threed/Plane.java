@@ -30,7 +30,6 @@ import org.hipparchus.geometry.partitioning.Hyperplane;
 import org.hipparchus.util.FastMath;
 
 /** The class represent planes in a three dimensional space.
- * @since 3.0
  */
 public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Euclidean2D> {
 
@@ -56,7 +55,6 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @param normal normal direction to the plane
      * @param tolerance tolerance below which points are considered identical
      * @exception MathRuntimeException if the normal norm is too small
-     * @since 3.3
      */
     public Plane(final Vector3D normal, final double tolerance)
         throws MathRuntimeException {
@@ -71,7 +69,6 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @param normal normal direction to the plane
      * @param tolerance tolerance below which points are considered identical
      * @exception MathRuntimeException if the normal norm is too small
-     * @since 3.3
      */
     public Plane(final Vector3D p, final Vector3D normal, final double tolerance)
         throws MathRuntimeException {
@@ -89,7 +86,6 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
      * @param p3 third point belonging to the plane
      * @param tolerance tolerance below which points are considered identical
      * @exception MathRuntimeException if the points do not constitute a plane
-     * @since 3.3
      */
     public Plane(final Vector3D p1, final Vector3D p2, final Vector3D p3, final double tolerance)
         throws MathRuntimeException {
@@ -214,7 +210,6 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     }
 
     /** {@inheritDoc}
-     * @since 3.3
      */
     @Override
     public Point<Euclidean3D> project(Point<Euclidean3D> point) {
@@ -222,7 +217,6 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     }
 
     /** {@inheritDoc}
-     * @since 3.3
      */
     @Override
     public double getTolerance() {

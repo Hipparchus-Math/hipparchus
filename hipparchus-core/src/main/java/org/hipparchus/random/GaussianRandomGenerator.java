@@ -21,7 +21,6 @@ package org.hipparchus.random;
  * This class is a gaussian normalized random generator for scalars.
  * <p>This class is a simple wrapper around the {@link
  * RandomGenerator#nextGaussian} method.</p>
- * @since 1.2
  */
 
 public class GaussianRandomGenerator implements NormalizedRandomGenerator {

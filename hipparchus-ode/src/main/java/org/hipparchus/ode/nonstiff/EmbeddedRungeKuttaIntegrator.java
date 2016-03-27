@@ -55,7 +55,6 @@ import org.hipparchus.util.FastMath;
  * evaluation is saved. For an <i>fsal</i> method, we have cs = 1 and
  * asi = bi for all i.</p>
  *
- * @since 1.2
  */
 
 public abstract class EmbeddedRungeKuttaIntegrator

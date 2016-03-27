@@ -99,7 +99,6 @@ public class ValueServer {
      * Construct a ValueServer instance using a RandomGenerator as its source
      * of random data.
      *
-     * @since 3.1
      * @param generator source of random data
      */
     public ValueServer(RandomGenerator generator) {

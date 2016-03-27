@@ -43,7 +43,6 @@ import org.hipparchus.util.Precision;
  * The given interval must bracket the root.</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
     implements BracketedRealFieldUnivariateSolver<T> {

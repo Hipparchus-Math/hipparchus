@@ -25,7 +25,6 @@ import org.hipparchus.util.MathUtils;
  * evenly spaced facets (rather than generating random normals as in the
  * base implementation).
  *
- * @since 4.0
  */
 public class InterpolatingMicrosphere2D extends InterpolatingMicrosphere {
     /** Space dimension. */

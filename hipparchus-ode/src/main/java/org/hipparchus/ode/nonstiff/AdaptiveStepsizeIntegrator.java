@@ -57,7 +57,6 @@ import org.hipparchus.util.FastMath;
  * otherwise the step is rejected and a new attempt is made with a new
  * stepsize.</p>
  *
- * @since 1.2
  *
  */
 

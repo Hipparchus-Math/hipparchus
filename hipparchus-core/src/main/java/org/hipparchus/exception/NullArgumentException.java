@@ -30,7 +30,6 @@ import java.util.Locale;
  * Note: from 4.0 onwards, this class extends {@link NullPointerException} instead
  * of {@link MathIllegalArgumentException}.
  *
- * @since 2.2
  */
 public class NullArgumentException extends NullPointerException
     implements LocalizedException {

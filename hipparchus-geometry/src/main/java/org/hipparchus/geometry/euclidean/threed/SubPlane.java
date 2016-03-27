@@ -29,7 +29,6 @@ import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 
 /** This class represents a sub-hyperplane for {@link Plane}.
- * @since 3.0
  */
 public class SubPlane extends AbstractSubHyperplane<Euclidean3D, Euclidean2D> {
 

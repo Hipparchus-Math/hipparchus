@@ -26,7 +26,6 @@ import org.hipparchus.optim.OptimizationData;
 /**
  * Class that represents a set of {@link LinearConstraint linear constraints}.
  *
- * @since 3.1
  */
 public class LinearConstraintSet implements OptimizationData {
     /** Set of constraints. */

@@ -21,7 +21,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Algorithm used to mutate a chromosome.
  *
- * @since 2.0
  */
 public interface MutationPolicy {
 

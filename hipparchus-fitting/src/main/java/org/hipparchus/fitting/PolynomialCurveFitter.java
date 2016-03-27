@@ -34,7 +34,6 @@ import org.hipparchus.linear.DiagonalMatrix;
  * They must be sorted in increasing order of the polynomial's degree.
  * The optimal values of the coefficients will be returned in the same order.
  *
- * @since 3.3
  */
 public class PolynomialCurveFitter extends AbstractCurveFitter {
     /** Parametric function to be fitted. */

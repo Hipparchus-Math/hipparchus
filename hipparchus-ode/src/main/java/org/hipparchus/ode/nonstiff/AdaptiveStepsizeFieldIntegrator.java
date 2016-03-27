@@ -63,7 +63,6 @@ import org.hipparchus.util.MathUtils;
  * stepsize.</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  *
  */
 

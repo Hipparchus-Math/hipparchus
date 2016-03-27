@@ -28,7 +28,6 @@ import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.util.FastMath;
 
 /** Class generating an enclosing ball from its support points.
- * @since 3.3
  */
 public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector3D> {
 

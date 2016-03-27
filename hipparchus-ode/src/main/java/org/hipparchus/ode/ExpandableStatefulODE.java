@@ -44,7 +44,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see FirstOrderDifferentialEquations
  * @see JacobianMatrices
  *
- * @since 3.0
  */
 
 public class ExpandableStatefulODE {

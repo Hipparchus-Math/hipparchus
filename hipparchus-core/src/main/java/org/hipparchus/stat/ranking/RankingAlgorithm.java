@@ -20,7 +20,6 @@ package org.hipparchus.stat.ranking;
 /**
  * Interface representing a rank transformation.
  *
- * @since 2.0
  */
 public interface RankingAlgorithm {
     /**

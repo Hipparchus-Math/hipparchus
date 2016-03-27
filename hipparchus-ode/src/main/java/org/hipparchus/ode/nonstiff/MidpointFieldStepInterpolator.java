@@ -45,7 +45,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *
  * @see MidpointFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class MidpointFieldStepInterpolator<T extends RealFieldElement<T>>

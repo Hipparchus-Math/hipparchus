@@ -28,7 +28,6 @@ import org.hipparchus.util.FastMath;
 /**
  * A collection of static methods that operate on or return polynomials.
  *
- * @since 2.0
  */
 public class PolynomialsUtils {
 

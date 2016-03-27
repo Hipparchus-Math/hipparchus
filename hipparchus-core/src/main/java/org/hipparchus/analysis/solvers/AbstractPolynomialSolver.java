@@ -22,7 +22,6 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 /**
  * Base class for solvers.
  *
- * @since 3.0
  */
 public abstract class AbstractPolynomialSolver
     extends BaseAbstractUnivariateSolver<PolynomialFunction>

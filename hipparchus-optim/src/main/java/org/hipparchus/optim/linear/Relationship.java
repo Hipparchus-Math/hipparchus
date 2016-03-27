@@ -19,7 +19,6 @@ package org.hipparchus.optim.linear;
 /**
  * Types of relationships between two cells in a Solver {@link LinearConstraint}.
  *
- * @since 2.0
  */
 public enum Relationship {
     /** Equality relationship. */

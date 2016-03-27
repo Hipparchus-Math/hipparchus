@@ -27,7 +27,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * components. Components of generated vectors follow (independent) Gaussian
  * distributions, with parameters supplied in the constructor.
  *
- * @since 1.2
  */
 public class UncorrelatedRandomVectorGenerator
   implements RandomVectorGenerator {

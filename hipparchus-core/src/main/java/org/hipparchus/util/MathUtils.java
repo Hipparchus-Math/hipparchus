@@ -37,13 +37,11 @@ import org.hipparchus.exception.NullArgumentException;
 public final class MathUtils {
     /**
      * \(2\pi\)
-     * @since 2.1
      */
     public static final double TWO_PI = 2 * FastMath.PI;
 
     /**
      * \(\pi^2\)
-     * @since 3.4
      */
     public static final double PI_SQUARED = FastMath.PI * FastMath.PI;
 
@@ -81,7 +79,6 @@ public final class MathUtils {
      *
      * @param value the value to be hashed (may be null)
      * @return the hash code
-     * @since 1.2
      */
     public static int hash(double[] value) {
         return Arrays.hashCode(value);
@@ -104,7 +101,6 @@ public final class MathUtils {
      * @param a angle to normalize
      * @param center center of the desired 2&pi; interval for the result
      * @return a-2k&pi; with integer k and center-&pi; &lt;= a-2k&pi; &lt;= center+&pi;
-     * @since 1.2
      */
      public static double normalizeAngle(double a, double center) {
          return a - TWO_PI * FastMath.floor((a + FastMath.PI - center) / TWO_PI);
@@ -115,7 +111,6 @@ public final class MathUtils {
       * @param e1 first element
       * @param e2 second element
       * @return max(a1, e2)
-      * @since 3.6
       */
      public static <T extends RealFieldElement<T>> T max(final T e1, final T e2) {
          return e1.subtract(e2).getReal() >= 0 ? e1 : e2;
@@ -126,7 +121,6 @@ public final class MathUtils {
       * @param e1 first element
       * @param e2 second element
       * @return min(a1, e2)
-      * @since 3.6
       */
      public static <T extends RealFieldElement<T>> T min(final T e1, final T e2) {
          return e1.subtract(e2).getReal() >= 0 ? e2 : e1;

@@ -27,7 +27,6 @@ import org.hipparchus.util.FastMath;
  * Population of chromosomes which uses elitism (certain percentage of the best
  * chromosomes is directly copied to the next generation).
  *
- * @since 2.0
  */
 public class ElitisticListPopulation extends ListPopulation {
 

@@ -22,7 +22,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Maximum number of evaluations of the function to be optimized.
  *
- * @since 3.1
  */
 public class MaxEval implements OptimizationData {
     /** Allowed number of evalutations. */

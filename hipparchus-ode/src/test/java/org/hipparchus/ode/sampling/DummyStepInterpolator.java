@@ -36,7 +36,6 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  *
  * @see StepHandler
  *
- * @since 1.2
  */
 
 public class DummyStepInterpolator

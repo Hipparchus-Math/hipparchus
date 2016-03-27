@@ -38,7 +38,6 @@ package org.hipparchus.analysis.solvers;
  * equation</em>, BIT Numerical Mathematics, volume 11, number 2,
  * pages 168-174, Springer, 1971.</p>
  *
- * @since 3.0
  */
 public class IllinoisSolver extends BaseSecantSolver {
 

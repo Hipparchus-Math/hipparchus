@@ -21,7 +21,6 @@ package org.hipparchus.linear;
  * Interface defining a visitor for matrix entries.
  *
  * @see DefaultRealMatrixPreservingVisitor
- * @since 2.0
  */
 public interface RealMatrixPreservingVisitor {
     /**

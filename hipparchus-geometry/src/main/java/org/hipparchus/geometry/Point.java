@@ -22,7 +22,6 @@ import java.io.Serializable;
  * @param <S> Type of the space.
  * @see Space
  * @see Vector
- * @since 3.3
  */
 public interface Point<S extends Space> extends Serializable {
 

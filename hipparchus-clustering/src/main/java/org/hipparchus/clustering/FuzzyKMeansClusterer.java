@@ -63,7 +63,6 @@ import org.hipparchus.util.MathUtils;
  * of the initial cluster centers.
  *
  * @param <T> type of the points to cluster
- * @since 3.3
  */
 public class FuzzyKMeansClusterer<T extends Clusterable> extends Clusterer<T> {
 

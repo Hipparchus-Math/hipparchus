@@ -25,7 +25,6 @@ package org.hipparchus.ode.sampling;
  * @see FieldStepNormalizer
  * @see StepNormalizer
  * @see StepNormalizerMode
- * @since 3.0
  */
 public enum StepNormalizerBounds {
     /** Do not include the first and last points. */

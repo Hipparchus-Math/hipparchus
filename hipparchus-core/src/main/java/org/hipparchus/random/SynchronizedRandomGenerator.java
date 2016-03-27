@@ -23,7 +23,6 @@ package org.hipparchus.random;
  * generator inside the overridden {@code synchronized} methods of this
  * class.
  *
- * @since 3.1
  */
 public class SynchronizedRandomGenerator implements RandomGenerator {
     /** Object to which all calls will be delegated. */

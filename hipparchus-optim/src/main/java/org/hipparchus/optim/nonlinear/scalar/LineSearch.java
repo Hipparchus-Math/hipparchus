@@ -30,7 +30,6 @@ import org.hipparchus.optim.univariate.UnivariatePointValuePair;
  * Class for finding the minimum of the objective function along a given
  * direction.
  *
- * @since 3.3
  */
 public class LineSearch {
     /**

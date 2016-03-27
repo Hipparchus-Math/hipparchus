@@ -49,7 +49,6 @@ import org.hipparchus.stat.descriptive.moment.SecondMoment;
  *
  * <p>Given <code>Q</code> and <code>R</code>, the last equation is solved by back-substitution.</p>
  *
- * @since 2.0
  */
 public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegression {
 
@@ -71,7 +70,6 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * singularity threshold for the QR decomposition.
      *
      * @param threshold the singularity threshold
-     * @since 3.3
      */
     public OLSMultipleLinearRegression(final double threshold) {
         this.threshold = threshold;
@@ -158,7 +156,6 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * @return SSTO - the total sum of squares
      * @throws NullPointerException if the sample has not been set
      * @see #isNoIntercept()
-     * @since 2.2
      */
     public double calculateTotalSumOfSquares() {
         if (isNoIntercept()) {
@@ -172,7 +169,6 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * Returns the sum of squared residuals.
      *
      * @return residual sum of squares
-     * @since 2.2
      * @throws org.hipparchus.linear.MathIllegalArgumentException if the design matrix is singular
      * @throws NullPointerException if the data for the model have not been loaded
      */
@@ -194,7 +190,6 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * @return R-square statistic
      * @throws NullPointerException if the sample has not been set
      * @throws org.hipparchus.linear.MathIllegalArgumentException if the design matrix is singular
-     * @since 2.2
      */
     public double calculateRSquared() {
         return 1 - calculateResidualSumOfSquares() / calculateTotalSumOfSquares();
@@ -218,7 +213,6 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
      * @throws NullPointerException if the sample has not been set
      * @throws org.hipparchus.linear.MathIllegalArgumentException if the design matrix is singular
      * @see #isNoIntercept()
-     * @since 2.2
      */
     public double calculateAdjustedRSquared() {
         final double n = getX().getRowDimension();

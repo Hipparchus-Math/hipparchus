@@ -129,7 +129,6 @@ import org.hipparchus.util.MathArrays;
  * they only depend on k. This class handles these transformations.</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public class AdamsNordsieckFieldTransformer<T extends RealFieldElement<T>> {
 

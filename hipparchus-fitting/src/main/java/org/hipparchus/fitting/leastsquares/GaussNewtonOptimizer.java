@@ -44,7 +44,6 @@ import org.hipparchus.util.Pair;
  * and SVD can compute a solution for rank-deficient problems.
  * </p>
  *
- * @since 3.3
  */
 public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
 

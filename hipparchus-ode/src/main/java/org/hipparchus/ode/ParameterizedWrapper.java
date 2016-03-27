@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalStateException;
 /** Wrapper class enabling {@link FirstOrderDifferentialEquations basic simple}
  *  ODE instances to be used when processing {@link JacobianMatrices}.
  *
- * @since 3.0
  */
 class ParameterizedWrapper implements ParameterizedODE {
 

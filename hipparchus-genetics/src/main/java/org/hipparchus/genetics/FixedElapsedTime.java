@@ -29,7 +29,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * Once the elapsed time reaches the configured <code>maxTime</code> value,
  * {@link #isSatisfied(Population)} returns true.
  *
- * @since 3.1
  */
 public class FixedElapsedTime implements StoppingCondition {
     /** Maximum allowed time period (in nanoseconds). */

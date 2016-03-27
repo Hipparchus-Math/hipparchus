@@ -28,7 +28,6 @@ import org.hipparchus.FieldElement;
  * This class is a singleton.
  * </p>
  * @see BigReal
- * @since 2.0
  */
 public class BigRealField implements Field<BigReal>, Serializable  {
 

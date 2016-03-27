@@ -44,7 +44,6 @@ import org.hipparchus.geometry.spherical.twod.SphericalPolygonsSet;
  * This class is intended for tests and debug purposes only.
  * </p>
  * @see RegionParser
- * @since 3.5
  */
 public class RegionDumper {
 

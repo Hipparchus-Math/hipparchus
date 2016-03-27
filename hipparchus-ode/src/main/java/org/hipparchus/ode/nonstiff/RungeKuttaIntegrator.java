@@ -46,7 +46,6 @@ import org.hipparchus.util.FastMath;
  * @see ClassicalRungeKuttaIntegrator
  * @see GillIntegrator
  * @see MidpointIntegrator
- * @since 1.2
  */
 
 public abstract class RungeKuttaIntegrator extends AbstractIntegrator {

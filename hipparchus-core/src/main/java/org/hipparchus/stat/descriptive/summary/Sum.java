@@ -155,7 +155,6 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
      * @param length the number of elements to include
      * @return the sum of the values or 0 if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
-     * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights,
                            final int begin, final int length) throws MathIllegalArgumentException {
@@ -189,7 +188,6 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
      * @param weights the weights array
      * @return the sum of the values or Double.NaN if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
-     * @since 2.1
      */
     public double evaluate(final double[] values, final double[] weights) throws MathIllegalArgumentException {
         return evaluate(values, weights, 0, values.length);

@@ -91,7 +91,6 @@ public class Erf {
      * @throws org.hipparchus.exception.MathIllegalStateException
      * if the algorithm fails to converge.
      * @see Gamma#regularizedGammaQ(double, double, double, int)
-     * @since 2.2
      */
     public static double erfc(double x) {
         if (FastMath.abs(x) > 40) {
@@ -137,7 +136,6 @@ public class Erf {
      * </p>
      * @param x the value
      * @return t such that x = erf(t)
-     * @since 3.2
      */
     public static double erfInv(final double x) {
 
@@ -233,7 +231,6 @@ public class Erf {
      * Returns the inverse erfc.
      * @param x the value
      * @return t such that x = erfc(t)
-     * @since 3.2
      */
     public static double erfcInv(final double x) {
         return erfInv(1 - x);

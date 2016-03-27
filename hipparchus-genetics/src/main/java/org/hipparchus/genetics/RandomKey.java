@@ -50,7 +50,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * </ul>
  *
  * @param <T> type of the permuted objects
- * @since 2.0
  */
 public abstract class RandomKey<T> extends AbstractListChromosome<Double> implements PermutationChromosome<T> {
 

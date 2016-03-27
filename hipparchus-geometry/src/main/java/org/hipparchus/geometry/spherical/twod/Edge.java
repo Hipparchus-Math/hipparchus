@@ -26,7 +26,6 @@ import org.hipparchus.util.MathUtils;
 /** Spherical polygons boundary edge.
  * @see SphericalPolygonsSet#getBoundaryLoops()
  * @see Vertex
- * @since 3.3
  */
 public class Edge {
 

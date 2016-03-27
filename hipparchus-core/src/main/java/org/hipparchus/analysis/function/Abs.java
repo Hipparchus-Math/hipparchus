@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * Absolute value function.
  *
- * @since 3.0
  */
 public class Abs implements UnivariateFunction {
     /** {@inheritDoc} */

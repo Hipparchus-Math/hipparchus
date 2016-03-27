@@ -29,7 +29,6 @@ import org.hipparchus.util.FastMath;
  * <i>Handbook of computational statistics: concepts and methods</i> by
  * James E. Gentle, Wolfgang H&auml;rdle, Yuichi Mori.</p>
  *
- * @since 3.0
  */
 public class StableRandomGenerator implements NormalizedRandomGenerator {
     /** Underlying generator. */

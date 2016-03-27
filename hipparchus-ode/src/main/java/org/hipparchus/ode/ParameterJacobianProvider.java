@@ -22,7 +22,6 @@ import org.hipparchus.exception.MathIllegalStateException;
 /** Interface to compute exactly Jacobian matrix for some parameter
  *  when computing {@link JacobianMatrices partial derivatives equations}.
  *
- * @since 3.0
  */
 public interface ParameterJacobianProvider extends Parameterizable {
 

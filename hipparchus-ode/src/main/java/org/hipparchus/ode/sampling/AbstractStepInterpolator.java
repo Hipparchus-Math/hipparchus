@@ -36,7 +36,6 @@ import org.hipparchus.ode.EquationsMapper;
  * @see org.hipparchus.ode.SecondOrderIntegrator
  * @see StepHandler
  *
- * @since 1.2
  *
  */
 
@@ -315,7 +314,6 @@ public abstract class AbstractStepInterpolator
    * it does not change any other property
    * </p>
    * @param softPreviousTime start of the restricted step
-   * @since 2.2
    */
   public void setSoftPreviousTime(final double softPreviousTime) {
       this.softPreviousTime = softPreviousTime;
@@ -329,7 +327,6 @@ public abstract class AbstractStepInterpolator
    * it does not change any other property
    * </p>
    * @param softCurrentTime end of the restricted step
-   * @since 2.2
    */
   public void setSoftCurrentTime(final double softCurrentTime) {
       this.softCurrentTime  = softCurrentTime;

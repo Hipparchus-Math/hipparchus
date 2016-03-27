@@ -19,7 +19,6 @@ package org.hipparchus.stat.inference;
 /**
  * Represents an alternative hypothesis for a hypothesis test.
  *
- * @since 3.3
  */
 public enum AlternativeHypothesis {
 

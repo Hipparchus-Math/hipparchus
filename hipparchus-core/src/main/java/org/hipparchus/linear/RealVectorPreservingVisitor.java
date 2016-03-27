@@ -21,7 +21,6 @@ package org.hipparchus.linear;
  * implementing this interface do not alter the entries of the vector being
  * visited.
  *
- * @since 3.1
  */
 public interface RealVectorPreservingVisitor {
     /**

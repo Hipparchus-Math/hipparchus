@@ -43,7 +43,6 @@ import org.hipparchus.util.MathUtils;
  *
  * @param <T> Type of the field elements.
  *
- * @since 3.2
  */
 public class FieldHermiteInterpolator<T extends FieldElement<T>> {
 

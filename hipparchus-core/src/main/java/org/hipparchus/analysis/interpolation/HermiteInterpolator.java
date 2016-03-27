@@ -42,7 +42,6 @@ import org.hipparchus.util.CombinatoricsUtils;
  * derivative for all points all have degree 3n-1.
  * </p>
  *
- * @since 3.1
  */
 public class HermiteInterpolator implements UnivariateDifferentiableVectorFunction {
 

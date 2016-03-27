@@ -28,7 +28,6 @@ import org.hipparchus.geometry.partitioning.Region;
  *
  * @param <S> Space type.
  * @param <P> Point type.
- * @since 3.3
  */
 public interface ConvexHull<S extends Space, P extends Point<S>> extends Serializable {
 

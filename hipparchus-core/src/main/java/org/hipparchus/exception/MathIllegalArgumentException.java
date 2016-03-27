@@ -22,7 +22,6 @@ package org.hipparchus.exception;
  * serve as a base class to create all the exceptions that have the semantics
  * of the standard {@link IllegalArgumentException}.
  *
- * @since 2.2
  */
 public class MathIllegalArgumentException extends MathRuntimeException {
     /** Serializable version Id. */

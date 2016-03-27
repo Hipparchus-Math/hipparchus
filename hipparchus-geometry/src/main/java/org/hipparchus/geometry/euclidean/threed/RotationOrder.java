@@ -26,7 +26,6 @@ package org.hipparchus.geometry.euclidean.threed;
  * the {@link Rotation#Rotation(RotationOrder,double,double,double)}
  * constructor or the {@link Rotation#getAngles} method.
  *
- * @since 1.2
  */
 public final class RotationOrder {
 

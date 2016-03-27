@@ -140,7 +140,6 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
 
 
     /** {@inheritDoc}
-     * @since 3.1
      * @throws MathIllegalArgumentException if {@code coefficients} is empty.
      * @throws NullArgumentException if {@code coefficients} is {@code null}.
      */
@@ -381,7 +380,6 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
     /**
      * Dedicated parametric polynomial class.
      *
-     * @since 3.0
      */
     public static class Parametric implements ParametricUnivariateFunction {
         /** {@inheritDoc} */

@@ -50,7 +50,6 @@ import org.hipparchus.util.FastMath;
  * @see GillIntegrator
  * @see MidpointIntegrator
  * @see ThreeEighthesIntegrator
- * @since 3.3
  */
 
 public class LutherIntegrator extends RungeKuttaIntegrator {

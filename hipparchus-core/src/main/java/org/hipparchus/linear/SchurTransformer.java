@@ -40,7 +40,6 @@ import org.hipparchus.util.Precision;
  * @see <a href="http://mathworld.wolfram.com/SchurDecomposition.html">Schur Decomposition - MathWorld</a>
  * @see <a href="http://en.wikipedia.org/wiki/Schur_decomposition">Schur Decomposition - Wikipedia</a>
  * @see <a href="http://en.wikipedia.org/wiki/Householder_transformation">Householder Transformations</a>
- * @since 3.1
  */
 class SchurTransformer {
     /** Maximum allowed iterations for convergence of the transformation. */

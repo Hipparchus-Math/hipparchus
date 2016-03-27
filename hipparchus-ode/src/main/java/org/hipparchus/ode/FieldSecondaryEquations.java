@@ -38,7 +38,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see FirstOrderFieldDifferentialEquations
  * @see FieldExpandableODE
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public interface FieldSecondaryEquations<T extends RealFieldElement<T>> {
 

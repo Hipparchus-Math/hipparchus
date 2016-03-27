@@ -40,7 +40,6 @@ package org.hipparchus.optim;
  * @see org.hipparchus.optim.SimpleValueChecker
  * @see org.hipparchus.optim.SimpleVectorValueChecker
  *
- * @since 3.0
  */
 public interface ConvergenceChecker<PAIR> {
     /**

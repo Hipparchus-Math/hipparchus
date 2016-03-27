@@ -24,7 +24,6 @@ import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 
 /**
  * This class implements a two-dimensional space.
- * @since 3.0
  */
 public class Euclidean2D implements Serializable, Space {
 

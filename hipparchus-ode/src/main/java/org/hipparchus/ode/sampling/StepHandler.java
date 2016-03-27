@@ -36,7 +36,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see org.hipparchus.ode.FirstOrderIntegrator
  * @see org.hipparchus.ode.SecondOrderIntegrator
  * @see StepInterpolator
- * @since 1.2
  */
 
 public interface StepHandler {

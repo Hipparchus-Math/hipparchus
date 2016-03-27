@@ -31,7 +31,6 @@ import org.hipparchus.exception.MathRuntimeException;
  * combinations</a> {@code (n, k)} of {@code k} elements in a set of
  * {@code n} elements.
  *
- * @since 3.3
  */
 public class Combinations implements Iterable<int[]> {
     /** Size of the set from which combinations are drawn. */

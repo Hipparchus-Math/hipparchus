@@ -26,7 +26,6 @@ import org.hipparchus.util.Precision;
 
 /** This class represents an arc on a circle.
  * @see ArcsSet
- * @since 3.3
  */
 public class Arc {
 

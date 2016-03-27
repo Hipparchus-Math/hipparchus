@@ -22,7 +22,6 @@ import org.hipparchus.optim.OptimizationData;
 /**
  * Gradient of the scalar function to be optimized.
  *
- * @since 3.1
  */
 public class ObjectiveFunctionGradient implements OptimizationData {
     /** Function to be optimized. */

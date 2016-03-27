@@ -33,7 +33,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @param <T> the type of the field elements
  * @see org.hipparchus.ode.FirstOrderFieldIntegrator
  * @see FieldStepHandler
- * @since 3.6
  */
 
 public interface FieldStepInterpolator<T extends RealFieldElement<T>> {

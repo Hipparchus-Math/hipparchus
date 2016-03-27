@@ -62,7 +62,6 @@ import org.hipparchus.util.MathUtils;
  * arrays is negligible for small matrices (about 1%). The gain from cache efficiency leads
  * to up to 3-fold improvements for matrices of moderate to large size.
  * </p>
- * @since 2.0
  */
 public class BlockRealMatrix extends AbstractRealMatrix implements Serializable {
     /** Block size. */

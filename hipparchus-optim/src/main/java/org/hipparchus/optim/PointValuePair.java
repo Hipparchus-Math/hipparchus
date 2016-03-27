@@ -26,7 +26,6 @@ import org.hipparchus.util.Pair;
  *
  * @see PointVectorValuePair
  * @see org.hipparchus.analysis.MultivariateFunction
- * @since 3.0
  */
 public class PointValuePair extends Pair<double[], Double> implements Serializable {
     /** Serializable UID. */

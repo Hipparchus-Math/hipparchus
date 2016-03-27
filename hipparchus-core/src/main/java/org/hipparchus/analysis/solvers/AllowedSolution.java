@@ -35,7 +35,6 @@ package org.hipparchus.analysis.solvers;
  * specific side the solution.</p>
  *
  * @see BracketedUnivariateSolver
- * @since 3.0
  */
 public enum AllowedSolution {
     /** There are no additional side restriction on the solutions for

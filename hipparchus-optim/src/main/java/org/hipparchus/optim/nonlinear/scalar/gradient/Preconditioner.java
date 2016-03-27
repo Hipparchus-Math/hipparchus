@@ -20,7 +20,6 @@ package org.hipparchus.optim.nonlinear.scalar.gradient;
 /**
  * This interface represents a preconditioner for differentiable scalar
  * objective function optimizers.
- * @since 2.0
  */
 public interface Preconditioner {
     /**

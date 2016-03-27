@@ -28,7 +28,6 @@ import org.hipparchus.util.MathUtils;
 /**
  * Provide a default implementation for several generic functions.
  *
- * @since 1.2
  */
 public abstract class BaseAbstractUnivariateIntegrator implements UnivariateIntegrator {
 

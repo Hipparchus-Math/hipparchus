@@ -29,7 +29,6 @@ import org.hipparchus.util.FastMath;
  * <p>
  * The function should be integrable.</p>
  *
- * @since 1.2
  */
 public class TrapezoidIntegrator extends BaseAbstractUnivariateIntegrator {
 

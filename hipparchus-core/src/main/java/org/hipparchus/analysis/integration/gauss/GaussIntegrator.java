@@ -27,7 +27,6 @@ import org.hipparchus.util.Pair;
  * {@link #integrate(UnivariateFunction) integrating} a weighted
  * function.
  *
- * @since 3.1
  */
 public class GaussIntegrator {
     /** Nodes. */

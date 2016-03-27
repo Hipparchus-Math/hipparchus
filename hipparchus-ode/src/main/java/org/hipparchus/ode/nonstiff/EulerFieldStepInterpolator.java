@@ -43,7 +43,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *
  * @see EulerFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class EulerFieldStepInterpolator<T extends RealFieldElement<T>>

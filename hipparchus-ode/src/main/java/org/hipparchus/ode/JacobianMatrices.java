@@ -50,7 +50,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see ParameterJacobianProvider
  * @see ParameterizedODE
  *
- * @since 3.0
  */
 public class JacobianMatrices {
 
@@ -480,7 +479,6 @@ public class JacobianMatrices {
 
     /**
      * Special exception for equations mismatch.
-     * @since 3.1
      */
     public static class MismatchedEquations extends MathIllegalArgumentException {
 

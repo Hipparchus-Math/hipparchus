@@ -19,7 +19,6 @@ package org.hipparchus.fitting.leastsquares;
 /**
  * An algorithm that can be applied to a non-linear least squares problem.
  *
- * @since 3.3
  */
 public interface LeastSquaresOptimizer {
 

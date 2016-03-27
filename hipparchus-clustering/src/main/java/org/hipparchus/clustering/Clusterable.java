@@ -19,7 +19,6 @@ package org.hipparchus.clustering;
 
 /**
  * Interface for n-dimensional points that can be clustered together.
- * @since 3.2
  */
 public interface Clusterable {
 

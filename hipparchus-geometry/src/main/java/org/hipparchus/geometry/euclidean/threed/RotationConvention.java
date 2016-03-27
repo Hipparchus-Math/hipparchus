@@ -20,7 +20,6 @@ package org.hipparchus.geometry.euclidean.threed;
 /**
  * This enumerates is used to differentiate the semantics of a rotation.
  * @see Rotation
- * @since 3.6
  */
 public enum RotationConvention {
 
