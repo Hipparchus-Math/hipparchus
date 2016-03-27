@@ -27,7 +27,6 @@ package org.hipparchus.random;
  * are in <a href="http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng-errata.txt">wellrng-errata.txt</a>.</p>
  *
  * @see <a href="http://www.iro.umontreal.ca/~panneton/WELLRNG.html">WELL Random number generator</a>
- * @since 2.2
  */
 public class Well44497b extends AbstractWell {
 

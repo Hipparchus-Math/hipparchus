@@ -40,7 +40,6 @@ import org.hipparchus.util.FastMath;
  * decide if the handler should trigger an event or not during the
  * proposed step.</p>
  *
- * @since 1.2
  */
 public class EventState {
 

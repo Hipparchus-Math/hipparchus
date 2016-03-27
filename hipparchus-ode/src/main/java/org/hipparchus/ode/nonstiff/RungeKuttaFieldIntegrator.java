@@ -52,7 +52,6 @@ import org.hipparchus.util.MathArrays;
  * @see GillFieldIntegrator
  * @see MidpointFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>

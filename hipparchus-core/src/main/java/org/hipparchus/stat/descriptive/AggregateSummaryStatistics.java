@@ -47,7 +47,6 @@ import org.hipparchus.exception.NullArgumentException;
  * provided by {@link #aggregate(Collection)} is adequate, that method should be used
  * to avoid unnecessary computation and synchronization delays.</p>
  *
- * @since 2.0
  *
  */
 public class AggregateSummaryStatistics implements StatisticalSummary,
@@ -357,7 +356,6 @@ public class AggregateSummaryStatistics implements StatisticalSummary,
      * A SummaryStatistics that also forwards all values added to it to a second
      * {@code SummaryStatistics} for aggregation.
      *
-     * @since 2.0
      */
     private static class AggregatingSummaryStatistics extends SummaryStatistics {
 

@@ -31,7 +31,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see FirstOrderDifferentialEquations
  * @see org.hipparchus.ode.sampling.StepHandler
  * @see org.hipparchus.ode.events.EventHandler
- * @since 1.2
  */
 
 public interface FirstOrderIntegrator extends ODEIntegrator {

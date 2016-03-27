@@ -26,7 +26,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * is incremented. Once the counter reaches the configured
  * {@code maxGenerations} value, {@link #isSatisfied(Population)} returns true.
  *
- * @since 2.0
  */
 public class FixedGenerationCount implements StoppingCondition {
     /** Number of generations that have passed */

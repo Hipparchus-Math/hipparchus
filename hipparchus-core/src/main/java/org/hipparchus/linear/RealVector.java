@@ -50,7 +50,6 @@ import org.hipparchus.util.FastMath;
  *   RealVector result = v.mapAddToSelf(3.4).mapToSelf(new Tan()).mapToSelf(new Power(2.3));
  * </pre>
  *
- * @since 2.1
  */
 public abstract class RealVector {
     /**
@@ -87,7 +86,6 @@ public abstract class RealVector {
      * @param index Index location of entry to be set.
      * @param increment Value to add to the vector entry.
      * @throws MathIllegalArgumentException if the index is not valid.
-     * @since 3.0
      */
     public void addToEntry(int index, double increment)
         throws MathIllegalArgumentException {
@@ -197,7 +195,6 @@ public abstract class RealVector {
      * @param end the index of the last entry of the subvector (inclusive)
      * @throws MathIllegalArgumentException if {@code start} of {@code end} are not valid
      * @throws MathIllegalArgumentException if {@code end < start}
-     * @since 3.1
      */
     protected void checkIndices(final int start, final int end)
         throws MathIllegalArgumentException {
@@ -869,7 +866,6 @@ public abstract class RealVector {
      * vector
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor) {
         final int dim = getDimension();
@@ -891,7 +887,6 @@ public abstract class RealVector {
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorPreservingVisitor visitor,
                                      final int start, final int end)
@@ -914,7 +909,6 @@ public abstract class RealVector {
      * vector
      * @return the value returned by {@link RealVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor) {
         return walkInDefaultOrder(visitor);
@@ -933,7 +927,6 @@ public abstract class RealVector {
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorPreservingVisitor visitor,
                                        final int start, final int end)
@@ -949,7 +942,6 @@ public abstract class RealVector {
      * of this vector
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
-     * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorChangingVisitor visitor) {
         final int dim = getDimension();
@@ -971,7 +963,6 @@ public abstract class RealVector {
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.1
      */
     public double walkInDefaultOrder(final RealVectorChangingVisitor visitor,
                               final int start, final int end)
@@ -994,7 +985,6 @@ public abstract class RealVector {
      * vector
      * @return the value returned by {@link RealVectorChangingVisitor#end()}
      * at the end of the walk
-     * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor) {
         return walkInDefaultOrder(visitor);
@@ -1013,7 +1003,6 @@ public abstract class RealVector {
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.1
      */
     public double walkInOptimizedOrder(final RealVectorChangingVisitor visitor,
                                        final int start, final int end)

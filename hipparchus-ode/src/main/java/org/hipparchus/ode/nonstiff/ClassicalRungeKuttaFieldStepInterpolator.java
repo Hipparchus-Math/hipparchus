@@ -53,7 +53,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *
  * @see ClassicalRungeKuttaFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class ClassicalRungeKuttaFieldStepInterpolator<T extends RealFieldElement<T>>

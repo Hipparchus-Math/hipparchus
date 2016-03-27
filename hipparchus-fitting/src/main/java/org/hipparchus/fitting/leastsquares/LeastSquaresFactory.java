@@ -37,7 +37,6 @@ import org.hipparchus.util.Pair;
 /**
  * A Factory for creating {@link LeastSquaresProblem}s.
  *
- * @since 3.3
  */
 public class LeastSquaresFactory {
 
@@ -60,7 +59,6 @@ public class LeastSquaresFactory {
      * @param paramValidator Model parameters validator.
      * @return the specified General Least Squares problem.
      *
-     * @since 3.4
      */
     public static LeastSquaresProblem create(final MultivariateJacobianFunction model,
                                              final RealVector observed,
@@ -353,7 +351,6 @@ public class LeastSquaresFactory {
     /**
      * A private, "field" immutable (not "real" immutable) implementation of {@link
      * LeastSquaresProblem}.
-     * @since 3.3
      */
     private static class LocalLeastSquaresProblem
             extends AbstractOptimizationProblem<Evaluation>

@@ -29,7 +29,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * <li>Wilson score interval</li>
  * </ul>
  *
- * @since 3.3
  */
 public final class IntervalUtils {
 

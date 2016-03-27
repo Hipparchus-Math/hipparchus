@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * Minimum function.
  *
- * @since 3.0
  */
 public class Min implements BivariateFunction {
     /** {@inheritDoc} */

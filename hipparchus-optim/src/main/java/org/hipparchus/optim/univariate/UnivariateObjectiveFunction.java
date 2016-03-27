@@ -22,7 +22,6 @@ import org.hipparchus.optim.OptimizationData;
 /**
  * Scalar function to be optimized.
  *
- * @since 3.1
  */
 public class UnivariateObjectiveFunction implements OptimizationData {
     /** Function to be optimized. */

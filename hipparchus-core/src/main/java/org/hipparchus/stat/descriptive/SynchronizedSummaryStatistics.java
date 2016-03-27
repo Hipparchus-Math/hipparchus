@@ -30,7 +30,6 @@ import org.hipparchus.util.MathUtils;
  * thread is computing a statistic from the instance, no other thread can modify
  * the instance nor compute another statistic.
  *
- * @since 1.2
  */
 public class SynchronizedSummaryStatistics extends SummaryStatistics {
 

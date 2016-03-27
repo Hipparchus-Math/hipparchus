@@ -21,7 +21,6 @@ package org.hipparchus.optim;
  *
  * @param <PAIR> Type of (point, value) pair.
  *
- * @since 3.0
  */
 public abstract class AbstractConvergenceChecker<PAIR>
     implements ConvergenceChecker<PAIR> {

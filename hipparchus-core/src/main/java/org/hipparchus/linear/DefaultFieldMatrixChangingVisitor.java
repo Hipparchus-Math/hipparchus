@@ -27,7 +27,6 @@ import org.hipparchus.FieldElement;
  * </p>
  *
  * @param <T> the type of the field elements
- * @since 2.0
  */
 public class DefaultFieldMatrixChangingVisitor<T extends FieldElement<T>>
     implements FieldMatrixChangingVisitor<T> {

@@ -71,7 +71,6 @@ import org.hipparchus.util.FastMath;
  * </table>
  *
  * @see GraggBulirschStoerIntegrator
- * @since 1.2
  */
 
 class GraggBulirschStoerStepInterpolator

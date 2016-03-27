@@ -156,7 +156,6 @@ import org.hipparchus.util.MathUtils;
  * they only depend on k and therefore are precomputed once for all.</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends AdamsFieldIntegrator<T> {
 

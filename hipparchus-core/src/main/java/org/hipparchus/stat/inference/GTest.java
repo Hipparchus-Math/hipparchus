@@ -34,7 +34,6 @@ import org.hipparchus.util.MathArrays;
  * but provided by one sample, or when the hypothesis under test is that the two
  * samples come from the same underlying distribution.</p>
  *
- * @since 3.1
  */
 public class GTest {
 

@@ -28,7 +28,6 @@ import org.hipparchus.stat.descriptive.StatisticalSummary;
  * A collection of static methods to create inference test instances or to
  * perform inference tests.
  *
- * @since 1.1
  */
 public class TestUtils  {
 
@@ -282,7 +281,6 @@ public class TestUtils  {
     /**
      * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareDataSetsComparison(long[], long[])
      *
-     * @since 1.2
      */
     public static double chiSquareDataSetsComparison(final long[] observed1,
                                                      final long[] observed2)
@@ -293,7 +291,6 @@ public class TestUtils  {
     /**
      * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTestDataSetsComparison(long[], long[])
      *
-     * @since 1.2
      */
     public static double chiSquareTestDataSetsComparison(final long[] observed1,
                                                          final long[] observed2)
@@ -305,7 +302,6 @@ public class TestUtils  {
     /**
      * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTestDataSetsComparison(long[], long[], double)
      *
-     * @since 1.2
      */
     public static boolean chiSquareTestDataSetsComparison(final long[] observed1,
                                                           final long[] observed2,
@@ -317,7 +313,6 @@ public class TestUtils  {
     /**
      * @see org.hipparchus.stat.inference.OneWayAnova#anovaFValue(Collection)
      *
-     * @since 1.2
      */
     public static double oneWayAnovaFValue(final Collection<double[]> categoryData)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -327,7 +322,6 @@ public class TestUtils  {
     /**
      * @see org.hipparchus.stat.inference.OneWayAnova#anovaPValue(Collection)
      *
-     * @since 1.2
      */
     public static double oneWayAnovaPValue(final Collection<double[]> categoryData)
         throws MathIllegalArgumentException, NullArgumentException,
@@ -338,7 +332,6 @@ public class TestUtils  {
     /**
      * @see org.hipparchus.stat.inference.OneWayAnova#anovaTest(Collection,double)
      *
-     * @since 1.2
      */
     public static boolean oneWayAnovaTest(final Collection<double[]> categoryData,
                                           final double alpha)
@@ -348,7 +341,6 @@ public class TestUtils  {
 
      /**
      * @see org.hipparchus.stat.inference.GTest#g(double[], long[])
-     * @since 3.1
      */
     public static double g(final double[] expected, final long[] observed)
         throws MathIllegalArgumentException {
@@ -357,7 +349,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.GTest#gTest( double[],  long[] )
-     * @since 3.1
      */
     public static double gTest(final double[] expected, final long[] observed)
         throws MathIllegalArgumentException, MathIllegalStateException {
@@ -366,7 +357,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.GTest#gTestIntrinsic(double[], long[] )
-     * @since 3.1
      */
     public static double gTestIntrinsic(final double[] expected, final long[] observed)
         throws MathIllegalArgumentException, MathIllegalStateException {
@@ -375,7 +365,6 @@ public class TestUtils  {
 
      /**
      * @see org.hipparchus.stat.inference.GTest#gTest( double[],long[],double)
-     * @since 3.1
      */
     public static boolean gTest(final double[] expected, final long[] observed,
                                 final double alpha)
@@ -385,7 +374,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.GTest#gDataSetsComparison(long[], long[])
-     * @since 3.1
      */
     public static double gDataSetsComparison(final long[] observed1,
                                                   final long[] observed2)
@@ -395,7 +383,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.GTest#rootLogLikelihoodRatio(long, long, long, long)
-     * @since 3.1
      */
     public static double rootLogLikelihoodRatio(final long k11, final long k12, final long k21, final long k22)
         throws MathIllegalArgumentException {
@@ -405,7 +392,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.GTest#gTestDataSetsComparison(long[], long[])
-     * @since 3.1
      */
     public static double gTestDataSetsComparison(final long[] observed1,
                                                         final long[] observed2)
@@ -416,7 +402,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.GTest#gTestDataSetsComparison(long[],long[],double)
-     * @since 3.1
      */
     public static boolean gTestDataSetsComparison(final long[] observed1,
                                                   final long[] observed2,
@@ -427,7 +412,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovStatistic(RealDistribution, double[])
-     * @since 3.3
      */
     public static double kolmogorovSmirnovStatistic(RealDistribution dist, double[] data)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -436,7 +420,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(RealDistribution, double[])
-     * @since 3.3
      */
     public static double kolmogorovSmirnovTest(RealDistribution dist, double[] data)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -445,7 +428,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(RealDistribution, double[], boolean)
-     * @since 3.3
      */
     public static double kolmogorovSmirnovTest(RealDistribution dist, double[] data, boolean strict)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -454,7 +436,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(RealDistribution, double[], double)
-     * @since 3.3
      */
     public static boolean kolmogorovSmirnovTest(RealDistribution dist, double[] data, double alpha)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -463,7 +444,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovStatistic(double[], double[])
-     * @since 3.3
      */
     public static double kolmogorovSmirnovStatistic(double[] x, double[] y)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -472,7 +452,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(double[], double[])
-     * @since 3.3
      */
     public static double kolmogorovSmirnovTest(double[] x, double[] y)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -481,7 +460,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(double[], double[], boolean)
-     * @since 3.3
      */
     public static double kolmogorovSmirnovTest(double[] x, double[] y, boolean strict)
             throws MathIllegalArgumentException, NullArgumentException  {
@@ -490,7 +468,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#exactP(double, int, int, boolean)
-     * @since 3.3
      */
     public static double exactP(double d, int m, int n, boolean strict) {
         return KS_TEST.exactP(d, n, m, strict);
@@ -498,7 +475,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#approximateP(double, int, int)
-     * @since 3.3
      */
     public static double approximateP(double d, int n, int m) {
         return KS_TEST.approximateP(d, n, m);
@@ -506,7 +482,6 @@ public class TestUtils  {
 
     /**
      * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#monteCarloP(double, int, int, boolean, int)
-     * @since 3.3
      */
     public static double monteCarloP(double d, int n, int m, boolean strict, int iterations) {
         return KS_TEST.monteCarloP(d, n, m, strict, iterations);

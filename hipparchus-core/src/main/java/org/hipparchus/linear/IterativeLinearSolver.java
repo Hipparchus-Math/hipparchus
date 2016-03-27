@@ -29,7 +29,6 @@ import org.hipparchus.util.MathUtils;
  * - A &middot; x, where A is the linear operator of the linear system, b is the
  * right-hand side vector, and x the current estimate of the solution.
  *
- * @since 3.0
  */
 public abstract class IterativeLinearSolver {
 

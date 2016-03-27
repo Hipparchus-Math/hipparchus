@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Useful functions for the implementation of various transforms.
  *
- * @since 3.0
  */
 public class TransformUtils {
     /**

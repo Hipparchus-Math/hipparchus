@@ -66,7 +66,6 @@ import org.hipparchus.RealFieldElement;
  * that Apache Commons Math will not catch it.</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  * @see UnivariateFunction
  */
 public interface RealFieldUnivariateFunction<T extends RealFieldElement<T>> {

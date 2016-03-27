@@ -22,7 +22,6 @@ import org.hipparchus.analysis.BivariateFunction;
 /**
  * Subtract the second operand from the first.
  *
- * @since 3.0
  */
 public class Subtract implements BivariateFunction {
     /** {@inheritDoc} */

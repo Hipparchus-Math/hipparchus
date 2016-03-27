@@ -32,7 +32,6 @@ import org.hipparchus.util.Precision;
  * <a href="http://en.wikipedia.org/wiki/Gaussian_function">
  *  Gaussian</a> function.
  *
- * @since 3.0
  */
 public class Gaussian implements UnivariateDifferentiableFunction {
     /** Mean. */
@@ -195,7 +194,6 @@ public class Gaussian implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)

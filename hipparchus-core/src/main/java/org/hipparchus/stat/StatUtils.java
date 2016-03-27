@@ -746,7 +746,6 @@ public final class StatUtils {
      *
      * @param sample Sample to normalize.
      * @return normalized (standardized) sample.
-     * @since 2.2
      */
     public static double[] normalize(final double[] sample) {
         DescriptiveStatistics stats = new DescriptiveStatistics();
@@ -789,7 +788,6 @@ public final class StatUtils {
      * @param sample input data
      * @return array of array of the most frequently occurring element(s) sorted in ascending order.
      * @throws MathIllegalArgumentException if the indices are invalid or the array is null
-     * @since 3.3
      */
     public static double[] mode(double[] sample) throws MathIllegalArgumentException {
         if (sample == null) {
@@ -819,7 +817,6 @@ public final class StatUtils {
      * @param length the number of elements to include
      * @return array of array of the most frequently occurring element(s) sorted in ascending order.
      * @throws MathIllegalArgumentException if the indices are invalid or the array is null
-     * @since 3.3
      */
     public static double[] mode(double[] sample, final int begin, final int length) {
         if (sample == null) {

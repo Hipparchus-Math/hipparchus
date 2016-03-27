@@ -148,7 +148,6 @@ import org.hipparchus.util.MathUtils;
  * Journal on Numerical Analysis 12(4): 617-629, 1975</dd>
  * </dl>
  *
- * @since 3.0
  */
 public class SymmLQ
     extends PreconditionedIterativeLinearSolver {

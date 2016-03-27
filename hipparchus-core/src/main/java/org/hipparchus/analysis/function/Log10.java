@@ -24,7 +24,6 @@ import org.hipparchus.util.FastMath;
 /**
  * Base 10 logarithm function.
  *
- * @since 3.0
  */
 public class Log10 implements UnivariateDifferentiableFunction {
 
@@ -35,7 +34,6 @@ public class Log10 implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {

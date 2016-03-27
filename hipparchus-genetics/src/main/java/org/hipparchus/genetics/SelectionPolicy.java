@@ -21,7 +21,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Algorithm used to select a chromosome pair from a population.
  *
- * @since 2.0
  */
 public interface SelectionPolicy {
     /**

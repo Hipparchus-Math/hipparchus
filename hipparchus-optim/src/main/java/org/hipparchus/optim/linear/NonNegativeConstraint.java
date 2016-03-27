@@ -22,7 +22,6 @@ import org.hipparchus.optim.OptimizationData;
  * A constraint for a linear optimization problem indicating whether all
  * variables must be restricted to non-negative values.
  *
- * @since 3.1
  */
 public class NonNegativeConstraint implements OptimizationData {
     /** Whether the variables are all positive. */

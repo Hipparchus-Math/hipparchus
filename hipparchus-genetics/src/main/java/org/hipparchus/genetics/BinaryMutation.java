@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Mutation for {@link BinaryChromosome}s. Randomly changes one gene.
  *
- * @since 2.0
  */
 public class BinaryMutation implements MutationPolicy {
 

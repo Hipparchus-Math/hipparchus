@@ -50,7 +50,6 @@ import org.hipparchus.util.FastMath;
  * @see <a href="http://en.wikipedia.org/wiki/Sobol_sequence">Sobol sequence (Wikipedia)</a>
  * @see <a href="http://web.maths.unsw.edu.au/~fkuo/sobol/">Sobol sequence direction numbers</a>
  *
- * @since 3.3
  */
 public class SobolSequenceGenerator implements RandomVectorGenerator {
 

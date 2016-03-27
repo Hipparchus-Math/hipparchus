@@ -18,7 +18,6 @@ package org.hipparchus.genetics;
 
 /**
  * A pair of {@link Chromosome} objects.
- * @since 2.0
  *
  */
 public class ChromosomePair {

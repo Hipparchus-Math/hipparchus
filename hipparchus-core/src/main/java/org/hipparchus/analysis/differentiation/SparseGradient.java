@@ -40,7 +40,6 @@ import org.hipparchus.util.Precision;
  * {@link DerivativeStructure} and use less memory.
  * </p>
  *
- * @since 3.3
  */
 public class SparseGradient implements RealFieldElement<SparseGradient>, Serializable {
 
@@ -927,7 +926,6 @@ public class SparseGradient implements RealFieldElement<SparseGradient>, Seriali
     /**
      * Get a hashCode for the derivative structure.
      * @return a hash code value for this object
-     * @since 3.2
      */
     @Override
     public int hashCode() {

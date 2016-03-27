@@ -64,7 +64,6 @@ import org.hipparchus.util.FastMath;
  * This example shows that the small step size is really bad, even simply
  * for second order derivative!</p>
  *
- * @since 3.1
  */
 public class FiniteDifferencesDifferentiator
     implements UnivariateFunctionDifferentiator, UnivariateVectorFunctionDifferentiator,

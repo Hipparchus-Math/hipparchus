@@ -19,7 +19,6 @@ package org.hipparchus.analysis.differentiation;
 import org.hipparchus.analysis.UnivariateVectorFunction;
 
 /** Interface defining the function differentiation operation.
- * @since 3.1
  */
 public interface UnivariateVectorFunctionDifferentiator {
 

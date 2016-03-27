@@ -33,7 +33,6 @@ import java.util.ResourceBundle;
  * localized properties files, and as a default format if some
  * translation is missing.
  * </p>
- * @since 2.2
  */
 public enum LocalizedCoreFormats implements Localizable {
 

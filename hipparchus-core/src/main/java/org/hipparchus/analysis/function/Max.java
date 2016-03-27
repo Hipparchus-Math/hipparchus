@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * Maximum function.
  *
- * @since 3.0
  */
 public class Max implements BivariateFunction {
     /** {@inheritDoc} */

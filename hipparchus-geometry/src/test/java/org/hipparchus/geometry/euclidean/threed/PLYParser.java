@@ -35,7 +35,6 @@ import org.hipparchus.util.Precision;
  * parse the full header, it does not handle all properties,
  * it has rudimentary error handling.
  * </p>
- * @since 3.5
  */
 public class PLYParser {
 

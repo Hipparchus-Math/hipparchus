@@ -29,7 +29,6 @@ import org.hipparchus.util.MathArrays;
  * <a href="http://en.wikipedia.org/wiki/Step_function">
  *  Step function</a>.
  *
- * @since 3.0
  */
 public class StepFunction implements UnivariateFunction {
     /** Abscissae. */

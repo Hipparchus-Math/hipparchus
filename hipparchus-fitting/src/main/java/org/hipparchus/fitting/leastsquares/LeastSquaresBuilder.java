@@ -29,7 +29,6 @@ import org.hipparchus.optim.PointVectorValuePair;
  * A mutable builder for {@link LeastSquaresProblem}s.
  *
  * @see LeastSquaresFactory
- * @since 3.3
  */
 public class LeastSquaresBuilder {
 
@@ -50,12 +49,10 @@ public class LeastSquaresBuilder {
     /**
      * Lazy evaluation.
      *
-     * @since 3.4
      */
     private boolean lazyEvaluation;
     /** Validator.
      *
-     * @since 3.4
      */
     private ParameterValidator paramValidator;
 
@@ -204,7 +201,6 @@ public class LeastSquaresBuilder {
      * @param newValue Whether to perform lazy evaluation.
      * @return this object.
      *
-     * @since 3.4
      */
     public LeastSquaresBuilder lazyEvaluation(final boolean newValue) {
         lazyEvaluation = newValue;
@@ -217,7 +213,6 @@ public class LeastSquaresBuilder {
      * @param newValidator Parameter validator.
      * @return this object.
      *
-     * @since 3.4
      */
     public LeastSquaresBuilder parameterValidator(final ParameterValidator newValidator) {
         paramValidator = newValidator;

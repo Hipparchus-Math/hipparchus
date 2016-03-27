@@ -21,7 +21,6 @@ import org.hipparchus.linear.RealMatrix;
 /**
  *  Reporting interface for basic multivariate statistics.
  *
- * @since 1.2
  */
 public interface StatisticalMultivariateSummary {
 

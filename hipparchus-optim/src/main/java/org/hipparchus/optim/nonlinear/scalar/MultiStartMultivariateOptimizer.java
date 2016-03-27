@@ -34,7 +34,6 @@ import org.hipparchus.random.RandomVectorGenerator;
  * turn with different starting points (trying to avoid being trapped
  * in a local extremum when looking for a global one).
  *
- * @since 3.0
  */
 public class MultiStartMultivariateOptimizer
     extends BaseMultiStartMultivariateOptimizer<PointValuePair> {

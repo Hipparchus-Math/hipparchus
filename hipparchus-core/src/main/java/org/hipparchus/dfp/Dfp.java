@@ -93,7 +93,6 @@ import org.hipparchus.util.FastMath;
  *  detail and is really only a matter of definition.  Any side effects of
  *  this can be rendered invisible by a subclass.</p>
  * @see DfpField
- * @since 2.2
  */
 public class Dfp implements RealFieldElement<Dfp> {
 
@@ -861,7 +860,6 @@ public class Dfp implements RealFieldElement<Dfp> {
 
     /** Get the absolute value of instance.
      * @return absolute value of instance
-     * @since 3.2
      */
     @Override
     public Dfp abs() {
@@ -1004,7 +1002,6 @@ public class Dfp implements RealFieldElement<Dfp> {
      *  That is round to nearest integer unless both are equidistant.
      *  In which case round to the even one.
      *  @return rounded value
-     * @since 3.2
      */
     @Override
     public Dfp rint() {
@@ -1014,7 +1011,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     /** Round to an integer using the round floor mode.
      * That is, round toward -Infinity
      *  @return rounded value
-     * @since 3.2
      */
     @Override
     public Dfp floor() {
@@ -1024,7 +1020,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     /** Round to an integer using the round ceil mode.
      * That is, round toward +Infinity
      *  @return rounded value
-     * @since 3.2
      */
     @Override
     public Dfp ceil() {
@@ -1034,7 +1029,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     /** Returns the IEEE remainder.
      * @param d divisor
      * @return this less n &times; d, where n is the integer closest to this/d
-     * @since 3.2
      */
     @Override
     public Dfp remainder(final Dfp d) {
@@ -1190,7 +1184,6 @@ public class Dfp implements RealFieldElement<Dfp> {
 
     /** Get the exponent of the greatest power of 10 that is less than or equal to abs(this).
      *  @return integer base 10 logarithm
-     * @since 3.2
      */
     public int intLog10()  {
         if (mant[mant.length-1] > 1000) {
@@ -1977,7 +1970,6 @@ public class Dfp implements RealFieldElement<Dfp> {
 
     /** Compute the square root.
      * @return square root of the instance
-     * @since 3.2
      */
     @Override
     public Dfp sqrt() {
@@ -2527,7 +2519,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public double getReal() {
@@ -2535,7 +2526,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp add(final double a) {
@@ -2543,7 +2533,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp subtract(final double a) {
@@ -2551,7 +2540,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp multiply(final double a) {
@@ -2559,7 +2547,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp divide(final double a) {
@@ -2567,7 +2554,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp remainder(final double a) {
@@ -2575,7 +2561,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public long round() {
@@ -2583,7 +2568,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp signum() {
@@ -2595,7 +2579,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp copySign(final Dfp s) {
@@ -2606,7 +2589,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp copySign(final double s) {
@@ -2618,7 +2600,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp scalb(final int n) {
@@ -2626,7 +2607,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp hypot(final Dfp y) {
@@ -2634,7 +2614,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp cbrt() {
@@ -2642,7 +2621,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp rootN(final int n) {
@@ -2652,7 +2630,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp pow(final double p) {
@@ -2660,7 +2637,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp pow(final int n) {
@@ -2668,7 +2644,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp pow(final Dfp e) {
@@ -2676,7 +2651,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp exp() {
@@ -2684,7 +2658,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp expm1() {
@@ -2692,7 +2665,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp log() {
@@ -2700,7 +2672,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp log1p() {
@@ -2708,7 +2679,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2, return type changed to {@link Dfp} in 4.0
      */
     @Override
     public Dfp log10() {
@@ -2716,7 +2686,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp cos() {
@@ -2724,7 +2693,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp sin() {
@@ -2732,7 +2700,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp tan() {
@@ -2740,7 +2707,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp acos() {
@@ -2748,7 +2714,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp asin() {
@@ -2756,7 +2721,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp atan() {
@@ -2764,7 +2728,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp atan2(final Dfp x)
@@ -2790,7 +2753,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp cosh() {
@@ -2798,7 +2760,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp sinh() {
@@ -2806,7 +2767,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp tanh() {
@@ -2816,7 +2776,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp acosh() {
@@ -2824,7 +2783,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp asinh() {
@@ -2832,7 +2790,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp atanh() {
@@ -2840,7 +2797,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp linearCombination(final Dfp[] a, final Dfp[] b)
@@ -2857,7 +2813,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp linearCombination(final double[] a, final Dfp[] b)
@@ -2874,7 +2829,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp linearCombination(final Dfp a1, final Dfp b1, final Dfp a2, final Dfp b2) {
@@ -2882,7 +2836,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp linearCombination(final double a1, final Dfp b1, final double a2, final Dfp b2) {
@@ -2890,7 +2843,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp linearCombination(final Dfp a1, final Dfp b1,
@@ -2900,7 +2852,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp linearCombination(final double a1, final Dfp b1,
@@ -2910,7 +2861,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp linearCombination(final Dfp a1, final Dfp b1, final Dfp a2, final Dfp b2,
@@ -2919,7 +2869,6 @@ public class Dfp implements RealFieldElement<Dfp> {
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public Dfp linearCombination(final double a1, final Dfp b1, final double a2, final Dfp b2,

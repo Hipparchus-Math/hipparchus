@@ -24,7 +24,6 @@ import org.hipparchus.linear.RealVector;
 /**
  * A pedantic implementation of {@link Optimum}.
  *
- * @since 3.3
  */
 class OptimumImpl implements Optimum {
 

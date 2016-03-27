@@ -27,7 +27,6 @@ import org.hipparchus.random.UnitSphereRandomVectorGenerator;
  * <em>William Dudziak</em>'s
  * <a href="http://www.dudziak.com/microsphere.pdf">MS thesis</a>.
  *
- * @since 3.6
  */
 public class MicrosphereProjectionInterpolator
     implements MultivariateInterpolator {

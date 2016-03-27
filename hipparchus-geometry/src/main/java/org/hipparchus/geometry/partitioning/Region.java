@@ -48,7 +48,6 @@ import org.hipparchus.geometry.Space;
 
  * @param <S> Type of the space.
 
- * @since 3.0
  */
 public interface Region<S extends Space> {
 
@@ -135,7 +134,6 @@ public interface Region<S extends Space> {
     /** Project a point on the boundary of the region.
      * @param point point to check
      * @return projection of the point on the boundary
-     * @since 3.3
      */
     BoundaryProjection<S> projectToBoundary(final Point<S> point);
 

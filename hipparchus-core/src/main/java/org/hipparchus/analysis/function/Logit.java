@@ -30,7 +30,6 @@ import org.hipparchus.util.FastMath;
  *  Logit</a> function.
  * It is the inverse of the {@link Sigmoid sigmoid} function.
  *
- * @since 3.0
  */
 public class Logit implements UnivariateDifferentiableFunction {
     /** Lower bound. */
@@ -156,7 +155,6 @@ public class Logit implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      * @exception MathIllegalArgumentException if parameter is outside of function domain
      */
     @Override

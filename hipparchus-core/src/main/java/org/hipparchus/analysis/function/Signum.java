@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * {@code signum} function.
  *
- * @since 3.0
  */
 public class Signum implements UnivariateFunction {
     /** {@inheritDoc} */

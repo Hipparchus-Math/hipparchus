@@ -24,7 +24,6 @@ import org.hipparchus.util.Precision;
 /** Transformer for {@link EventHandler#g(double, double[]) g functions}.
  * @see EventFilter
  * @see FilterType
- * @since 3.2
  */
 enum Transformer {
 

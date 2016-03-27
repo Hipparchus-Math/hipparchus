@@ -37,7 +37,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @see FieldStepNormalizer
  * @see FieldStepInterpolator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public interface FieldFixedStepHandler<T extends RealFieldElement<T>> {

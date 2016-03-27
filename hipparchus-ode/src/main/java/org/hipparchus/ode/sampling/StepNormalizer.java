@@ -85,7 +85,6 @@ import org.hipparchus.util.Precision;
  * @see FixedStepHandler
  * @see StepNormalizerMode
  * @see StepNormalizerBounds
- * @since 1.2
  */
 
 public class StepNormalizer implements StepHandler {
@@ -132,7 +131,6 @@ public class StepNormalizer implements StepHandler {
      * @param h fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
      * @param mode step normalizer mode to use
-     * @since 3.0
      */
     public StepNormalizer(final double h, final FixedStepHandler handler,
                           final StepNormalizerMode mode) {
@@ -144,7 +142,6 @@ public class StepNormalizer implements StepHandler {
      * @param h fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
      * @param bounds step normalizer bounds setting to use
-     * @since 3.0
      */
     public StepNormalizer(final double h, final FixedStepHandler handler,
                           final StepNormalizerBounds bounds) {
@@ -156,7 +153,6 @@ public class StepNormalizer implements StepHandler {
      * @param handler fixed time step handler to wrap
      * @param mode step normalizer mode to use
      * @param bounds step normalizer bounds setting to use
-     * @since 3.0
      */
     public StepNormalizer(final double h, final FixedStepHandler handler,
                           final StepNormalizerMode mode,

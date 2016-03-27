@@ -26,6 +26,5 @@ package org.hipparchus.linear;
  *  thus give incorrect results, like multiplications, divisions or
  *  functions mapping.
  * </p>
- * @since 2.0
  */
 public abstract class SparseRealVector extends RealVector {}

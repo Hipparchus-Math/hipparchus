@@ -42,7 +42,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see org.hipparchus.ode.FirstOrderIntegrator
  * @see org.hipparchus.ode.SecondOrderIntegrator
  * @see StepHandler
- * @since 1.2
  */
 
 public interface StepInterpolator extends Externalizable {
@@ -114,7 +113,6 @@ public interface StepInterpolator extends Externalizable {
    * @see #getInterpolatedSecondaryState(int)
    * @see #getInterpolatedSecondaryDerivatives(int)
    * @see #setInterpolatedTime(double)
-   * @since 2.0
    * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
   double[] getInterpolatedDerivatives() throws MathIllegalStateException;
@@ -133,7 +131,6 @@ public interface StepInterpolator extends Externalizable {
    * @see #getInterpolatedDerivatives()
    * @see #getInterpolatedSecondaryDerivatives(int)
    * @see #setInterpolatedTime(double)
-   * @since 3.0
    * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
   double[] getInterpolatedSecondaryState(int index) throws MathIllegalStateException;
@@ -151,7 +148,6 @@ public interface StepInterpolator extends Externalizable {
    * @see #getInterpolatedDerivatives()
    * @see #getInterpolatedSecondaryState(int)
    * @see #setInterpolatedTime(double)
-   * @since 3.0
    * @exception MathIllegalStateException if the number of functions evaluations is exceeded
    */
   double[] getInterpolatedSecondaryDerivatives(int index) throws MathIllegalStateException;

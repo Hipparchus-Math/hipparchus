@@ -32,7 +32,6 @@ import org.hipparchus.util.FastMath;
  *
  * implements Serializable since 2.0
  *
- * @since 1.1
  */
 public class Fraction
     extends Number

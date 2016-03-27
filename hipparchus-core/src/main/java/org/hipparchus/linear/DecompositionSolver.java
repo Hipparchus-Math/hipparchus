@@ -32,7 +32,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * with non-square matrix A and with non-null minimal norm. If an exact linear
  * solution exists it is also the minimal norm solution.
  *
- * @since 2.0
  */
 public interface DecompositionSolver {
 

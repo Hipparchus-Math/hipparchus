@@ -26,7 +26,6 @@ import org.hipparchus.util.FastMath;
 /**
  * Results of a Multiple Linear Regression model fit.
  *
- * @since 3.0
  */
 public class RegressionResults implements Serializable {
 

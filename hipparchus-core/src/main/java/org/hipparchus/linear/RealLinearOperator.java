@@ -47,7 +47,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  *  </dd>
  * </dl>
  *
- * @since 3.0
  */
 public abstract class RealLinearOperator {
     /**

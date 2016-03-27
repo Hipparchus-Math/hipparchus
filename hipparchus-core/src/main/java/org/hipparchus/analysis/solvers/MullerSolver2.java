@@ -43,7 +43,6 @@ import org.hipparchus.util.FastMath;
  * <p>
  * The formulas here do not use divided differences directly.</p>
  *
- * @since 1.2
  * @see MullerSolver
  */
 public class MullerSolver2 extends AbstractUnivariateSolver {

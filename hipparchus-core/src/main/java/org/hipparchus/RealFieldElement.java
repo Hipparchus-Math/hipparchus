@@ -23,7 +23,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * <a href="http://mathworld.wolfram.com/Field.html">field</a>.
  * @param <T> the type of the field elements
  * @see FieldElement
- * @since 3.2
  */
 public interface RealFieldElement<T> extends FieldElement<T> {
 
@@ -207,7 +206,6 @@ public interface RealFieldElement<T> extends FieldElement<T> {
 
     /** Base 10 logarithm.
      * @return base 10 logarithm of the instance
-     * @since 4.0
      */
     T log10();
 
@@ -285,7 +283,6 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * @param b Factors.
      * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
      * @throws MathIllegalArgumentException if arrays dimensions don't match
-     * @since 3.2
      */
     T linearCombination(T[] a, T[] b)
         throws MathIllegalArgumentException;
@@ -296,7 +293,6 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * @param b Factors.
      * @return <code>&Sigma;<sub>i</sub> a<sub>i</sub> b<sub>i</sub></code>.
      * @throws MathIllegalArgumentException if arrays dimensions don't match
-     * @since 3.2
      */
     T linearCombination(double[] a, T[] b)
         throws MathIllegalArgumentException;
@@ -311,7 +307,6 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * a<sub>2</sub>&times;b<sub>2</sub>
      * @see #linearCombination(Object, Object, Object, Object, Object, Object)
      * @see #linearCombination(Object, Object, Object, Object, Object, Object, Object, Object)
-     * @since 3.2
      */
     T linearCombination(T a1, T b1, T a2, T b2);
 
@@ -325,7 +320,6 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * a<sub>2</sub>&times;b<sub>2</sub>
      * @see #linearCombination(double, Object, double, Object, double, Object)
      * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
-     * @since 3.2
      */
     T linearCombination(double a1, T b1, double a2, T b2);
 
@@ -341,7 +335,6 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
      * @see #linearCombination(Object, Object, Object, Object)
      * @see #linearCombination(Object, Object, Object, Object, Object, Object, Object, Object)
-     * @since 3.2
      */
     T linearCombination(T a1, T b1, T a2, T b2, T a3, T b3);
 
@@ -357,7 +350,6 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
      * @see #linearCombination(double, Object, double, Object)
      * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
-     * @since 3.2
      */
     T linearCombination(double a1, T b1,  double a2, T b2, double a3, T b3);
 
@@ -376,7 +368,6 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * a<sub>4</sub>&times;b<sub>4</sub>
      * @see #linearCombination(Object, Object, Object, Object)
      * @see #linearCombination(Object, Object, Object, Object, Object, Object)
-     * @since 3.2
      */
     T linearCombination(T a1, T b1, T a2, T b2, T a3, T b3, T a4, T b4);
 
@@ -395,7 +386,6 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * a<sub>4</sub>&times;b<sub>4</sub>
      * @see #linearCombination(double, Object, double, Object)
      * @see #linearCombination(double, Object, double, Object, double, Object)
-     * @since 3.2
      */
     T linearCombination(double a1, T b1, double a2, T b2, double a3, T b3, double a4, T b4);
 

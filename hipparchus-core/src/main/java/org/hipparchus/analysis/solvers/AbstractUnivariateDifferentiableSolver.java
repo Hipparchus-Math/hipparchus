@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * Provide a default implementation for several functions useful to generic
  * solvers.
  *
- * @since 3.1
  */
 public abstract class AbstractUnivariateDifferentiableSolver
     extends BaseAbstractUnivariateSolver<UnivariateDifferentiableFunction>

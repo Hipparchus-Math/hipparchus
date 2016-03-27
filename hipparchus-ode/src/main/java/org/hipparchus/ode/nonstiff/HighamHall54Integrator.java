@@ -30,7 +30,6 @@ import org.hipparchus.util.FastMath;
  * (and automatic step initialization) and continuous output. This
  * method uses 7 functions evaluations per step.</p>
  *
- * @since 1.2
  */
 
 public class HighamHall54Integrator extends EmbeddedRungeKuttaIntegrator {

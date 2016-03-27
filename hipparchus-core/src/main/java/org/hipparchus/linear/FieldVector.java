@@ -50,7 +50,6 @@ import org.hipparchus.exception.NullArgumentException;
  * <p>
  *
  * @param <T> the type of the field elements
- * @since 2.0
  */
 public interface FieldVector<T extends FieldElement<T>>  {
 

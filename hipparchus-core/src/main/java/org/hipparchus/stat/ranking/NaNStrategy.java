@@ -32,7 +32,6 @@ package org.hipparchus.stat.ranking;
  * exception is thrown</li>
  * </ul>
  *
- * @since 2.0
  */
 public enum NaNStrategy {
 
@@ -49,7 +48,6 @@ public enum NaNStrategy {
     FIXED,
 
     /** NaNs result in an exception
-     * @since 3.1
      */
     FAILED
 }

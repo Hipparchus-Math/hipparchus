@@ -23,7 +23,6 @@ import org.hipparchus.util.MathArrays;
 /**
  * Generates a tricubic interpolating function.
  *
- * @since 3.4
  */
 public class TricubicInterpolator
     implements TrivariateGridInterpolator {

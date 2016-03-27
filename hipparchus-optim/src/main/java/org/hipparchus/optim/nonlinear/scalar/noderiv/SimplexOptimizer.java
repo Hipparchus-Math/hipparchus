@@ -84,7 +84,6 @@ import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
  *  {@link MathRuntimeException} if bounds are passed to it.
  * </p>
  *
- * @since 3.0
  */
 public class SimplexOptimizer extends MultivariateOptimizer {
     /** Simplex update rule. */

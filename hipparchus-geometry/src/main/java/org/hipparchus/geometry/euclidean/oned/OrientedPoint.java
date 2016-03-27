@@ -24,7 +24,6 @@ import org.hipparchus.geometry.partitioning.Hyperplane;
  * <p>An hyperplane in 1D is a simple point, its orientation being a
  * boolean.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
- * @since 3.0
  */
 public class OrientedPoint implements Hyperplane<Euclidean1D> {
 
@@ -42,7 +41,6 @@ public class OrientedPoint implements Hyperplane<Euclidean1D> {
      * @param direct if true, the plus side of the hyperplane is towards
      * abscissas greater than {@code location}
      * @param tolerance tolerance below which points are considered to belong to the hyperplane
-     * @since 3.3
      */
     public OrientedPoint(final Vector1D location, final boolean direct, final double tolerance) {
         this.location  = location;
@@ -107,7 +105,6 @@ public class OrientedPoint implements Hyperplane<Euclidean1D> {
     }
 
     /** {@inheritDoc}
-     * @since 3.3
      */
     @Override
     public Point<Euclidean1D> project(Point<Euclidean1D> point) {
@@ -115,7 +112,6 @@ public class OrientedPoint implements Hyperplane<Euclidean1D> {
     }
 
     /** {@inheritDoc}
-     * @since 3.3
      */
     @Override
     public double getTolerance() {

@@ -37,7 +37,6 @@ import org.hipparchus.util.FastMath;
  * approximation and be able to solve all roots from that point.
  * The algorithm requires a bracketing condition.
  *
- * @since 1.2
  */
 public class LaguerreSolver extends AbstractPolynomialSolver {
     /** Default absolute accuracy. */
@@ -178,7 +177,6 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * @throws NullArgumentException if the {@code coefficients} is
      * {@code null}.
      * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
-     * @since 3.1
      */
     public Complex[] solveAllComplex(double[] coefficients,
                                      double initial)
@@ -207,7 +205,6 @@ public class LaguerreSolver extends AbstractPolynomialSolver {
      * @throws NullArgumentException if the {@code coefficients} is
      * {@code null}.
      * @throws MathIllegalArgumentException if the {@code coefficients} array is empty.
-     * @since 3.1
      */
     public Complex solveComplex(double[] coefficients,
                                 double initial)

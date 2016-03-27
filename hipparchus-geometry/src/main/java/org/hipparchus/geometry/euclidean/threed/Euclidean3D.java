@@ -24,7 +24,6 @@ import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
 
 /**
  * This class implements a three-dimensional space.
- * @since 3.0
  */
 public class Euclidean3D implements Serializable, Space {
 

@@ -26,7 +26,6 @@ import org.hipparchus.linear.RealMatrix;
 
 /**
  * Returns the covariance matrix of the available vectors.
- * @since 1.2
  */
 public class VectorialCovariance implements Serializable {
 

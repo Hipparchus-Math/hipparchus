@@ -22,7 +22,6 @@ import org.hipparchus.analysis.BivariateFunction;
 /**
  * Divide the first operand by the second.
  *
- * @since 3.0
  */
 public class Divide implements BivariateFunction {
     /** {@inheritDoc} */

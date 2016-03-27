@@ -50,7 +50,6 @@ import org.hipparchus.util.MathUtils;
  * more of these threads invoke property setters, external synchronization must
  * be provided to ensure correct results.</p>
  *
- * @since 2.1
  */
 public class SemiVariance extends AbstractUnivariateStatistic implements Serializable {
 

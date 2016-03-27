@@ -22,7 +22,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Represents an interval estimate of a population parameter.
  *
- * @since 3.3
  */
 public class ConfidenceInterval {
 

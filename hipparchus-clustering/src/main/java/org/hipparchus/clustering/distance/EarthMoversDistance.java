@@ -25,7 +25,6 @@ import org.hipparchus.util.MathArrays;
  *
  * @see <a href="http://en.wikipedia.org/wiki/Earth_mover's_distance">Earth Mover's distance (Wikipedia)</a>
  *
- * @since 3.3
  */
 public class EarthMoversDistance implements DistanceMeasure {
 

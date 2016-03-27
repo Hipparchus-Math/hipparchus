@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * {@code ceil} function.
  *
- * @since 3.0
  */
 public class Ceil implements UnivariateFunction {
     /** {@inheritDoc} */

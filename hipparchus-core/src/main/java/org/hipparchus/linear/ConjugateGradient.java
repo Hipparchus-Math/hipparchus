@@ -73,7 +73,6 @@ import org.hipparchus.util.IterationManager;
  * Numerical Analysis 13: 56-80, 2002</dd>
  * </dl>
  *
- * @since 3.0
  */
 public class ConjugateGradient
     extends PreconditionedIterativeLinearSolver {

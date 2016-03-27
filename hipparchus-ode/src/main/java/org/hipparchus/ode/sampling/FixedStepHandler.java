@@ -33,7 +33,6 @@ package org.hipparchus.ode.sampling;
  *
  * @see StepHandler
  * @see StepNormalizer
- * @since 1.2
  */
 
 public interface FixedStepHandler  {

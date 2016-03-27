@@ -34,7 +34,6 @@ import org.hipparchus.util.FastMath;
  * A more flexible version, the generalised logistic, is implemented
  * by the {@link Logistic} class.
  *
- * @since 3.0
  */
 public class Sigmoid implements UnivariateDifferentiableFunction {
     /** Lower asymptote. */
@@ -153,7 +152,6 @@ public class Sigmoid implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)

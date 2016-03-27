@@ -25,7 +25,6 @@ import org.hipparchus.util.FastMath;
  * @see <a
  *      href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Agresti-Coull_Interval">
  *      Agresti-Coull interval (Wikipedia)</a>
- * @since 3.3
  */
 public class AgrestiCoullInterval implements BinomialConfidenceInterval {
 

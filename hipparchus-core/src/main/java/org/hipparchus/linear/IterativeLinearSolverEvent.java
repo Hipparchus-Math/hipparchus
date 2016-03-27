@@ -24,7 +24,6 @@ import org.hipparchus.util.IterationEvent;
  * This is the base class for all events occurring during the iterations of a
  * {@link IterativeLinearSolver}.
  *
- * @since 3.0
  */
 public abstract class IterativeLinearSolverEvent
     extends IterationEvent {

@@ -21,7 +21,6 @@ import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 
 /** Field for Decimal floating point instances.
- * @since 2.2
  */
 public class DfpField implements Field<Dfp> {
 

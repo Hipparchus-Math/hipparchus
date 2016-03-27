@@ -40,7 +40,6 @@ package org.hipparchus.analysis.solvers;
  * BIT Numerical Mathematics, volume 12, number 4, pages 503-508, Springer,
  * 1972.</p>
  *
- * @since 3.0
  */
 public class PegasusSolver extends BaseSecantSolver {
 

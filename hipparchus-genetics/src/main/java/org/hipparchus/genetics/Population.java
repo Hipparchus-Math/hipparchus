@@ -22,7 +22,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * A collection of chromosomes that facilitates generational evolution.
  *
- * @since 2.0
  */
 public interface Population extends Iterable<Chromosome> {
     /**

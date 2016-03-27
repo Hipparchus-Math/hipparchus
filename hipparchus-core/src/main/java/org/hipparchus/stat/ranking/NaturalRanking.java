@@ -66,7 +66,6 @@ import org.hipparchus.util.FastMath;
  * <td>MAXIMUM</td>
  * <td>(6, 5, 7, 8, 5, 9, 2, 2, 5)</td></tr></table></p>
  *
- * @since 2.0
  */
 public class NaturalRanking implements RankingAlgorithm {
 

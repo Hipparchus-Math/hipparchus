@@ -20,7 +20,6 @@ package org.hipparchus.linear;
 
 /**
  * Interface defining very basic matrix operations.
- * @since 2.0
  */
 public interface AnyMatrix {
 

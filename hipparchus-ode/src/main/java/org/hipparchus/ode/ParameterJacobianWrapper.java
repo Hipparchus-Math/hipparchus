@@ -27,7 +27,6 @@ import org.hipparchus.exception.MathIllegalStateException;
 /** Wrapper class to compute Jacobian matrices by finite differences for ODE
  *  which do not compute them by themselves.
  *
- * @since 3.0
  */
 class ParameterJacobianWrapper implements ParameterJacobianProvider {
 

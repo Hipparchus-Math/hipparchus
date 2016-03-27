@@ -36,7 +36,6 @@ import org.hipparchus.util.FastMath;
  * has been set (see {@link #SimpleUnivariateValueChecker(double,double,int)
  * this constructor}).
  *
- * @since 3.1
  */
 public class SimpleUnivariateValueChecker
     extends AbstractConvergenceChecker<UnivariatePointValuePair> {
@@ -81,7 +80,6 @@ public class SimpleUnivariateValueChecker
      * @param maxIter Maximum iteration count.
      * @throws MathIllegalArgumentException if {@code maxIter <= 0}.
      *
-     * @since 3.1
      */
     public SimpleUnivariateValueChecker(final double relativeThreshold,
                                         final double absoluteThreshold,

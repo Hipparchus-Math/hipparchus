@@ -39,7 +39,6 @@ public interface RealMatrix extends AnyMatrix {
      * @return a new matrix of the same type as the instance
      * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
-     * @since 2.0
      */
     RealMatrix createMatrix(int rowDimension, int columnDimension)
         throws MathIllegalArgumentException;
@@ -248,7 +247,6 @@ public interface RealMatrix extends AnyMatrix {
     * @throws MathIllegalArgumentException if {@code subMatrix} is not rectangular
     * (not all rows have the same length) or empty.
     * @throws NullArgumentException if {@code subMatrix} is {@code null}.
-    * @since 2.0
     */
     void setSubMatrix(double[][] subMatrix, int row, int column)
         throws MathIllegalArgumentException, NullArgumentException;
@@ -420,7 +418,6 @@ public interface RealMatrix extends AnyMatrix {
      * @param column Column index of entry to be set.
      * @param value the new value of the entry.
      * @throws MathIllegalArgumentException if the row or column index is not valid
-     * @since 2.0
      */
     void setEntry(int row, int column, double value) throws MathIllegalArgumentException;
 
@@ -432,7 +429,6 @@ public interface RealMatrix extends AnyMatrix {
      * @param column Column index of the entry to be modified.
      * @param increment value to add to the matrix entry.
      * @throws MathIllegalArgumentException if the row or column index is not valid.
-     * @since 2.0
      */
     void addToEntry(int row, int column, double increment) throws MathIllegalArgumentException;
 
@@ -444,7 +440,6 @@ public interface RealMatrix extends AnyMatrix {
      * @param column Column index of the entry to be modified.
      * @param factor Multiplication factor for the matrix entry.
      * @throws MathIllegalArgumentException if the row or column index is not valid.
-     * @since 2.0
      */
     void multiplyEntry(int row, int column, double factor) throws MathIllegalArgumentException;
 

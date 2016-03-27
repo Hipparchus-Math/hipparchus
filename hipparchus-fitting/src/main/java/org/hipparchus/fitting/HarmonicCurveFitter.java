@@ -43,7 +43,6 @@ import org.hipparchus.util.FastMath;
  * </ul>
  * The optimal values will be returned in the same order.
  *
- * @since 3.3
  */
 public class HarmonicCurveFitter extends AbstractCurveFitter {
     /** Parametric function to be fitted. */

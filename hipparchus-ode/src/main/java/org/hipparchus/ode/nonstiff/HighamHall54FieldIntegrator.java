@@ -36,7 +36,6 @@ import org.hipparchus.util.MathUtils;
  * method uses 7 functions evaluations per step.</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public class HighamHall54FieldIntegrator<T extends RealFieldElement<T>>

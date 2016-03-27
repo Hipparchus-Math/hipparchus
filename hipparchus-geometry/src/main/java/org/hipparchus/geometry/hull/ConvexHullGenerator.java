@@ -31,7 +31,6 @@ import org.hipparchus.geometry.Space;
  * @see <a href="http://en.wikipedia.org/wiki/Convex_hull">Convex Hull (Wikipedia)</a>
  * @see <a href="http://mathworld.wolfram.com/ConvexHull.html">Convex Hull (MathWorld)</a>
  *
- * @since 3.3
  */
 public interface ConvexHullGenerator<S extends Space, P extends Point<S>> {
 

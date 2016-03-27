@@ -31,7 +31,6 @@ import org.hipparchus.util.Pair;
  * @param <T> Type of the number used to represent the points and weights of
  * the quadrature rules.
  *
- * @since 3.1
  */
 public abstract class BaseRuleFactory<T extends Number> {
     /** List of points and weights, indexed by the order of the rule. */

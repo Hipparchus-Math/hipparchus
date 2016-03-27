@@ -32,7 +32,6 @@ import org.hipparchus.random.RandomVectorGenerator;
  * @param <PAIR> Type of the point/value pair returned by the optimization
  * algorithm.
  *
- * @since 3.0
  */
 public abstract class BaseMultiStartMultivariateOptimizer<PAIR>
     extends BaseMultivariateOptimizer<PAIR> {

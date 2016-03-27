@@ -36,7 +36,6 @@ import org.hipparchus.random.RandomGenerator;
  * turn with different starting points (trying to avoid being trapped
  * in a local extremum when looking for a global one).
  *
- * @since 3.0
  */
 public class MultiStartUnivariateOptimizer
     extends UnivariateOptimizer {

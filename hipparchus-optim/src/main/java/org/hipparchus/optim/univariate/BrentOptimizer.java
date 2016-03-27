@@ -38,7 +38,6 @@ import org.hipparchus.util.Precision;
  *  <li>to ensure that the best point encountered is the one returned.</li>
  * </ul>
  *
- * @since 2.0
  */
 public class BrentOptimizer extends UnivariateOptimizer {
     /**

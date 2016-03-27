@@ -26,7 +26,6 @@ import org.hipparchus.util.MathArrays;
  * matrix A<sub>ij</sub>, this preconditioner is
  * M = diag(1 / A<sub>11</sub>, 1 / A<sub>22</sub>, &hellip;).
  *
- * @since 3.0
  */
 public class JacobiPreconditioner extends RealLinearOperator {
 
@@ -109,7 +108,6 @@ public class JacobiPreconditioner extends RealLinearOperator {
      * P = diag(1 / &radic;A<sub>11</sub>, 1 / &radic;A<sub>22</sub>, &hellip;).
      *
      * @return the square root of {@code this} preconditioner
-     * @since 3.1
      */
     public RealLinearOperator sqrt() {
         final RealVector sqrtDiag = diag.map(new Sqrt());

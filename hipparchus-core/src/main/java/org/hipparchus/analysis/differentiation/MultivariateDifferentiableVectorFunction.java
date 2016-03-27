@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Extension of {@link MultivariateVectorFunction} representing a
  * multivariate differentiable vectorial function.
- * @since 3.1
  */
 public interface MultivariateDifferentiableVectorFunction
     extends MultivariateVectorFunction {

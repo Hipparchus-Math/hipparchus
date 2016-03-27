@@ -19,7 +19,6 @@ package org.hipparchus.genetics;
 /**
  * Fitness of a chromosome.
  *
- * @since 2.0
  */
 public interface Fitness {
 

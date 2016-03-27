@@ -47,7 +47,6 @@ import org.hipparchus.util.FastMath;
  * This class provides conversion of coordinates and also of gradient and Hessian
  * between spherical and Cartesian coordinates.
  * </p>
- * @since 3.2
  */
 public class SphericalCoordinates implements Serializable {
 

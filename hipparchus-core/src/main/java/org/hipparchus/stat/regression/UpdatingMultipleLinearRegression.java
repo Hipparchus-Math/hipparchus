@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * become available, they can be added to the regression  model and an updated
  * estimate regression statistics can be calculated.
  *
- * @since 3.0
  */
 public interface UpdatingMultipleLinearRegression {
 

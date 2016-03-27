@@ -36,7 +36,6 @@ import org.hipparchus.util.OpenIntToDoubleHashMap.Iterator;
  *  thus give incorrect results, like multiplications, divisions or
  *  functions mapping.
  * </p>
- * @since 2.0
  */
 public class OpenMapRealVector extends SparseRealVector
     implements Serializable {
@@ -221,7 +220,6 @@ public class OpenMapRealVector extends SparseRealVector
      * @param value Value to test
      * @return {@code true} if this value is within epsilon to zero,
      * {@code false} otherwise.
-     * @since 2.1
      */
     protected boolean isDefaultValue(double value) {
         return FastMath.abs(value) < epsilon;
@@ -305,7 +303,6 @@ public class OpenMapRealVector extends SparseRealVector
 
     /**
      * {@inheritDoc}
-     * @since 2.1
      */
     @Override
     public OpenMapRealVector copy() {
@@ -721,7 +718,6 @@ public class OpenMapRealVector extends SparseRealVector
     /**
      *
      * @return the percentage of none zero elements as a decimal percent.
-     * @since 2.2
      */
     public double getSparsity() {
         return (double)entries.size()/(double)getDimension();

@@ -21,7 +21,6 @@ import org.hipparchus.exception.MathRuntimeException;
 
 /** Enumerate for {@link EventFilter filtering events}.
  *
- * @since 3.2
  */
 
 public enum FilterType {

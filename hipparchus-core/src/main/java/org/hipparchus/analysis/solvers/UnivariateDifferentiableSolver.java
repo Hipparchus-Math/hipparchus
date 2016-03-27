@@ -23,7 +23,6 @@ import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
  * Interface for (univariate real) rootfinding algorithms.
  * Implementations will search for only one zero in the given interval.
  *
- * @since 3.1
  */
 public interface UnivariateDifferentiableSolver
     extends BaseUnivariateSolver<UnivariateDifferentiableFunction> {}

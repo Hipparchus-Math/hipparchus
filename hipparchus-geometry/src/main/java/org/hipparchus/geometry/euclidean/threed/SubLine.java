@@ -28,7 +28,6 @@ import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.Region.Location;
 
 /** This class represents a subset of a {@link Line}.
- * @since 3.0
  */
 public class SubLine {
 
@@ -52,7 +51,6 @@ public class SubLine {
      * @param end end point
      * @param tolerance tolerance below which points are considered identical
      * @exception MathIllegalArgumentException if the points are equal
-     * @since 3.3
      */
     public SubLine(final Vector3D start, final Vector3D end, final double tolerance)
         throws MathIllegalArgumentException {

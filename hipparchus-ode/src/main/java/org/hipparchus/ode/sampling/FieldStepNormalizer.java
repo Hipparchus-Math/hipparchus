@@ -88,7 +88,6 @@ import org.hipparchus.util.Precision;
  * @see FieldFixedStepHandler
  * @see StepNormalizerMode
  * @see StepNormalizerBounds
- * @since 3.6
  */
 
 public class FieldStepNormalizer<T extends RealFieldElement<T>> implements FieldStepHandler<T> {
@@ -130,7 +129,6 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * @param h fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
      * @param mode step normalizer mode to use
-     * @since 3.0
      */
     public FieldStepNormalizer(final double h, final FieldFixedStepHandler<T> handler,
                                final StepNormalizerMode mode) {
@@ -142,7 +140,6 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * @param h fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
      * @param bounds step normalizer bounds setting to use
-     * @since 3.0
      */
     public FieldStepNormalizer(final double h, final FieldFixedStepHandler<T> handler,
                                final StepNormalizerBounds bounds) {
@@ -154,7 +151,6 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * @param handler fixed time step handler to wrap
      * @param mode step normalizer mode to use
      * @param bounds step normalizer bounds setting to use
-     * @since 3.0
      */
     public FieldStepNormalizer(final double h, final FieldFixedStepHandler<T> handler,
                                final StepNormalizerMode mode, final StepNormalizerBounds bounds) {

@@ -33,7 +33,6 @@ import org.junit.Test;
  * a naive method may be used). Methods are also provided to test that invalid
  * parameters throw the expected exceptions.
  *
- * @since 3.0
  */
 public abstract class RealTransformerAbstractTest {
 

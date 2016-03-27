@@ -52,7 +52,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *
  * @see GillFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class GillFieldStepInterpolator<T extends RealFieldElement<T>>

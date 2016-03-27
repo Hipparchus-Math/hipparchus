@@ -26,7 +26,6 @@ import org.hipparchus.linear.DiagonalMatrix;
 /**
  * Fits points to a user-defined {@link ParametricUnivariateFunction function}.
  *
- * @since 3.4
  */
 public class SimpleCurveFitter extends AbstractCurveFitter {
     /** Function to fit. */

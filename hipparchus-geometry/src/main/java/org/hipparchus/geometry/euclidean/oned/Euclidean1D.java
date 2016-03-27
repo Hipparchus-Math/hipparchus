@@ -25,7 +25,6 @@ import org.hipparchus.geometry.Space;
 
 /**
  * This class implements a one-dimensional space.
- * @since 3.0
  */
 public class Euclidean1D implements Serializable, Space {
 

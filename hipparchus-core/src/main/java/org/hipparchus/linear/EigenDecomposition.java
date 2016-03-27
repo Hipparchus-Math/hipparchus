@@ -73,7 +73,6 @@ import org.hipparchus.util.Precision;
  *
  * @see <a href="http://mathworld.wolfram.com/EigenDecomposition.html">MathWorld</a>
  * @see <a href="http://en.wikipedia.org/wiki/Eigendecomposition_of_a_matrix">Wikipedia</a>
- * @since 2.0 (changed to concrete class in 3.0)
  */
 public class EigenDecomposition {
     /** Internally used epsilon criteria. */
@@ -113,7 +112,6 @@ public class EigenDecomposition {
      * @throws MathIllegalStateException if the algorithm fails to converge.
      * @throws MathRuntimeException if the decomposition of a general matrix
      * results in a matrix with zero norm
-     * @since 3.1
      */
     public EigenDecomposition(final RealMatrix matrix)
         throws MathRuntimeException {
@@ -135,7 +133,6 @@ public class EigenDecomposition {
      * @param main Main diagonal of the symmetric tridiagonal form.
      * @param secondary Secondary of the tridiagonal form.
      * @throws MathIllegalStateException if the algorithm fails to converge.
-     * @since 3.1
      */
     public EigenDecomposition(final double[] main, final double[] secondary) {
         isSymmetric = true;
@@ -232,7 +229,6 @@ public class EigenDecomposition {
      * element is not equal to zero.
      *
      * @return {@code true} if the eigen values are complex, {@code false} otherwise
-     * @since 3.1
      */
     public boolean hasComplexEigenvalues() {
         for (int i = 0; i < imagEigenvalues.length; i++) {
@@ -335,7 +331,6 @@ public class EigenDecomposition {
      * @return the square-root of the matrix.
      * @throws MathRuntimeException if the matrix is not
      * symmetric or not positive definite.
-     * @since 3.1
      */
     public RealMatrix getSquareRoot() {
         if (!isSymmetric) {

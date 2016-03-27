@@ -59,7 +59,6 @@ import org.hipparchus.util.MathUtils;
  * @see org.hipparchus.ode.nonstiff.AdamsBashforthFieldIntegrator
  * @see org.hipparchus.ode.nonstiff.AdamsMoultonFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
     extends AdaptiveStepsizeFieldIntegrator<T> {

@@ -21,7 +21,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /** Interface to compute by finite difference Jacobian matrix for some parameter
  *  when computing {@link JacobianMatrices partial derivatives equations}.
  *
- * @since 3.0
  */
 
 public interface ParameterizedODE extends Parameterizable {

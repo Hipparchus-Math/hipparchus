@@ -28,7 +28,6 @@ import org.hipparchus.util.MathArrays;
 /**
  * Utilities for manipulating function objects.
  *
- * @since 3.0
  */
 public class FunctionUtils {
     /**
@@ -67,7 +66,6 @@ public class FunctionUtils {
      *
      * @param f List of functions.
      * @return the composite function.
-     * @since 3.1
      */
     public static UnivariateDifferentiableFunction compose(final UnivariateDifferentiableFunction ... f) {
         return new UnivariateDifferentiableFunction() {
@@ -120,7 +118,6 @@ public class FunctionUtils {
      *
      * @param f List of functions.
      * @return a function that computes the sum of the functions.
-     * @since 3.1
      */
     public static UnivariateDifferentiableFunction add(final UnivariateDifferentiableFunction ... f) {
         return new UnivariateDifferentiableFunction() {
@@ -176,7 +173,6 @@ public class FunctionUtils {
      *
      * @param f List of functions.
      * @return a function that computes the product of the functions.
-     * @since 3.1
      */
     public static UnivariateDifferentiableFunction multiply(final UnivariateDifferentiableFunction ... f) {
         return new UnivariateDifferentiableFunction() {

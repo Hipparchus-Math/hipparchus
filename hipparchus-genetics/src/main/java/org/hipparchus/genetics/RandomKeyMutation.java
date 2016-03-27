@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * Mutation operator for {@link RandomKey}s. Changes a randomly chosen element
  * of the array representation to a random value uniformly distributed in [0,1].
  *
- * @since 2.0
  */
 public class RandomKeyMutation implements MutationPolicy {
 

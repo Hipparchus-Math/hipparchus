@@ -41,7 +41,6 @@ import org.hipparchus.util.Precision;
 
 /**
  * Base class managing common boilerplate for all integrators.
- * @since 2.0
  */
 public abstract class AbstractIntegrator implements FirstOrderIntegrator {
 
@@ -217,7 +216,6 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
 
     /** Get the differential equations to integrate.
      * @return differential equations to integrate
-     * @since 3.2
      */
     protected ExpandableStatefulODE getExpandable() {
         return expandable;
@@ -225,7 +223,6 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
 
     /** Get the evaluations counter.
      * @return evaluations counter
-     * @since 3.6
      */
     protected Incrementor getCounter() {
         return evaluations;
@@ -303,7 +300,6 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
      * {@code false} before they start integration, so a proper lazy
      * initialization is done automatically on the first step.</p>
      * @param stateInitialized new value for the flag
-     * @since 2.2
      */
     protected void setStateInitialized(final boolean stateInitialized) {
         this.statesInitialized = stateInitialized;
@@ -320,7 +316,6 @@ public abstract class AbstractIntegrator implements FirstOrderIntegrator {
      * the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
-     * @since 2.2
      */
     protected double acceptStep(final AbstractStepInterpolator interpolator,
                                 final double[] y, final double[] yDot, final double tEnd)

@@ -41,7 +41,6 @@ package org.hipparchus.ode;
  * @see SecondOrderIntegrator
  * @see FirstOrderConverter
  * @see FirstOrderDifferentialEquations
- * @since 1.2
  */
 
 public interface SecondOrderDifferentialEquations {

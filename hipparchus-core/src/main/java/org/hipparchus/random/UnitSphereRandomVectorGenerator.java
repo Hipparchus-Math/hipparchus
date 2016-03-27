@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * Generate random vectors isotropically located on the surface of a sphere.
  *
- * @since 2.1
  */
 public class UnitSphereRandomVectorGenerator
     implements RandomVectorGenerator {

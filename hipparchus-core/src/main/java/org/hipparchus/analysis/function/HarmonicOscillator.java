@@ -29,7 +29,6 @@ import org.hipparchus.util.FastMath;
  * <a href="http://en.wikipedia.org/wiki/Harmonic_oscillator">
  *  simple harmonic oscillator</a> function.
  *
- * @since 3.0
  */
 public class HarmonicOscillator implements UnivariateDifferentiableFunction {
     /** Amplitude. */
@@ -150,7 +149,6 @@ public class HarmonicOscillator implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)

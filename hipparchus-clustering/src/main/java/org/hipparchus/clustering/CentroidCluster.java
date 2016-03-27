@@ -23,7 +23,6 @@ package org.hipparchus.clustering;
  * of the original data set.
  *
  * @param <T> the type of points that can be clustered
- * @since 3.2
  */
 public class CentroidCluster<T extends Clusterable> extends Cluster<T> {
 

@@ -80,7 +80,6 @@ import org.hipparchus.util.FastMath;
  * DAMAGE.</strong></td></tr>
  * </table>
 
- * @since 2.0
 
  */
 public class MersenneTwister extends BitsStreamGenerator implements Serializable {

@@ -24,7 +24,6 @@ import org.hipparchus.util.MathArrays;
 /**
  * Generates a piecewise-bicubic interpolating function.
  *
- * @since 2.2
  */
 public class PiecewiseBicubicSplineInterpolator
     implements BivariateGridInterpolator {

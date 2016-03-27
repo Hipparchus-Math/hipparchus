@@ -29,7 +29,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * Instances of this class are guaranteed to be immutable.
  * </p>
  * @see SecondaryEquations
- * @since 3.0
  */
 public class EquationsMapper implements Serializable {
 

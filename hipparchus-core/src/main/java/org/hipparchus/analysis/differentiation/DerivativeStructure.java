@@ -56,7 +56,6 @@ import org.hipparchus.util.MathUtils;
  * differentiator}.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  * @see DSCompiler
- * @since 3.1
  */
 public class DerivativeStructure implements RealFieldElement<DerivativeStructure>, Serializable {
 
@@ -241,14 +240,12 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param c value of the constant
      * @return a constant compatible with instance order and number of parameters
      * @see #DerivativeStructure(int, int, double)
-     * @since 3.3
      */
     public DerivativeStructure createConstant(final double c) {
         return new DerivativeStructure(getFreeParameters(), getOrder(), c);
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public double getReal() {
@@ -287,7 +284,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure add(final double a) {
@@ -310,7 +306,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure subtract(final double a) {
@@ -337,7 +332,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure multiply(final double a) {
@@ -362,7 +356,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure divide(final double a) {
@@ -397,7 +390,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure remainder(final DerivativeStructure a)
@@ -419,7 +411,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure abs() {
@@ -432,7 +423,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure ceil() {
@@ -442,7 +432,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure floor() {
@@ -452,7 +441,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure rint() {
@@ -468,7 +456,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure signum() {
@@ -478,7 +465,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure copySign(final DerivativeStructure sign){
@@ -491,7 +477,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure copySign(final double sign) {
@@ -516,7 +501,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure scalb(final int n) {
@@ -530,7 +514,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure hypot(final DerivativeStructure y)
@@ -592,7 +575,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @return sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     public static DerivativeStructure hypot(final DerivativeStructure x, final DerivativeStructure y)
         throws MathIllegalArgumentException {
@@ -627,7 +609,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure sqrt() {
@@ -635,7 +616,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure cbrt() {
@@ -643,7 +623,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure rootN(final int n) {
@@ -682,7 +661,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param a number to exponentiate
      * @param x power to apply
      * @return a<sup>x</sup>
-     * @since 3.3
      */
     public static DerivativeStructure pow(final double a, final DerivativeStructure x) {
         final DerivativeStructure result = new DerivativeStructure(x.compiler);
@@ -691,7 +669,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure pow(final double p) {
@@ -701,7 +678,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure pow(final int n) {
@@ -713,7 +689,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure pow(final DerivativeStructure e)
@@ -725,7 +700,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure exp() {
@@ -735,7 +709,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure expm1() {
@@ -745,7 +718,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure log() {
@@ -755,7 +727,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure log1p() {
@@ -775,7 +746,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure cos() {
@@ -785,7 +755,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure sin() {
@@ -795,7 +764,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure tan() {
@@ -805,7 +773,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure acos() {
@@ -815,7 +782,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure asin() {
@@ -825,7 +791,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure atan() {
@@ -835,7 +800,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure atan2(final DerivativeStructure x)
@@ -852,7 +816,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @return atan2(y, x)
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     public static DerivativeStructure atan2(final DerivativeStructure y, final DerivativeStructure x)
         throws MathIllegalArgumentException {
@@ -860,7 +823,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure cosh() {
@@ -870,7 +832,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure sinh() {
@@ -880,7 +841,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure tanh() {
@@ -890,7 +850,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure acosh() {
@@ -900,7 +859,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure asinh() {
@@ -910,7 +868,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     }
 
     /** {@inheritDoc}
-     * @since 3.2
      */
     @Override
     public DerivativeStructure atanh() {
@@ -953,7 +910,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure linearCombination(final DerivativeStructure[] a, final DerivativeStructure[] b)
@@ -986,7 +942,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure linearCombination(final double[] a, final DerivativeStructure[] b)
@@ -1015,7 +970,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure linearCombination(final DerivativeStructure a1, final DerivativeStructure b1,
@@ -1039,7 +993,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure linearCombination(final double a1, final DerivativeStructure b1,
@@ -1063,7 +1016,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure linearCombination(final DerivativeStructure a1, final DerivativeStructure b1,
@@ -1089,7 +1041,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure linearCombination(final double a1, final DerivativeStructure b1,
@@ -1115,7 +1066,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure linearCombination(final DerivativeStructure a1, final DerivativeStructure b1,
@@ -1143,7 +1093,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc}
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
-     * @since 3.2
      */
     @Override
     public DerivativeStructure linearCombination(final double a1, final DerivativeStructure b1,
@@ -1176,7 +1125,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * </p>
      * @param other Object to test for equality to this
      * @return true if two derivative structures are equal
-     * @since 3.2
      */
     @Override
     public boolean equals(Object other) {
@@ -1199,7 +1147,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /**
      * Get a hashCode for the derivative structure.
      * @return a hash code value for this object
-     * @since 3.2
      */
     @Override
     public int hashCode() {

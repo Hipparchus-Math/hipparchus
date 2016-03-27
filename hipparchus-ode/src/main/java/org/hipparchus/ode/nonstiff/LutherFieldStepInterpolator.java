@@ -32,7 +32,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *
  * @see LutherFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class LutherFieldStepInterpolator<T extends RealFieldElement<T>>

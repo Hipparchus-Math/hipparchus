@@ -34,7 +34,6 @@ import org.hipparchus.stat.ranking.RankingAlgorithm;
  * strategies for handling NaNs and ties in the data (NaNs maximal, ties averaged).
  * The ranking algorithm can be set using a constructor argument.
  *
- * @since 2.0
  */
 public class SpearmansCorrelation {
 
@@ -60,7 +59,6 @@ public class SpearmansCorrelation {
      * @param rankingAlgorithm ranking algorithm
      * @throws MathIllegalArgumentException if the provided {@link RankingAlgorithm} is of
      * type {@link NaturalRanking} and uses a {@link NaNStrategy#REMOVED} strategy
-     * @since 3.1
      */
     public SpearmansCorrelation(final RankingAlgorithm rankingAlgorithm)
         throws MathIllegalArgumentException {

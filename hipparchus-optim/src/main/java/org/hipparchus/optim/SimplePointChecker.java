@@ -37,7 +37,6 @@ import org.hipparchus.util.Pair;
  * @param <PAIR> Type of the (point, value) pair.
  * The type of the "value" part of the pair (not used by this class).
  *
- * @since 3.0
  */
 public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
     extends AbstractConvergenceChecker<PAIR> {
@@ -80,7 +79,6 @@ public class SimplePointChecker<PAIR extends Pair<double[], ? extends Object>>
      * @param maxIter Maximum iteration count.
      * @throws MathIllegalArgumentException if {@code maxIter <= 0}.
      *
-     * @since 3.1
      */
     public SimplePointChecker(final double relativeThreshold,
                               final double absoluteThreshold,

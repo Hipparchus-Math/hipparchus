@@ -31,7 +31,6 @@ import org.hipparchus.geometry.partitioning.SubHyperplane.SplitSubHyperplane;
 
  * @param <S> Type of the space.
 
- * @since 3.0
  */
 public class RegionFactory<S extends Space> {
 

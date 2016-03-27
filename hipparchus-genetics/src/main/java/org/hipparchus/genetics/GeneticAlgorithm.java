@@ -24,7 +24,6 @@ import org.hipparchus.random.RandomGenerator;
  * Implementation of a genetic algorithm. All factors that govern the operation
  * of the algorithm can be configured for a specific problem.
  *
- * @since 2.0
  */
 public class GeneticAlgorithm {
 
@@ -223,7 +222,6 @@ public class GeneticAlgorithm {
      * Returns the number of generations evolved to reach {@link StoppingCondition} in the last run.
      *
      * @return number of generations evolved
-     * @since 2.1
      */
     public int getGenerationsEvolved() {
         return generationsEvolved;

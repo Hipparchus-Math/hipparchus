@@ -23,7 +23,6 @@ import org.hipparchus.util.MathArrays;
 /**
  * Calculates the Canberra distance between two points.
  *
- * @since 3.2
  */
 public class CanberraDistance implements DistanceMeasure {
 

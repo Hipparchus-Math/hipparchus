@@ -46,7 +46,6 @@ import org.hipparchus.util.FastMath;
  * @see <a href="http://mathworld.wolfram.com/QRDecomposition.html">MathWorld</a>
  * @see <a href="http://en.wikipedia.org/wiki/QR_decomposition">Wikipedia</a>
  *
- * @since 1.2 (changed to concrete class in 3.0)
  */
 public class QRDecomposition {
     /**
@@ -106,7 +105,6 @@ public class QRDecomposition {
 
     /** Decompose matrix.
      * @param matrix transposed matrix
-     * @since 3.2
      */
     protected void decompose(double[][] matrix) {
         for (int minor = 0; minor < FastMath.min(matrix.length, matrix[0].length); minor++) {
@@ -117,7 +115,6 @@ public class QRDecomposition {
     /** Perform Householder reflection for a minor A(minor, minor) of A.
      * @param minor minor index
      * @param matrix transposed matrix
-     * @since 3.2
      */
     protected void performHouseholderReflection(int minor, double[][] matrix) {
 

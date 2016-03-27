@@ -43,7 +43,6 @@ package org.hipparchus.ode.nonstiff;
  * @see GillIntegrator
  * @see ThreeEighthesIntegrator
  * @see LutherIntegrator
- * @since 1.2
  */
 
 public class EulerIntegrator extends RungeKuttaIntegrator {

@@ -24,7 +24,6 @@ import org.hipparchus.util.Pair;
  * A interface for functions that compute a vector of values and can compute their
  * derivatives (Jacobian).
  *
- * @since 3.3
  */
 public interface MultivariateJacobianFunction {
 

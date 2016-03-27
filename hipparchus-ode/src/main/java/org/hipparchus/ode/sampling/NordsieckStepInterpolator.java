@@ -35,7 +35,6 @@ import org.hipparchus.util.FastMath;
  *
  * @see org.hipparchus.ode.nonstiff.AdamsBashforthIntegrator
  * @see org.hipparchus.ode.nonstiff.AdamsMoultonIntegrator
- * @since 2.0
  */
 
 public class NordsieckStepInterpolator extends AbstractStepInterpolator {

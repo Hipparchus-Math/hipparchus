@@ -31,7 +31,6 @@ import org.hipparchus.util.FastMath;
  * performant implementations of the other methods if the underlying PRNG
  * supplies them.</p>
  *
- * @since 1.1
  */
 public abstract class AbstractRandomGenerator implements RandomGenerator {
 

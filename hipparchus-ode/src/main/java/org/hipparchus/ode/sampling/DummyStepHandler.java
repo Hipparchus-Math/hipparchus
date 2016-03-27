@@ -30,7 +30,6 @@ package org.hipparchus.ode.sampling;
  * method. This explains why there is no public constructor.</p>
  *
  * @see StepHandler
- * @since 1.2
  */
 
 public class DummyStepHandler implements StepHandler {

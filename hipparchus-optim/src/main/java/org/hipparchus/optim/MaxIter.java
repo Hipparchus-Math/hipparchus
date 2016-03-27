@@ -22,7 +22,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Maximum number of iterations performed by an (iterative) algorithm.
  *
- * @since 3.1
  */
 public class MaxIter implements OptimizationData {
     /** Allowed number of evalutations. */

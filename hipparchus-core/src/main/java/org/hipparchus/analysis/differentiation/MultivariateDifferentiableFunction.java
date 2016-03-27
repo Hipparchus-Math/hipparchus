@@ -23,7 +23,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Extension of {@link MultivariateFunction} representing a
  * multivariate differentiable real function.
- * @since 3.1
  */
 public interface MultivariateDifferentiableFunction extends MultivariateFunction {
 

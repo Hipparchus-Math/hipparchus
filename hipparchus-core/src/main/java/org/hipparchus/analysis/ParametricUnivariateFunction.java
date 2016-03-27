@@ -21,7 +21,6 @@ package org.hipparchus.analysis;
  * An interface representing a real function that depends on one independent
  * variable plus some extra parameters.
  *
- * @since 3.0
  */
 public interface ParametricUnivariateFunction {
     /**

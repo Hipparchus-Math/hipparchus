@@ -26,7 +26,6 @@ import org.hipparchus.util.FastMath;
  * deviation equal to 1. Generated values fall in the range
  * [-&#x0221A;3, +&#x0221A;3].</p>
  *
- * @since 1.2
  */
 public class UniformRandomGenerator implements NormalizedRandomGenerator {
 

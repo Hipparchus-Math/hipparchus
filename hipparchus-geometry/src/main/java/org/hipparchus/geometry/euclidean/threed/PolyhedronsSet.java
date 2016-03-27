@@ -42,13 +42,11 @@ import org.hipparchus.geometry.partitioning.Transform;
 import org.hipparchus.util.FastMath;
 
 /** This class represents a 3D region: a set of polyhedrons.
- * @since 3.0
  */
 public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
 
     /** Build a polyhedrons set representing the whole real line.
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public PolyhedronsSet(final double tolerance) {
         super(tolerance);
@@ -73,7 +71,6 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
      * </p>
      * @param tree inside/outside BSP tree representing the region
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public PolyhedronsSet(final BSPTree<Euclidean3D> tree, final double tolerance) {
         super(tree, tolerance);
@@ -98,7 +95,6 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
      * @param boundary collection of boundary elements, as a
      * collection of {@link SubHyperplane SubHyperplane} objects
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public PolyhedronsSet(final Collection<SubHyperplane<Euclidean3D>> boundary,
                           final double tolerance) {
@@ -121,7 +117,6 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
      * @param facets list of facets, as vertices indices in the vertices list
      * @param tolerance tolerance below which points are considered identical
      * @exception MathIllegalArgumentException if some basic sanity checks fail
-     * @since 3.5
      */
     public PolyhedronsSet(final List<Vector3D> vertices, final List<int[]> facets,
                           final double tolerance) {
@@ -136,7 +131,6 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
      * @param zMin low bound along the z direction
      * @param zMax high bound along the z direction
      * @param tolerance tolerance below which points are considered identical
-     * @since 3.3
      */
     public PolyhedronsSet(final double xMin, final double xMax,
                           final double yMin, final double yMax,
@@ -154,7 +148,6 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
      * @param zMax high bound along the z direction
      * @param tolerance tolerance below which points are considered identical
      * @return boundary tree
-     * @since 3.3
      */
     private static BSPTree<Euclidean3D> buildBoundary(final double xMin, final double xMax,
                                                       final double yMin, final double yMax,
@@ -181,7 +174,6 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
      * @param tolerance tolerance below which points are considered identical
      * @return boundary as a list of sub-hyperplanes
      * @exception MathIllegalArgumentException if some basic sanity checks fail
-     * @since 3.5
      */
     private static List<SubHyperplane<Euclidean3D>> buildBoundary(final List<Vector3D> vertices,
                                                                   final List<int[]> facets,
@@ -259,7 +251,6 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
      * @param facets list of facets, as vertices indices in the vertices list
      * @return references array such that r[v][k] = f for some k if facet f contains vertex v
      * @exception MathIllegalArgumentException if some facets have fewer than 3 vertices
-     * @since 3.5
      */
     private static int[][] findReferences(final List<Vector3D> vertices, final List<int[]> facets) {
 
@@ -304,7 +295,6 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
      * may contain extra entries at the end, set to negative indices)
      * @exception MathIllegalArgumentException if the same vertex appears more than
      * once in the successors list (which means one facet orientation is wrong)
-     * @since 3.5
      */
     private static int[][] successors(final List<Vector3D> vertices, final List<int[]> facets,
                                       final int[][] references) {

@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * {@code floor} function.
  *
- * @since 3.0
  */
 public class Floor implements UnivariateFunction {
     /** {@inheritDoc} */

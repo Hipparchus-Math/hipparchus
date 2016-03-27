@@ -23,7 +23,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** This class represents a 1D interval.
  * @see IntervalsSet
- * @since 3.0
  */
 public class Interval {
 
@@ -48,7 +47,6 @@ public class Interval {
 
     /** Get the lower bound of the interval.
      * @return lower bound of the interval
-     * @since 3.1
      */
     public double getInf() {
         return lower;
@@ -56,7 +54,6 @@ public class Interval {
 
     /** Get the upper bound of the interval.
      * @return upper bound of the interval
-     * @since 3.1
      */
     public double getSup() {
         return upper;
@@ -64,7 +61,6 @@ public class Interval {
 
     /** Get the size of the interval.
      * @return size of the interval
-     * @since 3.1
      */
     public double getSize() {
         return upper - lower;
@@ -72,7 +68,6 @@ public class Interval {
 
     /** Get the barycenter of the interval.
      * @return barycenter of the interval
-     * @since 3.1
      */
     public double getBarycenter() {
         return 0.5 * (lower + upper);
@@ -84,7 +79,6 @@ public class Interval {
      * belong to the boundary
      * @return a code representing the point status: either {@link
      * Location#INSIDE}, {@link Location#OUTSIDE} or {@link Location#BOUNDARY}
-     * @since 3.1
      */
     public Location checkPoint(final double point, final double tolerance) {
         if (point < lower - tolerance || point > upper + tolerance) {

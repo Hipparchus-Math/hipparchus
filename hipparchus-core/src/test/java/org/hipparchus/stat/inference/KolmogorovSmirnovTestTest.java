@@ -34,7 +34,6 @@ import org.junit.Test;
 /**
  * Test cases for {@link KolmogorovSmirnovTest}.
  *
- * @since 3.3
  */
 public class KolmogorovSmirnovTestTest {
 

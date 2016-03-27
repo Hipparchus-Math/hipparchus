@@ -38,7 +38,6 @@ import org.hipparchus.optim.OptimizationData;
  * the x<sub>i</sub> are the coordinates of the current point.
  * </p>
  *
- * @since 2.0
  */
 public class LinearObjectiveFunction
     implements MultivariateFunction,

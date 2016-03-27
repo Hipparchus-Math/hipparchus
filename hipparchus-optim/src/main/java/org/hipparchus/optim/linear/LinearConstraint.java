@@ -44,7 +44,6 @@ import org.hipparchus.linear.RealVector;
  * are the coordinates of the current point and v is the value of the constraint.
  * </p>
  *
- * @since 2.0
  */
 public class LinearConstraint implements Serializable {
     /** Serializable version identifier. */

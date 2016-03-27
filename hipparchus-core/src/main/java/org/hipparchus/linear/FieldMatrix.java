@@ -48,7 +48,6 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @return a new matrix of the same type as the instance
      * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
-     * @since 2.0
      */
     FieldMatrix<T> createMatrix(final int rowDimension, final int columnDimension)
     throws MathIllegalArgumentException;
@@ -241,7 +240,6 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @throws MathIllegalArgumentException if {@code subMatrix} is not
      * rectangular (not all rows have the same length).
      * @throws NullArgumentException if {@code subMatrix} is {@code null}.
-     * @since 2.0
      */
     void setSubMatrix(T[][] subMatrix, int row, int column)
         throws MathIllegalArgumentException, NullArgumentException;
@@ -402,7 +400,6 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param column  column location of entry to be set
      * @param value matrix entry to be set in row,column
      * @throws MathIllegalArgumentException if the row or column index is not valid.
-     * @since 2.0
      */
     void setEntry(int row, int column, T value) throws MathIllegalArgumentException;
 
@@ -414,7 +411,6 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param increment Value to add to the current matrix entry in
      * {@code (row, column)}.
      * @throws MathIllegalArgumentException if the row or column index is not valid.
-     * @since 2.0
      */
     void addToEntry(int row, int column, T increment) throws MathIllegalArgumentException;
 
@@ -426,7 +422,6 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @param factor Multiplication factor for the current matrix entry
      * in {@code (row,column)}
      * @throws MathIllegalArgumentException if the row or column index is not valid.
-     * @since 2.0
      */
     void multiplyEntry(int row, int column, T factor) throws MathIllegalArgumentException;
 

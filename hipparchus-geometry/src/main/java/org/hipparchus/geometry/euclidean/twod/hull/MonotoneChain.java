@@ -45,7 +45,6 @@ import org.hipparchus.util.Precision;
  *
  * @see <a href="http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain">
  * Andrew's monotone chain algorithm (Wikibooks)</a>
- * @since 3.3
  */
 public class MonotoneChain extends AbstractConvexHullGenerator2D {
 

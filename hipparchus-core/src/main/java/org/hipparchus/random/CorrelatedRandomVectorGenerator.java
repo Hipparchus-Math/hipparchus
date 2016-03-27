@@ -55,7 +55,6 @@ import org.hipparchus.linear.RectangularCholeskyDecomposition;
  * of the correlated vector. This class handles this situation
  * automatically.</p>
  *
- * @since 1.2
  */
 
 public class CorrelatedRandomVectorGenerator

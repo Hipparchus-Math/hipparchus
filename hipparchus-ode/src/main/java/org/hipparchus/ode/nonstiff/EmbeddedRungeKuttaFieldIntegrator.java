@@ -62,7 +62,6 @@ import org.hipparchus.util.MathUtils;
  * asi = bi for all i.</p>
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldElement<T>>

@@ -23,7 +23,6 @@ import org.hipparchus.util.FastMath;
 /**
  * {@code ulp} function.
  *
- * @since 3.0
  */
 public class Ulp implements UnivariateFunction {
     /** {@inheritDoc} */

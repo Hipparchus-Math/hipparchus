@@ -22,7 +22,6 @@ import org.hipparchus.geometry.partitioning.Region;
 
 /** This class represents sub-hyperplane for {@link LimitAngle}.
  * <p>Instances of this class are guaranteed to be immutable.</p>
- * @since 3.3
  */
 public class SubLimitAngle extends AbstractSubHyperplane<Sphere1D, Sphere1D> {
 

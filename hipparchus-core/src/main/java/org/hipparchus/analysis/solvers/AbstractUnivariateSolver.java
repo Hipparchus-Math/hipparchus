@@ -22,7 +22,6 @@ import org.hipparchus.analysis.UnivariateFunction;
 /**
  * Base class for solvers.
  *
- * @since 3.0
  */
 public abstract class AbstractUnivariateSolver
     extends BaseAbstractUnivariateSolver<UnivariateFunction>

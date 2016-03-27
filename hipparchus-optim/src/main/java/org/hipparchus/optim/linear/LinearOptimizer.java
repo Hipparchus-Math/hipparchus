@@ -27,7 +27,6 @@ import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
 /**
  * Base class for implementing linear optimizers.
  *
- * @since 3.1
  */
 public abstract class LinearOptimizer
     extends MultivariateOptimizer {

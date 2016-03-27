@@ -38,7 +38,6 @@ import org.hipparchus.util.OpenIntToFieldHashMap;
  *  thus give incorrect results.
  * </p>
  * @param <T> the type of the field elements
- * @since 2.0
  */
 public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector<T>, Serializable {
     /**  Serialization identifier. */
@@ -536,7 +535,6 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * @param end the index of the last entry of the subvector (inclusive)
      * @throws MathIllegalArgumentException if {@code start} of {@code end} are not valid
      * @throws MathIllegalArgumentException if {@code end < start}
-     * @since 3.3
      */
     private void checkIndices(final int start, final int end)
         throws MathIllegalArgumentException {
@@ -594,7 +592,6 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * vector
      * @return the value returned by {@link FieldVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorPreservingVisitor<T> visitor) {
         final int dim = getDimension();
@@ -616,7 +613,6 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorPreservingVisitor<T> visitor,
                                 final int start, final int end)
@@ -639,7 +635,6 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * vector
      * @return the value returned by {@link FieldVectorPreservingVisitor#end()}
      * at the end of the walk
-     * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorPreservingVisitor<T> visitor) {
         return walkInDefaultOrder(visitor);
@@ -658,7 +653,6 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorPreservingVisitor<T> visitor,
                                   final int start, final int end)
@@ -674,7 +668,6 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * of this vector
      * @return the value returned by {@link FieldVectorChangingVisitor#end()}
      * at the end of the walk
-     * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorChangingVisitor<T> visitor) {
         final int dim = getDimension();
@@ -696,7 +689,6 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.3
      */
     public T walkInDefaultOrder(final FieldVectorChangingVisitor<T> visitor,
                                 final int start, final int end)
@@ -719,7 +711,6 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * vector
      * @return the value returned by {@link FieldVectorChangingVisitor#end()}
      * at the end of the walk
-     * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorChangingVisitor<T> visitor) {
         return walkInDefaultOrder(visitor);
@@ -738,7 +729,6 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * at the end of the walk
      * @throws MathIllegalArgumentException if {@code end < start}.
      * @throws MathIllegalArgumentException if the indices are not valid.
-     * @since 3.3
      */
     public T walkInOptimizedOrder(final FieldVectorChangingVisitor<T> visitor,
                                   final int start, final int end)

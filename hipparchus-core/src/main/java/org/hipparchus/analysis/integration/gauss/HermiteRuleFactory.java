@@ -46,7 +46,6 @@ import org.hipparchus.util.Pair;
  *  Journal of Approximation theory <b>111</b>, 31-49
  * </blockquote>
  *
- * @since 3.3
  */
 public class HermiteRuleFactory extends BaseRuleFactory<Double> {
     /** &pi;<sup>1/2</sup> */

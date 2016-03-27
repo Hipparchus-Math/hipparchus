@@ -29,7 +29,6 @@ import org.hipparchus.util.FastMath;
  * <p>
  * The function should be integrable.</p>
  *
- * @since 3.3
  */
 public class MidPointIntegrator extends BaseAbstractUnivariateIntegrator {
 

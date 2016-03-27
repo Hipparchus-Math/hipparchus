@@ -23,7 +23,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Interface for distance measures of n-dimensional vectors.
  *
- * @since 3.2
  */
 public interface DistanceMeasure extends Serializable {
 

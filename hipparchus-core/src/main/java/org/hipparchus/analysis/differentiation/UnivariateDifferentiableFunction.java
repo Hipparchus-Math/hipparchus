@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * The derivative is computed with respect to the input variable.</p>
  * @see UnivariateDifferentiableFunction
  * @see UnivariateFunctionDifferentiator
- * @since 3.1
  */
 public interface UnivariateDifferentiableFunction extends UnivariateFunction {
 

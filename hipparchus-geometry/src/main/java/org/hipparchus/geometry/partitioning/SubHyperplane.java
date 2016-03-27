@@ -37,7 +37,6 @@ import org.hipparchus.geometry.Space;
 
  * @param <S> Type of the embedding space.
 
- * @since 3.0
  */
 public interface SubHyperplane<S extends Space> {
 
@@ -124,7 +123,6 @@ public interface SubHyperplane<S extends Space> {
          * {@link Side#BOTH} if both {@link #getPlus()} and {@link #getMinus()}
          * are neither null nor empty or {@link Side#HYPER} if both {@link #getPlus()} and
          * {@link #getMinus()} are either null or empty
-         * @since 3.6
          */
         public Side getSide() {
             if (plus != null && !plus.isEmpty()) {

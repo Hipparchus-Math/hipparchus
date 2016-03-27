@@ -27,7 +27,6 @@ import org.hipparchus.util.MathUtils;
 /**
  * Abstract base class for convex hull generators in the two-dimensional euclidean space.
  *
- * @since 3.3
  */
 abstract class AbstractConvexHullGenerator2D implements ConvexHullGenerator2D {
 

@@ -44,7 +44,6 @@ import org.hipparchus.random.RandomGenerator;
  * is parameterized by T. Moreover, the chromosomes must have same lengths.
  *
  * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
- * @since 3.1
  */
 public class NPointCrossover<T> implements CrossoverPolicy {
 

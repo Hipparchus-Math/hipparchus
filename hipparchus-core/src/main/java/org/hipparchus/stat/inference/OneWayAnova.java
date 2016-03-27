@@ -45,7 +45,6 @@ import org.hipparchus.util.MathUtils;
  *                ss = sum squared deviations
  * </pre>
  *
- * @since 1.2
  */
 public class OneWayAnova {
 
@@ -158,7 +157,6 @@ public class OneWayAnova {
      * at least two values
      * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
      * @throws MathIllegalStateException if the maximum number of iterations is exceeded
-     * @since 3.2
      */
     public double anovaPValue(final Collection<SummaryStatistics> categoryData,
                               final boolean allowOneElementData)

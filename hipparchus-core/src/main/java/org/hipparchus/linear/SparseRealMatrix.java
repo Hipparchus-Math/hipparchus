@@ -27,7 +27,6 @@ package org.hipparchus.linear;
  *  Some operations (that involve {@code NaN} and/or infinities) may
  *  thus give incorrect results.
  * </p>
- * @since 2.0
  */
 public interface SparseRealMatrix extends RealMatrix {
 

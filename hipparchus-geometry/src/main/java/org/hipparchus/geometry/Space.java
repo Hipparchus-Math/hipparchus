@@ -22,7 +22,6 @@ import org.hipparchus.exception.MathRuntimeException;
 
 /** This interface represents a generic space, with affine and vectorial counterparts.
  * @see Vector
- * @since 3.0
  */
 public interface Space extends Serializable {
 

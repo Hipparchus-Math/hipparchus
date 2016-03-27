@@ -23,7 +23,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  *  differential equations} in order to compute exactly the main state jacobian
  *  matrix for {@link JacobianMatrices partial derivatives equations}.
  *
- * @since 3.0
  */
 public interface MainStateJacobianProvider extends FirstOrderDifferentialEquations {
 

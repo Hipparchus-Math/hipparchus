@@ -21,7 +21,6 @@ import org.hipparchus.linear.RealVector;
 /**
  * Interface for validating a set of model parameters.
  *
- * @since 3.4
  */
 public interface ParameterValidator {
     /**

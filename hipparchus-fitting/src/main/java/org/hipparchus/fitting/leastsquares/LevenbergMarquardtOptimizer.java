@@ -105,7 +105,6 @@ import org.hipparchus.util.Precision;
  * <ol></td></tr>
  * </table>
  *
- * @since 3.3
  */
 public class LevenbergMarquardtOptimizer implements LeastSquaresOptimizer {
 

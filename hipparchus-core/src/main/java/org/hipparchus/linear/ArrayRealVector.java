@@ -29,7 +29,6 @@ import org.hipparchus.util.MathUtils;
 
 /**
  * This class implements the {@link RealVector} interface with a double array.
- * @since 2.0
  */
 public class ArrayRealVector extends RealVector implements Serializable {
     /** Serializable version identifier. */

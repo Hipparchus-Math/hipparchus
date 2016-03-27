@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathRuntimeException;
  * @param <S> Type of the space.
  * @see Space
  * @see Point
- * @since 3.0
  */
 public interface Vector<S extends Space> extends Point<S> {
 

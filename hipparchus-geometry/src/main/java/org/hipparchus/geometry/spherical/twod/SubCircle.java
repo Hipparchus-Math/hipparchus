@@ -26,7 +26,6 @@ import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.FastMath;
 
 /** This class represents a sub-hyperplane for {@link Circle}.
- * @since 3.3
  */
 public class SubCircle extends AbstractSubHyperplane<Sphere2D, Sphere1D> {
 

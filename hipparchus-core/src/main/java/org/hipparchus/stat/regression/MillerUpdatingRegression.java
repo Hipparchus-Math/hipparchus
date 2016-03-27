@@ -38,7 +38,6 @@ import org.hipparchus.util.Precision;
  * <p>This method for multiple regression forms the solution to the OLS problem
  * by updating the QR decomposition as described by Gentleman.</p>
  *
- * @since 3.0
  */
 public class MillerUpdatingRegression implements UpdatingMultipleLinearRegression {
 

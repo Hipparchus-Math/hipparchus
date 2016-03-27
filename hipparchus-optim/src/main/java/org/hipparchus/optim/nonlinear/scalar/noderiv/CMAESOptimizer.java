@@ -73,7 +73,6 @@ import org.hipparchus.util.FastMath;
  *  <li><a href="http://en.wikipedia.org/wiki/CMA-ES">Wikipedia</a></li>
  * </ul>
  *
- * @since 3.0
  */
 public class CMAESOptimizer
     extends MultivariateOptimizer {
@@ -217,7 +216,6 @@ public class CMAESOptimizer
      * @param generateStatistics Whether statistic data is collected.
      * @param checker Convergence checker.
      *
-     * @since 3.1
      */
     public CMAESOptimizer(int maxIterations,
                           double stopFitness,

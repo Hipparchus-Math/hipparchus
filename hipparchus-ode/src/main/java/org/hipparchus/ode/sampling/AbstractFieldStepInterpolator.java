@@ -34,7 +34,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * @see StepHandler
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public abstract class AbstractFieldStepInterpolator<T extends RealFieldElement<T>>

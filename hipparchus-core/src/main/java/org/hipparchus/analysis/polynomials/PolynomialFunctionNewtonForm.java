@@ -33,7 +33,6 @@ import org.hipparchus.util.MathUtils;
  *            a[n](x-c[0])(x-c[1])...(x-c[n-1])
  * Note that the length of a[] is one more than the length of c[]</p>
  *
- * @since 1.2
  */
 public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFunction {
 
@@ -98,7 +97,6 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
 
     /**
      * {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {

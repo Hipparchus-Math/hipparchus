@@ -41,7 +41,6 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  * step.</p>
  *
  * @see MidpointIntegrator
- * @since 1.2
  */
 
 class MidpointStepInterpolator

@@ -33,7 +33,6 @@ import org.hipparchus.util.MathArrays;
  *
  * @param <T> Type of the field elements.
  *
- * @since 2.0
  */
 public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     implements FieldMatrix<T> {

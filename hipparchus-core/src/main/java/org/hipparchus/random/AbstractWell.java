@@ -32,7 +32,6 @@ import org.hipparchus.util.FastMath;
  * are in <a href="http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng-errata.txt">wellrng-errata.txt</a>.</p>
  *
  * @see <a href="http://www.iro.umontreal.ca/~panneton/WELLRNG.html">WELL Random number generator</a>
- * @since 2.2
  */
 public abstract class AbstractWell extends BitsStreamGenerator implements Serializable {
 
@@ -154,7 +153,6 @@ public abstract class AbstractWell extends BitsStreamGenerator implements Serial
      * Inner class used to store the indirection index table which is fixed for a given type of WELL class
      * of pseudo-random number generator.
      *
-     * @since 4.0
      */
     protected static final class IndexTable {
         /** Index indirection table giving for each index its predecessor taking table size into account. */

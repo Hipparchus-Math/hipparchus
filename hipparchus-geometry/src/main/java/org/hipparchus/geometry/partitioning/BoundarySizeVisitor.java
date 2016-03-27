@@ -20,7 +20,6 @@ import org.hipparchus.geometry.Space;
 
 /** Visitor computing the boundary size.
  * @param <S> Type of the space.
- * @since 3.0
  */
 class BoundarySizeVisitor<S extends Space> implements BSPTreeVisitor<S> {
 

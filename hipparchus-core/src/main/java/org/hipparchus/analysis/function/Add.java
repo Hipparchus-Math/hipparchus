@@ -22,7 +22,6 @@ import org.hipparchus.analysis.BivariateFunction;
 /**
  * Add the two operands.
  *
- * @since 3.0
  */
 public class Add implements BivariateFunction {
     /** {@inheritDoc} */

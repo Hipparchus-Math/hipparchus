@@ -39,7 +39,6 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  * the derivatives already computed during the step.</p>
  *
  * @see EulerIntegrator
- * @since 1.2
  */
 
 class EulerStepInterpolator

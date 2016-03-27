@@ -33,7 +33,6 @@ import org.hipparchus.geometry.Vector;
  * @param <S> Type of the space.
  * @param <T> Type of the sub-space.
 
- * @since 3.0
  */
 public abstract class AbstractRegion<S extends Space, T extends Space> implements Region<S> {
 
@@ -306,7 +305,6 @@ public abstract class AbstractRegion<S extends Space, T extends Space> implement
     }
 
     /** {@inheritDoc}
-     * @since 3.3
      */
     @Override
     public BoundaryProjection<S> projectToBoundary(final Point<S> point) {

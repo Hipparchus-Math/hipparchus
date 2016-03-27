@@ -111,7 +111,6 @@ import org.hipparchus.util.MathUtils;
  * href="https://issues.apache.org/jira/browse/MATH-437">MATH-437</a> for details.
  * </p>
  *
- * @since 3.3
  */
 public class KolmogorovSmirnovTest {
 
@@ -594,7 +593,6 @@ public class KolmogorovSmirnovTest {
      * @param d value of d-statistic (x in [2])
      * @param n sample size
      * @return \(P(D_n < d)\)
-     * @since 3.4
      */
     public double pelzGood(double d, int n) {
         // Change the variable since approximation is for the distribution evaluated at d / sqrt(n)

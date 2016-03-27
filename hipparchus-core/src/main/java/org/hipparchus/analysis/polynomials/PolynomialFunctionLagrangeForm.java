@@ -31,7 +31,6 @@ import org.hipparchus.util.MathArrays;
  * The approximated function should be smooth enough for Lagrange polynomial
  * to work well. Otherwise, consider using splines instead.</p>
  *
- * @since 1.2
  */
 public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
     /**

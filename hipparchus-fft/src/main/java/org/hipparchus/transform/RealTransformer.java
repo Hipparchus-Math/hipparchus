@@ -29,7 +29,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * interface since it produces {@link org.hipparchus.complex.Complex}
  * results instead of real ones.
  *
- * @since 2.0
  */
 public interface RealTransformer  {
 

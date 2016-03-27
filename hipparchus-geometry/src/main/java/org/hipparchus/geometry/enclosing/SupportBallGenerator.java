@@ -29,7 +29,6 @@ import org.hipparchus.geometry.Space;
  * @param <S> Space type.
  * @param <P> Point type.
  * @see EnclosingBall
- * @since 3.3
  */
 public interface SupportBallGenerator<S extends Space, P extends Point<S>> {
 

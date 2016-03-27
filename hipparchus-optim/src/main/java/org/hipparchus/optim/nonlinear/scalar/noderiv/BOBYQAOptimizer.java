@@ -44,7 +44,6 @@ import org.hipparchus.util.FastMath;
  * derivative-based optimizer when the derivatives are approximated by
  * finite differences.
  *
- * @since 3.0
  */
 public class BOBYQAOptimizer
     extends MultivariateOptimizer {

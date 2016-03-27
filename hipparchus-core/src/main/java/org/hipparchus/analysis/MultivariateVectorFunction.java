@@ -19,7 +19,6 @@ package org.hipparchus.analysis;
 
 /**
  * An interface representing a multivariate vectorial function.
- * @since 2.0
  */
 public interface MultivariateVectorFunction {
 

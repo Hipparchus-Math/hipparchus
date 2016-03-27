@@ -32,7 +32,6 @@ import org.hipparchus.FieldElement;
  * solution exists it is also the minimal norm solution.</p>
  *
  * @param <T> the type of the field elements
- * @since 2.0
  */
 public interface FieldDecompositionSolver<T extends FieldElement<T>> {
 

@@ -36,7 +36,6 @@ import org.hipparchus.ode.sampling.FieldStepHandler;
  *
  * @see FirstOrderFieldDifferentialEquations
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public interface FirstOrderFieldIntegrator<T extends RealFieldElement<T>> {

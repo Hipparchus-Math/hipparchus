@@ -21,7 +21,6 @@ import org.hipparchus.geometry.Space;
 /** Utility class checking if inside nodes can be found
  * on the plus and minus sides of an hyperplane.
  * @param <S> Type of the space.
- * @since 3.4
  */
 class InsideFinder<S extends Space> {
 

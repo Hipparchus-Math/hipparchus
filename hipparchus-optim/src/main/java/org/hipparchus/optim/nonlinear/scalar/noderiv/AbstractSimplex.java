@@ -42,7 +42,6 @@ import org.hipparchus.optim.PointValuePair;
  * this class.
  *
  * @see SimplexOptimizer
- * @since 3.0
  */
 public abstract class AbstractSimplex implements OptimizationData {
     /** Simplex. */

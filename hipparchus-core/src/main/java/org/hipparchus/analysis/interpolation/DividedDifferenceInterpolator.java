@@ -32,7 +32,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * The actual code of Neville's evaluation is in PolynomialFunctionLagrangeForm,
  * this class provides an easy-to-use interface to it.</p>
  *
- * @since 1.2
  */
 public class DividedDifferenceInterpolator
     implements UnivariateInterpolator, Serializable {

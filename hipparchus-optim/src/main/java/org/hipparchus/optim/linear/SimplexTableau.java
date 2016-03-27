@@ -59,7 +59,6 @@ import org.hipparchus.util.Precision;
  * a1: Artificial variable</br>
  * RHS: Right hand side</br>
  * </p>
- * @since 2.0
  */
 class SimplexTableau implements Serializable {
 

@@ -23,7 +23,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * Interface representing a trivariate real interpolating function where the
  * sample points must be specified on a regular grid.
  *
- * @since 2.2
  */
 public interface TrivariateGridInterpolator {
     /**

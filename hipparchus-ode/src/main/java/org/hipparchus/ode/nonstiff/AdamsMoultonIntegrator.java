@@ -152,7 +152,6 @@ import org.hipparchus.util.FastMath;
  * <p>The P<sup>-1</sup>u vector and the P<sup>-1</sup> A P matrix do not depend on the state,
  * they only depend on k and therefore are precomputed once for all.</p>
  *
- * @since 2.0
  */
 public class AdamsMoultonIntegrator extends AdamsIntegrator {
 

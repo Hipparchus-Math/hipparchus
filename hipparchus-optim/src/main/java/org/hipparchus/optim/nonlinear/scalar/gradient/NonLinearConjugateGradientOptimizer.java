@@ -40,7 +40,6 @@ import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
  * {@link #optimize(OptimizationData[]) optimize} will throw
  * {@link MathRuntimeException} if bounds are passed to it.
  *
- * @since 2.0
  */
 public class NonLinearConjugateGradientOptimizer
     extends GradientMultivariateOptimizer {
@@ -67,7 +66,6 @@ public class NonLinearConjugateGradientOptimizer
      * other hand, the Polak-Ribière formula is often faster when it
      * does converge. Polak-Ribière is often used.
      *
-     * @since 2.0
      */
     public enum Formula {
         /** Fletcher-Reeves formula. */
@@ -109,7 +107,6 @@ public class NonLinearConjugateGradientOptimizer
      * line search.
      *
      * @see LineSearch#LineSearch(MultivariateOptimizer,double,double,double)
-     * @since 3.3
      */
     public NonLinearConjugateGradientOptimizer(final Formula updateFormula,
                                                ConvergenceChecker<PointValuePair> checker,
@@ -137,7 +134,6 @@ public class NonLinearConjugateGradientOptimizer
      * line search.
      *
      * @see LineSearch#LineSearch(MultivariateOptimizer,double,double,double)
-     * @since 3.3
      */
     public NonLinearConjugateGradientOptimizer(final Formula updateFormula,
                                                ConvergenceChecker<PointValuePair> checker,

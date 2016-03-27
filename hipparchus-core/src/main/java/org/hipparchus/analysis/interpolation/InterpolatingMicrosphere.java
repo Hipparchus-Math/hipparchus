@@ -29,7 +29,6 @@ import org.hipparchus.util.MathArrays;
 /**
  * Utility class for the {@link MicrosphereProjectionInterpolator} algorithm.
  *
- * @since 3.6
  */
 public class InterpolatingMicrosphere {
     /** Microsphere. */

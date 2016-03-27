@@ -44,7 +44,6 @@ import org.hipparchus.util.MathArrays;
  * @see LutherFieldIntegrator
  *
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public class MidpointFieldIntegrator<T extends RealFieldElement<T>> extends RungeKuttaFieldIntegrator<T> {

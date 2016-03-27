@@ -20,7 +20,6 @@ import org.hipparchus.geometry.Point;
 import org.hipparchus.util.FastMath;
 
 /** Simple container for a two-points segment.
- * @since 3.0
  */
 public class Segment {
 
@@ -78,7 +77,6 @@ public class Segment {
      *
      * @param p to check
      * @return distance between the instance and the point
-     * @since 3.1
      */
     public double distance(final Vector2D p) {
         final double deltaX = end.getX() - start.getX();

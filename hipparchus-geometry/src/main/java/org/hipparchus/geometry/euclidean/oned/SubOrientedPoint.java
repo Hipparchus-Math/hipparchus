@@ -24,7 +24,6 @@ import org.hipparchus.geometry.partitioning.Region;
  * <p>An hyperplane in 1D is a simple point, its orientation being a
  * boolean.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
- * @since 3.0
  */
 public class SubOrientedPoint extends AbstractSubHyperplane<Euclidean1D, Euclidean1D> {
 

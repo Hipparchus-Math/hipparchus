@@ -46,7 +46,6 @@ import org.hipparchus.util.FastMath;
  * Computation, 32 (1978), 175 - 199.
  *
  * @see DftNormalization
- * @since 1.2
  */
 public class FastFourierTransformer implements Serializable {
 

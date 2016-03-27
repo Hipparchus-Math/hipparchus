@@ -23,7 +23,6 @@ import org.hipparchus.util.Precision;
 /**
  * Check if an optimization has converged based on the change in computed RMS.
  *
- * @since 3.4
  */
 public class EvaluationRmsChecker implements ConvergenceChecker<Evaluation> {
 

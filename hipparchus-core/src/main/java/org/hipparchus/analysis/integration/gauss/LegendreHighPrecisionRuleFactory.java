@@ -30,7 +30,6 @@ import org.hipparchus.util.Pair;
  * presented in <a href="http://en.wikipedia.org/wiki/Abramowitz_and_Stegun">
  * Abramowitz and Stegun, 1964</a>.
  *
- * @since 3.1
  */
 public class LegendreHighPrecisionRuleFactory extends BaseRuleFactory<BigDecimal> {
     /** Settings for enhanced precision computations. */

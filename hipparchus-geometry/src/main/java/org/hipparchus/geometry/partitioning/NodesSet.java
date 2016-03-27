@@ -25,7 +25,6 @@ import org.hipparchus.geometry.Space;
 /** Set of {@link BSPTree BSP tree} nodes.
  * @see BoundaryAttribute
  * @param <S> Type of the space.
- * @since 3.4
  */
 public class NodesSet<S extends Space> implements Iterable<BSPTree<S>> {
 

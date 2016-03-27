@@ -74,7 +74,6 @@ import org.hipparchus.util.FastMath;
  * @see FieldStepHandler
  * @see FieldStepInterpolator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>

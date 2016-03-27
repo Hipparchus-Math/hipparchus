@@ -22,7 +22,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Extension of {@link UnivariateVectorFunction} representing a univariate differentiable vectorial function.
  *
- * @since 3.1
  */
 public interface UnivariateDifferentiableVectorFunction
     extends UnivariateVectorFunction {

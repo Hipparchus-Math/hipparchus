@@ -35,7 +35,6 @@ import org.hipparchus.util.MathArrays;
  * @see AdamsBashforthFieldIntegrator
  * @see AdamsMoultonFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class AdamsFieldStepInterpolator<T extends RealFieldElement<T>> extends AbstractFieldStepInterpolator<T> {

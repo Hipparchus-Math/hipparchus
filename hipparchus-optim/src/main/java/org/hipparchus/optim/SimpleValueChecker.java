@@ -34,7 +34,6 @@ import org.hipparchus.util.FastMath;
  * method will also return {@code true} if the number of iterations has been set
  * (see {@link #SimpleValueChecker(double,double,int) this constructor}).
  *
- * @since 3.0
  */
 public class SimpleValueChecker
     extends AbstractConvergenceChecker<PointValuePair> {
@@ -79,7 +78,6 @@ public class SimpleValueChecker
      * @param maxIter Maximum iteration count.
      * @throws MathIllegalArgumentException if {@code maxIter <= 0}.
      *
-     * @since 3.1
      */
     public SimpleValueChecker(final double relativeThreshold,
                               final double absoluteThreshold,

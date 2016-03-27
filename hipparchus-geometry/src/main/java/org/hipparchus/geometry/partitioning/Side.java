@@ -18,7 +18,6 @@ package org.hipparchus.geometry.partitioning;
 
 /** Enumerate representing the location of an element with respect to an
  * {@link Hyperplane hyperplane} of a space.
- * @since 3.0
  */
 public enum Side {
 

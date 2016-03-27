@@ -25,7 +25,6 @@ import java.util.Arrays;
  * <br/>
  * Immutable class.
  *
- * @since 3.1
  */
 public class SimpleBounds implements OptimizationData {
     /** Lower bounds. */

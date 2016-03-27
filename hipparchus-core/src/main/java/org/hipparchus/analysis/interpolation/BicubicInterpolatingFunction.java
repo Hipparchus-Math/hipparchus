@@ -28,7 +28,6 @@ import org.hipparchus.util.MathArrays;
  * <a href="http://en.wikipedia.org/wiki/Bicubic_interpolation">
  * bicubic spline interpolation</a>.
  *
- * @since 3.4
  */
 public class BicubicInterpolatingFunction
     implements BivariateFunction {

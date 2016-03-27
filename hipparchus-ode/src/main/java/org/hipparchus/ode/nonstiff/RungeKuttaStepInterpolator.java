@@ -31,7 +31,6 @@ import org.hipparchus.ode.sampling.AbstractStepInterpolator;
  * @see RungeKuttaIntegrator
  * @see EmbeddedRungeKuttaIntegrator
  *
- * @since 1.2
  */
 
 abstract class RungeKuttaStepInterpolator

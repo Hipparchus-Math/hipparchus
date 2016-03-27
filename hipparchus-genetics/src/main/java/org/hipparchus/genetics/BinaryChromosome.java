@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Chromosome represented by a vector of 0s and 1s.
  *
- * @since 2.0
  */
 public abstract class BinaryChromosome extends AbstractListChromosome<Integer> {
 

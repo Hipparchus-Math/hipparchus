@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Utilities for creating {@link RandomGenerator} instances.
  *
- * @since 3.3
  */
 public class RandomGeneratorFactory {
     /**

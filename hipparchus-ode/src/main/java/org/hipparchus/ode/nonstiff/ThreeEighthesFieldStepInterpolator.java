@@ -55,7 +55,6 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *
  * @see ThreeEighthesFieldIntegrator
  * @param <T> the type of the field elements
- * @since 3.6
  */
 
 class ThreeEighthesFieldStepInterpolator<T extends RealFieldElement<T>>

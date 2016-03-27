@@ -25,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * A {@link RandomGenerator} adapter that delegates the random number
  * generation to the standard {@link java.util.Random} class.
  *
- * @since 1.1
  */
 public class JDKRandomGenerator
     implements RandomGenerator {
@@ -45,7 +44,6 @@ public class JDKRandomGenerator
      * Creates an instance with the given seed.
      *
      * @param seed Initial seed.
-     * @since 3.6
      */
     public JDKRandomGenerator(long seed) {
         delegate = new Random(seed);

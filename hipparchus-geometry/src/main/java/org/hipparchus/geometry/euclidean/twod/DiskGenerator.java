@@ -24,7 +24,6 @@ import org.hipparchus.geometry.enclosing.SupportBallGenerator;
 import org.hipparchus.util.FastMath;
 
 /** Class generating an enclosing ball from its support points.
- * @since 3.3
  */
 public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D> {
 

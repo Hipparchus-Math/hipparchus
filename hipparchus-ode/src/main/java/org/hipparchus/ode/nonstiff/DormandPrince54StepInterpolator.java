@@ -27,7 +27,6 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  *
  * @see DormandPrince54Integrator
  *
- * @since 1.2
  */
 
 class DormandPrince54StepInterpolator

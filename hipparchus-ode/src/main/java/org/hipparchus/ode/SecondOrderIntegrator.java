@@ -30,7 +30,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * SecondOrderDifferentialEquations} interface.</p>
  *
  * @see SecondOrderDifferentialEquations
- * @since 1.2
  */
 
 public interface SecondOrderIntegrator extends ODEIntegrator {

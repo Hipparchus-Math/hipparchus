@@ -22,7 +22,6 @@ package org.hipparchus.transform;
  * normalizations is detailed below.
  *
  * @see FastCosineTransformer
- * @since 3.0
  */
 public enum DctNormalization {
     /**

@@ -19,7 +19,6 @@ package org.hipparchus.genetics;
 /**
  * Algorithm used to determine when to stop evolution.
  *
- * @since 2.0
  */
 public interface StoppingCondition {
     /**

@@ -33,7 +33,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * <p>Note: This class is package private as it is only used internally in
  * the {@link StorelessCovariance} class.</p>
  *
- * @since 3.0
  */
 class StorelessBivariateCovariance {
 

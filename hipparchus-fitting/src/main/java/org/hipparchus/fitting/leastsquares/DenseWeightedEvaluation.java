@@ -23,7 +23,6 @@ import org.hipparchus.linear.RealVector;
 /**
  * Applies a dense weight matrix to an evaluation.
  *
- * @since 3.3
  */
 class DenseWeightedEvaluation extends AbstractEvaluation {
 

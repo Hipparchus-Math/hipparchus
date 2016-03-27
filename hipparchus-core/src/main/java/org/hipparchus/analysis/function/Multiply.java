@@ -22,7 +22,6 @@ import org.hipparchus.analysis.BivariateFunction;
 /**
  * Multiply the two operands.
  *
- * @since 3.0
  */
 public class Multiply implements BivariateFunction {
     /** {@inheritDoc} */

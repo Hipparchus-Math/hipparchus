@@ -30,7 +30,6 @@ import org.hipparchus.util.FastMath;
  *             sin(x) / x   otherwise.
  * </code></pre>
  *
- * @since 3.0
  */
 public class Sinc implements UnivariateDifferentiableFunction {
     /**
@@ -93,7 +92,6 @@ public class Sinc implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t)

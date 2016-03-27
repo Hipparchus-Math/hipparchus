@@ -39,7 +39,6 @@ import org.hipparchus.geometry.Space;
 
  * @param <S> Type of the space.
 
- * @since 3.0
  */
 public interface Hyperplane<S extends Space> {
 
@@ -64,13 +63,11 @@ public interface Hyperplane<S extends Space> {
     /** Project a point to the hyperplane.
      * @param point point to project
      * @return projected point
-     * @since 3.3
      */
     Point<S> project(Point<S> point);
 
     /** Get the tolerance below which points are considered to belong to the hyperplane.
      * @return tolerance below which points are considered to belong to the hyperplane
-     * @since 3.3
      */
     double getTolerance();
 

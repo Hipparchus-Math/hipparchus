@@ -29,7 +29,6 @@ import org.hipparchus.util.Incrementor;
  * This code is based on a Python implementation (from <em>SciPy</em>,
  * module {@code optimize.py} v0.5).
  *
- * @since 2.2
  */
 public class BracketFinder {
     /** Tolerance to avoid division by zero. */

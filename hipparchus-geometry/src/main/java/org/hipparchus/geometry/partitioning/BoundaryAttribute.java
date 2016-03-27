@@ -29,7 +29,6 @@ import org.hipparchus.geometry.Space;
  * processing methods.</p>
  * @param <S> Type of the space.
  * @see Region#getTree
- * @since 3.0
  */
 public class BoundaryAttribute<S extends Space> {
 
@@ -57,7 +56,6 @@ public class BoundaryAttribute<S extends Space> {
      * plus side of its underlying hyperplane (may be null)
      * @param splitters sub-hyperplanes that were used to
      * split the boundary part (may be null)
-     * @since 3.4
      */
     BoundaryAttribute(final SubHyperplane<S> plusOutside,
                       final SubHyperplane<S> plusInside,

@@ -31,7 +31,6 @@ import org.hipparchus.util.MathUtils;
  * <p>All the methods implemented here use {@link #getEntry(int, int)} to access
  * matrix elements. Derived class can provide faster implementations.</p>
  *
- * @since 2.0
  */
 public abstract class AbstractRealMatrix
     extends RealLinearOperator

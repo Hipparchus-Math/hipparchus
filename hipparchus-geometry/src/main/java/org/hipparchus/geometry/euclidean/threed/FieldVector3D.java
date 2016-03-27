@@ -32,7 +32,6 @@ import org.hipparchus.util.MathArrays;
  * This class is a re-implementation of {@link Vector3D} using {@link RealFieldElement}.
  * <p>Instance of this class are guaranteed to be immutable.</p>
  * @param <T> the type of the field elements
- * @since 3.2
  */
 public class FieldVector3D<T extends RealFieldElement<T>> implements Serializable {
 

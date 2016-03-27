@@ -23,7 +23,6 @@ import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 /**
  * Inverse function.
  *
- * @since 3.0
  */
 public class Inverse implements UnivariateDifferentiableFunction {
     /** {@inheritDoc} */
@@ -33,7 +32,6 @@ public class Inverse implements UnivariateDifferentiableFunction {
     }
 
     /** {@inheritDoc}
-     * @since 3.1
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {

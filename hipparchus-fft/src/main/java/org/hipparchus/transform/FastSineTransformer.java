@@ -64,7 +64,6 @@ import org.hipparchus.util.FastMath;
  * {@link #transform(UnivariateFunction, double, double, int, TransformType)},
  * after sampling.
  *
- * @since 1.2
  */
 public class FastSineTransformer implements RealTransformer, Serializable {
 

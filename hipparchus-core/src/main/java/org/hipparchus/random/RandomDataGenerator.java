@@ -103,7 +103,6 @@ import org.hipparchus.util.MathArrays;
  * </li>
  * </ul>
  * </p>
- * @since 3.1
  */
 public class RandomDataGenerator implements Serializable {
 
@@ -883,7 +882,6 @@ public class RandomDataGenerator implements Serializable {
      * </p>
      *
      * @return the Random used to generate random data
-     * @since 3.2
      */
     public RandomGenerator getRandomGenerator() {
         if (rand == null) {

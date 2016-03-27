@@ -30,13 +30,11 @@ import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.util.Precision;
 
 /** This class represents a 1D region: a set of intervals.
- * @since 3.0
  */
 public class IntervalsSet extends AbstractRegion<Euclidean1D, Euclidean1D> implements Iterable<double[]> {
 
     /** Build an intervals set representing the whole real line.
      * @param tolerance tolerance below which points are considered identical.
-     * @since 3.3
      */
     public IntervalsSet(final double tolerance) {
         super(tolerance);
@@ -48,7 +46,6 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Euclidean1D> imple
      * @param upper upper bound of the interval, must be greater or equal
      * to {@code lower} (may be {@code Double.POSITIVE_INFINITY})
      * @param tolerance tolerance below which points are considered identical.
-     * @since 3.3
      */
     public IntervalsSet(final double lower, final double upper, final double tolerance) {
         super(buildTree(lower, upper, tolerance), tolerance);
@@ -63,7 +60,6 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Euclidean1D> imple
      * {@code Boolean.TRUE} and {@code Boolean.FALSE}</p>
      * @param tree inside/outside BSP tree representing the intervals set
      * @param tolerance tolerance below which points are considered identical.
-     * @since 3.3
      */
     public IntervalsSet(final BSPTree<Euclidean1D> tree, final double tolerance) {
         super(tree, tolerance);
@@ -88,7 +84,6 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Euclidean1D> imple
      * space.</p>
      * @param boundary collection of boundary elements
      * @param tolerance tolerance below which points are considered identical.
-     * @since 3.3
      */
     public IntervalsSet(final Collection<SubHyperplane<Euclidean1D>> boundary,
                         final double tolerance) {
@@ -206,7 +201,6 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Euclidean1D> imple
     }
 
     /** {@inheritDoc}
-     * @since 3.3
      */
     @Override
     public BoundaryProjection<Euclidean1D> projectToBoundary(final Point<Euclidean1D> point) {
@@ -509,7 +503,6 @@ public class IntervalsSet extends AbstractRegion<Euclidean1D, Euclidean1D> imple
      * <p>
      * The iterator does <em>not</em> support the optional {@code remove} operation.
      * </p>
-     * @since 3.3
      */
     @Override
     public Iterator<double[]> iterator() {

@@ -26,7 +26,6 @@ import org.hipparchus.optim.PointValuePair;
 /**
  * Base class for a multivariate scalar function optimizer.
  *
- * @since 3.1
  */
 public abstract class MultivariateOptimizer
     extends BaseMultivariateOptimizer<PointValuePair> {

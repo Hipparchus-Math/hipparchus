@@ -21,7 +21,6 @@ import org.hipparchus.optim.OptimizationData;
 /**
  * Pivot selection rule to the use for a Simplex solver.
  *
- * @since 3.3
  */
 public enum PivotSelectionRule implements OptimizationData {
     /**

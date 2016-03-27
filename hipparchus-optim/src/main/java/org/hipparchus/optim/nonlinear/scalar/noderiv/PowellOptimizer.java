@@ -50,7 +50,6 @@ import org.hipparchus.util.FastMath;
  * {@link org.hipparchus.optim.nonlinear.scalar.MultivariateFunctionPenaltyAdapter
  * MultivariateFunctionPenaltyAdapter}.
  *
- * @since 2.2
  */
 public class PowellOptimizer
     extends MultivariateOptimizer {

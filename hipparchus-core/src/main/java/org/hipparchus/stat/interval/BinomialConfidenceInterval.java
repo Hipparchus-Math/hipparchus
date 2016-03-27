@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @see <a
  *      href="http://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval">Binomial
  *      proportion confidence interval (Wikipedia)</a>
- * @since 3.3
  */
 public interface BinomialConfidenceInterval {
 

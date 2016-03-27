@@ -49,7 +49,6 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  * step.</p>
  *
  * @see ClassicalRungeKuttaIntegrator
- * @since 1.2
  */
 
 class ClassicalRungeKuttaStepInterpolator

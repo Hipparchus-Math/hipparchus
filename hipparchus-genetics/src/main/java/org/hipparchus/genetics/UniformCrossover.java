@@ -44,7 +44,6 @@ import org.hipparchus.random.RandomGenerator;
  * @see <a href="http://www.obitko.com/tutorials/genetic-algorithms/crossover-mutation.php">Crossover (Obitko.com)</a>
  * @see <a href="http://www.tomaszgwiazda.com/uniformX.htm">Uniform crossover</a>
  * @param <T> generic type of the {@link AbstractListChromosome}s for crossover
- * @since 3.1
  */
 public class UniformCrossover<T> implements CrossoverPolicy {
 

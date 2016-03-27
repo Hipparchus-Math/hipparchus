@@ -29,7 +29,6 @@ import org.hipparchus.exception.NullArgumentException;
 /**
  * Population of chromosomes represented by a {@link List}.
  *
- * @since 2.0
  */
 public abstract class ListPopulation implements Population {
 
@@ -84,7 +83,6 @@ public abstract class ListPopulation implements Population {
      * @param chromosomeColl a {@link Collection} of chromosomes
      * @throws MathIllegalArgumentException if the population would exceed the population limit when
      * adding this chromosome
-     * @since 3.1
      */
     public void addChromosomes(final Collection<Chromosome> chromosomeColl) throws MathIllegalArgumentException {
         if (chromosomes.size() + chromosomeColl.size() > populationLimit) {
@@ -105,7 +103,6 @@ public abstract class ListPopulation implements Population {
     /**
      * Access the list of chromosomes.
      * @return the list of chromosomes
-     * @since 3.1
      */
     protected List<Chromosome> getChromosomeList() {
         return chromosomes;

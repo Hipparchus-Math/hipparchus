@@ -45,7 +45,6 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see FirstOrderConverter
  * @see SecondOrderDifferentialEquations
  *
- * @since 1.2
  */
 
 public interface FirstOrderDifferentialEquations {

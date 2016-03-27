@@ -24,7 +24,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Returns the arithmetic mean of the available vectors.
- * @since 1.2
  */
 public class VectorialMean implements Serializable {
 

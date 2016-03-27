@@ -24,7 +24,6 @@ import org.hipparchus.exception.NullArgumentException;
 /**
  * Interface for univariate real integration algorithms.
  *
- * @since 1.2
  */
 public interface UnivariateIntegrator {
 

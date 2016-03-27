@@ -44,7 +44,6 @@ import org.hipparchus.util.FastMath;
  *
  * @see <a href="http://mathworld.wolfram.com/LUDecomposition.html">MathWorld</a>
  * @see <a href="http://en.wikipedia.org/wiki/LU_decomposition">Wikipedia</a>
- * @since 2.0 (changed to concrete class in 3.0)
  */
 public class LUDecomposition {
     /** Default bound to determine effective singularity in LU decomposition. */

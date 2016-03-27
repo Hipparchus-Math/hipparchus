@@ -25,7 +25,6 @@ import org.hipparchus.geometry.Space;
 /** Cut sub-hyperplanes characterization with respect to inside/outside cells.
  * @see BoundaryBuilder
  * @param <S> Type of the space.
- * @since 3.4
  */
 class Characterization<S extends Space> {
 
