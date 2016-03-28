@@ -42,3 +42,4 @@ TooManyIterationsException             MathIllegalStateException
 UnboundedSolutionException             MathIllegalStateException
 UnknownParameterException              MathIllegalArgumentException
 ZeroException                          MathIllegalArgumentException
+PivotingStrategyInterface              PivotingStrategy

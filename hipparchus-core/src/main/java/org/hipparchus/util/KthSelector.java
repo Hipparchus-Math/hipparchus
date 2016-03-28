@@ -35,14 +35,15 @@ public class KthSelector implements Serializable {
     /** Minimum selection size for insertion sort rather than selection. */
     private static final int MIN_SELECT_SIZE = 15;
 
-    /** A {@link PivotingStrategyInterface} used for pivoting  */
-    private final PivotingStrategyInterface pivotingStrategy;
+    /** A {@link PivotingStrategy} used for pivoting.  */
+    private final PivotingStrategy pivotingStrategy;
 
     /**
-     * Constructor with default {@link MedianOf3PivotingStrategy median of 3} pivoting strategy
+     * Constructor with default {@link PivotingStrategy#medianOf3() median of 3}
+     * pivoting strategy.
      */
     public KthSelector() {
-        this.pivotingStrategy = new MedianOf3PivotingStrategy();
+        this.pivotingStrategy = PivotingStrategy.medianOf3();
     }
 
     /**
@@ -50,20 +51,17 @@ public class KthSelector implements Serializable {
      *
      * @param pivotingStrategy pivoting strategy to use
      * @throws NullArgumentException when pivotingStrategy is null
-     * @see MedianOf3PivotingStrategy
-     * @see RandomPivotingStrategy
-     * @see CentralPivotingStrategy
      */
-    public KthSelector(final PivotingStrategyInterface pivotingStrategy)
+    public KthSelector(final PivotingStrategy pivotingStrategy)
         throws NullArgumentException {
         MathUtils.checkNotNull(pivotingStrategy);
         this.pivotingStrategy = pivotingStrategy;
     }
 
-    /** Get the pivotin strategy.
+    /** Get the pivoting strategy.
      * @return pivoting strategy
      */
-    public PivotingStrategyInterface getPivotingStrategy() {
+    public PivotingStrategy getPivotingStrategy() {
         return pivotingStrategy;
     }
 

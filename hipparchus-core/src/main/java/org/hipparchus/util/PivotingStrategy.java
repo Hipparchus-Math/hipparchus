@@ -17,15 +17,36 @@
 package org.hipparchus.util;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-
+import org.hipparchus.random.RandomGenerator;
 
 /**
  * A strategy to pick a pivoting index of an array for doing partitioning.
- * @see MedianOf3PivotingStrategy
- * @see RandomPivotingStrategy
- * @see CentralPivotingStrategy
  */
-public interface PivotingStrategyInterface {
+public interface PivotingStrategy {
+
+    /**
+     * Returns a mid point strategy based on the average of begin and end indices.
+     * @return the mid point strategy.
+     */
+    static PivotingStrategy central() {
+        return PivotingStrategies.getCentralPivotingStrategy();
+    }
+
+    /**
+     * Returns the classic median of 3 strategy given begin and end indices.
+     * @return the median of 3 strategy.
+     */
+    static PivotingStrategy medianOf3() {
+        return PivotingStrategies.getMedianOf3PivotingStrategy();
+    }
+
+    /**
+     * Returns a strategy of selecting random index between begin and end indices.
+     * @return a random strategy.
+     */
+    static PivotingStrategy random(RandomGenerator random) {
+        return PivotingStrategies.getRandomPivotingStrategy(random);
+    }
 
     /**
      * Find pivot index of the array so that partition and K<sup>th</sup>

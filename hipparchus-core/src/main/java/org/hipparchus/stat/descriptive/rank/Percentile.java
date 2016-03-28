@@ -29,8 +29,7 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.KthSelector;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
-import org.hipparchus.util.MedianOf3PivotingStrategy;
-import org.hipparchus.util.PivotingStrategyInterface;
+import org.hipparchus.util.PivotingStrategy;
 import org.hipparchus.util.Precision;
 
 /**
@@ -127,7 +126,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      *   can be reset with {@link #withEstimationType(EstimationType)}</li>
      *   <li>default NaN strategy: {@link NaNStrategy#REMOVED},
      *   can be reset with {@link #withNaNStrategy(NaNStrategy)}</li>
-     *   <li>a KthSelector that makes use of {@link MedianOf3PivotingStrategy},
+     *   <li>a KthSelector that makes use of {@link PivotingStrategy#medianOf3()},
      *   can be reset with {@link #withKthSelector(KthSelector)}</li>
      * </ul>
      */
@@ -149,7 +148,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      */
     public Percentile(final double quantile) throws MathIllegalArgumentException {
         this(quantile, EstimationType.LEGACY, NaNStrategy.REMOVED,
-             new KthSelector(new MedianOf3PivotingStrategy()));
+             new KthSelector(PivotingStrategy.medianOf3()));
     }
 
     /**
@@ -600,10 +599,10 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
     }
 
     /**
-     * Get the {@link PivotingStrategyInterface} used in KthSelector for computation.
+     * Get the {@link PivotingStrategy} used in KthSelector for computation.
      * @return the pivoting strategy set
      */
-    public PivotingStrategyInterface getPivotingStrategy() {
+    public PivotingStrategy getPivotingStrategy() {
         return kthSelector.getPivotingStrategy();
     }
 
