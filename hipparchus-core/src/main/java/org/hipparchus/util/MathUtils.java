@@ -292,7 +292,7 @@ public final class MathUtils {
     public static void checkNotNull(Object o)
         throws NullArgumentException {
         if (o == null) {
-            throw new NullArgumentException();
+            throw new NullArgumentException(LocalizedCoreFormats.NULL_NOT_ALLOWED);
         }
     }
 }

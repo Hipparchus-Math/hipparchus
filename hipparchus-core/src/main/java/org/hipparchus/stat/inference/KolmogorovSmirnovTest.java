@@ -907,12 +907,10 @@ public class KolmogorovSmirnovTest {
      * @throws MathIllegalArgumentException if array is too short
      */
     private void checkArray(double[] array) {
-        if (array == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.NULL_NOT_ALLOWED);
-        }
+        MathUtils.checkNotNull(array);
         if (array.length < 2) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, array.length,
-                                                2);
+                                                   2);
         }
     }
 

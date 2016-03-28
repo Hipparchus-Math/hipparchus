@@ -28,7 +28,6 @@ import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
 
@@ -37,6 +36,8 @@ import org.hipparchus.util.MathUtils;
  * <p>
  * The values are ordered using the default (natural order), unless a
  * {@code Comparator} is supplied in the constructor.
+ *
+ * @see LongFrequency
  */
 public class Frequency<T extends Comparable<T>> implements Serializable {
 
@@ -240,7 +241,7 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
      * @throws NullArgumentException if {@code other} is null
      */
     public void merge(final Frequency<? extends T> other) throws NullArgumentException {
-        MathUtils.checkNotNull(other, LocalizedCoreFormats.NULL_NOT_ALLOWED);
+        MathUtils.checkNotNull(other);
 
         Iterator<? extends Map.Entry<? extends T, Long>> iter = other.entrySetIterator();
         while (iter.hasNext()) {
@@ -259,7 +260,7 @@ public class Frequency<T extends Comparable<T>> implements Serializable {
      */
     public void merge(final Collection<? extends Frequency<? extends T>> others)
         throws NullArgumentException {
-        MathUtils.checkNotNull(others, LocalizedCoreFormats.NULL_NOT_ALLOWED);
+        MathUtils.checkNotNull(others);
 
         for (final Frequency<? extends T> freq : others) {
             merge(freq);
