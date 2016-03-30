@@ -76,7 +76,7 @@ public interface BinomialConfidenceInterval {
      * </ul>
      *
      * @param numberOfTrials number of trials
-     * @param probabilityOfSuccess probability of success
+     * @param probabilityOfSuccess observed probability of success
      * @param confidenceLevel desired probability that the true probability of
      * success falls within the returned interval
      * @return Confidence interval containing the probability of success with
