@@ -21,7 +21,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Represents an interval estimate of a population parameter.
- *
  */
 public class ConfidenceInterval {
 
@@ -99,10 +98,12 @@ public class ConfidenceInterval {
      */
     private void checkParameters(double lower, double upper, double confidence) {
         if (lower >= upper) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND, lower, upper);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
+                                                   lower, upper);
         }
         if (confidence <= 0 || confidence >= 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL, confidence, 0, 1);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
+                                                   confidence, 0, 1);
         }
     }
 }

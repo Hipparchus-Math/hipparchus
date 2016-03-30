@@ -123,7 +123,6 @@ public enum LocalizedCoreFormats implements Localizable {
     NAN_VALUE_CONVERSION("cannot convert NaN value"),
     NEGATIVE_COMPLEX_MODULE("negative complex module {0}"),
     NEGATIVE_ELEMENT_AT_INDEX("element {0} is negative: {1}"),
-    NEGATIVE_NUMBER_OF_SUCCESSES("number of successes must be non-negative ({0})"),
     NUMBER_OF_SUCCESSES("number of successes ({0})"), /* keep */
     NUMBER_OF_INTERPOLATION_POINTS("number of interpolation points ({0})"), /* keep */
     NUMBER_OF_TRIALS("number of trials ({0})"),

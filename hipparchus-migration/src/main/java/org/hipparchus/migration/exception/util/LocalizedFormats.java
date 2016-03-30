@@ -18,13 +18,13 @@ package org.hipparchus.migration.exception.util;
 
 import java.util.Locale;
 
+import org.hipparchus.clustering.LocalizedClusteringFormats;
 import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.fitting.LocalizedFittingFormats;
 import org.hipparchus.genetics.LocalizedGeneticsFormats;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.migration.LocalizedMigrationFormats;
-import org.hipparchus.clustering.LocalizedClusteringFormats;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.transform.LocalizedFFTFormats;
@@ -186,7 +186,6 @@ public enum LocalizedFormats implements Localizable {
     NEGATIVE_COMPLEX_MODULE(LocalizedCoreFormats.NEGATIVE_COMPLEX_MODULE),
     NEGATIVE_ELEMENT_AT_2D_INDEX(LocalizedMigrationFormats.NEGATIVE_ELEMENT_AT_2D_INDEX),
     NEGATIVE_ELEMENT_AT_INDEX(LocalizedCoreFormats.NEGATIVE_ELEMENT_AT_INDEX),
-    NEGATIVE_NUMBER_OF_SUCCESSES(LocalizedCoreFormats.NEGATIVE_NUMBER_OF_SUCCESSES),
     NUMBER_OF_SUCCESSES(LocalizedCoreFormats.NUMBER_OF_SUCCESSES),
     NEGATIVE_NUMBER_OF_TRIALS(LocalizedMigrationFormats.NEGATIVE_NUMBER_OF_TRIALS),
     NUMBER_OF_INTERPOLATION_POINTS(LocalizedCoreFormats.NUMBER_OF_INTERPOLATION_POINTS),

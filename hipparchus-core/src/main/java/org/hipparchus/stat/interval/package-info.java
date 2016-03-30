@@ -15,8 +15,6 @@
  * limitations under the License.
  */
 /**
- *
- *      Classes providing binomial proportion confidence interval construction.
- *
+ * Classes providing binomial proportion confidence interval construction.
  */
 package org.hipparchus.stat.interval;

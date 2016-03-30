@@ -16,21 +16,17 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.hipparchus.stat.interval.AgrestiCoullInterval;
-import org.hipparchus.stat.interval.BinomialConfidenceInterval;
-import org.hipparchus.stat.interval.ConfidenceInterval;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Test cases for the AgrestiCoullInterval class.
- *
  */
 public class AgrestiCoullIntervalTest extends BinomialConfidenceIntervalAbstractTest {
 
     @Override
     protected BinomialConfidenceInterval createBinomialConfidenceInterval() {
-        return new AgrestiCoullInterval();
+        return BinomialConfidenceInterval.agrestiCoull();
     }
 
     @Test

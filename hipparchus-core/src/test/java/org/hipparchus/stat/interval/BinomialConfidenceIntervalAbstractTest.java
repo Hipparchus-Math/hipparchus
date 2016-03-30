@@ -17,21 +17,18 @@
 package org.hipparchus.stat.interval;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.stat.interval.BinomialConfidenceInterval;
-import org.hipparchus.stat.interval.ConfidenceInterval;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * Test cases for the BinomialConfidenceInterval implementations.
- *
  */
 public abstract class BinomialConfidenceIntervalAbstractTest {
 
     protected BinomialConfidenceInterval testStatistic;
 
-    private final int successes = 50;
-    private final int trials = 500;
+    private final int trials             = 500;
+    private final double successes       = 0.1;
     private final double confidenceLevel = 0.9;
 
     protected abstract BinomialConfidenceInterval createBinomialConfidenceInterval();

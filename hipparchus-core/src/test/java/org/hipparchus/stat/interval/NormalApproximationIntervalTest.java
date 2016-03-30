@@ -16,21 +16,17 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.hipparchus.stat.interval.BinomialConfidenceInterval;
-import org.hipparchus.stat.interval.ConfidenceInterval;
-import org.hipparchus.stat.interval.NormalApproximationInterval;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Test cases for the NormalApproximationInterval class.
- *
  */
 public class NormalApproximationIntervalTest extends BinomialConfidenceIntervalAbstractTest {
 
     @Override
     protected BinomialConfidenceInterval createBinomialConfidenceInterval() {
-        return new NormalApproximationInterval();
+        return BinomialConfidenceInterval.normalApproximation();
     }
 
     @Test

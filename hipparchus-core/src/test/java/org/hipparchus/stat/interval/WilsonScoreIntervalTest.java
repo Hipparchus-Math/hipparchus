@@ -16,21 +16,17 @@
  */
 package org.hipparchus.stat.interval;
 
-import org.hipparchus.stat.interval.BinomialConfidenceInterval;
-import org.hipparchus.stat.interval.ConfidenceInterval;
-import org.hipparchus.stat.interval.WilsonScoreInterval;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Test cases for the WilsonScoreInterval class.
- *
  */
 public class WilsonScoreIntervalTest extends BinomialConfidenceIntervalAbstractTest {
 
     @Override
     protected BinomialConfidenceInterval createBinomialConfidenceInterval() {
-        return new WilsonScoreInterval();
+        return BinomialConfidenceInterval.wilsonScore();
     }
 
     @Test
