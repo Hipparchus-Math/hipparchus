@@ -33,7 +33,6 @@ import org.hipparchus.stat.ranking.RankingAlgorithm;
  * By default, ranks are computed using {@link NaturalRanking} with default
  * strategies for handling NaNs and ties in the data (NaNs maximal, ties averaged).
  * The ranking algorithm can be set using a constructor argument.
- *
  */
 public class SpearmansCorrelation {
 

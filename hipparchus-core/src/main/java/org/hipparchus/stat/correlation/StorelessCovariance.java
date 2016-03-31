@@ -27,24 +27,23 @@ import org.hipparchus.linear.RealMatrix;
  * stored in memory. The size of the covariance matrix is specified in the
  * constructor. Specific elements of the matrix are incrementally updated with
  * calls to incrementRow() or increment Covariance().
- *
- * <p>This class is based on a paper written by Philippe P&eacute;bay:
+ * <p>
+ * This class is based on a paper written by Philippe P&eacute;bay:
  * <a href="http://prod.sandia.gov/techlib/access-control.cgi/2008/086212.pdf">
  * Formulas for Robust, One-Pass Parallel Computation of Covariances and
  * Arbitrary-Order Statistical Moments</a>, 2008, Technical Report SAND2008-6212,
- * Sandia National Laboratories.</p>
- *
- * <p>Note: the underlying covariance matrix is symmetric, thus only the
- * upper triangular part of the matrix is stored and updated each increment.</p>
- *
+ * Sandia National Laboratories.
+ * <p>
+ * Note: the underlying covariance matrix is symmetric, thus only the
+ * upper triangular part of the matrix is stored and updated each increment.
  */
 public class StorelessCovariance extends Covariance {
 
     /** the square covariance matrix (upper triangular part) */
-    private StorelessBivariateCovariance[] covMatrix;
+    private final StorelessBivariateCovariance[] covMatrix;
 
     /** dimension of the square covariance matrix */
-    private int dimension;
+    private final int dimension;
 
     /**
      * Create a bias corrected covariance matrix with a given dimension.
@@ -127,12 +126,10 @@ public class StorelessCovariance extends Covariance {
      * @throws MathIllegalArgumentException if the number of observations
      * in the cell is &lt; 2
      */
-    public double getCovariance(final int xIndex,
-                                final int yIndex)
+    public double getCovariance(final int xIndex, final int yIndex)
         throws MathIllegalArgumentException {
 
         return getElement(xIndex, yIndex).getResult();
-
     }
 
     /**
@@ -188,7 +185,7 @@ public class StorelessCovariance extends Covariance {
     /**
      * {@inheritDoc}
      * @throws MathIllegalArgumentException if the number of observations
-     * in a cell is &lt; 2
+     * in a cell is < 2
      */
     @Override
     public RealMatrix getCovarianceMatrix() throws MathIllegalArgumentException {
@@ -222,8 +219,7 @@ public class StorelessCovariance extends Covariance {
      * @throws MathRuntimeException in all cases
      */
     @Override
-    public int getN()
-        throws MathRuntimeException {
+    public int getN() throws MathRuntimeException {
         throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
     }
 }

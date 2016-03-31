@@ -28,23 +28,23 @@ import org.hipparchus.util.FastMath;
 /**
  * Computes Pearson's product-moment correlation coefficients for pairs of arrays
  * or columns of a matrix.
- *
- * <p>The constructors that take <code>RealMatrix</code> or
+ * <p>
+ * The constructors that take <code>RealMatrix</code> or
  * <code>double[][]</code> arguments generate correlation matrices.  The
  * columns of the input matrices are assumed to represent variable values.
- * Correlations are given by the formula</p>
- *
- * <p><code>cor(X, Y) = &Sigma;[(x<sub>i</sub> - E(X))(y<sub>i</sub> - E(Y))] / [(n - 1)s(X)s(Y)]</code>
+ * Correlations are given by the formula:
+ * <p>
+ * <code>cor(X, Y) = &Sigma;[(x<sub>i</sub> - E(X))(y<sub>i</sub> - E(Y))] / [(n - 1)s(X)s(Y)]</code>
+ * <p>
  * where <code>E(X)</code> is the mean of <code>X</code>, <code>E(Y)</code>
- * is the mean of the <code>Y</code> values and s(X), s(Y) are standard deviations.</p>
- *
- * <p>To compute the correlation coefficient for a single pair of arrays, use {@link #PearsonsCorrelation()}
+ * is the mean of the <code>Y</code> values and s(X), s(Y) are standard deviations.
+ * <p>
+ * To compute the correlation coefficient for a single pair of arrays, use {@link #PearsonsCorrelation()}
  * to construct an instance with no data and then {@link #correlation(double[], double[])}.
  * Correlation matrices can also be computed directly from an instance with no data using
  * {@link #computeCorrelationMatrix(double[][])}. In order to use {@link #getCorrelationMatrix()},
  * {@link #getCorrelationPValues()},  or {@link #getCorrelationStandardErrors()}; however, one of the
- * constructors supplying data or a covariance matrix must be used to create the instance.</p>
- *
+ * constructors supplying data or a covariance matrix must be used to create the instance.
  */
 public class PearsonsCorrelation {
 

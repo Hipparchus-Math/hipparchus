@@ -65,7 +65,6 @@ import org.hipparchus.util.Pair;
  * Kendall tau rank correlation coefficient (Wikipedia)</a>
  * @see <a href="http://www.jstor.org/stable/2282833">A Computer
  * Method for Calculating Kendall's Tau with Ungrouped Data</a>
- *
  */
 public class KendallsCorrelation {
 

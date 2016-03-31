@@ -22,17 +22,16 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 /**
  * Bivariate Covariance implementation that does not require input data to be
  * stored in memory.
- *
- * <p>This class is based on a paper written by Philippe P&eacute;bay:
+ * <p>
+ * This class is based on a paper written by Philippe P&eacute;bay:
  * <a href="http://prod.sandia.gov/techlib/access-control.cgi/2008/086212.pdf">
  * Formulas for Robust, One-Pass Parallel Computation of Covariances and
  * Arbitrary-Order Statistical Moments</a>, 2008, Technical Report SAND2008-6212,
  * Sandia National Laboratories. It computes the covariance for a pair of variables.
- * Use {@link StorelessCovariance} to estimate an entire covariance matrix.</p>
- *
- * <p>Note: This class is package private as it is only used internally in
- * the {@link StorelessCovariance} class.</p>
- *
+ * Use {@link StorelessCovariance} to estimate an entire covariance matrix.
+ * <p>
+ * Note: This class is package private as it is only used internally in
+ * the {@link StorelessCovariance} class.
  */
 class StorelessBivariateCovariance {
 
@@ -125,7 +124,7 @@ class StorelessBivariateCovariance {
     public double getResult() throws MathIllegalArgumentException {
         if (n < 2) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION,
-                                                n, 2, true);
+                                                   n, 2, true);
         }
         if (biasCorrected) {
             return covarianceNumerator / (n - 1d);
