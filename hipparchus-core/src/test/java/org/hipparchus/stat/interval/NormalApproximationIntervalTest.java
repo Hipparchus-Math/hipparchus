@@ -20,13 +20,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the NormalApproximationInterval class.
+ * Test cases for the NormalApproximationInterval.
  */
-public class NormalApproximationIntervalTest extends BinomialConfidenceIntervalAbstractTest {
+public class NormalApproximationIntervalTest extends BinomialProportionAbstractTest {
 
     @Override
-    protected BinomialConfidenceInterval createBinomialConfidenceInterval() {
-        return BinomialConfidenceInterval.normalApproximation();
+    protected BinomialProportionMethod getBinomialProportionMethod() {
+        return BinomialProportion::getNormalApproximationInterval;
     }
 
     @Test

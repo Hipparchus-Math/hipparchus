@@ -21,59 +21,64 @@ import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test cases for the BinomialConfidenceInterval implementations.
+ * Test cases for the BinomialProportion implementations.
  */
-public abstract class BinomialConfidenceIntervalAbstractTest {
+public abstract class BinomialProportionAbstractTest {
 
-    protected BinomialConfidenceInterval testStatistic;
+    @FunctionalInterface
+    public interface BinomialProportionMethod {
+        ConfidenceInterval calculate(int trials, double probability, double confidenceLevel);
+    }
 
-    private final int trials             = 500;
-    private final double successes       = 0.1;
-    private final double confidenceLevel = 0.9;
+    protected BinomialProportionMethod testMethod;
 
-    protected abstract BinomialConfidenceInterval createBinomialConfidenceInterval();
+    private final int trials                  = 500;
+    private final double probabilityOfSuccess = 0.1;
+    private final double confidenceLevel      = 0.9;
+
+    protected abstract BinomialProportionMethod getBinomialProportionMethod();
 
     /**
      * Returns the confidence interval for the given statistic with the following values:
      *
      * <ul>
      *  <li>trials: 500</li>
-     *  <li>successes: 50</li>
+     *  <li>probabilityOfSuccess: 0.1</li>
      *  <li>confidenceLevel: 0.9</li>
      * </ul>
      * @return the Confidence Interval for the given values
      */
     protected ConfidenceInterval createStandardTestInterval() {
-        return testStatistic.createInterval(trials, successes, confidenceLevel);
+        return testMethod.calculate(trials, probabilityOfSuccess, confidenceLevel);
     }
 
     @Before
     public void setUp() {
-        testStatistic = createBinomialConfidenceInterval();
+        testMethod = getBinomialProportionMethod();
     }
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testZeroConfidencelevel() {
-        testStatistic.createInterval(trials, successes, 0d);
+        testMethod.calculate(trials, probabilityOfSuccess, 0d);
     }
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testOneConfidencelevel() {
-        testStatistic.createInterval(trials, successes, 1d);
+        testMethod.calculate(trials, probabilityOfSuccess, 1d);
     }
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testZeroTrials() {
-        testStatistic.createInterval(0, 0, confidenceLevel);
+        testMethod.calculate(0, 0, confidenceLevel);
     }
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testNegativeSuccesses() {
-        testStatistic.createInterval(trials, -1, confidenceLevel);
+        testMethod.calculate(trials, -1, confidenceLevel);
     }
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testSuccessesExceedingTrials() {
-        testStatistic.createInterval(trials, trials + 1, confidenceLevel);
+        testMethod.calculate(trials, trials + 1, confidenceLevel);
     }
 }

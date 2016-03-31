@@ -20,13 +20,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the AgrestiCoullInterval class.
+ * Test cases for the AgrestiCoullInterval.
  */
-public class AgrestiCoullIntervalTest extends BinomialConfidenceIntervalAbstractTest {
+public class AgrestiCoullIntervalTest extends BinomialProportionAbstractTest {
 
     @Override
-    protected BinomialConfidenceInterval createBinomialConfidenceInterval() {
-        return BinomialConfidenceInterval.agrestiCoull();
+    protected BinomialProportionMethod getBinomialProportionMethod() {
+        return BinomialProportion::getAgrestiCoullInterval;
     }
 
     @Test

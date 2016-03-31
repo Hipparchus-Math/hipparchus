@@ -20,13 +20,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the WilsonScoreInterval class.
+ * Test cases for the WilsonScoreInterval.
  */
-public class WilsonScoreIntervalTest extends BinomialConfidenceIntervalAbstractTest {
+public class WilsonScoreIntervalTest extends BinomialProportionAbstractTest {
 
     @Override
-    protected BinomialConfidenceInterval createBinomialConfidenceInterval() {
-        return BinomialConfidenceInterval.wilsonScore();
+    protected BinomialProportionMethod getBinomialProportionMethod() {
+        return BinomialProportion::getWilsonScoreInterval;
     }
 
     @Test

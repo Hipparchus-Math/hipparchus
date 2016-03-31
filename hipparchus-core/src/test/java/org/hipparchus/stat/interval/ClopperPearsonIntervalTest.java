@@ -20,13 +20,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the ClopperPearsonInterval class.
+ * Test cases for the ClopperPearsonInterval.
  */
-public class ClopperPearsonIntervalTest extends BinomialConfidenceIntervalAbstractTest {
+public class ClopperPearsonIntervalTest extends BinomialProportionAbstractTest {
 
     @Override
-    protected BinomialConfidenceInterval createBinomialConfidenceInterval() {
-        return BinomialConfidenceInterval.clopperPearson();
+    protected BinomialProportionMethod getBinomialProportionMethod() {
+        return BinomialProportion::getClopperPearsonInterval;
     }
 
     @Test
