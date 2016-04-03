@@ -21,14 +21,17 @@ import java.util.Arrays;
 import org.hipparchus.analysis.solvers.PegasusSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.FirstOrderIntegrator;
+import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.nonstiff.GraggBulirschStoerIntegrator;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class ReappearingEventTest {
+
     @Test
     public void testDormandPrince()
         throws MathIllegalArgumentException, MathIllegalStateException {
@@ -46,44 +49,40 @@ public class ReappearingEventTest {
     public double test(int integratorType)
         throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
-        FirstOrderIntegrator integrator;
-        integrator = (integratorType == 1)
-                     ? new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7)
-                     : new GraggBulirschStoerIntegrator(e, 100.0, 1e-7, 1e-7);
+        ODEIntegrator integrator = (integratorType == 1) ?
+                                   new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7) :
+                                   new GraggBulirschStoerIntegrator(e, 100.0, 1e-7, 1e-7);
         PegasusSolver rootSolver = new PegasusSolver(e, e);
         integrator.addEventHandler(new Event(), 0.1, e, 1000, rootSolver);
         double t0 = 6.0;
         double tEnd = 10.0;
         double[] y = {2.0, 2.0, 2.0, 4.0, 2.0, 7.0, 15.0};
-        return integrator.integrate(new Ode(), t0, y, tEnd, y);
+        return integrator.integrate(new Ode(), new ODEState(t0, y), tEnd).getTime();
     }
 
-    private static class Ode implements FirstOrderDifferentialEquations {
+    private static class Ode implements OrdinaryDifferentialEquation {
         public int getDimension() {
             return 7;
         }
 
-        public void computeDerivatives(double t, double[] y, double[] yDot) {
+        public double[] computeDerivatives(double t, double[] y) {
+            double[] yDot = new double[y.length];
             Arrays.fill(yDot, 1.0);
+            return yDot;
         }
     }
 
     /** State events for this unit test. */
-    protected static class Event implements EventHandler {
+    protected static class Event implements ODEEventHandler {
 
-        public void init(double t0, double[] y0, double t) {
+        public double g(ODEStateAndDerivative s) {
+            return s.getState()[6] - 15.0;
         }
 
-        public double g(double t, double[] y) {
-            return y[6] - 15.0;
-        }
-
-        public Action eventOccurred(double t, double[] y, boolean increasing) {
+        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
             return Action.STOP;
         }
 
-        public void resetState(double t, double[] y) {
-            // Never called.
-        }
     }
+
 }

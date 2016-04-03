@@ -22,15 +22,17 @@ import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.FirstOrderIntegrator;
+import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.GraggBulirschStoerIntegrator;
 import org.junit.Assert;
 import org.junit.Test;
 
 /** Base class for step normalizer output tests. */
 public abstract class StepNormalizerOutputTestBase
-    implements FirstOrderDifferentialEquations, FixedStepHandler {
+    implements OrdinaryDifferentialEquation, ODEFixedStepHandler {
 
     /** The normalized output time values. */
     private List<Double> output;
@@ -225,14 +227,13 @@ public abstract class StepNormalizerOutputTestBase
                         double[] expected, boolean reverse)
         throws MathIllegalArgumentException, MathIllegalStateException {
         // Forward test.
-        FirstOrderIntegrator integ = new GraggBulirschStoerIntegrator(
-                                                        1e-8, 1.0, 1e-5, 1e-5);
+        ODEIntegrator integ = new GraggBulirschStoerIntegrator(1e-8, 1.0, 1e-5, 1e-5);
         integ.addStepHandler(new StepNormalizer(0.5, this, mode, bounds));
         double[] y   = {0.0};
         double start = reverse ? getEnd()   : getStart();
         double end   = reverse ? getStart() : getEnd();
         output       = new ArrayList<Double>();
-        integ.integrate(this, start, y, end, y);
+        integ.integrate(this, new ODEState(start, y), end);
         double[] actual = new double[output.size()];
         for(int i = 0; i < actual.length; i++) {
             actual[i] = output.get(i);
@@ -246,17 +247,13 @@ public abstract class StepNormalizerOutputTestBase
     }
 
     /** {@inheritDoc} */
-    public void computeDerivatives(double t, double[] y, double[] yDot) {
-        yDot[0] = y[0];
+    public double[] computeDerivatives(double t, double[] y) {
+        return y;
     }
 
     /** {@inheritDoc} */
-    public void init(double t0, double[] y0, double t) {
-    }
-
-    /** {@inheritDoc} */
-    public void handleStep(double t, double[] y, double[] yDot, boolean isLast) {
-        output.add(t);
+    public void handleStep(ODEStateAndDerivative s, boolean isLast) {
+        output.add(s.getTime());
     }
 
 }

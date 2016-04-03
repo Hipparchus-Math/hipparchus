@@ -1,7 +1,9 @@
 package org.hipparchus.ode.events;
 
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.FirstOrderIntegrator;
+import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,8 +20,7 @@ public class CloseEventsTest {
     public void testCloseEvents() {
         // setup
         double e = 1e-15;
-        FirstOrderIntegrator integrator =
-                new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
+        ODEIntegrator integrator = new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(5);
         integrator.addEventHandler(detector1, 10, 1, 100);
@@ -27,7 +28,7 @@ public class CloseEventsTest {
         integrator.addEventHandler(detector2, 10, 1, 100);
 
         // action
-        integrator.integrate(new Equation(), 0, new double[2], 20, new double[2]);
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 20);
 
         // verify
         Assert.assertEquals(5, detector1.getActualT(), 0.0);
@@ -39,8 +40,7 @@ public class CloseEventsTest {
     public void testSimultaneousEvents() {
         // setup
         double e = 1e-15;
-        FirstOrderIntegrator integrator =
-                new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
+        ODEIntegrator integrator = new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(5);
         integrator.addEventHandler(detector1, 10, 1, 100);
@@ -48,7 +48,7 @@ public class CloseEventsTest {
         integrator.addEventHandler(detector2, 10, 1, 100);
 
         // action
-        integrator.integrate(new Equation(), 0, new double[2], 20, new double[2]);
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 20);
 
         // verify
         Assert.assertEquals(5, detector1.getActualT(), 0.0);
@@ -56,7 +56,7 @@ public class CloseEventsTest {
     }
 
     /** Mock event handler */
-    private static class TimeDetector implements EventHandler {
+    private static class TimeDetector implements ODEEventHandler {
 
         /** requested event time. */
         private final double eventT;
@@ -83,36 +83,27 @@ public class CloseEventsTest {
         }
 
         @Override
-        public void init(double t0, double[] y0, double t) {
+        public double g(ODEStateAndDerivative s) {
+            return s.getTime() - eventT;
         }
 
         @Override
-        public double g(double t, double[] y) {
-            return t - eventT;
-        }
-
-        @Override
-        public Action eventOccurred(double t, double[] y, boolean increasing) {
-            this.actualT = t;
+        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+            this.actualT = s.getTime();
             return Action.CONTINUE;
-        }
-
-        @Override
-        public void resetState(double t, double[] y) {
         }
 
     }
 
     /** arbitrary equations. */
-    public static class Equation implements FirstOrderDifferentialEquations {
+    public static class Equation implements OrdinaryDifferentialEquation {
 
         public int getDimension() {
             return 2;
         }
 
-        public void computeDerivatives(double t, double[] y, double[] yDot) {
-            yDot[0] = 1.0;
-            yDot[1] = 2.0;
+        public double[] computeDerivatives(double t, double[] y) {
+            return new double[] { 1.0, 2.0 };
         }
 
     }

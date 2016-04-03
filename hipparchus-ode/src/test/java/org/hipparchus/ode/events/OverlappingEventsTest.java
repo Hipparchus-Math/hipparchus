@@ -23,8 +23,10 @@ import org.hipparchus.analysis.solvers.BaseSecantSolver;
 import org.hipparchus.analysis.solvers.PegasusSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.FirstOrderIntegrator;
+import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -32,7 +34,7 @@ import org.junit.Test;
 /** Tests for overlapping state events. Also tests an event function that does
  * not converge to zero, but does have values of opposite sign around its root.
  */
-public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
+public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
 
     /** Expected event times for first event. */
     private static final double[] EVENT_TIMES1 = {1.0, 2.0, 3.0, 4.0, 5.0, 6.0,
@@ -75,10 +77,10 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
     public void test(int eventType)
         throws MathIllegalArgumentException, MathIllegalStateException {
         double e = 1e-15;
-        FirstOrderIntegrator integrator = new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
+        ODEIntegrator integrator = new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
         BaseSecantSolver rootSolver = new PegasusSolver(e, e);
-        EventHandler evt1 = new Event(0, eventType);
-        EventHandler evt2 = new Event(1, eventType);
+        ODEEventHandler evt1 = new Event(0, eventType);
+        ODEEventHandler evt2 = new Event(1, eventType);
         integrator.addEventHandler(evt1, 0.1, e, 999, rootSolver);
         integrator.addEventHandler(evt2, 0.1, e, 999, rootSolver);
         double t = 0.0;
@@ -87,7 +89,7 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
         List<Double> events1 = new ArrayList<Double>();
         List<Double> events2 = new ArrayList<Double>();
         while (t < tEnd) {
-            t = integrator.integrate(this, t, y, tEnd, y);
+            t = integrator.integrate(this, new ODEState(t, y), tEnd).getTime();
             //System.out.println("t=" + t + ",\t\ty=[" + y[0] + "," + y[1] + "]");
 
             if (y[0] >= 1.0) {
@@ -118,13 +120,12 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
     }
 
     /** {@inheritDoc} */
-    public void computeDerivatives(double t, double[] y, double[] yDot) {
-        yDot[0] = 1.0;
-        yDot[1] = 2.0;
+    public double[] computeDerivatives(double t, double[] y) {
+        return new double[] { 1.0, 2.0 };
     }
 
     /** State events for this unit test. */
-    private class Event implements EventHandler {
+    private class Event implements ODEEventHandler {
         /** The index of the continuous variable to use. */
         private final int idx;
 
@@ -141,23 +142,16 @@ public class OverlappingEventsTest implements FirstOrderDifferentialEquations {
         }
 
         /** {@inheritDoc} */
-        public void init(double t0, double[] y0, double t) {
+        public double g(ODEStateAndDerivative s) {
+            return (eventType == 0) ? s.getState()[idx] >= 1.0 ? 1.0 : -1.0
+                                    : s.getState()[idx] - 1.0;
         }
 
         /** {@inheritDoc} */
-        public double g(double t, double[] y) {
-            return (eventType == 0) ? y[idx] >= 1.0 ? 1.0 : -1.0
-                                    : y[idx] - 1.0;
-        }
-
-        /** {@inheritDoc} */
-        public Action eventOccurred(double t, double[] y, boolean increasing) {
+        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
             return Action.STOP;
         }
 
-        /** {@inheritDoc} */
-        public void resetState(double t, double[] y) {
-            // Never called.
-        }
     }
+
 }
