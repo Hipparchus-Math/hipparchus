@@ -21,24 +21,9 @@ import org.hipparchus.exception.MathIllegalStateException;
 
 /** Interface to compute exactly Jacobian matrix for some parameter
  *  when computing {@link JacobianMatrices partial derivatives equations}.
- * @deprecated as of 1.0, replaced with {@link NamedParameterJacobianProvider}
+ *
  */
-@Deprecated
-public interface ParameterJacobianProvider extends NamedParameterJacobianProvider {
-
-    /** {@inheritDoc}
-     * <p>
-     * The default implementation calls {@link #computeParameterJacobian(double,
-     * double[], double[], String, double[])}
-     * </p>
-     */
-    default double[] computeParameterJacobian(final double t, final double[] y,
-                                              final double[] yDot, final String paramName)
-        throws MathIllegalArgumentException, MathIllegalStateException {
-        final double[] dFdP = new double[y.length];
-        computeParameterJacobian(t, y, yDot, paramName, dFdP);
-        return dFdP;
-    }
+public interface NamedParameterJacobianProvider extends Parameterizable {
 
     /** Compute the Jacobian matrix of ODE with respect to one parameter.
      * <p>If the parameter does not belong to the collection returned by
@@ -49,14 +34,12 @@ public interface ParameterJacobianProvider extends NamedParameterJacobianProvide
      * @param yDot array containing the current value of the time derivative
      * of the main state vector
      * @param paramName name of the parameter to consider
-     * @param dFdP placeholder array where to put the Jacobian matrix of the
-     * ODE with respect to the parameter
+     * @return Jacobian matrix of the ODE with respect to the parameter
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      * @exception MathIllegalArgumentException if the parameter is not supported
      */
-    void computeParameterJacobian(double t, double[] y, double[] yDot,
-                                  String paramName, double[] dFdP)
+    double[] computeParameterJacobian(double t, double[] y, double[] yDot, String paramName)
         throws MathIllegalArgumentException, MathIllegalStateException;
 
 }

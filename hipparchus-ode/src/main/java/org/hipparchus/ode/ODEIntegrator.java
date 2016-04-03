@@ -19,15 +19,26 @@ package org.hipparchus.ode;
 
 import java.util.Collection;
 
+import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.sampling.StepHandler;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.events.ODEEventHandler;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 
-/**
- * This interface defines the common parts shared by integrators
- * for first and second order differential equations.
- * @see FirstOrderIntegrator
- * @see SecondOrderIntegrator
+/** This interface represents a first order integrator for
+ * differential equations.
+
+ * <p>The classes which are devoted to solve first order differential
+ * equations should implement this interface. The problems which can
+ * be handled should implement the {@link
+ * OrdinaryDifferentialEquation} interface.</p>
+ *
+ * @see OrdinaryDifferentialEquation
+ * @see org.hipparchus.ode.sampling.StepHandler
+ * @see org.hipparchus.ode.events.EventHandler
  */
 public interface ODEIntegrator  {
 
@@ -43,14 +54,14 @@ public interface ODEIntegrator  {
      * @see #getStepHandlers()
      * @see #clearStepHandlers()
      */
-    void addStepHandler(StepHandler handler);
+    void addStepHandler(ODEStepHandler handler);
 
     /** Get all the step handlers that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers
      * @see #addStepHandler(StepHandler)
      * @see #clearStepHandlers()
      */
-    Collection<StepHandler> getStepHandlers();
+    Collection<ODEStepHandler> getStepHandlers();
 
     /** Remove all the step handlers that have been added to the integrator.
      * @see #addStepHandler(StepHandler)
@@ -72,7 +83,7 @@ public interface ODEIntegrator  {
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      */
-    void addEventHandler(EventHandler handler, double maxCheckInterval,
+    void addEventHandler(ODEEventHandler handler, double maxCheckInterval,
                          double convergence, int maxIterationCount);
 
     /** Add an event handler to the integrator.
@@ -88,16 +99,16 @@ public interface ODEIntegrator  {
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      */
-    void addEventHandler(EventHandler handler, double maxCheckInterval,
+    void addEventHandler(ODEEventHandler handler, double maxCheckInterval,
                          double convergence, int maxIterationCount,
-                         UnivariateSolver solver);
+                         BracketedUnivariateSolver<UnivariateFunction> solver);
 
     /** Get all the event handlers that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers
      * @see #addEventHandler(EventHandler, double, double, int)
      * @see #clearEventHandlers()
      */
-    Collection<EventHandler> getEventHandlers();
+    Collection<ODEEventHandler> getEventHandlers();
 
     /** Remove all the event handlers that have been added to the integrator.
      * @see #addEventHandler(EventHandler, double, double, int)
@@ -113,8 +124,22 @@ public interface ODEIntegrator  {
      * <p>The result is undefined if the method is called outside of
      * calls to <code>integrate</code>.</p>
      * @return current value of the step start time t<sub>i</sub>
+     * @deprecated as of 1.0, replaced with {@link #getStepStart()
+     * getStepStart()}.{@link ODEStateAndDerivative#getTime() getTime()}
      */
+    @Deprecated
     double getCurrentStepStart();
+
+    /** Get the state at step start time t<sub>i</sub>.
+     * <p>This method can be called during integration (typically by
+     * the object implementing the {@link FirstOrderDifferentialEquations
+     * differential equations} problem) if the value of the current step that
+     * is attempted is needed.</p>
+     * <p>The result is undefined if the method is called outside of
+     * calls to <code>integrate</code>.</p>
+     * @return state at step start time t<sub>i</sub>
+     */
+    ODEStateAndDerivative getStepStart();
 
     /** Get the current signed value of the integration stepsize.
      * <p>This method can be called during integration (typically by
@@ -150,5 +175,95 @@ public interface ODEIntegrator  {
      * @return number of evaluations of the differential equations function
      */
     int getEvaluations();
+
+    /** Integrate the differential equations up to the given time.
+     * <p>This method solves an Initial Value Problem (IVP).</p>
+     * <p>Since this method stores some internal state variables made
+     * available in its public interface during integration ({@link
+     * #getCurrentSignedStepsize()}), it is <em>not</em> thread-safe.</p>
+     * @param equations differential equations to integrate
+     * @param initialState initial state (time, primary and secondary state vectors)
+     * @param finalTime target time for the integration
+     * (can be set to a value smaller than {@code t0} for backward integration)
+     * @return final state, its time will be the same as {@code finalTime} if
+     * integration reached its target, but may be different if some {@link
+     * org.hipparchus.ode.events.ODEEventHandler} stops it at some point.
+     * @exception MathIllegalArgumentException if integration step is too small
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
+     * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
+     */
+    ODEStateAndDerivative integrate(ExpandableODE equations,
+                                    ODEState initialState, double finalTime)
+        throws MathIllegalArgumentException, MathIllegalStateException;
+
+    /** Integrate the differential equations up to the given time.
+     * <p>This method solves an Initial Value Problem (IVP).</p>
+     * <p>Since this method stores some internal state variables made
+     * available in its public interface during integration ({@link
+     * #getCurrentSignedStepsize()}), it is <em>not</em> thread-safe.</p>
+     * @param equations differential equations to integrate
+     * @param initialState initial state (time, primary and secondary state vectors)
+     * @param finalTime target time for the integration
+     * (can be set to a value smaller than {@code t0} for backward integration)
+     * @return final state, its time will be the same as {@code finalTime} if
+     * integration reached its target, but may be different if some {@link
+     * org.hipparchus.ode.events.ODEEventHandler} stops it at some point.
+     * @exception MathIllegalArgumentException if integration step is too small
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
+     * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
+     */
+    default ODEStateAndDerivative integrate(OrdinaryDifferentialEquation equations,
+                                            ODEState initialState, double finalTime)
+        throws MathIllegalArgumentException, MathIllegalStateException {
+        return integrate(new ExpandableODE(equations), initialState, finalTime);
+    }
+
+    /** Integrate the differential equations up to the given time.
+     * <p>This method solves an Initial Value Problem (IVP).</p>
+     * <p>Since this method stores some internal state variables made
+     * available in its public interface during integration ({@link
+     * #getCurrentSignedStepsize()}), it is <em>not</em> thread-safe.</p>
+     * @param equations differential equations to integrate
+     * @param t0 initial time
+     * @param y0 initial value of the state vector at t0
+     * @param t target time for the integration
+     * (can be set to a value smaller than <code>t0</code> for backward integration)
+     * @param y placeholder where to put the state vector at each successful
+     *  step (and hence at the end of integration), can be the same object as y0
+     * @return stop time, will be the same as target time if integration reached its
+     * target, but may be different if some {@link
+     * org.hipparchus.ode.events.ODEEventHandler} stops it at some point.
+     * @exception MathIllegalArgumentException if arrays dimension do not match equations settings
+     * @exception MathIllegalArgumentException if integration step is too small
+     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
+     * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
+     * @deprecated as of 1.0, replaced with {@link #integrate(ExpandableODE, ODEState, double)}
+     */
+    @Deprecated
+    default double integrate(final FirstOrderDifferentialEquations equations,
+                             final double t0, final double[] y0, final double t, final double[] y)
+        throws MathIllegalArgumentException, MathIllegalStateException {
+
+        if (y0.length != equations.getDimension()) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   y0.length, equations.getDimension());
+        }
+        if (y.length != equations.getDimension()) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   y.length, equations.getDimension());
+        }
+
+        // prepare expandable stateful equations
+        final ExpandableODE expandableODE = new ExpandableODE(equations);
+
+        // perform integration
+        final ODEState              initialState = new ODEState(t0, y0);
+        final ODEStateAndDerivative finalState   = integrate(expandableODE, initialState, t);
+
+        // extract results back from the stateful equations
+        System.arraycopy(finalState.getState(), 0, y, 0, y.length);
+        return finalState.getTime();
+        
+    }
 
 }

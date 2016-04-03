@@ -37,33 +37,26 @@ package org.hipparchus.ode;
  * for example). These constants are completely outside of the scope
  * of this interface, the classes that implement it are allowed to
  * handle them as they want.</p>
- * @deprecated as of 1.0, replaced with {@link SecondOrderODE}
+ *
+ * @see SecondOrderIntegrator
+ * @see FirstOrderConverter
+ * @see FirstOrderDifferentialEquations
  */
-@Deprecated
-public interface SecondOrderDifferentialEquations extends SecondOrderODE {
+
+public interface SecondOrderODE {
+
+    /** Get the dimension of the problem.
+     * @return dimension of the problem
+     */
+    int getDimension();
 
     /** Get the current time derivative of the state vector.
      * @param t current value of the independent <I>time</I> variable
      * @param y array containing the current value of the state vector
      * @param yDot array containing the current value of the first derivative
      * of the state vector
-     * @param yDDot placeholder array where to put the second time derivative
-     * of the state vector
+     * @return second time derivative of the state vector
      */
-    default double[] computeSecondDerivatives(double t, double[] y, double[] yDot) {
-        final double[] yDDot = new double[y.length];
-        computeSecondDerivatives(t, y, yDot, yDDot);
-        return yDDot;
-    }
-
-    /** Get the current time derivative of the state vector.
-     * @param t current value of the independent <I>time</I> variable
-     * @param y array containing the current value of the state vector
-     * @param yDot array containing the current value of the first derivative
-     * of the state vector
-     * @param yDDot placeholder array where to put the second time derivative
-     * of the state vector
-     */
-    void computeSecondDerivatives(double t, double[] y, double[] yDot, double[] yDDot);
+    double[] computeSecondDerivatives(double t, double[] y, double[] yDot);
 
 }

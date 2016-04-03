@@ -17,11 +17,6 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
-
-
-
 /** This interface represents a first order differential equations set.
  *
  * <p>This interface should be implemented by all real first order
@@ -44,30 +39,38 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see FirstOrderIntegrator
  * @see FirstOrderConverter
  * @see SecondOrderDifferentialEquations
- * @deprecated as of 1.0, replaced with {@link OrdinaryDifferentialEquation}
+ *
  */
-@Deprecated
-public interface FirstOrderDifferentialEquations extends OrdinaryDifferentialEquation {
 
-    /** {@inheritDoc}
-     * <p>
-     * The default implementation calls {@link #computeDerivatives(double, double[], double[])}.
-     * </p>
+public interface OrdinaryDifferentialEquation {
+
+    /** Get the dimension of the problem.
+     * @return dimension of the problem
      */
-    default double[] computeDerivatives(double t, double[] y) {
-        final double[] yDot = new double[y.length];
-        computeDerivatives(t, y, yDot);
-        return yDot;
+    int getDimension();
+
+    /** Initialize equations at the start of an ODE integration.
+     * <p>
+     * This method is called once at the start of the integration. It
+     * may be used by the equations to initialize some internal data
+     * if needed.
+     * </p>
+     * <p>
+     * The default implementation does nothing.
+     * </p>
+     * @param t0 value of the independent <I>time</I> variable at integration start
+     * @param y0 array containing the value of the state vector at integration start
+     * @param finalTime target time for the integration
+     */
+    default void init(double t0, double[] y0, double finalTime) {
+        // do nothing by default
     }
 
     /** Get the current time derivative of the state vector.
      * @param t current value of the independent <I>time</I> variable
      * @param y array containing the current value of the state vector
-     * @param yDot placeholder array where to put the time derivative of the state vector
-     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
-     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
+     * @return time derivative of the state vector
      */
-    void computeDerivatives(double t, double[] y, double[] yDot)
-        throws MathIllegalArgumentException, MathIllegalStateException;
+    double[] computeDerivatives(double t, double[] y);
 
 }

@@ -37,23 +37,9 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see org.hipparchus.ode.FirstOrderIntegrator
  * @see org.hipparchus.ode.SecondOrderIntegrator
  * @see ODEStateInterpolator
- * @deprecated as of 1.0, replaced with {@link ODEStepHandler}
  */
-@Deprecated
-public interface StepHandler extends ODEStepHandler {
 
-    /** {@inheritDoc}} */
-    @Override
-    default void init(final ODEStateAndDerivative initialState, final double finalTime) {
-        init(initialState.getTime(), initialState.getState(), finalTime);
-    }
-
-    /** {@inheritDoc}} */
-    @Override
-    default void handleStep(final ODEStateInterpolator interpolator, final boolean isLast)
-        throws MathIllegalStateException {
-        handleStep(new MigrationStepInterpolator(interpolator), isLast);
-    }
+public interface ODEStepHandler {
 
     /** Initialize step handler at the start of an ODE integration.
      * <p>
@@ -61,11 +47,15 @@ public interface StepHandler extends ODEStepHandler {
      * may be used by the step handler to initialize some internal data
      * if needed.
      * </p>
-     * @param t0 start value of the independent <i>time</i> variable
-     * @param y0 array containing the start value of the state vector
-     * @param t target time for the integration
+     * <p>
+     * The default implementation does nothing
+     * </p>
+     * @param initialState initial time, state vector and derivative
+     * @param finalTime target time for the integration
      */
-    void init(double t0, double[] y0, double t);
+    default void init(ODEStateAndDerivative initialState, double finalTime) {
+        // nothing by default
+    }
 
     /**
      * Handle the last accepted step
@@ -83,7 +73,7 @@ public interface StepHandler extends ODEStepHandler {
      * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
-    void handleStep(StepInterpolator interpolator, boolean isLast)
+    void handleStep(ODEStateInterpolator interpolator, boolean isLast)
         throws MathIllegalStateException;
 
 }

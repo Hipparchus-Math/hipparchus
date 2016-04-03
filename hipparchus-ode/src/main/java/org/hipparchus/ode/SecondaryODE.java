@@ -36,16 +36,33 @@ import org.hipparchus.exception.MathIllegalStateException;
  * method.
  * </p>
  * @see ExpandableODE
- * @deprecated as of 1.0, replaced with {@link SecondaryODE}
  */
-@Deprecated
-public interface SecondaryEquations extends SecondaryODE {
+public interface SecondaryODE {
+
+    /** Get the dimension of the secondary state parameters.
+     * @return dimension of the secondary state parameters
+     */
+    int getDimension();
+
+    /** Initialize equations at the start of an ODE integration.
+     * <p>
+     * This method is called once at the start of the integration. It
+     * may be used by the equations to initialize some internal data
+     * if needed.
+     * </p>
+     * <p>
+     * The default implementation does nothing.
+     * </p>
+     * @param t0 value of the independent <I>time</I> variable at integration start
+     * @param primary0 array containing the value of the primary state vector at integration start
+     * @param secondary0 array containing the value of the secondary state vector at integration start
+     * @param finalTime target time for the integration
+     */
+    default void init(double t0, double[] primary0, double[] secondary0, double finalTime) {
+        // nothing by default
+    }
 
     /** Compute the derivatives related to the secondary state parameters.
-     * <p>
-     * The default implementation calls {@link #computeDerivatives(double, double[],
-     * double[], double[], double[])}.
-     * </p>
      * @param t current value of the independent <I>time</I> variable
      * @param primary array containing the current value of the primary state vector
      * @param primaryDot array containing the derivative of the primary state vector
@@ -54,25 +71,7 @@ public interface SecondaryEquations extends SecondaryODE {
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
-    default double[] computeDerivatives(final double t, final double[] primary, final double[] primaryDot,
-                                        final double[] secondary)
-        throws MathIllegalArgumentException, MathIllegalStateException {
-        final double[] secondaryDot = new double[secondary.length];
-        computeDerivatives(t, primary, primaryDot, secondary, secondaryDot);
-        return secondaryDot;
-    }
-
-    /** Compute the derivatives related to the secondary state parameters.
-     * @param t current value of the independent <I>time</I> variable
-     * @param primary array containing the current value of the primary state vector
-     * @param primaryDot array containing the derivative of the primary state vector
-     * @param secondary array containing the current value of the secondary state vector
-     * @param secondaryDot placeholder array where to put the derivative of the secondary state vector
-     * @exception MathIllegalStateException if the number of functions evaluations is exceeded
-     * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
-     */
-    void computeDerivatives(double t, double[] primary, double[] primaryDot,
-                            double[] secondary, double[] secondaryDot)
+    double[] computeDerivatives(double t, double[] primary, double[] primaryDot, double[] secondary)
         throws MathIllegalArgumentException, MathIllegalStateException;
 
 }

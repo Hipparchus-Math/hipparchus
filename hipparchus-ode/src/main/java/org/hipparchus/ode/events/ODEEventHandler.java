@@ -45,88 +45,10 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * stepsize control provided by integrators that monitor the local
  * error (this event handling feature is available for all integrators,
  * including fixed step ones).</p>
- * @deprecated as of 1.0, replaced with {@link ODEEventHandler}
+ *
  */
-@Deprecated
-public interface EventHandler extends ODEEventHandler {
 
-    /** {@inheritDoc} */
-    @Override
-    default void init(final ODEStateAndDerivative initialState, final double finalTime) {
-        init(initialState.getTime(), initialState.getState(), finalTime);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    default double g(final ODEStateAndDerivative state) {
-        return g(state.getTime(), state.getState());
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    default org.hipparchus.ode.events.Action eventOccurred(final ODEStateAndDerivative state,
-                                                           final boolean increasing) {
-        switch (eventOccurred(state.getTime(), state.getState(), increasing)) {
-            case CONTINUE:
-                return org.hipparchus.ode.events.Action.CONTINUE;
-            case RESET_DERIVATIVES:
-                return org.hipparchus.ode.events.Action.RESET_DERIVATIVES;
-            case RESET_STATE:
-                return org.hipparchus.ode.events.Action.RESET_STATE;
-            default:
-                return org.hipparchus.ode.events.Action.STOP;
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    default ODEState resetState(final ODEStateAndDerivative state) {
-        final double   t = state.getTime();
-        final double[] y = state.getState();
-        resetState(t, y);
-        return new ODEState(t, y);
-    }
-
-    /** Enumerate for actions to be performed when an event occurs.
-     * @deprecated as of 1.0, replaced with {@link Action}
-     */
-    @Deprecated
-    enum Action {
-
-        /** Stop indicator.
-         * <p>This value should be used as the return value of the {@link
-         * #eventOccurred eventOccurred} method when the integration should be
-         * stopped after the event ending the current step.</p>
-         */
-        STOP,
-
-        /** Reset state indicator.
-         * <p>This value should be used as the return value of the {@link
-         * #eventOccurred eventOccurred} method when the integration should
-         * go on after the event ending the current step, with a new state
-         * vector (which will be retrieved thanks to the {@link #resetState
-         * resetState} method).</p>
-         */
-        RESET_STATE,
-
-        /** Reset derivatives indicator.
-         * <p>This value should be used as the return value of the {@link
-         * #eventOccurred eventOccurred} method when the integration should
-         * go on after the event ending the current step, with a new derivatives
-         * vector (which will be retrieved thanks to the {@link
-         * org.hipparchus.ode.FirstOrderDifferentialEquations#computeDerivatives}
-         * method).</p>
-         */
-        RESET_DERIVATIVES,
-
-        /** Continue indicator.
-         * <p>This value should be used as the return value of the {@link
-         * #eventOccurred eventOccurred} method when the integration should go
-         * on after the event ending the current step.</p>
-         */
-        CONTINUE;
-
-    }
+public interface ODEEventHandler  {
 
     /** Initialize event handler at the start of an ODE integration.
      * <p>
@@ -134,11 +56,15 @@ public interface EventHandler extends ODEEventHandler {
      * may be used by the event handler to initialize some internal data
      * if needed.
      * </p>
-     * @param t0 start value of the independent <i>time</i> variable
-     * @param y0 array containing the start value of the state vector
-     * @param t target time for the integration
+     * <p>
+     * The default implementation does nothing
+     * </p>
+     * @param initialState initial time, state vector and derivative
+     * @param finalTime target time for the integration
      */
-    void init(double t0, double[] y0, double t);
+    default void init(ODEStateAndDerivative initialState, double finalTime) {
+        // nothing by default
+    }
 
     /** Compute the value of the switching function.
 
@@ -171,11 +97,11 @@ public interface EventHandler extends ODEEventHandler {
      * at bounce points, and {@code sign} is used to <em>unfold</em> it back, so the
      * solvers sees a {@code g(t)} function which behaves smoothly even across events.</p>
 
-     * @param t current value of the independent <i>time</i> variable
-     * @param y array containing the current value of the state vector
+     * @param state current value of the independent <i>time</i> variable, state vector
+     * and derivative
      * @return value of the g switching function
      */
-    double g(double t, double[] y);
+    double g(ODEStateAndDerivative state);
 
     /** Handle an event and choose what to do next.
 
@@ -207,9 +133,8 @@ public interface EventHandler extends ODEEventHandler {
 
      * <p>The scheduling between this method and the {@link
      * org.hipparchus.ode.sampling.StepHandler StepHandler} method {@link
-     * org.hipparchus.ode.sampling.StepHandler#handleStep(
-     * org.hipparchus.ode.sampling.StepInterpolator, boolean)
-     * handleStep(interpolator, isLast)} is to call this method first and
+     * org.hipparchus.ode.sampling.StepHandler#handleStep(org.hipparchus.ode.sampling.ODEStateInterpolator,
+     * boolean), boolean) handleStep(interpolator, isLast)} is to call this method first and
      * <code>handleStep</code> afterwards. This scheduling allows the integrator to
      * pass <code>true</code> as the <code>isLast</code> parameter to the step
      * handler to make it aware the step will be the last one if this method
@@ -219,7 +144,7 @@ public interface EventHandler extends ODEEventHandler {
      * does for example), user code called by this method and user
      * code called by step handlers may experience apparently out of order values
      * of the independent time variable. As an example, if the same user object
-     * implements both this {@link EventHandler EventHandler} interface and the
+     * implements both this {@link ODEEventHandler EventHandler} interface and the
      * {@link org.hipparchus.ode.sampling.ODEFixedStepHandler ODEFixedStepHandler}
      * interface, a <em>forward</em> integration may call its
      * <code>eventOccurred</code> method with t = 10 first and call its
@@ -229,8 +154,8 @@ public interface EventHandler extends ODEEventHandler {
      * to the size of the fixed step for {@link
      * org.hipparchus.ode.sampling.ODEFixedStepHandler fixed step handlers}.</p>
 
-     * @param t current value of the independent <i>time</i> variable
-     * @param y array containing the current value of the state vector
+     * @param state current value of the independent <i>time</i> variable, state vector
+     * and derivative
      * @param increasing if true, the value of the switching function increases
      * when times increases around event (note that increase is measured with respect
      * to physical time, not with respect to integration which may go backward in time)
@@ -238,7 +163,7 @@ public interface EventHandler extends ODEEventHandler {
      * value must be one of {@link Action#STOP}, {@link Action#RESET_STATE},
      * {@link Action#RESET_DERIVATIVES} or {@link Action#CONTINUE}
      */
-    Action eventOccurred(double t, double[] y, boolean increasing);
+    Action eventOccurred(ODEStateAndDerivative state, boolean increasing);
 
     /** Reset the state prior to continue the integration.
 
@@ -247,14 +172,15 @@ public interface EventHandler extends ODEEventHandler {
      * #eventOccurred} has itself returned the {@link Action#RESET_STATE}
      * indicator. It allows the user to reset the state vector for the
      * next step, without perturbing the step handler of the finishing
-     * step. If the {@link #eventOccurred} never returns the {@link
-     * Action#RESET_STATE} indicator, this function will never be called, and it is
-     * safe to leave its body empty.</p>
-
-     * @param t current value of the independent <i>time</i> variable
-     * @param y array containing the current value of the state vector
-     * the new state should be put in the same array
+     * step.</p>
+     * <p>The default implementation returns its argument.</p>
+     * @param state current value of the independent <i>time</i> variable, state vector
+     * and derivative
+     * @return reset state (note that it does not include the derivatives, they will
+     * be added automatically by the integrator afterwards)
      */
-    void resetState(double t, double[] y);
+    default ODEState resetState(ODEStateAndDerivative state) {
+        return state;
+    }
 
 }
