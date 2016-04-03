@@ -40,7 +40,7 @@ public class JacobianMatricesTest {
         // This test is taken from Hairer, Norsett and Wanner book
         // Solving Ordinary Differential Equations I (Nonstiff problems),
         // the curves dy/dp = g(b) are in figure 6.5
-        FirstOrderIntegrator integ =
+        ODEIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         double hP = 1.0e-12;
         SummaryStatistics residualsP0 = new SummaryStatistics();
@@ -48,9 +48,9 @@ public class JacobianMatricesTest {
         for (double b = 2.88; b < 3.08; b += 0.001) {
             Brusselator brusselator = new Brusselator(b);
             double[] y = { 1.3, b };
-            integ.integrate(brusselator, 0, y, 20.0, y);
+            y = integ.integrate(brusselator, new ODEState(0, y), 20.0).getState();
             double[] yP = { 1.3, b + hP };
-            integ.integrate(brusselator, 0, yP, 20.0, yP);
+            yP = integ.integrate(brusselator, new ODEState(0, yP), 20.0).getState();
             residualsP0.addValue((yP[0] - y[0]) / hP - brusselator.dYdP0());
             residualsP1.addValue((yP[1] - y[1]) / hP - brusselator.dYdP1());
         }
@@ -63,7 +63,7 @@ public class JacobianMatricesTest {
     @Test
     public void testHighAccuracyExternalDifferentiation()
         throws MathIllegalArgumentException, MathIllegalStateException {
-        FirstOrderIntegrator integ =
+        ODEIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
         double hP = 1.0e-12;
         SummaryStatistics residualsP0 = new SummaryStatistics();
@@ -71,10 +71,10 @@ public class JacobianMatricesTest {
         for (double b = 2.88; b < 3.08; b += 0.001) {
             ParamBrusselator brusselator = new ParamBrusselator(b);
             double[] y = { 1.3, b };
-            integ.integrate(brusselator, 0, y, 20.0, y);
+            y = integ.integrate(brusselator, new ODEState(0, y), 20.0).getState();
             double[] yP = { 1.3, b + hP };
             brusselator.setParameter("b", b + hP);
-            integ.integrate(brusselator, 0, yP, 20.0, yP);
+            yP = integ.integrate(brusselator, new ODEState(0, yP), 20.0).getState();
             residualsP0.addValue((yP[0] - y[0]) / hP - brusselator.dYdP0());
             residualsP1.addValue((yP[1] - y[1]) / hP - brusselator.dYdP1());
         }
@@ -114,23 +114,18 @@ public class JacobianMatricesTest {
                 ParamBrusselator brusselator = new ParamBrusselator(b);
                 brusselator.setParameter(ParamBrusselator.B, b);
             double[] z = { 1.3, b };
-            double[][] dZdZ0 = new double[2][2];
-            double[]   dZdP  = new double[2];
 
             JacobianMatrices jacob = new JacobianMatrices(brusselator, new double[] { hY, hY }, ParamBrusselator.B);
             jacob.setParameterizedODE(brusselator);
             jacob.setParameterStep(ParamBrusselator.B, hP);
             jacob.setInitialParameterJacobian(ParamBrusselator.B, new double[] { 0.0, 1.0 });
 
-            ExpandableStatefulODE efode = new ExpandableStatefulODE(brusselator);
-            efode.setTime(0);
-            efode.setPrimaryState(z);
+            ExpandableODE efode = new ExpandableODE(brusselator);
             jacob.registerVariationalEquations(efode);
 
             integ.setMaxEvaluations(5000);
-            integ.integrate(efode, 20.0);
-            jacob.getCurrentMainSetJacobian(dZdZ0);
-            jacob.getCurrentParameterJacobian(ParamBrusselator.B, dZdP);
+            final ODEStateAndDerivative finalState = integ.integrate(efode, new ODEState(0, z), 20.0);
+            final double[]   dZdP  = jacob.extractParameterJacobian(finalState, ParamBrusselator.B);
 //            Assert.assertEquals(5000, integ.getMaxEvaluations());
 //            Assert.assertTrue(integ.getEvaluations() > 1500);
 //            Assert.assertTrue(integ.getEvaluations() < 2100);
@@ -154,22 +149,17 @@ public class JacobianMatricesTest {
         for (double b = 2.88; b < 3.08; b += 0.001) {
             Brusselator brusselator = new Brusselator(b);
             double[] z = { 1.3, b };
-            double[][] dZdZ0 = new double[2][2];
-            double[]   dZdP  = new double[2];
 
             JacobianMatrices jacob = new JacobianMatrices(brusselator, Brusselator.B);
             jacob.addParameterJacobianProvider(brusselator);
             jacob.setInitialParameterJacobian(Brusselator.B, new double[] { 0.0, 1.0 });
 
-            ExpandableStatefulODE efode = new ExpandableStatefulODE(brusselator);
-            efode.setTime(0);
-            efode.setPrimaryState(z);
+            ExpandableODE efode = new ExpandableODE(brusselator);
             jacob.registerVariationalEquations(efode);
 
             integ.setMaxEvaluations(5000);
-            integ.integrate(efode, 20.0);
-            jacob.getCurrentMainSetJacobian(dZdZ0);
-            jacob.getCurrentParameterJacobian(Brusselator.B, dZdP);
+            final ODEStateAndDerivative finalState = integ.integrate(efode, new ODEState(0, z), 20.0);
+            final double[] dZdP = jacob.extractParameterJacobian(finalState, Brusselator.B);
 //            Assert.assertEquals(5000, integ.getMaxEvaluations());
 //            Assert.assertTrue(integ.getEvaluations() > 350);
 //            Assert.assertTrue(integ.getEvaluations() < 510);
@@ -198,39 +188,33 @@ public class JacobianMatricesTest {
         jacob.setInitialParameterJacobian(Circle.CY, circle.exactDyDcy(0));
         jacob.setInitialParameterJacobian(Circle.OMEGA, circle.exactDyDom(0));
 
-        ExpandableStatefulODE efode = new ExpandableStatefulODE(circle);
-        efode.setTime(0);
-        efode.setPrimaryState(y);
+        ExpandableODE efode = new ExpandableODE(circle);
         jacob.registerVariationalEquations(efode);
 
         integ.setMaxEvaluations(5000);
 
         double t = 18 * FastMath.PI;
-        integ.integrate(efode, t);
-        y = efode.getPrimaryState();
+        final ODEStateAndDerivative finalState = integ.integrate(efode, new ODEState(0, y), t);
+        y = finalState.getState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(circle.exactY(t)[i], y[i], 1.0e-9);
         }
 
-        double[][] dydy0 = new double[2][2];
-        jacob.getCurrentMainSetJacobian(dydy0);
+        double[][] dydy0 = jacob.extractMainSetJacobian(finalState);
         for (int i = 0; i < dydy0.length; ++i) {
             for (int j = 0; j < dydy0[i].length; ++j) {
                 Assert.assertEquals(circle.exactDyDy0(t)[i][j], dydy0[i][j], 1.0e-9);
             }
         }
-        double[] dydcx = new double[2];
-        jacob.getCurrentParameterJacobian(Circle.CX, dydcx);
+        double[] dydcx = jacob.extractParameterJacobian(finalState, Circle.CX);
         for (int i = 0; i < dydcx.length; ++i) {
             Assert.assertEquals(circle.exactDyDcx(t)[i], dydcx[i], 1.0e-7);
         }
-        double[] dydcy = new double[2];
-        jacob.getCurrentParameterJacobian(Circle.CY, dydcy);
+        double[] dydcy = jacob.extractParameterJacobian(finalState, Circle.CY);
         for (int i = 0; i < dydcy.length; ++i) {
             Assert.assertEquals(circle.exactDyDcy(t)[i], dydcy[i], 1.0e-7);
         }
-        double[] dydom = new double[2];
-        jacob.getCurrentParameterJacobian(Circle.OMEGA, dydom);
+        double[] dydom = jacob.extractParameterJacobian(finalState, Circle.OMEGA);
         for (int i = 0; i < dydom.length; ++i) {
             Assert.assertEquals(circle.exactDyDom(t)[i], dydom[i], 1.0e-7);
         }
@@ -260,43 +244,38 @@ public class JacobianMatricesTest {
         jacob.setInitialParameterJacobian(ParameterizedCircle.CY, pcircle.exactDyDcy(0));
         jacob.setInitialParameterJacobian(ParameterizedCircle.OMEGA, pcircle.exactDyDom(0));
 
-        ExpandableStatefulODE efode = new ExpandableStatefulODE(pcircle);
-        efode.setTime(0);
-        efode.setPrimaryState(y);
+        ExpandableODE efode = new ExpandableODE(pcircle);
         jacob.registerVariationalEquations(efode);
 
         integ.setMaxEvaluations(50000);
 
         double t = 18 * FastMath.PI;
-        integ.integrate(efode, t);
-        y = efode.getPrimaryState();
+        final ODEStateAndDerivative finalState = integ.integrate(efode, new ODEState(0, y), t);
+        y = finalState.getState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(pcircle.exactY(t)[i], y[i], 1.0e-9);
         }
 
-        double[][] dydy0 = new double[2][2];
-        jacob.getCurrentMainSetJacobian(dydy0);
+        double[][] dydy0 = jacob.extractMainSetJacobian(finalState);
         for (int i = 0; i < dydy0.length; ++i) {
             for (int j = 0; j < dydy0[i].length; ++j) {
                 Assert.assertEquals(pcircle.exactDyDy0(t)[i][j], dydy0[i][j], 5.0e-4);
             }
         }
 
-        double[] dydp0 = new double[2];
-        jacob.getCurrentParameterJacobian(ParameterizedCircle.CX, dydp0);
+        double[] dydp0 = jacob.extractParameterJacobian(finalState, ParameterizedCircle.CX);
         for (int i = 0; i < dydp0.length; ++i) {
             Assert.assertEquals(pcircle.exactDyDcx(t)[i], dydp0[i], 5.0e-4);
         }
 
-        double[] dydp1 = new double[2];
-        jacob.getCurrentParameterJacobian(ParameterizedCircle.OMEGA, dydp1);
+        double[] dydp1 =  jacob.extractParameterJacobian(finalState, ParameterizedCircle.OMEGA);
         for (int i = 0; i < dydp1.length; ++i) {
             Assert.assertEquals(pcircle.exactDyDom(t)[i], dydp1[i], 1.0e-2);
         }
     }
 
     private static class Brusselator extends AbstractParameterizable
-        implements MainStateJacobianProvider, ParameterJacobianProvider {
+        implements MainStateJacobianProvider, NamedParameterJacobianProvider {
 
         public static final String B = "b";
 
@@ -311,30 +290,29 @@ public class JacobianMatricesTest {
             return 2;
         }
 
-        public void computeDerivatives(double t, double[] y, double[] yDot) {
+        public double[] computeDerivatives(double t, double[] y) {
             double prod = y[0] * y[0] * y[1];
-            yDot[0] = 1 + prod - (b + 1) * y[0];
-            yDot[1] = b * y[0] - prod;
+            return new double[] {
+                1 + prod - (b + 1) * y[0],
+                b * y[0] - prod
+            };
         }
 
-        public void computeMainStateJacobian(double t, double[] y, double[] yDot,
-                                             double[][] dFdY) {
+        public double[][] computeMainStateJacobian(double t, double[] y, double[] yDot) {
             double p = 2 * y[0] * y[1];
             double y02 = y[0] * y[0];
-            dFdY[0][0] = p - (1 + b);
-            dFdY[0][1] = y02;
-            dFdY[1][0] = b - p;
-            dFdY[1][1] = -y02;
+            return new double[][] {
+                { p - (1 + b),  y02 },
+                { b - p,  -y02}
+            };
         }
 
-        public void computeParameterJacobian(double t, double[] y, double[] yDot,
-                                             String paramName, double[] dFdP) {
+        public double[] computeParameterJacobian(double t, double[] y, double[] yDot,
+                                             String paramName) {
             if (isSupported(paramName)) {
-                dFdP[0] = -y[0];
-                dFdP[1] = y[0];
+                return new double[] { -y[0], y[0] };
             } else {
-                dFdP[0] = 0;
-                dFdP[1] = 0;
+                return new double[] { 0, 0 };
             }
         }
 
@@ -349,7 +327,7 @@ public class JacobianMatricesTest {
     }
 
     private static class ParamBrusselator extends AbstractParameterizable
-        implements FirstOrderDifferentialEquations, ParameterizedODE {
+        implements OrdinaryDifferentialEquation, ParameterizedODE {
 
         public static final String B = "b";
 
@@ -378,10 +356,12 @@ public class JacobianMatricesTest {
             b = value;
         }
 
-        public void computeDerivatives(double t, double[] y, double[] yDot) {
+        public double[] computeDerivatives(double t, double[] y) {
             double prod = y[0] * y[0] * y[1];
-            yDot[0] = 1 + prod - (b + 1) * y[0];
-            yDot[1] = b * y[0] - prod;
+            return new double[] {
+                1 + prod - (b + 1) * y[0],
+                b * y[0] - prod
+            };
         }
 
         public double dYdP0() {
@@ -396,7 +376,7 @@ public class JacobianMatricesTest {
 
     /** ODE representing a point moving on a circle with provided center and angular rate. */
     private static class Circle extends AbstractParameterizable
-        implements MainStateJacobianProvider, ParameterJacobianProvider {
+        implements MainStateJacobianProvider, NamedParameterJacobianProvider {
 
         public static final String CX = "cx";
         public static final String CY = "cy";
@@ -419,32 +399,29 @@ public class JacobianMatricesTest {
             return 2;
         }
 
-        public void computeDerivatives(double t, double[] y, double[] yDot) {
-            yDot[0] = omega * (cy - y[1]);
-            yDot[1] = omega * (y[0] - cx);
+        public double[] computeDerivatives(double t, double[] y) {
+            return new double[] {
+                omega * (cy - y[1]),
+                omega * (y[0] - cx)
+            };
         }
 
-        public void computeMainStateJacobian(double t, double[] y,
-                                             double[] yDot, double[][] dFdY) {
-            dFdY[0][0] = 0;
-            dFdY[0][1] = -omega;
-            dFdY[1][0] = omega;
-            dFdY[1][1] = 0;
+        public double[][] computeMainStateJacobian(double t, double[] y, double[] yDot) {
+            return new double[][] {
+                { 0, -omega },
+                { omega, 0 }
+            };
         }
 
-        public void computeParameterJacobian(double t, double[] y, double[] yDot,
-                                             String paramName, double[] dFdP)
+        public double[] computeParameterJacobian(double t, double[] y, double[] yDot, String paramName)
             throws MathIllegalArgumentException {
             complainIfNotSupported(paramName);
             if (paramName.equals(CX)) {
-                dFdP[0] = 0;
-                dFdP[1] = -omega;
+                return new double[] { 0, -omega };
             } else if (paramName.equals(CY)) {
-                dFdP[0] = omega;
-                dFdP[1] = 0;
+                return new double[] { omega, 0 };
             }  else {
-                dFdP[0] = cy - y[1];
-                dFdP[1] = y[0] - cx;
+                return new double[] { cy - y[1], y[0] - cx };
             }
         }
 
@@ -492,7 +469,7 @@ public class JacobianMatricesTest {
 
     /** ODE representing a point moving on a circle with provided center and angular rate. */
     private static class ParameterizedCircle extends AbstractParameterizable
-        implements FirstOrderDifferentialEquations, ParameterizedODE {
+        implements OrdinaryDifferentialEquation, ParameterizedODE {
 
         public static final String CX = "cx";
         public static final String CY = "cy";
@@ -515,9 +492,11 @@ public class JacobianMatricesTest {
             return 2;
         }
 
-        public void computeDerivatives(double t, double[] y, double[] yDot) {
-            yDot[0] = omega * (cy - y[1]);
-            yDot[1] = omega * (y[0] - cx);
+        public double[] computeDerivatives(double t, double[] y) {
+            return new double[] {
+                omega * (cy - y[1]),
+                omega * (y[0] - cx)
+            };
         }
 
         public double getParameter(final String name)

@@ -28,10 +28,10 @@ import org.hipparchus.exception.MathIllegalStateException;
  *  which do not compute them by themselves.
  *
  */
-class ParameterJacobianWrapper implements ParameterJacobianProvider {
+class ParameterJacobianWrapper implements NamedParameterJacobianProvider {
 
     /** Main ODE set. */
-    private final FirstOrderDifferentialEquations fode;
+    private final OrdinaryDifferentialEquation fode;
 
     /** Raw ODE without Jacobian computation skill to be wrapped into a ParameterJacobianProvider. */
     private final ParameterizedODE pode;
@@ -39,13 +39,13 @@ class ParameterJacobianWrapper implements ParameterJacobianProvider {
     /** Steps for finite difference computation of the Jacobian df/dp w.r.t. parameters. */
     private final Map<String, Double> hParam;
 
-    /** Wrap a {@link ParameterizedODE} into a {@link ParameterJacobianProvider}.
+    /** Wrap a {@link ParameterizedODE} into a {@link NamedParameterJacobianProvider}.
      * @param fode main first order differential equations set
      * @param pode secondary problem, without parameter Jacobian computation skill
      * @param paramsAndSteps parameters and steps to compute the Jacobians df/dp
      * @see JacobianMatrices#setParameterStep(String, double)
      */
-    ParameterJacobianWrapper(final FirstOrderDifferentialEquations fode,
+    ParameterJacobianWrapper(final OrdinaryDifferentialEquation fode,
                              final ParameterizedODE pode,
                              final ParameterConfiguration[] paramsAndSteps) {
         this.fode = fode;
@@ -75,19 +75,19 @@ class ParameterJacobianWrapper implements ParameterJacobianProvider {
 
     /** {@inheritDoc} */
     @Override
-    public void computeParameterJacobian(double t, double[] y, double[] yDot,
-                                         String paramName, double[] dFdP)
+    public double[] computeParameterJacobian(final double t, final double[] y,
+                                             final double[] yDot, final String paramName)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         final int n = fode.getDimension();
+        final double[] dFdP = new double[n];
         if (pode.isSupported(paramName)) {
-            final double[] tmpDot = new double[n];
 
             // compute the jacobian df/dp w.r.t. parameter
             final double p  = pode.getParameter(paramName);
             final double hP = hParam.get(paramName);
             pode.setParameter(paramName, p + hP);
-            fode.computeDerivatives(t, y, tmpDot);
+            final double[] tmpDot = fode.computeDerivatives(t, y);
             for (int i = 0; i < n; ++i) {
                 dFdP[i] = (tmpDot[i] - yDot[i]) / hP;
             }
@@ -95,6 +95,8 @@ class ParameterJacobianWrapper implements ParameterJacobianProvider {
         } else {
             Arrays.fill(dFdP, 0, n, 0.0);
         }
+
+        return dFdP;
 
     }
 
