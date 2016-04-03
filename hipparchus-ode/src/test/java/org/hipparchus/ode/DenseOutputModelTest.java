@@ -31,27 +31,29 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-@Deprecated
-public class ContinuousOutputModelTest {
+public class DenseOutputModelTest {
 
     TestProblem3 pb;
     ODEIntegrator integ;
 
     @Test
     public void testBoundaries() throws MathIllegalArgumentException, MathIllegalStateException {
-        integ.addStepHandler(new ContinuousOutputModel());
+        integ.addStepHandler(new DenseOutputModel());
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
-        ContinuousOutputModel cm = (ContinuousOutputModel) integ.getStepHandlers().iterator().next();
-        cm.setInterpolatedTime(2.0 * pb.getInitialTime() - pb.getFinalTime());
-        cm.setInterpolatedTime(2.0 * pb.getFinalTime() - pb.getInitialTime());
-        cm.setInterpolatedTime(0.5 * (pb.getFinalTime() + pb.getInitialTime()));
+        DenseOutputModel dom = (DenseOutputModel) integ.getStepHandlers().iterator().next();
+        double tBefore = 2.0 * pb.getInitialTime() - pb.getFinalTime();
+        Assert.assertEquals(tBefore, dom.getInterpolatedState(tBefore).getTime(), 1.0e-10);
+        double tAfter = 2.0 * pb.getFinalTime() - pb.getInitialTime();
+        Assert.assertEquals(tAfter, dom.getInterpolatedState(tAfter).getTime(), 1.0e-10);
+        double tMiddle = 2.0 * pb.getFinalTime() - pb.getInitialTime();
+        Assert.assertEquals(tMiddle, dom.getInterpolatedState(tMiddle).getTime(), 1.0e-10);
     }
 
     @Test
     public void testRandomAccess() throws MathIllegalArgumentException, MathIllegalStateException {
 
-        ContinuousOutputModel cm = new ContinuousOutputModel();
-        integ.addStepHandler(cm);
+        DenseOutputModel dom = new DenseOutputModel();
+        integ.addStepHandler(dom);
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
         Random random = new Random(347588535632l);
@@ -60,9 +62,9 @@ public class ContinuousOutputModelTest {
         for (int i = 0; i < 1000; ++i) {
             double r = random.nextDouble();
             double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-            cm.setInterpolatedTime(time);
-            double[] interpolatedY    = cm.getInterpolatedState();
-            double[] interpolatedYDot = cm.getInterpolatedDerivatives();
+            ODEStateAndDerivative sd = dom.getInterpolatedState(time);
+            double[] interpolatedY    = sd.getState();
+            double[] interpolatedYDot = sd.getDerivative();
             double[] theoreticalY     = pb.computeTheoreticalState(time);
             double[] theoreticalYDot  = pb.doComputeDerivatives(time, theoreticalY);
             double dx = interpolatedY[0] - theoreticalY[0];
@@ -84,12 +86,11 @@ public class ContinuousOutputModelTest {
     public void testModelsMerging() throws MathIllegalArgumentException, MathIllegalStateException {
 
         // theoretical solution: y[0] = cos(t), y[1] = sin(t)
-        FirstOrderDifferentialEquations problem =
-                        new FirstOrderDifferentialEquations() {
+        OrdinaryDifferentialEquation problem =
+                        new OrdinaryDifferentialEquation() {        
             @Override
-            public void computeDerivatives(double t, double[] y, double[] dot) {
-                dot[0] = -y[1];
-                dot[1] =  y[0];
+            public double[] computeDerivatives(double t, double[] y) {
+                return new double[] { -y[1], y[0] };
             }
             @Override
             public int getDimension() {
@@ -98,32 +99,28 @@ public class ContinuousOutputModelTest {
         };
 
         // integrate backward from &pi; to 0;
-        ContinuousOutputModel cm1 = new ContinuousOutputModel();
+        DenseOutputModel dom1 = new DenseOutputModel();
         ODEIntegrator integ1 = new DormandPrince853Integrator(0, 1.0, 1.0e-8, 1.0e-8);
-        integ1.addStepHandler(cm1);
-        integ1.integrate(problem, FastMath.PI, new double[] { -1.0, 0.0 },
-                         0, new double[2]);
+        integ1.addStepHandler(dom1);
+        integ1.integrate(problem, new ODEState(FastMath.PI, new double[] { -1.0, 0.0 }), 0);
 
         // integrate backward from 2&pi; to &pi;
-        ContinuousOutputModel cm2 = new ContinuousOutputModel();
+        DenseOutputModel dom2 = new DenseOutputModel();
         ODEIntegrator integ2 = new DormandPrince853Integrator(0, 0.1, 1.0e-12, 1.0e-12);
-        integ2.addStepHandler(cm2);
-        integ2.integrate(problem, 2.0 * FastMath.PI, new double[] { 1.0, 0.0 },
-                         FastMath.PI, new double[2]);
+        integ2.addStepHandler(dom2);
+        integ2.integrate(problem, new ODEState(2.0 * FastMath.PI, new double[] { 1.0, 0.0 }), FastMath.PI);
 
         // merge the two half circles
-        ContinuousOutputModel cm = new ContinuousOutputModel();
-        cm.append(cm2);
-        cm.append(new ContinuousOutputModel());
-        cm.append(cm1);
+        DenseOutputModel dom = new DenseOutputModel();
+        dom.append(dom2);
+        dom.append(new DenseOutputModel());
+        dom.append(dom1);
 
         // check circle
-        Assert.assertEquals(2.0 * FastMath.PI, cm.getInitialTime(), 1.0e-12);
-        Assert.assertEquals(0, cm.getFinalTime(), 1.0e-12);
-        Assert.assertEquals(cm.getFinalTime(), cm.getInterpolatedTime(), 1.0e-12);
+        Assert.assertEquals(2.0 * FastMath.PI, dom.getInitialTime(), 1.0e-12);
+        Assert.assertEquals(0, dom.getFinalTime(), 1.0e-12);
         for (double t = 0; t < 2.0 * FastMath.PI; t += 0.1) {
-            cm.setInterpolatedTime(t);
-            double[] y = cm.getInterpolatedState();
+            final double[] y = dom.getInterpolatedState(t).getState();
             Assert.assertEquals(FastMath.cos(t), y[0], 1.0e-7);
             Assert.assertEquals(FastMath.sin(t), y[1], 1.0e-7);
         }
@@ -133,7 +130,7 @@ public class ContinuousOutputModelTest {
     @Test
     public void testErrorConditions() throws MathIllegalArgumentException, MathIllegalStateException {
 
-        ContinuousOutputModel cm = new ContinuousOutputModel();
+        DenseOutputModel cm = new DenseOutputModel();
         cm.handleStep(buildInterpolator(0, new double[] { 0.0, 1.0, -2.0 }, 1), true);
 
         // dimension mismatch
@@ -150,11 +147,11 @@ public class ContinuousOutputModelTest {
 
     }
 
-    private boolean checkAppendError(ContinuousOutputModel cm,
+    private boolean checkAppendError(DenseOutputModel cm,
                                      double t0, double[] y0, double t1)
                                                      throws MathIllegalArgumentException, MathIllegalStateException {
         try {
-            ContinuousOutputModel otherCm = new ContinuousOutputModel();
+            DenseOutputModel otherCm = new DenseOutputModel();
             otherCm.handleStep(buildInterpolator(t0, y0, t1), true);
             cm.append(otherCm);
         } catch(MathIllegalArgumentException iae) {
