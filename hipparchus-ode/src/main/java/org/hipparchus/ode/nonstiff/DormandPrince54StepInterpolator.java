@@ -17,9 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.EquationsMapper;
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.ODEStateAndDerivative;
 
 /**
  * This class represents an interpolator over the last step during an
@@ -30,7 +29,7 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  */
 
 class DormandPrince54StepInterpolator
-  extends RungeKuttaStepInterpolator {
+    extends RungeKuttaStepInterpolator {
 
     /** Last row of the Butcher-array internal weights, element 0. */
     private static final double A70 =    35.0 /  384.0;
@@ -70,155 +69,108 @@ class DormandPrince54StepInterpolator
     private static final double D6 =      69997945.0 /     29380423.0;
 
     /** Serializable version identifier. */
-    private static final long serialVersionUID = 20111120L;
+    private static final long serialVersionUID = 20160328L;
 
-    /** First vector for interpolation. */
-    private double[] v1;
-
-    /** Second vector for interpolation. */
-    private double[] v2;
-
-    /** Third vector for interpolation. */
-    private double[] v3;
-
-    /** Fourth vector for interpolation. */
-    private double[] v4;
-
-    /** Initialization indicator for the interpolation vectors. */
-    private boolean vectorsInitialized;
-
-  /** Simple constructor.
-   * This constructor builds an instance that is not usable yet, the
-   * {@link #reinitialize} method should be called before using the
-   * instance in order to initialize the internal arrays. This
-   * constructor is used only in order to delay the initialization in
-   * some cases. The {@link EmbeddedRungeKuttaIntegrator} uses the
-   * prototyping design pattern to create the step interpolators by
-   * cloning an uninitialized model and latter initializing the copy.
-   */
-  // CHECKSTYLE: stop RedundantModifier
-  // the public modifier here is needed for serialization
-  public DormandPrince54StepInterpolator() {
-    super();
-    v1 = null;
-    v2 = null;
-    v3 = null;
-    v4 = null;
-    vectorsInitialized = false;
-  }
-  // CHECKSTYLE: resume RedundantModifier
-
-  /** Copy constructor.
-   * @param interpolator interpolator to copy from. The copy is a deep
-   * copy: its arrays are separated from the original arrays of the
-   * instance
-   */
-  DormandPrince54StepInterpolator(final DormandPrince54StepInterpolator interpolator) {
-
-    super(interpolator);
-
-    if (interpolator.v1 == null) {
-
-      v1 = null;
-      v2 = null;
-      v3 = null;
-      v4 = null;
-      vectorsInitialized = false;
-
-    } else {
-
-      v1 = interpolator.v1.clone();
-      v2 = interpolator.v2.clone();
-      v3 = interpolator.v3.clone();
-      v4 = interpolator.v4.clone();
-      vectorsInitialized = interpolator.vectorsInitialized;
-
+    /** Simple constructor.
+     * @param forward integration direction indicator
+     * @param yDotK slopes at the intermediate points
+     * @param globalPreviousState start of the global step
+     * @param globalCurrentState end of the global step
+     * @param softPreviousState start of the restricted step
+     * @param softCurrentState end of the restricted step
+     * @param mapper equations mapper for the all equations
+     */
+    DormandPrince54StepInterpolator(final boolean forward,
+                                    final double[][] yDotK,
+                                    final ODEStateAndDerivative globalPreviousState,
+                                    final ODEStateAndDerivative globalCurrentState,
+                                    final ODEStateAndDerivative softPreviousState,
+                                    final ODEStateAndDerivative softCurrentState,
+                                    final EquationsMapper mapper) {
+        super(forward, yDotK,
+              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+              mapper);
     }
 
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  protected StepInterpolator doCopy() {
-    return new DormandPrince54StepInterpolator(this);
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  public void reinitialize(final AbstractIntegrator integrator,
-                           final double[] y, final double[][] yDotK, final boolean forward,
-                           final EquationsMapper primaryMapper,
-                           final EquationsMapper[] secondaryMappers) {
-    super.reinitialize(integrator, y, yDotK, forward, primaryMapper, secondaryMappers);
-    v1 = null;
-    v2 = null;
-    v3 = null;
-    v4 = null;
-    vectorsInitialized = false;
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public void storeTime(final double t) {
-    super.storeTime(t);
-    vectorsInitialized = false;
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  protected void computeInterpolatedStateAndDerivatives(final double theta,
-                                          final double oneMinusThetaH) {
-
-    if (! vectorsInitialized) {
-
-      if (v1 == null) {
-        v1 = new double[interpolatedState.length];
-        v2 = new double[interpolatedState.length];
-        v3 = new double[interpolatedState.length];
-        v4 = new double[interpolatedState.length];
-      }
-
-      // no step finalization is needed for this interpolator
-
-      // we need to compute the interpolation vectors for this time step
-      for (int i = 0; i < interpolatedState.length; ++i) {
-          final double yDot0 = yDotK[0][i];
-          final double yDot2 = yDotK[2][i];
-          final double yDot3 = yDotK[3][i];
-          final double yDot4 = yDotK[4][i];
-          final double yDot5 = yDotK[5][i];
-          final double yDot6 = yDotK[6][i];
-          v1[i] = A70 * yDot0 + A72 * yDot2 + A73 * yDot3 + A74 * yDot4 + A75 * yDot5;
-          v2[i] = yDot0 - v1[i];
-          v3[i] = v1[i] - v2[i] - yDot6;
-          v4[i] = D0 * yDot0 + D2 * yDot2 + D3 * yDot3 + D4 * yDot4 + D5 * yDot5 + D6 * yDot6;
-      }
-
-      vectorsInitialized = true;
-
+    /** {@inheritDoc} */
+    @Override
+    protected DormandPrince54StepInterpolator create(final boolean newForward, final double[][] newYDotK,
+                                                     final ODEStateAndDerivative newGlobalPreviousState,
+                                                     final ODEStateAndDerivative newGlobalCurrentState,
+                                                     final ODEStateAndDerivative newSoftPreviousState,
+                                                     final ODEStateAndDerivative newSoftCurrentState,
+                                                     final EquationsMapper newMapper) {
+        return new DormandPrince54StepInterpolator(newForward, newYDotK,
+                                                   newGlobalPreviousState, newGlobalCurrentState,
+                                                   newSoftPreviousState, newSoftCurrentState,
+                                                   newMapper);
     }
 
-    // interpolate
-    final double eta = 1 - theta;
-    final double twoTheta = 2 * theta;
-    final double dot2 = 1 - twoTheta;
-    final double dot3 = theta * (2 - 3 * theta);
-    final double dot4 = twoTheta * (1 + theta * (twoTheta - 3));
-    if ((previousState != null) && (theta <= 0.5)) {
-        for (int i = 0; i < interpolatedState.length; ++i) {
-            interpolatedState[i] =
-                    previousState[i] + theta * h * (v1[i] + eta * (v2[i] + theta * (v3[i] + eta * v4[i])));
-            interpolatedDerivatives[i] = v1[i] + dot2 * v2[i] + dot3 * v3[i] + dot4 * v4[i];
+    /** {@inheritDoc} */
+    @Override
+    protected ODEStateAndDerivative computeInterpolatedStateAndDerivatives(final EquationsMapper mapper,
+                                                                           final double time, final double theta,
+                                                                           final double thetaH, final double oneMinusThetaH) {
+
+        // interpolate
+        final double eta = 1 - theta;
+        final double twoTheta = 2 * theta;
+        final double dot2 = 1 - twoTheta;
+        final double dot3 = theta * (2 - 3 * theta);
+        final double dot4 = twoTheta * (1 + theta * (twoTheta - 3));
+
+        final double[] interpolatedState;
+        final double[] interpolatedDerivatives;
+        if (getGlobalPreviousState() != null && theta <= 0.5) {
+            final double f1        = thetaH;
+            final double f2        = f1 * eta;
+            final double f3        = f2 * theta;
+            final double f4        = f3 * eta;
+            final double coeff0    = f1 * A70 - f2   * (A70 - 1) + f3   * (2 * A70 - 1) + f4   * D0;
+            final double coeff1    = 0;
+            final double coeff2    = f1 * A72 - f2   * A72       + f3   * (2 * A72)     + f4   * D2;
+            final double coeff3    = f1 * A73 - f2   * A73       + f3   * (2 * A73)     + f4   * D3;
+            final double coeff4    = f1 * A74 - f2   * A74       + f3   * (2 * A74)     + f4   * D4;
+            final double coeff5    = f1 * A75 - f2   * A75       + f3   * (2 * A75)     + f4   * D5;
+            final double coeff6    = f4 * D6 - f3;
+            final double coeffDot0 =      A70 - dot2 * (A70 - 1) + dot3 * (2 * A70 - 1) + dot4 * D0;
+            final double coeffDot1 = 0;
+            final double coeffDot2 =      A72 - dot2 * A72       + dot3 * (2 * A72)     + dot4 * D2;
+            final double coeffDot3 =      A73 - dot2 * A73       + dot3 * (2 * A73)     + dot4 * D3;
+            final double coeffDot4 =      A74 - dot2 * A74       + dot3 * (2 * A74)     + dot4 * D4;
+            final double coeffDot5 =      A75 - dot2 * A75       + dot3 * (2 * A75)     + dot4 * D5;
+            final double coeffDot6 = dot4 * D6 - dot3;
+            interpolatedState       = previousStateLinearCombination(coeff0, coeff1, coeff2, coeff3,
+                                                                     coeff4, coeff5, coeff6);
+            interpolatedDerivatives = derivativeLinearCombination(coeffDot0, coeffDot1, coeffDot2, coeffDot3,
+                                                                  coeffDot4, coeffDot5, coeffDot6);
+        } else {
+            final double f1        = -oneMinusThetaH;
+            final double f2        = oneMinusThetaH * theta;
+            final double f3        = f2 * theta;
+            final double f4        = f3 * eta;
+            final double coeff0    = f1 * A70 - f2   * (A70 - 1) + f3   * (2 * A70 - 1) + f4   * D0;
+            final double coeff1    = 0;
+            final double coeff2    = f1 * A72 - f2   * A72       + f3   * (2 * A72)     + f4   * D2;
+            final double coeff3    = f1 * A73 - f2   * A73       + f3   * (2 * A73)     + f4   * D3;
+            final double coeff4    = f1 * A74 - f2   * A74       + f3   * (2 * A74)     + f4   * D4;
+            final double coeff5    = f1 * A75 - f2   * A75       + f3   * (2 * A75)     + f4   * D5;
+            final double coeff6    = f4 * D6 - f3;
+            final double coeffDot0 =      A70 - dot2 * (A70 - 1) + dot3 * (2 * A70 - 1) + dot4 * D0;
+            final double coeffDot1 = 0;
+            final double coeffDot2 =      A72 - dot2 * A72       + dot3 * (2 * A72)     + dot4 * D2;
+            final double coeffDot3 =      A73 - dot2 * A73       + dot3 * (2 * A73)     + dot4 * D3;
+            final double coeffDot4 =      A74 - dot2 * A74       + dot3 * (2 * A74)     + dot4 * D4;
+            final double coeffDot5 =      A75 - dot2 * A75       + dot3 * (2 * A75)     + dot4 * D5;
+            final double coeffDot6 = dot4 * D6 - dot3;
+            interpolatedState       = currentStateLinearCombination(coeff0, coeff1, coeff2, coeff3,
+                                                                    coeff4, coeff5, coeff6);
+            interpolatedDerivatives = derivativeLinearCombination(coeffDot0, coeffDot1, coeffDot2, coeffDot3,
+                                                                  coeffDot4, coeffDot5, coeffDot6);
         }
-    } else {
-        for (int i = 0; i < interpolatedState.length; ++i) {
-            interpolatedState[i] =
-                    currentState[i] - oneMinusThetaH * (v1[i] - theta * (v2[i] + theta * (v3[i] + eta * v4[i])));
-            interpolatedDerivatives[i] = v1[i] + dot2 * v2[i] + dot3 * v3[i] + dot4 * v4[i];
-        }
-    }
 
-  }
+        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+
+    }
 
 }

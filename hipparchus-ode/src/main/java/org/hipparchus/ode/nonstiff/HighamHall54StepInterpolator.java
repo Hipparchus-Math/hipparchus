@@ -17,7 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEStateAndDerivative;
 
 /**
  * This class represents an interpolator over the last step during an
@@ -28,94 +29,85 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  */
 
 class HighamHall54StepInterpolator
-  extends RungeKuttaStepInterpolator {
+    extends RungeKuttaStepInterpolator {
 
-  /** Serializable version identifier */
-  private static final long serialVersionUID = 20111120L;
+    /** Serializable version identifier */
+    private static final long serialVersionUID = 20111120L;
 
-  /** Simple constructor.
-   * This constructor builds an instance that is not usable yet, the
-   * {@link
-   * org.hipparchus.ode.sampling.AbstractStepInterpolator#reinitialize}
-   * method should be called before using the instance in order to
-   * initialize the internal arrays. This constructor is used only
-   * in order to delay the initialization in some cases. The {@link
-   * EmbeddedRungeKuttaIntegrator} uses the prototyping design pattern
-   * to create the step interpolators by cloning an uninitialized model
-   * and later initializing the copy.
-   */
-  // CHECKSTYLE: stop RedundantModifier
-  // the public modifier here is needed for serialization
-  public HighamHall54StepInterpolator() {
-    super();
-  }
-  // CHECKSTYLE: resume RedundantModifier
-
-  /** Copy constructor.
-   * @param interpolator interpolator to copy from. The copy is a deep
-   * copy: its arrays are separated from the original arrays of the
-   * instance
-   */
-  HighamHall54StepInterpolator(final HighamHall54StepInterpolator interpolator) {
-    super(interpolator);
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  protected StepInterpolator doCopy() {
-    return new HighamHall54StepInterpolator(this);
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  protected void computeInterpolatedStateAndDerivatives(final double theta,
-                                          final double oneMinusThetaH) {
-
-    final double bDot0 = 1 + theta * (-15.0/2.0 + theta * (16.0 - 10.0 * theta));
-    final double bDot2 = theta * (459.0/16.0 + theta * (-729.0/8.0 + 135.0/2.0 * theta));
-    final double bDot3 = theta * (-44.0 + theta * (152.0 - 120.0 * theta));
-    final double bDot4 = theta * (375.0/16.0 + theta * (-625.0/8.0 + 125.0/2.0 * theta));
-    final double bDot5 = theta * 5.0/8.0 * (2 * theta - 1);
-
-    if ((previousState != null) && (theta <= 0.5)) {
-        final double hTheta = h * theta;
-        final double b0 = hTheta * (1.0 + theta * (-15.0/4.0  + theta * (16.0/3.0 - 5.0/2.0 * theta)));
-        final double b2 = hTheta * (      theta * (459.0/32.0 + theta * (-243.0/8.0 + theta * 135.0/8.0)));
-        final double b3 = hTheta * (      theta * (-22.0      + theta * (152.0/3.0  + theta * -30.0)));
-        final double b4 = hTheta * (      theta * (375.0/32.0 + theta * (-625.0/24.0 + theta * 125.0/8.0)));
-        final double b5 = hTheta * (      theta * (-5.0/16.0  + theta *  5.0/12.0));
-        for (int i = 0; i < interpolatedState.length; ++i) {
-            final double yDot0 = yDotK[0][i];
-            final double yDot2 = yDotK[2][i];
-            final double yDot3 = yDotK[3][i];
-            final double yDot4 = yDotK[4][i];
-            final double yDot5 = yDotK[5][i];
-            interpolatedState[i] =
-                    previousState[i] + b0 * yDot0 + b2 * yDot2 + b3 * yDot3 + b4 * yDot4 + b5 * yDot5;
-            interpolatedDerivatives[i] =
-                    bDot0 * yDot0 + bDot2 * yDot2 + bDot3 * yDot3 + bDot4 * yDot4 + bDot5 * yDot5;
-        }
-    } else {
-        final double theta2 = theta * theta;
-        final double b0 = h * (-1.0/12.0 + theta * (1.0 + theta * (-15.0/4.0 + theta * (16.0/3.0 + theta * -5.0/2.0))));
-        final double b2 = h * (-27.0/32.0 + theta2 * (459.0/32.0 + theta * (-243.0/8.0 + theta * 135.0/8.0)));
-        final double b3 = h * (4.0/3.0 + theta2 * (-22.0 + theta * (152.0/3.0  + theta * -30.0)));
-        final double b4 = h * (-125.0/96.0 + theta2 * (375.0/32.0 + theta * (-625.0/24.0 + theta * 125.0/8.0)));
-        final double b5 = h * (-5.0/48.0 + theta2 * (-5.0/16.0 + theta * 5.0/12.0));
-        for (int i = 0; i < interpolatedState.length; ++i) {
-            final double yDot0 = yDotK[0][i];
-            final double yDot2 = yDotK[2][i];
-            final double yDot3 = yDotK[3][i];
-            final double yDot4 = yDotK[4][i];
-            final double yDot5 = yDotK[5][i];
-            interpolatedState[i] =
-                    currentState[i] + b0 * yDot0 + b2 * yDot2 + b3 * yDot3 + b4 * yDot4 + b5 * yDot5;
-            interpolatedDerivatives[i] =
-                    bDot0 * yDot0 + bDot2 * yDot2 + bDot3 * yDot3 + bDot4 * yDot4 + bDot5 * yDot5;
-        }
+    /** Simple constructor.
+     * @param forward integration direction indicator
+     * @param yDotK slopes at the intermediate points
+     * @param globalPreviousState start of the global step
+     * @param globalCurrentState end of the global step
+     * @param softPreviousState start of the restricted step
+     * @param softCurrentState end of the restricted step
+     * @param mapper equations mapper for the all equations
+     */
+    HighamHall54StepInterpolator(final boolean forward,
+                                 final double[][] yDotK,
+                                 final ODEStateAndDerivative globalPreviousState,
+                                 final ODEStateAndDerivative globalCurrentState,
+                                 final ODEStateAndDerivative softPreviousState,
+                                 final ODEStateAndDerivative softCurrentState,
+                                 final EquationsMapper mapper) {
+        super(forward, yDotK,
+              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+              mapper);
     }
 
-  }
+    /** {@inheritDoc} */
+    @Override
+    protected HighamHall54StepInterpolator create(final boolean newForward, final double[][] newYDotK,
+                                                  final ODEStateAndDerivative newGlobalPreviousState,
+                                                  final ODEStateAndDerivative newGlobalCurrentState,
+                                                  final ODEStateAndDerivative newSoftPreviousState,
+                                                  final ODEStateAndDerivative newSoftCurrentState,
+                                                  final EquationsMapper newMapper) {
+        return new HighamHall54StepInterpolator(newForward, newYDotK,
+                                                newGlobalPreviousState, newGlobalCurrentState,
+                                                newSoftPreviousState, newSoftCurrentState,
+                                                newMapper);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected ODEStateAndDerivative computeInterpolatedStateAndDerivatives(final EquationsMapper mapper,
+                                                                           final double time, final double theta,
+                                                                           final double thetaH, final double oneMinusThetaH) {
+
+        final double bDot0 = 1 + theta * (-15.0/2.0 + theta * (16.0 - 10.0 * theta));
+        final double bDot1 = 0;
+        final double bDot2 = theta * (459.0/16.0 + theta * (-729.0/8.0 + 135.0/2.0 * theta));
+        final double bDot3 = theta * (-44.0 + theta * (152.0 - 120.0 * theta));
+        final double bDot4 = theta * (375.0/16.0 + theta * (-625.0/8.0 + 125.0/2.0 * theta));
+        final double bDot5 = theta * 5.0/8.0 * (2 * theta - 1);
+
+        final double[] interpolatedState;
+        final double[] interpolatedDerivatives;
+        if (getGlobalPreviousState() != null && theta <= 0.5) {
+            final double b0 = thetaH * (1.0 + theta * (-15.0/4.0  + theta * (16.0/3.0 - 5.0/2.0 * theta)));
+            final double b1 = 0;
+            final double b2 = thetaH * (      theta * (459.0/32.0 + theta * (-243.0/8.0 + theta * 135.0/8.0)));
+            final double b3 = thetaH * (      theta * (-22.0      + theta * (152.0/3.0  + theta * -30.0)));
+            final double b4 = thetaH * (      theta * (375.0/32.0 + theta * (-625.0/24.0 + theta * 125.0/8.0)));
+            final double b5 = thetaH * (      theta * (-5.0/16.0  + theta *  5.0/12.0));
+            interpolatedState       = previousStateLinearCombination(b0 , b1, b2, b3, b4, b5);
+            interpolatedDerivatives = derivativeLinearCombination(bDot0 , bDot1, bDot2, bDot3, bDot4, bDot5);
+        } else {
+            final double theta2 = theta * theta;
+            final double h      = thetaH / theta;
+            final double b0 = h * (-1.0/12.0 + theta * (1.0 + theta * (-15.0/4.0 + theta * (16.0/3.0 + theta * -5.0/2.0))));
+            final double b1 = 0;
+            final double b2 = h * (-27.0/32.0 + theta2 * (459.0/32.0 + theta * (-243.0/8.0 + theta * 135.0/8.0)));
+            final double b3 = h * (4.0/3.0 + theta2 * (-22.0 + theta * (152.0/3.0  + theta * -30.0)));
+            final double b4 = h * (-125.0/96.0 + theta2 * (375.0/32.0 + theta * (-625.0/24.0 + theta * 125.0/8.0)));
+            final double b5 = h * (-5.0/48.0 + theta2 * (-5.0/16.0 + theta * 5.0/12.0));
+            interpolatedState       = currentStateLinearCombination(b0 , b1, b2, b3, b4, b5);
+            interpolatedDerivatives = derivativeLinearCombination(bDot0 , bDot1, bDot2, bDot3, bDot4, bDot5);
+        }
+
+        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+
+    }
 
 }
