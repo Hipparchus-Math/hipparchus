@@ -20,8 +20,10 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
-import org.hipparchus.ode.ExpandableStatefulODE;
+import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.MultistepIntegrator;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
 
 
 /** Base class for {@link AdamsBashforthIntegrator Adams-Bashforth} and
@@ -84,7 +86,8 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    public abstract void integrate(final ExpandableStatefulODE equations, final double t)
+    public abstract ODEStateAndDerivative integrate(final ExpandableODE equations,
+                                                    final ODEState initialState, final double finalTime)
         throws MathIllegalArgumentException, MathIllegalStateException;
 
     /** {@inheritDoc} */

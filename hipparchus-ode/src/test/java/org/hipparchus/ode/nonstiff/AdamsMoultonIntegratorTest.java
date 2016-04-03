@@ -18,21 +18,20 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
-import org.hipparchus.ode.ExpandableStatefulODE;
-import org.hipparchus.ode.FirstOrderIntegrator;
+import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
-import org.hipparchus.ode.sampling.StepHandler;
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -43,11 +42,11 @@ public class AdamsMoultonIntegratorTest {
     public void dimensionCheck()
         throws MathIllegalArgumentException, MathIllegalStateException {
         TestProblem1 pb = new TestProblem1();
-        FirstOrderIntegrator integ =
+        ODEIntegrator integ =
             new AdamsMoultonIntegrator(2, 0.0, 1.0, 1.0e-10, 1.0e-10);
         integ.integrate(pb,
-                        0.0, new double[pb.getDimension()+10],
-                        1.0, new double[pb.getDimension()+10]);
+                        new ODEState(0.0, new double[pb.getDimension()+10]),
+                        1.0);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
@@ -60,14 +59,12 @@ public class AdamsMoultonIntegratorTest {
           double[] vecAbsoluteTolerance = { 1.0e-15, 1.0e-16 };
           double[] vecRelativeTolerance = { 1.0e-15, 1.0e-16 };
 
-          FirstOrderIntegrator integ = new AdamsMoultonIntegrator(4, minStep, maxStep,
-                                                                  vecAbsoluteTolerance,
-                                                                  vecRelativeTolerance);
+          ODEIntegrator integ = new AdamsMoultonIntegrator(4, minStep, maxStep,
+                                                           vecAbsoluteTolerance,
+                                                           vecRelativeTolerance);
           TestProblemHandler handler = new TestProblemHandler(pb, integ);
           integ.addStepHandler(handler);
-          integ.integrate(pb,
-                          pb.getInitialTime(), pb.getInitialState(),
-                          pb.getFinalTime(), new double[pb.getDimension()]);
+          integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
     }
 
@@ -83,14 +80,12 @@ public class AdamsMoultonIntegratorTest {
             double scalAbsoluteTolerance = FastMath.pow(10.0, i);
             double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
-            FirstOrderIntegrator integ = new AdamsMoultonIntegrator(4, minStep, maxStep,
+            ODEIntegrator integ = new AdamsMoultonIntegrator(4, minStep, maxStep,
                                                                     scalAbsoluteTolerance,
                                                                     scalRelativeTolerance);
             TestProblemHandler handler = new TestProblemHandler(pb, integ);
             integ.addStepHandler(handler);
-            integ.integrate(pb,
-                            pb.getInitialTime(), pb.getInitialState(),
-                            pb.getFinalTime(), new double[pb.getDimension()]);
+            integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
             // the 0.45 and 8.69 factors are only valid for this test
             // and has been obtained from trial and error
@@ -119,9 +114,7 @@ public class AdamsMoultonIntegratorTest {
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
         integ.setMaxEvaluations(650);
-        integ.integrate(pb,
-                        pb.getInitialTime(), pb.getInitialState(),
-                        pb.getFinalTime(), new double[pb.getDimension()]);
+        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
     }
 
@@ -132,11 +125,10 @@ public class AdamsMoultonIntegratorTest {
         TestProblem5 pb = new TestProblem5();
         double range = FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
 
-        FirstOrderIntegrator integ = new AdamsMoultonIntegrator(4, 0, range, 1.0e-12, 1.0e-12);
+        ODEIntegrator integ = new AdamsMoultonIntegrator(4, 0, range, 1.0e-12, 1.0e-12);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
-        integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
-                        pb.getFinalTime(), new double[pb.getDimension()]);
+        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
         Assert.assertTrue(handler.getLastError() < 3.0e-9);
         Assert.assertTrue(handler.getMaximalValueError() < 3.0e-9);
@@ -156,8 +148,7 @@ public class AdamsMoultonIntegratorTest {
             integ.setStarterIntegrator(new PerfectStarter(pb, nSteps));
             TestProblemHandler handler = new TestProblemHandler(pb, integ);
             integ.addStepHandler(handler);
-            integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
-                            pb.getFinalTime(), new double[pb.getDimension()]);
+            integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
             if (nSteps < 5) {
                 Assert.assertTrue(handler.getMaximalValueError() > 2.2e-05);
             } else {
@@ -169,51 +160,42 @@ public class AdamsMoultonIntegratorTest {
 
     private static class PerfectStarter extends AbstractIntegrator {
 
-        private final PerfectInterpolator interpolator;
+        private PerfectInterpolator interpolator;
         private final int nbSteps;
 
         public PerfectStarter(final TestProblemAbstract problem, final int nbSteps) {
+            super("perfect");
             this.interpolator = new PerfectInterpolator(problem);
             this.nbSteps      = nbSteps;
         }
 
-        public void integrate(ExpandableStatefulODE equations, double t) {
-            double tStart = equations.getTime() + 0.01 * (t - equations.getTime());
-            getCounter().increment(nbSteps);
+        public ODEStateAndDerivative integrate(ExpandableODE equations, ODEState initialState, double finalTime) {
+            double tStart = initialState.getTime() + 0.01 * (finalTime - initialState.getTime());
+            getEvaluationsCounter().increment(nbSteps);
             for (int i = 0; i < nbSteps; ++i) {
-                double tK = ((nbSteps - 1 - (i + 1)) * equations.getTime() + (i + 1) * tStart) / (nbSteps - 1);
+                double tK = ((nbSteps - 1 - (i + 1)) * initialState.getTime() + (i + 1) * tStart) / (nbSteps - 1);
                 interpolator.setPreviousTime(interpolator.getCurrentTime());
                 interpolator.setCurrentTime(tK);
-                interpolator.setInterpolatedTime(tK);
-                for (StepHandler handler : getStepHandlers()) {
+                for (ODEStepHandler handler : getStepHandlers()) {
                     handler.handleStep(interpolator, i == nbSteps - 1);
                 }
             }
+            return interpolator.getCurrentState();
         }
 
     }
 
-    private static class PerfectInterpolator implements StepInterpolator {
+    private static class PerfectInterpolator implements ODEStateInterpolator {
+
+        private static final long serialVersionUID = 20160403L;
         private final TestProblemAbstract problem;
         private double previousTime;
         private double currentTime;
-        private double interpolatedTime;
 
         public PerfectInterpolator(final TestProblemAbstract problem) {
-            this.problem          = problem;
-            this.previousTime     = problem.getInitialTime();
-            this.currentTime      = problem.getInitialTime();
-            this.interpolatedTime = problem.getInitialTime();
-        }
-
-        public void readExternal(ObjectInput arg0) {
-        }
-
-        public void writeExternal(ObjectOutput arg0) {
-        }
-
-        public double getPreviousTime() {
-            return previousTime;
+            this.problem      = problem;
+            this.previousTime = problem.getInitialTime();
+            this.currentTime  = problem.getInitialTime();
         }
 
         public void setPreviousTime(double time) {
@@ -228,39 +210,22 @@ public class AdamsMoultonIntegratorTest {
             currentTime = time;
         }
 
-        public double getInterpolatedTime() {
-            return interpolatedTime;
+        public ODEStateAndDerivative getPreviousState() {
+            return getInterpolatedState(previousTime);
         }
 
-        public void setInterpolatedTime(double time) {
-            interpolatedTime = time;
+        public ODEStateAndDerivative getCurrentState() {
+            return getInterpolatedState(currentTime);
         }
 
-        public double[] getInterpolatedState() {
-            return problem.computeTheoreticalState(interpolatedTime);
-        }
-
-        public double[] getInterpolatedDerivatives() {
-            double[] y = problem.computeTheoreticalState(interpolatedTime);
-            double[] yDot = new double[y.length];
-            problem.computeDerivatives(interpolatedTime, y, yDot);
-            return yDot;
-        }
-
-        public double[] getInterpolatedSecondaryState(int index) {
-            return null;
-        }
-
-        public double[] getInterpolatedSecondaryDerivatives(int index) {
-            return null;
+        public ODEStateAndDerivative getInterpolatedState(final double time) {
+            double[] y    = problem.computeTheoreticalState(time);
+            double[] yDot = problem.computeDerivatives(time, y);
+            return new ODEStateAndDerivative(time, y, yDot);
         }
 
         public boolean isForward() {
             return problem.getFinalTime() > problem.getInitialTime();
-        }
-
-        public StepInterpolator copy() {
-            return this;
         }
 
     }

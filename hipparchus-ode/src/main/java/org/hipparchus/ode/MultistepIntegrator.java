@@ -22,8 +22,8 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.ode.nonstiff.AdaptiveStepsizeIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
-import org.hipparchus.ode.sampling.StepHandler;
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -66,7 +66,7 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
     protected Array2DRowRealMatrix nordsieck;
 
     /** Starter integrator. */
-    private FirstOrderIntegrator starter;
+    private ODEIntegrator starter;
 
     /** Number of steps of the multistep method (excluding the one being computed). */
     private final int nSteps;
@@ -185,7 +185,7 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
      * user configuration for these elements will be cleared before use.</p>
      * @param starterIntegrator starter integrator
      */
-    public void setStarterIntegrator(FirstOrderIntegrator starterIntegrator) {
+    public void setStarterIntegrator(ODEIntegrator starterIntegrator) {
         this.starter = starterIntegrator;
     }
 
@@ -198,49 +198,30 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
      * computation right from the beginning. In a sense, the starter integrator
      * can be seen as a dummy one and so it will never trigger any user event nor
      * call any user step handler.</p>
-     * @param t0 initial time
-     * @param y0 initial value of the state vector at t0
-     * @param t target time for the integration
-     * (can be set to a value smaller than <code>t0</code> for backward integration)
+     * @param equations complete set of differential equations to integrate
+     * @param initialState initial state (time, primary and secondary state vectors)
+     * @param finalTime target time for the integration
+     * (can be set to a value smaller than {@code initialState.getTime()} for backward integration)
      * @exception MathIllegalArgumentException if arrays dimension do not match equations settings
      * @exception MathIllegalArgumentException if integration step is too small
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      */
-    protected void start(final double t0, final double[] y0, final double t)
+    protected void start(final ExpandableODE equations, final ODEState initialState, final double finalTime)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        // make sure NO user event nor user step handler is triggered,
-        // this is the task of the top level integrator, not the task
-        // of the starter integrator
+        // make sure NO user events nor user step handlers are triggered,
+        // this is the task of the top level integrator, not the task of the starter integrator
         starter.clearEventHandlers();
         starter.clearStepHandlers();
 
         // set up one specific step handler to extract initial Nordsieck vector
-        starter.addStepHandler(new NordsieckInitializer((nSteps + 3) / 2, y0.length));
+        starter.addStepHandler(new NordsieckInitializer(equations.getMapper(), (nSteps + 3) / 2));
 
         // start integration, expecting a InitializationCompletedMarkerException
         try {
 
-            if (starter instanceof AbstractIntegrator) {
-                ((AbstractIntegrator) starter).integrate(getExpandable(), t);
-            } else {
-                starter.integrate(new FirstOrderDifferentialEquations() {
-
-                    /** {@inheritDoc} */
-                    @Override
-                    public int getDimension() {
-                        return getExpandable().getTotalDimension();
-                    }
-
-                    /** {@inheritDoc} */
-                    @Override
-                    public void computeDerivatives(double t, double[] y, double[] yDot) {
-                        getExpandable().computeDerivatives(t, y, yDot);
-                    }
-
-                }, t0, y0, t, new double[y0.length]);
-            }
+            starter.integrate(getEquations(), initialState, finalTime);
 
             // we should not reach this step
             throw new MathIllegalStateException(LocalizedODEFormats.MULTISTEP_STARTER_STOPPED_EARLY);
@@ -249,7 +230,7 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
             // this is the expected nominal interruption of the start integrator
 
             // count the evaluations used by the starter
-            getCounter().increment(starter.getEvaluations());
+            getEvaluationsCounter().increment(starter.getEvaluations());
 
         }
 
@@ -319,6 +300,32 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
       return nSteps;
     }
 
+    /** Rescale the instance.
+     * <p>Since the scaled and Nordsieck arrays are shared with the caller,
+     * this method has the side effect of rescaling this arrays in the caller too.</p>
+     * @param newStepSize new step size to use in the scaled and Nordsieck arrays
+     */
+    protected void rescale(final double newStepSize) {
+
+        final double ratio = newStepSize / getStepSize();
+        for (int i = 0; i < scaled.length; ++i) {
+            scaled[i] = scaled[i] * ratio;
+        }
+
+        final double[][] nData = nordsieck.getDataRef();
+        double power = ratio;
+        for (int i = 0; i < nData.length; ++i) {
+            power = power * ratio;
+            final double[] nDataI = nData[i];
+            for (int j = 0; j < nDataI.length; ++j) {
+                nDataI[j] = nDataI[j] * power;
+            }
+        }
+
+        setStepSize(newStepSize);
+
+    }
+
     /** Compute step grow/shrink factor according to normalized error.
      * @param error normalized error of the current step
      * @return grow/shrink factor for next step
@@ -327,29 +334,17 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
         return FastMath.min(maxGrowth, FastMath.max(minReduction, safety * FastMath.pow(error, exp)));
     }
 
-    /** Transformer used to convert the first step to Nordsieck representation.
-     * @deprecated as of 3.6 this unused interface is deprecated
-     */
-    @Deprecated
-    public interface NordsieckTransformer {
-        /** Initialize the high order scaled derivatives at step start.
-         * @param h step size to use for scaling
-         * @param t first steps times
-         * @param y first steps states
-         * @param yDot first steps derivatives
-         * @return Nordieck vector at first step (h<sup>2</sup>/2 y''<sub>n</sub>,
-         * h<sup>3</sup>/6 y'''<sub>n</sub> ... h<sup>k</sup>/k! y<sup>(k)</sup><sub>n</sub>)
-         */
-        Array2DRowRealMatrix initializeHighOrderDerivatives(final double h, final double[] t,
-                                                            final double[][] y,
-                                                            final double[][] yDot);
-    }
-
     /** Specialized step handler storing the first step. */
-    private class NordsieckInitializer implements StepHandler {
+    private class NordsieckInitializer implements ODEStepHandler {
+
+        /** Equation mapper. */
+        private final EquationsMapper mapper;
 
         /** Steps counter. */
         private int count;
+
+        /** Start of the integration. */
+        private ODEStateAndDerivative savedStart;
 
         /** First steps times. */
         private final double[] t;
@@ -361,82 +356,57 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
         private final double[][] yDot;
 
         /** Simple constructor.
+         * @param mapper equation mapper
          * @param nbStartPoints number of start points (including the initial point)
-         * @param n problem dimension
          */
-        NordsieckInitializer(final int nbStartPoints, final int n) {
-            this.count = 0;
-            this.t     = new double[nbStartPoints];
-            this.y     = new double[nbStartPoints][n];
-            this.yDot  = new double[nbStartPoints][n];
+        NordsieckInitializer(final EquationsMapper mapper, final int nbStartPoints) {
+            this.mapper = mapper;
+            this.count  = 0;
+            this.t      = new double[nbStartPoints];
+            this.y      = new double[nbStartPoints][];
+            this.yDot   = new double[nbStartPoints][];
         }
 
         /** {@inheritDoc} */
         @Override
-        public void handleStep(StepInterpolator interpolator, boolean isLast)
+        public void handleStep(ODEStateInterpolator interpolator, boolean isLast)
             throws MathIllegalStateException {
-
-            final double prev = interpolator.getPreviousTime();
-            final double curr = interpolator.getCurrentTime();
 
             if (count == 0) {
                 // first step, we need to store also the point at the beginning of the step
-                interpolator.setInterpolatedTime(prev);
-                t[0] = prev;
-                final ExpandableStatefulODE expandable = getExpandable();
-                final EquationsMapper primary = expandable.getPrimaryMapper();
-                primary.insertEquationData(interpolator.getInterpolatedState(), y[count]);
-                primary.insertEquationData(interpolator.getInterpolatedDerivatives(), yDot[count]);
-                int index = 0;
-                for (final EquationsMapper secondary : expandable.getSecondaryMappers()) {
-                    secondary.insertEquationData(interpolator.getInterpolatedSecondaryState(index), y[count]);
-                    secondary.insertEquationData(interpolator.getInterpolatedSecondaryDerivatives(index), yDot[count]);
-                    ++index;
-                }
+                savedStart   = interpolator.getPreviousState();
+                t[0]    = savedStart.getTime();
+                y[0]    = mapper.mapState(savedStart);
+                yDot[0] = mapper.mapDerivative(savedStart);
             }
 
             // store the point at the end of the step
             ++count;
-            interpolator.setInterpolatedTime(curr);
-            t[count] = curr;
-
-            final ExpandableStatefulODE expandable = getExpandable();
-            final EquationsMapper primary = expandable.getPrimaryMapper();
-            primary.insertEquationData(interpolator.getInterpolatedState(), y[count]);
-            primary.insertEquationData(interpolator.getInterpolatedDerivatives(), yDot[count]);
-            int index = 0;
-            for (final EquationsMapper secondary : expandable.getSecondaryMappers()) {
-                secondary.insertEquationData(interpolator.getInterpolatedSecondaryState(index), y[count]);
-                secondary.insertEquationData(interpolator.getInterpolatedSecondaryDerivatives(index), yDot[count]);
-                ++index;
-            }
+            final ODEStateAndDerivative curr = interpolator.getCurrentState();
+            t[count]    = curr.getTime();
+            y[count]    = mapper.mapState(curr);
+            yDot[count] = mapper.mapDerivative(curr);
 
             if (count == t.length - 1) {
 
                 // this was the last point we needed, we can compute the derivatives
-                stepStart = t[0];
-                stepSize  = (t[t.length - 1] - t[0]) / (t.length - 1);
+                setStepStart(savedStart);
+                setStepSize((t[t.length - 1] - t[0]) / (t.length - 1));
 
                 // first scaled derivative
                 scaled = yDot[0].clone();
                 for (int j = 0; j < scaled.length; ++j) {
-                    scaled[j] *= stepSize;
+                    scaled[j] *= getStepSize();
                 }
 
                 // higher order derivatives
-                nordsieck = initializeHighOrderDerivatives(stepSize, t, y, yDot);
+                nordsieck = initializeHighOrderDerivatives(getStepSize(), t, y, yDot);
 
                 // stop the integrator now that all needed steps have been handled
                 throw new InitializationCompletedMarkerException();
 
             }
 
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public void init(double t0, double[] y0, double time) {
-            // nothing to do
         }
 
     }
@@ -456,3 +426,4 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
     }
 
 }
+
