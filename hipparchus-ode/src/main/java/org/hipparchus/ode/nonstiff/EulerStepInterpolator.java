@@ -17,7 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEStateAndDerivative;
 
 /**
  * This class implements a linear interpolator for step.
@@ -42,60 +43,63 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  */
 
 class EulerStepInterpolator
-  extends RungeKuttaStepInterpolator {
+    extends RungeKuttaStepInterpolator {
 
-  /** Serializable version identifier. */
-  private static final long serialVersionUID = 20111120L;
+    /** Serializable version identifier. */
+    private static final long serialVersionUID = 20160328L;
 
-  /** Simple constructor.
-   * This constructor builds an instance that is not usable yet, the
-   * {@link
-   * org.hipparchus.ode.sampling.AbstractStepInterpolator#reinitialize}
-   * method should be called before using the instance in order to
-   * initialize the internal arrays. This constructor is used only
-   * in order to delay the initialization in some cases. The {@link
-   * RungeKuttaIntegrator} class uses the prototyping design pattern
-   * to create the step interpolators by cloning an uninitialized model
-   * and later initializing the copy.
-   */
-  // CHECKSTYLE: stop RedundantModifier
-  // the public modifier here is needed for serialization
-  public EulerStepInterpolator() {
-  }
-  // CHECKSTYLE: resume RedundantModifier
+    /** Simple constructor.
+     * @param forward integration direction indicator
+     * @param yDotK slopes at the intermediate points
+     * @param globalPreviousState start of the global step
+     * @param globalCurrentState end of the global step
+     * @param softPreviousState start of the restricted step
+     * @param softCurrentState end of the restricted step
+     * @param mapper equations mapper for the all equations
+     */
+    EulerStepInterpolator(final boolean forward,
+                          final double[][] yDotK,
+                          final ODEStateAndDerivative globalPreviousState,
+                          final ODEStateAndDerivative globalCurrentState,
+                          final ODEStateAndDerivative softPreviousState,
+                          final ODEStateAndDerivative softCurrentState,
+                          final EquationsMapper mapper) {
+        super(forward, yDotK,
+              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+              mapper);
+    }
 
-  /** Copy constructor.
-   * @param interpolator interpolator to copy from. The copy is a deep
-   * copy: its arrays are separated from the original arrays of the
-   * instance
-   */
-  EulerStepInterpolator(final EulerStepInterpolator interpolator) {
-    super(interpolator);
-  }
+    /** {@inheritDoc} */
+    @Override
+    protected EulerStepInterpolator create(final boolean newForward, final double[][] newYDotK,
+                                           final ODEStateAndDerivative newGlobalPreviousState,
+                                           final ODEStateAndDerivative newGlobalCurrentState,
+                                           final ODEStateAndDerivative newSoftPreviousState,
+                                           final ODEStateAndDerivative newSoftCurrentState,
+                                           final EquationsMapper newMapper) {
+        return new EulerStepInterpolator(newForward, newYDotK,
+                                         newGlobalPreviousState, newGlobalCurrentState,
+                                         newSoftPreviousState, newSoftCurrentState,
+                                         newMapper);
+    }
 
-  /** {@inheritDoc} */
-  @Override
-  protected StepInterpolator doCopy() {
-    return new EulerStepInterpolator(this);
-  }
+    /** {@inheritDoc} */
+    @Override
+    protected ODEStateAndDerivative computeInterpolatedStateAndDerivatives(final EquationsMapper mapper,
+                                                                           final double time, final double theta,
+                                                                           final double thetaH, final double oneMinusThetaH) {
+        final double[] interpolatedState;
+        final double[] interpolatedDerivatives;
+        if (getGlobalPreviousState() != null && theta <= 0.5) {
+            interpolatedState       = previousStateLinearCombination(thetaH);
+            interpolatedDerivatives = derivativeLinearCombination(1.0);
+        } else {
+            interpolatedState       = currentStateLinearCombination(-oneMinusThetaH);
+            interpolatedDerivatives = derivativeLinearCombination(1.0);
+        }
 
+        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
-  /** {@inheritDoc} */
-  @Override
-  protected void computeInterpolatedStateAndDerivatives(final double theta,
-                                          final double oneMinusThetaH) {
-      if ((previousState != null) && (theta <= 0.5)) {
-          for (int i = 0; i < interpolatedState.length; ++i) {
-              interpolatedState[i] = previousState[i] + theta * h * yDotK[0][i];
-          }
-          System.arraycopy(yDotK[0], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);
-      } else {
-          for (int i = 0; i < interpolatedState.length; ++i) {
-              interpolatedState[i] = currentState[i] - oneMinusThetaH * yDotK[0][i];
-          }
-          System.arraycopy(yDotK[0], 0, interpolatedDerivatives, 0, interpolatedDerivatives.length);
-      }
-
-  }
+    }
 
 }

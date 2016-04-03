@@ -17,7 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -34,48 +35,52 @@ import org.hipparchus.util.FastMath;
 class LutherStepInterpolator extends RungeKuttaStepInterpolator {
 
     /** Serializable version identifier */
-    private static final long serialVersionUID = 20140416L;
+    private static final long serialVersionUID = 20160328;
 
     /** Square root. */
     private static final double Q = FastMath.sqrt(21);
 
     /** Simple constructor.
-     * This constructor builds an instance that is not usable yet, the
-     * {@link
-     * org.hipparchus.ode.sampling.AbstractStepInterpolator#reinitialize}
-     * method should be called before using the instance in order to
-     * initialize the internal arrays. This constructor is used only
-     * in order to delay the initialization in some cases. The {@link
-     * RungeKuttaIntegrator} class uses the prototyping design pattern
-     * to create the step interpolators by cloning an uninitialized model
-     * and later initializing the copy.
+     * @param field field to which the time and state vector elements belong
+     * @param forward integration direction indicator
+     * @param yDotK slopes at the intermediate points
+     * @param globalPreviousState start of the global step
+     * @param globalCurrentState end of the global step
+     * @param softPreviousState start of the restricted step
+     * @param softCurrentState end of the restricted step
+     * @param mapper equations mapper for the all equations
      */
-    // CHECKSTYLE: stop RedundantModifier
-    // the public modifier here is needed for serialization
-    public LutherStepInterpolator() {
-    }
-    // CHECKSTYLE: resume RedundantModifier
-
-    /** Copy constructor.
-     * @param interpolator interpolator to copy from. The copy is a deep
-     * copy: its arrays are separated from the original arrays of the
-     * instance
-     */
-    LutherStepInterpolator(final LutherStepInterpolator interpolator) {
-        super(interpolator);
+    LutherStepInterpolator(final boolean forward,
+                                        final double[][] yDotK,
+                                        final ODEStateAndDerivative globalPreviousState,
+                                        final ODEStateAndDerivative globalCurrentState,
+                                        final ODEStateAndDerivative softPreviousState,
+                                        final ODEStateAndDerivative softCurrentState,
+                                        final EquationsMapper mapper) {
+        super(forward, yDotK,
+              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+              mapper);
     }
 
     /** {@inheritDoc} */
     @Override
-    protected StepInterpolator doCopy() {
-        return new LutherStepInterpolator(this);
+    protected LutherStepInterpolator create(final boolean newForward, final double[][] newYDotK,
+                                                         final ODEStateAndDerivative newGlobalPreviousState,
+                                                         final ODEStateAndDerivative newGlobalCurrentState,
+                                                         final ODEStateAndDerivative newSoftPreviousState,
+                                                         final ODEStateAndDerivative newSoftCurrentState,
+                                                         final EquationsMapper newMapper) {
+        return new LutherStepInterpolator(newForward, newYDotK,
+                                                       newGlobalPreviousState, newGlobalCurrentState,
+                                                       newSoftPreviousState, newSoftCurrentState,
+                                                       newMapper);
     }
-
 
     /** {@inheritDoc} */
     @Override
-    protected void computeInterpolatedStateAndDerivatives(final double theta,
-                                                          final double oneMinusThetaH) {
+    protected ODEStateAndDerivative computeInterpolatedStateAndDerivatives(final EquationsMapper mapper,
+                                                                           final double time, final double theta,
+                                                                           final double thetaH, final double oneMinusThetaH) {
 
         // the coefficients below have been computed by solving the
         // order conditions from a theorem from Butcher (1963), using
@@ -120,6 +125,9 @@ class LutherStepInterpolator extends RungeKuttaStepInterpolator {
         // are fulfilled, but some of the former ones are not, so the resulting interpolator is order 5.
         // At the end, we get the b_i as polynomials in theta.
 
+        final double[] interpolatedState;
+        final double[] interpolatedDerivatives;
+
         final double coeffDot1 =  1 + theta * ( -54            /   5.0 + theta * (   36                   + theta * ( -47                   + theta *   21)));
         final double coeffDot2 =  0;
         final double coeffDot3 =      theta * (-208            /  15.0 + theta * (  320            / 3.0  + theta * (-608            /  3.0 + theta *  112)));
@@ -128,7 +136,7 @@ class LutherStepInterpolator extends RungeKuttaStepInterpolator {
         final double coeffDot6 =      theta * ((833 - 343 * Q) / 150.0 + theta * ((-637 + 357 * Q) / 30.0 + theta * ((392 - 287 * Q) / 15.0 + theta * (-49 + 49 * Q) /  5.0)));
         final double coeffDot7 =      theta * (   3            /   5.0 + theta * (   -3                   + theta *     3));
 
-        if ((previousState != null) && (theta <= 0.5)) {
+        if (getGlobalPreviousState() != null && theta <= 0.5) {
 
             final double coeff1    =  1 + theta * ( -27            /   5.0 + theta * (   12                   + theta * ( -47            /  4.0 + theta *   21           /  5.0)));
             final double coeff2    =  0;
@@ -137,20 +145,12 @@ class LutherStepInterpolator extends RungeKuttaStepInterpolator {
             final double coeff5    =      theta * ((833 + 343 * Q) / 300.0 + theta * ((-637 - 357 * Q) / 90.0 + theta * ((392 + 287 * Q) / 60.0 + theta * (-49 - 49 * Q) / 25.0)));
             final double coeff6    =      theta * ((833 - 343 * Q) / 300.0 + theta * ((-637 + 357 * Q) / 90.0 + theta * ((392 - 287 * Q) / 60.0 + theta * (-49 + 49 * Q) / 25.0)));
             final double coeff7    =      theta * (   3            /  10.0 + theta * (   -1                   + theta * (   3            /  4.0)));
-            for (int i = 0; i < interpolatedState.length; ++i) {
-                final double yDot1 = yDotK[0][i];
-                final double yDot2 = yDotK[1][i];
-                final double yDot3 = yDotK[2][i];
-                final double yDot4 = yDotK[3][i];
-                final double yDot5 = yDotK[4][i];
-                final double yDot6 = yDotK[5][i];
-                final double yDot7 = yDotK[6][i];
-                interpolatedState[i] = previousState[i] +
-                        theta * h * (coeff1 * yDot1 + coeff2 * yDot2 + coeff3 * yDot3 +
-                                     coeff4 * yDot4 + coeff5 * yDot5 + coeff6 * yDot6 + coeff7 * yDot7);
-                interpolatedDerivatives[i] = coeffDot1 * yDot1 + coeffDot2 * yDot2 + coeffDot3 * yDot3 +
-                        coeffDot4 * yDot4 + coeffDot5 * yDot5 + coeffDot6 * yDot6 + coeffDot7 * yDot7;
-            }
+            interpolatedState       = previousStateLinearCombination(coeff1,
+                                                                     thetaH * coeff1, thetaH * coeff2,
+                                                                     thetaH * coeff3, thetaH * coeff4,
+                                                                     thetaH * coeff5, thetaH * coeff6,
+                                                                     thetaH * coeff7);
+            interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2, coeffDot3, coeffDot4, coeffDot5, coeffDot6, coeffDot7);
         } else {
 
             final double coeff1    =  -1 /  20.0 + theta * (  19            /  20.0 + theta * (  -89             /  20.0  + theta * (   151            /  20.0 + theta *  -21           /   5.0)));
@@ -160,21 +160,15 @@ class LutherStepInterpolator extends RungeKuttaStepInterpolator {
             final double coeff5    = -49 / 180.0 + theta * ( -49            / 180.0 + theta * ((2254 + 1029 * Q) / 900.0  + theta * ((-1372 - 847 * Q) / 300.0 + theta * ( 49 + 49 * Q) /  25.0)));
             final double coeff6    = -49 / 180.0 + theta * ( -49            / 180.0 + theta * ((2254 - 1029 * Q) / 900.0  + theta * ((-1372 + 847 * Q) / 300.0 + theta * ( 49 - 49 * Q) /  25.0)));
             final double coeff7    =  -1 /  20.0 + theta * (  -1            /  20.0 + theta * (    1             /   4.0  + theta * (    -3            /   4.0)));
-            for (int i = 0; i < interpolatedState.length; ++i) {
-                final double yDot1 = yDotK[0][i];
-                final double yDot2 = yDotK[1][i];
-                final double yDot3 = yDotK[2][i];
-                final double yDot4 = yDotK[3][i];
-                final double yDot5 = yDotK[4][i];
-                final double yDot6 = yDotK[5][i];
-                final double yDot7 = yDotK[6][i];
-                interpolatedState[i] = currentState[i] +
-                        oneMinusThetaH * (coeff1 * yDot1 + coeff2 * yDot2 + coeff3 * yDot3 +
-                                          coeff4 * yDot4 + coeff5 * yDot5 + coeff6 * yDot6 + coeff7 * yDot7);
-                interpolatedDerivatives[i] = coeffDot1 * yDot1 + coeffDot2 * yDot2 + coeffDot3 * yDot3 +
-                        coeffDot4 * yDot4 + coeffDot5 * yDot5 + coeffDot6 * yDot6 + coeffDot7 * yDot7;
-            }
+            interpolatedState       = currentStateLinearCombination(coeff1,
+                                                                    oneMinusThetaH * coeff1, oneMinusThetaH * coeff2,
+                                                                    oneMinusThetaH * coeff3, oneMinusThetaH * coeff4,
+                                                                    oneMinusThetaH * coeff5, oneMinusThetaH * coeff6,
+                                                                    oneMinusThetaH * coeff7);
+            interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2, coeffDot3, coeffDot4, coeffDot5, coeffDot6, coeffDot7);
         }
+
+        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

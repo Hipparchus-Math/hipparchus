@@ -17,6 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEStateAndDerivative;
 
 /**
  * This class implements a simple Euler integrator for Ordinary
@@ -47,25 +49,43 @@ package org.hipparchus.ode.nonstiff;
 
 public class EulerIntegrator extends RungeKuttaIntegrator {
 
-  /** Time steps Butcher array. */
-  private static final double[] STATIC_C = {
-  };
+    /** Simple constructor.
+     * Build an Euler integrator with the given step.
+     * @param step integration step
+     */
+    public EulerIntegrator(final double step) {
+        super("Euler", step);
+    }
 
-  /** Internal weights Butcher array. */
-  private static final double[][] STATIC_A = {
-  };
+    /** {@inheritDoc} */
+    @Override
+    public double[] getC() {
+        return new double[0];
+    }
 
-  /** Propagation weights Butcher array. */
-  private static final double[] STATIC_B = {
-    1.0
-  };
+    /** {@inheritDoc} */
+    @Override
+    public double[][] getA() {
+        return new double[0][];
+    }
 
-  /** Simple constructor.
-   * Build an Euler integrator with the given step.
-   * @param step integration step
-   */
-  public EulerIntegrator(final double step) {
-    super("Euler", STATIC_C, STATIC_A, STATIC_B, new EulerStepInterpolator(), step);
-  }
+    /** {@inheritDoc} */
+    @Override
+    public double[] getB() {
+        return new double[] { 1 };
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected EulerStepInterpolator
+        createInterpolator(final boolean forward, double[][] yDotK,
+                           final ODEStateAndDerivative globalPreviousState,
+                           final ODEStateAndDerivative globalCurrentState,
+                           final EquationsMapper mapper) {
+        return new EulerStepInterpolator(forward, yDotK,
+                                         globalPreviousState, globalCurrentState,
+                                         globalPreviousState, globalCurrentState,
+                                         mapper);
+    }
 
 }

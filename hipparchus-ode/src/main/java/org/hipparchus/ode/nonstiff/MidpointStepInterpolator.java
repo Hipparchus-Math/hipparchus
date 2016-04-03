@@ -17,7 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEStateAndDerivative;
 
 /**
  * This class implements a step interpolator for second order
@@ -46,70 +47,69 @@ import org.hipparchus.ode.sampling.StepInterpolator;
 class MidpointStepInterpolator
   extends RungeKuttaStepInterpolator {
 
-  /** Serializable version identifier */
-  private static final long serialVersionUID = 20111120L;
+    /** Serializable version identifier. */
+    private static final long serialVersionUID = 20160328L;
 
-  /** Simple constructor.
-   * This constructor builds an instance that is not usable yet, the
-   * {@link
-   * org.hipparchus.ode.sampling.AbstractStepInterpolator#reinitialize}
-   * method should be called before using the instance in order to
-   * initialize the internal arrays. This constructor is used only
-   * in order to delay the initialization in some cases. The {@link
-   * RungeKuttaIntegrator} class uses the prototyping design pattern
-   * to create the step interpolators by cloning an uninitialized model
-   * and later initializing the copy.
-   */
-  // CHECKSTYLE: stop RedundantModifier
-  // the public modifier here is needed for serialization
-  public MidpointStepInterpolator() {
-  }
-  // CHECKSTYLE: resume RedundantModifier
-
-  /** Copy constructor.
-   * @param interpolator interpolator to copy from. The copy is a deep
-   * copy: its arrays are separated from the original arrays of the
-   * instance
-   */
-  MidpointStepInterpolator(final MidpointStepInterpolator interpolator) {
-    super(interpolator);
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  protected StepInterpolator doCopy() {
-    return new MidpointStepInterpolator(this);
-  }
-
-
-  /** {@inheritDoc} */
-  @Override
-  protected void computeInterpolatedStateAndDerivatives(final double theta,
-                                          final double oneMinusThetaH) {
-
-    final double coeffDot2 = 2 * theta;
-    final double coeffDot1 = 1 - coeffDot2;
-
-    if ((previousState != null) && (theta <= 0.5)) {
-        final double coeff1    = theta * oneMinusThetaH;
-        final double coeff2    = theta * theta * h;
-        for (int i = 0; i < interpolatedState.length; ++i) {
-            final double yDot1 = yDotK[0][i];
-            final double yDot2 = yDotK[1][i];
-            interpolatedState[i] = previousState[i] + coeff1 * yDot1 + coeff2 * yDot2;
-            interpolatedDerivatives[i] = coeffDot1 * yDot1 + coeffDot2 * yDot2;
-        }
-    } else {
-        final double coeff1    = oneMinusThetaH * theta;
-        final double coeff2    = oneMinusThetaH * (1.0 + theta);
-        for (int i = 0; i < interpolatedState.length; ++i) {
-            final double yDot1 = yDotK[0][i];
-            final double yDot2 = yDotK[1][i];
-            interpolatedState[i] = currentState[i] + coeff1 * yDot1 - coeff2 * yDot2;
-            interpolatedDerivatives[i] = coeffDot1 * yDot1 + coeffDot2 * yDot2;
-        }
+    /** Simple constructor.
+     * @param forward integration direction indicator
+     * @param yDotK slopes at the intermediate points
+     * @param globalPreviousState start of the global step
+     * @param globalCurrentState end of the global step
+     * @param softPreviousState start of the restricted step
+     * @param softCurrentState end of the restricted step
+     * @param mapper equations mapper for the all equations
+     */
+    MidpointStepInterpolator(final boolean forward,
+                             final double[][] yDotK,
+                             final ODEStateAndDerivative globalPreviousState,
+                             final ODEStateAndDerivative globalCurrentState,
+                             final ODEStateAndDerivative softPreviousState,
+                             final ODEStateAndDerivative softCurrentState,
+                             final EquationsMapper mapper) {
+        super(forward, yDotK,
+              globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
+              mapper);
     }
 
-  }
+    /** {@inheritDoc} */
+    @Override
+    protected MidpointStepInterpolator create(final boolean newForward, final double[][] newYDotK,
+                                              final ODEStateAndDerivative newGlobalPreviousState,
+                                              final ODEStateAndDerivative newGlobalCurrentState,
+                                              final ODEStateAndDerivative newSoftPreviousState,
+                                              final ODEStateAndDerivative newSoftCurrentState,
+                                              final EquationsMapper newMapper) {
+        return new MidpointStepInterpolator(newForward, newYDotK,
+                                            newGlobalPreviousState, newGlobalCurrentState,
+                                            newSoftPreviousState, newSoftCurrentState,
+                                            newMapper);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected ODEStateAndDerivative computeInterpolatedStateAndDerivatives(final EquationsMapper mapper,
+                                                                           final double time, final double theta,
+                                                                           final double thetaH, final double oneMinusThetaH) {
+        final double coeffDot2 = 2 * theta;
+        final double coeffDot1 = 1 - coeffDot2;
+
+        final double[] interpolatedState;
+        final double[] interpolatedDerivatives;
+        if (getGlobalPreviousState() != null && theta <= 0.5) {
+
+            final double coeff1     = theta * oneMinusThetaH;
+            final double coeff2     = theta * thetaH;
+            interpolatedState       = previousStateLinearCombination(coeff1, coeff1, coeff2);
+            interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2);
+        } else {
+            final double coeff1     = oneMinusThetaH * theta;
+            final double coeff2     = oneMinusThetaH * (1.0 + theta);
+            interpolatedState       = currentStateLinearCombination(coeff1, coeff1, coeff2);
+            interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2);
+        }
+
+        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+
+    }
 
 }

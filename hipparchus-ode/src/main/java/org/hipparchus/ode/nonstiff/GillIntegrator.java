@@ -17,6 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
 
 
@@ -45,29 +47,51 @@ import org.hipparchus.util.FastMath;
 
 public class GillIntegrator extends RungeKuttaIntegrator {
 
-  /** Time steps Butcher array. */
-  private static final double[] STATIC_C = {
-    1.0 / 2.0, 1.0 / 2.0, 1.0
-  };
+    /** Simple constructor.
+     * Build a fourth-order Gill integrator with the given step.
+     * @param step integration step
+     */
+    public GillIntegrator(final double step) {
+        super("Gill", step);
+    }
 
-  /** Internal weights Butcher array. */
-  private static final double[][] STATIC_A = {
-    { 1.0 / 2.0 },
-    { (FastMath.sqrt(2.0) - 1.0) / 2.0, (2.0 - FastMath.sqrt(2.0)) / 2.0 },
-    { 0.0, -FastMath.sqrt(2.0) / 2.0, (2.0 + FastMath.sqrt(2.0)) / 2.0 }
-  };
+    /** {@inheritDoc} */
+    @Override
+    public double[] getC() {
+        return new double[] {
+            1.0 / 2.0, 1.0 / 2.0, 1.0
+        };
+    }
 
-  /** Propagation weights Butcher array. */
-  private static final double[] STATIC_B = {
-    1.0 / 6.0, (2.0 - FastMath.sqrt(2.0)) / 6.0, (2.0 + FastMath.sqrt(2.0)) / 6.0, 1.0 / 6.0
-  };
+    /** {@inheritDoc} */
+    @Override
+    public double[][] getA() {
+        return new double[][] {
+            { 1.0 / 2.0 },
+            { (FastMath.sqrt(2.0) - 1.0) / 2.0, (2.0 - FastMath.sqrt(2.0)) / 2.0 },
+            { 0.0, -FastMath.sqrt(2.0) / 2.0, (2.0 + FastMath.sqrt(2.0)) / 2.0 }
+        };
+    }
 
-  /** Simple constructor.
-   * Build a fourth-order Gill integrator with the given step.
-   * @param step integration step
-   */
-  public GillIntegrator(final double step) {
-    super("Gill", STATIC_C, STATIC_A, STATIC_B, new GillStepInterpolator(), step);
-  }
+    /** {@inheritDoc} */
+    @Override
+    public double[] getB() {
+        return new double[] {
+            1.0 / 6.0, (2.0 - FastMath.sqrt(2.0)) / 6.0, (2.0 + FastMath.sqrt(2.0)) / 6.0, 1.0 / 6.0
+        };
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected GillStepInterpolator
+    createInterpolator(final boolean forward, double[][] yDotK,
+                       final ODEStateAndDerivative globalPreviousState,
+                       final ODEStateAndDerivative globalCurrentState,
+                       final EquationsMapper mapper) {
+        return new GillStepInterpolator(forward, yDotK,
+                                        globalPreviousState, globalCurrentState,
+                                        globalPreviousState, globalCurrentState,
+                                        mapper);
+    }
 
 }

@@ -20,8 +20,10 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.FirstOrderIntegrator;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
+import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem2;
 import org.hipparchus.ode.TestProblem3;
@@ -30,9 +32,10 @@ import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblem6;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
-import org.hipparchus.ode.events.EventHandler;
-import org.hipparchus.ode.sampling.StepHandler;
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.ODEEventHandler;
+import org.hipparchus.ode.sampling.ODEStepHandler;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -45,16 +48,18 @@ public class LutherIntegratorTest {
         final double   t0     = 1878250320.0000029;
         final double   tEvent = 1878250379.9999986;
         final double[] k      = { 1.0e-4, 1.0e-5, 1.0e-6 };
-        FirstOrderDifferentialEquations ode = new FirstOrderDifferentialEquations() {
+        OrdinaryDifferentialEquation ode = new OrdinaryDifferentialEquation() {
 
             public int getDimension() {
                 return k.length;
             }
 
-            public void computeDerivatives(double t, double[] y, double[] yDot) {
+            public double[] computeDerivatives(double t, double[] y) {
+                double[] yDot = new double[y.length];
                 for (int i = 0; i < y.length; ++i) {
                     yDot[i] = k[i] * y[i];
                 }
+                return yDot;
             }
         };
 
@@ -66,30 +71,24 @@ public class LutherIntegratorTest {
         }
         double[] y    = new double[k.length];
 
-        double finalT = integrator.integrate(ode, t0, y0, tEvent, y);
+        double finalT = integrator.integrate(ode, new ODEState(t0, y0), tEvent).getTime();
         Assert.assertEquals(tEvent, finalT, 1.0e-15);
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(y0[i] * FastMath.exp(k[i] * (finalT - t0)), y[i], 1.0e-15);
         }
 
-        integrator.addEventHandler(new EventHandler() {
+        integrator.addEventHandler(new ODEEventHandler() {
 
-            public void init(double t0, double[] y0, double t) {
+            public double g(ODEStateAndDerivative s) {
+                return s.getTime() - tEvent;
             }
 
-            public void resetState(double t, double[] y) {
-            }
-
-            public double g(double t, double[] y) {
-                return t - tEvent;
-            }
-
-            public Action eventOccurred(double t, double[] y, boolean increasing) {
-                Assert.assertEquals(tEvent, t, 1.0e-15);
+            public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+                Assert.assertEquals(tEvent, s.getTime(), 1.0e-15);
                 return Action.CONTINUE;
             }
         }, Double.POSITIVE_INFINITY, 1.0e-20, 100);
-        finalT = integrator.integrate(ode, t0, y0, tEvent + 120, y);
+        finalT = integrator.integrate(ode, new ODEState(t0, y0), tEvent + 120).getTime();
         Assert.assertEquals(tEvent + 120, finalT, 1.0e-15);
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(y0[i] * FastMath.exp(k[i] * (finalT - t0)), y[i], 1.0e-15);
@@ -103,24 +102,16 @@ public class LutherIntegratorTest {
         try  {
             TestProblem1 pb = new TestProblem1();
             new LutherIntegrator(0.01).integrate(pb,
-                                                 0.0, new double[pb.getDimension()+10],
-                                                 1.0, new double[pb.getDimension()]);
+                                                 new ODEState(0.0, new double[pb.getDimension()+10]),
+                                                 1.0);
             Assert.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
         }
         try  {
             TestProblem1 pb = new TestProblem1();
             new LutherIntegrator(0.01).integrate(pb,
-                                                 0.0, new double[pb.getDimension()],
-                                                 1.0, new double[pb.getDimension()+10]);
-            Assert.fail("an exception should have been thrown");
-        } catch(MathIllegalArgumentException ie) {
-        }
-        try  {
-            TestProblem1 pb = new TestProblem1();
-            new LutherIntegrator(0.01).integrate(pb,
-                                                 0.0, new double[pb.getDimension()],
-                                                 0.0, new double[pb.getDimension()]);
+                                                 new ODEState(0.0, new double[pb.getDimension()]),
+                                                 0.0);
             Assert.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
         }
@@ -141,17 +132,16 @@ public class LutherIntegratorTest {
 
                 double step = (pb.getFinalTime() - pb.getInitialTime()) * FastMath.pow(2.0, -i);
 
-                FirstOrderIntegrator integ = new LutherIntegrator(step);
+                ODEIntegrator integ = new LutherIntegrator(step);
                 TestProblemHandler handler = new TestProblemHandler(pb, integ);
                 integ.addStepHandler(handler);
-                EventHandler[] functions = pb.getEventsHandlers();
+                ODEEventHandler[] functions = pb.getEventsHandlers();
                 for (int l = 0; l < functions.length; ++l) {
                     integ.addEventHandler(functions[l],
                                           Double.POSITIVE_INFINITY, 1.0e-6 * step, 1000);
                 }
                 Assert.assertEquals(functions.length, integ.getEventHandlers().size());
-                double stopTime = integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
-                                                  pb.getFinalTime(), new double[pb.getDimension()]);
+                double stopTime = integ.integrate(pb, pb.getInitialState(), pb.getFinalTime()).getTime();
                 if (functions.length == 0) {
                     Assert.assertEquals(pb.getFinalTime(), stopTime, 1.0e-10);
                 }
@@ -183,11 +173,10 @@ public class LutherIntegratorTest {
         TestProblem1 pb = new TestProblem1();
         double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
 
-        FirstOrderIntegrator integ = new LutherIntegrator(step);
+        ODEIntegrator integ = new LutherIntegrator(step);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
-        integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
-                        pb.getFinalTime(), new double[pb.getDimension()]);
+        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
         Assert.assertTrue(handler.getLastError() < 9.0e-17);
         Assert.assertTrue(handler.getMaximalValueError() < 4.0e-15);
@@ -202,11 +191,10 @@ public class LutherIntegratorTest {
         TestProblem1 pb = new TestProblem1();
         double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.2;
 
-        FirstOrderIntegrator integ = new LutherIntegrator(step);
+        ODEIntegrator integ = new LutherIntegrator(step);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
-        integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
-                        pb.getFinalTime(), new double[pb.getDimension()]);
+        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
         Assert.assertTrue(handler.getLastError() > 0.00002);
         Assert.assertTrue(handler.getMaximalValueError() > 0.001);
@@ -221,11 +209,10 @@ public class LutherIntegratorTest {
         TestProblem5 pb = new TestProblem5();
         double step = FastMath.abs(pb.getFinalTime() - pb.getInitialTime()) * 0.001;
 
-        FirstOrderIntegrator integ = new LutherIntegrator(step);
+        ODEIntegrator integ = new LutherIntegrator(step);
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
-        integ.integrate(pb, pb.getInitialTime(), pb.getInitialState(),
-                        pb.getFinalTime(), new double[pb.getDimension()]);
+        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
         Assert.assertTrue(handler.getLastError() < 3.0e-13);
         Assert.assertTrue(handler.getMaximalValueError() < 5.0e-13);
@@ -240,25 +227,23 @@ public class LutherIntegratorTest {
         final TestProblem3 pb  = new TestProblem3(0.9);
         double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.0003;
 
-        FirstOrderIntegrator integ = new LutherIntegrator(step);
+        ODEIntegrator integ = new LutherIntegrator(step);
         integ.addStepHandler(new KeplerHandler(pb));
-        integ.integrate(pb,
-                        pb.getInitialTime(), pb.getInitialState(),
-                        pb.getFinalTime(), new double[pb.getDimension()]);
+        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
     }
 
-    private static class KeplerHandler implements StepHandler {
+    private static class KeplerHandler implements ODEStepHandler {
         public KeplerHandler(TestProblem3 pb) {
             this.pb = pb;
             maxError = 0;
         }
-        public void init(double t0, double[] y0, double t) {
+        public void init(ODEStateAndDerivative s0, double t) {
             maxError = 0;
         }
-        public void handleStep(StepInterpolator interpolator, boolean isLast) {
+        public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
 
-            double[] interpolatedY = interpolator.getInterpolatedState ();
-            double[] theoreticalY  = pb.computeTheoreticalState(interpolator.getCurrentTime());
+            double[] interpolatedY = interpolator.getCurrentState().getState();
+            double[] theoreticalY  = pb.computeTheoreticalState(interpolator.getCurrentState().getTime());
             double dx = interpolatedY[0] - theoreticalY[0];
             double dy = interpolatedY[1] - theoreticalY[1];
             double error = dx * dx + dy * dy;
@@ -277,26 +262,25 @@ public class LutherIntegratorTest {
     public void testStepSize()
             throws MathIllegalArgumentException, MathIllegalStateException {
         final double step = 1.23456;
-        FirstOrderIntegrator integ = new LutherIntegrator(step);
-        integ.addStepHandler(new StepHandler() {
-            public void handleStep(StepInterpolator interpolator, boolean isLast) {
+        ODEIntegrator integ = new LutherIntegrator(step);
+        integ.addStepHandler(new ODEStepHandler() {
+            public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
                 if (! isLast) {
                     Assert.assertEquals(step,
-                                        interpolator.getCurrentTime() - interpolator.getPreviousTime(),
+                                        interpolator.getCurrentState().getTime() -
+                                        interpolator.getPreviousState().getTime(),
                                         1.0e-12);
                 }
             }
-            public void init(double t0, double[] y0, double t) {
-            }
         });
-        integ.integrate(new FirstOrderDifferentialEquations() {
-            public void computeDerivatives(double t, double[] y, double[] dot) {
-                dot[0] = 1.0;
+        integ.integrate(new OrdinaryDifferentialEquation() {
+            public double[] computeDerivatives(double t, double[] y) {
+                return new double[] { 1.0 };
             }
             public int getDimension() {
                 return 1;
             }
-        }, 0.0, new double[] { 0.0 }, 5.0, new double[1]);
+        }, new ODEState(0.0, new double[] { 0.0 }), 5.0);
     }
 
     @Test
@@ -306,8 +290,8 @@ public class LutherIntegratorTest {
         double h = (pb.getFinalTime() - pb.getInitialTime()) * 0.0003;
 
         RungeKuttaIntegrator integ = new LutherIntegrator(Double.NaN);
-        double   t = pb.getInitialTime();
-        double[] y = pb.getInitialState();
+        double   t = pb.getInitialState().getTime();
+        double[] y = pb.getInitialState().getState();
         for (int i = 0; i < 100; ++i) {
             y = integ.singleStep(pb, t, y, t + h);
             t += h;

@@ -17,6 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEStateAndDerivative;
 
 /**
  * This class implements a second order Runge-Kutta integrator for
@@ -42,27 +44,49 @@ package org.hipparchus.ode.nonstiff;
 
 public class MidpointIntegrator extends RungeKuttaIntegrator {
 
-  /** Time steps Butcher array. */
-  private static final double[] STATIC_C = {
-    1.0 / 2.0
-  };
+    /** Simple constructor.
+     * Build a midpoint integrator with the given step.
+     * @param step integration step
+     */
+    public MidpointIntegrator(final double step) {
+        super("midpoint", step);
+    }
 
-  /** Internal weights Butcher array. */
-  private static final double[][] STATIC_A = {
-    { 1.0 / 2.0 }
-  };
+    /** {@inheritDoc} */
+    @Override
+    public double[] getC() {
+        return new double[] {
+            1.0 / 2.0
+        };
+    }
 
-  /** Propagation weights Butcher array. */
-  private static final double[] STATIC_B = {
-    0.0, 1.0
-  };
+    /** {@inheritDoc} */
+    @Override
+    public double[][] getA() {
+        return new double[][] {
+            { 1.0 / 2.0 }
+        };
+    }
 
-  /** Simple constructor.
-   * Build a midpoint integrator with the given step.
-   * @param step integration step
-   */
-  public MidpointIntegrator(final double step) {
-    super("midpoint", STATIC_C, STATIC_A, STATIC_B, new MidpointStepInterpolator(), step);
-  }
+    /** {@inheritDoc} */
+    @Override
+    public double[] getB() {
+        return new double[] {
+            0.0, 1.0
+        };
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected MidpointStepInterpolator
+    createInterpolator(final boolean forward, double[][] yDotK,
+                       final ODEStateAndDerivative globalPreviousState,
+                       final ODEStateAndDerivative globalCurrentState,
+                       final EquationsMapper mapper) {
+        return new MidpointStepInterpolator(forward, yDotK,
+                                            globalPreviousState, globalCurrentState,
+                                            globalPreviousState, globalCurrentState,
+                                            mapper);
+    }
 
 }

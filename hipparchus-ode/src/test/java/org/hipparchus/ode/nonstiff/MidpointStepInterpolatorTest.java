@@ -27,69 +27,66 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.ContinuousOutputModel;
+import org.hipparchus.ode.DenseOutputModel;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.sampling.StepHandler;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class MidpointStepInterpolatorTest {
 
-  @Test
-  public void testDerivativesConsistency()
-      throws MathIllegalArgumentException, MathIllegalStateException {
-    TestProblem3 pb = new TestProblem3();
-    double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
-    MidpointIntegrator integ = new MidpointIntegrator(step);
-    StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 6.6e-12);
-  }
-
-  @Test
-  public void serialization()
-    throws IOException, ClassNotFoundException,
-           MathIllegalArgumentException, MathIllegalStateException {
-
-    TestProblem1 pb = new TestProblem1();
-    double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
-    MidpointIntegrator integ = new MidpointIntegrator(step);
-    integ.addStepHandler(new ContinuousOutputModel());
-    integ.integrate(pb,
-                    pb.getInitialTime(), pb.getInitialState(),
-                    pb.getFinalTime(), new double[pb.getDimension()]);
-
-    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    ObjectOutputStream    oos = new ObjectOutputStream(bos);
-    for (StepHandler handler : integ.getStepHandlers()) {
-        oos.writeObject(handler);
+    @Test
+    public void testDerivativesConsistency()
+        throws MathIllegalArgumentException, MathIllegalStateException {
+        TestProblem3 pb = new TestProblem3();
+        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
+        MidpointIntegrator integ = new MidpointIntegrator(step);
+        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 6.6e-12);
     }
 
-    Assert.assertTrue(bos.size () > 135000);
-    Assert.assertTrue(bos.size () < 145000);
+    @Test
+    public void serialization()
+        throws IOException, ClassNotFoundException,
+               MathIllegalArgumentException, MathIllegalStateException {
 
-    ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
-    ObjectInputStream     ois = new ObjectInputStream(bis);
-    ContinuousOutputModel cm  = (ContinuousOutputModel) ois.readObject();
+        TestProblem1 pb = new TestProblem1();
+        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
+        MidpointIntegrator integ = new MidpointIntegrator(step);
+        integ.addStepHandler(new DenseOutputModel());
+        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
-    Random random = new Random(347588535632l);
-    double maxError = 0.0;
-    for (int i = 0; i < 1000; ++i) {
-      double r = random.nextDouble();
-      double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-      cm.setInterpolatedTime(time);
-      double[] interpolatedY = cm.getInterpolatedState ();
-      double[] theoreticalY  = pb.computeTheoreticalState(time);
-      double dx = interpolatedY[0] - theoreticalY[0];
-      double dy = interpolatedY[1] - theoreticalY[1];
-      double error = dx * dx + dy * dy;
-      if (error > maxError) {
-        maxError = error;
-      }
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream    oos = new ObjectOutputStream(bos);
+        for (ODEStepHandler handler : integ.getStepHandlers()) {
+            oos.writeObject(handler);
+        }
+
+        Assert.assertTrue(bos.size () > 135000);
+        Assert.assertTrue(bos.size () < 145000);
+
+        ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
+        ObjectInputStream     ois = new ObjectInputStream(bis);
+        DenseOutputModel cm  = (DenseOutputModel) ois.readObject();
+
+        Random random = new Random(347588535632l);
+        double maxError = 0.0;
+        for (int i = 0; i < 1000; ++i) {
+            double r = random.nextDouble();
+            double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
+            double[] interpolatedY = cm.getInterpolatedState(time).getState();
+            double[] theoreticalY  = pb.computeTheoreticalState(time);
+            double dx = interpolatedY[0] - theoreticalY[0];
+            double dy = interpolatedY[1] - theoreticalY[1];
+            double error = dx * dx + dy * dy;
+            if (error > maxError) {
+                maxError = error;
+            }
+        }
+
+        Assert.assertTrue(maxError < 1.0e-6);
+
     }
-
-    Assert.assertTrue(maxError < 1.0e-6);
-
-  }
 
 }

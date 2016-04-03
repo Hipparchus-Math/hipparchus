@@ -36,7 +36,7 @@
  * computing the state vector at discrete times, they also provide a
  * cheap mean to get the state between the time steps. They do so through
  * classes extending the {@link
- * org.hipparchus.ode.sampling.StepInterpolator StepInterpolator}
+ * org.hipparchus.ode.sampling.ODEStateInterpolator StepInterpolator}
  * abstract class, which are made available to the user at the end of
  * each step.
  * </p>
@@ -74,7 +74,7 @@
  * org.hipparchus.ode.sampling.StepHandler StepHandler} interface or a
  * {@link org.hipparchus.ode.sampling.StepNormalizer StepNormalizer}
  * object wrapping a user-specified object implementing the {@link
- * org.hipparchus.ode.sampling.FixedStepHandler FixedStepHandler}
+ * org.hipparchus.ode.sampling.ODEFixedStepHandler ODEFixedStepHandler}
  * interface into the integrator before calling the {@link
  * org.hipparchus.ode.FirstOrderIntegrator#integrate
  * FirstOrderIntegrator.integrate} method. The user object will be called
@@ -97,12 +97,7 @@
  * </p>
  *
  * <p>
- * Other default implementations of the {@link
- * org.hipparchus.ode.sampling.StepHandler StepHandler} interface are
- * available for general needs ({@link
- * org.hipparchus.ode.sampling.DummyStepHandler DummyStepHandler}, {@link
- * org.hipparchus.ode.sampling.StepNormalizer StepNormalizer}) and custom
- * implementations can be developed for specific needs. As an example,
+ * Custom implementations can be developed for specific needs. As an example,
  * if an application is to be completely driven by the integration
  * process, then most of the application code will be run inside a step
  * handler specific to this application.

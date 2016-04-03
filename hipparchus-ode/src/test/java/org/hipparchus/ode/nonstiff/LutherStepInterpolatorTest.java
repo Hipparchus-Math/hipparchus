@@ -27,9 +27,9 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.ContinuousOutputModel;
+import org.hipparchus.ode.DenseOutputModel;
 import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.sampling.StepHandler;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -53,14 +53,12 @@ public class LutherStepInterpolatorTest {
         TestProblem3 pb = new TestProblem3(0.9);
         double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.0003;
         LutherIntegrator integ = new LutherIntegrator(step);
-        integ.addStepHandler(new ContinuousOutputModel());
-        integ.integrate(pb,
-                        pb.getInitialTime(), pb.getInitialState(),
-                        pb.getFinalTime(), new double[pb.getDimension()]);
+        integ.addStepHandler(new DenseOutputModel());
+        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream    oos = new ObjectOutputStream(bos);
-        for (StepHandler handler : integ.getStepHandlers()) {
+        for (ODEStepHandler handler : integ.getStepHandlers()) {
             oos.writeObject(handler);
         }
 
@@ -69,15 +67,14 @@ public class LutherStepInterpolatorTest {
 
         ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
         ObjectInputStream     ois = new ObjectInputStream(bis);
-        ContinuousOutputModel cm  = (ContinuousOutputModel) ois.readObject();
+        DenseOutputModel cm  = (DenseOutputModel) ois.readObject();
 
         Random random = new Random(347588535632l);
         double maxError = 0.0;
         for (int i = 0; i < 1000; ++i) {
             double r = random.nextDouble();
             double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-            cm.setInterpolatedTime(time);
-            double[] interpolatedY = cm.getInterpolatedState ();
+            double[] interpolatedY = cm.getInterpolatedState(time).getState();
             double[] theoreticalY  = pb.computeTheoreticalState(time);
             double dx = interpolatedY[0] - theoreticalY[0];
             double dy = interpolatedY[1] - theoreticalY[1];

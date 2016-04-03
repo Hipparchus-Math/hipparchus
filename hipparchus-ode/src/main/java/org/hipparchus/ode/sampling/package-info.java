@@ -47,9 +47,9 @@
  * org.hipparchus.ode.sampling.StepHandler StepHandler} interface can be called
  * either at regular or irregular rate. This interface allows to navigate to any location
  * within the last computed step, thanks to the provided {@link
- * org.hipparchus.ode.sampling.StepInterpolator StepInterpolator} object.
+ * org.hipparchus.ode.sampling.ODEStateInterpolator StepInterpolator} object.
  * If regular output is desired (for example in order to write an ephemeris file), then
- * the simpler {@link org.hipparchus.ode.sampling.FixedStepHandler FixedStepHandler}
+ * the simpler {@link org.hipparchus.ode.sampling.ODEFixedStepHandler ODEFixedStepHandler}
  * interface can be used. Objects implementing this interface should be wrapped within a
  * {@link org.hipparchus.ode.sampling.StepNormalizer StepNormalizer} instance
  * in order to be registered to the integrator.

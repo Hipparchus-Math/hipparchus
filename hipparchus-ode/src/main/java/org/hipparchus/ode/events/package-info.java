@@ -23,8 +23,8 @@
  *
  * <p>
  * Discrete events detection is based on switching functions. The user provides
- * a simple {@link org.hipparchus.ode.events.EventHandler#g g(t, y)}
- * function depending on the current time and state. The integrator will monitor
+ * a simple {@link org.hipparchus.ode.events.ODEEventHandler#g(org.hipparchus.ode.ODEStateAndDerivative)
+ * g(state)} function depending on the current time and state. The integrator will monitor
  * the value of the function throughout integration range and will trigger the
  * event when its sign changes. The magnitude of the value is almost irrelevant,
  * it should however be continuous (but not necessarily smooth) for the sake of
@@ -48,11 +48,11 @@
  * a chemical reaction up to some predefined concentration for the first substance,
  * we can use the following switching function setting:
  * <pre>
- *  public double g(double t, double[] y) {
- *    return y[0] - targetConcentration;
+ *  public double g(final ODEStateAndDerivative state) {
+ *    return state.getState()[0] - targetConcentration;
  *  }
  *
- *  public int eventOccurred(double t, double[] y) {
+ *  public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
  *    return STOP;
  *  }
  * </pre>
@@ -67,11 +67,11 @@
  * discontinuity that must be handled appropriately by the integrator. In such a case,
  * we would use a switching function setting similar to this:
  * <pre>
- *  public double g(double t, double[] y) {
- *    return (t - tManeuverStart) &lowast; (t - tManeuverStop);
+ *  public double g(final ODEStateAndDerivative state) {
+ *    return (state.getTime() - tManeuverStart) &lowast; (state.getTime() - tManeuverStop);
  *  }
  *
- *  public int eventOccurred(double t, double[] y) {
+ *  public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
  *    return RESET_DERIVATIVES;
  *  }
  * </pre>
@@ -80,11 +80,12 @@
  * <p>
  * The third case is useful mainly for monitoring purposes, a simple example is:
  * <pre>
- *  public double g(double t, double[] y) {
+ *  public double g(final ODEStateAndDerivative state) {
+ *  final double[] y = state.getState();
  *    return y[0] - y[1];
  *  }
  *
- *  public int eventOccurred(double t, double[] y) {
+ *  public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
  *    logger.log("y0(t) and y1(t) curves cross at t = " + t);
  *    return CONTINUE;
  *  }

@@ -17,13 +17,9 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
-import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.EquationsMapper;
-import org.hipparchus.ode.sampling.AbstractStepInterpolator;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 
 /** This class represents an interpolator over the last step during an
  * ODE integration for Runge-Kutta and embedded Runge-Kutta integrators.
@@ -33,178 +29,108 @@ import org.hipparchus.ode.sampling.AbstractStepInterpolator;
  *
  */
 
-abstract class RungeKuttaStepInterpolator
-  extends AbstractStepInterpolator {
+abstract class RungeKuttaStepInterpolator extends AbstractODEStateInterpolator {
 
-    /** Previous state. */
-    protected double[] previousState;
+    /** Serializable UID. */
+    private static final long serialVersionUID = 20160328L;
 
     /** Slopes at the intermediate points */
     protected double[][] yDotK;
 
-    /** Reference to the integrator. */
-    protected AbstractIntegrator integrator;
-
-  /** Simple constructor.
-   * This constructor builds an instance that is not usable yet, the
-   * {@link #reinitialize} method should be called before using the
-   * instance in order to initialize the internal arrays. This
-   * constructor is used only in order to delay the initialization in
-   * some cases. The {@link RungeKuttaIntegrator} and {@link
-   * EmbeddedRungeKuttaIntegrator} classes use the prototyping design
-   * pattern to create the step interpolators by cloning an
-   * uninitialized model and latter initializing the copy.
-   */
-  protected RungeKuttaStepInterpolator() {
-    previousState = null;
-    yDotK         = null;
-    integrator    = null;
-  }
-
-  /** Copy constructor.
-
-  * <p>The copied interpolator should have been finalized before the
-  * copy, otherwise the copy will not be able to perform correctly any
-  * interpolation and will throw a {@link NullPointerException}
-  * later. Since we don't want this constructor to throw the
-  * exceptions finalization may involve and since we don't want this
-  * method to modify the state of the copied interpolator,
-  * finalization is <strong>not</strong> done automatically, it
-  * remains under user control.</p>
-
-  * <p>The copy is a deep copy: its arrays are separated from the
-  * original arrays of the instance.</p>
-
-  * @param interpolator interpolator to copy from.
-
-  */
-  RungeKuttaStepInterpolator(final RungeKuttaStepInterpolator interpolator) {
-
-    super(interpolator);
-
-    if (interpolator.currentState != null) {
-
-      previousState = interpolator.previousState.clone();
-
-      yDotK = new double[interpolator.yDotK.length][];
-      for (int k = 0; k < interpolator.yDotK.length; ++k) {
-        yDotK[k] = interpolator.yDotK[k].clone();
-      }
-
-    } else {
-      previousState = null;
-      yDotK = null;
+    /** Simple constructor.
+     * @param field field to which the time and state vector elements belong
+     * @param forward integration direction indicator
+     * @param yDotK slopes at the intermediate points
+     * @param globalPreviousState start of the global step
+     * @param globalCurrentState end of the global step
+     * @param softPreviousState start of the restricted step
+     * @param softCurrentState end of the restricted step
+     * @param mapper equations mapper for the all equations
+     */
+    protected RungeKuttaStepInterpolator(final boolean forward,
+                                         final double[][] yDotK,
+                                         final ODEStateAndDerivative globalPreviousState,
+                                         final ODEStateAndDerivative globalCurrentState,
+                                         final ODEStateAndDerivative softPreviousState,
+                                         final ODEStateAndDerivative softCurrentState,
+                                         final EquationsMapper mapper) {
+        super(forward, globalPreviousState, globalCurrentState, softPreviousState, softCurrentState, mapper);
+        this.yDotK = new double[yDotK.length][];
+        for (int i = 0; i < yDotK.length; ++i) {
+            this.yDotK[i] = yDotK[i].clone();
+        }
     }
 
-    // we cannot keep any reference to the equations in the copy
-    // the interpolator should have been finalized before
-    integrator = null;
-
-  }
-
-  /** Reinitialize the instance
-   * <p>Some Runge-Kutta integrators need fewer functions evaluations
-   * than their counterpart step interpolators. So the interpolator
-   * should perform the last evaluations they need by themselves. The
-   * {@link RungeKuttaIntegrator RungeKuttaIntegrator} and {@link
-   * EmbeddedRungeKuttaIntegrator EmbeddedRungeKuttaIntegrator}
-   * abstract classes call this method in order to let the step
-   * interpolator perform the evaluations it needs. These evaluations
-   * will be performed during the call to <code>doFinalize</code> if
-   * any, i.e. only if the step handler either calls the {@link
-   * AbstractStepInterpolator#finalizeStep finalizeStep} method or the
-   * {@link AbstractStepInterpolator#getInterpolatedState
-   * getInterpolatedState} method (for an interpolator which needs a
-   * finalization) or if it clones the step interpolator.</p>
-   * @param rkIntegrator integrator being used
-   * @param y reference to the integrator array holding the state at
-   * the end of the step
-   * @param yDotArray reference to the integrator array holding all the
-   * intermediate slopes
-   * @param forward integration direction indicator
-   * @param primaryMapper equations mapper for the primary equations set
-   * @param secondaryMappers equations mappers for the secondary equations sets
-   */
-  public void reinitialize(final AbstractIntegrator rkIntegrator,
-                           final double[] y, final double[][] yDotArray, final boolean forward,
-                           final EquationsMapper primaryMapper,
-                           final EquationsMapper[] secondaryMappers) {
-    reinitialize(y, forward, primaryMapper, secondaryMappers);
-    this.previousState = null;
-    this.yDotK = yDotArray;
-    this.integrator = rkIntegrator;
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public void shift() {
-    previousState = currentState.clone();
-    super.shift();
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public void writeExternal(final ObjectOutput out)
-    throws IOException {
-
-    // save the state of the base class
-    writeBaseExternal(out);
-
-    // save the local attributes
-    final int n = (currentState == null) ? -1 : currentState.length;
-    for (int i = 0; i < n; ++i) {
-      out.writeDouble(previousState[i]);
+    /** {@inheritDoc} */
+    @Override
+    protected RungeKuttaStepInterpolator create(boolean newForward,
+                                                ODEStateAndDerivative newGlobalPreviousState,
+                                                ODEStateAndDerivative newGlobalCurrentState,
+                                                ODEStateAndDerivative newSoftPreviousState,
+                                                ODEStateAndDerivative newSoftCurrentState,
+                                                EquationsMapper newMapper) {
+        return create(newForward, yDotK,
+                      newGlobalPreviousState, newGlobalCurrentState,
+                      newSoftPreviousState, newSoftCurrentState,
+                      newMapper);
     }
 
-    final int kMax = (yDotK == null) ? -1 : yDotK.length;
-    out.writeInt(kMax);
-    for (int k = 0; k < kMax; ++k) {
-      for (int i = 0; i < n; ++i) {
-        out.writeDouble(yDotK[k][i]);
-      }
+    /** Create a new instance.
+     * @param newField field to which the time and state vector elements belong
+     * @param newForward integration direction indicator
+     * @param newYDotK slopes at the intermediate points
+     * @param newGlobalPreviousState start of the global step
+     * @param newGlobalCurrentState end of the global step
+     * @param newSoftPreviousState start of the restricted step
+     * @param newSoftCurrentState end of the restricted step
+     * @param newMapper equations mapper for the all equations
+     * @return a new instance
+     */
+    protected abstract RungeKuttaStepInterpolator create(boolean newForward, double[][] newYDotK,
+                                                         ODEStateAndDerivative newGlobalPreviousState,
+                                                         ODEStateAndDerivative newGlobalCurrentState,
+                                                         ODEStateAndDerivative newSoftPreviousState,
+                                                         ODEStateAndDerivative newSoftCurrentState,
+                                                         EquationsMapper newMapper);
+
+    /** Compute a state by linear combination added to previous state.
+     * @param coefficients coefficients to apply to the method staged derivatives
+     * @return combined state
+     */
+    protected final double[] previousStateLinearCombination(final double ... coefficients) {
+        return combine(getPreviousState().getState(),
+                       coefficients);
     }
 
-    // we do not save any reference to the equations
-
-  }
-
-  /** {@inheritDoc} */
-  @Override
-  public void readExternal(final ObjectInput in)
-    throws IOException, ClassNotFoundException {
-
-    // read the base class
-    final double t = readBaseExternal(in);
-
-    // read the local attributes
-    final int n = (currentState == null) ? -1 : currentState.length;
-    if (n < 0) {
-      previousState = null;
-    } else {
-      previousState = new double[n];
-      for (int i = 0; i < n; ++i) {
-        previousState[i] = in.readDouble();
-      }
+    /** Compute a state by linear combination added to current state.
+     * @param coefficients coefficients to apply to the method staged derivatives
+     * @return combined state
+     */
+    protected double[] currentStateLinearCombination(final double ... coefficients) {
+        return combine(getCurrentState().getState(),
+                       coefficients);
     }
 
-    final int kMax = in.readInt();
-    yDotK = (kMax < 0) ? null : new double[kMax][];
-    for (int k = 0; k < kMax; ++k) {
-      yDotK[k] = (n < 0) ? null : new double[n];
-      for (int i = 0; i < n; ++i) {
-        yDotK[k][i] = in.readDouble();
-      }
+    /** Compute a state derivative by linear combination.
+     * @param coefficients coefficients to apply to the method staged derivatives
+     * @return combined state
+     */
+    protected double[] derivativeLinearCombination(final double ... coefficients) {
+        return combine(new double[yDotK[0].length], coefficients);
     }
 
-    integrator = null;
-
-    if (currentState != null) {
-        // we can now set the interpolated time and state
-        setInterpolatedTime(t);
-    } else {
-        interpolatedTime = t;
+    /** Linearly combine arrays.
+     * @param a array to add to
+     * @param coefficients coefficients to apply to the method staged derivatives
+     * @return a itself, as a conveniency for fluent API
+     */
+    private double[] combine(final double[] a, final double ... coefficients) {
+        for (int i = 0; i < a.length; ++i) {
+            for (int k = 0; k < coefficients.length; ++k) {
+                a[i] += coefficients[k] * yDotK[k][i];
+            }
+        }
+        return a;
     }
-
-  }
 
 }

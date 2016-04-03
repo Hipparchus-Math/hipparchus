@@ -17,6 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
 
 
@@ -57,32 +59,54 @@ public class LutherIntegrator extends RungeKuttaIntegrator {
     /** Square root. */
     private static final double Q = FastMath.sqrt(21);
 
-    /** Time steps Butcher array. */
-    private static final double[] STATIC_C = {
-        1.0, 1.0 / 2.0, 2.0 / 3.0, (7.0 - Q) / 14.0, (7.0 + Q) / 14.0, 1.0
-    };
-
-    /** Internal weights Butcher array. */
-    private static final double[][] STATIC_A = {
-        {                      1.0        },
-        {                   3.0 /   8.0,                  1.0 /   8.0  },
-        {                   8.0 /   27.0,                 2.0 /   27.0,                  8.0 /   27.0  },
-        { (  -21.0 +   9.0 * Q) /  392.0, ( -56.0 +  8.0 * Q) /  392.0, ( 336.0 -  48.0 * Q) /  392.0, (-63.0 +   3.0 * Q) /  392.0 },
-        { (-1155.0 - 255.0 * Q) / 1960.0, (-280.0 - 40.0 * Q) / 1960.0, (   0.0 - 320.0 * Q) / 1960.0, ( 63.0 + 363.0 * Q) / 1960.0,   (2352.0 + 392.0 * Q) / 1960.0 },
-        { (  330.0 + 105.0 * Q) /  180.0, ( 120.0 +  0.0 * Q) /  180.0, (-200.0 + 280.0 * Q) /  180.0, (126.0 - 189.0 * Q) /  180.0,   (-686.0 - 126.0 * Q) /  180.0,   (490.0 -  70.0 * Q) / 180.0 }
-    };
-
-    /** Propagation weights Butcher array. */
-    private static final double[] STATIC_B = {
-        1.0 / 20.0, 0, 16.0 / 45.0, 0, 49.0 / 180.0, 49.0 / 180.0, 1.0 / 20.0
-    };
-
     /** Simple constructor.
      * Build a fourth-order Luther integrator with the given step.
      * @param step integration step
      */
     public LutherIntegrator(final double step) {
-        super("Luther", STATIC_C, STATIC_A, STATIC_B, new LutherStepInterpolator(), step);
+        super("Luther", step);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double[] getC() {
+        return new double[] {
+            1.0, 1.0 / 2.0, 2.0 / 3.0, (7.0 - Q) / 14.0, (7.0 + Q) / 14.0, 1.0
+        };
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double[][] getA() {
+        return new double[][] {
+            {                      1.0        },
+            {                   3.0 /   8.0,                  1.0 /   8.0  },
+            {                   8.0 /   27.0,                 2.0 /   27.0,                  8.0 /   27.0  },
+            { (  -21.0 +   9.0 * Q) /  392.0, ( -56.0 +  8.0 * Q) /  392.0, ( 336.0 -  48.0 * Q) /  392.0, (-63.0 +   3.0 * Q) /  392.0 },
+            { (-1155.0 - 255.0 * Q) / 1960.0, (-280.0 - 40.0 * Q) / 1960.0, (   0.0 - 320.0 * Q) / 1960.0, ( 63.0 + 363.0 * Q) / 1960.0,   (2352.0 + 392.0 * Q) / 1960.0 },
+            { (  330.0 + 105.0 * Q) /  180.0, ( 120.0 +  0.0 * Q) /  180.0, (-200.0 + 280.0 * Q) /  180.0, (126.0 - 189.0 * Q) /  180.0,   (-686.0 - 126.0 * Q) /  180.0,   (490.0 -  70.0 * Q) / 180.0 }
+        };
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double[] getB() {
+        return new double[] {
+            1.0 / 20.0, 0, 16.0 / 45.0, 0, 49.0 / 180.0, 49.0 / 180.0, 1.0 / 20.0
+        };
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    protected ClassicalRungeKuttaStepInterpolator
+    createInterpolator(final boolean forward, double[][] yDotK,
+                       final ODEStateAndDerivative globalPreviousState,
+                       final ODEStateAndDerivative globalCurrentState,
+                       final EquationsMapper mapper) {
+        return new ClassicalRungeKuttaStepInterpolator(forward, yDotK,
+                                                       globalPreviousState, globalCurrentState,
+                                                       globalPreviousState, globalCurrentState,
+                                                       mapper);
     }
 
 }

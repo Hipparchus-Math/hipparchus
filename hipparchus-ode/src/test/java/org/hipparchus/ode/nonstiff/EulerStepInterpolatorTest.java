@@ -27,164 +27,140 @@ import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.ContinuousOutputModel;
-import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.DenseOutputModel;
+import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.sampling.StepHandler;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
-import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class EulerStepInterpolatorTest {
 
-  @Test
-  public void noReset() throws MathIllegalStateException {
+    @Test
+    public void noReset() throws MathIllegalStateException {
 
-    double[]   y    =   { 0.0, 1.0, -2.0 };
-    double[][] yDot = { { 1.0, 2.0, -2.0 } };
-    EulerStepInterpolator interpolator = new EulerStepInterpolator();
-    interpolator.reinitialize(new DummyIntegrator(interpolator), y, yDot, true,
-                              new EquationsMapper(0, y.length),
-                              new EquationsMapper[0]);
-    interpolator.storeTime(0);
-    interpolator.shift();
-    interpolator.storeTime(1);
+        OrdinaryDifferentialEquation equation = new OrdinaryDifferentialEquation() {
+            public int getDimension() {
+                return 3;
+            }
+            public double[] computeDerivatives(double t, double[] y) {
+                return new double[] { 1.0, 2.0, -2.0 };
+            }
+        };
+        double     t0   = 0;
+        double[]   y0   =   { 0.0, 1.0, -2.0 };
+        double[]   yDot = equation.computeDerivatives(t0, y0);
+        double     t1   = 0.1;
+        double[]   y1   =  new double[y0.length];
+        for (int i = 0; i < y1.length; ++i) {
+            y1[i] = y0[i] + (t1 - t0) * yDot[i];
+        }
+        EulerStepInterpolator interpolator =
+                        new EulerStepInterpolator(true,
+                                                  new double[0][],
+                                                  new ODEStateAndDerivative(0, y0, yDot),
+                                                  new ODEStateAndDerivative(0, y1, yDot),
+                                                  new ODEStateAndDerivative(0, y0, yDot),
+                                                  new ODEStateAndDerivative(0, y1, yDot),
+                                                  new ExpandableODE(equation).getMapper());
+        double[] result = interpolator.getInterpolatedState(0.5 * (t0 + t1)).getState();
+        for (int i = 0; i < equation.getDimension(); ++i) {
+            Assert.assertEquals(0.5 * (y0[i] + y1[i]), result[i], 1.0e-10);
+        }
 
-    double[] result = interpolator.getInterpolatedState();
-    for (int i = 0; i < result.length; ++i) {
-      Assert.assertTrue(FastMath.abs(result[i] - y[i]) < 1.0e-10);
     }
 
-  }
+    @Test
+    public void interpolationAtBounds() throws MathIllegalStateException {
 
-  @Test
-  public void interpolationAtBounds() throws MathIllegalStateException {
+        OrdinaryDifferentialEquation equation = new OrdinaryDifferentialEquation() {
+            public int getDimension() {
+                return 3;
+            }
+            public double[] computeDerivatives(double t, double[] y) {
+                return new double[] { 1.0, 2.0, -2.0 };
+            }
+        };
+        double     t0   = 0;
+        double[]   y0   =   { 0.0, 1.0, -2.0 };
+        double[]   yDot = equation.computeDerivatives(t0, y0);
+        double     t1   = 0.1;
+        double[]   y1   =  new double[y0.length];
+        for (int i = 0; i < y1.length; ++i) {
+            y1[i] = y0[i] + (t1 - t0) * yDot[i];
+        }
+        EulerStepInterpolator interpolator =
+                        new EulerStepInterpolator(true,
+                                                  new double[0][],
+                                                  new ODEStateAndDerivative(0, y0, yDot),
+                                                  new ODEStateAndDerivative(0, y1, yDot),
+                                                  new ODEStateAndDerivative(0, y0, yDot),
+                                                  new ODEStateAndDerivative(0, y1, yDot),
+                                                  new ExpandableODE(equation).getMapper());
+        double[] previous = interpolator.getPreviousState().getState();
+        double[] interpolated = interpolator.getInterpolatedState(interpolator.getPreviousState().getTime()).getState();
+        for (int i = 0; i < equation.getDimension(); ++i) {
+            Assert.assertEquals(previous[i], interpolated[i], 1.0e-10);
+        }
 
-    double   t0 = 0;
-    double[] y0 = {0.0, 1.0, -2.0};
+        double[] current = interpolator.getCurrentState().getState();
+        interpolated = interpolator.getInterpolatedState(interpolator.getCurrentState().getTime()).getState();
+        for (int i = 0; i < equation.getDimension(); ++i) {
+            Assert.assertEquals(current[i], interpolated[i], 1.0e-10);
+        }
 
-    double[] y = y0.clone();
-    double[][] yDot = { new double[y0.length] };
-    EulerStepInterpolator interpolator = new EulerStepInterpolator();
-    interpolator.reinitialize(new DummyIntegrator(interpolator), y, yDot, true,
-                              new EquationsMapper(0, y.length),
-                              new EquationsMapper[0]);
-    interpolator.storeTime(t0);
-
-    double dt = 1.0;
-    interpolator.shift();
-    y[0] =  1.0;
-    y[1] =  3.0;
-    y[2] = -4.0;
-    yDot[0][0] = (y[0] - y0[0]) / dt;
-    yDot[0][1] = (y[1] - y0[1]) / dt;
-    yDot[0][2] = (y[2] - y0[2]) / dt;
-    interpolator.storeTime(t0 + dt);
-
-    interpolator.setInterpolatedTime(interpolator.getPreviousTime());
-    double[] result = interpolator.getInterpolatedState();
-    for (int i = 0; i < result.length; ++i) {
-        Assert.assertTrue(FastMath.abs(result[i] - y0[i]) < 1.0e-10);
     }
 
-    interpolator.setInterpolatedTime(interpolator.getCurrentTime());
-    result = interpolator.getInterpolatedState();
-    for (int i = 0; i < result.length; ++i) {
-      Assert.assertTrue(FastMath.abs(result[i] - y[i]) < 1.0e-10);
+    @Test
+    public void derivativesConsistency()
+        throws MathIllegalArgumentException, MathIllegalStateException {
+        TestProblem3 pb = new TestProblem3();
+        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
+        EulerIntegrator integ = new EulerIntegrator(step);
+        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 5.1e-12);
     }
 
-  }
+    @Test
+    public void serialization()
+        throws IOException, ClassNotFoundException,
+               MathIllegalArgumentException, MathIllegalStateException {
 
-  @Test
-  public void interpolationInside() throws MathIllegalStateException {
+        TestProblem1 pb = new TestProblem1();
+        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
+        EulerIntegrator integ = new EulerIntegrator(step);
+        integ.addStepHandler(new DenseOutputModel());
+        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
-    double[]   y    =   { 0.0, 1.0, -2.0 };
-    double[][] yDot = { { 1.0, 2.0, -2.0 } };
-    EulerStepInterpolator interpolator = new EulerStepInterpolator();
-    interpolator.reinitialize(new DummyIntegrator(interpolator), y, yDot, true,
-                              new EquationsMapper(0, y.length),
-                              new EquationsMapper[0]);
-    interpolator.storeTime(0);
-    interpolator.shift();
-    y[0] =  1.0;
-    y[1] =  3.0;
-    y[2] = -4.0;
-    interpolator.storeTime(1);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream    oos = new ObjectOutputStream(bos);
+        for (ODEStepHandler handler : integ.getStepHandlers()) {
+            oos.writeObject(handler);
+        }
 
-    interpolator.setInterpolatedTime(0.1);
-    double[] result = interpolator.getInterpolatedState();
-    Assert.assertTrue(FastMath.abs(result[0] - 0.1) < 1.0e-10);
-    Assert.assertTrue(FastMath.abs(result[1] - 1.2) < 1.0e-10);
-    Assert.assertTrue(FastMath.abs(result[2] + 2.2) < 1.0e-10);
+        ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
+        ObjectInputStream     ois = new ObjectInputStream(bis);
+        DenseOutputModel cm  = (DenseOutputModel) ois.readObject();
 
-    interpolator.setInterpolatedTime(0.5);
-    result = interpolator.getInterpolatedState();
-    Assert.assertTrue(FastMath.abs(result[0] - 0.5) < 1.0e-10);
-    Assert.assertTrue(FastMath.abs(result[1] - 2.0) < 1.0e-10);
-    Assert.assertTrue(FastMath.abs(result[2] + 3.0) < 1.0e-10);
+        Random random = new Random(347588535632l);
+        double maxError = 0.0;
+        for (int i = 0; i < 1000; ++i) {
+            double r = random.nextDouble();
+            double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
+            double[] interpolatedY = cm.getInterpolatedState(time).getState();
+            double[] theoreticalY  = pb.computeTheoreticalState(time);
+            double dx = interpolatedY[0] - theoreticalY[0];
+            double dy = interpolatedY[1] - theoreticalY[1];
+            double error = dx * dx + dy * dy;
+            if (error > maxError) {
+                maxError = error;
+            }
+        }
+        Assert.assertTrue(maxError < 0.001);
 
-  }
-
-  @Test
-  public void derivativesConsistency()
-      throws MathIllegalArgumentException, MathIllegalStateException {
-    TestProblem3 pb = new TestProblem3();
-    double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
-    EulerIntegrator integ = new EulerIntegrator(step);
-    StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 5.1e-12);
-  }
-
-  @Test
-  public void serialization()
-    throws IOException, ClassNotFoundException,
-           MathIllegalArgumentException, MathIllegalStateException {
-
-    TestProblem1 pb = new TestProblem1();
-    double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
-    EulerIntegrator integ = new EulerIntegrator(step);
-    integ.addStepHandler(new ContinuousOutputModel());
-    integ.integrate(pb,
-                    pb.getInitialTime(), pb.getInitialState(),
-                    pb.getFinalTime(), new double[pb.getDimension()]);
-
-    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-    ObjectOutputStream    oos = new ObjectOutputStream(bos);
-    for (StepHandler handler : integ.getStepHandlers()) {
-        oos.writeObject(handler);
     }
-
-    ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
-    ObjectInputStream     ois = new ObjectInputStream(bis);
-    ContinuousOutputModel cm  = (ContinuousOutputModel) ois.readObject();
-
-    Random random = new Random(347588535632l);
-    double maxError = 0.0;
-    for (int i = 0; i < 1000; ++i) {
-      double r = random.nextDouble();
-      double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-      cm.setInterpolatedTime(time);
-      double[] interpolatedY = cm.getInterpolatedState ();
-      double[] theoreticalY  = pb.computeTheoreticalState(time);
-      double dx = interpolatedY[0] - theoreticalY[0];
-      double dy = interpolatedY[1] - theoreticalY[1];
-      double error = dx * dx + dy * dy;
-      if (error > maxError) {
-        maxError = error;
-      }
-    }
-    Assert.assertTrue(maxError < 0.001);
-
-  }
-
-  private static class DummyIntegrator extends RungeKuttaIntegrator {
-
-
-      protected DummyIntegrator(RungeKuttaStepInterpolator prototype) {
-          super("dummy", new double[0], new double[0][0], new double[0], prototype, Double.NaN);
-      }
-
-  }
 
 }
