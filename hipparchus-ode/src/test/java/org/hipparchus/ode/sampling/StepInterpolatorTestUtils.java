@@ -22,8 +22,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FirstOrderFieldIntegrator;
-import org.hipparchus.ode.FirstOrderIntegrator;
+import org.hipparchus.ode.FieldODEIntegrator;
+import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.util.FastMath;
@@ -31,43 +31,34 @@ import org.junit.Assert;
 
 public class StepInterpolatorTestUtils {
 
-    public static void checkDerivativesConsistency(final FirstOrderIntegrator integrator,
+    public static void checkDerivativesConsistency(final ODEIntegrator integrator,
                                                    final TestProblemAbstract problem,
                                                    final double finiteDifferencesRatio,
                                                    final double threshold)
         throws MathIllegalArgumentException, MathIllegalStateException {
-        integrator.addStepHandler(new StepHandler() {
+        integrator.addStepHandler(new ODEStepHandler() {
 
-            public void handleStep(StepInterpolator interpolator, boolean isLast)
+            public void handleStep(ODEStateInterpolator interpolator, boolean isLast)
                 throws MathIllegalStateException {
 
-                final double dt = interpolator.getCurrentTime() - interpolator.getPreviousTime();
+                final double dt = interpolator.getCurrentState().getTime() - interpolator.getPreviousState().getTime();
                 final double h  = finiteDifferencesRatio * dt;
-                final double t  = interpolator.getCurrentTime() - 0.3 * dt;
+                final double t  = interpolator.getCurrentState().getTime() - 0.3 * dt;
 
                 if (FastMath.abs(h) < 10 * FastMath.ulp(t)) {
                     return;
                 }
 
-                interpolator.setInterpolatedTime(t - 4 * h);
-                final double[] yM4h = interpolator.getInterpolatedState().clone();
-                interpolator.setInterpolatedTime(t - 3 * h);
-                final double[] yM3h = interpolator.getInterpolatedState().clone();
-                interpolator.setInterpolatedTime(t - 2 * h);
-                final double[] yM2h = interpolator.getInterpolatedState().clone();
-                interpolator.setInterpolatedTime(t - h);
-                final double[] yM1h = interpolator.getInterpolatedState().clone();
-                interpolator.setInterpolatedTime(t + h);
-                final double[] yP1h = interpolator.getInterpolatedState().clone();
-                interpolator.setInterpolatedTime(t + 2 * h);
-                final double[] yP2h = interpolator.getInterpolatedState().clone();
-                interpolator.setInterpolatedTime(t + 3 * h);
-                final double[] yP3h = interpolator.getInterpolatedState().clone();
-                interpolator.setInterpolatedTime(t + 4 * h);
-                final double[] yP4h = interpolator.getInterpolatedState().clone();
+                final double[] yM4h = interpolator.getInterpolatedState(t - 4 * h).getState();
+                final double[] yM3h = interpolator.getInterpolatedState(t - 3 * h).getState();
+                final double[] yM2h = interpolator.getInterpolatedState(t - 2 * h).getState();
+                final double[] yM1h = interpolator.getInterpolatedState(t - h).getState();
+                final double[] yP1h = interpolator.getInterpolatedState(t + h).getState();
+                final double[] yP2h = interpolator.getInterpolatedState(t + 2 * h).getState();
+                final double[] yP3h = interpolator.getInterpolatedState(t + 3 * h).getState();
+                final double[] yP4h = interpolator.getInterpolatedState(t + 4 * h).getState();
 
-                interpolator.setInterpolatedTime(t);
-                final double[] yDot = interpolator.getInterpolatedDerivatives();
+                final double[] yDot = interpolator.getInterpolatedState(t).getDerivative();
 
                 for (int i = 0; i < yDot.length; ++i) {
                     final double approYDot = ( -3 * (yP4h[i] - yM4h[i]) +
@@ -79,23 +70,18 @@ public class StepInterpolatorTestUtils {
 
             }
 
-            public void init(double t0, double[] y0, double t) {
-            }
-
         });
 
-        integrator.integrate(problem,
-                             problem.getInitialTime(), problem.getInitialState(),
-                             problem.getFinalTime(), new double[problem.getDimension()]);
+        integrator.integrate(problem, problem.getInitialState(), problem.getFinalTime());
 
     }
 
-    public static <T extends RealFieldElement<T>> void checkDerivativesConsistency(final FirstOrderFieldIntegrator<T> integrator,
+    public static <T extends RealFieldElement<T>> void checkDerivativesConsistency(final FieldODEIntegrator<T> integrator,
                                                                                    final TestFieldProblemAbstract<T> problem,
                                                                                    final double threshold) {
-        integrator.addStepHandler(new FieldStepHandler<T>() {
+        integrator.addStepHandler(new FieldODEStepHandler<T>() {
 
-            public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
+            public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
                 throws MathIllegalStateException {
 
                 final T h = interpolator.getCurrentState().getTime().subtract(interpolator.getPreviousState().getTime()).multiply(0.001);

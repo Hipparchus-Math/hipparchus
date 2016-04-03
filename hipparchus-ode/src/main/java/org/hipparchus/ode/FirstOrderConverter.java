@@ -52,62 +52,56 @@ package org.hipparchus.ode;
  * @see SecondOrderDifferentialEquations
  */
 
-public class FirstOrderConverter implements FirstOrderDifferentialEquations {
+public class FirstOrderConverter implements OrdinaryDifferentialEquation {
 
     /** Underlying second order equations set. */
-    private final SecondOrderDifferentialEquations equations;
+    private final SecondOrderODE equations;
 
     /** second order problem dimension. */
     private final int dimension;
 
-    /** state vector. */
-    private final double[] z;
+    /** Simple constructor.
+     * Build a converter around a second order equations set.
+     * @param equations second order equations set to convert
+     */
+    public FirstOrderConverter (final SecondOrderODE equations) {
+        this.equations = equations;
+        dimension      = equations.getDimension();
+    }
 
-    /** first time derivative of the state vector. */
-    private final double[] zDot;
+    /** Get the dimension of the problem.
+     * <p>The dimension of the first order problem is twice the
+     * dimension of the underlying second order problem.</p>
+     * @return dimension of the problem
+     */
+    public int getDimension() {
+        return 2 * dimension;
+    }
 
-    /** second time derivative of the state vector. */
-    private final double[] zDDot;
+    /** Get the current time derivative of the state vector.
+     * @param t current value of the independent <I>time</I> variable
+     * @param y array containing the current value of the state vector
+     * @param yDot placeholder array where to put the time derivative of the state vector
+     */
+    public double[] computeDerivatives(final double t, final double[] y) {
 
-  /** Simple constructor.
-   * Build a converter around a second order equations set.
-   * @param equations second order equations set to convert
-   */
-  public FirstOrderConverter (final SecondOrderDifferentialEquations equations) {
-      this.equations = equations;
-      dimension      = equations.getDimension();
-      z              = new double[dimension];
-      zDot           = new double[dimension];
-      zDDot          = new double[dimension];
-  }
+        final double[] yDot = new double[y.length];
 
-  /** Get the dimension of the problem.
-   * <p>The dimension of the first order problem is twice the
-   * dimension of the underlying second order problem.</p>
-   * @return dimension of the problem
-   */
-  public int getDimension() {
-    return 2 * dimension;
-  }
+        // split the state vector in two
+        final double[] z    = new double[dimension];
+        final double[] zDot = new double[dimension];
+        System.arraycopy(y, 0,         z,    0, dimension);
+        System.arraycopy(y, dimension, zDot, 0, dimension);
 
-  /** Get the current time derivative of the state vector.
-   * @param t current value of the independent <I>time</I> variable
-   * @param y array containing the current value of the state vector
-   * @param yDot placeholder array where to put the time derivative of the state vector
-   */
-  public void computeDerivatives(final double t, final double[] y, final double[] yDot) {
+        // apply the underlying equations set
+        final double[] zDDot = equations.computeSecondDerivatives(t, z, zDot);
 
-    // split the state vector in two
-    System.arraycopy(y, 0,         z,    0, dimension);
-    System.arraycopy(y, dimension, zDot, 0, dimension);
+        // build the result state derivative
+        System.arraycopy(zDot,  0, yDot, 0,         dimension);
+        System.arraycopy(zDDot, 0, yDot, dimension, dimension);
 
-    // apply the underlying equations set
-    equations.computeSecondDerivatives(t, z, zDot, zDDot);
+        return yDot;
 
-    // build the result state derivative
-    System.arraycopy(zDot,  0, yDot, 0,         dimension);
-    System.arraycopy(zDDot, 0, yDot, dimension, dimension);
-
-  }
+    }
 
 }

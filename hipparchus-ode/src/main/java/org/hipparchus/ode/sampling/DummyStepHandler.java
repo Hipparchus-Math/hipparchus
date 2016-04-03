@@ -29,10 +29,10 @@ package org.hipparchus.ode.sampling;
  * ever created, which can be retrieved using the getInstance
  * method. This explains why there is no public constructor.</p>
  *
- * @see StepHandler
+ * @deprecated as of 1.0, this class is not used anymore
  */
-
-public class DummyStepHandler implements StepHandler {
+@Deprecated
+public class DummyStepHandler implements ODEStepHandler {
 
     /** Private constructor.
      * The constructor is private to prevent users from creating
@@ -48,11 +48,6 @@ public class DummyStepHandler implements StepHandler {
         return LazyHolder.INSTANCE;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public void init(double t0, double[] y0, double t) {
-    }
-
     /**
      * Handle the last accepted step.
      * This method does nothing in this class.
@@ -65,7 +60,7 @@ public class DummyStepHandler implements StepHandler {
      * copy.
      * @param isLast true if the step is the last one
      */
-    public void handleStep(final StepInterpolator interpolator, final boolean isLast) {
+    public void handleStep(final ODEStateInterpolator interpolator, final boolean isLast) {
     }
 
     // CHECKSTYLE: stop HideUtilityClassConstructor

@@ -19,6 +19,9 @@ package org.hipparchus.ode.events;
 
 import java.util.Arrays;
 
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
+
 /** Wrapper used to detect only increasing or decreasing events.
  *
  * <p>General {@link EventHandler events} are defined implicitly
@@ -51,13 +54,13 @@ import java.util.Arrays;
  *
  */
 
-public class EventFilter implements EventHandler {
+public class EventFilter implements ODEEventHandler {
 
     /** Number of past transformers updates stored. */
     private static final int HISTORY_SIZE = 100;
 
     /** Wrapped event handler. */
-    private final EventHandler rawHandler;
+    private final ODEEventHandler rawHandler;
 
     /** Filter to use. */
     private final FilterType filter;
@@ -78,7 +81,7 @@ public class EventFilter implements EventHandler {
      * @param rawHandler event handler to wrap
      * @param filter filter to use
      */
-    public EventFilter(final EventHandler rawHandler, final FilterType filter) {
+    public EventFilter(final ODEEventHandler rawHandler, final FilterType filter) {
         this.rawHandler   = rawHandler;
         this.filter       = filter;
         this.transformers = new Transformer[HISTORY_SIZE];
@@ -87,13 +90,13 @@ public class EventFilter implements EventHandler {
 
     /**  {@inheritDoc} */
     @Override
-    public void init(double t0, double[] y0, double t) {
+    public void init(final ODEStateAndDerivative initialState, double finalTime) {
 
         // delegate to raw handler
-        rawHandler.init(t0, y0, t);
+        rawHandler.init(initialState, finalTime);
 
         // initialize events triggering logic
-        forward  = t >= t0;
+        forward  = finalTime >= initialState.getTime();
         extremeT = forward ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
         Arrays.fill(transformers, Transformer.UNINITIALIZED);
         Arrays.fill(updates, extremeT);
@@ -102,14 +105,14 @@ public class EventFilter implements EventHandler {
 
     /**  {@inheritDoc} */
     @Override
-    public double g(double t, double[] y) {
+    public double g(final ODEStateAndDerivative state) {
 
-        final double rawG = rawHandler.g(t, y);
+        final double rawG = rawHandler.g(state);
 
         // search which transformer should be applied to g
         if (forward) {
             final int last = transformers.length - 1;
-            if (extremeT < t) {
+            if (extremeT < state.getTime()) {
                 // we are at the forward end of the history
 
                 // check if a new rough root has been crossed
@@ -128,7 +131,7 @@ public class EventFilter implements EventHandler {
                     transformers[last] = next;
                 }
 
-                extremeT = t;
+                extremeT = state.getTime();
 
                 // apply the transform
                 return next.transformed(rawG);
@@ -138,7 +141,7 @@ public class EventFilter implements EventHandler {
 
                 // select the transformer
                 for (int i = last; i > 0; --i) {
-                    if (updates[i] <= t) {
+                    if (updates[i] <= state.getTime()) {
                         // apply the transform
                         return transformers[i].transformed(rawG);
                     }
@@ -148,7 +151,7 @@ public class EventFilter implements EventHandler {
 
             }
         } else {
-            if (t < extremeT) {
+            if (state.getTime() < extremeT) {
                 // we are at the backward end of the history
 
                 // check if a new rough root has been crossed
@@ -167,7 +170,7 @@ public class EventFilter implements EventHandler {
                     transformers[0] = next;
                 }
 
-                extremeT = t;
+                extremeT = state.getTime();
 
                 // apply the transform
                 return next.transformed(rawG);
@@ -177,7 +180,7 @@ public class EventFilter implements EventHandler {
 
                 // select the transformer
                 for (int i = 0; i < updates.length - 1; ++i) {
-                    if (t <= updates[i]) {
+                    if (state.getTime() <= updates[i]) {
                         // apply the transform
                         return transformers[i].transformed(rawG);
                     }
@@ -192,16 +195,16 @@ public class EventFilter implements EventHandler {
 
     /**  {@inheritDoc} */
     @Override
-    public Action eventOccurred(double t, double[] y, boolean increasing) {
+    public Action eventOccurred(final ODEStateAndDerivative state, final boolean increasing) {
         // delegate to raw handler, fixing increasing status on the fly
-        return rawHandler.eventOccurred(t, y, filter.getTriggeredIncreasing());
+        return rawHandler.eventOccurred(state, filter.getTriggeredIncreasing());
     }
 
     /**  {@inheritDoc} */
     @Override
-    public void resetState(double t, double[] y) {
+    public ODEState resetState(final ODEStateAndDerivative state) {
         // delegate to raw handler
-        rawHandler.resetState(t, y);
+        return rawHandler.resetState(state);
     }
 
 }

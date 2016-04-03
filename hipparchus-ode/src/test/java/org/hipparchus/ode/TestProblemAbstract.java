@@ -17,145 +17,112 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.events.EventHandler;
+import org.hipparchus.ode.events.ODEEventHandler;
 
 /**
  * This class is used as the base class of the problems that are
  * integrated during the junit tests for the ODE integrators.
  */
 public abstract class TestProblemAbstract
-  implements FirstOrderDifferentialEquations {
+    implements OrdinaryDifferentialEquation {
 
-  /** Dimension of the problem. */
-  private int n;
+    /** Number of functions calls. */
+    private int calls;
 
-  /** Number of functions calls. */
-  private int calls;
+    /** Initial state */
+    private final ODEState s0;
 
-  /** Initial time */
-  private double t0;
+    /** Final time */
+    private final double t1;
 
-  /** Initial state */
-  private double[] y0;
+    /** Error scale */
+    private final double[] errorScale;
 
-  /** Final time */
-  private double t1;
+    /**
+     * Simple constructor.
+     * @param t0 initial time
+     * @param y0 initial state vector
+     * @param t1 final time
+     * @param errorScale error scale
+     */
+    protected TestProblemAbstract(double t0, double[] y0, double t1, double[] errorScale) {
+        calls           = 0;
+        s0              = new ODEState(t0, y0);
+        this.t1         = t1;
+        this.errorScale = errorScale.clone();
+    }
 
-  /** Error scale */
-  private double[] errorScale;
+    public int getDimension() {
+        return s0.getState().length;
+    }
 
-  /**
-   * Simple constructor.
-   */
-  protected TestProblemAbstract() {
-    n          = 0;
-    calls      = 0;
-    t0         = 0;
-    y0         = null;
-    t1         = 0;
-    errorScale = null;
-  }
+    /**
+     * Get the initial time.
+     * @return initial time
+     */
+    public double getInitialTime() {
+        return s0.getTime();
+    }
 
-  /**
-   * Set the initial conditions
-   * @param t0 initial time
-   * @param y0 initial state vector
-   */
-  protected void setInitialConditions(double t0, double[] y0) {
-    calls     = 0;
-    n         = y0.length;
-    this.t0   = t0;
-    this.y0   = y0.clone();
-   }
+    /**
+     * Get the initial state vector.
+     * @return initial state vector
+     */
+    public ODEState getInitialState() {
+        return s0;
+    }
 
-  /**
-   * Set the final conditions.
-   * @param t1 final time
-   */
-  protected void setFinalConditions(double t1) {
-    this.t1 = t1;
-  }
+    /**
+     * Get the final time.
+     * @return final time
+     */
+    public double getFinalTime() {
+        return t1;
+    }
 
-  /**
-   * Set the error scale
-   * @param errorScale error scale
-   */
-  protected void setErrorScale(double[] errorScale) {
-    this.errorScale = errorScale.clone();
-  }
+    /**
+     * Get the error scale.
+     * @return error scale
+     */
+    public double[] getErrorScale() {
+        return errorScale;
+    }
 
-  public int getDimension() {
-    return n;
-  }
+    /**
+     * Get the events handlers.
+     * @return events handlers   */
+    public ODEEventHandler[] getEventsHandlers() {
+        return new ODEEventHandler[0];
+    }
 
-  /**
-   * Get the initial time.
-   * @return initial time
-   */
-  public double getInitialTime() {
-    return t0;
-  }
+    /**
+     * Get the theoretical events times.
+     * @return theoretical events times
+     */
+    public double[] getTheoreticalEventsTimes() {
+        return new double[0];
+    }
 
-  /**
-   * Get the initial state vector.
-   * @return initial state vector
-   */
-  public double[] getInitialState() {
-    return y0;
-  }
+    /**
+     * Get the number of calls.
+     * @return nuber of calls
+     */
+    public int getCalls() {
+        return calls;
+    }
 
-  /**
-   * Get the final time.
-   * @return final time
-   */
-  public double getFinalTime() {
-    return t1;
-  }
+    public double[] computeDerivatives(double t, double[] y) {
+        ++calls;
+        return doComputeDerivatives(t, y);
+    }
 
-  /**
-   * Get the error scale.
-   * @return error scale
-   */
-  public double[] getErrorScale() {
-    return errorScale;
-  }
+    abstract public double[] doComputeDerivatives(double t, double[] y);
 
-  /**
-   * Get the events handlers.
-   * @return events handlers   */
-  public EventHandler[] getEventsHandlers() {
-    return new EventHandler[0];
-  }
-
-  /**
-   * Get the theoretical events times.
-   * @return theoretical events times
-   */
-  public double[] getTheoreticalEventsTimes() {
-      return new double[0];
-  }
-
-  /**
-   * Get the number of calls.
-   * @return nuber of calls
-   */
-  public int getCalls() {
-    return calls;
-  }
-
-  public void computeDerivatives(double t, double[] y, double[] yDot) {
-    ++calls;
-    doComputeDerivatives(t, y, yDot);
-  }
-
-  abstract public void doComputeDerivatives(double t, double[] y, double[] yDot);
-
-  /**
-   * Compute the theoretical state at the specified time.
-   * @param t time at which the state is required
-   * @return state vector at time t
-   */
-  abstract public double[] computeTheoreticalState(double t);
+    /**
+     * Compute the theoretical state at the specified time.
+     * @param t time at which the state is required
+     * @return state vector at time t
+     */
+    abstract public double[] computeTheoreticalState(double t);
 
 }

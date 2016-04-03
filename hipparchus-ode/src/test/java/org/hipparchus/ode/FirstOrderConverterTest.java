@@ -27,84 +27,85 @@ import org.junit.Test;
 
 public class FirstOrderConverterTest {
 
-  @Test
-  public void testDoubleDimension() {
-    for (int i = 1; i < 10; ++i) {
-      SecondOrderDifferentialEquations eqn2 = new Equations(i, 0.2);
-      FirstOrderConverter eqn1 = new FirstOrderConverter(eqn2);
-      Assert.assertTrue(eqn1.getDimension() == (2 * eqn2.getDimension()));
-    }
-  }
-
-  @Test
-  public void testDecreasingSteps()
-      throws MathIllegalArgumentException, MathIllegalStateException {
-
-    double previousError = Double.NaN;
-    for (int i = 0; i < 10; ++i) {
-
-      double step  = FastMath.pow(2.0, -(i + 1));
-      double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, step)
-                   - FastMath.sin(4.0);
-      if (i > 0) {
-        Assert.assertTrue(FastMath.abs(error) < FastMath.abs(previousError));
-      }
-      previousError = error;
-
-    }
-  }
-
-  @Test
-  public void testSmallStep()
-      throws MathIllegalArgumentException, MathIllegalStateException {
-    double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 1.0e-4)
-                   - FastMath.sin(4.0);
-    Assert.assertTrue(FastMath.abs(error) < 1.0e-10);
-  }
-
-  @Test
-  public void testBigStep()
-      throws MathIllegalArgumentException, MathIllegalStateException {
-    double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 0.5)
-                   - FastMath.sin(4.0);
-    Assert.assertTrue(FastMath.abs(error) > 0.1);
-  }
-
-  private static class Equations
-    implements SecondOrderDifferentialEquations {
-
-     private int n;
-
-      private double omega2;
-
-      public Equations(int n, double omega) {
-        this.n = n;
-        omega2 = omega * omega;
-      }
-
-      public int getDimension() {
-        return n;
-      }
-
-      public void computeSecondDerivatives(double t, double[] y, double[] yDot,
-                                           double[] yDDot) {
-        for (int i = 0; i < n; ++i) {
-          yDDot[i] = -omega2 * y[i];
+    @Test
+    public void testDoubleDimension() {
+        for (int i = 1; i < 10; ++i) {
+            SecondOrderODE eqn2 = new Equations(i, 0.2);
+            FirstOrderConverter eqn1 = new FirstOrderConverter(eqn2);
+            Assert.assertTrue(eqn1.getDimension() == (2 * eqn2.getDimension()));
         }
     }
 
-  }
+    @Test
+    public void testDecreasingSteps()
+                    throws MathIllegalArgumentException, MathIllegalStateException {
 
-  private double integrateWithSpecifiedStep(double omega,
-                                            double t0, double t,
-                                            double step) throws MathIllegalArgumentException, MathIllegalStateException {
-    double[] y0 = new double[2];
-    y0[0] = FastMath.sin(omega * t0);
-    y0[1] = omega * FastMath.cos(omega * t0);
-    ClassicalRungeKuttaIntegrator i = new ClassicalRungeKuttaIntegrator(step);
-    double[] y = new double[2];
-    i.integrate(new FirstOrderConverter(new Equations(1, omega)), t0, y0, t, y);
-    return y[0];
-  }
+        double previousError = Double.NaN;
+        for (int i = 0; i < 10; ++i) {
+
+            double step  = FastMath.pow(2.0, -(i + 1));
+            double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, step)
+                            - FastMath.sin(4.0);
+            if (i > 0) {
+                Assert.assertTrue(FastMath.abs(error) < FastMath.abs(previousError));
+            }
+            previousError = error;
+
+        }
+    }
+
+    @Test
+    public void testSmallStep()
+                    throws MathIllegalArgumentException, MathIllegalStateException {
+        double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 1.0e-4)
+                        - FastMath.sin(4.0);
+        Assert.assertTrue(FastMath.abs(error) < 1.0e-10);
+    }
+
+    @Test
+    public void testBigStep()
+                    throws MathIllegalArgumentException, MathIllegalStateException {
+        double error = integrateWithSpecifiedStep(4.0, 0.0, 1.0, 0.5)
+                        - FastMath.sin(4.0);
+        Assert.assertTrue(FastMath.abs(error) > 0.1);
+    }
+
+    private static class Equations
+    implements SecondOrderODE {
+
+        private int n;
+
+        private double omega2;
+
+        public Equations(int n, double omega) {
+            this.n = n;
+            omega2 = omega * omega;
+        }
+
+        public int getDimension() {
+            return n;
+        }
+
+        public double[] computeSecondDerivatives(double t, double[] y, double[] yDot) {
+            final double[] yDDot = new double[n];
+            for (int i = 0; i < n; ++i) {
+                yDDot[i] = -omega2 * y[i];
+            }
+            return yDDot;
+        }
+
+    }
+
+    private double integrateWithSpecifiedStep(double omega,
+                                              double t0, double t,
+                                              double step) throws MathIllegalArgumentException, MathIllegalStateException {
+        double[] y0 = new double[2];
+        y0[0] = FastMath.sin(omega * t0);
+        y0[1] = omega * FastMath.cos(omega * t0);
+        ClassicalRungeKuttaIntegrator i = new ClassicalRungeKuttaIntegrator(step);
+        final ODEStateAndDerivative finalstate =
+                        i.integrate(new FirstOrderConverter(new Equations(1, omega)), new ODEState(t0, y0), t);
+        return finalstate.getState()[0];
+    }
 
 }

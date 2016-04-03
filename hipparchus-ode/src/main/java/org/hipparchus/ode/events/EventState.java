@@ -20,14 +20,11 @@ package org.hipparchus.ode.events;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.AllowedSolution;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
-import org.hipparchus.analysis.solvers.PegasusSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.ode.EquationsMapper;
-import org.hipparchus.ode.ExpandableStatefulODE;
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 /** This class handles the state for one {@link EventHandler
@@ -44,7 +41,7 @@ import org.hipparchus.util.FastMath;
 public class EventState {
 
     /** Event handler. */
-    private final EventHandler handler;
+    private final ODEEventHandler handler;
 
     /** Maximal time interval between events handler checks. */
     private final double maxCheckInterval;
@@ -54,9 +51,6 @@ public class EventState {
 
     /** Upper limit in the iteration count for event localization. */
     private final int maxIterationCount;
-
-    /** Equation being integrated. */
-    private ExpandableStatefulODE expandable;
 
     /** Time at the beginning of the step. */
     private double t0;
@@ -85,10 +79,10 @@ public class EventState {
     private boolean increasing;
 
     /** Next action indicator. */
-    private EventHandler.Action nextAction;
+    private Action nextAction;
 
     /** Root-finding algorithm to use to detect state events. */
-    private final UnivariateSolver solver;
+    private final BracketedUnivariateSolver<UnivariateFunction> solver;
 
     /** Simple constructor.
      * @param handler event handler
@@ -100,9 +94,9 @@ public class EventState {
      * the event time search
      * @param solver Root-finding algorithm to use to detect state events
      */
-    public EventState(final EventHandler handler, final double maxCheckInterval,
+    public EventState(final ODEEventHandler handler, final double maxCheckInterval,
                       final double convergence, final int maxIterationCount,
-                      final UnivariateSolver solver) {
+                      final BracketedUnivariateSolver<UnivariateFunction> solver) {
         this.handler           = handler;
         this.maxCheckInterval  = maxCheckInterval;
         this.convergence       = FastMath.abs(convergence);
@@ -110,7 +104,6 @@ public class EventState {
         this.solver            = solver;
 
         // some dummy values ...
-        expandable        = null;
         t0                = Double.NaN;
         g0                = Double.NaN;
         g0Positive        = true;
@@ -118,22 +111,15 @@ public class EventState {
         pendingEventTime  = Double.NaN;
         previousEventTime = Double.NaN;
         increasing        = true;
-        nextAction        = EventHandler.Action.CONTINUE;
+        nextAction        = Action.CONTINUE;
 
     }
 
     /** Get the underlying event handler.
      * @return underlying event handler
      */
-    public EventHandler getEventHandler() {
+    public ODEEventHandler getEventHandler() {
         return handler;
-    }
-
-    /** Set the equation.
-     * @param expandable equation being integrated
-     */
-    public void setExpandable(final ExpandableStatefulODE expandable) {
-        this.expandable = expandable;
     }
 
     /** Get the maximal time interval between events handler checks.
@@ -162,12 +148,12 @@ public class EventState {
      * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
-    public void reinitializeBegin(final StepInterpolator interpolator)
+    public void reinitializeBegin(final ODEStateInterpolator interpolator)
         throws MathIllegalStateException {
 
-        t0 = interpolator.getPreviousTime();
-        interpolator.setInterpolatedTime(t0);
-        g0 = handler.g(t0, getCompleteState(interpolator));
+        final ODEStateAndDerivative s0 = interpolator.getPreviousState();
+        t0 = s0.getTime();
+        g0 = handler.g(s0);
         if (g0 == 0) {
             // excerpt from MATH-421 issue:
             // If an ODE solver is setup with an EventHandler that return STOP
@@ -185,30 +171,9 @@ public class EventState {
             final double epsilon = FastMath.max(solver.getAbsoluteAccuracy(),
                                                 FastMath.abs(solver.getRelativeAccuracy() * t0));
             final double tStart = t0 + 0.5 * epsilon;
-            interpolator.setInterpolatedTime(tStart);
-            g0 = handler.g(tStart, getCompleteState(interpolator));
+            g0 = handler.g(interpolator.getInterpolatedState(tStart));
         }
         g0Positive = g0 >= 0;
-
-    }
-
-    /** Get the complete state (primary and secondary).
-     * @param interpolator interpolator to use
-     * @return complete state
-     */
-    private double[] getCompleteState(final StepInterpolator interpolator) {
-
-        final double[] complete = new double[expandable.getTotalDimension()];
-
-        expandable.getPrimaryMapper().insertEquationData(interpolator.getInterpolatedState(),
-                                                         complete);
-        int index = 0;
-        for (EquationsMapper secondary : expandable.getSecondaryMappers()) {
-            secondary.insertEquationData(interpolator.getInterpolatedSecondaryState(index++),
-                                         complete);
-        }
-
-        return complete;
 
     }
 
@@ -220,122 +185,94 @@ public class EventState {
      * the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the event cannot be bracketed
      */
-    public boolean evaluateStep(final StepInterpolator interpolator)
+    public boolean evaluateStep(final ODEStateInterpolator interpolator)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        try {
-            forward = interpolator.isForward();
-            final double t1 = interpolator.getCurrentTime();
-            final double dt = t1 - t0;
-            if (FastMath.abs(dt) < convergence) {
-                // we cannot do anything on such a small step, don't trigger any events
-                return false;
+        forward = interpolator.isForward();
+        final ODEStateAndDerivative s1 = interpolator.getCurrentState();
+        final double t1 = s1.getTime();
+        final double dt = t1 - t0;
+        if (FastMath.abs(dt) < convergence) {
+            // we cannot do anything on such a small step, don't trigger any events
+            return false;
+        }
+        final int    n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / maxCheckInterval));
+        final double h = dt / n;
+
+        final UnivariateFunction f = new UnivariateFunction() {
+            /** {@inheritDoc} */
+            @Override
+            public double value(final double t) {
+                return handler.g(interpolator.getInterpolatedState(t));
             }
-            final int    n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / maxCheckInterval));
-            final double h = dt / n;
+        };
 
-            final UnivariateFunction f = new UnivariateFunction() {
-                /** {@inheritDoc} */
-                @Override
-                public double value(final double t) throws LocalMathIllegalStateException {
-                    try {
-                        interpolator.setInterpolatedTime(t);
-                        return handler.g(t, getCompleteState(interpolator));
-                    } catch (MathIllegalStateException mcee) {
-                        throw new LocalMathIllegalStateException(mcee);
-                    }
-                }
-            };
+        double ta = t0;
+        double ga = g0;
+        for (int i = 0; i < n; ++i) {
 
-            double ta = t0;
-            double ga = g0;
-            for (int i = 0; i < n; ++i) {
+            // evaluate handler value at the end of the substep
+            final double tb = (i == n - 1) ? t1 : t0 + (i + 1) * h;
+            final double gb = handler.g(interpolator.getInterpolatedState(tb));
 
-                // evaluate handler value at the end of the substep
-                final double tb = (i == n - 1) ? t1 : t0 + (i + 1) * h;
-                interpolator.setInterpolatedTime(tb);
-                final double gb = handler.g(tb, getCompleteState(interpolator));
+            // check events occurrence
+            if (g0Positive ^ (gb >= 0)) {
+                // there is a sign change: an event is expected during this step
 
-                // check events occurrence
-                if (g0Positive ^ (gb >= 0)) {
-                    // there is a sign change: an event is expected during this step
+                // variation direction, with respect to the integration direction
+                increasing = gb >= ga;
 
-                    // variation direction, with respect to the integration direction
-                    increasing = gb >= ga;
+                // find the event time making sure we select a solution just at or past the exact root
+                final double root = forward ?
+                                    solver.solve(maxIterationCount, f, ta, tb, AllowedSolution.RIGHT_SIDE) :
+                                    solver.solve(maxIterationCount, f, tb, ta, AllowedSolution.LEFT_SIDE);
 
-                    // find the event time making sure we select a solution just at or past the exact root
-                    final double root;
-                    if (solver instanceof BracketedUnivariateSolver<?>) {
-                        @SuppressWarnings("unchecked")
-                        BracketedUnivariateSolver<UnivariateFunction> bracketing =
-                                (BracketedUnivariateSolver<UnivariateFunction>) solver;
-                        root = forward ?
-                               bracketing.solve(maxIterationCount, f, ta, tb, AllowedSolution.RIGHT_SIDE) :
-                               bracketing.solve(maxIterationCount, f, tb, ta, AllowedSolution.LEFT_SIDE);
+                if ((!Double.isNaN(previousEventTime)) &&
+                    (FastMath.abs(root - ta) <= convergence) &&
+                    (FastMath.abs(root - previousEventTime) <= convergence)) {
+                    // we have either found nothing or found (again ?) a past event,
+                    // retry the substep excluding this value, and taking care to have the
+                    // required sign in case the g function is noisy around its zero and
+                    // crosses the axis several times
+                    do {
+                        ta = forward ? ta + convergence : ta - convergence;
+                        ga = f.value(ta);
+                    } while ((g0Positive ^ (ga >= 0)) && (forward ^ (ta >= tb)));
+
+                    if (forward ^ (ta >= tb)) {
+                        // we were able to skip this spurious root
+                        --i;
                     } else {
-                        final double baseRoot = forward ?
-                                                solver.solve(maxIterationCount, f, ta, tb) :
-                                                solver.solve(maxIterationCount, f, tb, ta);
-                        final int remainingEval = maxIterationCount - solver.getEvaluations();
-                        BracketedUnivariateSolver<UnivariateFunction> bracketing =
-                                new PegasusSolver(solver.getRelativeAccuracy(), solver.getAbsoluteAccuracy());
-                        root = forward ?
-                               UnivariateSolverUtils.forceSide(remainingEval, f, bracketing,
-                                                                   baseRoot, ta, tb, AllowedSolution.RIGHT_SIDE) :
-                               UnivariateSolverUtils.forceSide(remainingEval, f, bracketing,
-                                                                   baseRoot, tb, ta, AllowedSolution.LEFT_SIDE);
-                    }
-
-                    if ((!Double.isNaN(previousEventTime)) &&
-                        (FastMath.abs(root - ta) <= convergence) &&
-                        (FastMath.abs(root - previousEventTime) <= convergence)) {
-                        // we have either found nothing or found (again ?) a past event,
-                        // retry the substep excluding this value, and taking care to have the
-                        // required sign in case the g function is noisy around its zero and
-                        // crosses the axis several times
-                        do {
-                            ta = forward ? ta + convergence : ta - convergence;
-                            ga = f.value(ta);
-                        } while ((g0Positive ^ (ga >= 0)) && (forward ^ (ta >= tb)));
-
-                        if (forward ^ (ta >= tb)) {
-                            // we were able to skip this spurious root
-                            --i;
-                        } else {
-                            // we can't avoid this root before the end of the step,
-                            // we have to handle it despite it is close to the former one
-                            // maybe we have two very close roots
-                            pendingEventTime = root;
-                            pendingEvent = true;
-                            return true;
-                        }
-                    } else if (Double.isNaN(previousEventTime) ||
-                               (FastMath.abs(previousEventTime - root) > convergence)) {
+                        // we can't avoid this root before the end of the step,
+                        // we have to handle it despite it is close to the former one
+                        // maybe we have two very close roots
                         pendingEventTime = root;
                         pendingEvent = true;
                         return true;
-                    } else {
-                        // no sign change: there is no event for now
-                        ta = tb;
-                        ga = gb;
                     }
-
+                } else if (Double.isNaN(previousEventTime) ||
+                                (FastMath.abs(previousEventTime - root) > convergence)) {
+                    pendingEventTime = root;
+                    pendingEvent = true;
+                    return true;
                 } else {
                     // no sign change: there is no event for now
                     ta = tb;
                     ga = gb;
                 }
 
+            } else {
+                // no sign change: there is no event for now
+                ta = tb;
+                ga = gb;
             }
 
-            // no event during the whole step
-            pendingEvent     = false;
-            pendingEventTime = Double.NaN;
-            return false;
-
-        } catch (LocalMathIllegalStateException lmcee) {
-            throw lmcee.getException();
         }
+
+        // no event during the whole step
+        pendingEvent     = false;
+        pendingEventTime = Double.NaN;
+        return false;
 
     }
 
@@ -350,24 +287,21 @@ public class EventState {
     }
 
     /** Acknowledge the fact the step has been accepted by the integrator.
-     * @param t value of the independent <i>time</i> variable at the
-     * end of the step
-     * @param y array containing the current value of the state vector
-     * at the end of the step
+     * @param state state at the end of the step
      */
-    public void stepAccepted(final double t, final double[] y) {
+    public void stepAccepted(final ODEStateAndDerivative state) {
 
-        t0 = t;
-        g0 = handler.g(t, y);
+        t0 = state.getTime();
+        g0 = handler.g(state);
 
-        if (pendingEvent && (FastMath.abs(pendingEventTime - t) <= convergence)) {
+        if (pendingEvent && (FastMath.abs(pendingEventTime - state.getTime()) <= convergence)) {
             // force the sign to its value "just after the event"
-            previousEventTime = t;
+            previousEventTime = state.getTime();
             g0Positive        = increasing;
-            nextAction        = handler.eventOccurred(t, y, !(increasing ^ forward));
+            nextAction        = handler.eventOccurred(state, !(increasing ^ forward));
         } else {
             g0Positive = g0 >= 0;
-            nextAction = EventHandler.Action.CONTINUE;
+            nextAction = Action.CONTINUE;
         }
     }
 
@@ -376,55 +310,32 @@ public class EventState {
      * @return true if the integration should be stopped
      */
     public boolean stop() {
-        return nextAction == EventHandler.Action.STOP;
+        return nextAction == Action.STOP;
     }
 
     /** Let the event handler reset the state if it wants.
-     * @param t value of the independent <i>time</i> variable at the
-     * beginning of the next step
-     * @param y array were to put the desired state vector at the beginning
-     * of the next step
-     * @return true if the integrator should reset the derivatives too
+     * @param state state at the beginning of the next step
+     * @return reset state (may by the same as initial state if only
+     * derivatives should be reset), or null if nothing is reset
      */
-    public boolean reset(final double t, final double[] y) {
+    public ODEState reset(final ODEStateAndDerivative state) {
 
-        if (!(pendingEvent && (FastMath.abs(pendingEventTime - t) <= convergence))) {
-            return false;
+        if (!(pendingEvent && (FastMath.abs(pendingEventTime - state.getTime()) <= convergence))) {
+            return null;
         }
 
-        if (nextAction == EventHandler.Action.RESET_STATE) {
-            handler.resetState(t, y);
+        final ODEState newState;
+        if (nextAction == Action.RESET_STATE) {
+            newState = handler.resetState(state);
+        } else if (nextAction == Action.RESET_DERIVATIVES) {
+            newState = state;
+        } else {
+            newState = null;
         }
         pendingEvent      = false;
         pendingEventTime  = Double.NaN;
 
-        return (nextAction == EventHandler.Action.RESET_STATE) ||
-               (nextAction == EventHandler.Action.RESET_DERIVATIVES);
-
-    }
-
-    /** Local wrapper to propagate exceptions. */
-    private static class LocalMathIllegalStateException extends RuntimeException {
-
-        /** Serializable UID. */
-        private static final long serialVersionUID = 20120901L;
-
-        /** Wrapped exception. */
-        private final MathIllegalStateException wrapped;
-
-        /** Simple constructor.
-         * @param exception exception to wrap
-         */
-        LocalMathIllegalStateException(final MathIllegalStateException exception) {
-            wrapped = exception;
-        }
-
-        /** Get the wrapped exception.
-         * @return wrapped exception
-         */
-        public MathIllegalStateException getException() {
-            return wrapped;
-        }
+        return newState;
 
     }
 

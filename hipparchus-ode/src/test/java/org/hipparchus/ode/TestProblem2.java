@@ -34,42 +34,36 @@ import org.hipparchus.util.FastMath;
  * </p>
 
  */
-public class TestProblem2
-  extends TestProblemAbstract {
+public class TestProblem2 extends TestProblemAbstract {
 
-  /** theoretical state */
-  private double[] y;
-
-  /**
-   * Simple constructor.
-   */
-  public TestProblem2() {
-    super();
-    double[] y0 = { 0.0 };
-    setInitialConditions(0.0, y0);
-    setFinalConditions(1.0);
-    double[] errorScale = { 1.0 };
-    setErrorScale(errorScale);
-    y = new double[y0.length];
-  }
-
-  @Override
-  public void doComputeDerivatives(double t, double[] y, double[] yDot) {
-
-    // compute the derivatives
-    for (int i = 0; i < getDimension(); ++i)
-      yDot[i] = t * (t * t - y[i]);
-
-  }
-
-  @Override
-  public double[] computeTheoreticalState(double t) {
-    double t2 = t * t;
-    double c = t2 + 2 * (FastMath.exp (-0.5 * t2) - 1);
-    for (int i = 0; i < getDimension(); ++i) {
-      y[i] = c;
+    /**
+     * Simple constructor.
+     */
+    public TestProblem2() {
+        super(0.0, new double[] { 0.0 }, 1.0, new double[] { 1.0 });
     }
-    return y;
-  }
+
+    @Override
+    public double[] doComputeDerivatives(double t, double[] y) {
+
+        // compute the derivatives
+        final  double[] yDot = new double[getDimension()];
+        for (int i = 0; i < getDimension(); ++i) {
+            yDot[i] = t * (t * t - y[i]);
+        }
+        return yDot;
+
+    }
+
+    @Override
+    public double[] computeTheoreticalState(double t) {
+        final double[] y = new double[getDimension()];
+        double t2 = t * t;
+        double c = t2 + 2 * (FastMath.exp (-0.5 * t2) - 1);
+        for (int i = 0; i < getDimension(); ++i) {
+            y[i] = c;
+        }
+        return y;
+    }
 
 }

@@ -18,16 +18,19 @@
 package org.hipparchus.ode.events;
 
 
-import org.hipparchus.analysis.solvers.BrentSolver;
+import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.ExpandableStatefulODE;
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.SecondaryEquations;
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
+import org.hipparchus.ode.SecondaryODE;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.nonstiff.LutherIntegrator;
-import org.hipparchus.ode.sampling.AbstractStepInterpolator;
 import org.hipparchus.ode.sampling.DummyStepInterpolator;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,35 +47,43 @@ public class EventStateTest {
         final double tolerance = 0.1;
         EventState es = new EventState(new CloseEventsGenerator(r1, r2), 1.5 * gap,
                                        tolerance, 100,
-                                       new BrentSolver(tolerance));
-        es.setExpandable(new ExpandableStatefulODE(new FirstOrderDifferentialEquations() {
+                                       new BracketingNthOrderBrentSolver(tolerance, 5));
+        EquationsMapper mapper = new ExpandableODE(new OrdinaryDifferentialEquation() {
+            @Override
             public int getDimension() {
                 return 0;
             }
-            public void computeDerivatives(double t, double[] y, double[] yDot) {
+            @Override
+            public double[] computeDerivatives(double t, double[] y) {
+                return new double[0];
             }
-        }));
+        }).getMapper();
 
-        AbstractStepInterpolator interpolator =
-            new DummyStepInterpolator(new double[0], new double[0], true);
-        interpolator.storeTime(r1 - 2.5 * gap);
-        interpolator.shift();
-        interpolator.storeTime(r1 - 1.5 * gap);
-        es.reinitializeBegin(interpolator);
+        double[] a = new double[0];
+        ODEStateAndDerivative osdLongBefore = new ODEStateAndDerivative(r1 - 1.5 * gap, a, a);
+        ODEStateAndDerivative osBefore      = new ODEStateAndDerivative(r1 - 0.5 * gap, a, a);
+        ODEStateInterpolator interpolatorA  = new DummyStepInterpolator(true,
+                                                                        osdLongBefore, osBefore,
+                                                                        osdLongBefore, osBefore,
+                                                                        mapper);
+        Assert.assertFalse(es.evaluateStep(interpolatorA));
 
-        interpolator.shift();
-        interpolator.storeTime(r1 - 0.5 * gap);
-        Assert.assertFalse(es.evaluateStep(interpolator));
-
-        interpolator.shift();
-        interpolator.storeTime(0.5 * (r1 + r2));
-        Assert.assertTrue(es.evaluateStep(interpolator));
+        ODEStateAndDerivative osdBetween    = new ODEStateAndDerivative(0.5 * (r1 + r2), a, a);
+        ODEStateInterpolator interpolatorB  = new DummyStepInterpolator(true,
+                                                                        osBefore, osdBetween,
+                                                                        osBefore, osdBetween,
+                                                                        mapper);
+        Assert.assertTrue(es.evaluateStep(interpolatorB));
         Assert.assertEquals(r1, es.getEventTime(), tolerance);
-        es.stepAccepted(es.getEventTime(), new double[0]);
+        ODEStateAndDerivative osdAtEvent    = new ODEStateAndDerivative(r1, a, a);
+        es.stepAccepted(osdAtEvent);
 
-        interpolator.shift();
-        interpolator.storeTime(r2 + 0.4 * gap);
-        Assert.assertTrue(es.evaluateStep(interpolator));
+        ODEStateAndDerivative osdAfterSecond = new ODEStateAndDerivative(r2 + 0.4 * gap, a, a);
+        ODEStateInterpolator interpolatorC  = new DummyStepInterpolator(true,
+                                                                        osdAtEvent, osdAfterSecond,
+                                                                        osdAtEvent, osdAfterSecond,
+                                                                        mapper);
+        Assert.assertTrue(es.evaluateStep(interpolatorC));
         Assert.assertEquals(r2, es.getEventTime(), tolerance);
 
     }
@@ -82,14 +93,12 @@ public class EventStateTest {
     public void testIssue695()
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {
-
+        OrdinaryDifferentialEquation equation = new OrdinaryDifferentialEquation() {
             public int getDimension() {
                 return 1;
             }
-
-            public void computeDerivatives(double t, double[] y, double[] yDot) {
-                yDot[0] = 1.0;
+            public double[] computeDerivatives(double t, double[] y) {
+                return new double[] { 1.0 };
             }
         };
 
@@ -100,13 +109,13 @@ public class EventStateTest {
 
         double target = 30.0;
         double[] y = new double[1];
-        double tEnd = integrator.integrate(equation, 0.0, y, target, y);
+        double tEnd = integrator.integrate(equation, new ODEState(0.0, y), target).getTime();
         Assert.assertEquals(target, tEnd, 1.0e-10);
         Assert.assertEquals(32.0, y[0], 1.0e-10);
 
     }
 
-    private static class ResettingEvent implements EventHandler {
+    private static class ResettingEvent implements ODEEventHandler {
 
         private static double lastTriggerTime = Double.NEGATIVE_INFINITY;
         private final double tEvent;
@@ -115,27 +124,26 @@ public class EventStateTest {
             this.tEvent = tEvent;
         }
 
-        public void init(double t0, double[] y0, double t) {
-        }
-
-        public double g(double t, double[] y) {
+        public double g(ODEStateAndDerivative s) {
             // the bug corresponding to issue 695 causes the g function
             // to be called at obsolete times t despite an event
             // occurring later has already been triggered.
             // When this occurs, the following assertion is violated
-            Assert.assertTrue("going backard in time! (" + t + " < " + lastTriggerTime + ")",
-                              t >= lastTriggerTime);
-            return t - tEvent;
+            Assert.assertTrue("going backard in time! (" + s.getTime() + " < " + lastTriggerTime + ")",
+                              s.getTime() >= lastTriggerTime);
+            return s.getTime() - tEvent;
         }
 
-        public Action eventOccurred(double t, double[] y, boolean increasing) {
+        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
             // remember in a class variable when the event was triggered
-            lastTriggerTime = t;
+            lastTriggerTime = s.getTime();
             return Action.RESET_STATE;
         }
 
-        public void resetState(double t, double[] y) {
+        public ODEStateAndDerivative resetState(ODEStateAndDerivative s) {
+            double[] y = s.getState();
             y[0] += 1.0;
+            return new ODEStateAndDerivative(s.getTime(), y, s.getDerivative());
         }
 
     }
@@ -145,66 +153,49 @@ public class EventStateTest {
     public void testIssue965()
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        ExpandableStatefulODE equation =
-                new ExpandableStatefulODE(new FirstOrderDifferentialEquations() {
-
+        ExpandableODE equation = new ExpandableODE(new OrdinaryDifferentialEquation() {
             public int getDimension() {
                 return 1;
             }
-
-            public void computeDerivatives(double t, double[] y, double[] yDot) {
-                yDot[0] = 2.0;
+            public double[] computeDerivatives(double t, double[] y) {
+                return new double[] { 2.0 };
             }
         });
-        equation.setTime(0.0);
-        equation.setPrimaryState(new double[1]);
-        equation.addSecondaryEquations(new SecondaryEquations() {
-
+        equation.addSecondaryEquations(new SecondaryODE() {
             public int getDimension() {
                 return 1;
             }
-
-            public void computeDerivatives(double t, double[] primary,
-                                           double[] primaryDot, double[] secondary,
-                                           double[] secondaryDot) {
-                secondaryDot[0] = -3.0;
+            public double[] computeDerivatives(double t, double[] primary,
+                                           double[] primaryDot, double[] secondary) {
+                return new double[] { -3.0 };
             }
         });
-        int index = equation.getSecondaryMappers()[0].getFirstIndex();
 
         DormandPrince853Integrator integrator = new DormandPrince853Integrator(0.001, 1000, 1.0e-14, 1.0e-14);
-        integrator.addEventHandler(new SecondaryStateEvent(index, -3.0), 0.1, 1.0e-9, 1000);
+        integrator.addEventHandler(new SecondaryStateEvent(-3.0), 0.1, 1.0e-9, 1000);
         integrator.setInitialStepSize(3.0);
 
-        integrator.integrate(equation, 30.0);
-        Assert.assertEquals( 1.0, equation.getTime(), 1.0e-10);
-        Assert.assertEquals( 2.0, equation.getPrimaryState()[0], 1.0e-10);
-        Assert.assertEquals(-3.0, equation.getSecondaryState(0)[0], 1.0e-10);
+        ODEStateAndDerivative finalState = integrator.integrate(equation, new ODEState(0.0, new double[] { 1.0 }), 30.0);
+        Assert.assertEquals( 1.0, finalState.getTime(), 1.0e-10);
+        Assert.assertEquals( 2.0, finalState.getState()[0], 1.0e-10);
+        Assert.assertEquals(-3.0, finalState.getSecondaryState(0)[0], 1.0e-10);
 
     }
 
-    private static class SecondaryStateEvent implements EventHandler {
+    private static class SecondaryStateEvent implements ODEEventHandler {
 
-        private int index;
         private final double target;
 
-        public SecondaryStateEvent(final int index, final double target) {
-            this.index  = index;
+        public SecondaryStateEvent(final double target) {
             this.target = target;
         }
 
-        public void init(double t0, double[] y0, double t) {
+        public double g(ODEStateAndDerivative s) {
+            return s.getSecondaryState(0)[0] - target;
         }
 
-        public double g(double t, double[] y) {
-            return y[index] - target;
-        }
-
-        public Action eventOccurred(double t, double[] y, boolean increasing) {
+        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
             return Action.STOP;
-        }
-
-        public void resetState(double t, double[] y) {
         }
 
     }
@@ -213,14 +204,14 @@ public class EventStateTest {
     public void testEventsCloserThanThreshold()
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        FirstOrderDifferentialEquations equation = new FirstOrderDifferentialEquations() {
+        OrdinaryDifferentialEquation equation = new OrdinaryDifferentialEquation() {
 
             public int getDimension() {
                 return 1;
             }
 
-            public void computeDerivatives(double t, double[] y, double[] yDot) {
-                yDot[0] = 1.0;
+            public double[] computeDerivatives(double t, double[] y) {
+                return new double[] { 1.0 };
             }
         };
 
@@ -228,14 +219,13 @@ public class EventStateTest {
         CloseEventsGenerator eventsGenerator =
                         new CloseEventsGenerator(9.0 - 1.0 / 128, 9.0 + 1.0 / 128);
         integrator.addEventHandler(eventsGenerator, 1.0, 0.02, 1000);
-        double[] y = new double[1];
-        double tEnd = integrator.integrate(equation, 0.0, y, 100.0, y);
+        double tEnd = integrator.integrate(equation, new ODEState(0.0, new double[1]), 100.0).getTime();
         Assert.assertEquals( 2, eventsGenerator.getCount());
         Assert.assertEquals( 9.0 + 1.0 / 128, tEnd, 1.0 / 32.0);
 
     }
 
-    private class CloseEventsGenerator implements EventHandler {
+    private class CloseEventsGenerator implements ODEEventHandler {
 
         final double r1;
         final double r2;
@@ -247,17 +237,11 @@ public class EventStateTest {
             this.count = 0;
         }
 
-        public void init(double t0, double[] y0, double t) {
+        public double g(ODEStateAndDerivative s) {
+            return (s.getTime() - r1) * (r2 - s.getTime());
         }
 
-        public void resetState(double t, double[] y) {
-        }
-
-        public double g(double t, double[] y) {
-            return (t - r1) * (r2 - t);
-        }
-
-        public Action eventOccurred(double t, double[] y, boolean increasing) {
+        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
             return ++count < 2 ? Action.CONTINUE : Action.STOP;
         }
 

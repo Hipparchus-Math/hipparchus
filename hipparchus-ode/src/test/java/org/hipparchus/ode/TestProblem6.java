@@ -32,27 +32,19 @@ package org.hipparchus.ode;
  * </p>
 
  */
-public class TestProblem6
-  extends TestProblemAbstract {
-
-    /** theoretical state */
-    private double[] y;
+public class TestProblem6 extends TestProblemAbstract {
 
     /**
      * Simple constructor.
      */
     public TestProblem6() {
-        super();
-        double[] y0 = { -360.0 };
-        setInitialConditions(0.0, y0);
-        setFinalConditions(1.0);
-        double[] errorScale = { 1.0 };
-        setErrorScale(errorScale);
-        y = new double[y0.length];
+        super(0.0, new double[] { -360.0 }, 1.0, new double[] { 1.0 });
     }
 
     @Override
-    public void doComputeDerivatives(double t, double[] y, double[] yDot) {
+    public double[] doComputeDerivatives(double t, double[] y) {
+
+        final  double[] yDot = new double[getDimension()];
 
         // compute the derivatives
         double t2 = t  * t;
@@ -62,10 +54,13 @@ public class TestProblem6
             yDot[i] = 3 * t5 - y[i];
         }
 
+        return yDot;
+
     }
 
     @Override
     public double[] computeTheoreticalState(double t) {
+        final double[] y = new double[getDimension()];
         for (int i = 0; i < getDimension(); ++i) {
             y[i] = ((((3 * t - 15) * t + 60) * t - 180) * t + 360) * t - 360;
         }

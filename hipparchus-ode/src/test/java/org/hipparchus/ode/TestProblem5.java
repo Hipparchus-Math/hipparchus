@@ -17,18 +17,42 @@
 
 package org.hipparchus.ode;
 
+import org.hipparchus.util.FastMath;
+
 /**
  * This class is used in the junit tests for the ODE integrators.
  * <p>This is the same as problem 1 except integration is done
  * backward in time</p>
  */
-public class TestProblem5 extends TestProblem1 {
+public class TestProblem5 extends TestProblemAbstract {
 
-  /**
-   * Simple constructor.
-   */
+    /**
+     * Simple constructor.
+     */
     public TestProblem5() {
-        setFinalConditions(2 * getInitialTime() - getFinalTime());
+        super(0.0, new double[] { 1.0, 0.1 }, -4.0, new double[] { 1.0, 1.0 });
+    }
+
+    @Override
+    public double[] doComputeDerivatives(double t, double[] y) {
+
+        // compute the derivatives
+        final double[] yDot = new double[getDimension()];
+        for (int i = 0; i < getDimension(); ++i) {
+            yDot[i] = -y[i];
+        }
+        return yDot;
+
+    }
+
+    @Override
+    public double[] computeTheoreticalState(double t) {
+        final double c = FastMath.exp (getInitialTime() - t);
+        final double[] y = getInitialState().getState();
+        for (int i = 0; i < getDimension(); ++i) {
+            y[i] *= c;
+        }
+        return y;
     }
 
 }

@@ -36,78 +36,73 @@ import org.hipparchus.util.FastMath;
  * </p>
 
  */
-public class TestProblem3
-  extends TestProblemAbstract {
+public class TestProblem3 extends TestProblemAbstract {
 
-  /** Eccentricity */
-  double e;
+    /** Eccentricity */
+    double e;
 
-  /** theoretical state */
-  private double[] y;
-
-  /**
-   * Simple constructor.
-   * @param e eccentricity
-   */
-  public TestProblem3(double e) {
-    super();
-    this.e = e;
-    double[] y0 = { 1 - e, 0, 0, FastMath.sqrt((1+e)/(1-e)) };
-    setInitialConditions(0.0, y0);
-    setFinalConditions(20.0);
-    double[] errorScale = { 1.0, 1.0, 1.0, 1.0 };
-    setErrorScale(errorScale);
-    y = new double[y0.length];
-  }
-
-  /**
-   * Simple constructor.
-   */
-  public TestProblem3() {
-    this(0.1);
-  }
-
-  @Override
-  public void doComputeDerivatives(double t, double[] y, double[] yDot) {
-
-    // current radius
-    double r2 = y[0] * y[0] + y[1] * y[1];
-    double invR3 = 1 / (r2 * FastMath.sqrt(r2));
-
-    // compute the derivatives
-    yDot[0] = y[2];
-    yDot[1] = y[3];
-    yDot[2] = -invR3  * y[0];
-    yDot[3] = -invR3  * y[1];
-
-  }
-
-  @Override
-  public double[] computeTheoreticalState(double t) {
-
-    // solve Kepler's equation
-    double E = t;
-    double d = 0;
-    double corr = 999.0;
-    for (int i = 0; (i < 50) && (FastMath.abs(corr) > 1.0e-12); ++i) {
-      double f2  = e * FastMath.sin(E);
-      double f0  = d - f2;
-      double f1  = 1 - e * FastMath.cos(E);
-      double f12 = f1 + f1;
-      corr  = f0 * f12 / (f1 * f12 - f0 * f2);
-      d -= corr;
-      E = t + d;
+    /**
+     * Simple constructor.
+     * @param e eccentricity
+     */
+    public TestProblem3(double e) {
+        super(0.0, new double[] { 1 - e, 0, 0, FastMath.sqrt((1+e)/(1-e)) }, 20.0,
+              new double[] { 1.0, 1.0, 1.0, 1.0 });
     }
 
-    double cosE = FastMath.cos(E);
-    double sinE = FastMath.sin(E);
+    /**
+     * Simple constructor.
+     */
+    public TestProblem3() {
+        this(0.1);
+    }
 
-    y[0] = cosE - e;
-    y[1] = FastMath.sqrt(1 - e * e) * sinE;
-    y[2] = -sinE / (1 - e * cosE);
-    y[3] = FastMath.sqrt(1 - e * e) * cosE / (1 - e * cosE);
+    @Override
+    public double[] doComputeDerivatives(double t, double[] y) {
 
-    return y;
-  }
+        final  double[] yDot = new double[getDimension()];
+
+        // current radius
+        double r2 = y[0] * y[0] + y[1] * y[1];
+        double invR3 = 1 / (r2 * FastMath.sqrt(r2));
+
+        // compute the derivatives
+        yDot[0] = y[2];
+        yDot[1] = y[3];
+        yDot[2] = -invR3  * y[0];
+        yDot[3] = -invR3  * y[1];
+
+        return yDot;
+
+    }
+
+    @Override
+    public double[] computeTheoreticalState(double t) {
+
+        // solve Kepler's equation
+        double E = t;
+        double d = 0;
+        double corr = 999.0;
+        for (int i = 0; (i < 50) && (FastMath.abs(corr) > 1.0e-12); ++i) {
+            double f2  = e * FastMath.sin(E);
+            double f0  = d - f2;
+            double f1  = 1 - e * FastMath.cos(E);
+            double f12 = f1 + f1;
+            corr  = f0 * f12 / (f1 * f12 - f0 * f2);
+            d -= corr;
+            E = t + d;
+        }
+
+        double cosE = FastMath.cos(E);
+        double sinE = FastMath.sin(E);
+
+        double[] y = new double[getDimension()];
+        y[0] = cosE - e;
+        y[1] = FastMath.sqrt(1 - e * e) * sinE;
+        y[2] = -sinE / (1 - e * cosE);
+        y[3] = FastMath.sqrt(1 - e * e) * cosE / (1 - e * cosE);
+
+        return y;
+    }
 
 }

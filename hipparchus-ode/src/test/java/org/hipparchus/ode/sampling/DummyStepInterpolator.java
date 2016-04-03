@@ -17,20 +17,14 @@
 
 package org.hipparchus.ode.sampling;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
 import org.hipparchus.ode.EquationsMapper;
-import org.hipparchus.ode.sampling.AbstractStepInterpolator;
-import org.hipparchus.ode.sampling.StepHandler;
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.ODEStateAndDerivative;
 
 /** This class is a step interpolator that does nothing.
  *
  * <p>This class is used when the {@link StepHandler "step handler"}
  * set up by the user does not need step interpolation. It does not
- * recompute the state when {@link AbstractStepInterpolator#setInterpolatedTime
+ * recompute the state when {@link AbstractODEStateInterpolator#setInterpolatedTime
  * setInterpolatedTime} is called. This implies the interpolated state
  * is always the state at the end of the current step.</p>
  *
@@ -38,118 +32,52 @@ import org.hipparchus.ode.sampling.StepInterpolator;
  *
  */
 
-public class DummyStepInterpolator
-  extends AbstractStepInterpolator {
+public class DummyStepInterpolator extends AbstractODEStateInterpolator {
 
-  /** Serializable version identifier. */
-  private static final long serialVersionUID = 1708010296707839488L;
+    /** Serializable version identifier. */
+    private static final long serialVersionUID = 20160402L;
 
-  /** Current derivative. */
-  private double[] currentDerivative;
-
-  /** Simple constructor.
-   * This constructor builds an instance that is not usable yet, the
-   * <code>AbstractStepInterpolator.reinitialize</code> protected method
-   * should be called before using the instance in order to initialize
-   * the internal arrays. This constructor is used only in order to delay
-   * the initialization in some cases. As an example, the {@link
-   * org.hipparchus.ode.nonstiff.EmbeddedRungeKuttaIntegrator} uses
-   * the prototyping design pattern to create the step interpolators by
-   * cloning an uninitialized model and latter initializing the copy.
-   */
-  public DummyStepInterpolator() {
-    super();
-    currentDerivative = null;
-  }
-
-  /** Simple constructor.
-   * @param y reference to the integrator array holding the state at
-   * the end of the step
-   * @param yDot reference to the integrator array holding the state
-   * derivative at some arbitrary point within the step
-   * @param forward integration direction indicator
-   */
-  public DummyStepInterpolator(final double[] y, final double[] yDot, final boolean forward) {
-    super(y, forward, new EquationsMapper(0, y.length), new EquationsMapper[0]);
-    currentDerivative = yDot;
-  }
-
-  /** Copy constructor.
-   * @param interpolator interpolator to copy from. The copy is a deep
-   * copy: its arrays are separated from the original arrays of the
-   * instance
-   */
-  public DummyStepInterpolator(final DummyStepInterpolator interpolator) {
-    super(interpolator);
-    if (interpolator.currentDerivative != null) {
-        currentDerivative = interpolator.currentDerivative.clone();
-    }
-  }
-
-  /** Really copy the finalized instance.
-   * @return a copy of the finalized instance
-   */
-  @Override
-  protected StepInterpolator doCopy() {
-    return new DummyStepInterpolator(this);
-  }
-
-  /** Compute the state at the interpolated time.
-   * In this class, this method does nothing: the interpolated state
-   * is always the state at the end of the current step.
-   * @param theta normalized interpolation abscissa within the step
-   * (theta is zero at the previous time step and one at the current time step)
-   * @param oneMinusThetaH time gap between the interpolated time and
-   * the current time
-   */
-  @Override
-  protected void computeInterpolatedStateAndDerivatives(final double theta, final double oneMinusThetaH) {
-      System.arraycopy(currentState,      0, interpolatedState,       0, currentState.length);
-      System.arraycopy(currentDerivative, 0, interpolatedDerivatives, 0, currentDerivative.length);
-  }
-
-  /** Write the instance to an output channel.
-   * @param out output channel
-   * @exception IOException if the instance cannot be written
-   */
-  @Override
-  public void writeExternal(final ObjectOutput out)
-    throws IOException {
-
-      // save the state of the base class
-    writeBaseExternal(out);
-
-    if (currentDerivative != null) {
-        for (int i = 0; i < currentDerivative.length; ++i) {
-            out.writeDouble(currentDerivative[i]);
-        }
+    /** Simple constructor.
+     * @param isForward integration direction indicator
+     * @param globalPreviousState start of the global step
+     * @param globalCurrentState end of the global step
+     * @param softPreviousState start of the restricted step
+     * @param softCurrentState end of the restricted step
+     * @param equationsMapper mapper for ODE equations primary and secondary components
+     */
+    public DummyStepInterpolator(final boolean isForward,
+                                 final ODEStateAndDerivative globalPreviousState,
+                                 final ODEStateAndDerivative globalCurrentState,
+                                 final ODEStateAndDerivative softPreviousState,
+                                 final ODEStateAndDerivative softCurrentState,
+                                 final EquationsMapper equationsMapper) {
+        super(isForward, globalPreviousState, globalCurrentState,
+              softPreviousState, softCurrentState, equationsMapper);
     }
 
-  }
-
-  /** Read the instance from an input channel.
-   * @param in input channel
-   * @exception IOException if the instance cannot be read
-   */
-  @Override
-  public void readExternal(final ObjectInput in)
-    throws IOException, ClassNotFoundException {
-
-    // read the base class
-    final double t = readBaseExternal(in);
-
-    if (currentState == null) {
-        currentDerivative = null;
-    } else {
-        currentDerivative  = new double[currentState.length];
-        for (int i = 0; i < currentDerivative.length; ++i) {
-            currentDerivative[i] = in.readDouble();
-        }
+    /** {@inheritDoc} */
+    @Override
+    protected DummyStepInterpolator create(boolean newForward,
+                                           ODEStateAndDerivative newGlobalPreviousState,
+                                           ODEStateAndDerivative newGlobalCurrentState,
+                                           ODEStateAndDerivative newSoftPreviousState,
+                                           ODEStateAndDerivative newSoftCurrentState,
+                                           EquationsMapper newMapper) {
+        return new DummyStepInterpolator(newForward,
+                                         newGlobalPreviousState, newGlobalCurrentState,
+                                         newSoftPreviousState, newSoftCurrentState,
+                                         newMapper);
     }
 
-    // we can now set the interpolated time and state
-    setInterpolatedTime(t);
-
-  }
+    /** {@inheritDoc}.
+     * In this class, this method does nothing: the interpolated state
+     * is always the state at the end of the current step.
+     */
+    @Override
+    protected ODEStateAndDerivative computeInterpolatedStateAndDerivatives(EquationsMapper equationsMapper,
+                                                                           double time, double theta,
+                                                                           double thetaH, double oneMinusThetaH) {
+        return getCurrentState();
+    }
 
 }

@@ -18,6 +18,7 @@
 package org.hipparchus.ode.sampling;
 
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -87,24 +88,19 @@ import org.hipparchus.util.Precision;
  * @see StepNormalizerBounds
  */
 
-public class StepNormalizer implements StepHandler {
+public class StepNormalizer implements ODEStepHandler {
+
     /** Fixed time step. */
     private double h;
 
     /** Underlying step handler. */
-    private final FixedStepHandler handler;
+    private final ODEFixedStepHandler handler;
 
-    /** First step time. */
-    private double firstTime;
+    /** First step state. */
+    private ODEStateAndDerivative first;
 
-    /** Last step time. */
-    private double lastTime;
-
-    /** Last state vector. */
-    private double[] lastState;
-
-    /** Last derivatives vector. */
-    private double[] lastDerivatives;
+    /** Last step step. */
+    private ODEStateAndDerivative last;
 
     /** Integration direction indicator. */
     private boolean forward;
@@ -121,7 +117,7 @@ public class StepNormalizer implements StepHandler {
      * @param h fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
      */
-    public StepNormalizer(final double h, final FixedStepHandler handler) {
+    public StepNormalizer(final double h, final ODEFixedStepHandler handler) {
         this(h, handler, StepNormalizerMode.INCREMENT,
              StepNormalizerBounds.FIRST);
     }
@@ -132,7 +128,7 @@ public class StepNormalizer implements StepHandler {
      * @param handler fixed time step handler to wrap
      * @param mode step normalizer mode to use
      */
-    public StepNormalizer(final double h, final FixedStepHandler handler,
+    public StepNormalizer(final double h, final ODEFixedStepHandler handler,
                           final StepNormalizerMode mode) {
         this(h, handler, mode, StepNormalizerBounds.FIRST);
     }
@@ -143,7 +139,7 @@ public class StepNormalizer implements StepHandler {
      * @param handler fixed time step handler to wrap
      * @param bounds step normalizer bounds setting to use
      */
-    public StepNormalizer(final double h, final FixedStepHandler handler,
+    public StepNormalizer(final double h, final ODEFixedStepHandler handler,
                           final StepNormalizerBounds bounds) {
         this(h, handler, StepNormalizerMode.INCREMENT, bounds);
     }
@@ -154,32 +150,28 @@ public class StepNormalizer implements StepHandler {
      * @param mode step normalizer mode to use
      * @param bounds step normalizer bounds setting to use
      */
-    public StepNormalizer(final double h, final FixedStepHandler handler,
+    public StepNormalizer(final double h, final ODEFixedStepHandler handler,
                           final StepNormalizerMode mode,
                           final StepNormalizerBounds bounds) {
         this.h          = FastMath.abs(h);
         this.handler    = handler;
         this.mode       = mode;
         this.bounds     = bounds;
-        firstTime       = Double.NaN;
-        lastTime        = Double.NaN;
-        lastState       = null;
-        lastDerivatives = null;
+        first           = null;
+        last            = null;
         forward         = true;
     }
 
     /** {@inheritDoc} */
     @Override
-    public void init(double t0, double[] y0, double t) {
+    public void init(final ODEStateAndDerivative initialState, final double finalTime) {
 
-        firstTime       = Double.NaN;
-        lastTime        = Double.NaN;
-        lastState       = null;
-        lastDerivatives = null;
+        first           = null;
+        last            = null;
         forward         = true;
 
         // initialize the underlying handler
-        handler.init(t0, y0, t);
+        handler.init(initialState, finalTime);
 
     }
 
@@ -196,18 +188,16 @@ public class StepNormalizer implements StepHandler {
      * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
-    public void handleStep(final StepInterpolator interpolator, final boolean isLast)
+    public void handleStep(final ODEStateInterpolator interpolator, final boolean isLast)
         throws MathIllegalStateException {
         // The first time, update the last state with the start information.
-        if (lastState == null) {
-            firstTime = interpolator.getPreviousTime();
-            lastTime = interpolator.getPreviousTime();
-            interpolator.setInterpolatedTime(lastTime);
-            lastState = interpolator.getInterpolatedState().clone();
-            lastDerivatives = interpolator.getInterpolatedDerivatives().clone();
+        if (last == null) {
+
+            first   = interpolator.getPreviousState();
+            last    = first;
 
             // Take the integration direction into account.
-            forward = interpolator.getCurrentTime() >= lastTime;
+            forward = interpolator.isForward();
             if (!forward) {
                 h = -h;
             }
@@ -215,10 +205,10 @@ public class StepNormalizer implements StepHandler {
 
         // Calculate next normalized step time.
         double nextTime = (mode == StepNormalizerMode.INCREMENT) ?
-                          lastTime + h :
-                          (FastMath.floor(lastTime / h) + 1) * h;
+                          last.getTime() + h :
+                          (FastMath.floor(last.getTime() / h) + 1) * h;
         if (mode == StepNormalizerMode.MULTIPLES &&
-            Precision.equals(nextTime, lastTime, 1)) {
+            Precision.equals(nextTime, last.getTime(), 1)) {
             nextTime += h;
         }
 
@@ -229,7 +219,7 @@ public class StepNormalizer implements StepHandler {
             doNormalizedStep(false);
 
             // Store the next step as last step.
-            storeStep(interpolator, nextTime);
+            last = interpolator.getInterpolatedState(nextTime);
 
             // Move on to the next step.
             nextTime += h;
@@ -241,10 +231,10 @@ public class StepNormalizer implements StepHandler {
             // the handler. We may have to output one more step. Only the last
             // one of those should be flagged as being the last.
             boolean addLast = bounds.lastIncluded() &&
-                              lastTime != interpolator.getCurrentTime();
+                              last.getTime() != interpolator.getCurrentState().getTime();
             doNormalizedStep(!addLast);
             if (addLast) {
-                storeStep(interpolator, interpolator.getCurrentTime());
+                last = interpolator.getCurrentState();
                 doNormalizedStep(true);
             }
         }
@@ -260,10 +250,10 @@ public class StepNormalizer implements StepHandler {
      * current step
      */
     private boolean isNextInStep(double nextTime,
-                                 StepInterpolator interpolator) {
+                                 ODEStateInterpolator interpolator) {
         return forward ?
-               nextTime <= interpolator.getCurrentTime() :
-               nextTime >= interpolator.getCurrentTime();
+               nextTime <= interpolator.getCurrentState().getTime() :
+               nextTime >= interpolator.getCurrentState().getTime();
     }
 
     /**
@@ -271,27 +261,10 @@ public class StepNormalizer implements StepHandler {
      * @param isLast true if the step is the last one
      */
     private void doNormalizedStep(boolean isLast) {
-        if (!bounds.firstIncluded() && firstTime == lastTime) {
+        if (!bounds.firstIncluded() && first.getTime() == last.getTime()) {
             return;
         }
-        handler.handleStep(lastTime, lastState, lastDerivatives, isLast);
+        handler.handleStep(last, isLast);
     }
 
-    /** Stores the interpolated information for the given time in the current
-     * state.
-     * @param interpolator interpolator for the last accepted step, to use to
-     * get the interpolated information
-     * @param t the time for which to store the interpolated information
-     * @exception MathIllegalStateException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
-     */
-    private void storeStep(StepInterpolator interpolator, double t)
-        throws MathIllegalStateException {
-        lastTime = t;
-        interpolator.setInterpolatedTime(lastTime);
-        System.arraycopy(interpolator.getInterpolatedState(), 0,
-                         lastState, 0, lastState.length);
-        System.arraycopy(interpolator.getInterpolatedDerivatives(), 0,
-                         lastDerivatives, 0, lastDerivatives.length);
-    }
 }

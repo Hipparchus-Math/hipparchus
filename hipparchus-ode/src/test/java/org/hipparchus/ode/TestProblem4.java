@@ -17,7 +17,8 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.ode.events.EventHandler;
+import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -35,109 +36,97 @@ import org.hipparchus.util.FastMath;
  * </p>
 
  */
-public class TestProblem4
-  extends TestProblemAbstract {
+public class TestProblem4 extends TestProblemAbstract {
 
-  /** Time offset. */
-  private double a;
+    private static final double OFFSET = 1.2;
 
-  /** theoretical state */
-  private double[] y;
+    /** Time offset. */
+    private double a;
 
-  /** Simple constructor. */
-  public TestProblem4() {
-    super();
-    a = 1.2;
-    double[] y0 = { FastMath.sin(a), FastMath.cos(a) };
-    setInitialConditions(0.0, y0);
-    setFinalConditions(15);
-    double[] errorScale = { 1.0, 0.0 };
-    setErrorScale(errorScale);
-    y = new double[y0.length];
-  }
-
-  @Override
-  public EventHandler[] getEventsHandlers() {
-    return new EventHandler[] { new Bounce(), new Stop() };
-  }
-
-  /**
-   * Get the theoretical events times.
-   * @return theoretical events times
-   */
-  @Override
-  public double[] getTheoreticalEventsTimes() {
-      return new double[] {
-          1 * FastMath.PI - a,
-          2 * FastMath.PI - a,
-          3 * FastMath.PI - a,
-          4 * FastMath.PI - a,
-          12.0
-      };
-  }
-
-  @Override
-  public void doComputeDerivatives(double t, double[] y, double[] yDot) {
-    yDot[0] =  y[1];
-    yDot[1] = -y[0];
-  }
-
-  @Override
-  public double[] computeTheoreticalState(double t) {
-    double sin = FastMath.sin(t + a);
-    double cos = FastMath.cos(t + a);
-    y[0] = FastMath.abs(sin);
-    y[1] = (sin >= 0) ? cos : -cos;
-    return y;
-  }
-
-  private static class Bounce implements EventHandler {
-
-    private int sign;
-
-    public Bounce() {
-      sign = +1;
+    /** Simple constructor. */
+    public TestProblem4() {
+        super(0.0, new double[] { FastMath.sin(OFFSET), FastMath.cos(OFFSET) },
+              15, new double[] { 1.0, 0.0 });
+        a = OFFSET;
     }
 
-    public void init(double t0, double[] y0, double t) {
+    @Override
+    public ODEEventHandler[] getEventsHandlers() {
+        return new ODEEventHandler[] { new Bounce(), new Stop() };
     }
 
-    public double g(double t, double[] y) {
-      return sign * y[0];
+    /**
+     * Get the theoretical events times.
+     * @return theoretical events times
+     */
+    @Override
+    public double[] getTheoreticalEventsTimes() {
+        return new double[] {
+                             1 * FastMath.PI - a,
+                             2 * FastMath.PI - a,
+                             3 * FastMath.PI - a,
+                             4 * FastMath.PI - a,
+                             12.0
+        };
     }
 
-    public Action eventOccurred(double t, double[] y, boolean increasing) {
-      // this sign change is needed because the state will be reset soon
-      sign = -sign;
-      return Action.RESET_STATE;
+    @Override
+    public double[] doComputeDerivatives(double t, double[] y) {
+        return new double[] {
+          y[1], -y[0]
+        };
     }
 
-    public void resetState(double t, double[] y) {
-      y[0] = -y[0];
-      y[1] = -y[1];
+    @Override
+    public double[] computeTheoreticalState(double t) {
+        double sin = FastMath.sin(t + a);
+        double cos = FastMath.cos(t + a);
+        return new double[] {
+            FastMath.abs(sin),
+            (sin >= 0) ? cos : -cos
+        };
     }
 
-  }
+    private static class Bounce implements ODEEventHandler {
 
-  private static class Stop implements EventHandler {
+        private int sign;
 
-    public Stop() {
+        public Bounce() {
+            sign = +1;
+        }
+
+        public double g(ODEStateAndDerivative s) {
+            return sign * s.getState()[0];
+        }
+
+        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+            // this sign change is needed because the state will be reset soon
+            sign = -sign;
+            return Action.RESET_STATE;
+        }
+
+        public ODEStateAndDerivative resetState(ODEStateAndDerivative s) {
+            final double[] y    = s.getState();
+            final double[] yDot = s.getDerivative();
+            y[0]    = -y[0];
+            y[1]    = -y[1];
+            yDot[0] = -yDot[0];
+            yDot[1] = -yDot[1];
+            return new ODEStateAndDerivative(s.getTime(), y, yDot);
+        }
+
     }
 
-    public void init(double t0, double[] y0, double t) {
-    }
+    private static class Stop implements ODEEventHandler {
 
-    public double g(double t, double[] y) {
-      return t - 12.0;
-    }
+        public double g(ODEStateAndDerivative s) {
+            return s.getTime() - 12.0;
+        }
 
-    public Action eventOccurred(double t, double[] y, boolean increasing) {
-      return Action.STOP;
-    }
+        public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+            return Action.STOP;
+        }
 
-    public void resetState(double t, double[] y) {
     }
-
-  }
 
 }

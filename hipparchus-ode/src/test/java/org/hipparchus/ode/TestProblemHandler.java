@@ -17,144 +17,142 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEIntegrator;
-import org.hipparchus.ode.sampling.StepHandler;
-import org.hipparchus.ode.sampling.StepInterpolator;
+import org.hipparchus.ode.sampling.ODEStepHandler;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 /**
  * This class is used to handle steps for the test problems
  * integrated during the junit tests for the ODE integrators.
  */
-public class TestProblemHandler
-  implements StepHandler {
+public class TestProblemHandler implements ODEStepHandler {
 
-  /** Associated problem. */
-  private TestProblemAbstract problem;
+    /** Associated problem. */
+    private TestProblemAbstract problem;
 
-  /** Maximal errors encountered during the integration. */
-  private double maxValueError;
-  private double maxTimeError;
+    /** Maximal errors encountered during the integration. */
+    private double maxValueError;
+    private double maxTimeError;
 
-  /** Error at the end of the integration. */
-  private double lastError;
+    /** Error at the end of the integration. */
+    private double lastError;
 
-  /** Time at the end of integration. */
-  private double lastTime;
+    /** Time at the end of integration. */
+    private double lastTime;
 
-  /** ODE solver used. */
-  private ODEIntegrator integrator;
+    /** ODE solver used. */
+    private ODEIntegrator integrator;
 
-  /** Expected start for step. */
-  private double expectedStepStart;
+    /** Expected start for step. */
+    private double expectedStepStart;
 
-  /**
-   * Simple constructor.
-   * @param problem problem for which steps should be handled
-   * @param integrator ODE solver used
-   */
-  public TestProblemHandler(TestProblemAbstract problem, ODEIntegrator integrator) {
-    this.problem = problem;
-    this.integrator = integrator;
-    maxValueError = 0;
-    maxTimeError  = 0;
-    lastError     = 0;
-    expectedStepStart = Double.NaN;
-  }
+    /**
+     * Simple constructor.
+     * @param problem problem for which steps should be handled
+     * @param integrator ODE solver used
+     */
+    public TestProblemHandler(TestProblemAbstract problem, ODEIntegrator integrator) {
+        this.problem = problem;
+        this.integrator = integrator;
+        maxValueError = 0;
+        maxTimeError  = 0;
+        lastError     = 0;
+        expectedStepStart = Double.NaN;
+    }
 
-  public void init(double t0, double[] y0, double t) {
-    maxValueError = 0;
-    maxTimeError  = 0;
-    lastError     = 0;
-    expectedStepStart = Double.NaN;
-  }
+    public void init(ODEStateAndDerivative s0, double t) {
+        maxValueError = 0;
+        maxTimeError  = 0;
+        lastError     = 0;
+        expectedStepStart = Double.NaN;
+    }
 
-  public void handleStep(StepInterpolator interpolator, boolean isLast) throws MathIllegalStateException {
+    public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
 
-    double start = integrator.getCurrentStepStart();
-    if (FastMath.abs((start - problem.getInitialTime()) / integrator.getCurrentSignedStepsize()) > 0.001) {
-        // multistep integrators do not handle the first steps themselves
-        // so we have to make sure the integrator we look at has really started its work
-        if (!Double.isNaN(expectedStepStart)) {
-            // the step should either start at the end of the integrator step
-            // or at an event if the step is split into several substeps
-            double stepError = FastMath.max(maxTimeError, FastMath.abs(start - expectedStepStart));
-            for (double eventTime : problem.getTheoreticalEventsTimes()) {
-                stepError = FastMath.min(stepError, FastMath.abs(start - eventTime));
+        double start = integrator.getStepStart().getTime();
+        if (FastMath.abs((start - problem.getInitialTime()) / integrator.getCurrentSignedStepsize()) > 0.001) {
+            // multistep integrators do not handle the first steps themselves
+            // so we have to make sure the integrator we look at has really started its work
+            if (!Double.isNaN(expectedStepStart)) {
+                // the step should either start at the end of the integrator step
+                // or at an event if the step is split into several substeps
+                double stepError = FastMath.max(maxTimeError, FastMath.abs(start - expectedStepStart));
+                for (double eventTime : problem.getTheoreticalEventsTimes()) {
+                    stepError = FastMath.min(stepError, FastMath.abs(start - eventTime));
+                }
+                maxTimeError = FastMath.max(maxTimeError, stepError);
             }
-            maxTimeError = FastMath.max(maxTimeError, stepError);
+            expectedStepStart = start + integrator.getCurrentSignedStepsize();
         }
-        expectedStepStart = start + integrator.getCurrentSignedStepsize();
+
+
+        double pT = interpolator.getPreviousState().getTime();
+        double cT = interpolator.getCurrentState().getTime();
+        double[] errorScale = problem.getErrorScale();
+
+        // store the error at the last step
+        if (isLast) {
+            double[] interpolatedY = interpolator.getCurrentState().getState();
+            double[] theoreticalY  = problem.computeTheoreticalState(cT);
+            for (int i = 0; i < interpolatedY.length; ++i) {
+                double error = FastMath.abs(interpolatedY[i] - theoreticalY[i]);
+                lastError = FastMath.max(error, lastError);
+            }
+            lastTime = cT;
+        }
+        // walk through the step
+        for (int k = 0; k <= 20; ++k) {
+
+            double time = pT + (k * (cT - pT)) / 20;
+            ODEStateAndDerivative interpolated = interpolator.getInterpolatedState(time);
+            double[] interpolatedY = interpolated.getState();
+            double[] theoreticalY  = problem.computeTheoreticalState(interpolated.getTime());
+
+            // update the errors
+            for (int i = 0; i < interpolatedY.length; ++i) {
+                double error = errorScale[i] * FastMath.abs(interpolatedY[i] - theoreticalY[i]);
+                maxValueError = FastMath.max(error, maxValueError);
+            }
+        }
+
+    }
+
+    /**
+     * Get the maximal value error encountered during integration.
+     * @return maximal value error
+     */
+    public double getMaximalValueError() {
+        return maxValueError;
+    }
+
+    /**
+     * Get the maximal time error encountered during integration.
+     * @return maximal time error
+     */
+    public double getMaximalTimeError() {
+        return maxTimeError;
     }
 
 
-    double pT = interpolator.getPreviousTime();
-    double cT = interpolator.getCurrentTime();
-    double[] errorScale = problem.getErrorScale();
-
-    // store the error at the last step
-    if (isLast) {
-        double[] interpolatedY = interpolator.getInterpolatedState();
-        double[] theoreticalY  = problem.computeTheoreticalState(cT);
-        for (int i = 0; i < interpolatedY.length; ++i) {
-            double error = FastMath.abs(interpolatedY[i] - theoreticalY[i]);
-            lastError = FastMath.max(error, lastError);
-        }
-        lastTime = cT;
-    }
-    // walk through the step
-    for (int k = 0; k <= 20; ++k) {
-
-        double time = pT + (k * (cT - pT)) / 20;
-        interpolator.setInterpolatedTime(time);
-        double[] interpolatedY = interpolator.getInterpolatedState();
-        double[] theoreticalY  = problem.computeTheoreticalState(interpolator.getInterpolatedTime());
-
-        // update the errors
-        for (int i = 0; i < interpolatedY.length; ++i) {
-            double error = errorScale[i] * FastMath.abs(interpolatedY[i] - theoreticalY[i]);
-            maxValueError = FastMath.max(error, maxValueError);
-        }
+    public int getCalls() {
+        return problem.getCalls();
     }
 
-  }
+    /**
+     * Get the error at the end of the integration.
+     * @return error at the end of the integration
+     */
+    public double getLastError() {
+        return lastError;
+    }
 
-  /**
-   * Get the maximal value error encountered during integration.
-   * @return maximal value error
-   */
-  public double getMaximalValueError() {
-    return maxValueError;
-  }
-
-  /**
-   * Get the maximal time error encountered during integration.
-   * @return maximal time error
-   */
-  public double getMaximalTimeError() {
-    return maxTimeError;
-  }
-
-
-  public int getCalls() {
-      return problem.getCalls();
-  }
-
-  /**
-   * Get the error at the end of the integration.
-   * @return error at the end of the integration
-   */
-  public double getLastError() {
-    return lastError;
-  }
-
-  /**
-   * Get the time at the end of the integration.
-   * @return time at the end of the integration.
-   */
-  public double getLastTime() {
-    return lastTime;
-  }
+    /**
+     * Get the time at the end of the integration.
+     * @return time at the end of the integration.
+     */
+    public double getLastTime() {
+        return lastTime;
+    }
 
 }
