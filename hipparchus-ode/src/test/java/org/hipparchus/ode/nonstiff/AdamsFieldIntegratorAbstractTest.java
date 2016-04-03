@@ -26,15 +26,15 @@ import org.hipparchus.ode.AbstractFieldIntegrator;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FirstOrderFieldIntegrator;
+import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.MultistepFieldIntegrator;
 import org.hipparchus.ode.TestFieldProblem1;
 import org.hipparchus.ode.TestFieldProblem5;
 import org.hipparchus.ode.TestFieldProblem6;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestFieldProblemHandler;
-import org.hipparchus.ode.sampling.FieldStepHandler;
-import org.hipparchus.ode.sampling.FieldStepInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
+import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -60,7 +60,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
         double[] vecAbsoluteTolerance = { 1.0e-15, 1.0e-16 };
         double[] vecRelativeTolerance = { 1.0e-15, 1.0e-16 };
 
-        FirstOrderFieldIntegrator<T> integ = createIntegrator(field, 4, minStep, maxStep,
+        FieldODEIntegrator<T> integ = createIntegrator(field, 4, minStep, maxStep,
                                                               vecAbsoluteTolerance,
                                                               vecRelativeTolerance);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
@@ -83,7 +83,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             double scalAbsoluteTolerance = FastMath.pow(10.0, i);
             double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
-            FirstOrderFieldIntegrator<T> integ = createIntegrator(field, 4, minStep, maxStep,
+            FieldODEIntegrator<T> integ = createIntegrator(field, 4, minStep, maxStep,
                                                                   scalAbsoluteTolerance,
                                                                   scalRelativeTolerance);
             TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
@@ -110,7 +110,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
         TestFieldProblem1<T> pb  = new TestFieldProblem1<T>(field);
         double range = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
 
-        FirstOrderFieldIntegrator<T> integ = createIntegrator(field, 2, 0, range, 1.0e-12, 1.0e-12);
+        FieldODEIntegrator<T> integ = createIntegrator(field, 2, 0, range, 1.0e-12, 1.0e-12);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
         integ.setMaxEvaluations(max);
@@ -206,7 +206,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
                 T tK = initialState.getTime().multiply(nbSteps - 1 - (i + 1)).add(tStart.multiply(i + 1)).divide(nbSteps - 1);
                 interpolator.setPreviousTime(interpolator.getCurrentTime());
                 interpolator.setCurrentTime(tK);
-                for (FieldStepHandler<T> handler : getStepHandlers()) {
+                for (FieldODEStepHandler<T> handler : getStepHandlers()) {
                     handler.handleStep(interpolator, i == nbSteps - 1);
                 }
             }
@@ -215,7 +215,7 @@ public abstract class AdamsFieldIntegratorAbstractTest {
 
     }
 
-    private static class PerfectInterpolator<T extends RealFieldElement<T>> implements FieldStepInterpolator<T> {
+    private static class PerfectInterpolator<T extends RealFieldElement<T>> implements FieldODEStateInterpolator<T> {
         private final TestFieldProblemAbstract<T> problem;
         private T previousTime;
         private T currentTime;

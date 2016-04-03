@@ -28,7 +28,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
+import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.TestFieldProblem1;
 import org.hipparchus.ode.TestFieldProblem2;
 import org.hipparchus.ode.TestFieldProblem3;
@@ -38,9 +38,9 @@ import org.hipparchus.ode.TestFieldProblem6;
 import org.hipparchus.ode.TestFieldProblemAbstract;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
-import org.hipparchus.ode.events.FieldEventHandler;
-import org.hipparchus.ode.sampling.FieldStepHandler;
-import org.hipparchus.ode.sampling.FieldStepInterpolator;
+import org.hipparchus.ode.events.FieldODEEventHandler;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
+import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -123,7 +123,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         k[0] = field.getZero().add(1.0e-4);
         k[1] = field.getZero().add(1.0e-5);
         k[2] = field.getZero().add(1.0e-6);
-        FirstOrderFieldDifferentialEquations<T> ode = new FirstOrderFieldDifferentialEquations<T>() {
+        FieldOrdinaryDifferentialEquation<T> ode = new FieldOrdinaryDifferentialEquation<T>() {
 
             public int getDimension() {
                 return k.length;
@@ -159,7 +159,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                 epsilonY);
         }
 
-        integrator.addEventHandler(new FieldEventHandler<T>() {
+        integrator.addEventHandler(new FieldODEEventHandler<T>() {
 
             public void init(FieldODEStateAndDerivative<T> state0, T t) {
             }
@@ -243,7 +243,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                 RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
                 TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
                 integ.addStepHandler(handler);
-                FieldEventHandler<T>[] functions = pb.getEventsHandlers();
+                FieldODEEventHandler<T>[] functions = pb.getEventsHandlers();
                 for (int l = 0; l < functions.length; ++l) {
                     integ.addEventHandler(functions[l],
                                           Double.POSITIVE_INFINITY, 1.0e-6 * step.getReal(), 1000);
@@ -357,7 +357,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
     protected <T extends RealFieldElement<T>> void doTestKepler(Field<T> field, double expectedMaxError, double epsilon)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field, field.getZero().add(0.9));
+        final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field.getZero().add(0.9));
         T step = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.0003);
 
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
@@ -365,7 +365,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
     }
 
-    private static class KeplerHandler<T extends RealFieldElement<T>> implements FieldStepHandler<T> {
+    private static class KeplerHandler<T extends RealFieldElement<T>> implements FieldODEStepHandler<T> {
         private T maxError;
         private final TestFieldProblem3<T> pb;
         private final double expectedMaxError;
@@ -379,7 +379,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         public void init(FieldODEStateAndDerivative<T> state0, T t) {
             maxError = pb.getField().getZero();
         }
-        public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
+        public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
                         throws MathIllegalStateException {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
@@ -403,8 +403,8 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         throws MathIllegalArgumentException, MathIllegalStateException {
         final T step = field.getZero().add(1.23456);
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, step);
-        integ.addStepHandler(new FieldStepHandler<T>() {
-            public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast) {
+        integ.addStepHandler(new FieldODEStepHandler<T>() {
+            public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) {
                 if (! isLast) {
                     Assert.assertEquals(step.getReal(),
                                         interpolator.getCurrentState().getTime().subtract(interpolator.getPreviousState().getTime()).getReal(),
@@ -414,7 +414,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
             public void init(FieldODEStateAndDerivative<T> s0, T t) {
             }
         });
-        integ.integrate(new FieldExpandableODE<T>(new FirstOrderFieldDifferentialEquations<T>() {
+        integ.integrate(new FieldExpandableODE<T>(new FieldOrdinaryDifferentialEquation<T>() {
             public void init(T t0, T[] y0, T t) {
             }
             public T[] computeDerivatives(T t, T[] y) {
@@ -433,7 +433,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends RealFieldElement<T>> void doTestSingleStep(final Field<T> field, final double epsilon) {
 
-        final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field, field.getZero().add(0.9));
+        final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field.getZero().add(0.9));
         T h = pb.getFinalTime().subtract(pb.getInitialState().getTime()).multiply(0.0003);
 
         RungeKuttaFieldIntegrator<T> integ = createIntegrator(field, field.getZero().add(Double.NaN));
@@ -460,7 +460,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         final T[] y0 = MathArrays.buildArray(field, 1);
         y0[0] = field.getOne();
         final T t   = field.getZero().add(0.001);
-        FirstOrderFieldDifferentialEquations<T> equations = new FirstOrderFieldDifferentialEquations<T>() {
+        FieldOrdinaryDifferentialEquation<T> equations = new FieldOrdinaryDifferentialEquation<T>() {
 
             public int getDimension() {
                 return 1;
@@ -563,7 +563,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         return y.getPartialDerivative(orders);
     }
 
-    private static class SinCos implements FirstOrderFieldDifferentialEquations<DerivativeStructure> {
+    private static class SinCos implements FieldOrdinaryDifferentialEquation<DerivativeStructure> {
 
         private final DerivativeStructure omega;
         private       DerivativeStructure r;

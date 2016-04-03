@@ -23,7 +23,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.sampling.AbstractFieldStepInterpolator;
+import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -37,7 +37,7 @@ import org.hipparchus.util.MathArrays;
  * @param <T> the type of the field elements
  */
 
-class AdamsFieldStepInterpolator<T extends RealFieldElement<T>> extends AbstractFieldStepInterpolator<T> {
+class AdamsFieldStepInterpolator<T extends RealFieldElement<T>> extends AbstractFieldODEStateInterpolator<T> {
 
     /** Step size used in the first scaled derivative and Nordsieck vector. */
     private T scalingH;

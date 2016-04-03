@@ -22,7 +22,7 @@ import java.lang.reflect.Array;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.ode.events.Action;
-import org.hipparchus.ode.events.FieldEventHandler;
+import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 
@@ -45,6 +45,8 @@ import org.hipparchus.util.MathArrays;
 public class TestFieldProblem4<T extends RealFieldElement<T>>
     extends TestFieldProblemAbstract<T> {
 
+    private static final double OFFSET = 1.2;
+
     /** Time offset. */
     private T a;
 
@@ -52,21 +54,26 @@ public class TestFieldProblem4<T extends RealFieldElement<T>>
      * @param field field to which elements belong
      */
     public TestFieldProblem4(Field<T> field) {
-        super(field);
-        a = convert(1.2);
+        super(convert(field, 0.0),
+              createY0(field),
+              convert(field, 15),
+              convert(field, 1.0, 0.0));
+        a = convert(field, OFFSET);
+    }
+
+    private static <T extends RealFieldElement<T>> T[] createY0(final Field<T> field) {
+        final T a = convert(field, OFFSET);
         T[] y0 = MathArrays.buildArray(field, 2);
         y0[0] = a.sin();
-        y0[1] = a.cos();;
-        setInitialConditions(convert(0.0), y0);
-        setFinalConditions(convert(15));
-        setErrorScale(convert(1.0, 0.0));
+        y0[1] = a.cos();
+        return y0;
     }
 
     @Override
-    public FieldEventHandler<T>[] getEventsHandlers() {
+    public FieldODEEventHandler<T>[] getEventsHandlers() {
         @SuppressWarnings("unchecked")
-        FieldEventHandler<T>[] handlers =
-                        (FieldEventHandler<T>[]) Array.newInstance(FieldEventHandler.class, 2);
+        FieldODEEventHandler<T>[] handlers =
+                        (FieldODEEventHandler<T>[]) Array.newInstance(FieldODEEventHandler.class, 2);
         handlers[0] = new Bounce<T>();
         handlers[1] = new Stop<T>();
         return handlers;
@@ -83,7 +90,7 @@ public class TestFieldProblem4<T extends RealFieldElement<T>>
         array[1] = a.negate().add(2 * FastMath.PI);
         array[2] = a.negate().add(3 * FastMath.PI);
         array[3] = a.negate().add(4 * FastMath.PI);
-        array[4] = convert(120.0);
+        array[4] = convert(a.getField(), 120.0);
         return array;
     }
 
@@ -105,7 +112,7 @@ public class TestFieldProblem4<T extends RealFieldElement<T>>
         return y;
     }
 
-    private static class Bounce<T extends RealFieldElement<T>> implements FieldEventHandler<T> {
+    private static class Bounce<T extends RealFieldElement<T>> implements FieldODEEventHandler<T> {
 
         private int sign;
 
@@ -135,7 +142,7 @@ public class TestFieldProblem4<T extends RealFieldElement<T>>
 
     }
 
-    private static class Stop<T extends RealFieldElement<T>> implements FieldEventHandler<T> {
+    private static class Stop<T extends RealFieldElement<T>> implements FieldODEEventHandler<T> {
 
         public Stop() {
         }

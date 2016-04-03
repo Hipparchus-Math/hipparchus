@@ -49,7 +49,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  *
  * @param <T> the type of the field elements
  */
-public interface FieldEventHandler<T extends RealFieldElement<T>>  {
+public interface FieldODEEventHandler<T extends RealFieldElement<T>>  {
 
     /** Initialize event handler at the start of an ODE integration.
      * <p>
@@ -57,10 +57,15 @@ public interface FieldEventHandler<T extends RealFieldElement<T>>  {
      * may be used by the event handler to initialize some internal data
      * if needed.
      * </p>
+     * <p>
+     * The default implementation does nothing
+     * </p>
      * @param initialState initial time, state vector and derivative
      * @param finalTime target time for the integration
      */
-    void init(FieldODEStateAndDerivative<T> initialState, T finalTime);
+    default void init(FieldODEStateAndDerivative<T> initialState, T finalTime) {
+        // nothing by default
+    }
 
     /** Compute the value of the switching function.
 
@@ -129,8 +134,8 @@ public interface FieldEventHandler<T extends RealFieldElement<T>>  {
      * </ul>
 
      * <p>The scheduling between this method and the {@link
-     * org.hipparchus.ode.sampling.FieldStepHandler FieldStepHandler} method {@link
-     * org.hipparchus.ode.sampling.FieldStepHandler#handleStep(
+     * org.hipparchus.ode.sampling.FieldODEStepHandler FieldStepHandler} method {@link
+     * org.hipparchus.ode.sampling.FieldODEStepHandler#handleStep(
      * org.hipparchus.ode.sampling.FieldStepInterpolator, boolean)
      * handleStep(interpolator, isLast)} is to call this method first and
      * <code>handleStep</code> afterwards. This scheduling allows the integrator to
@@ -140,13 +145,13 @@ public interface FieldEventHandler<T extends RealFieldElement<T>>  {
      * throughout the last step, user code called by this method and user
      * code called by step handlers may experience apparently out of order values
      * of the independent time variable. As an example, if the same user object
-     * implements both this {@link FieldEventHandler FieldEventHandler} interface and the
-     * {@link org.hipparchus.ode.sampling.FieldStepHandler FieldStepHandler}
+     * implements both this {@link FieldODEEventHandler FieldEventHandler} interface and the
+     * {@link org.hipparchus.ode.sampling.FieldODEStepHandler FieldStepHandler}
      * interface, a <em>forward</em> integration may call its
      * {code eventOccurred} method with t = 10 first and call its
      * {code handleStep} method with t = 9 afterwards. Such out of order
      * calls are limited to the size of the integration step for {@link
-     * org.hipparchus.ode.sampling.FieldStepHandler variable step handlers}.</p>
+     * org.hipparchus.ode.sampling.FieldODEStepHandler variable step handlers}.</p>
 
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative
@@ -166,14 +171,15 @@ public interface FieldEventHandler<T extends RealFieldElement<T>>  {
      * #eventOccurred(FieldODEStateAndDerivative, boolean) eventOccurred} has itself
      * returned the {@link Action#RESET_STATE} indicator. It allows the user to reset
      * the state vector for the next step, without perturbing the step handler of the
-     * finishing step. If the {@link #eventOccurred(FieldODEStateAndDerivative, boolean)
-     * eventOccurred} never returns the {@link Action#RESET_STATE} indicator, this
-     * function will never be called, and it is safe to leave its body empty.</p>
+     * finishing step.</p>
+     * <p>The default implementation returns its argument.</p>
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative
      * @return reset state (note that it does not include the derivatives, they will
      * be added automatically by the integrator afterwards)
      */
-    FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state);
+    default FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
+        return state;
+    }
 
 }

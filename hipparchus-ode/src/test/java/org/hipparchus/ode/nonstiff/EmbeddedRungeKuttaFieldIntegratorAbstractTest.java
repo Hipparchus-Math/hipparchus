@@ -26,17 +26,17 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
-import org.hipparchus.ode.FirstOrderFieldIntegrator;
+import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
+import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.TestFieldProblem1;
 import org.hipparchus.ode.TestFieldProblem3;
 import org.hipparchus.ode.TestFieldProblem4;
 import org.hipparchus.ode.TestFieldProblem5;
 import org.hipparchus.ode.TestFieldProblemHandler;
 import org.hipparchus.ode.events.Action;
-import org.hipparchus.ode.events.FieldEventHandler;
-import org.hipparchus.ode.sampling.FieldStepHandler;
-import org.hipparchus.ode.sampling.FieldStepInterpolator;
+import org.hipparchus.ode.events.FieldODEEventHandler;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
+import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -129,7 +129,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
     public abstract void testForwardBackwardExceptions();
 
     protected <T extends RealFieldElement<T>> void doTestForwardBackwardExceptions(final Field<T> field) {
-        FirstOrderFieldDifferentialEquations<T> equations = new FirstOrderFieldDifferentialEquations<T>() {
+        FieldOrdinaryDifferentialEquation<T> equations = new FieldOrdinaryDifferentialEquation<T>() {
 
             public int getDimension() {
                 return 1;
@@ -186,7 +186,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         double[] vecAbsoluteTolerance = { 1.0e-15, 1.0e-16 };
         double[] vecRelativeTolerance = { 1.0e-15, 1.0e-16 };
 
-        FirstOrderFieldIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
+        FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                               vecAbsoluteTolerance, vecRelativeTolerance);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
@@ -210,7 +210,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             double scalAbsoluteTolerance = FastMath.pow(10.0, i);
             double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
-            FirstOrderFieldIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
+            FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                                   scalAbsoluteTolerance, scalRelativeTolerance);
             TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
             integ.addStepHandler(handler);
@@ -241,11 +241,11 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
       double scalAbsoluteTolerance = 1.0e-8;
       double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
-      FirstOrderFieldIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
+      FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                             scalAbsoluteTolerance, scalRelativeTolerance);
       TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
       integ.addStepHandler(handler);
-      FieldEventHandler<T>[] functions = pb.getEventsHandlers();
+      FieldODEEventHandler<T>[] functions = pb.getEventsHandlers();
       double convergence = 1.0e-8 * maxStep;
       for (int l = 0; l < functions.length; ++l) {
           integ.addEventHandler(functions[l], Double.POSITIVE_INFINITY, convergence, 1000);
@@ -273,12 +273,12 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         double scalAbsoluteTolerance = 1.0e-8;
         double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
-        FirstOrderFieldIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
+        FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                               scalAbsoluteTolerance, scalRelativeTolerance);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
 
-        integ.addEventHandler(new FieldEventHandler<T>() {
+        integ.addEventHandler(new FieldODEEventHandler<T>() {
           public void init(FieldODEStateAndDerivative<T> state0, T t) {
           }
           public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
@@ -312,12 +312,12 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         double scalAbsoluteTolerance = 1.0e-8;
         double scalRelativeTolerance = 0.01 * scalAbsoluteTolerance;
 
-        FirstOrderFieldIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
+        FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                               scalAbsoluteTolerance, scalRelativeTolerance);
         TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
         integ.addStepHandler(handler);
 
-        integ.addEventHandler(new FieldEventHandler<T>() {
+        integ.addEventHandler(new FieldODEEventHandler<T>() {
             public void init(FieldODEStateAndDerivative<T> state0, T t) {
             }
             public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
@@ -413,19 +413,19 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
     protected <T extends RealFieldElement<T>> void doTestKepler(Field<T> field, double epsilon) {
 
-        final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field, field.getZero().add(0.9));
+        final TestFieldProblem3<T> pb  = new TestFieldProblem3<T>(field.getZero().add(0.9));
         double minStep = 0;
         double maxStep = pb.getFinalTime().subtract(pb.getInitialState().getTime()).getReal();
         double[] vecAbsoluteTolerance = { 1.0e-8, 1.0e-8, 1.0e-10, 1.0e-10 };
         double[] vecRelativeTolerance = { 1.0e-10, 1.0e-10, 1.0e-8, 1.0e-8 };
 
-        FirstOrderFieldIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
+        FieldODEIntegrator<T> integ = createIntegrator(field, minStep, maxStep,
                                                               vecAbsoluteTolerance, vecRelativeTolerance);
         integ.addStepHandler(new KeplerHandler<T>(pb, epsilon));
         integ.integrate(new FieldExpandableODE<T>(pb), pb.getInitialState(), pb.getFinalTime());
     }
 
-    private static class KeplerHandler<T extends RealFieldElement<T>> implements FieldStepHandler<T> {
+    private static class KeplerHandler<T extends RealFieldElement<T>> implements FieldODEStepHandler<T> {
         private T maxError;
         private final TestFieldProblem3<T> pb;
         private final double epsilon;
@@ -437,7 +437,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         public void init(FieldODEStateAndDerivative<T> state0, T t) {
             maxError = pb.getField().getZero();
         }
-        public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
+        public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
                         throws MathIllegalStateException {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
@@ -508,7 +508,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
         return y.getPartialDerivative(orders);
     }
 
-    private static class SinCos implements FirstOrderFieldDifferentialEquations<DerivativeStructure> {
+    private static class SinCos implements FieldOrdinaryDifferentialEquation<DerivativeStructure> {
 
         private final DerivativeStructure omega;
         private       DerivativeStructure r;

@@ -221,12 +221,12 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
 
     /** {@inheritDoc} */
     @Override
-    protected void sanityChecks(final FieldODEState<T> eqn, final T t)
+    protected void sanityChecks(final FieldODEState<T> initialState, final T t)
         throws MathIllegalArgumentException {
 
-        super.sanityChecks(eqn, t);
+        super.sanityChecks(initialState, t);
 
-        mainSetDimension = eqn.getStateDimension();
+        mainSetDimension = initialState.getStateDimension();
 
         if (vecAbsoluteTolerance != null && vecAbsoluteTolerance.length != mainSetDimension) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,

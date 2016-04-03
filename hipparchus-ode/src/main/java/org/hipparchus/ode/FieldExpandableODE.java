@@ -38,12 +38,12 @@ import org.hipparchus.util.MathArrays;
  * <p>
  * We want the integrator to use <em>only</em> the primary set to estimate the
  * errors and hence the step sizes. It should <em>not</em> use the secondary
- * equations in this computation. The {@link FirstOrderFieldIntegrator integrator} will
+ * equations in this computation. The {@link FieldODEIntegrator integrator} will
  * be able to know where the primary set ends and so where the secondary sets begin.
  * </p>
  *
- * @see FirstOrderFieldDifferentialEquations
- * @see FieldSecondaryEquations
+ * @see FieldOrdinaryDifferentialEquation
+ * @see FieldSecondaryODE
  *
  * @param <T> the type of the field elements
  */
@@ -51,10 +51,10 @@ import org.hipparchus.util.MathArrays;
 public class FieldExpandableODE<T extends RealFieldElement<T>> {
 
     /** Primary differential equation. */
-    private final FirstOrderFieldDifferentialEquations<T> primary;
+    private final FieldOrdinaryDifferentialEquation<T> primary;
 
     /** Components of the expandable ODE. */
-    private List<FieldSecondaryEquations<T>> components;
+    private List<FieldSecondaryODE<T>> components;
 
     /** Mapper for all equations. */
     private FieldEquationsMapper<T> mapper;
@@ -62,9 +62,9 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
     /** Build an expandable set from its primary ODE set.
      * @param primary the primary set of differential equations to be integrated.
      */
-    public FieldExpandableODE(final FirstOrderFieldDifferentialEquations<T> primary) {
+    public FieldExpandableODE(final FieldOrdinaryDifferentialEquation<T> primary) {
         this.primary    = primary;
-        this.components = new ArrayList<FieldSecondaryEquations<T>>();
+        this.components = new ArrayList<FieldSecondaryODE<T>>();
         this.mapper     = new FieldEquationsMapper<T>(null, primary.getDimension());
     }
 
@@ -82,7 +82,7 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
      * {@link FieldODEStateAndDerivative#getSecondaryDerivative(int)} (beware index
      * 0 corresponds to main state, additional states start at 1)
      */
-    public int addSecondaryEquations(final FieldSecondaryEquations<T> secondary) {
+    public int addSecondaryEquations(final FieldSecondaryODE<T> secondary) {
 
         components.add(secondary);
         mapper = new FieldEquationsMapper<T>(mapper, secondary.getDimension());

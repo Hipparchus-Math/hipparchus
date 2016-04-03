@@ -34,12 +34,12 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * last one, store the points in an ephemeris, or forward them to
  * specialized processing or output methods.</p>
  *
- * @see org.hipparchus.ode.FirstOrderFieldIntegrator
- * @see FieldStepInterpolator
+ * @see org.hipparchus.ode.FieldODEIntegrator
+ * @see FieldODEStateInterpolator
  * @param <T> the type of the field elements
  */
 
-public interface FieldStepHandler<T extends RealFieldElement<T>> {
+public interface FieldODEStepHandler<T extends RealFieldElement<T>> {
 
     /** Initialize step handler at the start of an ODE integration.
      * <p>
@@ -47,10 +47,15 @@ public interface FieldStepHandler<T extends RealFieldElement<T>> {
      * may be used by the step handler to initialize some internal data
      * if needed.
      * </p>
+     * <p>
+     * The default implementation does nothing.
+     * </p>
      * @param initialState initial time, state vector and derivative
      * @param finalTime target time for the integration
      */
-    void init(FieldODEStateAndDerivative<T> initialState, T finalTime);
+    default void init(FieldODEStateAndDerivative<T> initialState, T finalTime) {
+        // nothing by default
+    }
 
     /**
      * Handle the last accepted step
@@ -68,7 +73,7 @@ public interface FieldStepHandler<T extends RealFieldElement<T>> {
      * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
-    void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
+    void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
         throws MathIllegalStateException;
 
 }

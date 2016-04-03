@@ -23,8 +23,8 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.events.FieldEventHandler;
-import org.hipparchus.ode.sampling.FieldStepHandler;
+import org.hipparchus.ode.events.FieldODEEventHandler;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
 
 /** This interface represents a first order integrator for
  * differential equations.
@@ -34,11 +34,11 @@ import org.hipparchus.ode.sampling.FieldStepHandler;
  * be handled should implement the {@link
  * FirstOrderDifferentialEquations} interface.</p>
  *
- * @see FirstOrderFieldDifferentialEquations
+ * @see FieldOrdinaryDifferentialEquation
  * @param <T> the type of the field elements
  */
 
-public interface FirstOrderFieldIntegrator<T extends RealFieldElement<T>> {
+public interface FieldODEIntegrator<T extends RealFieldElement<T>> {
 
     /** Get the name of the method.
      * @return name of the method
@@ -52,17 +52,17 @@ public interface FirstOrderFieldIntegrator<T extends RealFieldElement<T>> {
      * @see #getStepHandlers()
      * @see #clearStepHandlers()
      */
-    void addStepHandler(FieldStepHandler<T> handler);
+    void addStepHandler(FieldODEStepHandler<T> handler);
 
     /** Get all the step handlers that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers
-     * @see #addStepHandler(FieldStepHandler)
+     * @see #addStepHandler(FieldODEStepHandler)
      * @see #clearStepHandlers()
      */
-    Collection<FieldStepHandler<T>> getStepHandlers();
+    Collection<FieldODEStepHandler<T>> getStepHandlers();
 
     /** Remove all the step handlers that have been added to the integrator.
-     * @see #addStepHandler(FieldStepHandler)
+     * @see #addStepHandler(FieldODEStepHandler)
      * @see #getStepHandlers()
      */
     void clearStepHandlers();
@@ -79,12 +79,12 @@ public interface FirstOrderFieldIntegrator<T extends RealFieldElement<T>> {
      * @param convergence convergence threshold in the event time search
      * @param maxIterationCount upper limit of the iteration count in
      * the event time search events.
-     * @see #addEventHandler(FieldEventHandler, double, double, int,
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int,
      * org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver)
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      */
-    void addEventHandler(FieldEventHandler<T>  handler, double maxCheckInterval,
+    void addEventHandler(FieldODEEventHandler<T>  handler, double maxCheckInterval,
                          double convergence, int maxIterationCount);
 
     /** Add an event handler to the integrator.
@@ -96,37 +96,37 @@ public interface FirstOrderFieldIntegrator<T extends RealFieldElement<T>> {
      * @param maxIterationCount upper limit of the iteration count in
      * the event time search events.
      * @param solver solver to use to locate the event
-     * @see #addEventHandler(FieldEventHandler, double, double, int)
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int)
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      */
-    void addEventHandler(FieldEventHandler<T>  handler, double maxCheckInterval,
+    void addEventHandler(FieldODEEventHandler<T>  handler, double maxCheckInterval,
                          double convergence, int maxIterationCount,
                          BracketedRealFieldUnivariateSolver<T> solver);
 
     /** Get all the event handlers that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers
-     * @see #addEventHandler(FieldEventHandler, double, double, int)
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int)
      * @see #clearEventHandlers()
      */
-    Collection<FieldEventHandler<T> > getEventHandlers();
+    Collection<FieldODEEventHandler<T> > getEventHandlers();
 
     /** Remove all the event handlers that have been added to the integrator.
-     * @see #addEventHandler(FieldEventHandler, double, double, int)
+     * @see #addEventHandler(FieldODEEventHandler, double, double, int)
      * @see #getEventHandlers()
      */
     void clearEventHandlers();
 
-    /** Get the current value of the step start time t<sub>i</sub>.
+    /** Get the state at step start time t<sub>i</sub>.
      * <p>This method can be called during integration (typically by
      * the object implementing the {@link FirstOrderDifferentialEquations
      * differential equations} problem) if the value of the current step that
      * is attempted is needed.</p>
      * <p>The result is undefined if the method is called outside of
      * calls to <code>integrate</code>.</p>
-     * @return current value of the state at step start time t<sub>i</sub>
+     * @return state at step start time t<sub>i</sub>
      */
-    FieldODEStateAndDerivative<T> getCurrentStepStart();
+    FieldODEStateAndDerivative<T> getStepStart();
 
     /** Get the current signed value of the integration stepsize.
      * <p>This method can be called during integration (typically by
@@ -174,7 +174,7 @@ public interface FirstOrderFieldIntegrator<T extends RealFieldElement<T>> {
      * (can be set to a value smaller than {@code t0} for backward integration)
      * @return final state, its time will be the same as {@code finalTime} if
      * integration reached its target, but may be different if some {@link
-     * org.hipparchus.ode.events.FieldEventHandler} stops it at some point.
+     * org.hipparchus.ode.events.FieldODEEventHandler} stops it at some point.
      * @exception MathIllegalArgumentException if integration step is too small
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed

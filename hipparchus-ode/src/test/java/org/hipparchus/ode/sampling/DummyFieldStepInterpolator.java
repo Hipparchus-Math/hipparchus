@@ -22,7 +22,7 @@ import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 
 public class DummyFieldStepInterpolator<T extends RealFieldElement<T>>
-    extends AbstractFieldStepInterpolator<T> {
+    extends AbstractFieldODEStateInterpolator<T> {
 
     public DummyFieldStepInterpolator(final boolean forward,
                                       final FieldODEStateAndDerivative<T> globalPreviousState,
@@ -34,7 +34,7 @@ public class DummyFieldStepInterpolator<T extends RealFieldElement<T>>
     }
 
     @Override
-    protected AbstractFieldStepInterpolator<T> create(final boolean newForward,
+    protected AbstractFieldODEStateInterpolator<T> create(final boolean newForward,
                                                       final FieldODEStateAndDerivative<T> newGlobalPreviousState,
                                                       final FieldODEStateAndDerivative<T> newGlobalCurrentState,
                                                       final FieldODEStateAndDerivative<T> newSoftPreviousState,

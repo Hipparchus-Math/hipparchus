@@ -24,8 +24,8 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.sampling.FieldStepHandler;
-import org.hipparchus.ode.sampling.FieldStepInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
+import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -71,13 +71,13 @@ import org.hipparchus.util.FastMath;
  * org.hipparchus.ode.nonstiff.AdaptiveStepsizeFieldIntegrator adaptive
  * step size integrators}).</p>
  *
- * @see FieldStepHandler
- * @see FieldStepInterpolator
+ * @see FieldODEStepHandler
+ * @see FieldODEStateInterpolator
  * @param <T> the type of the field elements
  */
 
-public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
-    implements FieldStepHandler<T> {
+public class FieldDenseOutputModel<T extends RealFieldElement<T>>
+    implements FieldODEStepHandler<T> {
 
     /** Initial integration time. */
     private T initialTime;
@@ -92,13 +92,13 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
     private int index;
 
     /** Steps table. */
-    private List<FieldStepInterpolator<T>> steps;
+    private List<FieldODEStateInterpolator<T>> steps;
 
     /** Simple constructor.
      * Build an empty continuous output model.
      */
-    public ContinuousOutputFieldModel() {
-        steps       = new ArrayList<FieldStepInterpolator<T>>();
+    public FieldDenseOutputModel() {
+        steps       = new ArrayList<FieldODEStateInterpolator<T>>();
         initialTime = null;
         finalTime   = null;
         forward     = true;
@@ -115,7 +115,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * during step finalization
      */
-    public void append(final ContinuousOutputFieldModel<T> model)
+    public void append(final FieldDenseOutputModel<T> model)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         if (model.steps.size() == 0) {
@@ -140,7 +140,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
                 throw new MathIllegalArgumentException(LocalizedODEFormats.PROPAGATION_DIRECTION_MISMATCH);
             }
 
-            final FieldStepInterpolator<T> lastInterpolator = steps.get(index);
+            final FieldODEStateInterpolator<T> lastInterpolator = steps.get(index);
             final T current  = lastInterpolator.getCurrentState().getTime();
             final T previous = lastInterpolator.getPreviousState().getTime();
             final T step = current.subtract(previous);
@@ -152,7 +152,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
 
         }
 
-        for (FieldStepInterpolator<T> interpolator : model.steps) {
+        for (FieldODEStateInterpolator<T> interpolator : model.steps) {
             steps.add(interpolator);
         }
 
@@ -192,7 +192,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * during step finalization
      */
-    public void handleStep(final FieldStepInterpolator<T> interpolator, final boolean isLast)
+    public void handleStep(final FieldODEStateInterpolator<T> interpolator, final boolean isLast)
         throws MathIllegalStateException {
 
         if (steps.size() == 0) {
@@ -234,11 +234,11 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
 
         // initialize the search with the complete steps table
         int iMin = 0;
-        final FieldStepInterpolator<T> sMin = steps.get(iMin);
+        final FieldODEStateInterpolator<T> sMin = steps.get(iMin);
         T tMin = sMin.getPreviousState().getTime().add(sMin.getCurrentState().getTime()).multiply(0.5);
 
         int iMax = steps.size() - 1;
-        final FieldStepInterpolator<T> sMax = steps.get(iMax);
+        final FieldODEStateInterpolator<T> sMax = steps.get(iMax);
         T tMax = sMax.getPreviousState().getTime().add(sMax.getCurrentState().getTime()).multiply(0.5);
 
         // handle points outside of the integration interval
@@ -256,7 +256,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
         while (iMax - iMin > 5) {
 
             // use the last estimated index as the splitting index
-            final FieldStepInterpolator<T> si = steps.get(index);
+            final FieldODEStateInterpolator<T> si = steps.get(index);
             final int location = locatePoint(time, si);
             if (location < 0) {
                 iMax = index;
@@ -271,7 +271,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
 
             // compute a new estimate of the index in the reduced table slice
             final int iMed = (iMin + iMax) / 2;
-            final FieldStepInterpolator<T> sMed = steps.get(iMed);
+            final FieldODEStateInterpolator<T> sMed = steps.get(iMed);
             final T tMed = sMed.getPreviousState().getTime().add(sMed.getCurrentState().getTime()).multiply(0.5);
 
             if (tMed.subtract(tMin).abs().subtract(1.0e-6).getReal() < 0 ||
@@ -323,7 +323,7 @@ public class ContinuousOutputFieldModel<T extends RealFieldElement<T>>
      * the interval, and +1 if it is after the interval, according to
      * the interval direction
      */
-    private int locatePoint(final T time, final FieldStepInterpolator<T> interval) {
+    private int locatePoint(final T time, final FieldODEStateInterpolator<T> interval) {
         if (forward) {
             if (time.subtract(interval.getPreviousState().getTime()).getReal() < 0) {
                 return -1;

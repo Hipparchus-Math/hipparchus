@@ -21,9 +21,9 @@ import org.hipparchus.RealFieldElement;
 
 /** Container for time, main and secondary state vectors as well as their derivatives.
 
- * @see FirstOrderFieldDifferentialEquations
- * @see FieldSecondaryEquations
- * @see FirstOrderFieldIntegrator
+ * @see FieldOrdinaryDifferentialEquation
+ * @see FieldSecondaryODE
+ * @see FieldODEIntegrator
  * @param <T> the type of the field elements
  */
 
@@ -70,7 +70,7 @@ public class FieldODEStateAndDerivative<T extends RealFieldElement<T>> extends F
 
     /** Get derivative of the secondary state at time.
      * @param index index of the secondary set as returned
-     * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryEquations)}
+     * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryODE)}
      * (beware index 0 corresponds to main state, additional states start at 1)
      * @return derivative of the secondary state at time
      */

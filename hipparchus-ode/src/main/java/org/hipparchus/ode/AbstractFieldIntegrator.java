@@ -32,10 +32,10 @@ import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.events.FieldEventHandler;
+import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.ode.events.FieldEventState;
-import org.hipparchus.ode.sampling.AbstractFieldStepInterpolator;
-import org.hipparchus.ode.sampling.FieldStepHandler;
+import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Incrementor;
 
@@ -43,7 +43,7 @@ import org.hipparchus.util.Incrementor;
  * Base class managing common boilerplate for all integrators.
  * @param <T> the type of the field elements
  */
-public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> implements FirstOrderFieldIntegrator<T> {
+public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> implements FieldODEIntegrator<T> {
 
     /** Default relative accuracy. */
     private static final double DEFAULT_RELATIVE_ACCURACY = 1e-14;
@@ -52,7 +52,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     private static final double DEFAULT_FUNCTION_VALUE_ACCURACY = 1e-15;
 
     /** Step handler. */
-    private Collection<FieldStepHandler<T>> stepHandlers;
+    private Collection<FieldODEStepHandler<T>> stepHandlers;
 
     /** Current step start. */
     private FieldODEStateAndDerivative<T> stepStart;
@@ -91,7 +91,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     protected AbstractFieldIntegrator(final Field<T> field, final String name) {
         this.field        = field;
         this.name         = name;
-        stepHandlers      = new ArrayList<FieldStepHandler<T>>();
+        stepHandlers      = new ArrayList<FieldODEStepHandler<T>>();
         stepStart         = null;
         stepSize          = null;
         eventsStates      = new ArrayList<FieldEventState<T>>();
@@ -114,13 +114,13 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
 
     /** {@inheritDoc} */
     @Override
-    public void addStepHandler(final FieldStepHandler<T> handler) {
+    public void addStepHandler(final FieldODEStepHandler<T> handler) {
         stepHandlers.add(handler);
     }
 
     /** {@inheritDoc} */
     @Override
-    public Collection<FieldStepHandler<T>> getStepHandlers() {
+    public Collection<FieldODEStepHandler<T>> getStepHandlers() {
         return Collections.unmodifiableCollection(stepHandlers);
     }
 
@@ -132,7 +132,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
 
     /** {@inheritDoc} */
     @Override
-    public void addEventHandler(final FieldEventHandler<T> handler,
+    public void addEventHandler(final FieldODEEventHandler<T> handler,
                                 final double maxCheckInterval,
                                 final double convergence,
                                 final int maxIterationCount) {
@@ -146,7 +146,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
 
     /** {@inheritDoc} */
     @Override
-    public void addEventHandler(final FieldEventHandler<T> handler,
+    public void addEventHandler(final FieldODEEventHandler<T> handler,
                                 final double maxCheckInterval,
                                 final double convergence,
                                 final int maxIterationCount,
@@ -157,8 +157,8 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
 
     /** {@inheritDoc} */
     @Override
-    public Collection<FieldEventHandler<T>> getEventHandlers() {
-        final List<FieldEventHandler<T>> list = new ArrayList<FieldEventHandler<T>>(eventsStates.size());
+    public Collection<FieldODEEventHandler<T>> getEventHandlers() {
+        final List<FieldODEEventHandler<T>> list = new ArrayList<FieldODEEventHandler<T>>(eventsStates.size());
         for (FieldEventState<T> state : eventsStates) {
             list.add(state.getEventHandler());
         }
@@ -169,12 +169,6 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     @Override
     public void clearEventHandlers() {
         eventsStates.clear();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public FieldODEStateAndDerivative<T> getCurrentStepStart() {
-        return stepStart;
     }
 
     /** {@inheritDoc} */
@@ -227,7 +221,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
         }
 
         // initialize step handlers
-        for (FieldStepHandler<T> handler : stepHandlers) {
+        for (FieldODEStepHandler<T> handler : stepHandlers) {
             handler.init(state0, t);
         }
 
@@ -286,7 +280,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
      * @exception MathIllegalArgumentException if the location of an event cannot be bracketed
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
-    protected FieldODEStateAndDerivative<T> acceptStep(final AbstractFieldStepInterpolator<T> interpolator,
+    protected FieldODEStateAndDerivative<T> acceptStep(final AbstractFieldODEStateInterpolator<T> interpolator,
                                                        final T tEnd)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
@@ -320,7 +314,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
                 }
             }
 
-            AbstractFieldStepInterpolator<T> restricted = interpolator;
+            AbstractFieldODEStateInterpolator<T> restricted = interpolator;
             while (!occurringEvents.isEmpty()) {
 
                 // handle the chronologically first event
@@ -341,7 +335,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
                 }
 
                 // handle the first part of the step, up to the event
-                for (final FieldStepHandler<T> handler : stepHandlers) {
+                for (final FieldODEStepHandler<T> handler : stepHandlers) {
                     handler.handleStep(restricted, isLastStep);
                 }
 
@@ -350,18 +344,15 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
                     return eventState;
                 }
 
-                FieldODEState<T> newState = null;
                 resetOccurred = false;
-                for (final FieldEventState<T> state : eventsStates) {
-                    newState = state.reset(eventState);
-                    if (newState != null) {
-                        // some event handler has triggered changes that
-                        // invalidate the derivatives, we need to recompute them
-                        final T[] y    = equations.getMapper().mapState(newState);
-                        final T[] yDot = computeDerivatives(newState.getTime(), y);
-                        resetOccurred = true;
-                        return equations.getMapper().mapStateAndDerivative(newState.getTime(), y, yDot);
-                    }
+                final FieldODEState<T> newState = currentEvent.reset(eventState);
+                if (newState != null) {
+                    // some event handler has triggered changes that
+                    // invalidate the derivatives, we need to recompute them
+                    final T[] y    = equations.getMapper().mapState(newState);
+                    final T[] yDot = computeDerivatives(newState.getTime(), y);
+                    resetOccurred = true;
+                    return equations.getMapper().mapStateAndDerivative(newState.getTime(), y, yDot);
                 }
 
                 // prepare handling of the remaining part of the step
@@ -384,7 +375,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
             isLastStep = isLastStep || currentState.getTime().subtract(tEnd).abs().getReal() <= FastMath.ulp(tEnd.getReal());
 
             // handle the remaining part of the step, after all events if any
-            for (FieldStepHandler<T> handler : stepHandlers) {
+            for (FieldODEStepHandler<T> handler : stepHandlers) {
                 handler.handleStep(restricted, isLastStep);
             }
 
@@ -393,18 +384,18 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
     }
 
     /** Check the integration span.
-     * @param eqn set of differential equations
+     * @param initialState initial state
      * @param t target time for the integration
      * @exception MathIllegalArgumentException if integration span is too small
      * @exception MathIllegalArgumentException if adaptive step size integrators
      * tolerance arrays dimensions are not compatible with equations settings
      */
-    protected void sanityChecks(final FieldODEState<T> eqn, final T t)
+    protected void sanityChecks(final FieldODEState<T> initialState, final T t)
         throws MathIllegalArgumentException {
 
-        final double threshold = 1000 * FastMath.ulp(FastMath.max(FastMath.abs(eqn.getTime().getReal()),
+        final double threshold = 1000 * FastMath.ulp(FastMath.max(FastMath.abs(initialState.getTime().getReal()),
                                                                   FastMath.abs(t.getReal())));
-        final double dt = eqn.getTime().subtract(t).abs().getReal();
+        final double dt = initialState.getTime().subtract(t).abs().getReal();
         if (dt <= threshold) {
             throw new MathIllegalArgumentException(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL,
                                                    dt, threshold, false);
@@ -439,10 +430,9 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
         this.stepStart = stepStart;
     }
 
-    /** Get current step start.
-     * @return current step start
-     */
-    protected FieldODEStateAndDerivative<T> getStepStart() {
+    /**  {@inheritDoc} */
+    @Override
+    public FieldODEStateAndDerivative<T> getStepStart() {
         return stepStart;
     }
 

@@ -44,10 +44,10 @@ public class TestFieldProblem1<T extends RealFieldElement<T>>
      * @param field field to which elements belong
      */
     public TestFieldProblem1(Field<T> field) {
-        super(field);
-        setInitialConditions(convert(0.0), convert(1.0, 0.1));
-        setFinalConditions(convert(4.0));
-        setErrorScale(convert(1.0, 1.0));
+        super(convert(field, 0.0),
+              convert(field, 1.0, 0.1),
+              convert(field, 4.0),
+              convert(field, 1.0, 1.0));
     }
 
     @Override

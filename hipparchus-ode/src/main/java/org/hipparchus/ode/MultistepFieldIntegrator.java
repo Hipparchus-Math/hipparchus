@@ -24,8 +24,8 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.ode.nonstiff.AdaptiveStepsizeFieldIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
-import org.hipparchus.ode.sampling.FieldStepHandler;
-import org.hipparchus.ode.sampling.FieldStepInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
+import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -72,7 +72,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
     protected Array2DRowFieldMatrix<T> nordsieck;
 
     /** Starter integrator. */
-    private FirstOrderFieldIntegrator<T> starter;
+    private FieldODEIntegrator<T> starter;
 
     /** Number of steps of the multistep method (excluding the one being computed). */
     private final int nSteps;
@@ -182,7 +182,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
      * Get the starter integrator.
      * @return starter integrator
      */
-    public FirstOrderFieldIntegrator<T> getStarterIntegrator() {
+    public FieldODEIntegrator<T> getStarterIntegrator() {
         return starter;
     }
 
@@ -193,7 +193,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
      * user configuration for these elements will be cleared before use.</p>
      * @param starterIntegrator starter integrator
      */
-    public void setStarterIntegrator(FirstOrderFieldIntegrator<T> starterIntegrator) {
+    public void setStarterIntegrator(FieldODEIntegrator<T> starterIntegrator) {
         this.starter = starterIntegrator;
     }
 
@@ -218,9 +218,8 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
     protected void start(final FieldExpandableODE<T> equations, final FieldODEState<T> initialState, final T t)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        // make sure NO user event nor user step handler is triggered,
-        // this is the task of the top level integrator, not the task
-        // of the starter integrator
+        // make sure NO user events nor user step handlers are triggered,
+        // this is the task of the top level integrator, not the task of the starter integrator
         starter.clearEventHandlers();
         starter.clearStepHandlers();
 
@@ -335,7 +334,6 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
 
     }
 
-
     /** Compute step grow/shrink factor according to normalized error.
      * @param error normalized error of the current step
      * @return grow/shrink factor for next step
@@ -348,7 +346,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
 
     /** Specialized step handler storing the first step.
      */
-    private class FieldNordsieckInitializer implements FieldStepHandler<T> {
+    private class FieldNordsieckInitializer implements FieldODEStepHandler<T> {
 
         /** Equation mapper. */
         private final FieldEquationsMapper<T> mapper;
@@ -382,7 +380,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
 
         /** {@inheritDoc} */
         @Override
-        public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast)
+        public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast)
             throws MathIllegalStateException {
 
 

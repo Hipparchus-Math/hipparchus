@@ -50,17 +50,21 @@ extends TestFieldProblemAbstract<T> {
      * @param field field to which elements belong
      * @param e eccentricity
      */
-    public TestFieldProblem3(Field<T> field, T e) {
-        super(field);
+    public TestFieldProblem3(T e) {
+        super(convert(e.getField(), 0.0),
+              createY0(e),
+              convert(e.getField(), 20.0),
+              convert(e.getField(), 1.0, 1.0, 1.0, 1.0));
         this.e = e;
-        T[] y0 = MathArrays.buildArray(field, 4);
+    }
+
+    private static <T extends RealFieldElement<T>> T[] createY0(final T e) {
+        T[] y0 = MathArrays.buildArray(e.getField(), 4);
         y0[0] = e.subtract(1).negate();
-        y0[1] = field.getZero();
-        y0[2] = field.getZero();
+        y0[1] = e.getField().getZero();
+        y0[2] = e.getField().getZero();
         y0[3] = e.add(1).divide(y0[0]).sqrt();
-        setInitialConditions(convert(0.0), y0);
-        setFinalConditions(convert(20.0));
-        setErrorScale(convert(1.0, 1.0, 1.0, 1.0));
+        return y0;
     }
 
     /**
@@ -68,7 +72,7 @@ extends TestFieldProblemAbstract<T> {
      * @param field field to which elements belong
      */
     public TestFieldProblem3(Field<T> field) {
-        this(field, field.getZero().add(0.1));
+        this(field.getZero().add(0.1));
     }
 
     @Override
@@ -97,8 +101,8 @@ extends TestFieldProblemAbstract<T> {
 
         // solve Kepler's equation
         T E = t;
-        T d = convert(0);
-        T corr = convert(999.0);
+        T d = convert(t.getField(), 0);
+        T corr = convert(t.getField(), 999.0);
         for (int i = 0; (i < 50) && (corr.abs().getReal() > 1.0e-12); ++i) {
             T f2  = e.multiply(E.sin());
             T f0  = d.subtract(f2);

@@ -27,7 +27,7 @@ import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
+import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -103,8 +103,8 @@ public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
      * @return external weights for the high order method from Butcher array
      */
     protected abstract RungeKuttaFieldStepInterpolator<T> createInterpolator(boolean forward, T[][] yDotK,
-                                                                             final FieldODEStateAndDerivative<T> globalPreviousState,
-                                                                             final FieldODEStateAndDerivative<T> globalCurrentState,
+                                                                             FieldODEStateAndDerivative<T> globalPreviousState,
+                                                                             FieldODEStateAndDerivative<T> globalCurrentState,
                                                                              FieldEquationsMapper<T> mapper);
 
     /** {@inheritDoc} */
@@ -226,7 +226,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
      * (can be set to a value smaller than {@code t0} for backward integration)
      * @return state vector at {@code t}
      */
-    public T[] singleStep(final FirstOrderFieldDifferentialEquations<T> equations,
+    public T[] singleStep(final FieldOrdinaryDifferentialEquation<T> equations,
                           final T t0, final T[] y0, final T t) {
 
         // create some internal working arrays

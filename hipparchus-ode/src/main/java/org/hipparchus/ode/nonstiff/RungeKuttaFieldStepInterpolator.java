@@ -21,7 +21,7 @@ import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.sampling.AbstractFieldStepInterpolator;
+import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
 import org.hipparchus.util.MathArrays;
 
 /** This class represents an interpolator over the last step during an
@@ -34,7 +34,7 @@ import org.hipparchus.util.MathArrays;
  */
 
 abstract class RungeKuttaFieldStepInterpolator<T extends RealFieldElement<T>>
-    extends AbstractFieldStepInterpolator<T> {
+    extends AbstractFieldODEStateInterpolator<T> {
 
     /** Field to which the time and state vector elements belong. */
     private final Field<T> field;

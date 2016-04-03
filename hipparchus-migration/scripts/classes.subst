@@ -43,3 +43,15 @@ UnboundedSolutionException             MathIllegalStateException
 UnknownParameterException              MathIllegalArgumentException
 ZeroException                          MathIllegalArgumentException
 PivotingStrategyInterface              PivotingStrategy
+FirstOrderFieldDifferentialEquations   FieldOrdinaryDifferentialEquation
+FieldSecondaryEquations                FieldSecondaryODE
+FieldStepInterpolator                  FieldODEEventHandler
+FieldStepHandler                       FieldODEStepHandler
+FieldFixedStepHandler                  FieldFODEFixedStepHandler
+FieldEventHandler                      FieldODEStateInterpolator
+ContinuousOutputFieldModel             FieldDenseOutputModel
+AbstractFieldStepInterpolator          AbstractFieldODEStateInterpolator
+FirstOrderFieldIntegrator              FieldODEIntegrator
+FirstOrderIntegrator                   ODEIntegrator
+ExpandableStatefulODE                  ExpandableODE
+AbstractStepInterpolator               AbstractODEStateInterpolator

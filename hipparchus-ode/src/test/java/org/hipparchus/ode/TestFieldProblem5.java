@@ -19,6 +19,7 @@ package org.hipparchus.ode;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.util.MathArrays;
 
 /**
  * This class is used in the junit tests for the ODE integrators.
@@ -27,15 +28,43 @@ import org.hipparchus.RealFieldElement;
  * @param <T> the type of the field elements
  */
 public class TestFieldProblem5<T extends RealFieldElement<T>>
-    extends TestFieldProblem1<T> {
+    extends TestFieldProblemAbstract<T> {
 
     /**
      * Simple constructor.
      * @param field field to which elements belong
      */
     public TestFieldProblem5(Field<T> field) {
-        super(field);
-        setFinalConditions(getInitialState().getTime().multiply(2).subtract(getFinalTime()));
+        super(convert(field, 0.0),
+              convert(field, 1.0, 0.1),
+              convert(field, -4.0),
+              convert(field, 1.0, 1.0));
+    }
+
+    @Override
+    public T[] doComputeDerivatives(T t, T[] y) {
+
+        final T[] yDot = MathArrays.buildArray(getField(), getDimension());
+
+        // compute the derivatives
+        for (int i = 0; i < getDimension(); ++i) {
+            yDot[i] = y[i].negate();
+        }
+
+        return yDot;
+
+    }
+
+    @Override
+    public T[] computeTheoreticalState(T t) {
+        final FieldODEState<T> s0 = getInitialState();
+        final T[] y0 = s0.getState();
+        final T[] y = MathArrays.buildArray(getField(), getDimension());
+        T c = s0.getTime().subtract(t).exp();
+        for (int i = 0; i < getDimension(); ++i) {
+            y[i] = c.multiply(y0[i]);
+        }
+        return y;
     }
 
 }

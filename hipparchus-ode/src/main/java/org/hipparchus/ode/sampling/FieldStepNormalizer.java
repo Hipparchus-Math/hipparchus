@@ -24,8 +24,8 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
 /**
- * This class wraps an object implementing {@link FieldFixedStepHandler}
- * into a {@link FieldStepHandler}.
+ * This class wraps an object implementing {@link FieldODEFixedStepHandler}
+ * into a {@link FieldODEStepHandler}.
 
  * <p>This wrapper allows to use fixed step handlers with general
  * integrators which cannot guaranty their integration steps will
@@ -33,8 +33,8 @@ import org.hipparchus.util.Precision;
  * handlers.</p>
  *
  * <p>The stepsize used is selected at construction time. The {@link
- * FieldFixedStepHandler#handleStep handleStep} method of the underlying
- * {@link FieldFixedStepHandler} object is called at normalized times. The
+ * FieldODEFixedStepHandler#handleStep handleStep} method of the underlying
+ * {@link FieldODEFixedStepHandler} object is called at normalized times. The
  * normalized times can be influenced by the {@link StepNormalizerMode} and
  * {@link StepNormalizerBounds}.</p>
  *
@@ -84,19 +84,19 @@ import org.hipparchus.util.Precision;
  * </p>
  *
  * @param <T> the type of the field elements
- * @see FieldStepHandler
- * @see FieldFixedStepHandler
+ * @see FieldODEStepHandler
+ * @see FieldODEFixedStepHandler
  * @see StepNormalizerMode
  * @see StepNormalizerBounds
  */
 
-public class FieldStepNormalizer<T extends RealFieldElement<T>> implements FieldStepHandler<T> {
+public class FieldStepNormalizer<T extends RealFieldElement<T>> implements FieldODEStepHandler<T> {
 
     /** Fixed time step. */
     private double h;
 
     /** Underlying step handler. */
-    private final FieldFixedStepHandler<T> handler;
+    private final FieldODEFixedStepHandler<T> handler;
 
     /** First step state. */
     private FieldODEStateAndDerivative<T> first;
@@ -119,7 +119,7 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * @param h fixed time step (sign is not used)
      * @param handler fixed time step handler to wrap
      */
-    public FieldStepNormalizer(final double h, final FieldFixedStepHandler<T> handler) {
+    public FieldStepNormalizer(final double h, final FieldODEFixedStepHandler<T> handler) {
         this(h, handler, StepNormalizerMode.INCREMENT,
              StepNormalizerBounds.FIRST);
     }
@@ -130,7 +130,7 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * @param handler fixed time step handler to wrap
      * @param mode step normalizer mode to use
      */
-    public FieldStepNormalizer(final double h, final FieldFixedStepHandler<T> handler,
+    public FieldStepNormalizer(final double h, final FieldODEFixedStepHandler<T> handler,
                                final StepNormalizerMode mode) {
         this(h, handler, mode, StepNormalizerBounds.FIRST);
     }
@@ -141,7 +141,7 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * @param handler fixed time step handler to wrap
      * @param bounds step normalizer bounds setting to use
      */
-    public FieldStepNormalizer(final double h, final FieldFixedStepHandler<T> handler,
+    public FieldStepNormalizer(final double h, final FieldODEFixedStepHandler<T> handler,
                                final StepNormalizerBounds bounds) {
         this(h, handler, StepNormalizerMode.INCREMENT, bounds);
     }
@@ -152,7 +152,7 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * @param mode step normalizer mode to use
      * @param bounds step normalizer bounds setting to use
      */
-    public FieldStepNormalizer(final double h, final FieldFixedStepHandler<T> handler,
+    public FieldStepNormalizer(final double h, final FieldODEFixedStepHandler<T> handler,
                                final StepNormalizerMode mode, final StepNormalizerBounds bounds) {
         this.h       = FastMath.abs(h);
         this.handler = handler;
@@ -189,7 +189,7 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
-    public void handleStep(final FieldStepInterpolator<T> interpolator, final boolean isLast)
+    public void handleStep(final FieldODEStateInterpolator<T> interpolator, final boolean isLast)
         throws MathIllegalStateException {
         // The first time, update the last state with the start information.
         if (last == null) {
@@ -250,7 +250,7 @@ public class FieldStepNormalizer<T extends RealFieldElement<T>> implements Field
      * @return value indicating whether the next normalized time is in the
      * current step
      */
-    private boolean isNextInStep(final T nextTime, final FieldStepInterpolator<T> interpolator) {
+    private boolean isNextInStep(final T nextTime, final FieldODEStateInterpolator<T> interpolator) {
         return forward ?
                nextTime.getReal() <= interpolator.getCurrentState().getTime().getReal() :
                nextTime.getReal() >= interpolator.getCurrentState().getTime().getReal();

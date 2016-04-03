@@ -28,18 +28,18 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * in getting the solution of an ordinary differential equation at
  * fixed time steps. Objects implementing this interface should be
  * wrapped within an instance of {@link FieldStepNormalizer} that itself
- * is used as the general {@link FieldStepHandler} by the integrator. The
+ * is used as the general {@link FieldODEStepHandler} by the integrator. The
  * {@link FieldStepNormalizer} object is called according to the integrator
  * internal algorithms and it calls objects implementing this
  * interface as necessary at fixed time steps.</p>
  *
- * @see FieldStepHandler
+ * @see FieldODEStepHandler
  * @see FieldStepNormalizer
- * @see FieldStepInterpolator
+ * @see FieldODEStateInterpolator
  * @param <T> the type of the field elements
  */
 
-public interface FieldFixedStepHandler<T extends RealFieldElement<T>> {
+public interface FieldODEFixedStepHandler<T extends RealFieldElement<T>> {
 
     /** Initialize step handler at the start of an ODE integration.
      * <p>
@@ -47,10 +47,15 @@ public interface FieldFixedStepHandler<T extends RealFieldElement<T>> {
      * may be used by the step handler to initialize some internal data
      * if needed.
      * </p>
+     * <p>
+     * The default implementation does nothing.
+     * </p>
      * @param initialState initial time, state vector and derivative
      * @param finalTime target time for the integration
      */
-    void init(FieldODEStateAndDerivative<T> initialState, T finalTime);
+    default void init(FieldODEStateAndDerivative<T> initialState, T finalTime) {
+        // nothing by default
+    }
 
     /**
      * Handle the last accepted step

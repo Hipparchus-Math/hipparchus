@@ -19,8 +19,8 @@ package org.hipparchus.ode;
 
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.sampling.FieldStepHandler;
-import org.hipparchus.ode.sampling.FieldStepInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStepHandler;
+import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -29,7 +29,7 @@ import org.hipparchus.util.MathUtils;
  * @param <T> the type of the field elements
  */
 public class TestFieldProblemHandler<T extends RealFieldElement<T>>
-    implements FieldStepHandler<T> {
+    implements FieldODEStepHandler<T> {
 
     /** Associated problem. */
     private TestFieldProblemAbstract<T> problem;
@@ -45,7 +45,7 @@ public class TestFieldProblemHandler<T extends RealFieldElement<T>>
     private T lastTime;
 
     /** ODE solver used. */
-    private FirstOrderFieldIntegrator<T> integrator;
+    private FieldODEIntegrator<T> integrator;
 
     /** Expected start for step. */
     private T expectedStepStart;
@@ -55,7 +55,7 @@ public class TestFieldProblemHandler<T extends RealFieldElement<T>>
      * @param problem problem for which steps should be handled
      * @param integrator ODE solver used
      */
-    public TestFieldProblemHandler(TestFieldProblemAbstract<T> problem, FirstOrderFieldIntegrator<T> integrator) {
+    public TestFieldProblemHandler(TestFieldProblemAbstract<T> problem, FieldODEIntegrator<T> integrator) {
         this.problem      = problem;
         this.integrator   = integrator;
         maxValueError     = problem.getField().getZero();
@@ -71,9 +71,9 @@ public class TestFieldProblemHandler<T extends RealFieldElement<T>>
         expectedStepStart = null;
     }
 
-    public void handleStep(FieldStepInterpolator<T> interpolator, boolean isLast) throws MathIllegalStateException {
+    public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) throws MathIllegalStateException {
 
-        T start = integrator.getCurrentStepStart().getTime();
+        T start = integrator.getStepStart().getTime();
         if (start.subtract(problem.getInitialState().getTime()).divide(integrator.getCurrentSignedStepsize()).abs().getReal() > 0.001) {
             // multistep integrators do not handle the first steps themselves
             // so we have to make sure the integrator we look at has really started its work

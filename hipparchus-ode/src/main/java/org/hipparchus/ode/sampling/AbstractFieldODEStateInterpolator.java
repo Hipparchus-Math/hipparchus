@@ -30,14 +30,14 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * retrieve the state vector at intermediate times between the
  * previous and the current grid points (dense output).</p>
  *
- * @see org.hipparchus.ode.FirstOrderFieldIntegrator
+ * @see org.hipparchus.ode.FieldODEIntegrator
  * @see StepHandler
  *
  * @param <T> the type of the field elements
  */
 
-public abstract class AbstractFieldStepInterpolator<T extends RealFieldElement<T>>
-    implements FieldStepInterpolator<T> {
+public abstract class AbstractFieldODEStateInterpolator<T extends RealFieldElement<T>>
+    implements FieldODEStateInterpolator<T> {
 
     /** Global previous state. */
     private final FieldODEStateAndDerivative<T> globalPreviousState;
@@ -65,12 +65,12 @@ public abstract class AbstractFieldStepInterpolator<T extends RealFieldElement<T
      * @param softCurrentState end of the restricted step
      * @param equationsMapper mapper for ODE equations primary and secondary components
      */
-    protected AbstractFieldStepInterpolator(final boolean isForward,
-                                            final FieldODEStateAndDerivative<T> globalPreviousState,
-                                            final FieldODEStateAndDerivative<T> globalCurrentState,
-                                            final FieldODEStateAndDerivative<T> softPreviousState,
-                                            final FieldODEStateAndDerivative<T> softCurrentState,
-                                            final FieldEquationsMapper<T> equationsMapper) {
+    protected AbstractFieldODEStateInterpolator(final boolean isForward,
+                                                final FieldODEStateAndDerivative<T> globalPreviousState,
+                                                final FieldODEStateAndDerivative<T> globalCurrentState,
+                                                final FieldODEStateAndDerivative<T> softPreviousState,
+                                                final FieldODEStateAndDerivative<T> softCurrentState,
+                                                final FieldEquationsMapper<T> equationsMapper) {
         this.forward             = isForward;
         this.globalPreviousState = globalPreviousState;
         this.globalCurrentState  = globalCurrentState;
@@ -89,8 +89,8 @@ public abstract class AbstractFieldStepInterpolator<T extends RealFieldElement<T
      * @see #getPreviousState()
      * @see #getCurrentState()
      */
-    public AbstractFieldStepInterpolator<T> restrictStep(final FieldODEStateAndDerivative<T> previousState,
-                                                         final FieldODEStateAndDerivative<T> currentState) {
+    public AbstractFieldODEStateInterpolator<T> restrictStep(final FieldODEStateAndDerivative<T> previousState,
+                                                             final FieldODEStateAndDerivative<T> currentState) {
         return create(forward, globalPreviousState, globalCurrentState, previousState, currentState, mapper);
     }
 
@@ -103,12 +103,12 @@ public abstract class AbstractFieldStepInterpolator<T extends RealFieldElement<T
      * @param newMapper equations mapper for the all equations
      * @return a new instance
      */
-    protected abstract AbstractFieldStepInterpolator<T> create(boolean newForward,
-                                                               FieldODEStateAndDerivative<T> newGlobalPreviousState,
-                                                               FieldODEStateAndDerivative<T> newGlobalCurrentState,
-                                                               FieldODEStateAndDerivative<T> newSoftPreviousState,
-                                                               FieldODEStateAndDerivative<T> newSoftCurrentState,
-                                                               FieldEquationsMapper<T> newMapper);
+    protected abstract AbstractFieldODEStateInterpolator<T> create(boolean newForward,
+                                                                   FieldODEStateAndDerivative<T> newGlobalPreviousState,
+                                                                   FieldODEStateAndDerivative<T> newGlobalCurrentState,
+                                                                   FieldODEStateAndDerivative<T> newSoftPreviousState,
+                                                                   FieldODEStateAndDerivative<T> newSoftCurrentState,
+                                                                   FieldEquationsMapper<T> newMapper);
 
     /**
      * Get the previous global grid point state.

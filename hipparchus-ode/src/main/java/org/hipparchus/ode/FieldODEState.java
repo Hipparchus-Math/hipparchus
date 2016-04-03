@@ -23,9 +23,9 @@ import org.hipparchus.util.MathArrays;
 
 /** Container for time, main and secondary state vectors.
 
- * @see FirstOrderFieldDifferentialEquations
- * @see FieldSecondaryEquations
- * @see FirstOrderFieldIntegrator
+ * @see FieldOrdinaryDifferentialEquation
+ * @see FieldSecondaryODE
+ * @see FieldODEIntegrator
  * @see FieldODEStateAndDerivative
  * @param <T> the type of the field elements
  */
@@ -117,7 +117,7 @@ public class FieldODEState<T extends RealFieldElement<T>> {
 
     /** Get secondary state dimension.
      * @param index index of the secondary set as returned
-     * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryEquations)}
+     * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryODE)}
      * (beware index 0 corresponds to main state, additional states start at 1)
      * @return secondary state dimension
      */
@@ -127,12 +127,28 @@ public class FieldODEState<T extends RealFieldElement<T>> {
 
     /** Get secondary state at time.
      * @param index index of the secondary set as returned
-     * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryEquations)}
+     * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryODE)}
      * (beware index 0 corresponds to main state, additional states start at 1)
      * @return secondary state at time
      */
     public T[] getSecondaryState(final int index) {
         return index == 0 ? state.clone() : secondaryState[index - 1].clone();
+    }
+
+    /** Return the dimension of the complete set of equations.
+     * <p>
+     * The complete set of equations correspond to the primary set plus all secondary sets.
+     * </p>
+     * @return dimension of the complete set of equations
+     */
+    public int getTotalDimension() {
+        int dimension = state.length;
+        if (secondaryState != null) {
+            for (final T[] secondary : secondaryState) {
+                dimension += secondary.length;
+            }
+        }
+        return dimension;
     }
 
 }

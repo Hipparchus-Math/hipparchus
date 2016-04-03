@@ -38,12 +38,12 @@ import org.hipparchus.RealFieldElement;
  * of this interface, the classes that implement it are allowed to
  * handle them as they want.</p>
  *
- * @see FirstOrderFieldIntegrator
+ * @see FieldODEIntegrator
  *
  * @param <T> the type of the field elements
  */
 
-public interface FirstOrderFieldDifferentialEquations<T extends RealFieldElement<T>> {
+public interface FieldOrdinaryDifferentialEquation<T extends RealFieldElement<T>> {
 
     /** Get the dimension of the problem.
      * @return dimension of the problem
@@ -56,11 +56,16 @@ public interface FirstOrderFieldDifferentialEquations<T extends RealFieldElement
      * may be used by the equations to initialize some internal data
      * if needed.
      * </p>
+     * <p>
+     * The default implementation does nothing.
+     * </p>
      * @param t0 value of the independent <I>time</I> variable at integration start
      * @param y0 array containing the value of the state vector at integration start
      * @param finalTime target time for the integration
      */
-    void init(T t0, T[] y0, T finalTime);
+    default void init(T t0, T[] y0, T finalTime) {
+        // do nothing by default
+    }
 
     /** Get the current time derivative of the state vector.
      * @param t current value of the independent <I>time</I> variable

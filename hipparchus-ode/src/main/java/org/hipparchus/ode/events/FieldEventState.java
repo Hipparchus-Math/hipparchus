@@ -25,7 +25,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.sampling.FieldStepInterpolator;
+import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
 /** This class handles the state for one {@link EventHandler
@@ -43,7 +43,7 @@ import org.hipparchus.util.FastMath;
 public class FieldEventState<T extends RealFieldElement<T>> {
 
     /** Event handler. */
-    private final FieldEventHandler<T> handler;
+    private final FieldODEEventHandler<T> handler;
 
     /** Maximal time interval between events handler checks. */
     private final double maxCheckInterval;
@@ -96,7 +96,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
      * the event time search
      * @param solver Root-finding algorithm to use to detect state events
      */
-    public FieldEventState(final FieldEventHandler<T> handler, final double maxCheckInterval,
+    public FieldEventState(final FieldODEEventHandler<T> handler, final double maxCheckInterval,
                            final T convergence, final int maxIterationCount,
                            final BracketedRealFieldUnivariateSolver<T> solver) {
         this.handler           = handler;
@@ -120,7 +120,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
     /** Get the underlying event handler.
      * @return underlying event handler
      */
-    public FieldEventHandler<T> getEventHandler() {
+    public FieldODEEventHandler<T> getEventHandler() {
         return handler;
     }
 
@@ -150,7 +150,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
      * @exception MathIllegalStateException if the interpolator throws one because
      * the number of functions evaluations is exceeded
      */
-    public void reinitializeBegin(final FieldStepInterpolator<T> interpolator)
+    public void reinitializeBegin(final FieldODEStateInterpolator<T> interpolator)
         throws MathIllegalStateException {
 
         final FieldODEStateAndDerivative<T> s0 = interpolator.getPreviousState();
@@ -187,7 +187,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
      * the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if the event cannot be bracketed
      */
-    public boolean evaluateStep(final FieldStepInterpolator<T> interpolator)
+    public boolean evaluateStep(final FieldODEStateInterpolator<T> interpolator)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         forward = interpolator.isForward();

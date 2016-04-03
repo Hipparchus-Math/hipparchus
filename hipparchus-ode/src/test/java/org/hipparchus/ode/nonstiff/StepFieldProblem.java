@@ -19,16 +19,16 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
+import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.events.Action;
-import org.hipparchus.ode.events.FieldEventHandler;
+import org.hipparchus.ode.events.FieldODEEventHandler;
 import org.hipparchus.util.MathArrays;
 
 
 public class StepFieldProblem<T extends RealFieldElement<T>>
-    implements FirstOrderFieldDifferentialEquations<T>, FieldEventHandler<T> {
+    implements FieldOrdinaryDifferentialEquation<T>, FieldODEEventHandler<T> {
 
     public StepFieldProblem(Field<T> field, T rateBefore, T rateAfter, T switchTime) {
         this.field      = field;

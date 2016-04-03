@@ -18,16 +18,17 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import java.lang.reflect.InvocationTargetException;
+
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.EquationsMapper;
-import org.hipparchus.ode.ExpandableStatefulODE;
 import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldExpandableODE;
-import org.hipparchus.ode.FirstOrderFieldDifferentialEquations;
+import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
+import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
-import org.hipparchus.ode.sampling.AbstractFieldStepInterpolator;
+import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -103,7 +104,7 @@ public abstract class RungeKuttaFieldStepInterpolatorAbstractTest {
                                                                                      double epsilonSin, double epsilonCos,
                                                                                      double epsilonSinDot, double epsilonCosDot) {
 
-        FirstOrderFieldDifferentialEquations<T> eqn = new SinCos<T>(field);
+        FieldOrdinaryDifferentialEquation<T> eqn = new SinCos<T>(field);
         RungeKuttaFieldStepInterpolator<T> fieldInterpolator =
                         setUpInterpolator(field, eqn, 0.0, new double[] { 0.0, 1.0 }, 0.125);
         RungeKuttaStepInterpolator regularInterpolator = convertInterpolator(fieldInterpolator, eqn);
@@ -123,9 +124,9 @@ public abstract class RungeKuttaFieldStepInterpolatorAbstractTest {
             T[] fieldY    = state.getState();
             T[] fieldYDot = state.getDerivative();
 
-            regularInterpolator.setInterpolatedTime(t.getReal());
-            double[] regularY     = regularInterpolator.getInterpolatedState();
-            double[] regularYDot  = regularInterpolator.getInterpolatedDerivatives();
+            ODEStateAndDerivative regularState = regularInterpolator.getInterpolatedState(t.getReal());
+            double[] regularY     = regularState.getState();
+            double[] regularYDot  = regularState.getDerivative();
 
             maxErrorSin    = FastMath.max(maxErrorSin,    fieldY[0].subtract(regularY[0]).abs().getReal());
             maxErrorCos    = FastMath.max(maxErrorCos,    fieldY[1].subtract(regularY[1]).abs().getReal());
@@ -142,7 +143,7 @@ public abstract class RungeKuttaFieldStepInterpolatorAbstractTest {
 
     private <T extends RealFieldElement<T>>
     RungeKuttaFieldStepInterpolator<T> setUpInterpolator(final Field<T> field,
-                                                         final FirstOrderFieldDifferentialEquations<T> eqn,
+                                                         final FieldOrdinaryDifferentialEquation<T> eqn,
                                                          final double t0, final double[] y0,
                                                          final double t1) {
 
@@ -192,7 +193,7 @@ public abstract class RungeKuttaFieldStepInterpolatorAbstractTest {
 
     private <T extends RealFieldElement<T>>
     RungeKuttaStepInterpolator convertInterpolator(final RungeKuttaFieldStepInterpolator<T> fieldInterpolator,
-                                                   final FirstOrderFieldDifferentialEquations<T> eqn) {
+                                                   final FieldOrdinaryDifferentialEquation<T> eqn) {
 
         RungeKuttaStepInterpolator regularInterpolator = null;
         try {
@@ -201,72 +202,32 @@ public abstract class RungeKuttaFieldStepInterpolatorAbstractTest {
             String integratorName = interpolatorName.replaceAll("Field", "");
             @SuppressWarnings("unchecked")
             Class<RungeKuttaStepInterpolator> clz = (Class<RungeKuttaStepInterpolator>) Class.forName(integratorName);
-            regularInterpolator = clz.newInstance();
 
-            double[][] yDotArray = null;
             java.lang.reflect.Field fYD = RungeKuttaFieldStepInterpolator.class.getDeclaredField("yDotK");
             fYD.setAccessible(true);
             @SuppressWarnings("unchecked")
-            T[][] fieldYDotk = (T[][]) fYD.get(fieldInterpolator);
-            yDotArray = new double[fieldYDotk.length][];
-            for (int i = 0; i < yDotArray.length; ++i) {
-                yDotArray[i] = new double[fieldYDotk[i].length];
-                for (int j = 0; j < yDotArray[i].length; ++j) {
-                    yDotArray[i][j] = fieldYDotk[i][j].getReal();
-                }
-            }
-            double[] y = new double[yDotArray[0].length];
+            final double[][] yDotK = convertArray((T[][]) fYD.get(fieldInterpolator));
 
-            EquationsMapper primaryMapper = null;
-            EquationsMapper[] secondaryMappers = null;
-            java.lang.reflect.Field fMapper = AbstractFieldStepInterpolator.class.getDeclaredField("mapper");
+            java.lang.reflect.Field fMapper = AbstractFieldODEStateInterpolator.class.getDeclaredField("mapper");
             fMapper.setAccessible(true);
             @SuppressWarnings("unchecked")
-            FieldEquationsMapper<T> mapper = (FieldEquationsMapper<T>) fMapper.get(fieldInterpolator);
-            java.lang.reflect.Field fStart = FieldEquationsMapper.class.getDeclaredField("start");
-            fStart.setAccessible(true);
-            int[] start = (int[]) fStart.get(mapper);
-            primaryMapper = new EquationsMapper(start[0], start[1]);
-            secondaryMappers = new EquationsMapper[mapper.getNumberOfEquations() - 1];
-            for (int i = 0; i < secondaryMappers.length; ++i) {
-                secondaryMappers[i] = new EquationsMapper(start[i + 1], start[i + 2]);
-            }
+            EquationsMapper regularMapper = convertMapper((FieldEquationsMapper<T>) fMapper.get(fieldInterpolator));
 
-            AbstractIntegrator dummyIntegrator = new AbstractIntegrator("dummy") {
-                @Override
-                public void integrate(ExpandableStatefulODE equations, double t) {
-                    Assert.fail("this method should not be called");
-                }
-                @Override
-                public void computeDerivatives(final double t, final double[] y, final double[] yDot) {
-                    T fieldT = fieldInterpolator.getCurrentState().getTime().getField().getZero().add(t);
-                    T[] fieldY = MathArrays.buildArray(fieldInterpolator.getCurrentState().getTime().getField(), y.length);
-                    for (int i = 0; i < y.length; ++i) {
-                        fieldY[i] = fieldInterpolator.getCurrentState().getTime().getField().getZero().add(y[i]);
-                    }
-                    T[] fieldYDot = eqn.computeDerivatives(fieldT, fieldY);
-                    for (int i = 0; i < yDot.length; ++i) {
-                        yDot[i] = fieldYDot[i].getReal();
-                    }
-                }
-            };
-            regularInterpolator.reinitialize(dummyIntegrator, y, yDotArray,
-                                             fieldInterpolator.isForward(),
-                                             primaryMapper, secondaryMappers);
-
-            T[] fieldPreviousY = fieldInterpolator.getPreviousState().getState();
-            for (int i = 0; i < y.length; ++i) {
-                y[i] = fieldPreviousY[i].getReal();
-            }
-            regularInterpolator.storeTime(fieldInterpolator.getPreviousState().getTime().getReal());
-
-            regularInterpolator.shift();
-
-            T[] fieldCurrentY = fieldInterpolator.getCurrentState().getState();
-            for (int i = 0; i < y.length; ++i) {
-                y[i] = fieldCurrentY[i].getReal();
-            }
-            regularInterpolator.storeTime(fieldInterpolator.getCurrentState().getTime().getReal());
+            java.lang.reflect.Constructor<RungeKuttaStepInterpolator> regularInterpolatorConstructor =
+                            clz.getDeclaredConstructor(Boolean.TYPE,
+                                                       double[][].class,
+                                                       ODEStateAndDerivative.class,
+                                                       ODEStateAndDerivative.class,
+                                                       ODEStateAndDerivative.class,
+                                                       ODEStateAndDerivative.class,
+                                                       EquationsMapper.class);
+            return regularInterpolatorConstructor.newInstance(fieldInterpolator.isForward(),
+                                                              yDotK,
+                                                              convertODEStateAndDerivative(fieldInterpolator.getGlobalPreviousState()),
+                                                              convertODEStateAndDerivative(fieldInterpolator.getGlobalCurrentState()),
+                                                              convertODEStateAndDerivative(fieldInterpolator.getPreviousState()),
+                                                              convertODEStateAndDerivative(fieldInterpolator.getCurrentState()),
+                                                              regularMapper);
 
         } catch (ClassNotFoundException cnfe) {
             Assert.fail(cnfe.getLocalizedMessage());
@@ -278,13 +239,87 @@ public abstract class RungeKuttaFieldStepInterpolatorAbstractTest {
             Assert.fail(nsfe.getLocalizedMessage());
         } catch (IllegalArgumentException iae) {
             Assert.fail(iae.getLocalizedMessage());
+        } catch (InvocationTargetException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
         }
 
         return regularInterpolator;
 
     }
 
-    private static class SinCos<T extends RealFieldElement<T>> implements FirstOrderFieldDifferentialEquations<T> {
+    private <T extends RealFieldElement<T>>
+    ODEStateAndDerivative convertODEStateAndDerivative(final FieldODEStateAndDerivative<T> s) {
+        final double[][] secondaryStates;
+        final double[][] secondaryDerivatives;
+        if (s.getNumberOfSecondaryStates() == 0) {
+            secondaryStates      = null;
+            secondaryDerivatives = null;
+        } else {
+            secondaryStates      = new double[s.getNumberOfSecondaryStates()][];
+            secondaryDerivatives = new double[s.getNumberOfSecondaryStates()][];
+            for (int i = 0; i < secondaryStates.length; ++i) {
+                secondaryStates[i]      = convertArray(s.getSecondaryState(i));
+                secondaryDerivatives[i] = convertArray(s.getSecondaryDerivative(i));
+            }
+        }
+        return new ODEStateAndDerivative(s.getTime().getReal(),
+                                         convertArray(s.getState()),
+                                         convertArray(s.getDerivative()),
+                                         secondaryStates,
+                                         secondaryDerivatives);
+    }
+
+    private <T extends RealFieldElement<T>> double[][] convertArray(final T[][] fieldArray) {
+        if (fieldArray == null) {
+            return null;
+        }
+        double[][] array = new double[fieldArray.length][];
+        for (int i = 0; i < array.length; ++i) {
+            array[i] = convertArray(fieldArray[i]);
+        }
+        return array;
+    }
+
+    private <T extends RealFieldElement<T>> double[] convertArray(final T[] fieldArray) {
+        if (fieldArray == null) {
+            return null;
+        }
+        double[] array = new double[fieldArray.length];
+        for (int i = 0; i < array.length; ++i) {
+            array[i] = fieldArray[i].getReal();
+        }
+        return array;
+    }
+
+    private <T extends RealFieldElement<T>>
+    EquationsMapper convertMapper(final FieldEquationsMapper<T> fieldmapper)
+        throws NoSuchMethodException, SecurityException, NoSuchFieldException,
+               IllegalArgumentException, IllegalAccessException,
+               InstantiationException, InvocationTargetException {
+        java.lang.reflect.Field fStart = FieldEquationsMapper.class.getDeclaredField("start");
+        fStart.setAccessible(true);
+        int[] start = (int[]) fStart.get(fieldmapper);
+
+        java.lang.reflect.Constructor<EquationsMapper> regularMapperConstructor =
+                        EquationsMapper.class.getDeclaredConstructor(EquationsMapper.class,
+                                                                     Integer.TYPE);
+        regularMapperConstructor.setAccessible(true);
+        EquationsMapper regularMapper = regularMapperConstructor.newInstance(null, start[1]);
+        for (int k = 0; k < fieldmapper.getNumberOfEquations(); ++k) {
+            regularMapper = regularMapperConstructor.newInstance(regularMapper,
+                                                                 start[k + 2] - start[k + 1]);
+        }
+        return regularMapper;
+    }
+
+    private static class SinCos<T extends RealFieldElement<T>> implements FieldOrdinaryDifferentialEquation<T> {
         private final Field<T> field;
         protected SinCos(final Field<T> field) {
             this.field = field;
