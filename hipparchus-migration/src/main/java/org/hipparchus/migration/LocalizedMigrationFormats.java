@@ -45,6 +45,7 @@ public enum LocalizedMigrationFormats implements Localizable {
     // CHECKSTYLE: stop MultipleVariableDeclarations
     // CHECKSTYLE: stop JavadocVariable
 
+    ARGUMENT_OUTSIDE_DOMAIN("Argument {0} outside domain [{1} ; {2}]"),
     ASSYMETRIC_EIGEN_NOT_SUPPORTED("eigen decomposition of assymetric matrices not supported yet"),
     BOBYQA_BOUND_DIFFERENCE_CONDITION("the difference between the upper and lower bound must be larger than twice the initial trust region radius ({0})"),
     CANNOT_CLEAR_STATISTIC_CONSTRUCTED_FROM_EXTERNAL_MOMENTS("statistics constructed from external moments cannot be cleared"),
@@ -70,6 +71,7 @@ public enum LocalizedMigrationFormats implements Localizable {
     MISMATCHED_LOESS_ABSCISSA_ORDINATE_ARRAYS("Loess expects the abscissa and ordinate arrays to be of the same size, but got {0} abscissae and {1} ordinatae"),
     NEGATIVE_BRIGHTNESS_EXPONENT("brightness exponent should be positive or null, but got {0}"),
     NEGATIVE_ELEMENT_AT_2D_INDEX("element ({0}, {1}) is negative: {2}"),
+    NEGATIVE_NUMBER_OF_SUCCESSES("number of successes must be non-negative ({0})"),
     NEGATIVE_NUMBER_OF_TRIALS("number of trials must be non-negative ({0})"),
     NON_POSITIVE_DEFINITE_MATRIX("not positive definite matrix: diagonal element at ({1},{1}) is smaller than {2} ({0})"),
     NON_POSITIVE_MICROSPHERE_ELEMENTS("number of microsphere elements must be positive, but got {0}"),

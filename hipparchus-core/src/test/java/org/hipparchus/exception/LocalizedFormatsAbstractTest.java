@@ -53,7 +53,7 @@ public abstract class LocalizedFormatsAbstractTest {
         } catch (IllegalArgumentException iae) {
             localizable = null;
         } catch (NoSuchMethodException | SecurityException | IllegalAccessException | InvocationTargetException e) {
-            Assert.fail(e.getLocalizedMessage());
+            Assert.fail(s + " <-> " + e.getLocalizedMessage());
         }
         return localizable;
     }

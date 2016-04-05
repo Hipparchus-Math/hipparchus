@@ -39,7 +39,6 @@ public enum LocalizedCoreFormats implements Localizable {
     // CHECKSTYLE: stop MultipleVariableDeclarations
     // CHECKSTYLE: stop JavadocVariable
 
-    ARGUMENT_OUTSIDE_DOMAIN("Argument {0} outside domain [{1} ; {2}]"),
     ARRAY_SIZE_EXCEEDS_MAX_VARIABLES("array size cannot be greater than {0}"),
     ARRAY_SIZES_SHOULD_HAVE_DIFFERENCE_1("array sizes should have difference 1 ({0} != {1} + 1)"),
     ARRAY_SUMS_TO_ZERO("array sums to zero"),
