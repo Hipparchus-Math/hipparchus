@@ -16,7 +16,9 @@
  */
 package org.hipparchus.random;
 
-import java.util.Random;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.RealDistribution;
@@ -26,12 +28,12 @@ import org.hipparchus.util.Precision;
 import org.hipparchus.util.ResizableDoubleArray;
 
 /**
- * Extension of {@ code java.util.Random} that wraps a
- * {@link RandomGenerator} and provides additional methods to generate deviates
+ *
+ * A {@link RandomGenerator} that provides additional methods to generate deviates
  * following probability distributions.
  *
  */
-public class RandomData extends Random {
+public class RandomData implements RandomGenerator, Serializable {
 
     /**
      * Cached random normal value.  The default implementation for
@@ -60,8 +62,11 @@ public class RandomData extends Random {
     /** Serializable version identifier. */
     private static final long serialVersionUID = 2306581345647615033L;
 
-    /** Wrapped randomGenerator instance */
+    /** Source of random data */
     private final RandomGenerator randomGenerator;
+
+    private static final HashSet<String> CONTINUOUS_NAMES = new HashSet<String>();
+    private static final HashSet<String> DISCRETE_NAMES = new HashSet<String>();
 
     /**
      * Initialize tables.
@@ -90,6 +95,11 @@ public class RandomData extends Random {
         }
 
         EXPONENTIAL_SA_QI = ra.getElements();
+
+        final String[] discreteCns = {"list", "them", "all"};
+        DISCRETE_NAMES.addAll(Arrays.asList(discreteCns));
+        final String[] continuousCns = {"list", "them", "all"};
+        CONTINUOUS_NAMES.addAll(Arrays.asList(continuousCns));
     }
 
     /**
@@ -108,14 +118,14 @@ public class RandomData extends Random {
     }
 
     /**
-     * Factory method to create a <code>Random</code> using the supplied
-     * <code>RandomGenerator</code>.
+     * Factory method to create a {@codeRandomData} instance using the supplied
+     * {@code RandomGenerator}.
      *
-     * @param randomGenerator  wrapped RandomGenerator instance
-     * @return a Random instance wrapping the RandomGenerator
+     * @param randomGenerator source of random bits
+     * @return a RandomData using the given RandomGenerator to source bits
      */
-    public static Random createAdaptor(RandomGenerator randomGenerator) {
-        return new RandomAdaptor(randomGenerator);
+    public static RandomData of(RandomGenerator randomGenerator) {
+        return new RandomData(randomGenerator);
     }
 
     /**
@@ -434,7 +444,10 @@ public class RandomData extends Random {
      * @param dist the distribution to sample from
      * @return a random value following the given distribution
      */
-    public double nextInversionDeviate(RealDistribution dist) {
+    public double nextDeviate(RealDistribution dist) {
+        if (CONTINUOUS_NAMES.contains(dist.getClass().getName())) {
+            return callContinuousMethod(dist);
+        }
         return dist.inverseCumulativeProbability(randomGenerator.nextDouble());
     }
 
@@ -444,7 +457,10 @@ public class RandomData extends Random {
      * @param dist the distribution to sample from
      * @return a random value following the given distribution
      */
-    public double nextInversionDeviate(IntegerDistribution dist) {
+    public int nextDeviate(IntegerDistribution dist) {
+        if (DISCRETE_NAMES.contains(dist.getClass().getName())) {
+            return callDiscreteMethod(dist);
+        }
         return dist.inverseCumulativeProbability(randomGenerator.nextDouble());
     }
 
@@ -540,6 +556,16 @@ public class RandomData extends Random {
 
         w = FastMath.min(w, Double.MAX_VALUE);
         return Precision.equals(a, a0) ? w / (b + w) : b / (b + w);
+    }
+
+    private double callContinuousMethod(RealDistribution dist) {
+        // Ugly if with InstanceOf checks and delegation
+        return 0;
+    }
+
+    private int callDiscreteMethod(IntegerDistribution dist) {
+     // Ugly if with InstanceOf checks and delegation
+        return 0;
     }
 
 }
