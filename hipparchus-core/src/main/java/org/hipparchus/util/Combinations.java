@@ -29,7 +29,7 @@ import org.hipparchus.exception.MathRuntimeException;
 /**
  * Utility to create combinations {@code (n, k)} of {@code k} elements
  * in a set of {@code n} elements.
- * 
+ *
  * @see <a href="http://en.wikipedia.org/wiki/Combination">
  * Combination @ Wikipedia</a>
  */
@@ -399,11 +399,7 @@ public class Combinations implements Iterable<int[]> {
             long ret = 0;
             for (int i = 0; i < c.length; i++) {
                 final int digit = c[i];
-                if (digit < 0 ||
-                    digit >= n) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                           digit, 0, n - 1);
-                }
+                MathUtils.checkRangeInclusive(digit, 0, n - 1);
 
                 ret += c[i] * ArithmeticUtils.pow(n, i);
             }

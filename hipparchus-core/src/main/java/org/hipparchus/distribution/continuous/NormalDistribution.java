@@ -23,6 +23,7 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Erf;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of the normal (gaussian) distribution.
@@ -151,10 +152,7 @@ public class NormalDistribution extends AbstractRealDistribution {
     /** {@inheritDoc} */
     @Override
     public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
-        if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(p, 0, 1);
         return mean + standardDeviation * SQRT2 * Erf.erfInv(2 * p - 1);
     }
 

@@ -65,9 +65,7 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
     public double transform(Object o)
         throws MathIllegalArgumentException, NullArgumentException {
 
-        if (o == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.OBJECT_TRANSFORMATION);
-        }
+        MathUtils.checkNotNull(o, LocalizedCoreFormats.OBJECT_TRANSFORMATION);
 
         if (o instanceof Number) {
             return ((Number)o).doubleValue();

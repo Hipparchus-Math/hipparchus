@@ -20,7 +20,7 @@ import org.hipparchus.distribution.discrete.BinomialDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implements binomial test statistics.
@@ -104,18 +104,13 @@ public class BinomialTest {
         if (numberOfSuccesses < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, numberOfSuccesses, 0);
         }
-        if (probability < 0 || probability > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   probability, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(probability, 0, 1);
         if (numberOfTrials < numberOfSuccesses) {
             throw new MathIllegalArgumentException(
                 LocalizedCoreFormats.BINOMIAL_INVALID_PARAMETERS_ORDER,
                 numberOfTrials, numberOfSuccesses);
         }
-        if (alternativeHypothesis == null) {
-            throw new NullArgumentException();
-        }
+        MathUtils.checkNotNull(alternativeHypothesis);
 
         // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final BinomialDistribution distribution = new BinomialDistribution(null, numberOfTrials, probability);

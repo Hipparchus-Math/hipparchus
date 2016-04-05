@@ -71,9 +71,8 @@ public class ProperFractionFormat extends FractionFormat {
                                 NumberFormat numeratorFormat,
                                 NumberFormat denominatorFormat) {
         super(numeratorFormat, denominatorFormat);
-        if (wholeFormat == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.WHOLE_FORMAT);
-        }
+
+        MathUtils.checkNotNull(wholeFormat, LocalizedCoreFormats.WHOLE_FORMAT);
         this.wholeFormat = wholeFormat;
     }
 

@@ -24,6 +24,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Base class for integer-valued discrete distributions.
@@ -75,10 +76,7 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
      */
     @Override
     public int inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
-        if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(p, 0, 1);
 
         int lower = getSupportLowerBound();
         if (p == 0.0) {

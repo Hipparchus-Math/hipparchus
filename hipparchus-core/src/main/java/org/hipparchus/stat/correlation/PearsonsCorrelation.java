@@ -19,11 +19,11 @@ package org.hipparchus.stat.correlation;
 import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.regression.SimpleRegression;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Computes Pearson's product-moment correlation coefficients for pairs of arrays
@@ -107,9 +107,7 @@ public class PearsonsCorrelation {
      */
     public PearsonsCorrelation(Covariance covariance) {
         RealMatrix covarianceMatrix = covariance.getCovarianceMatrix();
-        if (covarianceMatrix == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.COVARIANCE_MATRIX);
-        }
+        MathUtils.checkNotNull(covarianceMatrix, LocalizedCoreFormats.COVARIANCE_MATRIX);
         nObs = covariance.getN();
         correlationMatrix = covarianceToCorrelation(covarianceMatrix);
     }

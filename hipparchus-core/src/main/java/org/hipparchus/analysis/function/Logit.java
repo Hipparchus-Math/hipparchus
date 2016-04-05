@@ -24,6 +24,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/Logit">
@@ -147,10 +148,7 @@ public class Logit implements UnivariateDifferentiableFunction {
                                 double lo,
                                 double hi)
         throws MathIllegalArgumentException {
-        if (x < lo || x > hi) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   x, lo, hi);
-        }
+        MathUtils.checkRangeInclusive(x, lo, hi);
         return FastMath.log((x - lo) / (hi - x));
     }
 
@@ -161,10 +159,7 @@ public class Logit implements UnivariateDifferentiableFunction {
     public DerivativeStructure value(final DerivativeStructure t)
         throws MathIllegalArgumentException {
         final double x = t.getValue();
-        if (x < lo || x > hi) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   x, lo, hi);
-        }
+        MathUtils.checkRangeInclusive(x, lo, hi);
         double[] f = new double[t.getOrder() + 1];
 
         // function value

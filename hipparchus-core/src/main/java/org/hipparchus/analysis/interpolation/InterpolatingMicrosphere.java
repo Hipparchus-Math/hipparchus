@@ -25,6 +25,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Utility class for the {@link MicrosphereProjectionInterpolator} algorithm.
@@ -80,11 +81,7 @@ public class InterpolatingMicrosphere {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    size, 0);
         }
-        if (maxDarkFraction < 0 ||
-            maxDarkFraction > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   maxDarkFraction, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(maxDarkFraction, 0, 1);
         if (darkThreshold < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, darkThreshold, 0);
         }

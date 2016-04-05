@@ -103,11 +103,7 @@ public class HaltonSequenceGenerator implements RandomVectorGenerator {
             throws MathIllegalArgumentException, NullArgumentException {
 
         MathUtils.checkNotNull(bases);
-
-        if (dimension < 1 || dimension > bases.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   dimension, 1, PRIMES.length);
-        }
+        MathUtils.checkRangeInclusive(dimension, 1, bases.length);
 
         if (weights != null && weights.length != bases.length) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,

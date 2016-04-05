@@ -637,10 +637,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      */
     @Override
     public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
-        if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(p, 0, 1);
 
         if (p == 0.0) {
             return getSupportLowerBound();

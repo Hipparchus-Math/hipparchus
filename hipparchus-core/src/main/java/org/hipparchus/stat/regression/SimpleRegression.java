@@ -833,17 +833,17 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
                     throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_INCREASING_SEQUENCE);
                 } else if (variablesToInclude[0] != 0) {
                     throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                           variablesToInclude[0], 0,1);
+                                                           variablesToInclude[0], 0, 1);
                 }
                 if (variablesToInclude[1] != 1) {
                      throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                            variablesToInclude[0], 0,1);
+                                                            variablesToInclude[0], 0, 1);
                 }
                 return regress();
             }else{
                 if( variablesToInclude[0] != 1 && variablesToInclude[0] != 0 ) {
                      throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                            variablesToInclude[0],0,1);
+                                                            variablesToInclude[0], 0, 1);
                 }
                 final double _mean = sumY * sumY / n;
                 final double _syy = sumYY + _mean;

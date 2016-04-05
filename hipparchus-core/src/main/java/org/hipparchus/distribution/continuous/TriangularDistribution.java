@@ -22,6 +22,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of the triangular real distribution.
@@ -237,10 +238,8 @@ public class TriangularDistribution extends AbstractRealDistribution {
     @Override
     public double inverseCumulativeProbability(double p)
         throws MathIllegalArgumentException {
-        if (p < 0 || p > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(p, 0, 1);
+
         if (p == 0) {
             return a;
         }

@@ -23,6 +23,7 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of the Weibull distribution. This implementation uses the
@@ -163,11 +164,10 @@ public class WeibullDistribution extends AbstractRealDistribution {
      */
     @Override
     public double inverseCumulativeProbability(double p) {
+        MathUtils.checkRangeInclusive(p, 0, 1);
+
         double ret;
-        if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0.0, 1.0);
-        } else if (p == 0) {
+        if (p == 0) {
             ret = 0.0;
         } else  if (p == 1) {
             ret = Double.POSITIVE_INFINITY;

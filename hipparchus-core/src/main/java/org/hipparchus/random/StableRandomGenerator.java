@@ -17,9 +17,10 @@
 package org.hipparchus.random;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * <p>This class provides a stable normalized random generator. It samples from a stable
@@ -65,10 +66,7 @@ public class StableRandomGenerator implements NormalizedRandomGenerator {
                     alpha, 0, 2);
         }
 
-        if (!(beta >= -1d && beta <= 1d)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                    beta, -1, 1);
-        }
+        MathUtils.checkRangeInclusive(beta, -1, 1);
 
         this.generator = generator;
         this.alpha = alpha;

@@ -27,6 +27,7 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.OptimizationData;
 import org.hipparchus.optim.PointValuePair;
+import org.hipparchus.util.MathUtils;
 
 /**
  * This class implements the simplex concept.
@@ -290,11 +291,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      * @return the point at location {@code index}.
      */
     public PointValuePair getPoint(int index) {
-        if (index < 0 ||
-            index >= simplex.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   index, 0, simplex.length - 1);
-        }
+        MathUtils.checkRangeInclusive(index, 0, simplex.length - 1);
         return simplex[index];
     }
 
@@ -306,11 +303,7 @@ public abstract class AbstractSimplex implements OptimizationData {
      * @param point New value.
      */
     protected void setPoint(int index, PointValuePair point) {
-        if (index < 0 ||
-            index >= simplex.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   index, 0, simplex.length - 1);
-        }
+        MathUtils.checkRangeInclusive(index, 0, simplex.length - 1);
         simplex[index] = point;
     }
 

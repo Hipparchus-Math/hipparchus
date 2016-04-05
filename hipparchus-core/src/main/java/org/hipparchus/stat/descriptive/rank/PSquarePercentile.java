@@ -347,10 +347,12 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
                 markerArray[i].previous(markerArray[i - 1])
                         .next(markerArray[i + 1]).index(i);
             }
-            markerArray[0].previous(markerArray[0]).next(markerArray[1])
-                    .index(0);
-            markerArray[5].previous(markerArray[4]).next(markerArray[5])
-                    .index(5);
+            markerArray[0].previous(markerArray[0])
+                          .next(markerArray[1])
+                          .index(0);
+            markerArray[5].previous(markerArray[4])
+                          .next(markerArray[5])
+                          .index(5);
         }
 
         /**
@@ -492,10 +494,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          */
         @Override
         public double estimate(final int index) {
-            if (index < LOW || index > HIGH) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                       index, LOW, HIGH);
-            }
+            MathUtils.checkRangeInclusive(index, LOW, HIGH);
             return markerArray[index].estimate();
         }
 
@@ -551,10 +550,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          */
         @Override
         public double height(final int markerIndex) {
-            if (markerIndex >= markerArray.length || markerIndex <= 0) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                       markerIndex, 1, markerArray.length);
-            }
+            MathUtils.checkRangeInclusive(markerIndex, 1, markerArray.length - 1);
             return markerArray[markerIndex].markerHeight;
         }
 

@@ -23,6 +23,7 @@ import java.text.ParsePosition;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Formats a BigFraction number in proper format. The number format
@@ -71,9 +72,7 @@ public class ProperBigFractionFormat extends BigFractionFormat {
                                    final NumberFormat denominatorFormat) {
         super(numeratorFormat, denominatorFormat);
 
-        if (wholeFormat == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.WHOLE_FORMAT);
-        }
+        MathUtils.checkNotNull(wholeFormat, LocalizedCoreFormats.WHOLE_FORMAT);
         this.wholeFormat = wholeFormat;
     }
 

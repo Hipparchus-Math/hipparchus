@@ -1641,9 +1641,7 @@ public class MathArrays {
     public static boolean verifyValues(final double[] values, final int begin,
             final int length, final boolean allowEmpty) throws MathIllegalArgumentException {
 
-        if (values == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
-        }
+        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
 
         if (begin < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, Integer.valueOf(begin));
@@ -1736,9 +1734,8 @@ public class MathArrays {
     public static boolean verifyValues(final double[] values, final double[] weights,
             final int begin, final int length, final boolean allowEmpty) throws MathIllegalArgumentException {
 
-        if (weights == null || values == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
-        }
+        MathUtils.checkNotNull(weights, LocalizedCoreFormats.INPUT_ARRAY);
+        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
 
         checkEqualLength(weights, values);
 

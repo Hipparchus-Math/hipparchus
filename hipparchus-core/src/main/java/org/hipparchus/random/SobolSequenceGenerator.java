@@ -30,6 +30,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of a Sobol sequence.
@@ -87,10 +88,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
      * @throws MathIllegalArgumentException if the space dimension is outside the allowed range of [1, 1000]
      */
     public SobolSequenceGenerator(final int dimension) throws MathIllegalArgumentException {
-        if (dimension < 1 || dimension > MAX_DIMENSION) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   dimension, 1, MAX_DIMENSION);
-        }
+        MathUtils.checkRangeInclusive(dimension, 1, MAX_DIMENSION);
 
         // initialize the other dimensions with direction numbers from a resource
         final InputStream is = getClass().getResourceAsStream(RESOURCE_NAME);
@@ -168,10 +166,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
 
         // initialize the other dimensions with direction numbers from the stream
         int lastDimension = initFromStream(is);
-        if (lastDimension < dimension) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   dimension, 1, lastDimension);
-        }
+        MathUtils.checkRangeInclusive(dimension, 1, lastDimension);
     }
 
     /**
@@ -272,7 +267,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
 
         for (int i = 0; i < dimension; i++) {
             x[i] ^= direction[i][c];
-            v[i] = (double) x[i] / SCALE;
+            v[i] = x[i] / SCALE;
         }
         count++;
         return v;

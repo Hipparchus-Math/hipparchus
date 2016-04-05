@@ -21,6 +21,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Utility routines for {@link UnivariateSolver} objects.
@@ -46,9 +47,7 @@ public class UnivariateSolverUtils {
      */
     public static double solve(UnivariateFunction function, double x0, double x1)
         throws MathIllegalArgumentException, NullArgumentException {
-        if (function == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.FUNCTION);
-        }
+        MathUtils.checkNotNull(function, LocalizedCoreFormats.FUNCTION);
         final UnivariateSolver solver = new BrentSolver();
         return solver.solve(Integer.MAX_VALUE, function, x0, x1);
     }
@@ -70,9 +69,7 @@ public class UnivariateSolverUtils {
                                double x0, double x1,
                                double absoluteAccuracy)
         throws MathIllegalArgumentException, NullArgumentException {
-        if (function == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.FUNCTION);
-        }
+        MathUtils.checkNotNull(function, LocalizedCoreFormats.FUNCTION);
         final UnivariateSolver solver = new BrentSolver(absoluteAccuracy);
         return solver.solve(Integer.MAX_VALUE, function, x0, x1);
     }
@@ -289,9 +286,8 @@ public class UnivariateSolverUtils {
                                    final double q, final double r, final int maximumIterations)
         throws MathIllegalArgumentException {
 
-        if (function == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.FUNCTION);
-        }
+        MathUtils.checkNotNull(function, LocalizedCoreFormats.FUNCTION);
+
         if (q <= 0)  {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    q, 0);
@@ -377,9 +373,7 @@ public class UnivariateSolverUtils {
                                        final double lower,
                                        final double upper)
         throws NullArgumentException {
-        if (function == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.FUNCTION);
-        }
+        MathUtils.checkNotNull(function, LocalizedCoreFormats.FUNCTION);
         final double fLo = function.value(lower);
         final double fHi = function.value(upper);
         return (fLo >= 0 && fHi <= 0) || (fLo <= 0 && fHi >= 0);
@@ -447,9 +441,7 @@ public class UnivariateSolverUtils {
                                         final double lower,
                                         final double upper)
         throws MathIllegalArgumentException, NullArgumentException {
-        if (function == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.FUNCTION);
-        }
+        MathUtils.checkNotNull(function, LocalizedCoreFormats.FUNCTION);
         verifyInterval(lower, upper);
         if (!isBracketing(function, lower, upper)) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_BRACKETING_INTERVAL,

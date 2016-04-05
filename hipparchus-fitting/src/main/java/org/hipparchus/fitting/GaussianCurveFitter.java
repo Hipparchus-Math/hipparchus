@@ -30,6 +30,7 @@ import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Fits points to a {@link
@@ -208,9 +209,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
          * observations.
          */
         public ParameterGuesser(Collection<WeightedObservedPoint> observations) {
-            if (observations == null) {
-                throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
-            }
+            MathUtils.checkNotNull(observations);
             if (observations.size() < 3) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                        observations.size(), 3);
