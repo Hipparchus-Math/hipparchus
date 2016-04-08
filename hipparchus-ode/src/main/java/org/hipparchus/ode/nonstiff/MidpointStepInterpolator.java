@@ -99,12 +99,12 @@ class MidpointStepInterpolator
 
             final double coeff1     = theta * oneMinusThetaH;
             final double coeff2     = theta * thetaH;
-            interpolatedState       = previousStateLinearCombination(coeff1, coeff1, coeff2);
+            interpolatedState       = previousStateLinearCombination(coeff1, coeff2);
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2);
         } else {
-            final double coeff1     = oneMinusThetaH * theta;
-            final double coeff2     = oneMinusThetaH * (1.0 + theta);
-            interpolatedState       = currentStateLinearCombination(coeff1, coeff1, coeff2);
+            final double coeff1     =  oneMinusThetaH * theta;
+            final double coeff2     = -oneMinusThetaH * (1.0 + theta);
+            interpolatedState       = currentStateLinearCombination(coeff1, coeff2);
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2);
         }
 
