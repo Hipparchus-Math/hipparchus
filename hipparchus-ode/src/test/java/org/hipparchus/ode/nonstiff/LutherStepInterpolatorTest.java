@@ -18,74 +18,39 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Random;
-
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.DenseOutputModel;
-import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.sampling.ODEStepHandler;
-import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
-import org.junit.Assert;
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEStateAndDerivative;
 import org.junit.Test;
 
-public class LutherStepInterpolatorTest {
+public class LutherStepInterpolatorTest extends RungeKuttaStepInterpolatorAbstractTest {
 
-    @Test
-    public void derivativesConsistency()
-            throws MathIllegalArgumentException, MathIllegalStateException {
-        TestProblem3 pb = new TestProblem3();
-        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
-        LutherIntegrator integ = new LutherIntegrator(step);
-        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 6.5e-12);
+    @Override
+    protected RungeKuttaStepInterpolator
+        createInterpolator(boolean forward, double[][] yDotK,
+                           ODEStateAndDerivative globalPreviousState,
+                           ODEStateAndDerivative globalCurrentState,
+                           ODEStateAndDerivative softPreviousState,
+                           ODEStateAndDerivative softCurrentState,
+                           EquationsMapper mapper) {
+        return new LutherStepInterpolator(forward, yDotK,
+                                          globalPreviousState, globalCurrentState,
+                                          softPreviousState, softCurrentState,
+                                          mapper);
+    }
+
+    @Override
+    protected ButcherArrayProvider createButcherArrayProvider() {
+        return new LutherIntegrator(1.0);
     }
 
     @Test
-    public void serialization()
-            throws IOException, ClassNotFoundException,
-            MathIllegalArgumentException, MathIllegalStateException  {
+    public void interpolationAtBounds() {
+        doInterpolationAtBounds(1.0e-15);
+    }
 
-        TestProblem3 pb = new TestProblem3(0.9);
-        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.0003;
-        LutherIntegrator integ = new LutherIntegrator(step);
-        integ.addStepHandler(new DenseOutputModel());
-        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream    oos = new ObjectOutputStream(bos);
-        for (ODEStepHandler handler : integ.getStepHandlers()) {
-            oos.writeObject(handler);
-        }
-
-        Assert.assertTrue(bos.size() > 1200000);
-        Assert.assertTrue(bos.size() < 1250000);
-
-        ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
-        ObjectInputStream     ois = new ObjectInputStream(bis);
-        DenseOutputModel cm  = (DenseOutputModel) ois.readObject();
-
-        Random random = new Random(347588535632l);
-        double maxError = 0.0;
-        for (int i = 0; i < 1000; ++i) {
-            double r = random.nextDouble();
-            double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-            double[] interpolatedY = cm.getInterpolatedState(time).getState();
-            double[] theoreticalY  = pb.computeTheoreticalState(time);
-            double dx = interpolatedY[0] - theoreticalY[0];
-            double dy = interpolatedY[1] - theoreticalY[1];
-            double error = dx * dx + dy * dy;
-            if (error > maxError) {
-                maxError = error;
-            }
-        }
-
-        Assert.assertTrue(maxError < 2.2e-7);
-
+    @Test
+    public void interpolationInside() {
+        doInterpolationInside(1.1e-7, 9.6e-9);
     }
 
 }

@@ -91,6 +91,9 @@ public abstract class RungeKuttaFieldStepInterpolatorAbstractTest {
             FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
             maxErrorSin = FastMath.max(maxErrorSin, state.getState()[0].subtract(t.sin()).abs().getReal());
             maxErrorCos = FastMath.max(maxErrorCos, state.getState()[1].subtract(t.cos()).abs().getReal());
+            System.out.println(t.getReal() + " " +
+                               state.getState()[0].subtract(t.sin()).abs().getReal() + " " +
+                               state.getState()[1].subtract(t.cos()).abs().getReal());
         }
         Assert.assertEquals(0.0, maxErrorSin, epsilonSin);
         Assert.assertEquals(0.0, maxErrorCos, epsilonCos);
