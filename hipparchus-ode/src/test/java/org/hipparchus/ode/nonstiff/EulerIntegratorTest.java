@@ -34,6 +34,7 @@ import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
+import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -173,6 +174,15 @@ public class EulerIntegratorTest {
                 return 1;
             }
         }, new ODEState(0.0, new double[] { 0.0 }), 5.0);
+    }
+
+    @Test
+    public void derivativesConsistency()
+        throws MathIllegalArgumentException, MathIllegalStateException {
+        TestProblem3 pb = new TestProblem3();
+        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
+        EulerIntegrator integ = new EulerIntegrator(step);
+        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 5.1e-12);
     }
 
 }

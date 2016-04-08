@@ -33,6 +33,7 @@ import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStepHandler;
+import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -172,6 +173,15 @@ public class MidpointIntegratorTest {
                 return 1;
             }
         }, new ODEState(0.0, new double[] { 0.0 }), 5.0);
+    }
+
+    @Test
+    public void testDerivativesConsistency()
+        throws MathIllegalArgumentException, MathIllegalStateException {
+        TestProblem3 pb = new TestProblem3();
+        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
+        MidpointIntegrator integ = new MidpointIntegrator(step);
+        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 6.6e-12);
     }
 
 }

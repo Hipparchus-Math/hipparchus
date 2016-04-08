@@ -35,6 +35,7 @@ import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStepHandler;
+import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -308,6 +309,15 @@ public class ClassicalRungeKuttaIntegratorTest {
 
         integ.integrate(equations, new ODEState(start, new double[] { 1.0 }), end);
 
+    }
+
+    @Test
+    public void derivativesConsistency()
+                    throws MathIllegalArgumentException, MathIllegalStateException {
+        TestProblem3 pb = new TestProblem3();
+        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
+        ClassicalRungeKuttaIntegrator integ = new ClassicalRungeKuttaIntegrator(step);
+        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 6.6e-12);
     }
 
 }

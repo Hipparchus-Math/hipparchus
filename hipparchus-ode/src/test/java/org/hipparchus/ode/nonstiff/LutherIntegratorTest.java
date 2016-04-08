@@ -35,6 +35,7 @@ import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStepHandler;
+import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -301,6 +302,15 @@ public class LutherIntegratorTest {
         double dy = y[1] - yth[1];
         double error = dx * dx + dy * dy;
         Assert.assertEquals(0.0, error, 1.0e-11);
+    }
+
+    @Test
+    public void derivativesConsistency()
+            throws MathIllegalArgumentException, MathIllegalStateException {
+        TestProblem3 pb = new TestProblem3();
+        double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
+        LutherIntegrator integ = new LutherIntegrator(step);
+        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 6.5e-12);
     }
 
 }
