@@ -25,7 +25,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.Decimal64Field;
 import org.junit.Test;
 
-public class ClassicalRungKuttaFieldStepInterpolatorTest extends RungeKuttaFieldStepInterpolatorAbstractTest {
+public class ClassicalRungeKuttaFieldStepInterpolatorTest extends RungeKuttaFieldStepInterpolatorAbstractTest {
 
     protected <T extends RealFieldElement<T>> RungeKuttaFieldStepInterpolator<T>
     createInterpolator(Field<T> field, boolean forward, T[][] yDotK,
