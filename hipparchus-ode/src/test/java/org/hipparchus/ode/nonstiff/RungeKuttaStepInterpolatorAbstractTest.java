@@ -77,7 +77,6 @@ public abstract class RungeKuttaStepInterpolatorAbstractTest {
             double[] reference = sinCos.theoreticalState(t);
             maxErrorSin = FastMath.max(maxErrorSin, FastMath.abs(interpolated[0] - reference[0]));
             maxErrorCos = FastMath.max(maxErrorCos, FastMath.abs(interpolated[1] - reference[1]));
-            System.out.println(t + " " + (interpolated[0] - reference[0]) + " " + (interpolated[1] - reference[1]));
         }
 
         Assert.assertEquals(0.0, maxErrorSin, epsilonSin);
