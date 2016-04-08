@@ -145,8 +145,7 @@ class LutherStepInterpolator extends RungeKuttaStepInterpolator {
             final double coeff5    =      theta * ((833 + 343 * Q) / 300.0 + theta * ((-637 - 357 * Q) / 90.0 + theta * ((392 + 287 * Q) / 60.0 + theta * (-49 - 49 * Q) / 25.0)));
             final double coeff6    =      theta * ((833 - 343 * Q) / 300.0 + theta * ((-637 + 357 * Q) / 90.0 + theta * ((392 - 287 * Q) / 60.0 + theta * (-49 + 49 * Q) / 25.0)));
             final double coeff7    =      theta * (   3            /  10.0 + theta * (   -1                   + theta * (   3            /  4.0)));
-            interpolatedState       = previousStateLinearCombination(coeff1,
-                                                                     thetaH * coeff1, thetaH * coeff2,
+            interpolatedState       = previousStateLinearCombination(thetaH * coeff1, thetaH * coeff2,
                                                                      thetaH * coeff3, thetaH * coeff4,
                                                                      thetaH * coeff5, thetaH * coeff6,
                                                                      thetaH * coeff7);
@@ -160,8 +159,7 @@ class LutherStepInterpolator extends RungeKuttaStepInterpolator {
             final double coeff5    = -49 / 180.0 + theta * ( -49            / 180.0 + theta * ((2254 + 1029 * Q) / 900.0  + theta * ((-1372 - 847 * Q) / 300.0 + theta * ( 49 + 49 * Q) /  25.0)));
             final double coeff6    = -49 / 180.0 + theta * ( -49            / 180.0 + theta * ((2254 - 1029 * Q) / 900.0  + theta * ((-1372 + 847 * Q) / 300.0 + theta * ( 49 - 49 * Q) /  25.0)));
             final double coeff7    =  -1 /  20.0 + theta * (  -1            /  20.0 + theta * (    1             /   4.0  + theta * (    -3            /   4.0)));
-            interpolatedState       = currentStateLinearCombination(coeff1,
-                                                                    oneMinusThetaH * coeff1, oneMinusThetaH * coeff2,
+            interpolatedState       = currentStateLinearCombination(oneMinusThetaH * coeff1, oneMinusThetaH * coeff2,
                                                                     oneMinusThetaH * coeff3, oneMinusThetaH * coeff4,
                                                                     oneMinusThetaH * coeff5, oneMinusThetaH * coeff6,
                                                                     oneMinusThetaH * coeff7);
