@@ -17,49 +17,52 @@
 
 package org.hipparchus.ode.nonstiff;
 
-import org.hipparchus.ode.FirstOrderDifferentialEquations;
-import org.hipparchus.ode.events.EventHandler;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
+import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.ODEEventHandler;
 
 
-public class StepProblem
-  implements FirstOrderDifferentialEquations, EventHandler {
+public class StepProblem implements OrdinaryDifferentialEquation, ODEEventHandler {
 
-  public StepProblem(double rateBefore, double rateAfter,
-                     double switchTime) {
-    this.rateAfter  = rateAfter;
-    this.switchTime = switchTime;
-    setRate(rateBefore);
-  }
+    private double rate;
+    private double rateAfter;
+    private double switchTime;
 
-  public void computeDerivatives(double t, double[] y, double[] yDot) {
-    yDot[0] = rate;
-  }
+    public StepProblem(double rateBefore, double rateAfter,
+                       double switchTime) {
+        this.rateAfter  = rateAfter;
+        this.switchTime = switchTime;
+        setRate(rateBefore);
+    }
 
-  public int getDimension() {
-    return 1;
-  }
+    public double[] computeDerivatives(double t, double[] y) {
+        return new double[] {
+            rate
+        };
+    }
 
-  public void setRate(double rate) {
-    this.rate = rate;
-  }
+    public int getDimension() {
+        return 1;
+    }
 
-  public void init(double t0, double[] y0, double t) {
-  }
+    public void setRate(double rate) {
+        this.rate = rate;
+    }
 
-  public Action eventOccurred(double t, double[] y, boolean increasing) {
-    setRate(rateAfter);
-    return Action.RESET_DERIVATIVES;
-  }
+    public void init(double t0, double[] y0, double t) {
+    }
 
-  public double g(double t, double[] y) {
-    return t - switchTime;
-  }
+    public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
+        setRate(rateAfter);
+        return Action.RESET_DERIVATIVES;
+    }
 
-  public void resetState(double t, double[] y) {
-  }
+    public double g(ODEStateAndDerivative s) {
+        return s.getTime() - switchTime;
+    }
 
-  private double rate;
-  private double rateAfter;
-  private double switchTime;
+    public void resetState(double t, double[] y) {
+    }
 
 }
