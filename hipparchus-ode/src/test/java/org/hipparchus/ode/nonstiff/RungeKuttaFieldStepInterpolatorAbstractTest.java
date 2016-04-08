@@ -229,25 +229,10 @@ public abstract class RungeKuttaFieldStepInterpolatorAbstractTest {
                                                               convertODEStateAndDerivative(fieldInterpolator.getCurrentState()),
                                                               regularMapper);
 
-        } catch (ClassNotFoundException cnfe) {
-            Assert.fail(cnfe.getLocalizedMessage());
-        } catch (InstantiationException ie) {
-            Assert.fail(ie.getLocalizedMessage());
-        } catch (IllegalAccessException iae) {
-            Assert.fail(iae.getLocalizedMessage());
-        } catch (NoSuchFieldException nsfe) {
-            Assert.fail(nsfe.getLocalizedMessage());
-        } catch (IllegalArgumentException iae) {
-            Assert.fail(iae.getLocalizedMessage());
-        } catch (InvocationTargetException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+        } catch (ClassNotFoundException | InstantiationException   | IllegalAccessException    |
+                 NoSuchFieldException   | IllegalArgumentException | InvocationTargetException |
+                 NoSuchMethodException  | SecurityException e) {
+            Assert.fail(e.getLocalizedMessage());
         }
 
         return regularInterpolator;
