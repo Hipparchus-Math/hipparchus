@@ -125,7 +125,7 @@ class GillStepInterpolator
             interpolatedState       = previousStateLinearCombination(coeff1, coeff2, coeff3, coeff4);
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2, coeffDot3 , coeffDot4);
         } else {
-            final double s      = oneMinusThetaH / 6.0;
+            final double s      = oneMinusThetaH / -6.0;
             final double c23    = s * (2 + twoTheta - fourTheta2);
             final double coeff1 = s * (1 - 5 * theta + fourTheta2);
             final double coeff2 = c23  * ONE_MINUS_INV_SQRT_2;
