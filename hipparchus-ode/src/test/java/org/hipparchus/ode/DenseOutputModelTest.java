@@ -17,14 +17,21 @@
 
 package org.hipparchus.ode;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
+import org.hipparchus.ode.nonstiff.EulerIntegrator;
 import org.hipparchus.ode.sampling.DummyStepInterpolator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.junit.After;
 import org.junit.Assert;
@@ -147,6 +154,49 @@ public class DenseOutputModelTest {
 
     }
 
+    @Test
+    public void testSerialization() {
+        try {
+            TestProblem1 pb = new TestProblem1();
+            double step = (pb.getFinalTime() - pb.getInitialTime()) * 0.001;
+            EulerIntegrator integ = new EulerIntegrator(step);
+            integ.addStepHandler(new DenseOutputModel());
+            integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
+
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream    oos = new ObjectOutputStream(bos);
+            for (ODEStepHandler handler : integ.getStepHandlers()) {
+                oos.writeObject(handler);
+            }
+
+            int expectedSize = 131976;
+            Assert.assertTrue("size = " + bos.size(), bos.size () >  9 * expectedSize / 10);
+            Assert.assertTrue("size = " + bos.size(), bos.size () < 11 * expectedSize / 10);
+
+            ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
+            ObjectInputStream     ois = new ObjectInputStream(bis);
+            DenseOutputModel cm  = (DenseOutputModel) ois.readObject();
+
+            Random random = new Random(347588535632l);
+            double maxError = 0.0;
+            for (int i = 0; i < 1000; ++i) {
+                double r = random.nextDouble();
+                double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
+                double[] interpolatedY = cm.getInterpolatedState(time).getState();
+                double[] theoreticalY  = pb.computeTheoreticalState(time);
+                double dx = interpolatedY[0] - theoreticalY[0];
+                double dy = interpolatedY[1] - theoreticalY[1];
+                double error = dx * dx + dy * dy;
+                if (error > maxError) {
+                    maxError = error;
+                }
+            }
+            Assert.assertEquals(0.0, maxError, 5.5e-7);
+        } catch (ClassNotFoundException | IOException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
+
+    }
     private boolean checkAppendError(DenseOutputModel cm,
                                      double t0, double[] y0, double t1)
                                                      throws MathIllegalArgumentException, MathIllegalStateException {

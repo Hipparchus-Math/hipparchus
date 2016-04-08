@@ -17,6 +17,8 @@
 
 package org.hipparchus.ode;
 
+import java.io.Serializable;
+
 /** Container for time, main and secondary state vectors.
 
  * @see FirstOrderDifferentialEquations
@@ -25,7 +27,10 @@ package org.hipparchus.ode;
  * @see ODEStateAndDerivative
  */
 
-public class ODEState {
+public class ODEState implements Serializable {
+
+    /** Serializable UID. */
+    private static final long serialVersionUID = 20160408L;
 
     /** Time. */
     private final double time;

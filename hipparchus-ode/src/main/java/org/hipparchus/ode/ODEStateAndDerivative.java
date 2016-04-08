@@ -26,6 +26,9 @@ package org.hipparchus.ode;
 
 public class ODEStateAndDerivative extends ODEState {
 
+    /** Serializable UID. */
+    private static final long serialVersionUID = 20160408L;
+
     /** Derivative of the main state at time. */
     private final double[] derivative;
 
