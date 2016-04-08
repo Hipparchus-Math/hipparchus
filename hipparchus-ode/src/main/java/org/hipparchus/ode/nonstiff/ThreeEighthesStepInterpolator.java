@@ -119,7 +119,7 @@ class ThreeEighthesStepInterpolator
             interpolatedState       = previousStateLinearCombination(coeff1, coeff2, coeff3, coeff4);
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2, coeffDot3, coeffDot4);
         } else {
-            final double s          = oneMinusThetaH / 8.0;
+            final double s          = oneMinusThetaH / -8.0;
             final double fourTheta2 = 4 * theta * theta;
             final double coeff1     = s * (1 - 7 * theta + 2 * fourTheta2);
             final double coeff2     = 3 * s * (1 + theta - fourTheta2);
