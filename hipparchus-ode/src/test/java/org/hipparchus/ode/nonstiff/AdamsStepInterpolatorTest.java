@@ -62,8 +62,8 @@ public class AdamsStepInterpolatorTest {
             oos.writeObject(handler);
         }
 
-        Assert.assertTrue(bos.size() > 47000);
-        Assert.assertTrue(bos.size() < 48000);
+        Assert.assertTrue("size = " + bos.size(), bos.size() > 51000);
+        Assert.assertTrue("size = " + bos.size(), bos.size() < 52000);
 
         ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
         ObjectInputStream     ois = new ObjectInputStream(bis);
