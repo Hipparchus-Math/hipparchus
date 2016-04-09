@@ -827,8 +827,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                     }
                 } else {
                     optimalIter = k - 1;
-                    if ((k > 2) &&
-                                    (costPerTimeUnit[k-2] < orderControl1 * costPerTimeUnit[k-1])) {
+                    if ((k > 2) && (costPerTimeUnit[k-2] < orderControl1 * costPerTimeUnit[k-1])) {
                         optimalIter = k - 2;
                     }
                     if (costPerTimeUnit[k] < orderControl2 * costPerTimeUnit[optimalIter]) {
