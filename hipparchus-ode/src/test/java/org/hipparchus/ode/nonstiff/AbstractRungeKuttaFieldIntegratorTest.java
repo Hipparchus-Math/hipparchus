@@ -129,9 +129,6 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
                 return k.length;
             }
 
-            public void init(T t0, T[] y0, T t) {
-            }
-
             public T[] computeDerivatives(T t, T[] y) {
                 T[] yDot = MathArrays.buildArray(field, k.length);
                 for (int i = 0; i < y.length; ++i) {
@@ -160,13 +157,6 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
         }
 
         integrator.addEventHandler(new FieldODEEventHandler<T>() {
-
-            public void init(FieldODEStateAndDerivative<T> state0, T t) {
-            }
-
-            public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
-                return state;
-            }
 
             public T g(FieldODEStateAndDerivative<T> state) {
                 return state.getTime().subtract(tEvent);
@@ -411,12 +401,8 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
                                         epsilon);
                 }
             }
-            public void init(FieldODEStateAndDerivative<T> s0, T t) {
-            }
         });
         integ.integrate(new FieldExpandableODE<T>(new FieldOrdinaryDifferentialEquation<T>() {
-            public void init(T t0, T[] y0, T t) {
-            }
             public T[] computeDerivatives(T t, T[] y) {
                 T[] dot = MathArrays.buildArray(t.getField(), 1);
                 dot[0] = t.getField().getOne();
@@ -464,9 +450,6 @@ public abstract class AbstractRungeKuttaFieldIntegratorTest {
 
             public int getDimension() {
                 return 1;
-            }
-
-            public void init(T t0, T[] y0, T t) {
             }
 
             public T[] computeDerivatives(T t, T[] y) {
