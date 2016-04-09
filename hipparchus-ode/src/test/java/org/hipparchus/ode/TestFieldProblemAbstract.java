@@ -42,7 +42,7 @@ public abstract class TestFieldProblemAbstract<T extends RealFieldElement<T>>
     private final T t1;
 
     /** Error scale */
-    private T[] errorScale;
+    private final T[] errorScale;
 
     /**
      * Simple constructor.
@@ -55,7 +55,7 @@ public abstract class TestFieldProblemAbstract<T extends RealFieldElement<T>>
         calls      = 0;
         s0         = new FieldODEState<T>(t0, y0);
         this.t1    = t1;
-        errorScale = errorScale.clone();
+        this.errorScale = errorScale.clone();
     }
 
     /** get the filed to which elements belong.
