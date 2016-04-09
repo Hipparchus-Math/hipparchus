@@ -25,12 +25,14 @@ import java.lang.reflect.InvocationTargetException;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.TestFieldProblem1;
 import org.hipparchus.ode.TestFieldProblem2;
 import org.hipparchus.ode.TestFieldProblem3;
@@ -122,9 +124,6 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                 return k.length;
             }
 
-            public void init(T t0, T[] y0, T t) {
-            }
-
             public T[] computeDerivatives(T t, T[] y) {
                 T[] yDot = MathArrays.buildArray(field, k.length);
                 for (int i = 0; i < y.length; ++i) {
@@ -153,13 +152,6 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         }
 
         integrator.addEventHandler(new FieldODEEventHandler<T>() {
-
-            public void init(FieldODEStateAndDerivative<T> state0, T t) {
-            }
-
-            public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
-                return state;
-            }
 
             public T g(FieldODEStateAndDerivative<T> state) {
                 return state.getTime().subtract(tEvent);
@@ -196,6 +188,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                  field.getOne());
             Assert.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, ie.getSpecifier());
         }
         try  {
             TestFieldProblem1<T> pb = new TestFieldProblem1<T>(field);
@@ -204,6 +197,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                  field.getZero());
             Assert.fail("an exception should have been thrown");
         } catch(MathIllegalArgumentException ie) {
+            Assert.assertEquals(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL, ie.getSpecifier());
         }
     }
 
@@ -404,12 +398,8 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                         epsilon);
                 }
             }
-            public void init(FieldODEStateAndDerivative<T> s0, T t) {
-            }
         });
         integ.integrate(new FieldExpandableODE<T>(new FieldOrdinaryDifferentialEquation<T>() {
-            public void init(T t0, T[] y0, T t) {
-            }
             public T[] computeDerivatives(T t, T[] y) {
                 T[] dot = MathArrays.buildArray(t.getField(), 1);
                 dot[0] = t.getField().getOne();
@@ -457,9 +447,6 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
             public int getDimension() {
                 return 1;
-            }
-
-            public void init(T t0, T[] y0, T t) {
             }
 
             public T[] computeDerivatives(T t, T[] y) {
