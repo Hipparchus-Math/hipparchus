@@ -246,10 +246,9 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
         start(equations, getStepStart(), finalTime);
 
         // reuse the step that was chosen by the starter integrator
-        ODEStateAndDerivative stepStart = getStepStart();
         ODEStateAndDerivative stepEnd   =
-                        AdamsStepInterpolator.taylor(stepStart,
-                                                     stepStart.getTime() + getStepSize(),
+                        AdamsStepInterpolator.taylor(getStepStart(),
+                                                     getStepStart().getTime() + getStepSize(),
                                                      getStepSize(), scaled, nordsieck);
 
         // main integration loop
@@ -320,7 +319,7 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
                 final double  filteredNextT      = getStepStart().getTime() + hNew;
                 final boolean filteredNextIsLast = forward ? (filteredNextT >= finalTime) : (filteredNextT <= finalTime);
                 if (filteredNextIsLast) {
-                    hNew = finalTime - stepStart.getTime();
+                    hNew = finalTime - getStepStart().getTime();
                 }
 
                 rescale(hNew);

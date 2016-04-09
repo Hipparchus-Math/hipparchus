@@ -251,10 +251,9 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
         start(equations, getStepStart(), finalTime);
 
         // reuse the step that was chosen by the starter integrator
-        FieldODEStateAndDerivative<T> stepStart = getStepStart();
         FieldODEStateAndDerivative<T> stepEnd   =
-                        AdamsFieldStepInterpolator.taylor(stepStart,
-                                                          stepStart.getTime().add(getStepSize()),
+                        AdamsFieldStepInterpolator.taylor(getStepStart(),
+                                                          getStepStart().getTime().add(getStepSize()),
                                                           getStepSize(), scaled, nordsieck);
 
         // main integration loop
