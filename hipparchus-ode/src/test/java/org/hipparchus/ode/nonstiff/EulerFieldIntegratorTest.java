@@ -62,7 +62,7 @@ public class EulerFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractT
 
     @Override
     public void testBackward() {
-        doTestBackward(Decimal64Field.getInstance(),0.45, 0.45, 1.0e-12, "Euler");
+        doTestBackward(Decimal64Field.getInstance(), 0.45, 0.45, 1.0e-12, "Euler");
     }
 
     @Override
