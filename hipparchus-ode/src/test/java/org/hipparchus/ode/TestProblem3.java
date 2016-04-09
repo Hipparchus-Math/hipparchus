@@ -48,6 +48,7 @@ public class TestProblem3 extends TestProblemAbstract {
     public TestProblem3(double e) {
         super(0.0, new double[] { 1 - e, 0, 0, FastMath.sqrt((1+e)/(1-e)) }, 20.0,
               new double[] { 1.0, 1.0, 1.0, 1.0 });
+        this.e = e;
     }
 
     /**
