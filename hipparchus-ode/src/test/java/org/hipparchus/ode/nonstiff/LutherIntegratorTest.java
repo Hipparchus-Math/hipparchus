@@ -83,4 +83,9 @@ public class LutherIntegratorTest extends RungeKuttaIntegratorAbstractTest {
         doTestDerivativesConsistency(1.0e-20);
     }
 
+    @Override
+    public void testSerialization() {
+        doTestSerialization(1437963, 2.18e-7);
+    }
+
 }

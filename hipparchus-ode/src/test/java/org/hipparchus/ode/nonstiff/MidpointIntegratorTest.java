@@ -84,4 +84,9 @@ public class MidpointIntegratorTest extends RungeKuttaIntegratorAbstractTest {
         doTestDerivativesConsistency(1.0e-10);
     }
 
+    @Override
+    public void testSerialization() {
+        doTestSerialization(737825, 1.19);
+    }
+
 }

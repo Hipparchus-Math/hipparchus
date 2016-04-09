@@ -85,4 +85,9 @@ public class EulerIntegratorTest extends RungeKuttaIntegratorAbstractTest {
         doTestDerivativesConsistency(1.0e-10);
     }
 
+    @Override
+    public void testSerialization() {
+        doTestSerialization(597794, 881);
+    }
+
 }

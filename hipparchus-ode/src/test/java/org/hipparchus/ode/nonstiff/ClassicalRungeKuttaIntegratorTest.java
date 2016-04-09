@@ -84,4 +84,9 @@ public class ClassicalRungeKuttaIntegratorTest extends RungeKuttaIntegratorAbstr
         doTestDerivativesConsistency(1.0e-10);
     }
 
+    @Override
+    public void testSerialization() {
+        doTestSerialization(1017892, 5.5e-3);
+    }
+
 }

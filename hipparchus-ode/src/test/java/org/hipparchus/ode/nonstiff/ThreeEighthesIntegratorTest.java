@@ -84,4 +84,9 @@ public class ThreeEighthesIntegratorTest extends RungeKuttaIntegratorAbstractTes
         doTestDerivativesConsistency(1.0e-10);
     }
 
+    @Override
+    public void testSerialization() {
+        doTestSerialization(1017886, 0.031);
+    }
+
 }
