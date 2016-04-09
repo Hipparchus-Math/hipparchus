@@ -18,6 +18,9 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
@@ -83,16 +86,16 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
             // get the Butcher arrays from the regular integrator
             @SuppressWarnings("unchecked")
-            Class<RungeKuttaIntegrator> c = (Class<RungeKuttaIntegrator>) Class.forName(regularName);
-            java.lang.reflect.Field jlrFieldA = c.getDeclaredField("STATIC_A");
-            jlrFieldA.setAccessible(true);
-            double[][] regularA = (double[][]) jlrFieldA.get(null);
-            java.lang.reflect.Field jlrFieldB = c.getDeclaredField("STATIC_B");
-            jlrFieldB.setAccessible(true);
-            double[]   regularB = (double[])   jlrFieldB.get(null);
-            java.lang.reflect.Field jlrFieldC = c.getDeclaredField("STATIC_C");
-            jlrFieldC.setAccessible(true);
-            double[]   regularC = (double[])   jlrFieldC.get(null);
+            Constructor<EmbeddedRungeKuttaIntegrator> constructor =
+                (Constructor<EmbeddedRungeKuttaIntegrator>) Class.forName(regularName).getConstructor(Double.TYPE,
+                                                                                                      Double.TYPE,
+                                                                                                      Double.TYPE,
+                                                                                                      Double.TYPE);
+            final EmbeddedRungeKuttaIntegrator regularIntegrator =
+                            constructor.newInstance(0.0, 1.0, 1.0e-10, 1.0e-10);
+            double[][] regularA = regularIntegrator.getA();
+            double[]   regularB = regularIntegrator.getB();
+            double[]   regularC = regularIntegrator.getC();
 
             Assert.assertEquals(regularA.length, fieldA.length);
             for (int i = 0; i < regularA.length; ++i) {
@@ -101,16 +104,10 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
             checkArray(regularB, fieldB);
             checkArray(regularC, fieldC);
 
-        } catch (ClassNotFoundException cnfe) {
-            Assert.fail(cnfe.getLocalizedMessage());
-        } catch (IllegalAccessException iae) {
-            Assert.fail(iae.getLocalizedMessage());
-        } catch (IllegalArgumentException iae) {
-            Assert.fail(iae.getLocalizedMessage());
-        } catch (SecurityException se) {
-            Assert.fail(se.getLocalizedMessage());
-        } catch (NoSuchFieldException nsfe) {
-            Assert.fail(nsfe.getLocalizedMessage());
+        } catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException  |
+                 SecurityException      | NoSuchMethodException  | InvocationTargetException |
+                 InstantiationException e) {
+            Assert.fail(e.getLocalizedMessage());
         }
     }
 
