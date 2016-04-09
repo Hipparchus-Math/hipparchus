@@ -38,7 +38,7 @@ public class DormandPrince54StepInterpolatorTest {
 
     @Test
     public void derivativesConsistency()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         TestProblem3 pb = new TestProblem3(0.1);
         double minStep = 0;
         double maxStep = pb.getFinalTime() - pb.getInitialTime();
@@ -47,13 +47,13 @@ public class DormandPrince54StepInterpolatorTest {
         DormandPrince54Integrator integ = new DormandPrince54Integrator(minStep, maxStep,
                                                                         scalAbsoluteTolerance,
                                                                         scalRelativeTolerance);
-        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 3.6e-12);
+        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 3.7e-12);
     }
 
     @Test
     public void serialization()
-                    throws IOException, ClassNotFoundException,
-                    MathIllegalArgumentException, MathIllegalStateException  {
+        throws IOException, ClassNotFoundException,
+               MathIllegalArgumentException, MathIllegalStateException  {
 
         TestProblem3 pb = new TestProblem3(0.9);
         double minStep = 0;
@@ -72,8 +72,8 @@ public class DormandPrince54StepInterpolatorTest {
             oos.writeObject(handler);
         }
 
-        Assert.assertTrue(bos.size () > 135000);
-        Assert.assertTrue(bos.size () < 145000);
+        Assert.assertTrue("size = " + bos.size(), bos.size () > 165000);
+        Assert.assertTrue("size = " + bos.size(), bos.size () < 175000);
 
         ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
         ObjectInputStream     ois = new ObjectInputStream(bis);
