@@ -297,9 +297,9 @@ public abstract class RungeKuttaFieldStepInterpolatorAbstractTest {
                                                                      Integer.TYPE);
         regularMapperConstructor.setAccessible(true);
         EquationsMapper regularMapper = regularMapperConstructor.newInstance(null, start[1]);
-        for (int k = 0; k < fieldmapper.getNumberOfEquations(); ++k) {
+        for (int k = 1; k < fieldmapper.getNumberOfEquations(); ++k) {
             regularMapper = regularMapperConstructor.newInstance(regularMapper,
-                                                                 start[k + 2] - start[k + 1]);
+                                                                 start[k + 1] - start[k]);
         }
         return regularMapper;
     }
