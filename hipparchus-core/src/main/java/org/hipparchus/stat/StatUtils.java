@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
@@ -34,6 +33,7 @@ import org.hipparchus.stat.descriptive.summary.Product;
 import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.stat.descriptive.summary.SumOfLogs;
 import org.hipparchus.stat.descriptive.summary.SumOfSquares;
+import org.hipparchus.util.MathUtils;
 
 /**
  * StatUtils provides static methods for computing statistics based on data
@@ -790,9 +790,7 @@ public final class StatUtils {
      * @throws MathIllegalArgumentException if the indices are invalid or the array is null
      */
     public static double[] mode(double[] sample) throws MathIllegalArgumentException {
-        if (sample == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
-        }
+        MathUtils.checkNotNull(sample, LocalizedCoreFormats.INPUT_ARRAY);
         return getMode(sample, 0, sample.length);
     }
 
@@ -819,9 +817,7 @@ public final class StatUtils {
      * @throws MathIllegalArgumentException if the indices are invalid or the array is null
      */
     public static double[] mode(double[] sample, final int begin, final int length) {
-        if (sample == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
-        }
+        MathUtils.checkNotNull(sample, LocalizedCoreFormats.INPUT_ARRAY);
 
         if (begin < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, Integer.valueOf(begin));
@@ -849,7 +845,7 @@ public final class StatUtils {
         Arrays.stream(values, begin, begin + length)
               .filter(d -> !Double.isNaN(d))
               .forEach(freq::addValue);
-        
+
         List<Double> list = freq.getMode();
         // Convert the list to an array of primitive double
         return list.stream()

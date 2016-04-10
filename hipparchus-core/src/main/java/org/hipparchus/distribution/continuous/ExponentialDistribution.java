@@ -22,6 +22,7 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.ResizableDoubleArray;
 
 /**
@@ -172,12 +173,10 @@ public class ExponentialDistribution extends AbstractRealDistribution {
      */
     @Override
     public double inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
-        double ret;
+        MathUtils.checkRangeInclusive(p, 0, 1);
 
-        if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0.0, 1.0);
-        } else if (p == 1.0) {
+        double ret;
+        if (p == 1.0) {
             ret = Double.POSITIVE_INFINITY;
         } else {
             ret = -mean * FastMath.log(1.0 - p);

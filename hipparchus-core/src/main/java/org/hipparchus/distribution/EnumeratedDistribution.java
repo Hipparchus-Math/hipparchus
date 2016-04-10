@@ -28,6 +28,7 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Pair;
 
 /**
@@ -260,9 +261,7 @@ public class EnumeratedDistribution<T> implements Serializable {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES, sampleSize);
         }
 
-        if (array == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
-        }
+        MathUtils.checkNotNull(array, LocalizedCoreFormats.INPUT_ARRAY);
 
         T[] out;
         if (array.length < sampleSize) {

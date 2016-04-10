@@ -21,11 +21,12 @@ import java.math.BigInteger;
 
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Representation of a rational number.
@@ -484,9 +485,8 @@ public class Fraction
      *   cannot be represented in an {@code int}.
      */
     private Fraction addSub(Fraction fraction, boolean isAdd) {
-        if (fraction == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.FRACTION);
-        }
+        MathUtils.checkNotNull(fraction, LocalizedCoreFormats.FRACTION);
+
         // zero is identity for addition.
         if (numerator == 0) {
             return isAdd ? fraction : fraction.negate();
@@ -542,9 +542,7 @@ public class Fraction
      */
     @Override
     public Fraction multiply(Fraction fraction) {
-        if (fraction == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.FRACTION);
-        }
+        MathUtils.checkNotNull(fraction, LocalizedCoreFormats.FRACTION);
         if (numerator == 0 || fraction.numerator == 0) {
             return ZERO;
         }
@@ -579,9 +577,7 @@ public class Fraction
      */
     @Override
     public Fraction divide(Fraction fraction) {
-        if (fraction == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.FRACTION);
-        }
+        MathUtils.checkNotNull(fraction, LocalizedCoreFormats.FRACTION);
         if (fraction.numerator == 0) {
             throw new MathRuntimeException(LocalizedCoreFormats.ZERO_FRACTION_TO_DIVIDE_BY,
                                               fraction.numerator, fraction.denominator);

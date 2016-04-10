@@ -522,10 +522,7 @@ public class SparseFieldVector<T extends FieldElement<T>> implements FieldVector
      * @throws MathIllegalArgumentException if the index is not valid.
      */
     private void checkIndex(final int index) throws MathIllegalArgumentException {
-        if (index < 0 || index >= getDimension()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   index, 0, getDimension() - 1);
-        }
+        MathUtils.checkRangeInclusive(index, 0, getDimension() - 1);
     }
 
     /**

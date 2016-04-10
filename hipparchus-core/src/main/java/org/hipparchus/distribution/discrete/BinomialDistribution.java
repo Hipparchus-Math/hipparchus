@@ -22,6 +22,7 @@ import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of the binomial distribution.
@@ -75,10 +76,8 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_TRIALS,
                                            trials);
         }
-        if (p < 0 || p > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0, 1);
-        }
+
+        MathUtils.checkRangeInclusive(p, 0, 1);
 
         probabilityOfSuccess = p;
         numberOfTrials = trials;

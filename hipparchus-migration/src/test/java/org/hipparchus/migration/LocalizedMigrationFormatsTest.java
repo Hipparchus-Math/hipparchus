@@ -19,7 +19,6 @@ package org.hipparchus.migration;
 
 
 import org.hipparchus.exception.LocalizedFormatsAbstractTest;
-import org.hipparchus.migration.LocalizedMigrationFormats;
 
 @Deprecated
 public class LocalizedMigrationFormatsTest extends LocalizedFormatsAbstractTest {
@@ -31,7 +30,7 @@ public class LocalizedMigrationFormatsTest extends LocalizedFormatsAbstractTest 
 
     @Override
     protected int getExpectedNumber() {
-        return 74;
+        return 76;
     }
 
 }

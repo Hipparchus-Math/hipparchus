@@ -400,7 +400,7 @@ public final class CombinatoricsUtils {
                     sum += sign * binomialCoefficient(k, j) * ArithmeticUtils.pow(j, n);
                     if (sum < 0) {
                         // there was an overflow somewhere
-                        throw new MathRuntimeException(LocalizedCoreFormats.ARGUMENT_OUTSIDE_DOMAIN,
+                        throw new MathRuntimeException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                           n, 0, stirlingS2.length - 1);
                     }
                 }

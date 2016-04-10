@@ -19,6 +19,7 @@ package org.hipparchus.optim.univariate;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.optim.OptimizationData;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Search interval and (optional) start value.
@@ -48,11 +49,8 @@ public class SearchInterval implements OptimizationData {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
                                                    lo, hi);
         }
-        if (init < lo ||
-            init > hi) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   init, lo, hi);
-        }
+
+        MathUtils.checkRangeInclusive(init, lo, hi);
 
         lower = lo;
         upper = hi;

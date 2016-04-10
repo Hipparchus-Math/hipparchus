@@ -21,6 +21,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of the geometric distribution.
@@ -177,10 +178,8 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
      */
     @Override
     public int inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
-        if (p < 0 || p > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(p, 0, 1);
+
         if (p == 1) {
             return Integer.MAX_VALUE;
         }

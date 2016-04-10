@@ -295,4 +295,35 @@ public final class MathUtils {
             throw new NullArgumentException(LocalizedCoreFormats.NULL_NOT_ALLOWED);
         }
     }
+
+    /**
+     * Checks that the given value is strictly within the range [lo, hi].
+     *
+     * @param value value to be checked.
+     * @param lo the lower bound (inclusive).
+     * @param hi the upper bound (inclusive).
+     * @throws MathIllegalArgumentException if {@code value} is strictly outside [lo, hi].
+     */
+    public static void checkRangeInclusive(long value, long lo, long hi) {
+        if (value < lo || value > hi) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
+                                                   value, lo, hi);
+        }
+    }
+
+    /**
+     * Checks that the given value is strictly within the range [lo, hi].
+     *
+     * @param value value to be checked.
+     * @param lo the lower bound (inclusive).
+     * @param hi the upper bound (inclusive).
+     * @throws MathIllegalArgumentException if {@code value} is strictly outside [lo, hi].
+     */
+    public static void checkRangeInclusive(double value, double lo, double hi) {
+        if (value < lo || value > hi) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
+                                                   value, lo, hi);
+        }
+    }
+
 }

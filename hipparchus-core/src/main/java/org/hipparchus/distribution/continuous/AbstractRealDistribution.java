@@ -25,6 +25,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Base class for probability distributions on the reals.
@@ -128,10 +129,8 @@ public abstract class AbstractRealDistribution
          * progressions 1, 2, 4, ... and -1, -2, -4, ... are used to bracket
          * the root.
          */
-        if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0, 1);
-        }
+
+        MathUtils.checkRangeInclusive(p, 0, 1);
 
         double lowerBound = getSupportLowerBound();
         if (p == 0.0) {

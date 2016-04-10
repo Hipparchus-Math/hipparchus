@@ -23,6 +23,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Class mapping the part of a complete state or derivative that pertains
@@ -197,10 +198,7 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
      * @exception MathIllegalArgumentException if index is out of range
      */
     private void checkIndex(final int index) throws MathIllegalArgumentException {
-        if (index < 0 || index > start.length - 2) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.ARGUMENT_OUTSIDE_DOMAIN,
-                                                   index, 0, start.length - 2);
-        }
+        MathUtils.checkRangeInclusive(index, 0, start.length - 2);
     }
 
 }

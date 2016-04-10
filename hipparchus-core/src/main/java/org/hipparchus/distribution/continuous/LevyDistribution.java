@@ -16,12 +16,12 @@
  */
 package org.hipparchus.distribution.continuous;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Erf;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * This class implements the <a href="http://en.wikipedia.org/wiki/L%C3%A9vy_distribution">
@@ -130,10 +130,7 @@ public class LevyDistribution extends AbstractRealDistribution {
     /** {@inheritDoc} */
     @Override
     public double inverseCumulativeProbability(final double p) throws MathIllegalArgumentException {
-        if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(p, 0, 1);
         final double t = Erf.erfcInv(p);
         return mu + halfC / (t * t);
     }

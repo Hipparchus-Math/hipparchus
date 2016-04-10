@@ -20,6 +20,7 @@ import org.hipparchus.analysis.TrivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Function that implements the
@@ -495,18 +496,9 @@ class TricubicFunction
      */
     @Override
     public double value(double x, double y, double z) throws MathIllegalArgumentException {
-        if (x < 0 || x > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   x, 0, 1);
-        }
-        if (y < 0 || y > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   y, 0, 1);
-        }
-        if (z < 0 || z > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   z, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(x, 0, 1);
+        MathUtils.checkRangeInclusive(y, 0, 1);
+        MathUtils.checkRangeInclusive(z, 0, 1);
 
         final double x2 = x * x;
         final double x3 = x2 * x;

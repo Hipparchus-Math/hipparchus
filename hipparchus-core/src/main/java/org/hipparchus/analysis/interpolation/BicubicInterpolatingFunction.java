@@ -22,6 +22,7 @@ import org.hipparchus.analysis.BivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Function that implements the
@@ -294,14 +295,8 @@ class BicubicFunction implements BivariateFunction {
      */
     @Override
     public double value(double x, double y) {
-        if (x < 0 || x > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   x, 0, 1);
-        }
-        if (y < 0 || y > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   y, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(x, 0, 1);
+        MathUtils.checkRangeInclusive(y, 0, 1);
 
         final double x2 = x * x;
         final double x3 = x2 * x;

@@ -27,6 +27,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.CompositeFormat;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Formats a Complex number in cartesian format "Re(c) + Im(c)i".  'i' can
@@ -61,9 +62,7 @@ public class ComplexFormat {
      * @throws NullArgumentException if {@code realFormat} is {@code null}.
      */
     public ComplexFormat(NumberFormat format) throws NullArgumentException {
-        if (format == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.IMAGINARY_FORMAT);
-        }
+        MathUtils.checkNotNull(format, LocalizedCoreFormats.IMAGINARY_FORMAT);
         this.imaginaryCharacter = DEFAULT_IMAGINARY_CHARACTER;
         this.imaginaryFormat = format;
         this.realFormat = format;
@@ -79,12 +78,8 @@ public class ComplexFormat {
       */
     public ComplexFormat(NumberFormat realFormat, NumberFormat imaginaryFormat)
         throws NullArgumentException {
-        if (imaginaryFormat == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.IMAGINARY_FORMAT);
-        }
-        if (realFormat == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.REAL_FORMAT);
-        }
+        MathUtils.checkNotNull(imaginaryFormat, LocalizedCoreFormats.IMAGINARY_FORMAT);
+        MathUtils.checkNotNull(realFormat, LocalizedCoreFormats.REAL_FORMAT);
 
         this.imaginaryCharacter = DEFAULT_IMAGINARY_CHARACTER;
         this.imaginaryFormat = imaginaryFormat;
@@ -146,12 +141,8 @@ public class ComplexFormat {
         if (imaginaryCharacter.length() == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
-        if (imaginaryFormat == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.IMAGINARY_FORMAT);
-        }
-        if (realFormat == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.REAL_FORMAT);
-        }
+        MathUtils.checkNotNull(imaginaryFormat, LocalizedCoreFormats.IMAGINARY_FORMAT);
+        MathUtils.checkNotNull(realFormat, LocalizedCoreFormats.REAL_FORMAT);
 
         this.imaginaryCharacter = imaginaryCharacter;
         this.imaginaryFormat = imaginaryFormat;

@@ -24,6 +24,7 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Random Key chromosome is used for permutation representation. It is a vector
@@ -179,10 +180,7 @@ public abstract class RandomKey<T> extends AbstractListChromosome<Double> implem
         throws MathIllegalArgumentException {
 
         for (double val : chromosomeRepresentation) {
-            if (val < 0 || val > 1) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                         val, 0, 1);
-            }
+            MathUtils.checkRangeInclusive(val, 0, 1);
         }
     }
 

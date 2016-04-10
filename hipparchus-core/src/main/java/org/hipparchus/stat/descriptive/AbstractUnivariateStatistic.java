@@ -18,8 +18,8 @@ package org.hipparchus.stat.descriptive;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Abstract base class for implementations of the {@link UnivariateStatistic} interface.
@@ -95,9 +95,7 @@ public abstract class AbstractUnivariateStatistic
      */
     public void setData(final double[] values, final int begin, final int length)
             throws MathIllegalArgumentException {
-        if (values == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
-        }
+        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
 
         if (begin < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.START_POSITION, begin);

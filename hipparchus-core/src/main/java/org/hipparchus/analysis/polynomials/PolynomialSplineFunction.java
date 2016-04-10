@@ -24,6 +24,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Represents a polynomial spline function.
@@ -129,10 +130,7 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
      */
     @Override
     public double value(double v) {
-        if (v < knots[0] || v > knots[n]) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   v, knots[0], knots[n]);
-        }
+        MathUtils.checkRangeInclusive(v, knots[0], knots[n]);
         int i = Arrays.binarySearch(knots, v);
         if (i < 0) {
             i = -i - 2;
@@ -165,10 +163,7 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {
         final double t0 = t.getValue();
-        if (t0 < knots[0] || t0 > knots[n]) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   t0, knots[0], knots[n]);
-        }
+        MathUtils.checkRangeInclusive(t0, knots[0], knots[n]);
         int i = Arrays.binarySearch(knots, t0);
         if (i < 0) {
             i = -i - 2;

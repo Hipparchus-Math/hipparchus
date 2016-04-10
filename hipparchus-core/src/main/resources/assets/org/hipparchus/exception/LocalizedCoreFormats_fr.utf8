@@ -13,7 +13,6 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-ARGUMENT_OUTSIDE_DOMAIN = argument {0} hors domaine [{1} ; {2}]
 ARRAY_SIZE_EXCEEDS_MAX_VARIABLES = la taille de tableau ne devrait pas dépasser {0}
 ARRAY_SIZES_SHOULD_HAVE_DIFFERENCE_1 = les tableaux devraient avoir une différence de taille de 1 ({0} != {1} + 1)
 ARRAY_SUMS_TO_ZERO = somme du tableau nulle
@@ -97,7 +96,6 @@ NAN_ELEMENT_AT_INDEX = l''élément {0} est un NaN
 NAN_VALUE_CONVERSION = les valeurs NaN ne peuvent être converties
 NEGATIVE_COMPLEX_MODULE = module négatif ({0}) pour un nombre complexe
 NEGATIVE_ELEMENT_AT_INDEX = l''élément {0} est négatif : {1}
-NEGATIVE_NUMBER_OF_SUCCESSES = le nombre de succès ne doit pas être négatif ({0})
 NUMBER_OF_SUCCESSES = nombre de succès ({0})
 NUMBER_OF_INTERPOLATION_POINTS = nombre de points d''interpolation ({0})
 NUMBER_OF_TRIALS = nombre d''essais ({0})

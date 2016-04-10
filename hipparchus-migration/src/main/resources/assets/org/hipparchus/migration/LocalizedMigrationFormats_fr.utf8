@@ -13,6 +13,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+ARGUMENT_OUTSIDE_DOMAIN = argument {0} hors domaine [{1} ; {2}]
 ASSYMETRIC_EIGEN_NOT_SUPPORTED = la décomposition en valeurs/vecteurs propres de matrices 
 BOBYQA_BOUND_DIFFERENCE_CONDITION = la différence entre la contrainte supérieure et inférieure doit être plus grande que deux fois le rayon de la région de confiance initiale ({0})
 CANNOT_CLEAR_STATISTIC_CONSTRUCTED_FROM_EXTERNAL_MOMENTS = les statistiques basées sur des moments externes ne peuvent pas être remises à zéro
@@ -38,6 +39,7 @@ MAX_ITERATIONS_EXCEEDED = nombre maximal d''itérations ({0}) dépassé
 MISMATCHED_LOESS_ABSCISSA_ORDINATE_ARRAYS = Loess a besoin de tableaux d''abscisses et d''ordonnées de même taille, mais il y a {0} points en abscisse et {1} en ordonnée
 NEGATIVE_BRIGHTNESS_EXPONENT = l''exposant de brillance devrait être positif ou null, or e = {0}
 NEGATIVE_ELEMENT_AT_2D_INDEX = l''élément ({0}, {1}) est négatif : {2}
+NEGATIVE_NUMBER_OF_SUCCESSES = le nombre de succès ne doit pas être négatif ({0})
 NEGATIVE_NUMBER_OF_TRIALS = le nombre d''essais ne doit pas être négatif ({0})
 NON_POSITIVE_DEFINITE_MATRIX = matrice non définie positive : l''élément diagonal ({1},{1}) est inférieur à {2} ({0})
 NON_POSITIVE_MICROSPHERE_ELEMENTS = le nombre d''éléments de la microsphère devrait être positif, or n = {0}

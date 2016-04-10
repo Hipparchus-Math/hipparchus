@@ -19,9 +19,9 @@ package org.hipparchus.stat.regression;
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Results of a Multiple Linear Regression model fit.
@@ -150,10 +150,7 @@ public class RegressionResults implements Serializable {
         if (parameters == null) {
             return Double.NaN;
         }
-        if (index < 0 || index >= this.parameters.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   index, 0, this.parameters.length - 1);
-        }
+        MathUtils.checkRangeInclusive(index, 0, this.parameters.length - 1);
         return this.parameters[index];
     }
 
@@ -188,10 +185,7 @@ public class RegressionResults implements Serializable {
         if (parameters == null) {
             return Double.NaN;
         }
-        if (index < 0 || index >= this.parameters.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   index, 0, this.parameters.length - 1);
-        }
+        MathUtils.checkRangeInclusive(index, 0, this.parameters.length - 1);
         double var = this.getVcvElement(index, index);
         if (!Double.isNaN(var) && var > Double.MIN_VALUE) {
             return FastMath.sqrt(var);
@@ -242,14 +236,8 @@ public class RegressionResults implements Serializable {
         if (parameters == null) {
             return Double.NaN;
         }
-        if (i < 0 || i >= this.parameters.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   i, 0, this.parameters.length - 1);
-        }
-        if (j < 0 || j >= this.parameters.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   j, 0, this.parameters.length - 1);
-        }
+        MathUtils.checkRangeInclusive(i, 0, this.parameters.length - 1);
+        MathUtils.checkRangeInclusive(j, 0, this.parameters.length - 1);
         return this.getVcvElement(i, j);
     }
 

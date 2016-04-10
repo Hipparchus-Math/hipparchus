@@ -25,6 +25,7 @@ import java.util.Locale;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Common part shared by both {@link FractionFormat} and {@link BigFractionFormat}.
@@ -67,13 +68,8 @@ abstract class AbstractFormat extends NumberFormat implements Serializable {
      */
     protected AbstractFormat(final NumberFormat numeratorFormat,
                              final NumberFormat denominatorFormat) {
-        if (numeratorFormat == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.NUMERATOR_FORMAT);
-        }
-
-        if (denominatorFormat == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.DENOMINATOR_FORMAT);
-        }
+        MathUtils.checkNotNull(numeratorFormat, LocalizedCoreFormats.NUMERATOR_FORMAT);
+        MathUtils.checkNotNull(denominatorFormat, LocalizedCoreFormats.DENOMINATOR_FORMAT);
 
         this.numeratorFormat   = numeratorFormat;
         this.denominatorFormat = denominatorFormat;

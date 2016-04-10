@@ -20,6 +20,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.ContinuedFraction;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * <p>
@@ -241,14 +242,8 @@ public class Beta {
     private static double logGammaSum(final double a, final double b)
         throws MathIllegalArgumentException {
 
-        if ((a < 1.0) || (a > 2.0)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   a, 1.0, 2.0);
-        }
-        if ((b < 1.0) || (b > 2.0)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   b, 1.0, 2.0);
-        }
+        MathUtils.checkRangeInclusive(a, 1, 2);
+        MathUtils.checkRangeInclusive(b, 1, 2);
 
         final double x = (a - 1.0) + (b - 1.0);
         if (x <= 0.5) {
@@ -318,10 +313,7 @@ public class Beta {
                                              final double b)
         throws MathIllegalArgumentException {
 
-        if ((a < 0) || (a > b)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   a, 0, b);
-        }
+        MathUtils.checkRangeInclusive(a, 0, b);
         if (b < 10) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    b, 10);

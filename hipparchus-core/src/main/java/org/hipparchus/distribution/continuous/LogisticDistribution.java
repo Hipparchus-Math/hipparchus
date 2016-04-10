@@ -113,10 +113,9 @@ public class LogisticDistribution extends AbstractRealDistribution {
     /** {@inheritDoc} */
     @Override
     public double inverseCumulativeProbability(double p) throws MathIllegalArgumentException {
-        if (p < 0.0 || p > 1.0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   p, 0.0, 1.0);
-        } else if (p == 0) {
+        MathUtils.checkRangeInclusive(p, 0, 1);
+
+        if (p == 0) {
             return 0.0;
         } else if (p == 1) {
             return Double.POSITIVE_INFINITY;

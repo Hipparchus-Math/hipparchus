@@ -21,6 +21,7 @@ import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Utility methods to generate confidence intervals for a binomial proportion.
@@ -266,10 +267,7 @@ public class BinomialProportion {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_TRIALS,
                                                    numberOfTrials);
         }
-        if (probabilityOfSuccess < 0 || probabilityOfSuccess > 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   probabilityOfSuccess, 0, 1);
-        }
+        MathUtils.checkRangeInclusive(probabilityOfSuccess, 0, 1);
         if (confidenceLevel <= 0 || confidenceLevel >= 1) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
                                                    confidenceLevel, 0, 1);

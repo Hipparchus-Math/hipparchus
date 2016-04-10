@@ -226,9 +226,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic implements Se
      */
     @Override
     public double evaluate(final double[] values) throws MathIllegalArgumentException {
-        if (values == null) {
-            throw new NullArgumentException(LocalizedCoreFormats.INPUT_ARRAY);
-        }
+        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
         return evaluate(values, 0, values.length);
     }
 

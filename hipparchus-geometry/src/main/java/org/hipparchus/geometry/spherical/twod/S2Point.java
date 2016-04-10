@@ -16,9 +16,8 @@
  */
 package org.hipparchus.geometry.spherical.twod;
 
-import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -115,10 +114,7 @@ public class S2Point implements Point<Sphere2D> {
     private static Vector3D vector(final double theta, final double phi)
        throws MathIllegalArgumentException {
 
-        if (phi < 0 || phi > FastMath.PI) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   phi, 0, FastMath.PI);
-        }
+        MathUtils.checkRangeInclusive(phi, 0, FastMath.PI);
 
         final double cosTheta = FastMath.cos(theta);
         final double sinTheta = FastMath.sin(theta);

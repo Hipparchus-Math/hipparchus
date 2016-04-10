@@ -222,11 +222,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      * {@code 0} and the value returned by {@link #getSize()} (excluded).
      */
     public int[] getCounts(int index) throws MathIllegalArgumentException {
-        if (index < 0 ||
-            index >= totalSize) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                   index, 0, totalSize);
-        }
+        MathUtils.checkRangeInclusive(index, 0, totalSize - 1);
 
         final int[] indices = new int[dimension];
 
@@ -268,11 +264,7 @@ public class MultidimensionalCounter implements Iterable<Integer> {
         int count = 0;
         for (int i = 0; i < dimension; i++) {
             final int index = c[i];
-            if (index < 0 ||
-                index >= size[i]) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
-                                                       index, 0, size[i] - 1);
-            }
+            MathUtils.checkRangeInclusive(index, 0, size[i] - 1);
             count += uniCounterOffset[i] * c[i];
         }
         return count + c[last];
