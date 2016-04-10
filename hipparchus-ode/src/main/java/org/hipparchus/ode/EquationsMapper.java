@@ -195,7 +195,7 @@ public class EquationsMapper implements Serializable {
      */
     private void checkIndex(final int index) throws MathIllegalArgumentException {
         if (index < 0 || index > start.length - 2) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.ARGUMENT_OUTSIDE_DOMAIN,
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_SIMPLE,
                                                    index, 0, start.length - 2);
         }
     }
