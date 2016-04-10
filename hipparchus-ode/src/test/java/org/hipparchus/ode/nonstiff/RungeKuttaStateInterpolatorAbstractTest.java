@@ -21,7 +21,6 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.ODEStateAndDerivative;
-import org.hipparchus.ode.OrdinaryDifferentialEquation;
 
 public abstract class RungeKuttaStateInterpolatorAbstractTest extends ODEStateInterpolatorAbstractTest {
 
@@ -35,9 +34,9 @@ public abstract class RungeKuttaStateInterpolatorAbstractTest extends ODEStateIn
 
     protected abstract ButcherArrayProvider createButcherArrayProvider();
 
-    protected RungeKuttaStateInterpolator setUpInterpolator(final OrdinaryDifferentialEquation eqn,
-                                                           final double t0, final double[] y0,
-                                                           final double t1) {
+    protected RungeKuttaStateInterpolator setUpInterpolator(final ReferenceODE eqn,
+                                                            final double t0, final double[] y0,
+                                                            final double t1) {
 
         // get the Butcher arrays from the field integrator
         ButcherArrayProvider provider = createButcherArrayProvider();

@@ -48,7 +48,7 @@ public abstract class RungeKuttaFieldStateInterpolatorAbstractTest extends Field
 
     protected <T extends RealFieldElement<T>>
     RungeKuttaFieldStateInterpolator<T> setUpInterpolator(final Field<T> field,
-                                                          final FieldOrdinaryDifferentialEquation<T> eqn,
+                                                          final ReferenceFieldODE<T> eqn,
                                                           final double t0, final double[] y0,
                                                           final double t1) {
 

@@ -18,6 +18,7 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
@@ -71,11 +72,16 @@ public abstract class ODEStateInterpolatorAbstractTest {
 
     }
 
-    protected abstract ODEStateInterpolator setUpInterpolator(final OrdinaryDifferentialEquation eqn,
+    public interface ReferenceODE extends OrdinaryDifferentialEquation {
+        double[]              theoreticalState(double t);
+        DerivativeStructure[] theoreticalState(DerivativeStructure t);
+    }
+
+    protected abstract ODEStateInterpolator setUpInterpolator(final ReferenceODE eqn,
                                                               final double t0, final double[] y0,
                                                               final double t1);
 
-    private static class SinCos implements OrdinaryDifferentialEquation {
+    private static class SinCos implements ReferenceODE {
         public int getDimension() {
             return 2;
         }
@@ -89,6 +95,11 @@ public abstract class ODEStateInterpolatorAbstractTest {
         public double[] theoreticalState(final double t) {
             return new double[] {
                 FastMath.sin(t), FastMath.cos(t)
+            };
+        }
+        public DerivativeStructure[] theoreticalState(final DerivativeStructure t) {
+            return new DerivativeStructure[] {
+                t.sin(), t.cos()
             };
         }
     }

@@ -66,8 +66,8 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
     protected <T extends RealFieldElement<T>> void doInterpolationInside(final Field<T> field,
                                                                          double epsilonSin, double epsilonCos) {
 
-        FieldODEStateInterpolator<T> interpolator = setUpInterpolator(field,
-                                                                      new SinCos<T>(field),
+        ReferenceFieldODE<T> sinCos =  new SinCos<T>(field);
+        FieldODEStateInterpolator<T> interpolator = setUpInterpolator(field, sinCos,
                                                                       0.0, new double[] { 0.0, 1.0 }, 0.0125);
 
         int n = 100;
@@ -78,8 +78,9 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                   add(interpolator.getCurrentState().getTime().multiply(i)).
                   divide(n);
             FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
-            maxErrorSin = FastMath.max(maxErrorSin, state.getState()[0].subtract(t.sin()).abs().getReal());
-            maxErrorCos = FastMath.max(maxErrorCos, state.getState()[1].subtract(t.cos()).abs().getReal());
+            T[] ref = sinCos.theoreticalState(t);
+            maxErrorSin = FastMath.max(maxErrorSin, state.getState()[0].subtract(ref[0]).abs().getReal());
+            maxErrorCos = FastMath.max(maxErrorCos, state.getState()[1].subtract(ref[1]).abs().getReal());
         }
         Assert.assertEquals(0.0, maxErrorSin, epsilonSin);
         Assert.assertEquals(0.0, maxErrorCos, epsilonCos);
@@ -93,7 +94,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                                                                                      double epsilonSin, double epsilonCos,
                                                                                      double epsilonSinDot, double epsilonCosDot) {
 
-        FieldOrdinaryDifferentialEquation<T> eqn = new SinCos<T>(field);
+        ReferenceFieldODE<T> eqn = new SinCos<T>(field);
         FieldODEStateInterpolator<T> fieldInterpolator =
                         setUpInterpolator(field, eqn, 0.0, new double[] { 0.0, 1.0 }, 0.125);
         ODEStateInterpolator regularInterpolator = convertInterpolator(fieldInterpolator, eqn);
@@ -130,9 +131,13 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
 
     }
 
+    public interface ReferenceFieldODE<T extends RealFieldElement<T>> extends FieldOrdinaryDifferentialEquation<T> {
+        T[] theoreticalState(T t);
+    }
+
     protected abstract <T extends RealFieldElement<T>>
     FieldODEStateInterpolator<T> setUpInterpolator(final Field<T> field,
-                                                   final FieldOrdinaryDifferentialEquation<T> eqn,
+                                                   final ReferenceFieldODE<T> eqn,
                                                    final double t0, final double[] y0,
                                                    final double t1);
 
@@ -205,7 +210,7 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         return regularMapper;
     }
 
-    private static class SinCos<T extends RealFieldElement<T>> implements FieldOrdinaryDifferentialEquation<T> {
+    private static class SinCos<T extends RealFieldElement<T>> implements ReferenceFieldODE<T> {
         private final Field<T> field;
         protected SinCos(final Field<T> field) {
             this.field = field;
@@ -220,6 +225,12 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
             yDot[0] = y[1];
             yDot[1] = y[0].negate();
             return yDot;
+        }
+        public T[] theoreticalState(final T t) {
+            T[] state = MathArrays.buildArray(field, 2);
+            state[0] = t.sin();
+            state[1] = t.cos();
+            return state;
         }
     }
 
