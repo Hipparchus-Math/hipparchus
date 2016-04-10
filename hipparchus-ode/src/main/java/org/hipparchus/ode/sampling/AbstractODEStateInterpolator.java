@@ -156,6 +156,13 @@ public abstract class AbstractODEStateInterpolator
         return forward;
     }
 
+    /** Get the mapper for ODE equations primary and secondary components.
+     * @return mapper for ODE equations primary and secondary components
+     */
+    protected EquationsMapper getMapper() {
+        return mapper;
+    }
+
     /** Compute the state and derivatives at the interpolated time.
      * This is the main processing method that should be implemented by
      * the derived classes to perform the interpolation.
