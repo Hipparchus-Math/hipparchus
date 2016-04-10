@@ -138,12 +138,12 @@ public class DormandPrince54Integrator extends EmbeddedRungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected DormandPrince54StepInterpolator
+    protected DormandPrince54StateInterpolator
     createInterpolator(final boolean forward, double[][] yDotK,
                        final ODEStateAndDerivative globalPreviousState,
                        final ODEStateAndDerivative globalCurrentState,
                        final EquationsMapper mapper) {
-        return new DormandPrince54StepInterpolator(forward, yDotK,
+        return new DormandPrince54StateInterpolator(forward, yDotK,
                                                    globalPreviousState, globalCurrentState,
                                                    globalPreviousState, globalCurrentState,
                                                    mapper);

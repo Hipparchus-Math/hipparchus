@@ -111,12 +111,12 @@ public class HighamHall54Integrator extends EmbeddedRungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected HighamHall54StepInterpolator
+    protected HighamHall54StateInterpolator
     createInterpolator(final boolean forward, double[][] yDotK,
                        final ODEStateAndDerivative globalPreviousState,
                        final ODEStateAndDerivative globalCurrentState,
                        final EquationsMapper mapper) {
-        return new HighamHall54StepInterpolator(forward, yDotK,
+        return new HighamHall54StateInterpolator(forward, yDotK,
                                                 globalPreviousState, globalCurrentState,
                                                 globalPreviousState, globalCurrentState,
                                                 mapper);

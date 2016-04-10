@@ -109,12 +109,12 @@ public class GillFieldIntegrator<T extends RealFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    protected GillFieldStepInterpolator<T>
+    protected GillFieldStateInterpolator<T>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new GillFieldStepInterpolator<T>(getField(), forward, yDotK,
+        return new GillFieldStateInterpolator<T>(getField(), forward, yDotK,
                                                 globalPreviousState, globalCurrentState,
                                                 globalPreviousState, globalCurrentState,
                                                 mapper);

@@ -227,7 +227,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
         // reuse the step that was chosen by the starter integrator
         FieldODEStateAndDerivative<T> stepStart = getStepStart();
         FieldODEStateAndDerivative<T> stepEnd   =
-                        AdamsFieldStepInterpolator.taylor(stepStart,
+                        AdamsFieldStateInterpolator.taylor(stepStart,
                                                           stepStart.getTime().add(getStepSize()),
                                                           getStepSize(), scaled, nordsieck);
 
@@ -261,7 +261,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
                     // reject the step and attempt to reduce error by stepsize control
                     final T factor = computeStepGrowShrinkFactor(error);
                     rescale(filterStep(getStepSize().multiply(factor), forward, false));
-                    stepEnd = AdamsFieldStepInterpolator.taylor(getStepStart(),
+                    stepEnd = AdamsFieldStateInterpolator.taylor(getStepStart(),
                                                                 getStepStart().getTime().add(getStepSize()),
                                                                 getStepSize(),
                                                                 scaled,
@@ -281,7 +281,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
 
             // discrete events handling
             stepEnd = new FieldODEStateAndDerivative<T>(stepEnd.getTime(), predictedY, correctedYDot);
-            setStepStart(acceptStep(new AdamsFieldStepInterpolator<T>(getStepSize(), stepEnd,
+            setStepStart(acceptStep(new AdamsFieldStateInterpolator<T>(getStepSize(), stepEnd,
                                                                       correctedScaled, predictedNordsieck, forward,
                                                                       getStepStart(), stepEnd,
                                                                       equations.getMapper()),
@@ -317,7 +317,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
                 }
 
                 rescale(hNew);
-                stepEnd = AdamsFieldStepInterpolator.taylor(getStepStart(), getStepStart().getTime().add(getStepSize()),
+                stepEnd = AdamsFieldStateInterpolator.taylor(getStepStart(), getStepStart().getTime().add(getStepSize()),
                                                             getStepSize(), scaled, nordsieck);
 
             }

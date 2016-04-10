@@ -40,8 +40,7 @@ import org.junit.Test;
 public class GraggBulirschStoerIntegratorTest {
 
     @Test(expected=MathIllegalArgumentException.class)
-    public void testDimensionCheck()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testDimensionCheck() {
         TestProblem1 pb = new TestProblem1();
         AdaptiveStepsizeIntegrator integrator =
                         new GraggBulirschStoerIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
@@ -51,8 +50,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test(expected=MathIllegalArgumentException.class)
-    public void testNullIntervalCheck()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testNullIntervalCheck() {
         TestProblem1 pb = new TestProblem1();
         GraggBulirschStoerIntegrator integrator =
                         new GraggBulirschStoerIntegrator(0.0, 1.0, 1.0e-10, 1.0e-10);
@@ -62,8 +60,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test(expected=MathIllegalArgumentException.class)
-    public void testMinStep()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testMinStep() {
 
         TestProblem5 pb  = new TestProblem5();
         double minStep   = 0.1 * FastMath.abs(pb.getFinalTime() - pb.getInitialTime());
@@ -81,8 +78,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test
-    public void testBackward()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testBackward() {
 
         TestProblem5 pb = new TestProblem5();
         double minStep = 0;
@@ -104,8 +100,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test
-    public void testIncreasingTolerance()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testIncreasingTolerance() {
 
         int previousCalls = Integer.MAX_VALUE;
         for (int i = -12; i < -4; ++i) {
@@ -140,8 +135,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test
-    public void testIntegratorControls()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testIntegratorControls() {
 
         TestProblem3 pb = new TestProblem3(0.999);
         GraggBulirschStoerIntegrator integ =
@@ -169,8 +163,7 @@ public class GraggBulirschStoerIntegratorTest {
 
     }
 
-    private double getMaxError(ODEIntegrator integrator, TestProblemAbstract pb)
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    private double getMaxError(ODEIntegrator integrator, TestProblemAbstract pb) {
         TestProblemHandler handler = new TestProblemHandler(pb, integrator);
         integrator.addStepHandler(handler);
         integrator.integrate(pb, pb.getInitialState(), pb.getFinalTime());
@@ -178,8 +171,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test
-    public void testEvents()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testEvents() {
 
         TestProblem4 pb = new TestProblem4();
         double minStep = 0;
@@ -209,8 +201,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test
-    public void testKepler()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testKepler() {
 
         final TestProblem3 pb = new TestProblem3(0.9);
         double minStep        = 0;
@@ -230,8 +221,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test
-    public void testVariableSteps()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testVariableSteps() {
 
         final TestProblem3 pb = new TestProblem3(0.9);
         double minStep        = 0;
@@ -248,8 +238,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test
-    public void testTooLargeFirstStep()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testTooLargeFirstStep() {
 
         AdaptiveStepsizeIntegrator integ =
                         new GraggBulirschStoerIntegrator(0, Double.POSITIVE_INFINITY, Double.NaN, Double.NaN);
@@ -275,8 +264,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test
-    public void testUnstableDerivative()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testUnstableDerivative() {
         final StepProblem stepProblem = new StepProblem(0.0, 1.0, 2.0);
         ODEIntegrator integ =
                         new GraggBulirschStoerIntegrator(0.1, 10, 1.0e-12, 0.0);
@@ -287,8 +275,7 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     @Test
-    public void testIssue596()
-                    throws MathIllegalArgumentException, MathIllegalStateException {
+    public void testIssue596() {
         ODEIntegrator integ = new GraggBulirschStoerIntegrator(1e-10, 100.0, 1e-7, 1e-7);
         integ.addStepHandler(new ODEStepHandler() {
 
@@ -354,6 +341,9 @@ public class GraggBulirschStoerIntegratorTest {
     }
 
     public static class VariableStepHandler implements ODEStepHandler {
+        private boolean firstTime;
+        private double  minStep;
+        private double  maxStep;
         public VariableStepHandler() {
             firstTime = true;
             minStep = 0;
@@ -364,8 +354,7 @@ public class GraggBulirschStoerIntegratorTest {
             minStep = 0;
             maxStep = 0;
         }
-        public void handleStep(ODEStateInterpolator interpolator,
-                               boolean isLast) {
+        public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
 
             double step = FastMath.abs(interpolator.getCurrentState().getTime() -
                                        interpolator.getPreviousState().getTime());
@@ -387,9 +376,6 @@ public class GraggBulirschStoerIntegratorTest {
                 Assert.assertTrue(maxStep > 1.5);
             }
         }
-        private boolean firstTime;
-        private double  minStep;
-        private double  maxStep;
     }
 
 }

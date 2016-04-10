@@ -83,12 +83,12 @@ public class ClassicalRungeKuttaIntegrator extends RungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected ClassicalRungeKuttaStepInterpolator
+    protected ClassicalRungeKuttaStateInterpolator
     createInterpolator(final boolean forward, double[][] yDotK,
                        final ODEStateAndDerivative globalPreviousState,
                        final ODEStateAndDerivative globalCurrentState,
                        final EquationsMapper mapper) {
-        return new ClassicalRungeKuttaStepInterpolator(forward, yDotK,
+        return new ClassicalRungeKuttaStateInterpolator(forward, yDotK,
                                                        globalPreviousState, globalCurrentState,
                                                        globalPreviousState, globalCurrentState,
                                                        mapper);

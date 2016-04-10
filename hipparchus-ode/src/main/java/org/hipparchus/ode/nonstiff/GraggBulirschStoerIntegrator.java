@@ -733,7 +733,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
 
             // dense output handling
             double hInt = getMaxStep();
-            final GraggBulirschStoerStepInterpolator interpolator;
+            final GraggBulirschStoerStateInterpolator interpolator;
             if (! reject) {
 
                 // extrapolate state at middle point of the step
@@ -780,7 +780,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                 new ODEStateAndDerivative(nextT, y1, computeDerivatives(nextT, y1));
 
                 // set up interpolator covering the full step
-                interpolator = new GraggBulirschStoerStepInterpolator(forward,
+                interpolator = new GraggBulirschStoerStateInterpolator(forward,
                                                                       getStepStart(), stepEnd,
                                                                       getStepStart(), stepEnd,
                                                                       equations.getMapper(), yMidDots);

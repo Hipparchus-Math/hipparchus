@@ -162,7 +162,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
      * @param mapper equations mapper for the all equations
      * @return external weights for the high order method from Butcher array
      */
-    protected abstract RungeKuttaStepInterpolator createInterpolator(boolean forward, double[][] yDotK,
+    protected abstract RungeKuttaStateInterpolator createInterpolator(boolean forward, double[][] yDotK,
                                                                      ODEStateAndDerivative globalPreviousState,
                                                                      ODEStateAndDerivative globalCurrentState,
                                                                      EquationsMapper mapper);

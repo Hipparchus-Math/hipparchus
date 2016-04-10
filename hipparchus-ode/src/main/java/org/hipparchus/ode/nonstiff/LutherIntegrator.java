@@ -98,12 +98,12 @@ public class LutherIntegrator extends RungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected LutherStepInterpolator
+    protected LutherStateInterpolator
     createInterpolator(final boolean forward, double[][] yDotK,
                        final ODEStateAndDerivative globalPreviousState,
                        final ODEStateAndDerivative globalCurrentState,
                        final EquationsMapper mapper) {
-        return new LutherStepInterpolator(forward, yDotK,
+        return new LutherStateInterpolator(forward, yDotK,
                                           globalPreviousState, globalCurrentState,
                                           globalPreviousState, globalCurrentState,
                                           mapper);

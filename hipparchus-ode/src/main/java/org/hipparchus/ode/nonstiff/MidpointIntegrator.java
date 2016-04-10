@@ -78,12 +78,12 @@ public class MidpointIntegrator extends RungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected MidpointStepInterpolator
+    protected MidpointStateInterpolator
     createInterpolator(final boolean forward, double[][] yDotK,
                        final ODEStateAndDerivative globalPreviousState,
                        final ODEStateAndDerivative globalCurrentState,
                        final EquationsMapper mapper) {
-        return new MidpointStepInterpolator(forward, yDotK,
+        return new MidpointStateInterpolator(forward, yDotK,
                                             globalPreviousState, globalCurrentState,
                                             globalPreviousState, globalCurrentState,
                                             mapper);

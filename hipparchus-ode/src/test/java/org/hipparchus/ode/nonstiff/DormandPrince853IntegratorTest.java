@@ -285,7 +285,7 @@ public class DormandPrince853IntegratorTest {
         Assert.assertTrue(eventHandler.initCalled);
         Assert.assertTrue(eventHandler.resetCalled);
 
-        Assert.assertEquals(4.0, finalT);
+        Assert.assertEquals(4.0, finalT, 1.0e-10);
 
     }
 

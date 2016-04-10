@@ -102,7 +102,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
      * @param mapper equations mapper for the all equations
      * @return external weights for the high order method from Butcher array
      */
-    protected abstract RungeKuttaFieldStepInterpolator<T> createInterpolator(boolean forward, T[][] yDotK,
+    protected abstract RungeKuttaFieldStateInterpolator<T> createInterpolator(boolean forward, T[][] yDotK,
                                                                              FieldODEStateAndDerivative<T> globalPreviousState,
                                                                              FieldODEStateAndDerivative<T> globalCurrentState,
                                                                              FieldEquationsMapper<T> mapper);

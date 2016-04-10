@@ -77,12 +77,12 @@ public class EulerIntegrator extends RungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected EulerStepInterpolator
+    protected EulerStateInterpolator
         createInterpolator(final boolean forward, double[][] yDotK,
                            final ODEStateAndDerivative globalPreviousState,
                            final ODEStateAndDerivative globalCurrentState,
                            final EquationsMapper mapper) {
-        return new EulerStepInterpolator(forward, yDotK,
+        return new EulerStateInterpolator(forward, yDotK,
                                          globalPreviousState, globalCurrentState,
                                          globalPreviousState, globalCurrentState,
                                          mapper);

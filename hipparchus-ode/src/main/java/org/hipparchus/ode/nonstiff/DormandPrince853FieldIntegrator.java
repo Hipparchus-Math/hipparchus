@@ -394,11 +394,11 @@ public class DormandPrince853FieldIntegrator<T extends RealFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    protected DormandPrince853FieldStepInterpolator<T>
+    protected DormandPrince853FieldStateInterpolator<T>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState, final FieldEquationsMapper<T> mapper) {
-        return new DormandPrince853FieldStepInterpolator<T>(getField(), forward, yDotK,
+        return new DormandPrince853FieldStateInterpolator<T>(getField(), forward, yDotK,
                                                             globalPreviousState, globalCurrentState,
                                                             globalPreviousState, globalCurrentState,
                                                             mapper);

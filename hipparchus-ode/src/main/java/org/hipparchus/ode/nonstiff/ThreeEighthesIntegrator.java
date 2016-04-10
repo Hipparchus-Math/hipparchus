@@ -81,12 +81,12 @@ public class ThreeEighthesIntegrator extends RungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected ThreeEighthesStepInterpolator
+    protected ThreeEighthesStateInterpolator
     createInterpolator(final boolean forward, double[][] yDotK,
                        final ODEStateAndDerivative globalPreviousState,
                        final ODEStateAndDerivative globalCurrentState,
                        final EquationsMapper mapper) {
-        return new ThreeEighthesStepInterpolator(forward, yDotK,
+        return new ThreeEighthesStateInterpolator(forward, yDotK,
                                                  globalPreviousState, globalCurrentState,
                                                  globalPreviousState, globalCurrentState,
                                                  mapper);

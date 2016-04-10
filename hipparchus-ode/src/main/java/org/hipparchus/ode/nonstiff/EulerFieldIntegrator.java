@@ -84,12 +84,12 @@ public class EulerFieldIntegrator<T extends RealFieldElement<T>> extends RungeKu
 
     /** {@inheritDoc} */
     @Override
-    protected EulerFieldStepInterpolator<T>
+    protected EulerFieldStateInterpolator<T>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new EulerFieldStepInterpolator<T>(getField(), forward, yDotK,
+        return new EulerFieldStateInterpolator<T>(getField(), forward, yDotK,
                                                  globalPreviousState, globalCurrentState,
                                                  globalPreviousState, globalCurrentState,
                                                  mapper);

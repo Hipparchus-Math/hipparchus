@@ -99,12 +99,12 @@ public class ClassicalRungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    protected ClassicalRungeKuttaFieldStepInterpolator<T>
+    protected ClassicalRungeKuttaFieldStateInterpolator<T>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new ClassicalRungeKuttaFieldStepInterpolator<T>(getField(), forward, yDotK,
+        return new ClassicalRungeKuttaFieldStateInterpolator<T>(getField(), forward, yDotK,
                                                                globalPreviousState, globalCurrentState,
                                                                globalPreviousState, globalCurrentState,
                                                                mapper);

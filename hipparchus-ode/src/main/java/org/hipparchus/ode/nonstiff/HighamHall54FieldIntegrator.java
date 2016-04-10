@@ -163,11 +163,11 @@ public class HighamHall54FieldIntegrator<T extends RealFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    protected HighamHall54FieldStepInterpolator<T>
+    protected HighamHall54FieldStateInterpolator<T>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState, final FieldEquationsMapper<T> mapper) {
-        return new HighamHall54FieldStepInterpolator<T>(getField(), forward, yDotK,
+        return new HighamHall54FieldStateInterpolator<T>(getField(), forward, yDotK,
                                                         globalPreviousState, globalCurrentState,
                                                         globalPreviousState, globalCurrentState,
                                                         mapper);

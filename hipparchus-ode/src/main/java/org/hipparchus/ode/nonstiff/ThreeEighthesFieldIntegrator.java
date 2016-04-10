@@ -98,12 +98,12 @@ public class ThreeEighthesFieldIntegrator<T extends RealFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    protected ThreeEighthesFieldStepInterpolator<T>
+    protected ThreeEighthesFieldStateInterpolator<T>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new ThreeEighthesFieldStepInterpolator<T>(getField(), forward, yDotK,
+        return new ThreeEighthesFieldStateInterpolator<T>(getField(), forward, yDotK,
                                                          globalPreviousState, globalCurrentState,
                                                          globalPreviousState, globalCurrentState,
                                                          mapper);

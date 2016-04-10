@@ -134,12 +134,12 @@ public class LutherFieldIntegrator<T extends RealFieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    protected LutherFieldStepInterpolator<T>
+    protected LutherFieldStateInterpolator<T>
         createInterpolator(final boolean forward, T[][] yDotK,
                            final FieldODEStateAndDerivative<T> globalPreviousState,
                            final FieldODEStateAndDerivative<T> globalCurrentState,
                            final FieldEquationsMapper<T> mapper) {
-        return new LutherFieldStepInterpolator<T>(getField(), forward, yDotK,
+        return new LutherFieldStateInterpolator<T>(getField(), forward, yDotK,
                                                   globalPreviousState, globalCurrentState,
                                                   globalPreviousState, globalCurrentState,
                                                   mapper);

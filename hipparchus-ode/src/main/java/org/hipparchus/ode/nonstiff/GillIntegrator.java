@@ -83,12 +83,12 @@ public class GillIntegrator extends RungeKuttaIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    protected GillStepInterpolator
+    protected GillStateInterpolator
     createInterpolator(final boolean forward, double[][] yDotK,
                        final ODEStateAndDerivative globalPreviousState,
                        final ODEStateAndDerivative globalCurrentState,
                        final EquationsMapper mapper) {
-        return new GillStepInterpolator(forward, yDotK,
+        return new GillStateInterpolator(forward, yDotK,
                                         globalPreviousState, globalCurrentState,
                                         globalPreviousState, globalCurrentState,
                                         mapper);

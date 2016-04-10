@@ -221,7 +221,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
         // reuse the step that was chosen by the starter integrator
         ODEStateAndDerivative stepStart = getStepStart();
         ODEStateAndDerivative stepEnd   =
-                        AdamsStepInterpolator.taylor(stepStart,
+                        AdamsStateInterpolator.taylor(stepStart,
                                                      stepStart.getTime() + getStepSize(),
                                                      getStepSize(), scaled, nordsieck);
 
@@ -254,7 +254,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
                     // reject the step and attempt to reduce error by stepsize control
                     final double factor = computeStepGrowShrinkFactor(error);
                     rescale(filterStep(getStepSize() * factor, forward, false));
-                    stepEnd = AdamsStepInterpolator.taylor(getStepStart(),
+                    stepEnd = AdamsStateInterpolator.taylor(getStepStart(),
                                                            getStepStart().getTime() + getStepSize(),
                                                            getStepSize(),
                                                            scaled,
@@ -274,7 +274,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
 
             // discrete events handling
             stepEnd = new ODEStateAndDerivative(stepEnd.getTime(), predictedY, correctedYDot);
-            setStepStart(acceptStep(new AdamsStepInterpolator(getStepSize(), stepEnd,
+            setStepStart(acceptStep(new AdamsStateInterpolator(getStepSize(), stepEnd,
                                                               correctedScaled, predictedNordsieck, forward,
                                                               getStepStart(), stepEnd,
                                                               equations.getMapper()),
@@ -310,7 +310,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
                 }
 
                 rescale(hNew);
-                stepEnd = AdamsStepInterpolator.taylor(getStepStart(), getStepStart().getTime() + getStepSize(),
+                stepEnd = AdamsStateInterpolator.taylor(getStepStart(), getStepStart().getTime() + getStepSize(),
                                                        getStepSize(), scaled, nordsieck);
             }
 

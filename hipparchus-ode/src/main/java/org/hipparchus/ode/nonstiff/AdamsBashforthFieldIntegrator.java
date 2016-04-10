@@ -252,7 +252,7 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
 
         // reuse the step that was chosen by the starter integrator
         FieldODEStateAndDerivative<T> stepEnd   =
-                        AdamsFieldStepInterpolator.taylor(getStepStart(),
+                        AdamsFieldStateInterpolator.taylor(getStepStart(),
                                                           getStepStart().getTime().add(getStepSize()),
                                                           getStepSize(), scaled, nordsieck);
 
@@ -286,7 +286,7 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
                     // reject the step and attempt to reduce error by stepsize control
                     final T factor = computeStepGrowShrinkFactor(error);
                     rescale(filterStep(getStepSize().multiply(factor), forward, false));
-                    stepEnd = AdamsFieldStepInterpolator.taylor(getStepStart(),
+                    stepEnd = AdamsFieldStateInterpolator.taylor(getStepStart(),
                                                                 getStepStart().getTime().add(getStepSize()),
                                                                 getStepSize(),
                                                                 scaled,
@@ -296,7 +296,7 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
             }
 
             // discrete events handling
-            setStepStart(acceptStep(new AdamsFieldStepInterpolator<T>(getStepSize(), stepEnd,
+            setStepStart(acceptStep(new AdamsFieldStateInterpolator<T>(getStepSize(), stepEnd,
                                                                       predictedScaled, predictedNordsieck, forward,
                                                                       getStepStart(), stepEnd,
                                                                       equations.getMapper()),
@@ -332,7 +332,7 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
                 }
 
                 rescale(hNew);
-                stepEnd = AdamsFieldStepInterpolator.taylor(getStepStart(), getStepStart().getTime().add(getStepSize()),
+                stepEnd = AdamsFieldStateInterpolator.taylor(getStepStart(), getStepStart().getTime().add(getStepSize()),
                                                             getStepSize(), scaled, nordsieck);
 
             }
