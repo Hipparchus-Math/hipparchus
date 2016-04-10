@@ -18,85 +18,50 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Random;
-
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.DenseOutputModel;
-import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.sampling.ODEStepHandler;
-import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
-import org.junit.Assert;
+import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.junit.Test;
 
-public class GraggBulirschStoerStateInterpolatorTest {
+public class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
 
     @Test
-    public void derivativesConsistency()
-        throws MathIllegalArgumentException, MathIllegalStateException {
-        TestProblem3 pb = new TestProblem3(0.9);
-        double minStep   = 0;
-        double maxStep   = pb.getFinalTime() - pb.getInitialTime();
-        double absTolerance = 1.0e-8;
-        double relTolerance = 1.0e-8;
-
-        GraggBulirschStoerIntegrator integ =
-                        new GraggBulirschStoerIntegrator(minStep, maxStep,
-                                                         absTolerance, relTolerance);
-        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 5.9e-10);
+    public void interpolationAtBounds() {
+        doInterpolationAtBounds(1.0e-15);
     }
 
     @Test
-    public void serialization()
-        throws IOException, ClassNotFoundException,
-               MathIllegalArgumentException, MathIllegalStateException {
+    public void interpolationInside() {
+        doInterpolationInside(1.0e-50, 1.0e-50);
+    }
 
-        TestProblem3 pb  = new TestProblem3(0.9);
-        double minStep   = 0;
-        double maxStep   = pb.getFinalTime() - pb.getInitialTime();
-        double absTolerance = 1.0e-8;
-        double relTolerance = 1.0e-8;
+    protected ODEStateInterpolator setUpInterpolator(final ReferenceODE eqn,
+                                                     final double t0, final double[] y0,
+                                                     final double t1) {
 
-        GraggBulirschStoerIntegrator integ =
-                        new GraggBulirschStoerIntegrator(minStep, maxStep,
-                                                         absTolerance, relTolerance);
-        integ.addStepHandler(new DenseOutputModel());
-        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
+        // evaluate derivatives at mid-step
+        final int derivationOrder = 7;
+        DerivativeStructure middleT = new DerivativeStructure(1, derivationOrder, 0, 0.5 * (t0 + t1));
+        DerivativeStructure[] derivatives =  eqn.theoreticalState(middleT);
 
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream    oos = new ObjectOutputStream(bos);
-        for (ODEStepHandler handler : integ.getStepHandlers()) {
-            oos.writeObject(handler);
-        }
-
-        Assert.assertTrue(bos.size () > 35000);
-        Assert.assertTrue(bos.size () < 36000);
-
-        ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
-        ObjectInputStream     ois = new ObjectInputStream(bis);
-        DenseOutputModel cm  = (DenseOutputModel) ois.readObject();
-
-        Random random = new Random(347588535632l);
-        double maxError = 0.0;
-        for (int i = 0; i < 1000; ++i) {
-            double r = random.nextDouble();
-            double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-            double[] interpolatedY = cm.getInterpolatedState(time).getState();
-            double[] theoreticalY  = pb.computeTheoreticalState(time);
-            double dx = interpolatedY[0] - theoreticalY[0];
-            double dy = interpolatedY[1] - theoreticalY[1];
-            double error = dx * dx + dy * dy;
-            if (error > maxError) {
-                maxError = error;
+        double[][] yMidDots = new double[derivationOrder + 1][eqn.getDimension()];
+        for (int k = 0; k < yMidDots.length; ++k) {
+            for (int i = 0; i < derivatives.length; ++i) {
+                yMidDots[k][i] = derivatives[i].getPartialDerivative(k);
             }
         }
 
-        Assert.assertTrue(maxError < 5.0e-10);
+        ODEStateAndDerivative s0 = new ODEStateAndDerivative(t0, y0, eqn.computeDerivatives(t0, y0));
+        double[] y1 = eqn.theoreticalState(t1);
+        ODEStateAndDerivative s1 = new ODEStateAndDerivative(t1, y1, eqn.computeDerivatives(t1, y1));
+        EquationsMapper mapper = new ExpandableODE(eqn).getMapper();
+
+        GraggBulirschStoerStateInterpolator interpolator =
+                        new GraggBulirschStoerStateInterpolator(t1 >= t0, s0, s1, s0, s1,
+                                                                mapper, yMidDots, derivationOrder);
+        return interpolator;
 
     }
 

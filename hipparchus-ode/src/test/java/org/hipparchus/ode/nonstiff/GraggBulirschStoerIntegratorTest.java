@@ -19,10 +19,10 @@ package org.hipparchus.ode.nonstiff;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.TestProblem4;
@@ -30,8 +30,9 @@ import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblemAbstract;
 import org.hipparchus.ode.TestProblemHandler;
 import org.hipparchus.ode.events.ODEEventHandler;
-import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.hipparchus.ode.sampling.ODEStepHandler;
+import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -272,6 +273,21 @@ public class GraggBulirschStoerIntegratorTest {
         Assert.assertEquals(8.0,
                             integ.integrate(stepProblem, new ODEState(0.0, new double[] { 0.0 }), 10.0).getState()[0],
                             1.0e-12);
+    }
+
+    @Test
+    public void derivativesConsistency()
+        throws MathIllegalArgumentException, MathIllegalStateException {
+        TestProblem3 pb = new TestProblem3(0.9);
+        double minStep   = 0;
+        double maxStep   = pb.getFinalTime() - pb.getInitialTime();
+        double absTolerance = 1.0e-8;
+        double relTolerance = 1.0e-8;
+
+        GraggBulirschStoerIntegrator integ =
+                        new GraggBulirschStoerIntegrator(minStep, maxStep,
+                                                         absTolerance, relTolerance);
+        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 5.9e-10);
     }
 
     @Test

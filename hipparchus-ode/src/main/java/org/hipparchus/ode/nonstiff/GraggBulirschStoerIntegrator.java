@@ -525,7 +525,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
         final boolean forward = finalTime > initialState.getTime();
 
         // create some internal working arrays
-        final double[]   y        = y0.clone();
+        double[]         y        = y0.clone();
         final double[]   y1       = new double[y.length];
         final double[][] diagonal = new double[sequence.length-1][];
         final double[][] y1Diag   = new double[sequence.length-1][];
@@ -675,7 +675,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                                                     orderControl1 * costPerTimeUnit[targetIter])) {
                                                     --targetIter;
                                                 }
-                                                hNew = optimalStep[targetIter];
+                                                hNew = filterStep(optimalStep[targetIter], forward, false);
                                             }
                                         }
                                     }
@@ -700,7 +700,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                                                  orderControl1 * costPerTimeUnit[targetIter])) {
                                                 --targetIter;
                                             }
-                                            hNew = optimalStep[targetIter];
+                                            hNew = filterStep(optimalStep[targetIter], forward, false);
                                         }
                                     }
                                     break;
@@ -713,7 +713,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                                             orderControl1 * costPerTimeUnit[targetIter])) {
                                             --targetIter;
                                         }
-                                        hNew = optimalStep[targetIter];
+                                        hNew = filterStep(optimalStep[targetIter], forward, false);
                                     }
                                     loop = false;
                                     break;
@@ -781,22 +781,20 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
 
                 // set up interpolator covering the full step
                 interpolator = new GraggBulirschStoerStateInterpolator(forward,
-                                                                      getStepStart(), stepEnd,
-                                                                      getStepStart(), stepEnd,
-                                                                      equations.getMapper(), yMidDots);
+                                                                       getStepStart(), stepEnd,
+                                                                       getStepStart(), stepEnd,
+                                                                       equations.getMapper(),
+                                                                       yMidDots, mu);
 
                 if (mu >= 0) {
-
-                    // estimate the dense output coefficients
-                    interpolator.computeCoefficients(mu, getStepSize(), equations.getMapper());
 
                     if (useInterpolationError) {
                         // use the interpolation error to limit stepsize
                         final double interpError = interpolator.estimateError(scale);
-                        hInt = FastMath.abs(getStepSize() / FastMath.max(FastMath.pow(interpError, 1.0 / (mu+4)),
-                                                                         0.01));
+                        hInt = FastMath.abs(getStepSize() /
+                                                       FastMath.max(FastMath.pow(interpError, 1.0 / (mu+4)), 0.01));
                         if (interpError > 10.0) {
-                            hNew = hInt;
+                            hNew   = filterStep(hInt, forward, false);
                             reject = true;
                         }
                     }
@@ -811,6 +809,12 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
 
                 // Discrete events handling
                 setStepStart(acceptStep(interpolator, finalTime));
+
+                // prepare next step
+                // beware that y1 is not always valid anymore here,
+                // as some event may have triggered a reset
+                // so we need to copy the new step start set previously
+                y = equations.getMapper().mapState(getStepStart());
 
                 int optimalIter;
                 if (k == 1) {
@@ -843,7 +847,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                 } else {
                     // stepsize control
                     if (optimalIter <= k) {
-                        hNew = optimalStep[optimalIter];
+                        hNew = filterStep(optimalStep[optimalIter], forward, false);
                     } else {
                         if ((k < targetIter) &&
                                         (costPerTimeUnit[k] < orderControl2 * costPerTimeUnit[k-1])) {

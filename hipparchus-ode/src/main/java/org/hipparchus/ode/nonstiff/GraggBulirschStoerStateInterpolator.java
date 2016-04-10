@@ -81,13 +81,13 @@ class GraggBulirschStoerStateInterpolator
     private final double[][] yMidDots;
 
     /** Interpolation polynomials. */
-    private double[][] polynomials;
+    private final double[][] polynomials;
 
     /** Error coefficients for the interpolation. */
-    private double[] errfac;
+    private final double[] errfac;
 
     /** Degree of the interpolation polynomials. */
-    private int currentDegree;
+    private final int currentDegree;
 
     /** Simple constructor.
      * @param forward integration direction indicator
@@ -96,8 +96,9 @@ class GraggBulirschStoerStateInterpolator
      * @param softPreviousState start of the restricted step
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
-     * @param yMidDots erivatives at the middle of the step
+     * @param yMidDots derivatives at the middle of the step
      * (element 0 is state at midpoint, element 1 is first derivative ...)
+     * @param mu degree of the interpolation polynomial
      */
     GraggBulirschStoerStateInterpolator(final boolean forward,
                                         final ODEStateAndDerivative globalPreviousState,
@@ -105,11 +106,34 @@ class GraggBulirschStoerStateInterpolator
                                         final ODEStateAndDerivative softPreviousState,
                                         final ODEStateAndDerivative softCurrentState,
                                         final EquationsMapper mapper,
-                                        final double[][] yMidDots) {
+                                        final double[][] yMidDots,
+                                        final int mu) {
         super(forward,
               globalPreviousState, globalCurrentState, softPreviousState, softCurrentState,
               mapper);
-        this.yMidDots = yMidDots.clone();
+
+        this.yMidDots      = yMidDots.clone();
+        this.currentDegree = mu + 4;
+        this.polynomials   = new double[currentDegree + 1][getCurrentState().getTotalDimension()];
+
+        // initialize the error factors array for interpolation
+        if (currentDegree <= 4) {
+            errfac = null;
+        } else {
+            errfac = new double[currentDegree - 4];
+            for (int i = 0; i < errfac.length; ++i) {
+                final int ip5 = i + 5;
+                errfac[i] = 1.0 / (ip5 * ip5);
+                final double e = 0.5 * FastMath.sqrt (((double) (i + 1)) / ip5);
+                for (int j = 0; j <= i; ++j) {
+                    errfac[i] *= e / (j + 1);
+                }
+            }
+        }
+
+        // compute the interpolation coefficients
+        computeCoefficients(mu);
+
     }
 
     /** {@inheritDoc} */
@@ -123,82 +147,29 @@ class GraggBulirschStoerStateInterpolator
         return new GraggBulirschStoerStateInterpolator(newForward,
                                                        newGlobalPreviousState, newGlobalCurrentState,
                                                        newSoftPreviousState, newSoftCurrentState,
-                                                       newMapper, yMidDots);
-    }
-
-    /** Reallocate the internal tables.
-     * Reallocate the internal tables in order to be able to handle
-     * interpolation polynomials up to the given degree
-     * @param maxDegree maximal degree to handle
-     */
-    private void resetTables(final int maxDegree) {
-
-        if (maxDegree < 0) {
-            polynomials   = null;
-            errfac        = null;
-            currentDegree = -1;
-        } else {
-
-            final double[][] newPols = new double[maxDegree + 1][];
-            if (polynomials != null) {
-                System.arraycopy(polynomials, 0, newPols, 0, polynomials.length);
-                for (int i = polynomials.length; i < newPols.length; ++i) {
-                    newPols[i] = new double[getCurrentState().getTotalDimension()];
-                }
-            } else {
-                for (int i = 0; i < newPols.length; ++i) {
-                    newPols[i] = new double[getCurrentState().getTotalDimension()];
-                }
-            }
-            polynomials = newPols;
-
-            // initialize the error factors array for interpolation
-            if (maxDegree <= 4) {
-                errfac = null;
-            } else {
-                errfac = new double[maxDegree - 4];
-                for (int i = 0; i < errfac.length; ++i) {
-                    final int ip5 = i + 5;
-                    errfac[i] = 1.0 / (ip5 * ip5);
-                    final double e = 0.5 * FastMath.sqrt (((double) (i + 1)) / ip5);
-                    for (int j = 0; j <= i; ++j) {
-                        errfac[i] *= e / (j + 1);
-                    }
-                }
-            }
-
-            currentDegree = 0;
-
-        }
-
+                                                       newMapper, yMidDots, currentDegree - 4);
     }
 
     /** Compute the interpolation coefficients for dense output.
      * @param mu degree of the interpolation polynomial
-     * @param h current step
-     * @param mapper equations mapper
      */
-    public void computeCoefficients(final int mu, final double h, final EquationsMapper mapper) {
+    private void computeCoefficients(final int mu) {
 
-        if ((polynomials == null) || (polynomials.length <= (mu + 4))) {
-            resetTables(mu + 4);
-        }
+        final double[] y0Dot = getMapper().mapDerivative(getGlobalPreviousState());
+        final double[] y1Dot = getMapper().mapDerivative(getGlobalCurrentState());
+        final double[] y1    = getMapper().mapState(getGlobalCurrentState());
 
-        currentDegree = mu + 4;
-        final double[] y0Dot = mapper.mapDerivative(getGlobalPreviousState());
-        final double[] y1Dot = mapper.mapDerivative(getGlobalCurrentState());
-        final double[] y1    = mapper.mapState(getGlobalCurrentState());
-
-        final double[] currentState = mapper.mapState(getCurrentState());
-        for (int i = 0; i < currentState.length; ++i) {
+        final double[] previousState = getMapper().mapState(getPreviousState());
+        final double h = getCurrentState().getTime() - getPreviousState().getTime();
+        for (int i = 0; i < previousState.length; ++i) {
 
             final double yp0   = h * y0Dot[i];
             final double yp1   = h * y1Dot[i];
-            final double ydiff = y1[i] - currentState[i];
+            final double ydiff = y1[i] - previousState[i];
             final double aspl  = ydiff - yp1;
             final double bspl  = yp0 - ydiff;
 
-            polynomials[0][i] = currentState[i];
+            polynomials[0][i] = previousState[i];
             polynomials[1][i] = ydiff;
             polynomials[2][i] = aspl;
             polynomials[3][i] = bspl;
@@ -208,7 +179,7 @@ class GraggBulirschStoerStateInterpolator
             }
 
             // compute the remaining coefficients
-            final double ph0 = 0.5 * (currentState[i] + y1[i]) + 0.125 * (aspl + bspl);
+            final double ph0 = 0.5 * (previousState[i] + y1[i]) + 0.125 * (aspl + bspl);
             polynomials[4][i] = 16 * (yMidDots[0][i] - ph0);
 
             if (mu > 0) {
