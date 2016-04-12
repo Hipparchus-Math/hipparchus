@@ -255,12 +255,8 @@ public class MultidimensionalCounter implements Iterable<Integer> {
      * the range of the corresponding dimension, as defined in the
      * {@link MultidimensionalCounter#MultidimensionalCounter(int...) constructor}.
      */
-    public int getCount(int ... c)
-        throws MathIllegalArgumentException {
-        if (c.length != dimension) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   c.length, dimension);
-        }
+    public int getCount(int ... c) throws MathIllegalArgumentException {
+        MathUtils.checkDimension(c.length, dimension);
         int count = 0;
         for (int i = 0; i < dimension; i++) {
             final int index = c[i];

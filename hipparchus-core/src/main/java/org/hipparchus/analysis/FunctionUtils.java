@@ -24,6 +24,7 @@ import org.hipparchus.analysis.function.Identity;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Utilities for manipulating function objects.
@@ -440,11 +441,7 @@ public class FunctionUtils {
                 // evaluate regular functions
                 final double    v = f.value(dPoint);
                 final double[] dv = gradient.value(dPoint);
-                if (dv.length != point.length) {
-                    // the gradient function is inconsistent
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                           dv.length, point.length);
-                }
+                MathUtils.checkDimension(dv.length, point.length);
 
                 // build the combined derivative
                 final int parameters = point[0].getFreeParameters();

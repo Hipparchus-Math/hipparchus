@@ -326,4 +326,18 @@ public final class MathUtils {
         }
     }
 
+    /**
+     * Checks that the given dimensions match.
+     *
+     * @param dimension the first dimension.
+     * @param otherDimension the second dimension.
+     * @throws MathIllegalArgumentException if length != otherLength.
+     */
+    public static void checkDimension(int dimension, int otherDimension) {
+        if (dimension != otherDimension) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   dimension, otherDimension);
+        }
+    }
+
 }

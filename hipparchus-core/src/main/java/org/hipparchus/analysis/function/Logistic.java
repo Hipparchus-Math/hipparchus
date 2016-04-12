@@ -24,6 +24,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * <a href="http://en.wikipedia.org/wiki/Generalised_logistic_function">
@@ -174,13 +175,8 @@ public class Logistic implements UnivariateDifferentiableFunction {
          */
         private void validateParameters(double[] param)
             throws MathIllegalArgumentException, NullArgumentException {
-            if (param == null) {
-                throw new NullArgumentException();
-            }
-            if (param.length != 6) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       param.length, 6);
-            }
+            MathUtils.checkNotNull(param);
+            MathUtils.checkDimension(param.length, 6);
             if (param[5] <= 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                        param[5], 0);

@@ -26,6 +26,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
 
 /**
@@ -170,10 +171,7 @@ public class Gaussian implements UnivariateDifferentiableFunction {
             if (param == null) {
                 throw new NullArgumentException();
             }
-            if (param.length != 3) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       param.length, 3);
-            }
+            MathUtils.checkDimension(param.length, 3);
             if (param[2] <= 0) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                        param[2], 0);
