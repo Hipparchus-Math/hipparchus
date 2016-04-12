@@ -19,8 +19,7 @@ package org.hipparchus.stat.descriptive;
 import org.hipparchus.linear.RealMatrix;
 
 /**
- *  Reporting interface for basic multivariate statistics.
- *
+ * Reporting interface for basic multivariate statistics.
  */
 public interface StatisticalMultivariateSummary {
 

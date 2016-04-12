@@ -22,6 +22,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.KthSelector;
+import org.hipparchus.util.PivotingStrategy;
 
 
 /**
@@ -31,7 +32,7 @@ import org.hipparchus.util.KthSelector;
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
 public class Median extends Percentile implements Serializable {
 
@@ -56,7 +57,7 @@ public class Median extends Percentile implements Serializable {
      * @param original the {@code Median} instance to copy
      * @throws NullArgumentException if original is null
      */
-    public Median(Median original) throws NullArgumentException {
+    Median(Median original) throws NullArgumentException {
         super(original);
     }
 
@@ -73,6 +74,12 @@ public class Median extends Percentile implements Serializable {
                    final KthSelector kthSelector)
         throws MathIllegalArgumentException {
         super(FIXED_QUANTILE_50, estimationType, nanStrategy, kthSelector);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Median copy() {
+        return new Median(this);
     }
 
     /** {@inheritDoc} */

@@ -28,22 +28,22 @@ import org.hipparchus.util.MathUtils;
 /**
  * Computes the skewness of the available values.
  * <p>
- * We use the following (unbiased) formula to define skewness:</p>
+ * We use the following (unbiased) formula to define skewness:
  * <p>
- * skewness = [n / (n -1) (n - 2)] sum[(x_i - mean)^3] / std^3 </p>
+ * skewness = [n / (n -1) (n - 2)] sum[(x_i - mean)^3] / std^3
  * <p>
  * where n is the number of values, mean is the {@link Mean} and std is the
- * {@link StandardDeviation} </p>
+ * {@link StandardDeviation}.
  * <p>
  * Note that this statistic is undefined for n < 3.  <code>Double.Nan</code>
  * is returned when there is not sufficient data to compute the statistic.
  * Double.NaN may also be returned if the input includes NaN and / or
- * infinite values.</p>
+ * infinite values.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally. </p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
 public class Skewness extends AbstractStorelessUnivariateStatistic implements Serializable {
 
@@ -57,7 +57,7 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
      * Determines whether or not this statistic can be incremented or cleared.
      * <p>
      * Statistics based on (constructed from) external moments cannot
-     * be incremented or cleared.</p>
+     * be incremented or cleared.
     */
     protected boolean incMoment;
 
@@ -93,7 +93,7 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
      * {@inheritDoc}
      * <p>Note that when {@link #Skewness(ThirdMoment)} is used to
      * create a Skewness, this method does nothing. In that case, the
-     * ThirdMoment should be incremented directly.</p>
+     * ThirdMoment should be incremented directly.
      */
     @Override
     public void increment(final double d) {
@@ -105,7 +105,7 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
     /**
      * Returns the value of the statistic based on the values that have been added.
      * <p>
-     * See {@link Skewness} for the definition used in the computation.</p>
+     * See {@link Skewness} for the definition used in the computation.
      *
      * @return the skewness of the available values.
      */
@@ -125,17 +125,13 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return moment.getN();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         if (incMoment) {
@@ -147,9 +143,9 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
      * Returns the Skewness of the entries in the specified portion of the
      * input array.
      * <p>
-     * See {@link Skewness} for the definition used in the computation.</p>
+     * See {@link Skewness} for the definition used in the computation.
      * <p>
-     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     * Throws <code>IllegalArgumentException</code> if the array is null.
      *
      * @param values the input array
      * @param begin the index of the first array element to include
@@ -159,7 +155,7 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
      *  parameters are not valid
      */
     @Override
-    public double evaluate(final double[] values,final int begin, final int length)
+    public double evaluate(final double[] values, final int begin, final int length)
         throws MathIllegalArgumentException {
 
         // Initialize the skewness
@@ -198,20 +194,16 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
         return skew;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Skewness copy() {
-        Skewness result = new Skewness();
-        // No try-catch or advertised exception because args are guaranteed non-null
-        copy(this, result);
-        return result;
+        return new Skewness(this);
     }
 
     /**
      * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
+     * <p>
+     * Neither source nor dest can be null.
      *
      * @param source Skewness to copy
      * @param dest Skewness to copy to
@@ -221,7 +213,7 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
         throws NullArgumentException {
         MathUtils.checkNotNull(source);
         MathUtils.checkNotNull(dest);
-        dest.moment = new ThirdMoment(source.moment.copy());
+        dest.moment = source.moment.copy();
         dest.incMoment = source.incMoment;
     }
 }

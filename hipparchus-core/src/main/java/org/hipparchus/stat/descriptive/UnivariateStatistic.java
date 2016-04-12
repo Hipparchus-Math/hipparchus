@@ -16,8 +16,10 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 
 /**
@@ -26,13 +28,19 @@ import org.hipparchus.util.MathArrays;
 public interface UnivariateStatistic extends MathArrays.Function {
     /**
      * Returns the result of evaluating the statistic over the input array.
+     * <p>
+     * The default implementation delegates to
+     * <code>evaluate(double[], int, int)</code> in the natural way.
      *
      * @param values input array
      * @return the value of the statistic applied to the input array
      * @throws MathIllegalArgumentException  if values is null
      */
     @Override
-    double evaluate(double[] values) throws MathIllegalArgumentException;
+    default double evaluate(double[] values) throws MathIllegalArgumentException {
+        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
+        return evaluate(values, 0, values.length);
+    }
 
     /**
      * Returns the result of evaluating the statistic over the specified entries

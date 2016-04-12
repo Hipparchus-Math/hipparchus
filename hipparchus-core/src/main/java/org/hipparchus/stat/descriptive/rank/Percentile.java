@@ -24,6 +24,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
+import org.hipparchus.stat.descriptive.QuantiledUnivariateStatistic;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.KthSelector;
@@ -54,7 +55,7 @@ import org.hipparchus.util.Precision;
  * <code>floor(pos)</code> in the array and let <code>upper</code> be the
  * next element in the array.  Return <code>lower + d * (upper - lower)</code>
  * </li>
- * </ol></p>
+ * </ol>
  * <p>
  * To compute percentiles, the data must be at least partially ordered.  Input
  * arrays are copied and recursively partitioned using an ordering definition.
@@ -63,33 +64,32 @@ import org.hipparchus.util.Precision;
  * <code>Double.NaN</code> larger than any other value (including
  * <code>Double.POSITIVE_INFINITY</code>).  Therefore, for example, the median
  * (50th percentile) of
- * <code>{0, 1, 2, 3, 4, Double.NaN}</code> evaluates to <code>2.5.</code></p>
+ * <code>{0, 1, 2, 3, 4, Double.NaN}</code> evaluates to <code>2.5.</code>
  * <p>
  * Since percentile estimation usually involves interpolation between array
  * elements, arrays containing  <code>NaN</code> or infinite values will often
- * result in <code>NaN</code> or infinite values returned.</p>
+ * result in <code>NaN</code> or infinite values returned.
  * <p>
  * Further, to include different estimation types such as R1, R2 as mentioned in
  * <a href="http://en.wikipedia.org/wiki/Quantile">Quantile page(wikipedia)</a>,
  * a type specific NaN handling strategy is used to closely match with the
- * typically observed results from popular tools like R(R1-R9), Excel(R7).</p>
+ * typically observed results from popular tools like R(R1-R9), Excel(R7).
  * <p>
- * Since 2.2, Percentile uses only selection instead of complete sorting
- * and caches selection algorithm state between calls to the various
- * {@code evaluate} methods. This greatly improves efficiency, both for a single
- * percentile and multiple percentile computations. To maximize performance when
- * multiple percentiles are computed based on the same data, users should set the
- * data array once using either one of the {@link #evaluate(double[], double)} or
- * {@link #setData(double[])} methods and thereafter {@link #evaluate(double)}
- * with just the percentile provided.
- * </p>
+ * Percentile uses only selection instead of complete sorting and caches selection
+ * algorithm state between calls to the various {@code evaluate} methods. This
+ * greatly improves efficiency, both for a single percentile and multiple percentile
+ * computations. To maximize performance when multiple percentiles are computed
+ * based on the same data, users should set the data array once using either one
+ * of the {@link #evaluate(double[], double)} or {@link #setData(double[])} methods
+ * and thereafter {@link #evaluate(double)} with just the percentile provided.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
-public class Percentile extends AbstractUnivariateStatistic implements Serializable {
+public class Percentile extends AbstractUnivariateStatistic
+    implements QuantiledUnivariateStatistic, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -170,7 +170,6 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
             System.arraycopy(original.cachedPivots, 0, cachedPivots, 0, original.cachedPivots.length);
         }
         setQuantile(original.quantile);
-
     }
 
     /**
@@ -229,7 +228,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * <p>
      * The stored array is the one which was set by previous calls to
      * {@link #setData(double[])}
-     * </p>
+     *
      * @param p the percentile value to compute
      * @return the value of the statistic applied to the stored data
      * @throws MathIllegalArgumentException if p is not a valid quantile value
@@ -237,38 +236,6 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      */
     public double evaluate(final double p) throws MathIllegalArgumentException {
         return evaluate(getDataRef(), p);
-    }
-
-    /**
-     * Returns an estimate of the <code>p</code>th percentile of the values
-     * in the <code>values</code> array.
-     * <p>
-     * Calls to this method do not modify the internal <code>quantile</code>
-     * state of this statistic.</p>
-     * <p>
-     * <ul>
-     * <li>Returns <code>Double.NaN</code> if <code>values</code> has length
-     * <code>0</code></li>
-     * <li>Returns (for any value of <code>p</code>) <code>values[0]</code>
-     *  if <code>values</code> has length <code>1</code></li>
-     * <li>Throws <code>MathIllegalArgumentException</code> if <code>values</code>
-     * is null or p is not a valid quantile value (p must be greater than 0
-     * and less than or equal to 100) </li>
-     * </ul></p>
-     * <p>
-     * See {@link Percentile} for a description of the percentile estimation
-     * algorithm used.</p>
-     *
-     * @param values input array of values
-     * @param p the percentile value to compute
-     * @return the percentile value or Double.NaN if the array is empty
-     * @throws MathIllegalArgumentException if <code>values</code> is null or p is invalid
-     */
-    public double evaluate(final double[] values, final double p)
-        throws MathIllegalArgumentException {
-
-        MathArrays.verifyValues(values, 0, 0);
-        return evaluate(values, 0, values.length, p);
     }
 
     /**
@@ -282,10 +249,10 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * <code>values[begin]</code> if <code>length = 1 </code></li>
      * <li>Throws <code>MathIllegalArgumentException</code> if <code>values</code>
      * is null, or <code>start</code> or <code>length</code> is invalid</li>
-     * </ul></p>
+     * </ul>
      * <p>
      * See {@link Percentile} for a description of the percentile estimation
-     * algorithm used.</p>
+     * algorithm used.
      *
      * @param values the input array
      * @param start index of the first array element to include
@@ -300,14 +267,14 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
         return evaluate(values, start, length, quantile);
     }
 
-     /**
+    /**
      * Returns an estimate of the <code>p</code>th percentile of the values
      * in the <code>values</code> array, starting with the element in (0-based)
      * position <code>begin</code> in the array and including <code>length</code>
      * values.
      * <p>
      * Calls to this method do not modify the internal <code>quantile</code>
-     * state of this statistic.</p>
+     * state of this statistic.
      * <p>
      * <ul>
      * <li>Returns <code>Double.NaN</code> if <code>length = 0</code></li>
@@ -317,10 +284,10 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      *  is null , <code>begin</code> or <code>length</code> is invalid, or
      * <code>p</code> is not a valid quantile value (p must be greater than 0
      * and less than or equal to 100)</li>
-     * </ul></p>
+     * </ul>
      * <p>
      * See {@link Percentile} for a description of the percentile estimation
-     * algorithm used.</p>
+     * algorithm used.
      *
      * @param values array of input values
      * @param p  the percentile to compute
@@ -330,13 +297,15 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * @throws MathIllegalArgumentException if the parameters are not valid or the
      * input array is null
      */
+    @Override
     public double evaluate(final double[] values, final int begin,
                            final int length, final double p)
         throws MathIllegalArgumentException {
 
         MathArrays.verifyValues(values, begin, length);
         if (p > 100 || p <= 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_QUANTILE_VALUE, p, 0, 100);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_QUANTILE_VALUE,
+                                                   p, 0, 100);
         }
         if (length == 0) {
             return Double.NaN;
@@ -357,6 +326,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      *
      * @return quantile set while construction or {@link #setQuantile(double)}
      */
+    @Override
     public double getQuantile() {
         return quantile;
     }
@@ -369,6 +339,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * @throws MathIllegalArgumentException  if p is not greater than 0 and less
      * than or equal to 100
      */
+    @Override
     public void setQuantile(final double p) throws MathIllegalArgumentException {
         if (p <= 0 || p > 100) {
             throw new MathIllegalArgumentException(
@@ -377,9 +348,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
         quantile = p;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Percentile copy() {
         return new Percentile(this);
@@ -418,7 +387,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
                     MathArrays.checkNotNaN(work);
                     break;
                 default: //FIXED
-                    work = copyOf(values,begin,length);
+                    work = copyOf(values, begin, length);
                     break;
             }
         }
@@ -538,7 +507,6 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * <p>
      * This method is intended to be used as part of a fluent-type builder
      * pattern. Building finely tune instances should be done as follows:
-     * </p>
      * <pre>
      *   Percentile customized = new Percentile(quantile).
      *                           withEstimationType(estimationType).
@@ -548,7 +516,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * <p>
      * If any of the {@code withXxx} method is omitted, the default value for
      * the corresponding customization parameter will be used.
-     * </p>
+     *
      * @param newEstimationType estimation type for the new instance
      * @return a new instance, with changed estimation type
      * @throws NullArgumentException when newEstimationType is null
@@ -571,7 +539,6 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * <p>
      * This method is intended to be used as part of a fluent-type builder
      * pattern. Building finely tune instances should be done as follows:
-     * </p>
      * <pre>
      *   Percentile customized = new Percentile(quantile).
      *                           withEstimationType(estimationType).
@@ -581,7 +548,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * <p>
      * If any of the {@code withXxx} method is omitted, the default value for
      * the corresponding customization parameter will be used.
-     * </p>
+     *
      * @param newNaNStrategy NaN strategy for the new instance
      * @return a new instance, with changed NaN handling strategy
      * @throws NullArgumentException when newNaNStrategy is null
@@ -612,7 +579,6 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * <p>
      * This method is intended to be used as part of a fluent-type builder
      * pattern. Building finely tune instances should be done as follows:
-     * </p>
      * <pre>
      *   Percentile customized = new Percentile(quantile).
      *                           withEstimationType(estimationType).
@@ -622,7 +588,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * <p>
      * If any of the {@code withXxx} method is omitted, the default value for
      * the corresponding customization parameter will be used.
-     * </p>
+     *
      * @param newKthSelector KthSelector for the new instance
      * @return a new instance, with changed KthSelector
      * @throws NullArgumentException when newKthSelector is null

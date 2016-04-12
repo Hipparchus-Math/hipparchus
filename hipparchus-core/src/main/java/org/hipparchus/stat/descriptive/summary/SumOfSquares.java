@@ -29,14 +29,15 @@ import org.hipparchus.util.MathUtils;
  * <p>
  * If there are no values in the dataset, then 0 is returned.
  * If any of the values are
- * <code>NaN</code>, then <code>NaN</code> is returned.</p>
+ * <code>NaN</code>, then <code>NaN</code> is returned.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
-public class SumOfSquares extends AbstractStorelessUnivariateStatistic implements Serializable {
+public class SumOfSquares extends AbstractStorelessUnivariateStatistic
+    implements Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -44,9 +45,7 @@ public class SumOfSquares extends AbstractStorelessUnivariateStatistic implement
     /** Number of values that have been added */
     private long n;
 
-    /**
-     * The currently running sumSq
-     */
+    /** The currently running sumSq */
     private double value;
 
     /**
@@ -68,34 +67,26 @@ public class SumOfSquares extends AbstractStorelessUnivariateStatistic implement
         copy(original, this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void increment(final double d) {
         value += d * d;
         n++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public double getResult() {
         return value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return n;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         value = 0;
@@ -106,8 +97,6 @@ public class SumOfSquares extends AbstractStorelessUnivariateStatistic implement
      * Returns the sum of the squares of the entries in the specified portion of
      * the input array, or <code>Double.NaN</code> if the designated subarray
      * is empty.
-     * <p>
-     * Throws <code>MathIllegalArgumentException</code> if the array is null.</p>
      *
      * @param values the input array
      * @param begin index of the first array element to include
@@ -130,20 +119,16 @@ public class SumOfSquares extends AbstractStorelessUnivariateStatistic implement
         return sumSq;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public SumOfSquares copy() {
-        SumOfSquares result = new SumOfSquares();
-        // no try-catch or advertised exception here because args are valid
-        copy(this, result);
-        return result;
+        return new SumOfSquares(this);
     }
 
     /**
      * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
+     * <p>
+     * Neither source nor dest can be null.
      *
      * @param source SumOfSquares to copy
      * @param dest SumOfSquares to copy to

@@ -16,9 +16,6 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
 
@@ -26,131 +23,27 @@ import org.hipparchus.util.Precision;
  * Abstract base class for implementations of the
  * {@link StorelessUnivariateStatistic} interface.
  * <p>
- * Provides default {@code evaluate(double[],...)} and {@code incrementAll(double[])}
+ * Provides default {@code hashCode()} and {@code equals(Object)}
  * implementations.
- * <p>
- * <strong>Note that these implementations are not synchronized.</strong>
  */
 public abstract class AbstractStorelessUnivariateStatistic
     implements StorelessUnivariateStatistic {
 
-    /**
-     * This default implementation creates a copy of this {@link StorelessUnivariateStatistic}
-     * instance, calls {@link #clear} on it, then calls {@link #incrementAll} with the specified
-     * portion of the input array, and then uses {@link #getResult} to compute the return value.
-     * <p>
-     * Note that this implementation does not change the internal state of the statistic.
-     * <p>
-     * Implementations may override this method with a more efficient and possibly more
-     * accurate implementation that works directly with the input array.
-     * <p>
-     * If the array is null, a MathIllegalArgumentException is thrown.
-     *
-     * @param values input array
-     * @return the value of the statistic applied to the input array
-     * @throws MathIllegalArgumentException if values is null
-     * @see org.hipparchus.stat.descriptive.UnivariateStatistic#evaluate(double[])
-     */
-    @Override
-    public double evaluate(final double[] values) throws MathIllegalArgumentException {
-        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
-        return evaluate(values, 0, values.length);
-    }
-
-    /**
-     * This default implementation creates a copy of this {@link StorelessUnivariateStatistic}
-     * instance, calls {@link #clear} on it, then calls {@link #incrementAll} with the specified
-     * portion of the input array, and then uses {@link #getResult} to compute the return value.
-     * <p>
-     * Note that this implementation does not change the internal state of the statistic.
-     * <p>
-     * Implementations may override this method with a more efficient and possibly more
-     * accurate implementation that works directly with the input array.
-     * <p>
-     * If the array is null or the index parameters are not valid, an
-     * MathIllegalArgumentException is thrown.
-     *
-     * @param values the input array
-     * @param begin the index of the first element to include
-     * @param length the number of elements to include
-     * @return the value of the statistic applied to the included array entries
-     * @throws MathIllegalArgumentException if the array is null or the indices are not valid
-     * @see org.hipparchus.stat.descriptive.UnivariateStatistic#evaluate(double[], int, int)
-     */
-    @Override
-    public double evaluate(final double[] values, final int begin, final int length)
-        throws MathIllegalArgumentException {
-
-        if (MathArrays.verifyValues(values, begin, length)) {
-            final StorelessUnivariateStatistic stat = copy();
-            stat.clear();
-            stat.incrementAll(values, begin, length);
-            return stat.getResult();
-        }
-        return Double.NaN;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public abstract StorelessUnivariateStatistic copy();
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public abstract void clear();
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public abstract double getResult();
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public abstract void increment(final double d);
-
-    /**
-     * This default implementation just calls {@link #increment} in a loop over
-     * the input array.
-     * <p>
-     * Throws IllegalArgumentException if the input values array is null.
-     *
-     * @param values values to add
-     * @throws MathIllegalArgumentException if values is null
-     * @see StorelessUnivariateStatistic#incrementAll(double[])
-     */
-    @Override
-    public void incrementAll(double[] values) throws MathIllegalArgumentException {
-        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
-        incrementAll(values, 0, values.length);
-    }
-
-    /**
-     * This default implementation just calls {@link #increment} in a loop over
-     * the specified portion of the input array.
-     * <p>
-     * Throws IllegalArgumentException if the input values array is null.
-     *
-     * @param values  array holding values to add
-     * @param begin   index of the first array element to add
-     * @param length  number of array elements to add
-     * @throws MathIllegalArgumentException if values is null
-     * @see StorelessUnivariateStatistic#incrementAll(double[], int, int)
-     */
-    @Override
-    public void incrementAll(double[] values, int begin, int length) throws MathIllegalArgumentException {
-        if (MathArrays.verifyValues(values, begin, length)) {
-            int k = begin + length;
-            for (int i = begin; i < k; i++) {
-                increment(values[i]);
-            }
-        }
-    }
 
     /**
      * Returns true iff <code>object</code> is the same type of
