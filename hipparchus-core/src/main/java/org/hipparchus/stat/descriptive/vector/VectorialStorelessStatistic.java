@@ -46,7 +46,7 @@ public class VectorialStorelessStatistic
     /** {@inheritDoc} */
     @Override
     public void increment(double[] d) {
-        MathUtils.checkDimension(stats.length, d.length);
+        MathUtils.checkDimension(d.length, stats.length);
         for (int i = 0; i < stats.length; i++) {
             stats[i].increment(d[i]);
         }

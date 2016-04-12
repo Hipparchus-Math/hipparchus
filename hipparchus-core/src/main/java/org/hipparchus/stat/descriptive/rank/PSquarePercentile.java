@@ -131,7 +131,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
 
         this.quantile = original.quantile;
 
-        if (markers != null) {
+        if (original.markers != null) {
             this.markers = (PSquareMarkers) original.markers.clone();
         }
 
