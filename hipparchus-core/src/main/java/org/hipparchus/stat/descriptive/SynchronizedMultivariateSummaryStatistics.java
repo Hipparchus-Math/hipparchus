@@ -17,12 +17,10 @@
 package org.hipparchus.stat.descriptive;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.RealMatrix;
 
 /**
- * Implementation of
- * {@link org.hipparchus.stat.descriptive.MultivariateSummaryStatistics} that
+ * Implementation of {@link MultivariateSummaryStatistics} that
  * is safe to use in a multithreaded environment.  Multiple threads can safely
  * operate on a single instance without causing runtime exceptions due to race
  * conditions.  In effect, this implementation makes modification and access
@@ -34,7 +32,7 @@ public class SynchronizedMultivariateSummaryStatistics
     extends MultivariateSummaryStatistics {
 
     /** Serialization UID */
-    private static final long serialVersionUID = 7099834153347155363L;
+    private static final long serialVersionUID = 20160413L;
 
     /**
      * Construct a SynchronizedMultivariateSummaryStatistics instance
@@ -175,122 +173,4 @@ public class SynchronizedMultivariateSummaryStatistics
         return super.hashCode();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic[] getSumImpl() {
-        return super.getSumImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setSumImpl(StorelessUnivariateStatistic[] sumImpl)
-    throws MathIllegalArgumentException, MathIllegalStateException {
-        super.setSumImpl(sumImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic[] getSumsqImpl() {
-        return super.getSumsqImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setSumsqImpl(StorelessUnivariateStatistic[] sumsqImpl)
-    throws MathIllegalArgumentException, MathIllegalStateException {
-        super.setSumsqImpl(sumsqImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic[] getMinImpl() {
-        return super.getMinImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setMinImpl(StorelessUnivariateStatistic[] minImpl)
-    throws MathIllegalArgumentException, MathIllegalStateException {
-        super.setMinImpl(minImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic[] getMaxImpl() {
-        return super.getMaxImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setMaxImpl(StorelessUnivariateStatistic[] maxImpl)
-    throws MathIllegalArgumentException, MathIllegalStateException{
-        super.setMaxImpl(maxImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic[] getSumLogImpl() {
-        return super.getSumLogImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setSumLogImpl(StorelessUnivariateStatistic[] sumLogImpl)
-    throws MathIllegalArgumentException, MathIllegalStateException {
-        super.setSumLogImpl(sumLogImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic[] getGeoMeanImpl() {
-        return super.getGeoMeanImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setGeoMeanImpl(StorelessUnivariateStatistic[] geoMeanImpl)
-    throws MathIllegalArgumentException, MathIllegalStateException {
-        super.setGeoMeanImpl(geoMeanImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic[] getMeanImpl() {
-        return super.getMeanImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setMeanImpl(StorelessUnivariateStatistic[] meanImpl)
-    throws MathIllegalArgumentException, MathIllegalStateException {
-        super.setMeanImpl(meanImpl);
-    }
 }

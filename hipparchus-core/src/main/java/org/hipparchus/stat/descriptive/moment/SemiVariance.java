@@ -139,10 +139,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
     /** {@inheritDoc} */
     @Override
     public SemiVariance copy() {
-        SemiVariance result = new SemiVariance();
-        // No try-catch or advertised exception because args are guaranteed non-null
-        copy(this, result);
-        return result;
+        return new SemiVariance(this);
     }
 
     /**

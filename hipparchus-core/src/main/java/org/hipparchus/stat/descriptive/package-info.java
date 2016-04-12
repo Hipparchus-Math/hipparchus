@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 /**
- * Generic univariate summary statistic objects.
+ * Generic univariate and multivariate summary statistic objects.
  *
  * <h3>UnivariateStatistic API Usage Examples:</h3>
  *
