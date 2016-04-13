@@ -17,18 +17,16 @@
 package org.hipparchus.stat.correlation;
 
 import java.util.Arrays;
-import java.util.Comparator;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.Pair;
+import org.hipparchus.util.MathArrays;
 
 /**
- * Implementation of Kendall's Tau-b rank correlation</a>.
+ * Implementation of Kendall's Tau-b rank correlation.
  * <p>
  * A pair of observations (x<sub>1</sub>, y<sub>1</sub>) and
  * (x<sub>2</sub>, y<sub>2</sub>) are considered <i>concordant</i> if
@@ -153,39 +151,28 @@ public class KendallsCorrelation {
     public double correlation(final double[] xArray, final double[] yArray)
             throws MathIllegalArgumentException {
 
-        if (xArray.length != yArray.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xArray.length, yArray.length);
-        }
+        MathArrays.checkEqualLength(xArray, yArray);
 
         final int n = xArray.length;
         final long numPairs = sum(n - 1);
 
-        @SuppressWarnings("unchecked")
-        Pair<Double, Double>[] pairs = new Pair[n];
+        DoublePair[] pairs = new DoublePair[n];
         for (int i = 0; i < n; i++) {
-            pairs[i] = new Pair<Double, Double>(xArray[i], yArray[i]);
+            pairs[i] = new DoublePair(xArray[i], yArray[i]);
         }
 
-        Arrays.sort(pairs, new Comparator<Pair<Double, Double>>() {
-            /** {@inheritDoc} */
-            @Override
-            public int compare(Pair<Double, Double> pair1, Pair<Double, Double> pair2) {
-                int compareFirst = pair1.getFirst().compareTo(pair2.getFirst());
-                return compareFirst != 0 ? compareFirst : pair1.getSecond().compareTo(pair2.getSecond());
-            }
-        });
+        Arrays.sort(pairs);
 
         long tiedXPairs = 0;
         long tiedXYPairs = 0;
         long consecutiveXTies = 1;
         long consecutiveXYTies = 1;
-        Pair<Double, Double> prev = pairs[0];
+        DoublePair prev = pairs[0];
         for (int i = 1; i < n; i++) {
-            final Pair<Double, Double> curr = pairs[i];
-            if (curr.getFirst().equals(prev.getFirst())) {
+            final DoublePair curr = pairs[i];
+            if (Double.compare(curr.getFirst(), prev.getFirst()) == 0) {
                 consecutiveXTies++;
-                if (curr.getSecond().equals(prev.getSecond())) {
+                if (Double.compare(curr.getSecond(), prev.getSecond()) == 0) {
                     consecutiveXYTies++;
                 } else {
                     tiedXYPairs += sum(consecutiveXYTies - 1);
@@ -203,8 +190,7 @@ public class KendallsCorrelation {
         tiedXYPairs += sum(consecutiveXYTies - 1);
 
         long swaps = 0;
-        @SuppressWarnings("unchecked")
-        Pair<Double, Double>[] pairsDestination = new Pair[n];
+        DoublePair[] pairsDestination = new DoublePair[n];
         for (int segmentSize = 1; segmentSize < n; segmentSize <<= 1) {
             for (int offset = 0; offset < n; offset += 2 * segmentSize) {
                 int i = offset;
@@ -216,7 +202,7 @@ public class KendallsCorrelation {
                 while (i < iEnd || j < jEnd) {
                     if (i < iEnd) {
                         if (j < jEnd) {
-                            if (pairs[i].getSecond().compareTo(pairs[j].getSecond()) <= 0) {
+                            if (Double.compare(pairs[i].getSecond(), pairs[j].getSecond()) <= 0) {
                                 pairsDestination[copyLocation] = pairs[i];
                                 i++;
                             } else {
@@ -235,7 +221,7 @@ public class KendallsCorrelation {
                     copyLocation++;
                 }
             }
-            final Pair<Double, Double>[] pairsTemp = pairs;
+            final DoublePair[] pairsTemp = pairs;
             pairs = pairsDestination;
             pairsDestination = pairsTemp;
         }
@@ -244,8 +230,8 @@ public class KendallsCorrelation {
         long consecutiveYTies = 1;
         prev = pairs[0];
         for (int i = 1; i < n; i++) {
-            final Pair<Double, Double> curr = pairs[i];
-            if (curr.getSecond().equals(prev.getSecond())) {
+            final DoublePair curr = pairs[i];
+            if (Double.compare(curr.getSecond(), prev.getSecond()) == 0) {
                 consecutiveYTies++;
             } else {
                 tiedYPairs += sum(consecutiveYTies - 1);
@@ -270,4 +256,41 @@ public class KendallsCorrelation {
     private static long sum(long n) {
         return n * (n + 1) / 2l;
     }
+
+    /**
+     * Helper data structure holding a (double, double) pair.
+     */
+    private static class DoublePair implements Comparable<DoublePair> {
+        /** The first value */
+        private final double first;
+        /** The second value */
+        private final double second;
+
+        /**
+         * @param first first value.
+         * @param second second value.
+         */
+        DoublePair(double first, double second) {
+            this.first = first;
+            this.second = second;
+        }
+
+        /** @return the first value. */
+        public double getFirst() {
+            return first;
+        }
+
+        /** @return the second value. */
+        public double getSecond() {
+            return second;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int compareTo(DoublePair other) {
+            int compareKey = Double.compare(getFirst(), other.getFirst());
+            return compareKey != 0 ? compareKey : Double.compare(getSecond(), other.getSecond());
+        }
+    }
+
 }
