@@ -1011,7 +1011,7 @@ public abstract class RealVector {
     }
 
     /** An entry in the vector. */
-    protected class Entry {
+    public class Entry {
         /** Index of this entry. */
         private int index;
 
