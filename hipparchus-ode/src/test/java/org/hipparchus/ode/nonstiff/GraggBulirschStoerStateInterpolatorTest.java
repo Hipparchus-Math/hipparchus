@@ -53,10 +53,10 @@ public class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolato
             }
         }
 
-        ODEStateAndDerivative s0 = new ODEStateAndDerivative(t0, y0, eqn.computeDerivatives(t0, y0));
-        double[] y1 = eqn.theoreticalState(t1);
-        ODEStateAndDerivative s1 = new ODEStateAndDerivative(t1, y1, eqn.computeDerivatives(t1, y1));
         EquationsMapper mapper = new ExpandableODE(eqn).getMapper();
+        ODEStateAndDerivative s0 = mapper.mapStateAndDerivative(t0, y0, eqn.computeDerivatives(t0, y0));
+        double[] y1 = eqn.theoreticalState(t1);
+        ODEStateAndDerivative s1 = mapper.mapStateAndDerivative(t1, y1, eqn.computeDerivatives(t1, y1));
 
         GraggBulirschStoerStateInterpolator interpolator =
                         new GraggBulirschStoerStateInterpolator(t1 >= t0, s0, s1, s0, s1,

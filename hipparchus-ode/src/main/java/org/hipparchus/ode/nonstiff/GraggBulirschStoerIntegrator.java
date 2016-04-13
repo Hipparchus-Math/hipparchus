@@ -519,13 +519,11 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
-        final double   t0 = initialState.getTime();
-        final double[] y0 = equations.getMapper().mapState(initialState);
-        setStepStart(initIntegration(equations, t0, y0, finalTime));
+        setStepStart(initIntegration(equations, initialState, finalTime));
         final boolean forward = finalTime > initialState.getTime();
 
         // create some internal working arrays
-        double[]         y        = y0.clone();
+        double[]         y        = equations.getMapper().mapState(getStepStart());
         final double[]   y1       = new double[y.length];
         final double[][] diagonal = new double[sequence.length-1][];
         final double[][] y1Diag   = new double[sequence.length-1][];
@@ -539,7 +537,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
             fk[k] = new double[sequence[k] + 1][];
         }
 
-        final double[][] yMidDots = new double[1 + 2 * sequence.length][y0.length];
+        final double[][] yMidDots = new double[1 + 2 * sequence.length][y.length];
 
         // initial scaling
         final double[] scale = new double[mainSetDimension];
@@ -749,25 +747,25 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                     final int l2 = l / 2;
                     double factor = FastMath.pow(0.5 * sequence[l2], l);
                     int middleIndex = fk[l2].length / 2;
-                    for (int i = 0; i < y0.length; ++i) {
+                    for (int i = 0; i < y.length; ++i) {
                         yMidDots[l+1][i] = factor * fk[l2][middleIndex + l][i];
                     }
                     for (int j = 1; j <= k - l2; ++j) {
                         factor = FastMath.pow(0.5 * sequence[j + l2], l);
                         middleIndex = fk[l2+j].length / 2;
-                        for (int i = 0; i < y0.length; ++i) {
+                        for (int i = 0; i < y.length; ++i) {
                             diagonal[j-1][i] = factor * fk[l2+j][middleIndex+l][i];
                         }
                         extrapolate(l2, j, diagonal, yMidDots[l+1]);
                     }
-                    for (int i = 0; i < y0.length; ++i) {
+                    for (int i = 0; i < y.length; ++i) {
                         yMidDots[l+1][i] *= getStepSize();
                     }
 
                     // compute centered differences to evaluate next derivatives
                     for (int j = (l + 1) / 2; j <= k; ++j) {
                         for (int m = fk[j].length - 1; m >= 2 * (l + 1); --m) {
-                            for (int i = 0; i < y0.length; ++i) {
+                            for (int i = 0; i < y.length; ++i) {
                                 fk[j][m][i] -= fk[j][m-2][i];
                             }
                         }
@@ -777,7 +775,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
 
                 // state at end of step
                 final ODEStateAndDerivative stepEnd =
-                                new ODEStateAndDerivative(nextT, y1, computeDerivatives(nextT, y1));
+                    equations.getMapper().mapStateAndDerivative(nextT, y1, computeDerivatives(nextT, y1));
 
                 // set up interpolator covering the full step
                 interpolator = new GraggBulirschStoerStateInterpolator(forward,

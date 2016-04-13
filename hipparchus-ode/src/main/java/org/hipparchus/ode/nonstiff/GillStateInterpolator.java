@@ -135,7 +135,7 @@ class GillStateInterpolator
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2, coeffDot3 , coeffDot4);
         }
 
-        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

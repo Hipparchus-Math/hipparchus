@@ -126,7 +126,7 @@ class ClassicalRungeKuttaStateInterpolator
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot23, coeffDot23, coeffDot4);
         }
 
-        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

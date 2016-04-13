@@ -237,9 +237,7 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
-        final double   t0 = initialState.getTime();
-        final double[] y  = equations.getMapper().mapState(initialState);
-        setStepStart(initIntegration(equations, t0, y, finalTime));
+        setStepStart(initIntegration(equations, initialState, finalTime));
         final boolean forward = finalTime > initialState.getTime();
 
         // compute the initial Nordsieck vector using the configured starter integrator
@@ -247,12 +245,13 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
 
         // reuse the step that was chosen by the starter integrator
         ODEStateAndDerivative stepEnd   =
-                        AdamsStateInterpolator.taylor(getStepStart(),
-                                                     getStepStart().getTime() + getStepSize(),
-                                                     getStepSize(), scaled, nordsieck);
+                        AdamsStateInterpolator.taylor(equations.getMapper(), getStepStart(),
+                                                      getStepStart().getTime() + getStepSize(),
+                                                      getStepSize(), scaled, nordsieck);
 
         // main integration loop
         setIsLastStep(false);
+        final double[] y  = equations.getMapper().mapState(getStepStart());
         do {
 
             double[] predictedY  = null;
@@ -281,20 +280,20 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
                     // reject the step and attempt to reduce error by stepsize control
                     final double factor = computeStepGrowShrinkFactor(error);
                     rescale(filterStep(getStepSize() * factor, forward, false));
-                    stepEnd = AdamsStateInterpolator.taylor(getStepStart(),
-                                                           getStepStart().getTime() + getStepSize(),
-                                                           getStepSize(),
-                                                           scaled,
-                                                           nordsieck);
+                    stepEnd = AdamsStateInterpolator.taylor(equations.getMapper(), getStepStart(),
+                                                            getStepStart().getTime() + getStepSize(),
+                                                            getStepSize(),
+                                                            scaled,
+                                                            nordsieck);
 
                 }
             }
 
             // discrete events handling
             setStepStart(acceptStep(new AdamsStateInterpolator(getStepSize(), stepEnd,
-                                                              predictedScaled, predictedNordsieck, forward,
-                                                              getStepStart(), stepEnd,
-                                                              equations.getMapper()),
+                                                               predictedScaled, predictedNordsieck, forward,
+                                                               getStepStart(), stepEnd,
+                                                               equations.getMapper()),
                                     finalTime));
             scaled    = predictedScaled;
             nordsieck = predictedNordsieck;
@@ -323,8 +322,8 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
                 }
 
                 rescale(hNew);
-                stepEnd = AdamsStateInterpolator.taylor(getStepStart(), getStepStart().getTime() + getStepSize(),
-                                                       getStepSize(), scaled, nordsieck);
+                stepEnd = AdamsStateInterpolator.taylor(equations.getMapper(), getStepStart(), getStepStart().getTime() + getStepSize(),
+                                                        getStepSize(), scaled, nordsieck);
 
             }
 

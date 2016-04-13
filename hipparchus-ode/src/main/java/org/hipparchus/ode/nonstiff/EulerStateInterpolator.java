@@ -98,7 +98,7 @@ class EulerStateInterpolator
             interpolatedDerivatives = derivativeLinearCombination(1.0);
         }
 
-        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

@@ -189,36 +189,40 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
     /** Prepare the start of an integration.
      * @param eqn equations to integrate
-     * @param t0 start value of the independent <i>time</i> variable
-     * @param y0 array containing the start value of the state vector
+     * @param s0 initial state vector
      * @param t target time for the integration
      */
     protected ODEStateAndDerivative initIntegration(final ExpandableODE eqn,
-                                                    final double t0, final double[] y0, final double t) {
+                                                    final ODEState s0, final double t) {
 
         this.equations = eqn;
         evaluations    = evaluations.withCount(0);
 
         // initialize ODE
-        eqn.init(t0, y0, t);
+        eqn.init(s0, t);
 
-        // set up derivatives of initial state
+        // set up derivatives of initial state (including primary and secondary components)
+        final double   t0    = s0.getTime();
+        final double[] y0    = eqn.getMapper().mapState(s0);
         final double[] y0Dot = computeDerivatives(t0, y0);
-        final ODEStateAndDerivative state0 = new ODEStateAndDerivative(t0, y0, y0Dot);
+
+        // built the state
+        final ODEStateAndDerivative s0WithDerivatives =
+                        eqn.getMapper().mapStateAndDerivative(t0, y0, y0Dot);
 
         // initialize event handlers
         for (final EventState state : eventsStates) {
-            state.getEventHandler().init(state0, t);
+            state.getEventHandler().init(s0WithDerivatives, t);
         }
 
         // initialize step handlers
         for (ODEStepHandler handler : stepHandlers) {
-            handler.init(state0, t);
+            handler.init(s0WithDerivatives, t);
         }
 
         setStateInitialized(false);
 
-        return state0;
+        return s0WithDerivatives;
 
     }
 

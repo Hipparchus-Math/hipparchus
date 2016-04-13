@@ -132,10 +132,11 @@ class AdamsStateInterpolator extends AbstractODEStateInterpolator {
     protected ODEStateAndDerivative computeInterpolatedStateAndDerivatives(final EquationsMapper equationsMapper,
                                                                            final double time, final double theta,
                                                                            final double thetaH, final double oneMinusThetaH) {
-        return taylor(reference, time, scalingH, scaled, nordsieck);
+        return taylor(equationsMapper, reference, time, scalingH, scaled, nordsieck);
     }
 
     /** Estimate state by applying Taylor formula.
+     * @param equationsMapper mapper for ODE equations primary and secondary components
      * @param reference reference state
      * @param time time at which state must be estimated
      * @param stepSize step size used in the scaled and Nordsieck arrays
@@ -144,7 +145,8 @@ class AdamsStateInterpolator extends AbstractODEStateInterpolator {
      * @return estimated state
      * @param <S> the type of the field elements
      */
-    public static ODEStateAndDerivative taylor(final ODEStateAndDerivative reference,
+    public static ODEStateAndDerivative taylor(final EquationsMapper equationsMapper,
+                                               final ODEStateAndDerivative reference,
                                                final double time, final double stepSize,
                                                final double[] scaled,
                                                final Array2DRowRealMatrix nordsieck) {
@@ -176,7 +178,7 @@ class AdamsStateInterpolator extends AbstractODEStateInterpolator {
             estimatedDerivatives[j] = (estimatedDerivatives[j] + scaled[j] * normalizedAbscissa) / x;
         }
 
-        return new ODEStateAndDerivative(time, estimatedState, estimatedDerivatives);
+        return equationsMapper.mapStateAndDerivative(time, estimatedState, estimatedDerivatives);
 
     }
 

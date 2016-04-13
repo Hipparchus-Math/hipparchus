@@ -169,7 +169,7 @@ class DormandPrince54StateInterpolator
                                                                   coeffDot4, coeffDot5, coeffDot6);
         }
 
-        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

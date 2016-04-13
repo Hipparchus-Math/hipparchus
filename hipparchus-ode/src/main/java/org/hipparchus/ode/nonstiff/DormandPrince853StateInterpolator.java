@@ -255,7 +255,7 @@ class DormandPrince853StateInterpolator
                                                                   q[8], q[9], q[10], q[11], q[12], q[13], q[14], q[15]);
         }
 
-        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

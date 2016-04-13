@@ -273,7 +273,7 @@ class GraggBulirschStoerStateInterpolator
             System.arraycopy(yMidDots[1], 0, interpolatedDerivatives, 0, dimension);
         }
 
-        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

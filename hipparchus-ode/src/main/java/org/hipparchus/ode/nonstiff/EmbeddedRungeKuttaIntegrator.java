@@ -192,16 +192,13 @@ public abstract class EmbeddedRungeKuttaIntegrator
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
-        final double   t0 = initialState.getTime();
-        final double[] y0 = equations.getMapper().mapState(initialState);
-        setStepStart(initIntegration(equations, t0, y0, finalTime));
+        setStepStart(initIntegration(equations, initialState, finalTime));
         final boolean forward = finalTime > initialState.getTime();
 
         // create some internal working arrays
         final int        stages  = c.length + 1;
-        double[]         y       = y0;
         final double[][] yDotK   = new double[stages][];
-        final double[]   yTmp    = new double[y0.length];
+        final double[]   yTmp    = new double[equations.getMapper().getTotalDimension()];
 
         // set up integration control objects
         double  hNew      = 0;
@@ -216,7 +213,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
             while (error >= 1.0) {
 
                 // first stage
-                y        = equations.getMapper().mapState(getStepStart());
+                final double[] y = equations.getMapper().mapState(getStepStart());
                 yDotK[0] = equations.getMapper().mapDerivative(getStepStart());
 
                 if (firstTime) {
@@ -248,7 +245,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
                 // next stages
                 for (int k = 1; k < stages; ++k) {
 
-                    for (int j = 0; j < y0.length; ++j) {
+                    for (int j = 0; j < y.length; ++j) {
                         double sum = a[k-1][0] * yDotK[0][j];
                         for (int l = 1; l < k; ++l) {
                             sum += a[k-1][l] * yDotK[l][j];
@@ -261,7 +258,7 @@ public abstract class EmbeddedRungeKuttaIntegrator
                 }
 
                 // estimate the state at the end of the step
-                for (int j = 0; j < y0.length; ++j) {
+                for (int j = 0; j < y.length; ++j) {
                     double sum    = b[0] * yDotK[0][j];
                     for (int l = 1; l < stages; ++l) {
                         sum    += b[l] * yDotK[l][j];
@@ -282,10 +279,9 @@ public abstract class EmbeddedRungeKuttaIntegrator
             }
             final double   stepEnd = getStepStart().getTime() + getStepSize();
             final double[] yDotTmp = (fsal >= 0) ? yDotK[fsal] : computeDerivatives(stepEnd, yTmp);
-            final ODEStateAndDerivative stateTmp = new ODEStateAndDerivative(stepEnd, yTmp, yDotTmp);
+            final ODEStateAndDerivative stateTmp = equations.getMapper().mapStateAndDerivative(stepEnd, yTmp, yDotTmp);
 
             // local error is small enough: accept the step, trigger events and step handlers
-            System.arraycopy(yTmp, 0, y, 0, y0.length);
             setStepStart(acceptStep(createInterpolator(forward, yDotK, getStepStart(), stateTmp, equations.getMapper()),
                                     finalTime));
 

@@ -106,7 +106,7 @@ class HighamHall54StateInterpolator
             interpolatedDerivatives = derivativeLinearCombination(bDot0 , bDot1, bDot2, bDot3, bDot4, bDot5);
         }
 
-        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

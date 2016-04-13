@@ -99,16 +99,14 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
-        final double   t0 = initialState.getTime();
-        final double[] y0 = equations.getMapper().mapState(initialState);
-        setStepStart(initIntegration(equations, t0, y0, finalTime));
+        setStepStart(initIntegration(equations, initialState, finalTime));
         final boolean forward = finalTime > initialState.getTime();
 
         // create some internal working arrays
         final int        stages = c.length + 1;
-        double[]         y      = y0;
+        double[]         y      = equations.getMapper().mapState(getStepStart());
         final double[][] yDotK  = new double[stages][];
-        final double[]   yTmp   = new double[y0.length];
+        final double[]   yTmp   = new double[y.length];
 
         // set up integration control objects
         if (forward) {
@@ -136,7 +134,7 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
             // next stages
             for (int k = 1; k < stages; ++k) {
 
-                for (int j = 0; j < y0.length; ++j) {
+                for (int j = 0; j < y.length; ++j) {
                     double sum = a[k-1][0] * yDotK[0][j];
                     for (int l = 1; l < k; ++l) {
                         sum += a[k-1][l] * yDotK[l][j];
@@ -149,7 +147,7 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
             }
 
             // estimate the state at the end of the step
-            for (int j = 0; j < y0.length; ++j) {
+            for (int j = 0; j < y.length; ++j) {
                 double sum    = b[0] * yDotK[0][j];
                 for (int l = 1; l < stages; ++l) {
                     sum    += b[l] * yDotK[l][j];
@@ -158,11 +156,13 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
             }
             final double stepEnd   = getStepStart().getTime() + getStepSize();
             final double[] yDotTmp = computeDerivatives(stepEnd, yTmp);
-            final ODEStateAndDerivative stateTmp = new ODEStateAndDerivative(stepEnd, yTmp, yDotTmp);
+            final ODEStateAndDerivative stateTmp =
+                equations.getMapper().mapStateAndDerivative(stepEnd, yTmp, yDotTmp);
 
             // discrete events handling
-            System.arraycopy(yTmp, 0, y, 0, y0.length);
-            setStepStart(acceptStep(createInterpolator(forward, yDotK, getStepStart(), stateTmp, equations.getMapper()),
+            System.arraycopy(yTmp, 0, y, 0, y.length);
+            setStepStart(acceptStep(createInterpolator(forward, yDotK, getStepStart(), stateTmp,
+                                                       equations.getMapper()),
                                     finalTime));
 
             if (!isLastStep()) {

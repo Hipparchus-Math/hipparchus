@@ -108,7 +108,7 @@ class MidpointStateInterpolator
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2);
         }
 
-        return new ODEStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

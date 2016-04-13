@@ -124,7 +124,8 @@ public class JacobianMatricesTest {
             jacob.registerVariationalEquations(efode);
 
             integ.setMaxEvaluations(5000);
-            final ODEStateAndDerivative finalState = integ.integrate(efode, new ODEState(0, z), 20.0);
+            final ODEState initialState = jacob.setUpInitialState(new ODEState(0, z));
+            final ODEStateAndDerivative finalState = integ.integrate(efode, initialState, 20.0);
             final double[]   dZdP  = jacob.extractParameterJacobian(finalState, ParamBrusselator.B);
 //            Assert.assertEquals(5000, integ.getMaxEvaluations());
 //            Assert.assertTrue(integ.getEvaluations() > 1500);
@@ -158,7 +159,8 @@ public class JacobianMatricesTest {
             jacob.registerVariationalEquations(efode);
 
             integ.setMaxEvaluations(5000);
-            final ODEStateAndDerivative finalState = integ.integrate(efode, new ODEState(0, z), 20.0);
+            final ODEState initialState = jacob.setUpInitialState(new ODEState(0, z));
+            final ODEStateAndDerivative finalState = integ.integrate(efode, initialState, 20.0);
             final double[] dZdP = jacob.extractParameterJacobian(finalState, Brusselator.B);
 //            Assert.assertEquals(5000, integ.getMaxEvaluations());
 //            Assert.assertTrue(integ.getEvaluations() > 350);
@@ -194,7 +196,8 @@ public class JacobianMatricesTest {
         integ.setMaxEvaluations(5000);
 
         double t = 18 * FastMath.PI;
-        final ODEStateAndDerivative finalState = integ.integrate(efode, new ODEState(0, y), t);
+        final ODEState initialState = jacob.setUpInitialState(new ODEState(0, y));
+        final ODEStateAndDerivative finalState = integ.integrate(efode, initialState, t);
         y = finalState.getState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(circle.exactY(t)[i], y[i], 1.0e-9);
@@ -250,7 +253,8 @@ public class JacobianMatricesTest {
         integ.setMaxEvaluations(50000);
 
         double t = 18 * FastMath.PI;
-        final ODEStateAndDerivative finalState = integ.integrate(efode, new ODEState(0, y), t);
+        final ODEState initialState = jacob.setUpInitialState(new ODEState(0, y));
+        final ODEStateAndDerivative finalState = integ.integrate(efode, initialState, t);
         y = finalState.getState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(pcircle.exactY(t)[i], y[i], 1.0e-9);

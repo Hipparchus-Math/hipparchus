@@ -45,9 +45,10 @@ public abstract class RungeKuttaStateInterpolatorAbstractTest extends ODEStateIn
         double[]   c = provider.getC();
 
         // store initial state
+        EquationsMapper mapper = new ExpandableODE(eqn).getMapper();
         double[][] yDotK = new double[b.length][];
         yDotK[0] = eqn.computeDerivatives(t0, y0);
-        ODEStateAndDerivative s0 = new ODEStateAndDerivative(t0, y0, yDotK[0]);
+        ODEStateAndDerivative s0 = mapper.mapStateAndDerivative(t0, y0, yDotK[0]);
 
         // perform one integration step, in order to get consistent derivatives
         double h = t1 - t0;
@@ -68,10 +69,9 @@ public abstract class RungeKuttaStateInterpolatorAbstractTest extends ODEStateIn
                 y[i] += h * b[s] * yDotK[s][i];
             }
         }
-        ODEStateAndDerivative s1 = new ODEStateAndDerivative(t1, y, eqn.computeDerivatives(t1, y));
+        ODEStateAndDerivative s1 = mapper.mapStateAndDerivative(t1, y, eqn.computeDerivatives(t1, y));
 
-        return createInterpolator(t1 > t0, yDotK, s0, s1, s0, s1,
-                                  new ExpandableODE(eqn).getMapper());
+        return createInterpolator(t1 > t0, yDotK, s0, s1, s0, s1, mapper);
 
     }
 
