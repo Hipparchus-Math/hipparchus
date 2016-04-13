@@ -21,6 +21,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Covariance implementation that does not require input data to be
@@ -143,10 +144,7 @@ public class StorelessCovariance extends Covariance {
         throws MathIllegalArgumentException {
 
         int length = data.length;
-        if (length != dimension) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   length, dimension);
-        }
+        MathUtils.checkDimension(length, dimension);
 
         // only update the upper triangular part of the covariance matrix
         // as only these parts are actually stored
@@ -168,10 +166,7 @@ public class StorelessCovariance extends Covariance {
      * @throws MathIllegalArgumentException if the dimension of sc does not match this
      */
     public void append(StorelessCovariance sc) throws MathIllegalArgumentException {
-        if (sc.dimension != dimension) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   sc.dimension, dimension);
-        }
+        MathUtils.checkDimension(sc.dimension, dimension);
 
         // only update the upper triangular part of the covariance matrix
         // as only these parts are actually stored

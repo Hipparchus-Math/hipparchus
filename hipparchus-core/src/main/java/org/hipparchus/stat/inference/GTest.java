@@ -22,6 +22,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implements <a href="http://en.wikipedia.org/wiki/G-test">G Test</a>
@@ -75,10 +76,7 @@ public class GTest {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, 2);
         }
-        if (expected.length != observed.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   expected.length, observed.length);
-        }
+        MathUtils.checkDimension(expected.length, observed.length);
         MathArrays.checkPositive(expected);
         MathArrays.checkNonNegative(observed);
 
@@ -97,9 +95,9 @@ public class GTest {
         double sum = 0d;
         for (int i = 0; i < observed.length; i++) {
             final double dev = rescale ?
-                    FastMath.log((double) observed[i] / (ratio * expected[i])) :
-                        FastMath.log((double) observed[i] / expected[i]);
-            sum += ((double) observed[i]) * dev;
+                    FastMath.log(observed[i] / (ratio * expected[i])) :
+                        FastMath.log(observed[i] / expected[i]);
+            sum += (observed[i]) * dev;
         }
         return 2d * sum;
     }
@@ -255,13 +253,13 @@ public class GTest {
         double sum_k = 0d;
         for (int i = 0; i < k.length; i++) {
             for (int j = 0; j < k[i].length; j++) {
-                sum_k += (double) k[i][j];
+                sum_k += k[i][j];
             }
         }
         for (int i = 0; i < k.length; i++) {
             for (int j = 0; j < k[i].length; j++) {
                 if (k[i][j] != 0) {
-                    final double p_ij = (double) k[i][j] / sum_k;
+                    final double p_ij = k[i][j] / sum_k;
                     h += p_ij * FastMath.log(p_ij);
                 }
             }
@@ -284,11 +282,11 @@ public class GTest {
         double h = 0d;
         double sum_k = 0d;
         for (int i = 0; i < k.length; i++) {
-            sum_k += (double) k[i];
+            sum_k += k[i];
         }
         for (int i = 0; i < k.length; i++) {
             if (k[i] != 0) {
-                final double p_i = (double) k[i] / sum_k;
+                final double p_i = k[i] / sum_k;
                 h += p_i * FastMath.log(p_i);
             }
         }
@@ -345,10 +343,7 @@ public class GTest {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, 2);
         }
-        if (observed1.length != observed2.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   observed1.length, observed2.length);
-        }
+        MathUtils.checkDimension(observed1.length, observed2.length);
 
         // Ensure non-negative counts
         MathArrays.checkNonNegative(observed1);

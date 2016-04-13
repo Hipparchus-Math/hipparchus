@@ -24,6 +24,7 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.stat.ranking.NaturalRanking;
 import org.hipparchus.stat.ranking.RankingAlgorithm;
+import org.hipparchus.util.MathArrays;
 
 /**
  * Spearman's rank correlation. This implementation performs a rank
@@ -169,16 +170,14 @@ public class SpearmansCorrelation {
      * @throws MathIllegalArgumentException if the array length is less than 2
      */
     public double correlation(final double[] xArray, final double[] yArray) {
-        if (xArray.length != yArray.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xArray.length, yArray.length);
-        } else if (xArray.length < 2) {
+        MathArrays.checkEqualLength(xArray, yArray);
+        if (xArray.length < 2) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION,
                                                    xArray.length, 2);
-        } else {
-            return new PearsonsCorrelation().correlation(rankingAlgorithm.rank(xArray),
-                                                         rankingAlgorithm.rank(yArray));
         }
+
+        return new PearsonsCorrelation().correlation(rankingAlgorithm.rank(xArray),
+                                                     rankingAlgorithm.rank(yArray));
     }
 
     /**

@@ -23,6 +23,7 @@ import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.regression.SimpleRegression;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -267,19 +268,17 @@ public class PearsonsCorrelation {
      * @throws MathIllegalArgumentException if there is insufficient data
      */
     public double correlation(final double[] xArray, final double[] yArray) {
-        SimpleRegression regression = new SimpleRegression();
-        if (xArray.length != yArray.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xArray.length, yArray.length);
-        } else if (xArray.length < 2) {
+        MathArrays.checkEqualLength(xArray, yArray);
+        if (xArray.length < 2) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION,
                                                    xArray.length, 2);
-        } else {
-            for(int i=0; i<xArray.length; i++) {
-                regression.addData(xArray[i], yArray[i]);
-            }
-            return regression.getR();
         }
+
+        SimpleRegression regression = new SimpleRegression();
+        for(int i = 0; i < xArray.length; i++) {
+            regression.addData(xArray[i], yArray[i]);
+        }
+        return regression.getR();
     }
 
     /**

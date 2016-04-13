@@ -93,23 +93,10 @@ public class BicubicInterpolatingFunction
         if (xLen == 0 || yLen == 0 || f.length == 0 || f[0].length == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
-        if (xLen != f.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xLen, f.length);
-        }
-        if (xLen != dFdX.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xLen, dFdX.length);
-        }
-        if (xLen != dFdY.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xLen, dFdY.length);
-        }
-        if (xLen != d2FdXdY.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xLen, d2FdXdY.length);
-        }
-
+        MathUtils.checkDimension(xLen, f.length);
+        MathUtils.checkDimension(xLen, dFdX.length);
+        MathUtils.checkDimension(xLen, dFdY.length);
+        MathUtils.checkDimension(xLen, d2FdXdY.length);
         MathArrays.checkOrder(x);
         MathArrays.checkOrder(y);
 
@@ -121,22 +108,11 @@ public class BicubicInterpolatingFunction
         splines = new BicubicFunction[lastI][lastJ];
 
         for (int i = 0; i < lastI; i++) {
-            if (f[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       f[i].length, yLen);
-            }
-            if (dFdX[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       dFdX[i].length, yLen);
-            }
-            if (dFdY[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       dFdY[i].length, yLen);
-            }
-            if (d2FdXdY[i].length != yLen) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       d2FdXdY[i].length, yLen);
-            }
+            MathUtils.checkDimension(f[i].length, yLen);
+            MathUtils.checkDimension(dFdX[i].length, yLen);
+            MathUtils.checkDimension(dFdY[i].length, yLen);
+            MathUtils.checkDimension(d2FdXdY[i].length, yLen);
+
             final int ip1 = i + 1;
             final double xR = xval[ip1] - xval[i];
             for (int j = 0; j < lastJ; j++) {

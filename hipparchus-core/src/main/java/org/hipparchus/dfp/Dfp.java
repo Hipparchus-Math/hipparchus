@@ -20,9 +20,9 @@ package org.hipparchus.dfp;
 import java.util.Arrays;
 
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  *  Decimal floating point library for Java
@@ -2801,10 +2801,7 @@ public class Dfp implements RealFieldElement<Dfp> {
     @Override
     public Dfp linearCombination(final Dfp[] a, final Dfp[] b)
         throws MathIllegalArgumentException {
-        if (a.length != b.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   a.length, b.length);
-        }
+        MathUtils.checkDimension(a.length, b.length);
         Dfp r = getZero();
         for (int i = 0; i < a.length; ++i) {
             r = r.add(a[i].multiply(b[i]));
@@ -2817,10 +2814,7 @@ public class Dfp implements RealFieldElement<Dfp> {
     @Override
     public Dfp linearCombination(final double[] a, final Dfp[] b)
         throws MathIllegalArgumentException {
-        if (a.length != b.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   a.length, b.length);
-        }
+        MathUtils.checkDimension(a.length, b.length);
         Dfp r = getZero();
         for (int i = 0; i < a.length; ++i) {
             r = r.add(b[i].multiply(a[i]));

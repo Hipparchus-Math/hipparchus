@@ -81,13 +81,9 @@ public final class Quaternion implements Serializable {
      *
      * @throws MathIllegalArgumentException if the array length is not 3.
      */
-    public Quaternion(final double scalar,
-                      final double[] v)
+    public Quaternion(final double scalar, final double[] v)
         throws MathIllegalArgumentException {
-        if (v.length != 3) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   v.length, 3);
-        }
+        MathUtils.checkDimension(v.length, 3);
         this.q0 = scalar;
         this.q1 = v[0];
         this.q2 = v[1];

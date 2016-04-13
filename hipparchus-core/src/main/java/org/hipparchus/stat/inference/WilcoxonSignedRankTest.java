@@ -25,6 +25,7 @@ import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.stat.ranking.NaturalRanking;
 import org.hipparchus.stat.ranking.TiesStrategy;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 
 /**
  * An implementation of the Wilcoxon signed-rank test.
@@ -72,18 +73,13 @@ public class WilcoxonSignedRankTest {
     private void ensureDataConformance(final double[] x, final double[] y)
         throws MathIllegalArgumentException, NullArgumentException {
 
-        if (x == null ||
-            y == null) {
-                throw new NullArgumentException();
+        if (x == null || y == null) {
+            throw new NullArgumentException();
         }
-        if (x.length == 0 ||
-            y.length == 0) {
+        if (x.length == 0 || y.length == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
-        if (y.length != x.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   y.length, x.length);
-        }
+        MathArrays.checkEqualLength(y, x);
     }
 
     /**
@@ -188,7 +184,7 @@ public class WilcoxonSignedRankTest {
         }
 
         final int N = x.length;
-        final double Wminus = (((double) (N * (N + 1))) / 2.0) - Wplus;
+        final double Wminus = ((N * (N + 1)) / 2.0) - Wplus;
 
         return FastMath.max(Wplus, Wminus);
     }
@@ -231,7 +227,7 @@ public class WilcoxonSignedRankTest {
          * largerRankSums / m gives the one-sided p-value, so it's multiplied
          * with 2 to get the two-sided p-value
          */
-        return 2 * ((double) largerRankSums) / ((double) m);
+        return 2 * ((double) largerRankSums) / (m);
     }
 
     /**
@@ -241,12 +237,12 @@ public class WilcoxonSignedRankTest {
      */
     private double calculateAsymptoticPValue(final double Wmin, final int N) {
 
-        final double ES = (double) (N * (N + 1)) / 4.0;
+        final double ES = N * (N + 1) / 4.0;
 
         /* Same as (but saves computations):
          * final double VarW = ((double) (N * (N + 1) * (2*N + 1))) / 24;
          */
-        final double VarS = ES * ((double) (2 * N + 1) / 6.0);
+        final double VarS = ES * ((2 * N + 1) / 6.0);
 
         // - 0.5 is a continuity correction
         final double z = (Wmin - ES - 0.5) / FastMath.sqrt(VarS);
@@ -316,7 +312,7 @@ public class WilcoxonSignedRankTest {
         if (exactPValue) {
             return calculateExactPValue(Wmax, N);
         } else {
-            final double Wmin = ( (double)(N*(N+1)) / 2.0 ) - Wmax;
+            final double Wmin = ( N*(N+1) / 2.0 ) - Wmax;
             return calculateAsymptoticPValue(Wmin, N);
         }
     }

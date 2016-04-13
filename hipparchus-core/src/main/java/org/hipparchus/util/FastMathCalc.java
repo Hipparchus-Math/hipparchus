@@ -18,9 +18,6 @@ package org.hipparchus.util;
 
 import java.io.PrintStream;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalArgumentException;
-
 /**
  * Class used to compute the classical functions tables.
  */
@@ -601,7 +598,7 @@ class FastMathCalc {
      */
     static void printarray(PrintStream out, String name, int expectedLen, double[][] array2d) {
         out.println(name);
-        checkLen(expectedLen, array2d.length);
+        MathUtils.checkDimension(expectedLen, array2d.length);
         out.println(TABLE_START_DECL + " ");
         int i = 0;
         for(double[] array : array2d) { // "double array[]" causes PMD parsing error
@@ -623,7 +620,7 @@ class FastMathCalc {
      */
     static void printarray(PrintStream out, String name, int expectedLen, double[] array) {
         out.println(name + "=");
-        checkLen(expectedLen, array.length);
+        MathUtils.checkDimension(expectedLen, array.length);
         out.println(TABLE_START_DECL);
         for(double d : array){
             out.printf("        %s%n", format(d)); // one entry per line
@@ -640,20 +637,6 @@ class FastMathCalc {
             return "Double.NaN,";
         } else {
             return ((d >= 0) ? "+" : "") + Double.toString(d) + "d,";
-        }
-    }
-
-    /**
-     * Check two lengths are equal.
-     * @param expectedLen expected length
-     * @param actual actual length
-     * @exception MathIllegalArgumentException if the two lengths are not equal
-     */
-    private static void checkLen(int expectedLen, int actual)
-        throws MathIllegalArgumentException {
-        if (expectedLen != actual) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   actual, expectedLen);
         }
     }
 

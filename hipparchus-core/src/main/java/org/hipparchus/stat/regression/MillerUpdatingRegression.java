@@ -21,6 +21,7 @@ import java.util.Arrays;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
 
 /**
@@ -195,15 +196,11 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
      */
     @Override
     public void addObservations(double[][] x, double[] y) throws MathIllegalArgumentException {
-        if ((x == null) || (y == null) || (x.length != y.length)) {
-            throw new MathIllegalArgumentException(
-                  LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                  (x == null) ? 0 : x.length,
-                  (y == null) ? 0 : y.length);
-        }
+        MathUtils.checkNotNull(x, LocalizedCoreFormats.INPUT_ARRAY);
+        MathUtils.checkNotNull(y, LocalizedCoreFormats.INPUT_ARRAY);
+        MathUtils.checkDimension(x.length, y.length);
         if (x.length == 0) {  // Must be no y data either
-            throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.NO_DATA);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         if (x[0].length + 1 > x.length) {
             throw new MathIllegalArgumentException(

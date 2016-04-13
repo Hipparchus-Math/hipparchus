@@ -19,6 +19,7 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Generates a tricubic interpolating function.
@@ -61,10 +62,7 @@ public class TricubicInterpolator
         final double[][][] d3FdXdYdZ = new double[xLen][yLen][zLen];
 
         for (int i = 1; i < xLen - 1; i++) {
-            if (yval.length != fval[i].length) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                       yval.length, fval[i].length);
-            }
+            MathUtils.checkDimension(yval.length, fval[i].length);
 
             final int nI = i + 1;
             final int pI = i - 1;
@@ -75,10 +73,7 @@ public class TricubicInterpolator
             final double deltaX = nX - pX;
 
             for (int j = 1; j < yLen - 1; j++) {
-                if (zval.length != fval[i][j].length) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                           zval.length, fval[i][j].length);
-                }
+                MathUtils.checkDimension(zval.length, fval[i][j].length);
 
                 final int nJ = j + 1;
                 final int pJ = j - 1;
