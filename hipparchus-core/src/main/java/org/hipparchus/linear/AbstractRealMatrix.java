@@ -33,8 +33,7 @@ import org.hipparchus.util.MathUtils;
  *
  */
 public abstract class AbstractRealMatrix
-    extends RealLinearOperator
-    implements RealMatrix {
+    implements RealMatrix, RealLinearOperator {
 
     /** Default format. */
     private static final RealMatrixFormat DEFAULT_FORMAT = RealMatrixFormat.getInstance(Locale.US);

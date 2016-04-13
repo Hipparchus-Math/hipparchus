@@ -18,9 +18,6 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.RealLinearOperator;
-import org.hipparchus.linear.RealVector;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.CombinatoricsUtils;
 
@@ -29,7 +26,7 @@ import org.hipparchus.util.CombinatoricsUtils;
  * {@link RealLinearOperator}.
  */
 public class InverseHilbertMatrix
-    extends RealLinearOperator {
+    implements RealLinearOperator {
 
     /** The size of the matrix. */
     private final int n;

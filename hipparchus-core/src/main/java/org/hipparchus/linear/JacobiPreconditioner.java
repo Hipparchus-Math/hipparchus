@@ -25,9 +25,8 @@ import org.hipparchus.util.MathArrays;
  * This class implements the standard Jacobi (diagonal) preconditioner. For a
  * matrix A<sub>ij</sub>, this preconditioner is
  * M = diag(1 / A<sub>11</sub>, 1 / A<sub>22</sub>, &hellip;).
- *
  */
-public class JacobiPreconditioner extends RealLinearOperator {
+public class JacobiPreconditioner implements RealLinearOperator {
 
     /** The diagonal coefficients of the preconditioner. */
     private final ArrayRealVector diag;

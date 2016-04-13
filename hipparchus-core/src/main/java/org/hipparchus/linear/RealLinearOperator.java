@@ -23,7 +23,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * This class defines a linear operator operating on real ({@code double})
  * vector spaces. No direct access to the coefficients of the underlying matrix
  * is provided.
- *
+ * <p>
  * The motivation for such an interface is well stated by
  * <a href="#BARR1994">Barrett et al. (1994)</a>:
  * <blockquote>
@@ -35,8 +35,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  *  supply a subroutine for computing y (and perhaps z) given x, which permits
  *  full exploitation of the sparsity or other special structure of A.
  * </blockquote>
- * <br/>
- *
+ * <p>
  * <dl>
  *  <dt><a name="BARR1994">Barret et al. (1994)</a></dt>
  *  <dd>
@@ -46,22 +45,21 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  *   Iterative Methods</em>, SIAM
  *  </dd>
  * </dl>
- *
  */
-public abstract class RealLinearOperator {
+public interface RealLinearOperator {
     /**
      * Returns the dimension of the codomain of this operator.
      *
      * @return the number of rows of the underlying matrix
      */
-    public abstract int getRowDimension();
+    int getRowDimension();
 
     /**
      * Returns the dimension of the domain of this operator.
      *
      * @return the number of columns of the underlying matrix
      */
-    public abstract int getColumnDimension();
+    int getColumnDimension();
 
     /**
      * Returns the result of multiplying {@code this} by the vector {@code x}.
@@ -71,38 +69,39 @@ public abstract class RealLinearOperator {
      * @throws MathIllegalArgumentException if the column dimension does not match
      * the size of {@code x}
      */
-    public abstract RealVector operate(final RealVector x)
+    RealVector operate(final RealVector x)
         throws MathIllegalArgumentException;
 
     /**
      * Returns the result of multiplying the transpose of {@code this} operator
-     * by the vector {@code x} (optional operation). The default implementation
-     * throws an {@link UnsupportedOperationException}. Users overriding this
-     * method must also override {@link #isTransposable()}.
+     * by the vector {@code x} (optional operation).
+     * <p>
+     * The default implementation throws an {@link UnsupportedOperationException}.
+     * Users overriding this method must also override {@link #isTransposable()}.
      *
      * @param x the vector to operate on
-     * @return the product of the transpose of {@code this} instance with
-     * {@code x}
-     * @throws org.hipparchus.exception.MathIllegalArgumentException
-     * if the row dimension does not match the size of {@code x}
+     * @return the product of the transpose of {@code this} instance with {@code x}
+     * @throws MathIllegalArgumentException if the row dimension does not match the
+     * size of {@code x}
      * @throws UnsupportedOperationException if this operation is not supported
      * by {@code this} operator
      */
-    public RealVector operateTranspose(final RealVector x)
+    default RealVector operateTranspose(final RealVector x)
         throws MathIllegalArgumentException, UnsupportedOperationException {
         throw new UnsupportedOperationException();
     }
 
     /**
-     * Returns {@code true} if this operator supports
-     * {@link #operateTranspose(RealVector)}. If {@code true} is returned,
-     * {@link #operateTranspose(RealVector)} should not throw
-     * {@code UnsupportedOperationException}. The default implementation returns
-     * {@code false}.
+     * Returns {@code true} if this operator supports {@link #operateTranspose(RealVector)}.
+     * <p>
+     * If {@code true} is returned, {@link #operateTranspose(RealVector)}
+     * should not throw {@code UnsupportedOperationException}.
+     * <p>
+     * The default implementation returns {@code false}.
      *
      * @return {@code false}
      */
-    public boolean isTransposable() {
+    default boolean isTransposable() {
         return false;
     }
 }

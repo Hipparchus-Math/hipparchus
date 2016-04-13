@@ -18,13 +18,10 @@ package org.hipparchus.linear;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.RealLinearOperator;
-import org.hipparchus.linear.RealVector;
 
 /** This class implements Hilbert Matrices as {@link RealLinearOperator}. */
 public class HilbertMatrix
-    extends RealLinearOperator {
+    implements RealLinearOperator {
 
     /** The size of the matrix. */
     private final int n;
