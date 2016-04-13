@@ -47,7 +47,7 @@ import org.hipparchus.util.MathUtils;
  * relTol which will be used for all components.
  * </p>
  * <p>
- * Note that <em>only</em> the {@link FieldODEState#getState() main part}
+ * Note that <em>only</em> the {@link FieldODEState#getPrimaryState() main part}
  * of the state vector is used for stepsize control. The {@link
  * FieldODEState#getSecondaryState(int) secondary parts} of the state
  * vector are explicitly ignored for stepsize control.
@@ -226,7 +226,7 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
 
         super.sanityChecks(initialState, t);
 
-        mainSetDimension = initialState.getStateDimension();
+        mainSetDimension = initialState.getPrimaryStateDimension();
 
         if (vecAbsoluteTolerance != null && vecAbsoluteTolerance.length != mainSetDimension) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,

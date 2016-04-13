@@ -47,14 +47,14 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
 
         Assert.assertEquals(0.0, interpolator.getPreviousState().getTime().getReal(), 1.0e-15);
         for (int i = 0; i < 2; ++i) {
-            Assert.assertEquals(interpolator.getPreviousState().getState()[i].getReal(),
-                                interpolator.getInterpolatedState(interpolator.getPreviousState().getTime()).getState()[i].getReal(),
+            Assert.assertEquals(interpolator.getPreviousState().getPrimaryState()[i].getReal(),
+                                interpolator.getInterpolatedState(interpolator.getPreviousState().getTime()).getPrimaryState()[i].getReal(),
                                 epsilon);
         }
         Assert.assertEquals(0.125, interpolator.getCurrentState().getTime().getReal(), 1.0e-15);
         for (int i = 0; i < 2; ++i) {
-            Assert.assertEquals(interpolator.getCurrentState().getState()[i].getReal(),
-                                interpolator.getInterpolatedState(interpolator.getCurrentState().getTime()).getState()[i].getReal(),
+            Assert.assertEquals(interpolator.getCurrentState().getPrimaryState()[i].getReal(),
+                                interpolator.getInterpolatedState(interpolator.getCurrentState().getTime()).getPrimaryState()[i].getReal(),
                                 epsilon);
         }
 
@@ -79,8 +79,8 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                   divide(n);
             FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
             T[] ref = sinCos.theoreticalState(t);
-            maxErrorSin = FastMath.max(maxErrorSin, state.getState()[0].subtract(ref[0]).abs().getReal());
-            maxErrorCos = FastMath.max(maxErrorCos, state.getState()[1].subtract(ref[1]).abs().getReal());
+            maxErrorSin = FastMath.max(maxErrorSin, state.getPrimaryState()[0].subtract(ref[0]).abs().getReal());
+            maxErrorCos = FastMath.max(maxErrorCos, state.getPrimaryState()[1].subtract(ref[1]).abs().getReal());
         }
         Assert.assertEquals(0.0, maxErrorSin, epsilonSin);
         Assert.assertEquals(0.0, maxErrorCos, epsilonCos);
@@ -111,12 +111,12 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                   divide(n);
 
             FieldODEStateAndDerivative<T> state = fieldInterpolator.getInterpolatedState(t);
-            T[] fieldY    = state.getState();
-            T[] fieldYDot = state.getDerivative();
+            T[] fieldY    = state.getPrimaryState();
+            T[] fieldYDot = state.getPrimaryDerivative();
 
             ODEStateAndDerivative regularState = regularInterpolator.getInterpolatedState(t.getReal());
-            double[] regularY     = regularState.getState();
-            double[] regularYDot  = regularState.getDerivative();
+            double[] regularY     = regularState.getPrimaryState();
+            double[] regularYDot  = regularState.getPrimaryDerivative();
 
             maxErrorSin    = FastMath.max(maxErrorSin,    fieldY[0].subtract(regularY[0]).abs().getReal());
             maxErrorCos    = FastMath.max(maxErrorCos,    fieldY[1].subtract(regularY[1]).abs().getReal());
@@ -161,8 +161,8 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
             }
         }
         return new ODEStateAndDerivative(s.getTime().getReal(),
-                                         convertArray(s.getState()),
-                                         convertArray(s.getDerivative()),
+                                         convertArray(s.getPrimaryState()),
+                                         convertArray(s.getPrimaryDerivative()),
                                          secondaryStates,
                                          secondaryDerivatives);
     }

@@ -45,7 +45,7 @@ public interface StepHandler extends ODEStepHandler {
     /** {@inheritDoc}} */
     @Override
     default void init(final ODEStateAndDerivative initialState, final double finalTime) {
-        init(initialState.getTime(), initialState.getState(), finalTime);
+        init(initialState.getTime(), initialState.getPrimaryState(), finalTime);
     }
 
     /** {@inheritDoc}} */

@@ -133,7 +133,7 @@ public class ContinuousOutputModel extends DenseOutputModel {
      * @see #getInterpolatedSecondaryDerivatives(int)
      */
     public double[] getInterpolatedState() throws MathIllegalStateException {
-      return getInterpolatedState(getInterpolatedTime()).getState();
+      return getInterpolatedState(getInterpolatedTime()).getPrimaryState();
     }
 
     /**
@@ -150,7 +150,7 @@ public class ContinuousOutputModel extends DenseOutputModel {
      * @see #getInterpolatedSecondaryDerivatives(int)
      */
     public double[] getInterpolatedDerivatives() throws MathIllegalStateException {
-      return getInterpolatedState(getInterpolatedTime()).getDerivative();
+      return getInterpolatedState(getInterpolatedTime()).getPrimaryDerivative();
     }
 
     /** Get the interpolated secondary state corresponding to the secondary equations.

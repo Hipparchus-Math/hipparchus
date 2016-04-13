@@ -53,7 +53,7 @@ public abstract class TestProblemAbstract
     }
 
     public int getDimension() {
-        return s0.getState().length;
+        return s0.getPrimaryState().length;
     }
 
     /**

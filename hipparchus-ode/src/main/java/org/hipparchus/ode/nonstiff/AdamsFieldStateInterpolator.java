@@ -172,7 +172,7 @@ class AdamsFieldStateInterpolator<T extends RealFieldElement<T>> extends Abstrac
             }
         }
 
-        S[] estimatedState = reference.getState();
+        S[] estimatedState = reference.getPrimaryState();
         for (int j = 0; j < stateVariation.length; ++j) {
             stateVariation[j]    = stateVariation[j].add(scaled[j].multiply(normalizedAbscissa));
             estimatedState[j] = estimatedState[j].add(stateVariation[j]);

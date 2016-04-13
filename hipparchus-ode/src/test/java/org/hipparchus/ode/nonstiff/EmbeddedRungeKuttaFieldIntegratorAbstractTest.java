@@ -439,8 +439,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
             FieldODEStateAndDerivative<T> current = interpolator.getCurrentState();
             T[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
-            T dx = current.getState()[0].subtract(theoreticalY[0]);
-            T dy = current.getState()[1].subtract(theoreticalY[1]);
+            T dx = current.getPrimaryState()[0].subtract(theoreticalY[0]);
+            T dy = current.getPrimaryState()[1].subtract(theoreticalY[1]);
             T error = dx.multiply(dx).add(dy.multiply(dy));
             if (error.subtract(maxError).getReal() > 0) {
                 maxError = error;
@@ -486,14 +486,14 @@ public abstract class EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
         // check values
         for (int i = 0; i < sinCos.getDimension(); ++i) {
-            Assert.assertEquals(sinCos.theoreticalY(t.getReal())[i], result.getState()[i].getValue(), epsilonY);
+            Assert.assertEquals(sinCos.theoreticalY(t.getReal())[i], result.getPrimaryState()[i].getValue(), epsilonY);
         }
 
         // check derivatives
         final double[][] derivatives = sinCos.getDerivatives(t.getReal());
         for (int i = 0; i < sinCos.getDimension(); ++i) {
             for (int parameter = 0; parameter < parameters; ++parameter) {
-                Assert.assertEquals(derivatives[i][parameter], dYdP(result.getState()[i], parameter), epsilonPartials[parameter]);
+                Assert.assertEquals(derivatives[i][parameter], dYdP(result.getPrimaryState()[i], parameter), epsilonPartials[parameter]);
             }
         }
 

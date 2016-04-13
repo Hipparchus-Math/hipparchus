@@ -107,7 +107,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @see #getInterpolatedSecondaryDerivatives(int)
      * @see #setInterpolatedTime(double)
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
-     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link ODEState#getState()}
+     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link ODEState#getPrimaryState()}
      */
     @Deprecated
     double[] getInterpolatedState() throws MathIllegalStateException;
@@ -124,7 +124,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @see #getInterpolatedSecondaryDerivatives(int)
      * @see #setInterpolatedTime(double)
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
-     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link ODEStateAndDerivative#getDerivative()}
+     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link ODEStateAndDerivative#getPrimaryDerivative()}
      */
     @Deprecated
     double[] getInterpolatedDerivatives() throws MathIllegalStateException;

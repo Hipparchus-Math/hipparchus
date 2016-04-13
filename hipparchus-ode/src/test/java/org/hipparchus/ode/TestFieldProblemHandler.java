@@ -95,7 +95,7 @@ public class TestFieldProblemHandler<T extends RealFieldElement<T>>
 
         // store the error at the last step
         if (isLast) {
-            T[] interpolatedY = interpolator.getInterpolatedState(cT).getState();
+            T[] interpolatedY = interpolator.getInterpolatedState(cT).getPrimaryState();
             T[] theoreticalY  = problem.computeTheoreticalState(cT);
             for (int i = 0; i < interpolatedY.length; ++i) {
                 T error = interpolatedY[i].subtract(theoreticalY[i]).abs();
@@ -108,7 +108,7 @@ public class TestFieldProblemHandler<T extends RealFieldElement<T>>
         for (int k = 0; k <= 20; ++k) {
 
             T time = pT.add(cT.subtract(pT).multiply(k).divide(20));
-            T[] interpolatedY = interpolator.getInterpolatedState(time).getState();
+            T[] interpolatedY = interpolator.getInterpolatedState(time).getPrimaryState();
             T[] theoreticalY  = problem.computeTheoreticalState(time);
 
             // update the errors

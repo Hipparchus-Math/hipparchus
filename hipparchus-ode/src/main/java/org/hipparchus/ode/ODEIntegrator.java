@@ -261,7 +261,7 @@ public interface ODEIntegrator  {
         final ODEStateAndDerivative finalState   = integrate(expandableODE, initialState, t);
 
         // extract results back from the stateful equations
-        System.arraycopy(finalState.getState(), 0, y, 0, y.length);
+        System.arraycopy(finalState.getPrimaryState(), 0, y, 0, y.length);
         return finalState.getTime();
         
     }

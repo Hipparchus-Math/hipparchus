@@ -269,7 +269,7 @@ public class DormandPrince54IntegratorTest {
                 double curr   = interpolator.getCurrentState().getTime();
                 double interp = ((10 - a) * prev + a * curr) / 10;
 
-                double[] interpolatedY = interpolator.getInterpolatedState (interp).getState();
+                double[] interpolatedY = interpolator.getInterpolatedState (interp).getPrimaryState();
                 double[] theoreticalY  = pb.computeTheoreticalState(interp);
                 double dx = interpolatedY[0] - theoreticalY[0];
                 double dy = interpolatedY[1] - theoreticalY[1];

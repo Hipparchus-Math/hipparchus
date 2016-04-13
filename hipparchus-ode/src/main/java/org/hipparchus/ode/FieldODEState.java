@@ -35,8 +35,8 @@ public class FieldODEState<T extends RealFieldElement<T>> {
     /** Time. */
     private final T time;
 
-    /** Main state at time. */
-    private final T[] state;
+    /** Primary state at time. */
+    private final T[] primaryState;
 
     /** Secondary state at time. */
     private final T[][] secondaryState;
@@ -46,20 +46,20 @@ public class FieldODEState<T extends RealFieldElement<T>> {
      * #FieldODEState(RealFieldElement, RealFieldElement[], RealFieldElement[][])
      * FieldODEState(time, state, null)}.</p>
      * @param time time
-     * @param state state at time
+     * @param primaryState primary state at time
      */
-    public FieldODEState(T time, T[] state) {
-        this(time, state, null);
+    public FieldODEState(T time, T[] primaryState) {
+        this(time, primaryState, null);
     }
 
     /** Simple constructor.
      * @param time time
-     * @param state state at time
-     * @param secondaryState state at time (may be null)
+     * @param primaryState primary state at time
+     * @param secondaryState secondary state at time (may be null)
      */
-    public FieldODEState(T time, T[] state, T[][] secondaryState) {
+    public FieldODEState(T time, T[] primaryState, T[][] secondaryState) {
         this.time           = time;
-        this.state          = state.clone();
+        this.primaryState   = primaryState.clone();
         this.secondaryState = copy(time.getField(), secondaryState);
     }
 
@@ -94,18 +94,18 @@ public class FieldODEState<T extends RealFieldElement<T>> {
         return time;
     }
 
-    /** Get main state dimension.
-     * @return main state dimension
+    /** Get primary state dimension.
+     * @return primary state dimension
      */
-    public int getStateDimension() {
-        return state.length;
+    public int getPrimaryStateDimension() {
+        return primaryState.length;
     }
 
-    /** Get main state at time.
-     * @return main state at time
+    /** Get primary state at time.
+     * @return primary state at time
      */
-    public T[] getState() {
-        return state.clone();
+    public T[] getPrimaryState() {
+        return primaryState.clone();
     }
 
     /** Get the number of secondary states.
@@ -118,21 +118,21 @@ public class FieldODEState<T extends RealFieldElement<T>> {
     /** Get secondary state dimension.
      * @param index index of the secondary set as returned
      * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryODE)}
-     * (beware index 0 corresponds to main state, additional states start at 1)
+     * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return secondary state dimension
      */
     public int getSecondaryStateDimension(final int index) {
-        return index == 0 ? state.length : secondaryState[index - 1].length;
+        return index == 0 ? primaryState.length : secondaryState[index - 1].length;
     }
 
     /** Get secondary state at time.
      * @param index index of the secondary set as returned
      * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryODE)}
-     * (beware index 0 corresponds to main state, additional states start at 1)
+     * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return secondary state at time
      */
     public T[] getSecondaryState(final int index) {
-        return index == 0 ? state.clone() : secondaryState[index - 1].clone();
+        return index == 0 ? primaryState.clone() : secondaryState[index - 1].clone();
     }
 
     /** Return the dimension of the complete set of equations.
@@ -142,7 +142,7 @@ public class FieldODEState<T extends RealFieldElement<T>> {
      * @return dimension of the complete set of equations
      */
     public int getTotalDimension() {
-        int dimension = state.length;
+        int dimension = primaryState.length;
         if (secondaryState != null) {
             for (final T[] secondary : secondaryState) {
                 dimension += secondary.length;

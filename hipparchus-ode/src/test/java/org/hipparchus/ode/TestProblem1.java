@@ -57,7 +57,7 @@ public class TestProblem1 extends TestProblemAbstract {
     @Override
     public double[] computeTheoreticalState(double t) {
         final double c = FastMath.exp (getInitialTime() - t);
-        final double[] y = getInitialState().getState();
+        final double[] y = getInitialState().getPrimaryState();
         for (int i = 0; i < getDimension(); ++i) {
             y[i] *= c;
         }

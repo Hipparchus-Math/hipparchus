@@ -248,7 +248,7 @@ public class EventFilterTest {
         }
 
         public double g(ODEStateAndDerivative s) {
-            return s.getState()[0];
+            return s.getPrimaryState()[0];
         }
 
         public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {

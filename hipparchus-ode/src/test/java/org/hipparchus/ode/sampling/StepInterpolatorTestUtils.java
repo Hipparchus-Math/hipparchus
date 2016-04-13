@@ -49,16 +49,16 @@ public class StepInterpolatorTestUtils {
                     return;
                 }
 
-                final double[] yM4h = interpolator.getInterpolatedState(t - 4 * h).getState();
-                final double[] yM3h = interpolator.getInterpolatedState(t - 3 * h).getState();
-                final double[] yM2h = interpolator.getInterpolatedState(t - 2 * h).getState();
-                final double[] yM1h = interpolator.getInterpolatedState(t - h).getState();
-                final double[] yP1h = interpolator.getInterpolatedState(t + h).getState();
-                final double[] yP2h = interpolator.getInterpolatedState(t + 2 * h).getState();
-                final double[] yP3h = interpolator.getInterpolatedState(t + 3 * h).getState();
-                final double[] yP4h = interpolator.getInterpolatedState(t + 4 * h).getState();
+                final double[] yM4h = interpolator.getInterpolatedState(t - 4 * h).getPrimaryState();
+                final double[] yM3h = interpolator.getInterpolatedState(t - 3 * h).getPrimaryState();
+                final double[] yM2h = interpolator.getInterpolatedState(t - 2 * h).getPrimaryState();
+                final double[] yM1h = interpolator.getInterpolatedState(t - h).getPrimaryState();
+                final double[] yP1h = interpolator.getInterpolatedState(t + h).getPrimaryState();
+                final double[] yP2h = interpolator.getInterpolatedState(t + 2 * h).getPrimaryState();
+                final double[] yP3h = interpolator.getInterpolatedState(t + 3 * h).getPrimaryState();
+                final double[] yP4h = interpolator.getInterpolatedState(t + 4 * h).getPrimaryState();
 
-                final double[] yDot = interpolator.getInterpolatedState(t).getDerivative();
+                final double[] yDot = interpolator.getInterpolatedState(t).getPrimaryDerivative();
 
                 for (int i = 0; i < yDot.length; ++i) {
                     final double approYDot = ( -3 * (yP4h[i] - yM4h[i]) +
@@ -91,16 +91,16 @@ public class StepInterpolatorTestUtils {
                     return;
                 }
 
-                final T[] yM4h = interpolator.getInterpolatedState(t.add(h.multiply(-4))).getState();
-                final T[] yM3h = interpolator.getInterpolatedState(t.add(h.multiply(-3))).getState();
-                final T[] yM2h = interpolator.getInterpolatedState(t.add(h.multiply(-2))).getState();
-                final T[] yM1h = interpolator.getInterpolatedState(t.add(h.multiply(-1))).getState();
-                final T[] yP1h = interpolator.getInterpolatedState(t.add(h.multiply( 1))).getState();
-                final T[] yP2h = interpolator.getInterpolatedState(t.add(h.multiply( 2))).getState();
-                final T[] yP3h = interpolator.getInterpolatedState(t.add(h.multiply( 3))).getState();
-                final T[] yP4h = interpolator.getInterpolatedState(t.add(h.multiply( 4))).getState();
+                final T[] yM4h = interpolator.getInterpolatedState(t.add(h.multiply(-4))).getPrimaryState();
+                final T[] yM3h = interpolator.getInterpolatedState(t.add(h.multiply(-3))).getPrimaryState();
+                final T[] yM2h = interpolator.getInterpolatedState(t.add(h.multiply(-2))).getPrimaryState();
+                final T[] yM1h = interpolator.getInterpolatedState(t.add(h.multiply(-1))).getPrimaryState();
+                final T[] yP1h = interpolator.getInterpolatedState(t.add(h.multiply( 1))).getPrimaryState();
+                final T[] yP2h = interpolator.getInterpolatedState(t.add(h.multiply( 2))).getPrimaryState();
+                final T[] yP3h = interpolator.getInterpolatedState(t.add(h.multiply( 3))).getPrimaryState();
+                final T[] yP4h = interpolator.getInterpolatedState(t.add(h.multiply( 4))).getPrimaryState();
 
-                final T[] yDot = interpolator.getInterpolatedState(t).getDerivative();
+                final T[] yDot = interpolator.getInterpolatedState(t).getPrimaryDerivative();
 
                 for (int i = 0; i < yDot.length; ++i) {
                     final T approYDot =     yP4h[i].subtract(yM4h[i]).multiply(  -3).

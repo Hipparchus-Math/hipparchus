@@ -85,7 +85,7 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
     public T[] mapState(final FieldODEState<T> state) {
         final T[] y = MathArrays.buildArray(state.getTime().getField(), getTotalDimension());
         int index = 0;
-        insertEquationData(index, state.getState(), y);
+        insertEquationData(index, state.getPrimaryState(), y);
         while (++index < getNumberOfEquations()) {
             insertEquationData(index, state.getSecondaryState(index), y);
         }
@@ -99,7 +99,7 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
     public T[] mapDerivative(final FieldODEStateAndDerivative<T> state) {
         final T[] yDot = MathArrays.buildArray(state.getTime().getField(), getTotalDimension());
         int index = 0;
-        insertEquationData(index, state.getDerivative(), yDot);
+        insertEquationData(index, state.getPrimaryDerivative(), yDot);
         while (++index < getNumberOfEquations()) {
             insertEquationData(index, state.getSecondaryDerivative(index), yDot);
         }

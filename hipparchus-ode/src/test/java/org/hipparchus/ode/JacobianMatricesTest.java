@@ -48,9 +48,9 @@ public class JacobianMatricesTest {
         for (double b = 2.88; b < 3.08; b += 0.001) {
             Brusselator brusselator = new Brusselator(b);
             double[] y = { 1.3, b };
-            y = integ.integrate(brusselator, new ODEState(0, y), 20.0).getState();
+            y = integ.integrate(brusselator, new ODEState(0, y), 20.0).getPrimaryState();
             double[] yP = { 1.3, b + hP };
-            yP = integ.integrate(brusselator, new ODEState(0, yP), 20.0).getState();
+            yP = integ.integrate(brusselator, new ODEState(0, yP), 20.0).getPrimaryState();
             residualsP0.addValue((yP[0] - y[0]) / hP - brusselator.dYdP0());
             residualsP1.addValue((yP[1] - y[1]) / hP - brusselator.dYdP1());
         }
@@ -71,10 +71,10 @@ public class JacobianMatricesTest {
         for (double b = 2.88; b < 3.08; b += 0.001) {
             ParamBrusselator brusselator = new ParamBrusselator(b);
             double[] y = { 1.3, b };
-            y = integ.integrate(brusselator, new ODEState(0, y), 20.0).getState();
+            y = integ.integrate(brusselator, new ODEState(0, y), 20.0).getPrimaryState();
             double[] yP = { 1.3, b + hP };
             brusselator.setParameter("b", b + hP);
-            yP = integ.integrate(brusselator, new ODEState(0, yP), 20.0).getState();
+            yP = integ.integrate(brusselator, new ODEState(0, yP), 20.0).getPrimaryState();
             residualsP0.addValue((yP[0] - y[0]) / hP - brusselator.dYdP0());
             residualsP1.addValue((yP[1] - y[1]) / hP - brusselator.dYdP1());
         }
@@ -198,7 +198,7 @@ public class JacobianMatricesTest {
         double t = 18 * FastMath.PI;
         final ODEState initialState = jacob.setUpInitialState(new ODEState(0, y));
         final ODEStateAndDerivative finalState = integ.integrate(efode, initialState, t);
-        y = finalState.getState();
+        y = finalState.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(circle.exactY(t)[i], y[i], 1.0e-9);
         }
@@ -255,7 +255,7 @@ public class JacobianMatricesTest {
         double t = 18 * FastMath.PI;
         final ODEState initialState = jacob.setUpInitialState(new ODEState(0, y));
         final ODEStateAndDerivative finalState = integ.integrate(efode, initialState, t);
-        y = finalState.getState();
+        y = finalState.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(pcircle.exactY(t)[i], y[i], 1.0e-9);
         }

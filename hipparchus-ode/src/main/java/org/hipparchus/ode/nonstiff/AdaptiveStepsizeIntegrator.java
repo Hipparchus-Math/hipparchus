@@ -220,7 +220,7 @@ public abstract class AdaptiveStepsizeIntegrator
 
         super.sanityChecks(initialState, t);
 
-        mainSetDimension = initialState.getStateDimension();
+        mainSetDimension = initialState.gePrimaryStateDimension();
 
         if ((vecAbsoluteTolerance != null) && (vecAbsoluteTolerance.length != mainSetDimension)) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,

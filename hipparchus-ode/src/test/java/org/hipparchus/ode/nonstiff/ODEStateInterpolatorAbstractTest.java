@@ -35,14 +35,14 @@ public abstract class ODEStateInterpolatorAbstractTest {
 
         Assert.assertEquals(0.0, interpolator.getPreviousState().getTime(), 1.0e-15);
         for (int i = 0; i < 2; ++i) {
-            Assert.assertEquals(interpolator.getPreviousState().getState()[i],
-                                interpolator.getInterpolatedState(interpolator.getPreviousState().getTime()).getState()[i],
+            Assert.assertEquals(interpolator.getPreviousState().getPrimaryState()[i],
+                                interpolator.getInterpolatedState(interpolator.getPreviousState().getTime()).getPrimaryState()[i],
                                 epsilon);
         }
         Assert.assertEquals(0.125, interpolator.getCurrentState().getTime(), 1.0e-15);
         for (int i = 0; i < 2; ++i) {
-            Assert.assertEquals(interpolator.getCurrentState().getState()[i],
-                                interpolator.getInterpolatedState(interpolator.getCurrentState().getTime()).getState()[i],
+            Assert.assertEquals(interpolator.getCurrentState().getPrimaryState()[i],
+                                interpolator.getInterpolatedState(interpolator.getCurrentState().getTime()).getPrimaryState()[i],
                                 epsilon);
         }
     }
@@ -61,7 +61,7 @@ public abstract class ODEStateInterpolatorAbstractTest {
         for (int i = 0; i <= n; ++i) {
             double t =     ((n - i) * interpolator.getPreviousState().getTime() +
                                  i  * interpolator.getCurrentState().getTime()) / n;
-            final double[] interpolated = interpolator.getInterpolatedState(t).getState();
+            final double[] interpolated = interpolator.getInterpolatedState(t).getPrimaryState();
             double[] reference = sinCos.theoreticalState(t);
             maxErrorSin = FastMath.max(maxErrorSin, FastMath.abs(interpolated[0] - reference[0]));
             maxErrorCos = FastMath.max(maxErrorCos, FastMath.abs(interpolated[1] - reference[1]));

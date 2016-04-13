@@ -234,7 +234,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
             while (error >= 1.0) {
 
                 // predict a first estimate of the state at step end (P in the PECE sequence)
-                predictedY = stepEnd.getState();
+                predictedY = stepEnd.getPrimaryState();
 
                 // evaluate a first estimate of the derivative (first E in the PECE sequence)
                 final double[] yDot = computeDerivatives(stepEnd.getTime(), predictedY);

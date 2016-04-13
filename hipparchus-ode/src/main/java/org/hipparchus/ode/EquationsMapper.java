@@ -81,7 +81,7 @@ public class EquationsMapper implements Serializable {
     public double[] mapState(final ODEState state) {
         final double[] y = new double[getTotalDimension()];
         int index = 0;
-        insertEquationData(index, state.getState(), y);
+        insertEquationData(index, state.getPrimaryState(), y);
         while (++index < getNumberOfEquations()) {
             insertEquationData(index, state.getSecondaryState(index), y);
         }
@@ -95,7 +95,7 @@ public class EquationsMapper implements Serializable {
     public double[] mapDerivative(final ODEStateAndDerivative state) {
         final double[] yDot = new double[getTotalDimension()];
         int index = 0;
-        insertEquationData(index, state.getDerivative(), yDot);
+        insertEquationData(index, state.getPrimaryDerivative(), yDot);
         while (++index < getNumberOfEquations()) {
             insertEquationData(index, state.getSecondaryDerivative(index), yDot);
         }

@@ -141,9 +141,9 @@ public class EventStateTest {
         }
 
         public ODEStateAndDerivative resetState(ODEStateAndDerivative s) {
-            double[] y = s.getState();
+            double[] y = s.getPrimaryState();
             y[0] += 1.0;
-            return new ODEStateAndDerivative(s.getTime(), y, s.getDerivative());
+            return new ODEStateAndDerivative(s.getTime(), y, s.getPrimaryDerivative());
         }
 
     }
@@ -175,9 +175,12 @@ public class EventStateTest {
         integrator.addEventHandler(new SecondaryStateEvent(-3.0), 0.1, 1.0e-9, 1000);
         integrator.setInitialStepSize(3.0);
 
-        ODEStateAndDerivative finalState = integrator.integrate(equation, new ODEState(0.0, new double[] { 1.0 }), 30.0);
+        ODEState initialState = new ODEState(0.0,
+                                             new double[] { 1.0 },
+                                             new double[][] { { 0.0 } });
+        ODEStateAndDerivative finalState = integrator.integrate(equation, initialState, 30.0);
         Assert.assertEquals( 1.0, finalState.getTime(), 1.0e-10);
-        Assert.assertEquals( 2.0, finalState.getState()[0], 1.0e-10);
+        Assert.assertEquals( 2.0, finalState.getPrimaryState()[0], 1.0e-10);
         Assert.assertEquals(-3.0, finalState.getSecondaryState(0)[0], 1.0e-10);
 
     }

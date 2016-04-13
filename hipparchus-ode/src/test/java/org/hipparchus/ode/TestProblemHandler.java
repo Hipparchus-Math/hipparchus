@@ -93,7 +93,7 @@ public class TestProblemHandler implements ODEStepHandler {
 
         // store the error at the last step
         if (isLast) {
-            double[] interpolatedY = interpolator.getCurrentState().getState();
+            double[] interpolatedY = interpolator.getCurrentState().getPrimaryState();
             double[] theoreticalY  = problem.computeTheoreticalState(cT);
             for (int i = 0; i < interpolatedY.length; ++i) {
                 double error = FastMath.abs(interpolatedY[i] - theoreticalY[i]);
@@ -106,7 +106,7 @@ public class TestProblemHandler implements ODEStepHandler {
 
             double time = pT + (k * (cT - pT)) / 20;
             ODEStateAndDerivative interpolated = interpolator.getInterpolatedState(time);
-            double[] interpolatedY = interpolated.getState();
+            double[] interpolatedY = interpolated.getPrimaryState();
             double[] theoreticalY  = problem.computeTheoreticalState(interpolated.getTime());
 
             // update the errors

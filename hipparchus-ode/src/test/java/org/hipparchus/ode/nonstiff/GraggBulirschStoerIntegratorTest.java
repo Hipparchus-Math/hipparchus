@@ -271,7 +271,7 @@ public class GraggBulirschStoerIntegratorTest {
                         new GraggBulirschStoerIntegrator(0.1, 10, 1.0e-12, 0.0);
         integ.addEventHandler(stepProblem, 1.0, 1.0e-12, 1000);
         Assert.assertEquals(8.0,
-                            integ.integrate(stepProblem, new ODEState(0.0, new double[] { 0.0 }), 10.0).getState()[0],
+                            integ.integrate(stepProblem, new ODEState(0.0, new double[] { 0.0 }), 10.0).getPrimaryState()[0],
                             1.0e-12);
     }
 
@@ -298,8 +298,8 @@ public class GraggBulirschStoerIntegratorTest {
             public void handleStep(ODEStateInterpolator interpolator, boolean isLast)
                             throws MathIllegalStateException {
                 double t = interpolator.getCurrentState().getTime();
-                double[] y = interpolator.getInterpolatedState(t).getState();
-                double[] yDot = interpolator.getInterpolatedState(t).getDerivative();
+                double[] y = interpolator.getInterpolatedState(t).getPrimaryState();
+                double[] yDot = interpolator.getInterpolatedState(t).getPrimaryDerivative();
                 Assert.assertEquals(3.0 * t - 5.0, y[0], 1.0e-14);
                 Assert.assertEquals(3.0, yDot[0], 1.0e-14);
             }
@@ -337,7 +337,7 @@ public class GraggBulirschStoerIntegratorTest {
                 double curr   = interpolator.getCurrentState().getTime();
                 double interp = ((100 - a) * prev + a * curr) / 100;
 
-                double[] interpolatedY = interpolator.getInterpolatedState (interp).getState();
+                double[] interpolatedY = interpolator.getInterpolatedState (interp).getPrimaryState();
                 double[] theoreticalY  = pb.computeTheoreticalState(interp);
                 double dx = interpolatedY[0] - theoreticalY[0];
                 double dy = interpolatedY[1] - theoreticalY[1];

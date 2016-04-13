@@ -130,7 +130,7 @@ public class FieldDenseOutputModel<T extends RealFieldElement<T>>
             // safety checks
             final FieldODEStateAndDerivative<T> s1 = steps.get(0).getPreviousState();
             final FieldODEStateAndDerivative<T> s2 = model.steps.get(0).getPreviousState();
-            checkDimensionsEquality(s1.getStateDimension(), s2.getStateDimension());
+            checkDimensionsEquality(s1.getPrimaryStateDimension(), s2.getPrimaryStateDimension());
             checkDimensionsEquality(s1.getNumberOfSecondaryStates(), s2.getNumberOfSecondaryStates());
             for (int i = 0; i < s1.getNumberOfSecondaryStates(); ++i) {
                 checkDimensionsEquality(s1.getSecondaryStateDimension(i), s2.getSecondaryStateDimension(i));

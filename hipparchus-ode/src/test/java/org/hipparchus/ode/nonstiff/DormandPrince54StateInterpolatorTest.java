@@ -84,7 +84,7 @@ public class DormandPrince54StateInterpolatorTest {
         for (int i = 0; i < 1000; ++i) {
             double r = random.nextDouble();
             double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-            double[] interpolatedY = cm.getInterpolatedState(time).getState();
+            double[] interpolatedY = cm.getInterpolatedState(time).getPrimaryState();
             double[] theoreticalY  = pb.computeTheoreticalState(time);
             double dx = interpolatedY[0] - theoreticalY[0];
             double dy = interpolatedY[1] - theoreticalY[1];

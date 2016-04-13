@@ -197,37 +197,41 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
 
     /** Prepare the start of an integration.
      * @param eqn equations to integrate
-     * @param t0 start value of the independent <i>time</i> variable
-     * @param y0 array containing the start value of the state vector
+     * @param s0 initial state vector
      * @param t target time for the integration
      * @return initial state with derivatives added
      */
     protected FieldODEStateAndDerivative<T> initIntegration(final FieldExpandableODE<T> eqn,
-                                                            final T t0, final T[] y0, final T t) {
+                                                            final FieldODEState<T> s0, final T t) {
 
         this.equations = eqn;
         evaluations    = evaluations.withCount(0);
 
         // initialize ODE
-        eqn.init(t0, y0, t);
+        eqn.init(s0, t);
 
-        // set up derivatives of initial state
+        // set up derivatives of initial state (including primary and secondary components)
+        final T   t0    = s0.getTime();
+        final T[] y0    = eqn.getMapper().mapState(s0);
         final T[] y0Dot = computeDerivatives(t0, y0);
-        final FieldODEStateAndDerivative<T> state0 = new FieldODEStateAndDerivative<T>(t0, y0, y0Dot);
+
+        // built the state
+        final FieldODEStateAndDerivative<T> s0WithDerivatives =
+                        eqn.getMapper().mapStateAndDerivative(t0, y0, y0Dot);
 
         // initialize event handlers
         for (final FieldEventState<T> state : eventsStates) {
-            state.getEventHandler().init(state0, t);
+            state.getEventHandler().init(s0WithDerivatives, t);
         }
 
         // initialize step handlers
         for (FieldODEStepHandler<T> handler : stepHandlers) {
-            handler.init(state0, t);
+            handler.init(s0WithDerivatives, t);
         }
 
         setStateInitialized(false);
 
-        return state0;
+        return s0WithDerivatives;
 
     }
 

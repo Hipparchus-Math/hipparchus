@@ -96,7 +96,7 @@ public class TestProblem4 extends TestProblemAbstract {
         }
 
         public double g(ODEStateAndDerivative s) {
-            return sign * s.getState()[0];
+            return sign * s.getPrimaryState()[0];
         }
 
         public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
@@ -106,8 +106,8 @@ public class TestProblem4 extends TestProblemAbstract {
         }
 
         public ODEStateAndDerivative resetState(ODEStateAndDerivative s) {
-            final double[] y    = s.getState();
-            final double[] yDot = s.getDerivative();
+            final double[] y    = s.getPrimaryState();
+            final double[] yDot = s.getPrimaryDerivative();
             y[0]    = -y[0];
             y[1]    = -y[1];
             yDot[0] = -yDot[0];

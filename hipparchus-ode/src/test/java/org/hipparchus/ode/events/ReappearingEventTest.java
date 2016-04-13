@@ -76,7 +76,7 @@ public class ReappearingEventTest {
     protected static class Event implements ODEEventHandler {
 
         public double g(ODEStateAndDerivative s) {
-            return s.getState()[6] - 15.0;
+            return s.getPrimaryState()[6] - 15.0;
         }
 
         public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {

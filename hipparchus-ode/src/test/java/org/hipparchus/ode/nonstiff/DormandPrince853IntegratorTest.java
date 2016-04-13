@@ -72,7 +72,7 @@ public class DormandPrince853IntegratorTest {
         integrator.setInitialStepSize(60.0);
         ODEStateAndDerivative finalState = integrator.integrate(new ExpandableODE(ode), new ODEState(t0, y0), tEvent);
         Assert.assertEquals(tEvent, finalState.getTime(), 5.0e-6);
-        double[] y = finalState.getState();
+        double[] y = finalState.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(y0[i] * FastMath.exp(k[i] * (finalState.getTime() - t0)), y[i], 1.0e-9);
         }
@@ -91,7 +91,7 @@ public class DormandPrince853IntegratorTest {
         }, Double.POSITIVE_INFINITY, 1.0e-20, 100);
         finalState = integrator.integrate(new ExpandableODE(ode), new ODEState(t0, y0), tEvent + 120);
         Assert.assertEquals(tEvent + 120, finalState.getTime(), 5.0e-6);
-        y = finalState.getState();
+        y = finalState.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(y0[i] * FastMath.exp(k[i] * (finalState.getTime() - t0)), y[i], 1.0e-9);
         }
@@ -442,7 +442,7 @@ public class DormandPrince853IntegratorTest {
             // once a step has been handled by handleStep,
             // events checking should only refer to dates after the step
             Assert.assertTrue(s.getTime() >= tMin);
-            return s.getState()[index];
+            return s.getPrimaryState()[index];
         }
 
         public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {

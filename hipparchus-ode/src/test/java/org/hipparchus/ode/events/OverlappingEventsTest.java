@@ -143,8 +143,8 @@ public class OverlappingEventsTest implements OrdinaryDifferentialEquation {
 
         /** {@inheritDoc} */
         public double g(ODEStateAndDerivative s) {
-            return (eventType == 0) ? s.getState()[idx] >= 1.0 ? 1.0 : -1.0
-                                    : s.getState()[idx] - 1.0;
+            return (eventType == 0) ? s.getPrimaryState()[idx] >= 1.0 ? 1.0 : -1.0
+                                    : s.getPrimaryState()[idx] - 1.0;
         }
 
         /** {@inheritDoc} */

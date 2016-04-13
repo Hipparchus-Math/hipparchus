@@ -44,12 +44,12 @@ public class FieldExpandableODETest {
         for (int i = 0; i < complete.length; ++i) {
             complete[i] = field.getZero().add(i);
         }
-        equation.init(t0, complete, t);
+        equation.init(new FieldODEState<T>(t0, complete), t);
         T[] completeDot = equation.computeDerivatives(t0, complete);
         FieldODEStateAndDerivative<T> state = equation.getMapper().mapStateAndDerivative(t0, complete, completeDot);
         Assert.assertEquals(0, state.getNumberOfSecondaryStates());
-        T[] mainState    = state.getState();
-        T[] mainStateDot = state.getDerivative();
+        T[] mainState    = state.getPrimaryState();
+        T[] mainStateDot = state.getPrimaryDerivative();
         Assert.assertEquals(main.getDimension(), mainState.length);
         for (int i = 0; i < main.getDimension(); ++i) {
             Assert.assertEquals(i, mainState[i].getReal(),   1.0e-15);
@@ -83,7 +83,7 @@ public class FieldExpandableODETest {
         for (int i = 0; i < complete.length; ++i) {
             complete[i] = field.getZero().add(i);
         }
-        equation.init(t0, complete, t);
+        equation.init(new FieldODEState<T>(t0, complete), t);
         T[] completeDot = equation.computeDerivatives(t0, complete);
 
         T[] mainState    = equation.getMapper().extractEquationData(0,  complete);
@@ -140,7 +140,7 @@ public class FieldExpandableODETest {
         for (int i = 0; i < complete.length; ++i) {
             complete[i] = field.getZero().add(i);
         }
-        equation.init(t0, complete, t);
+        equation.init(new FieldODEState<T>(t0, complete), t);
         T[] completeDot = equation.computeDerivatives(t0, complete);
 
         try {
@@ -161,8 +161,8 @@ public class FieldExpandableODETest {
         Assert.assertEquals(secondary1.getDimension(), state.getSecondaryStateDimension(i1));
         Assert.assertEquals(secondary2.getDimension(), state.getSecondaryStateDimension(i2));
 
-        T[] mainState             = state.getState();
-        T[] mainStateDot          = state.getDerivative();
+        T[] mainState             = state.getPrimaryState();
+        T[] mainStateDot          = state.getPrimaryDerivative();
         T[] mainStateAlternate    = state.getSecondaryState(0);
         T[] mainStateDotAlternate = state.getSecondaryDerivative(0);
         Assert.assertEquals(main.getDimension(), mainState.length);

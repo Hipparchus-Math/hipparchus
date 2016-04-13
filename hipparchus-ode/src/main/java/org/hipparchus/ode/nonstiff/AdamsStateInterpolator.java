@@ -171,7 +171,7 @@ class AdamsStateInterpolator extends AbstractODEStateInterpolator {
             }
         }
 
-        double[] estimatedState = reference.getState();
+        double[] estimatedState = reference.getPrimaryState();
         for (int j = 0; j < stateVariation.length; ++j) {
             stateVariation[j]       = stateVariation[j] + scaled[j] * normalizedAbscissa;
             estimatedState[j]       = estimatedState[j] + stateVariation[j];

@@ -105,7 +105,7 @@ public class FirstOrderConverterTest {
         ClassicalRungeKuttaIntegrator i = new ClassicalRungeKuttaIntegrator(step);
         final ODEStateAndDerivative finalstate =
                         i.integrate(new FirstOrderConverter(new Equations(1, omega)), new ODEState(t0, y0), t);
-        return finalstate.getState()[0];
+        return finalstate.getPrimaryState()[0];
     }
 
 }

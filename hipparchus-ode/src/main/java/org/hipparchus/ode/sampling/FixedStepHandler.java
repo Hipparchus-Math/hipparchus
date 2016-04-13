@@ -42,13 +42,13 @@ public interface FixedStepHandler extends ODEFixedStepHandler {
     /** {@inheritDoc}} */
     @Override
     default void init(final ODEStateAndDerivative initialState, final double finalTime) {
-        init(initialState.getTime(), initialState.getState(), finalTime);
+        init(initialState.getTime(), initialState.getPrimaryState(), finalTime);
     }
 
     /** {@inheritDoc}} */
     @Override
     default void handleStep(final ODEStateAndDerivative state, final boolean isLast) {
-        handleStep(state.getTime(), state.getState(), state.getDerivative(), isLast);
+        handleStep(state.getTime(), state.getPrimaryState(), state.getPrimaryDerivative(), isLast);
     }
 
     /** Initialize step handler at the start of an ODE integration.

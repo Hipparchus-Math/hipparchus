@@ -64,7 +64,7 @@ public class JacobianMatrices {
     /** FODE without exact parameter Jacobian computation skill. */
     private ParameterizedODE pode;
 
-    /** Main state vector dimension. */
+    /** Primary state vector dimension. */
     private int stateDim;
 
     /** Selected parameters for parameter Jacobian computation. */
@@ -207,7 +207,7 @@ public class JacobianMatrices {
         secondary[index - 1] = matricesData;
 
         // create an updated initial state
-        return new ODEState(initialState.getTime(), initialState.getState(), secondary);
+        return new ODEState(initialState.getTime(), initialState.getPrimaryState(), secondary);
 
     }
 

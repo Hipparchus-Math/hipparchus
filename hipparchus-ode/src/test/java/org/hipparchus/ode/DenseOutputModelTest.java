@@ -70,8 +70,8 @@ public class DenseOutputModelTest {
             double r = random.nextDouble();
             double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
             ODEStateAndDerivative sd = dom.getInterpolatedState(time);
-            double[] interpolatedY    = sd.getState();
-            double[] interpolatedYDot = sd.getDerivative();
+            double[] interpolatedY    = sd.getPrimaryState();
+            double[] interpolatedYDot = sd.getPrimaryDerivative();
             double[] theoreticalY     = pb.computeTheoreticalState(time);
             double[] theoreticalYDot  = pb.doComputeDerivatives(time, theoreticalY);
             double dx = interpolatedY[0] - theoreticalY[0];
@@ -127,7 +127,7 @@ public class DenseOutputModelTest {
         Assert.assertEquals(2.0 * FastMath.PI, dom.getInitialTime(), 1.0e-12);
         Assert.assertEquals(0, dom.getFinalTime(), 1.0e-12);
         for (double t = 0; t < 2.0 * FastMath.PI; t += 0.1) {
-            final double[] y = dom.getInterpolatedState(t).getState();
+            final double[] y = dom.getInterpolatedState(t).getPrimaryState();
             Assert.assertEquals(FastMath.cos(t), y[0], 1.0e-7);
             Assert.assertEquals(FastMath.sin(t), y[1], 1.0e-7);
         }
@@ -182,7 +182,7 @@ public class DenseOutputModelTest {
             for (int i = 0; i < 1000; ++i) {
                 double r = random.nextDouble();
                 double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-                double[] interpolatedY = cm.getInterpolatedState(time).getState();
+                double[] interpolatedY = cm.getInterpolatedState(time).getPrimaryState();
                 double[] theoreticalY  = pb.computeTheoreticalState(time);
                 double dx = interpolatedY[0] - theoreticalY[0];
                 double dy = interpolatedY[1] - theoreticalY[1];

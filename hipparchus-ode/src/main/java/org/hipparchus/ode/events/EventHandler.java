@@ -53,20 +53,20 @@ public interface EventHandler extends ODEEventHandler {
     /** {@inheritDoc} */
     @Override
     default void init(final ODEStateAndDerivative initialState, final double finalTime) {
-        init(initialState.getTime(), initialState.getState(), finalTime);
+        init(initialState.getTime(), initialState.getPrimaryState(), finalTime);
     }
 
     /** {@inheritDoc} */
     @Override
     default double g(final ODEStateAndDerivative state) {
-        return g(state.getTime(), state.getState());
+        return g(state.getTime(), state.getPrimaryState());
     }
 
     /** {@inheritDoc} */
     @Override
     default org.hipparchus.ode.events.Action eventOccurred(final ODEStateAndDerivative state,
                                                            final boolean increasing) {
-        switch (eventOccurred(state.getTime(), state.getState(), increasing)) {
+        switch (eventOccurred(state.getTime(), state.getPrimaryState(), increasing)) {
             case CONTINUE:
                 return org.hipparchus.ode.events.Action.CONTINUE;
             case RESET_DERIVATIVES:
@@ -82,7 +82,7 @@ public interface EventHandler extends ODEEventHandler {
     @Override
     default ODEState resetState(final ODEStateAndDerivative state) {
         final double   t = state.getTime();
-        final double[] y = state.getState();
+        final double[] y = state.getPrimaryState();
         resetState(t, y);
         return new ODEState(t, y);
     }

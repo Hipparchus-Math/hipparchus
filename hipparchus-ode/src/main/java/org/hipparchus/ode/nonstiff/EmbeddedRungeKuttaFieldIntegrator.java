@@ -216,16 +216,13 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
-        final T   t0 = initialState.getTime();
-        final T[] y0 = equations.getMapper().mapState(initialState);
-        setStepStart(initIntegration(equations, t0, y0, finalTime));
+        setStepStart(initIntegration(equations, initialState, finalTime));
         final boolean forward = finalTime.subtract(initialState.getTime()).getReal() > 0;
 
         // create some internal working arrays
         final int   stages = c.length + 1;
-        T[]         y      = y0;
         final T[][] yDotK  = MathArrays.buildArray(getField(), stages, -1);
-        final T[]   yTmp   = MathArrays.buildArray(getField(), y0.length);
+        final T[]   yTmp   = MathArrays.buildArray(getField(), equations.getMapper().getTotalDimension());
 
         // set up integration control objects
         T  hNew           = getField().getZero();
@@ -240,7 +237,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
             while (error.subtract(1.0).getReal() >= 0) {
 
                 // first stage
-                y        = equations.getMapper().mapState(getStepStart());
+                final T[] y = equations.getMapper().mapState(getStepStart());
                 yDotK[0] = equations.getMapper().mapDerivative(getStepStart());
 
                 if (firstTime) {
@@ -272,7 +269,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
                 // next stages
                 for (int k = 1; k < stages; ++k) {
 
-                    for (int j = 0; j < y0.length; ++j) {
+                    for (int j = 0; j < y.length; ++j) {
                         T sum = yDotK[0][j].multiply(a[k-1][0]);
                         for (int l = 1; l < k; ++l) {
                             sum = sum.add(yDotK[l][j].multiply(a[k-1][l]));
@@ -285,7 +282,7 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
                 }
 
                 // estimate the state at the end of the step
-                for (int j = 0; j < y0.length; ++j) {
+                for (int j = 0; j < y.length; ++j) {
                     T sum    = yDotK[0][j].multiply(b[0]);
                     for (int l = 1; l < stages; ++l) {
                         sum = sum.add(yDotK[l][j].multiply(b[l]));
@@ -308,7 +305,6 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
             final FieldODEStateAndDerivative<T> stateTmp = new FieldODEStateAndDerivative<T>(stepEnd, yTmp, yDotTmp);
 
             // local error is small enough: accept the step, trigger events and step handlers
-            System.arraycopy(yTmp, 0, y, 0, y0.length);
             setStepStart(acceptStep(createInterpolator(forward, yDotK, getStepStart(), stateTmp, equations.getMapper()),
                                     finalTime));
 

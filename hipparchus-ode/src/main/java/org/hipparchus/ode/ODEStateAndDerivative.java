@@ -29,8 +29,8 @@ public class ODEStateAndDerivative extends ODEState {
     /** Serializable UID. */
     private static final long serialVersionUID = 20160408L;
 
-    /** Derivative of the main state at time. */
-    private final double[] derivative;
+    /** Derivative of the primary state at time. */
+    private final double[] primaryDerivative;
 
     /** Derivative of the secondary state at time. */
     private final double[][] secondaryDerivative;
@@ -41,41 +41,42 @@ public class ODEStateAndDerivative extends ODEState {
      * double[][], double[][]) ODEStateAndDerivative(time, state,
      * derivative, null, null)}.</p>
      * @param time time
-     * @param state state at time
-     * @param derivative derivative of the state at time
+     * @param primaryState primary state at time
+     * @param primaryDerivative derivative of the primary state at time
      */
-    public ODEStateAndDerivative(double time, double[] state, double[] derivative) {
-        this(time, state, derivative, null, null);
+    public ODEStateAndDerivative(double time, double[] primaryState, double[] primaryDerivative) {
+        this(time, primaryState, primaryDerivative, null, null);
     }
 
     /** Simple constructor.
      * @param time time
-     * @param state state at time
-     * @param derivative derivative of the state at time
+     * @param primaryState primary state at time
+     * @param primaryDerivative derivative of the primary state at time
      * @param secondaryState state at time (may be null)
      * @param secondaryDerivative derivative of the state at time (may be null)
      */
-    public ODEStateAndDerivative(double time, double[] state, double[] derivative, double[][] secondaryState, double[][] secondaryDerivative) {
-        super(time, state, secondaryState);
-        this.derivative          = derivative.clone();
+    public ODEStateAndDerivative(double time, double[] primaryState, double[] primaryDerivative,
+                                 double[][] secondaryState, double[][] secondaryDerivative) {
+        super(time, primaryState, secondaryState);
+        this.primaryDerivative   = primaryDerivative.clone();
         this.secondaryDerivative = copy(secondaryDerivative);
     }
 
-    /** Get derivative of the main state at time.
-     * @return derivative of the main state at time
+    /** Get derivative of the primary state at time.
+     * @return derivative of the primary state at time
      */
-    public double[] getDerivative() {
-        return derivative.clone();
+    public double[] getPrimaryDerivative() {
+        return primaryDerivative.clone();
     }
 
     /** Get derivative of the secondary state at time.
      * @param index index of the secondary set as returned
      * by {@link ExpandableODE#addSecondaryEquations(SecondaryEquations)}
-     * (beware index 0 corresponds to main state, additional states start at 1)
+     * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return derivative of the secondary state at time
      */
     public double[] getSecondaryDerivative(final int index) {
-        return index == 0 ? derivative.clone() : secondaryDerivative[index - 1].clone();
+        return index == 0 ? primaryDerivative.clone() : secondaryDerivative[index - 1].clone();
     }
 
 }

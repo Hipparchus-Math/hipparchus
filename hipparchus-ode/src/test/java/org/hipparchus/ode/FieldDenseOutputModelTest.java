@@ -77,12 +77,12 @@ public class FieldDenseOutputModelTest {
             FieldODEStateAndDerivative<T> interpolated = cm.getInterpolatedState(time);
             T[] theoreticalY = pb.computeTheoreticalState(time);
             T[] theoreticalYDot  = pb.doComputeDerivatives(time, theoreticalY);
-            T dx = interpolated.getState()[0].subtract(theoreticalY[0]);
-            T dy = interpolated.getState()[1].subtract(theoreticalY[1]);
+            T dx = interpolated.getPrimaryState()[0].subtract(theoreticalY[0]);
+            T dy = interpolated.getPrimaryState()[1].subtract(theoreticalY[1]);
             T error = dx.multiply(dx).add(dy.multiply(dy));
             maxError = MathUtils.max(maxError, error);
-            T dxDot = interpolated.getDerivative()[0].subtract(theoreticalYDot[0]);
-            T dyDot = interpolated.getDerivative()[1].subtract(theoreticalYDot[1]);
+            T dxDot = interpolated.getPrimaryDerivative()[0].subtract(theoreticalYDot[0]);
+            T dyDot = interpolated.getPrimaryDerivative()[1].subtract(theoreticalYDot[1]);
             T errorDot = dxDot.multiply(dxDot).add(dyDot.multiply(dyDot));
             maxErrorDot = MathUtils.max(maxErrorDot, errorDot);
         }
@@ -151,8 +151,8 @@ public class FieldDenseOutputModelTest {
         Assert.assertEquals(0, cm.getFinalTime().getReal(), 1.0e-12);
         for (double t = 0; t < 2.0 * FastMath.PI; t += 0.1) {
             FieldODEStateAndDerivative<T> interpolated = cm.getInterpolatedState(field.getZero().add(t));
-            Assert.assertEquals(FastMath.cos(t), interpolated.getState()[0].getReal(), 1.0e-7);
-            Assert.assertEquals(FastMath.sin(t), interpolated.getState()[1].getReal(), 1.0e-7);
+            Assert.assertEquals(FastMath.cos(t), interpolated.getPrimaryState()[0].getReal(), 1.0e-7);
+            Assert.assertEquals(FastMath.sin(t), interpolated.getPrimaryState()[1].getReal(), 1.0e-7);
         }
 
     }
@@ -202,7 +202,7 @@ public class FieldDenseOutputModelTest {
         final FieldODEStateAndDerivative<T> s1 = new FieldODEStateAndDerivative<T>(field.getZero().add(t1), fieldY, fieldY);
         final FieldEquationsMapper<T> mapper   = new FieldExpandableODE<T>(new FieldOrdinaryDifferentialEquation<T>() {
             public int getDimension() {
-                return s0.getStateDimension();
+                return s0.getPrimaryStateDimension();
             }
             public void init(T t0, T[] y0, T finalTime) {
             }

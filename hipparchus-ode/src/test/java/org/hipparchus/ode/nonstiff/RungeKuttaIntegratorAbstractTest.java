@@ -90,7 +90,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                                                             new ODEState(t0, y0),
                                                             tEvent);
         Assert.assertEquals(tEvent, result.getTime(), epsilonT);
-        double[] y = result.getState();
+        double[] y = result.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(y0[i] * FastMath.exp(k[i] * (result.getTime() - t0)), y[i], epsilonY);
         }
@@ -110,7 +110,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                                       new ODEState(t0, y0),
                                       tEvent + 120);
         Assert.assertEquals(tEvent + 120, result.getTime(), epsilonT);
-        y = result.getState();
+        y = result.getPrimaryState();
         for (int i = 0; i < y.length; ++i) {
             Assert.assertEquals(y0[i] * FastMath.exp(k[i] * (result.getTime() - t0)), y[i], epsilonY);
         }
@@ -302,8 +302,8 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
             ODEStateAndDerivative current = interpolator.getCurrentState();
             double[] theoreticalY  = pb.computeTheoreticalState(current.getTime());
-            double dx = current.getState()[0] - theoreticalY[0];
-            double dy = current.getState()[1] - theoreticalY[1];
+            double dx = current.getPrimaryState()[0] - theoreticalY[0];
+            double dy = current.getPrimaryState()[1] - theoreticalY[1];
             maxError = FastMath.max(maxError, dx * dx + dy * dy);
             if (isLast) {
                 Assert.assertEquals(expectedMaxError, maxError, epsilon);
@@ -347,7 +347,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
         RungeKuttaIntegrator integ = createIntegrator(Double.NaN);
         double   t = pb.getInitialState().getTime();
-        double[] y = pb.getInitialState().getState();
+        double[] y = pb.getInitialState().getPrimaryState();
         for (int i = 0; i < 100; ++i) {
             y  = integ.singleStep(pb, t, y, t + h);
             t += h;
@@ -396,7 +396,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
       ODEStateAndDerivative result = integ.integrate(new ExpandableODE(stepProblem),
                                                      new ODEState(0, new double[1]),
                                                      10.0);
-      Assert.assertEquals(8.0, result.getState()[0], epsilon);
+      Assert.assertEquals(8.0, result.getPrimaryState()[0], epsilon);
     }
 
     @Test
@@ -439,7 +439,7 @@ public abstract class RungeKuttaIntegratorAbstractTest {
             for (int i = 0; i < 1000; ++i) {
                 double r = random.nextDouble();
                 double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-                double[] interpolatedY = cm.getInterpolatedState(time).getState();
+                double[] interpolatedY = cm.getInterpolatedState(time).getPrimaryState();
                 double[] theoreticalY  = pb.computeTheoreticalState(time);
                 double dx = interpolatedY[0] - theoreticalY[0];
                 double dy = interpolatedY[1] - theoreticalY[1];

@@ -69,7 +69,7 @@ public abstract class TestFieldProblemAbstract<T extends RealFieldElement<T>>
      * @return problem dimension
      */
     public int getDimension() {
-        return s0.getStateDimension();
+        return s0.getPrimaryStateDimension();
     }
 
    /**

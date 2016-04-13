@@ -90,14 +90,14 @@ class MigrationStepInterpolator implements StepInterpolator {
     @Override
     @Deprecated
     public double[] getInterpolatedState() throws MathIllegalStateException {
-        return interpolated.getState();
+        return interpolated.getPrimaryState();
     }
 
     /** {@inheritDoc} */
     @Override
     @Deprecated
     public double[] getInterpolatedDerivatives() throws MathIllegalStateException {
-        return interpolated.getDerivative();
+        return interpolated.getPrimaryDerivative();
     }
 
     /** {@inheritDoc} */

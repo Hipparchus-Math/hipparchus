@@ -216,9 +216,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         sanityChecks(initialState, finalTime);
-        final T   t0 = initialState.getTime();
-        final T[] y  = equations.getMapper().mapState(initialState);
-        setStepStart(initIntegration(equations, t0, y, finalTime));
+        setStepStart(initIntegration(equations, initialState, finalTime));
         final boolean forward = finalTime.subtract(initialState.getTime()).getReal() > 0;
 
         // compute the initial Nordsieck vector using the configured starter integrator
@@ -233,6 +231,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
 
         // main integration loop
         setIsLastStep(false);
+        final T[] y = equations.getMapper().mapState(stepStart);
         do {
 
             T[] predictedY = null;
@@ -242,7 +241,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
             while (error.subtract(1.0).getReal() >= 0.0) {
 
                 // predict a first estimate of the state at step end (P in the PECE sequence)
-                predictedY = stepEnd.getState();
+                predictedY = stepEnd.getPrimaryState();
 
                 // evaluate a first estimate of the derivative (first E in the PECE sequence)
                 final T[] yDot = computeDerivatives(stepEnd.getTime(), predictedY);

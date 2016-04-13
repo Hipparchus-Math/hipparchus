@@ -84,7 +84,7 @@ public class ExpandableODE {
      * @return index of the secondary equation in the expanded state, to be used
      * as the parameter to {@link FieldODEState#getSecondaryState(int)} and
      * {@link FieldODEStateAndDerivative#getSecondaryDerivative(int)} (beware index
-     * 0 corresponds to main state, additional states start at 1)
+     * 0 corresponds to primary state, secondary states start at 1)
      */
     public int addSecondaryEquations(final SecondaryODE secondary) {
 
@@ -107,7 +107,7 @@ public class ExpandableODE {
 
         // initialize primary equations
         int index = 0;
-        final double[] primary0 = s0.getState();
+        final double[] primary0 = s0.getPrimaryState();
         primary.init(t0, primary0, finalTime);
 
         // initialize secondary equations

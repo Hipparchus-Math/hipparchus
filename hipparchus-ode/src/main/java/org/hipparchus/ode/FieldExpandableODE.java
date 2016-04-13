@@ -80,7 +80,7 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
      * @return index of the secondary equation in the expanded state, to be used
      * as the parameter to {@link FieldODEState#getSecondaryState(int)} and
      * {@link FieldODEStateAndDerivative#getSecondaryDerivative(int)} (beware index
-     * 0 corresponds to main state, additional states start at 1)
+     * 0 corresponds to primary state, secondary states start at 1)
      */
     public int addSecondaryEquations(final FieldSecondaryODE<T> secondary) {
 
@@ -92,22 +92,23 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
     }
 
     /** Initialize equations at the start of an ODE integration.
-     * @param t0 value of the independent <I>time</I> variable at integration start
-     * @param y0 array containing the value of the state vector at integration start
+     * @param s0 state at integration start
      * @param finalTime target time for the integration
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */
-    public void init(final T t0, final T[] y0, final T finalTime) {
+    public void init(final FieldODEState<T> s0, final T finalTime) {
+
+        final T t0 = s0.getTime();
 
         // initialize primary equations
         int index = 0;
-        final T[] primary0 = mapper.extractEquationData(index, y0);
+        final T[] primary0 = s0.getPrimaryState();
         primary.init(t0, primary0, finalTime);
 
         // initialize secondary equations
         while (++index < mapper.getNumberOfEquations()) {
-            final T[] secondary0 = mapper.extractEquationData(index, y0);
+            final T[] secondary0 = s0.getSecondaryState(index);
             components.get(index - 1).init(t0, primary0, secondary0, finalTime);
         }
 

@@ -35,8 +35,8 @@ public class ODEState implements Serializable {
     /** Time. */
     private final double time;
 
-    /** Main state at time. */
-    private final double[] state;
+    /** Primary state at time. */
+    private final double[] primaryState;
 
     /** Secondary state at time. */
     private final double[][] secondaryState;
@@ -46,20 +46,20 @@ public class ODEState implements Serializable {
      * #ODEState(double, double[], double[][])
      * ODEState(time, state, null)}.</p>
      * @param time time
-     * @param state state at time
+     * @param primaryState primary state at time
      */
-    public ODEState(double time, double[] state) {
-        this(time, state, null);
+    public ODEState(double time, double[] primaryState) {
+        this(time, primaryState, null);
     }
 
     /** Simple constructor.
      * @param time time
-     * @param state state at time
-     * @param secondaryState state at time (may be null)
+     * @param primaryState state at time
+     * @param secondaryState primary state at time (may be null)
      */
-    public ODEState(double time, double[] state, double[][] secondaryState) {
+    public ODEState(double time, double[] primaryState, double[][] secondaryState) {
         this.time           = time;
-        this.state          = state.clone();
+        this.primaryState   = primaryState.clone();
         this.secondaryState = copy(secondaryState);
     }
 
@@ -93,18 +93,18 @@ public class ODEState implements Serializable {
         return time;
     }
 
-    /** Get main state dimension.
-     * @return main state dimension
+    /** Get primary state dimension.
+     * @return primary state dimension
      */
-    public int getStateDimension() {
-        return state.length;
+    public int gePrimaryStateDimension() {
+        return primaryState.length;
     }
 
-    /** Get main state at time.
-     * @return main state at time
+    /** Get primary state at time.
+     * @return primary state at time
      */
-    public double[] getState() {
-        return state.clone();
+    public double[] getPrimaryState() {
+        return primaryState.clone();
     }
 
     /** Get the number of secondary states.
@@ -117,21 +117,21 @@ public class ODEState implements Serializable {
     /** Get secondary state dimension.
      * @param index index of the secondary set as returned
      * by {@link ExpandableODE#addSecondaryEquations(SecondaryEquations)}
-     * (beware index 0 corresponds to main state, additional states start at 1)
+     * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return secondary state dimension
      */
     public int getSecondaryStateDimension(final int index) {
-        return index == 0 ? state.length : secondaryState[index - 1].length;
+        return index == 0 ? primaryState.length : secondaryState[index - 1].length;
     }
 
     /** Get secondary state at time.
      * @param index index of the secondary set as returned
      * by {@link ExpandableODE#addSecondaryEquations(SecondaryEquations)}
-     * (beware index 0 corresponds to main state, additional states start at 1)
+     * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return secondary state at time
      */
     public double[] getSecondaryState(final int index) {
-        return index == 0 ? state.clone() : secondaryState[index - 1].clone();
+        return index == 0 ? primaryState.clone() : secondaryState[index - 1].clone();
     }
 
     /** Return the dimension of the complete set of equations.
@@ -141,7 +141,7 @@ public class ODEState implements Serializable {
      * @return dimension of the complete set of equations
      */
     public int getTotalDimension() {
-        int dimension = state.length;
+        int dimension = primaryState.length;
         if (secondaryState != null) {
             for (final double[] secondary : secondaryState) {
                 dimension += secondary.length;

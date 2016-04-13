@@ -29,8 +29,8 @@ import org.hipparchus.RealFieldElement;
 
 public class FieldODEStateAndDerivative<T extends RealFieldElement<T>> extends FieldODEState<T> {
 
-    /** Derivative of the main state at time. */
-    private final T[] derivative;
+    /** Derivative of the primary state at time. */
+    private final T[] primaryDerivative;
 
     /** Derivative of the secondary state at time. */
     private final T[][] secondaryDerivative;
@@ -41,41 +41,42 @@ public class FieldODEStateAndDerivative<T extends RealFieldElement<T>> extends F
      * RealFieldElement[][], RealFieldElement[][]) FieldODEStateAndDerivative(time, state,
      * derivative, null, null)}.</p>
      * @param time time
-     * @param state state at time
-     * @param derivative derivative of the state at time
+     * @param primaryState primary state at time
+     * @param primaryDerivative derivative of the primary state at time
      */
-    public FieldODEStateAndDerivative(T time, T[] state, T[] derivative) {
-        this(time, state, derivative, null, null);
+    public FieldODEStateAndDerivative(T time, T[] primaryState, T[] primaryDerivative) {
+        this(time, primaryState, primaryDerivative, null, null);
     }
 
     /** Simple constructor.
      * @param time time
-     * @param state state at time
-     * @param derivative derivative of the state at time
+     * @param primaryState primary state at time
+     * @param primaryDerivative derivative of the primary state at time
      * @param secondaryState state at time (may be null)
      * @param secondaryDerivative derivative of the state at time (may be null)
      */
-    public FieldODEStateAndDerivative(T time, T[] state, T[] derivative, T[][] secondaryState, T[][] secondaryDerivative) {
-        super(time, state, secondaryState);
-        this.derivative          = derivative.clone();
+    public FieldODEStateAndDerivative(T time, T[] primaryState, T[] primaryDerivative,
+                                      T[][] secondaryState, T[][] secondaryDerivative) {
+        super(time, primaryState, secondaryState);
+        this.primaryDerivative   = primaryDerivative.clone();
         this.secondaryDerivative = copy(time.getField(), secondaryDerivative);
     }
 
-    /** Get derivative of the main state at time.
-     * @return derivative of the main state at time
+    /** Get derivative of the primary state at time.
+     * @return derivative of the primary state at time
      */
-    public T[] getDerivative() {
-        return derivative.clone();
+    public T[] getPrimaryDerivative() {
+        return primaryDerivative.clone();
     }
 
     /** Get derivative of the secondary state at time.
      * @param index index of the secondary set as returned
      * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryODE)}
-     * (beware index 0 corresponds to main state, additional states start at 1)
+     * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return derivative of the secondary state at time
      */
     public T[] getSecondaryDerivative(final int index) {
-        return index == 0 ? derivative.clone() : secondaryDerivative[index - 1].clone();
+        return index == 0 ? primaryDerivative.clone() : secondaryDerivative[index - 1].clone();
     }
 
 }

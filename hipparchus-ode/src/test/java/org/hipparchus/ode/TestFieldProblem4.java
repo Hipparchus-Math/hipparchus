@@ -124,7 +124,7 @@ public class TestFieldProblem4<T extends RealFieldElement<T>>
         }
 
         public T g(FieldODEStateAndDerivative<T> state) {
-            return state.getState()[0].multiply(sign);
+            return state.getPrimaryState()[0].multiply(sign);
         }
 
         public Action eventOccurred(FieldODEStateAndDerivative<T> state, boolean increasing) {
@@ -134,7 +134,7 @@ public class TestFieldProblem4<T extends RealFieldElement<T>>
         }
 
         public FieldODEState<T> resetState(FieldODEStateAndDerivative<T> state) {
-            T[] y = state.getState();
+            T[] y = state.getPrimaryState();
             y[0] = y[0].negate();
             y[1] = y[1].negate();
             return new FieldODEState<T>(state.getTime(), y);
