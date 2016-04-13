@@ -29,7 +29,6 @@ import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_9
 
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.rank.Median;
 import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.junit.Assert;
@@ -83,8 +82,6 @@ public class MedianTest extends UnivariateStatisticAbstractTest{
             UnivariateStatistic percentile = getTestMedian(e);
             Assert.assertEquals(1d, percentile.evaluate(singletonArray), 0);
             Assert.assertEquals(1d, percentile.evaluate(singletonArray, 0, 1), 0);
-            Assert.assertEquals(1d, new Median().evaluate(singletonArray, 0, 1, 5), 0);
-            Assert.assertEquals(1d, new Median().evaluate(singletonArray, 0, 1, 100), 0);
             Assert.assertTrue(Double.isNaN(percentile.evaluate(singletonArray, 0, 0)));
         }
     }

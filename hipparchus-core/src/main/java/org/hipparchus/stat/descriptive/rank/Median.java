@@ -20,8 +20,11 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
+import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.KthSelector;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.PivotingStrategy;
 
 
@@ -34,7 +37,7 @@ import org.hipparchus.util.PivotingStrategy;
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.
  */
-public class Median extends Percentile implements Serializable {
+public class Median extends AbstractUnivariateStatistic implements Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -42,12 +45,32 @@ public class Median extends Percentile implements Serializable {
     /** Fixed quantile. */
     private static final double FIXED_QUANTILE_50 = 50.0;
 
+    /** The percentile impl to calculate the median. */
+    private Percentile percentile;
+
     /**
      * Default constructor.
      */
     public Median() {
-        // No try-catch or advertised exception - arg is valid
-        super(FIXED_QUANTILE_50);
+        percentile = new Percentile(FIXED_QUANTILE_50);
+    }
+
+    /**
+     * Constructs a Median with the specific {@link EstimationType},
+     * {@link NaNStrategy} and {@link PivotingStrategy}.
+     *
+     * @param estimationType one of the percentile {@link EstimationType estimation types}
+     * @param nanStrategy one of {@link NaNStrategy} to handle with NaNs
+     * @param kthSelector {@link KthSelector} to use for pivoting during search
+     * @throws MathIllegalArgumentException if p is not within (0,100]
+     * @throws NullArgumentException if type or NaNStrategy passed is null
+     */
+    private Median(final EstimationType estimationType, final NaNStrategy nanStrategy,
+                   final KthSelector kthSelector)
+        throws MathIllegalArgumentException {
+
+        percentile = new Percentile(FIXED_QUANTILE_50, estimationType,
+                                    nanStrategy, kthSelector);
     }
 
     /**
@@ -58,22 +81,15 @@ public class Median extends Percentile implements Serializable {
      * @throws NullArgumentException if original is null
      */
     Median(Median original) throws NullArgumentException {
-        super(original);
+        MathUtils.checkNotNull(original);
+
+        this.percentile = original.percentile.copy();
     }
 
-    /**
-     * Constructs a Median with the specific {@link EstimationType}, {@link NaNStrategy} and {@link PivotingStrategy}.
-     *
-     * @param estimationType one of the percentile {@link EstimationType  estimation types}
-     * @param nanStrategy one of {@link NaNStrategy} to handle with NaNs
-     * @param kthSelector {@link KthSelector} to use for pivoting during search
-     * @throws MathIllegalArgumentException if p is not within (0,100]
-     * @throws NullArgumentException if type or NaNStrategy passed is null
-     */
-    private Median(final EstimationType estimationType, final NaNStrategy nanStrategy,
-                   final KthSelector kthSelector)
+    @Override
+    public double evaluate(double[] values, int begin, int length)
         throws MathIllegalArgumentException {
-        super(FIXED_QUANTILE_50, estimationType, nanStrategy, kthSelector);
+        return percentile.evaluate(values, begin, length);
     }
 
     /** {@inheritDoc} */
@@ -82,22 +98,71 @@ public class Median extends Percentile implements Serializable {
         return new Median(this);
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /**
+     * Get the estimation {@link EstimationType type} used for computation.
+     *
+     * @return the {@code estimationType} set
+     */
+    public EstimationType getEstimationType() {
+        return percentile.getEstimationType();
+    }
+
+    /**
+     * Build a new instance similar to the current one except for the
+     * {@link EstimationType estimation type}.
+     *
+     * @param newEstimationType estimation type for the new instance
+     * @return a new instance, with changed estimation type
+     * @throws NullArgumentException when newEstimationType is null
+     */
     public Median withEstimationType(final EstimationType newEstimationType) {
-        return new Median(newEstimationType, getNaNStrategy(), getKthSelector());
+        return new Median(newEstimationType,
+                          percentile.getNaNStrategy(),
+                          percentile.getKthSelector());
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /**
+     * Get the {@link NaNStrategy NaN Handling} strategy used for computation.
+     * @return {@code NaN Handling} strategy set during construction
+     */
+    public NaNStrategy getNaNStrategy() {
+        return percentile.getNaNStrategy();
+    }
+
+    /**
+     * Build a new instance similar to the current one except for the
+     * {@link NaNStrategy NaN handling} strategy.
+     *
+     * @param newNaNStrategy NaN strategy for the new instance
+     * @return a new instance, with changed NaN handling strategy
+     * @throws NullArgumentException when newNaNStrategy is null
+     */
     public Median withNaNStrategy(final NaNStrategy newNaNStrategy) {
-        return new Median(getEstimationType(), newNaNStrategy, getKthSelector());
+        return new Median(percentile.getEstimationType(),
+                          newNaNStrategy,
+                          percentile.getKthSelector());
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /**
+     * Get the {@link KthSelector kthSelector} used for computation.
+     * @return the {@code kthSelector} set
+     */
+    public KthSelector getKthSelector() {
+        return percentile.getKthSelector();
+    }
+
+    /**
+     * Build a new instance similar to the current one except for the
+     * {@link KthSelector kthSelector} instance specifically set.
+     *
+     * @param newKthSelector KthSelector for the new instance
+     * @return a new instance, with changed KthSelector
+     * @throws NullArgumentException when newKthSelector is null
+     */
     public Median withKthSelector(final KthSelector newKthSelector) {
-        return new Median(getEstimationType(), getNaNStrategy(), newKthSelector);
+        return new Median(percentile.getEstimationType(),
+                          percentile.getNaNStrategy(),
+                          newKthSelector);
     }
 
 }
