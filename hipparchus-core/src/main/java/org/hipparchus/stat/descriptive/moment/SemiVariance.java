@@ -21,6 +21,7 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -175,8 +176,8 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      @Override
      public double evaluate(final double[] values, final int start, final int length)
          throws MathIllegalArgumentException {
-         double m = (new Mean()).evaluate(values, start, length);
-         return evaluate(values, m, varianceDirection, biasCorrected, 0, values.length);
+         double m = StatUtils.mean(values, start, length);
+         return evaluate(values, m, varianceDirection, biasCorrected, start, length);
      }
 
      /**
@@ -190,7 +191,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
       */
      public double evaluate(final double[] values, Direction direction)
          throws MathIllegalArgumentException {
-         double m = (new Mean()).evaluate(values);
+         double m = StatUtils.mean(values);
          return evaluate(values, m, direction, biasCorrected, 0, values.length);
      }
 
@@ -242,8 +243,8 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
       * @return the SemiVariance
       * @throws MathIllegalArgumentException if the parameters are not valid
       */
-     public double evaluate (final double[] values, final double cutoff, final Direction direction,
-                             final boolean corrected, final int start, final int length)
+     public double evaluate(final double[] values, final double cutoff, final Direction direction,
+                            final boolean corrected, final int start, final int length)
          throws MathIllegalArgumentException {
 
          MathArrays.verifyValues(values, start, length);
@@ -257,7 +258,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
 
                  double dev = 0.0;
                  double sumsq = 0.0;
-                 for (int i = start; i < length; i++) {
+                 for (int i = start, end = start + length; i < end; i++) {
                      if ((values[i] > cutoff) == booleanDirection) {
                          dev = values[i] - cutoff;
                          sumsq += dev * dev;
