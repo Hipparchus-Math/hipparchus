@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.WeightedEvaluation;
 import org.hipparchus.util.MathArrays;
@@ -235,8 +236,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
             if (length == 1) {
                 var = 0.0;
             } else if (length > 1) {
-                Mean mean = new Mean();
-                double m = mean.evaluate(values, begin, length);
+                double m = StatUtils.mean(values, begin, length);
                 var = evaluate(values, m, begin, length);
             }
         }

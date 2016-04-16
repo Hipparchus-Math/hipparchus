@@ -16,30 +16,22 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.moment.Kurtosis;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link UnivariateStatistic} class.
+ * Test cases for the {@link Kurtosis} class.
  */
 public class KurtosisTest extends StorelessUnivariateStatisticAbstractTest{
 
-    protected Kurtosis stat;
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public Kurtosis getUnivariateStatistic() {
         return new Kurtosis();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double expectedValue() {
         return this.kurt;
@@ -50,16 +42,16 @@ public class KurtosisTest extends StorelessUnivariateStatisticAbstractTest{
      */
     @Test
     public void testNaN() {
-        Kurtosis kurt = new Kurtosis();
-        Assert.assertTrue(Double.isNaN(kurt.getResult()));
+        Kurtosis kurt = getUnivariateStatistic();
+        assertTrue(Double.isNaN(kurt.getResult()));
         kurt.increment(1d);
-        Assert.assertTrue(Double.isNaN(kurt.getResult()));
+        assertTrue(Double.isNaN(kurt.getResult()));
         kurt.increment(1d);
-        Assert.assertTrue(Double.isNaN(kurt.getResult()));
+        assertTrue(Double.isNaN(kurt.getResult()));
         kurt.increment(1d);
-        Assert.assertTrue(Double.isNaN(kurt.getResult()));
+        assertTrue(Double.isNaN(kurt.getResult()));
         kurt.increment(1d);
-        Assert.assertFalse(Double.isNaN(kurt.getResult()));
+        assertFalse(Double.isNaN(kurt.getResult()));
     }
 
 }

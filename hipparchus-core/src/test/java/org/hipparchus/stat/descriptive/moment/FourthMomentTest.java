@@ -17,28 +17,17 @@
 package org.hipparchus.stat.descriptive.moment;
 
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.moment.FourthMoment;
 
 /**
  * Test cases for the {@link FourthMoment} class.
  */
 public class FourthMomentTest extends StorelessUnivariateStatisticAbstractTest{
 
-    /** descriptive statistic. */
-    protected FourthMoment stat;
-
-    /**
-     * @see org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest#getUnivariateStatistic()
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public FourthMoment getUnivariateStatistic() {
         return new FourthMoment();
     }
 
-    /**
-     * @see org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest#expectedValue()
-     */
     @Override
     public double expectedValue() {
        return this.fourthMoment;

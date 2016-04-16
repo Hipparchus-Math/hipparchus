@@ -16,53 +16,49 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.moment.Mean;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link UnivariateStatistic} class.
+ * Test cases for the {@link Mean} class.
  */
 public class MeanTest extends StorelessUnivariateStatisticAbstractTest{
 
-    protected Mean stat;
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public Mean getUnivariateStatistic() {
         return new Mean();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double expectedValue() {
         return this.mean;
     }
 
-    /**Expected value for  the testArray defined in UnivariateStatisticAbstractTest */
+    /** Expected value for the testArray defined in UnivariateStatisticAbstractTest */
     public double expectedWeightedValue() {
         return this.weightedMean;
     }
 
     @Test
     public void testSmallSamples() {
-        Mean mean = new Mean();
-        Assert.assertTrue(Double.isNaN(mean.getResult()));
+        Mean mean = getUnivariateStatistic();
+        assertTrue(Double.isNaN(mean.getResult()));
         mean.increment(1d);
-        Assert.assertEquals(1d, mean.getResult(), 0);
+        assertEquals(1d, mean.getResult(), 0);
     }
 
     @Test
     public void testWeightedMean() {
-        Mean mean = new Mean();
-        Assert.assertEquals(expectedWeightedValue(), mean.evaluate(testArray, testWeightsArray, 0, testArray.length), getTolerance());
-        Assert.assertEquals(expectedValue(), mean.evaluate(testArray, identicalWeightsArray, 0, testArray.length), getTolerance());
+        Mean mean = getUnivariateStatistic();
+        assertEquals(expectedWeightedValue(),
+                     mean.evaluate(testArray, testWeightsArray, 0, testArray.length),
+                     getTolerance());
+        assertEquals(expectedValue(),
+                     mean.evaluate(testArray, identicalWeightsArray, 0, testArray.length),
+                     getTolerance());
     }
 
 }

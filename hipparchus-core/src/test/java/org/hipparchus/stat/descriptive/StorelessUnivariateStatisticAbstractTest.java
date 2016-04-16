@@ -16,12 +16,13 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.hipparchus.TestUtils;
-import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -35,118 +36,110 @@ public abstract class StorelessUnivariateStatisticAbstractTest
 
     /** Return a new instance of the statistic */
     @Override
-    public abstract UnivariateStatistic getUnivariateStatistic();
+    public abstract StorelessUnivariateStatistic getUnivariateStatistic();
 
-    /**Expected value for  the testArray defined in UnivariateStatisticAbstractTest */
+    /**Expected value for the testArray defined in UnivariateStatisticAbstractTest */
     @Override
     public abstract double expectedValue();
 
     /**
-     *  Verifies that increment() and incrementAll work properly.
+     * Verifies that increment() and incrementAll work properly.
      */
     @Test
     public void testIncrementation() {
 
-        StorelessUnivariateStatistic statistic =
-            (StorelessUnivariateStatistic) getUnivariateStatistic();
+        StorelessUnivariateStatistic statistic = getUnivariateStatistic();
 
         // Add testArray one value at a time and check result
         for (int i = 0; i < testArray.length; i++) {
             statistic.increment(testArray[i]);
         }
 
-        Assert.assertEquals(expectedValue(), statistic.getResult(), getTolerance());
-        Assert.assertEquals(testArray.length, statistic.getN());
+        assertEquals(expectedValue(), statistic.getResult(), getTolerance());
+        assertEquals(testArray.length, statistic.getN());
 
         statistic.clear();
 
         // Add testArray all at once and check again
         statistic.incrementAll(testArray);
-        Assert.assertEquals(expectedValue(), statistic.getResult(), getTolerance());
-        Assert.assertEquals(testArray.length, statistic.getN());
+        assertEquals(expectedValue(), statistic.getResult(), getTolerance());
+        assertEquals(testArray.length, statistic.getN());
 
         statistic.clear();
 
         // Cleared
         checkClearValue(statistic);
-        Assert.assertEquals(0, statistic.getN());
-
+        assertEquals(0, statistic.getN());
     }
 
     protected void checkClearValue(StorelessUnivariateStatistic statistic){
-        Assert.assertTrue(Double.isNaN(statistic.getResult()));
+        assertTrue(Double.isNaN(statistic.getResult()));
     }
 
     @Test
     public void testSerialization() {
-
-        StorelessUnivariateStatistic statistic =
-            (StorelessUnivariateStatistic) getUnivariateStatistic();
+        StorelessUnivariateStatistic statistic = getUnivariateStatistic();
 
         TestUtils.checkSerializedEquality(statistic);
-
         statistic.clear();
 
         for (int i = 0; i < testArray.length; i++) {
             statistic.increment(testArray[i]);
-            if(i % 5 == 0)
+            if(i % 5 == 0) {
                 statistic = (StorelessUnivariateStatistic)TestUtils.serializeAndRecover(statistic);
+            }
         }
 
         TestUtils.checkSerializedEquality(statistic);
-
-        Assert.assertEquals(expectedValue(), statistic.getResult(), getTolerance());
+        assertEquals(expectedValue(), statistic.getResult(), getTolerance());
 
         statistic.clear();
-
         checkClearValue(statistic);
-
     }
 
     @Test
     public void testEqualsAndHashCode() {
-        StorelessUnivariateStatistic statistic =
-            (StorelessUnivariateStatistic) getUnivariateStatistic();
+        StorelessUnivariateStatistic statistic = getUnivariateStatistic();
         StorelessUnivariateStatistic statistic2 = null;
 
-        Assert.assertTrue("non-null, compared to null", !statistic.equals(statistic2));
-        Assert.assertTrue("reflexive, non-null", statistic.equals(statistic));
+        assertTrue("non-null, compared to null", !statistic.equals(statistic2));
+        assertTrue("reflexive, non-null", statistic.equals(statistic));
 
         int emptyHash = statistic.hashCode();
-        statistic2 = (StorelessUnivariateStatistic) getUnivariateStatistic();
-        Assert.assertTrue("empty stats should be equal", statistic.equals(statistic2));
-        Assert.assertEquals("empty stats should have the same hashcode",
-                emptyHash, statistic2.hashCode());
+        statistic2 = getUnivariateStatistic();
+        assertTrue("empty stats should be equal", statistic.equals(statistic2));
+        assertEquals("empty stats should have the same hashcode",
+                     emptyHash, statistic2.hashCode());
 
         statistic.increment(1d);
-        Assert.assertTrue("reflexive, non-empty", statistic.equals(statistic));
-        Assert.assertTrue("non-empty, compared to empty", !statistic.equals(statistic2));
-        Assert.assertTrue("non-empty, compared to empty", !statistic2.equals(statistic));
-        Assert.assertTrue("non-empty stat should have different hashcode from empty stat",
-                statistic.hashCode() != emptyHash);
+        assertTrue("reflexive, non-empty", statistic.equals(statistic));
+        assertTrue("non-empty, compared to empty", !statistic.equals(statistic2));
+        assertTrue("non-empty, compared to empty", !statistic2.equals(statistic));
+        assertTrue("non-empty stat should have different hashcode from empty stat",
+                   statistic.hashCode() != emptyHash);
 
         statistic2.increment(1d);
-        Assert.assertTrue("stats with same data should be equal", statistic.equals(statistic2));
-        Assert.assertEquals("stats with same data should have the same hashcode",
-                statistic.hashCode(), statistic2.hashCode());
+        assertTrue("stats with same data should be equal", statistic.equals(statistic2));
+        assertEquals("stats with same data should have the same hashcode",
+                     statistic.hashCode(), statistic2.hashCode());
 
         statistic.increment(Double.POSITIVE_INFINITY);
-        Assert.assertTrue("stats with different n's should not be equal", !statistic2.equals(statistic));
-        Assert.assertTrue("stats with different n's should have different hashcodes",
-                statistic.hashCode() != statistic2.hashCode());
+        assertTrue("stats with different n's should not be equal", !statistic2.equals(statistic));
+        assertTrue("stats with different n's should have different hashcodes",
+                   statistic.hashCode() != statistic2.hashCode());
 
         statistic2.increment(Double.POSITIVE_INFINITY);
-        Assert.assertTrue("stats with same data should be equal", statistic.equals(statistic2));
-        Assert.assertEquals("stats with same data should have the same hashcode",
-                statistic.hashCode(), statistic2.hashCode());
+        assertTrue("stats with same data should be equal", statistic.equals(statistic2));
+        assertEquals("stats with same data should have the same hashcode",
+                     statistic.hashCode(), statistic2.hashCode());
 
         statistic.clear();
         statistic2.clear();
-        Assert.assertTrue("cleared stats should be equal", statistic.equals(statistic2));
-        Assert.assertEquals("cleared stats should have thashcode of empty stat",
-                emptyHash, statistic2.hashCode());
-        Assert.assertEquals("cleared stats should have thashcode of empty stat",
-                emptyHash, statistic.hashCode());
+        assertTrue("cleared stats should be equal", statistic.equals(statistic2));
+        assertEquals("cleared stats should have thashcode of empty stat",
+                     emptyHash, statistic2.hashCode());
+        assertEquals("cleared stats should have thashcode of empty stat",
+                     emptyHash, statistic.hashCode());
 
     }
 
@@ -155,9 +148,9 @@ public abstract class StorelessUnivariateStatisticAbstractTest
         UnivariateStatistic stat = getUnivariateStatistic();
         if (stat instanceof SecondMoment) {
             SecondMoment moment = (SecondMoment) getUnivariateStatistic();
-            Assert.assertTrue(Double.isNaN(moment.getResult()));
+            assertTrue(Double.isNaN(moment.getResult()));
             moment.increment(1d);
-            Assert.assertEquals(0d, moment.getResult(), 0);
+            assertEquals(0d, moment.getResult(), 0);
         }
     }
 
@@ -167,9 +160,9 @@ public abstract class StorelessUnivariateStatisticAbstractTest
      */
     @Test
     public void testConsistency() {
-        StorelessUnivariateStatistic stat = (StorelessUnivariateStatistic) getUnivariateStatistic();
+        StorelessUnivariateStatistic stat = getUnivariateStatistic();
         stat.incrementAll(testArray);
-        Assert.assertEquals(stat.getResult(), stat.evaluate(testArray), getTolerance());
+        assertEquals(stat.getResult(), stat.evaluate(testArray), getTolerance());
         for (int i = 0; i < smallSamples.length; i++) {
             stat.clear();
             for (int j =0; j < smallSamples[i].length; j++) {
@@ -186,8 +179,7 @@ public abstract class StorelessUnivariateStatisticAbstractTest
     @Test
     public void testCopyConsistency() {
 
-        StorelessUnivariateStatistic master =
-            (StorelessUnivariateStatistic) getUnivariateStatistic();
+        StorelessUnivariateStatistic master = getUnivariateStatistic();
 
         StorelessUnivariateStatistic replica = null;
 
@@ -199,23 +191,20 @@ public abstract class StorelessUnivariateStatisticAbstractTest
         replica = master.copy();
 
         // Check same
-        Assert.assertTrue(replica.equals(master));
-        Assert.assertTrue(master.equals(replica));
+        assertTrue(replica.equals(master));
+        assertTrue(master.equals(replica));
 
         // Now add second part to both and check again
-        master.incrementAll(testArray,
-                (int) index, (int) (testArray.length - index));
-        replica.incrementAll(testArray,
-                (int) index, (int) (testArray.length - index));
-        Assert.assertTrue(replica.equals(master));
-        Assert.assertTrue(master.equals(replica));
+        master.incrementAll(testArray, (int) index, (int) (testArray.length - index));
+        replica.incrementAll(testArray, (int) index, (int) (testArray.length - index));
+        assertTrue(replica.equals(master));
+        assertTrue(master.equals(replica));
     }
 
     @Test
     public void testSerial() {
-        StorelessUnivariateStatistic s =
-            (StorelessUnivariateStatistic) getUnivariateStatistic();
-        Assert.assertEquals(s, TestUtils.serializeAndRecover(s));
+        StorelessUnivariateStatistic s = getUnivariateStatistic();
+        assertEquals(s, TestUtils.serializeAndRecover(s));
     }
 
     /**
@@ -223,18 +212,18 @@ public abstract class StorelessUnivariateStatisticAbstractTest
      */
     @Test
     public void testEvaluateInternalState() {
-        StorelessUnivariateStatistic stat = (StorelessUnivariateStatistic) getUnivariateStatistic();
+        StorelessUnivariateStatistic stat = getUnivariateStatistic();
         stat.evaluate(testArray);
-        Assert.assertEquals(0, stat.getN());
+        assertEquals(0, stat.getN());
 
         stat.incrementAll(testArray);
 
         StorelessUnivariateStatistic savedStatistic = stat.copy();
 
-        Assert.assertNotEquals(stat.getResult(), stat.evaluate(testArray, 0, 5), getTolerance());
+        assertNotEquals(stat.getResult(), stat.evaluate(testArray, 0, 5), getTolerance());
 
-        Assert.assertEquals(savedStatistic.getResult(), stat.getResult(), 0.0);
-        Assert.assertEquals(savedStatistic.getN(), stat.getN());
+        assertEquals(savedStatistic.getResult(), stat.getResult(), 0.0);
+        assertEquals(savedStatistic.getN(), stat.getN());
     }
 
 }

@@ -16,31 +16,22 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.moment.Skewness;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link UnivariateStatistic} class.
- *
+ * Test cases for the {@link Skewness} class.
  */
 public class SkewnessTest extends StorelessUnivariateStatisticAbstractTest{
 
-    protected Skewness stat;
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public Skewness getUnivariateStatistic() {
         return new Skewness();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double expectedValue() {
         return this.skew;
@@ -51,14 +42,14 @@ public class SkewnessTest extends StorelessUnivariateStatisticAbstractTest{
      */
     @Test
     public void testNaN() {
-        Skewness skew = new Skewness();
-        Assert.assertTrue(Double.isNaN(skew.getResult()));
+        Skewness skew = getUnivariateStatistic();
+        assertTrue(Double.isNaN(skew.getResult()));
         skew.increment(1d);
-        Assert.assertTrue(Double.isNaN(skew.getResult()));
+        assertTrue(Double.isNaN(skew.getResult()));
         skew.increment(1d);
-        Assert.assertTrue(Double.isNaN(skew.getResult()));
+        assertTrue(Double.isNaN(skew.getResult()));
         skew.increment(1d);
-        Assert.assertFalse(Double.isNaN(skew.getResult()));
+        assertFalse(Double.isNaN(skew.getResult()));
     }
 
 }

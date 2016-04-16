@@ -16,30 +16,22 @@
  */
 package org.hipparchus.stat.descriptive.rank;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.rank.Min;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link UnivariateStatistic} class.
+ * Test cases for the {@link Min} class.
  */
 public class MinTest extends StorelessUnivariateStatisticAbstractTest{
 
-    protected Min stat;
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public Min getUnivariateStatistic() {
         return new Min();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double expectedValue() {
         return this.min;
@@ -48,27 +40,27 @@ public class MinTest extends StorelessUnivariateStatisticAbstractTest{
     @Test
     public void testSpecialValues() {
         double[] testArray = {0d, Double.NaN, Double.POSITIVE_INFINITY, Double.NEGATIVE_INFINITY};
-        Min min = new Min();
-        Assert.assertTrue(Double.isNaN(min.getResult()));
+        Min min = getUnivariateStatistic();
+        assertTrue(Double.isNaN(min.getResult()));
         min.increment(testArray[0]);
-        Assert.assertEquals(0d, min.getResult(), 0);
+        assertEquals(0d, min.getResult(), 0);
         min.increment(testArray[1]);
-        Assert.assertEquals(0d, min.getResult(), 0);
+        assertEquals(0d, min.getResult(), 0);
         min.increment(testArray[2]);
-        Assert.assertEquals(0d, min.getResult(), 0);
+        assertEquals(0d, min.getResult(), 0);
         min.increment(testArray[3]);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY, min.getResult(), 0);
-        Assert.assertEquals(Double.NEGATIVE_INFINITY, min.evaluate(testArray), 0);
+        assertEquals(Double.NEGATIVE_INFINITY, min.getResult(), 0);
+        assertEquals(Double.NEGATIVE_INFINITY, min.evaluate(testArray), 0);
     }
 
     @Test
     public void testNaNs() {
-        Min min = new Min();
+        Min min = getUnivariateStatistic();
         double nan = Double.NaN;
-        Assert.assertEquals(2d, min.evaluate(new double[]{nan, 2d, 3d}), 0);
-        Assert.assertEquals(1d, min.evaluate(new double[]{1d, nan, 3d}), 0);
-        Assert.assertEquals(1d, min.evaluate(new double[]{1d, 2d, nan}), 0);
-        Assert.assertTrue(Double.isNaN(min.evaluate(new double[]{nan, nan, nan})));
+        assertEquals(2d, min.evaluate(new double[]{nan, 2d, 3d}), 0);
+        assertEquals(1d, min.evaluate(new double[]{1d, nan, 3d}), 0);
+        assertEquals(1d, min.evaluate(new double[]{1d, 2d, nan}), 0);
+        assertTrue(Double.isNaN(min.evaluate(new double[]{nan, nan, nan})));
     }
 
 }

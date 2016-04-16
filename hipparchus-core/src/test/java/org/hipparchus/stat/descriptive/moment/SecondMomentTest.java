@@ -17,28 +17,17 @@
 package org.hipparchus.stat.descriptive.moment;
 
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.moment.SecondMoment;
 
 /**
  * Test cases for the {@link SecondMoment} class.
  */
 public class SecondMomentTest extends StorelessUnivariateStatisticAbstractTest {
 
-    /** descriptive statistic. */
-    protected SecondMoment stat;
-
-    /**
-     * @see org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest#getUnivariateStatistic()
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public SecondMoment getUnivariateStatistic() {
         return new SecondMoment();
     }
 
-    /**
-     * @see org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest#expectedValue()
-     */
     @Override
     public double expectedValue() {
         return this.secondMoment;

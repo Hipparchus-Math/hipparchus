@@ -16,16 +16,13 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
-import org.hipparchus.stat.descriptive.moment.FourthMoment;
-import org.hipparchus.stat.descriptive.moment.Kurtosis;
-import org.hipparchus.stat.descriptive.moment.Mean;
-import org.hipparchus.stat.descriptive.moment.Skewness;
-import org.hipparchus.stat.descriptive.moment.Variance;
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Test;
 
 
 /**
+ * Test class for use of external moments.
  */
 public class InteractionTest {
 
@@ -36,30 +33,10 @@ public class InteractionTest {
 
     protected double tolerance = 10E-12;
 
-    protected double[] testArray =
-        {
-            12.5,
-            12,
-            11.8,
-            14.2,
-            14.9,
-            14.5,
-            21,
-            8.2,
-            10.3,
-            11.3,
-            14.1,
-            9.9,
-            12.2,
-            12,
-            12.1,
-            11,
-            19.8,
-            11,
-            10,
-            8.8,
-            9,
-            12.3 };
+    protected double[] testArray = {
+        12.5, 12, 11.8, 14.2, 14.9, 14.5, 21, 8.2, 10.3, 11.3, 14.1,
+        9.9, 12.2, 12, 12.1, 11, 19.8, 11, 10, 8.8, 9, 12.3
+    };
 
     @Test
     public void testInteraction() {
@@ -74,11 +51,10 @@ public class InteractionTest {
             m4.increment(testArray[i]);
         }
 
-        Assert.assertEquals(mean,m.getResult(),tolerance);
-        Assert.assertEquals(var,v.getResult(),tolerance);
-        Assert.assertEquals(skew ,s.getResult(),tolerance);
-        Assert.assertEquals(kurt,k.getResult(),tolerance);
-
+        assertEquals(mean, m.getResult(), tolerance);
+        assertEquals(var, v.getResult(), tolerance);
+        assertEquals(skew, s.getResult(), tolerance);
+        assertEquals(kurt, k.getResult(), tolerance);
     }
 
 }

@@ -20,6 +20,7 @@ import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.WeightedEvaluation;
 import org.hipparchus.stat.descriptive.summary.Sum;
@@ -156,18 +157,17 @@ public class Mean extends AbstractStorelessUnivariateStatistic
         throws MathIllegalArgumentException {
 
         if (MathArrays.verifyValues(values, begin, length)) {
-            Sum sum = new Sum();
             double sampleSize = length;
 
             // Compute initial estimate using definitional formula
-            double xbar = sum.evaluate(values, begin, length) / sampleSize;
+            double xbar = StatUtils.sum(values, begin, length) / sampleSize;
 
             // Compute correction factor in second pass
             double correction = 0;
             for (int i = begin; i < begin + length; i++) {
                 correction += values[i] - xbar;
             }
-            return xbar + (correction/sampleSize);
+            return xbar + (correction / sampleSize);
         }
         return Double.NaN;
     }
