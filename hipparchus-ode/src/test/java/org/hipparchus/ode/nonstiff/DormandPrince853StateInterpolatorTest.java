@@ -47,7 +47,7 @@ public class DormandPrince853StateInterpolatorTest {
         DormandPrince853Integrator integ = new DormandPrince853Integrator(minStep, maxStep,
                                                                           scalAbsoluteTolerance,
                                                                           scalRelativeTolerance);
-        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 1.8e-12);
+        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.01, 2.1e-12);
     }
 
     @Test

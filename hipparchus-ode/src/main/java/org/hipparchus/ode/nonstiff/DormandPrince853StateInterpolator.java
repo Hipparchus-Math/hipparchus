@@ -206,7 +206,7 @@ class DormandPrince853StateInterpolator
         final double dot1     = 1.0 - twoTheta;
         final double dot2     = theta * (2 - 3 * theta);
         final double dot3     = twoTheta * (theta * (twoTheta - 3) + 1);
-        final double dot4     = theta2   * (theta * (5 * theta - 9) + 3);
+        final double dot4     = theta2   * (theta * (5 * theta - 8) + 3);
         final double dot5     = theta2   * (theta * (theta * (15 - 6 * theta) - 12) + 3);
         final double dot6     = theta2   * (theta * (theta * (theta * (18 - 7 * theta) - 15) + 4));
         final double[] interpolatedState;
