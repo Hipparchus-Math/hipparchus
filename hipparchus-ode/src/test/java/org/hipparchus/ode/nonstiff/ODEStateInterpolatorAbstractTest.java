@@ -85,8 +85,6 @@ public abstract class ODEStateInterpolatorAbstractTest {
         public int getDimension() {
             return 2;
         }
-        public void init(final double t0, final double[] y0, final double finalTime) {
-        }
         public double[] computeDerivatives(final double t, final double[] y) {
             return new double[] {
                 y[1], -y[0]
