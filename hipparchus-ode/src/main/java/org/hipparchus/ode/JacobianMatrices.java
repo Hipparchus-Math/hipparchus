@@ -39,7 +39,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * In order to compute Jacobian matrices with respect to some parameters of the
  * primary ODE set, the following parameter Jacobian providers may be set:
  * <ul>
- * <li>a {@link ParameterController}</li>
+ * <li>a {@link ParametersController}</li>
  * </ul>
  * </p>
  *
@@ -47,7 +47,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see FirstOrderDifferentialEquations
  * @see MainStateJacobianProvider
  * @see NamedParameterJacobianProvider
- * @see ParameterController
+ * @see ParametersController
  *
  */
 public class JacobianMatrices {
@@ -62,7 +62,7 @@ public class JacobianMatrices {
     private MainStateJacobianProvider jode;
 
     /** FODE without exact parameter Jacobian computation skill. */
-    private ParameterController pode;
+    private ParametersController parametersController;
 
     /** Primary state vector dimension. */
     private int stateDim;
@@ -122,7 +122,7 @@ public class JacobianMatrices {
         this.index = -1;
 
         this.jode = jode;
-        this.pode = null;
+        this.parametersController = null;
 
         this.stateDim = jode.getDimension();
 
@@ -219,17 +219,26 @@ public class JacobianMatrices {
     }
 
     /** Set a parameter Jacobian provider.
-     * @param parameterizedOde the parameterized ODE to compute the parameter Jacobian matrix using finite differences
+     * @param parametersController the controller to compute the parameter Jacobian matrix using finite differences
+     * @deprecated as of 1.0, replaced with {@link #setParametersController(ParametersController)}
      */
-    public void setParameterizedODE(final ParameterController parameterizedOde) {
-        this.pode = parameterizedOde;
+    @Deprecated
+    public void setParameterizedODE(final ParametersController parametersController) {
+        setParametersController(parametersController);
+    }
+
+    /** Set a parameter Jacobian provider.
+     * @param parametersController the controller to compute the parameter Jacobian matrix using finite differences
+     */
+    public void setParametersController(final ParametersController parametersController) {
+        this.parametersController = parametersController;
         dirtyParameter = true;
     }
 
     /** Set the step associated to a parameter in order to compute by finite
      *  difference the Jacobian matrix.
      * <p>
-     * Needed if and only if the primary ODE set is a {@link ParameterController}.
+     * Needed if and only if the primary ODE set is a {@link ParametersController}.
      * </p>
      * <p>
      * Given a non zero parameter value pval for the parameter, a reasonable value
@@ -240,7 +249,7 @@ public class JacobianMatrices {
      * </p>
      * @param parameter parameter to consider for Jacobian processing
      * @param hP step for Jacobian finite difference computation w.r.t. the specified parameter
-     * @see ParameterController
+     * @see ParametersController
      * @exception MathIllegalArgumentException if the parameter is not supported
      */
     public void setParameterStep(final String parameter, final double hP)
@@ -400,7 +409,7 @@ public class JacobianMatrices {
 
             // Lazy initialization
             if (dirtyParameter && (paramDim != 0)) {
-                jacobianProviders.add(new ParameterJacobianWrapper(jode, pode, selectedParameters));
+                jacobianProviders.add(new ParameterJacobianWrapper(jode, parametersController, selectedParameters));
                 dirtyParameter = false;
             }
 

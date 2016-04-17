@@ -116,7 +116,7 @@ public class JacobianMatricesTest {
             double[] z = { 1.3, b };
 
             JacobianMatrices jacob = new JacobianMatrices(brusselator, new double[] { hY, hY }, ParamBrusselator.B);
-            jacob.setParameterizedODE(brusselator);
+            jacob.setParametersController(brusselator);
             jacob.setParameterStep(ParamBrusselator.B, hP);
             jacob.setInitialParameterJacobian(ParamBrusselator.B, new double[] { 0.0, 1.0 });
 
@@ -238,7 +238,7 @@ public class JacobianMatricesTest {
         JacobianMatrices jacob = new JacobianMatrices(pcircle, new double[] { hY, hY },
                                                       ParameterizedCircle.CX, ParameterizedCircle.CY,
                                                       ParameterizedCircle.OMEGA);
-        jacob.setParameterizedODE(pcircle);
+        jacob.setParametersController(pcircle);
         jacob.setParameterStep(ParameterizedCircle.CX,    hP);
         jacob.setParameterStep(ParameterizedCircle.CY,    hP);
         jacob.setParameterStep(ParameterizedCircle.OMEGA, hP);
@@ -331,7 +331,7 @@ public class JacobianMatricesTest {
     }
 
     private static class ParamBrusselator extends AbstractParameterizable
-        implements OrdinaryDifferentialEquation, ParameterController {
+        implements OrdinaryDifferentialEquation, ParametersController {
 
         public static final String B = "b";
 
@@ -473,7 +473,7 @@ public class JacobianMatricesTest {
 
     /** ODE representing a point moving on a circle with provided center and angular rate. */
     private static class ParameterizedCircle extends AbstractParameterizable
-        implements OrdinaryDifferentialEquation, ParameterController {
+        implements OrdinaryDifferentialEquation, ParametersController {
 
         public static final String CX = "cx";
         public static final String CY = "cy";

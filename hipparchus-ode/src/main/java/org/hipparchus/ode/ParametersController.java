@@ -23,7 +23,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  *
  */
 
-public interface ParameterController extends Parameterizable {
+public interface ParametersController extends Parameterizable {
 
     /** Get parameter value from its name.
      * @param name parameter name

@@ -34,19 +34,19 @@ class ParameterJacobianWrapper implements NamedParameterJacobianProvider {
     private final OrdinaryDifferentialEquation fode;
 
     /** Raw ODE without Jacobian computation skill to be wrapped into a ParameterJacobianProvider. */
-    private final ParameterController pode;
+    private final ParametersController pode;
 
     /** Steps for finite difference computation of the Jacobian df/dp w.r.t. parameters. */
     private final Map<String, Double> hParam;
 
-    /** Wrap a {@link ParameterController} into a {@link NamedParameterJacobianProvider}.
+    /** Wrap a {@link ParametersController} into a {@link NamedParameterJacobianProvider}.
      * @param fode main first order differential equations set
      * @param pode secondary problem, without parameter Jacobian computation skill
      * @param paramsAndSteps parameters and steps to compute the Jacobians df/dp
      * @see JacobianMatrices#setParameterStep(String, double)
      */
     ParameterJacobianWrapper(final OrdinaryDifferentialEquation fode,
-                             final ParameterController pode,
+                             final ParametersController pode,
                              final ParameterConfiguration[] paramsAndSteps) {
         this.fode = fode;
         this.pode = pode;
