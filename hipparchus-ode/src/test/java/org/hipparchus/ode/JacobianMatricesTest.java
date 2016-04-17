@@ -331,7 +331,7 @@ public class JacobianMatricesTest {
     }
 
     private static class ParamBrusselator extends AbstractParameterizable
-        implements OrdinaryDifferentialEquation, ParameterizedODE {
+        implements OrdinaryDifferentialEquation, ParameterController {
 
         public static final String B = "b";
 
@@ -473,7 +473,7 @@ public class JacobianMatricesTest {
 
     /** ODE representing a point moving on a circle with provided center and angular rate. */
     private static class ParameterizedCircle extends AbstractParameterizable
-        implements OrdinaryDifferentialEquation, ParameterizedODE {
+        implements OrdinaryDifferentialEquation, ParameterController {
 
         public static final String CX = "cx";
         public static final String CY = "cy";

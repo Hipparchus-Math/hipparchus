@@ -39,7 +39,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * In order to compute Jacobian matrices with respect to some parameters of the
  * primary ODE set, the following parameter Jacobian providers may be set:
  * <ul>
- * <li>a {@link ParameterizedODE}</li>
+ * <li>a {@link ParameterController}</li>
  * </ul>
  * </p>
  *
@@ -47,7 +47,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see FirstOrderDifferentialEquations
  * @see MainStateJacobianProvider
  * @see NamedParameterJacobianProvider
- * @see ParameterizedODE
+ * @see ParameterController
  *
  */
 public class JacobianMatrices {
@@ -62,7 +62,7 @@ public class JacobianMatrices {
     private MainStateJacobianProvider jode;
 
     /** FODE without exact parameter Jacobian computation skill. */
-    private ParameterizedODE pode;
+    private ParameterController pode;
 
     /** Primary state vector dimension. */
     private int stateDim;
@@ -221,7 +221,7 @@ public class JacobianMatrices {
     /** Set a parameter Jacobian provider.
      * @param parameterizedOde the parameterized ODE to compute the parameter Jacobian matrix using finite differences
      */
-    public void setParameterizedODE(final ParameterizedODE parameterizedOde) {
+    public void setParameterizedODE(final ParameterController parameterizedOde) {
         this.pode = parameterizedOde;
         dirtyParameter = true;
     }
@@ -229,7 +229,7 @@ public class JacobianMatrices {
     /** Set the step associated to a parameter in order to compute by finite
      *  difference the Jacobian matrix.
      * <p>
-     * Needed if and only if the primary ODE set is a {@link ParameterizedODE}.
+     * Needed if and only if the primary ODE set is a {@link ParameterController}.
      * </p>
      * <p>
      * Given a non zero parameter value pval for the parameter, a reasonable value
@@ -240,7 +240,7 @@ public class JacobianMatrices {
      * </p>
      * @param parameter parameter to consider for Jacobian processing
      * @param hP step for Jacobian finite difference computation w.r.t. the specified parameter
-     * @see ParameterizedODE
+     * @see ParameterController
      * @exception MathIllegalArgumentException if the parameter is not supported
      */
     public void setParameterStep(final String parameter, final double hP)

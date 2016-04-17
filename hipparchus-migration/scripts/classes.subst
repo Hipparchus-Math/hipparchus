@@ -55,3 +55,4 @@ FirstOrderFieldIntegrator              FieldODEIntegrator
 FirstOrderIntegrator                   ODEIntegrator
 ExpandableStatefulODE                  ExpandableODE
 AbstractStepInterpolator               AbstractODEStateInterpolator
+ParameterizedODE                       ParameterController
