@@ -18,74 +18,56 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.Random;
+import org.hipparchus.linear.Array2DRowRealMatrix;
+import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.DenseOutputModel;
-import org.hipparchus.ode.TestProblem1;
-import org.hipparchus.ode.TestProblem3;
-import org.hipparchus.ode.nonstiff.AdamsBashforthIntegrator;
-import org.hipparchus.ode.sampling.ODEStepHandler;
-import org.hipparchus.ode.sampling.StepInterpolatorTestUtils;
-import org.junit.Assert;
-import org.junit.Test;
+public class AdamsStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
 
-public class AdamsStateInterpolatorTest {
+    @Override
+    protected ODEStateInterpolator
+        setUpInterpolator(ReferenceODE eqn, double t0, double[] y0, double t1) {
+        final int        nSteps   = 12;
+        final double     h        = (t1 - t0) / (nSteps - 1);
+        final int        nbPoints = (nSteps + 3) / 2;
+        final double[]   t        = new double[nbPoints];
+        final double[][] y        = new double[nbPoints][];
+        final double[][] yDot     = new double[nbPoints][];
+        for (int i = 0; i < nbPoints; ++i) {
+            t[i]    = t0 + i * h;
+            y[i]    = eqn.theoreticalState(t[i]);
+            yDot[i] = eqn.computeDerivatives(t[i], y[i]);
+        }
+        AdamsNordsieckTransformer transformer = AdamsNordsieckTransformer.getInstance(nSteps);
+        Array2DRowRealMatrix      nordsieck   = transformer.initializeHighOrderDerivatives(h, t, y, yDot);
 
-    @Test
-    public void derivativesConsistency()
-        throws MathIllegalArgumentException, MathIllegalStateException {
-        TestProblem3 pb = new TestProblem3();
-        AdamsBashforthIntegrator integ = new AdamsBashforthIntegrator(4, 0.0, 1.0, 1.0e-10, 1.0e-10);
-        StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.05, 2.8e-9);
+        double[] scaled = new double[eqn.getDimension()];
+        for (int i = 0; i < scaled.length; ++i) {
+            scaled[i] = h * yDot[0][i];
+        }
+        double   tCurrent    = t1;
+        double[] yCurrent    = eqn.theoreticalState(tCurrent);
+        double[] yDotCurrent = eqn.computeDerivatives(tCurrent, yCurrent);
+
+        ODEStateAndDerivative previous = new ODEStateAndDerivative(t[0], y[0], yDot[0]);
+        ODEStateAndDerivative current  = new ODEStateAndDerivative(tCurrent, yCurrent, yDotCurrent);
+        return new AdamsStateInterpolator(h, previous, scaled, nordsieck, t1 >= t0,
+                                          previous, current, new ExpandableODE(eqn).getMapper());
+
     }
 
-    @Test
-    public void serialization()
-    throws IOException, ClassNotFoundException,
-           MathIllegalArgumentException, MathIllegalStateException {
+    @Override
+    public void interpolationAtBounds() {
+        // as the Adams step interpolator is based on a Taylor expansion since previous step,
+        // the maximum error is at step end and not in the middle of the step
+        // as for Runge-Kutta integrators
+        doInterpolationAtBounds(1.4e-6);
+    }
 
-        TestProblem1 pb = new TestProblem1();
-        AdamsBashforthIntegrator integ = new AdamsBashforthIntegrator(4, 0.0, 1.0, 1.0e-10, 1.0e-10);
-        integ.addStepHandler(new DenseOutputModel());
-        integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
-
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream    oos = new ObjectOutputStream(bos);
-        for (ODEStepHandler handler : integ.getStepHandlers()) {
-            oos.writeObject(handler);
-        }
-
-        Assert.assertTrue("size = " + bos.size(), bos.size() > 51000);
-        Assert.assertTrue("size = " + bos.size(), bos.size() < 52000);
-
-        ByteArrayInputStream  bis = new ByteArrayInputStream(bos.toByteArray());
-        ObjectInputStream     ois = new ObjectInputStream(bis);
-        DenseOutputModel      cm  = (DenseOutputModel) ois.readObject();
-
-        Random random = new Random(347588535632l);
-        double maxError = 0.0;
-        for (int i = 0; i < 1000; ++i) {
-            double r = random.nextDouble();
-            double time = r * pb.getInitialTime() + (1.0 - r) * pb.getFinalTime();
-            double[] interpolatedY = cm.getInterpolatedState(time).getPrimaryState();
-            double[] theoreticalY  = pb.computeTheoreticalState(time);
-            double dx = interpolatedY[0] - theoreticalY[0];
-            double dy = interpolatedY[1] - theoreticalY[1];
-            double error = dx * dx + dy * dy;
-            if (error > maxError) {
-                maxError = error;
-            }
-        }
-
-        Assert.assertTrue(maxError < 1.0e-6);
-
+    @Override
+    public void interpolationInside() {
+        doInterpolationInside(3.3e-10, 1.4e-6);
     }
 
 }
