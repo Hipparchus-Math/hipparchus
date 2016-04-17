@@ -212,7 +212,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
 
         // set up derivatives of initial state (including primary and secondary components)
         final T   t0    = s0.getTime();
-        final T[] y0    = eqn.getMapper().mapState(s0);
+        final T[] y0    = s0.getCompleteState();
         final T[] y0Dot = computeDerivatives(t0, y0);
 
         // built the state
@@ -353,7 +353,7 @@ public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> imp
                 if (newState != null) {
                     // some event handler has triggered changes that
                     // invalidate the derivatives, we need to recompute them
-                    final T[] y    = equations.getMapper().mapState(newState);
+                    final T[] y    = newState.getCompleteState();
                     final T[] yDot = computeDerivatives(newState.getTime(), y);
                     resetOccurred = true;
                     return equations.getMapper().mapStateAndDerivative(newState.getTime(), y, yDot);

@@ -256,7 +256,7 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
 
         // main integration loop
         setIsLastStep(false);
-        final T[] y = equations.getMapper().mapState(getStepStart());
+        final T[] y = getStepStart().getCompleteState();
         do {
 
             T[] predictedY = null;

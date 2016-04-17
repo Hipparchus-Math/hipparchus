@@ -231,7 +231,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
 
         // main integration loop
         setIsLastStep(false);
-        final T[] y = equations.getMapper().mapState(stepStart);
+        final T[] y = stepStart.getCompleteState();
         do {
 
             T[] predictedY = null;

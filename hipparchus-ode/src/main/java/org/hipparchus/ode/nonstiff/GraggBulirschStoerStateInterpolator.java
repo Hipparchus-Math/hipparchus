@@ -114,7 +114,7 @@ class GraggBulirschStoerStateInterpolator
 
         this.yMidDots      = yMidDots.clone();
         this.currentDegree = mu + 4;
-        this.polynomials   = new double[currentDegree + 1][getCurrentState().getTotalDimension()];
+        this.polynomials   = new double[currentDegree + 1][getCurrentState().getCompleteStateDimension()];
 
         // initialize the error factors array for interpolation
         if (currentDegree <= 4) {
@@ -155,11 +155,11 @@ class GraggBulirschStoerStateInterpolator
      */
     private void computeCoefficients(final int mu) {
 
-        final double[] y0Dot = getMapper().mapDerivative(getGlobalPreviousState());
-        final double[] y1Dot = getMapper().mapDerivative(getGlobalCurrentState());
-        final double[] y1    = getMapper().mapState(getGlobalCurrentState());
+        final double[] y0Dot = getGlobalPreviousState().getCompleteDerivative();
+        final double[] y1Dot = getGlobalCurrentState().getCompleteDerivative();
+        final double[] y1    = getGlobalCurrentState().getCompleteState();
 
-        final double[] previousState = getMapper().mapState(getPreviousState());
+        final double[] previousState = getPreviousState().getCompleteState();
         final double h = getCurrentState().getTime() - getPreviousState().getTime();
         for (int i = 0; i < previousState.length; ++i) {
 

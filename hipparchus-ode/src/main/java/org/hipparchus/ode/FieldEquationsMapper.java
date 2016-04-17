@@ -81,29 +81,21 @@ public class FieldEquationsMapper<T extends RealFieldElement<T>> implements Seri
     /** Map a state to a complete flat array.
      * @param state state to map
      * @return flat array containing the mapped state, including primary and secondary components
+     * @deprecated as of 1.0, replaced with {@link FieldODEState#getCompleteState()}
      */
+    @Deprecated
     public T[] mapState(final FieldODEState<T> state) {
-        final T[] y = MathArrays.buildArray(state.getTime().getField(), getTotalDimension());
-        int index = 0;
-        insertEquationData(index, state.getPrimaryState(), y);
-        while (++index < getNumberOfEquations()) {
-            insertEquationData(index, state.getSecondaryState(index), y);
-        }
-        return y;
+        return state.getCompleteState();
     }
 
     /** Map a state derivative to a complete flat array.
      * @param state state to map
      * @return flat array containing the mapped state derivative, including primary and secondary components
+     * @deprecated as of 1.0, replaced with {@link FieldODEStateAndDerivative#getCompleteDerivative()}
      */
+    @Deprecated
     public T[] mapDerivative(final FieldODEStateAndDerivative<T> state) {
-        final T[] yDot = MathArrays.buildArray(state.getTime().getField(), getTotalDimension());
-        int index = 0;
-        insertEquationData(index, state.getPrimaryDerivative(), yDot);
-        while (++index < getNumberOfEquations()) {
-            insertEquationData(index, state.getSecondaryDerivative(index), yDot);
-        }
-        return yDot;
+        return state.getCompleteDerivative();
     }
 
     /** Map flat arrays to a state and derivative.

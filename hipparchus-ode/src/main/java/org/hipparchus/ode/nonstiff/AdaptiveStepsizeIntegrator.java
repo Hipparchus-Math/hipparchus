@@ -220,7 +220,7 @@ public abstract class AdaptiveStepsizeIntegrator
 
         super.sanityChecks(initialState, t);
 
-        mainSetDimension = initialState.gePrimaryStateDimension();
+        mainSetDimension = initialState.getPrimaryStateDimension();
 
         if ((vecAbsoluteTolerance != null) && (vecAbsoluteTolerance.length != mainSetDimension)) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
@@ -256,8 +256,8 @@ public abstract class AdaptiveStepsizeIntegrator
 
         // very rough first guess : h = 0.01 * ||y/scale|| / ||y'/scale||
         // this guess will be used to perform an Euler step
-        final double[] y0    = mapper.mapState(state0);
-        final double[] yDot0 = mapper.mapDerivative(state0);
+        final double[] y0    = state0.getCompleteState();
+        final double[] yDot0 = state0.getCompleteDerivative();
         double yOnScale2 = 0;
         double yDotOnScale2 = 0;
         for (int j = 0; j < scale.length; ++j) {

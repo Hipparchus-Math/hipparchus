@@ -262,10 +262,10 @@ public abstract class AdaptiveStepsizeFieldIntegrator<T extends RealFieldElement
 
         // very rough first guess : h = 0.01 * ||y/scale|| / ||y'/scale||
         // this guess will be used to perform an Euler step
-        final T[] y0    = mapper.mapState(state0);
-        final T[] yDot0 = mapper.mapDerivative(state0);
-        T yOnScale2    = getField().getZero();
-        T yDotOnScale2 = getField().getZero();
+        final T[] y0    = state0.getCompleteState();
+        final T[] yDot0 = state0.getCompleteDerivative();
+        T yOnScale2     = getField().getZero();
+        T yDotOnScale2  = getField().getZero();
         for (int j = 0; j < scale.length; ++j) {
             final T ratio    = y0[j].divide(scale[j]);
             yOnScale2        = yOnScale2.add(ratio.multiply(ratio));

@@ -66,6 +66,7 @@ public class EventStateTest {
                                                                         osdLongBefore, osBefore,
                                                                         osdLongBefore, osBefore,
                                                                         mapper);
+        es.reinitializeBegin(interpolatorA);
         Assert.assertFalse(es.evaluateStep(interpolatorA));
 
         ODEStateAndDerivative osdBetween    = new ODEStateAndDerivative(0.5 * (r1 + r2), a, a);

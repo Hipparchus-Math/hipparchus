@@ -213,8 +213,8 @@ public abstract class EmbeddedRungeKuttaIntegrator
             while (error >= 1.0) {
 
                 // first stage
-                final double[] y = equations.getMapper().mapState(getStepStart());
-                yDotK[0] = equations.getMapper().mapDerivative(getStepStart());
+                final double[] y = getStepStart().getCompleteState();
+                yDotK[0] = getStepStart().getCompleteDerivative();
 
                 if (firstTime) {
                     final double[] scale = new double[mainSetDimension];

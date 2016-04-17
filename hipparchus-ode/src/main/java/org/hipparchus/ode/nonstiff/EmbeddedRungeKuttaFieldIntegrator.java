@@ -237,8 +237,8 @@ public abstract class EmbeddedRungeKuttaFieldIntegrator<T extends RealFieldEleme
             while (error.subtract(1.0).getReal() >= 0) {
 
                 // first stage
-                final T[] y = equations.getMapper().mapState(getStepStart());
-                yDotK[0] = equations.getMapper().mapDerivative(getStepStart());
+                final T[] y = getStepStart().getCompleteState();
+                yDotK[0] = getStepStart().getCompleteDerivative();
 
                 if (firstTime) {
                     final T[] scale = MathArrays.buildArray(getField(), mainSetDimension);

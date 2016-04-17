@@ -105,7 +105,7 @@ abstract class RungeKuttaFieldStateInterpolator<T extends RealFieldElement<T>>
      */
     @SafeVarargs
     protected final T[] previousStateLinearCombination(final T ... coefficients) {
-        return combine(getPreviousState().getPrimaryState(),
+        return combine(getPreviousState().getCompleteState(),
                        coefficients);
     }
 
@@ -115,7 +115,7 @@ abstract class RungeKuttaFieldStateInterpolator<T extends RealFieldElement<T>>
      */
     @SuppressWarnings("unchecked")
     protected T[] currentStateLinearCombination(final T ... coefficients) {
-        return combine(getCurrentState().getPrimaryState(),
+        return combine(getCurrentState().getCompleteState(),
                        coefficients);
     }
 

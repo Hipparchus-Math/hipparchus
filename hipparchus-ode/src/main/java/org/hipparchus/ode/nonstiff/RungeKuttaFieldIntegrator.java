@@ -142,8 +142,8 @@ public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
         do {
 
             // first stage
-            final T[] y = equations.getMapper().mapState(getStepStart());
-            yDotK[0]    = equations.getMapper().mapDerivative(getStepStart());
+            final T[] y = getStepStart().getCompleteState();
+            yDotK[0]    = getStepStart().getCompleteDerivative();
 
             // next stages
             for (int k = 1; k < stages; ++k) {

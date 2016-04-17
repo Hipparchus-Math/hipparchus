@@ -74,34 +74,6 @@ public class EquationsMapper implements Serializable {
         return start[start.length - 1];
     }
 
-    /** Map a state to a complete flat array.
-     * @param state state to map
-     * @return flat array containing the mapped state, including primary and secondary components
-     */
-    public double[] mapState(final ODEState state) {
-        final double[] y = new double[getTotalDimension()];
-        int index = 0;
-        insertEquationData(index, state.getPrimaryState(), y);
-        while (++index < getNumberOfEquations()) {
-            insertEquationData(index, state.getSecondaryState(index), y);
-        }
-        return y;
-    }
-
-    /** Map a state derivative to a complete flat array.
-     * @param state state to map
-     * @return flat array containing the mapped state derivative, including primary and secondary components
-     */
-    public double[] mapDerivative(final ODEStateAndDerivative state) {
-        final double[] yDot = new double[getTotalDimension()];
-        int index = 0;
-        insertEquationData(index, state.getPrimaryDerivative(), yDot);
-        while (++index < getNumberOfEquations()) {
-            insertEquationData(index, state.getSecondaryDerivative(index), yDot);
-        }
-        return yDot;
-    }
-
     /** Map flat arrays to a state and derivative.
      * @param t time
      * @param y state array to map, including primary and secondary components

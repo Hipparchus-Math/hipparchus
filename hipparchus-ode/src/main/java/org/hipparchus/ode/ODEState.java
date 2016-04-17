@@ -41,6 +41,9 @@ public class ODEState implements Serializable {
     /** Secondary state at time. */
     private final double[][] secondaryState;
 
+    /** Complete dimension. */
+    private final int completeDimension;
+
     /** Simple constructor.
      * <p>Calling this constructor is equivalent to call {@link
      * #ODEState(double, double[], double[][])
@@ -58,9 +61,20 @@ public class ODEState implements Serializable {
      * @param secondaryState primary state at time (may be null)
      */
     public ODEState(double time, double[] primaryState, double[][] secondaryState) {
+
         this.time           = time;
         this.primaryState   = primaryState.clone();
         this.secondaryState = copy(secondaryState);
+
+        // compute once and for all the complete dimension
+        int dimension = primaryState.length;
+        if (secondaryState != null) {
+            for (final double[] secondary : secondaryState) {
+                dimension += secondary.length;
+            }
+        }
+        this.completeDimension = dimension;
+
     }
 
     /** Copy a two-dimensions array.
@@ -95,13 +109,17 @@ public class ODEState implements Serializable {
 
     /** Get primary state dimension.
      * @return primary state dimension
+     * @see #getSecondaryStateDimension(int)
+     * @see #getCompleteStateDimension()
      */
-    public int gePrimaryStateDimension() {
+    public int getPrimaryStateDimension() {
         return primaryState.length;
     }
 
     /** Get primary state at time.
      * @return primary state at time
+     * @see #getSecondaryState(int)
+     * @see #getCompleteState()
      */
     public double[] getPrimaryState() {
         return primaryState.clone();
@@ -119,6 +137,8 @@ public class ODEState implements Serializable {
      * by {@link ExpandableODE#addSecondaryEquations(SecondaryEquations)}
      * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return secondary state dimension
+     * @see #getPrimaryStateDimension()
+     * @see #getCompleteStateDimension()
      */
     public int getSecondaryStateDimension(final int index) {
         return index == 0 ? primaryState.length : secondaryState[index - 1].length;
@@ -129,6 +149,8 @@ public class ODEState implements Serializable {
      * by {@link ExpandableODE#addSecondaryEquations(SecondaryEquations)}
      * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return secondary state at time
+     * @see #getPrimaryState()
+     * @see #getCompleteState()
      */
     public double[] getSecondaryState(final int index) {
         return index == 0 ? primaryState.clone() : secondaryState[index - 1].clone();
@@ -139,15 +161,34 @@ public class ODEState implements Serializable {
      * The complete set of equations correspond to the primary set plus all secondary sets.
      * </p>
      * @return dimension of the complete set of equations
+     * @see #getPrimaryStateDimension()
+     * @see #getSecondaryStateDimension(int)
      */
-    public int getTotalDimension() {
-        int dimension = primaryState.length;
+    public int getCompleteStateDimension() {
+        return completeDimension;
+    }
+
+    /** Get complete state at time.
+     * @return complete state at time, starting with
+     * {@link #getPrimaryState() primary state}, followed
+     * by all {@link #getSecondaryState(int) secondary states} in
+     * increasing index order
+     * @see #getPrimaryState()
+     * @see #getSecondaryState(int)
+     */
+    public double[] getCompleteState() {
+        final double[] completeState = new double[getCompleteStateDimension()];
+        System.arraycopy(primaryState, 0, completeState, 0, primaryState.length);
+        int offset = primaryState.length;
         if (secondaryState != null) {
-            for (final double[] secondary : secondaryState) {
-                dimension += secondary.length;
+            for (int index = 1; index < secondaryState.length; ++index) {
+                System.arraycopy(secondaryState[index], 0,
+                                 completeState, offset,
+                                 secondaryState[index].length);
+                offset += secondaryState[index].length;
             }
         }
-        return dimension;
+        return completeState;
     }
 
 }

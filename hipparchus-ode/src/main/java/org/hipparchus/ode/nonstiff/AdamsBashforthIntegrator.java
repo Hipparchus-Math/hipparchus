@@ -251,7 +251,7 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
 
         // main integration loop
         setIsLastStep(false);
-        final double[] y  = equations.getMapper().mapState(getStepStart());
+        final double[] y  = getStepStart().getCompleteState();
         do {
 
             double[] predictedY  = null;

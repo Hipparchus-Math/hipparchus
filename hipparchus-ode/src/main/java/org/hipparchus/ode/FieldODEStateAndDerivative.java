@@ -18,6 +18,7 @@
 package org.hipparchus.ode;
 
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.util.MathArrays;
 
 /** Container for time, main and secondary state vectors as well as their derivatives.
 
@@ -59,11 +60,13 @@ public class FieldODEStateAndDerivative<T extends RealFieldElement<T>> extends F
                                       T[][] secondaryState, T[][] secondaryDerivative) {
         super(time, primaryState, secondaryState);
         this.primaryDerivative   = primaryDerivative.clone();
-        this.secondaryDerivative = copy(time.getField(), secondaryDerivative);
+        this.secondaryDerivative = copy(secondaryDerivative);
     }
 
     /** Get derivative of the primary state at time.
      * @return derivative of the primary state at time
+     * @see #getSecondaryDerivative(int)
+     * @see #getCompleteDerivative()
      */
     public T[] getPrimaryDerivative() {
         return primaryDerivative.clone();
@@ -74,9 +77,34 @@ public class FieldODEStateAndDerivative<T extends RealFieldElement<T>> extends F
      * by {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryODE)}
      * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return derivative of the secondary state at time
+     * @see #getPrimaryDerivative()
+     * @see #getCompleteDerivative()
      */
     public T[] getSecondaryDerivative(final int index) {
         return index == 0 ? primaryDerivative.clone() : secondaryDerivative[index - 1].clone();
+    }
+
+    /** Get complete derivative at time.
+     * @return complete derivative at time, starting with
+     * {@link #getPrimaryDerivative() primary derivative}, followed
+     * by all {@link #getSecondaryDerivative(int) secondary derivatives} in
+     * increasing index order
+     * @see #getPrimaryDerivative()
+     * @see #getSecondaryDerivative(int)
+     */
+    public T[] getCompleteDerivative() {
+        final T[] completeDerivative = MathArrays.buildArray(getTime().getField(), getCompleteStateDimension());
+        System.arraycopy(primaryDerivative, 0, completeDerivative, 0, primaryDerivative.length);
+        int offset = primaryDerivative.length;
+        if (secondaryDerivative != null) {
+            for (int index = 1; index < secondaryDerivative.length; ++index) {
+                System.arraycopy(secondaryDerivative[index], 0,
+                                 completeDerivative, offset,
+                                 secondaryDerivative[index].length);
+                offset += secondaryDerivative[index].length;
+            }
+        }
+        return completeDerivative;
     }
 
 }

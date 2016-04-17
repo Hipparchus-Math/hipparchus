@@ -17,7 +17,6 @@
 
 package org.hipparchus.ode;
 
-import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.util.MathArrays;
 
@@ -41,6 +40,9 @@ public class FieldODEState<T extends RealFieldElement<T>> {
     /** Secondary state at time. */
     private final T[][] secondaryState;
 
+    /** Complete dimension. */
+    private final int completeDimension;
+
     /** Simple constructor.
      * <p>Calling this constructor is equivalent to call {@link
      * #FieldODEState(RealFieldElement, RealFieldElement[], RealFieldElement[][])
@@ -58,17 +60,27 @@ public class FieldODEState<T extends RealFieldElement<T>> {
      * @param secondaryState secondary state at time (may be null)
      */
     public FieldODEState(T time, T[] primaryState, T[][] secondaryState) {
+
         this.time           = time;
         this.primaryState   = primaryState.clone();
-        this.secondaryState = copy(time.getField(), secondaryState);
+        this.secondaryState = copy(secondaryState);
+
+        // compute once and for all the complete dimension
+        int dimension = primaryState.length;
+        if (secondaryState != null) {
+            for (final T[] secondary : secondaryState) {
+                dimension += secondary.length;
+            }
+        }
+        this.completeDimension = dimension;
+
     }
 
     /** Copy a two-dimensions array.
-     * @param field field to which elements belong
      * @param original original array (may be null)
      * @return copied array or null if original array was null
      */
-    protected T[][] copy(final Field<T> field, final T[][] original) {
+    protected T[][] copy(final T[][] original) {
 
         // special handling of null arrays
         if (original == null) {
@@ -76,7 +88,7 @@ public class FieldODEState<T extends RealFieldElement<T>> {
         }
 
         // allocate the array
-        final T[][] copied = MathArrays.buildArray(field, original.length, -1);
+        final T[][] copied = MathArrays.buildArray(time.getField(), original.length, -1);
 
         // copy content
         for (int i = 0; i < original.length; ++i) {
@@ -96,6 +108,17 @@ public class FieldODEState<T extends RealFieldElement<T>> {
 
     /** Get primary state dimension.
      * @return primary state dimension
+     * @deprecated as of 1.0, replaced with {@link #getPrimaryStateDimension()}
+     */
+    @Deprecated
+    public int getStateDimension() {
+        return getPrimaryStateDimension();
+    }
+
+    /** Get primary state dimension.
+     * @return primary state dimension
+     * @see #getSecondaryStateDimension(int)
+     * @see #getCompleteStateDimension()
      */
     public int getPrimaryStateDimension() {
         return primaryState.length;
@@ -103,6 +126,17 @@ public class FieldODEState<T extends RealFieldElement<T>> {
 
     /** Get primary state at time.
      * @return primary state at time
+     * @deprecated as of 1.0, replaced with {@link #getPrimaryState()}
+     */
+    @Deprecated
+    public T[] getState() {
+        return getPrimaryState();
+    }
+
+    /** Get primary state at time.
+     * @return primary state at time
+     * @see #getSecondaryState(int)
+     * @see #getC
      */
     public T[] getPrimaryState() {
         return primaryState.clone();
@@ -141,14 +175,31 @@ public class FieldODEState<T extends RealFieldElement<T>> {
      * </p>
      * @return dimension of the complete set of equations
      */
-    public int getTotalDimension() {
-        int dimension = primaryState.length;
+    public int getCompleteStateDimension() {
+        return completeDimension;
+    }
+
+    /** Get complete state at time.
+     * @return complete state at time, starting with
+     * {@link #getPrimaryState() primary state}, followed
+     * by all {@link #getSecondaryState(int) secondary states} in
+     * increasing index order
+     * @see #getPrimaryState()
+     * @see #getSecondaryState(int)
+     */
+    public T[] getCompleteState() {
+        final T[] completeState = MathArrays.buildArray(time.getField(), getCompleteStateDimension());
+        System.arraycopy(primaryState, 0, completeState, 0, primaryState.length);
+        int offset = primaryState.length;
         if (secondaryState != null) {
-            for (final T[] secondary : secondaryState) {
-                dimension += secondary.length;
+            for (int index = 1; index < secondaryState.length; ++index) {
+                System.arraycopy(secondaryState[index], 0,
+                                 completeState, offset,
+                                 secondaryState[index].length);
+                offset += secondaryState[index].length;
             }
         }
-        return dimension;
+        return completeState;
     }
 
 }

@@ -137,7 +137,7 @@ public class DenseOutputModel implements ODEStepHandler, Serializable {
 
             final ODEStateAndDerivative s1 = steps.get(0).getPreviousState();
             final ODEStateAndDerivative s2 = model.steps.get(0).getPreviousState();
-            checkDimensionsEquality(s1.gePrimaryStateDimension(), s2.gePrimaryStateDimension());
+            checkDimensionsEquality(s1.getPrimaryStateDimension(), s2.getPrimaryStateDimension());
             checkDimensionsEquality(s1.getNumberOfSecondaryStates(), s2.getNumberOfSecondaryStates());
             for (int i = 0; i < s1.getNumberOfSecondaryStates(); ++i) {
                 checkDimensionsEquality(s1.getSecondaryStateDimension(i), s2.getSecondaryStateDimension(i));

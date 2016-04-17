@@ -224,7 +224,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
         starter.clearStepHandlers();
 
         // set up one specific step handler to extract initial Nordsieck vector
-        starter.addStepHandler(new FieldNordsieckInitializer(equations.getMapper(), (nSteps + 3) / 2));
+        starter.addStepHandler(new FieldNordsieckInitializer((nSteps + 3) / 2));
 
         // start integration, expecting a InitializationCompletedMarkerException
         try {
@@ -348,9 +348,6 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
      */
     private class FieldNordsieckInitializer implements FieldODEStepHandler<T> {
 
-        /** Equation mapper. */
-        private final FieldEquationsMapper<T> mapper;
-
         /** Steps counter. */
         private int count;
 
@@ -367,11 +364,9 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
         private final T[][] yDot;
 
         /** Simple constructor.
-         * @param mapper equation mapper
          * @param nbStartPoints number of start points (including the initial point)
          */
-        FieldNordsieckInitializer(final FieldEquationsMapper<T> mapper, final int nbStartPoints) {
-            this.mapper = mapper;
+        FieldNordsieckInitializer(final int nbStartPoints) {
             this.count  = 0;
             this.t      = MathArrays.buildArray(getField(), nbStartPoints);
             this.y      = MathArrays.buildArray(getField(), nbStartPoints, -1);
@@ -389,16 +384,16 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
                 final FieldODEStateAndDerivative<T> prev = interpolator.getPreviousState();
                 savedStart  = prev;
                 t[count]    = prev.getTime();
-                y[count]    = mapper.mapState(prev);
-                yDot[count] = mapper.mapDerivative(prev);
+                y[count]    = prev.getCompleteState();
+                yDot[count] = prev.getCompleteDerivative();
             }
 
             // store the point at the end of the step
             ++count;
             final FieldODEStateAndDerivative<T> curr = interpolator.getCurrentState();
             t[count]    = curr.getTime();
-            y[count]    = mapper.mapState(curr);
-            yDot[count] = mapper.mapDerivative(curr);
+            y[count]    = curr.getCompleteState();
+            yDot[count] = curr.getCompleteDerivative();
 
             if (count == t.length - 1) {
 

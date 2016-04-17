@@ -77,7 +77,9 @@ public class DummyStepInterpolator extends AbstractODEStateInterpolator {
     protected ODEStateAndDerivative computeInterpolatedStateAndDerivatives(EquationsMapper equationsMapper,
                                                                            double time, double theta,
                                                                            double thetaH, double oneMinusThetaH) {
-        return getCurrentState();
+        return new ODEStateAndDerivative(time,
+                                         getCurrentState().getCompleteState(),
+                                         getCurrentState().getCompleteDerivative());
     }
 
 }

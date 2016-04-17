@@ -523,7 +523,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
         final boolean forward = finalTime > initialState.getTime();
 
         // create some internal working arrays
-        double[]         y        = equations.getMapper().mapState(getStepStart());
+        double[]         y        = getStepStart().getCompleteState();
         final double[]   y1       = new double[y.length];
         final double[][] diagonal = new double[sequence.length-1][];
         final double[][] y1Diag   = new double[sequence.length-1][];
@@ -565,7 +565,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
             if (newStep) {
 
                 // first evaluation, at the beginning of the step
-                final double[] yDot0 = equations.getMapper().mapDerivative(getStepStart());
+                final double[] yDot0 = getStepStart().getCompleteDerivative();
                 for (int k = 0; k < sequence.length; ++k) {
                     // all sequences start from the same point, so we share the derivatives
                     fk[k][0] = yDot0;
@@ -812,7 +812,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                 // beware that y1 is not always valid anymore here,
                 // as some event may have triggered a reset
                 // so we need to copy the new step start set previously
-                y = equations.getMapper().mapState(getStepStart());
+                y = getStepStart().getCompleteState();
 
                 int optimalIter;
                 if (k == 1) {

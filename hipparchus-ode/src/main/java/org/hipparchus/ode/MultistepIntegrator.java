@@ -216,7 +216,7 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
         starter.clearStepHandlers();
 
         // set up one specific step handler to extract initial Nordsieck vector
-        starter.addStepHandler(new NordsieckInitializer(equations.getMapper(), (nSteps + 3) / 2));
+        starter.addStepHandler(new NordsieckInitializer((nSteps + 3) / 2));
 
         // start integration, expecting a InitializationCompletedMarkerException
         try {
@@ -337,9 +337,6 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
     /** Specialized step handler storing the first step. */
     private class NordsieckInitializer implements ODEStepHandler {
 
-        /** Equation mapper. */
-        private final EquationsMapper mapper;
-
         /** Steps counter. */
         private int count;
 
@@ -356,11 +353,9 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
         private final double[][] yDot;
 
         /** Simple constructor.
-         * @param mapper equation mapper
          * @param nbStartPoints number of start points (including the initial point)
          */
-        NordsieckInitializer(final EquationsMapper mapper, final int nbStartPoints) {
-            this.mapper = mapper;
+        NordsieckInitializer(final int nbStartPoints) {
             this.count  = 0;
             this.t      = new double[nbStartPoints];
             this.y      = new double[nbStartPoints][];
@@ -376,16 +371,16 @@ public abstract class MultistepIntegrator extends AdaptiveStepsizeIntegrator {
                 // first step, we need to store also the point at the beginning of the step
                 savedStart   = interpolator.getPreviousState();
                 t[0]    = savedStart.getTime();
-                y[0]    = mapper.mapState(savedStart);
-                yDot[0] = mapper.mapDerivative(savedStart);
+                y[0]    = savedStart.getCompleteState();
+                yDot[0] = savedStart.getCompleteDerivative();
             }
 
             // store the point at the end of the step
             ++count;
             final ODEStateAndDerivative curr = interpolator.getCurrentState();
             t[count]    = curr.getTime();
-            y[count]    = mapper.mapState(curr);
-            yDot[count] = mapper.mapDerivative(curr);
+            y[count]    = curr.getCompleteState();
+            yDot[count] = curr.getCompleteDerivative();
 
             if (count == t.length - 1) {
 

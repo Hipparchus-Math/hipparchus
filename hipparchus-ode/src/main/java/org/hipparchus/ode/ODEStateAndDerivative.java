@@ -64,6 +64,8 @@ public class ODEStateAndDerivative extends ODEState {
 
     /** Get derivative of the primary state at time.
      * @return derivative of the primary state at time
+     * @see #getSecondaryDerivative(int)
+     * @see #getCompleteDerivative()
      */
     public double[] getPrimaryDerivative() {
         return primaryDerivative.clone();
@@ -74,9 +76,34 @@ public class ODEStateAndDerivative extends ODEState {
      * by {@link ExpandableODE#addSecondaryEquations(SecondaryEquations)}
      * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return derivative of the secondary state at time
+     * @see #getPrimaryDerivative()
+     * @see #getCompleteDerivative()
      */
     public double[] getSecondaryDerivative(final int index) {
         return index == 0 ? primaryDerivative.clone() : secondaryDerivative[index - 1].clone();
+    }
+
+    /** Get complete derivative at time.
+     * @return complete derivative at time, starting with
+     * {@link #getPrimaryDerivative() primary derivative}, followed
+     * by all {@link #getSecondaryDerivative(int) secondary derivatives} in
+     * increasing index order
+     * @see #getPrimaryDerivative()
+     * @see #getSecondaryDerivative(int)
+     */
+    public double[] getCompleteDerivative() {
+        final double[] completeDerivative = new double[getCompleteStateDimension()];
+        System.arraycopy(primaryDerivative, 0, completeDerivative, 0, primaryDerivative.length);
+        int offset = primaryDerivative.length;
+        if (secondaryDerivative != null) {
+            for (int index = 1; index < secondaryDerivative.length; ++index) {
+                System.arraycopy(secondaryDerivative[index], 0,
+                                 completeDerivative, offset,
+                                 secondaryDerivative[index].length);
+                offset += secondaryDerivative[index].length;
+            }
+        }
+        return completeDerivative;
     }
 
 }

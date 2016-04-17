@@ -224,7 +224,7 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
                                                       getStepSize(), scaled, nordsieck);
 
         setIsLastStep(false);
-        final double[] y = equations.getMapper().mapState(stepStart);
+        final double[] y = stepStart.getCompleteState();
         do {
 
             double[] predictedY = null;

@@ -192,8 +192,8 @@ public class FieldExpandableODETest {
             Assert.assertEquals(-i, completeDot[i + main.getDimension() + secondary1.getDimension()].getReal(),  1.0e-15);
         }
 
-        T[] remappedState = equation.getMapper().mapState(state);
-        T[] remappedDerivative = equation.getMapper().mapDerivative(state);
+        T[] remappedState = state.getCompleteState();
+        T[] remappedDerivative = state.getCompleteDerivative();
         Assert.assertEquals(equation.getMapper().getTotalDimension(), remappedState.length);
         Assert.assertEquals(equation.getMapper().getTotalDimension(), remappedDerivative.length);
         for (int i = 0; i < remappedState.length; ++i) {

@@ -104,7 +104,7 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
 
         // create some internal working arrays
         final int        stages = c.length + 1;
-        double[]         y      = equations.getMapper().mapState(getStepStart());
+        double[]         y      = getStepStart().getCompleteState();
         final double[][] yDotK  = new double[stages][];
         final double[]   yTmp   = new double[y.length];
 
@@ -128,8 +128,8 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
         do {
 
             // first stage
-            y        = equations.getMapper().mapState(getStepStart());
-            yDotK[0] = equations.getMapper().mapDerivative(getStepStart());
+            y        = getStepStart().getCompleteState();
+            yDotK[0] = getStepStart().getCompleteDerivative();
 
             // next stages
             for (int k = 1; k < stages; ++k) {

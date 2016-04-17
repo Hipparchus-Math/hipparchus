@@ -98,7 +98,7 @@ abstract class RungeKuttaStateInterpolator extends AbstractODEStateInterpolator 
      * @return combined state
      */
     protected final double[] previousStateLinearCombination(final double ... coefficients) {
-        return combine(getPreviousState().getPrimaryState(),
+        return combine(getPreviousState().getCompleteState(),
                        coefficients);
     }
 
@@ -107,7 +107,7 @@ abstract class RungeKuttaStateInterpolator extends AbstractODEStateInterpolator 
      * @return combined state
      */
     protected double[] currentStateLinearCombination(final double ... coefficients) {
-        return combine(getCurrentState().getPrimaryState(),
+        return combine(getCurrentState().getCompleteState(),
                        coefficients);
     }
 
