@@ -255,6 +255,8 @@ public class DormandPrince853Integrator extends EmbeddedRungeKuttaIntegrator {
                 226716250.0 / 18341897.0,
                 1371316744.0 / 2131383595.0
             }, {
+                // the following stage is both for interpolation and the first stage in next step
+                // (the coefficients are identical to the B array)
                 104257.0/1920240.0,
                 0.0,
                 0.0,
@@ -312,7 +314,8 @@ public class DormandPrince853Integrator extends EmbeddedRungeKuttaIntegrator {
                 0.0,
                 -1199007803.0 / 857031517296.0,
                 157882067000.0 / 53564469831.0,
-                -290468882375.0 / 31741908048.0}
+                -290468882375.0 / 31741908048.0
+            }
         };
     }
 
