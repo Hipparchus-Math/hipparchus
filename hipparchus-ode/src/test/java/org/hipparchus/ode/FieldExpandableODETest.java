@@ -44,8 +44,8 @@ public class FieldExpandableODETest {
         for (int i = 0; i < complete.length; ++i) {
             complete[i] = field.getZero().add(i);
         }
-        equation.init(new FieldODEState<T>(t0, complete), t);
         T[] completeDot = equation.computeDerivatives(t0, complete);
+        equation.init(equation.getMapper().mapStateAndDerivative(t0, complete, completeDot), t);
         FieldODEStateAndDerivative<T> state = equation.getMapper().mapStateAndDerivative(t0, complete, completeDot);
         Assert.assertEquals(0, state.getNumberOfSecondaryStates());
         T[] mainState    = state.getPrimaryState();
@@ -59,11 +59,11 @@ public class FieldExpandableODETest {
     }
 
     @Test
-    public void testMainAndSecondary() {
-        doTestMainAndSecondary(Decimal64Field.getInstance());
+    public void testPrimaryAndSecondary() {
+        doTestPrimaryAndSecondary(Decimal64Field.getInstance());
     }
 
-    private <T extends RealFieldElement<T>> void doTestMainAndSecondary(final Field<T> field) {
+    private <T extends RealFieldElement<T>> void doTestPrimaryAndSecondary(final Field<T> field) {
 
         FieldOrdinaryDifferentialEquation<T> main = new Linear<T>(field, 3, 0);
         FieldExpandableODE<T> equation = new FieldExpandableODE<T>(main);
@@ -83,8 +83,8 @@ public class FieldExpandableODETest {
         for (int i = 0; i < complete.length; ++i) {
             complete[i] = field.getZero().add(i);
         }
-        equation.init(new FieldODEState<T>(t0, complete), t);
         T[] completeDot = equation.computeDerivatives(t0, complete);
+        equation.init(equation.getMapper().mapStateAndDerivative(t0, complete, completeDot), t);
 
         T[] mainState    = equation.getMapper().extractEquationData(0,  complete);
         T[] mainStateDot = equation.getMapper().extractEquationData(0,  completeDot);
@@ -138,10 +138,10 @@ public class FieldExpandableODETest {
         T t  = field.getZero().add(100);
         T[] complete    = MathArrays.buildArray(field, equation.getMapper().getTotalDimension());
         for (int i = 0; i < complete.length; ++i) {
-            complete[i] = field.getZero().add(i);
+            complete[i]    = field.getZero().add(i);
         }
-        equation.init(new FieldODEState<T>(t0, complete), t);
         T[] completeDot = equation.computeDerivatives(t0, complete);
+        equation.init(equation.getMapper().mapStateAndDerivative(t0, complete, completeDot), t);
 
         try {
             equation.getMapper().mapStateAndDerivative(t0, MathArrays.buildArray(field, complete.length + 1), completeDot);

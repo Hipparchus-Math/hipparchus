@@ -181,7 +181,7 @@ public class ODEState implements Serializable {
         System.arraycopy(primaryState, 0, completeState, 0, primaryState.length);
         int offset = primaryState.length;
         if (secondaryState != null) {
-            for (int index = 1; index < secondaryState.length; ++index) {
+            for (int index = 0; index < secondaryState.length; ++index) {
                 System.arraycopy(secondaryState[index], 0,
                                  completeState, offset,
                                  secondaryState[index].length);
