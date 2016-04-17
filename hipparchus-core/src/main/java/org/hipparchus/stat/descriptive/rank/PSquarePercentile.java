@@ -49,15 +49,12 @@ import org.hipparchus.util.Precision;
  * <p>
  * Note: This implementation is not synchronized and produces an approximate
  * result. For small samples, where data can be stored and processed in memory,
- * {@link Percentile} should be used.</p>
- *
+ * {@link Percentile} should be used.
  */
 public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
-        implements StorelessUnivariateStatistic, Serializable {
+    implements StorelessUnivariateStatistic, Serializable {
 
-    /**
-     * The maximum array size used for psquare algorithm
-     */
+    /** The maximum array size used for psquare algorithm */
     private static final int PSQUARE_CONSTANT = 5;
 
     /**
@@ -66,14 +63,10 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
      */
     private static final double DEFAULT_QUANTILE_DESIRED = 50d;
 
-    /**
-     * Serial ID
-     */
+    /** Serial ID */
     private static final long serialVersionUID = 20150412L;
 
-    /**
-     * A decimal formatter for print convenience
-     */
+    /** A decimal formatter for print convenience */
     private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("00.00");
 
     /**
@@ -91,7 +84,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
 
     /**
      * lastObservation is the last observation value/input sample. No need to
-     * serialize
+     * serialize.
      */
     private transient double lastObservation;
 
@@ -119,7 +112,8 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
      */
     public PSquarePercentile(final double p) {
         if (p > 100 || p < 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE, p, 0, 100);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE,
+                                                   p, 0, 100);
         }
         this.quantile = p / 100d;// always set it within (0,1]
     }
@@ -132,9 +126,21 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         this(DEFAULT_QUANTILE_DESIRED);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    public PSquarePercentile(PSquarePercentile original) {
+        super();
+
+        this.quantile = original.quantile;
+
+        if (original.markers != null) {
+            this.markers = (PSquareMarkers) original.markers.clone();
+        }
+
+        this.countOfObservations = original.countOfObservations;
+        this.pValue = original.pValue;
+        this.initialFive.addAll(original.initialFive);
+    }
+
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         double result = getResult();
@@ -220,30 +226,16 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return countOfObservations;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
-    public StorelessUnivariateStatistic copy() {
-        // multiply quantile by 100 now as anyway constructor divides it by 100
-        PSquarePercentile copy = new PSquarePercentile(100d * quantile);
-
-        if (markers != null) {
-            copy.markers = (PSquareMarkers) markers.clone();
-        }
-        copy.countOfObservations = countOfObservations;
-        copy.pValue = pValue;
-        copy.initialFive.clear();
-        copy.initialFive.addAll(initialFive);
-        return copy;
+    public PSquarePercentile copy() {
+        return new PSquarePercentile(this);
     }
 
     /**

@@ -18,14 +18,11 @@ package org.hipparchus.stat.descriptive;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
 /**
- * Abstract base class for implementations of the {@link UnivariateStatistic} interface.
- * <p>
- * Provides a default implementation of <code>evaluate(double[]),</code>
- * delegating to <code>evaluate(double[], int, int)</code> in the natural way.
+ * Abstract base class for implementations of the
+ * {@link UnivariateStatistic} interface.
  */
 public abstract class AbstractUnivariateStatistic
     implements UnivariateStatistic {
@@ -33,25 +30,12 @@ public abstract class AbstractUnivariateStatistic
     /** Stored data. */
     private double[] storedData;
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double evaluate(final double[] values) throws MathIllegalArgumentException {
-        MathArrays.verifyValues(values, 0, 0);
-        return evaluate(values, 0, values.length);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public abstract double evaluate(final double[] values, final int begin, final int length)
         throws MathIllegalArgumentException;
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public abstract UnivariateStatistic copy();
 
@@ -116,8 +100,9 @@ public abstract class AbstractUnivariateStatistic
     /**
      * Returns the result of evaluating the statistic over the stored data.
      * <p>
-     * The stored array is the one which was set by previous calls to {@link #setData(double[])}.
-     * </p>
+     * The stored array is the one which was set by previous calls to
+     * {@link #setData(double[])}.
+     *
      * @return the value of the statistic applied to the stored data
      * @throws MathIllegalArgumentException if the stored data array is null
      */

@@ -16,34 +16,24 @@
  */
 package org.hipparchus.stat.descriptive.moment;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.moment.Mean;
-import org.hipparchus.stat.descriptive.moment.SecondMoment;
-import org.hipparchus.stat.descriptive.moment.StandardDeviation;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link UnivariateStatistic} class.
- *
+ * Test cases for the {@link StandardDeviation} class.
  */
 public class StandardDeviationTest extends StorelessUnivariateStatisticAbstractTest{
 
-    protected StandardDeviation stat;
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public StandardDeviation getUnivariateStatistic() {
         return new StandardDeviation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double expectedValue() {
         return this.std;
@@ -51,14 +41,13 @@ public class StandardDeviationTest extends StorelessUnivariateStatisticAbstractT
 
     /**
      * Make sure Double.NaN is returned iff n = 0
-     *
      */
     @Test
     public void testNaN() {
-        StandardDeviation std = new StandardDeviation();
-        Assert.assertTrue(Double.isNaN(std.getResult()));
+        StandardDeviation std = getUnivariateStatistic();
+        assertTrue(Double.isNaN(std.getResult()));
         std.increment(1d);
-        Assert.assertEquals(0d, std.getResult(), 0);
+        assertEquals(0d, std.getResult(), 0);
     }
 
     /**
@@ -66,31 +55,32 @@ public class StandardDeviationTest extends StorelessUnivariateStatisticAbstractT
      */
     @Test
     public void testPopulation() {
-        double[] values = {-1.0d, 3.1d, 4.0d, -2.1d, 22d, 11.7d, 3d, 14d};
+        double[] values = { -1.0d, 3.1d, 4.0d, -2.1d, 22d, 11.7d, 3d, 14d };
         double sigma = populationStandardDeviation(values);
         SecondMoment m = new SecondMoment();
         m.incrementAll(values);  // side effect is to add values
-        StandardDeviation s1 = new StandardDeviation();
+
+        StandardDeviation s1 = getUnivariateStatistic();
         s1.setBiasCorrected(false);
-        Assert.assertEquals(sigma, s1.evaluate(values), 1E-14);
+        assertEquals(sigma, s1.evaluate(values), 1E-14);
         s1.incrementAll(values);
-        Assert.assertEquals(sigma, s1.getResult(), 1E-14);
+        assertEquals(sigma, s1.getResult(), 1E-14);
         s1 = new StandardDeviation(false, m);
-        Assert.assertEquals(sigma, s1.getResult(), 1E-14);
+        assertEquals(sigma, s1.getResult(), 1E-14);
         s1 = new StandardDeviation(false);
-        Assert.assertEquals(sigma, s1.evaluate(values), 1E-14);
+        assertEquals(sigma, s1.evaluate(values), 1E-14);
         s1.incrementAll(values);
-        Assert.assertEquals(sigma, s1.getResult(), 1E-14);
+        assertEquals(sigma, s1.getResult(), 1E-14);
     }
 
     /**
      * Definitional formula for population standard deviation
      */
     protected double populationStandardDeviation(double[] v) {
-        double mean = new Mean().evaluate(v);
+        double mean = StatUtils.mean(v);
         double sum = 0;
-        for (int i = 0; i < v.length; i++) {
-            sum += (v[i] - mean) * (v[i] - mean);
+        for (double val : v) {
+            sum += (val - mean) * (val - mean);
         }
         return FastMath.sqrt(sum / v.length);
     }

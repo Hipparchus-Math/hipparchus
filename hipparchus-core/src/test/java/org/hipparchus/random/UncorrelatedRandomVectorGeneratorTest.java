@@ -18,14 +18,11 @@
 package org.hipparchus.random;
 
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.random.GaussianRandomGenerator;
-import org.hipparchus.random.JDKRandomGenerator;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.UncorrelatedRandomVectorGenerator;
-import org.hipparchus.stat.descriptive.moment.VectorialCovariance;
-import org.hipparchus.stat.descriptive.moment.VectorialMean;
-import org.junit.Test;
+import org.hipparchus.stat.descriptive.moment.Mean;
+import org.hipparchus.stat.descriptive.vector.VectorialCovariance;
+import org.hipparchus.stat.descriptive.vector.VectorialStorelessStatistic;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class UncorrelatedRandomVectorGeneratorTest {
     private double[] mean;
@@ -45,7 +42,8 @@ public class UncorrelatedRandomVectorGeneratorTest {
     @Test
     public void testMeanAndCorrelation() {
 
-        VectorialMean meanStat = new VectorialMean(mean.length);
+        VectorialStorelessStatistic meanStat =
+                new VectorialStorelessStatistic(mean.length, new Mean());
         VectorialCovariance covStat = new VectorialCovariance(mean.length, true);
         for (int i = 0; i < 10000; ++i) {
             double[] v = generator.nextVector();

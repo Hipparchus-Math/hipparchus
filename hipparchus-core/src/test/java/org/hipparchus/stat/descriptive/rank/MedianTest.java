@@ -26,36 +26,29 @@ import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_6
 import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_7;
 import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_8;
 import static org.hipparchus.stat.descriptive.rank.Percentile.EstimationType.R_9;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.rank.Median;
 import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
 import org.hipparchus.stat.ranking.NaNStrategy;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link UnivariateStatistic} class.
+ * Test cases for the {@link Median} class.
  */
 public class MedianTest extends UnivariateStatisticAbstractTest{
 
-    protected Median stat;
-
     /**
-     * {@link  org.hipparchus.stat.descriptive.rank.Percentile.EstimationType type}
-     *  to be used while calling
+     * {@link Percentile.EstimationType type} to be used while calling
      * {@link #getUnivariateStatistic()}
      */
-    protected EstimationType estimationType = LEGACY;
+    private final EstimationType estimationType = LEGACY;
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
-        return new Median();
+    public Median getUnivariateStatistic() {
+        return new Median().withEstimationType(estimationType);
     }
 
     private Median getTestMedian(EstimationType type) {
@@ -63,17 +56,9 @@ public class MedianTest extends UnivariateStatisticAbstractTest{
         return new Median().withEstimationType(type).withNaNStrategy(strategy);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double expectedValue() {
         return this.median;
-    }
-
-    @Before
-    public void before() {
-        estimationType=LEGACY;
     }
 
     @Test
@@ -81,11 +66,9 @@ public class MedianTest extends UnivariateStatisticAbstractTest{
         double[] singletonArray = new double[] { 1d };
         for (EstimationType e : EstimationType.values()) {
             UnivariateStatistic percentile = getTestMedian(e);
-            Assert.assertEquals(1d, percentile.evaluate(singletonArray), 0);
-            Assert.assertEquals(1d, percentile.evaluate(singletonArray, 0, 1), 0);
-            Assert.assertEquals(1d, new Median().evaluate(singletonArray, 0, 1, 5), 0);
-            Assert.assertEquals(1d, new Median().evaluate(singletonArray, 0, 1, 100), 0);
-            Assert.assertTrue(Double.isNaN(percentile.evaluate(singletonArray, 0, 0)));
+            assertEquals(1d, percentile.evaluate(singletonArray), 0);
+            assertEquals(1d, percentile.evaluate(singletonArray, 0, 1), 0);
+            assertTrue(Double.isNaN(percentile.evaluate(singletonArray, 0, 0)));
         }
     }
 
@@ -109,8 +92,8 @@ public class MedianTest extends UnivariateStatisticAbstractTest{
             EstimationType e = (EstimationType) o[0];
             double expected = (Double) o[1];
             double result = getTestMedian(e).evaluate(d);
-            Assert.assertEquals("expected[" + e + "] = " + expected +
-                    " but was = " + result, expected, result, tolerance);
+            assertEquals("expected[" + e + "] = " + expected +
+                         " but was = " + result, expected, result, tolerance);
         }
     }
 }

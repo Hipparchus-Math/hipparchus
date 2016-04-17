@@ -17,9 +17,10 @@
 
 package org.hipparchus.distribution.discrete;
 
+import static org.junit.Assert.assertEquals;
+
 import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.discrete.HypergeometricDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -317,5 +318,18 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
             Assert.assertTrue("sample=" + sample, 0 <= sample);
             Assert.assertTrue("sample=" + sample, sample <= n);
         }
+    }
+
+    @Test
+    public void testMath1356() {
+        HypergeometricDistribution dist = new HypergeometricDistribution(11, 11, 1);
+        assertEquals(1.0, dist.probability(1), 1e-6);
+        assertEquals(0.0, dist.probability(0), 1e-6);
+
+        dist = new HypergeometricDistribution(11, 11, 11);
+        assertEquals(0.0, dist.probability(0), 1e-6);
+        assertEquals(0.0, dist.probability(1), 1e-6);
+        assertEquals(0.0, dist.probability(10), 1e-6);
+        assertEquals(1.0, dist.probability(11), 1e-6);
     }
 }

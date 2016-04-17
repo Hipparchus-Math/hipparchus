@@ -21,6 +21,7 @@ import java.util.TreeMap;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Pair;
 
 /**
@@ -107,12 +108,7 @@ public abstract class BaseRuleFactory<T extends Number> {
      * have the same length.
      */
     protected void addRule(Pair<T[], T[]> rule) throws MathIllegalArgumentException {
-        if (rule.getFirst().length != rule.getSecond().length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   rule.getFirst().length,
-                                                   rule.getSecond().length);
-        }
-
+        MathUtils.checkDimension(rule.getFirst().length, rule.getSecond().length);
         pointsAndWeights.put(rule.getFirst().length, rule);
     }
 

@@ -27,6 +27,7 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /** Class holding "compiled" computation rules for derivative structures.
  * <p>This class implements the computation rules described in Dan Kalman's paper <a
@@ -537,11 +538,7 @@ public class DSCompiler {
             throws MathIllegalArgumentException {
 
         // safety check
-        if (orders.length != getFreeParameters()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   orders.length, getFreeParameters());
-        }
-
+        MathUtils.checkDimension(orders.length, getFreeParameters());
         return getPartialDerivativeIndex(parameters, order, sizes, orders);
 
     }
@@ -1807,14 +1804,8 @@ public class DSCompiler {
      */
     public void checkCompatibility(final DSCompiler compiler)
         throws MathIllegalArgumentException {
-        if (parameters != compiler.parameters) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   parameters, compiler.parameters);
-        }
-        if (order != compiler.order) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   order, compiler.order);
-        }
+        MathUtils.checkDimension(parameters, compiler.parameters);
+        MathUtils.checkDimension(order, compiler.order);
     }
 
 }

@@ -17,34 +17,65 @@
 
 package org.hipparchus.stat.descriptive.moment;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Arrays;
+
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.StatUtils;
-import org.hipparchus.stat.descriptive.moment.SemiVariance;
-import org.junit.Assert;
+import org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest;
+import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * Test cases for the {@link SemiVariance} class.
+ */
+public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
 
-public class SemiVarianceTest {
+    private double semiVariance;
+
+    @Before
+    public void setup() {
+        // calculate the semivariance the same way as defined by
+        // the SemiVariance class. This is not the same as calculating
+        // the variance of the values that are below / above the cutoff.
+        double val =
+            Arrays.stream(testArray)
+                  .filter(x -> x < this.mean)
+                  .reduce(0, (x, y) -> x + (y - this.mean) * (y - this.mean));
+
+        this.semiVariance = val / (testArray.length - 1);
+    }
+
+    @Override
+    public SemiVariance getUnivariateStatistic() {
+        return new SemiVariance();
+    }
+
+    @Override
+    public double expectedValue() {
+        return semiVariance;
+    }
 
     @Test
     public void testInsufficientData() {
-        double[] nothing = null;
-        SemiVariance sv = new SemiVariance();
+        SemiVariance sv = getUnivariateStatistic();
         try {
-            sv.evaluate(nothing);
-            Assert.fail("null is not a valid data array.");
+            sv.evaluate(null);
+            fail("null is not a valid data array.");
         } catch (NullArgumentException nae) {
         }
 
         try {
             sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
-            sv.evaluate(nothing);
-            Assert.fail("null is not a valid data array.");
+            sv.evaluate(null);
+            fail("null is not a valid data array.");
         } catch (NullArgumentException nae) {
         }
-        nothing = new double[] {};
-        Assert.assertTrue(Double.isNaN(sv.evaluate(nothing)));
+        assertTrue(Double.isNaN(sv.evaluate(new double[0])));
     }
 
     @Test
@@ -52,7 +83,7 @@ public class SemiVarianceTest {
         SemiVariance sv = new SemiVariance();
         double[] values = { 50.0d };
         double singletest = sv.evaluate(values);
-        Assert.assertEquals(0.0d, singletest, 0);
+        assertEquals(0.0d, singletest, 0);
     }
 
     @Test
@@ -60,7 +91,7 @@ public class SemiVarianceTest {
         SemiVariance sv = new SemiVariance(SemiVariance.UPSIDE_VARIANCE);
         double[] values = { 50.0d };
         double singletest = sv.evaluate(values);
-        Assert.assertEquals(0.0d, singletest, 0);
+        assertEquals(0.0d, singletest, 0);
     }
 
     @Test
@@ -68,18 +99,18 @@ public class SemiVarianceTest {
         final double[] values = { -2.0d, 2.0d, 4.0d, -2.0d, 22.0d, 11.0d, 3.0d, 14.0d, 5.0d };
         final int length = values.length;
         final double mean = StatUtils.mean(values); // 6.333...
-        final SemiVariance sv = new SemiVariance();  // Default bias correction is true
+        final SemiVariance sv = getUnivariateStatistic(); // Default bias correction is true
         final double downsideSemiVariance = sv.evaluate(values); // Downside is the default
-        Assert.assertEquals(TestUtils.sumSquareDev(new double[] {-2d, 2d, 4d, -2d, 3d, 5d}, mean) / (length - 1),
-                downsideSemiVariance, 1E-14);
+        assertEquals(TestUtils.sumSquareDev(new double[] {-2d, 2d, 4d, -2d, 3d, 5d}, mean) / (length - 1),
+                     downsideSemiVariance, 1E-14);
 
         sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
         final double upsideSemiVariance = sv.evaluate(values);
-        Assert.assertEquals(TestUtils.sumSquareDev(new double[] {22d, 11d, 14d}, mean) / (length - 1),
-                upsideSemiVariance, 1E-14);
+        assertEquals(TestUtils.sumSquareDev(new double[] {22d, 11d, 14d}, mean) / (length - 1),
+                     upsideSemiVariance, 1E-14);
 
         // Verify that upper + lower semivariance against the mean sum to variance
-        Assert.assertEquals(StatUtils.variance(values), downsideSemiVariance + upsideSemiVariance, 10e-12);
+        assertEquals(StatUtils.variance(values), downsideSemiVariance + upsideSemiVariance, 10e-12);
     }
 
     @Test
@@ -88,11 +119,11 @@ public class SemiVarianceTest {
         SemiVariance sv = new SemiVariance(false);
 
         double singletest = sv.evaluate(values);
-        Assert.assertEquals(19.556d, singletest, 0.01d);
+        assertEquals(19.556d, singletest, 0.01d);
 
         sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
         singletest = sv.evaluate(values);
-        Assert.assertEquals(36.222d, singletest, 0.01d);
+        assertEquals(36.222d, singletest, 0.01d);
     }
 
     @Test
@@ -101,17 +132,17 @@ public class SemiVarianceTest {
         SemiVariance sv = new SemiVariance(false); // Turn off bias correction - use df = length
 
         double singletest = sv.evaluate(values, 1.0d, SemiVariance.DOWNSIDE_VARIANCE, false, 0, values.length);
-        Assert.assertEquals(TestUtils.sumSquareDev(new double[] { -2d, -2d }, 1.0d) / values.length,
-                singletest, 0.01d);
+        assertEquals(TestUtils.sumSquareDev(new double[] { -2d, -2d }, 1.0d) / values.length,
+                     singletest, 0.01d);
 
         singletest = sv.evaluate(values, 3.0d, SemiVariance.UPSIDE_VARIANCE, false, 0, values.length);
-        Assert.assertEquals(TestUtils.sumSquareDev(new double[] { 4d, 22d, 11d, 14d, 5d }, 3.0d) / values.length, singletest,
-                0.01d);
+        assertEquals(TestUtils.sumSquareDev(new double[] { 4d, 22d, 11d, 14d, 5d }, 3.0d) / values.length,
+                     singletest,
+                     0.01d);
     }
 
     /**
-     * Check that the lower + upper semivariance against the mean sum to the
-     * variance.
+     * Check that the lower + upper semivariance against the mean sum to the variance.
      */
     @Test
     public void testVarianceDecompMeanCutoff() {
@@ -122,7 +153,7 @@ public class SemiVarianceTest {
         final double lower = sv.evaluate(values);
         sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
         final double upper = sv.evaluate(values);
-        Assert.assertEquals(variance, lower + upper, 10e-12);
+        assertEquals(variance, lower + upper, 10e-12);
     }
 
     /**
@@ -140,15 +171,16 @@ public class SemiVarianceTest {
         double lower = sv.evaluate(values, target);
         sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
         double upper = sv.evaluate(values, target);
-        Assert.assertEquals(totalSumOfSquares / (values.length - 1), lower + upper, 10e-12);
+        assertEquals(totalSumOfSquares / (values.length - 1), lower + upper, 10e-12);
     }
 
     @Test
     public void testNoVariance() {
         final double[] values = {100d, 100d, 100d, 100d};
-        SemiVariance sv = new SemiVariance();
-        Assert.assertEquals(0, sv.evaluate(values), 10E-12);
-        Assert.assertEquals(0, sv.evaluate(values, 100d), 10E-12);
-        Assert.assertEquals(0, sv.evaluate(values, 100d, SemiVariance.UPSIDE_VARIANCE, false, 0, values.length), 10E-12);
+        SemiVariance sv = getUnivariateStatistic();
+        assertEquals(0, sv.evaluate(values), 10E-12);
+        assertEquals(0, sv.evaluate(values, 100d), 10E-12);
+        assertEquals(0, sv.evaluate(values, 100d, SemiVariance.UPSIDE_VARIANCE, false, 0, values.length), 10E-12);
     }
+
 }

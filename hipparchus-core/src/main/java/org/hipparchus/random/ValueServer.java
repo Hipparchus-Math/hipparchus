@@ -112,7 +112,7 @@ public class ValueServer {
      * @return generated value
      * @throws IOException in REPLAY_MODE if a file I/O error occurs
      * @throws MathIllegalStateException if mode is not recognized
-     * @throws MathIllegalArgumentException if the underlying random generator thwrows one
+     * @throws MathIllegalArgumentException if the underlying random generator throws one
      */
     public double getNext() throws IOException, MathIllegalArgumentException, MathIllegalStateException {
         switch (mode) {
@@ -137,7 +137,7 @@ public class ValueServer {
      * @param values array to be filled
      * @throws IOException in REPLAY_MODE if a file I/O error occurs
      * @throws MathIllegalStateException if mode is not recognized
-     * @throws MathIllegalArgumentException if the underlying random generator thwrows one
+     * @throws MathIllegalArgumentException if the underlying random generator throws one
      */
     public void fill(double[] values)
         throws IOException, MathIllegalArgumentException, MathIllegalStateException {
@@ -154,7 +154,7 @@ public class ValueServer {
      * @return array of generated values
      * @throws IOException in REPLAY_MODE if a file I/O error occurs
      * @throws MathIllegalStateException if mode is not recognized
-     * @throws MathIllegalArgumentException if the underlying random generator thwrows one
+     * @throws MathIllegalArgumentException if the underlying random generator throws one
      */
     public double[] fill(int length)
         throws IOException, MathIllegalArgumentException, MathIllegalStateException {
@@ -413,7 +413,7 @@ public class ValueServer {
      * Gets a uniformly distributed random value with mean = mu.
      *
      * @return random uniform value
-     * @throws MathIllegalArgumentException if the underlying random generator thwrows one
+     * @throws MathIllegalArgumentException if the underlying random generator throws one
      */
     private double getNextUniform() throws MathIllegalArgumentException {
         return randomData.nextUniform(0, 2 * mu);
@@ -423,7 +423,7 @@ public class ValueServer {
      * Gets an exponentially distributed random value with mean = mu.
      *
      * @return random exponential value
-     * @throws MathIllegalArgumentException if the underlying random generator thwrows one
+     * @throws MathIllegalArgumentException if the underlying random generator throws one
      */
     private double getNextExponential() throws MathIllegalArgumentException {
         return randomData.nextExponential(mu);
@@ -434,7 +434,7 @@ public class ValueServer {
      * and standard deviation = sigma.
      *
      * @return random Gaussian value
-     * @throws MathIllegalArgumentException if the underlying random generator thwrows one
+     * @throws MathIllegalArgumentException if the underlying random generator throws one
      */
     private double getNextGaussian() throws MathIllegalArgumentException {
         return randomData.nextGaussian(mu, sigma);

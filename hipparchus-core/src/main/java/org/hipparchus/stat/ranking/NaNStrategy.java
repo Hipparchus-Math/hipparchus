@@ -47,7 +47,6 @@ public enum NaNStrategy {
     /** NaNs are left in place */
     FIXED,
 
-    /** NaNs result in an exception
-     */
+    /** NaNs result in an exception */
     FAILED
 }

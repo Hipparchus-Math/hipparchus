@@ -33,6 +33,7 @@ import org.hipparchus.stat.descriptive.summary.Product;
 import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.stat.descriptive.summary.SumOfLogs;
 import org.hipparchus.stat.descriptive.summary.SumOfSquares;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -677,10 +678,7 @@ public final class StatUtils {
         throws MathIllegalArgumentException {
 
         int n = sample1.length;
-        if (n != sample2.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   n, sample2.length);
-        }
+        MathArrays.checkEqualLength(sample1, sample2);
         if (n <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DIMENSION);
         }
@@ -725,10 +723,7 @@ public final class StatUtils {
         double sum2 = 0d;
         double diff = 0d;
         int n = sample1.length;
-        if (n != sample2.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   n, sample2.length);
-        }
+        MathArrays.checkEqualLength(sample1, sample2);
         if (n < 2) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    n, 2);

@@ -23,10 +23,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.hipparchus.distribution.EnumeratedDistribution;
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
+import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Pair;
 
@@ -146,11 +146,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      */
     private static List<Pair<Double, Double>> createDistribution(double[] singletons,
                                                                  double[] probabilities) {
-        if (singletons.length != probabilities.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   probabilities.length, singletons.length);
-        }
-
+        MathArrays.checkEqualLength(singletons, probabilities);
         final List<Pair<Double, Double>> samples = new ArrayList<Pair<Double, Double>>(singletons.length);
 
         for (int i = 0; i < singletons.length; i++) {

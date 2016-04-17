@@ -23,14 +23,14 @@ import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
 
 /**
- *  Value object representing the results of a univariate statistical summary.
- *
+ * Value object representing the results of a univariate
+ * statistical summary.
  */
-public class StatisticalSummaryValues implements Serializable,
-    StatisticalSummary {
+public class StatisticalSummaryValues
+    implements Serializable, StatisticalSummary {
 
     /** Serialization id */
-    private static final long serialVersionUID = -5108854841843722536L;
+    private static final long serialVersionUID = 20160406L;
 
     /** The sample mean */
     private final double mean;
@@ -51,7 +51,7 @@ public class StatisticalSummaryValues implements Serializable,
     private final double sum;
 
     /**
-      * Constructor
+      * Constructor.
       *
       * @param mean  the sample mean
       * @param variance  the sample variance
@@ -61,7 +61,7 @@ public class StatisticalSummaryValues implements Serializable,
       * @param sum  the sum of the values
      */
     public StatisticalSummaryValues(double mean, double variance, long n,
-        double max, double min, double sum) {
+                                    double max, double min, double sum) {
         super();
         this.mean = mean;
         this.variance = variance;
@@ -129,8 +129,8 @@ public class StatisticalSummaryValues implements Serializable,
 
     /**
      * Returns true iff <code>object</code> is a
-     * <code>StatisticalSummaryValues</code> instance and all statistics have
-     *  the same values as this.
+     * <code>StatisticalSummaryValues</code> instance and all
+     * statistics have the same values as this.
      *
      * @param object the object to test equality against.
      * @return true if object equals this
@@ -176,15 +176,14 @@ public class StatisticalSummaryValues implements Serializable,
      */
     @Override
     public String toString() {
-        StringBuffer outBuffer = new StringBuffer();
+        StringBuilder outBuffer = new StringBuilder();
         String endl = "\n";
         outBuffer.append("StatisticalSummaryValues:").append(endl);
         outBuffer.append("n: ").append(getN()).append(endl);
         outBuffer.append("min: ").append(getMin()).append(endl);
         outBuffer.append("max: ").append(getMax()).append(endl);
         outBuffer.append("mean: ").append(getMean()).append(endl);
-        outBuffer.append("std dev: ").append(getStandardDeviation())
-            .append(endl);
+        outBuffer.append("std dev: ").append(getStandardDeviation()).append(endl);
         outBuffer.append("variance: ").append(getVariance()).append(endl);
         outBuffer.append("sum: ").append(getSum()).append(endl);
         return outBuffer.toString();

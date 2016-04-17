@@ -23,6 +23,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implements Chi-Square test statistics.
@@ -80,10 +81,7 @@ public class ChiSquareTest {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    expected.length, 2);
         }
-        if (expected.length != observed.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   expected.length, observed.length);
-        }
+        MathUtils.checkDimension(expected.length, observed.length);
         MathArrays.checkPositive(expected);
         MathArrays.checkNonNegative(observed);
 
@@ -406,10 +404,7 @@ public class ChiSquareTest {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    observed1.length, 2);
         }
-        if (observed1.length != observed2.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   observed1.length, observed2.length);
-        }
+        MathUtils.checkDimension(observed1.length, observed2.length);
 
         // Ensure non-negative counts
         MathArrays.checkNonNegative(observed1);

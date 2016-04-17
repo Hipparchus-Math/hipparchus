@@ -23,17 +23,13 @@ import org.hipparchus.TestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.random.CorrelatedRandomVectorGenerator;
-import org.hipparchus.random.GaussianRandomGenerator;
-import org.hipparchus.random.JDKRandomGenerator;
-import org.hipparchus.random.NormalizedRandomGenerator;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.correlation.StorelessCovariance;
-import org.hipparchus.stat.descriptive.moment.VectorialCovariance;
-import org.hipparchus.stat.descriptive.moment.VectorialMean;
+import org.hipparchus.stat.descriptive.moment.Mean;
+import org.hipparchus.stat.descriptive.vector.VectorialCovariance;
+import org.hipparchus.stat.descriptive.vector.VectorialStorelessStatistic;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 public class CorrelatedRandomVectorGeneratorTest {
     private double[] mean;
@@ -122,7 +118,8 @@ public class CorrelatedRandomVectorGeneratorTest {
     @Test
     public void testMeanAndCovariance() {
 
-        VectorialMean meanStat = new VectorialMean(mean.length);
+        VectorialStorelessStatistic meanStat =
+                new VectorialStorelessStatistic(mean.length, new Mean());
         VectorialCovariance covStat = new VectorialCovariance(mean.length, true);
         for (int i = 0; i < 5000; ++i) {
             double[] v = generator.nextVector();

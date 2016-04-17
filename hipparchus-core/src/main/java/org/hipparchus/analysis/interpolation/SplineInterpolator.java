@@ -63,14 +63,11 @@ public class SplineInterpolator implements UnivariateInterpolator {
     @Override
     public PolynomialSplineFunction interpolate(double x[], double y[])
         throws MathIllegalArgumentException {
-        if (x.length != y.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   x.length, y.length);
-        }
 
+        MathArrays.checkEqualLength(x, y);
         if (x.length < 3) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_POINTS,
-                                                x.length, 3, true);
+                                                   x.length, 3, true);
         }
 
         // Number of intervals.  The number of data points is n + 1.

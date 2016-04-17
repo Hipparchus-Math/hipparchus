@@ -17,29 +17,19 @@
 package org.hipparchus.stat.descriptive.moment;
 
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link UnivariateStatistic} class.
+ * Test cases for the {@link GeometricMean} class.
  */
 public class GeometricMeanTest extends StorelessUnivariateStatisticAbstractTest{
 
-    protected GeometricMean stat;
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public GeometricMean getUnivariateStatistic() {
         return new GeometricMean();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double expectedValue() {
         return this.geoMean;
@@ -47,7 +37,7 @@ public class GeometricMeanTest extends StorelessUnivariateStatisticAbstractTest{
 
     @Test
     public void testSpecialValues() {
-        GeometricMean mean = new GeometricMean();
+        GeometricMean mean = getUnivariateStatistic();
         // empty
         Assert.assertTrue(Double.isNaN(mean.getResult()));
 

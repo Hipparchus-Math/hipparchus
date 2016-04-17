@@ -19,6 +19,7 @@ package org.hipparchus.analysis.interpolation;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Generates a {@link BicubicInterpolatingFunction bicubic interpolating
@@ -49,11 +50,7 @@ public class BicubicInterpolator
         if (xval.length == 0 || yval.length == 0 || fval.length == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
-        if (xval.length != fval.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xval.length, fval.length);
-        }
-
+        MathUtils.checkDimension(xval.length, fval.length);
         MathArrays.checkOrder(xval);
         MathArrays.checkOrder(yval);
 

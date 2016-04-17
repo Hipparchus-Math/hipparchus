@@ -21,62 +21,17 @@ import java.util.Locale;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.stat.descriptive.MultivariateSummaryStatistics;
-import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
-import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.util.FastMath;
-import org.junit.Test;
 import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link MultivariateSummaryStatistics} class.
- *
  */
-
 public class MultivariateSummaryStatisticsTest {
 
     protected MultivariateSummaryStatistics createMultivariateSummaryStatistics(int k, boolean isCovarianceBiasCorrected) {
         return new MultivariateSummaryStatistics(k, isCovarianceBiasCorrected);
-    }
-
-    @Test
-    public void testSetterInjection() {
-        MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(2, true);
-        u.setMeanImpl(new StorelessUnivariateStatistic[] {
-                        new sumMean(), new sumMean()
-                      });
-        u.addValue(new double[] { 1, 2 });
-        u.addValue(new double[] { 3, 4 });
-        Assert.assertEquals(4, u.getMean()[0], 1E-14);
-        Assert.assertEquals(6, u.getMean()[1], 1E-14);
-        u.clear();
-        u.addValue(new double[] { 1, 2 });
-        u.addValue(new double[] { 3, 4 });
-        Assert.assertEquals(4, u.getMean()[0], 1E-14);
-        Assert.assertEquals(6, u.getMean()[1], 1E-14);
-        u.clear();
-        u.setMeanImpl(new StorelessUnivariateStatistic[] {
-                        new Mean(), new Mean()
-                      }); // OK after clear
-        u.addValue(new double[] { 1, 2 });
-        u.addValue(new double[] { 3, 4 });
-        Assert.assertEquals(2, u.getMean()[0], 1E-14);
-        Assert.assertEquals(3, u.getMean()[1], 1E-14);
-        Assert.assertEquals(2, u.getDimension());
-    }
-
-    @Test
-    public void testSetterIllegalState() {
-        MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(2, true);
-        u.addValue(new double[] { 1, 2 });
-        u.addValue(new double[] { 3, 4 });
-        try {
-            u.setMeanImpl(new StorelessUnivariateStatistic[] { new sumMean(), new sumMean() });
-            Assert.fail("Expecting MathIllegalStateException");
-        } catch (MathIllegalStateException ex) {
-            // expected
-        }
     }
 
     @Test
@@ -100,83 +55,6 @@ public class MultivariateSummaryStatisticsTest {
                      "covariance: Array2DRowRealMatrix{{1.0,-1.0},{-1.0,1.0}}" +suffix,
                      stats.toString().replaceAll("([0-9]+\\.[0-9][0-9][0-9])[0-9]+", "$1..."));
         Locale.setDefault(d);
-    }
-
-    @Test
-    public void testShuffledStatistics() {
-        // the purpose of this test is only to check the get/set methods
-        // we are aware shuffling statistics like this is really not
-        // something sensible to do in production ...
-        MultivariateSummaryStatistics reference = createMultivariateSummaryStatistics(2, true);
-        MultivariateSummaryStatistics shuffled  = createMultivariateSummaryStatistics(2, true);
-
-        StorelessUnivariateStatistic[] tmp = shuffled.getGeoMeanImpl();
-        shuffled.setGeoMeanImpl(shuffled.getMeanImpl());
-        shuffled.setMeanImpl(shuffled.getMaxImpl());
-        shuffled.setMaxImpl(shuffled.getMinImpl());
-        shuffled.setMinImpl(shuffled.getSumImpl());
-        shuffled.setSumImpl(shuffled.getSumsqImpl());
-        shuffled.setSumsqImpl(shuffled.getSumLogImpl());
-        shuffled.setSumLogImpl(tmp);
-
-        for (int i = 100; i > 0; --i) {
-            reference.addValue(new double[] {i, i});
-            shuffled.addValue(new double[] {i, i});
-        }
-
-        TestUtils.assertEquals(reference.getMean(),          shuffled.getGeometricMean(), 1.0e-10);
-        TestUtils.assertEquals(reference.getMax(),           shuffled.getMean(),          1.0e-10);
-        TestUtils.assertEquals(reference.getMin(),           shuffled.getMax(),           1.0e-10);
-        TestUtils.assertEquals(reference.getSum(),           shuffled.getMin(),           1.0e-10);
-        TestUtils.assertEquals(reference.getSumSq(),         shuffled.getSum(),           1.0e-10);
-        TestUtils.assertEquals(reference.getSumLog(),        shuffled.getSumSq(),         1.0e-10);
-        TestUtils.assertEquals(reference.getGeometricMean(), shuffled.getSumLog(),        1.0e-10);
-
-    }
-
-    /**
-     * Bogus mean implementation to test setter injection.
-     * Returns the sum instead of the mean.
-     */
-    static class sumMean implements StorelessUnivariateStatistic {
-        private double sum = 0;
-        private long n = 0;
-        @Override
-        public double evaluate(double[] values, int begin, int length) {
-            return 0;
-        }
-        @Override
-        public double evaluate(double[] values) {
-            return 0;
-        }
-        @Override
-        public void clear() {
-          sum = 0;
-          n = 0;
-        }
-        @Override
-        public long getN() {
-            return n;
-        }
-        @Override
-        public double getResult() {
-            return sum;
-        }
-        @Override
-        public void increment(double d) {
-            sum += d;
-            n++;
-        }
-        @Override
-        public void incrementAll(double[] values, int start, int length) {
-        }
-        @Override
-        public void incrementAll(double[] values) {
-        }
-        @Override
-        public StorelessUnivariateStatistic copy() {
-            return new sumMean();
-        }
     }
 
     @Test

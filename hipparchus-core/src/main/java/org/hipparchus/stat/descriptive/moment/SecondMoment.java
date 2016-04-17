@@ -25,32 +25,32 @@ import org.hipparchus.util.MathUtils;
  * Computes a statistic related to the Second Central Moment.  Specifically,
  * what is computed is the sum of squared deviations from the sample mean.
  * <p>
- * The following recursive updating formula is used:</p>
+ * The following recursive updating formula is used:
  * <p>
  * Let <ul>
  * <li> dev = (current obs - previous mean) </li>
  * <li> n = number of observations (including current obs) </li>
  * </ul>
- * Then</p>
+ * Then
  * <p>
- * new value = old value + dev^2 * (n -1) / n.</p>
+ * new value = old value + dev^2 * (n -1) / n.
  * <p>
  * Returns <code>Double.NaN</code> if no data values have been added and
  * returns <code>0</code> if there is just one value in the data set.
  * Note that Double.NaN may also be returned if the input includes NaN
- * and / or infinite values.</p>
+ * and / or infinite values.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
 public class SecondMoment extends FirstMoment implements Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
 
-    /** second moment of values that have been added */
+    /** Second moment of values that have been added */
     protected double m2;
 
     /**
@@ -73,9 +73,7 @@ public class SecondMoment extends FirstMoment implements Serializable {
         this.m2 = original.m2;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void increment(final double d) {
         if (n < 1) {
@@ -85,26 +83,20 @@ public class SecondMoment extends FirstMoment implements Serializable {
         m2 += ((double) n - 1) * dev * nDev;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         super.clear();
         m2 = Double.NaN;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public double getResult() {
         return m2;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public SecondMoment copy() {
         SecondMoment result = new SecondMoment();
@@ -115,7 +107,8 @@ public class SecondMoment extends FirstMoment implements Serializable {
 
     /**
      * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
+     * <p>
+     * Neither source nor dest can be null.
      *
      * @param source SecondMoment to copy
      * @param dest SecondMoment to copy to

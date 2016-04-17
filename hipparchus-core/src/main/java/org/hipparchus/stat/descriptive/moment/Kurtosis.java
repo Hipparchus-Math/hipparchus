@@ -29,22 +29,22 @@ import org.hipparchus.util.MathUtils;
 /**
  * Computes the Kurtosis of the available values.
  * <p>
- * We use the following (unbiased) formula to define kurtosis:</p>
+ * We use the following (unbiased) formula to define kurtosis:
  * <p>
  * kurtosis = { [n(n+1) / (n -1)(n - 2)(n-3)] sum[(x_i - mean)^4] / std^4 } - [3(n-1)^2 / (n-2)(n-3)]
- * </p><p>
+ * <p>
  * where n is the number of values, mean is the {@link Mean} and std is the
- * {@link StandardDeviation}</p>
+ * {@link StandardDeviation}.
  * <p>
  * Note that this statistic is undefined for n < 4.  <code>Double.Nan</code>
  * is returned when there is not sufficient data to compute the statistic.
  * Note that Double.NaN may also be returned if the input includes NaN
- * and / or infinite values.</p>
+ * and / or infinite values.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
 public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements Serializable {
 
@@ -58,7 +58,7 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
      * Determines whether or not this statistic can be incremented or cleared.
      * <p>
      * Statistics based on (constructed from) external moments cannot
-     * be incremented or cleared.</p>
+     * be incremented or cleared.
      */
     protected boolean incMoment;
 
@@ -104,9 +104,7 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public double getResult() {
         double kurtosis = Double.NaN;
@@ -125,9 +123,7 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
         return kurtosis;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         if (incMoment) {
@@ -135,9 +131,7 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return moment.getN();
@@ -196,20 +190,16 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
         return kurt;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Kurtosis copy() {
-        Kurtosis result = new Kurtosis();
-        // No try-catch because args are guaranteed non-null
-        copy(this, result);
-        return result;
+        return new Kurtosis(this);
     }
 
     /**
      * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
+     * <p>
+     * Neither source nor dest can be null.
      *
      * @param source Kurtosis to copy
      * @param dest Kurtosis to copy to

@@ -102,12 +102,9 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
         }
         if (knots.length < 2) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION,
-                                                2, knots.length, false);
+                                                   2, knots.length, false);
         }
-        if (knots.length - 1 != polynomials.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   polynomials.length, knots.length);
-        }
+        MathUtils.checkDimension(polynomials.length, knots.length - 1);
         MathArrays.checkOrder(knots);
 
         this.n = knots.length -1;

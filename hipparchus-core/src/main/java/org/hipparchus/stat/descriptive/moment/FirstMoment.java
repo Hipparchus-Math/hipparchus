@@ -23,29 +23,29 @@ import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.hipparchus.util.MathUtils;
 
 /**
- * Computes the first moment (arithmetic mean).  Uses the definitional formula:
+ * Computes the first moment (arithmetic mean). Uses the definitional formula:
  * <p>
- * mean = sum(x_i) / n </p>
+ * mean = sum(x_i) / n
  * <p>
- * where <code>n</code> is the number of observations. </p>
+ * where <code>n</code> is the number of observations.
  * <p>
  * To limit numeric errors, the value of the statistic is computed using the
- * following recursive updating algorithm: </p>
+ * following recursive updating algorithm:
  * <p>
  * <ol>
  * <li>Initialize <code>m = </code> the first value</li>
  * <li>For each additional value, update using <br>
  *   <code>m = m + (new value - m) / (number of observations)</code></li>
- * </ol></p>
+ * </ol>
  * <p>
- *  Returns <code>Double.NaN</code> if the dataset is empty. Note that
- *  Double.NaN may also be returned if the input includes NaN and / or infinite
- *  values.</p>
+ * Returns <code>Double.NaN</code> if the dataset is empty. Note that
+ * Double.NaN may also be returned if the input includes NaN and / or infinite
+ * values.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
 class FirstMoment extends AbstractStorelessUnivariateStatistic
     implements Serializable {
@@ -73,7 +73,7 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
     protected double nDev;
 
     /**
-     * Create a FirstMoment instance
+     * Create a FirstMoment instance.
      */
     FirstMoment() {
         n = 0;
@@ -94,9 +94,7 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
          copy(original, this);
      }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
      @Override
     public void increment(final double d) {
         if (n == 0) {
@@ -109,9 +107,7 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
         m1 += nDev;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         m1 = Double.NaN;
@@ -120,25 +116,19 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
         nDev = Double.NaN;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public double getResult() {
         return m1;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return n;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public FirstMoment copy() {
         FirstMoment result = new FirstMoment();
@@ -149,7 +139,8 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
 
     /**
      * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
+     * <p>
+     * Neither source nor dest can be null.
      *
      * @param source FirstMoment to copy
      * @param dest FirstMoment to copy to

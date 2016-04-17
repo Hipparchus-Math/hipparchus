@@ -33,7 +33,7 @@ import org.hipparchus.util.MathUtils;
  * geometric mean </a> of the available values.
  * <p>
  * Uses a {@link SumOfLogs} instance to compute sum of logs and returns
- * <code> exp( 1/n  (sum of logs) ).</code>  Therefore, </p>
+ * <code> exp( 1/n  (sum of logs) ).</code>  Therefore,
  * <ul>
  * <li>If any of values are < 0, the result is <code>NaN.</code></li>
  * <li>If all values are non-negative and less than
@@ -42,12 +42,12 @@ import org.hipparchus.util.MathUtils;
  * <li>If both <code>Double.POSITIVE_INFINITY</code> and
  * <code>Double.NEGATIVE_INFINITY</code> are among the values, the result is
  * <code>NaN.</code></li>
- * </ul> </p>
+ * </ul>
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
 public class GeometricMean extends AbstractStorelessUnivariateStatistic implements Serializable {
 
@@ -65,6 +65,14 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
     }
 
     /**
+     * Create a GeometricMean instance using the given SumOfLogs instance
+     * @param sumOfLogs sum of logs instance to use for computation.
+     */
+    public GeometricMean(SumOfLogs sumOfLogs) {
+        this.sumOfLogs = sumOfLogs;
+    }
+
+    /**
      * Copy constructor, creates a new {@code GeometricMean} identical
      * to the {@code original}.
      *
@@ -76,36 +84,19 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
         copy(original, this);
     }
 
-    /**
-     * Create a GeometricMean instance using the given SumOfLogs instance
-     * @param sumOfLogs sum of logs instance to use for computation.
-     */
-    public GeometricMean(SumOfLogs sumOfLogs) {
-        this.sumOfLogs = sumOfLogs;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public GeometricMean copy() {
-        GeometricMean result = new GeometricMean();
-        // no try-catch or advertised exception because args guaranteed non-null
-        copy(this, result);
-        return result;
+        return new GeometricMean(this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void increment(final double d) {
         sumOfLogs.increment(d);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public double getResult() {
         if (sumOfLogs.getN() > 0) {
@@ -115,9 +106,7 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         sumOfLogs.clear();
@@ -127,9 +116,7 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
      * Returns the geometric mean of the entries in the specified portion
      * of the input array.
      * <p>
-     * See {@link GeometricMean} for details on the computing algorithm.</p>
-     * <p>
-     * Throws <code>IllegalArgumentException</code> if the array is null.</p>
+     * See {@link GeometricMean} for details on the computing algorithm.
      *
      * @param values input array containing the values
      * @param begin first array element to include
@@ -145,19 +132,18 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
         return FastMath.exp(sumOfLogs.evaluate(values, begin, length) / length);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return sumOfLogs.getN();
     }
 
     /**
-     * <p>Sets the implementation for the sum of logs.</p>
-     * <p>This method must be activated before any data has been added - i.e.,
+     * Sets the implementation for the sum of logs.
+     * <p>
+     * This method must be activated before any data has been added - i.e.,
      * before {@link #increment(double) increment} has been used to add data;
-     * otherwise an IllegalStateException will be thrown.</p>
+     * otherwise an IllegalStateException will be thrown.
      *
      * @param sumLogImpl the StorelessUnivariateStatistic instance to use
      * for computing the log sum
@@ -181,7 +167,8 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
 
     /**
      * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
+     * <p>
+     * Neither source nor dest can be null.
      *
      * @param source GeometricMean to copy
      * @param dest GeometricMean to copy to

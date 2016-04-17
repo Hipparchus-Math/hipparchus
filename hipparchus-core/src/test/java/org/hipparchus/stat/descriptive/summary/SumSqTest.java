@@ -16,31 +16,23 @@
  */
 package org.hipparchus.stat.descriptive.summary;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.summary.SumOfSquares;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Test cases for the {@link SumOfSquares} class.
  */
-public class SumSqTest extends StorelessUnivariateStatisticAbstractTest{
+public class SumSqTest extends StorelessUnivariateStatisticAbstractTest {
 
-    protected SumOfSquares stat;
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public SumOfSquares getUnivariateStatistic() {
         return new SumOfSquares();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double expectedValue() {
         return this.sumSq;
@@ -48,23 +40,23 @@ public class SumSqTest extends StorelessUnivariateStatisticAbstractTest{
 
     @Test
     public void testSpecialValues() {
-        SumOfSquares sumSq = new SumOfSquares();
-        Assert.assertEquals(0, sumSq.getResult(), 0);
+        SumOfSquares sumSq = getUnivariateStatistic();
+        assertEquals(0, sumSq.getResult(), 0);
         sumSq.increment(2d);
-        Assert.assertEquals(4d, sumSq.getResult(), 0);
+        assertEquals(4d, sumSq.getResult(), 0);
         sumSq.increment(Double.POSITIVE_INFINITY);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, sumSq.getResult(), 0);
+        assertEquals(Double.POSITIVE_INFINITY, sumSq.getResult(), 0);
         sumSq.increment(Double.NEGATIVE_INFINITY);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, sumSq.getResult(), 0);
+        assertEquals(Double.POSITIVE_INFINITY, sumSq.getResult(), 0);
         sumSq.increment(Double.NaN);
-        Assert.assertTrue(Double.isNaN(sumSq.getResult()));
+        assertTrue(Double.isNaN(sumSq.getResult()));
         sumSq.increment(1);
-        Assert.assertTrue(Double.isNaN(sumSq.getResult()));
+        assertTrue(Double.isNaN(sumSq.getResult()));
     }
 
     @Override
     protected void checkClearValue(StorelessUnivariateStatistic statistic) {
-        Assert.assertEquals(0, statistic.getResult(), 0);
+        assertEquals(0, statistic.getResult(), 0);
     }
 
 }

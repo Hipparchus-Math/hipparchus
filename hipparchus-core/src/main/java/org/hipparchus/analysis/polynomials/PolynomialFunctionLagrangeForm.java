@@ -312,10 +312,7 @@ public class PolynomialFunctionLagrangeForm implements UnivariateFunction {
      */
     public static boolean verifyInterpolationArray(double x[], double y[], boolean abort)
         throws MathIllegalArgumentException {
-        if (x.length != y.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   x.length, y.length);
-        }
+        MathArrays.checkEqualLength(x, y);
         if (x.length < 2) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.WRONG_NUMBER_OF_POINTS, 2, x.length, true);
         }

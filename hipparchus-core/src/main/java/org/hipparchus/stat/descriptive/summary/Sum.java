@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
+import org.hipparchus.stat.descriptive.WeightedEvaluation;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -30,24 +31,23 @@ import org.hipparchus.util.MathUtils;
  * <p>
  * If there are no values in the dataset, then 0 is returned.
  * If any of the values are
- * <code>NaN</code>, then <code>NaN</code> is returned.</p>
+ * <code>NaN</code>, then <code>NaN</code> is returned.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
-public class Sum extends AbstractStorelessUnivariateStatistic implements Serializable {
+public class Sum extends AbstractStorelessUnivariateStatistic
+    implements WeightedEvaluation, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
 
-    /** */
+    /** The number of values that have been added */
     private long n;
 
-    /**
-     * The currently running sum.
-     */
+    /** The currently running sum */
     private double value;
 
     /**
@@ -69,34 +69,26 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
         copy(original, this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void increment(final double d) {
         value += d;
         n++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public double getResult() {
         return value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return n;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         value = 0;
@@ -106,8 +98,6 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
     /**
      * The sum of the entries in the specified portion of the input array,
      * or 0 if the designated subarray is empty.
-     * <p>
-     * Throws <code>MathIllegalArgumentException</code> if the array is null.</p>
      *
      * @param values the input array
      * @param begin index of the first array element to include
@@ -156,6 +146,7 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
      * @return the sum of the values or 0 if length = 0
      * @throws MathIllegalArgumentException if the parameters are not valid
      */
+    @Override
     public double evaluate(final double[] values, final double[] weights,
                            final int begin, final int length) throws MathIllegalArgumentException {
         double sum = Double.NaN;
@@ -168,45 +159,16 @@ public class Sum extends AbstractStorelessUnivariateStatistic implements Seriali
         return sum;
     }
 
-    /**
-     * The weighted sum of the entries in the the input array.
-     * <p>
-     * Throws <code>MathIllegalArgumentException</code> if any of the following are true:
-     * <ul><li>the values array is null</li>
-     *     <li>the weights array is null</li>
-     *     <li>the weights array does not have the same length as the values array</li>
-     *     <li>the weights array contains one or more infinite values</li>
-     *     <li>the weights array contains one or more NaN values</li>
-     *     <li>the weights array contains negative values</li>
-     * </ul></p>
-     * <p>
-     * Uses the formula, <pre>
-     *    weighted sum = &Sigma;(values[i] * weights[i])
-     * </pre></p>
-     *
-     * @param values the input array
-     * @param weights the weights array
-     * @return the sum of the values or Double.NaN if length = 0
-     * @throws MathIllegalArgumentException if the parameters are not valid
-     */
-    public double evaluate(final double[] values, final double[] weights) throws MathIllegalArgumentException {
-        return evaluate(values, weights, 0, values.length);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Sum copy() {
-        Sum result = new Sum();
-        // No try-catch or advertised exception because args are valid
-        copy(this, result);
-        return result;
+        return new Sum(this);
     }
 
     /**
      * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
+     * <p>
+     * Neither source nor dest can be null.
      *
      * @param source Sum to copy
      * @param dest Sum to copy to

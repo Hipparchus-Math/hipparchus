@@ -1,25 +1,29 @@
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
- * contributor license agreements. See the NOTICE file distributed with this
- * work for additional information regarding copyright ownership. The ASF
- * licenses this file to You under the Apache License, Version 2.0 (the
- * "License"); you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
- * or agreed to in writing, software distributed under the License is
- * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
- * KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.hipparchus.stat.descriptive;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Locale;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.stat.descriptive.DescriptiveStatistics;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.stat.descriptive.moment.Variance;
@@ -29,7 +33,6 @@ import org.hipparchus.stat.descriptive.rank.Percentile;
 import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.stat.descriptive.summary.SumOfSquares;
 import org.hipparchus.util.Precision;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -41,15 +44,24 @@ public class DescriptiveStatisticsTest {
         return new DescriptiveStatistics();
     }
 
+    protected DescriptiveStatistics.Builder createBuilder() {
+        return DescriptiveStatistics.builder();
+    }
+
     @Test
-    public void testSetterInjection() {
+    public void testCustomMeanImpl() {
         DescriptiveStatistics stats = createDescriptiveStatistics();
         stats.addValue(1);
         stats.addValue(3);
-        Assert.assertEquals(2, stats.getMean(), 1E-10);
+        assertEquals(2, stats.getMean(), 1E-10);
+
         // Now lets try some new math
-        stats.setMeanImpl(new deepMean());
-        Assert.assertEquals(42, stats.getMean(), 1E-10);
+        DescriptiveStatistics stats2 =
+                createBuilder().withMeanImpl(new DeepMean())
+                               .withInitialValues(stats.getValues())
+                               .build();
+
+        assertEquals(42, stats2.getMean(), 1E-10);
     }
 
     @Test
@@ -57,12 +69,9 @@ public class DescriptiveStatisticsTest {
         DescriptiveStatistics stats = createDescriptiveStatistics();
         stats.addValue(1);
         stats.addValue(3);
-        DescriptiveStatistics copy = new DescriptiveStatistics(stats);
-        Assert.assertEquals(2, copy.getMean(), 1E-10);
-        // Now lets try some new math
-        stats.setMeanImpl(new deepMean());
-        copy = stats.copy();
-        Assert.assertEquals(42, copy.getMean(), 1E-10);
+        assertEquals(2, stats.getMean(), 1E-10);
+        DescriptiveStatistics copy = stats.copy();
+        assertEquals(2, copy.getMean(), 1E-10);
     }
 
     @Test
@@ -73,19 +82,19 @@ public class DescriptiveStatisticsTest {
             stats.addValue(i + 1);
         }
         int refSum = (100 * 101) / 2;
-        Assert.assertEquals(refSum / 100.0, stats.getMean(), 1E-10);
-        Assert.assertEquals(300, stats.getWindowSize());
+        assertEquals(refSum / 100.0, stats.getMean(), 1E-10);
+        assertEquals(300, stats.getWindowSize());
         try {
             stats.setWindowSize(-3);
-            Assert.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException iae) {
             // expected
         }
-        Assert.assertEquals(300, stats.getWindowSize());
+        assertEquals(300, stats.getWindowSize());
         stats.setWindowSize(50);
-        Assert.assertEquals(50, stats.getWindowSize());
+        assertEquals(50, stats.getWindowSize());
         int refSum2 = refSum - (50 * 51) / 2;
-        Assert.assertEquals(refSum2 / 50.0, stats.getMean(), 1E-10);
+        assertEquals(refSum2 / 50.0, stats.getMean(), 1E-10);
     }
 
     @Test
@@ -95,16 +104,16 @@ public class DescriptiveStatisticsTest {
             stats.addValue(i);
         }
         int refSum = (100 * 101) / 2;
-        Assert.assertEquals(refSum / 100.0, stats.getMean(), 1E-10);
+        assertEquals(refSum / 100.0, stats.getMean(), 1E-10);
         double[] v = stats.getValues();
         for (int i = 0; i < v.length; ++i) {
-            Assert.assertEquals(100.0 - i, v[i], 1.0e-10);
+            assertEquals(100.0 - i, v[i], 1.0e-10);
         }
         double[] s = stats.getSortedValues();
         for (int i = 0; i < s.length; ++i) {
-            Assert.assertEquals(i + 1.0, s[i], 1.0e-10);
+            assertEquals(i + 1.0, s[i], 1.0e-10);
         }
-        Assert.assertEquals(12.0, stats.getElement(88), 1.0e-10);
+        assertEquals(12.0, stats.getElement(88), 1.0e-10);
     }
 
     @Test
@@ -120,7 +129,7 @@ public class DescriptiveStatisticsTest {
         }
         expected = Math.sqrt(expected);
 
-        Assert.assertEquals(expected, stats.getQuadraticMean(), Math.ulp(expected));
+        assertEquals(expected, stats.getQuadraticMean(), Math.ulp(expected));
     }
 
     @Test
@@ -131,7 +140,7 @@ public class DescriptiveStatisticsTest {
         stats.addValue(3);
         Locale d = Locale.getDefault();
         Locale.setDefault(Locale.US);
-        Assert.assertEquals("DescriptiveStatistics:\n" +
+        assertEquals("DescriptiveStatistics:\n" +
                      "n: 3\n" +
                      "min: 1.0\n" +
                      "max: 3.0\n" +
@@ -144,64 +153,31 @@ public class DescriptiveStatisticsTest {
     }
 
     @Test
-    public void testShuffledStatistics() {
-        // the purpose of this test is only to check the get/set methods
-        // we are aware shuffling statistics like this is really not
-        // something sensible to do in production ...
-        DescriptiveStatistics reference = createDescriptiveStatistics();
-        DescriptiveStatistics shuffled  = createDescriptiveStatistics();
-
-        UnivariateStatistic tmp = shuffled.getGeometricMeanImpl();
-        shuffled.setGeometricMeanImpl(shuffled.getMeanImpl());
-        shuffled.setMeanImpl(shuffled.getKurtosisImpl());
-        shuffled.setKurtosisImpl(shuffled.getSkewnessImpl());
-        shuffled.setSkewnessImpl(shuffled.getVarianceImpl());
-        shuffled.setVarianceImpl(shuffled.getMaxImpl());
-        shuffled.setMaxImpl(shuffled.getMinImpl());
-        shuffled.setMinImpl(shuffled.getSumImpl());
-        shuffled.setSumImpl(shuffled.getSumsqImpl());
-        shuffled.setSumsqImpl(tmp);
-
-        for (int i = 100; i > 0; --i) {
-            reference.addValue(i);
-            shuffled.addValue(i);
-        }
-
-        Assert.assertEquals(reference.getMean(),          shuffled.getGeometricMean(), 1.0e-10);
-        Assert.assertEquals(reference.getKurtosis(),      shuffled.getMean(),          1.0e-10);
-        Assert.assertEquals(reference.getSkewness(),      shuffled.getKurtosis(), 1.0e-10);
-        Assert.assertEquals(reference.getVariance(),      shuffled.getSkewness(), 1.0e-10);
-        Assert.assertEquals(reference.getMax(),           shuffled.getVariance(), 1.0e-10);
-        Assert.assertEquals(reference.getMin(),           shuffled.getMax(), 1.0e-10);
-        Assert.assertEquals(reference.getSum(),           shuffled.getMin(), 1.0e-10);
-        Assert.assertEquals(reference.getSumsq(),         shuffled.getSum(), 1.0e-10);
-        Assert.assertEquals(reference.getGeometricMean(), shuffled.getSumsq(), 1.0e-10);
-
-    }
-
-    @Test
-    public void testPercentileSetter() {
+    public void testPercentile() {
         DescriptiveStatistics stats = createDescriptiveStatistics();
+
         stats.addValue(1);
         stats.addValue(2);
         stats.addValue(3);
-        Assert.assertEquals(2, stats.getPercentile(50.0), 1E-10);
+        assertEquals(2, stats.getPercentile(50.0), 1E-10);
 
-        // Inject wrapped Percentile impl
-        stats.setPercentileImpl(new goodPercentile());
-        Assert.assertEquals(2, stats.getPercentile(50.0), 1E-10);
+        // Try wrapper impl
+        DescriptiveStatistics stats1 =
+            DescriptiveStatistics.builder()
+                                 .withInitialValues(stats.getValues())
+                                 .withPercentileImpl(new GoodPercentile())
+                                 .build();
+
+        assertEquals(2, stats1.getPercentile(50.0), 1E-10);
 
         // Try "new math" impl
-        stats.setPercentileImpl(new subPercentile());
-        Assert.assertEquals(10.0, stats.getPercentile(10.0), 1E-10);
+        DescriptiveStatistics stats2 =
+            DescriptiveStatistics.builder()
+                                 .withInitialValues(stats.getValues())
+                                 .withPercentileImpl(new SubPercentile())
+                                 .build();
 
-        // Try to set bad impl
-        try {
-            stats.setPercentileImpl(new badPercentile());
-            Assert.fail("Expecting MathIllegalArgumentException");
-        } catch (MathIllegalArgumentException ex) {
-            // expected
-        }
+        assertEquals(10.0, stats2.getPercentile(10.0), 1E-10);
     }
 
     @Test
@@ -212,28 +188,25 @@ public class DescriptiveStatisticsTest {
         }
         descriptiveStatistics.clear();
         descriptiveStatistics.addValue(1.2);
-        Assert.assertEquals(1, descriptiveStatistics.getN());
+        assertEquals(1, descriptiveStatistics.getN());
     }
 
     @Test
     public void testRemoval() {
-
         final DescriptiveStatistics dstat = createDescriptiveStatistics();
 
-        checkremoval(dstat, 1, 6.0, 0.0, Double.NaN);
-        checkremoval(dstat, 3, 5.0, 3.0, 4.5);
-        checkremoval(dstat, 6, 3.5, 2.5, 3.0);
-        checkremoval(dstat, 9, 3.5, 2.5, 3.0);
-        checkremoval(dstat, DescriptiveStatistics.INFINITE_WINDOW, 3.5, 2.5, 3.0);
-
+        checkRemoval(dstat, 1, 6.0, 0.0, Double.NaN);
+        checkRemoval(dstat, 3, 5.0, 3.0, 4.5);
+        checkRemoval(dstat, 6, 3.5, 2.5, 3.0);
+        checkRemoval(dstat, 9, 3.5, 2.5, 3.0);
+        checkRemoval(dstat, DescriptiveStatistics.INFINITE_WINDOW, 3.5, 2.5, 3.0);
     }
 
     @Test
     public void testSummaryConsistency() {
-        final DescriptiveStatistics dstats = new DescriptiveStatistics();
-        final SummaryStatistics sstats = new SummaryStatistics();
         final int windowSize = 5;
-        dstats.setWindowSize(windowSize);
+        final DescriptiveStatistics dstats = new DescriptiveStatistics(windowSize);
+        final SummaryStatistics sstats = new SummaryStatistics();
         final double tol = 1E-12;
         for (int i = 0; i < 20; i++) {
             dstats.addValue(i);
@@ -289,10 +262,10 @@ public class DescriptiveStatisticsTest {
 
         final double iqr = t - o;
         // System.out.println(String.format("25th percentile %s 75th percentile %s", o, t));
-        Assert.assertTrue(iqr >= 0);
+        assertTrue(iqr >= 0);
     }
 
-    public void checkremoval(DescriptiveStatistics dstat, int wsize,
+    public void checkRemoval(DescriptiveStatistics dstat, int wsize,
                              double mean1, double mean2, double mean3) {
 
         dstat.setWindowSize(wsize);
@@ -302,20 +275,19 @@ public class DescriptiveStatisticsTest {
             dstat.addValue(i);
         }
 
-        Assert.assertTrue(Precision.equalsIncludingNaN(mean1, dstat.getMean()));
+        assertTrue(Precision.equalsIncludingNaN(mean1, dstat.getMean()));
         dstat.replaceMostRecentValue(0);
-        Assert.assertTrue(Precision.equalsIncludingNaN(mean2, dstat.getMean()));
+        assertTrue(Precision.equalsIncludingNaN(mean2, dstat.getMean()));
         dstat.removeMostRecentValue();
-        Assert.assertTrue(Precision.equalsIncludingNaN(mean3, dstat.getMean()));
-
+        assertTrue(Precision.equalsIncludingNaN(mean3, dstat.getMean()));
     }
 
-    // Test UnivariateStatistics impls for setter injection tests
+    // Test UnivariateStatistics impls for custom statistics tests.
 
     /**
-     * A new way to compute the mean
+     * A new way to compute the mean.
      */
-    static class deepMean implements UnivariateStatistic {
+    static class DeepMean implements UnivariateStatistic {
 
         @Override
         public double evaluate(double[] values, int begin, int length) {
@@ -328,29 +300,40 @@ public class DescriptiveStatisticsTest {
         }
         @Override
         public UnivariateStatistic copy() {
-            return new deepMean();
+            return new DeepMean();
         }
     }
 
     /**
-     * Test percentile implementation - wraps a Percentile
+     * Test percentile implementation - wraps a Percentile.
      */
-    static class goodPercentile implements UnivariateStatistic {
+    static class GoodPercentile implements QuantiledUnivariateStatistic {
+
         private final Percentile percentile = new Percentile();
+
+        @Override
         public void setQuantile(double quantile) {
             percentile.setQuantile(quantile);
         }
+
+        @Override
+        public double getQuantile() {
+            return percentile.getQuantile();
+        }
+
+        @Override
+        public double evaluate(double[] values, int begin, int length, double p) {
+            return percentile.evaluate(values, begin, length, p);
+        }
+
         @Override
         public double evaluate(double[] values, int begin, int length) {
             return percentile.evaluate(values, begin, length);
         }
+
         @Override
-        public double evaluate(double[] values) {
-            return percentile.evaluate(values);
-        }
-        @Override
-        public UnivariateStatistic copy() {
-            goodPercentile result = new goodPercentile();
+        public QuantiledUnivariateStatistic copy() {
+            GoodPercentile result = new GoodPercentile();
             result.setQuantile(percentile.getQuantile());
             return result;
         }
@@ -358,42 +341,26 @@ public class DescriptiveStatisticsTest {
 
     /**
      * Test percentile subclass - another "new math" impl
-     * Always returns currently set quantile
+     * Always returns currently set quantile.
      */
-    static class subPercentile extends Percentile {
+    static class SubPercentile extends Percentile {
+        private static final long serialVersionUID = 1L;
+
         @Override
-        public double evaluate(double[] values, int begin, int length) {
+        public double evaluate(double[] values, int begin, int length, double p) {
             return getQuantile();
         }
+
         @Override
-        public double evaluate(double[] values) {
+        public double evaluate(double[] values, double p) {
             return getQuantile();
         }
-        private static final long serialVersionUID = 8040701391045914979L;
+
         @Override
         public Percentile copy() {
-            subPercentile result = new subPercentile();
+            SubPercentile result = new SubPercentile();
+            result.setQuantile(this.getQuantile());
             return result;
         }
     }
-
-    /**
-     * "Bad" test percentile implementation - no setQuantile
-     */
-    static class badPercentile implements UnivariateStatistic {
-        private final Percentile percentile = new Percentile();
-        @Override
-        public double evaluate(double[] values, int begin, int length) {
-            return percentile.evaluate(values, begin, length);
-        }
-        @Override
-        public double evaluate(double[] values) {
-            return percentile.evaluate(values);
-        }
-        @Override
-        public UnivariateStatistic copy() {
-            return new badPercentile();
-        }
-    }
-
 }

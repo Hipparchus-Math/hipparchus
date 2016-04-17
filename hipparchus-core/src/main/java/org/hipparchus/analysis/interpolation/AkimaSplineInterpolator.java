@@ -70,10 +70,7 @@ public class AkimaSplineInterpolator
             throw new NullArgumentException();
         }
 
-        if (xvals.length != yvals.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xvals.length, yvals.length);
-        }
+        MathArrays.checkEqualLength(xvals, yvals);
 
         if (xvals.length < MINIMUM_NUMBER_POINTS) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_POINTS,
@@ -170,15 +167,8 @@ public class AkimaSplineInterpolator
     private PolynomialSplineFunction interpolateHermiteSorted(double[] xvals,
                                                               double[] yvals,
                                                               double[] firstDerivatives) {
-        if (xvals.length != yvals.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xvals.length, yvals.length);
-        }
-
-        if (xvals.length != firstDerivatives.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   xvals.length, firstDerivatives.length);
-        }
+        MathArrays.checkEqualLength(xvals, yvals);
+        MathArrays.checkEqualLength(xvals, firstDerivatives);
 
         final int minimumLength = 2;
         if (xvals.length < minimumLength) {

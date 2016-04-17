@@ -25,6 +25,7 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.stat.descriptive.moment.Variance;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Abstract base class for implementations of MultipleLinearRegression.
@@ -105,15 +106,11 @@ public abstract class AbstractMultipleLinearRegression implements
      * <code>nvars + 1</code>
      */
     public void newSampleData(double[] data, int nobs, int nvars) {
-        if (data == null) {
-            throw new NullArgumentException();
-        }
-        if (data.length != nobs * (nvars + 1)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   data.length, nobs * (nvars + 1));
-        }
+        MathUtils.checkNotNull(data, LocalizedCoreFormats.INPUT_ARRAY);
+        MathUtils.checkDimension(data.length, nobs * (nvars + 1));
         if (nobs <= nvars) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE, nobs, nvars + 1);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_OBSERVED_POINTS_IN_SAMPLE,
+                                                   nobs, nvars + 1);
         }
         double[] y = new double[nobs];
         final int cols = noIntercept ? nvars: nvars + 1;
@@ -187,10 +184,7 @@ public abstract class AbstractMultipleLinearRegression implements
             final int nVars = x[0].length;
             final double[][] xAug = new double[x.length][nVars + 1];
             for (int i = 0; i < x.length; i++) {
-                if (x[i].length != nVars) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                           x[i].length, nVars);
-                }
+                MathUtils.checkDimension(x[i].length, nVars);
                 xAug[i][0] = 1.0d;
                 System.arraycopy(x[i], 0, xAug[i], 1, nVars);
             }
@@ -220,10 +214,7 @@ public abstract class AbstractMultipleLinearRegression implements
         if ((x == null) || (y == null)) {
             throw new NullArgumentException();
         }
-        if (x.length != y.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   y.length, x.length);
-        }
+        MathUtils.checkDimension(x.length, y.length);
         if (x.length == 0) {  // Must be no y data either
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
@@ -245,10 +236,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * @throws MathIllegalArgumentException if the covariance matrix is not square
      */
     protected void validateCovarianceData(double[][] x, double[][] covariance) {
-        if (x.length != covariance.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   x.length, covariance.length);
-        }
+        MathUtils.checkDimension(x.length, covariance.length);
         if (covariance.length > 0 && covariance.length != covariance[0].length) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    covariance.length, covariance[0].length);

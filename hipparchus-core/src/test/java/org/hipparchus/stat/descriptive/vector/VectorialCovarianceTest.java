@@ -15,14 +15,15 @@
 //specific language governing permissions and limitations
 //under the License.
 
-package org.hipparchus.stat.descriptive.moment;
+package org.hipparchus.stat.descriptive.vector;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.stat.descriptive.moment.VectorialCovariance;
 import org.junit.Test;
-import org.junit.Assert;
 
 public class VectorialCovarianceTest {
     private double[][] points;
@@ -41,10 +42,10 @@ public class VectorialCovarianceTest {
     public void testMismatch() {
         try {
             new VectorialCovariance(8, true).increment(new double[5]);
-            Assert.fail("an exception should have been thrown");
+            fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException dme) {
-            Assert.assertEquals(5, ((Integer) dme.getParts()[0]).intValue());
-            Assert.assertEquals(8, ((Integer) dme.getParts()[1]).intValue());
+            assertEquals(5, ((Integer) dme.getParts()[0]).intValue());
+            assertEquals(8, ((Integer) dme.getParts()[1]).intValue());
         }
     }
 
@@ -54,9 +55,9 @@ public class VectorialCovarianceTest {
         stat.increment(new double[] {-1.0,  1.0});
         stat.increment(new double[] { 1.0, -1.0});
         RealMatrix c = stat.getResult();
-        Assert.assertEquals( 2.0, c.getEntry(0, 0), 1.0e-12);
-        Assert.assertEquals(-2.0, c.getEntry(1, 0), 1.0e-12);
-        Assert.assertEquals( 2.0, c.getEntry(1, 1), 1.0e-12);
+        assertEquals( 2.0, c.getEntry(0, 0), 1.0e-12);
+        assertEquals(-2.0, c.getEntry(1, 0), 1.0e-12);
+        assertEquals( 2.0, c.getEntry(1, 1), 1.0e-12);
     }
 
     @Test
@@ -67,7 +68,7 @@ public class VectorialCovarianceTest {
             stat.increment(points[i]);
         }
 
-        Assert.assertEquals(points.length, stat.getN());
+        assertEquals(points.length, stat.getN());
 
         RealMatrix c = stat.getResult();
         double[][] refC    = new double[][] {
@@ -78,7 +79,7 @@ public class VectorialCovarianceTest {
 
         for (int i = 0; i < c.getRowDimension(); ++i) {
             for (int j = 0; j <= i; ++j) {
-                Assert.assertEquals(refC[i][j], c.getEntry(i, j), 1.0e-12);
+                assertEquals(refC[i][j], c.getEntry(i, j), 1.0e-12);
             }
         }
 
@@ -87,6 +88,6 @@ public class VectorialCovarianceTest {
     @Test
     public void testSerial(){
         VectorialCovariance stat = new VectorialCovariance(points[0].length, true);
-        Assert.assertEquals(stat, TestUtils.serializeAndRecover(stat));
+        assertEquals(stat, TestUtils.serializeAndRecover(stat));
     }
 }

@@ -16,67 +16,59 @@
  */
 package org.hipparchus.stat.descriptive.summary;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.summary.Sum;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Test cases for the {@link Sum} class.
  */
-public class SumTest extends StorelessUnivariateStatisticAbstractTest{
+public class SumTest extends StorelessUnivariateStatisticAbstractTest {
 
-    protected Sum stat;
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public UnivariateStatistic getUnivariateStatistic() {
+    public Sum getUnivariateStatistic() {
         return new Sum();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public double expectedValue() {
         return this.sum;
     }
 
-    /**Expected value for  the testArray defined in UnivariateStatisticAbstractTest */
+    /** Expected value for the testArray defined in UnivariateStatisticAbstractTest */
     public double expectedWeightedValue() {
         return this.weightedSum;
     }
 
     @Test
     public void testSpecialValues() {
-        Sum sum = new Sum();
-        Assert.assertEquals(0, sum.getResult(), 0);
+        Sum sum = getUnivariateStatistic();
+        assertEquals(0, sum.getResult(), 0);
         sum.increment(1);
-        Assert.assertEquals(1, sum.getResult(), 0);
+        assertEquals(1, sum.getResult(), 0);
         sum.increment(Double.POSITIVE_INFINITY);
-        Assert.assertEquals(Double.POSITIVE_INFINITY, sum.getResult(), 0);
+        assertEquals(Double.POSITIVE_INFINITY, sum.getResult(), 0);
         sum.increment(Double.NEGATIVE_INFINITY);
-        Assert.assertTrue(Double.isNaN(sum.getResult()));
+        assertTrue(Double.isNaN(sum.getResult()));
         sum.increment(1);
-        Assert.assertTrue(Double.isNaN(sum.getResult()));
+        assertTrue(Double.isNaN(sum.getResult()));
     }
 
     @Test
     public void testWeightedSum() {
         Sum sum = new Sum();
-        Assert.assertEquals(expectedWeightedValue(),
-                            sum.evaluate(testArray, testWeightsArray, 0, testArray.length), getTolerance());
-        Assert.assertEquals(expectedValue(),
-                            sum.evaluate(testArray, unitWeightsArray, 0, testArray.length), getTolerance());
+        assertEquals(expectedWeightedValue(),
+                     sum.evaluate(testArray, testWeightsArray, 0, testArray.length), getTolerance());
+        assertEquals(expectedValue(),
+                     sum.evaluate(testArray, unitWeightsArray, 0, testArray.length), getTolerance());
     }
 
     @Override
     protected void checkClearValue(StorelessUnivariateStatistic statistic) {
-        Assert.assertEquals(0, statistic.getResult(), 0);
+        assertEquals(0, statistic.getResult(), 0);
     }
 
 }

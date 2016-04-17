@@ -20,13 +20,15 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Weighted evaluation for statistics.
- *
  */
 public interface WeightedEvaluation {
 
     /**
      * Returns the result of evaluating the statistic over the input array,
      * using the supplied weights.
+     * <p>
+     * The default implementation delegates to
+     * <code>evaluate(double[], double[], int, int)</code> in the natural way.
      *
      * @param values input array
      * @param weights array of weights
@@ -35,7 +37,9 @@ public interface WeightedEvaluation {
      * do not match, weights contain NaN, negative or infinite values, or
      * weights does not include at least on positive value
      */
-    double evaluate(double[] values, double[] weights) throws MathIllegalArgumentException;
+    default double evaluate(double[] values, double[] weights) throws MathIllegalArgumentException {
+        return evaluate(values, weights, 0, values.length);
+    }
 
     /**
      * Returns the result of evaluating the statistic over the specified entries
@@ -51,6 +55,6 @@ public interface WeightedEvaluation {
      * infinite values, or weights does not include at least on positive value
      */
     double evaluate(double[] values, double[] weights, int begin, int length)
-    throws MathIllegalArgumentException;
+        throws MathIllegalArgumentException;
 
 }

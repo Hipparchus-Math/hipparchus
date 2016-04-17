@@ -38,14 +38,15 @@ import org.hipparchus.util.MathUtils;
  * <li>If both <code>Double.POSITIVE_INFINITY</code> and
  * <code>Double.NEGATIVE_INFINITY</code> are among the values, the result is
  * <code>NaN.</code></li>
- * </ul></p>
+ * </ul>
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
-public class SumOfLogs extends AbstractStorelessUnivariateStatistic implements Serializable {
+public class SumOfLogs extends AbstractStorelessUnivariateStatistic
+    implements Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -53,9 +54,7 @@ public class SumOfLogs extends AbstractStorelessUnivariateStatistic implements S
     /** Number of values that have been added */
     private int n;
 
-    /**
-     * The currently running value
-     */
+    /** The currently running value */
     private double value;
 
     /**
@@ -77,34 +76,26 @@ public class SumOfLogs extends AbstractStorelessUnivariateStatistic implements S
         copy(original, this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void increment(final double d) {
         value += FastMath.log(d);
         n++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public double getResult() {
         return value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return n;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         value = 0d;
@@ -115,10 +106,6 @@ public class SumOfLogs extends AbstractStorelessUnivariateStatistic implements S
      * Returns the sum of the natural logs of the entries in the specified portion of
      * the input array, or <code>Double.NaN</code> if the designated subarray
      * is empty.
-     * <p>
-     * Throws <code>MathIllegalArgumentException</code> if the array is null.</p>
-     * <p>
-     * See {@link SumOfLogs}.</p>
      *
      * @param values the input array
      * @param begin index of the first array element to include
@@ -142,20 +129,16 @@ public class SumOfLogs extends AbstractStorelessUnivariateStatistic implements S
         return sumLog;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public SumOfLogs copy() {
-        SumOfLogs result = new SumOfLogs();
-        // No try-catch or advertised exception here because args are valid
-        copy(this, result);
-        return result;
+        return new SumOfLogs(this);
     }
 
     /**
      * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
+     * <p>
+     * Neither source nor dest can be null.
      *
      * @param source SumOfLogs to copy
      * @param dest SumOfLogs to copy to

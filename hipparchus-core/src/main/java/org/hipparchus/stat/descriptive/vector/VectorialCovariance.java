@@ -14,15 +14,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.stat.descriptive.moment;
+package org.hipparchus.stat.descriptive.vector;
 
 import java.io.Serializable;
 import java.util.Arrays;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.util.MathArrays;
 
 /**
  * Returns the covariance matrix of the available vectors.
@@ -62,10 +62,7 @@ public class VectorialCovariance implements Serializable {
      * @throws MathIllegalArgumentException if the vector does not have the right dimension
      */
     public void increment(double[] v) throws MathIllegalArgumentException {
-        if (v.length != sums.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   v.length, sums.length);
-        }
+        MathArrays.checkEqualLength(v, sums);
         int k = 0;
         for (int i = 0; i < v.length; ++i) {
             sums[i] += v[i];

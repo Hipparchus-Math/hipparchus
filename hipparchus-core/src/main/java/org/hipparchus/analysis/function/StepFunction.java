@@ -67,10 +67,7 @@ public class StepFunction implements UnivariateFunction {
             y.length == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
-        if (y.length != x.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   y.length, x.length);
-        }
+        MathArrays.checkEqualLength(y, x);
         MathArrays.checkOrder(x);
 
         abscissa = x.clone();

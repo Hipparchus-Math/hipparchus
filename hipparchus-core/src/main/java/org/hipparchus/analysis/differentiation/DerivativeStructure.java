@@ -203,10 +203,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     public DerivativeStructure(final int parameters, final int order, final double ... derivatives)
         throws MathIllegalArgumentException {
         this(parameters, order);
-        if (derivatives.length != data.length) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   derivatives.length, data.length);
-        }
+        MathArrays.checkEqualLength(derivatives, data);
         System.arraycopy(derivatives, 0, data, 0, data.length);
     }
 
@@ -591,10 +588,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     public DerivativeStructure compose(final double ... f)
         throws MathIllegalArgumentException {
-        if (f.length != getOrder() + 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   f.length, getOrder() + 1);
-        }
+
+        MathUtils.checkDimension(f.length, getOrder() + 1);
         final DerivativeStructure result = new DerivativeStructure(compiler);
         compiler.compose(data, 0, f, result.data, 0);
         return result;

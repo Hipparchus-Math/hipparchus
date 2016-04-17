@@ -32,22 +32,22 @@ import org.hipparchus.util.MathUtils;
  * (i.e. <code>NaN</code> values have no impact on the value of the statistic).</li>
  * <li>If any of the values equals <code>Double.NEGATIVE_INFINITY</code>,
  * the result is <code>Double.NEGATIVE_INFINITY.</code></li>
- * </ul></p>
+ * </ul>
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
  * multiple threads access an instance of this class concurrently, and at least
  * one of the threads invokes the <code>increment()</code> or
- * <code>clear()</code> method, it must be synchronized externally.</p>
+ * <code>clear()</code> method, it must be synchronized externally.
  */
 public class Min extends AbstractStorelessUnivariateStatistic implements Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
 
-    /**Number of values that have been added */
+    /** Number of values that have been added */
     private long n;
 
-    /**Current value of the statistic */
+    /** Current value of the statistic */
     private double value;
 
     /**
@@ -69,9 +69,7 @@ public class Min extends AbstractStorelessUnivariateStatistic implements Seriali
         copy(original, this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void increment(final double d) {
         if (d < value || Double.isNaN(value)) {
@@ -80,26 +78,20 @@ public class Min extends AbstractStorelessUnivariateStatistic implements Seriali
         n++;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         value = Double.NaN;
         n = 0;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public double getResult() {
         return value;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return n;
@@ -111,14 +103,14 @@ public class Min extends AbstractStorelessUnivariateStatistic implements Seriali
      * is empty.
      * <p>
      * Throws <code>MathIllegalArgumentException</code> if the array is null or
-     * the array index parameters are not valid.</p>
+     * the array index parameters are not valid.
      * <p>
      * <ul>
      * <li>The result is <code>NaN</code> iff all values are <code>NaN</code>
      * (i.e. <code>NaN</code> values have no impact on the value of the statistic).</li>
      * <li>If any of the values equals <code>Double.NEGATIVE_INFINITY</code>,
      * the result is <code>Double.NEGATIVE_INFINITY.</code></li>
-     * </ul> </p>
+     * </ul>
      *
      * @param values the input array
      * @param begin index of the first array element to include
@@ -143,20 +135,16 @@ public class Min extends AbstractStorelessUnivariateStatistic implements Seriali
         return min;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public Min copy() {
-        Min result = new Min();
-        // No try-catch or advertised exception - args are non-null
-        copy(this, result);
-        return result;
+        return new Min(this);
     }
 
     /**
      * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
+     * <p>
+     * Neither source nor dest can be null.
      *
      * @param source Min to copy
      * @param dest Min to copy to

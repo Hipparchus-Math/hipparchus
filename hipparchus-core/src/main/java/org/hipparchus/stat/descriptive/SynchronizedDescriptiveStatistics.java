@@ -18,7 +18,6 @@ package org.hipparchus.stat.descriptive;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of
@@ -29,12 +28,20 @@ import org.hipparchus.util.MathUtils;
  * methods atomic operations for a single instance.  That is to say, as one
  * thread is computing a statistic from the instance, no other thread can modify
  * the instance nor compute another statistic.
- *
  */
-public class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
+public final class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
 
     /** Serialization UID */
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Returns a builder for a {@link SynchronizedDescriptiveStatistics}.
+     *
+     * @return a descriptive statistics builder.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Construct an instance with infinite window
@@ -60,94 +67,89 @@ public class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
      * @param original the {@code SynchronizedDescriptiveStatistics} instance to copy
      * @throws NullArgumentException if original is null
      */
-    public SynchronizedDescriptiveStatistics(SynchronizedDescriptiveStatistics original)
-    throws NullArgumentException {
-        copy(original, this);
+    protected SynchronizedDescriptiveStatistics(SynchronizedDescriptiveStatistics original)
+        throws NullArgumentException {
+        super(original);
     }
 
     /**
-     * {@inheritDoc}
+     * Construct a new SynchronizedDescriptiveStatistics instance based
+     * on the data provided by a builder.
+     *
+     * @param builder the builder to use.
      */
+    protected SynchronizedDescriptiveStatistics(Builder builder) {
+        super(builder);
+    }
+
+    /** {@inheritDoc} */
     @Override
     public synchronized void addValue(double v) {
         super.addValue(v);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double apply(UnivariateStatistic stat) {
         return super.apply(stat);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized void clear() {
         super.clear();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getElement(int index) {
         return super.getElement(index);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized long getN() {
         return super.getN();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getStandardDeviation() {
         return super.getStandardDeviation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getQuadraticMean() {
         return super.getQuadraticMean();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getPercentile(double p)
+        throws MathIllegalArgumentException {
+        return super.getPercentile(p);
+    }
+
+    /** {@inheritDoc} */
     @Override
     public synchronized double[] getValues() {
         return super.getValues();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized int getWindowSize() {
         return super.getWindowSize();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized void setWindowSize(int windowSize) throws MathIllegalArgumentException {
         super.setWindowSize(windowSize);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized String toString() {
         return super.toString();
@@ -161,31 +163,18 @@ public class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
      */
     @Override
     public synchronized SynchronizedDescriptiveStatistics copy() {
-        SynchronizedDescriptiveStatistics result =
-            new SynchronizedDescriptiveStatistics();
-        // No try-catch or advertised exception because arguments are guaranteed non-null
-        copy(this, result);
-        return result;
+        return new SynchronizedDescriptiveStatistics(this);
     }
 
     /**
-     * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
-     * <p>Acquires synchronization lock on source, then dest before copying.</p>
-     *
-     * @param source SynchronizedDescriptiveStatistics to copy
-     * @param dest SynchronizedDescriptiveStatistics to copy to
-     * @throws NullArgumentException if either source or dest is null
+     * A mutable builder for a SynchronizedDescriptiveStatistics.
      */
-    public static void copy(SynchronizedDescriptiveStatistics source,
-                            SynchronizedDescriptiveStatistics dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        synchronized (source) {
-            synchronized (dest) {
-                DescriptiveStatistics.copy(source, dest);
-            }
+    public static class Builder extends DescriptiveStatistics.Builder {
+
+        @Override
+        public SynchronizedDescriptiveStatistics build() {
+            return new SynchronizedDescriptiveStatistics(this);
         }
+
     }
 }

@@ -79,9 +79,7 @@ final class SaddlePointExpansion {
     /**
      * Default constructor.
      */
-    private SaddlePointExpansion() {
-        super();
-    }
+    private SaddlePointExpansion() {}
 
     /**
      * Compute the error of Stirling's series at the given value.
@@ -93,31 +91,29 @@ final class SaddlePointExpansion {
      * href="http://mathworld.wolfram.com/StirlingsSeries.html">
      * http://mathworld.wolfram.com/StirlingsSeries.html</a></li>
      * </ol>
-     * </p>
      *
      * @param z the value.
      * @return the Striling's series error.
      */
     static double getStirlingError(double z) {
-        double ret;
         if (z < 15.0) {
             double z2 = 2.0 * z;
             if (FastMath.floor(z2) == z2) {
-                ret = EXACT_STIRLING_ERRORS[(int) z2];
+                return EXACT_STIRLING_ERRORS[(int) z2];
             } else {
-                ret = Gamma.logGamma(z + 1.0) - (z + 0.5) * FastMath.log(z) +
-                      z - HALF_LOG_2_PI;
+                return Gamma.logGamma(z + 1.0) - (z + 0.5) * FastMath.log(z) +
+                       z - HALF_LOG_2_PI;
             }
         } else {
             double z2 = z * z;
-            ret = (0.083333333333333333333 -
-                    (0.00277777777777777777778 -
-                            (0.00079365079365079365079365 -
-                                    (0.000595238095238095238095238 -
-                                            0.0008417508417508417508417508 /
-                                            z2) / z2) / z2) / z2) / z;
+            double ret = (0.083333333333333333333 -
+                           (0.00277777777777777777778 -
+                             (0.00079365079365079365079365 -
+                               (0.000595238095238095238095238 -
+                                 0.0008417508417508417508417508 /
+                                   z2) / z2) / z2) / z2) / z;
+            return ret;
         }
-        return ret;
     }
 
     /**
@@ -130,14 +126,12 @@ final class SaddlePointExpansion {
      * href="http://www.herine.net/stat/papers/dbinom.pdf">
      * http://www.herine.net/stat/papers/dbinom.pdf</a></li>
      * </ol>
-     * </p>
      *
      * @param x the x value.
      * @param mu the average.
      * @return a part of the deviance.
      */
     static double getDeviancePart(double x, double mu) {
-        double ret;
         if (FastMath.abs(x - mu) < 0.1 * (x + mu)) {
             double d = x - mu;
             double v = d / (x + mu);
@@ -152,11 +146,10 @@ final class SaddlePointExpansion {
                 s1 = s + ej / ((j * 2) + 1);
                 ++j;
             }
-            ret = s1;
+            return s1;
         } else {
-            ret = x * FastMath.log(x / mu) + mu - x;
+            return x * FastMath.log(x / mu) + mu - x;
         }
-        return ret;
     }
 
     /**
@@ -170,26 +163,28 @@ final class SaddlePointExpansion {
      * @return log(p(x)).
      */
     static double logBinomialProbability(int x, int n, double p, double q) {
-        double ret;
+        if (n == 0) {
+            return x == 0 ? 0d : Double.NEGATIVE_INFINITY;
+        }
         if (x == 0) {
             if (p < 0.1) {
-                ret = -getDeviancePart(n, n * q) - n * p;
+                return -getDeviancePart(n, n * q) - n * p;
             } else {
-                ret = n * FastMath.log(q);
+                return n * FastMath.log(q);
             }
         } else if (x == n) {
             if (q < 0.1) {
-                ret = -getDeviancePart(n, n * p) - n * q;
+                return -getDeviancePart(n, n * p) - n * q;
             } else {
-                ret = n * FastMath.log(p);
+                return n * FastMath.log(p);
             }
         } else {
-            ret = getStirlingError(n) - getStirlingError(x) -
-                  getStirlingError(n - x) - getDeviancePart(x, n * p) -
-                  getDeviancePart(n - x, n * q);
+            double ret = getStirlingError(n) - getStirlingError(x) -
+                         getStirlingError(n - x) - getDeviancePart(x, n * p) -
+                         getDeviancePart(n - x, n * q);
             double f = (MathUtils.TWO_PI * x * (n - x)) / n;
             ret = -0.5 * FastMath.log(f) + ret;
+            return ret;
         }
-        return ret;
     }
 }
