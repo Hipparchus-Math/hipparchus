@@ -34,23 +34,26 @@ public class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolato
 
     @Test
     public void interpolationInside() {
-        doInterpolationInside(1.0e-50, 1.0e-50);
+        doInterpolationInside(3.5e-18, 1.2e-16);
     }
 
     protected ODEStateInterpolator setUpInterpolator(final ReferenceODE eqn,
                                                      final double t0, final double[] y0,
                                                      final double t1) {
 
-        // evaluate derivatives at mid-step
+        // evaluate scaled derivatives at mid-step
         final int derivationOrder = 7;
         DerivativeStructure middleT = new DerivativeStructure(1, derivationOrder, 0, 0.5 * (t0 + t1));
         DerivativeStructure[] derivatives =  eqn.theoreticalState(middleT);
 
-        double[][] yMidDots = new double[derivationOrder + 1][eqn.getDimension()];
+        final double[][] yMidDots = new double[derivationOrder + 1][eqn.getDimension()];
+        final double     h        = t1 - t0;
+        double           hK       = 1.0;
         for (int k = 0; k < yMidDots.length; ++k) {
             for (int i = 0; i < derivatives.length; ++i) {
-                yMidDots[k][i] = derivatives[i].getPartialDerivative(k);
+                yMidDots[k][i] = hK * derivatives[i].getPartialDerivative(k);
             }
+            hK *= h;
         }
 
         EquationsMapper mapper = new ExpandableODE(eqn).getMapper();

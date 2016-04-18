@@ -75,8 +75,8 @@ class GraggBulirschStoerStateInterpolator
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160329L;
 
-    /** Derivatives at the middle of the step.
-     * element 0 is state at midpoint, element 1 is first derivative ...
+    /** Scaled derivatives at the middle of the step $\tau$.
+     * (element k is $h^{k} d^{k}y(\tau)/dt^{k}$ where h is step size...)
      */
     private final double[][] yMidDots;
 
@@ -96,8 +96,8 @@ class GraggBulirschStoerStateInterpolator
      * @param softPreviousState start of the restricted step
      * @param softCurrentState end of the restricted step
      * @param mapper equations mapper for the all equations
-     * @param yMidDots derivatives at the middle of the step
-     * (element 0 is state at midpoint, element 1 is first derivative ...)
+     * @param yMidDots scaled derivatives at the middle of the step $\tau$
+     * (element k is $h^{k} d^{k}y(\tau)/dt^{k}$ where h is step size...)
      * @param mu degree of the interpolation polynomial
      */
     GraggBulirschStoerStateInterpolator(final boolean forward,
@@ -159,8 +159,8 @@ class GraggBulirschStoerStateInterpolator
         final double[] y1Dot = getGlobalCurrentState().getCompleteDerivative();
         final double[] y1    = getGlobalCurrentState().getCompleteState();
 
-        final double[] previousState = getPreviousState().getCompleteState();
-        final double h = getCurrentState().getTime() - getPreviousState().getTime();
+        final double[] previousState = getGlobalPreviousState().getCompleteState();
+        final double h = getGlobalCurrentState().getTime() - getGlobalPreviousState().getTime();
         for (int i = 0; i < previousState.length; ++i) {
 
             final double yp0   = h * y0Dot[i];

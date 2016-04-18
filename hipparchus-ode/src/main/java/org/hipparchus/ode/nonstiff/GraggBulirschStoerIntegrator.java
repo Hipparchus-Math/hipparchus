@@ -537,6 +537,8 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
             fk[k] = new double[sequence[k] + 1][];
         }
 
+        // scaled derivatives at the middle of the step $\tau$
+        // (element k is $h^{k} d^{k}y(\tau)/dt^{k}$ where h is step size...)
         final double[][] yMidDots = new double[1 + 2 * sequence.length][y.length];
 
         // initial scaling
