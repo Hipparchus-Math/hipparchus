@@ -109,10 +109,10 @@ public class EventStateTest {
         integrator.setInitialStepSize(3.0);
 
         double target = 30.0;
-        double[] y = new double[1];
-        double tEnd = integrator.integrate(equation, new ODEState(0.0, y), target).getTime();
-        Assert.assertEquals(target, tEnd, 1.0e-10);
-        Assert.assertEquals(32.0, y[0], 1.0e-10);
+        ODEStateAndDerivative finalState =
+                        integrator.integrate(equation, new ODEState(0.0, new double[1]), target);
+        Assert.assertEquals(target, finalState.getTime(), 1.0e-10);
+        Assert.assertEquals(32.0, finalState.getPrimaryState()[0], 1.0e-10);
 
     }
 
@@ -162,7 +162,7 @@ public class EventStateTest {
                 return new double[] { 2.0 };
             }
         });
-        equation.addSecondaryEquations(new SecondaryODE() {
+        int index = equation.addSecondaryEquations(new SecondaryODE() {
             public int getDimension() {
                 return 1;
             }
@@ -171,31 +171,34 @@ public class EventStateTest {
                 return new double[] { -3.0 };
             }
         });
+        Assert.assertEquals(1, index);
 
         DormandPrince853Integrator integrator = new DormandPrince853Integrator(0.001, 1000, 1.0e-14, 1.0e-14);
-        integrator.addEventHandler(new SecondaryStateEvent(-3.0), 0.1, 1.0e-9, 1000);
+        integrator.addEventHandler(new SecondaryStateEvent(index, -3.0), 0.1, 1.0e-9, 1000);
         integrator.setInitialStepSize(3.0);
 
         ODEState initialState = new ODEState(0.0,
-                                             new double[] { 1.0 },
+                                             new double[] { 0.0 },
                                              new double[][] { { 0.0 } });
         ODEStateAndDerivative finalState = integrator.integrate(equation, initialState, 30.0);
         Assert.assertEquals( 1.0, finalState.getTime(), 1.0e-10);
         Assert.assertEquals( 2.0, finalState.getPrimaryState()[0], 1.0e-10);
-        Assert.assertEquals(-3.0, finalState.getSecondaryState(0)[0], 1.0e-10);
+        Assert.assertEquals(-3.0, finalState.getSecondaryState(index)[0], 1.0e-10);
 
     }
 
     private static class SecondaryStateEvent implements ODEEventHandler {
 
+        private int index;
         private final double target;
 
-        public SecondaryStateEvent(final double target) {
+        public SecondaryStateEvent(final int index, final double target) {
+            this.index  = index;
             this.target = target;
         }
 
         public double g(ODEStateAndDerivative s) {
-            return s.getSecondaryState(0)[0] - target;
+            return s.getSecondaryState(index)[0] - target;
         }
 
         public Action eventOccurred(ODEStateAndDerivative s, boolean increasing) {
