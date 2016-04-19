@@ -59,31 +59,31 @@ The user is safe.
 
 
 ## 4.3 Root-finding
-[          UnivariateSolver](../apidocs/org.hipparchus/analysis/solvers/UnivariateSolver.html)
-, [          UnivariateDifferentiableSolver](../apidocs/org.hipparchus/analysis/solvers/UnivariateDifferentiableSolver.html)
-and [          PolynomialSolver](../apidocs/org.hipparchus/analysis/solvers/PolynomialSolver.html)
+[          UnivariateSolver](../apidocs/org/hipparchus/analysis/solvers/UnivariateSolver.html)
+, [          UnivariateDifferentiableSolver](../apidocs/org/hipparchus/analysis/solvers/UnivariateDifferentiableSolver.html)
+and [          PolynomialSolver](../apidocs/org/hipparchus/analysis/solvers/PolynomialSolver.html)
 provide means to find roots of
-[univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html),
-[differentiable univariate real-valued functions](../apidocs/org.hipparchus/analysis/differentiation/UnivariateDifferentiable.html),
-and [polynomial functions](../apidocs/org.hipparchus/analysis/polynomials/PolynomialFunction.html) respectively.
+[univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html),
+[differentiable univariate real-valued functions](../apidocs/org/hipparchus/analysis/differentiation/UnivariateDifferentiable.html),
+and [polynomial functions](../apidocs/org/hipparchus/analysis/polynomials/PolynomialFunction.html) respectively.
 A root is the value where the function takes the value 0.  Commons-Math
 includes implementations of the several root-finding algorithms:
 
 | <font size="+1">Root solvers</font> |
 | --- |
 | Name | Function type | Convergence | Needs initial bracketing | Bracket side selection |
-| [Bisection](../apidocs/org.hipparchus/analysis/solvers/BisectionSolver.html) | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | linear, guaranteed | yes | yes |
-| [Brent-Dekker](../apidocs/org.hipparchus/analysis/solvers/BrentSolver.html) | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | super-linear, guaranteed | yes | no |
-| [bracketing n](../apidocs/org.hipparchus/analysis/solvers/BracketingNthOrderBrentSolver.html) | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | variable order, guaranteed | yes | yes |
-| [Illinois Method](../apidocs/org.hipparchus/analysis/solvers/IllinoisSolver.html) | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | super-linear, guaranteed | yes | yes |
-| [Laguerre's Method](../apidocs/org.hipparchus/analysis/solvers/LaguerreSolver.html) | [polynomial functions](../apidocs/org.hipparchus/analysis/polynomials/PolynomialFunction.html) | cubic for simple root, linear for multiple root | yes | no |
-| [Muller's Method](../apidocs/org.hipparchus/analysis/solvers/MullerSolver.html) using bracketing to deal with real-valued functions | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | quadratic close to roots | yes | no |
-| [Muller's Method](../apidocs/org.hipparchus/analysis/solvers/MullerSolver2.html) using modulus to deal with real-valued functions | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | quadratic close to root | yes | no |
-| [Newton-Raphson's Method](../apidocs/org.hipparchus/analysis/solvers/NewtonRaphsonSolver.html) | [differentiable univariate real-valued functions](../apidocs/org.hipparchus/analysis/differentiation/UnivariateDifferentiableFunction.html) | quadratic, non-guaranteed | no | no |
-| [Pegasus Method](../apidocs/org.hipparchus/analysis/solvers/PegasusSolver.html) | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | super-linear, guaranteed | yes | yes |
-| [Regula Falsi (false position) Method](../apidocs/org.hipparchus/analysis/solvers/RegulaFalsiSolver.html) | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | linear, guaranteed | yes | yes |
-| [Ridder's Method](../apidocs/org.hipparchus/analysis/solvers/RiddersSolver.html) | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | super-linear | yes | no |
-| [Secant Method](../apidocs/org.hipparchus/analysis/solvers/SecantSolver.html) | [univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html) | super-linear, non-guaranteed | yes | no |
+| [Bisection](../apidocs/org/hipparchus/analysis/solvers/BisectionSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | linear, guaranteed | yes | yes |
+| [Brent-Dekker](../apidocs/org/hipparchus/analysis/solvers/BrentSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | super-linear, guaranteed | yes | no |
+| [bracketing n](../apidocs/org/hipparchus/analysis/solvers/BracketingNthOrderBrentSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | variable order, guaranteed | yes | yes |
+| [Illinois Method](../apidocs/org/hipparchus/analysis/solvers/IllinoisSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | super-linear, guaranteed | yes | yes |
+| [Laguerre's Method](../apidocs/org/hipparchus/analysis/solvers/LaguerreSolver.html) | [polynomial functions](../apidocs/org/hipparchus/analysis/polynomials/PolynomialFunction.html) | cubic for simple root, linear for multiple root | yes | no |
+| [Muller's Method](../apidocs/org/hipparchus/analysis/solvers/MullerSolver.html) using bracketing to deal with real-valued functions | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | quadratic close to roots | yes | no |
+| [Muller's Method](../apidocs/org/hipparchus/analysis/solvers/MullerSolver2.html) using modulus to deal with real-valued functions | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | quadratic close to root | yes | no |
+| [Newton-Raphson's Method](../apidocs/org/hipparchus/analysis/solvers/NewtonRaphsonSolver.html) | [differentiable univariate real-valued functions](../apidocs/org/hipparchus/analysis/differentiation/UnivariateDifferentiableFunction.html) | quadratic, non-guaranteed | no | no |
+| [Pegasus Method](../apidocs/org/hipparchus/analysis/solvers/PegasusSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | super-linear, guaranteed | yes | yes |
+| [Regula Falsi (false position) Method](../apidocs/org/hipparchus/analysis/solvers/RegulaFalsiSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | linear, guaranteed | yes | yes |
+| [Ridder's Method](../apidocs/org/hipparchus/analysis/solvers/RiddersSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | super-linear | yes | no |
+| [Secant Method](../apidocs/org/hipparchus/analysis/solvers/SecantSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | super-linear, non-guaranteed | yes | no |
 Some algorithms require that the initial search interval brackets the root
 (i.e. the function values at interval end points have opposite signs).  Some
 algorithms preserve bracketing throughout computation and allow user to
@@ -218,7 +218,7 @@ there are only getters to retriveve their values, no setters are available.
 
 
 ## 4.4 Interpolation
-A [          UnivariateInterpolator](../apidocs/org.hipparchus/analysis/interpolation/UnivariateInterpolator.html)
+A [          UnivariateInterpolator](../apidocs/org/hipparchus/analysis/interpolation/UnivariateInterpolator.html)
 is used to find a univariate real-valued
 function `f` which for a given set of ordered pairs
 (`x<sub>i</sub>`,`y<sub>i</sub>`) yields
@@ -297,13 +297,13 @@ no requirements for a regular grid) and some points may provide derivatives whil
     System.out.println("derivative at x = 0.5: " + interpolator.derivative(0.5)[0]);
     // should print "interpolation polynomial: 1 + 2 x + 4 x^2 - 4 x^3 + x^4"
     System.out.println("interpolation polynomial: " + interpolator.getPolynomials()[0]);
-A [          BivariateGridInterpolator](../apidocs/org.hipparchus/analysis/interpolation/BivariateGridInterpolator.html)
+A [          BivariateGridInterpolator](../apidocs/org/hipparchus/analysis/interpolation/BivariateGridInterpolator.html)
 is used to find a bivariate real-valued
 function `f` which for a given set of tuples
 (`x<sub>i</sub>`,`y<sub>j</sub>`,`f<sub>ij</sub>`)
 yields `f(x<sub>i</sub>,y<sub>j</sub>)=f<sub>ij</sub>` to the best accuracy
 possible. The result is provided as an object implementing the
-[          BivariateFunction](../apidocs/org.hipparchus/analysis/BivariateFunction.html)
+[          BivariateFunction](../apidocs/org/hipparchus/analysis/BivariateFunction.html)
 interface. It can therefore be evaluated at any point,
 including a point not belonging to the original set.
 The arrays `x<sub>i</sub>` and `y<sub>j</sub>` must be
@@ -314,24 +314,24 @@ the interpolation function is a 3rd-degree polynomial of two variables. The coef
 are computed from the function values sampled on a grid, as well as the values of the
 partial derivatives of the function at those grid points.
 From two-dimensional data sampled on a grid, the
-[          BicubicSplineInterpolator](../apidocs/org.hipparchus/analysis/interpolation/BicubicSplineInterpolator.html)
+[          BicubicSplineInterpolator](../apidocs/org/hipparchus/analysis/interpolation/BicubicSplineInterpolator.html)
 computes a
-[          bicubic interpolating function](../apidocs/org.hipparchus/analysis/interpolation/BicubicSplineInterpolatingFunction.html)
+[          bicubic interpolating function](../apidocs/org/hipparchus/analysis/interpolation/BicubicSplineInterpolatingFunction.html)
 .
 Prior to computing an interpolating function, the
-[          SmoothingPolynomialBicubicSplineInterpolator](../apidocs/org.hipparchus/analysis/interpolation/SmoothingPolynomialBicubicSplineInterpolator.html)
+[          SmoothingPolynomialBicubicSplineInterpolator](../apidocs/org/hipparchus/analysis/interpolation/SmoothingPolynomialBicubicSplineInterpolator.html)
 class performs smoothing of
 the data by computing the polynomial that best fits each of the one-dimensional
 curves along each of the coordinate axes.
 
-A [          TrivariateGridInterpolator](../apidocs/org.hipparchus/analysis/interpolation/TrivariateGridInterpolator.html)
+A [          TrivariateGridInterpolator](../apidocs/org/hipparchus/analysis/interpolation/TrivariateGridInterpolator.html)
 is used to find a trivariate real-valued
 function `f` which for a given set of tuples
 (`x<sub>i</sub>`,`y<sub>j</sub>`,`z<sub>k</sub>`,
 `f<sub>ijk</sub>`)
 yields `f(x<sub>i</sub>,y<sub>j</sub>,z<sub>k</sub>)=f<sub>ijk</sub>`
 to the best accuracy possible. The result is provided as an object implementing the
-[          TrivariateFunction](../apidocs/org.hipparchus/analysis/TrivariateFunction.html)
+[          TrivariateFunction](../apidocs/org/hipparchus/analysis/TrivariateFunction.html)
 interface. It can therefore be evaluated at any point,
 including a point not belonging to the original set.
 The arrays `x<sub>i</sub>`, `y<sub>j</sub>` and
@@ -343,16 +343,16 @@ the interpolation function is a 3rd-degree polynomial of three variables. The co
 are computed from the function values sampled on a grid, as well as the values of the
 partial derivatives of the function at those grid points.
 From three-dimensional data sampled on a grid, the
-[          TricubicSplineInterpolator](../apidocs/org.hipparchus/analysis/interpolation/TricubicSplineInterpolator.html)
+[          TricubicSplineInterpolator](../apidocs/org/hipparchus/analysis/interpolation/TricubicSplineInterpolator.html)
 computes a
-[          tricubic interpolating function](../apidocs/org.hipparchus/analysis/interpolation/TricubicSplineInterpolatingFunction.html)
+[          tricubic interpolating function](../apidocs/org/hipparchus/analysis/interpolation/TricubicSplineInterpolatingFunction.html)
 .
 
 
 ## 4.5 Integration
-A [          UnivariateIntegrator](../apidocs/org.hipparchus/analysis/integration/UnivariateIntegrator.html)
+A [          UnivariateIntegrator](../apidocs/org/hipparchus/analysis/integration/UnivariateIntegrator.html)
 provides the means to numerically integrate
-[          univariate real-valued functions](../apidocs/org.hipparchus/analysis/UnivariateFunction.html)
+[          univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html)
 .
 * `f(c) = 0.0` (see "function value accuracy")
 * `min &lt;= c &lt;= max` (except for the secant method, which may find a solution outside the interval)
@@ -360,14 +360,14 @@ provides the means to numerically integrate
 
 
 ## 4.6 Polynomials
-The [          org.hipparchus.analysis.polynomials](../apidocs/org.hipparchus/analysis/polynomials/package-summary.html)
+The [          org.hipparchus.analysis.polynomials](../apidocs/org/hipparchus/analysis/polynomials/package-summary.html)
 package provides real
 coefficients polynomials.
 
-The [          PolynomialFunction](../apidocs/org.hipparchus/analysis/polynomials/PolynomialFunction.html)
+The [          PolynomialFunction](../apidocs/org/hipparchus/analysis/polynomials/PolynomialFunction.html)
 class is the most general one, using traditional
 coefficients arrays. The
-[          PolynomialsUtils](../apidocs/org.hipparchus/analysis/polynomials/PolynomialsUtils.html)
+[          PolynomialsUtils](../apidocs/org/hipparchus/analysis/polynomials/PolynomialsUtils.html)
 utility class provides static factory methods to build
 Chebyshev, Hermite, Jacobi, Laguerre and Legendre polynomials. Coefficients are
 computed using exact fractions so these factory methods can build polynomials
@@ -375,11 +375,11 @@ up to any degree.
 
 
 ## 4.7 Differentiation
-The [          org.hipparchus.analysis.differentiation](../apidocs/org.hipparchus/analysis/differentiation/package-summary.html)
+The [          org.hipparchus.analysis.differentiation](../apidocs/org/hipparchus/analysis/differentiation/package-summary.html)
 package provides a general-purpose
 differentiation framework.
 
-The core class is [          DerivativeStructure](../apidocs/org.hipparchus/analysis/differentiation/DerivativeStructure.html)
+The core class is [          DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
 which holds the value and the differentials of a function. This class
 handles some arbitrary number of free parameters and arbitrary derivation order. It is used
 both as the input and the output type for the <a
@@ -387,7 +387,7 @@ href="../apidocs/org.hipparchus/analysis/differentiation/UnivariateDifferentiabl
 UnivariateDifferentiableFunction</a> interface. Any differentiable function should implement this
 interface.
 
-The main idea behind the [          DerivativeStructure](../apidocs/org.hipparchus/analysis/differentiation/DerivativeStructure.html)
+The main idea behind the [          DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
 class is that it can be used almost as a number (i.e. it can be added,
 multiplied, its square root can be extracted or its cosine computed... However, in addition to
 computed the value itself when doing these computations, the partial derivatives are also computed
@@ -492,7 +492,7 @@ free parameter 0 and the second argument is derivation order with respect to fre
 There are several ways a user can create an implementation of the <a
 href="../apidocs/org.hipparchus/analysis/differentiation/UnivariateDifferentiableFunction.html">
 UnivariateDifferentiableFunction</a> interface. The first method is to simply write it directly using
-the appropriate methods from [          DerivativeStructure](../apidocs/org.hipparchus/analysis/differentiation/DerivativeStructure.html)
+the appropriate methods from [          DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
 to compute addition, subtraction, sine, cosine... This is often quite
 straigthforward and there is no need to remember the rules for differentiation: the user code only
 represent the function itself, the differentials will be computed automatically under the hood. The
@@ -503,7 +503,7 @@ href="../apidocs/org.hipparchus/analysis/differentiation/UnivariateFunctionDiffe
 UnivariateFunctionDifferentiator</a> interface to retrieve a differentiated version of the same function.
 The first method is more suited to small functions for which user already control all the underlying code.
 The second method is more suited to either large functions that would be cumbersome to write using the
-[          DerivativeStructure](../apidocs/org.hipparchus/analysis/differentiation/DerivativeStructure.html)
+[          DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
 API, or functions for which user does not have control to the full underlying code
 (for example functions that call external libraries).
 
@@ -551,12 +551,12 @@ Note that using <a
 href="../apidocs/org.hipparchus/analysis/differentiation/FiniteDifferencesDifferentiator.html">
 FiniteDifferencesDifferentiator</a>a> in order to have a <a
 href="../apidocs/org.hipparchus/analysis/differentiation/UnivariateDifferentiableFunction.html">
-UnivariateDifferentiableFunction</a> that can be provided to a [Newton-Raphson's](../apidocs/org.hipparchus/analysis/solvers/NewtonRaphsonSolver.html)
+UnivariateDifferentiableFunction</a> that can be provided to a [Newton-Raphson's](../apidocs/org/hipparchus/analysis/solvers/NewtonRaphsonSolver.html)
 solver is a very bad idea. The reason is that finite differences are not really accurate and needs lots
 of additional calls to the basic underlying function. If user initially have only the basic function
 available and needs to find its roots, it is <em>much</em> more accurate and <em>much</em> more
 efficient to use a solver that only requires the function values and not the derivatives. A good choice is
-to use [bracketing          n](../apidocs/org.hipparchus/analysis/solvers/BracketingNthOrderBrentSolver.html)
+to use [bracketing          n](../apidocs/org/hipparchus/analysis/solvers/BracketingNthOrderBrentSolver.html)
 method, which in fact converges faster than <a
 href="../apidocs/org.hipparchus/analysis/solvers/NewtonRaphsonSolver.html">Newton-Raphson's</a> and
 can be configured to a highere order (typically 5) than Newton-Raphson which is an order 2 method.

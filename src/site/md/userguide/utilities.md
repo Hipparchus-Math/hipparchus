@@ -2,7 +2,7 @@
 # 6 Utilities
 
 ## 6.1 Overview
-The [    org.hipparchus.util](../apidocs/org.hipparchus/util/package-summary.html)
+The [    org.hipparchus.util](../apidocs/org/hipparchus/util/package-summary.html)
 package collects a group of array utilities,
 value transformers,  and numerical routines used by implementation classes in
 commons-math.
@@ -14,14 +14,14 @@ To maintain statistics based on a "rolling" window of values, a resizable
 array implementation was developed and is provided for reuse in the
 `util` package.  The core functionality provided is described in
 the documentation for the interface,
-[    DoubleArray](../apidocs/org.hipparchus/util/DoubleArray.html)
+[    DoubleArray](../apidocs/org/hipparchus/util/DoubleArray.html)
 .  This interface adds one method,
 `addElementRolling(double)` to basic list accessors.
 The `addElementRolling` method adds an element
 (the actual parameter) to the end of the list and removes the first element
 in the list.
 
-The [    ResizableDoubleArray](../apidocs/org.hipparchus/util/ResizableDoubleArray.html)
+The [    ResizableDoubleArray](../apidocs/org/hipparchus/util/ResizableDoubleArray.html)
 class provides a configurable, array-backed
 implementation of the `DoubleArray` interface.
 When `addElementRolling` is invoked, the underlying
@@ -35,14 +35,14 @@ the end needs to be created.  Both of these operations are handled
 automatically, with frequency / effect driven by the configuration
 properties `expansionMode`, `expansionFactor` and
 `contractionCriteria.`  See
-[    ResizableDoubleArray](../apidocs/org.hipparchus/util/ResizableDoubleArray.html)
+[    ResizableDoubleArray](../apidocs/org/hipparchus/util/ResizableDoubleArray.html)
 
 for details.
 
 
 
 ## 6.3 int/double hash map
-The [    OpenIntToDoubleHashMap](../apidocs/org.hipparchus/util/OpenIntToDoubleHashMap.html)
+The [    OpenIntToDoubleHashMap](../apidocs/org/hipparchus/util/OpenIntToDoubleHashMap.html)
 class provides a specialized hash map
 implementation for int/double. This implementation has a much smaller memory
 overhead than standard `java.util.HashMap` class. It uses open addressing
@@ -52,7 +52,7 @@ improve data locality.
 
 
 ## 6.4 Continued Fractions
-The [    ContinuedFraction](../apidocs/org.hipparchus/util/ContinuedFraction.html)
+The [    ContinuedFraction](../apidocs/org/hipparchus/util/ContinuedFraction.html)
 class provides a generic way to create and evaluate
 continued fractions.  The easiest way to create a continued fraction is
 to subclass `ContinuedFraction` and override the
@@ -113,7 +113,7 @@ Then, to evalute <i>e</i><sup>x</sup> for any value x, simply call any of the
 
 ## 6.5 Binomial coefficients, factorials, Stirling numbers and other common math functions
 A collection of reusable math functions is provided in the
-[ArithmeticUtils](../apidocs/org.hipparchus/util/ArithmeticUtils.html)
+[ArithmeticUtils](../apidocs/org/hipparchus/util/ArithmeticUtils.html)
 * Binomial coefficients -- "n choose k" available as an (exact) long value, `binomialCoefficient(int, int)` for small n, k; as a double, `binomialCoefficientDouble(int, int)` for larger values; and in a "super-sized" version, `binomialCoefficientLog(int, int)` that returns the natural logarithm of the value.
 * Stirling numbers of the second kind -- S(n,k) as an exact long value `stirlingS2(int, int)` for small n, k.
 * Factorials -- like binomial coefficients, these are available as exact long values, `factorial(int)`; doubles, `factorialDouble(int)`; or logs, `factorialLog(int)`.
@@ -173,7 +173,7 @@ provided by FastMath even in 1.5 Java virtual machines
 
 
 ## 6.7 Miscellaneous
-The [    MultidimensionalCounter](../apidocs/org.hipparchus/util/MultidimensionalCounter.html)
+The [    MultidimensionalCounter](../apidocs/org/hipparchus/util/MultidimensionalCounter.html)
 is a utility class that converts a set of indices
 (identifying points in a multidimensional space) to a single index (e.g. identifying
 a location in a one-dimensional array.

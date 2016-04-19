@@ -2,14 +2,14 @@
 ## 8.1 Overview
 The distributions package provides a framework and implementations for some commonly used
 probability distributions. Continuous univariate distributions are represented by implementations of
-the [RealDistribution](../apidocs/org.hipparchus/distribution/RealDistribution.html)
+the [RealDistribution](../apidocs/org/hipparchus/distribution/RealDistribution.html)
 interface.  Discrete distributions implement
-[IntegerDistribution](../apidocs/org.hipparchus/distribution/IntegerDistribution.html)
+[IntegerDistribution](../apidocs/org/hipparchus/distribution/IntegerDistribution.html)
 (values must be mapped to integers) and there is an
-[EnumeratedDistribution](../apidocs/org.hipparchus/distribution/EnumeratedDistribution.html)
+[EnumeratedDistribution](../apidocs/org/hipparchus/distribution/EnumeratedDistribution.html)
 class representing discrete distributions with a finite, enumerated set of values.  Finally, multivariate
 real-valued distributions can be represented via the
-[MultivariateRealDistribution](../apidocs/org.hipparchus/distribution/MultiVariateRealDistribution.html)
+[MultivariateRealDistribution](../apidocs/org/hipparchus/distribution/MultiVariateRealDistribution.html)
 interface.
 
 An overview of available continuous distributions:<br/>
@@ -45,7 +45,7 @@ case, this will usually be identically 0.
     double upperTail = 1.0 - t.cumulativeProbability(2.75); // P(T(29) &gt;= 2.75)
 All distributions implement a `sample()` method to support random sampling from the
 distribution. Implementation classes expose constructors allowing the default
-[RandomGenerator](../apidocs/org.hipparchus/random/RandomGenerator.html)
+[RandomGenerator](../apidocs/org/hipparchus/random/RandomGenerator.html)
 used by the sampling algorithm to be overridden.  If sampling is not going to be used, providing
 a null `RandomGenerator` constructor argument will avoid the overhead of initializing
 the default generator.
@@ -66,14 +66,14 @@ TODO: add section on multivariate distributions
 -->
 ## 8.3 User Defined Distributions
 User-defined distributions can be implemented using
-[RealDistribution](../apidocs/org.hipparchus/distribution/RealDistribution.html),
-[IntegerDistribution](../apidocs/org.hipparchus/distribution/IntegerDistribution.html) and
-[MultivariateRealDistribution](../apidocs/org.hipparchus/distribution/MultivariateRealDistribution.html)
+[RealDistribution](../apidocs/org/hipparchus/distribution/RealDistribution.html),
+[IntegerDistribution](../apidocs/org/hipparchus/distribution/IntegerDistribution.html) and
+[MultivariateRealDistribution](../apidocs/org/hipparchus/distribution/MultivariateRealDistribution.html)
 interfaces serve as base types.  These serve as the basis for all the distributions directly supported by
 Apache Commons Math.  To aid in implementing distributions,
-the [AbstractRealDistribution](../apidocs/org.hipparchus/distribution/AbstractRealDistribution.html),
-[AbstractIntegerDistribution](../apidocs/org.hipparchus/distribution/AbstractIntegerDistribution.html) and
-[AbstractMultivariateRealDistribution](../apidocs/org.hipparchus/distribution/AbstractMultivariateRealDistribution.html)
+the [AbstractRealDistribution](../apidocs/org/hipparchus/distribution/AbstractRealDistribution.html),
+[AbstractIntegerDistribution](../apidocs/org/hipparchus/distribution/AbstractIntegerDistribution.html) and
+[AbstractMultivariateRealDistribution](../apidocs/org/hipparchus/distribution/AbstractMultivariateRealDistribution.html)
 provide implementation building blocks and offer basic distribution functionality.
 By extending these abstract classes directly, much of the repetitive distribution
 implementation is already developed and should save time and effort in developing

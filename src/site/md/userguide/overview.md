@@ -69,9 +69,9 @@ values/objects or state changes.
 
 When the actual parameters provided to a method or the internal state of an object
 make a computation meaningless, a
-[      MathIllegalArgumentException](../apidocs/org.hipparchus/exception/MathIllegalArgumentException.html)
+[      MathIllegalArgumentException](../apidocs/org/hipparchus/exception/MathIllegalArgumentException.html)
 or
-[    MathIllegalStateException](../apidocs/org.hipparchus/exception/MathIllegalStateException.html)
+[    MathIllegalStateException](../apidocs/org/hipparchus/exception/MathIllegalStateException.html)
 may be thrown. Exact conditions under which runtime
 exceptions (and any other exceptions) are thrown are specified in the javadoc method
 comments.
@@ -82,7 +82,7 @@ or other special values are returned are fully specified in the javadoc method c
 
 As of version 2.2, the policy for dealing with null references is as
 follows: When an argument is unexpectedly null, a
-[    NullArgumentException](../apidocs/org.hipparchus/exception/NullArgumentException.html)
+[    NullArgumentException](../apidocs/org/hipparchus/exception/NullArgumentException.html)
 is raised to signal the illegal argument. Note that this
 class does not inherit from the standard `NullPointerException` but is a subclass
 of `MathIllegalArgumentException`.

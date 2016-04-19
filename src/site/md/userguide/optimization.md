@@ -1,6 +1,6 @@
 # 12 Optimization
 <em>The contents of this section currently describes deprecated classes.</em>
-Please refer to the new [API        description](../apidocs/org.hipparchus/optim/package-summary.html)
+Please refer to the new [API        description](../apidocs/org/hipparchus/optim/package-summary.html)
 .
 
 Least squares optimizers are not in this package anymore, they have been moved
@@ -28,7 +28,7 @@ functions are called objective function here. When the goal is to minimize, the
 functions are often called cost function, this name is not used in this package.
 
 The type of goal, i.e. minimization or maximization, is defined by the enumerated
-[        GoalType](../apidocs/org.hipparchus/optimization/GoalType.html)
+[        GoalType](../apidocs/org/hipparchus/optimization/GoalType.html)
 which has only two values: `MAXIMIZE` and `MINIMIZE`.
 
 Optimizers are the algorithms that will either minimize or maximize, the objective
@@ -64,7 +64,7 @@ prevent being trapped into a local extremum when looking for a global one.
 
 
 ## 12.2 Univariate Functions
-A [          UnivariateOptimizer](../apidocs/org.hipparchus/optimization/univariate/UnivariateOptimizer.html)
+A [          UnivariateOptimizer](../apidocs/org/hipparchus/optimization/univariate/UnivariateOptimizer.html)
 is used to find the minimal values of a univariate real-valued
 function `f`.
 
@@ -199,7 +199,7 @@ A random number between zero and one was added to each y value calculated.
 | 9 | 754.598868667148 |
 | 10 | 916.128818085883 |
 
-First we need to implement the interface [DifferentiableMultivariateVectorFunction](../apidocs/org.hipparchus/analysis/DifferentiableMultivariateVectorFunction.html).
+First we need to implement the interface [DifferentiableMultivariateVectorFunction](../apidocs/org/hipparchus/analysis/DifferentiableMultivariateVectorFunction.html).
 This requires the implementation of the method signatures:
 
 
@@ -402,7 +402,7 @@ search direction update methods are supported. It is also possible to set up a p
 or to change the line-search algorithm of the inner loop if desired (the default one is a Brent
 solver).
 
-The [          PowellOptimizer](../apidocs/org.hipparchus/optimization/direct/PowellOptimizer.html)
+The [          PowellOptimizer](../apidocs/org/hipparchus/optimization/direct/PowellOptimizer.html)
 provides an optimization method for non-differentiable functions.
 
 

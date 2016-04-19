@@ -9,7 +9,7 @@ of y(t) from t=t<sub>0</sub> to t=t<sub>1</sub>.
 All integrators provide dense output. This means that besides computing the state vector
 at discrete times, they also provide a cheap mean to get both the state and its derivative
 between the time steps. They do so through classes extending the
-[StepInterpolator](../apidocs/org.hipparchus/ode/sampling/StepInterpolator.html)
+[StepInterpolator](../apidocs/org/hipparchus/ode/sampling/StepInterpolator.html)
 abstract class, which are made available to the user at the end of each step.
 
 All integrators handle multiple discrete events detection based on switching
@@ -49,11 +49,11 @@ primitive double API will be modified to match the newer field API. This cannot 
 3.6 for compatibility reasons.
 
 The user should describe his problem in his own classes which should implement the
-[FirstOrderDifferentialEquations](../apidocs/org.hipparchus/ode/FirstOrderDifferentialEquations.html)
-interface (or  [FirstOrderFieldDifferentialEquations](../apidocs/org.hipparchus/ode/FirstOrderFieldDifferentialEquations.html)
+[FirstOrderDifferentialEquations](../apidocs/org/hipparchus/ode/FirstOrderDifferentialEquations.html)
+interface (or  [FirstOrderFieldDifferentialEquations](../apidocs/org/hipparchus/ode/FirstOrderFieldDifferentialEquations.html)
 interface). Then he should pass it to the integrator he prefers among all the classes that implement
-the [FirstOrderIntegrator](../apidocs/org.hipparchus/ode/FirstOrderIntegrator.html)
-interface (or the [FirstOrderFieldIntegrator](../apidocs/org.hipparchus/ode/FirstOrderFieldIntegrator.html)
+the [FirstOrderIntegrator](../apidocs/org/hipparchus/ode/FirstOrderIntegrator.html)
+interface (or the [FirstOrderFieldIntegrator](../apidocs/org/hipparchus/ode/FirstOrderFieldIntegrator.html)
 interface). The following example shows how to implement the simple two-dimensional problem using double primitives:
 * y'<sub>0</sub>(t) = ω × (c<sub>1</sub> - y<sub>1</sub>(t))
 * y'<sub>1</sub>(t) = ω × (y<sub>0</sub>(t) - c<sub>0</sub>)
@@ -98,10 +98,10 @@ simple use: the state vector at the end of the integration process is copied in 
 `FirstOrderIntegrator.integrate` method, as shown by previous example. The second one
 should be used when more in-depth information is needed throughout the integration process. The user
 can register an object implementing the
-[StepHandler](../apidocs/org.hipparchus/ode/sampling/StepHandler.html) interface or a
-[StepNormalizer](../apidocs/org.hipparchus/ode/sampling/StepNormalizer.html) object wrapping
+[StepHandler](../apidocs/org/hipparchus/ode/sampling/StepHandler.html) interface or a
+[StepNormalizer](../apidocs/org/hipparchus/ode/sampling/StepNormalizer.html) object wrapping
 a user-specified object implementing the
-[FixedStepHandler](../apidocs/org.hipparchus/ode/sampling/FixedStepHandler.html) interface
+[FixedStepHandler](../apidocs/org/hipparchus/ode/sampling/FixedStepHandler.html) interface
 into the integrator before calling the `FirstOrderIntegrator.integrate` method. The user object
 will be called appropriately during the integration process, allowing the user to process intermediate
 results. The default step handler does nothing. Considering again the previous example, we want to print the
@@ -120,7 +120,7 @@ to integrator.integrate:
         }
     };
     integrator.addStepHandler(stepHandler);
-[ContinuousOutputModel](../apidocs/org.hipparchus/ode/ContinuousOutputModel.html)
+[ContinuousOutputModel](../apidocs/org/hipparchus/ode/ContinuousOutputModel.html)
 is a special-purpose step handler that is able to store all steps and to provide transparent access to
 any intermediate result once the integration is over. An important feature of this class is that it
 implements the `Serializable` interface. This means that a complete continuous model of the
@@ -128,10 +128,10 @@ integrated function throughout the integration range can be serialized and reuse
 a persistent medium like a file system or a database) or elsewhere (if sent to another application).
 Only the result of the integration is stored, there is no reference to the integrated problem by itself.
 
-Other default implementations of the [StepHandler](../apidocs/org.hipparchus/ode/sampling/StepHandler.html)
+Other default implementations of the [StepHandler](../apidocs/org/hipparchus/ode/sampling/StepHandler.html)
 interface are available for general needs
-([DummyStepHandler](../apidocs/org.hipparchus/ode/sampling/DummyStepHandler.html),
-[StepNormalizer](../apidocs/org.hipparchus/ode/sampling/StepNormalizer.html)) and custom
+([DummyStepHandler](../apidocs/org/hipparchus/ode/sampling/DummyStepHandler.html),
+[StepNormalizer](../apidocs/org/hipparchus/ode/sampling/StepNormalizer.html)) and custom
 implementations can be developed for specific needs. As an example, if an application is to be
 completely driven by the integration process, then most of the application code will be run inside a
 step handler specific to this application.
@@ -139,12 +139,12 @@ step handler specific to this application.
 Some integrators (the simple ones) use fixed steps that are set at creation time. The more efficient
 integrators use variable steps that are handled internally in order to control the integration error
 of the main state with respect to a specified accuracy (these integrators extend the
-[AdaptiveStepsizeIntegrator](../apidocs/org.hipparchus/ode/AdaptiveStepsizeIntegrator.html)
+[AdaptiveStepsizeIntegrator](../apidocs/org/hipparchus/ode/AdaptiveStepsizeIntegrator.html)
 abstract class). The secondary equations are explicitly ignored for step size control, in order to get reproducible
 results regardless of the secondary equations being integrated or not. The step handler which is called after each
-successful step shows up the variable stepsize. The [StepNormalizer](../apidocs/org.hipparchus/ode/sampling/StepNormalizer.html)
+successful step shows up the variable stepsize. The [StepNormalizer](../apidocs/org/hipparchus/ode/sampling/StepNormalizer.html)
 class can be used to convert the variable stepsize into a fixed stepsize that can be handled by classes
-implementing the [FixedStepHandler](../apidocs/org.hipparchus/ode/sampling/FixedStepHandler.html)
+implementing the [FixedStepHandler](../apidocs/org/hipparchus/ode/sampling/FixedStepHandler.html)
 interface. Adaptive stepsize integrators can automatically compute the initial stepsize by themselves,
 however the user can specify it if he prefers to retain full control over the integration or if the
 automatic guess is wrong.
@@ -157,7 +157,7 @@ is not defined by the time t but by a target condition on state y (say y[0] = 1.
 for example).
 
 Discrete events detection is based on switching functions. The user provides
-a simple [g(t, y)](../apidocs/org.hipparchus/ode/events/EventHandler.html)
+a simple [g(t, y)](../apidocs/org/hipparchus/ode/events/EventHandler.html)
 function depending on the current time and state. The integrator will monitor
 the value of the function throughout integration range and will trigger the
 event when its sign changes. The magnitude of the value is almost irrelevant.
@@ -226,22 +226,22 @@ on the Nordsieck vector representation of the state.
 | <font size="+1">Fixed Step Integrators</font> |
 | --- |
 | Name | Order |
-| [Euler](../apidocs/org.hipparchus/ode/nonstiff/EulerIntegrator.html) | 1 |
-| [Midpoint](../apidocs/org.hipparchus/ode/nonstiff/MidpointIntegrator.html) | 2 |
-| [Classical Runge-Kutta](../apidocs/org.hipparchus/ode/nonstiff/ClassicalRungeKuttaIntegrator.html) | 4 |
-| [Gill](../apidocs/org.hipparchus/ode/nonstiff/GillIntegrator.html) | 4 |
-| [3/8](../apidocs/org.hipparchus/ode/nonstiff/ThreeEighthesIntegrator.html) | 4 |
-| [Luther](../apidocs/org.hipparchus/ode/nonstiff/LutherIntegrator.html) | 6 |
+| [Euler](../apidocs/org/hipparchus/ode/nonstiff/EulerIntegrator.html) | 1 |
+| [Midpoint](../apidocs/org/hipparchus/ode/nonstiff/MidpointIntegrator.html) | 2 |
+| [Classical Runge-Kutta](../apidocs/org/hipparchus/ode/nonstiff/ClassicalRungeKuttaIntegrator.html) | 4 |
+| [Gill](../apidocs/org/hipparchus/ode/nonstiff/GillIntegrator.html) | 4 |
+| [3/8](../apidocs/org/hipparchus/ode/nonstiff/ThreeEighthesIntegrator.html) | 4 |
+| [Luther](../apidocs/org/hipparchus/ode/nonstiff/LutherIntegrator.html) | 6 |
 
 | <font size="+1">Adaptive Stepsize Integrators</font> |
 | --- |
 | Name | Integration Order | Error Estimation Order |
-| [Higham and Hall](../apidocs/org.hipparchus/ode/nonstiff/HighamHall54Integrator.html) | 5 | 4 |
-| [Dormand-Prince 5(4)](../apidocs/org.hipparchus/ode/nonstiff/DormandPrince54Integrator.html) | 5 | 4 |
-| [Dormand-Prince 8(5,3)](../apidocs/org.hipparchus/ode/nonstiff/DormandPrince853Integrator.html) | 8 | 5 and 3 |
-| [Gragg-Bulirsch-Stoer](../apidocs/org.hipparchus/ode/nonstiff/GraggBulirschStoerIntegrator.html) | variable (up to 18 by default) | variable |
-| [Adams-Bashforth](../apidocs/org.hipparchus/ode/nonstiff/AdamsBashforthIntegrator.html) | variable | variable |
-| [Adams-Moulton](../apidocs/org.hipparchus/ode/nonstiff/AdamsMoultonIntegrator.html) | variable | variable |
+| [Higham and Hall](../apidocs/org/hipparchus/ode/nonstiff/HighamHall54Integrator.html) | 5 | 4 |
+| [Dormand-Prince 5(4)](../apidocs/org/hipparchus/ode/nonstiff/DormandPrince54Integrator.html) | 5 | 4 |
+| [Dormand-Prince 8(5,3)](../apidocs/org/hipparchus/ode/nonstiff/DormandPrince853Integrator.html) | 8 | 5 and 3 |
+| [Gragg-Bulirsch-Stoer](../apidocs/org/hipparchus/ode/nonstiff/GraggBulirschStoerIntegrator.html) | variable (up to 18 by default) | variable |
+| [Adams-Bashforth](../apidocs/org/hipparchus/ode/nonstiff/AdamsBashforthIntegrator.html) | variable | variable |
+| [Adams-Moulton](../apidocs/org/hipparchus/ode/nonstiff/AdamsMoultonIntegrator.html) | variable | variable |
 
 
 ## 15.5 Derivatives
@@ -270,7 +270,7 @@ results in both cases.
 
 What remains of user responsibility is to provide the local Jacobians df(t, y, p)/dy and df(t, y, p)/dp<sub>k</sub>
 corresponding the the main ODE y'=f(t, y, p). The main ODE is as usual provided by the user as a class implementing
-the [FirstOrderDifferentialEquations](../apidocs/org.hipparchus/ode/FirstOrderDifferentialEquations.html)
+the [FirstOrderDifferentialEquations](../apidocs/org/hipparchus/ode/FirstOrderDifferentialEquations.html)
 interface or a sub-interface.
 
 If the ODE is simple enough that the user can implement df(t, y, p)/dy directly, then instead of providing an
@@ -279,7 +279,7 @@ href="../apidocs/org.hipparchus/ode/FirstOrderDifferentialEquations.html">FirstO
 interface only, the user should rather provide an implementation of the <a
 href="../apidocs/org.hipparchus/ode/MainStateJacobianProvider.html">MainStateJacobianProvider</a> interface,
 which extends the previous interface by adding a method to compute df(t, y, p)/dy. The user class is used as a
-constructor parameter of the [JacobianMatrices](../apidocs/org.hipparchus/ode/JacobianMatrices.html)
+constructor parameter of the [JacobianMatrices](../apidocs/org/hipparchus/ode/JacobianMatrices.html)
 class. If the ODE is too complex or the user simply does not bother implementing df(t, y, p)/dy directly, then
 the ODE can still be implemented using the simple <a
 href="../apidocs/org.hipparchus/ode/FirstOrderDifferentialEquations.html">FirstOrderDifferentialEquations</a>

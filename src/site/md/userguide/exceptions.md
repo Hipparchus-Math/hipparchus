@@ -23,10 +23,10 @@ by Bruce Eckel.
 ## 19.3 Hierarchies
 The exceptions defined by Commons Math follow the Java standard
 hierarchies:
-* [ `IllegalArgumentException`](http://docs.oracle.com/javase/6/docs/api/java/lang/IllegalArgumentException.html): A [ `MathIllegalArgumentException`](../apidocs/org.hipparchus/exception/MathIllegalArgumentException.html) is thrown when some input parameter fails a precondition check.
-* [ `IllegalStateException`](http://docs.oracle.com/javase/6/docs/api/java/lang/IllegalStateException.html): A [ `MathIllegalStateException`](../apidocs/org.hipparchus/exception/MathIllegalStateException.html) is thrown when some inconsistency has been detected.
-* [ `ArithmeticException`](http://docs.oracle.com/javase/6/docs/api/java/lang/MathArithmeticException.html): A [ `MathArithmeticException`](../apidocs/org.hipparchus/exception/MathArithmeticException.html) is thrown when conditions such as "division by zero" or "overflow" are encountered.
-* [ `UnsupportedOperationException`](http://docs.oracle.com/javase/6/docs/api/java/lang/MathUnsupportedOperationException.html): A [ `MathUnsupportedOperationException`](../apidocs/org.hipparchus/exception/MathUnsupportedOperationException.html) indicates that a feature is missing or does not make sense in the given context.
+* [ `IllegalArgumentException`](http://docs.oracle.com/javase/6/docs/api/java/lang/IllegalArgumentException.html): A [ `MathIllegalArgumentException`](../apidocs/org/hipparchus/exception/MathIllegalArgumentException.html) is thrown when some input parameter fails a precondition check.
+* [ `IllegalStateException`](http://docs.oracle.com/javase/6/docs/api/java/lang/IllegalStateException.html): A [ `MathIllegalStateException`](../apidocs/org/hipparchus/exception/MathIllegalStateException.html) is thrown when some inconsistency has been detected.
+* [ `ArithmeticException`](http://docs.oracle.com/javase/6/docs/api/java/lang/MathArithmeticException.html): A [ `MathArithmeticException`](../apidocs/org/hipparchus/exception/MathArithmeticException.html) is thrown when conditions such as "division by zero" or "overflow" are encountered.
+* [ `UnsupportedOperationException`](http://docs.oracle.com/javase/6/docs/api/java/lang/MathUnsupportedOperationException.html): A [ `MathUnsupportedOperationException`](../apidocs/org/hipparchus/exception/MathUnsupportedOperationException.html) indicates that a feature is missing or does not make sense in the given context.
 
 
 
@@ -36,10 +36,10 @@ exist, each conveying a specific underlying cause of the problem.
 
 
 ## 19.4 Features
-* [ `IllegalArgumentException`](http://docs.oracle.com/javase/6/docs/api/java/lang/IllegalArgumentException.html): A [ `MathIllegalArgumentException`](../apidocs/org.hipparchus/exception/MathIllegalArgumentException.html) is thrown when some input parameter fails a precondition check.
-* [ `IllegalStateException`](http://docs.oracle.com/javase/6/docs/api/java/lang/IllegalStateException.html): A [ `MathIllegalStateException`](../apidocs/org.hipparchus/exception/MathIllegalStateException.html) is thrown when some inconsistency has been detected.
-* [ `ArithmeticException`](http://docs.oracle.com/javase/6/docs/api/java/lang/MathArithmeticException.html): A [ `MathArithmeticException`](../apidocs/org.hipparchus/exception/MathArithmeticException.html) is thrown when conditions such as "division by zero" or "overflow" are encountered.
-* [ `UnsupportedOperationException`](http://docs.oracle.com/javase/6/docs/api/java/lang/MathUnsupportedOperationException.html): A [ `MathUnsupportedOperationException`](../apidocs/org.hipparchus/exception/MathUnsupportedOperationException.html) indicates that a feature is missing or does not make sense in the given context.
+* [ `IllegalArgumentException`](http://docs.oracle.com/javase/6/docs/api/java/lang/IllegalArgumentException.html): A [ `MathIllegalArgumentException`](../apidocs/org/hipparchus/exception/MathIllegalArgumentException.html) is thrown when some input parameter fails a precondition check.
+* [ `IllegalStateException`](http://docs.oracle.com/javase/6/docs/api/java/lang/IllegalStateException.html): A [ `MathIllegalStateException`](../apidocs/org/hipparchus/exception/MathIllegalStateException.html) is thrown when some inconsistency has been detected.
+* [ `ArithmeticException`](http://docs.oracle.com/javase/6/docs/api/java/lang/MathArithmeticException.html): A [ `MathArithmeticException`](../apidocs/org/hipparchus/exception/MathArithmeticException.html) is thrown when conditions such as "division by zero" or "overflow" are encountered.
+* [ `UnsupportedOperationException`](http://docs.oracle.com/javase/6/docs/api/java/lang/MathUnsupportedOperationException.html): A [ `MathUnsupportedOperationException`](../apidocs/org/hipparchus/exception/MathUnsupportedOperationException.html) indicates that a feature is missing or does not make sense in the given context.
 
 
 

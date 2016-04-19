@@ -7,7 +7,7 @@ be used to solve linear systems either in exact sense and in least squares sense
 
 
 ## 3.2 Real matrices
-The [          RealMatrix](../apidocs/org.hipparchus/linear/RealMatrix.html)
+The [          RealMatrix](../apidocs/org/hipparchus/linear/RealMatrix.html)
 interface represents a matrix with real numbers as
 entries.  The following basic matrix operations are supported:
 * Matrix addition, subtraction, multiplication
@@ -50,7 +50,7 @@ SparseRealMatrix</a> for sparse matrices.
 
 
 ## 3.3 Real vectors
-The [          RealVector](../apidocs/org.hipparchus/linear/RealVector.html)
+The [          RealVector](../apidocs/org/hipparchus/linear/RealVector.html)
 interface represents a vector with real numbers as
 entries.  The following basic matrix operations are supported:
 * Matrix addition, subtraction, multiplication
@@ -60,7 +60,7 @@ entries.  The following basic matrix operations are supported:
 * Operation on a vector
 
 
-The [          RealVectorFormat](../apidocs/org.hipparchus/linear/RealVectorFormat.html)
+The [          RealVectorFormat](../apidocs/org/hipparchus/linear/RealVectorFormat.html)
 class handles input/output of vectors in a customizable
 textual format.
 
@@ -115,11 +115,11 @@ and for algorithms that compute least square solutions.
 | <font size="+1">Decomposition algorithms</font> |
 | --- |
 | Name | coefficients matrix | problem type |
-| [LU](../apidocs/org.hipparchus/linear/LUDecomposition.html) | square | exact solution only |
-| [Cholesky](../apidocs/org.hipparchus/linear/CholeskyDecomposition.html) | symmetric positive definite | exact solution only |
-| [QR](../apidocs/org.hipparchus/linear/QRDecomposition.html) | any | least squares solution |
-| [eigen decomposition](../apidocs/org.hipparchus/linear/EigenDecomposition.html) | square | exact solution only |
-| [SVD](../apidocs/org.hipparchus/linear/SingularValueDecomposition.html) | any | least squares solution |
+| [LU](../apidocs/org/hipparchus/linear/LUDecomposition.html) | square | exact solution only |
+| [Cholesky](../apidocs/org/hipparchus/linear/CholeskyDecomposition.html) | symmetric positive definite | exact solution only |
+| [QR](../apidocs/org/hipparchus/linear/QRDecomposition.html) | any | least squares solution |
+| [eigen decomposition](../apidocs/org/hipparchus/linear/EigenDecomposition.html) | square | exact solution only |
+| [SVD](../apidocs/org/hipparchus/linear/SingularValueDecomposition.html) | any | least squares solution |
 
 It is possible to use a simple array of double instead of a `RealVector`.
 In this case, the solution will be provided also as an array of double.

@@ -5,8 +5,8 @@ fraction number formatting.
 
 
 ## 9.2 Fraction Numbers
-[          Fraction](../apidocs/org.hipparchus/fraction/Fraction.html)
-and [          BigFraction](../apidocs/org.hipparchus/fraction/BigFraction.html)
+[          Fraction](../apidocs/org/hipparchus/fraction/Fraction.html)
+and [          BigFraction](../apidocs/org/hipparchus/fraction/BigFraction.html)
 provide fraction number type that forms the basis for
 the fraction functionality found in Commons-Math. The former one can be
 used for fractions whose numerators and denominators are small enough
@@ -40,7 +40,7 @@ Like fraction construction, for each of the fraction functions, the resulting fr
 
 ## 9.3 Fraction Formatting and Parsing
 `Fraction` instances can be converted to and from strings
-using the[          FractionFormat](../apidocs/org.hipparchus/fraction/FractionFormat.html)
+using the[          FractionFormat](../apidocs/org/hipparchus/fraction/FractionFormat.html)
 class. `FractionFormat` is a
 `java.text.Format` extension and, as such, is used like other
 formatting objects (e.g. `java.text.SimpleDateFormat`):

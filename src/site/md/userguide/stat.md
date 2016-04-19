@@ -31,12 +31,12 @@ implementations that do not require value storage as well as
 implementations that operate on arrays of stored values.
 
 The top level interface is
-[          UnivariateStatistic](../apidocs/org.hipparchus/stat/descriptive/UnivariateStatistic.html)
+[          UnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/UnivariateStatistic.html)
 .
 This interface, implemented by all statistics, consists of
 `evaluate()` methods that take double[] arrays as arguments
 and return the value of the statistic.   This interface is extended by
-[          StorelessUnivariateStatistic](../apidocs/org.hipparchus/stat/descriptive/StorelessUnivariateStatistic.html)
+[          StorelessUnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/StorelessUnivariateStatistic.html)
 , which adds `increment(),`
 `getResult()` and associated methods to support
 "storageless" implementations that maintain counters, sums or other
@@ -44,9 +44,9 @@ state information as values are added using the `increment()`
 method.
 
 Abstract implementations of the top level interfaces are provided in
-[          AbstractUnivariateStatistic](../apidocs/org.hipparchus/stat/descriptive/AbstractUnivariateStatistic.html)
+[          AbstractUnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/AbstractUnivariateStatistic.html)
 and
-[          AbstractStorelessUnivariateStatistic](../apidocs/org.hipparchus/stat/descriptive/AbstractStorelessUnivariateStatistic.html)
+[          AbstractStorelessUnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/AbstractStorelessUnivariateStatistic.html)
 respectively.
 
 Each statistic is implemented as a separate class, in one of the
@@ -55,9 +55,9 @@ classes above (depending on whether or not value storage is required to
 compute the statistic). There are several ways to instantiate and use statistics.
 Statistics can be instantiated and used directly,  but it is generally more convenient
 (and efficient) to access them using the provided aggregates,
-[           DescriptiveStatistics](../apidocs/org.hipparchus/stat/descriptive/DescriptiveStatistics.html)
+[           DescriptiveStatistics](../apidocs/org/hipparchus/stat/descriptive/DescriptiveStatistics.html)
 and
-[           SummaryStatistics.](../apidocs/org.hipparchus/stat/descriptive/SummaryStatistics.html)
+[           SummaryStatistics.](../apidocs/org/hipparchus/stat/descriptive/SummaryStatistics.html)
 
 
 `DescriptiveStatistics` maintains the input data in memory
@@ -71,11 +71,11 @@ the full array of values.
 
 | Aggregate | Statistics Included | Values stored? | "Rolling" capability? |
 | --- | --- | --- | --- |
-| [ DescriptiveStatistics](../apidocs/org.hipparchus/stat/descriptive/DescriptiveStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance, percentiles, skewness, kurtosis, median | Yes | Yes |
-| [ SummaryStatistics](../apidocs/org.hipparchus/stat/descriptive/SummaryStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance | No | No |
+| [ DescriptiveStatistics](../apidocs/org/hipparchus/stat/descriptive/DescriptiveStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance, percentiles, skewness, kurtosis, median | Yes | Yes |
+| [ SummaryStatistics](../apidocs/org/hipparchus/stat/descriptive/SummaryStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance | No | No |
 
 `SummaryStatistics` can be aggregated using
-[          AggregateSummaryStatistics.](../apidocs/org.hipparchus/stat/descriptive/AggregateSummaryStatistics.html)
+[          AggregateSummaryStatistics.](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html)
 This class can be used to concurrently
 gather statistics for multiple datasets as well as for a combined sample
 including all of the data.
@@ -87,18 +87,18 @@ input data.
 
 Neither `DescriptiveStatistics` nor `SummaryStatistics`
 is thread-safe.
-[           SynchronizedDescriptiveStatistics](../apidocs/org.hipparchus/stat/descriptive/SynchronizedDescriptiveStatistics.html)
+[           SynchronizedDescriptiveStatistics](../apidocs/org/hipparchus/stat/descriptive/SynchronizedDescriptiveStatistics.html)
 and
-[            SynchronizedSummaryStatistics](../apidocs/org.hipparchus/stat/descriptive/SynchronizedSummaryStatistics.html)
+[            SynchronizedSummaryStatistics](../apidocs/org/hipparchus/stat/descriptive/SynchronizedSummaryStatistics.html)
 , respectively, provide thread-safe
 versions for applications that require concurrent access to statistical
 aggregates by multiple threads.
-[            SynchronizedMultivariateSummaryStatistics](../apidocs/org.hipparchus/stat/descriptive/SynchronizedMultiVariateSummaryStatistics.html)
+[            SynchronizedMultivariateSummaryStatistics](../apidocs/org/hipparchus/stat/descriptive/SynchronizedMultiVariateSummaryStatistics.html)
 provides thread-safe
 `MultivariateSummaryStatistics.`
 
 There is also a utility class,
-[          StatUtils](../apidocs/org.hipparchus/stat/StatUtils.html)
+[          StatUtils](../apidocs/org/hipparchus/stat/StatUtils.html)
 , that provides static methods for computing statistics
 directly from double[] arrays.
 
@@ -190,7 +190,7 @@ window size set to 100
 The first is to use an `AggregateSummaryStatistics` instance
 to accumulate overall statistics contributed by `SummaryStatistics`
 instances created using
-[        AggregateSummaryStatistics.createContributingStatistics()](../apidocs/org.hipparchus/stat/descriptive/AggregateSummaryStatistics.html#createContributingStatistics())
+[        AggregateSummaryStatistics.createContributingStatistics()](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html#createContributingStatistics())
 :
 
     // Create a AggregateSummaryStatistics instance to accumulate the overall statistics 
@@ -210,7 +210,7 @@ The above approach has the disadvantages that the `addValue` calls must be synch
 `SummaryStatistics` instance maintained by the aggregate and each value addition updates the
 aggregate as well as the subsample. For applications that can wait to do the aggregation until all values
 have been added, a static
-[          aggregate](../apidocs/org.hipparchus/stat/descriptive/AggregateSummaryStatistics.html#aggregate(java.util.Collection))
+[          aggregate](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html#aggregate(java.util.Collection))
 method is available, as shown in the following example.
 This method should be used when aggregation needs to be done across threads.
 
@@ -236,7 +236,7 @@ This method should be used when aggregation needs to be done across threads.
 
 
 ## 1.3 Frequency distributions
-[          Frequency](../apidocs/org.hipparchus/stat/Frequency.html)
+[          Frequency](../apidocs/org/hipparchus/stat/Frequency.html)
 
 provides a simple interface for maintaining counts and percentages of discrete
 values.
@@ -294,7 +294,7 @@ Here are some examples.
 
 
 ## 1.4 Simple regression
-[          SimpleRegression](../apidocs/org.hipparchus/stat/regression/SimpleRegression.html)
+[          SimpleRegression](../apidocs/org/hipparchus/stat/regression/SimpleRegression.html)
 provides ordinary least squares regression with
 one independent variable estimating the linear model:
 
@@ -415,9 +415,9 @@ may be biased.
 
 
 ## 1.5 Multiple linear regression
-[         OLSMultipleLinearRegression](../apidocs/org.hipparchus/stat/regression/OLSMultipleLinearRegression.html)
+[         OLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html)
 and
-[         GLSMultipleLinearRegression](../apidocs/org.hipparchus/stat/regression/GLSMultipleLinearRegression.html)
+[         GLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html)
 provide least squares regression to fit the linear model:
 
 ` Y=X*b+u `
@@ -426,20 +426,20 @@ where Y is an n-vector <b>regressand</b>, X is a [n,k] matrix whose k columns ar
 <b>regressors</b>, b is k-vector of <b>regression parameters</b> and u is an n-vector
 of <b>error terms</b> or <b>residuals</b>.
 
-[          OLSMultipleLinearRegression](../apidocs/org.hipparchus/stat/regression/OLSMultipleLinearRegression.html)
+[          OLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html)
 provides Ordinary Least Squares Regression, and
-[          GLSMultipleLinearRegression](../apidocs/org.hipparchus/stat/regression/GLSMultipleLinearRegression.html)
+[          GLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html)
 implements Generalized Least Squares.  See the javadoc for these
 classes for details on the algorithms and formulas used.
 
 Data for OLS models can be loaded in a single double[] array, consisting of concatenated rows of data, each containing
 the regressand (Y) value, followed by regressor values; or using a double[][] array with rows corresponding to
 observations. GLS models also require a double[][] array representing the covariance matrix of the error terms.  See
-[           AbstractMultipleLinearRegression#newSampleData(double[],int,int)](../apidocs/org.hipparchus/stat/regression/AbstractMultipleLinearRegression.html#newSampleData(double[], int, int))
+[           AbstractMultipleLinearRegression#newSampleData(double[],int,int)](../apidocs/org/hipparchus/stat/regression/AbstractMultipleLinearRegression.html#newSampleData(double[], int, int))
 ,
-[           OLSMultipleLinearRegression#newSampleData(double[], double[][])](../apidocs/org.hipparchus/stat/regression/OLSMultipleLinearRegression.html#newSampleData(double[], double[][]))
+[           OLSMultipleLinearRegression#newSampleData(double[], double[][])](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html#newSampleData(double[], double[][]))
 and
-[           GLSMultipleLinearRegression#newSampleData(double[],double[][],double[][])](../apidocs/org.hipparchus/stat/regression/GLSMultipleLinearRegression.html#newSampleData(double[], double[][], double[][]))
+[           GLSMultipleLinearRegression#newSampleData(double[],double[][],double[][])](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html#newSampleData(double[], double[][], double[][]))
 for details.
 
 * arithmetic and geometric means
@@ -508,11 +508,11 @@ Here are some examples.
 
 ## 1.6 Rank transformations
 Some statistical algorithms require that input data be replaced by ranks.
-The [         org.hipparchus.stat.ranking](../apidocs/org.hipparchus/stat/ranking/package-summary.html)
+The [         org.hipparchus.stat.ranking](../apidocs/org/hipparchus/stat/ranking/package-summary.html)
 package provides rank transformation.
-[         RankingAlgorithm](../apidocs/org.hipparchus/stat/ranking/RankingAlgorithm.html)
+[         RankingAlgorithm](../apidocs/org/hipparchus/stat/ranking/RankingAlgorithm.html)
 defines the interface for ranking.
-[         NaturalRanking](../apidocs/org.hipparchus/stat/ranking/NaturalRanking.html)
+[         NaturalRanking](../apidocs/org/hipparchus/stat/ranking/NaturalRanking.html)
 provides an implementation that has two configuration options.
 * arithmetic and geometric means
 * variance and standard deviation
@@ -538,23 +538,23 @@ The default `NaNStrategy` is NaNStrategy.MAXIMAL.  This makes `NaN`
 values larger than any other value (including `Double.POSITIVE_INFINITY`). The
 default `TiesStrategy` is `TiesStrategy.AVERAGE,` which assigns tied
 values the average of the ranks applicable to the sequence of ties.  See the
-[        NaturalRanking](../apidocs/org.hipparchus/stat/ranking/NaturalRanking.html)
-for more examples and [        TiesStrategy](../apidocs/org.hipparchus/stat/ranking/TiesStrategy.html)
-and [NaNStrategy](../apidocs/org.hipparchus/stat/ranking/NaNStrategy.html)
+[        NaturalRanking](../apidocs/org/hipparchus/stat/ranking/NaturalRanking.html)
+for more examples and [        TiesStrategy](../apidocs/org/hipparchus/stat/ranking/TiesStrategy.html)
+and [NaNStrategy](../apidocs/org/hipparchus/stat/ranking/NaNStrategy.html)
 for details on these configuration options.
 
 
 ## 1.7 Covariance and correlation
-The [          org.hipparchus.stat.correlation](../apidocs/org.hipparchus/stat/correlation/package-summary.html)
+The [          org.hipparchus.stat.correlation](../apidocs/org/hipparchus/stat/correlation/package-summary.html)
 package computes covariances
 and correlations for pairs of arrays or columns of a matrix.
-[          Covariance](../apidocs/org.hipparchus/stat/correlation/Covariance.html)
+[          Covariance](../apidocs/org/hipparchus/stat/correlation/Covariance.html)
 computes covariances,
-[          PearsonsCorrelation](../apidocs/org.hipparchus/stat/correlation/PearsonsCorrelation.html)
+[          PearsonsCorrelation](../apidocs/org/hipparchus/stat/correlation/PearsonsCorrelation.html)
 provides Pearson's Product-Moment correlation coefficients,
-[          SpearmansCorrelation](../apidocs/org.hipparchus/stat/correlation/SpearmansCorrelation.html)
+[          SpearmansCorrelation](../apidocs/org/hipparchus/stat/correlation/SpearmansCorrelation.html)
 computes Spearman's rank correlation and
-[          KendallsCorrelation](../apidocs/org.hipparchus/stat/correlation/KendallsCorrelation.html)
+[          KendallsCorrelation](../apidocs/org/hipparchus/stat/correlation/KendallsCorrelation.html)
 computes Kendall's tau rank correlation.
 
 <strong>Implementation Notes</strong>
@@ -667,7 +667,7 @@ This is equivalent to
 
 
 ## 1.8 Statistical tests
-The [          org.hipparchus.stat.inference](../apidocs/org.hipparchus/stat/inference/)
+The [          org.hipparchus.stat.inference](../apidocs/org/hipparchus/stat/inference/)
 package provides implementations for
 [          Student's t](http://www.itl.nist.gov/div898/handbook/prc/section2/prc22.htm)
 ,
@@ -687,23 +687,23 @@ associated with `t-`,
 `Chi-Square`, `G`, `One-Way ANOVA`, `Mann-Whitney U`
 `Wilcoxon signed rank`, and `Kolmogorov-Smirnov` tests.
 The respective test classes are
-[          TTest](../apidocs/org.hipparchus/stat/inference/TTest.html)
+[          TTest](../apidocs/org/hipparchus/stat/inference/TTest.html)
 ,
-[          ChiSquareTest](../apidocs/org.hipparchus/stat/inference/ChiSquareTest.html)
+[          ChiSquareTest](../apidocs/org/hipparchus/stat/inference/ChiSquareTest.html)
 ,
-[          GTest](../apidocs/org.hipparchus/stat/inference/GTest.html)
+[          GTest](../apidocs/org/hipparchus/stat/inference/GTest.html)
 ,
-[          OneWayAnova](../apidocs/org.hipparchus/stat/inference/OneWayAnova.html)
+[          OneWayAnova](../apidocs/org/hipparchus/stat/inference/OneWayAnova.html)
 ,
-[          MannWhitneyUTest](../apidocs/org.hipparchus/stat/inference/MannWhitneyUTest.html)
+[          MannWhitneyUTest](../apidocs/org/hipparchus/stat/inference/MannWhitneyUTest.html)
 ,
-[          WilcoxonSignedRankTest](../apidocs/org.hipparchus/stat/inference/WilcoxonSignedRankTest.html)
+[          WilcoxonSignedRankTest](../apidocs/org/hipparchus/stat/inference/WilcoxonSignedRankTest.html)
 ,
-[          BinomialTest](../apidocs/org.hipparchus/stat/inference/BinomialTest.html)
+[          BinomialTest](../apidocs/org/hipparchus/stat/inference/BinomialTest.html)
 and
-[          KolmogorovSmirnovTest](../apidocs/org.hipparchus/stat/inference/KolmogorovSmirnovTest.html)
+[          KolmogorovSmirnovTest](../apidocs/org/hipparchus/stat/inference/KolmogorovSmirnovTest.html)
 .
-The [          TestUtils](../apidocs/org.hipparchus/stat/inference/TestUtils.html)
+The [          TestUtils](../apidocs/org/hipparchus/stat/inference/TestUtils.html)
 class provides static methods to get test instances or
 to compute test statistics directly.  The examples below all use the
 static methods in `TestUtils` to execute tests.  To get
@@ -733,7 +733,7 @@ t-test comparing the mean of the `observed` values against
 `mu.`
 </dd>
 <dd>To compare the mean of a dataset described by a
-[          StatisticalSummary](../apidocs/org.hipparchus/stat/descriptive/StatisticalSummary.html)
+[          StatisticalSummary](../apidocs/org/hipparchus/stat/descriptive/StatisticalSummary.html)
 to a fixed value:
 
     double[] observed ={1d, 2d, 3d};

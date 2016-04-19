@@ -4,13 +4,13 @@ The filter package currently provides only an implementation of a Kalman filter.
 
 
 ## 17.2 Kalman Filter
-[          KalmanFilter](../apidocs/org.hipparchus/filter/KalmanFilter.html)
+[          KalmanFilter](../apidocs/org/hipparchus/filter/KalmanFilter.html)
 provides a discrete-time filter to estimate
 a stochastic linear process.
 
 
-A Kalman filter is initialized with a [          ProcessModel](../apidocs/org.hipparchus/filter/ProcessModel.html)
-and a [          MeasurementModel](../apidocs/org.hipparchus/filter/MeasurementModel.html)
+A Kalman filter is initialized with a [          ProcessModel](../apidocs/org/hipparchus/filter/ProcessModel.html)
+and a [          MeasurementModel](../apidocs/org/hipparchus/filter/MeasurementModel.html)
 , which contain the corresponding transformation and noise covariance matrices.
 The parameter names used in the respective models correspond to the following names commonly used
 in the mathematical literature:

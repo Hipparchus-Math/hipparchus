@@ -5,15 +5,15 @@ genetic algorithms.
 
 
 ## 16.2 GA Framework
-[      GeneticAlgorithm](../apidocs/org.hipparchus/genetics/GeneticAlgorithm.html)
+[      GeneticAlgorithm](../apidocs/org/hipparchus/genetics/GeneticAlgorithm.html)
 provides an execution framework for Genetic Algorithms (GA).
-[      Populations,](../apidocs/org.hipparchus/genetics/Population.html)
-consisting of [      Chromosomes](../apidocs/org.hipparchus/genetics/Chromosome.html)
+[      Populations,](../apidocs/org/hipparchus/genetics/Population.html)
+consisting of [      Chromosomes](../apidocs/org/hipparchus/genetics/Chromosome.html)
 are evolved by the `GeneticAlgorithm` until a
-[      StoppingCondition](../apidocs/org.hipparchus/genetics/StoppingCondition.html)
-is reached. Evolution is determined by [      SelectionPolicy](../apidocs/org.hipparchus/genetics/SelectionPolicy.html)
-, [      MutationPolicy](../apidocs/org.hipparchus/genetics/MutationPolicy.html)
-and [      Fitness](../apidocs/org.hipparchus/genetics/Fitness.html)
+[      StoppingCondition](../apidocs/org/hipparchus/genetics/StoppingCondition.html)
+is reached. Evolution is determined by [      SelectionPolicy](../apidocs/org/hipparchus/genetics/SelectionPolicy.html)
+, [      MutationPolicy](../apidocs/org/hipparchus/genetics/MutationPolicy.html)
+and [      Fitness](../apidocs/org/hipparchus/genetics/Fitness.html)
 .
 
 The GA itself is implemented by the `evolve` method of the
@@ -30,8 +30,8 @@ which looks like this:
 The `nextGeneration` method implements the following algorithm:
 1. Get nextGeneration population to fill from `current` generation, using its nextGeneration method
 * Apply configured `SelectionPolicy` to select a pair of parents from `current`
-* With probability = [ getCrossoverRate()](../apidocs/org.hipparchus/genetics/GeneticAlgorithm.html#getCrossoverRate()), apply configured `CrossoverPolicy` to parents
-* With probability = [ getMutationRate()](../apidocs/org.hipparchus/genetics/GeneticAlgorithm.html#getMutationRate()), apply configured `MutationPolicy` to each of the offspring
+* With probability = [ getCrossoverRate()](../apidocs/org/hipparchus/genetics/GeneticAlgorithm.html#getCrossoverRate()), apply configured `CrossoverPolicy` to parents
+* With probability = [ getMutationRate()](../apidocs/org/hipparchus/genetics/GeneticAlgorithm.html#getMutationRate()), apply configured `MutationPolicy` to each of the offspring
 * Add offspring individually to nextGeneration, space permitting
 1. Return nextGeneration
 
@@ -63,15 +63,15 @@ Here is an example GA execution:
 The arguments to the `GeneticAlgorithm` constructor above are: <br/>
 | Parameter | value in example | meaning |
 | --- | --- | --- |
-| crossoverPolicy | [OnePointCrossover](../apidocs/org.hipparchus/genetics/OnePointCrossover.html) | A random crossover point is selected and the first part from each parent is copied to the corresponding child, and the second parts are copied crosswise. |
+| crossoverPolicy | [OnePointCrossover](../apidocs/org/hipparchus/genetics/OnePointCrossover.html) | A random crossover point is selected and the first part from each parent is copied to the corresponding child, and the second parts are copied crosswise. |
 | crossoverRate | 1 | Always apply crossover |
-| mutationPolicy | [RandomKeyMutation](../apidocs/org.hipparchus/genetics/RandomKeyMutation.html) | Changes a randomly chosen element of the array representation to a random value uniformly distributed in [0,1]. |
+| mutationPolicy | [RandomKeyMutation](../apidocs/org/hipparchus/genetics/RandomKeyMutation.html) | Changes a randomly chosen element of the array representation to a random value uniformly distributed in [0,1]. |
 | mutationRate | .1 | Apply mutation with probability 0.1 - that is, 10% of the time. |
-| selectionPolicy | [TournamentSelection](../apidocs/org.hipparchus/genetics/TournamentSelection.html) | Each of the two selected chromosomes is selected based on an n-ary tournament -- this is done by drawing n random chromosomes without replacement from the population, and then selecting the fittest chromosome among them. |
+| selectionPolicy | [TournamentSelection](../apidocs/org/hipparchus/genetics/TournamentSelection.html) | Each of the two selected chromosomes is selected based on an n-ary tournament -- this is done by drawing n random chromosomes without replacement from the population, and then selecting the fittest chromosome among them. |
 The algorithm starts with an `initial` population of `Chromosomes.` and executes until
-the specified [StoppingCondition](../apidocs/org.hipparchus/genetics/StoppingCondition.html)
+the specified [StoppingCondition](../apidocs/org/hipparchus/genetics/StoppingCondition.html)
 is reached.  In the example above, a
-[FixedGenerationCount](../apidocs/org.hipparchus/genetics/FixedGenerationCount.html)
+[FixedGenerationCount](../apidocs/org/hipparchus/genetics/FixedGenerationCount.html)
 stopping condition is used, which means the algorithm proceeds through a fixed number of generations.
 
 

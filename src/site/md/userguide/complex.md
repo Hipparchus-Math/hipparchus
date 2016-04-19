@@ -6,7 +6,7 @@ formatting.
 
 
 ## 7.2 Complex Numbers
-[          Complex](../apidocs/org.hipparchus/complex/Complex.html)
+[          Complex](../apidocs/org/hipparchus/complex/Complex.html)
 provides a complex number type that forms the basis for
 the complex functionality found in commons-math.
 
@@ -16,9 +16,9 @@ following the rules for `java.lang.Double` arithmetic in
 handling infinite and `NaN` values.  No attempt is made
 to comply with ANSII/IEC C99x Annex G or any other standard for
 Complex arithmetic.  See the class and method javadocs for the
-[           Complex](../apidocs/org.hipparchus/complex/Complex.html)
+[           Complex](../apidocs/org/hipparchus/complex/Complex.html)
 and
-[           ComplexUtils](../apidocs/org.hipparchus/complex/ComplexUtils.html)
+[           ComplexUtils](../apidocs/org/hipparchus/complex/ComplexUtils.html)
 classes for details on computing formulas.
 
 To create a complex number, simply call the constructor passing in two
@@ -46,7 +46,7 @@ complex number functions similar to the real number functions found in
 
 
 ## 7.3 Complex Transcendental Functions
-[          Complex](../apidocs/org.hipparchus/complex/Complex.html)
+[          Complex](../apidocs/org/hipparchus/complex/Complex.html)
 also provides implementations of serveral transcendental
 functions involving complex number arguments.
 These operations provide the means to compute the log, sine, tangent,
@@ -62,7 +62,7 @@ and other complex values :
 
 ## 7.4 Complex Formatting and Parsing
 `Complex` instances can be converted to and from strings
-using the[          ComplexFormat](../apidocs/org.hipparchus/complex/ComplexFormat.html)
+using the[          ComplexFormat](../apidocs/org/hipparchus/complex/ComplexFormat.html)
 class.
 `ComplexFormat` is a `java.text.Format`
 extension and, as such, is used like other formatting objects (e.g.

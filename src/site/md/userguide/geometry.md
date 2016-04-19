@@ -12,11 +12,11 @@ space as shown in the following table:
 | <font size="+1">Regions</font> |
 | --- |
 | Space | Region |
-| Euclidean 1D | [IntervalsSet](../apidocs/org.hipparchus/geometry/euclidean/oned/IntervalsSet.html) |
-| Euclidean 2D | [PolygonsSet](../apidocs/org.hipparchus/geometry/euclidean/twod/PolygonsSet.html) |
-| Euclidean 3D | [PolyhedronsSet](../apidocs/org.hipparchus/geometry/euclidean/threed/PolyhedronsSet.html) |
-| 1-Sphere | [ArcsSet](../apidocs/org.hipparchus/geometry/spherical/oned/ArcsSet.html) |
-| 2-Sphere | [SphericalPolygonsSet](../apidocs/org.hipparchus/geometry/spherical/twod/SphericalPolygonsSet.html) |
+| Euclidean 1D | [IntervalsSet](../apidocs/org/hipparchus/geometry/euclidean/oned/IntervalsSet.html) |
+| Euclidean 2D | [PolygonsSet](../apidocs/org/hipparchus/geometry/euclidean/twod/PolygonsSet.html) |
+| Euclidean 3D | [PolyhedronsSet](../apidocs/org/hipparchus/geometry/euclidean/threed/PolyhedronsSet.html) |
+| 1-Sphere | [ArcsSet](../apidocs/org/hipparchus/geometry/spherical/oned/ArcsSet.html) |
+| 2-Sphere | [SphericalPolygonsSet](../apidocs/org/hipparchus/geometry/spherical/twod/SphericalPolygonsSet.html) |
 
 All these regions share common features. Regions can be defined from several non-connected parts.
 As an example, one PolygonsSet instance in Euclidean 2D (i.e. the plane) can represent a region composed
@@ -42,9 +42,9 @@ function in a root solver to determine when a moving point crosses the region bo
 
 
 ## 11.2 Euclidean spaces
-[          Vector1D](../apidocs/org.hipparchus/geometry/euclidean/oned/Vector1D.html)
-, [          Vector2D](../apidocs/org.hipparchus/geometry/euclidean/twod/Vector2D.html)
-and [          Vector3D](../apidocs/org.hipparchus/geometry/euclidean/threed/Vector3D.html)
+[          Vector1D](../apidocs/org/hipparchus/geometry/euclidean/oned/Vector1D.html)
+, [          Vector2D](../apidocs/org/hipparchus/geometry/euclidean/twod/Vector2D.html)
+and [          Vector3D](../apidocs/org/hipparchus/geometry/euclidean/threed/Vector3D.html)
 provide simple vector types. One important feature is
 that instances of these classes are guaranteed
 to be immutable, this greatly simplifies modeling dynamical systems
@@ -63,13 +63,13 @@ normalization, orthogonal vector finding and angular separation computation
 which have a specific meaning in 3D. The 3D geometry specific cross product
 is of course also implemented.
 
-[          Vector1DFormat](../apidocs/org.hipparchus/geometry/euclidean/oned/Vector1DFormat.html)
-, [          Vector2DFormat](../apidocs/org.hipparchus/geometry/euclidean/twod/Vector2DFormat.html)
-and [          Vector3DFormat](../apidocs/org.hipparchus/geometry/euclidean/threed/Vector3DFormat.html)
+[          Vector1DFormat](../apidocs/org/hipparchus/geometry/euclidean/oned/Vector1DFormat.html)
+, [          Vector2DFormat](../apidocs/org/hipparchus/geometry/euclidean/twod/Vector2DFormat.html)
+and [          Vector3DFormat](../apidocs/org/hipparchus/geometry/euclidean/threed/Vector3DFormat.html)
 are specialized classes for formatting output or parsing
 input with text representation of vectors.
 
-[          Rotation](../apidocs/org.hipparchus/geometry/euclidean/threed/Rotation.html)
+[          Rotation](../apidocs/org/hipparchus/geometry/euclidean/threed/Rotation.html)
 represents 3D rotations.
 Rotation instances are also immutable objects, as Vector3D instances.
 
@@ -156,12 +156,12 @@ on the 1-sphere (i.e. the one dimensional circle corresponding to the boundary o
 a two-dimensional disc) and the 2-sphere (i.e. the two dimensional sphere surface
 corresponding to the boundary of a three-dimensional ball). The main classes in
 this package correspond to the region explained above, i.e.
-[ArcsSet](../apidocs/org.hipparchus/geometry/spherical/oned/ArcsSet.html)
-and [SphericalPolygonsSet](../apidocs/org.hipparchus/geometry/spherical/twod/SphericalPolygonsSet.html).
+[ArcsSet](../apidocs/org/hipparchus/geometry/spherical/oned/ArcsSet.html)
+and [SphericalPolygonsSet](../apidocs/org/hipparchus/geometry/spherical/twod/SphericalPolygonsSet.html).
 
 
 ## 11.4 Binary Space Partitioning
-[          BSP trees](../apidocs/org.hipparchus/geometry/partitioning/BSPTree.html)
+[          BSP trees](../apidocs/org/hipparchus/geometry/partitioning/BSPTree.html)
 are an efficient way to represent space partitions and
 to associate attributes with each cell. Each node in a BSP tree
 represents a convex region which is partitioned in two convex
@@ -243,7 +243,7 @@ this method, one way to build directly an empty region without complementing the
 
 
     PolygonsSet empty = new PolygonsSet(new BSPTree&lt;Euclidean2D&gt;(false), tolerance);
-In the Euclidean 3D case, the [PolyhedronsSet](../apidocs/org.hipparchus/geometry/euclidean/threed/PolyhedronsSet.html)
+In the Euclidean 3D case, the [PolyhedronsSet](../apidocs/org/hipparchus/geometry/euclidean/threed/PolyhedronsSet.html)
 class has another specific constructor to build regions from vertices and facets. The signature of this
 constructor is:
 
