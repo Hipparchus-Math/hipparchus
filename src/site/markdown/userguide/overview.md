@@ -9,7 +9,7 @@ in the package.
 
 
 
-## 0.2 What's in commons-math
+## 0.2 What's in hipparchus
 Commons Math is made up of a small set of math/stat utilities addressing
 programming problems like the ones in the list below.  This list is not exhaustive,
 it's just meant to give a feel for the kinds of things that Commons Math provides.
@@ -26,7 +26,6 @@ it's just meant to give a feel for the kinds of things that Commons Math provide
 * Generating random samples and/or datasets that are "like" the data in an input file
 * Performing statistical significance tests
 * Miscellaneous mathematical functions such as factorials, binomial coefficients and "special functions" (e.g. gamma, beta functions)
-
 
 We are actively seeking ideas for additional components that fit into the
 [Commons Math vision](../index.html#summary) of a set of lightweight,
@@ -58,7 +57,7 @@ Package javadocs are [here](../apidocs/index.html)
 
 
 
-## 0.4 How interface contracts are specified in commons-math javadoc
+## 0.4 How interface contracts are specified in hipparchus javadoc
 You should always read the javadoc class and method comments carefully when using
 Commons Math components in your programs.  The javadoc provides references to the algorithms
 that are used, usage notes about limitations, performance, etc. as well as interface contracts.
@@ -69,20 +68,20 @@ values/objects or state changes.
 
 When the actual parameters provided to a method or the internal state of an object
 make a computation meaningless, a
-[      MathIllegalArgumentException](../apidocs/org/hipparchus/exception/MathIllegalArgumentException.html)
+[MathIllegalArgumentException](../apidocs/org/hipparchus/exception/MathIllegalArgumentException.html)
 or
-[    MathIllegalStateException](../apidocs/org/hipparchus/exception/MathIllegalStateException.html)
+[MathIllegalStateException](../apidocs/org/hipparchus/exception/MathIllegalStateException.html)
 may be thrown. Exact conditions under which runtime
 exceptions (and any other exceptions) are thrown are specified in the javadoc method
 comments.
-In some cases, to be consistent with the [    IEEE 754 standard](http://grouper.ieee.org/groups/754/)
+In some cases, to be consistent with the [IEEE 754 standard](http://grouper.ieee.org/groups/754/)
 for floating point arithmetic and with java.lang.Math, Commons Math
 methods return `Double.NaN` values. Conditions under which `Double.NaN`
 or other special values are returned are fully specified in the javadoc method comments.
 
 As of version 2.2, the policy for dealing with null references is as
 follows: When an argument is unexpectedly null, a
-[    NullArgumentException](../apidocs/org/hipparchus/exception/NullArgumentException.html)
+[NullArgumentException](../apidocs/org/hipparchus/exception/NullArgumentException.html)
 is raised to signal the illegal argument. Note that this
 class does not inherit from the standard `NullPointerException` but is a subclass
 of `MathIllegalArgumentException`.
@@ -90,11 +89,11 @@ of `MathIllegalArgumentException`.
 
 
 ## 0.5 Dependencies
-Commons Math requires JDK 1.5+ and has no runtime dependencies.
+Hipparchus requires JDK 1.8+ and has no runtime dependencies.
 
 
 
 ## 0.6 License
-Commons Math is distributed under the terms of the Apache License, Version 2.0:
+Hipparchus is distributed under the terms of the Apache License, Version 2.0:
 [.    ](http://www.apache.org/licenses/LICENSE-2.0)
 

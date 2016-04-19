@@ -84,15 +84,13 @@
 * [16.1 Overview](genetics.html#a16.1_Overview)
 * [16.2 GA Framework](genetics.html#a16.2_GA_Framework)
 * [16.3 Implementation and Examples](genetics.html#a16.3_Implementation)
-* [17.1 Overview](filter.html#a17.1_Overview)
-* [17.2 Kalman Filter](filter.html#a17.2_Kalman_Filter)
-* [18.1 Overview](ml.html#overview)
-* [18.2 Clustering algorithms and distance measures](ml.html#clustering)
-* [18.3 Implementation](ml.html#implementation)
-* [19.1 Overview](exceptions.html#a19.1_Overview)
-* [19.2 Unchecked Exceptions](exceptions.html#a19.2_Unchecked_Exceptions)
-* [19.3 Hierarchies](exceptions.html#a19.3_Hierarchies)
-* [19.4 Features](exceptions.html#a19.4_Features)
+* [17.1 Overview](ml.html#overview)
+* [17.2 Clustering algorithms and distance measures](ml.html#clustering)
+* [17.3 Implementation](ml.html#implementation)
+* [18.1 Overview](exceptions.html#a19.1_Overview)
+* [18.2 Unchecked Exceptions](exceptions.html#a19.2_Unchecked_Exceptions)
+* [18.3 Hierarchies](exceptions.html#a19.3_Hierarchies)
+* [18.4 Features](exceptions.html#a19.4_Features)
 
 
 

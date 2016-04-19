@@ -1,10 +1,10 @@
-# 16 Machine Learning
-## 16.1 Overview
+# 17 Machine Learning
+## 17.1 Overview
 Machine learning support in commons-math currently provides operations to cluster
 data sets based on a distance measure.
 
 
-## 16.2 Clustering algorithms and distance measures
+## 17.2 Clustering algorithms and distance measures
 The [          Clusterer](../apidocs/org/hipparchus/ml/clustering/Clusterer.html)
 class represents a clustering algorithm.
 The following algorithms are available:
@@ -18,7 +18,7 @@ An comparison of the available clustering algorithms:<br/>
 ![Comparison of clustering algorithms](../images/userguide/cluster_comparison.png)
 
 
-## 16.3 Distance measures
+## 17.3 Distance measures
 Each clustering algorithm requires a distance measure to determine the distance
 between two points (either data points or cluster centers).
 The following distance measures are available:
@@ -29,7 +29,7 @@ The following distance measures are available:
 
 
 
-## 16.3 Example
+## 17.3 Example
 Here is an example of a clustering execution. Let us assume we have a set of locations from our domain model,
 where each location has a method `double getX()` and `double getY()`
 representing their current coordinates in a 2-dimensional space. We want to cluster the locations into
