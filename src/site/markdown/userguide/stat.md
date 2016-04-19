@@ -103,10 +103,10 @@ There is also a utility class,
 directly from double[] arrays.
 
 Here are some examples showing how to compute Descriptive statistics.
-<dl>
-<dt>Compute summary statistics for a list of double values</dt>
-<br/>
-<dd>Using the `DescriptiveStatistics` aggregate
+
+### Compute summary statistics for a list of double values
+
+Using the `DescriptiveStatistics` aggregate
 (values are stored in memory):
 
     // Get a DescriptiveStatistics instance
@@ -121,8 +121,8 @@ Here are some examples showing how to compute Descriptive statistics.
     double mean = stats.getMean();
     double std = stats.getStandardDeviation();
     double median = stats.getPercentile(50);
-</dd>
-<dd>Using the `SummaryStatistics` aggregate (values are
+
+Using the `SummaryStatistics` aggregate (values are
 <strong>not</strong> stored in memory):
 
     // Get a SummaryStatistics instance
@@ -140,8 +140,8 @@ Here are some examples showing how to compute Descriptive statistics.
     double mean = stats.getMean();
     double std = stats.getStandardDeviation();
     //double median = stats.getMedian(); &lt;-- NOT AVAILABLE
-</dd>
-<dd>Using the `StatUtils` utility class:
+
+Using the `StatUtils` utility class:
 
     // Compute statistics directly from the array
     // assume values is a double[] array
@@ -151,11 +151,10 @@ Here are some examples showing how to compute Descriptive statistics.
     
     // Compute the mean of the first three values in the array
     mean = StatUtils.mean(values, 0, 3);
-</dd>
-<dt>Maintain a "rolling mean" of the most recent 100 values from
-an input stream</dt>
-<br/>
-<dd>Use a `DescriptiveStatistics` instance with
+
+### Maintain a "rolling mean" of the most recent 100 values from an input stream
+
+Use a `DescriptiveStatistics` instance with
 window size set to 100
 
     // Create a DescriptiveStats instance and set the window size to 100
@@ -175,18 +174,18 @@ window size set to 100
            }
     }
     in.close();
-</dd>
-<dt>Compute statistics in a thread-safe manner</dt>
-<br/>
-<dd>Use a `SynchronizedDescriptiveStatistics` instance
+
+### Compute statistics in a thread-safe manner
+
+Use a `SynchronizedDescriptiveStatistics` instance
 
     // Create a SynchronizedDescriptiveStatistics instance and
     // use as any other DescriptiveStatistics instance
     DescriptiveStatistics stats = new SynchronizedDescriptiveStatistics();
-</dd>
-<dt>Compute statistics for multiple samples and overall statistics concurrently</dt>
-<br/>
-<dd>There are two ways to do this using `AggregateSummaryStatistics.`
+
+### Compute statistics for multiple samples and overall statistics concurrently
+
+There are two ways to do this using `AggregateSummaryStatistics.`
 The first is to use an `AggregateSummaryStatistics` instance
 to accumulate overall statistics contributed by `SummaryStatistics`
 instances created using
@@ -231,8 +230,6 @@ This method should be used when aggregation needs to be done across threads.
     
     // Full sample data is reported by aggregatedStats
     double totalSampleSum = aggregatedStats.getSum();
-</dd>
-</dl>
 
 
 ## 1.3 Frequency distributions
@@ -250,10 +247,10 @@ comparable to those that have already been added results in an
 `IllegalArgumentException.`
 
 Here are some examples.
-<dl>
-<dt>Compute a frequency distribution based on integer values</dt>
-<br/>
-<dd>Mixing integers, longs, Integers and Longs:
+
+###Compute a frequency distribution based on integer values
+
+Mixing integers, longs, Integers and Longs:
 
      Frequency f = new Frequency();
      f.addValue(1);
@@ -266,10 +263,10 @@ Here are some examples.
      System.out.println(f.getPct(new Integer(1)));  // displays 0.6
      System.out.println(f.getCumPct(-2));   // displays 0
      System.out.println(f.getCumPct(10));  // displays 1
-</dd>
-<dt>Count string frequencies</dt>
-<br/>
-<dd>Using case-sensitive comparison, alpha sort order (natural comparator):
+
+### Count string frequencies
+
+Using case-sensitive comparison, alpha sort order (natural comparator):
 
     Frequency f = new Frequency();
     f.addValue("one");
@@ -279,8 +276,8 @@ Here are some examples.
     System.out.println(f.getCount("one")); // displays 1
     System.out.println(f.getCumPct("Z"));  // displays 0.5
     System.out.println(f.getCumPct("Ot")); // displays 0.25
-</dd>
-<dd>Using case-insensitive comparator:
+
+Using case-insensitive comparator:
 
     Frequency f = new Frequency(String.CASE_INSENSITIVE_ORDER);
     f.addValue("one");
@@ -289,8 +286,7 @@ Here are some examples.
     f.addValue("Z");
     System.out.println(f.getCount("one"));  // displays 3
     System.out.println(f.getCumPct("z"));  // displays 1
-</dd>
-</dl>
+
 
 
 ## 1.4 Simple regression
@@ -329,9 +325,10 @@ added to the model.
 
 
 Here are some examples.
-<dl>
-<dt>Estimate a model based on observations added one at a time</dt>
-<dd>Instantiate a regression instance and add data points
+
+### Estimate a model based on observations added one at a time
+
+Instantiate a regression instance and add data points
 
     regression = new SimpleRegression();
     regression.addData(1d, 2d);
@@ -345,8 +342,8 @@ Here are some examples.
     
     regression.addData(3d, 3d);
     // Now all statistics are defined.
-</dd>
-<dd>Compute some statistics based on observations added so far
+
+Compute some statistics based on observations added so far
 
     System.out.println(regression.getIntercept());
     // displays intercept of regression line
@@ -356,23 +353,23 @@ Here are some examples.
     
     System.out.println(regression.getSlopeStdErr());
     // displays slope standard error
-</dd>
-<dd>Use the regression model to predict the y value for a new x value
+
+Use the regression model to predict the y value for a new x value
 
     System.out.println(regression.predict(1.5d)
     // displays predicted y value for x = 1.5
 More data points can be added and subsequent getXxx calls will incorporate
 additional data in statistics.
-</dd>
-<br/>
-<dt>Estimate a model from a double[][] array of data points</dt>
-<dd>Instantiate a regression object and load dataset
+
+### Estimate a model from a double[][] array of data points
+
+Instantiate a regression object and load dataset
 
     double[][] data = { { 1, 3 }, {2, 5 }, {3, 7 }, {4, 14 }, {5, 11 }};
     SimpleRegression regression = new SimpleRegression();
     regression.addData(data);
-</dd>
-<dd>Estimate regression model based on data
+
+Estimate regression model based on data
 
     System.out.println(regression.getIntercept());
     // displays intercept of regression line
@@ -384,17 +381,17 @@ additional data in statistics.
     // displays slope standard error
 More data points -- even another double[][] array -- can be added and subsequent
 getXxx calls will incorporate additional data in statistics.
-</dd>
-<br/>
-<dt>Estimate a model from a double[][] array of data points, <em>excluding</em> the intercept</dt>
-<dd>Instantiate a regression object and load dataset
+
+### Estimate a model from a double[][] array of data points, <em>excluding</em> the intercept
+
+Instantiate a regression object and load dataset
 
     double[][] data = { { 1, 3 }, {2, 5 }, {3, 7 }, {4, 14 }, {5, 11 }};
     SimpleRegression regression = new SimpleRegression(false);
     //the argument, false, tells the class not to include a constant
     regression.addData(data);
-</dd>
-<dd>Estimate regression model based on data
+
+Estimate regression model based on data
 
     System.out.println(regression.getIntercept());
     // displays intercept of regression line, since we have constrained the constant, 0.0 is returned
@@ -409,9 +406,7 @@ getXxx calls will incorporate additional data in statistics.
     // will return Double.NaN, since we constrained the parameter to zero
 Caution must be exercised when interpreting the slope when no constant is being estimated. The slope
 may be biased.
-</dd>
 
-</dl>
 
 
 ## 1.5 Multiple linear regression
@@ -451,10 +446,10 @@ for details.
 
 
 Here are some examples.
-<dl>
-<dt>OLS regression</dt>
-<br/>
-<dd>Instantiate an OLS regression object and load a dataset:
+
+###OLS regression
+
+Instantiate an OLS regression object and load a dataset:
 
     OLSMultipleLinearRegression regression = new OLSMultipleLinearRegression();
     double[] y = new double[]{11.0, 12.0, 13.0, 14.0, 15.0, 16.0};
@@ -466,8 +461,8 @@ Here are some examples.
     x[4] = new double[]{0, 0, 0, 5.0, 0};
     x[5] = new double[]{0, 0, 0, 0, 6.0};          
     regression.newSampleData(y, x);
-</dd>
-<dd>Get regression parameters and diagnostics:
+
+Get regression parameters and diagnostics:
 
     double[] beta = regression.estimateRegressionParameters();       
     
@@ -480,10 +475,10 @@ Here are some examples.
     double rSquared = regression.calculateRSquared();
     
     double sigma = regression.estimateRegressionStandardError();
-</dd>
-<dt>GLS regression</dt>
-<br/>
-<dd>Instantiate a GLS regression object and load a dataset:
+
+### GLS regression
+
+Instantiate a GLS regression object and load a dataset:
 
     GLSMultipleLinearRegression regression = new GLSMultipleLinearRegression();
     double[] y = new double[]{11.0, 12.0, 13.0, 14.0, 15.0, 16.0};
@@ -502,8 +497,6 @@ Here are some examples.
     omega[4] = new double[]{0, 0, 0, 0, 5.5, 0};
     omega[5] = new double[]{0, 0, 0, 0, 0, 6.6};
     regression.newSampleData(y, x, omega); 
-</dd>
-</dl>
 
 
 ## 1.6 Rank transformations
@@ -567,21 +560,19 @@ computes Kendall's tau rank correlation.
 
 
 <strong>Examples:</strong>
-<dl>
-<dt><strong>Covariance of 2 arrays</strong></dt>
-<br/>
-<dd>To compute the unbiased covariance between 2 double arrays,
+### <strong>Covariance of 2 arrays</strong>
+
+To compute the unbiased covariance between 2 double arrays,
 `x` and `y`, use:
 
     new Covariance().covariance(x, y)
 For non-bias-corrected covariances, use
 
     covariance(x, y, false)
-</dd>
-<br/>
-<dt><strong>Covariance matrix</strong></dt>
-<br/>
-<dd> A covariance matrix over the columns of a source matrix `data`
+
+### <strong>Covariance matrix</strong>
+
+A covariance matrix over the columns of a source matrix `data`
 can be computed using
 
     new Covariance().computeCovarianceMatrix(data)
@@ -590,29 +581,26 @@ columns of `data.` As above, to get non-bias-corrected covariances,
 use
 
     computeCovarianceMatrix(data, false)
-</dd>
-<br/>
-<dt><strong>Pearson's correlation of 2 arrays</strong></dt>
-<br/>
-<dd>To compute the Pearson's product-moment correlation between two double arrays
+
+### <strong>Pearson's correlation of 2 arrays</strong><
+
+To compute the Pearson's product-moment correlation between two double arrays
 `x` and `y`, use:
 
     new PearsonsCorrelation().correlation(x, y)
-</dd>
-<br/>
-<dt><strong>Pearson's correlation matrix</strong></dt>
-<br/>
-<dd> A (Pearson's) correlation matrix over the columns of a source matrix `data`
+
+### <strong>Pearson's correlation matrix</strong>
+
+A (Pearson's) correlation matrix over the columns of a source matrix `data`
 can be computed using
 
     new PearsonsCorrelation().computeCorrelationMatrix(data)
 The i-jth entry of the returned matrix is the Pearson's product-moment correlation between the
 ith and jth columns of `data.`
-</dd>
-<br/>
-<dt><strong>Pearson's correlation significance and standard errors</strong></dt>
-<br/>
-<dd> To compute standard errors and/or significances of correlation coefficients
+
+### <strong>Pearson's correlation significance and standard errors</strong>
+
+To compute standard errors and/or significances of correlation coefficients
 associated with Pearson's correlation coefficients, start by creating a
 `PearsonsCorrelation` instance
 
@@ -642,11 +630,10 @@ For example, if `data` is a RealMatrix with 2 columns and 10 rows, then
 is the significance of the Pearson's correlation coefficient between the two columns
 of `data`.  If this value is less than .01, we can say that the correlation
 between the two columns of data is significant at the 99% level.
-</dd>
-<br/>
-<dt><strong>Spearman's rank correlation coefficient</strong></dt>
-<br/>
-<dd>To compute the Spearman's rank-moment correlation between two double arrays
+
+### <strong>Spearman's rank correlation coefficient</strong>
+
+To compute the Spearman's rank-moment correlation between two double arrays
 `x` and `y`:
 
     new SpearmansCorrelation().correlation(x, y)
@@ -654,16 +641,14 @@ This is equivalent to
 
     RankingAlgorithm ranking = new NaturalRanking();
     new PearsonsCorrelation().correlation(ranking.rank(x), ranking.rank(y))
-</dd>
-<br/>
-<dt><strong>Kendalls's tau rank correlation coefficient</strong></dt>
-<br/>
-<dd>To compute the Kendall's tau rank correlation between two double arrays
+
+### <strong>Kendalls's tau rank correlation coefficient</strong>
+
+To compute the Kendall's tau rank correlation between two double arrays
 `x` and `y`:
 
     new KendallsCorrelation().correlation(x, y)
-</dd>
-</dl>
+
 
 
 ## 1.8 Statistical tests
@@ -720,10 +705,10 @@ or use the implementation constructors directly, e.g. `new TTest()`.
 
 
 <strong>Examples:</strong>
-<dl>
-<dt><strong>One-sample `t` tests</strong></dt>
-<br/>
-<dd>To compare the mean of a double[] array to a fixed value:
+
+### <strong>One-sample `t` tests</strong>
+
+To compare the mean of a double[] array to a fixed value:
 
     double[] observed = {1d, 2d, 3d};
     double mu = 2.5d;
@@ -731,8 +716,8 @@ or use the implementation constructors directly, e.g. `new TTest()`.
 The code above will display the t-statistic associated with a one-sample
 t-test comparing the mean of the `observed` values against
 `mu.`
-</dd>
-<dd>To compare the mean of a dataset described by a
+
+To compare the mean of a dataset described by a
 [          StatisticalSummary](../apidocs/org/hipparchus/stat/descriptive/StatisticalSummary.html)
 to a fixed value:
 
@@ -743,8 +728,8 @@ to a fixed value:
         sampleStats.addValue(observed[i]);
     }
     System.out.println(TestUtils.t(mu, observed));
-</dd>
-<dd>To compute the p-value associated with the null hypothesis that the mean
+
+To compute the p-value associated with the null hypothesis that the mean
 of a set of values equals a point estimate, against the two-sided alternative that
 the mean is different from the target value:
 
@@ -754,8 +739,8 @@ the mean is different from the target value:
 The snippet above will display the p-value associated with the null
 hypothesis that the mean of the population from which the
 `observed` values are drawn equals `mu.`
-</dd>
-<dd>To perform the test using a fixed significance level, use:
+
+To perform the test using a fixed significance level, use:
 
     TestUtils.tTest(mu, observed, alpha);
 where `0 &lt; alpha &lt; 0.5` is the significance level of
@@ -763,11 +748,10 @@ the test.  The boolean value returned will be `true` iff the
 null hypothesis can be rejected with confidence `1 - alpha`.
 To test, for example at the 95% level of confidence, use
 `alpha = 0.05`
-</dd>
-<br/>
-<dt><strong>Two-Sample t-tests</strong></dt>
-<br/>
-<dd><strong>Example 1:</strong> Paired test evaluating
+
+### <strong>Two-Sample t-tests</strong>
+
+<strong>Example 1:</strong> Paired test evaluating
 the null hypothesis that the mean difference between corresponding
 (paired) elements of the `double[]` arrays
 `sample1` and `sample2` is zero.
@@ -786,10 +770,11 @@ To perform a fixed significance level test with alpha = .05:
 The last example will return `true` iff the p-value
 returned by `TestUtils.pairedTTest(sample1, sample2)`
 is less than `.05`
-</dd>
-<dd><strong>Example 2: </strong> unpaired, two-sided, two-sample t-test using
+
+### <strong>Example 2: </strong> unpaired, two-sided, two-sample t-test using
 `StatisticalSummary` instances, without assuming that
 subpopulation variances are equal.
+
 First create the `StatisticalSummary` instances.  Both
 `DescriptiveStatistics` and `SummaryStatistics`
 implement this interface.  Assume that `summary1` and
@@ -822,11 +807,9 @@ In each case above, the test does not assume that the subpopulation
 variances are equal.  To perform the tests under this assumption,
 replace "t" at the beginning of the method name with "homoscedasticT"
 
-</dd>
-<br/>
-<dt><strong>Chi-square tests</strong></dt>
-<br/>
-<dd>To compute a chi-square statistic measuring the agreement between a
+### <strong>Chi-square tests</strong>
+
+To compute a chi-square statistic measuring the agreement between a
 `long[]` array of observed counts and a `double[]`
 array of expected counts, use:
 
@@ -835,13 +818,13 @@ array of expected counts, use:
     System.out.println(TestUtils.chiSquare(expected, observed));
 the value displayed will be
 `sum((expected[i] - observed[i])^2 / expected[i])`
-</dd>
-<dd> To get the p-value associated with the null hypothesis that
+
+To get the p-value associated with the null hypothesis that
 `observed` conforms to `expected` use:
 
     TestUtils.chiSquareTest(expected, observed);
-</dd>
-<dd> To test the null hypothesis that `observed` conforms to
+
+To test the null hypothesis that `observed` conforms to
 `expected` with `alpha` significance level
 (equiv. `100 * (1-alpha)%` confidence) where `
 0 &lt; alpha &lt; 1 ` use:
@@ -849,8 +832,8 @@ the value displayed will be
     TestUtils.chiSquareTest(expected, observed, alpha);
 The boolean value returned will be `true` iff the null hypothesis
 can be rejected with confidence `1 - alpha`.
-</dd>
-<dd>To compute a chi-square statistic statistic associated with a
+
+To compute a chi-square statistic statistic associated with a
 [          chi-square test of independence](http://www.itl.nist.gov/div898/handbook/prc/section4/prc45.htm)
 based on a two-dimensional (long[][])
 `counts` array viewed as a two-way table, use:
@@ -863,25 +846,24 @@ The chi-square statistic returned is
 where the sum is taken over all table entries and
 `expected[i][j]` is the product of the row and column sums at
 row `i`, column `j` divided by the total count.
-</dd>
-<dd>To compute the p-value associated with the null hypothesis that
+
+To compute the p-value associated with the null hypothesis that
 the classifications represented by the counts in the columns of the input 2-way
 table are independent of the rows, use:
 
      TestUtils.chiSquareTest(counts);
-</dd>
-<dd>To perform a chi-square test of independence with `alpha`
+
+To perform a chi-square test of independence with `alpha`
 significance level (equiv. `100 * (1-alpha)%` confidence)
 where `0 &lt; alpha &lt; 1 ` use:
 
     TestUtils.chiSquareTest(counts, alpha);
 The boolean value returned will be `true` iff the null
 hypothesis can be rejected with confidence `1 - alpha`.
-</dd>
-<br/>
-<dt><strong>G tests</strong></dt>
-<br/>
-<dd>G tests are an alternative to chi-square tests that are recommended
+
+### <strong>G tests</strong>
+
+G tests are an alternative to chi-square tests that are recommended
 when observed counts are small and / or incidence probabilities for
 some cells are small. See Ted Dunning's paper,
 [          Accurate Methods for the Statistics of Surprise and Coincidence](http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.14.5962)
@@ -890,8 +872,8 @@ background and an empirical analysis showing now chi-square
 statistics can be misleading in the presence of low incidence probabilities.
 This paper also derives the formulas used in computing G statistics and the
 root log likelihood ratio provided by the `GTest` class.
-</dd>
-<dd>To compute a G-test statistic measuring the agreement between a
+
+To compute a G-test statistic measuring the agreement between a
 `long[]` array of observed counts and a `double[]`
 array of expected counts, use:
 
@@ -900,13 +882,13 @@ array of expected counts, use:
     System.out.println(TestUtils.g(expected, observed));
 the value displayed will be
 `2 * sum(observed[i]) * log(observed[i]/expected[i])`
-</dd>
-<dd>To get the p-value associated with the null hypothesis that
+
+To get the p-value associated with the null hypothesis that
 `observed` conforms to `expected` use:
 
     TestUtils.gTest(expected, observed);
-</dd>
-<dd>To test the null hypothesis that `observed` conforms to
+
+To test the null hypothesis that `observed` conforms to
 `expected` with `alpha` siginficance level
 (equiv. `100 * (1-alpha)%` confidence) where `
 0 &lt; alpha &lt; 1 ` use:
@@ -914,8 +896,8 @@ the value displayed will be
     TestUtils.gTest(expected, observed, alpha);
 The boolean value returned will be `true` iff the null hypothesis
 can be rejected with confidence `1 - alpha`.
-</dd>
-<dd>To evaluate the hypothesis that two sets of counts come from the
+
+To evaluate the hypothesis that two sets of counts come from the
 same underlying distribution, use long[] arrays for the counts and
 `gDataSetsComparison` for the test statistic
 
@@ -923,8 +905,8 @@ same underlying distribution, use long[] arrays for the counts and
     long[] obs2 = new long[]{807, 759, 184};
     System.out.println(TestUtils.gDataSetsComparison(obs1, obs2)); // G statistic
     System.out.println(TestUtils.gTestDataSetsComparison(obs1, obs2)); // p-value
-</dd>
-<dd>For 2 x 2 designs, the `rootLogLikelihoodRatio` method
+
+For 2 x 2 designs, the `rootLogLikelihoodRatio` method
 computes the
 [          signed root log likelihood ratio.](http://tdunning.blogspot.com/2008/03/surprise-and-coincidence.html)
 For example, suppose that for two events
@@ -934,11 +916,8 @@ is 1995, A not B is 0; and neither A nor B is 10000.  Then
     new GTest().rootLogLikelihoodRatio(5, 1995, 0, 100000);
 returns the root log likelihood associated with the null hypothesis that A
 and B are independent.
-</dd>
-<br/>
-<dt><strong>One-Way ANOVA tests</strong></dt>
-<br/>
-<dd>
+
+### <strong>One-Way ANOVA tests</strong>
 
     double[] classA =
        {93.0, 103.0, 95.0, 101.0, 91.0, 105.0, 96.0, 94.0, 101.0 };
@@ -963,11 +942,10 @@ hypothesis incorrectly only about one in 100 times), use
 
     TestUtils.oneWayAnovaTest(classes, 0.01); // returns a boolean
                                               // true means reject null hypothesis
-</dd>
-<br/>
-<dt><strong>Kolmogorov-Smirnov tests</strong></dt>
-<br/>
-<dd>Given a double[] array `data` of values, to evaluate the
+
+### <strong>Kolmogorov-Smirnov tests</strong>
+
+Given a double[] array `data` of values, to evaluate the
 null hypothesis that the values are drawn from a unit normal distribution
 
     final NormalDistribution unitNormal = new NormalDistribution(0d, 1d);
@@ -976,7 +954,7 @@ returns the p-value and
 
     TestUtils.kolmogorovSmirnovStatistic(unitNormal, sample)
 returns the D-statistic.
-<br/>
+
 If `y` is a double array, to evaluate the null hypothesis that
 `x` and `y` are drawn from the same underlying distribution,
 use
@@ -998,7 +976,3 @@ method), first compute the d-statistic and then use the `exactP` method
     TestUtils.exactP(d, x.length, y.length, false)
 assuming that the non-strict form of the null hypothesis is desired. Note, however,
 that exact computation for large samples takes a long time.
-</dd>
-</dl>
-
-

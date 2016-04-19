@@ -43,7 +43,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * initial state must also be inserted before integration and matrices
  * result must be extracted after integration. This implies a precise
  * scheduling of the calls to the various methods of this class. The
- * proper scheduling is the following:
+ * proper scheduling is the following one:
  * </p>
  * <pre>
  *   // set up equations
@@ -64,6 +64,13 @@ import org.hipparchus.exception.MathIllegalStateException;
  *   dYdY0 = ve.extractMainSetJacobian(finalState);
  *   dYdP  = ve.extractParameterJacobian(finalState, name);
  * </pre>
+ * <p>
+ * The most important part is to not forget to call {@link #setUpInitialState(ODEState)} to add
+ * the secondary state with the initial matrices to the {@link ODEState} used in the
+ * {@link ODEIntegrator#integrate(ExpandableODE, ODEState, double) integrate} method.
+ * Forgetting to do this and passing only a {@link ODEState} without the secondary state
+ * set up will trigger an error as the state vector will not have the correct dimension.
+ * </p>
  *
  * @see ExpandableODE
  * @see ODEJacobiansProvider
