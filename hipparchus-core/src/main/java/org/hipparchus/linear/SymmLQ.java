@@ -118,8 +118,7 @@ import org.hipparchus.util.MathUtils;
  * <p>
  * Besides standard {@link MathIllegalArgumentException}, this class might throw
  * {@link MathIllegalArgumentException} if the linear operator or the
- * preconditioner are not symmetric. In this case, the {@link ExceptionContext}
- * provides more information
+ * preconditioner are not symmetric.
  * <ul>
  * <li>key {@code "operator"} points to the offending linear operator, say L,</li>
  * <li>key {@code "vector1"} points to the first offending vector, say x,
@@ -130,14 +129,7 @@ import org.hipparchus.util.MathUtils;
  * </p>
  * <p>
  * {@link MathIllegalArgumentException} might also be thrown in case the
- * preconditioner is not positive definite. The relevant keys to the
- * {@link ExceptionContext} are
- * <ul>
- * <li>key {@code "operator"}, which points to the offending linear operator,
- * say L,</li>
- * <li>key {@code "vector"}, which points to the offending vector, say x, such
- * that x<sup>T</sup> &middot; L &middot; x < 0.</li>
- * </ul>
+ * preconditioner is not positive definite.
  * </p>
  * <h3>References</h3>
  * <dl>

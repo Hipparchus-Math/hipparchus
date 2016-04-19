@@ -215,8 +215,7 @@ public class VariationalEquation {
      * called prior to integrate the equations.
      * </p>
      * <p>
-     * This method must be called <em>after</em> {@link
-     * #registerVariationalEquations(ExpandableODE)},
+     * This method must be called <em>after</em>
      * {@link #setInitialMainStateJacobian(double[][])} and
      * {@link #setInitialParameterJacobian(String, double[])}.
      * </p>

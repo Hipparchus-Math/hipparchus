@@ -193,7 +193,7 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
      * no sanity checks ...). It handles the strict minimum of computation,
      * so it can be embedded in outer loops.</p>
      * <p>
-     * This method is <em>not</em> used at all by the {@link #integrate(ExpandableODE, double)}
+     * This method is <em>not</em> used at all by the {@link #integrate(ExpandableODE, ODEState, double)}
      * method. It also completely ignores the step set at construction time, and
      * uses only a single step to go from {@code t0} to {@code t}.
      * </p>

@@ -23,7 +23,7 @@ package org.hipparchus.ode;
  *
  * <p>This class is a wrapper around a {@link
  * SecondOrderDifferentialEquations} which allow to use a {@link
- * FirstOrderIntegrator} to integrate it.</p>
+ * ODEIntegrator} to integrate it.</p>
  *
  * <p>The transformation is done by changing the n dimension state
  * vector to a 2n dimension vector, where the first n components are
@@ -47,7 +47,7 @@ package org.hipparchus.ode;
  * problem level, i.e. to implement the problem as a first order one
  * and then avoid using this class.</p>
  *
- * @see FirstOrderIntegrator
+ * @see ODEIntegrator
  * @see FirstOrderDifferentialEquations
  * @see SecondOrderDifferentialEquations
  */
@@ -69,20 +69,18 @@ public class FirstOrderConverter implements OrdinaryDifferentialEquation {
         dimension      = equations.getDimension();
     }
 
-    /** Get the dimension of the problem.
+    /** {@inheritDoc}
      * <p>The dimension of the first order problem is twice the
      * dimension of the underlying second order problem.</p>
      * @return dimension of the problem
      */
+    @Override
     public int getDimension() {
         return 2 * dimension;
     }
 
-    /** Get the current time derivative of the state vector.
-     * @param t current value of the independent <I>time</I> variable
-     * @param y array containing the current value of the state vector
-     * @param yDot placeholder array where to put the time derivative of the state vector
-     */
+    /** {@inheritDoc} */
+    @Override
     public double[] computeDerivatives(final double t, final double[] y) {
 
         final double[] yDot = new double[y.length];

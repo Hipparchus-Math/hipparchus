@@ -26,7 +26,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  *
  * <p>This interface should be implemented by all real first order
  * differential equation problems before they can be handled by the
- * integrators {@link FirstOrderIntegrator#integrate} method.</p>
+ * integrators {@link ODEIntegrator#integrate} method.</p>
  *
  * <p>A first order differential equations problem, as seen by an
  * integrator is the time derivative <code>dY/dt</code> of a state
@@ -41,7 +41,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * of this interface, the classes that implement it are allowed to
  * handle them as they want.</p>
  *
- * @see FirstOrderIntegrator
+ * @see ODEIntegrator
  * @see FirstOrderConverter
  * @see SecondOrderDifferentialEquations
  * @deprecated as of 1.0, replaced with {@link OrdinaryDifferentialEquation}

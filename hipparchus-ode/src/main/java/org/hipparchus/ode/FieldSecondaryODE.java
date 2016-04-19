@@ -32,7 +32,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * <p>
  * This interface allows users to add such equations to a primary set of {@link
  * FieldOrdinaryDifferentialEquation first order differential equations}
- * thanks to the {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryEquations)}
+ * thanks to the {@link FieldExpandableODE#addSecondaryEquations(FieldSecondaryODE)}
  * method.
  * </p>
  * @see FieldOrdinaryDifferentialEquation

@@ -22,7 +22,7 @@ package org.hipparchus.ode;
 
  * <p>This interface should be implemented by all real second order
  * differential equation problems before they can be handled by the
- * integrators {@link SecondOrderIntegrator#integrate} method.</p>
+ * {@link FirstOrderConverter converter to first order}.</p>
  *
  * <p>A second order differential equations problem, as seen by an
  * integrator is the second time derivative <code>d2Y/dt^2</code> of a
@@ -42,14 +42,8 @@ package org.hipparchus.ode;
 @Deprecated
 public interface SecondOrderDifferentialEquations extends SecondOrderODE {
 
-    /** Get the current time derivative of the state vector.
-     * @param t current value of the independent <I>time</I> variable
-     * @param y array containing the current value of the state vector
-     * @param yDot array containing the current value of the first derivative
-     * of the state vector
-     * @param yDDot placeholder array where to put the second time derivative
-     * of the state vector
-     */
+    /** {@inheritDoc} */
+    @Override
     default double[] computeSecondDerivatives(double t, double[] y, double[] yDot) {
         final double[] yDDot = new double[y.length];
         computeSecondDerivatives(t, y, yDot, yDDot);

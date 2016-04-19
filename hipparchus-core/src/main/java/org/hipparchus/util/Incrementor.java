@@ -60,7 +60,7 @@ public class Incrementor {
     /**
      * Creates an Incrementor.
      * <p>
-     * The maximal value will be set to {@link Integer.MAX_VALUE}.
+     * The maximal value will be set to {@code Integer.MAX_VALUE}.
      */
     public Incrementor() {
         this(Integer.MAX_VALUE);
@@ -189,7 +189,7 @@ public class Incrementor {
      * @return {@code false} if calling {@link #increment(int)
      * increment(nTimes)} would call the {@link MaxCountExceededCallback callback}
      * {@code true} otherwise.
-     * @throws MathIllegalArgumentException if {@nTimes} is negative.
+     * @throws MathIllegalArgumentException if {@code nTimes} is negative.
      */
     public boolean canIncrement(int nTimes) {
         if (nTimes < 0) {

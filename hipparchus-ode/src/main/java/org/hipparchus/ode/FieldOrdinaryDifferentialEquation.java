@@ -23,7 +23,8 @@ import org.hipparchus.RealFieldElement;
  *
  * <p>This interface should be implemented by all real first order
  * differential equation problems before they can be handled by the
- * integrators {@link FirstOrderIntegrator#integrate} method.</p>
+ * integrators {@link FieldODEIntegrator#integrate(FieldExpandableODE,
+ * FieldODEState, RealFieldElement)} method.</p>
  *
  * <p>A first order differential equations problem, as seen by an
  * integrator is the time derivative <code>dY/dt</code> of a state

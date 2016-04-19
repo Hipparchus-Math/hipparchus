@@ -48,8 +48,7 @@ import org.hipparchus.util.IterationManager;
  * <p>
  * Besides standard {@link MathIllegalArgumentException}, this class might throw
  * {@link MathIllegalArgumentException} if the linear operator or
- * the preconditioner are not positive definite. In this case, the
- * {@link ExceptionContext} provides some more information
+ * the preconditioner are not positive definite.
  * <ul>
  * <li>key {@code "operator"} points to the offending linear operator, say L,</li>
  * <li>key {@code "vector"} points to the offending vector, say x, such that

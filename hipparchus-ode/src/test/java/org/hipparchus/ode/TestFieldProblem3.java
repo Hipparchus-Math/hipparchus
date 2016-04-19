@@ -47,7 +47,6 @@ extends TestFieldProblemAbstract<T> {
 
     /**
      * Simple constructor.
-     * @param field field to which elements belong
      * @param e eccentricity
      */
     public TestFieldProblem3(T e) {

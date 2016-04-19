@@ -20,8 +20,8 @@ package org.hipparchus.ode;
 /** Container for time, main and secondary state vectors as well as their derivatives.
 
  * @see OrdinaryDifferentialEquation
- * @see SecondaryEquations
- * @see FirstOrderIntegrator
+ * @see SecondaryODE
+ * @see ODEIntegrator
  */
 
 public class ODEStateAndDerivative extends ODEState {
@@ -73,7 +73,7 @@ public class ODEStateAndDerivative extends ODEState {
 
     /** Get derivative of the secondary state at time.
      * @param index index of the secondary set as returned
-     * by {@link ExpandableODE#addSecondaryEquations(SecondaryEquations)}
+     * by {@link ExpandableODE#addSecondaryEquations(SecondaryODE)}
      * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return derivative of the secondary state at time
      * @see #getPrimaryDerivative()

@@ -23,7 +23,7 @@ import java.io.Serializable;
 
  * @see FirstOrderDifferentialEquations
  * @see SecondaryEquations
- * @see FirstOrderIntegrator
+ * @see ODEIntegrator
  * @see ODEStateAndDerivative
  */
 
@@ -134,7 +134,7 @@ public class ODEState implements Serializable {
 
     /** Get secondary state dimension.
      * @param index index of the secondary set as returned
-     * by {@link ExpandableODE#addSecondaryEquations(SecondaryEquations)}
+     * by {@link ExpandableODE#addSecondaryEquations(SecondaryODE)}
      * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return secondary state dimension
      * @see #getPrimaryStateDimension()
@@ -146,7 +146,7 @@ public class ODEState implements Serializable {
 
     /** Get secondary state at time.
      * @param index index of the secondary set as returned
-     * by {@link ExpandableODE#addSecondaryEquations(SecondaryEquations)}
+     * by {@link ExpandableODE#addSecondaryEquations(SecondaryODE)}
      * (beware index 0 corresponds to primary state, secondary states start at 1)
      * @return secondary state at time
      * @see #getPrimaryState()

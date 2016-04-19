@@ -28,11 +28,8 @@ package org.hipparchus.analysis.solvers;
  * actual root, but it may also be an approximation that is slightly smaller
  * or slightly larger than the actual root. Root-finding algorithms generally
  * only guarantee that the returned solution is within the requested
- * tolerances. In certain cases however, in particular for
- * {@link org.hipparchus.ode.events.EventHandler state events} of
- * {@link org.hipparchus.ode.ODEIntegrator ODE solvers}, it
- * may be necessary to guarantee that a solution is returned that lies on a
- * specific side the solution.</p>
+ * tolerances. In certain cases however, it may be necessary to guarantee
+ * that a solution is returned that lies on a specific side the solution.</p>
  *
  * @see BracketedUnivariateSolver
  */

@@ -40,7 +40,7 @@ public class RandomData implements RandomGenerator, Serializable {
      * {@link #nextGaussian} generates pairs of values and this field caches the
      * second value so that the full algorithm is not executed for every
      * activation.  The value {@code Double.NaN} signals that there is
-     * no cached value.  Use {@link #clear} to clear the cached value.
+     * no cached value.
      */
     private double cachedNormalDeviate = Double.NaN;
 
@@ -118,7 +118,7 @@ public class RandomData implements RandomGenerator, Serializable {
     }
 
     /**
-     * Factory method to create a {@codeRandomData} instance using the supplied
+     * Factory method to create a {@code RandomData} instance using the supplied
      * {@code RandomGenerator}.
      *
      * @param randomGenerator source of random bits
@@ -258,9 +258,7 @@ public class RandomData implements RandomGenerator, Serializable {
      * <p>
      * The algorithm generates a pair of independent random values.  One of
      * these is cached for reuse, so the full algorithm is not executed on each
-     * activation.  Implementations that do not override this method should
-     * make sure to call {@link #clear} to clear the cached value in the
-     * implementation of {@link #setSeed(long)}.</p>
+     * activation.</p>
      *
      * @return  the next pseudorandom, Gaussian ("normally") distributed
      * {@code double} value with mean {@code 0.0} and

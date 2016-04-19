@@ -37,8 +37,8 @@ import org.hipparchus.ode.sampling.ODEStepHandler;
  * OrdinaryDifferentialEquation} interface.</p>
  *
  * @see OrdinaryDifferentialEquation
- * @see org.hipparchus.ode.sampling.StepHandler
- * @see org.hipparchus.ode.events.EventHandler
+ * @see org.hipparchus.ode.sampling.ODEStepHandler
+ * @see org.hipparchus.ode.events.ODEEventHandler
  */
 public interface ODEIntegrator  {
 
@@ -58,13 +58,13 @@ public interface ODEIntegrator  {
 
     /** Get all the step handlers that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers
-     * @see #addStepHandler(StepHandler)
+     * @see #addStepHandler(ODEStepHandler)
      * @see #clearStepHandlers()
      */
     Collection<ODEStepHandler> getStepHandlers();
 
     /** Remove all the step handlers that have been added to the integrator.
-     * @see #addStepHandler(StepHandler)
+     * @see #addStepHandler(ODEStepHandler)
      * @see #getStepHandlers()
      */
     void clearStepHandlers();
@@ -105,13 +105,13 @@ public interface ODEIntegrator  {
 
     /** Get all the event handlers that have been added to the integrator.
      * @return an unmodifiable collection of the added events handlers
-     * @see #addEventHandler(EventHandler, double, double, int)
+     * @see #addEventHandler(ODEEventHandler, double, double, int)
      * @see #clearEventHandlers()
      */
     Collection<ODEEventHandler> getEventHandlers();
 
     /** Remove all the event handlers that have been added to the integrator.
-     * @see #addEventHandler(EventHandler, double, double, int)
+     * @see #addEventHandler(ODEEventHandler, double, double, int)
      * @see #getEventHandlers()
      */
     void clearEventHandlers();

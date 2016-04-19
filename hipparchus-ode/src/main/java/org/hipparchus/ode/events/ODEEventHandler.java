@@ -82,21 +82,20 @@ public interface ODEEventHandler  {
      * exceptions} related to root not being bracketed will occur.</p>
      * <p>This need for consistency is sometimes tricky to achieve. A typical
      * example is using an event to model a ball bouncing on the floor. The first
-     * idea to represent this would be to have {@code g(t) = h(t)} where h is the
-     * height above the floor at time {@code t}. When {@code g(t)} reaches 0, the
-     * ball is on the floor, so it should bounce and the typical way to do this is
+     * idea to represent this would be to have {@code g(state) = h(state)} where h is the
+     * height above the floor at time {@code state.getTime()}. When {@code g(state)}
+     * reaches 0, the ball is on the floor, so it should bounce and the typical way to do this is
      * to reverse its vertical velocity. However, this would mean that before the
-     * event {@code g(t)} was decreasing from positive values to 0, and after the
-     * event {@code g(t)} would be increasing from 0 to positive values again.
-     * Consistency is broken here! The solution here is to have {@code g(t) = sign
-     * * h(t)}, where sign is a variable with initial value set to {@code +1}. Each
-     * time {@link #eventOccurred(double, double[], boolean) eventOccurred} is called,
-     * {@code sign} is reset to {@code -sign}. This allows the {@code g(t)}
+     * event {@code g(state)} was decreasing from positive values to 0, and after the
+     * event {@code g(state)} would be increasing from 0 to positive values again.
+     * Consistency is broken here! The solution here is to have {@code g(state) = sign
+     * * h(state)}, where sign is a variable with initial value set to {@code +1}. Each
+     * time {@link #eventOccurred(ODEStateAndDerivative, boolean) eventOccurred} is called,
+     * {@code sign} is reset to {@code -sign}. This allows the {@code g(state)}
      * function to remain continuous (and even smooth) even across events, despite
-     * {@code h(t)} is not. Basically, the event is used to <em>fold</em> {@code h(t)}
+     * {@code h(state)} is not. Basically, the event is used to <em>fold</em> {@code h(state)}
      * at bounce points, and {@code sign} is used to <em>unfold</em> it back, so the
-     * solvers sees a {@code g(t)} function which behaves smoothly even across events.</p>
-
+     * solvers sees a {@code g(state)} function which behaves smoothly even across events.</p>
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative
      * @return value of the g switching function
@@ -118,7 +117,7 @@ public interface ODEEventHandler  {
      * <ul>
      *   <li>if {@link Action#STOP} is returned, the step handler will be called
      *   with the <code>isLast</code> flag of the {@link
-     *   org.hipparchus.ode.sampling.StepHandler#handleStep handleStep}
+     *   org.hipparchus.ode.sampling.ODEStepHandler#handleStep handleStep}
      *   method set to true and the integration will be stopped,</li>
      *   <li>if {@link Action#RESET_STATE} is returned, the {@link #resetState
      *   resetState} method will be called once the step handler has
@@ -132,9 +131,9 @@ public interface ODEEventHandler  {
      * </ul>
 
      * <p>The scheduling between this method and the {@link
-     * org.hipparchus.ode.sampling.StepHandler StepHandler} method {@link
-     * org.hipparchus.ode.sampling.StepHandler#handleStep(org.hipparchus.ode.sampling.ODEStateInterpolator,
-     * boolean), boolean) handleStep(interpolator, isLast)} is to call this method first and
+     * org.hipparchus.ode.sampling.ODEStepHandler ODEStepHandler} method {@link
+     * org.hipparchus.ode.sampling.ODEStepHandler#handleStep(org.hipparchus.ode.sampling.ODEStateInterpolator,
+     * boolean) handleStep(interpolator, isLast)} is to call this method first and
      * <code>handleStep</code> afterwards. This scheduling allows the integrator to
      * pass <code>true</code> as the <code>isLast</code> parameter to the step
      * handler to make it aware the step will be the last one if this method
@@ -150,7 +149,7 @@ public interface ODEEventHandler  {
      * <code>eventOccurred</code> method with t = 10 first and call its
      * <code>handleStep</code> method with t = 9 afterwards. Such out of order
      * calls are limited to the size of the integration step for {@link
-     * org.hipparchus.ode.sampling.StepHandler variable step handlers} and
+     * org.hipparchus.ode.sampling.ODEStepHandler variable step handlers} and
      * to the size of the fixed step for {@link
      * org.hipparchus.ode.sampling.ODEFixedStepHandler fixed step handlers}.</p>
 

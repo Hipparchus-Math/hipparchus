@@ -22,13 +22,13 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 
 /** This class is a step interpolator that does nothing.
  *
- * <p>This class is used when the {@link StepHandler "step handler"}
+ * <p>This class is used when the {@link ODEStepHandler "step handler"}
  * set up by the user does not need step interpolation. It does not
- * recompute the state when {@link AbstractODEStateInterpolator#setInterpolatedTime
- * setInterpolatedTime} is called. This implies the interpolated state
- * is always the state at the end of the current step.</p>
+ * recompute the state when {@link AbstractODEStateInterpolator#getInterpolatedState(double)
+ * getInterpolatedState} is called, only updating time and copying current state
+ * vector.</p>
  *
- * @see StepHandler
+ * @see ODEStepHandler
  *
  */
 

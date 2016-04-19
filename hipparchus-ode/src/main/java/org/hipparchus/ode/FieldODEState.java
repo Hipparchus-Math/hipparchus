@@ -136,7 +136,7 @@ public class FieldODEState<T extends RealFieldElement<T>> {
     /** Get primary state at time.
      * @return primary state at time
      * @see #getSecondaryState(int)
-     * @see #getC
+     * @see #getCompleteState()
      */
     public T[] getPrimaryState() {
         return primaryState.clone();

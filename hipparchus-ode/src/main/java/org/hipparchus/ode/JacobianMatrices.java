@@ -159,7 +159,7 @@ public class JacobianMatrices {
      * match the selected equations set dimension
      * @exception MismatchedEquations if the primary set of the expandable set does
      * not match the one used to build the instance
-     * @see ExpandableODE#add(SecondaryODE)
+     * @see ExpandableODE#addSecondaryEquations(SecondaryODE)
      * @see #setUpInitialState(ODEState)
      */
     public void registerVariationalEquations(final ExpandableODE expandable)

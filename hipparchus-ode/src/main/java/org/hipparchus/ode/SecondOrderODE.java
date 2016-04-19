@@ -22,7 +22,7 @@ package org.hipparchus.ode;
 
  * <p>This interface should be implemented by all real second order
  * differential equation problems before they can be handled by the
- * integrators {@link SecondOrderIntegrator#integrate} method.</p>
+ * integrators {@link FirstOrderConverter converter to first order}.</p>
  *
  * <p>A second order differential equations problem, as seen by an
  * integrator is the second time derivative <code>d2Y/dt^2</code> of a
@@ -38,7 +38,6 @@ package org.hipparchus.ode;
  * of this interface, the classes that implement it are allowed to
  * handle them as they want.</p>
  *
- * @see SecondOrderIntegrator
  * @see FirstOrderConverter
  * @see FirstOrderDifferentialEquations
  */

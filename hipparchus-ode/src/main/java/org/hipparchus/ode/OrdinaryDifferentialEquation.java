@@ -21,7 +21,8 @@ package org.hipparchus.ode;
  *
  * <p>This interface should be implemented by all real first order
  * differential equation problems before they can be handled by the
- * integrators {@link FirstOrderIntegrator#integrate} method.</p>
+ * integrators {@link ODEIntegrator#integrate(OrdinaryDifferentialEquation,
+ * ODEState, double)} method.</p>
  *
  * <p>A first order differential equations problem, as seen by an
  * integrator is the time derivative <code>dY/dt</code> of a state
@@ -36,12 +37,11 @@ package org.hipparchus.ode;
  * of this interface, the classes that implement it are allowed to
  * handle them as they want.</p>
  *
- * @see FirstOrderIntegrator
+ * @see ODEIntegrator
  * @see FirstOrderConverter
  * @see SecondOrderDifferentialEquations
  *
  */
-
 public interface OrdinaryDifferentialEquation {
 
     /** Get the dimension of the problem.

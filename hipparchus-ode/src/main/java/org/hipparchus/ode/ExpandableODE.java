@@ -40,8 +40,8 @@ import org.hipparchus.exception.MathIllegalStateException;
  * be able to know where the primary set ends and so where the secondary sets begin.
  * </p>
  *
- * @see FirstOrderDifferentialEquations
- * @see JacobianMatrices
+ * @see OrdinaryDifferentialEquation
+ * @see VariationalEquation
  *
  */
 
@@ -121,7 +121,7 @@ public class ExpandableODE {
     /** Get the current time derivative of the complete state vector.
      * @param t current value of the independent <I>time</I> variable
      * @param y array containing the current value of the complete state vector
-     * @param yDot placeholder array where to put the time derivative of the complete state vector
+     * @return time derivative of the complete state vector
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
      * @exception MathIllegalArgumentException if arrays dimensions do not match equations settings
      */

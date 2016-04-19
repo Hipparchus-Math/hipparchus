@@ -25,7 +25,7 @@ import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link SumLog} class.
+ * Test cases for the {@code SumLog} class.
  */
 public class SumLogTest extends StorelessUnivariateStatisticAbstractTest {
 

@@ -700,7 +700,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
          * @param windowSize sets the size of the window.
          * @throws MathIllegalArgumentException if window size is less than 1 but
          * not equal to {@link #INFINITE_WINDOW}
-         * @returns the builder
+         * @return the builder
          */
         public Builder withWindowSize(int windowSize) {
             if (windowSize < 1 && windowSize != INFINITE_WINDOW) {
@@ -717,7 +717,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
          *
          * @param initialValues the initial values to use.
          * @throws NullArgumentException if initialValues is null
-         * @returns the builder
+         * @return the builder
          */
         public Builder withInitialValues(double[] initialValues) {
             MathUtils.checkNotNull(initialValues, LocalizedCoreFormats.INPUT_ARRAY);
