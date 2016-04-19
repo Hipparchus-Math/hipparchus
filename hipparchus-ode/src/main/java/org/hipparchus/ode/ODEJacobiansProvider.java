@@ -16,18 +16,20 @@
  */
 package org.hipparchus.ode;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 
-/** Interface expanding {@link FirstOrderDifferentialEquations first order
- *  differential equations} in order to compute exactly the main state jacobian
- *  matrix for {@link JacobianMatrices partial derivatives equations}.
- * @deprecated as of 1.0, replaced with {@link ODEJacobiansProvider}
+/** Interface expanding {@link OrdinaryDifferentialEquation first order
+ *  differential equations} in order to compute exactly the Jacobian
+ *  matrices for {@link JacobianMatrices partial derivatives equations}.
  */
-@Deprecated
-public interface MainStateJacobianProvider extends OrdinaryDifferentialEquation {
+public interface ODEJacobiansProvider
+    extends OrdinaryDifferentialEquation, NamedParameterJacobianProvider {
 
-    /** Compute the jacobian matrix of ODE with respect to main state.
+    /** Compute the Jacobian matrix of ODE with respect to state.
      * @param t current value of the independent <I>time</I> variable
      * @param y array containing the current value of the main state vector
      * @param yDot array containing the current value of the time derivative of the main state vector
@@ -37,5 +39,35 @@ public interface MainStateJacobianProvider extends OrdinaryDifferentialEquation 
      */
     double[][] computeMainStateJacobian(double t, double[] y, double[] yDot)
         throws MathIllegalArgumentException, MathIllegalStateException;
+
+    /** {@inheritDoc}
+     * <p>
+     * The default implementation has no parameters at all.
+     * </p>
+     */
+    default List<String> getParametersNames() {
+        return Collections.emptyList();
+    }
+
+    /** {@inheritDoc}
+     * <p>
+     * The default implementation supports no parameters at all.
+     * </p>
+     */
+    default boolean isSupported(String name) {
+        return false;
+    }
+
+    /** {@inheritDoc}
+     * <p>
+     * The default implementation supports no parameters at all.
+     * </p>
+     */
+    default double[] computeParameterJacobian(double t, double[] y, double[] yDot,
+                                              String paramName)
+        throws MathIllegalArgumentException {
+        throw new MathIllegalArgumentException(LocalizedODEFormats.UNKNOWN_PARAMETER,
+                                               paramName);
+    }
 
 }

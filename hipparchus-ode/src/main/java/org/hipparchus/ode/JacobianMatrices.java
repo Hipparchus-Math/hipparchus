@@ -48,8 +48,9 @@ import org.hipparchus.exception.MathIllegalStateException;
  * @see MainStateJacobianProvider
  * @see NamedParameterJacobianProvider
  * @see ParametersController
- *
+ * @deprecated as of 1.0, replaced with {@link VariationalEquation}
  */
+@Deprecated
 public class JacobianMatrices {
 
     /** Expandable first order differential equation. */
@@ -68,7 +69,7 @@ public class JacobianMatrices {
     private int stateDim;
 
     /** Selected parameters for parameter Jacobian computation. */
-    private ParameterConfiguration[] selectedParameters;
+    private MutableParameterConfiguration[] selectedParameters;
 
     /** FODE with exact parameter Jacobian computation skill. */
     private List<NamedParameterJacobianProvider> jacobianProviders;
@@ -130,9 +131,9 @@ public class JacobianMatrices {
             selectedParameters = null;
             paramDim = 0;
         } else {
-            this.selectedParameters = new ParameterConfiguration[parameters.length];
+            this.selectedParameters = new MutableParameterConfiguration[parameters.length];
             for (int i = 0; i < parameters.length; ++i) {
-                selectedParameters[i] = new ParameterConfiguration(parameters[i], Double.NaN);
+                selectedParameters[i] = new MutableParameterConfiguration(parameters[i], Double.NaN);
             }
             paramDim = parameters.length;
         }
@@ -255,7 +256,7 @@ public class JacobianMatrices {
     public void setParameterStep(final String parameter, final double hP)
         throws MathIllegalArgumentException {
 
-        for (ParameterConfiguration param: selectedParameters) {
+        for (MutableParameterConfiguration param: selectedParameters) {
             if (parameter.equals(param.getParameterName())) {
                 param.setHP(hP);
                 dirtyParameter = true;
@@ -315,7 +316,7 @@ public class JacobianMatrices {
 
         // store the column in a global single dimension array
         int i = stateDim * stateDim;
-        for (ParameterConfiguration param: selectedParameters) {
+        for (MutableParameterConfiguration param: selectedParameters) {
             if (pName.equals(param.getParameterName())) {
                 System.arraycopy(dYdP, 0, matricesData, i, stateDim);
                 return;
@@ -359,7 +360,7 @@ public class JacobianMatrices {
 
         final double[] dYdP = new double[stateDim];
         int i = stateDim * stateDim;
-        for (ParameterConfiguration param: selectedParameters) {
+        for (MutableParameterConfiguration param: selectedParameters) {
             if (param.getParameterName().equals(pName)) {
                 System.arraycopy(p, i, dYdP, 0, stateDim);
                 break;
@@ -409,7 +410,13 @@ public class JacobianMatrices {
 
             // Lazy initialization
             if (dirtyParameter && (paramDim != 0)) {
-                jacobianProviders.add(new ParameterJacobianWrapper(jode, parametersController, selectedParameters));
+                ParameterConfiguration [] immutable = new ParameterConfiguration[selectedParameters.length];
+                for (int i = 0; i < selectedParameters.length; ++i) {
+                    immutable[i] = new ParameterConfiguration(selectedParameters[i].getParameterName(),
+                                                              selectedParameters[i].getHP());
+                }
+                jacobianProviders.add(new ParameterJacobianWrapper(jode, new double[jode.getDimension()],
+                                                                   parametersController, immutable));
                 dirtyParameter = false;
             }
 
@@ -437,7 +444,7 @@ public class JacobianMatrices {
             if (paramDim != 0) {
                 // compute Jacobian matrices with respect to parameters
                 int startIndex = stateDim * stateDim;
-                for (ParameterConfiguration param: selectedParameters) {
+                for (MutableParameterConfiguration param: selectedParameters) {
                     boolean found = false;
                     for (int k = 0 ; (!found) && (k < jacobianProviders.size()); ++k) {
                         final NamedParameterJacobianProvider provider = jacobianProviders.get(k);
@@ -543,6 +550,46 @@ public class JacobianMatrices {
         /** Simple constructor. */
         public MismatchedEquations() {
             super(LocalizedODEFormats.UNMATCHED_ODE_IN_EXPANDED_SET);
+        }
+
+    }
+
+    private static class MutableParameterConfiguration {
+
+        /** Parameter name. */
+        private String parameterName;
+
+        /** Parameter step for finite difference computation. */
+        private double hP;
+
+        /** Parameter name and step pair constructor.
+         * @param parameterName parameter name
+         * @param hP parameter step
+         */
+        MutableParameterConfiguration(final String parameterName, final double hP) {
+            this.parameterName = parameterName;
+            this.hP = hP;
+        }
+
+        /** Get parameter name.
+         * @return parameterName parameter name
+         */
+        public String getParameterName() {
+            return parameterName;
+        }
+
+        /** Get parameter step.
+         * @return hP parameter step
+         */
+        public double getHP() {
+            return hP;
+        }
+
+        /** Set parameter step.
+         * @param hParam parameter step
+         */
+        public void setHP(final double hParam) {
+            this.hP = hParam;
         }
 
     }

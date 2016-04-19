@@ -18,6 +18,7 @@ package org.hipparchus.ode;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 
@@ -28,7 +29,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 public abstract class AbstractParameterizable implements Parameterizable {
 
    /** List of the parameters names. */
-    private final Collection<String> parametersNames;
+    private final List<String> parametersNames;
 
     /** Simple constructor.
      * @param names names of the supported parameters
@@ -50,7 +51,7 @@ public abstract class AbstractParameterizable implements Parameterizable {
 
     /** {@inheritDoc} */
     @Override
-    public Collection<String> getParametersNames() {
+    public List<String> getParametersNames() {
         return parametersNames;
     }
 

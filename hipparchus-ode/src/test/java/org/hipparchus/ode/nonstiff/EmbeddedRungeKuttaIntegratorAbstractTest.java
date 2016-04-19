@@ -19,16 +19,14 @@ package org.hipparchus.ode.nonstiff;
 
 
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ExpandableODE;
-import org.hipparchus.ode.JacobianMatrices;
 import org.hipparchus.ode.LocalizedODEFormats;
-import org.hipparchus.ode.MainStateJacobianProvider;
-import org.hipparchus.ode.NamedParameterJacobianProvider;
 import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.ODEJacobiansProvider;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
@@ -37,6 +35,7 @@ import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.TestProblem4;
 import org.hipparchus.ode.TestProblem5;
 import org.hipparchus.ode.TestProblemHandler;
+import org.hipparchus.ode.VariationalEquation;
 import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
@@ -648,11 +647,9 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         double t     = 6.0;
         SinCos sinCos = new SinCos(omega);
 
-        ExpandableODE    expandable = new ExpandableODE(sinCos);
-        JacobianMatrices jm         = new JacobianMatrices(sinCos, "omega");
-        jm.addParameterJacobianProvider(sinCos);
-        jm.registerVariationalEquations(expandable);
-        ODEState initialState = jm.setUpInitialState(new ODEState(t0, y0));
+        ExpandableODE       expandable   = new ExpandableODE(sinCos);
+        VariationalEquation ve           = new VariationalEquation(expandable, sinCos);
+        ODEState            initialState = ve.setUpInitialState(new ODEState(t0, y0));
 
         EmbeddedRungeKuttaIntegrator integrator =
                         createIntegrator(0.001 * (t - t0), t - t0, 1.0e-12, 1.0e-12);
@@ -670,21 +667,21 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         }
 
         // check derivatives
-        double[][] dydy0 = jm.extractMainSetJacobian(finalState);
+        double[][] dydy0 = ve.extractMainSetJacobian(finalState);
         for (int i = 0; i < dydy0.length; ++i) {
             for (int j = 0; j < dydy0[i].length; ++j) {
                 Assert.assertEquals(sinCos.exactDyDy0(t)[i][j], dydy0[i][j], epsilonPartials);
             }
         }
 
-        double[] dydp0 = jm.extractParameterJacobian(finalState, SinCos.OMEGA_PARAMETER);
+        double[] dydp0 = ve.extractParameterJacobian(finalState, SinCos.OMEGA_PARAMETER);
         for (int i = 0; i < dydp0.length; ++i) {
             Assert.assertEquals(sinCos.exactDyDomega(t)[i], dydp0[i], epsilonPartials);
         }
 
     }
 
-    private static class SinCos implements MainStateJacobianProvider, NamedParameterJacobianProvider {
+    private static class SinCos implements ODEJacobiansProvider {
 
         public static String OMEGA_PARAMETER = "omega";
 
@@ -795,7 +792,7 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
         }
 
         @Override
-        public Collection<String> getParametersNames() {
+        public List<String> getParametersNames() {
             return Arrays.asList(OMEGA_PARAMETER);
         }
 
