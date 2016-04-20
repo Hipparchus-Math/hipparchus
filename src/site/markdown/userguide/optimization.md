@@ -286,7 +286,7 @@ can be seen below:
         }
 
 Below is the the class containing all the implementation details
-(Taken from the Apache Commons Math <b>org.hipparchus.optimization.general.LevenbergMarquardtOptimizerTest</b>):
+(Taken from the Hipparchus <b>org.hipparchus.optimization.general.LevenbergMarquardtOptimizerTest</b>):
 
 
 

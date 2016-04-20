@@ -45,11 +45,11 @@ limitations under the License.
 -->
 <document>
   <properties>
-    <title>Download Apache Commons Math</title>
+    <title>Download Apache Hipparchus</title>
     <author email="dev@commons.apache.org">Commons Documentation Team</author>
   </properties>
   <body>
-    <section name="Download Apache Commons Math">
+    <section name="Download Apache Hipparchus">
     <subsection name="Using a Mirror">
       <p>
         We recommend you use a mirror to download our release
@@ -95,7 +95,7 @@ limitations under the License.
       </p>
     </subsection>
     </section>
-    <section name="Apache Commons Math 3.4.1 (requires Java 1.5+)">
+    <section name="Apache Hipparchus 3.4.1 (requires Java 1.5+)">
       <subsection name="Binaries">
         <table>
           <tr>
@@ -125,7 +125,7 @@ limitations under the License.
         </table>
       </subsection>
     </section>
-    <section name="Apache Commons Math 2.2 (requires Java 1.5+)">
+    <section name="Apache Hipparchus 2.2 (requires Java 1.5+)">
       <subsection name="Binaries">
         <table>
           <tr>

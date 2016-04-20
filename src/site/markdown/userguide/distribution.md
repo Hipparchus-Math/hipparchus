@@ -70,7 +70,7 @@ User-defined distributions can be implemented using
 [IntegerDistribution](../apidocs/org/hipparchus/distribution/IntegerDistribution.html) and
 [MultivariateRealDistribution](../apidocs/org/hipparchus/distribution/MultivariateRealDistribution.html)
 interfaces serve as base types.  These serve as the basis for all the distributions directly supported by
-Apache Commons Math.  To aid in implementing distributions,
+Hipparchus.  To aid in implementing distributions,
 the [AbstractRealDistribution](../apidocs/org/hipparchus/distribution/AbstractRealDistribution.html),
 [AbstractIntegerDistribution](../apidocs/org/hipparchus/distribution/AbstractIntegerDistribution.html) and
 [AbstractMultivariateRealDistribution](../apidocs/org/hipparchus/distribution/AbstractMultivariateRealDistribution.html)

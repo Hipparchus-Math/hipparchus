@@ -38,7 +38,7 @@
  |                                                                      |
  +======================================================================+
 --->
-Contributing to Apache Commons Math
+Contributing to Hipparchus
 ======================
 
 You have found a bug or you have an idea for a cool new feature? Contributing code is a great way to give something back to
@@ -50,7 +50,7 @@ Getting Started
 
 + Make sure you have a [JIRA account](https://issues.apache.org/jira/).
 + Make sure you have a [GitHub account](https://github.com/signup/free).
-+ If you're planning to implement a new feature it makes sense to discuss you're changes on the [dev list](https://commons.apache.org/mail-lists.html) first. This way you can make sure you're not wasting your time on something that isn't considered to be in Apache Commons Math's scope.
++ If you're planning to implement a new feature it makes sense to discuss you're changes on the [dev list](https://commons.apache.org/mail-lists.html) first. This way you can make sure you're not wasting your time on something that isn't considered to be in Hipparchus's scope.
 + Submit a ticket for your issue, assuming one does not already exist.
   + Clearly describe the issue including steps to reproduce when it is a bug.
   + Make sure you fill in the earliest version that you know has the issue.
@@ -87,7 +87,7 @@ Additional Resources
 --------------------
 
 + [Contributing patches](https://commons.apache.org/patches.html)
-+ [Apache Commons Math JIRA project page](https://issues.apache.org/jira/browse/MATH)
++ [Hipparchus JIRA project page](https://issues.apache.org/jira/browse/MATH)
 + [Contributor License Agreement][cla]
 + [General GitHub documentation](https://help.github.com/)
 + [GitHub pull request documentation](https://help.github.com/send-pull-requests/)

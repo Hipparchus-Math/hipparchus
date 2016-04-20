@@ -201,7 +201,7 @@
    limitations under the License.
 
 
-Apache Commons Math includes the following code provided to the ASF under the
+Hipparchus includes the following code provided to the ASF under the
 Apache License 2.0:
 
  - The inverse error function implementation in the Erf class is based on CUDA
@@ -223,7 +223,7 @@ Apache License 2.0:
  
 
 
-APACHE COMMONS MATH DERIVATIVE WORKS: 
+Hipparchus DERIVATIVE WORKS: 
 
 The Apache commons-math library includes a number of subcomponents
 whose implementation is derived from original sources written

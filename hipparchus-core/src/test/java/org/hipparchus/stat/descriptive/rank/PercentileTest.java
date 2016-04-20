@@ -615,7 +615,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
 
     @Test
     public void testAllEstimationTechniquesOnly() {
-        assertEquals("Legacy Apache Commons Math",Percentile.EstimationType.LEGACY.getName());
+        assertEquals("Legacy Hipparchus",Percentile.EstimationType.LEGACY.getName());
         final Object[][] map =
                 new Object[][] { { Percentile.EstimationType.LEGACY, 20.82 }, { Percentile.EstimationType.R_1, 19.8 },
                         { Percentile.EstimationType.R_2, 19.8 }, { Percentile.EstimationType.R_3, 19.8 }, { Percentile.EstimationType.R_4, 19.310 },
@@ -645,7 +645,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
     @Test
     public void testAllEstimationTechniquesOnlyForAllPivotingStrategies() {
 
-        assertEquals("Legacy Apache Commons Math",Percentile.EstimationType.LEGACY.getName());
+        assertEquals("Legacy Hipparchus",Percentile.EstimationType.LEGACY.getName());
 
         for (final PivotingStrategy strategy : new PivotingStrategy[] {
             PivotingStrategy.medianOf3(),

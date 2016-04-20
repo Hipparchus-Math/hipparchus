@@ -124,7 +124,7 @@ In some cases, the model function requires parameters to lie within a specific d
 a parameter may be used in a square root and needs to be positive, or another parameter represents
 the sine of an angle and should be within -1 and +1, or several parameters may need to remain in
 the unit circle and the sum of their squares must be smaller than 1. The least square solvers available
-in Apache Commons Math currently don't allow to set up constraints on the parameters. This is a
+in Hipparchus currently don't allow to set up constraints on the parameters. This is a
 known missing feature. There are two ways to circumvent this.
 
 Both ways are achieved by setting up a

@@ -54,7 +54,7 @@ integrators or for optimizations).
        }
      }
 As shown in this example the exception is really something local to user code
-and there is a guarantee Apache Commons Math will not mess with it.
+and there is a guarantee Hipparchus will not mess with it.
 The user is safe.
 
 
@@ -507,7 +507,7 @@ The second method is more suited to either large functions that would be cumbers
 API, or functions for which user does not have control to the full underlying code
 (for example functions that call external libraries).
 
-Apache Commons Math provides one implementation of the <a
+Hipparchus provides one implementation of the <a
 href="../apidocs/org.hipparchus/analysis/differentiation/UnivariateFunctionDifferentiator.html">
 UnivariateFunctionDifferentiator</a> interface: <a
 href="../apidocs/org.hipparchus/analysis/differentiation/FiniteDifferencesDifferentiator.html">

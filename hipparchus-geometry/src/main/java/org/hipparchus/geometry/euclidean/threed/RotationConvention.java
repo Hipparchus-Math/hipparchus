@@ -37,7 +37,7 @@ public enum RotationConvention {
      * would be vector (-2, 1, 3). This means that the vector rotates counterclockwise.
      * </p>
      * <p>
-     * This convention was the only one supported by Apache Commons Math up to version 3.5.
+     * This convention was the only one supported by Hipparchus up to version 3.5.
      * </p>
      * <p>
      * The difference with {@link #FRAME_TRANSFORM} is only the semantics of the sign

@@ -1,4 +1,4 @@
-Apache Commons Math
+Hipparchus
 Copyright 2001-2016 The Apache Software Foundation
 
 This product includes software developed at

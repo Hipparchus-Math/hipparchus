@@ -3,16 +3,16 @@
 
 ## 0.1 About The User Guide
 This guide is intended to help programmers quickly find what they need to develop
-solutions using Commons Math.  It also provides a supplement to the javadoc API documentation,
+solutions using Hipparchus.  It also provides a supplement to the javadoc API documentation,
 providing a little more explanation of the mathematical objects and functions included
 in the package.
 
 
 
 ## 0.2 What's in hipparchus
-Commons Math is made up of a small set of math/stat utilities addressing
+Hipparchus is made up of a small set of math/stat utilities addressing
 programming problems like the ones in the list below.  This list is not exhaustive,
-it's just meant to give a feel for the kinds of things that Commons Math provides.
+it's just meant to give a feel for the kinds of things that Hipparchus provides.
 * Computing means, variances and other summary statistics for a list of numbers
 * Fitting a line to a set of data points using linear regression
 * Fitting a curve to a set of data points
@@ -28,7 +28,7 @@ it's just meant to give a feel for the kinds of things that Commons Math provide
 * Miscellaneous mathematical functions such as factorials, binomial coefficients and "special functions" (e.g. gamma, beta functions)
 
 We are actively seeking ideas for additional components that fit into the
-[Commons Math vision](../index.html#summary) of a set of lightweight,
+[Hipparchus vision](../index.html#summary) of a set of lightweight,
 self-contained math/stat components useful for solving common programming problems.
 Suggestions for new components or enhancements to existing functionality are always welcome!
 All feedback/suggestions for improvement should be sent to the
@@ -38,7 +38,7 @@ All feedback/suggestions for improvement should be sent to the
 
 
 ## 0.3 How commons-math is organized
-Commons Math is divided into sixteen subpackages, based on functionality provided.
+Hipparchus is divided into sixteen subpackages, based on functionality provided.
 * Computing means, variances and other summary statistics for a list of numbers
 * Fitting a line to a set of data points using linear regression
 * Fitting a curve to a set of data points
@@ -59,7 +59,7 @@ Package javadocs are [here](../apidocs/index.html)
 
 ## 0.4 How interface contracts are specified in hipparchus javadoc
 You should always read the javadoc class and method comments carefully when using
-Commons Math components in your programs.  The javadoc provides references to the algorithms
+Hipparchus components in your programs.  The javadoc provides references to the algorithms
 that are used, usage notes about limitations, performance, etc. as well as interface contracts.
 Interface contracts are specified in terms of preconditions (what has to be true in order
 for the method to return valid results), special values returned (e.g. Double.NaN)
@@ -75,7 +75,7 @@ may be thrown. Exact conditions under which runtime
 exceptions (and any other exceptions) are thrown are specified in the javadoc method
 comments.
 In some cases, to be consistent with the [IEEE 754 standard](http://grouper.ieee.org/groups/754/)
-for floating point arithmetic and with java.lang.Math, Commons Math
+for floating point arithmetic and with java.lang.Math, Hipparchus
 methods return `Double.NaN` values. Conditions under which `Double.NaN`
 or other special values are returned are fully specified in the javadoc method comments.
 

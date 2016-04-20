@@ -53,7 +53,7 @@
 
   <rule ref="rulesets/java/unnecessary.xml">
 
-    <!-- In many places in Apache Commons Math, there are complex boolean expressions.
+    <!-- In many places in Hipparchus, there are complex boolean expressions.
          We do use extra parentheses there as most people do not recall operator precedence,
          this means even if the parentheses are useless for the compiler, we don't consider
          them useless for the developer. This is the reason why we disable this rule. -->

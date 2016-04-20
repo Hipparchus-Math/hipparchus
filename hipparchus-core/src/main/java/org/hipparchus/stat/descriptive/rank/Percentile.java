@@ -644,10 +644,10 @@ public class Percentile extends AbstractUnivariateStatistic
          * &amp;maxLimit = 1 \\
          * \end{align}\)
          */
-        LEGACY("Legacy Apache Commons Math") {
+        LEGACY("Legacy Hipparchus") {
             /**
              * {@inheritDoc}.This method in particular makes use of existing
-             * Apache Commons Math style of picking up the index.
+             * Hipparchus style of picking up the index.
              */
             @Override
             protected double index(final double p, final int length) {
@@ -793,7 +793,7 @@ public class Percentile extends AbstractUnivariateStatistic
          * \end{align}\)
          * <p>
          * <b>Note:</b> This method computes the index in a manner very close to
-         * the default Commons Math Percentile existing implementation. However
+         * the default Hipparchus Percentile existing implementation. However
          * the difference to be noted is in picking up the limits with which
          * first element (p&lt;1(N+1)) and last elements (p&gt;N/(N+1))are done.
          * While in default case; these are done with p=0 and p=1 respectively.

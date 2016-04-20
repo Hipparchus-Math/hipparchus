@@ -108,10 +108,10 @@ size <- 5
 probability <- 0.0
 
 densityPoints <- c(-1, 0, 1, 10, 11)
-# Note: commons math returns 0's below
+# Note: Hipparchus returns 0's below
 densityValues <- c(NaN, NaN, NaN, NaN, NaN)
 distributionPoints <- c(-1, 0, 1, 5, 10)
-# Note: commons math returns 0's below
+# Note: Hipparchus returns 0's below
 distributionValues <- c(NaN, NaN, NaN, NaN, NaN)
 
 output <- c("Density test n = ", size, ", p = ", probability)

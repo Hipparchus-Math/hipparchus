@@ -40,19 +40,19 @@
  |                                                                      |
  +======================================================================+
 --->
-Apache Commons Math
+Hipparchus
 ===================
 
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
-The Apache Commons Math project is a library of lightweight, self-contained mathematics and statistics components addressing the most common practical problems not immediately available in the Java programming language or commons-lang.
+The Hipparchus project is a library of lightweight, self-contained mathematics and statistics components addressing the most common practical problems not immediately available in the Java programming language or commons-lang.
 
 Documentation
 -------------
 
 More information can be found on the [homepage](https://commons.apache.org/proper/commons-math).
 The [JavaDoc](https://commons.apache.org/proper/commons-math/apidocs) can be browsed.
-Questions related to the usage of Apache Commons Math should be posted to the [user mailing list][ml].
+Questions related to the usage of Hipparchus should be posted to the [user mailing list][ml].
 
 Where can I get the latest release?
 -----------------------------------
@@ -87,7 +87,7 @@ Code is under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2.
 
 Donations
 ---------
-You like Apache Commons Math? Then [donate back to the ASF](https://www.apache.org/foundation/contributing.html) to support the development.
+You like Hipparchus? Then [donate back to the ASF](https://www.apache.org/foundation/contributing.html) to support the development.
 
 Additional Resources
 --------------------

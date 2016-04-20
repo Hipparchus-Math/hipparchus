@@ -63,7 +63,7 @@ import org.hipparchus.RealFieldElement;
  * </pre>
  *<p>
  * As shown, the exception is local to the user's code and it is guaranteed
- * that Apache Commons Math will not catch it.</p>
+ * that Hipparchus will not catch it.</p>
  *
  * @param <T> the type of the field elements
  * @see UnivariateFunction
@@ -77,7 +77,7 @@ public interface RealFieldUnivariateFunction<T extends RealFieldElement<T>> {
      * @throws IllegalArgumentException when the activated method itself can
      * ascertain that a precondition, specified in the API expressed at the
      * level of the activated method, has been violated.
-     * When Commons Math throws an {@code IllegalArgumentException}, it is
+     * When Hipparchus throws an {@code IllegalArgumentException}, it is
      * usually the consequence of checking the actual parameters passed to
      * the method.
      */

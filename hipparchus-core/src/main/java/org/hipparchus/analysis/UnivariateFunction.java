@@ -61,7 +61,7 @@ package org.hipparchus.analysis;
  * </pre>
  *
  * As shown, the exception is local to the user's code and it is guaranteed
- * that Apache Commons Math will not catch it.
+ * that Hipparchus will not catch it.
  *
  */
 public interface UnivariateFunction {
@@ -73,7 +73,7 @@ public interface UnivariateFunction {
      * @throws IllegalArgumentException when the activated method itself can
      * ascertain that a precondition, specified in the API expressed at the
      * level of the activated method, has been violated.
-     * When Commons Math throws an {@code IllegalArgumentException}, it is
+     * When Hipparchus throws an {@code IllegalArgumentException}, it is
      * usually the consequence of checking the actual parameters passed to
      * the method.
      */

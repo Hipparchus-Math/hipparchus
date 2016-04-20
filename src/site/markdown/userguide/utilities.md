@@ -123,7 +123,7 @@ A collection of reusable math functions is provided in the
 
 
 ## 6.6 Fast mathematical functions
-Apache Commons Math provides a faster, more accurate, portable alternative
+Hipparchus provides a faster, more accurate, portable alternative
 to the regular `Math` and `StrictMath`classes for large
 scale computation.
 
@@ -141,7 +141,7 @@ even at first use of the class. If users prefer to compute the tables
 automatically at load time, they can change a compile-time constant. This will
 increase class load time at first use, but this overhead will occur only once
 per run, regardless of the number of subsequent calls to computation methods.
-Note that FastMath is extensively used inside Apache Commons Math, so by
+Note that FastMath is extensively used inside Hipparchus, so by
 calling some algorithms, the one-shot overhead when the constant is set to
 false will occur regardless of the end-user calling FastMath methods directly
 or not. Performance figures for a specific JVM and hardware can be evaluated by

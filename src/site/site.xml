@@ -17,7 +17,7 @@
 -->
 <project name="Math">
   <bannerRight>
-    <name>Commons Math</name>
+    <name>Hipparchus</name>
     <src>/images/math.gif</src>
     <href>/index.html</href>
   </bannerRight>

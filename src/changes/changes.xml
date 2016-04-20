@@ -440,7 +440,7 @@ Most notable among the new features are:
  numerous bug fixes. See below for a full list.
   
 The minimum version of the Java platform required to compile and use
- Apache Commons Math is Java 5.
+ Hipparchus is Java 5.
   
 Users are encouraged to upgrade to this version as this release not
  only includes bug fixes but also deprecates numerous classes and
@@ -520,7 +520,7 @@ Most notable among the new features are:
  for a full list.
   
 The minimum version of the Java platform required to compile and use
- Apache Commons Math is Java 5.
+ Hipparchus is Java 5.
   
 Users are encouraged to upgrade to this version as this release not
  only includes bug fixes but also deprecates numerous classes and
@@ -3657,7 +3657,7 @@ are simply solved by adjusting the import statements in users code.">
       </action>
     </release>
     <release version="1.0" date="2004-12-06"
-       description="Apache Commons Math 1.0 - Initial Release">
+       description="Hipparchus 1.0 - Initial Release">
     </release>
   </body>
 </document>

@@ -33,7 +33,7 @@ public interface MultivariateFunction {
      * @throws  org.hipparchus.exception.MathIllegalArgumentException
      * when the activated method itself can ascertain that preconditions,
      * specified in the API expressed at the level of the activated method,
-     * have been violated.  In the vast majority of cases where Commons Math
+     * have been violated.  In the vast majority of cases where Hipparchus
      * throws this exception, it is the result of argument checking of actual
      * parameters immediately passed to a method.
      */

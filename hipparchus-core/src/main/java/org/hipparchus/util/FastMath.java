@@ -37,7 +37,7 @@ import org.hipparchus.exception.MathRuntimeException;
  * time does not penalize methods that don't need them.
  * <p>
  * Note that FastMath is
- * extensively used inside Apache Commons Math, so by calling some algorithms,
+ * extensively used inside Hipparchus, so by calling some algorithms,
  * the overhead when the the tables need to be initialized will occur
  * regardless of the end-user calling FastMath methods directly or not.
  * Performance figures for a specific JVM and hardware can be evaluated by

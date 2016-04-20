@@ -2,7 +2,7 @@
 # 2 Data Generation
 
 ## 2.1 Overview
-The Commons Math random package includes utilities for
+The Hipparchus random package includes utilities for
 * generating random numbers
 * generating random vectors
 * generating random strings
@@ -23,7 +23,7 @@ Makoto Matsumoto and Takuji Nishimura and the more recent WELL generators
 (Well Equidistributed Long-period Linear) from Fran&#231;ois Panneton, Pierre
 L&#39;Ecuyer and Makoto Matsumoto.
 
-Sections 2.2-2.6 below show how to use the commons math API to generate
+Sections 2.2-2.6 below show how to use the Hipparchus API to generate
 different kinds of random data.  The examples all use the default
 JDK-supplied PRNG.  PRNG pluggability is covered in 2.7.  The only
 modification required to the examples to use alternative PRNGs is to
@@ -50,7 +50,7 @@ same length.  The mathematical concept of a
 [    probability distribution](http://www.itl.nist.gov/div898/handbook/eda/section3/eda36.htm)
 basically amounts to asserting that different
 ranges in the set  of possible values of a random variable have
-different probabilities of containing the value.  Commons Math supports
+different probabilities of containing the value.  Hipparchus supports
 generating random sequences from each of the distributions in the
 [    distributions](../apidocs/org/hipparchus/distribution/package-summary.html)
 package.

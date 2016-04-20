@@ -41,7 +41,7 @@ import org.hipparchus.geometry.Space;
 
  * <p>
  * Note that this interface is <em>not</em> intended to be implemented
- * by Apache Commons Math users, it is only intended to be implemented
+ * by Hipparchus users, it is only intended to be implemented
  * within the library itself. New methods may be added even for minor
  * versions, which breaks compatibility for external implementations.
  * </p>

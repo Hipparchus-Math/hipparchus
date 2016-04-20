@@ -151,7 +151,7 @@ shortcuts `applyTo(Rotation)` which is equivalent to
 
 
 ## 11.3 n-Sphere
-The Apache Commons Math library provides a few classes dealing with geometry
+The Hipparchus library provides a few classes dealing with geometry
 on the 1-sphere (i.e. the one dimensional circle corresponding to the boundary of
 a two-dimensional disc) and the 2-sphere (i.e. the two dimensional sphere surface
 corresponding to the boundary of a three-dimensional ball). The main classes in
