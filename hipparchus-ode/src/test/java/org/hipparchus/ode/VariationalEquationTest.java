@@ -19,7 +19,6 @@ package org.hipparchus.ode;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -173,87 +172,6 @@ public class VariationalEquationTest {
         Assert.assertTrue(residualsP1.getStandardDeviation() < 0.01);
     }
 
-    @Test
-    public void testTutorial() {
-        ODEIntegrator               integ        = new DormandPrince54Integrator(1.0e-8, 100.0, 1.0e-10, 1.0e-10);
-        Circle2                     circle       = new Circle2(1.0,  1.0, 0.1);
-        ExpandableODE               expandable   = new ExpandableODE(circle);
-        VariationalEquation         ve           = new VariationalEquation(expandable, circle);
-        final ODEState              initialState = ve.setUpInitialState(new ODEState(0, new double[] { 0.0, 1.0 }));
-        final ODEStateAndDerivative finalState   = integ.integrate(expandable, initialState, 18 * FastMath.PI);
-
-        double[][] dYdY0 = ve.extractMainSetJacobian(finalState);
-        System.out.format(Locale.US, "state transition matrixt at t = %6.3f%n  %6.3f %6.3f%n  %6.3f %6.3f%n",
-                          finalState.getTime(),
-                          dYdY0[0][0], dYdY0[0][1],
-                          dYdY0[1][0], dYdY0[1][1]);
-
-        double[] dYdCX = ve.extractParameterJacobian(finalState, Circle.CX);
-        System.out.format(Locale.US, "dY/dCx =   %6.3f %6.3f%n", dYdCX[0], dYdCX[1]);
-
-        double[] dYdCY = ve.extractParameterJacobian(finalState, Circle.CY);
-        System.out.format(Locale.US, "dY/dCy =   %6.3f %6.3f%n", dYdCY[0], dYdCY[1]);
-
-        double[] dYdO  = ve.extractParameterJacobian(finalState, Circle.OMEGA);
-        System.out.format(Locale.US, "dY/dω  =   %6.3f %6.3f%n", dYdO[0], dYdO[1]);
-
-    }
-    private static class Circle2 implements ODEJacobiansProvider {
-
-        public static final String CX    = "cx";
-        public static final String CY    = "cy";
-        public static final String OMEGA = "omega";
-
-        private double cx;
-        private double cy;
-        private double omega;
-
-        public Circle2(double cx, double cy, double omega) {
-            this.cx    = cx;
-            this.cy    = cy;
-            this.omega = omega;
-        }
-
-        public int getDimension() {
-            return 2;
-        }
-
-        public double[] computeDerivatives(double t, double[] y) {
-            return new double[] {
-                omega * (cy - y[1]),
-                omega * (y[0] - cx)
-            };
-        }
-
-        public double[][] computeMainStateJacobian(double t, double[] y, double[] yDot) {
-            return new double[][] {
-                { 0, -omega },
-                { omega, 0 }
-            };
-        }
-
-        public List<String> getParametersNames() {
-            return Arrays.asList(CX, CY, OMEGA);
-        }
-
-        public boolean isSupported(String name) {
-            return CX.equals(name) || CY.equals(name) || OMEGA.equals(name);
-        }
-
-        public double[] computeParameterJacobian(double t, double[] y, double[] yDot, String paramName)
-            throws MathIllegalArgumentException {
-            if (CX.equals(paramName)) {
-                return new double[] { 0, -omega };
-            } else if (CY.equals(paramName)) {
-                return new double[] { omega, 0 };
-            }  else if (OMEGA.equals(paramName)) {
-                return new double[] { cy - y[1], y[0] - cx };
-            } else {
-                throw new MathIllegalArgumentException(LocalizedODEFormats.UNKNOWN_PARAMETER,
-                                                       paramName);
-            }
-        }
-    }
     @Test
     public void testFinalResult()
         throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
