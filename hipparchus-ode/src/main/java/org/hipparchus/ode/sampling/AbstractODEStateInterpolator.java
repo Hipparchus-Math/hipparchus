@@ -29,11 +29,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * retrieve the state vector at intermediate times between the
  * previous and the current grid points (dense output).</p>
  *
- * @see org.hipparchus.ode.FirstOrderIntegrator
- * @see org.hipparchus.ode.SecondOrderIntegrator
- * @see StepHandler
- *
- *
+ * @see org.hipparchus.ode.ODEIntegrator
+ * @see ODEStepHandler
  */
 
 public abstract class AbstractODEStateInterpolator

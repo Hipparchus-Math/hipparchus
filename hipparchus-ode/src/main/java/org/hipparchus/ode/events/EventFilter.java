@@ -41,7 +41,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  *
  * <p>Users can wrap a regular {@link EventHandler event handler} in
  * an instance of this class and provide this wrapping instance to
- * the {@link org.hipparchus.ode.FirstOrderIntegrator ODE solver}
+ * the {@link org.hipparchus.ode.ODEIntegrator ODE solver}
  * in order to avoid wasting time looking for uninteresting events.
  * The wrapper will intercept the calls to the {@link
  * EventHandler#g(double, double[]) g function} and to the {@link

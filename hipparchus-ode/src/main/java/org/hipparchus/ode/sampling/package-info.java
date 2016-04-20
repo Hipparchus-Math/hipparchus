@@ -25,8 +25,8 @@
  * In addition to computing the evolution of the state vector at some grid points, all
  * ODE integrators also build up interpolation models of this evolution <em>inside</em> the
  * last computed step. If users are interested in these interpolators, they can register a
- * {@link org.hipparchus.ode.sampling.StepHandler StepHandler} instance using the
- * {@link org.hipparchus.ode.FirstOrderIntegrator#addStepHandler addStepHandler}
+ * {@link org.hipparchus.ode.sampling.ODEStepHandler ODEStepHandler} instance using the
+ * {@link org.hipparchus.ode.ODEIntegrator#addStepHandler addStepHandler}
  * method which is supported by all integrators. The integrator will call this instance
  * at the end of each accepted step and provide it the interpolator. The user can do
  * whatever he wants with this interpolator, which computes both the state and its
@@ -44,10 +44,10 @@
  *
  * <p>
  * Since some integrators may use variable step size, the generic {@link
- * org.hipparchus.ode.sampling.StepHandler StepHandler} interface can be called
+ * org.hipparchus.ode.sampling.ODEStepHandler ODEStepHandler} interface can be called
  * either at regular or irregular rate. This interface allows to navigate to any location
  * within the last computed step, thanks to the provided {@link
- * org.hipparchus.ode.sampling.ODEStateInterpolator StepInterpolator} object.
+ * org.hipparchus.ode.sampling.ODEStateInterpolator ODEStateInterpolator} object.
  * If regular output is desired (for example in order to write an ephemeris file), then
  * the simpler {@link org.hipparchus.ode.sampling.ODEFixedStepHandler ODEFixedStepHandler}
  * interface can be used. Objects implementing this interface should be wrapped within a
