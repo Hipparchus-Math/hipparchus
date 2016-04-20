@@ -110,7 +110,7 @@ is done as follows (using Dormand-Prince 8(5,3) integrator as an example):
     double[]                     y            = finalState.getPrimaryState();
     System.out.format(Locale.US, "final state at %4.1f: %6.3f %6.3f%n", t, y[0], y[1]);
 
-## 15.2 Continuous Output
+## 15.2 Dense Output
 The solution of the integration problem is provided by two means. The first one is aimed towards
 simple use: the state vector at the end of the integration process is copied in the y array of the
 `FirstOrderIntegrator.integrate` method, as shown by previous example. The second one
