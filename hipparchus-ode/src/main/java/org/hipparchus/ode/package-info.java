@@ -36,7 +36,7 @@
  * computing the state vector at discrete times, they also provide a
  * cheap mean to get the state between the time steps. They do so through
  * classes extending the {@link
- * org.hipparchus.ode.sampling.ODEStateInterpolator StepInterpolator}
+ * org.hipparchus.ode.sampling.ODEStateInterpolator ODEStateInterpolator}
  * abstract class, which are made available to the user at the end of
  * each step.
  * </p>
@@ -56,35 +56,35 @@
  * <p>
  * The user should describe his problem in his own classes
  * (<code>UserProblem</code> in the diagram below) which should implement
- * the {@link org.hipparchus.ode.FirstOrderDifferentialEquations
- * FirstOrderDifferentialEquations} interface. Then he should pass it to
+ * the {@link org.hipparchus.ode.OrdinaryDifferentialEquation
+ * OrdinaryDifferentialEquation} interface. Then he should pass it to
  * the integrator he prefers among all the classes that implement the
- * {@link org.hipparchus.ode.FirstOrderIntegrator
- * FirstOrderIntegrator} interface.
+ * {@link org.hipparchus.ode.ODEIntegrator
+ * ODEIntegrator} interface.
  * </p>
  *
  * <p>
  * The solution of the integration problem is provided by two means. The
  * first one is aimed towards simple use: the state vector at the end of
  * the integration process is copied in the <code>y</code> array of the
- * {@link org.hipparchus.ode.FirstOrderIntegrator#integrate
- * FirstOrderIntegrator.integrate} method. The second one should be used
+ * {@link org.hipparchus.ode.ODEIntegrator#integrate
+ * ODEIntegrator.integrate} method. The second one should be used
  * when more in-depth information is needed throughout the integration
  * process. The user can register an object implementing the {@link
- * org.hipparchus.ode.sampling.StepHandler StepHandler} interface or a
+ * org.hipparchus.ode.sampling.ODEStepHandler ODEStepHandler} interface or a
  * {@link org.hipparchus.ode.sampling.StepNormalizer StepNormalizer}
  * object wrapping a user-specified object implementing the {@link
  * org.hipparchus.ode.sampling.ODEFixedStepHandler ODEFixedStepHandler}
  * interface into the integrator before calling the {@link
- * org.hipparchus.ode.FirstOrderIntegrator#integrate
- * FirstOrderIntegrator.integrate} method. The user object will be called
+ * org.hipparchus.ode.ODEIntegrator#integrate
+ * ODEIntegrator.integrate} method. The user object will be called
  * appropriately during the integration process, allowing the user to
  * process intermediate results. The default step handler does nothing.
  * </p>
  *
  * <p>
- * {@link org.hipparchus.ode.ContinuousOutputModel
- * ContinuousOutputModel} is a special-purpose step handler that is able
+ * {@link org.hipparchus.ode.DenseOutputModel
+ * DenseOutputModel} is a special-purpose step handler that is able
  * to store all steps and to provide transparent access to any
  * intermediate result once the integration is over. An important feature
  * of this class is that it implements the <code>Serializable</code>
@@ -115,7 +115,7 @@
  * org.hipparchus.ode.sampling.StepNormalizer StepNormalizer} class can
  * be used to convert the variable stepsize into a fixed stepsize that
  * can be handled by classes implementing the {@link
- * org.hipparchus.ode.sampling.FixedStepHandler FixedStepHandler}
+ * org.hipparchus.ode.sampling.ODEFixedStepHandler ODEFixedStepHandler}
  * interface. Adaptive stepsize integrators can automatically compute the
  * initial stepsize by themselves, however the user can specify it if he
  * prefers to retain full control over the integration or if the
@@ -150,7 +150,7 @@
  * <p>
  * In the table above, the {@link org.hipparchus.ode.nonstiff.AdamsBashforthIntegrator
  * Adams-Bashforth} and {@link org.hipparchus.ode.nonstiff.AdamsMoultonIntegrator
- * Adams-Moulton} integrators appear as variable-step ones. This is an experimental extension
+ * Adams-Moulton} integrators appear as variable-step ones. This is an extension
  * to the classical algorithms using the Nordsieck vector representation.
  * </p>
  *

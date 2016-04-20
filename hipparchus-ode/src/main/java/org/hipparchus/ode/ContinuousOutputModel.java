@@ -159,9 +159,8 @@ public class ContinuousOutputModel extends DenseOutputModel {
      * to be preserved across several calls to the associated
      * {@link #setInterpolatedTime(double)} method.</p>
      * @param secondaryStateIndex index of the secondary set, as returned by {@link
-     * org.hipparchus.ode.ExpandableStatefulODE#addSecondaryEquations(
-     * org.hipparchus.ode.SecondaryEquations)
-     * ExpandableStatefulODE.addSecondaryEquations(SecondaryEquations)}
+     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(SecondaryODE)
+     * ExpandableODE.addSecondaryEquations(secondary)}
      * @return interpolated secondary state at the current interpolation date
      * @see #setInterpolatedTime(double)
      * @see #getInterpolatedState()
@@ -180,9 +179,8 @@ public class ContinuousOutputModel extends DenseOutputModel {
      * to be preserved across several calls to the associated
      * {@link #setInterpolatedTime(double)} method.</p>
      * @param secondaryStateIndex index of the secondary set, as returned by {@link
-     * org.hipparchus.ode.ExpandableStatefulODE#addSecondaryEquations(
-     * org.hipparchus.ode.SecondaryEquations)
-     * ExpandableStatefulODE.addSecondaryEquations(SecondaryEquations)}
+     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(SecondaryODE)
+     * ExpandableODE.addSecondaryEquations(secondary)}
      * @return interpolated secondary derivatives at the current interpolation date
      * @see #setInterpolatedTime(double)
      * @see #getInterpolatedState()

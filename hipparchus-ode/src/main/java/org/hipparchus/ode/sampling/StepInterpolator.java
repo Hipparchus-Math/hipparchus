@@ -20,6 +20,7 @@ package org.hipparchus.ode.sampling;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.SecondaryODE;
 
 /** This interface represents an interpolator over the last step
  * during an ODE integration.
@@ -39,7 +40,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * {@link #copy()} method.
  * </p>
  *
- * @see org.hipparchus.ode.FirstOrderIntegrator
+ * @see org.hipparchus.ode.ODEIntegrator
  * @see StepHandler
  * @deprecated as of 1.0, replaced with {@link ODEStateInterpolator}
  */
@@ -135,9 +136,8 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * to be preserved across several calls to the associated
      * {@link #setInterpolatedTime(double)} method.</p>
      * @param index index of the secondary set, as returned by {@link
-     * org.hipparchus.ode.ExpandableStatefulODE#addSecondaryEquations(
-     * org.hipparchus.ode.SecondaryEquations)
-     * ExpandableStatefulODE.addSecondaryEquations(SecondaryEquations)}
+     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(SecondaryODE)
+     * ExpandableODE.addSecondaryEquations(secondary)}
      * @return interpolated secondary state at the current interpolation date
      * @see #getInterpolatedState()
      * @see #getInterpolatedDerivatives()
@@ -154,9 +154,8 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * it should not be modified and it should be copied if it needs
      * to be preserved across several calls.</p>
      * @param index index of the secondary set, as returned by {@link
-     * org.hipparchus.ode.ExpandableStatefulODE#addSecondaryEquations(
-     * org.hipparchus.ode.SecondaryEquations)
-     * ExpandableStatefulODE.addSecondaryEquations(SecondaryEquations)}
+     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(SecondaryODE)
+     * ExpandableODE.addSecondaryEquations(secondary)}
      * @return interpolated secondary derivatives at the current interpolation date
      * @see #getInterpolatedState()
      * @see #getInterpolatedDerivatives()

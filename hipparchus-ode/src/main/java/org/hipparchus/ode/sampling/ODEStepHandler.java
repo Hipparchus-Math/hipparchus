@@ -34,8 +34,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * last one, store the points in an ephemeris, or forward them to
  * specialized processing or output methods.</p>
  *
- * @see org.hipparchus.ode.FirstOrderIntegrator
- * @see org.hipparchus.ode.SecondOrderIntegrator
+ * @see org.hipparchus.ode.ODEIntegrator
  * @see ODEStateInterpolator
  */
 

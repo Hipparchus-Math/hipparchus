@@ -32,8 +32,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * (this feature is often called dense output).</p>
  * </p>
  *
- * @see org.hipparchus.ode.FirstOrderIntegrator
- * @see StepHandler
+ * @see org.hipparchus.ode.ODEIntegrator
+ * @see ODEStepHandler
  */
 
 public interface ODEStateInterpolator extends Serializable {
