@@ -18,18 +18,9 @@
 package org.hipparchus.ode.nonstiff;
 
 
-import java.util.Locale;
-
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.ode.ODEIntegrator;
-import org.hipparchus.ode.ODEState;
-import org.hipparchus.ode.ODEStateAndDerivative;
-import org.hipparchus.ode.OrdinaryDifferentialEquation;
-import org.hipparchus.ode.sampling.ODEStateInterpolator;
-import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.Decimal64Field;
-import org.junit.Test;
 
 public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
@@ -43,29 +34,6 @@ public class DormandPrince853FieldIntegratorTest extends EmbeddedRungeKuttaField
     createIntegrator(Field<T> field, final double minStep, final double maxStep,
                      final double[] vecAbsoluteTolerance, final double[] vecRelativeTolerance) {
         return new DormandPrince853FieldIntegrator<T>(field, minStep, maxStep, vecAbsoluteTolerance, vecRelativeTolerance);
-    }
-
-    private static class CircleODE implements OrdinaryDifferentialEquation {
-        
-        private double[] c;
-        private double omega;
-    
-        public CircleODE(double[] c, double omega) {
-            this.c     = c;
-            this.omega = omega;
-        }
-    
-        public int getDimension() {
-            return 2;
-        }
-    
-        public double[] computeDerivatives(double t, double[] y) {
-            return new double[] {
-                omega * (c[1] - y[1]),
-                omega * (y[0] - c[0])
-            };
-        }
-    
     }
 
     @Override
