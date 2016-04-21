@@ -19,7 +19,6 @@ package org.hipparchus.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.JacobianMatrices.MismatchedEquations;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
@@ -104,7 +103,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testInternalDifferentiation()
-                    throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
+                    throws MathIllegalArgumentException, MathIllegalStateException {
         AbstractIntegrator integ =
                         new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         double hP = 1.0e-12;
@@ -143,7 +142,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testAnalyticalDifferentiation()
-        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         SummaryStatistics residualsP0 = new SummaryStatistics();
@@ -177,7 +176,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testFinalResult()
-        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
@@ -226,7 +225,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testParameterizable()
-        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });

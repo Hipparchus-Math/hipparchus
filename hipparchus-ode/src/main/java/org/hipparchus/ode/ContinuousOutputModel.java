@@ -19,7 +19,6 @@ package org.hipparchus.ode;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
-import org.hipparchus.ode.sampling.StepHandler;
 
 /**
  * This class stores all information provided by an ODE integrator
@@ -73,7 +72,7 @@ import org.hipparchus.ode.sampling.StepHandler;
  * org.hipparchus.ode.nonstiff.AdaptiveStepsizeIntegrator adaptive
  * step size integrators}).</p>
  *
- * @see StepHandler
+ * @see org.hipparchus.ode.sampling.StepHandler
  * @see ODEStateInterpolator
  * @deprecated as of 1.0, replaced with {@link DenseOutputModel}
  */
