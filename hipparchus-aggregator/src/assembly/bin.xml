@@ -19,28 +19,33 @@ limitations under the License.
           xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3 http://maven.apache.org/xsd/assembly-1.1.3.xsd">
     <id>bin</id>
     <formats>
-        <format>zip</format>
+      <format>zip</format>
+      <format>zip</format>
     </formats>
     <baseDirectory>hipparchus-${project.version}-bin</baseDirectory>
     <includeSiteDirectory>false</includeSiteDirectory>
-    <dependencySets>
-        <dependencySet>
-            <includes>
-                <include>${project.groupId}:hipparchus-core</include>
-                <include>${project.groupId}:hipparchus-geometry</include>
-                <include>${project.groupId}:hipparchus-genetics</include>
-                <include>${project.groupId}:hipparchus-ode</include>
-                <include>${project.groupId}:hipparchus-optim</include>
-                <include>${project.groupId}:hipparchus-fitting</include>
-                <include>${project.groupId}:hipparchus-legacy</include>
-                <include>${project.groupId}:hipparchus-migration</include>
-                <include>${project.groupId}:hipparchus-fft</include>
-            </includes>
-            <outputDirectory></outputDirectory>
-            <unpack>false</unpack>
-        </dependencySet>
-    </dependencySets>
-
+    <moduleSets>
+      <moduleSet>
+        <useAllReactorProjects>true</useAllReactorProjects>
+        <includes>
+          <include>${project.groupId}:hipparchus-core</include>
+          <include>${project.groupId}:hipparchus-geometry</include>
+          <include>${project.groupId}:hipparchus-genetics</include>
+          <include>${project.groupId}:hipparchus-ode</include>
+          <include>${project.groupId}:hipparchus-optim</include>
+          <include>${project.groupId}:hipparchus-fitting</include>
+          <include>${project.groupId}:hipparchus-perf</include>
+          <include>${project.groupId}:hipparchus-samples</include>
+          <include>${project.groupId}:hipparchus-fft</include>
+          <include>${project.groupId}:hipparchus-clustering</include>
+          <include>${project.groupId}:hipparchus-migration</include>
+        </includes>
+        <binaries>
+          <outputDirectory></outputDirectory>
+          <unpack>false</unpack>
+        </binaries>
+      </moduleSet>
+    </moduleSets>
     <fileSets>
         <fileSet>
             <directory>..</directory>

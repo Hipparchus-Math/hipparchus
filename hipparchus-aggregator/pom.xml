@@ -1,20 +1,4 @@
 <?xml version="1.0"?>
-<!--
-   Licensed to the Apache Software Foundation (ASF) under one or more
-   contributor license agreements.  See the NOTICE file distributed with
-   this work for additional information regarding copyright ownership.
-   The ASF licenses this file to You under the Apache License, Version 2.0
-   (the "License"); you may not use this file except in compliance with
-   the License.  You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-   Unless required by applicable law or agreed to in writing, software
-   distributed under the License is distributed on an "AS IS" BASIS,
-   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-   See the License for the specific language governing permissions and
-   limitations under the License.
--->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -27,49 +11,24 @@
     <relativePath>../</relativePath>
   </parent>
 
-  <artifactId>hipparchus-release</artifactId>
+  <artifactId>hipparchus-aggregate</artifactId>
   <packaging>pom</packaging>
-  <name>Hipparchus::Release</name>
-  <description>The Hipparchus release module</description>
+  <name>Hipparchus::Aggregate</name>
+  <description>The Hipparchus aggregator</description>
 
-  <properties>
-    <hipparchusParentDir>${basedir}/..</hipparchusParentDir>
-  </properties>
-
-  <dependencies>
-      <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-core</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-geometry</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-genetics</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-ode</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-optim</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-fitting</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-migration</artifactId>
-      </dependency>
-      <dependency>
-          <groupId>org.hipparchus</groupId>
-          <artifactId>hipparchus-fft</artifactId>
-      </dependency>
-  </dependencies>
+  <modules>
+    <module>../hipparchus-core</module>
+    <module>../hipparchus-geometry</module>
+    <module>../hipparchus-genetics</module>
+    <module>../hipparchus-ode</module>
+    <module>../hipparchus-optim</module>
+    <module>../hipparchus-fitting</module>
+    <module>../hipparchus-perf</module>
+    <module>../hipparchus-samples</module>
+    <module>../hipparchus-fft</module> <!-- marked for deletion -->
+    <module>../hipparchus-clustering</module>
+    <module>../hipparchus-migration</module>
+  </modules>
 
   <build>
     <plugins>
@@ -83,24 +42,30 @@
               <goal>single</goal>
             </goals>
             <configuration>
+              <skipAssembly>false</skipAssembly>
               <finalName>hipparchus-${project.version}</finalName>
               <descriptors>
                 <descriptor>src/assembly/src.xml</descriptor>
               </descriptors>
+              <!-- There are a lot of long file names. Suppress the warnings. -->
+              <tarLongFileMode>gnu</tarLongFileMode>
             </configuration>
           </execution>
           <execution>
             <id>binary</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
             <configuration>
+              <skipAssembly>false</skipAssembly>
               <finalName>hipparchus-${project.version}</finalName>
               <descriptors>
                 <descriptor>src/assembly/bin.xml</descriptor>
               </descriptors>
+              <!-- There are a lot of long file names. Suppress the warnings. -->
+              <tarLongFileMode>gnu</tarLongFileMode>
             </configuration>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <phase>verify</phase>
           </execution>
         </executions>
       </plugin>
@@ -134,4 +99,23 @@
       </plugin>
     </plugins>
   </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>${hipparchus.maven-javadoc-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <id>aggregate</id>
+            <reports>
+              <report>aggregate</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
 </project>

@@ -463,21 +463,6 @@
     <hipparchus.staging.directory>/home/hipparchus/staging/</hipparchus.staging.directory>
   </properties>
 
-  <modules>
-    <module>hipparchus-core</module>
-    <module>hipparchus-geometry</module>
-    <module>hipparchus-genetics</module>
-    <module>hipparchus-ode</module>
-    <module>hipparchus-optim</module>
-    <module>hipparchus-fitting</module>
-    <module>hipparchus-perf</module>
-    <module>hipparchus-samples</module>
-    <module>hipparchus-fft</module> <!-- marked for deletion -->
-    <module>hipparchus-clustering</module>
-    <module>hipparchus-migration</module>
-    <module>hipparchus-release</module>
-  </modules>
-
   <build>
     <extensions>
       <extension>
@@ -494,12 +479,8 @@
           <artifactId>maven-assembly-plugin</artifactId>
           <version>${hipparchus.maven-assembly-plugin.version}</version>
           <configuration>
-            <descriptors>
-              <descriptor>src/main/assembly/src.xml</descriptor>
-              <descriptor>src/main/assembly/bin.xml</descriptor>
-            </descriptors>
-            <!-- There are a lot of long file names. Suppress the warnings. -->
-            <tarLongFileMode>gnu</tarLongFileMode>
+            <!-- for all modules except aggregator module, assembly is skipped -->
+            <skipAssembly>true</skipAssembly>
           </configuration>
         </plugin>
         <plugin>
@@ -885,19 +866,6 @@
               <!-- available for compatibility. They will be removed in 4.0 -->
               <!-- So we temporarily disable the CPD report -->
               <!-- <report>cpd</report> -->
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>${hipparchus.maven-javadoc-plugin.version}</version>
-        <reportSets>
-          <reportSet>
-            <id>aggregate</id>
-            <reports>
-              <report>aggregate</report>
             </reports>
           </reportSet>
         </reportSets>
