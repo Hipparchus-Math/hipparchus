@@ -32,6 +32,13 @@
   <name>Hipparchus::Genetic Algorithms</name>
   <description>The Hipparchus genetics module</description>
 
+  <distributionManagement>
+    <site>
+      <id>publishedSite</id>
+      <url>https://hipparchus.org/static/${artifactId}/</url>
+    </site>
+  </distributionManagement>
+
   <properties>
     <hipparchusParentDir>${basedir}/..</hipparchusParentDir>
   </properties>

@@ -399,11 +399,6 @@
         <artifactId>hipparchus-migration</artifactId>
         <version>${project.version}</version>
       </dependency>
-      <dependency>
-        <groupId>org.hipparchus</groupId>
-        <artifactId>hipparchus-release</artifactId>
-        <version>${project.version}</version>
-      </dependency>
 
       <dependency>
         <groupId>junit</groupId>
@@ -722,7 +717,7 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${hipparchus.maven-site-plugin.version}</version>
-          <executions>
+          <!--<executions>
             <execution>
               <id>aggregateSite</id>
               <goals>
@@ -737,7 +732,7 @@
                 <goal>attach-descriptor</goal>
               </goals>
             </execution>
-          </executions>
+          </executions>-->
         </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>
@@ -866,6 +861,19 @@
               <!-- available for compatibility. They will be removed in 4.0 -->
               <!-- So we temporarily disable the CPD report -->
               <!-- <report>cpd</report> -->
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+         <reportSets>
+           <reportSet>
+             <id>aggregate</id>
+             <inherited>false</inherited>
+             <reports>
+              <report>aggregate</report>
             </reports>
           </reportSet>
         </reportSets>

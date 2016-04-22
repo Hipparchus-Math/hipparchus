@@ -31,7 +31,6 @@ sub-folders:
   * `hipparchus-optim`
   * `hipparchus-parent`
   * `hipparchus-perf`
-  * `hipparchus-release`
   * `hipparchus-samples`
   * `src`
 
@@ -40,12 +39,12 @@ defines project organization into modules. The aggregator project does
 not contain any code by itself (even the `src` folder at this level
 does not contain code).
 
-The `hipparchus-parent` folder contains the other models parent
-project that defines elements that will be inherited by all modules
-like maven plugins version numbers and configuration. This project
-does not either contain code by itself.
+The `hipparchus-parent` folder contains the parent project for other
+modules. This parent project defines elements that will be inherited
+by all modules like maven plugins version numbers and configuration.
+This project does not either contain code by itself.
 
-The other `hipparchus-xyz` folders are the projects for the various
+The remaining `hipparchus-xyz` folders are the projects for the various
 modules that compose Hipparchus and that inherit from the parent.
 
 In order to build Hipparchus, you should stay in the top level folder
@@ -59,6 +58,20 @@ and will assemble the built artifacts into the `target` folder that will
 be created automatically. Once the command completes, you will find
 several archive files in `zip` and `tar.bz2` formats that contain
 all artifacts. The archive files with
+
+If you also want to build the static site containing the project
+documentation (general project information, user guide, javadocs,
+source reference ...), you will have to run the following maven
+command:
+
+    mvn site site:stage
+
+The first goal (`site`) will create separate sub-sites in all modules
+(in `target/site` folders), including the aggragator module.  All
+inter-module links in these temporary folders fail because they are
+not combined. The second goal (`site:stage`) combines all these
+sub-sites together in one consitent and fully linked site in a
+`target/staging` folder within the aggregator project.
 
 ### Eclipse build
 

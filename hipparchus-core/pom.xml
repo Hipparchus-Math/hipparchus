@@ -16,6 +16,13 @@
   <name>Hipparchus::Core</name>
   <description>The Hipparchus core module</description>
 
+  <distributionManagement>
+    <site>
+      <id>publishedSite</id>
+      <url>https://hipparchus.org/static/${artifactId}/</url>
+    </site>
+  </distributionManagement>
+
   <dependencies>
     <dependency>
       <groupId>junit</groupId>
