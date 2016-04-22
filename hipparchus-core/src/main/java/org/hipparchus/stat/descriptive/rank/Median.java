@@ -24,7 +24,6 @@ import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
 import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.KthSelector;
-import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.PivotingStrategy;
 
 
@@ -81,8 +80,7 @@ public class Median extends AbstractUnivariateStatistic implements Serializable 
      * @throws NullArgumentException if original is null
      */
     Median(Median original) throws NullArgumentException {
-        MathUtils.checkNotNull(original);
-
+        super(original);
         this.percentile = original.percentile.copy();
     }
 

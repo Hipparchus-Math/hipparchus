@@ -159,8 +159,7 @@ public class Percentile extends AbstractUnivariateStatistic
      * @throws NullArgumentException if original is null
      */
     public Percentile(final Percentile original) throws NullArgumentException {
-
-        MathUtils.checkNotNull(original);
+        super(original);
         estimationType   = original.getEstimationType();
         nanStrategy      = original.getNaNStrategy();
         kthSelector      = original.getKthSelector();

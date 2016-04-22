@@ -18,6 +18,7 @@ package org.hipparchus.stat.descriptive;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -29,6 +30,21 @@ public abstract class AbstractUnivariateStatistic
 
     /** Stored data. */
     private double[] storedData;
+
+    /** Default constructor. */
+    protected AbstractUnivariateStatistic() {}
+
+    /**
+     * Copy constructor, creates an identical copy
+     * of the {@code original}.
+     *
+     * @param original the instance to copy
+     * @throws NullArgumentException  if original is null
+     */
+    protected AbstractUnivariateStatistic(AbstractUnivariateStatistic original) {
+        MathUtils.checkNotNull(original);
+        this.storedData = original.storedData != null ? original.storedData.clone() : null;
+    }
 
     /** {@inheritDoc} */
     @Override

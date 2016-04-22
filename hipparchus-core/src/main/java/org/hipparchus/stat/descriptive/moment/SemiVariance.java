@@ -24,7 +24,6 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
 import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.MathUtils;
 
 /**
  * Computes the semivariance of a set of values with respect to a given cutoff value.
@@ -135,7 +134,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * @throws NullArgumentException  if original is null
      */
     public SemiVariance(final SemiVariance original) throws NullArgumentException {
-        MathUtils.checkNotNull(original);
+        super(original);
         this.biasCorrected     = original.biasCorrected;
         this.varianceDirection = original.varianceDirection;
     }
