@@ -66,7 +66,9 @@ public class Product extends AbstractStorelessUnivariateStatistic
      * @throws NullArgumentException  if original is null
      */
     public Product(Product original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.n     = original.n;
+        this.value = original.value;
     }
 
     /** {@inheritDoc} */
@@ -166,23 +168,6 @@ public class Product extends AbstractStorelessUnivariateStatistic
     @Override
     public Product copy() {
         return new Product(this);
-    }
-
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source Product to copy
-     * @param dest Product to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(Product source, Product dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.n = source.n;
-        dest.value = source.value;
     }
 
 }

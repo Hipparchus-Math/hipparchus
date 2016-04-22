@@ -73,18 +73,19 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * Determines whether or not bias correction is applied when computing the
      * value of the statistic.  True means that bias is corrected.
      */
-    private boolean biasCorrected = true;
+    private final boolean biasCorrected;
 
     /**
      * Determines whether to calculate downside or upside SemiVariance.
      */
-    private Direction varianceDirection = Direction.DOWNSIDE;
+    private final Direction varianceDirection;
 
     /**
      * Constructs a SemiVariance with default (true) <code>biasCorrected</code>
      * property and default (Downside) <code>varianceDirection</code> property.
      */
     public SemiVariance() {
+        this(true, Direction.DOWNSIDE);
     }
 
     /**
@@ -96,7 +97,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * constructor
      */
     public SemiVariance(final boolean biasCorrected) {
-        this.biasCorrected = biasCorrected;
+        this(biasCorrected, Direction.DOWNSIDE);
     }
 
     /**
@@ -107,7 +108,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * to calculate
      */
     public SemiVariance(final Direction direction) {
-        this.varianceDirection = direction;
+        this(true, direction);
     }
 
     /**
@@ -122,7 +123,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * to calculate
      */
     public SemiVariance(final boolean corrected, final Direction direction) {
-        this.biasCorrected = corrected;
+        this.biasCorrected     = corrected;
         this.varianceDirection = direction;
     }
 
@@ -134,30 +135,15 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * @throws NullArgumentException  if original is null
      */
     public SemiVariance(final SemiVariance original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.biasCorrected     = original.biasCorrected;
+        this.varianceDirection = original.varianceDirection;
     }
 
     /** {@inheritDoc} */
     @Override
     public SemiVariance copy() {
         return new SemiVariance(this);
-    }
-
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source SemiVariance to copy
-     * @param dest SemiVariance to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(final SemiVariance source, SemiVariance dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.biasCorrected = source.biasCorrected;
-        dest.varianceDirection = source.varianceDirection;
     }
 
     /**
@@ -284,12 +270,12 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      }
 
      /**
-      * Sets the biasCorrected property.
+      * Returns a copy of this instance with the given biasCorrected setting.
       *
       * @param biasCorrected new biasCorrected property value
       */
-     public void setBiasCorrected(boolean biasCorrected) {
-         this.biasCorrected = biasCorrected;
+     public SemiVariance withBiasCorrected(boolean biasCorrected) {
+         return new SemiVariance(biasCorrected, this.varianceDirection);
      }
 
      /**
@@ -302,12 +288,12 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      }
 
      /**
-      * Sets the variance direction
+      * Returns a copy of this instance with the given direction setting.
       *
       * @param varianceDirection the direction of the semivariance
       */
-     public void setVarianceDirection(Direction varianceDirection) {
-         this.varianceDirection = varianceDirection;
+     public SemiVariance withVarianceDirection(Direction varianceDirection) {
+         return new SemiVariance(this.biasCorrected, varianceDirection);
      }
 
      /**

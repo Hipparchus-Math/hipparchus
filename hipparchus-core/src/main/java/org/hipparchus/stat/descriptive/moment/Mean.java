@@ -69,7 +69,7 @@ public class Mean extends AbstractStorelessUnivariateStatistic
     private static final long serialVersionUID = 20150412L;
 
     /** First moment on which this statistic is based. */
-    protected FirstMoment moment;
+    protected final FirstMoment moment;
 
     /**
      * Determines whether or not this statistic can be incremented or cleared.
@@ -77,12 +77,12 @@ public class Mean extends AbstractStorelessUnivariateStatistic
      * Statistics based on (constructed from) external moments cannot
      * be incremented or cleared.
      */
-    protected boolean incMoment;
+    protected final boolean incMoment;
 
     /** Constructs a Mean. */
     public Mean() {
-        incMoment = true;
         moment = new FirstMoment();
+        incMoment = true;
     }
 
     /**
@@ -103,7 +103,9 @@ public class Mean extends AbstractStorelessUnivariateStatistic
      * @throws NullArgumentException if original is null
      */
     public Mean(Mean original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.moment    = original.moment.copy();
+        this.incMoment = original.incMoment;
     }
 
     /**
@@ -228,20 +230,4 @@ public class Mean extends AbstractStorelessUnivariateStatistic
         return new Mean(this);
     }
 
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source Mean to copy
-     * @param dest Mean to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(Mean source, Mean dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.incMoment = source.incMoment;
-        dest.moment = source.moment.copy();
-    }
 }

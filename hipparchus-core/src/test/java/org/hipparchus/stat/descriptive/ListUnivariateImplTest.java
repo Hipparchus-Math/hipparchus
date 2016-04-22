@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -60,7 +59,7 @@ public final class ListUnivariateImplTest {
         u.addValue(three);
         Assert.assertEquals("N",n,u.getN(),tolerance);
         Assert.assertEquals("sum",sum,u.getSum(),tolerance);
-        Assert.assertEquals("sumsq",sumSq,u.getSumsq(),tolerance);
+        Assert.assertEquals("sumsq",sumSq,u.getSumOfSquares(),tolerance);
         Assert.assertEquals("var",var,u.getVariance(),tolerance);
         Assert.assertEquals("std",std,u.getStandardDeviation(),tolerance);
         Assert.assertEquals("mean",mean,u.getMean(),tolerance);
@@ -144,7 +143,7 @@ public final class ListUnivariateImplTest {
 
         Assert.assertEquals("N",n,u2.getN(),tolerance);
         Assert.assertEquals("sum",sum,u2.getSum(),tolerance);
-        Assert.assertEquals("sumsq",sumSq,u2.getSumsq(),tolerance);
+        Assert.assertEquals("sumsq",sumSq,u2.getSumOfSquares(),tolerance);
         Assert.assertEquals("var",var,u2.getVariance(),tolerance);
         Assert.assertEquals("std",std,u2.getStandardDeviation(),tolerance);
         Assert.assertEquals("mean",mean,u2.getMean(),tolerance);

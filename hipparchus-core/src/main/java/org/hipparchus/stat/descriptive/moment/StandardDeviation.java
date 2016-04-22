@@ -49,14 +49,14 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
     private static final long serialVersionUID = 20150412L;
 
     /** Wrapped Variance instance */
-    private Variance variance = null;
+    private final Variance variance;
 
     /**
      * Constructs a StandardDeviation.  Sets the underlying {@link Variance}
      * instance's <code>isBiasCorrected</code> property to true.
      */
     public StandardDeviation() {
-        variance = new Variance();
+        this(new Variance());
     }
 
     /**
@@ -65,7 +65,7 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * @param m2 the external moment
      */
     public StandardDeviation(final SecondMoment m2) {
-        variance = new Variance(m2);
+        this(new Variance(m2));
     }
 
     /**
@@ -79,7 +79,7 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * the bias-corrected formula
      */
     public StandardDeviation(boolean isBiasCorrected) {
-        variance = new Variance(isBiasCorrected);
+        this(new Variance(isBiasCorrected));
     }
 
     /**
@@ -94,7 +94,15 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * @param m2 the external moment
      */
     public StandardDeviation(boolean isBiasCorrected, SecondMoment m2) {
-        variance = new Variance(isBiasCorrected, m2);
+        this(new Variance(isBiasCorrected, m2));
+    }
+
+    /**
+     * Create a new instance with the given variance.
+     * @param variance the variance to use
+     */
+    private StandardDeviation(Variance variance) {
+        this.variance = variance;
     }
 
     /**
@@ -105,7 +113,8 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * @throws NullArgumentException if original is null
      */
     public StandardDeviation(StandardDeviation original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.variance = original.variance.copy();
     }
 
     /** {@inheritDoc} */
@@ -214,32 +223,19 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
     }
 
     /**
+     * Returns a new copy of this standard deviation with the given
+     * bias correction setting.
+     *
      * @param isBiasCorrected The isBiasCorrected to set.
      */
-    public void setBiasCorrected(boolean isBiasCorrected) {
-        variance.setBiasCorrected(isBiasCorrected);
+    public StandardDeviation withBiasCorrected(boolean isBiasCorrected) {
+        return new StandardDeviation(variance.withBiasCorrected(isBiasCorrected));
     }
 
     /** {@inheritDoc} */
     @Override
     public StandardDeviation copy() {
         return new StandardDeviation(this);
-    }
-
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source StandardDeviation to copy
-     * @param dest StandardDeviation to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(StandardDeviation source, StandardDeviation dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.variance = source.variance.copy();
     }
 
 }

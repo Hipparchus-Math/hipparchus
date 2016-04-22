@@ -75,7 +75,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
     private static final long serialVersionUID = 20150412L;
 
     /** SecondMoment is used in incremental calculation of Variance*/
-    protected SecondMoment moment = null;
+    protected final SecondMoment moment;
 
     /**
      * Whether or not {@link #increment(double)} should increment
@@ -84,21 +84,21 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * set to false and increments must be applied to the second moment
      * directly.
      */
-    protected boolean incMoment = true;
+    protected final boolean incMoment;
 
     /**
      * Whether or not bias correction is applied when computing the
      * value of the statistic. True means that bias is corrected.  See
      * {@link Variance} for details on the formula.
      */
-    private boolean isBiasCorrected = true;
+    private final boolean isBiasCorrected;
 
     /**
      * Constructs a Variance with default (true) <code>isBiasCorrected</code>
      * property.
      */
     public Variance() {
-        moment = new SecondMoment();
+        this(true);
     }
 
     /**
@@ -112,8 +112,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * @param m2 the SecondMoment (Third or Fourth moments work here as well.)
      */
     public Variance(final SecondMoment m2) {
-        incMoment = false;
-        this.moment = m2;
+        this(true, m2);
     }
 
     /**
@@ -125,8 +124,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * constructor
      */
     public Variance(boolean isBiasCorrected) {
-        moment = new SecondMoment();
-        this.isBiasCorrected = isBiasCorrected;
+        this(new SecondMoment(), true, isBiasCorrected);
     }
 
     /**
@@ -139,8 +137,21 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * here as well.)
      */
     public Variance(boolean isBiasCorrected, SecondMoment m2) {
-        incMoment = false;
-        this.moment = m2;
+        this(m2, false, isBiasCorrected);
+    }
+
+    /**
+     * Constructs a Variance with the specified parameters.
+     *
+     * @param m2 the SecondMoment (Third or Fourth moments work
+     * here as well.)
+     * @param incMoment if the moment shall be incremented
+     * @param isBiasCorrected  setting for bias correction - true means
+     * bias will be corrected
+     */
+    private Variance(SecondMoment m2, boolean incMoment, boolean isBiasCorrected) {
+        this.moment          = m2;
+        this.incMoment       = incMoment;
         this.isBiasCorrected = isBiasCorrected;
     }
 
@@ -152,7 +163,10 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * @throws NullArgumentException if original is null
      */
     public Variance(Variance original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.moment          = original.moment.copy();
+        this.incMoment       = original.incMoment;
+        this.isBiasCorrected = original.isBiasCorrected;
     }
 
     /**
@@ -517,10 +531,13 @@ public class Variance extends AbstractStorelessUnivariateStatistic
     }
 
     /**
+     * Returns a new copy of this variance with the given bias correction
+     * setting.
+     *
      * @param biasCorrected The isBiasCorrected to set.
      */
-    public void setBiasCorrected(boolean biasCorrected) {
-        this.isBiasCorrected = biasCorrected;
+    public Variance withBiasCorrected(boolean biasCorrected) {
+        return new Variance(this.moment, this.incMoment, biasCorrected);
     }
 
     /** {@inheritDoc} */
@@ -529,21 +546,4 @@ public class Variance extends AbstractStorelessUnivariateStatistic
         return new Variance(this);
     }
 
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source Variance to copy
-     * @param dest Variance to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(Variance source, Variance dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.moment = source.moment.copy();
-        dest.isBiasCorrected = source.isBiasCorrected;
-        dest.incMoment = source.incMoment;
-    }
 }

@@ -18,8 +18,6 @@ package org.hipparchus.stat.descriptive;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
@@ -35,91 +33,75 @@ import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
 
 /**
- * <p>
  * Computes summary statistics for a stream of data values added using the
  * {@link #addValue(double) addValue} method. The data values are not stored in
  * memory, so this class can be used to compute statistics for very large data
  * streams.
- * </p>
  * <p>
  * The {@link StorelessUnivariateStatistic} instances used to maintain summary
- * state and compute statistics are configurable via setters. For example, the
+ * state and compute statistics are configurable via a builder. For example, the
  * default implementation for the variance can be overridden by calling
- * {@link #setVarianceImpl(StorelessUnivariateStatistic)}. Actual parameters to
- * these methods must implement the {@link StorelessUnivariateStatistic}
- * interface and configuration must be completed before <code>addValue</code>
- * is called. No configuration is necessary to use the default, commons-math
- * provided implementations.
- * </p>
+ * <pre>
+ *    SummaryStatistics stats =
+ *        SummaryStatistics.builder()
+ *                         .withVariance(new MyVarianceImpl())
+ *                         .build();
+ * </pre>
  * <p>
  * Note: This class is not thread-safe. Use
  * {@link SynchronizedSummaryStatistics} if concurrent access from multiple
  * threads is required.
- * </p>
  */
 public class SummaryStatistics implements StatisticalSummary, Serializable {
 
     /** Serialization UID */
-    private static final long serialVersionUID = -2021321786743555871L;
+    private static final long serialVersionUID = 20160422L;
 
     /** count of values that have been added */
     private long n = 0;
 
     /** SecondMoment is used to compute the mean and variance */
-    private SecondMoment secondMoment = new SecondMoment();
-
-    /** sum of values that have been added */
-    private Sum sum = new Sum();
-
-    /** sum of the square of each value that has been added */
-    private SumOfSquares sumsq = new SumOfSquares();
-
+    private final SecondMoment secondMoment;
     /** min of values that have been added */
-    private Min min = new Min();
-
+    private final StorelessUnivariateStatistic minImpl;
     /** max of values that have been added */
-    private Max max = new Max();
-
+    private final StorelessUnivariateStatistic maxImpl;
+    /** sum of values that have been added */
+    private final StorelessUnivariateStatistic sumImpl;
+    /** sum of the square of each value that has been added */
+    private final StorelessUnivariateStatistic sumOfSquaresImpl;
     /** sumLog of values that have been added */
-    private SumOfLogs sumLog = new SumOfLogs();
-
-    /** geoMean of values that have been added */
-    private GeometricMean geoMean = new GeometricMean(sumLog);
-
+    private final StorelessUnivariateStatistic sumOfLogsImpl;
     /** mean of values that have been added */
-    private Mean mean = new Mean(secondMoment);
-
+    private final StorelessUnivariateStatistic meanImpl;
     /** variance of values that have been added */
-    private Variance variance = new Variance(secondMoment);
+    private final StorelessUnivariateStatistic varianceImpl;
+    /** geoMean of values that have been added */
+    private final StorelessUnivariateStatistic geoMeanImpl;
+    /** population variance of values that have been added */
+    private final StorelessUnivariateStatistic populationVariance;
 
-    /** Sum statistic implementation - can be reset by setter. */
-    private StorelessUnivariateStatistic sumImpl = sum;
-
-    /** Sum of squares statistic implementation - can be reset by setter. */
-    private StorelessUnivariateStatistic sumsqImpl = sumsq;
-
-    /** Minimum statistic implementation - can be reset by setter. */
-    private StorelessUnivariateStatistic minImpl = min;
-
-    /** Maximum statistic implementation - can be reset by setter. */
-    private StorelessUnivariateStatistic maxImpl = max;
-
-    /** Sum of log statistic implementation - can be reset by setter. */
-    private StorelessUnivariateStatistic sumLogImpl = sumLog;
-
-    /** Geometric mean statistic implementation - can be reset by setter. */
-    private StorelessUnivariateStatistic geoMeanImpl = geoMean;
-
-    /** Mean statistic implementation - can be reset by setter. */
-    private StorelessUnivariateStatistic meanImpl = mean;
-
-    /** Variance statistic implementation - can be reset by setter. */
-    private StorelessUnivariateStatistic varianceImpl = variance;
+    /** Indicates if the mean impl uses an external moment */
+    private final boolean meanUsesExternalMoment;
+    /** Indicates if the variance impl uses an external moment */
+    private final boolean varianceUsesExternalMoment;
+    /** Indicates if the geo mean impl uses an external sum of logs */
+    private final boolean geoMeanUsesExternalSumOfLogs;
 
     /**
-     * Construct a SummaryStatistics instance
+     * Returns a builder for a {@link SummaryStatistics}.
+     *
+     * @return a summary statistics builder.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
+
+    /**
+     * Construct a SummaryStatistics instance.
      */
     public SummaryStatistics() {
+        this(new Builder().build());
     }
 
     /**
@@ -129,7 +111,66 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @throws NullArgumentException if original is null
      */
     public SummaryStatistics(SummaryStatistics original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+
+        this.n                = original.n;
+        this.secondMoment     = original.secondMoment.copy();
+        this.maxImpl          = original.maxImpl.copy();
+        this.minImpl          = original.minImpl.copy();
+        this.sumImpl          = original.sumImpl.copy();
+        this.sumOfLogsImpl    = original.sumOfLogsImpl.copy();
+        this.sumOfSquaresImpl = original.sumOfSquaresImpl.copy();
+
+        // Keep default statistics with embedded moments in synch
+        if (original.meanUsesExternalMoment) {
+            this.meanImpl = new Mean(this.secondMoment);
+        } else {
+            this.meanImpl = original.meanImpl.copy();
+        }
+        this.meanUsesExternalMoment = original.meanUsesExternalMoment;
+
+        if (original.varianceUsesExternalMoment) {
+            this.varianceImpl = new Variance(this.secondMoment);
+        } else {
+            this.varianceImpl = original.varianceImpl.copy();
+        }
+        this.varianceUsesExternalMoment = original.varianceUsesExternalMoment;
+
+        if (original.geoMeanUsesExternalSumOfLogs &&
+            this.sumOfLogsImpl instanceof SumOfLogs) {
+            this.geoMeanImpl = new GeometricMean((SumOfLogs) this.sumOfLogsImpl);
+        } else {
+            this.geoMeanImpl = original.geoMeanImpl.copy();
+        }
+        this.geoMeanUsesExternalSumOfLogs = original.geoMeanUsesExternalSumOfLogs;
+
+        this.populationVariance = new Variance(false, this.secondMoment);
+    }
+
+    /**
+     * Construct a new SummaryStatistics instance based
+     * on the data provided by a builder.
+     *
+     * @param builder the builder to use.
+     */
+    protected SummaryStatistics(Builder builder) {
+        this.secondMoment       = builder.secondMoment;
+        this.maxImpl            = builder.maxImpl;
+        this.minImpl            = builder.minImpl;
+        this.meanImpl           = builder.meanImpl;
+        this.sumImpl            = builder.sumImpl;
+        this.sumOfSquaresImpl   = builder.sumOfSquaresImpl;
+        this.sumOfLogsImpl      = builder.sumOfLogsImpl;
+        this.varianceImpl       = builder.varianceImpl;
+        this.geoMeanImpl        = builder.geoMeanImpl;
+
+        // the population variance can not be overridden
+        // it will always use the second moment.
+        this.populationVariance = new Variance(false, this.secondMoment);
+
+        this.meanUsesExternalMoment       = builder.meanUsesExternalMoment;
+        this.varianceUsesExternalMoment   = builder.varianceUsesExternalMoment;
+        this.geoMeanUsesExternalSumOfLogs = builder.geometricMeanUsesExternalSumOfLogs;
     }
 
     /**
@@ -139,7 +180,7 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      */
     public StatisticalSummary getSummary() {
         return new StatisticalSummaryValues(getMean(), getVariance(), getN(),
-                getMax(), getMin(), getSum());
+                                            getMax(), getMin(), getSum());
     }
 
     /**
@@ -147,28 +188,31 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @param value the value to add
      */
     public void addValue(double value) {
-        sumImpl.increment(value);
-        sumsqImpl.increment(value);
+        secondMoment.increment(value);
         minImpl.increment(value);
         maxImpl.increment(value);
-        sumLogImpl.increment(value);
-        secondMoment.increment(value);
-        // If mean, variance or geomean have been overridden,
-        // need to increment these
-        if (meanImpl != mean) {
+        sumImpl.increment(value);
+        sumOfSquaresImpl.increment(value);
+        sumOfLogsImpl.increment(value);
+
+        // update mean/variance/geoMean if they
+        // do not use external moments / sumOfLogs.
+
+        if (!meanUsesExternalMoment) {
             meanImpl.increment(value);
         }
-        if (varianceImpl != variance) {
+        if (!varianceUsesExternalMoment) {
             varianceImpl.increment(value);
         }
-        if (geoMeanImpl != geoMean) {
+        if (!geoMeanUsesExternalSumOfLogs) {
             geoMeanImpl.increment(value);
         }
+
         n++;
     }
 
     /**
-     * Returns the number of available values
+     * Returns the number of available values.
      * @return The number of available values
      */
     @Override
@@ -177,7 +221,7 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     }
 
     /**
-     * Returns the sum of the values that have been added
+     * Returns the sum of the values that have been added.
      * @return The sum or <code>Double.NaN</code> if no values have been added
      */
     @Override
@@ -189,18 +233,18 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * Returns the sum of the squares of the values that have been added.
      * <p>
      * Double.NaN is returned if no values have been added.
-     * </p>
+     *
      * @return The sum of squares
      */
-    public double getSumsq() {
-        return sumsqImpl.getResult();
+    public double getSumOfSquares() {
+        return sumOfSquaresImpl.getResult();
     }
 
     /**
      * Returns the mean of the values that have been added.
      * <p>
      * Double.NaN is returned if no values have been added.
-     * </p>
+     *
      * @return the mean
      */
     @Override
@@ -212,42 +256,40 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * Returns the standard deviation of the values that have been added.
      * <p>
      * Double.NaN is returned if no values have been added.
-     * </p>
+     *
      * @return the standard deviation
      */
     @Override
     public double getStandardDeviation() {
-        double stdDev = Double.NaN;
-        if (getN() > 0) {
-            if (getN() > 1) {
-                stdDev = FastMath.sqrt(getVariance());
-            } else {
-                stdDev = 0.0;
-            }
+        final long size = getN();
+        if (size > 0) {
+            return size > 1 ? FastMath.sqrt(getVariance()) : 0.0;
+        } else {
+            return Double.NaN;
         }
-        return stdDev;
     }
 
     /**
      * Returns the quadratic mean, a.k.a.
      * <a href="http://mathworld.wolfram.com/Root-Mean-Square.html">
      * root-mean-square</a> of the available values
+     *
      * @return The quadratic mean or {@code Double.NaN} if no values
      * have been added.
      */
     public double getQuadraticMean() {
         final long size = getN();
-        return size > 0 ? FastMath.sqrt(getSumsq() / size) : Double.NaN;
+        return size > 0 ? FastMath.sqrt(getSumOfSquares() / size) : Double.NaN;
     }
 
     /**
      * Returns the (sample) variance of the available values.
-     *
-     * <p>This method returns the bias-corrected sample variance (using {@code n - 1} in
+     * <p>
+     * This method returns the bias-corrected sample variance (using {@code n - 1} in
      * the denominator).  Use {@link #getPopulationVariance()} for the non-bias-corrected
-     * population variance.</p>
-     *
-     * <p>Double.NaN is returned if no values have been added.</p>
+     * population variance.
+     * <p>
+     * Double.NaN is returned if no values have been added.
      *
      * @return the variance
      */
@@ -259,14 +301,12 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Returns the <a href="http://en.wikibooks.org/wiki/Statistics/Summary/Variance">
      * population variance</a> of the values that have been added.
-     *
-     * <p>Double.NaN is returned if no values have been added.</p>
+     * <p>
+     * Double.NaN is returned if no values have been added.
      *
      * @return the population variance
      */
     public double getPopulationVariance() {
-        Variance populationVariance = new Variance(secondMoment);
-        populationVariance.setBiasCorrected(false);
         return populationVariance.getResult();
     }
 
@@ -274,7 +314,7 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * Returns the maximum of the values that have been added.
      * <p>
      * Double.NaN is returned if no values have been added.
-     * </p>
+     *
      * @return the maximum
      */
     @Override
@@ -286,7 +326,7 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * Returns the minimum of the values that have been added.
      * <p>
      * Double.NaN is returned if no values have been added.
-     * </p>
+     *
      * @return the minimum
      */
     @Override
@@ -298,7 +338,7 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * Returns the geometric mean of the values that have been added.
      * <p>
      * Double.NaN is returned if no values have been added.
-     * </p>
+     *
      * @return the geometric mean
      */
     public double getGeometricMean() {
@@ -309,21 +349,21 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * Returns the sum of the logs of the values that have been added.
      * <p>
      * Double.NaN is returned if no values have been added.
-     * </p>
+     *
      * @return the sum of logs
      */
     public double getSumOfLogs() {
-        return sumLogImpl.getResult();
+        return sumOfLogsImpl.getResult();
     }
 
     /**
-     * Returns a statistic related to the Second Central Moment.  Specifically,
+     * Returns a statistic related to the Second Central Moment. Specifically,
      * what is returned is the sum of squared deviations from the sample mean
      * among the values that have been added.
      * <p>
      * Returns <code>Double.NaN</code> if no data values have been added and
-     * returns <code>0</code> if there is just one value in the data set.</p>
-     * <p>
+     * returns <code>0</code> if there is just one value in the data set.
+     *
      * @return second central moment statistic
      */
     public double getSecondMoment() {
@@ -333,6 +373,7 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
     /**
      * Generates a text report displaying summary statistics from values that
      * have been added.
+     *
      * @return String with line feeds displaying statistics
      */
     @Override
@@ -345,42 +386,42 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
         outBuffer.append("max: ").append(getMax()).append(endl);
         outBuffer.append("sum: ").append(getSum()).append(endl);
         outBuffer.append("mean: ").append(getMean()).append(endl);
-        outBuffer.append("geometric mean: ").append(getGeometricMean())
-            .append(endl);
         outBuffer.append("variance: ").append(getVariance()).append(endl);
         outBuffer.append("population variance: ").append(getPopulationVariance()).append(endl);
+        outBuffer.append("standard deviation: ").append(getStandardDeviation()).append(endl);
+        outBuffer.append("geometric mean: ").append(getGeometricMean()).append(endl);
         outBuffer.append("second moment: ").append(getSecondMoment()).append(endl);
-        outBuffer.append("sum of squares: ").append(getSumsq()).append(endl);
-        outBuffer.append("standard deviation: ").append(getStandardDeviation())
-            .append(endl);
+        outBuffer.append("sum of squares: ").append(getSumOfSquares()).append(endl);
         outBuffer.append("sum of logs: ").append(getSumOfLogs()).append(endl);
         return outBuffer.toString();
     }
 
     /**
-     * Resets all statistics and storage
+     * Resets all statistics and storage.
      */
     public void clear() {
         this.n = 0;
         minImpl.clear();
         maxImpl.clear();
         sumImpl.clear();
-        sumLogImpl.clear();
-        sumsqImpl.clear();
-        geoMeanImpl.clear();
+        sumOfLogsImpl.clear();
+        sumOfSquaresImpl.clear();
         secondMoment.clear();
-        if (meanImpl != mean) {
+        if (!meanUsesExternalMoment) {
             meanImpl.clear();
         }
-        if (varianceImpl != variance) {
+        if (!varianceUsesExternalMoment) {
             varianceImpl.clear();
+        }
+        if (!geoMeanUsesExternalSumOfLogs) {
+            geoMeanImpl.clear();
         }
     }
 
     /**
-     * Returns true iff <code>object</code> is a
-     * <code>SummaryStatistics</code> instance and all statistics have the
-     * same values as this.
+     * Returns true iff <code>object</code> is a <code>SummaryStatistics</code>
+     * instance and all statistics have the same values as this.
+     *
      * @param object the object to test equality against.
      * @return true if object equals this
      */
@@ -399,12 +440,13 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
                Precision.equalsIncludingNaN(stat.getMin(),           getMin())           &&
                Precision.equalsIncludingNaN(stat.getN(),             getN())             &&
                Precision.equalsIncludingNaN(stat.getSum(),           getSum())           &&
-               Precision.equalsIncludingNaN(stat.getSumsq(),         getSumsq())         &&
+               Precision.equalsIncludingNaN(stat.getSumOfSquares(),  getSumOfSquares())  &&
+               Precision.equalsIncludingNaN(stat.getSumOfLogs(),     getSumOfLogs())     &&
                Precision.equalsIncludingNaN(stat.getVariance(),      getVariance());
     }
 
     /**
-     * Returns hash code based on values of statistics
+     * Returns hash code based on values of statistics.
      * @return hash code
      */
     @Override
@@ -416,246 +458,10 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
         result = result * 31 + MathUtils.hash(getMin());
         result = result * 31 + MathUtils.hash(getN());
         result = result * 31 + MathUtils.hash(getSum());
-        result = result * 31 + MathUtils.hash(getSumsq());
+        result = result * 31 + MathUtils.hash(getSumOfSquares());
+        result = result * 31 + MathUtils.hash(getSumOfLogs());
         result = result * 31 + MathUtils.hash(getVariance());
         return result;
-    }
-
-    // Getters and setters for statistics implementations
-    /**
-     * Returns the currently configured Sum implementation
-     * @return the StorelessUnivariateStatistic implementing the sum
-     */
-    public StorelessUnivariateStatistic getSumImpl() {
-        return sumImpl;
-    }
-
-    /**
-     * <p>
-     * Sets the implementation for the Sum.
-     * </p>
-     * <p>
-     * This method cannot be activated after data has been added - i.e.,
-     * after {@link #addValue(double) addValue} has been used to add data.
-     * If it is activated after data has been added, an IllegalStateException
-     * will be thrown.
-     * </p>
-     * @param sumImpl the StorelessUnivariateStatistic instance to use for
-     *        computing the Sum
-     * @throws MathIllegalStateException if data has already been added (i.e if n >0)
-     */
-    public void setSumImpl(StorelessUnivariateStatistic sumImpl)
-    throws MathIllegalStateException {
-        checkEmpty();
-        this.sumImpl = sumImpl;
-    }
-
-    /**
-     * Returns the currently configured sum of squares implementation
-     * @return the StorelessUnivariateStatistic implementing the sum of squares
-     */
-    public StorelessUnivariateStatistic getSumsqImpl() {
-        return sumsqImpl;
-    }
-
-    /**
-     * <p>
-     * Sets the implementation for the sum of squares.
-     * </p>
-     * <p>
-     * This method cannot be activated after data has been added - i.e.,
-     * after {@link #addValue(double) addValue} has been used to add data.
-     * If it is activated after data has been added, an IllegalStateException
-     * will be thrown.
-     * </p>
-     * @param sumsqImpl the StorelessUnivariateStatistic instance to use for
-     *        computing the sum of squares
-     * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     */
-    public void setSumsqImpl(StorelessUnivariateStatistic sumsqImpl)
-    throws MathIllegalStateException {
-        checkEmpty();
-        this.sumsqImpl = sumsqImpl;
-    }
-
-    /**
-     * Returns the currently configured minimum implementation
-     * @return the StorelessUnivariateStatistic implementing the minimum
-     */
-    public StorelessUnivariateStatistic getMinImpl() {
-        return minImpl;
-    }
-
-    /**
-     * <p>
-     * Sets the implementation for the minimum.
-     * </p>
-     * <p>
-     * This method cannot be activated after data has been added - i.e.,
-     * after {@link #addValue(double) addValue} has been used to add data.
-     * If it is activated after data has been added, an IllegalStateException
-     * will be thrown.
-     * </p>
-     * @param minImpl the StorelessUnivariateStatistic instance to use for
-     *        computing the minimum
-     * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     */
-    public void setMinImpl(StorelessUnivariateStatistic minImpl)
-    throws MathIllegalStateException {
-        checkEmpty();
-        this.minImpl = minImpl;
-    }
-
-    /**
-     * Returns the currently configured maximum implementation
-     * @return the StorelessUnivariateStatistic implementing the maximum
-     */
-    public StorelessUnivariateStatistic getMaxImpl() {
-        return maxImpl;
-    }
-
-    /**
-     * <p>
-     * Sets the implementation for the maximum.
-     * </p>
-     * <p>
-     * This method cannot be activated after data has been added - i.e.,
-     * after {@link #addValue(double) addValue} has been used to add data.
-     * If it is activated after data has been added, an IllegalStateException
-     * will be thrown.
-     * </p>
-     * @param maxImpl the StorelessUnivariateStatistic instance to use for
-     *        computing the maximum
-     * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     */
-    public void setMaxImpl(StorelessUnivariateStatistic maxImpl)
-    throws MathIllegalStateException {
-        checkEmpty();
-        this.maxImpl = maxImpl;
-    }
-
-    /**
-     * Returns the currently configured sum of logs implementation
-     * @return the StorelessUnivariateStatistic implementing the log sum
-     */
-    public StorelessUnivariateStatistic getSumLogImpl() {
-        return sumLogImpl;
-    }
-
-    /**
-     * <p>
-     * Sets the implementation for the sum of logs.
-     * </p>
-     * <p>
-     * This method cannot be activated after data has been added - i.e.,
-     * after {@link #addValue(double) addValue} has been used to add data.
-     * If it is activated after data has been added, an IllegalStateException
-     * will be thrown.
-     * </p>
-     * @param sumLogImpl the StorelessUnivariateStatistic instance to use for
-     *        computing the log sum
-     * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     */
-    public void setSumLogImpl(StorelessUnivariateStatistic sumLogImpl)
-    throws MathIllegalStateException {
-        checkEmpty();
-        this.sumLogImpl = sumLogImpl;
-        geoMean.setSumLogImpl(sumLogImpl);
-    }
-
-    /**
-     * Returns the currently configured geometric mean implementation
-     * @return the StorelessUnivariateStatistic implementing the geometric mean
-     */
-    public StorelessUnivariateStatistic getGeoMeanImpl() {
-        return geoMeanImpl;
-    }
-
-    /**
-     * <p>
-     * Sets the implementation for the geometric mean.
-     * </p>
-     * <p>
-     * This method cannot be activated after data has been added - i.e.,
-     * after {@link #addValue(double) addValue} has been used to add data.
-     * If it is activated after data has been added, an IllegalStateException
-     * will be thrown.
-     * </p>
-     * @param geoMeanImpl the StorelessUnivariateStatistic instance to use for
-     *        computing the geometric mean
-     * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     */
-    public void setGeoMeanImpl(StorelessUnivariateStatistic geoMeanImpl)
-    throws MathIllegalStateException {
-        checkEmpty();
-        this.geoMeanImpl = geoMeanImpl;
-    }
-
-    /**
-     * Returns the currently configured mean implementation
-     * @return the StorelessUnivariateStatistic implementing the mean
-     */
-    public StorelessUnivariateStatistic getMeanImpl() {
-        return meanImpl;
-    }
-
-    /**
-     * <p>
-     * Sets the implementation for the mean.
-     * </p>
-     * <p>
-     * This method cannot be activated after data has been added - i.e.,
-     * after {@link #addValue(double) addValue} has been used to add data.
-     * If it is activated after data has been added, an IllegalStateException
-     * will be thrown.
-     * </p>
-     * @param meanImpl the StorelessUnivariateStatistic instance to use for
-     *        computing the mean
-     * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     */
-    public void setMeanImpl(StorelessUnivariateStatistic meanImpl)
-    throws MathIllegalStateException {
-        checkEmpty();
-        this.meanImpl = meanImpl;
-    }
-
-    /**
-     * Returns the currently configured variance implementation
-     * @return the StorelessUnivariateStatistic implementing the variance
-     */
-    public StorelessUnivariateStatistic getVarianceImpl() {
-        return varianceImpl;
-    }
-
-    /**
-     * <p>
-     * Sets the implementation for the variance.
-     * </p>
-     * <p>
-     * This method cannot be activated after data has been added - i.e.,
-     * after {@link #addValue(double) addValue} has been used to add data.
-     * If it is activated after data has been added, an IllegalStateException
-     * will be thrown.
-     * </p>
-     * @param varianceImpl the StorelessUnivariateStatistic instance to use for
-     *        computing the variance
-     * @throws MathIllegalStateException if data has already been added (i.e if n > 0)
-     */
-    public void setVarianceImpl(StorelessUnivariateStatistic varianceImpl)
-    throws MathIllegalStateException {
-        checkEmpty();
-        this.varianceImpl = varianceImpl;
-    }
-
-    /**
-     * Throws IllegalStateException if n > 0.
-     * @throws MathIllegalStateException if data has been added
-     */
-    private void checkEmpty() throws MathIllegalStateException {
-        if (n > 0) {
-            throw new MathIllegalStateException(
-                LocalizedCoreFormats.VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC, n);
-        }
     }
 
     /**
@@ -664,90 +470,183 @@ public class SummaryStatistics implements StatisticalSummary, Serializable {
      * @return a copy of this
      */
     public SummaryStatistics copy() {
-        SummaryStatistics result = new SummaryStatistics();
-        // No try-catch or advertised exception because arguments are guaranteed non-null
-        copy(this, result);
-        return result;
+        return new SummaryStatistics(this);
     }
 
     /**
-     * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
-     *
-     * @param source SummaryStatistics to copy
-     * @param dest SummaryStatistics to copy to
-     * @throws NullArgumentException if either source or dest is null
+     * A mutable builder for a SummaryStatistics.
      */
-    public static void copy(SummaryStatistics source, SummaryStatistics dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.maxImpl = source.maxImpl.copy();
-        dest.minImpl = source.minImpl.copy();
-        dest.sumImpl = source.sumImpl.copy();
-        dest.sumLogImpl = source.sumLogImpl.copy();
-        dest.sumsqImpl = source.sumsqImpl.copy();
-        dest.secondMoment = source.secondMoment.copy();
-        dest.n = source.n;
+    public static class Builder {
+        /** Second moment can not be set externally, needed for other statistics. */
+        private final SecondMoment secondMoment = new SecondMoment();
 
-        // Keep commons-math supplied statistics with embedded moments in synch
-        if (source.getVarianceImpl() instanceof Variance) {
-            dest.varianceImpl = new Variance(dest.secondMoment);
-        } else {
-            dest.varianceImpl = source.varianceImpl.copy();
-        }
-        if (source.meanImpl instanceof Mean) {
-            dest.meanImpl = new Mean(dest.secondMoment);
-        } else {
-            dest.meanImpl = source.meanImpl.copy();
-        }
-        if (source.getGeoMeanImpl() instanceof GeometricMean) {
-            dest.geoMeanImpl = new GeometricMean((SumOfLogs) dest.sumLogImpl);
-        } else {
-            dest.geoMeanImpl = source.geoMeanImpl.copy();
+        private StorelessUnivariateStatistic maxImpl;
+        private StorelessUnivariateStatistic minImpl;
+        private StorelessUnivariateStatistic sumImpl;
+        private StorelessUnivariateStatistic sumOfSquaresImpl;
+        private StorelessUnivariateStatistic sumOfLogsImpl;
+        private StorelessUnivariateStatistic meanImpl;
+        private StorelessUnivariateStatistic varianceImpl;
+        private StorelessUnivariateStatistic geoMeanImpl;
+
+        private boolean meanUsesExternalMoment;
+        private boolean varianceUsesExternalMoment;
+        private boolean geometricMeanUsesExternalSumOfLogs;
+
+        protected Builder() {}
+
+        /**
+         * Sets the max implementation to use.
+         *
+         * @param maxImpl the max implementation
+         * @return the builder
+         * @throws NullArgumentException if maxImpl is null
+         */
+        public Builder withMaxImpl(StorelessUnivariateStatistic maxImpl) {
+            MathUtils.checkNotNull(maxImpl);
+            this.maxImpl = maxImpl;
+            return this;
         }
 
-        // Make sure that if stat == statImpl in source, same
-        // holds in dest; otherwise copy stat
-        if (source.geoMean == source.geoMeanImpl) {
-            dest.geoMean = (GeometricMean) dest.geoMeanImpl;
-        } else {
-            GeometricMean.copy(source.geoMean, dest.geoMean);
+        /**
+         * Sets the min implementation to use.
+         *
+         * @param minImpl the min implementation
+         * @return the builder
+         * @throws NullArgumentException if minImpl is null
+         */
+        public Builder withMinImpl(StorelessUnivariateStatistic minImpl) {
+            MathUtils.checkNotNull(minImpl);
+            this.minImpl = minImpl;
+            return this;
         }
-        if (source.max == source.maxImpl) {
-            dest.max = (Max) dest.maxImpl;
-        } else {
-            Max.copy(source.max, dest.max);
+
+        /**
+         * Sets the mean implementation to use.
+         *
+         * @param meanImpl the mean implementation
+         * @return the builder
+         * @throws NullArgumentException if meanImpl is null
+         */
+        public Builder withMeanImpl(StorelessUnivariateStatistic meanImpl) {
+            MathUtils.checkNotNull(meanImpl);
+            this.meanImpl = meanImpl;
+            return this;
         }
-        if (source.mean == source.meanImpl) {
-            dest.mean = (Mean) dest.meanImpl;
-        } else {
-            Mean.copy(source.mean, dest.mean);
+
+        /**
+         * Sets the geometric mean implementation to use.
+         *
+         * @param geometricMeanImpl the geometric mean implementation
+         * @return the builder
+         * @throws NullArgumentException if geometricMeanImpl is null
+         */
+        public Builder withGeometricMeanImpl(StorelessUnivariateStatistic geometricMeanImpl) {
+            MathUtils.checkNotNull(geometricMeanImpl);
+            this.geoMeanImpl = geometricMeanImpl;
+            return this;
         }
-        if (source.min == source.minImpl) {
-            dest.min = (Min) dest.minImpl;
-        } else {
-            Min.copy(source.min, dest.min);
+
+        /**
+         * Sets the variance implementation to use.
+         *
+         * @param varianceImpl the variance implementation
+         * @return the builder
+         * @throws NullArgumentException if varianceImpl is null
+         */
+        public Builder withVarianceImpl(StorelessUnivariateStatistic varianceImpl) {
+            MathUtils.checkNotNull(varianceImpl);
+            this.varianceImpl = varianceImpl;
+            return this;
         }
-        if (source.sum == source.sumImpl) {
-            dest.sum = (Sum) dest.sumImpl;
-        } else {
-            Sum.copy(source.sum, dest.sum);
+
+        /**
+         * Sets the sum implementation to use.
+         *
+         * @param sumImpl the sum implementation
+         * @return the builder
+         * @throws NullArgumentException if sumImpl is null
+         */
+        public Builder withSumImpl(StorelessUnivariateStatistic sumImpl) {
+            MathUtils.checkNotNull(sumImpl);
+            this.sumImpl = sumImpl;
+            return this;
         }
-        if (source.variance == source.varianceImpl) {
-            dest.variance = (Variance) dest.varianceImpl;
-        } else {
-            Variance.copy(source.variance, dest.variance);
+
+        /**
+         * Sets the sum of squares implementation to use.
+         *
+         * @param sumSqImpl the sum of squares implementation
+         * @return the builder
+         * @throws NullArgumentException if sumSqImpl is null
+         */
+        public Builder withSumOfSquaresImpl(StorelessUnivariateStatistic sumSqImpl) {
+            MathUtils.checkNotNull(sumSqImpl);
+            this.sumOfSquaresImpl = sumSqImpl;
+            return this;
         }
-        if (source.sumLog == source.sumLogImpl) {
-            dest.sumLog = (SumOfLogs) dest.sumLogImpl;
-        } else {
-            SumOfLogs.copy(source.sumLog, dest.sumLog);
+
+        /**
+         * Sets the sum of logs implementation to use.
+         *
+         * @param sumLogImpl the sum of logs implementation
+         * @return the builder
+         * @throws NullArgumentException if sumLogImpl is null
+         */
+        public Builder withSumOfLogsImpl(StorelessUnivariateStatistic sumLogImpl) {
+            MathUtils.checkNotNull(sumLogImpl);
+            this.sumOfLogsImpl = sumLogImpl;
+            return this;
         }
-        if (source.sumsq == source.sumsqImpl) {
-            dest.sumsq = (SumOfSquares) dest.sumsqImpl;
-        } else {
-            SumOfSquares.copy(source.sumsq, dest.sumsq);
+
+        /**
+         * Sets up default implementations to use.
+         */
+        protected void setupDefaultsImpls() {
+            if (maxImpl == null) {
+                maxImpl = new Max();
+            }
+            if (minImpl == null) {
+                minImpl = new Min();
+            }
+            if (sumImpl == null) {
+                sumImpl = new Sum();
+            }
+            if (sumOfSquaresImpl == null) {
+                sumOfSquaresImpl = new SumOfSquares();
+            }
+            if (sumOfLogsImpl == null) {
+                sumOfLogsImpl = new SumOfLogs();
+            }
+            if (meanImpl == null) {
+                meanImpl = new Mean(secondMoment);
+                meanUsesExternalMoment = true;
+            }
+            if (varianceImpl == null) {
+                varianceImpl = new Variance(secondMoment);
+                varianceUsesExternalMoment = true;
+            }
+            if (geoMeanImpl == null) {
+                if (sumOfLogsImpl instanceof SumOfLogs) {
+                    geoMeanImpl = new GeometricMean((SumOfLogs) sumOfLogsImpl);
+                    geometricMeanUsesExternalSumOfLogs = true;
+                } else {
+                    geoMeanImpl = new GeometricMean();
+                }
+            }
+        }
+
+        /**
+         * Constructs a new SummaryStatistics instance with the values
+         * stored in this builder.
+         *
+         * @return a new SummaryStatistics instance.
+         */
+        public SummaryStatistics build() {
+            // setup default implementations.
+            setupDefaultsImpls();
+            return new SummaryStatistics(this);
         }
     }
+
 }

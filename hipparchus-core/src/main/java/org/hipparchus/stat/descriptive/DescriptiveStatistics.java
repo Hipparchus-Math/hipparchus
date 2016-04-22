@@ -77,7 +77,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
     /** Sum statistic implementation - can be reset by setter. */
     private final UnivariateStatistic sumImpl;
     /** Sum of squares statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic sumsqImpl;
+    private final UnivariateStatistic sumOfSquaresImpl;
     /** Mean statistic implementation - can be reset by setter. */
     private final UnivariateStatistic meanImpl;
     /** Variance statistic implementation - can be reset by setter. */
@@ -154,7 +154,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
         this.minImpl           = original.minImpl.copy();
         this.meanImpl          = original.meanImpl.copy();
         this.sumImpl           = original.sumImpl.copy();
-        this.sumsqImpl         = original.sumsqImpl.copy();
+        this.sumOfSquaresImpl         = original.sumOfSquaresImpl.copy();
         this.varianceImpl      = original.varianceImpl.copy();
         this.geometricMeanImpl = original.geometricMeanImpl.copy();
         this.kurtosisImpl      = original.kurtosisImpl.copy();
@@ -173,7 +173,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
         this.minImpl           = builder.minImpl;
         this.meanImpl          = builder.meanImpl;
         this.sumImpl           = builder.sumImpl;
-        this.sumsqImpl         = builder.sumsqImpl;
+        this.sumOfSquaresImpl         = builder.sumsqImpl;
         this.varianceImpl      = builder.varianceImpl;
         this.geometricMeanImpl = builder.geometricMeanImpl;
         this.kurtosisImpl      = builder.kurtosisImpl;
@@ -317,7 +317,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      */
     public double getQuadraticMean() {
         final long n = getN();
-        return n > 0 ? FastMath.sqrt(getSumsq() / n) : Double.NaN;
+        return n > 0 ? FastMath.sqrt(getSumOfSquares() / n) : Double.NaN;
     }
 
     /**
@@ -372,8 +372,8 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @return The sum of the squares or Double.NaN if no
      * values have been added.
      */
-    public double getSumsq() {
-        return apply(sumsqImpl);
+    public double getSumOfSquares() {
+        return apply(sumOfSquaresImpl);
     }
 
     /**
@@ -672,7 +672,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
          * @return the builder
          * @throws NullArgumentException if sumSqImpl is null
          */
-        public Builder withSumsqImpl(UnivariateStatistic sumSqImpl) {
+        public Builder withSumOfSquaresImpl(UnivariateStatistic sumSqImpl) {
             MathUtils.checkNotNull(sumSqImpl);
             this.sumsqImpl = sumSqImpl;
             return this;

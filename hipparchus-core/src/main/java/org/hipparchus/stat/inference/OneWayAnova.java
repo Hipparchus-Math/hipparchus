@@ -297,7 +297,7 @@ public class OneWayAnova {
         for (final SummaryStatistics data : categoryData) {
 
             final double sum = data.getSum();
-            final double sumsq = data.getSumsq();
+            final double sumsq = data.getSumOfSquares();
             final int num = (int) data.getN();
             totnum += num;
             totsum += sum;

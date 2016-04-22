@@ -16,9 +16,7 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of
@@ -29,12 +27,20 @@ import org.hipparchus.util.MathUtils;
  * methods atomic operations for a single instance.  That is to say, as one
  * thread is computing a statistic from the instance, no other thread can modify
  * the instance nor compute another statistic.
- *
  */
 public class SynchronizedSummaryStatistics extends SummaryStatistics {
 
     /** Serialization UID */
-    private static final long serialVersionUID = 1909861009042253704L;
+    private static final long serialVersionUID = 20160422L;
+
+    /**
+     * Returns a builder for a {@link SynchronizedSummaryStatistics}.
+     *
+     * @return a descriptive statistics builder.
+     */
+    public static Builder builder() {
+        return new Builder();
+    }
 
     /**
      * Construct a SynchronizedSummaryStatistics instance
@@ -49,281 +55,121 @@ public class SynchronizedSummaryStatistics extends SummaryStatistics {
      * @param original the {@code SynchronizedSummaryStatistics} instance to copy
      * @throws NullArgumentException if original is null
      */
-    public SynchronizedSummaryStatistics(SynchronizedSummaryStatistics original)
-    throws NullArgumentException {
-        copy(original, this);
+    private SynchronizedSummaryStatistics(SynchronizedSummaryStatistics original)
+        throws NullArgumentException {
+        super(original);
     }
 
     /**
-     * {@inheritDoc}
+     * Construct a new SynchronizedSummaryStatistics instance based
+     * on the data provided by a builder.
+     *
+     * @param builder the builder to use.
      */
+    protected SynchronizedSummaryStatistics(Builder builder) {
+        super(builder);
+    }
+
+    /** {@inheritDoc} */
     @Override
     public synchronized StatisticalSummary getSummary() {
         return super.getSummary();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized void addValue(double value) {
         super.addValue(value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized long getN() {
         return super.getN();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getSum() {
         return super.getSum();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
-    public synchronized double getSumsq() {
-        return super.getSumsq();
+    public synchronized double getSumOfSquares() {
+        return super.getSumOfSquares();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getMean() {
         return super.getMean();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getStandardDeviation() {
         return super.getStandardDeviation();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getQuadraticMean() {
         return super.getQuadraticMean();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getVariance() {
         return super.getVariance();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getPopulationVariance() {
         return super.getPopulationVariance();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getMax() {
         return super.getMax();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getMin() {
         return super.getMin();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double getGeometricMean() {
         return super.getGeometricMean();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized String toString() {
         return super.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized void clear() {
         super.clear();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized boolean equals(Object object) {
         return super.equals(object);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized int hashCode() {
         return super.hashCode();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic getSumImpl() {
-        return super.getSumImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setSumImpl(StorelessUnivariateStatistic sumImpl)
-    throws MathIllegalStateException {
-        super.setSumImpl(sumImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic getSumsqImpl() {
-        return super.getSumsqImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setSumsqImpl(StorelessUnivariateStatistic sumsqImpl)
-    throws MathIllegalStateException {
-        super.setSumsqImpl(sumsqImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic getMinImpl() {
-        return super.getMinImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setMinImpl(StorelessUnivariateStatistic minImpl)
-    throws MathIllegalStateException {
-        super.setMinImpl(minImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic getMaxImpl() {
-        return super.getMaxImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setMaxImpl(StorelessUnivariateStatistic maxImpl)
-    throws MathIllegalStateException {
-        super.setMaxImpl(maxImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic getSumLogImpl() {
-        return super.getSumLogImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setSumLogImpl(StorelessUnivariateStatistic sumLogImpl)
-    throws MathIllegalStateException {
-        super.setSumLogImpl(sumLogImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic getGeoMeanImpl() {
-        return super.getGeoMeanImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setGeoMeanImpl(StorelessUnivariateStatistic geoMeanImpl)
-    throws MathIllegalStateException {
-        super.setGeoMeanImpl(geoMeanImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic getMeanImpl() {
-        return super.getMeanImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setMeanImpl(StorelessUnivariateStatistic meanImpl)
-    throws MathIllegalStateException {
-        super.setMeanImpl(meanImpl);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized StorelessUnivariateStatistic getVarianceImpl() {
-        return super.getVarianceImpl();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized void setVarianceImpl(StorelessUnivariateStatistic varianceImpl)
-    throws MathIllegalStateException {
-        super.setVarianceImpl(varianceImpl);
     }
 
     /**
@@ -334,32 +180,20 @@ public class SynchronizedSummaryStatistics extends SummaryStatistics {
      */
     @Override
     public synchronized SynchronizedSummaryStatistics copy() {
-        SynchronizedSummaryStatistics result =
-            new SynchronizedSummaryStatistics();
-        // No try-catch or advertised exception because arguments are guaranteed non-null
-        copy(this, result);
-        return result;
+        return new SynchronizedSummaryStatistics(this);
     }
 
     /**
-     * Copies source to dest.
-     * <p>Neither source nor dest can be null.</p>
-     * <p>Acquires synchronization lock on source, then dest before copying.</p>
-     *
-     * @param source SynchronizedSummaryStatistics to copy
-     * @param dest SynchronizedSummaryStatistics to copy to
-     * @throws NullArgumentException if either source or dest is null
+     * A mutable builder for a SynchronizedSummaryStatistics.
      */
-    public static void copy(SynchronizedSummaryStatistics source,
-                            SynchronizedSummaryStatistics dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        synchronized (source) {
-            synchronized (dest) {
-                SummaryStatistics.copy(source, dest);
-            }
+    public static class Builder extends SummaryStatistics.Builder {
+
+        @Override
+        public SynchronizedSummaryStatistics build() {
+            setupDefaultsImpls();
+            return new SynchronizedSummaryStatistics(this);
         }
+
     }
 
 }

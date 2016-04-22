@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.NumberTransformer;
 import org.hipparchus.util.TransformerMap;
@@ -70,7 +69,7 @@ public final class MixedListUnivariateImplTest {
         u.addValue(three);
         Assert.assertEquals("N", n, u.getN(), tolerance);
         Assert.assertEquals("sum", sum, u.getSum(), tolerance);
-        Assert.assertEquals("sumsq", sumSq, u.getSumsq(), tolerance);
+        Assert.assertEquals("sumsq", sumSq, u.getSumOfSquares(), tolerance);
         Assert.assertEquals("var", var, u.getVariance(), tolerance);
         Assert.assertEquals("std", std, u.getStandardDeviation(), tolerance);
         Assert.assertEquals("mean", mean, u.getMean(), tolerance);

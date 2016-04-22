@@ -46,7 +46,7 @@ public class Median extends AbstractUnivariateStatistic implements Serializable 
     private static final double FIXED_QUANTILE_50 = 50.0;
 
     /** The percentile impl to calculate the median. */
-    private Percentile percentile;
+    private final Percentile percentile;
 
     /**
      * Default constructor.
