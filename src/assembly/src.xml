@@ -30,7 +30,7 @@
   <fileSets>
     <!-- main project directory structure -->
     <fileSet>
-      <directory>..</directory>
+      <directory>.</directory>
       <outputDirectory></outputDirectory>
       <useDefaultExcludes>true</useDefaultExcludes>
       <excludes>

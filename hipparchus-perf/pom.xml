@@ -24,7 +24,7 @@
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath>../</relativePath>
+    <relativePath>../hipparchus-parent</relativePath>
   </parent>
 
   <artifactId>hipparchus-perf</artifactId>

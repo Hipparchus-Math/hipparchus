@@ -1,0 +1,963 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.hipparchus</groupId>
+  <artifactId>hipparchus</artifactId>
+  <version>1.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Hipparchus</name>
+  <url>https://www.hipparchus.org/</url>
+
+  <inceptionYear>2016</inceptionYear>
+  <description>The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.</description>
+
+  <organization>
+    <name>Hipparchus</name>
+    <url>https://www.hipparchus.org/</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:https://www.orekit.org/git/hipparchus-main.git</connection>
+    <developerConnection>scm:git:ssh://git@www.orekit.org/hipparchus-main.git</developerConnection>
+    <url>https://www.orekit.org/forge/projects/hipparchus/repository</url>
+  </scm>
+
+  <issueManagement>
+    <system>Redmine</system>
+    <url>https://www.orekit.org/forge/projects/hipparchus/issues</url>
+  </issueManagement>
+
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <site>
+      <id>publishedSite</id>
+      <url>https://hipparchus.org/static/</url>
+    </site>
+  </distributionManagement>
+
+  <developers>
+    <developer>
+      <name>Otmar Ertl</name>
+      <id>oertl</id>
+      <email>oertl at hipparchus dot org</email>
+    </developer>
+    <developer>
+      <name>Luc Maisonobe</name>
+      <id>luc</id>
+      <email>luc at hipparchus dot org</email>
+    </developer>
+    <developer>
+      <name>Thomas Neidhart</name>
+      <id>tn</id>
+      <email>tn at hipparchus dot org</email>
+    </developer>
+    <developer>
+      <name>Phil Steitz</name>
+      <id>psteitz</id>
+      <email>psteitz at hipparchus dot org</email>
+    </developer>
+    <developer>
+      <name>Evan Ward</name>
+      <id>evanward</id>
+      <email>evanward at apache dot org</email>
+    </developer>
+  </developers>
+  <contributors>
+    <contributor>
+      <name>Mikkel Meyer Andersen</name>
+    </contributor>
+    <contributor>
+      <name>Bill Barker</name>
+    </contributor>
+    <contributor>
+      <name>S&#233;bastien Brisard</name>
+    </contributor>
+    <contributor>
+      <name>Albert Davidson Chou</name>
+    </contributor>
+    <contributor>
+      <name>Mark Diggory</name>
+    </contributor>
+    <contributor>
+      <name>Robert Burrell Donkin</name>
+    </contributor>
+    <contributor>
+      <name>Tim O'Brien</name>
+    </contributor>
+    <contributor>
+      <name>J. Pietschmann</name>
+    </contributor>
+    <contributor>
+      <name>Dimitri Pourbaix</name>
+    </contributor>
+    <contributor>
+      <name>Gilles Sadowski</name>
+    </contributor>
+    <contributor>
+      <name>Greg Sterijevski</name>
+    </contributor>
+    <contributor>
+      <name>Brent Worden</name>
+    </contributor>
+    <contributor>
+      <name>Eldar Agalarov</name>
+    </contributor>
+    <contributor>
+      <name>Tim Allison</name>
+    </contributor>
+    <contributor>
+      <name>C. Scott Ananian</name>
+    </contributor>
+    <contributor>
+      <name>Mark Anderson</name>
+    </contributor>
+    <contributor>
+      <name>Peter Andrews</name>
+    </contributor>
+    <contributor>
+      <name>R&#233;mi Arntzen</name>
+    </contributor>
+    <contributor>
+      <name>Matt Adereth</name>
+    </contributor>
+    <contributor>
+      <name>Jared Becksfort</name>
+    </contributor>
+    <contributor>
+      <name>Michael Bjorkegren</name>
+    </contributor>
+    <contributor>
+      <name>Brian Bloniarz</name>
+    </contributor>
+    <contributor>
+      <name>John Bollinger</name>
+    </contributor>
+    <contributor>
+      <name>Cyril Briquet</name>
+    </contributor>
+    <contributor>
+      <name>Dave Brosius</name>
+    </contributor>
+    <contributor>
+      <name>Dan Checkoway</name>
+    </contributor>
+    <contributor>
+      <name>Anders Conbere</name>
+    </contributor>
+    <contributor>
+      <name>Charles Cooper</name>
+    </contributor>
+    <contributor>
+      <name>Paul Cowan</name>
+    </contributor>
+    <contributor>
+      <name>Benjamin Croizet</name>
+    </contributor>
+    <contributor>
+      <name>Larry Diamond</name>
+    </contributor>
+    <contributor>
+      <name>Aleksei Dievskii</name>
+    </contributor>
+    <contributor>
+      <name>Rodrigo di Lorenzo Lopes</name>
+    </contributor>
+    <contributor>
+      <name>Hasan Diwan</name>
+    </contributor>
+    <contributor>
+      <name>Ted Dunning</name>
+    </contributor>
+    <contributor>
+      <name>Ole Ersoy</name>
+    </contributor>
+    <contributor>
+      <name>Ajo Fod</name>
+    </contributor>
+    <contributor>
+      <name>John Gant</name>
+    </contributor>
+    <contributor>
+      <name>Ken Geis</name>
+    </contributor>
+    <contributor>
+      <name>Hank Grabowski</name>
+    </contributor>
+    <contributor>
+      <name>Bernhard Gr&#252;newaldt</name>
+    </contributor>
+    <contributor>
+      <name>Elliotte Rusty Harold</name>
+    </contributor>
+    <contributor>
+      <name>Dennis Hendriks</name>
+    </contributor>
+    <contributor>
+      <name>Reid Hochstedler</name>
+    </contributor>
+    <contributor>
+      <name>Matthias Hummel</name>
+    </contributor>
+    <contributor>
+      <name>Curtis Jensen</name>
+    </contributor>
+    <contributor>
+      <name>Bruce A Johnson</name>
+    </contributor>
+    <contributor>
+      <name>Ismael Juma</name>
+    </contributor>
+    <contributor>
+      <name>Eugene Kirpichov</name>
+    </contributor>
+    <contributor>
+      <name>Oleksandr Kornieiev</name>
+    </contributor>
+    <contributor>
+      <name>Piotr Kochanski</name>
+    </contributor>
+    <contributor>
+      <name>Sergei Lebedev</name>
+    </contributor>
+    <contributor>
+      <name>Bob MacCallum</name>
+    </contributor>
+    <contributor>
+      <name>Jake Mannix</name>
+    </contributor>
+    <contributor>
+      <name>Benjamin McCann</name>
+    </contributor>
+    <contributor>
+      <name>Patrick Meyer</name>
+    </contributor>
+    <contributor>
+      <name>J. Lewis Muir</name>
+    </contributor>
+    <contributor>
+      <name>Venkatesha Murthy</name>
+    </contributor>
+    <contributor>
+      <name>Christopher Nix</name>
+    </contributor>
+    <contributor>
+      <name>Fredrik Norin</name>
+    </contributor>
+    <contributor>
+      <name>Sean Owen</name>
+    </contributor>
+    <contributor>
+      <name>Sujit Pal</name>
+    </contributor>
+    <contributor>
+      <name>Todd C. Parnell</name>
+    </contributor>
+    <contributor>
+      <name>Qualtagh</name>
+    </contributor>
+    <contributor>
+      <name>Andreas Rieger</name>
+    </contributor>
+    <contributor>
+      <name>S&#233;bastien Riou</name>
+    </contributor>
+    <contributor>
+      <name>Benedikt Ritter</name>
+    </contributor>
+    <contributor>
+      <name>Bill Rossi</name>
+    </contributor>
+    <contributor>
+      <name>Matthew Rowles</name>
+    </contributor>
+    <contributor>
+      <name>Pavel Ryzhov</name>
+    </contributor>
+    <contributor>
+      <name>Joni Salonen</name>
+    </contributor>
+    <contributor>
+      <name>Michael Saunders</name>
+    </contributor>
+    <contributor>
+      <name>Thorsten Schaefer</name>
+    </contributor>
+    <contributor>
+      <name>Christopher Schuck</name>
+    </contributor>
+    <contributor>
+      <name>Christian Semrau</name>
+    </contributor>
+    <contributor>
+      <name>David Stefka</name>
+    </contributor>
+    <contributor>
+      <name>Mauro Talevi</name>
+    </contributor>
+    <contributor>
+      <name>Radoslav Tsvetkov</name>
+    </contributor>
+    <contributor>
+      <name>Kim van der Linde</name>
+    </contributor>
+    <contributor>
+      <name>Alexey Volkov</name>
+    </contributor>
+    <contributor>
+      <name>Andrew Waterman</name>
+    </contributor>
+    <contributor>
+      <name>J&#246;rg Weimar</name>
+    </contributor>
+    <contributor>
+      <name>Christian Winter</name>
+    </contributor>
+    <contributor>
+      <name>Piotr Wydrych</name>
+    </contributor>
+    <contributor>
+      <name>Xiaogang Zhang</name>
+    </contributor>
+    <contributor>
+      <name>Chris Popp</name>
+    </contributor>
+  </contributors>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-core</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-geometry</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-fitting</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-fft</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-genetics</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-ode</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-optim</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-optim</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-clustering</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-migration</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-release</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>4.12</version>
+        <scope>test</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+
+    <!-- Root Hipparchus directory so sub-modules can refer to files in the parent directory. -->
+    <hipparchusParentDir>${basedir}</hipparchusParentDir>
+
+    <!-- Project specific plugin versions -->
+
+    <hipparchus.findbugs-maven-plugin.version>3.0.1</hipparchus.findbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.7.4.201502262128</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.maven-assembly-plugin.version>2.5.4</hipparchus.maven-assembly-plugin.version>
+    <hipparchus.maven-bundle-plugin.version>3.0.1</hipparchus.maven-bundle-plugin.version>
+    <hipparchus.build-helper-maven-plugin>1.7</hipparchus.build-helper-maven-plugin>
+    <hipparchus.maven-changes-plugin.version>2.11</hipparchus.maven-changes-plugin.version>
+    <hipparchus.maven-checkstyle-plugin.version>2.15</hipparchus.maven-checkstyle-plugin.version>
+    <hipparchus.checkstyle.version>6.6</hipparchus.checkstyle.version>
+    <hipparchus.maven-clean-plugin.version>2.6.1</hipparchus.maven-clean-plugin.version>
+    <hipparchus.maven-compiler-plugin.version>3.5.1</hipparchus.maven-compiler-plugin.version>
+    <hipparchus.maven-javadoc-plugin.version>2.10.3</hipparchus.maven-javadoc-plugin.version>
+    <hipparchus.maven-jar-plugin.version>2.6</hipparchus.maven-jar-plugin.version>
+    <hipparchus.maven-jxr-plugin.version>2.5</hipparchus.maven-jxr-plugin.version>
+    <hipparchus.maven-plantuml-plugin.version>7940</hipparchus.maven-plantuml-plugin.version>
+    <hipparchus.maven-project-info-reports-plugin.version>2.8</hipparchus.maven-project-info-reports-plugin.version>
+    <hipparchus.maven-pmd-plugin.version>3.5</hipparchus.maven-pmd-plugin.version>
+    <hipparchus.maven-resources-plugin.version>2.7</hipparchus.maven-resources-plugin.version>
+    <hipparchus.maven-site-plugin.version>3.5</hipparchus.maven-site-plugin.version>
+    <hipparchus.maven-source-plugin.version>2.4</hipparchus.maven-source-plugin.version>
+    <hipparchus.maven-surefire-plugin.version>2.18.1</hipparchus.maven-surefire-plugin.version>
+    <hipparchus.maven-surefire-report-plugin.version>2.18.1</hipparchus.maven-surefire-report-plugin.version>
+    <hipparchus.jgit.buildnumber.version>1.2.10</hipparchus.jgit.buildnumber.version>
+    <hipparchus.maven-release-plugin.version>2.5.3</hipparchus.maven-release-plugin.version>
+    <hipparchus.wagon-ssh.version>2.10</hipparchus.wagon-ssh.version>
+    <hipparchus.wagon-maven-plugin.version>1.0</hipparchus.wagon-maven-plugin.version>
+    <hipparchus.nexus-staging-maven-plugin.version>1.6.6</hipparchus.nexus-staging-maven-plugin.version>
+    <hipparchus.maven-gpg-plugin.version>1.6</hipparchus.maven-gpg-plugin.version>
+    <hipparchus.rat.version>0.11</hipparchus.rat.version>
+    <hipparchus.junit.version>4.12</hipparchus.junit.version>
+    <hipparchus.implementation.build>${git.revision};
+      ${maven.build.timestamp}</hipparchus.implementation.build>
+
+    <!-- old Apache staging properties - to be removed -->
+    <hipparchus.staging.id>hipparchus-staging</hipparchus.staging.id>
+    <hipparchus.staging.url>scp://www.hipparchus.org/</hipparchus.staging.url>
+    <hipparchus.staging.directory>/home/hipparchus/staging/</hipparchus.staging.directory>
+  </properties>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-ssh</artifactId>
+        <version>${hipparchus.wagon-ssh.version}</version>
+      </extension>
+    </extensions>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-assembly-plugin</artifactId>
+          <version>${hipparchus.maven-assembly-plugin.version}</version>
+          <configuration>
+            <!-- for all modules except aggregator module, assembly is skipped -->
+            <skipAssembly>true</skipAssembly>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-changes-plugin</artifactId>
+          <version>${hipparchus.maven-changes-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>${hipparchus.maven-clean-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${hipparchus.maven-compiler-plugin.version}</version>
+          <configuration>
+            <source>${maven.compiler.source}</source>
+            <target>${maven.compiler.target}</target>
+            <compilerArgument>-Xlint:deprecation</compilerArgument>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>${hipparchus.maven-jar-plugin.version}</version>
+          <configuration>
+            <archive>
+              <manifestFile>${project.build.directory}/osgi/MANIFEST.MF</manifestFile>
+              <manifestEntries>
+                <Implementation-Build>${hipparchus.implementation.build}</Implementation-Build>
+                <X-Compile-Source-JDK>${maven.compiler.source}</X-Compile-Source-JDK>
+                <X-Compile-Target-JDK>${maven.compiler.target}</X-Compile-Target-JDK>
+              </manifestEntries>
+            </archive>
+          </configuration>
+          <executions>
+            <execution>
+              <goals>
+                <goal>jar</goal>
+                <goal>test-jar</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!-- MathJax -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-javadoc-plugin</artifactId>
+          <version>${hipparchus.maven-javadoc-plugin.version}</version>
+          <configuration>
+            <additionalparam>-Xdoclint:none -header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jxr-plugin</artifactId>
+          <version>${hipparchus.maven-jxr-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${hipparchus.maven-surefire-plugin.version}</version>
+          <configuration>
+            <includes>
+              <include>**/*Test.java</include>
+            </includes>
+            <excludes>
+              <exclude>**/*AbstractTest.java</exclude>
+            </excludes>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>${hipparchus.maven-resources-plugin.version}</version>
+          <executions>
+            <execution>
+              <phase>process-resources</phase>
+              <goals>
+                <goal>copy-resources</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${project.build.outputDirectory}/META-INF</outputDirectory>
+                <resources>
+                  <resource>
+                    <directory>.</directory>
+                    <includes>
+                      <include>LICENSE.txt</include>
+                      <include>NOTICE.txt</include>
+                    </includes>
+                  </resource>
+                </resources>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>${hipparchus.maven-bundle-plugin.version}</version>
+          <extensions>true</extensions>
+          <configuration>
+            <archive>
+              <forced>true</forced>
+            </archive>
+            <manifestLocation>${project.build.directory}/osgi</manifestLocation>
+            <instructions>
+              <Export-Package>{local-packages};version=${project.version};-noimport:=true</Export-Package>
+              <Bundle-DocURL>${project.url}</Bundle-DocURL>
+            </instructions>
+          </configuration>
+          <executions>
+            <execution>
+              <id>bundle-manifest</id>
+              <phase>process-classes</phase>
+              <goals>
+                <goal>manifest</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.jacoco</groupId>
+          <artifactId>jacoco-maven-plugin</artifactId>
+          <version>${hipparchus.jacoco-maven-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>prepare-agent</id>
+              <phase>process-test-classes</phase>
+              <goals>
+                <goal>prepare-agent</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>report</id>
+              <phase>site</phase>
+              <goals>
+                <goal>report</goal>
+              </goals>
+            </execution>
+            <execution>
+              <id>check</id>
+              <goals>
+                <goal>check</goal>
+              </goals>
+              <configuration>
+                <rules>
+                  <rule>
+                    <element>BUNDLE</element>
+                    <limits>
+                      <limit>
+                        <counter>CLASS</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>1.00</minimum>
+                      </limit>
+                      <limit>
+                        <counter>INSTRUCTION</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.90</minimum>
+                      </limit>
+                      <limit>
+                        <counter>METHOD</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.95</minimum>
+                      </limit>
+                      <limit>
+                        <counter>BRANCH</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.85</minimum>
+                      </limit>
+                      <limit>
+                        <counter>COMPLEXITY</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.85</minimum>
+                      </limit>
+                      <limit>
+                        <counter>LINE</counter>
+                        <value>COVEREDRATIO</value>
+                        <minimum>0.90</minimum>
+                      </limit>
+                    </limits>
+                  </rule>
+                </rules>
+                <haltOnFailure>false</haltOnFailure>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>wagon-maven-plugin</artifactId>
+          <version>${hipparchus.wagon-maven-plugin.version}</version>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>findbugs-maven-plugin</artifactId>
+          <version>${hipparchus.findbugs-maven-plugin.version}</version>
+          <configuration>
+            <threshold>Normal</threshold>
+            <effort>Default</effort>
+            <!-- each project has their own findbugs exclude filter -->
+            <excludeFilterFile>${basedir}/src/conf/findbugs-exclude-filter.xml</excludeFilterFile>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>${hipparchus.maven-pmd-plugin.version}</version>
+          <configuration>
+            <targetJdk>${maven.compiler.target}</targetJdk>
+            <skipEmptyReport>false</skipEmptyReport>
+            <rulesets>
+              <ruleset>${hipparchusParentDir}/src/conf/pmd-ruleset.xml</ruleset>
+            </rulesets>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <version>${hipparchus.maven-checkstyle-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${hipparchus.checkstyle.version}</version>
+            </dependency>
+          </dependencies>
+          <configuration>
+            <configLocation>${hipparchusParentDir}/src/conf/checkstyle.xml</configLocation>
+            <enableRulesSummary>false</enableRulesSummary>
+            <headerLocation>${hipparchusParentDir}/src/conf/license-header.txt</headerLocation>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${hipparchus.maven-site-plugin.version}</version>
+          <executions>
+            <execution>
+              <id>aggregateSite</id>
+              <goals>
+                <goal>stage</goal>
+              </goals>
+              <phase>site</phase>
+            </execution>
+            <execution>
+              <id>attachSiteDescriptor</id>
+              <phase>pre-site</phase>
+              <goals>
+                <goal>attach-descriptor</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <versionRange>[${hipparchus.maven-bundle-plugin.version},)</versionRange>
+                    <goals>
+                      <goal>manifest</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore/>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>${hipparchus.maven-release-plugin.version}</version>
+        <configuration>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+          <useReleaseProfile>false</useReleaseProfile>
+          <releaseProfiles>release</releaseProfiles>
+          <goals>deploy</goals>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <reporting>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <version>${hipparchus.maven-site-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-project-info-reports-plugin</artifactId>
+        <version>${hipparchus.maven-project-info-reports-plugin.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.rat</groupId>
+        <artifactId>apache-rat-plugin</artifactId>
+        <version>${hipparchus.rat.version}</version>
+        <configuration>
+          <excludes>
+
+            <!-- MANIFEST files cannot have any comments, so we can't put
+              license header -->
+            <exclude>src/test/maxima/special/RealFunctionValidation/MANIFEST.txt</exclude>
+
+            <!-- the following are test data files with specific syntax that
+              cannot include Apache header (and the contained data is public, it is not
+              owned by Apache) -->
+            <exclude>src/test/resources/org/hipparchus/random/testData.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/random/emptyFile.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/data/PiDigits.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/data/NumAcc3.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/data/Lew.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/data/NumAcc2.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/data/NumAcc1.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/data/Lottery.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/data/NumAcc4.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/data/Michelso.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/data/Mavro.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/issue-1211.bsp</exclude>
+            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-bad-orientation.ply</exclude>
+            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-hole.ply</exclude>
+            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-out-of-plane.ply</exclude>
+            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N-too-close.ply</exclude>
+            <exclude>src/test/resources/org/hipparchus/geometry/euclidean/threed/pentomino-N.ply</exclude>
+
+            <!-- direction numbers for Sobol generation from Frances Y. Kuo
+              and Stephen Joe, available under a BSD-style license (see LICENSE.txt) -->
+            <exclude>src/main/resources/assets/org/hipparchus/random/new-joe-kuo-6.1000</exclude>
+
+            <!-- text file explaining reference to a public domain image -->
+            <exclude>src/userguide/resources/references.txt</exclude>
+
+            <!-- version 0.8 of apache-rat-plugin does not exclude properly
+              some default development tools files (see RAT-126) -->
+            <exclude>bin/**</exclude>
+            <exclude>.gitignore</exclude>
+            <exclude>.git/**</exclude>
+            <exclude>.checkstyle</exclude>
+            <exclude>.ekstazi/**</exclude>
+
+          </excludes>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${hipparchus.maven-pmd-plugin.version}</version>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>pmd</report>
+              <!-- As of 3.x series, the cpd report sees (correctly) numerous
+                duplications -->
+              <!-- This is due to packages being renamed, and the old name
+                still needs to be -->
+              <!-- available for compatibility. They will be removed in 4.0 -->
+              <!-- So we temporarily disable the CPD report -->
+              <!-- <report>cpd</report> -->
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+    </plugins>
+  </reporting>
+
+  <profiles>
+    <profile>
+      <id>jgit-buildnumber</id>
+      <activation>
+        <file>
+          <exists>.git</exists>
+        </file>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>ru.concerteza.buildnumber</groupId>
+            <artifactId>maven-jgit-buildnumber-plugin</artifactId>
+            <version>${hipparchus.jgit.buildnumber.version}</version>
+            <executions>
+              <execution>
+                <phase>generate-resources</phase>
+                <goals>
+                  <goal>extract-buildnumber</goal>
+                </goals>
+              </execution>
+            </executions>
+            <configuration>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>release</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-source-plugin</artifactId>
+            <version>${hipparchus.maven-source-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-sources</id>
+                <goals>
+                  <goal>jar-no-fork</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-javadoc-plugin</artifactId>
+            <version>${hipparchus.maven-javadoc-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>attach-javadocs</id>
+                <goals>
+                  <goal>jar</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
+            <groupId>org.sonatype.plugins</groupId>
+            <artifactId>nexus-staging-maven-plugin</artifactId>
+            <version>${hipparchus.nexus-staging-maven-plugin.version}</version>
+            <extensions>true</extensions>
+            <configuration>
+              <serverId>ossrh</serverId>
+              <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+              <autoReleaseAfterClose>false</autoReleaseAfterClose>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-gpg-plugin</artifactId>
+            <version>${hipparchus.maven-gpg-plugin.version}</version>
+            <executions>
+              <execution>
+                <id>sign-artifacts</id>
+                <phase>verify</phase>
+                <goals>
+                  <goal>sign</goal>
+                </goals>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
