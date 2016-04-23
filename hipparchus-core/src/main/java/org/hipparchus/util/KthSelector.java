@@ -43,7 +43,7 @@ public class KthSelector implements Serializable {
      * pivoting strategy.
      */
     public KthSelector() {
-        this.pivotingStrategy = PivotingStrategy.medianOf3();
+        this.pivotingStrategy = PivotingStrategy.MEDIAN_OF_3;
     }
 
     /**

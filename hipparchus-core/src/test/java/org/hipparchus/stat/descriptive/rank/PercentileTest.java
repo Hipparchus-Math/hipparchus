@@ -28,7 +28,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well1024a;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest;
 import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
@@ -75,7 +74,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
         quantile         = 95.0;
         type             = Percentile.EstimationType.LEGACY;
         nanStrategy      = NaNStrategy.REMOVED;
-        kthSelector      = new KthSelector(PivotingStrategy.medianOf3());
+        kthSelector      = new KthSelector(PivotingStrategy.MEDIAN_OF_3);
     }
 
     private void reset(final double p, final Percentile.EstimationType type) {
@@ -285,19 +284,13 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
 
     @Test
     public void testAllTechniquesPercentileUsingMedianOf3Pivoting() {
-        kthSelector = new KthSelector(PivotingStrategy.medianOf3());
+        kthSelector = new KthSelector(PivotingStrategy.MEDIAN_OF_3);
         checkAllTechniquesPercentile();
     }
 
     @Test
     public void testAllTechniquesPercentileUsingCentralPivoting() {
-        kthSelector = new KthSelector(PivotingStrategy.central());
-        checkAllTechniquesPercentile();
-    }
-
-    @Test
-    public void testAllTechniquesPercentileUsingRandomPivoting() {
-        kthSelector = new KthSelector(PivotingStrategy.random(new Well1024a(0x268a7fb4194240f6l)));
+        kthSelector = new KthSelector(PivotingStrategy.CENTRAL);
         checkAllTechniquesPercentile();
     }
 
@@ -622,7 +615,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
                         { Percentile.EstimationType.R_5, 20.280}, { Percentile.EstimationType.R_6, 20.820},
                         { Percentile.EstimationType.R_7, 19.555 }, { Percentile.EstimationType.R_8, 20.460 },{Percentile.EstimationType.R_9,20.415} };
         try {
-            Percentile.EstimationType.LEGACY.evaluate(testArray, -1d, new KthSelector(PivotingStrategy.medianOf3()));
+            Percentile.EstimationType.LEGACY.evaluate(testArray, -1d, new KthSelector(PivotingStrategy.MEDIAN_OF_3));
         } catch (final MathIllegalArgumentException oore) {
         }
         try {
@@ -647,11 +640,7 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
 
         assertEquals("Legacy Hipparchus",Percentile.EstimationType.LEGACY.getName());
 
-        for (final PivotingStrategy strategy : new PivotingStrategy[] {
-            PivotingStrategy.medianOf3(),
-            PivotingStrategy.central(),
-            PivotingStrategy.random(new Well1024a(0xf097c734e4740053l))
-        }) {
+        for (final PivotingStrategy strategy : PivotingStrategy.values()) {
             kthSelector = new KthSelector(strategy);
             testAllEstimationTechniquesOnly();
         }
