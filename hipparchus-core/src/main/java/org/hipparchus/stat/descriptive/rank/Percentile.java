@@ -148,7 +148,7 @@ public class Percentile extends AbstractUnivariateStatistic
      */
     public Percentile(final double quantile) throws MathIllegalArgumentException {
         this(quantile, EstimationType.LEGACY, NaNStrategy.REMOVED,
-             new KthSelector(PivotingStrategy.medianOf3()));
+             new KthSelector(PivotingStrategy.MEDIAN_OF_3));
     }
 
     /**
