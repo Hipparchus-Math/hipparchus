@@ -15,8 +15,8 @@
   <description>The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.</description>
 
   <organization>
-    <name>Hipparchus</name>
-    <url>https://www.hipparchus.org/</url>
+    <name>Hipparchus.org</name>
+    <url>https://hipparchus.org/</url>
   </organization>
 
   <licenses>
@@ -27,14 +27,14 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:https://www.orekit.org/git/hipparchus-main.git</connection>
-    <developerConnection>scm:git:ssh://git@www.orekit.org/hipparchus-main.git</developerConnection>
-    <url>https://www.orekit.org/forge/projects/hipparchus/repository</url>
+    <connection>scm:git:https://github.com/Hipparchus-Math/hipparchus.git</connection>
+    <developerConnection>scm:git:git@github.com:Hipparchus-Math/hipparchus.git</developerConnection>
+    <url>https://github.com/Hipparchus-Math/hipparchus</url>
   </scm>
 
   <issueManagement>
-    <system>Redmine</system>
-    <url>https://www.orekit.org/forge/projects/hipparchus/issues</url>
+    <system>GitHub</system>
+    <url>https://github.com/Hipparchus-Math/hipparchus/issues</url>
   </issueManagement>
 
   <distributionManagement>
@@ -428,7 +428,7 @@
     <hipparchus.maven-changes-plugin.version>2.11</hipparchus.maven-changes-plugin.version>
     <hipparchus.maven-checkstyle-plugin.version>2.15</hipparchus.maven-checkstyle-plugin.version>
     <hipparchus.checkstyle.version>6.6</hipparchus.checkstyle.version>
-    <hipparchus.maven-clean-plugin.version>2.6.1</hipparchus.maven-clean-plugin.version>
+    <hipparchus.maven-clean-plugin.version>3.0.0</hipparchus.maven-clean-plugin.version>
     <hipparchus.maven-compiler-plugin.version>3.5.1</hipparchus.maven-compiler-plugin.version>
     <hipparchus.maven-javadoc-plugin.version>2.10.3</hipparchus.maven-javadoc-plugin.version>
     <hipparchus.maven-jar-plugin.version>2.6</hipparchus.maven-jar-plugin.version>
@@ -449,8 +449,9 @@
     <hipparchus.maven-gpg-plugin.version>1.6</hipparchus.maven-gpg-plugin.version>
     <hipparchus.rat.version>0.11</hipparchus.rat.version>
     <hipparchus.junit.version>4.12</hipparchus.junit.version>
-    <hipparchus.implementation.build>${git.revision};
-      ${maven.build.timestamp}</hipparchus.implementation.build>
+    <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
+    <hipparchus.reflow-velocity-tools.version>1.1.1</hipparchus.reflow-velocity-tools.version>
+    <hipparchus.velocity.version>1.7</hipparchus.velocity.version>
 
     <!-- old Apache staging properties - to be removed -->
     <hipparchus.staging.id>hipparchus-staging</hipparchus.staging.id>
@@ -717,22 +718,10 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${hipparchus.maven-site-plugin.version}</version>
-          <!--<executions>
-            <execution>
-              <id>aggregateSite</id>
-              <goals>
-                <goal>stage</goal>
-              </goals>
-              <phase>site</phase>
-            </execution>
-            <execution>
-              <id>attachSiteDescriptor</id>
-              <phase>pre-site</phase>
-              <goals>
-                <goal>attach-descriptor</goal>
-              </goals>
-            </execution>
-          </executions>-->
+          <configuration>
+            <!-- this is an abuse of maven, we use a staging area in the top-level build directory -->
+            <stagingDirectory>${project.basedir}/../target/staging</stagingDirectory>
+          </configuration>
         </plugin>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
         <plugin>

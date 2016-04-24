@@ -13,8 +13,22 @@
 
   <artifactId>hipparchus-aggregator</artifactId>
   <packaging>pom</packaging>
-  <name>Hipparchus::Aggregate</name>
-  <description>The Hipparchus aggregator</description>
+  <name>Hipparchus</name>
+  <description>The Hipparchus mathematics library</description>
+
+  <scm>
+    <!-- override the value from the parent pom wich the *same* value,
+         to avoid maven adding the module name at the end of the URL -->
+    <connection>${project.parent.scm.connection}</connection>
+    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
+  </scm>
+
+  <distributionManagement>
+    <site>
+      <id>publishedSite</id>
+      <url>https://hipparchus.org/static/</url>
+    </site>
+  </distributionManagement>
 
   <modules>
     <module>hipparchus-core</module>
@@ -69,6 +83,15 @@
           </execution>
         </executions>
       </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>${hipparchus.maven-site-plugin.version}</version>
+          <configuration>
+            <!-- override the value hacked in the parent pom, only for the aggregator module -->
+            <stagingDirectory>${project.build.directory}/staging</stagingDirectory>
+          </configuration>
+        </plugin>
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>wagon-maven-plugin</artifactId>
@@ -91,6 +114,7 @@
       </plugin>
     </plugins>
   </build>
+  
 
   <reporting>
     <plugins>

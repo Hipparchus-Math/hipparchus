@@ -32,12 +32,12 @@
   <name>Hipparchus::Fast Fourier Transforms</name>
   <description>The Hipparchus fft module</description>
 
-  <distributionManagement>
-    <site>
-      <id>publishedSite</id>
-      <url>https://hipparchus.org/static/${project.artifactId}/</url>
-    </site>
-  </distributionManagement>
+  <scm>
+    <!-- override the value from the parent pom wich the *same* value,
+         to avoid maven adding the module name at the end of the URL -->
+    <connection>${project.parent.scm.connection}</connection>
+    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
+  </scm>
 
   <properties>
     <hipparchusParentDir>${basedir}/..</hipparchusParentDir>

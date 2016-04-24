@@ -48,11 +48,13 @@ Thanks in advance!
     "Principal Components Analysis." The body of the post should include each
     of the following items (but be _as brief as possible_):
 
-    ** A concise description of the new feature / enhancement
-    ** References to definitions and algorithms. Using standard
-       definitions and algorithms makes communication much easier and will
-       greatly increase the chances that we will accept the code / idea
-    **Some indication of why the addition / enhancement is practically useful
+      * A concise description of the new feature / enhancement
+
+      * References to definitions and algorithms. Using standard
+        definitions and algorithms makes communication much easier and will
+        greatly increase the chances that we will accept the code / idea
+
+      * Some indication of why the addition / enhancement is practically useful
 
   * Assuming a generally favorable response to the idea on developers list,
     the next step is to create a ticket for a new issue in the
@@ -101,10 +103,10 @@ in the git book for explanation about how to configure these settings and more.
   * Hipparchus javadoc generation now supports embedded LaTeX formulas via the
     [MathJax](http://www.mathjax.org) javascript display engine. To
     embed mathematical expressions formatted in LaTeX in javadoc, simply surround
-    the expression to be formatted with either \\( and \\) for inline
-    formulas, or \\[ and \\] to have the formula appear on a separate line.
-    For example, \\(a^2 + b^2 = c^2\\) will render an in-line formula
-    saying that (a, b, c) is Pythagorean triplet.  Using \\[ and \\] on
+    the expression to be formatted with either `\\(` and  `\\)` for inline
+    formulas, or `\\[` and `\\]` to have the formula appear on a separate line.
+    For example, `\\(a^2 + b^2 = c^2\\)` will render an in-line formula
+    saying that (a, b, c) is Pythagorean triplet.  Using `\\[` and `\\]` on
     the ends will render the same formula on a separate line.  See the MathJax
     and LaTex documentation for details on how to represent formulas and
     escape special characters.
