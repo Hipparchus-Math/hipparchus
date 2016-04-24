@@ -226,104 +226,104 @@ public interface SummaryStatistics extends StatisticalSummary {
         /**
          * Sets the max implementation to use.
          *
-         * @param maxImpl the max implementation
+         * @param impl the max implementation
          * @return the builder
-         * @throws NullArgumentException if maxImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withMaxImpl(StorelessUnivariateStatistic maxImpl) {
-            MathUtils.checkNotNull(maxImpl);
-            this.maxImpl = maxImpl;
+        public Builder withMaxImpl(StorelessUnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.maxImpl = impl;
             return this;
         }
 
         /**
          * Sets the min implementation to use.
          *
-         * @param minImpl the min implementation
+         * @param impl the min implementation
          * @return the builder
-         * @throws NullArgumentException if minImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withMinImpl(StorelessUnivariateStatistic minImpl) {
-            MathUtils.checkNotNull(minImpl);
-            this.minImpl = minImpl;
+        public Builder withMinImpl(StorelessUnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.minImpl = impl;
             return this;
         }
 
         /**
          * Sets the mean implementation to use.
          *
-         * @param meanImpl the mean implementation
+         * @param impl the mean implementation
          * @return the builder
-         * @throws NullArgumentException if meanImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withMeanImpl(StorelessUnivariateStatistic meanImpl) {
-            MathUtils.checkNotNull(meanImpl);
-            this.meanImpl = meanImpl;
+        public Builder withMeanImpl(StorelessUnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.meanImpl = impl;
             return this;
         }
 
         /**
          * Sets the geometric mean implementation to use.
          *
-         * @param geometricMeanImpl the geometric mean implementation
+         * @param impl the geometric mean implementation
          * @return the builder
-         * @throws NullArgumentException if geometricMeanImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withGeometricMeanImpl(StorelessUnivariateStatistic geometricMeanImpl) {
-            MathUtils.checkNotNull(geometricMeanImpl);
-            this.geoMeanImpl = geometricMeanImpl;
+        public Builder withGeometricMeanImpl(StorelessUnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.geoMeanImpl = impl;
             return this;
         }
 
         /**
          * Sets the variance implementation to use.
          *
-         * @param varianceImpl the variance implementation
+         * @param impl the variance implementation
          * @return the builder
-         * @throws NullArgumentException if varianceImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withVarianceImpl(StorelessUnivariateStatistic varianceImpl) {
-            MathUtils.checkNotNull(varianceImpl);
-            this.varianceImpl = varianceImpl;
+        public Builder withVarianceImpl(StorelessUnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.varianceImpl = impl;
             return this;
         }
 
         /**
          * Sets the sum implementation to use.
          *
-         * @param sumImpl the sum implementation
+         * @param impl the sum implementation
          * @return the builder
-         * @throws NullArgumentException if sumImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withSumImpl(StorelessUnivariateStatistic sumImpl) {
-            MathUtils.checkNotNull(sumImpl);
-            this.sumImpl = sumImpl;
+        public Builder withSumImpl(StorelessUnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.sumImpl = impl;
             return this;
         }
 
         /**
          * Sets the sum of squares implementation to use.
          *
-         * @param sumSqImpl the sum of squares implementation
+         * @param impl the sum of squares implementation
          * @return the builder
-         * @throws NullArgumentException if sumSqImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withSumOfSquaresImpl(StorelessUnivariateStatistic sumSqImpl) {
-            MathUtils.checkNotNull(sumSqImpl);
-            this.sumOfSquaresImpl = sumSqImpl;
+        public Builder withSumOfSquaresImpl(StorelessUnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.sumOfSquaresImpl = impl;
             return this;
         }
 
         /**
          * Sets the sum of logs implementation to use.
          *
-         * @param sumLogImpl the sum of logs implementation
+         * @param impl the sum of logs implementation
          * @return the builder
-         * @throws NullArgumentException if sumLogImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withSumOfLogsImpl(StorelessUnivariateStatistic sumLogImpl) {
-            MathUtils.checkNotNull(sumLogImpl);
-            this.sumOfLogsImpl = sumLogImpl;
+        public Builder withSumOfLogsImpl(StorelessUnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.sumOfLogsImpl = impl;
             return this;
         }
 

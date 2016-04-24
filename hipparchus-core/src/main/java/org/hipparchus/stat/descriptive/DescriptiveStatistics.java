@@ -360,130 +360,130 @@ public interface DescriptiveStatistics extends StatisticalSummary {
         /**
          * Sets the max implementation to use.
          *
-         * @param maxImpl the max implementation
+         * @param impl the max implementation
          * @return the builder
-         * @throws NullArgumentException if maxImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withMaxImpl(UnivariateStatistic maxImpl) {
-            MathUtils.checkNotNull(maxImpl);
-            this.maxImpl = maxImpl;
+        public Builder withMaxImpl(UnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.maxImpl = impl;
             return this;
         }
 
         /**
          * Sets the min implementation to use.
          *
-         * @param minImpl the min implementation
+         * @param impl the min implementation
          * @return the builder
-         * @throws NullArgumentException if minImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withMinImpl(UnivariateStatistic minImpl) {
-            MathUtils.checkNotNull(minImpl);
-            this.minImpl = minImpl;
+        public Builder withMinImpl(UnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.minImpl = impl;
             return this;
         }
 
         /**
          * Sets the mean implementation to use.
          *
-         * @param meanImpl the mean implementation
+         * @param impl the mean implementation
          * @return the builder
-         * @throws NullArgumentException if meanImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withMeanImpl(UnivariateStatistic meanImpl) {
-            MathUtils.checkNotNull(meanImpl);
-            this.meanImpl = meanImpl;
+        public Builder withMeanImpl(UnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.meanImpl = impl;
             return this;
         }
 
         /**
          * Sets the geometric mean implementation to use.
          *
-         * @param geometricMeanImpl the geometric mean implementation
+         * @param impl the geometric mean implementation
          * @return the builder
-         * @throws NullArgumentException if geometricMeanImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withGeometricMeanImpl(UnivariateStatistic geometricMeanImpl) {
-            MathUtils.checkNotNull(geometricMeanImpl);
-            this.geometricMeanImpl = geometricMeanImpl;
+        public Builder withGeometricMeanImpl(UnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.geometricMeanImpl = impl;
             return this;
         }
 
         /**
          * Sets the kurtosis implementation to use.
          *
-         * @param kurtosisImpl the kurtosis implementation
+         * @param impl the kurtosis implementation
          * @return the builder
-         * @throws NullArgumentException if kurtosisImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withKurtosisImpl(UnivariateStatistic kurtosisImpl) {
-            MathUtils.checkNotNull(kurtosisImpl);
-            this.kurtosisImpl = kurtosisImpl;
+        public Builder withKurtosisImpl(UnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.kurtosisImpl = impl;
             return this;
         }
 
         /**
          * Sets the percentile implementation to use.
          *
-         * @param percentileImpl the percentile implementation
+         * @param impl the percentile implementation
          * @return the builder
-         * @throws NullArgumentException if percentileImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withPercentileImpl(QuantiledUnivariateStatistic percentileImpl) {
-            MathUtils.checkNotNull(percentileImpl);
-            this.percentileImpl = percentileImpl;
+        public Builder withPercentileImpl(QuantiledUnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.percentileImpl = impl;
             return this;
         }
 
         /**
          * Sets the skewness implementation to use.
          *
-         * @param skewnessImpl the skewness implementation
+         * @param impl the skewness implementation
          * @return the builder
-         * @throws NullArgumentException if skewnessImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withSkewnessImpl(UnivariateStatistic skewnessImpl) {
-            MathUtils.checkNotNull(skewnessImpl);
-            this.skewnessImpl = skewnessImpl;
+        public Builder withSkewnessImpl(UnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.skewnessImpl = impl;
             return this;
         }
 
         /**
          * Sets the variance implementation to use.
          *
-         * @param varianceImpl the variance implementation
+         * @param impl the variance implementation
          * @return the builder
-         * @throws NullArgumentException if varianceImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withVarianceImpl(UnivariateStatistic varianceImpl) {
-            MathUtils.checkNotNull(varianceImpl);
-            this.varianceImpl = varianceImpl;
+        public Builder withVarianceImpl(UnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.varianceImpl = impl;
             return this;
         }
 
         /**
          * Sets the sum of squares implementation to use.
          *
-         * @param sumSqImpl the sum of squares implementation
+         * @param impl the sum of squares implementation
          * @return the builder
-         * @throws NullArgumentException if sumSqImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withSumOfSquaresImpl(UnivariateStatistic sumSqImpl) {
-            MathUtils.checkNotNull(sumSqImpl);
-            this.sumsqImpl = sumSqImpl;
+        public Builder withSumOfSquaresImpl(UnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.sumsqImpl = impl;
             return this;
         }
 
         /**
          * Sets the sum implementation to use.
          *
-         * @param sumImpl the sum implementation
+         * @param impl the sum implementation
          * @return the builder
-         * @throws NullArgumentException if sumImpl is null
+         * @throws NullArgumentException if impl is null
          */
-        public Builder withSumImpl(UnivariateStatistic sumImpl) {
-            MathUtils.checkNotNull(sumImpl);
-            this.sumImpl = sumImpl;
+        public Builder withSumImpl(UnivariateStatistic impl) {
+            MathUtils.checkNotNull(impl);
+            this.sumImpl = impl;
             return this;
         }
 
@@ -493,31 +493,31 @@ public interface DescriptiveStatistics extends StatisticalSummary {
          *
          * @see DescriptiveStatistics#setWindowSize(int)
          *
-         * @param windowSize sets the size of the window.
+         * @param size sets the size of the window.
          * @throws MathIllegalArgumentException if window size is less than 1 but
          * not equal to {@link #INFINITE_WINDOW}
          * @return the builder
          */
-        public Builder withWindowSize(int windowSize) {
-            if (windowSize < 1 && windowSize != INFINITE_WINDOW) {
+        public Builder withWindowSize(int size) {
+            if (size < 1 && size != INFINITE_WINDOW) {
                 throw new MathIllegalArgumentException(
-                        LocalizedCoreFormats.NOT_POSITIVE_WINDOW_SIZE, windowSize);
+                        LocalizedCoreFormats.NOT_POSITIVE_WINDOW_SIZE, size);
             }
 
-            this.windowSize = windowSize;
+            this.windowSize = size;
             return this;
         }
 
         /**
          * Sets the initial values of the reported statistics.
          *
-         * @param initialValues the initial values to use.
-         * @throws NullArgumentException if initialValues is null
+         * @param values the initial values to use.
+         * @throws NullArgumentException if values is null
          * @return the builder
          */
-        public Builder withInitialValues(double[] initialValues) {
-            MathUtils.checkNotNull(initialValues, LocalizedCoreFormats.INPUT_ARRAY);
-            this.initialValues = initialValues;
+        public Builder withInitialValues(double[] values) {
+            MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
+            this.initialValues = values;
             return this;
         }
 

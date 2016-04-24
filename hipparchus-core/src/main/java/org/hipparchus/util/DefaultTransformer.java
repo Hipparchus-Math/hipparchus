@@ -79,6 +79,9 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
         }
     }
 
+    /**
+     * Always return the singleton instance when de-serializing this transformer.
+     */
     private Object readResolve() {
         return INSTANCE;
     }

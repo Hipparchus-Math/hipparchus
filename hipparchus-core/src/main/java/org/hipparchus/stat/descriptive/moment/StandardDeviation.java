@@ -227,6 +227,7 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * bias correction setting.
      *
      * @param isBiasCorrected The isBiasCorrected to set.
+     * @return a copy of this instance with the given bias correction setting
      */
     public StandardDeviation withBiasCorrected(boolean isBiasCorrected) {
         return new StandardDeviation(variance.withBiasCorrected(isBiasCorrected));

@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.MathArrays;
@@ -254,7 +253,7 @@ public class EnumeratedDistribution<T> implements Serializable {
      * @param array the array to populate.
      * @return an array representing the random sample.
      * @throws MathIllegalArgumentException if {@code sampleSize} is not positive.
-     * @throws NullArgumentException if {@code array} is null
+     * @throws org.hipparchus.exception.NullArgumentException if {@code array} is null
      */
     public T[] sample(int sampleSize, final T[] array) throws MathIllegalArgumentException {
         if (sampleSize <= 0) {

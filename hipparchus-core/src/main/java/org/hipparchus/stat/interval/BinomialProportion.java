@@ -36,7 +36,7 @@ public class BinomialProportion {
      * The standard normal distribution to calculate the inverse cumulative probability.
      * Accessed and used in a thread-safe way.
      */
-    private static final NormalDistribution normalDistribution = new NormalDistribution(null, 0, 1);
+    private static final NormalDistribution NORMAL_DISTRIBUTION = new NormalDistribution(null, 0, 1);
 
     /** Utility class, prevent instantiation. */
     private BinomialProportion() {}
@@ -78,7 +78,7 @@ public class BinomialProportion {
         final int numberOfSuccesses = (int) (numberOfTrials * probabilityOfSuccess);
 
         final double alpha = (1.0 - confidenceLevel) / 2;
-        final double z = normalDistribution.inverseCumulativeProbability(1 - alpha);
+        final double z = NORMAL_DISTRIBUTION.inverseCumulativeProbability(1 - alpha);
         final double zSquared = FastMath.pow(z, 2);
         final double modifiedNumberOfTrials = numberOfTrials + zSquared;
         final double modifiedSuccessesRatio = (1.0 / modifiedNumberOfTrials) *
@@ -195,7 +195,7 @@ public class BinomialProportion {
         final double mean = probabilityOfSuccess;
         final double alpha = (1.0 - confidenceLevel) / 2;
 
-        final double difference = normalDistribution.inverseCumulativeProbability(1 - alpha) *
+        final double difference = NORMAL_DISTRIBUTION.inverseCumulativeProbability(1 - alpha) *
                                   FastMath.sqrt(1.0 / numberOfTrials * mean * (1 - mean));
         return new ConfidenceInterval(mean - difference, mean + difference, confidenceLevel);
     }
@@ -235,7 +235,7 @@ public class BinomialProportion {
         checkParameters(numberOfTrials, probabilityOfSuccess, confidenceLevel);
 
         final double alpha = (1.0 - confidenceLevel) / 2;
-        final double z = normalDistribution.inverseCumulativeProbability(1 - alpha);
+        final double z = NORMAL_DISTRIBUTION.inverseCumulativeProbability(1 - alpha);
         final double zSquared = FastMath.pow(z, 2);
         final double mean = probabilityOfSuccess;
 

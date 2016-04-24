@@ -24,7 +24,6 @@ import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
 import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.KthSelector;
-import org.hipparchus.util.PivotingStrategy;
 
 
 /**
@@ -56,7 +55,7 @@ public class Median extends AbstractUnivariateStatistic implements Serializable 
 
     /**
      * Constructs a Median with the specific {@link EstimationType},
-     * {@link NaNStrategy} and {@link PivotingStrategy}.
+     * {@link NaNStrategy} and {@link KthSelector}.
      *
      * @param estimationType one of the percentile {@link EstimationType estimation types}
      * @param nanStrategy one of {@link NaNStrategy} to handle with NaNs

@@ -535,6 +535,7 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * setting.
      *
      * @param biasCorrected The isBiasCorrected to set.
+     * @return a copy of this instance with the given bias correction setting
      */
     public Variance withBiasCorrected(boolean biasCorrected) {
         return new Variance(this.moment, this.incMoment, biasCorrected);

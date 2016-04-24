@@ -18,7 +18,6 @@ package org.hipparchus.stat.descriptive;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -39,7 +38,7 @@ public abstract class AbstractUnivariateStatistic
      * of the {@code original}.
      *
      * @param original the instance to copy
-     * @throws NullArgumentException  if original is null
+     * @throws org.hipparchus.exception.NullArgumentException  if original is null
      */
     protected AbstractUnivariateStatistic(AbstractUnivariateStatistic original) {
         MathUtils.checkNotNull(original);

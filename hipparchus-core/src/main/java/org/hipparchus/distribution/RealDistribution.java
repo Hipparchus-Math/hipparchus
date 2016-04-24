@@ -16,7 +16,6 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
@@ -108,8 +107,8 @@ public interface RealDistribution {
      * distribution.
      *
      * @return the variance (possibly {@code Double.POSITIVE_INFINITY} as
-     * for certain cases in {@link TDistribution}) or {@code Double.NaN} if it
-     * is not defined
+     * for certain cases in {@link org.hipparchus.distribution.continuous.TDistribution})
+     * or {@code Double.NaN} if it is not defined
      */
     double getNumericalVariance();
 

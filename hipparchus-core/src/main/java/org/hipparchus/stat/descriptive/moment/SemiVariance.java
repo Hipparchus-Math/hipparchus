@@ -271,10 +271,11 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      /**
       * Returns a copy of this instance with the given biasCorrected setting.
       *
-      * @param biasCorrected new biasCorrected property value
+      * @param isBiasCorrected new biasCorrected property value
+      * @return a copy of this instance with the given bias correction setting
       */
-     public SemiVariance withBiasCorrected(boolean biasCorrected) {
-         return new SemiVariance(biasCorrected, this.varianceDirection);
+     public SemiVariance withBiasCorrected(boolean isBiasCorrected) {
+         return new SemiVariance(isBiasCorrected, this.varianceDirection);
      }
 
      /**
@@ -290,9 +291,10 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
       * Returns a copy of this instance with the given direction setting.
       *
       * @param varianceDirection the direction of the semivariance
+      * @return a copy of this instance with the given direction setting
       */
-     public SemiVariance withVarianceDirection(Direction varianceDirection) {
-         return new SemiVariance(this.biasCorrected, varianceDirection);
+     public SemiVariance withVarianceDirection(Direction direction) {
+         return new SemiVariance(this.biasCorrected, direction);
      }
 
      /**
