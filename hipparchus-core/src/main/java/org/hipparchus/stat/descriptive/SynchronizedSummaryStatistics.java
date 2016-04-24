@@ -31,7 +31,8 @@ import org.hipparchus.util.MathUtils;
  * That is to say, as one thread is computing a statistic from the instance,
  * no other thread can modify the instance nor compute another statistic.
  */
-class SynchronizedSummaryStatistics implements SummaryStatistics, Serializable {
+final class SynchronizedSummaryStatistics
+    implements SummaryStatistics, Serializable {
 
     /** Serialization UID */
     private static final long serialVersionUID = 20160422L;

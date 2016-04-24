@@ -43,9 +43,7 @@ import org.hipparchus.util.Precision;
  *                         .build();
  * </pre>
  * <p>
- * Note: This class is not thread-safe. Use
- * {@link SynchronizedSummaryStatistics} if concurrent access from multiple
- * threads is required.
+ * Note: This class is not thread-safe.
  */
 class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
 
@@ -152,31 +150,20 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
         this.geoMeanUsesExternalSumOfLogs = builder.geometricMeanUsesExternalSumOfLogs;
     }
 
-    /**
-     * Returns a copy of this SummaryStatistics instance with the same internal state.
-     *
-     * @return a copy of this
-     */
+    /** {@inheritDoc} */
     @Override
-    public SummaryStatisticsImpl copy() {
+    public SummaryStatistics copy() {
         return new SummaryStatisticsImpl(this);
     }
 
-    /**
-     * Return a {@link StatisticalSummaryValues} instance reporting current
-     * statistics.
-     * @return Current values of statistics
-     */
+    /** {@inheritDoc} */
     @Override
     public StatisticalSummary getSummary() {
         return new StatisticalSummaryValues(getMean(), getVariance(), getN(),
                                             getMax(), getMin(), getSum());
     }
 
-    /**
-     * Add a value to the data
-     * @param value the value to add
-     */
+    /** {@inheritDoc} */
     @Override
     public void addValue(double value) {
         secondMoment.increment(value);
@@ -202,9 +189,7 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
         n++;
     }
 
-    /**
-     * Resets all statistics and storage.
-     */
+    /** {@inheritDoc} */
     @Override
     public void clear() {
         this.n = 0;
@@ -225,135 +210,67 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
         }
     }
 
-    /**
-     * Returns the number of available values.
-     * @return The number of available values
-     */
+    /** {@inheritDoc} */
     @Override
     public long getN() {
         return n;
     }
 
-    /**
-     * Returns the sum of the values that have been added.
-     * @return The sum or <code>Double.NaN</code> if no values have been added
-     */
+    /** {@inheritDoc} */
     @Override
     public double getSum() {
         return sumImpl.getResult();
     }
 
-    /**
-     * Returns the sum of the squares of the values that have been added.
-     * <p>
-     * Double.NaN is returned if no values have been added.
-     *
-     * @return The sum of squares
-     */
+    /** {@inheritDoc} */
     @Override
     public double getSumOfSquares() {
         return sumOfSquaresImpl.getResult();
     }
 
-    /**
-     * Returns the mean of the values that have been added.
-     * <p>
-     * Double.NaN is returned if no values have been added.
-     *
-     * @return the mean
-     */
+    /** {@inheritDoc} */
     @Override
     public double getMean() {
         return meanImpl.getResult();
     }
 
-    /**
-     * Returns the (sample) variance of the available values.
-     * <p>
-     * This method returns the bias-corrected sample variance (using {@code n - 1} in
-     * the denominator).  Use {@link #getPopulationVariance()} for the non-bias-corrected
-     * population variance.
-     * <p>
-     * Double.NaN is returned if no values have been added.
-     *
-     * @return the variance
-     */
+    /** {@inheritDoc} */
     @Override
     public double getVariance() {
         return varianceImpl.getResult();
     }
 
-    /**
-     * Returns the <a href="http://en.wikibooks.org/wiki/Statistics/Summary/Variance">
-     * population variance</a> of the values that have been added.
-     * <p>
-     * Double.NaN is returned if no values have been added.
-     *
-     * @return the population variance
-     */
+    /** {@inheritDoc} */
     @Override
     public double getPopulationVariance() {
         return populationVariance.getResult();
     }
 
-    /**
-     * Returns the maximum of the values that have been added.
-     * <p>
-     * Double.NaN is returned if no values have been added.
-     *
-     * @return the maximum
-     */
+    /** {@inheritDoc} */
     @Override
     public double getMax() {
         return maxImpl.getResult();
     }
 
-    /**
-     * Returns the minimum of the values that have been added.
-     * <p>
-     * Double.NaN is returned if no values have been added.
-     *
-     * @return the minimum
-     */
+    /** {@inheritDoc} */
     @Override
     public double getMin() {
         return minImpl.getResult();
     }
 
-    /**
-     * Returns the geometric mean of the values that have been added.
-     * <p>
-     * Double.NaN is returned if no values have been added.
-     *
-     * @return the geometric mean
-     */
+    /** {@inheritDoc} */
     @Override
     public double getGeometricMean() {
         return geoMeanImpl.getResult();
     }
 
-    /**
-     * Returns the sum of the logs of the values that have been added.
-     * <p>
-     * Double.NaN is returned if no values have been added.
-     *
-     * @return the sum of logs
-     */
+    /** {@inheritDoc} */
     @Override
     public double getSumOfLogs() {
         return sumOfLogsImpl.getResult();
     }
 
-    /**
-     * Returns a statistic related to the Second Central Moment. Specifically,
-     * what is returned is the sum of squared deviations from the sample mean
-     * among the values that have been added.
-     * <p>
-     * Returns <code>Double.NaN</code> if no data values have been added and
-     * returns <code>0</code> if there is just one value in the data set.
-     *
-     * @return second central moment statistic
-     */
+    /** {@inheritDoc} */
     @Override
     public double getSecondMoment() {
         return secondMoment.getResult();

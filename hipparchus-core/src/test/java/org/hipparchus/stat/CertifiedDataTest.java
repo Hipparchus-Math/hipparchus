@@ -69,7 +69,7 @@ public class CertifiedDataTest {
     @Test
     public void testDescriptiveStatistics() throws Exception {
 
-        DescriptiveStatistics u = new DescriptiveStatistics();
+        DescriptiveStatistics u = DescriptiveStatistics.create();
 
         loadStats("data/PiDigits.txt", u);
         Assert.assertEquals("PiDigits: std", std, u.getStandardDeviation(), 1E-14);

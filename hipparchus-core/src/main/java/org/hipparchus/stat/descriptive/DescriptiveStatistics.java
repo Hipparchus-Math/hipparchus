@@ -16,7 +16,6 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -35,7 +34,6 @@ import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.stat.descriptive.summary.SumOfSquares;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
-import org.hipparchus.util.ResizableDoubleArray;
 
 
 /**
@@ -45,69 +43,57 @@ import org.hipparchus.util.ResizableDoubleArray;
  * The {@link #getWindowSize() windowSize} property sets a limit on the number
  * of values that can be stored in the dataset. The default value, INFINITE_WINDOW,
  * puts no limit on the size of the dataset. This value should be used with
- * caution, as the backing store will grow without bound in this case.  For very
- * large datasets, {@link SummaryStatistics}, which does not store the dataset,
- * should be used instead of this class. If <code>windowSize</code> is not
- * INFINITE_WINDOW and more values are added than can be stored in the dataset,
- * new values are added in a "rolling" manner, with new values replacing the
- * "oldest" values in the dataset.
+ * caution, as the backing store will grow without bound in this case.
  * <p>
- * Note: this class is not threadsafe. Use {@link SynchronizedDescriptiveStatistics}
+ * For very large datasets, {@link SummaryStatistics}, which does not store
+ * the dataset, should be used instead of this class. If <code>windowSize</code>
+ * is not INFINITE_WINDOW and more values are added than can be stored in the
+ * dataset, new values are added in a "rolling" manner, with new values replacing
+ * the "oldest" values in the dataset.
+ * <p>
+ * To create a DescriptiveStatistics instance with default statistic implementations,
+ * use:
+ * <pre>
+ *    DescriptiveStatistics stats = DescriptiveStatistics.create();
+ * </pre>
+ * <p>
+ * The {@link UnivariateStatistic} instances used to compute statistics
+ * are configurable via a builder. For example, the default implementation for
+ * the variance can be overridden by calling
+ * <pre>
+ *    DescriptiveStatistics stats =
+ *        DescriptiveStatistics.builder()
+ *                             .withVariance(new MyVarianceImpl())
+ *                             .build();
+ * </pre>
+ * <p>
+ * Note: this class is not threadsafe.
+ * Use {@link #synchronizedDescriptiveStatistics(DescriptiveStatistics)}
  * if concurrent access from multiple threads is required.
  */
-public class DescriptiveStatistics implements StatisticalSummary, Serializable {
+public interface DescriptiveStatistics extends StatisticalSummary {
 
     /**
      * Represents an infinite window size.  When the {@link #getWindowSize()}
      * returns this value, there is no limit to the number of data values
      * that can be stored in the dataset.
      */
-    public static final int INFINITE_WINDOW = -1;
-
-    /** Serialization UID */
-    private static final long serialVersionUID = 20160411L;
-
-    /** Stored data values. */
-    private final ResizableDoubleArray eDA;
-
-    /** Maximum statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic maxImpl;
-    /** Minimum statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic minImpl;
-    /** Sum statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic sumImpl;
-    /** Sum of squares statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic sumOfSquaresImpl;
-    /** Mean statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic meanImpl;
-    /** Variance statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic varianceImpl;
-    /** Geometric mean statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic geometricMeanImpl;
-    /** Kurtosis statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic kurtosisImpl;
-    /** Skewness statistic implementation - can be reset by setter. */
-    private final UnivariateStatistic skewnessImpl;
-    /** Percentile statistic implementation - can be reset by setter. */
-    private final QuantiledUnivariateStatistic percentileImpl;
-
-    /** hold the window size **/
-    private int windowSize;
+    static final int INFINITE_WINDOW = -1;
 
     /**
      * Returns a builder for a {@link DescriptiveStatistics}.
      *
      * @return a descriptive statistics builder.
      */
-    public static Builder builder() {
+    static Builder builder() {
         return new Builder();
     }
 
     /**
      * Construct a DescriptiveStatistics instance with an infinite window.
      */
-    public DescriptiveStatistics() {
-        this(builder());
+    static DescriptiveStatistics create() {
+        return builder().build();
     }
 
     /**
@@ -117,74 +103,35 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @throws MathIllegalArgumentException if window size is less than 1 but
      * not equal to {@link #INFINITE_WINDOW}
      */
-    public DescriptiveStatistics(int window) throws MathIllegalArgumentException {
-        this(builder().withWindowSize(window));
+    static DescriptiveStatistics of(int window) throws MathIllegalArgumentException {
+        return builder().withWindowSize(window).build();
     }
 
     /**
      * Construct a DescriptiveStatistics instance with an infinite window
      * and the initial data values in double[] initialDoubleArray.
-     * If initialDoubleArray is null, then this constructor corresponds to
-     * DescriptiveStatistics()
      *
      * @param initialDoubleArray the initial double[].
+     * @throws NullArgumentException if the input array is null
      */
-    public DescriptiveStatistics(double[] initialDoubleArray) {
-        this(builder().withInitialValues(initialDoubleArray));
+    static DescriptiveStatistics of(double[] initialDoubleArray) {
+        return builder().withInitialValues(initialDoubleArray).build();
     }
 
     /**
-     * Copy constructor.
+     * Decorates another DescriptiveStatistics to synchronize its behaviour for a
+     * multi-threaded environment.
      * <p>
-     * Construct a new DescriptiveStatistics instance that
-     * is a copy of original.
+     * Methods are synchronized, then forwarded to the decorated DescriptiveStatistics.
      *
-     * @param original DescriptiveStatistics instance to copy
-     * @throws NullArgumentException if original is null
+     * @param statistic the summary statistic to decorate
+     * @return a synchronized wrapper for the descriptive statistic
      */
-    protected DescriptiveStatistics(DescriptiveStatistics original) {
-        MathUtils.checkNotNull(original);
-
-        // Copy data and window size
-        this.eDA        = original.eDA.copy();
-        this.windowSize = original.windowSize;
-
-        // Copy implementations
-        this.maxImpl           = original.maxImpl.copy();
-        this.minImpl           = original.minImpl.copy();
-        this.meanImpl          = original.meanImpl.copy();
-        this.sumImpl           = original.sumImpl.copy();
-        this.sumOfSquaresImpl         = original.sumOfSquaresImpl.copy();
-        this.varianceImpl      = original.varianceImpl.copy();
-        this.geometricMeanImpl = original.geometricMeanImpl.copy();
-        this.kurtosisImpl      = original.kurtosisImpl.copy();
-        this.skewnessImpl      = original.skewnessImpl.copy();
-        this.percentileImpl    = original.percentileImpl.copy();
-    }
-
-    /**
-     * Construct a new DescriptiveStatistics instance based
-     * on the data provided by a builder.
-     *
-     * @param builder the builder to use.
-     */
-    protected DescriptiveStatistics(Builder builder) {
-        this.maxImpl           = builder.maxImpl;
-        this.minImpl           = builder.minImpl;
-        this.meanImpl          = builder.meanImpl;
-        this.sumImpl           = builder.sumImpl;
-        this.sumOfSquaresImpl         = builder.sumsqImpl;
-        this.varianceImpl      = builder.varianceImpl;
-        this.geometricMeanImpl = builder.geometricMeanImpl;
-        this.kurtosisImpl      = builder.kurtosisImpl;
-        this.skewnessImpl      = builder.skewnessImpl;
-        this.percentileImpl    = builder.percentileImpl;
-
-        this.windowSize        = builder.windowSize;
-        int initialCapacity    = this.windowSize < 0 ? 100 : this.windowSize;
-        this.eDA               = builder.initialValues != null ?
-            new ResizableDoubleArray(builder.initialValues) :
-            new ResizableDoubleArray(initialCapacity);
+    static DescriptiveStatistics synchronizedDescriptiveStatistics(DescriptiveStatistics statistic) {
+        if (statistic instanceof SynchronizedDescriptiveStatistics) {
+            return statistic;
+        }
+        return new SynchronizedDescriptiveStatistics(statistic);
     }
 
     /**
@@ -195,30 +142,14 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @param v the value to be added
      */
-    public void addValue(double v) {
-        if (windowSize != INFINITE_WINDOW) {
-            if (getN() == windowSize) {
-                eDA.addElementRolling(v);
-            } else if (getN() < windowSize) {
-                eDA.addElement(v);
-            }
-        } else {
-            eDA.addElement(v);
-        }
-    }
+    void addValue(double v);
 
     /**
      * Removes the most recent value from the dataset.
      *
      * @throws MathIllegalStateException if there are no elements stored
      */
-    public void removeMostRecentValue() throws MathIllegalStateException {
-        try {
-            eDA.discardMostRecentElements(1);
-        } catch (MathIllegalArgumentException ex) {
-            throw new MathIllegalStateException(LocalizedCoreFormats.NO_DATA);
-        }
-    }
+    void removeMostRecentValue() throws MathIllegalStateException;
 
     /**
      * Replaces the most recently stored value with the given value.
@@ -228,22 +159,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @return replaced value
      * @throws MathIllegalStateException if there are no elements stored
      */
-    public double replaceMostRecentValue(double v) throws MathIllegalStateException {
-        return eDA.substituteMostRecentElement(v);
-    }
-
-    /**
-     * Returns the arithmetic mean of the available values.
-     *
-     * @see <a href="http://www.xycoon.com/arithmetic_mean.htm">
-     * Arithmetic mean</a>
-     *
-     * @return The mean or Double.NaN if no values have been added.
-     */
-    @Override
-    public double getMean() {
-        return apply(meanImpl);
-    }
+    double replaceMostRecentValue(double v) throws MathIllegalStateException;
 
     /**
      * Returns the geometric mean of the available values.
@@ -256,24 +172,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @return The geometricMean, Double.NaN if no values have been added,
      * or if any negative values have been added.
      */
-    public double getGeometricMean() {
-        return apply(geometricMeanImpl);
-    }
-
-    /**
-     * Returns the (sample) variance of the available values.
-     * <p>
-     * This method returns the bias-corrected sample variance
-     * (using {@code n - 1} in the denominator). Use {@link #getPopulationVariance()}
-     * for the non-bias-corrected population variance.
-     *
-     * @return The variance, Double.NaN if no values have been added
-     * or 0.0 for a single value set.
-     */
-    @Override
-    public double getVariance() {
-        return apply(varianceImpl);
-    }
+    double getGeometricMean();
 
     /**
      * Returns the population variance of the available values.
@@ -284,9 +183,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @return The population variance, Double.NaN if no values have been added,
      * or 0.0 for a single value set.
      */
-    public double getPopulationVariance() {
-        return apply(new Variance(false));
-    }
+    double getPopulationVariance();
 
     /**
      * Returns the standard deviation of the available values.
@@ -294,7 +191,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * or 0.0 for a single value set.
      */
     @Override
-    public double getStandardDeviation() {
+    default double getStandardDeviation() {
         double stdDev = Double.NaN;
         if (getN() > 0) {
             if (getN() > 1) {
@@ -315,7 +212,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @return The quadratic mean or {@code Double.NaN} if no values
      * have been added.
      */
-    public double getQuadraticMean() {
+    default double getQuadraticMean() {
         final long n = getN();
         return n > 0 ? FastMath.sqrt(getSumOfSquares() / n) : Double.NaN;
     }
@@ -326,9 +223,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @return The skewness, Double.NaN if less than 3 values have been added.
      */
-    public double getSkewness() {
-        return apply(skewnessImpl);
-    }
+    double getSkewness();
 
     /**
      * Returns the Kurtosis of the available values. Kurtosis is a
@@ -336,45 +231,14 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @return The kurtosis, Double.NaN if less than 4 values have been added.
      */
-    public double getKurtosis() {
-        return apply(kurtosisImpl);
-    }
-
-    /**
-     * Returns the maximum of the available values
-     * @return The max or Double.NaN if no values have been added.
-     */
-    @Override
-    public double getMax() {
-        return apply(maxImpl);
-    }
-
-    /**
-    * Returns the minimum of the available values
-    * @return The min or Double.NaN if no values have been added.
-    */
-    @Override
-    public double getMin() {
-        return apply(minImpl);
-    }
-
-    /**
-     * Returns the sum of the available values.
-     * @return The sum or Double.NaN if no values have been added
-     */
-    @Override
-    public double getSum() {
-        return apply(sumImpl);
-    }
+    double getKurtosis();
 
     /**
      * Returns the sum of the squares of the available values.
      * @return The sum of the squares or Double.NaN if no
      * values have been added.
      */
-    public double getSumOfSquares() {
-        return apply(sumOfSquaresImpl);
-    }
+    double getSumOfSquares();
 
     /**
      * Returns an estimate for the pth percentile of the stored values.
@@ -393,28 +257,13 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @return An estimate for the pth percentile of the stored data
      * @throws MathIllegalArgumentException if p is not a valid quantile
      */
-    public double getPercentile(final double p)
-        throws MathIllegalArgumentException {
-
-        percentileImpl.setQuantile(p);
-        return apply(percentileImpl);
-    }
-
-    /**
-     * Returns the number of available values.
-     * @return The number of available values
-     */
-    @Override
-    public long getN() {
-        return eDA.getNumElements();
-    }
+    double getPercentile(final double p)
+        throws MathIllegalArgumentException;
 
     /**
      * Resets all statistics and storage.
      */
-    public void clear() {
-        eDA.clear();
-    }
+    void clear();
 
     /**
      * Returns the maximum number of values that can be stored in the
@@ -422,9 +271,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      *
      * @return The current window size or -1 if its Infinite.
      */
-    public int getWindowSize() {
-        return windowSize;
-    }
+    int getWindowSize();
 
     /**
      * WindowSize controls the number of values that contribute to the
@@ -440,23 +287,8 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @throws MathIllegalArgumentException if window size is less than 1 but
      * not equal to {@link #INFINITE_WINDOW}
      */
-    public void setWindowSize(int windowSize)
-        throws MathIllegalArgumentException {
-
-        if (windowSize < 1 && windowSize != INFINITE_WINDOW) {
-            throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.NOT_POSITIVE_WINDOW_SIZE, windowSize);
-        }
-
-        this.windowSize = windowSize;
-
-        // We need to check to see if we need to discard elements
-        // from the front of the array.  If the windowSize is less than
-        // the current number of elements.
-        if (windowSize != INFINITE_WINDOW && windowSize < eDA.getNumElements()) {
-            eDA.discardFrontElements(eDA.getNumElements() - windowSize);
-        }
-    }
+    void setWindowSize(int windowSize)
+        throws MathIllegalArgumentException;
 
     /**
      * Returns the current set of values in an array of double primitives.
@@ -467,9 +299,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @return the current set of numbers in the order in which they
      * were added to this set
      */
-    public double[] getValues() {
-        return eDA.getElements();
-    }
+    double[] getValues();
 
     /**
      * Returns the current set of values in an array of double primitives,
@@ -479,7 +309,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @return returns the current set of
      * numbers sorted in ascending order
      */
-    public double[] getSortedValues() {
+    default double[] getSortedValues() {
         double[] sort = getValues();
         Arrays.sort(sort);
         return sort;
@@ -490,74 +320,40 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @param index The Index of the element
      * @return return the element at the specified index
      */
-    public double getElement(int index) {
-        return eDA.getElement(index);
-    }
-
-    /**
-     * Generates a text report displaying univariate statistics from values
-     * that have been added.  Each statistic is displayed on a separate
-     * line.
-     *
-     * @return String with line feeds displaying statistics
-     */
-    @Override
-    public String toString() {
-        StringBuilder outBuffer = new StringBuilder();
-        String endl = "\n";
-        outBuffer.append("DescriptiveStatistics:").append(endl);
-        outBuffer.append("n: ").append(getN()).append(endl);
-        outBuffer.append("min: ").append(getMin()).append(endl);
-        outBuffer.append("max: ").append(getMax()).append(endl);
-        outBuffer.append("mean: ").append(getMean()).append(endl);
-        outBuffer.append("std dev: ").append(getStandardDeviation()).append(endl);
-        try {
-            // No catch for MIAE because actual parameter is valid below
-            outBuffer.append("median: ").append(getPercentile(50)).append(endl);
-        } catch (MathIllegalStateException ex) {
-            outBuffer.append("median: unavailable").append(endl);
-        }
-        outBuffer.append("skewness: ").append(getSkewness()).append(endl);
-        outBuffer.append("kurtosis: ").append(getKurtosis()).append(endl);
-        return outBuffer.toString();
-    }
+    double getElement(int index);
 
     /**
      * Apply the given statistic to the data associated with this set of statistics.
      * @param stat the statistic to apply
      * @return the computed value of the statistic.
      */
-    public double apply(UnivariateStatistic stat) {
-        // No try-catch or advertised exception here because arguments are guaranteed valid
-        return eDA.compute(stat);
-    }
+    double apply(UnivariateStatistic stat);
 
     /**
      * Returns a copy of this DescriptiveStatistics instance with the same internal state.
      *
      * @return a copy of this
      */
-    public DescriptiveStatistics copy() {
-        return new DescriptiveStatistics(this);
-    }
+    DescriptiveStatistics copy();
 
     /**
      * A mutable builder for a DescriptiveStatistics.
      */
     public static class Builder {
-        private UnivariateStatistic          maxImpl           = new Max();
-        private UnivariateStatistic          minImpl           = new Min();
-        private UnivariateStatistic          sumImpl           = new Sum();
-        private UnivariateStatistic          sumsqImpl         = new SumOfSquares();
-        private UnivariateStatistic          meanImpl          = new Mean();
-        private UnivariateStatistic          varianceImpl      = new Variance();
-        private UnivariateStatistic          geometricMeanImpl = new GeometricMean();
-        private UnivariateStatistic          kurtosisImpl      = new Kurtosis();
-        private UnivariateStatistic          skewnessImpl      = new Skewness();
-        private QuantiledUnivariateStatistic percentileImpl    = new Percentile();
+        UnivariateStatistic          maxImpl           = new Max();
+        UnivariateStatistic          minImpl           = new Min();
+        UnivariateStatistic          sumImpl           = new Sum();
+        UnivariateStatistic          sumsqImpl         = new SumOfSquares();
+        UnivariateStatistic          meanImpl          = new Mean();
+        UnivariateStatistic          varianceImpl      = new Variance();
+        UnivariateStatistic          geometricMeanImpl = new GeometricMean();
+        UnivariateStatistic          kurtosisImpl      = new Kurtosis();
+        UnivariateStatistic          skewnessImpl      = new Skewness();
+        QuantiledUnivariateStatistic percentileImpl    = new Percentile();
 
-        private int      windowSize = INFINITE_WINDOW;
-        private double[] initialValues;
+        int      windowSize = INFINITE_WINDOW;
+        double[] initialValues;
+        boolean  threadsafe;
 
         protected Builder() {}
 
@@ -726,13 +522,25 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
         }
 
         /**
+         * Indicates if the returned instance shall be thread-safe,
+         * i.e. all access is synchronized.
+         *
+         * @return the builder
+         */
+        public Builder threadsafe() {
+            this.threadsafe = true;
+            return this;
+        }
+
+        /**
          * Constructs a new DescriptiveStatistics instance with the values
          * stored in this builder.
          *
          * @return a new DescriptiveStatistics instance.
          */
         public DescriptiveStatistics build() {
-            return new DescriptiveStatistics(this);
+            DescriptiveStatistics instance = new DescriptiveStatisticsImpl(this);
+            return threadsafe ? synchronizedDescriptiveStatistics(instance) : instance;
         }
     }
 }

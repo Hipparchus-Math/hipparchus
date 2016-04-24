@@ -16,11 +16,8 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.StableRandomGenerator;
-import org.hipparchus.random.Well19937c;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.junit.Assert;
@@ -74,7 +71,7 @@ public class StableRandomGeneratorTest {
     @Test
     public void testCauchyCase() {
         StableRandomGenerator generator = new StableRandomGenerator(rg, 1d, 0.0);
-        DescriptiveStatistics summary = new DescriptiveStatistics();
+        DescriptiveStatistics summary = DescriptiveStatistics.create();
 
         for (int i = 0; i < sampleSize; ++i) {
             double sample = generator.nextNormalizedDouble();

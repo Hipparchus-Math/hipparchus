@@ -35,7 +35,7 @@ import org.hipparchus.util.MathUtils;
  * memory, so this class can be used to compute statistics for very large data
  * streams.
  * <p>
- * To create a SummaryStatistics instance with default statistic implementations
+ * To create a SummaryStatistics instance with default statistic implementations,
  * use:
  * <pre>
  *    SummaryStatistics stats = SummaryStatistics.create();

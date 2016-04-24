@@ -21,15 +21,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.stat.descriptive.DescriptiveStatistics;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.util.DefaultTransformer;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.NumberTransformer;
 
 /**
  */
-public class ListUnivariateImpl extends DescriptiveStatistics implements Serializable {
+public class ListUnivariateImpl extends DescriptiveStatisticsImpl implements Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = -8837442489133392138L;
@@ -64,7 +62,7 @@ public class ListUnivariateImpl extends DescriptiveStatistics implements Seriali
      * @param transformer the number transformer used to convert the list items.
      */
     public ListUnivariateImpl(List<Object> list, NumberTransformer transformer) {
-        super();
+        super(DescriptiveStatistics.builder());
         this.list = list;
         this.transformer = transformer;
     }
@@ -78,7 +76,7 @@ public class ListUnivariateImpl extends DescriptiveStatistics implements Seriali
         // If the window size is not INFINITE_WINDOW AND
         // the current list is larger that the window size, we need to
         // take into account only the last n elements of the list
-        // as definied by windowSize
+        // as defined by windowSize
 
         final int wSize = getWindowSize();
         if (wSize != DescriptiveStatistics.INFINITE_WINDOW && wSize < list.size()) {

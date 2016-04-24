@@ -16,165 +16,196 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import java.io.Serializable;
+
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of
  * {@link org.hipparchus.stat.descriptive.DescriptiveStatistics} that
- * is safe to use in a multithreaded environment.  Multiple threads can safely
- * operate on a single instance without causing runtime exceptions due to race
- * conditions.  In effect, this implementation makes modification and access
- * methods atomic operations for a single instance.  That is to say, as one
- * thread is computing a statistic from the instance, no other thread can modify
- * the instance nor compute another statistic.
+ * is safe to use in a multithreaded environment.
+ * <p>
+ * Multiple threads can safely operate on a single instance without causing
+ * runtime exceptions due to race conditions.  In effect, this implementation
+ * makes modification and access methods atomic operations for a single instance.
+ * That is to say, as one thread is computing a statistic from the instance,
+ * no other thread can modify the instance nor compute another statistic.
  */
-public final class SynchronizedDescriptiveStatistics extends DescriptiveStatistics {
+final class SynchronizedDescriptiveStatistics
+    implements DescriptiveStatistics, Serializable {
 
     /** Serialization UID */
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 20160424L;
+
+    /** The DescriptiveStatistics instance to delegate to. */
+    private final DescriptiveStatistics delegate;
 
     /**
-     * Returns a builder for a {@link SynchronizedDescriptiveStatistics}.
+     * Constructor that wraps the given instance.
      *
-     * @return a descriptive statistics builder.
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    /**
-     * Construct an instance with infinite window
-     */
-    public SynchronizedDescriptiveStatistics() {
-        // no try-catch or advertized IAE because arg is valid
-        this(INFINITE_WINDOW);
-    }
-
-    /**
-     * Construct an instance with finite window
-     * @param window the finite window size.
-     * @throws MathIllegalArgumentException if window size is less than 1 but
-     * not equal to {@link #INFINITE_WINDOW}
-     */
-    public SynchronizedDescriptiveStatistics(int window) throws MathIllegalArgumentException {
-        super(window);
-    }
-
-    /**
-     * A copy constructor. Creates a deep-copy of the {@code original}.
-     *
-     * @param original the {@code SynchronizedDescriptiveStatistics} instance to copy
+     * @param original the {@code DescriptiveStatistics} instance to wrap
      * @throws NullArgumentException if original is null
      */
-    protected SynchronizedDescriptiveStatistics(SynchronizedDescriptiveStatistics original)
+    SynchronizedDescriptiveStatistics(DescriptiveStatistics original)
         throws NullArgumentException {
-        super(original);
+        MathUtils.checkNotNull(original);
+        this.delegate = original;
     }
 
-    /**
-     * Construct a new SynchronizedDescriptiveStatistics instance based
-     * on the data provided by a builder.
-     *
-     * @param builder the builder to use.
-     */
-    protected SynchronizedDescriptiveStatistics(Builder builder) {
-        super(builder);
+    /** {@inheritDoc} */
+    @Override
+    public synchronized SynchronizedDescriptiveStatistics copy() {
+        return new SynchronizedDescriptiveStatistics(this.delegate.copy());
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized void addValue(double v) {
-        super.addValue(v);
+        delegate.addValue(v);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized void removeMostRecentValue()
+        throws MathIllegalStateException {
+        delegate.removeMostRecentValue();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double replaceMostRecentValue(double v)
+        throws MathIllegalStateException {
+        return delegate.replaceMostRecentValue(v);
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized double apply(UnivariateStatistic stat) {
-        return super.apply(stat);
+        return delegate.apply(stat);
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized void clear() {
-        super.clear();
+        delegate.clear();
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized double getElement(int index) {
-        return super.getElement(index);
+        return delegate.getElement(index);
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized long getN() {
-        return super.getN();
+        return delegate.getN();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getMean() {
+        return delegate.getMean();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getVariance() {
+        return delegate.getVariance();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getMax() {
+        return delegate.getMax();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getMin() {
+        return delegate.getMin();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getSum() {
+        return delegate.getSum();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getGeometricMean() {
+        return delegate.getGeometricMean();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getPopulationVariance() {
+        return delegate.getPopulationVariance();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getSkewness() {
+        return delegate.getSkewness();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getKurtosis() {
+        return delegate.getKurtosis();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getSumOfSquares() {
+        return delegate.getSumOfSquares();
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized double getStandardDeviation() {
-        return super.getStandardDeviation();
+        return delegate.getStandardDeviation();
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized double getQuadraticMean() {
-        return super.getQuadraticMean();
+        return delegate.getQuadraticMean();
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized double getPercentile(double p)
         throws MathIllegalArgumentException {
-        return super.getPercentile(p);
+        return delegate.getPercentile(p);
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized double[] getValues() {
-        return super.getValues();
+        return delegate.getValues();
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized int getWindowSize() {
-        return super.getWindowSize();
+        return delegate.getWindowSize();
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized void setWindowSize(int windowSize) throws MathIllegalArgumentException {
-        super.setWindowSize(windowSize);
+        delegate.setWindowSize(windowSize);
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized String toString() {
-        return super.toString();
+        return delegate.toString();
     }
 
-    /**
-     * Returns a copy of this SynchronizedDescriptiveStatistics instance with the
-     * same internal state.
-     *
-     * @return a copy of this
-     */
-    @Override
-    public synchronized SynchronizedDescriptiveStatistics copy() {
-        return new SynchronizedDescriptiveStatistics(this);
-    }
-
-    /**
-     * A mutable builder for a SynchronizedDescriptiveStatistics.
-     */
-    public static class Builder extends DescriptiveStatistics.Builder {
-
-        @Override
-        public SynchronizedDescriptiveStatistics build() {
-            return new SynchronizedDescriptiveStatistics(this);
-        }
-
-    }
 }

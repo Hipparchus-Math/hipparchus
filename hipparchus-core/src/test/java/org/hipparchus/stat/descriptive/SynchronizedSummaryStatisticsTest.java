@@ -22,12 +22,15 @@ public final class SynchronizedSummaryStatisticsTest extends SummaryStatisticsTe
 
     @Override
     protected SummaryStatistics createSummaryStatistics() {
-        return SummaryStatistics.builder().threadsafe().build();
+        return SummaryStatistics.builder()
+                                .threadsafe()
+                                .build();
     }
 
     @Override
     protected Builder createBuilder() {
-        return SummaryStatistics.builder().threadsafe();
+        return SummaryStatistics.builder()
+                                .threadsafe();
     }
 
 }
