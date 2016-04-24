@@ -16,13 +16,13 @@
 # limitations under the License.
 # -----------------------------------------------------------------------------
 #
-# Shell script to create commons math RCs.
+# Shell script to create Hipparchus RCs.
 # This script should be run from a fresh checkout of the RC tag.
 #
 # -----------------------------------------------------------------------------
 # Set script variables
 version=2.1
-repo_path=~/.m2/repository/org/apache/commons/commons-math/${version}
+repo_path=~/.m2/repository/org/hipparchus/hipparchus-core/${version}
 site_mods_path=./siteMods
 release_path=~/math-release
 #

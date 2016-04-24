@@ -36,7 +36,7 @@ import org.hipparchus.util.MathUtils;
  * the {@link org.hipparchus.stat.inference.TTest}.
  * </p><p>
  * Uses the {@link org.hipparchus.distribution.continuous.FDistribution
- * commons-math F Distribution implementation} to estimate exact p-values.</p>
+ * Hipparchus F Distribution implementation} to estimate exact p-values.</p>
  * <p>This implementation is based on a description at
  * http://faculty.vassar.edu/lowry/ch13pt1.html</p>
  * <pre>
@@ -101,11 +101,11 @@ public class OneWayAnova {
      * contain at least two values.</li></ul></p><p>
      * This implementation uses the
      * {@link org.hipparchus.distribution.continuous.FDistribution
-     * commons-math F Distribution implementation} to estimate the exact
+     * Hipparchus F Distribution implementation} to estimate the exact
      * p-value, using the formula<pre>
      *   p = 1 - cumulativeProbability(F)</pre>
      * where <code>F</code> is the F value and <code>cumulativeProbability</code>
-     * is the commons-math implementation of the F distribution.</p>
+     * is the Hipparchus implementation of the F distribution.</p>
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>
      * arrays each containing data for one category
@@ -140,11 +140,11 @@ public class OneWayAnova {
      * contain at least two values.</li></ul></p><p>
      * This implementation uses the
      * {@link org.hipparchus.distribution.continuous.FDistribution
-     * commons-math F Distribution implementation} to estimate the exact
+     * Hipparchus F Distribution implementation} to estimate the exact
      * p-value, using the formula<pre>
      *   p = 1 - cumulativeProbability(F)</pre>
      * where <code>F</code> is the F value and <code>cumulativeProbability</code>
-     * is the commons-math implementation of the F distribution.</p>
+     * is the Hipparchus implementation of the F distribution.</p>
      *
      * @param categoryData <code>Collection</code> of {@link SummaryStatistics}
      * each containing data for one category
@@ -220,11 +220,11 @@ public class OneWayAnova {
      * </li></ul></p><p>
      * This implementation uses the
      * {@link org.hipparchus.distribution.continuous.FDistribution
-     * commons-math F Distribution implementation} to estimate the exact
+     * Hipparchus F Distribution implementation} to estimate the exact
      * p-value, using the formula<pre>
      *   p = 1 - cumulativeProbability(F)</pre>
      * where <code>F</code> is the F value and <code>cumulativeProbability</code>
-     * is the commons-math implementation of the F distribution.</p>
+     * is the Hipparchus implementation of the F distribution.</p>
      * <p>True is returned iff the estimated p-value is less than alpha.</p>
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>

@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 #------------------------------------------------------------------------------
-# R source file to run all commons-math R verification tests
+# R source file to run all Hipparchus R verification tests
 #
 # To run the test, install R, put this file and all other o.a.c.math R
 # verification tests and the testfunctions utilities file into the same

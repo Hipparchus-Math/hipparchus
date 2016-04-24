@@ -129,7 +129,6 @@ public class EigenDecompositionTest {
         Assert.assertEquals(0.1, ed.getRealEigenvalue(3), 1.0e-15);
     }
 
-    // the following test triggered an ArrayIndexOutOfBoundsException in commons-math 2.0
     @Test
     public void testMath308() {
 

@@ -32,12 +32,11 @@ We are actively seeking ideas for additional components that fit into the
 self-contained math/stat components useful for solving common programming problems.
 Suggestions for new components or enhancements to existing functionality are always welcome!
 All feedback/suggestions for improvement should be sent to the
-[commons-dev mailing list](http://commons.apache.org/mail-lists.html) with
-[math] at the beginning of the subject line.
+[developers mailing list](../mail-lists.html).
 
 
 
-## 0.3 How commons-math is organized
+## 0.3 How Hipparchus is organized
 Hipparchus is divided into sixteen subpackages, based on functionality provided.
 * Computing means, variances and other summary statistics for a list of numbers
 * Fitting a line to a set of data points using linear regression

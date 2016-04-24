@@ -1,6 +1,6 @@
 # 3 Linear Algebra
 ## 3.1 Overview
-Linear algebra support in commons-math provides operations on real matrices
+Linear algebra support in Hipparchus provides operations on real matrices
 (both dense and sparse matrices are supported) and vectors. It features basic
 operations (addition, subtraction ...) and decomposition algorithms that can
 be used to solve linear systems either in exact sense and in least squares sense.

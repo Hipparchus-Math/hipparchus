@@ -66,7 +66,7 @@ provide means to find roots of
 [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html),
 [differentiable univariate real-valued functions](../apidocs/org/hipparchus/analysis/differentiation/UnivariateDifferentiable.html),
 and [polynomial functions](../apidocs/org/hipparchus/analysis/polynomials/PolynomialFunction.html) respectively.
-A root is the value where the function takes the value 0.  Commons-Math
+A root is the value where the function takes the value 0.  Hipparchus
 includes implementations of the several root-finding algorithms:
 
 | <font size="+1">Root solvers</font> |

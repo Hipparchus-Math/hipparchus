@@ -496,10 +496,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * [min,upperBounds[0]],(upperBounds[0],upperBounds[1]],...,
      *  (upperBounds[binCount-2], upperBounds[binCount-1] = max].</p>
      *
-     * <p>Note: In versions 1.0-2.0 of commons-math, this method
-     * incorrectly returned the array of probability generator upper
-     * bounds now returned by {@link #getGeneratorUpperBounds()}.</p>
-     *
      * @return array of bin upper bounds
      */
     public double[] getUpperBounds() {
@@ -518,9 +514,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      *
      * <strong>Preconditions:</strong><ul>
      * <li>the distribution must be loaded before invoking this method</li></ul>
-     *
-     * <p>In versions 1.0-2.0 of commons-math, this array was (incorrectly) returned
-     * by {@link #getUpperBounds()}.</p>
      *
      * @return array of upper bounds of subintervals used in data generation
      * @throws NullPointerException unless a {@code load} method has been

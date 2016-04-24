@@ -15,7 +15,7 @@
 #
 #------------------------------------------------------------------------------
 # R source file to validate Cauchy distribution tests in
-# org.apache.commons.math.distribution.CauchyDistributionTest
+# org.hipparchus.distribution.CauchyDistributionTest
 #
 # To run the test, install R, put this file and testFunctions
 # into the same directory, launch R from this directory and then enter
