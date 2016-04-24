@@ -16,160 +16,154 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import java.io.Serializable;
+
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.MathUtils;
 
 /**
- * Implementation of
- * {@link org.hipparchus.stat.descriptive.SummaryStatistics} that
- * is safe to use in a multithreaded environment.  Multiple threads can safely
- * operate on a single instance without causing runtime exceptions due to race
- * conditions.  In effect, this implementation makes modification and access
- * methods atomic operations for a single instance.  That is to say, as one
- * thread is computing a statistic from the instance, no other thread can modify
- * the instance nor compute another statistic.
+ * Implementation of {@link SummaryStatistics} that is safe to use in a
+ * multi-threaded environment.
+ * <p>
+ * Multiple threads can safely operate on a single instance without causing
+ * runtime exceptions due to race conditions.  In effect, this implementation
+ * makes modification and access methods atomic operations for a single instance.
+ * That is to say, as one thread is computing a statistic from the instance,
+ * no other thread can modify the instance nor compute another statistic.
  */
-public class SynchronizedSummaryStatistics extends SummaryStatistics {
+final class SynchronizedSummaryStatistics
+    implements SummaryStatistics, Serializable {
 
     /** Serialization UID */
     private static final long serialVersionUID = 20160422L;
 
-    /**
-     * Returns a builder for a {@link SynchronizedSummaryStatistics}.
-     *
-     * @return a descriptive statistics builder.
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
+    /** The SummaryStatistics instance to delegate to. */
+    private final SummaryStatistics delegate;
 
     /**
-     * Construct a SynchronizedSummaryStatistics instance
-     */
-    public SynchronizedSummaryStatistics() {
-        super();
-    }
-
-    /**
-     * A copy constructor. Creates a deep-copy of the {@code original}.
+     * Constructor that wraps the given instance.
      *
-     * @param original the {@code SynchronizedSummaryStatistics} instance to copy
+     * @param original the {@code SummaryStatistics} instance to wrap
      * @throws NullArgumentException if original is null
      */
-    private SynchronizedSummaryStatistics(SynchronizedSummaryStatistics original)
+    SynchronizedSummaryStatistics(SummaryStatistics original)
         throws NullArgumentException {
-        super(original);
-    }
-
-    /**
-     * Construct a new SynchronizedSummaryStatistics instance based
-     * on the data provided by a builder.
-     *
-     * @param builder the builder to use.
-     */
-    protected SynchronizedSummaryStatistics(Builder builder) {
-        super(builder);
+        MathUtils.checkNotNull(original);
+        this.delegate = original;
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized StatisticalSummary getSummary() {
-        return super.getSummary();
+        return delegate.getSummary();
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized void addValue(double value) {
-        super.addValue(value);
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized long getN() {
-        return super.getN();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getSum() {
-        return super.getSum();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getSumOfSquares() {
-        return super.getSumOfSquares();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getMean() {
-        return super.getMean();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getStandardDeviation() {
-        return super.getStandardDeviation();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getQuadraticMean() {
-        return super.getQuadraticMean();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getVariance() {
-        return super.getVariance();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getPopulationVariance() {
-        return super.getPopulationVariance();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getMax() {
-        return super.getMax();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getMin() {
-        return super.getMin();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized double getGeometricMean() {
-        return super.getGeometricMean();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public synchronized String toString() {
-        return super.toString();
+        delegate.addValue(value);
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized void clear() {
-        super.clear();
+        delegate.clear();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized long getN() {
+        return delegate.getN();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getSum() {
+        return delegate.getSum();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getSumOfSquares() {
+        return delegate.getSumOfSquares();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double getSumOfLogs() {
+        return delegate.getSumOfLogs();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double getSecondMoment() {
+        return delegate.getSecondMoment();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getMean() {
+        return delegate.getMean();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getStandardDeviation() {
+        return delegate.getStandardDeviation();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getQuadraticMean() {
+        return delegate.getQuadraticMean();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getVariance() {
+        return delegate.getVariance();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getPopulationVariance() {
+        return delegate.getPopulationVariance();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getMax() {
+        return delegate.getMax();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getMin() {
+        return delegate.getMin();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double getGeometricMean() {
+        return delegate.getGeometricMean();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized String toString() {
+        return delegate.toString();
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized boolean equals(Object object) {
-        return super.equals(object);
+        return delegate.equals(object);
     }
 
     /** {@inheritDoc} */
     @Override
     public synchronized int hashCode() {
-        return super.hashCode();
+        return delegate.hashCode();
     }
 
     /**
@@ -179,21 +173,8 @@ public class SynchronizedSummaryStatistics extends SummaryStatistics {
      * @return a copy of this
      */
     @Override
-    public synchronized SynchronizedSummaryStatistics copy() {
-        return new SynchronizedSummaryStatistics(this);
-    }
-
-    /**
-     * A mutable builder for a SynchronizedSummaryStatistics.
-     */
-    public static class Builder extends SummaryStatistics.Builder {
-
-        @Override
-        public SynchronizedSummaryStatistics build() {
-            setupDefaultsImpls();
-            return new SynchronizedSummaryStatistics(this);
-        }
-
+    public synchronized SummaryStatistics copy() {
+        return new SynchronizedSummaryStatistics(this.delegate.copy());
     }
 
 }

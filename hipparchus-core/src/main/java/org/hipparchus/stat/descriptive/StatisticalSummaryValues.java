@@ -129,7 +129,7 @@ public class StatisticalSummaryValues
 
     /**
      * Returns true iff <code>object</code> is a
-     * <code>StatisticalSummaryValues</code> instance and all
+     * <code>StatisticalSummary</code> instance and all
      * statistics have the same values as this.
      *
      * @param object the object to test equality against.
@@ -143,13 +143,13 @@ public class StatisticalSummaryValues
         if (object instanceof StatisticalSummaryValues == false) {
             return false;
         }
-        StatisticalSummaryValues stat = (StatisticalSummaryValues) object;
-        return Precision.equalsIncludingNaN(stat.getMax(),      getMax())  &&
-               Precision.equalsIncludingNaN(stat.getMean(),     getMean()) &&
-               Precision.equalsIncludingNaN(stat.getMin(),      getMin())  &&
-               Precision.equalsIncludingNaN(stat.getN(),        getN())    &&
-               Precision.equalsIncludingNaN(stat.getSum(),      getSum())  &&
-               Precision.equalsIncludingNaN(stat.getVariance(), getVariance());
+        StatisticalSummary other = (StatisticalSummary) object;
+        return Precision.equalsIncludingNaN(other.getMax(),      getMax())  &&
+               Precision.equalsIncludingNaN(other.getMean(),     getMean()) &&
+               Precision.equalsIncludingNaN(other.getMin(),      getMin())  &&
+               Precision.equalsIncludingNaN(other.getN(),        getN())    &&
+               Precision.equalsIncludingNaN(other.getSum(),      getSum())  &&
+               Precision.equalsIncludingNaN(other.getVariance(), getVariance());
     }
 
     /**

@@ -62,9 +62,9 @@ public abstract class AbstractStorelessUnivariateStatistic
         if (object == null || object.getClass() != this.getClass()) {
             return false;
         }
-        StorelessUnivariateStatistic stat = (StorelessUnivariateStatistic) object;
-        return Precision.equalsIncludingNaN(stat.getResult(), this.getResult()) &&
-               Precision.equalsIncludingNaN(stat.getN(), this.getN());
+        StorelessUnivariateStatistic other = (StorelessUnivariateStatistic) object;
+        return Precision.equalsIncludingNaN(other.getResult(), getResult()) &&
+               Precision.equalsIncludingNaN(other.getN(),      getN());
     }
 
     /**

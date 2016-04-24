@@ -344,7 +344,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         public void computeStats() throws IOException {
             String str = null;
             double val = 0.0;
-            sampleStats = new SummaryStatistics();
+            sampleStats = SummaryStatistics.create();
             while ((str = inputStream.readLine()) != null) {
                 val = Double.parseDouble(str);
                 sampleStats.addValue(val);
@@ -377,7 +377,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         /** {@inheritDoc} */
         @Override
         public void computeStats() throws IOException {
-            sampleStats = new SummaryStatistics();
+            sampleStats = SummaryStatistics.create();
             for (int i = 0; i < inputArray.length; i++) {
                 sampleStats.addValue(inputArray[i]);
             }
@@ -412,7 +412,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             binStats.clear();
         }
         for (int i = 0; i < binCount; i++) {
-            SummaryStatistics stats = new SummaryStatistics();
+            SummaryStatistics stats = SummaryStatistics.create();
             binStats.add(i,stats);
         }
 

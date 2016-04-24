@@ -84,6 +84,7 @@ public final class BrentOptimizerTest {
         final double lower = -1.0;
         final double upper = +1.0;
         UnivariateFunction f = new UnivariateFunction() {
+            @Override
             public double value(double x) {
                 if (x < lower) {
                     throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
@@ -142,7 +143,7 @@ public final class BrentOptimizerTest {
 
         final DescriptiveStatistics[] stat = new DescriptiveStatistics[2];
         for (int i = 0; i < stat.length; i++) {
-            stat[i] = new DescriptiveStatistics();
+            stat[i] = DescriptiveStatistics.create();
         }
 
         final double min = -0.75;
@@ -211,6 +212,7 @@ public final class BrentOptimizerTest {
     @Test
     public void testMath832() {
         final UnivariateFunction f = new UnivariateFunction() {
+                @Override
                 public double value(double x) {
                     final double sqrtX = FastMath.sqrt(x);
                     final double a = 1e2 * sqrtX;

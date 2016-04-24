@@ -13,18 +13,16 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import org.hipparchus.stat.descriptive.MultivariateSummaryStatistics;
-import org.hipparchus.stat.descriptive.SynchronizedMultivariateSummaryStatistics;
-
-
 /**
- * Test cases for the {@link SynchronizedMultivariateSummaryStatisticsTest} class.
- *          2007) $
+ * Test cases for the {@link SynchronizedMultivariateSummaryStatistics} class.
  */
 public final class SynchronizedMultivariateSummaryStatisticsTest
     extends MultivariateSummaryStatisticsTest {
     @Override
     protected MultivariateSummaryStatistics createMultivariateSummaryStatistics(int k, boolean isCovarianceBiasCorrected) {
-        return new SynchronizedMultivariateSummaryStatistics(k, isCovarianceBiasCorrected);
+        return MultivariateSummaryStatistics.builder(k)
+                                            .withCovarianceBiasCorrected(isCovarianceBiasCorrected)
+                                            .threadsafe()
+                                            .build();
     }
 }

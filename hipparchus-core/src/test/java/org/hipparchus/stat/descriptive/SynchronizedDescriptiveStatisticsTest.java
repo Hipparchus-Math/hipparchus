@@ -23,12 +23,15 @@ public final class SynchronizedDescriptiveStatisticsTest extends DescriptiveStat
 
     @Override
     protected DescriptiveStatistics createDescriptiveStatistics() {
-        return new SynchronizedDescriptiveStatistics();
+        return DescriptiveStatistics.builder()
+                                    .threadsafe()
+                                    .build();
     }
 
     @Override
     protected SynchronizedDescriptiveStatistics.Builder createBuilder() {
-        return SynchronizedDescriptiveStatistics.builder();
+        return DescriptiveStatistics.builder()
+                                    .threadsafe();
     }
 
 }

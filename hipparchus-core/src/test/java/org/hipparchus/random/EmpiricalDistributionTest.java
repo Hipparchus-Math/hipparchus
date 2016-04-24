@@ -33,11 +33,9 @@ import org.hipparchus.distribution.continuous.ConstantRealDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.distribution.continuous.RealDistributionAbstractTest;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.EmpiricalDistribution;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -291,7 +289,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     private void tstGen(double tolerance)throws Exception {
         empiricalDistribution.load(url);
         empiricalDistribution.reSeed(1000);
-        SummaryStatistics stats = new SummaryStatistics();
+        SummaryStatistics stats = SummaryStatistics.create();
         for (int i = 1; i < 1000; i++) {
             stats.addValue(empiricalDistribution.getNextValue());
         }
@@ -302,7 +300,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     private void tstDoubleGen(double tolerance)throws Exception {
         empiricalDistribution2.load(dataArray);
         empiricalDistribution2.reSeed(1000);
-        SummaryStatistics stats = new SummaryStatistics();
+        SummaryStatistics stats = SummaryStatistics.create();
         for (int i = 1; i < 1000; i++) {
             stats.addValue(empiricalDistribution2.getNextValue());
         }

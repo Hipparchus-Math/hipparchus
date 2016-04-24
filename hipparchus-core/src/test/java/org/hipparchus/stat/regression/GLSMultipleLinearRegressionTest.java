@@ -16,9 +16,6 @@
  */
 package org.hipparchus.stat.regression;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -31,8 +28,9 @@ import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.correlation.Covariance;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
-import org.hipparchus.stat.regression.GLSMultipleLinearRegression;
-import org.hipparchus.stat.regression.OLSMultipleLinearRegression;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbstractTest {
 
@@ -265,8 +263,8 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         gls.newCovarianceData(cov.getData());
 
         // Create aggregators for stats measuring model performance
-        DescriptiveStatistics olsBetaStats = new DescriptiveStatistics();
-        DescriptiveStatistics glsBetaStats = new DescriptiveStatistics();
+        DescriptiveStatistics olsBetaStats = DescriptiveStatistics.create();
+        DescriptiveStatistics glsBetaStats = DescriptiveStatistics.create();
 
         // Generate Y vectors for 10000 models, estimate GLS and OLS and
         // Verify that OLS estimates are better
