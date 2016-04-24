@@ -212,13 +212,10 @@ public class Percentile extends AbstractUnivariateStatistic
     /** {@inheritDoc} */
     @Override
     public void setData(final double[] values, final int begin, final int length)
-    throws MathIllegalArgumentException {
-        if (values == null) {
-            cachedPivots = null;
-        } else {
-            cachedPivots = new int[PIVOTS_HEAP_LENGTH];
-            Arrays.fill(cachedPivots, -1);
-        }
+        throws MathIllegalArgumentException {
+        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
+        cachedPivots = new int[PIVOTS_HEAP_LENGTH];
+        Arrays.fill(cachedPivots, -1);
         super.setData(values, begin, length);
     }
 
