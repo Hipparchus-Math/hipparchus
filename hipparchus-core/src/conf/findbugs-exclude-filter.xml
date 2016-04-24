@@ -31,7 +31,7 @@
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>
   <Match>
-    <Class name="org.hipparchus.distribution.SaddlePointExpansion" />
+    <Class name="org.hipparchus.distribution.discrete.SaddlePointExpansion" />
     <Or>
       <Method name="getDeviancePart" params="double,double" returns="double" />
       <Method name="getStirlingError" params="double" returns="double" />
@@ -187,6 +187,11 @@
     <Bug pattern="NP_NULL_PARAM_DEREF_ALL_TARGETS_DANGEROUS" />
   </Match>
   
+  <!-- DoublePair intentionally implements Comparable inconsistently with equals -->
+  <Match>
+    <Class name="org.hipparchus.stat.correlation.KendallsCorrelation$DoublePair" />
+    <Bug pattern="EQ_COMPARETO_USE_OBJECT_EQUALS" />
+  </Match>
   <!-- IntDoublePair intentionally implements Comparable inconsistently with equals -->
   <Match>
     <Class name="org.hipparchus.stat.ranking.NaturalRanking$IntDoublePair" />
