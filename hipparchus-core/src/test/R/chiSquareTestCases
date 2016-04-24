@@ -15,7 +15,7 @@
 #
 #------------------------------------------------------------------------------
 # R source file to validate ChiSquare tests in
-# org.apache.commons.math.stat.inference.ChiSquareTestTest
+# org.hipparchus.stat.inference.ChiSquareTestTest
 #
 # To run the test, install R, put this file and testFunctions
 # into the same directory, launch R from this directory and then enter

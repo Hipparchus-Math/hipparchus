@@ -19,21 +19,21 @@ INTRODUCTION
 
 The purpose of the R programs included in this directory is to validate
 the target values used in Hipparchus unit tests. Success running the
-R and commons-math tests on a platform (OS and R version) means that R and
-commons-math give results for the test cases that are close in value.  The
+R and Hipparchus tests on a platform (OS and R version) means that R and
+Hipparchus give results for the test cases that are close in value.  The
 tests include configurable tolerance levels; but care must be taken in changing
 these, since in most cases the pre-set tolerance is close to the number of
 decimal digits used in expressing the expected values (both here and in the
-corresponding commons-math unit tests).
+corresponding Hipparchus unit tests).
 
-Of course it is always possible that both R and commons-math give incorrect
+Of course it is always possible that both R and Hipparchus give incorrect
 values for test cases, so these tests should not be interpreted as definitive
 in any absolute sense. The value of developing and running the tests is really
 to generate questions (and answers!) when the two systems give different
 results.
 
 Contributions of additional test cases (both R and Junit code) or just
-R programs to validate commons-math tests that are not covered here would be
+R programs to validate Hipparchus tests that are not covered here would be
 greatly appreciated.
 
 SETUP
@@ -112,7 +112,7 @@ binomialTestCases):
 Start by defining a "verification function" -- in this example a function to
 verify computation of binomial probabilities. The <points> argument is a vector
 of integer values to feed into the density function, <expected> is a vector of
-the computed probabilies from the commons-math Junit tests, <n> and <p> are
+the computed probabilies from the Hipparchus Junit tests, <n> and <p> are
 parameters of the distribution and <tol> is the error tolerance of the test.
 The function computes the probabilities using R and compares the values that
 R produces with those in the <expected> vector.

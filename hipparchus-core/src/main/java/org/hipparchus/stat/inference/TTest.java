@@ -46,7 +46,7 @@ import org.hipparchus.util.FastMath;
  * <p>
  * Input to tests can be either <code>double[]</code> arrays or
  * {@link StatisticalSummary} instances.</p><p>
- * Uses commons-math {@link org.hipparchus.distribution.continuous.TDistribution}
+ * Uses Hipparchus {@link org.hipparchus.distribution.continuous.TDistribution}
  * implementation to estimate exact p-values.</p>
  *
  */

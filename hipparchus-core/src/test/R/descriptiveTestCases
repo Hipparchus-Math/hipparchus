@@ -15,7 +15,7 @@
 #
 #------------------------------------------------------------------------------
 # R source file to validate summary statistics tests in
-# org.apache.commons.math.stat.CertifiedDataTest
+# org.hipparchus.stat.CertifiedDataTest
 #
 # To run the test, install R, put this file and testFunctions
 # into the same directory, launch R from this directory and then enter

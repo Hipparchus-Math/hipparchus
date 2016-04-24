@@ -46,7 +46,7 @@ import org.hipparchus.util.FastMath;
  * <a href="http://www.dtic.mil/dtic/pdf/announcements/CopyrightGuidance.pdf">Copyright guidance</a>
  * indicates that unless otherwise stated in the code, all FORTRAN functions in
  * this library are license free. Since no such notice appears in the code these
- * functions can safely be ported to Commons-Math.
+ * functions can safely be ported to Hipparchus.
  * </p>
  *
  */

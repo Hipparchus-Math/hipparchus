@@ -329,14 +329,14 @@ by itself.
 
 
 ## 2.7 PRNG Pluggability
-To enable alternative PRNGs to be "plugged in" to the commons-math data
+To enable alternative PRNGs to be "plugged in" to the Hipparchus data
 generation utilities and to provide a generic means to replace
 `java.util.Random` in applications, a random generator
-adaptor framework has been added to commons-math.  The
+adaptor framework has been added to Hipparchus.  The
 [      RandomGenerator](../apidocs/org/hipparchus/random/RandomGenerator.html)
 interface abstracts the public interface of
 `java.util.Random` and any implementation of this
-interface can be used as the source of random data for the commons-math
+interface can be used as the source of random data for the Hipparchus
 data generation classes.  An abstract base class,
 [      AbstractRandomGenerator](../apidocs/org/hipparchus/random/AbstractRandomGenerator.html)
 is provided to make implementation easier.
@@ -349,7 +349,7 @@ class is provided, which extends
 a `RandomGenerator` instance.
 
 
-Commons-math provides by itself several implementations of the <a
+Hipparchus provides by itself several implementations of the <a
 href="../apidocs/org.hipparchus/random/RandomGenerator.html">
 RandomGenerator</a> interface:
 * generating random numbers

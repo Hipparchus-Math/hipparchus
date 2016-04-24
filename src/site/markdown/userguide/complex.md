@@ -8,10 +8,10 @@ formatting.
 ## 7.2 Complex Numbers
 [          Complex](../apidocs/org/hipparchus/complex/Complex.html)
 provides a complex number type that forms the basis for
-the complex functionality found in commons-math.
+the complex functionality found in Hipparchus.
 
 Complex functions and arithmetic operations are implemented in
-commons-math by applying standard computational formulas and
+Hipparchus by applying standard computational formulas and
 following the rules for `java.lang.Double` arithmetic in
 handling infinite and `NaN` values.  No attempt is made
 to comply with ANSII/IEC C99x Annex G or any other standard for

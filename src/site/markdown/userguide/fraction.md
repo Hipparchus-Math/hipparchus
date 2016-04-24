@@ -8,7 +8,7 @@ fraction number formatting.
 [          Fraction](../apidocs/org/hipparchus/fraction/Fraction.html)
 and [          BigFraction](../apidocs/org/hipparchus/fraction/BigFraction.html)
 provide fraction number type that forms the basis for
-the fraction functionality found in Commons-Math. The former one can be
+the fraction functionality found in Hipparchus. The former one can be
 used for fractions whose numerators and denominators are small enough
 to fit in an int (taking care of intermediate values) while the second
 class should be used when there is a risk the numerator and denominator

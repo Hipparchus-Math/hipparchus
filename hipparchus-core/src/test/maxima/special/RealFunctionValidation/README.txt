@@ -18,17 +18,17 @@
 Validation of real functions
 ============================
 
-This document details the procedure used in Commons-Math 3 to assess the
+This document details the procedure used in Hipparchus to assess the
 accuracy of the implementations of special functions. It is a two-step process
 
 1. reference values are computed with a multi-precision software (for example,
    the Maxima Computer Algebra System) [1],
-2. these reference values are compared with the Commons-Math3 implementation.
+2. these reference values are compared with the Hipparchus implementation.
    The accuracy is computed in ulps.
 
 This process relies on a small Java application, called RealFunctionValidation,
-which can be found in $CM3_SRC/src/test/maxima/special, where $CM3_SRC is the
-root directory to the source of Commons-Math 3
+which can be found in $HIPPARCHUS_SRC/src/test/maxima/special, where
+$HIPPARCHUS_SRC is the root directory to the source of Hipparchus
 
 
 Compilation of RealFunctionValidation
@@ -36,13 +36,13 @@ Compilation of RealFunctionValidation
 
 Change to the relevant directory
 
-  cd $CM3_SRC/src/test/maxima/special/RealFunctionValidation
+  cd $HIPPARCHUS_SRC/src/test/maxima/special/RealFunctionValidation
 
-Compile the source file. The jar file of Commons-Math3 should be included in
+Compile the source file. The jar file of Hipparchus should be included in
 your classpath. If it is installed in your local maven repository, the
 following command should work
 
-  javac -classpath $HOME/.m2/repository/org/apache/commons/commons-math4/4.0-SNAPSHOT/commons-math4-4.0-SNAPSHOT.jar RealFunctionValidation.java
+  javac -classpath $HOME/.m2/repository/org/hipparchus/hipparchus-core/1.0-SNAPSHOT/hipparchus-core-1.0-SNAPSHOT.jar RealFunctionValidation.java
 
 Create a jar file
 
@@ -58,13 +58,13 @@ Invocation of the application RealFunctionValidation
 
 The java application comes with a shell script, RealFunctionValidaton.sh. You
 should edit this file, and change the variables
-- CM3_JAR: full path to the Commons-Math 3 jar file,
+- HIPPARCHUS_JAR: full path to the Hipparchus jar file,
 - APP_JAR: full path to the RealFunctionValidation application jar file.
 
 Invoking this application is then very simple. For example, to validate the
 implementation of Gamma.logGamma, change to directory reference
 
-  cd $CM3_SRC/src/test/maxima/special/reference
+  cd $HIPPARCHUS_SRC/hipparchus-core/src/test/maxima/special/reference
 
 and run the application
 

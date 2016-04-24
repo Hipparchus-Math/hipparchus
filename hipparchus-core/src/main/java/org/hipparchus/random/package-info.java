@@ -17,7 +17,7 @@
 /**
  *
  *      <p>Random number and random data generators.</p>
- *      <p>Commons-math provides a few pseudo random number generators. The top level interface is RandomGenerator.
+ *      <p>Hipparchus provides a few pseudo random number generators. The top level interface is RandomGenerator.
  *      It is implemented by three classes:
  *      <ul>
  *        <li>{@link org.hipparchus.random.JDKRandomGenerator JDKRandomGenerator}

@@ -1,25 +1,31 @@
 
-              Apache Commons Math 3.4.1 RELEASE NOTES
+              Hipparchus RELEASE NOTES
 
-The Apache Commons Math team is pleased to announce the release of commons-math3-3.4.1
+The Hipparchus team is pleased to announce the release of hipparchus 1.0
 
-The Apache Commons Math project is a library of lightweight, self-contained mathematics
-and statistics components addressing the most common practical problems not immediately
-available in the Java programming language or commons-lang.
+The Hipparchus project is a library of lightweight, self-contained
+mathematics and statistics components addressing the most common
+problems not available in the Java programming language.
 
-This is a maintenance release: It fixes issue MATH-1188.
+This is the first release of the library.
 
 Changes in this version include:
 
+o Forked from the Apache Commons Math library.
+o Modularized the library into several components
+  (hipparchus-core, hipparchus-clustering, hipparchus-fft,
+   hipparchus-fitting, hipparchus-genetics, hipparchus-geometry,
+   hipparchus-geometry, hipparchus-ode, hipparchus-optim,
+   hipparchus-perf, hipparchus-samples)
+o Creation of a migration module and an associated script
+  to help switching from Apache Commons Math to Hipparchus
+o Simplified exception hierarchy
+o Revamped Ordinary Differential Equations API to match
+  the new API introduced with field-based ODE
 
-Fixed Bugs:
-o MATH-1188:  Fixed non-Java1.5 code in BesselJ. 
+For complete information on Hipparchus, including instructions on how to submit bug reports,
+patches, or suggestions for improvement, see the Hipparchus website:
 
-
-
-For complete information on Apache Commons Math, including instructions on how to submit bug reports,
-patches, or suggestions for improvement, see the Apache Commons Math website:
-
-http://commons.apache.org/proper/commons-math/
+http://hipparchus.org/
 
 
