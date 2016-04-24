@@ -318,7 +318,7 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
             return false;
         }
         SummaryStatistics other = (SummaryStatistics)object;
-        return Precision.equalsIncludingNaN(other.getN(),             getN())             &&
+        return other.getN() == getN()                                                     &&
                Precision.equalsIncludingNaN(other.getMax(),           getMax())           &&
                Precision.equalsIncludingNaN(other.getMin(),           getMin())           &&
                Precision.equalsIncludingNaN(other.getSum(),           getSum())           &&
