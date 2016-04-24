@@ -13,6 +13,8 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import org.hipparchus.stat.descriptive.SummaryStatistics.Builder;
+
 /**
  * Test cases for the {@link SynchronizedSummaryStatistics} class.
  */
@@ -20,12 +22,12 @@ public final class SynchronizedSummaryStatisticsTest extends SummaryStatisticsTe
 
     @Override
     protected SummaryStatistics createSummaryStatistics() {
-        return new SynchronizedSummaryStatistics();
+        return SummaryStatistics.builder().threadsafe().build();
     }
 
     @Override
-    protected SynchronizedSummaryStatistics.Builder createBuilder() {
-        return SynchronizedSummaryStatistics.builder();
+    protected Builder createBuilder() {
+        return SummaryStatistics.builder().threadsafe();
     }
 
 }

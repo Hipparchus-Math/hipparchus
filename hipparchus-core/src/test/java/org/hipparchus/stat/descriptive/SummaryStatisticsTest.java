@@ -51,7 +51,7 @@ public class SummaryStatisticsTest {
     private final double tolerance = 10E-15;
 
     protected SummaryStatistics createSummaryStatistics() {
-        return new SummaryStatistics();
+        return SummaryStatistics.create();
     }
 
     protected SummaryStatistics.Builder createBuilder() {
@@ -226,7 +226,7 @@ public class SummaryStatisticsTest {
         u.addValue(1d);
         u.addValue(3d);
         u.addValue(4d);
-        SummaryStatistics v = new SummaryStatistics(u);
+        SummaryStatistics v = u.copy();
         assertEquals(u, v);
         assertEquals(v, u);
 

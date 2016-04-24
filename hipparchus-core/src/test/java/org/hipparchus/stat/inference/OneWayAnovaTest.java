@@ -21,7 +21,6 @@ import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
-import org.hipparchus.stat.inference.OneWayAnova;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -107,17 +106,17 @@ public class OneWayAnovaTest {
     public void testAnovaPValueSummaryStatistics() {
         // Target comparison values computed using R version 2.6.0 (Linux version)
         List<SummaryStatistics> threeClasses = new ArrayList<SummaryStatistics>();
-        SummaryStatistics statsA = new SummaryStatistics();
+        SummaryStatistics statsA = SummaryStatistics.create();
         for (double a : classA) {
             statsA.addValue(a);
         }
         threeClasses.add(statsA);
-        SummaryStatistics statsB = new SummaryStatistics();
+        SummaryStatistics statsB = SummaryStatistics.create();
         for (double b : classB) {
             statsB.addValue(b);
         }
         threeClasses.add(statsB);
-        SummaryStatistics statsC = new SummaryStatistics();
+        SummaryStatistics statsC = SummaryStatistics.create();
         for (double c : classC) {
             statsC.addValue(c);
         }

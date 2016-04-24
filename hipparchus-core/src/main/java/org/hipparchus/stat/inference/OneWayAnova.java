@@ -195,7 +195,7 @@ public class OneWayAnova {
 
         // convert arrays to SummaryStatistics
         for (final double[] data : categoryData) {
-            final SummaryStatistics dataSummaryStatistics = new SummaryStatistics();
+            final SummaryStatistics dataSummaryStatistics = SummaryStatistics.create();
             categoryDataSummaryStatistics.add(dataSummaryStatistics);
             for (final double val : data) {
                 dataSummaryStatistics.addValue(val);

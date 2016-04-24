@@ -31,7 +31,7 @@ import org.junit.Test;
 
 
 /**
- * Test cases for {@link AggregateSummaryStatistics}
+ * Test cases for {@link AggregateSummaryStatistics}.
  */
 public class AggregateSummaryStatisticsTest {
 
@@ -89,7 +89,7 @@ public class AggregateSummaryStatisticsTest {
 
         // Create aggregator and total stats for comparison
         AggregateSummaryStatistics aggregate = new AggregateSummaryStatistics();
-        SummaryStatistics totalStats = new SummaryStatistics();
+        SummaryStatistics totalStats = SummaryStatistics.create();
 
         // Create array of component stats
         SummaryStatistics componentStats[] = new SummaryStatistics[nSamples];
@@ -137,7 +137,7 @@ public class AggregateSummaryStatisticsTest {
         int nSamples = subSamples.length;
 
         // Compute combined stats directly
-        SummaryStatistics totalStats = new SummaryStatistics();
+        SummaryStatistics totalStats = SummaryStatistics.create();
         for (int i = 0; i < totalSample.length; i++) {
             totalStats.addValue(totalSample[i]);
         }
@@ -145,7 +145,7 @@ public class AggregateSummaryStatisticsTest {
         // Now compute subsample stats individually and aggregate
         SummaryStatistics[] subSampleStats = new SummaryStatistics[nSamples];
         for (int i = 0; i < nSamples; i++) {
-            subSampleStats[i] = new SummaryStatistics();
+            subSampleStats[i] = SummaryStatistics.create();
         }
         Collection<SummaryStatistics> aggregate = new ArrayList<SummaryStatistics>();
         for (int i = 0; i < nSamples; i++) {
@@ -173,7 +173,7 @@ public class AggregateSummaryStatisticsTest {
         int nSamples = subSamples.length;
 
         // Compute combined stats directly
-        SummaryStatistics totalStats = new SummaryStatistics();
+        SummaryStatistics totalStats = SummaryStatistics.create();
         for (int i = 0; i < totalSample.length; i++) {
             totalStats.addValue(totalSample[i]);
         }
@@ -181,7 +181,7 @@ public class AggregateSummaryStatisticsTest {
         // Now compute subsample stats individually and aggregate
         SummaryStatistics[] subSampleStats = new SummaryStatistics[nSamples];
         for (int i = 0; i < nSamples; i++) {
-            subSampleStats[i] = new SummaryStatistics();
+            subSampleStats[i] = SummaryStatistics.create();
         }
         Collection<StatisticalSummary> aggregate = new ArrayList<StatisticalSummary>();
         for (int i = 0; i < nSamples; i++) {
@@ -203,7 +203,7 @@ public class AggregateSummaryStatisticsTest {
         double[][] subSamples = {{1}, {2}, {3}, {4}, {5}};
 
         // Compute combined stats directly
-        SummaryStatistics totalStats = new SummaryStatistics();
+        SummaryStatistics totalStats = SummaryStatistics.create();
         for (int i = 0; i < totalSample.length; i++) {
             totalStats.addValue(totalSample[i]);
         }
@@ -211,7 +211,7 @@ public class AggregateSummaryStatisticsTest {
         // Now compute subsample stats individually and aggregate
         SummaryStatistics[] subSampleStats = new SummaryStatistics[5];
         for (int i = 0; i < 5; i++) {
-            subSampleStats[i] = new SummaryStatistics();
+            subSampleStats[i] = SummaryStatistics.create();
         }
         Collection<SummaryStatistics> aggregate = new ArrayList<SummaryStatistics>();
         for (int i = 0; i < 5; i++) {
@@ -222,7 +222,7 @@ public class AggregateSummaryStatisticsTest {
         }
 
         // Compare values
-        StatisticalSummaryValues aggregatedStats = AggregateSummaryStatistics.aggregate(aggregate);
+        StatisticalSummary aggregatedStats = AggregateSummaryStatistics.aggregate(aggregate);
         assertEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
     }
 
@@ -232,7 +232,7 @@ public class AggregateSummaryStatisticsTest {
         double[][] subSamples = {{Double.POSITIVE_INFINITY, 2}, {3}, {Double.NaN}, {5}};
 
         // Compute combined stats directly
-        SummaryStatistics totalStats = new SummaryStatistics();
+        SummaryStatistics totalStats = SummaryStatistics.create();
         for (int i = 0; i < totalSample.length; i++) {
             totalStats.addValue(totalSample[i]);
         }
@@ -240,7 +240,7 @@ public class AggregateSummaryStatisticsTest {
         // Now compute subsample stats individually and aggregate
         SummaryStatistics[] subSampleStats = new SummaryStatistics[5];
         for (int i = 0; i < 4; i++) {
-            subSampleStats[i] = new SummaryStatistics();
+            subSampleStats[i] = SummaryStatistics.create();
         }
         Collection<SummaryStatistics> aggregate = new ArrayList<SummaryStatistics>();
         for (int i = 0; i < 4; i++) {
@@ -251,7 +251,7 @@ public class AggregateSummaryStatisticsTest {
         }
 
         // Compare values
-        StatisticalSummaryValues aggregatedStats = AggregateSummaryStatistics.aggregate(aggregate);
+        StatisticalSummary aggregatedStats = AggregateSummaryStatistics.aggregate(aggregate);
         assertEquals(totalStats.getSummary(), aggregatedStats, 10E-12);
 
     }

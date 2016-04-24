@@ -13,8 +13,10 @@
  */
 package org.hipparchus.fitting.leastsquares;
 
-import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
+import java.awt.geom.Point2D;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.RealVector;
@@ -23,10 +25,6 @@ import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class demonstrates the main functionality of the
@@ -94,8 +92,8 @@ public class EvaluationTestValidation {
 
         // Initialize statistics accumulators.
         for (int i = 0; i < numParams; i++) {
-            paramsFoundByDirectSolution[i] = new SummaryStatistics();
-            sigmaEstimate[i] = new SummaryStatistics();
+            paramsFoundByDirectSolution[i] = SummaryStatistics.create();
+            sigmaEstimate[i] = SummaryStatistics.create();
         }
 
         final RealVector init = new ArrayRealVector(new double[]{ slope, offset }, false);

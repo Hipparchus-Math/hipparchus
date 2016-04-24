@@ -206,7 +206,7 @@ public class DescriptiveStatisticsTest {
     public void testSummaryConsistency() {
         final int windowSize = 5;
         final DescriptiveStatistics dstats = new DescriptiveStatistics(windowSize);
-        final SummaryStatistics sstats = new SummaryStatistics();
+        final SummaryStatistics sstats = SummaryStatistics.create();
         final double tol = 1E-12;
         for (int i = 0; i < 20; i++) {
             dstats.addValue(i);

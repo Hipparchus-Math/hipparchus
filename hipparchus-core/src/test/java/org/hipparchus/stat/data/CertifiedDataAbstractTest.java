@@ -47,7 +47,7 @@ public abstract class CertifiedDataAbstractTest {
     @Before
     public void setUp() throws IOException {
         descriptives = new DescriptiveStatistics();
-        summaries = new SummaryStatistics();
+        summaries = SummaryStatistics.create();
         certifiedValues = new HashMap<String, Double>();
 
         loadData();
@@ -138,6 +138,7 @@ public abstract class CertifiedDataAbstractTest {
             // Get the value of prop
             String prop = "get" + name.substring(0,1).toUpperCase() + name.substring(1);
             Method meth = bean.getClass().getMethod(prop, new Class[0]);
+            meth.setAccessible(true);
             Object property = meth.invoke(bean, new Object[0]);
             if (meth.getReturnType().equals(Double.TYPE)) {
                 return (Double) property;
