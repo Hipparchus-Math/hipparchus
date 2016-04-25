@@ -65,7 +65,7 @@ public interface MultivariateSummaryStatistics
      * @param k dimension of the data
      */
     static MultivariateSummaryStatistics of(int k) {
-        return builder(k).withCovarianceBiasCorrected(true).build();
+        return builder(k).withBiasCorrectedCovariance(true).build();
     }
 
     /**
@@ -143,7 +143,7 @@ public interface MultivariateSummaryStatistics
          * is computed
          * @return the builder
          */
-        public Builder withCovarianceBiasCorrected(boolean biasCorrected) {
+        public Builder withBiasCorrectedCovariance(boolean biasCorrected) {
             this.covarianceBiasCorrected = biasCorrected;
             return this;
         }

@@ -534,11 +534,11 @@ public class Variance extends AbstractStorelessUnivariateStatistic
      * Returns a new copy of this variance with the given bias correction
      * setting.
      *
-     * @param biasCorrected The isBiasCorrected to set.
+     * @param biasCorrection The bias correction flag to set.
      * @return a copy of this instance with the given bias correction setting
      */
-    public Variance withBiasCorrected(boolean biasCorrected) {
-        return new Variance(this.moment, this.incMoment, biasCorrected);
+    public Variance withBiasCorrection(boolean biasCorrection) {
+        return new Variance(this.moment, this.incMoment, biasCorrection);
     }
 
     /** {@inheritDoc} */

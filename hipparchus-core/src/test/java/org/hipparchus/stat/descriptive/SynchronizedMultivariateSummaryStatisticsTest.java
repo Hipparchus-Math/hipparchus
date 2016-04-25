@@ -21,7 +21,7 @@ public final class SynchronizedMultivariateSummaryStatisticsTest
     @Override
     protected MultivariateSummaryStatistics createMultivariateSummaryStatistics(int k, boolean isCovarianceBiasCorrected) {
         return MultivariateSummaryStatistics.builder(k)
-                                            .withCovarianceBiasCorrected(isCovarianceBiasCorrected)
+                                            .withBiasCorrectedCovariance(isCovarianceBiasCorrected)
                                             .threadsafe()
                                             .build();
     }

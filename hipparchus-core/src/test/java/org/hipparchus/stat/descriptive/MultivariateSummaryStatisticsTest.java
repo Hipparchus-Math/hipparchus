@@ -36,7 +36,7 @@ public class MultivariateSummaryStatisticsTest {
 
     protected MultivariateSummaryStatistics createMultivariateSummaryStatistics(int k, boolean isCovarianceBiasCorrected) {
         return MultivariateSummaryStatistics.builder(k)
-                                            .withCovarianceBiasCorrected(isCovarianceBiasCorrected)
+                                            .withBiasCorrectedCovariance(isCovarianceBiasCorrected)
                                             .build();
     }
 

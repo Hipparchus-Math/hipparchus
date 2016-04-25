@@ -61,7 +61,7 @@ public class StandardDeviationTest extends StorelessUnivariateStatisticAbstractT
         m.incrementAll(values);  // side effect is to add values
 
         StandardDeviation s1 = getUnivariateStatistic();
-        s1 = s1.withBiasCorrected(false);
+        s1 = s1.withBiasCorrection(false);
         assertEquals(sigma, s1.evaluate(values), 1E-14);
         s1.incrementAll(values);
         assertEquals(sigma, s1.getResult(), 1E-14);
