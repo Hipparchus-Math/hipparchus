@@ -22,6 +22,7 @@ import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver.Interval;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
@@ -58,7 +59,7 @@ public class EventState {
     /** Value of the events handler at the beginning of the step. */
     private double g0;
 
-    /** Simulated sign of g0 (we cheat when crossing events). */
+    /** Sign of g0. */
     private boolean g0Positive;
 
     /** Indicator of event expected during the step. */
@@ -79,8 +80,9 @@ public class EventState {
     /** Integration direction. */
     private boolean forward;
 
-    /** Variation direction around pending event.
-     *  (this is considered with respect to the integration direction)
+    /**
+     * Direction of g(t) in the propagation direction for the pending event, or if there
+     * is no pending event the direction of the previous event.
      */
     private boolean increasing;
 
@@ -256,10 +258,12 @@ public class EventState {
                              double ga,
                              final double tb,
                              final double gb) {
-        assert ga == 0.0 || gb == 0.0 || (ga > 0.0 && gb < 0.0) || (ga < 0.0 && gb > 0.0);
+        // check there appears to be a root in [ta, tb]
+        check(ga == 0.0 || gb == 0.0 || (ga > 0.0 && gb < 0.0) || (ga < 0.0 && gb > 0.0));
 
         final UnivariateFunction f = t -> handler.g(interpolator.getInterpolatedState(t));
 
+        // loop to skip through "fake" roots, i.e. where g(t) = g'(t) = 0.0
         while (true) {
             // event time, just at or before the actual root.
             final double beforeRoot;
@@ -304,8 +308,8 @@ public class EventState {
             if (beforeRoot == afterRoot) {
                 afterRoot = nextAfter(afterRoot);
             }
-            // afterRoot and beforeRoot must be different
-            assert (forward && afterRoot > beforeRoot) || (!forward && afterRoot < beforeRoot);
+            // check loop is making some progress
+            check((forward && afterRoot > beforeRoot) || (!forward && afterRoot < beforeRoot));
 
             final double afterRootG = f.value(afterRoot);
             if (afterRootG == 0.0 || afterRootG > 0.0 == g0Positive) {
@@ -328,8 +332,9 @@ public class EventState {
                 afterEvent = afterRoot;
                 afterG = afterRootG;
 
-                assert afterG > 0 == increasing;
-                assert increasing == gb >= ga;
+                // check increasing set correctly
+                check(afterG > 0 == increasing);
+                check(increasing == gb >= ga);
 
                 return true;
             }
@@ -376,9 +381,8 @@ public class EventState {
      */
     public boolean tryAdvance(final ODEStateAndDerivative state,
                               final ODEStateInterpolator interpolator) {
-        // check for illegal states.
-        // These exceptions should be impossible for the user to cause.
-        assert !(pendingEvent && strictlyAfter(pendingEventTime, state.getTime()));
+        // check this is only called before a pending event.
+        check(!(pendingEvent && strictlyAfter(pendingEventTime, state.getTime())));
 
         final double t = state.getTime();
 
@@ -415,10 +419,9 @@ public class EventState {
      * may be restarted safely.
      */
     public EventOccurrence doEvent(final ODEStateAndDerivative state) {
-        // check for illegal states.
-        // These exceptions should be impossible for the user to cause.
-        assert pendingEvent;
-        assert state.getTime() == this.pendingEventTime;
+        // check event is pending and is at the same time
+        check(pendingEvent);
+        check(state.getTime() == this.pendingEventTime);
 
         final Action action = handler.eventOccurred(state, increasing == forward);
         final ODEState newState;
@@ -435,7 +438,8 @@ public class EventState {
         t0 = afterEvent;
         g0 = afterG;
         g0Positive = increasing;
-        assert g0 == 0.0 || g0Positive == (g0 > 0);
+        // check g0Positive set correctly
+        check(g0 == 0.0 || g0Positive == (g0 > 0));
         return new EventOccurrence(action, newState, earliestTimeConsidered);
     }
 
@@ -487,6 +491,18 @@ public class EventState {
      */
     private boolean strictlyAfter(final double t1, final double t2) {
         return forward ? t1 < t2 : t2 < t1;
+    }
+
+    /**
+     * Same as keyword assert, but throw a {@link MathRuntimeException}.
+     *
+     * @param condition to check
+     * @throws MathRuntimeException if {@code condition} is false.
+     */
+    private void check(final boolean condition) throws MathRuntimeException {
+        if (!condition) {
+            throw MathRuntimeException.createInternalError();
+        }
     }
 
     /**
