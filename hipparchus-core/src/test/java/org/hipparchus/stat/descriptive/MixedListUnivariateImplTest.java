@@ -16,15 +16,16 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.NumberTransformer;
 import org.hipparchus.util.TransformerMap;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -51,9 +52,7 @@ public final class MixedListUnivariateImplTest {
         transformers = new TransformerMap();
 
         transformers.putTransformer(Foo.class, new FooTransformer());
-
         transformers.putTransformer(Bar.class, new BarTransformer());
-
     }
 
     /** test stats */
@@ -61,52 +60,43 @@ public final class MixedListUnivariateImplTest {
     public void testStats() {
         List<Object> externalList = new ArrayList<Object>();
 
-        DescriptiveStatistics u = new ListUnivariateImpl(externalList,transformers);
+        DescriptiveStatistics u = new ListUnivariateImpl(externalList, transformers);
 
-        Assert.assertEquals("total count", 0, u.getN(), tolerance);
+        assertEquals("total count", 0, u.getN(), tolerance);
         u.addValue(one);
         u.addValue(two);
         u.addValue(two);
         u.addValue(three);
-        Assert.assertEquals("N", n, u.getN(), tolerance);
-        Assert.assertEquals("sum", sum, u.getSum(), tolerance);
-        Assert.assertEquals("sumsq", sumSq, u.getSumsq(), tolerance);
-        Assert.assertEquals("var", var, u.getVariance(), tolerance);
-        Assert.assertEquals("std", std, u.getStandardDeviation(), tolerance);
-        Assert.assertEquals("mean", mean, u.getMean(), tolerance);
-        Assert.assertEquals("min", min, u.getMin(), tolerance);
-        Assert.assertEquals("max", max, u.getMax(), tolerance);
+        assertEquals("N", n, u.getN(), tolerance);
+        assertEquals("sum", sum, u.getSum(), tolerance);
+        assertEquals("sumsq", sumSq, u.getSumOfSquares(), tolerance);
+        assertEquals("var", var, u.getVariance(), tolerance);
+        assertEquals("std", std, u.getStandardDeviation(), tolerance);
+        assertEquals("mean", mean, u.getMean(), tolerance);
+        assertEquals("min", min, u.getMin(), tolerance);
+        assertEquals("max", max, u.getMax(), tolerance);
         u.clear();
-        Assert.assertEquals("total count", 0, u.getN(), tolerance);
+        assertEquals("total count", 0, u.getN(), tolerance);
     }
 
     @Test
     public void testN0andN1Conditions() {
         DescriptiveStatistics u = new ListUnivariateImpl(new ArrayList<Object>(),transformers);
 
-        Assert.assertTrue(
-            "Mean of n = 0 set should be NaN",
-            Double.isNaN(u.getMean()));
-        Assert.assertTrue(
-            "Standard Deviation of n = 0 set should be NaN",
-            Double.isNaN(u.getStandardDeviation()));
-        Assert.assertTrue(
-            "Variance of n = 0 set should be NaN",
-            Double.isNaN(u.getVariance()));
+        assertTrue("Mean of n = 0 set should be NaN", Double.isNaN(u.getMean()));
+        assertTrue("Standard Deviation of n = 0 set should be NaN",
+                   Double.isNaN(u.getStandardDeviation()));
+        assertTrue("Variance of n = 0 set should be NaN",
+                   Double.isNaN(u.getVariance()));
 
         u.addValue(one);
 
-        Assert.assertTrue(
-            "Mean of n = 1 set should be value of single item n1, instead it is " + u.getMean() ,
-            u.getMean() == one);
+        assertTrue("Mean of n = 1 set should be value of single item n1, instead it is " + u.getMean(),
+                   u.getMean() == one);
 
-        Assert.assertTrue(
-            "StdDev of n = 1 set should be zero, instead it is: "
-                + u.getStandardDeviation(),
-            u.getStandardDeviation() == 0);
-        Assert.assertTrue(
-            "Variance of n = 1 set should be zero",
-            u.getVariance() == 0);
+        assertTrue("StdDev of n = 1 set should be zero, instead it is: " + u.getStandardDeviation(),
+                   u.getStandardDeviation() == 0);
+        assertTrue("Variance of n = 1 set should be zero", u.getVariance() == 0);
     }
 
     @Test
@@ -137,11 +127,10 @@ public final class MixedListUnivariateImplTest {
         u.addObject("9");
         u.addObject("12.3");
 
-
-        Assert.assertEquals("mean", 12.40455, u.getMean(), 0.0001);
-        Assert.assertEquals("variance", 10.00236, u.getVariance(), 0.0001);
-        Assert.assertEquals("skewness", 1.437424, u.getSkewness(), 0.0001);
-        Assert.assertEquals("kurtosis", 2.37719, u.getKurtosis(), 0.0001);
+        assertEquals("mean", 12.40455, u.getMean(), 0.0001);
+        assertEquals("variance", 10.00236, u.getVariance(), 0.0001);
+        assertEquals("skewness", 1.437424, u.getSkewness(), 0.0001);
+        assertEquals("kurtosis", 2.37719, u.getKurtosis(), 0.0001);
     }
 
     @Test
@@ -154,11 +143,10 @@ public final class MixedListUnivariateImplTest {
         u.addValue(3.0);
         u.addValue(4.0);
 
-        Assert.assertEquals(
-            "Geometric mean not expected",
-            2.213364,
-            u.getGeometricMean(),
-            0.00001);
+        assertEquals("Geometric mean not expected",
+                     2.213364,
+                     u.getGeometricMean(),
+                     0.00001);
 
         // Now test rolling - StorelessDescriptiveStatistics should discount the contribution
         // of a discarded element
@@ -166,12 +154,10 @@ public final class MixedListUnivariateImplTest {
             u.addValue(i + 2);
         }
         // Values should be (2,3,4,5,6,7,8,9,10,11)
-        Assert.assertEquals(
-            "Geometric mean not expected",
-            5.755931,
-            u.getGeometricMean(),
-            0.00001);
-
+        assertEquals("Geometric mean not expected",
+                     5.755931,
+                     u.getGeometricMean(),
+                     0.00001);
     }
 
     public static final class Foo {

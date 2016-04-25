@@ -24,10 +24,10 @@ import java.util.Locale;
  * this exception.
  * This class is meant to signal a precondition violation ("null is an illegal
  * argument") and so does not extend the standard {@code NullPointerException}.
- * Propagation of {@code NullPointerException} from within Commons-Math is
+ * Propagation of {@code NullPointerException} from within Hipparchus is
  * construed to be a bug.
  * <p>
- * Note: from 4.0 onwards, this class extends {@link NullPointerException} instead
+ * Note: from 1.0 onwards, this class extends {@link NullPointerException} instead
  * of {@link MathIllegalArgumentException}.
  *
  */

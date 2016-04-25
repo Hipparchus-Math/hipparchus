@@ -70,7 +70,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
         }
 
         try {
-            sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
+            sv = sv.withVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
             sv.evaluate(null);
             fail("null is not a valid data array.");
         } catch (NullArgumentException nae) {
@@ -99,12 +99,12 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
         final double[] values = { -2.0d, 2.0d, 4.0d, -2.0d, 22.0d, 11.0d, 3.0d, 14.0d, 5.0d };
         final int length = values.length;
         final double mean = StatUtils.mean(values); // 6.333...
-        final SemiVariance sv = getUnivariateStatistic(); // Default bias correction is true
+        SemiVariance sv = getUnivariateStatistic(); // Default bias correction is true
         final double downsideSemiVariance = sv.evaluate(values); // Downside is the default
         assertEquals(TestUtils.sumSquareDev(new double[] {-2d, 2d, 4d, -2d, 3d, 5d}, mean) / (length - 1),
                      downsideSemiVariance, 1E-14);
 
-        sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
+        sv = sv.withVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
         final double upsideSemiVariance = sv.evaluate(values);
         assertEquals(TestUtils.sumSquareDev(new double[] {22d, 11d, 14d}, mean) / (length - 1),
                      upsideSemiVariance, 1E-14);
@@ -121,7 +121,7 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
         double singletest = sv.evaluate(values);
         assertEquals(19.556d, singletest, 0.01d);
 
-        sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
+        sv = sv.withVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
         singletest = sv.evaluate(values);
         assertEquals(36.222d, singletest, 0.01d);
     }
@@ -149,9 +149,9 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
         double[] values = { -2.0d, 2.0d, 4.0d, -2.0d, 22.0d, 11.0d, 3.0d, 14.0d, 5.0d };
         double variance = StatUtils.variance(values);
         SemiVariance sv = new SemiVariance(true); // Bias corrected
-        sv.setVarianceDirection(SemiVariance.DOWNSIDE_VARIANCE);
+        sv = sv.withVarianceDirection(SemiVariance.DOWNSIDE_VARIANCE);
         final double lower = sv.evaluate(values);
-        sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
+        sv = sv.withVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
         final double upper = sv.evaluate(values);
         assertEquals(variance, lower + upper, 10e-12);
     }
@@ -167,9 +167,9 @@ public class SemiVarianceTest extends UnivariateStatisticAbstractTest {
         double target = 0;
         double totalSumOfSquares = TestUtils.sumSquareDev(values, target);
         SemiVariance sv = new SemiVariance(true); // Bias corrected
-        sv.setVarianceDirection(SemiVariance.DOWNSIDE_VARIANCE);
+        sv = sv.withVarianceDirection(SemiVariance.DOWNSIDE_VARIANCE);
         double lower = sv.evaluate(values, target);
-        sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
+        sv = sv.withVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
         double upper = sv.evaluate(values, target);
         assertEquals(totalSumOfSquares / (values.length - 1), lower + upper, 10e-12);
     }

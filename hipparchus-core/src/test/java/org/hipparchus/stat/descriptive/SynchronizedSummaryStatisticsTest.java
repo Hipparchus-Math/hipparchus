@@ -13,17 +13,24 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import org.hipparchus.stat.descriptive.SummaryStatistics;
-import org.hipparchus.stat.descriptive.SynchronizedSummaryStatistics;
+import org.hipparchus.stat.descriptive.SummaryStatistics.Builder;
 
 /**
- * Test cases for the {@link SynchronizedSummaryStatisticsTest} class.
- *          2007) $
+ * Test cases for the {@link SynchronizedSummaryStatistics} class.
  */
 public final class SynchronizedSummaryStatisticsTest extends SummaryStatisticsTest {
 
     @Override
     protected SummaryStatistics createSummaryStatistics() {
-        return new SynchronizedSummaryStatistics();
+        return SummaryStatistics.builder()
+                                .threadsafe()
+                                .build();
     }
+
+    @Override
+    protected Builder createBuilder() {
+        return SummaryStatistics.builder()
+                                .threadsafe();
+    }
+
 }

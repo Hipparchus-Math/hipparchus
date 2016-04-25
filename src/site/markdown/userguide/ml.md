@@ -1,6 +1,6 @@
 # 17 Machine Learning
 ## 17.1 Overview
-Machine learning support in commons-math currently provides operations to cluster
+Machine learning support in Hipparchus currently provides operations to cluster
 data sets based on a distance measure.
 
 

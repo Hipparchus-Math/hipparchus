@@ -17,36 +17,67 @@
 package org.hipparchus.util;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
 
 /**
  * A strategy to pick a pivoting index of an array for doing partitioning.
  */
-public interface PivotingStrategy {
+public enum PivotingStrategy {
 
     /**
-     * Returns a mid point strategy based on the average of begin and end indices.
-     * @return the mid point strategy.
+     * A mid point strategy based on the average of begin and end indices.
      */
-    static PivotingStrategy central() {
-        return PivotingStrategies.getCentralPivotingStrategy();
-    }
+    CENTRAL {
+        /**
+         * {@inheritDoc}
+         * This in particular picks a average of begin and end indices
+         * @return The index corresponding to a simple average of
+         * the first and the last element indices of the array slice
+         * @throws MathIllegalArgumentException when indices exceeds range
+         */
+        @Override
+        public int pivotIndex(final double[] work, final int begin, final int end)
+            throws MathIllegalArgumentException {
+            MathArrays.verifyValues(work, begin, end-begin);
+            return begin + (end - begin)/2;
+        }
+    },
 
     /**
-     * Returns the classic median of 3 strategy given begin and end indices.
-     * @return the median of 3 strategy.
+     * Classic median of 3 strategy given begin and end indices.
      */
-    static PivotingStrategy medianOf3() {
-        return PivotingStrategies.getMedianOf3PivotingStrategy();
-    }
+    MEDIAN_OF_3 {
+        /**
+         * {@inheritDoc}
+         * This in specific makes use of median of 3 pivoting.
+         * @return The index corresponding to a pivot chosen between the
+         * first, middle and the last indices of the array slice
+         * @throws MathIllegalArgumentException when indices exceeds range
+         */
+        @Override
+        public int pivotIndex(final double[] work, final int begin, final int end)
+            throws MathIllegalArgumentException {
+            MathArrays.verifyValues(work, begin, end-begin);
+            final int inclusiveEnd = end - 1;
+            final int middle = begin + (inclusiveEnd - begin) / 2;
+            final double wBegin = work[begin];
+            final double wMiddle = work[middle];
+            final double wEnd = work[inclusiveEnd];
 
-    /**
-     * Returns a strategy of selecting random index between begin and end indices.
-     * @return a random strategy.
-     */
-    static PivotingStrategy random(RandomGenerator random) {
-        return PivotingStrategies.getRandomPivotingStrategy(random);
-    }
+            if (wBegin < wMiddle) {
+                if (wMiddle < wEnd) {
+                    return middle;
+                } else {
+                    return wBegin < wEnd ? inclusiveEnd : begin;
+                }
+            } else {
+                if (wBegin < wEnd) {
+                    return begin;
+                } else {
+                    return wMiddle < wEnd ? inclusiveEnd : middle;
+                }
+            }
+        }
+    };
 
     /**
      * Find pivot index of the array so that partition and K<sup>th</sup>
@@ -58,7 +89,7 @@ public interface PivotingStrategy {
      * first and the last element of the array slice
      * @throws MathIllegalArgumentException when indices exceeds range
      */
-    int pivotIndex(double[] work, int begin, int end)
+    public abstract int pivotIndex(double[] work, int begin, int end)
         throws MathIllegalArgumentException;
 
 }

@@ -27,7 +27,6 @@ import org.hipparchus.stat.descriptive.StatisticalSummary;
 /**
  * A collection of static methods to create inference test instances or to
  * perform inference tests.
- *
  */
 public class TestUtils  {
 
@@ -56,7 +55,7 @@ public class TestUtils  {
     // CHECKSTYLE: stop JavadocMethodCheck
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#homoscedasticT(double[], double[])
+     * @see TTest#homoscedasticT(double[], double[])
      */
     public static double homoscedasticT(final double[] sample1, final double[] sample2)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -64,7 +63,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#homoscedasticT(org.hipparchus.stat.descriptive.StatisticalSummary, org.hipparchus.stat.descriptive.StatisticalSummary)
+     * @see TTest#homoscedasticT(StatisticalSummary, StatisticalSummary)
      */
     public static double homoscedasticT(final StatisticalSummary sampleStats1,
                                         final StatisticalSummary sampleStats2)
@@ -73,7 +72,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#homoscedasticTTest(double[], double[], double)
+     * @see TTest#homoscedasticTTest(double[], double[], double)
      */
     public static boolean homoscedasticTTest(final double[] sample1, final double[] sample2,
                                              final double alpha)
@@ -82,7 +81,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#homoscedasticTTest(double[], double[])
+     * @see TTest#homoscedasticTTest(double[], double[])
      */
     public static double homoscedasticTTest(final double[] sample1, final double[] sample2)
         throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
@@ -90,7 +89,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#homoscedasticTTest(org.hipparchus.stat.descriptive.StatisticalSummary, org.hipparchus.stat.descriptive.StatisticalSummary)
+     * @see TTest#homoscedasticTTest(StatisticalSummary, StatisticalSummary)
      */
     public static double homoscedasticTTest(final StatisticalSummary sampleStats1,
                                             final StatisticalSummary sampleStats2)
@@ -99,7 +98,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#pairedT(double[], double[])
+     * @see TTest#pairedT(double[], double[])
      */
     public static double pairedT(final double[] sample1, final double[] sample2)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -107,7 +106,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#pairedTTest(double[], double[], double)
+     * @see TTest#pairedTTest(double[], double[], double)
      */
     public static boolean pairedTTest(final double[] sample1, final double[] sample2,
                                       final double alpha)
@@ -116,7 +115,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#pairedTTest(double[], double[])
+     * @see TTest#pairedTTest(double[], double[])
      */
     public static double pairedTTest(final double[] sample1, final double[] sample2)
         throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
@@ -124,7 +123,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#t(double, double[])
+     * @see TTest#t(double, double[])
      */
     public static double t(final double mu, final double[] observed)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -132,7 +131,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#t(double, org.hipparchus.stat.descriptive.StatisticalSummary)
+     * @see TTest#t(double, StatisticalSummary)
      */
     public static double t(final double mu, final StatisticalSummary sampleStats)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -140,7 +139,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#t(double[], double[])
+     * @see TTest#t(double[], double[])
      */
     public static double t(final double[] sample1, final double[] sample2)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -148,7 +147,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#t(org.hipparchus.stat.descriptive.StatisticalSummary, org.hipparchus.stat.descriptive.StatisticalSummary)
+     * @see TTest#t(StatisticalSummary, StatisticalSummary)
      */
     public static double t(final StatisticalSummary sampleStats1,
                            final StatisticalSummary sampleStats2)
@@ -157,7 +156,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#tTest(double, double[], double)
+     * @see TTest#tTest(double, double[], double)
      */
     public static boolean tTest(final double mu, final double[] sample, final double alpha)
         throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
@@ -165,7 +164,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#tTest(double, double[])
+     * @see TTest#tTest(double, double[])
      */
     public static double tTest(final double mu, final double[] sample)
         throws MathIllegalArgumentException, NullArgumentException,
@@ -174,7 +173,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#tTest(double, org.hipparchus.stat.descriptive.StatisticalSummary, double)
+     * @see TTest#tTest(double, StatisticalSummary, double)
      */
     public static boolean tTest(final double mu, final StatisticalSummary sampleStats,
                                 final double alpha)
@@ -183,7 +182,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#tTest(double, org.hipparchus.stat.descriptive.StatisticalSummary)
+     * @see TTest#tTest(double, StatisticalSummary)
      */
     public static double tTest(final double mu, final StatisticalSummary sampleStats)
         throws MathIllegalArgumentException, NullArgumentException,
@@ -192,7 +191,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#tTest(double[], double[], double)
+     * @see TTest#tTest(double[], double[], double)
      */
     public static boolean tTest(final double[] sample1, final double[] sample2,
                                 final double alpha)
@@ -201,7 +200,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#tTest(double[], double[])
+     * @see TTest#tTest(double[], double[])
      */
     public static double tTest(final double[] sample1, final double[] sample2)
         throws MathIllegalArgumentException, NullArgumentException,
@@ -210,7 +209,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#tTest(org.hipparchus.stat.descriptive.StatisticalSummary, org.hipparchus.stat.descriptive.StatisticalSummary, double)
+     * @see TTest#tTest(StatisticalSummary, StatisticalSummary, double)
      */
     public static boolean tTest(final StatisticalSummary sampleStats1,
                                 final StatisticalSummary sampleStats2,
@@ -220,7 +219,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.TTest#tTest(org.hipparchus.stat.descriptive.StatisticalSummary, org.hipparchus.stat.descriptive.StatisticalSummary)
+     * @see TTest#tTest(StatisticalSummary, StatisticalSummary)
      */
     public static double tTest(final StatisticalSummary sampleStats1,
                                final StatisticalSummary sampleStats2)
@@ -230,7 +229,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquare(double[], long[])
+     * @see ChiSquareTest#chiSquare(double[], long[])
      */
     public static double chiSquare(final double[] expected, final long[] observed)
         throws MathIllegalArgumentException {
@@ -238,7 +237,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquare(long[][])
+     * @see ChiSquareTest#chiSquare(long[][])
      */
     public static double chiSquare(final long[][] counts)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -246,7 +245,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTest(double[], long[], double)
+     * @see ChiSquareTest#chiSquareTest(double[], long[], double)
      */
     public static boolean chiSquareTest(final double[] expected, final long[] observed,
                                         final double alpha)
@@ -255,7 +254,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTest(double[], long[])
+     * @see ChiSquareTest#chiSquareTest(double[], long[])
      */
     public static double chiSquareTest(final double[] expected, final long[] observed)
         throws MathIllegalArgumentException, MathIllegalStateException {
@@ -263,7 +262,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTest(long[][], double)
+     * @see ChiSquareTest#chiSquareTest(long[][], double)
      */
     public static boolean chiSquareTest(final long[][] counts, final double alpha)
         throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
@@ -271,7 +270,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTest(long[][])
+     * @see ChiSquareTest#chiSquareTest(long[][])
      */
     public static double chiSquareTest(final long[][] counts)
         throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
@@ -279,8 +278,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareDataSetsComparison(long[], long[])
-     *
+     * @see ChiSquareTest#chiSquareDataSetsComparison(long[], long[])
      */
     public static double chiSquareDataSetsComparison(final long[] observed1,
                                                      final long[] observed2)
@@ -289,8 +287,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTestDataSetsComparison(long[], long[])
-     *
+     * @see ChiSquareTest#chiSquareTestDataSetsComparison(long[], long[])
      */
     public static double chiSquareTestDataSetsComparison(final long[] observed1,
                                                          final long[] observed2)
@@ -300,8 +297,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.ChiSquareTest#chiSquareTestDataSetsComparison(long[], long[], double)
-     *
+     * @see ChiSquareTest#chiSquareTestDataSetsComparison(long[], long[], double)
      */
     public static boolean chiSquareTestDataSetsComparison(final long[] observed1,
                                                           final long[] observed2,
@@ -311,8 +307,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.OneWayAnova#anovaFValue(Collection)
-     *
+     * @see OneWayAnova#anovaFValue(Collection)
      */
     public static double oneWayAnovaFValue(final Collection<double[]> categoryData)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -320,8 +315,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.OneWayAnova#anovaPValue(Collection)
-     *
+     * @see OneWayAnova#anovaPValue(Collection)
      */
     public static double oneWayAnovaPValue(final Collection<double[]> categoryData)
         throws MathIllegalArgumentException, NullArgumentException,
@@ -330,8 +324,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.OneWayAnova#anovaTest(Collection,double)
-     *
+     * @see OneWayAnova#anovaTest(Collection,double)
      */
     public static boolean oneWayAnovaTest(final Collection<double[]> categoryData,
                                           final double alpha)
@@ -340,7 +333,7 @@ public class TestUtils  {
     }
 
      /**
-     * @see org.hipparchus.stat.inference.GTest#g(double[], long[])
+     * @see GTest#g(double[], long[])
      */
     public static double g(final double[] expected, final long[] observed)
         throws MathIllegalArgumentException {
@@ -348,7 +341,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.GTest#gTest( double[],  long[] )
+     * @see GTest#gTest( double[],  long[] )
      */
     public static double gTest(final double[] expected, final long[] observed)
         throws MathIllegalArgumentException, MathIllegalStateException {
@@ -356,7 +349,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.GTest#gTestIntrinsic(double[], long[] )
+     * @see GTest#gTestIntrinsic(double[], long[] )
      */
     public static double gTestIntrinsic(final double[] expected, final long[] observed)
         throws MathIllegalArgumentException, MathIllegalStateException {
@@ -364,7 +357,7 @@ public class TestUtils  {
     }
 
      /**
-     * @see org.hipparchus.stat.inference.GTest#gTest( double[],long[],double)
+     * @see GTest#gTest( double[],long[],double)
      */
     public static boolean gTest(final double[] expected, final long[] observed,
                                 final double alpha)
@@ -373,7 +366,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.GTest#gDataSetsComparison(long[], long[])
+     * @see GTest#gDataSetsComparison(long[], long[])
      */
     public static double gDataSetsComparison(final long[] observed1,
                                                   final long[] observed2)
@@ -382,7 +375,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.GTest#rootLogLikelihoodRatio(long, long, long, long)
+     * @see GTest#rootLogLikelihoodRatio(long, long, long, long)
      */
     public static double rootLogLikelihoodRatio(final long k11, final long k12, final long k21, final long k22)
         throws MathIllegalArgumentException {
@@ -391,7 +384,7 @@ public class TestUtils  {
 
 
     /**
-     * @see org.hipparchus.stat.inference.GTest#gTestDataSetsComparison(long[], long[])
+     * @see GTest#gTestDataSetsComparison(long[], long[])
      */
     public static double gTestDataSetsComparison(final long[] observed1,
                                                         final long[] observed2)
@@ -401,7 +394,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.GTest#gTestDataSetsComparison(long[],long[],double)
+     * @see GTest#gTestDataSetsComparison(long[],long[],double)
      */
     public static boolean gTestDataSetsComparison(final long[] observed1,
                                                   final long[] observed2,
@@ -411,7 +404,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovStatistic(RealDistribution, double[])
+     * @see KolmogorovSmirnovTest#kolmogorovSmirnovStatistic(RealDistribution, double[])
      */
     public static double kolmogorovSmirnovStatistic(RealDistribution dist, double[] data)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -419,7 +412,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(RealDistribution, double[])
+     * @see KolmogorovSmirnovTest#kolmogorovSmirnovTest(RealDistribution, double[])
      */
     public static double kolmogorovSmirnovTest(RealDistribution dist, double[] data)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -427,7 +420,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(RealDistribution, double[], boolean)
+     * @see KolmogorovSmirnovTest#kolmogorovSmirnovTest(RealDistribution, double[], boolean)
      */
     public static double kolmogorovSmirnovTest(RealDistribution dist, double[] data, boolean strict)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -435,7 +428,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(RealDistribution, double[], double)
+     * @see KolmogorovSmirnovTest#kolmogorovSmirnovTest(RealDistribution, double[], double)
      */
     public static boolean kolmogorovSmirnovTest(RealDistribution dist, double[] data, double alpha)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -443,7 +436,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovStatistic(double[], double[])
+     * @see KolmogorovSmirnovTest#kolmogorovSmirnovStatistic(double[], double[])
      */
     public static double kolmogorovSmirnovStatistic(double[] x, double[] y)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -451,7 +444,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(double[], double[])
+     * @see KolmogorovSmirnovTest#kolmogorovSmirnovTest(double[], double[])
      */
     public static double kolmogorovSmirnovTest(double[] x, double[] y)
             throws MathIllegalArgumentException, NullArgumentException {
@@ -459,7 +452,7 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#kolmogorovSmirnovTest(double[], double[], boolean)
+     * @see KolmogorovSmirnovTest#kolmogorovSmirnovTest(double[], double[], boolean)
      */
     public static double kolmogorovSmirnovTest(double[] x, double[] y, boolean strict)
             throws MathIllegalArgumentException, NullArgumentException  {
@@ -467,21 +460,21 @@ public class TestUtils  {
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#exactP(double, int, int, boolean)
+     * @see KolmogorovSmirnovTest#exactP(double, int, int, boolean)
      */
     public static double exactP(double d, int m, int n, boolean strict) {
         return KS_TEST.exactP(d, n, m, strict);
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#approximateP(double, int, int)
+     * @see KolmogorovSmirnovTest#approximateP(double, int, int)
      */
     public static double approximateP(double d, int n, int m) {
         return KS_TEST.approximateP(d, n, m);
     }
 
     /**
-     * @see org.hipparchus.stat.inference.KolmogorovSmirnovTest#monteCarloP(double, int, int, boolean, int)
+     * @see KolmogorovSmirnovTest#monteCarloP(double, int, int, boolean, int)
      */
     public static double monteCarloP(double d, int n, int m, boolean strict, int iterations) {
         return KS_TEST.monteCarloP(d, n, m, strict, iterations);

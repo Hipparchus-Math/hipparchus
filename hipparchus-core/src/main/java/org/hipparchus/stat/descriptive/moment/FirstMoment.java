@@ -90,8 +90,11 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
      * @throws NullArgumentException if original is null
      */
      FirstMoment(FirstMoment original) throws NullArgumentException {
-         super();
-         copy(original, this);
+         MathUtils.checkNotNull(original);
+         this.n    = original.n;
+         this.m1   = original.m1;
+         this.dev  = original.dev;
+         this.nDev = original.nDev;
      }
 
     /** {@inheritDoc} */
@@ -131,28 +134,7 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
     /** {@inheritDoc} */
     @Override
     public FirstMoment copy() {
-        FirstMoment result = new FirstMoment();
-        // No try-catch or advertised exception because args are guaranteed non-null
-        copy(this, result);
-        return result;
+        return new FirstMoment(this);
     }
 
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source FirstMoment to copy
-     * @param dest FirstMoment to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(FirstMoment source, FirstMoment dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.n = source.n;
-        dest.m1 = source.m1;
-        dest.dev = source.dev;
-        dest.nDev = source.nDev;
-    }
 }

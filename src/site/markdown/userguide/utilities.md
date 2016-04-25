@@ -5,7 +5,7 @@
 The [    org.hipparchus.util](../apidocs/org/hipparchus/util/package-summary.html)
 package collects a group of array utilities,
 value transformers,  and numerical routines used by implementation classes in
-commons-math.
+Hipparchus.
 
 
 

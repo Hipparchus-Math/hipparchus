@@ -16,18 +16,15 @@
  */
 package org.hipparchus.stat.descriptive;
 
-
 import java.util.Locale;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.stat.descriptive.StatisticalSummaryValues;
 import org.junit.Assert;
 import org.junit.Test;
+
 /**
  * Test cases for the {@link StatisticalSummaryValues} class.
- *
  */
-
 public final class StatisticalSummaryValuesTest {
 
     @Test

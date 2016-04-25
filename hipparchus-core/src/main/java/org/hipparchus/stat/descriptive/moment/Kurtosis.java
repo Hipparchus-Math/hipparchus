@@ -52,7 +52,7 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
     private static final long serialVersionUID = 20150412L;
 
     /**Fourth Moment on which this statistic is based */
-    protected FourthMoment moment;
+    protected final FourthMoment moment;
 
     /**
      * Determines whether or not this statistic can be incremented or cleared.
@@ -60,14 +60,14 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
      * Statistics based on (constructed from) external moments cannot
      * be incremented or cleared.
      */
-    protected boolean incMoment;
+    protected final boolean incMoment;
 
     /**
      * Construct a Kurtosis.
      */
     public Kurtosis() {
+        moment    = new FourthMoment();
         incMoment = true;
-        moment = new FourthMoment();
     }
 
     /**
@@ -76,8 +76,8 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
      * @param m4 external Moment
      */
     public Kurtosis(final FourthMoment m4) {
-        incMoment = false;
         this.moment = m4;
+        incMoment   = false;
     }
 
     /**
@@ -88,7 +88,9 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
      * @throws NullArgumentException if original is null
      */
     public Kurtosis(Kurtosis original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.moment    = original.moment.copy();
+        this.incMoment = original.incMoment;
     }
 
     /**
@@ -194,23 +196,6 @@ public class Kurtosis extends AbstractStorelessUnivariateStatistic  implements S
     @Override
     public Kurtosis copy() {
         return new Kurtosis(this);
-    }
-
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source Kurtosis to copy
-     * @param dest Kurtosis to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(Kurtosis source, Kurtosis dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.moment = source.moment.copy();
-        dest.incMoment = source.incMoment;
     }
 
 }

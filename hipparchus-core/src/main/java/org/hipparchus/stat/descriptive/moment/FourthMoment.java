@@ -19,7 +19,6 @@ package org.hipparchus.stat.descriptive.moment;
 import java.io.Serializable;
 
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.MathUtils;
 
 /**
  * Computes a statistic related to the Fourth Central Moment. Specifically,
@@ -77,8 +76,8 @@ class FourthMoment extends ThirdMoment implements Serializable{
      * @throws NullArgumentException if original is null
      */
     FourthMoment(FourthMoment original) throws NullArgumentException {
-         super();
-         copy(original, this);
+        super(original);
+        this.m4 = original.m4;
     }
 
     /** {@inheritDoc} */
@@ -118,26 +117,7 @@ class FourthMoment extends ThirdMoment implements Serializable{
     /** {@inheritDoc} */
     @Override
     public FourthMoment copy() {
-        FourthMoment result = new FourthMoment();
-        // No try-catch or advertised exception because args are guaranteed non-null
-        copy(this, result);
-        return result;
+        return new FourthMoment(this);
     }
 
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source FourthMoment to copy
-     * @param dest FourthMoment to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(FourthMoment source, FourthMoment dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        ThirdMoment.copy(source, dest);
-        dest.m4 = source.m4;
-    }
 }

@@ -16,19 +16,19 @@
  */
 package org.hipparchus;
 
-import java.util.regex.Pattern;
-import java.util.regex.Matcher;
-import java.util.regex.MatchResult;
 import java.util.concurrent.Callable;
+import java.util.regex.MatchResult;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import org.hipparchus.util.MathArrays;
+import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
-import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.util.MathArrays;
 
 /**
  * Simple benchmarking utilities.
@@ -82,7 +82,7 @@ public class PerfTestUtils {
         final int len = methods.length;
         final StatisticalSummary[] stats = new StatisticalSummary[len];
         for (int j = 0; j < len; j++) {
-            final SummaryStatistics s = new SummaryStatistics();
+            final SummaryStatistics s = SummaryStatistics.create();
             for (int k = 0; k < repeatStat; k++) {
                 s.addValue(times[j][k][0]);
             }
@@ -299,6 +299,7 @@ public class PerfTestUtils {
         }
 
         /** {@inheritDoc} */
+        @Override
         public abstract Double call() throws Exception;
     }
 

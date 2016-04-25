@@ -18,12 +18,9 @@ package org.hipparchus.stat.descriptive.moment;
 
 import java.io.Serializable;
 
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
-import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.summary.SumOfLogs;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -55,21 +52,31 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
     private static final long serialVersionUID = 20150412L;
 
     /** Wrapped SumOfLogs instance */
-    private StorelessUnivariateStatistic sumOfLogs;
+    private final SumOfLogs sumOfLogs;
+
+    /**
+     * Determines whether or not this statistic can be incremented or cleared.
+     * <p>
+     * Statistics based on (constructed from) external statistics cannot
+     * be incremented or cleared.
+     */
+    private final boolean incSumOfLogs;
 
     /**
      * Create a GeometricMean instance.
      */
     public GeometricMean() {
         sumOfLogs = new SumOfLogs();
+        incSumOfLogs = true;
     }
 
     /**
-     * Create a GeometricMean instance using the given SumOfLogs instance
+     * Create a GeometricMean instance using the given SumOfLogs instance.
      * @param sumOfLogs sum of logs instance to use for computation.
      */
     public GeometricMean(SumOfLogs sumOfLogs) {
         this.sumOfLogs = sumOfLogs;
+        incSumOfLogs = false;
     }
 
     /**
@@ -80,8 +87,9 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
      * @throws NullArgumentException if original is null
      */
     public GeometricMean(GeometricMean original) throws NullArgumentException {
-        super();
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.sumOfLogs    = original.sumOfLogs.copy();
+        this.incSumOfLogs = original.incSumOfLogs;
     }
 
     /** {@inheritDoc} */
@@ -93,7 +101,9 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
     /** {@inheritDoc} */
     @Override
     public void increment(final double d) {
-        sumOfLogs.increment(d);
+        if (incSumOfLogs) {
+            sumOfLogs.increment(d);
+        }
     }
 
     /** {@inheritDoc} */
@@ -109,7 +119,9 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
     /** {@inheritDoc} */
     @Override
     public void clear() {
-        sumOfLogs.clear();
+        if (incSumOfLogs) {
+            sumOfLogs.clear();
+        }
     }
 
     /**
@@ -136,61 +148,6 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
     @Override
     public long getN() {
         return sumOfLogs.getN();
-    }
-
-    /**
-     * Sets the implementation for the sum of logs.
-     * <p>
-     * This method must be activated before any data has been added - i.e.,
-     * before {@link #increment(double) increment} has been used to add data;
-     * otherwise an IllegalStateException will be thrown.
-     *
-     * @param sumLogImpl the StorelessUnivariateStatistic instance to use
-     * for computing the log sum
-     * @throws MathIllegalStateException if data has already been added
-     *  (i.e if n > 0)
-     */
-    public void setSumLogImpl(StorelessUnivariateStatistic sumLogImpl)
-        throws MathIllegalStateException {
-        checkEmpty();
-        this.sumOfLogs = sumLogImpl;
-    }
-
-    /**
-     * Returns the currently configured sum of logs implementation.
-     *
-     * @return the StorelessUnivariateStatistic implementing the log sum
-     */
-    public StorelessUnivariateStatistic getSumLogImpl() {
-        return sumOfLogs;
-    }
-
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source GeometricMean to copy
-     * @param dest GeometricMean to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(GeometricMean source, GeometricMean dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.sumOfLogs = source.sumOfLogs.copy();
-    }
-
-    /**
-     * Throws MathIllegalStateException if n > 0.
-     * @throws MathIllegalStateException if data has been added to this statistic
-     */
-    private void checkEmpty() throws MathIllegalStateException {
-        if (getN() > 0) {
-            throw new MathIllegalStateException(
-                    LocalizedCoreFormats.VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC,
-                    getN());
-        }
     }
 
 }

@@ -1,9 +1,9 @@
 # Table of Contents" href="toc
 
 * [0.1 About the User Guide](overview.html#a0.1_About_the_User_Guide)
-* [0.2 What's in commons-math](overview.html#a0.2_Whats_in_commons-math)
-* [0.3 How commons-math is organized](overview.html#a0.3_How_commons-math_is_organized)
-* [0.4 How interface contracts are specified in commons-math javadoc](overview.html#a0.4_How_interface_contracts_are_specified_in_commons-math_javadoc)
+* [0.2 What's in Hipparchus](overview.html#a0.2_Whats_in_Hipparchus)
+* [0.3 How Hipparchus is organized](overview.html#a0.3_How_Hipparchus_is_organized)
+* [0.4 How interface contracts are specified in Hipparchus javadoc](overview.html#a0.4_How_interface_contracts_are_specified_in_Hipparchus_javadoc)
 * [0.5 Dependencies](overview.html#a0.5_Dependencies)
 * [1.1 Overview](stat.html#a1.1_Overview)
 * [1.2 Descriptive statistics](stat.html#a1.2_Descriptive_statistics)

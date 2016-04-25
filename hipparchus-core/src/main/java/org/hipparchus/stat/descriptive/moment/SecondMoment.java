@@ -19,7 +19,6 @@ package org.hipparchus.stat.descriptive.moment;
 import java.io.Serializable;
 
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.MathUtils;
 
 /**
  * Computes a statistic related to the Second Central Moment.  Specifically,
@@ -99,27 +98,7 @@ public class SecondMoment extends FirstMoment implements Serializable {
     /** {@inheritDoc} */
     @Override
     public SecondMoment copy() {
-        SecondMoment result = new SecondMoment();
-        // no try-catch or advertised NAE because args are guaranteed non-null
-        copy(this, result);
-        return result;
-    }
-
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source SecondMoment to copy
-     * @param dest SecondMoment to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(SecondMoment source, SecondMoment dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        FirstMoment.copy(source, dest);
-        dest.m2 = source.m2;
+        return new SecondMoment(this);
     }
 
 }

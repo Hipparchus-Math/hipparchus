@@ -148,7 +148,7 @@ public class Percentile extends AbstractUnivariateStatistic
      */
     public Percentile(final double quantile) throws MathIllegalArgumentException {
         this(quantile, EstimationType.LEGACY, NaNStrategy.REMOVED,
-             new KthSelector(PivotingStrategy.medianOf3()));
+             new KthSelector(PivotingStrategy.MEDIAN_OF_3));
     }
 
     /**
@@ -159,8 +159,7 @@ public class Percentile extends AbstractUnivariateStatistic
      * @throws NullArgumentException if original is null
      */
     public Percentile(final Percentile original) throws NullArgumentException {
-
-        MathUtils.checkNotNull(original);
+        super(original);
         estimationType   = original.getEstimationType();
         nanStrategy      = original.getNaNStrategy();
         kthSelector      = original.getKthSelector();
@@ -213,13 +212,10 @@ public class Percentile extends AbstractUnivariateStatistic
     /** {@inheritDoc} */
     @Override
     public void setData(final double[] values, final int begin, final int length)
-    throws MathIllegalArgumentException {
-        if (values == null) {
-            cachedPivots = null;
-        } else {
-            cachedPivots = new int[PIVOTS_HEAP_LENGTH];
-            Arrays.fill(cachedPivots, -1);
-        }
+        throws MathIllegalArgumentException {
+        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
+        cachedPivots = new int[PIVOTS_HEAP_LENGTH];
+        Arrays.fill(cachedPivots, -1);
         super.setData(values, begin, length);
     }
 

@@ -16,161 +16,139 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import java.io.Serializable;
+
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Implementation of {@link MultivariateSummaryStatistics} that
- * is safe to use in a multithreaded environment.  Multiple threads can safely
- * operate on a single instance without causing runtime exceptions due to race
- * conditions.  In effect, this implementation makes modification and access
- * methods atomic operations for a single instance.  That is to say, as one
- * thread is computing a statistic from the instance, no other thread can modify
- * the instance nor compute another statistic.
+ * is safe to use in a multithreaded environment.
+ * <p>
+ * Multiple threads can safely operate on a single instance without causing
+ * runtime exceptions due to race conditions.  In effect, this implementation
+ * makes modification and access methods atomic operations for a single instance.
+ * <p>
+ * That is to say, as one thread is computing a statistic from the instance,
+ * no other thread can modify the instance nor compute another statistic.
  */
-public class SynchronizedMultivariateSummaryStatistics
-    extends MultivariateSummaryStatistics {
+final class SynchronizedMultivariateSummaryStatistics
+    implements MultivariateSummaryStatistics, Serializable {
 
     /** Serialization UID */
     private static final long serialVersionUID = 20160413L;
 
-    /**
-     * Construct a SynchronizedMultivariateSummaryStatistics instance
-     * @param k dimension of the data
-     * @param isCovarianceBiasCorrected if true, the unbiased sample
-     * covariance is computed, otherwise the biased population covariance
-     * is computed
-     */
-    public SynchronizedMultivariateSummaryStatistics(int k, boolean isCovarianceBiasCorrected) {
-        super(k, isCovarianceBiasCorrected);
-    }
+    /** The MultivariateSummaryStatistics instance to delegate to. */
+    private final MultivariateSummaryStatistics delegate;
 
     /**
-     * {@inheritDoc}
+     * Constructor that wraps the given instance.
+     *
+     * @param original the {@code MultivariateSummaryStatistics} instance to wrap
+     * @throws NullArgumentException if original is null
      */
+    SynchronizedMultivariateSummaryStatistics(MultivariateSummaryStatistics original)
+        throws NullArgumentException {
+        MathUtils.checkNotNull(original);
+        this.delegate = original;
+    }
+
+    /** {@inheritDoc} */
     @Override
     public synchronized void addValue(double[] value) throws MathIllegalArgumentException {
-      super.addValue(value);
+        delegate.addValue(value);
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized int getDimension() {
-        return super.getDimension();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized long getN() {
-        return super.getN();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized double[] getSum() {
-        return super.getSum();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized double[] getSumSq() {
-        return super.getSumSq();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized double[] getSumLog() {
-        return super.getSumLog();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized double[] getMean() {
-        return super.getMean();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized double[] getStandardDeviation() {
-        return super.getStandardDeviation();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized RealMatrix getCovariance() {
-        return super.getCovariance();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized double[] getMax() {
-        return super.getMax();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized double[] getMin() {
-        return super.getMin();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized double[] getGeometricMean() {
-        return super.getGeometricMean();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public synchronized String toString() {
-        return super.toString();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized void clear() {
-        super.clear();
+        delegate.clear();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
+    @Override
+    public synchronized int getDimension() {
+        return delegate.getDimension();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized long getN() {
+        return delegate.getN();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double[] getSum() {
+        return delegate.getSum();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double[] getSumSq() {
+        return delegate.getSumSq();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double[] getSumLog() {
+        return delegate.getSumLog();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double[] getMean() {
+        return delegate.getMean();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double[] getStandardDeviation() {
+        return delegate.getStandardDeviation();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized RealMatrix getCovariance() {
+        return delegate.getCovariance();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double[] getMax() {
+        return delegate.getMax();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double[] getMin() {
+        return delegate.getMin();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized double[] getGeometricMean() {
+        return delegate.getGeometricMean();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public synchronized String toString() {
+        return delegate.toString();
+    }
+
+    /** {@inheritDoc} */
     @Override
     public synchronized boolean equals(Object object) {
-        return super.equals(object);
+        return delegate.equals(object);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized int hashCode() {
-        return super.hashCode();
+        return delegate.hashCode();
     }
 
 }

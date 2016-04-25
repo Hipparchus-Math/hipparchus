@@ -27,7 +27,6 @@ import java.util.Locale;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NullArgumentException;
 
 /**
  * Formats a BigFraction number in proper format or improper format.
@@ -51,7 +50,7 @@ public class BigFractionFormat extends AbstractFormat implements Serializable {
      * Create an improper formatting instance with a custom number format for
      * both the numerator and denominator.
      * @param format the custom format for both the numerator and denominator.
-     * @throws NullArgumentException if the provided format is null.
+     * @throws org.hipparchus.exception.NullArgumentException if the provided format is null.
      */
     public BigFractionFormat(final NumberFormat format) {
         super(format);
@@ -62,7 +61,7 @@ public class BigFractionFormat extends AbstractFormat implements Serializable {
      * the numerator and a custom number format for the denominator.
      * @param numeratorFormat the custom format for the numerator.
      * @param denominatorFormat the custom format for the denominator.
-     * @throws NullArgumentException if either provided format is null.
+     * @throws org.hipparchus.exception.NullArgumentException if either provided format is null.
      */
     public BigFractionFormat(final NumberFormat numeratorFormat,
                              final NumberFormat denominatorFormat) {

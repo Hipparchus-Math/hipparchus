@@ -23,10 +23,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.NavigableMap;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
@@ -38,6 +38,7 @@ import org.hipparchus.util.MathUtils;
  * {@code Comparator} is supplied in the constructor.
  *
  * @see LongFrequency
+ * @param <T> the element type
  */
 public class Frequency<T extends Comparable<T>> implements Serializable {
 

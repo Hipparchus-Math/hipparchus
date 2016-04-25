@@ -15,6 +15,6 @@
  * limitations under the License.
  */
 /**
- * Convenience routines and common data structures used throughout the commons-math library.
+ * Convenience routines and common data structures used throughout the Hipparchus library.
  */
 package org.hipparchus.util;

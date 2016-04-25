@@ -19,7 +19,6 @@ package org.hipparchus.stat.descriptive.moment;
 import java.io.Serializable;
 
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.util.MathUtils;
 
 
 /**
@@ -79,7 +78,9 @@ class ThirdMoment extends SecondMoment implements Serializable {
      * @throws NullArgumentException if original is null
      */
     ThirdMoment(ThirdMoment original) throws NullArgumentException {
-        copy(original, this);
+        super(original);
+        this.m3     = original.m3;
+        this.nDevSq = original.nDevSq;
     }
 
     /** {@inheritDoc} */
@@ -113,28 +114,7 @@ class ThirdMoment extends SecondMoment implements Serializable {
     /** {@inheritDoc} */
     @Override
     public ThirdMoment copy() {
-        ThirdMoment result = new ThirdMoment();
-        // No try-catch or advertised exception because args are guaranteed non-null
-        copy(this, result);
-        return result;
-    }
-
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source ThirdMoment to copy
-     * @param dest ThirdMoment to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(ThirdMoment source, ThirdMoment dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        SecondMoment.copy(source, dest);
-        dest.m3 = source.m3;
-        dest.nDevSq = source.nDevSq;
+        return new ThirdMoment(this);
     }
 
 }

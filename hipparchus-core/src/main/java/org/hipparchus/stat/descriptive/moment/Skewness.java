@@ -51,7 +51,7 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
     private static final long serialVersionUID = 20150412L;
 
     /** Third moment on which this statistic is based */
-    protected ThirdMoment moment = null;
+    protected final ThirdMoment moment;
 
      /**
      * Determines whether or not this statistic can be incremented or cleared.
@@ -59,14 +59,14 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
      * Statistics based on (constructed from) external moments cannot
      * be incremented or cleared.
     */
-    protected boolean incMoment;
+    protected final boolean incMoment;
 
     /**
      * Constructs a Skewness.
      */
     public Skewness() {
-        incMoment = true;
         moment = new ThirdMoment();
+        incMoment = true;
     }
 
     /**
@@ -74,8 +74,8 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
      * @param m3 external moment
      */
     public Skewness(final ThirdMoment m3) {
-        incMoment = false;
         this.moment = m3;
+        incMoment = false;
     }
 
     /**
@@ -86,7 +86,9 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
      * @throws NullArgumentException if original is null
      */
     public Skewness(Skewness original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.moment    = original.moment.copy();
+        this.incMoment = original.incMoment;
     }
 
     /**
@@ -200,20 +202,4 @@ public class Skewness extends AbstractStorelessUnivariateStatistic implements Se
         return new Skewness(this);
     }
 
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source Skewness to copy
-     * @param dest Skewness to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(Skewness source, Skewness dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.moment = source.moment.copy();
-        dest.incMoment = source.incMoment;
-    }
 }

@@ -15,7 +15,7 @@
 #
 #------------------------------------------------------------------------------
 # R source file to validate Weibull distribution tests in
-# org.apache.commons.math.distribution.GammaDistributionTest
+# org.hipparchus.distribution.GammaDistributionTest
 #
 # To run the test, install R, put this file and testFunctions
 # into the same directory, launch R from this directory and then enter

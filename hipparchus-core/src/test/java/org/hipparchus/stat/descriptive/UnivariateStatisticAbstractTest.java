@@ -24,8 +24,6 @@ import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
-import org.hipparchus.stat.descriptive.UnivariateStatistic;
-import org.hipparchus.stat.descriptive.WeightedEvaluation;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -149,6 +147,23 @@ public abstract class UnivariateStatisticAbstractTest {
         Assert.assertEquals(expectedValue(), copy.evaluate(testArray), getTolerance());
     }
 
+    @Test
+    public void testCopyData() {
+        UnivariateStatistic stat = getUnivariateStatistic();
+
+        if (stat instanceof AbstractUnivariateStatistic) {
+            AbstractUnivariateStatistic original = (AbstractUnivariateStatistic) stat;
+            original.setData(testArray);
+            Assert.assertEquals(expectedValue(), original.evaluate(), getTolerance());
+
+            AbstractUnivariateStatistic copy = (AbstractUnivariateStatistic) original.copy();
+            Assert.assertEquals(original.evaluate(), copy.evaluate(), getTolerance());
+
+            Assert.assertArrayEquals(original.getData(), copy.getData(), 1e-10);
+            Assert.assertNotSame(original.getDataRef(), copy.getDataRef());
+        }
+    }
+
     /**
      * Tests consistency of weighted statistic computation.
      * For statistics that support weighted evaluation, this test case compares
@@ -157,7 +172,6 @@ public abstract class UnivariateStatisticAbstractTest {
      * value appearing only once but with a weight value equal to its multiplicity
      * in the repeating array.
      */
-
     @Test
     public void testWeightedConsistency() {
 

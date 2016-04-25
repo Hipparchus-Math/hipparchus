@@ -24,8 +24,6 @@ import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
 import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.KthSelector;
-import org.hipparchus.util.MathUtils;
-import org.hipparchus.util.PivotingStrategy;
 
 
 /**
@@ -46,7 +44,7 @@ public class Median extends AbstractUnivariateStatistic implements Serializable 
     private static final double FIXED_QUANTILE_50 = 50.0;
 
     /** The percentile impl to calculate the median. */
-    private Percentile percentile;
+    private final Percentile percentile;
 
     /**
      * Default constructor.
@@ -57,7 +55,7 @@ public class Median extends AbstractUnivariateStatistic implements Serializable 
 
     /**
      * Constructs a Median with the specific {@link EstimationType},
-     * {@link NaNStrategy} and {@link PivotingStrategy}.
+     * {@link NaNStrategy} and {@link KthSelector}.
      *
      * @param estimationType one of the percentile {@link EstimationType estimation types}
      * @param nanStrategy one of {@link NaNStrategy} to handle with NaNs
@@ -81,8 +79,7 @@ public class Median extends AbstractUnivariateStatistic implements Serializable 
      * @throws NullArgumentException if original is null
      */
     Median(Median original) throws NullArgumentException {
-        MathUtils.checkNotNull(original);
-
+        super(original);
         this.percentile = original.percentile.copy();
     }
 

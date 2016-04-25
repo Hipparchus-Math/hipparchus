@@ -24,13 +24,20 @@
     <groupId>org.hipparchus</groupId>
     <artifactId>hipparchus</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <relativePath>../</relativePath>
+    <relativePath>../hipparchus-parent</relativePath>
   </parent>
 
   <artifactId>hipparchus-optim</artifactId>
   <packaging>jar</packaging>
   <name>Hipparchus::Optimization</name>
   <description>The Hipparchus optimization module</description>
+
+  <scm>
+    <!-- override the value from the parent pom wich the *same* value,
+         to avoid maven adding the module name at the end of the URL -->
+    <connection>${project.parent.scm.connection}</connection>
+    <developerConnection>${project.parent.scm.developerConnection}</developerConnection>
+  </scm>
 
   <properties>
     <hipparchusParentDir>${basedir}/..</hipparchusParentDir>

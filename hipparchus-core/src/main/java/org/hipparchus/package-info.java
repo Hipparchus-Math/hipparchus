@@ -15,6 +15,6 @@
  * limitations under the License.
  */
 /**
- * Common classes used throughout the commons-math library.
+ * Common classes used throughout the Hipparchus library.
  */
 package org.hipparchus;

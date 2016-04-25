@@ -19,7 +19,6 @@ package org.hipparchus.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.JacobianMatrices.MismatchedEquations;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
 import org.hipparchus.util.FastMath;
@@ -44,8 +43,8 @@ public class JacobianMatricesTest {
         ODEIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         double hP = 1.0e-12;
-        SummaryStatistics residualsP0 = new SummaryStatistics();
-        SummaryStatistics residualsP1 = new SummaryStatistics();
+        SummaryStatistics residualsP0 = SummaryStatistics.create();
+        SummaryStatistics residualsP1 = SummaryStatistics.create();
         for (double b = 2.88; b < 3.08; b += 0.001) {
             Brusselator brusselator = new Brusselator(b);
             double[] y = { 1.3, b };
@@ -67,8 +66,8 @@ public class JacobianMatricesTest {
         ODEIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
         double hP = 1.0e-12;
-        SummaryStatistics residualsP0 = new SummaryStatistics();
-        SummaryStatistics residualsP1 = new SummaryStatistics();
+        SummaryStatistics residualsP0 = SummaryStatistics.create();
+        SummaryStatistics residualsP1 = SummaryStatistics.create();
         for (double b = 2.88; b < 3.08; b += 0.001) {
             ParamBrusselator brusselator = new ParamBrusselator(b);
             double[] y = { 1.3, b };
@@ -98,19 +97,19 @@ public class JacobianMatricesTest {
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException upe) {
             Assert.assertEquals(LocalizedODEFormats.UNKNOWN_PARAMETER, upe.getSpecifier());
-            Assert.assertEquals(name, (String) upe.getParts()[0]);
+            Assert.assertEquals(name, upe.getParts()[0]);
         }
     }
 
     @Test
     public void testInternalDifferentiation()
-                    throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
+                    throws MathIllegalArgumentException, MathIllegalStateException {
         AbstractIntegrator integ =
                         new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         double hP = 1.0e-12;
         double hY = 1.0e-12;
-        SummaryStatistics residualsP0 = new SummaryStatistics();
-        SummaryStatistics residualsP1 = new SummaryStatistics();
+        SummaryStatistics residualsP0 = SummaryStatistics.create();
+        SummaryStatistics residualsP1 = SummaryStatistics.create();
         for (double b = 2.88; b < 3.08; b += 0.001) {
                 ParamBrusselator brusselator = new ParamBrusselator(b);
                 brusselator.setParameter(ParamBrusselator.B, b);
@@ -143,11 +142,11 @@ public class JacobianMatricesTest {
 
     @Test
     public void testAnalyticalDifferentiation()
-        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
+        throws MathIllegalArgumentException, MathIllegalStateException {
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
-        SummaryStatistics residualsP0 = new SummaryStatistics();
-        SummaryStatistics residualsP1 = new SummaryStatistics();
+        SummaryStatistics residualsP0 = SummaryStatistics.create();
+        SummaryStatistics residualsP1 = SummaryStatistics.create();
         for (double b = 2.88; b < 3.08; b += 0.001) {
             Brusselator brusselator = new Brusselator(b);
             double[] z = { 1.3, b };
@@ -177,7 +176,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testFinalResult()
-        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
@@ -226,7 +225,7 @@ public class JacobianMatricesTest {
 
     @Test
     public void testParameterizable()
-        throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
+        throws MathIllegalArgumentException, MathIllegalStateException {
 
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
@@ -291,10 +290,12 @@ public class JacobianMatricesTest {
             this.b = b;
         }
 
+        @Override
         public int getDimension() {
             return 2;
         }
 
+        @Override
         public double[] computeDerivatives(double t, double[] y) {
             double prod = y[0] * y[0] * y[1];
             return new double[] {
@@ -303,6 +304,7 @@ public class JacobianMatricesTest {
             };
         }
 
+        @Override
         public double[][] computeMainStateJacobian(double t, double[] y, double[] yDot) {
             double p = 2 * y[0] * y[1];
             double y02 = y[0] * y[0];
@@ -312,6 +314,7 @@ public class JacobianMatricesTest {
             };
         }
 
+        @Override
         public double[] computeParameterJacobian(double t, double[] y, double[] yDot,
                                              String paramName) {
             if (isSupported(paramName)) {
@@ -343,11 +346,13 @@ public class JacobianMatricesTest {
             this.b = b;
         }
 
+        @Override
         public int getDimension() {
             return 2;
         }
 
         /** {@inheritDoc} */
+        @Override
         public double getParameter(final String name)
             throws MathIllegalArgumentException {
             complainIfNotSupported(name);
@@ -355,12 +360,14 @@ public class JacobianMatricesTest {
         }
 
         /** {@inheritDoc} */
+        @Override
         public void setParameter(final String name, final double value)
             throws MathIllegalArgumentException {
             complainIfNotSupported(name);
             b = value;
         }
 
+        @Override
         public double[] computeDerivatives(double t, double[] y) {
             double prod = y[0] * y[0] * y[1];
             return new double[] {
@@ -400,10 +407,12 @@ public class JacobianMatricesTest {
             this.omega = omega;
         }
 
+        @Override
         public int getDimension() {
             return 2;
         }
 
+        @Override
         public double[] computeDerivatives(double t, double[] y) {
             return new double[] {
                 omega * (cy - y[1]),
@@ -411,6 +420,7 @@ public class JacobianMatricesTest {
             };
         }
 
+        @Override
         public double[][] computeMainStateJacobian(double t, double[] y, double[] yDot) {
             return new double[][] {
                 { 0, -omega },
@@ -418,6 +428,7 @@ public class JacobianMatricesTest {
             };
         }
 
+        @Override
         public double[] computeParameterJacobian(double t, double[] y, double[] yDot, String paramName)
             throws MathIllegalArgumentException {
             complainIfNotSupported(paramName);
@@ -493,10 +504,12 @@ public class JacobianMatricesTest {
             this.omega = omega;
         }
 
+        @Override
         public int getDimension() {
             return 2;
         }
 
+        @Override
         public double[] computeDerivatives(double t, double[] y) {
             return new double[] {
                 omega * (cy - y[1]),
@@ -504,6 +517,7 @@ public class JacobianMatricesTest {
             };
         }
 
+        @Override
         public double getParameter(final String name)
             throws MathIllegalArgumentException {
             if (name.equals(CX)) {
@@ -517,6 +531,7 @@ public class JacobianMatricesTest {
             }
         }
 
+        @Override
         public void setParameter(final String name, final double value)
             throws MathIllegalArgumentException {
             if (name.equals(CX)) {

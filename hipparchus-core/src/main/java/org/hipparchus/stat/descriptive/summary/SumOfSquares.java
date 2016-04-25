@@ -64,7 +64,9 @@ public class SumOfSquares extends AbstractStorelessUnivariateStatistic
      * @throws NullArgumentException if original is null
      */
     public SumOfSquares(SumOfSquares original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.n     = original.n;
+        this.value = original.value;
     }
 
     /** {@inheritDoc} */
@@ -123,23 +125,6 @@ public class SumOfSquares extends AbstractStorelessUnivariateStatistic
     @Override
     public SumOfSquares copy() {
         return new SumOfSquares(this);
-    }
-
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source SumOfSquares to copy
-     * @param dest SumOfSquares to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(SumOfSquares source, SumOfSquares dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.n = source.n;
-        dest.value = source.value;
     }
 
 }

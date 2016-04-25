@@ -20,7 +20,6 @@ package org.hipparchus.stat;
 import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
@@ -496,7 +495,7 @@ public final class StatUtilsTest {
         // normalize this sample
         double standardizedSample[] = StatUtils.normalize(sample);
 
-        DescriptiveStatistics stats = new DescriptiveStatistics();
+        DescriptiveStatistics stats = DescriptiveStatistics.create();
         // Add the data from the array
         for (int i = 0; i < length; i++) {
             stats.addValue(standardizedSample[i]);

@@ -41,7 +41,7 @@ import org.junit.Test;
 public class DescriptiveStatisticsTest {
 
     protected DescriptiveStatistics createDescriptiveStatistics() {
-        return new DescriptiveStatistics();
+        return DescriptiveStatistics.create();
     }
 
     protected DescriptiveStatistics.Builder createBuilder() {
@@ -119,7 +119,7 @@ public class DescriptiveStatisticsTest {
     @Test
     public void testQuadraticMean() {
         final double[] values = { 1.2, 3.4, 5.6, 7.89 };
-        final DescriptiveStatistics stats = new DescriptiveStatistics(values);
+        final DescriptiveStatistics stats = DescriptiveStatistics.of(values);
 
         final int len = values.length;
         double expected = 0;
@@ -182,7 +182,7 @@ public class DescriptiveStatisticsTest {
 
     @Test
     public void test20090720() {
-        DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics(100);
+        DescriptiveStatistics descriptiveStatistics = DescriptiveStatistics.of(100);
         for (int i = 0; i < 161; i++) {
             descriptiveStatistics.addValue(1.2);
         }
@@ -205,8 +205,8 @@ public class DescriptiveStatisticsTest {
     @Test
     public void testSummaryConsistency() {
         final int windowSize = 5;
-        final DescriptiveStatistics dstats = new DescriptiveStatistics(windowSize);
-        final SummaryStatistics sstats = new SummaryStatistics();
+        final DescriptiveStatistics dstats = DescriptiveStatistics.of(windowSize);
+        final SummaryStatistics sstats = SummaryStatistics.create();
         final double tol = 1E-12;
         for (int i = 0; i < 20; i++) {
             dstats.addValue(i);
@@ -228,8 +228,8 @@ public class DescriptiveStatisticsTest {
             TestUtils.assertEquals(new Variance().evaluate(values), dstats.getVariance(), tol);
             TestUtils.assertEquals(dstats.getSum(), sstats.getSum(), tol);
             TestUtils.assertEquals(new Sum().evaluate(values), dstats.getSum(), tol);
-            TestUtils.assertEquals(dstats.getSumsq(), sstats.getSumsq(), tol);
-            TestUtils.assertEquals(new SumOfSquares().evaluate(values), dstats.getSumsq(), tol);
+            TestUtils.assertEquals(dstats.getSumOfSquares(), sstats.getSumOfSquares(), tol);
+            TestUtils.assertEquals(new SumOfSquares().evaluate(values), dstats.getSumOfSquares(), tol);
             TestUtils.assertEquals(dstats.getPopulationVariance(), sstats.getPopulationVariance(), tol);
             TestUtils.assertEquals(new Variance(false).evaluate(values), dstats.getPopulationVariance(), tol);
         }
@@ -255,7 +255,7 @@ public class DescriptiveStatisticsTest {
             -0.09944199541668033
         };
 
-        final DescriptiveStatistics ds = new DescriptiveStatistics(data);
+        final DescriptiveStatistics ds = DescriptiveStatistics.of(data);
 
         final double t = ds.getPercentile(75);
         final double o = ds.getPercentile(25);

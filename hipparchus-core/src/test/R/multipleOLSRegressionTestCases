@@ -15,7 +15,7 @@
 #
 #------------------------------------------------------------------------------
 # R source file to validate OLS multiple regression tests in
-# org.apache.commons.math.stat.regression.OLSMultipleLinearRegressionTest
+# org.hipparchus.stat.regression.OLSMultipleLinearRegressionTest
 #
 # To run the test, install R, put this file and testFunctions
 # into the same directory, launch R from this directory and then enter

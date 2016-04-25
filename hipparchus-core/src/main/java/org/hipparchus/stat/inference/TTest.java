@@ -24,6 +24,7 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathUtils;
 
 /**
  * An implementation for Student's t-tests.
@@ -46,7 +47,7 @@ import org.hipparchus.util.FastMath;
  * <p>
  * Input to tests can be either <code>double[]</code> arrays or
  * {@link StatisticalSummary} instances.</p><p>
- * Uses commons-math {@link org.hipparchus.distribution.continuous.TDistribution}
+ * Uses Hipparchus {@link org.hipparchus.distribution.continuous.TDistribution}
  * implementation to estimate exact p-values.</p>
  *
  */
@@ -1136,9 +1137,7 @@ public class TTest {
     private void checkSampleData(final double[] data)
         throws MathIllegalArgumentException, NullArgumentException {
 
-        if (data == null) {
-            throw new NullArgumentException();
-        }
+        MathUtils.checkNotNull(data, LocalizedCoreFormats.INPUT_ARRAY);
         if (data.length < 2) {
             throw new MathIllegalArgumentException(
                     LocalizedCoreFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
@@ -1157,9 +1156,7 @@ public class TTest {
     private void checkSampleData(final StatisticalSummary stat)
         throws MathIllegalArgumentException, NullArgumentException {
 
-        if (stat == null) {
-            throw new NullArgumentException();
-        }
+        MathUtils.checkNotNull(stat);
         if (stat.getN() < 2) {
             throw new MathIllegalArgumentException(
                     LocalizedCoreFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,

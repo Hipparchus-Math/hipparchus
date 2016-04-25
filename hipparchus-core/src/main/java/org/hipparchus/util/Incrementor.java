@@ -117,11 +117,11 @@ public class Incrementor {
     /**
      * Creates a new instance and set the counter to the given value.
      *
-     * @param count Value of the counter.
+     * @param value Value of the counter.
      * @return a new instance.
      */
-    public Incrementor withCount(int count) {
-        return new Incrementor(count,
+    public Incrementor withCount(int value) {
+        return new Incrementor(value,
                                this.maximalCount,
                                this.maxCountCallback);
     }

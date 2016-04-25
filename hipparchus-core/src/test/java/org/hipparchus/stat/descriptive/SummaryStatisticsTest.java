@@ -17,17 +17,19 @@
 package org.hipparchus.stat.descriptive;
 
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.hipparchus.TestUtils;
-import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.stat.descriptive.StatisticalSummary;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.stat.descriptive.moment.Variance;
 import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.util.FastMath;
-import org.junit.Assert;
 import org.junit.Test;
+
 /**
  * Test cases for the {@link SummaryStatistics} class.
  */
@@ -49,59 +51,55 @@ public class SummaryStatisticsTest {
     private final double tolerance = 10E-15;
 
     protected SummaryStatistics createSummaryStatistics() {
-        return new SummaryStatistics();
+        return SummaryStatistics.create();
+    }
+
+    protected SummaryStatistics.Builder createBuilder() {
+        return SummaryStatistics.builder();
     }
 
     /** test stats */
     @Test
     public void testStats() {
         SummaryStatistics u = createSummaryStatistics();
-        Assert.assertEquals("total count",0,u.getN(),tolerance);
+        assertEquals("total count",0,u.getN(),tolerance);
         u.addValue(one);
         u.addValue(twoF);
         u.addValue(twoL);
         u.addValue(three);
-        Assert.assertEquals("N",n,u.getN(),tolerance);
-        Assert.assertEquals("sum",sum,u.getSum(),tolerance);
-        Assert.assertEquals("sumsq",sumSq,u.getSumsq(),tolerance);
-        Assert.assertEquals("var",var,u.getVariance(),tolerance);
-        Assert.assertEquals("population var",popVar,u.getPopulationVariance(),tolerance);
-        Assert.assertEquals("std",std,u.getStandardDeviation(),tolerance);
-        Assert.assertEquals("mean",mean,u.getMean(),tolerance);
-        Assert.assertEquals("min",min,u.getMin(),tolerance);
-        Assert.assertEquals("max",max,u.getMax(),tolerance);
+        assertEquals("N",n,u.getN(),tolerance);
+        assertEquals("sum",sum,u.getSum(),tolerance);
+        assertEquals("sumsq",sumSq,u.getSumOfSquares(),tolerance);
+        assertEquals("var",var,u.getVariance(),tolerance);
+        assertEquals("population var",popVar,u.getPopulationVariance(),tolerance);
+        assertEquals("std",std,u.getStandardDeviation(),tolerance);
+        assertEquals("mean",mean,u.getMean(),tolerance);
+        assertEquals("min",min,u.getMin(),tolerance);
+        assertEquals("max",max,u.getMax(),tolerance);
         u.clear();
-        Assert.assertEquals("total count",0,u.getN(),tolerance);
+        assertEquals("total count",0,u.getN(),tolerance);
     }
 
     @Test
     public void testN0andN1Conditions() {
         SummaryStatistics u = createSummaryStatistics();
-        Assert.assertTrue("Mean of n = 0 set should be NaN",
-                Double.isNaN( u.getMean() ) );
-        Assert.assertTrue("Standard Deviation of n = 0 set should be NaN",
-                Double.isNaN( u.getStandardDeviation() ) );
-        Assert.assertTrue("Variance of n = 0 set should be NaN",
-                Double.isNaN(u.getVariance() ) );
+        assertTrue("Mean of n = 0 set should be NaN", Double.isNaN( u.getMean() ) );
+        assertTrue("Standard Deviation of n = 0 set should be NaN",
+                   Double.isNaN( u.getStandardDeviation() ) );
+        assertTrue("Variance of n = 0 set should be NaN", Double.isNaN(u.getVariance() ) );
 
         /* n=1 */
         u.addValue(one);
-        Assert.assertTrue("mean should be one (n = 1)",
-                u.getMean() == one);
-        Assert.assertTrue("geometric should be one (n = 1) instead it is " + u.getGeometricMean(),
-                u.getGeometricMean() == one);
-        Assert.assertTrue("Std should be zero (n = 1)",
-                u.getStandardDeviation() == 0.0);
-        Assert.assertTrue("variance should be zero (n = 1)",
-                u.getVariance() == 0.0);
+        assertTrue("mean should be one (n = 1)", u.getMean() == one);
+        assertTrue("geometric should be one (n = 1) instead it is " + u.getGeometricMean(),
+                   u.getGeometricMean() == one);
+        assertTrue("Std should be zero (n = 1)", u.getStandardDeviation() == 0.0);
+        assertTrue("variance should be zero (n = 1)", u.getVariance() == 0.0);
 
         /* n=2 */
         u.addValue(twoF);
-        Assert.assertTrue("Std should not be zero (n = 2)",
-                u.getStandardDeviation() != 0.0);
-        Assert.assertTrue("variance should not be zero (n = 2)",
-                u.getVariance() != 0.0);
-
+        assertTrue("Std should not be zero (n = 2)", u.getStandardDeviation() != 0.0);
+        assertTrue("variance should not be zero (n = 2)", u.getVariance() != 0.0);
     }
 
     @Test
@@ -112,35 +110,31 @@ public class SummaryStatisticsTest {
         u.addValue( 3.0 );
         u.addValue( 4.0 );
 
-        Assert.assertEquals( "Geometric mean not expected", 2.213364,
-                u.getGeometricMean(), 0.00001 );
+        assertEquals( "Geometric mean not expected", 2.213364, u.getGeometricMean(), 0.00001 );
     }
 
     @Test
     public void testNaNContracts() {
         SummaryStatistics u = createSummaryStatistics();
-        Assert.assertTrue("mean not NaN",Double.isNaN(u.getMean()));
-        Assert.assertTrue("min not NaN",Double.isNaN(u.getMin()));
-        Assert.assertTrue("std dev not NaN",Double.isNaN(u.getStandardDeviation()));
-        Assert.assertTrue("var not NaN",Double.isNaN(u.getVariance()));
-        Assert.assertTrue("geom mean not NaN",Double.isNaN(u.getGeometricMean()));
+        assertTrue("mean not NaN",Double.isNaN(u.getMean()));
+        assertTrue("min not NaN",Double.isNaN(u.getMin()));
+        assertTrue("std dev not NaN",Double.isNaN(u.getStandardDeviation()));
+        assertTrue("var not NaN",Double.isNaN(u.getVariance()));
+        assertTrue("geom mean not NaN",Double.isNaN(u.getGeometricMean()));
 
         u.addValue(1.0);
 
-        Assert.assertEquals( "mean not expected", 1.0,
-                u.getMean(), Double.MIN_VALUE);
-        Assert.assertEquals( "variance not expected", 0.0,
-                u.getVariance(), Double.MIN_VALUE);
-        Assert.assertEquals( "geometric mean not expected", 1.0,
-                u.getGeometricMean(), Double.MIN_VALUE);
+        assertEquals("mean not expected", 1.0, u.getMean(), Double.MIN_VALUE);
+        assertEquals("variance not expected", 0.0, u.getVariance(), Double.MIN_VALUE);
+        assertEquals("geometric mean not expected", 1.0, u.getGeometricMean(), Double.MIN_VALUE);
 
         u.addValue(-1.0);
 
-        Assert.assertTrue("geom mean not NaN",Double.isNaN(u.getGeometricMean()));
+        assertTrue("geom mean not NaN",Double.isNaN(u.getGeometricMean()));
 
         u.addValue(0.0);
 
-        Assert.assertTrue("geom mean not NaN",Double.isNaN(u.getGeometricMean()));
+        assertTrue("geom mean not NaN",Double.isNaN(u.getGeometricMean()));
 
         //FiXME: test all other NaN contract specs
     }
@@ -182,7 +176,6 @@ public class SummaryStatisticsTest {
         s = (SummaryStatistics) TestUtils.serializeAndRecover(u);
         summary = s.getSummary();
         verifySummary(u, summary);
-
     }
 
     @Test
@@ -190,41 +183,40 @@ public class SummaryStatisticsTest {
         SummaryStatistics u = createSummaryStatistics();
         SummaryStatistics t = null;
         int emptyHash = u.hashCode();
-        Assert.assertTrue("reflexive", u.equals(u));
-        Assert.assertFalse("non-null compared to null", u.equals(t));
-        Assert.assertFalse("wrong type", u.equals(Double.valueOf(0)));
+        assertTrue("reflexive", u.equals(u));
+        assertFalse("non-null compared to null", u.equals(t));
+        assertFalse("wrong type", u.equals(Double.valueOf(0)));
         t = createSummaryStatistics();
-        Assert.assertTrue("empty instances should be equal", t.equals(u));
-        Assert.assertTrue("empty instances should be equal", u.equals(t));
-        Assert.assertEquals("empty hash code", emptyHash, t.hashCode());
+        assertTrue("empty instances should be equal", t.equals(u));
+        assertTrue("empty instances should be equal", u.equals(t));
+        assertEquals("empty hash code", emptyHash, t.hashCode());
 
         // Add some data to u
         u.addValue(2d);
         u.addValue(1d);
         u.addValue(3d);
         u.addValue(4d);
-        Assert.assertFalse("different n's should make instances not equal", t.equals(u));
-        Assert.assertFalse("different n's should make instances not equal", u.equals(t));
-        Assert.assertTrue("different n's should make hashcodes different",
-                u.hashCode() != t.hashCode());
+        assertFalse("different n's should make instances not equal", t.equals(u));
+        assertFalse("different n's should make instances not equal", u.equals(t));
+        assertTrue("different n's should make hashcodes different", u.hashCode() != t.hashCode());
 
         //Add data in same order to t
         t.addValue(2d);
         t.addValue(1d);
         t.addValue(3d);
         t.addValue(4d);
-        Assert.assertTrue("summaries based on same data should be equal", t.equals(u));
-        Assert.assertTrue("summaries based on same data should be equal", u.equals(t));
-        Assert.assertEquals("summaries based on same data should have same hashcodes",
-                u.hashCode(), t.hashCode());
+        assertTrue("summaries based on same data should be equal", t.equals(u));
+        assertTrue("summaries based on same data should be equal", u.equals(t));
+        assertEquals("summaries based on same data should have same hashcodes",
+                     u.hashCode(), t.hashCode());
 
         // Clear and make sure summaries are indistinguishable from empty summary
         u.clear();
         t.clear();
-        Assert.assertTrue("empty instances should be equal", t.equals(u));
-        Assert.assertTrue("empty instances should be equal", u.equals(t));
-        Assert.assertEquals("empty hash code", emptyHash, t.hashCode());
-        Assert.assertEquals("empty hash code", emptyHash, u.hashCode());
+        assertTrue("empty instances should be equal", t.equals(u));
+        assertTrue("empty instances should be equal", u.equals(t));
+        assertEquals("empty hash code", emptyHash, t.hashCode());
+        assertEquals("empty hash code", emptyHash, u.hashCode());
     }
 
     @Test
@@ -234,9 +226,9 @@ public class SummaryStatisticsTest {
         u.addValue(1d);
         u.addValue(3d);
         u.addValue(4d);
-        SummaryStatistics v = new SummaryStatistics(u);
-        Assert.assertEquals(u, v);
-        Assert.assertEquals(v, u);
+        SummaryStatistics v = u.copy();
+        assertEquals(u, v);
+        assertEquals(v, u);
 
         // Make sure both behave the same with additional values added
         u.addValue(7d);
@@ -247,19 +239,12 @@ public class SummaryStatisticsTest {
         v.addValue(9d);
         v.addValue(11d);
         v.addValue(23d);
-        Assert.assertEquals(u, v);
-        Assert.assertEquals(v, u);
-
-        // Check implementation pointers are preserved
-        u.clear();
-        u.setSumImpl(new Sum());
-        SummaryStatistics.copy(u,v);
-        Assert.assertEquals(u.getSumImpl(), v.getSumImpl());
-
+        assertEquals(u, v);
+        assertEquals(v, u);
     }
 
     private void verifySummary(SummaryStatistics u, StatisticalSummary s) {
-        Assert.assertEquals("N",s.getN(),u.getN());
+        assertEquals("N",s.getN(),u.getN());
         TestUtils.assertEquals("sum",s.getSum(),u.getSum(),tolerance);
         TestUtils.assertEquals("var",s.getVariance(),u.getVariance(),tolerance);
         TestUtils.assertEquals("std",s.getStandardDeviation(),u.getStandardDeviation(),tolerance);
@@ -270,33 +255,22 @@ public class SummaryStatisticsTest {
 
     @Test
     public void testSetterInjection() {
-        SummaryStatistics u = createSummaryStatistics();
-        u.setMeanImpl(new Sum());
-        u.setSumLogImpl(new Sum());
+        SummaryStatistics u =
+                createBuilder()
+                    .withMeanImpl(new Sum())
+                    .withSumOfLogsImpl(new Sum())
+                    .build();
+
         u.addValue(1);
         u.addValue(3);
-        Assert.assertEquals(4, u.getMean(), 1E-14);
-        Assert.assertEquals(4, u.getSumOfLogs(), 1E-14);
-        Assert.assertEquals(FastMath.exp(2), u.getGeometricMean(), 1E-14);
+        assertEquals(4, u.getMean(), 1E-14);
+        assertEquals(4, u.getSumOfLogs(), 1E-14);
+        assertEquals(StatUtils.geometricMean(new double[] { 1, 3}),
+                     u.getGeometricMean(), 1E-14);
         u.clear();
         u.addValue(1);
         u.addValue(2);
-        Assert.assertEquals(3, u.getMean(), 1E-14);
-        u.clear();
-        u.setMeanImpl(new Mean()); // OK after clear
-    }
-
-    @Test
-    public void testSetterIllegalState() {
-        SummaryStatistics u = createSummaryStatistics();
-        u.addValue(1);
-        u.addValue(3);
-        try {
-            u.setMeanImpl(new Sum());
-            Assert.fail("Expecting MathIllegalStateException");
-        } catch (MathIllegalStateException ex) {
-            // expected
-        }
+        assertEquals(3, u.getMean(), 1E-14);
     }
 
     @Test
@@ -314,7 +288,7 @@ public class SummaryStatisticsTest {
         }
         expected = Math.sqrt(expected);
 
-        Assert.assertEquals(expected, stats.getQuadraticMean(), Math.ulp(expected));
+        assertEquals(expected, stats.getQuadraticMean(), Math.ulp(expected));
     }
 
     /**
@@ -323,34 +297,32 @@ public class SummaryStatisticsTest {
     @Test
     public void testOverrideVarianceWithMathClass() {
         double[] scores = {1, 2, 3, 4};
-        SummaryStatistics stats = new SummaryStatistics();
-        stats.setVarianceImpl(new Variance(false)); //use "population variance"
+        // use "population variance"
+        SummaryStatistics stats = createBuilder().withVarianceImpl(new Variance(false)).build();
         for(double i : scores) {
           stats.addValue(i);
         }
-        Assert.assertEquals((new Variance(false)).evaluate(scores),stats.getVariance(), 0);
+        assertEquals((new Variance(false)).evaluate(scores),stats.getVariance(), 0);
     }
 
     @Test
     public void testOverrideMeanWithMathClass() {
         double[] scores = {1, 2, 3, 4};
-        SummaryStatistics stats = new SummaryStatistics();
-        stats.setMeanImpl(new Mean());
+        SummaryStatistics stats = createBuilder().withMeanImpl(new Mean()).build();
         for(double i : scores) {
           stats.addValue(i);
         }
-        Assert.assertEquals((new Mean()).evaluate(scores),stats.getMean(), 0);
+        assertEquals((new Mean()).evaluate(scores),stats.getMean(), 0);
     }
 
     @Test
     public void testOverrideGeoMeanWithMathClass() {
         double[] scores = {1, 2, 3, 4};
-        SummaryStatistics stats = new SummaryStatistics();
-        stats.setGeoMeanImpl(new GeometricMean());
+        SummaryStatistics stats = createBuilder().withGeometricMeanImpl(new GeometricMean()).build();
         for(double i : scores) {
           stats.addValue(i);
         }
-        Assert.assertEquals((new GeometricMean()).evaluate(scores),stats.getGeometricMean(), 0);
+        assertEquals((new GeometricMean()).evaluate(scores),stats.getGeometricMean(), 0);
     }
 
     @Test
@@ -359,16 +331,19 @@ public class SummaryStatisticsTest {
         for (int i = 0; i < 5; i++) {
             u.addValue(i);
         }
-        final String[] labels = {"min", "max", "sum", "geometric mean", "variance",
-                "population variance", "second moment", "sum of squares", "standard deviation",
-        "sum of logs"};
-        final double[] values = {u.getMin(), u.getMax(), u.getSum(), u.getGeometricMean(),
-                u.getVariance(), u.getPopulationVariance(), u.getSecondMoment(), u.getSumsq(),
-                u.getStandardDeviation(), u.getSumOfLogs()};
+        final String[] labels = {
+            "min", "max", "sum", "geometric mean", "variance", "population variance",
+            "second moment", "sum of squares", "standard deviation", "sum of logs"
+        };
+        final double[] values = {
+            u.getMin(), u.getMax(), u.getSum(), u.getGeometricMean(), u.getVariance(),
+            u.getPopulationVariance(), u.getSecondMoment(), u.getSumOfSquares(),
+            u.getStandardDeviation(), u.getSumOfLogs()
+        };
         final String toString = u.toString();
-        Assert.assertTrue(toString.indexOf("n: " + u.getN()) > 0); // getN() returns a long
+        assertTrue(toString.indexOf("n: " + u.getN()) > 0); // getN() returns a long
         for (int i = 0; i < values.length; i++) {
-            Assert.assertTrue(toString.indexOf(labels[i] + ": " + String.valueOf(values[i])) > 0);
+            assertTrue(toString.indexOf(labels[i] + ": " + String.valueOf(values[i])) > 0);
         }
     }
 }

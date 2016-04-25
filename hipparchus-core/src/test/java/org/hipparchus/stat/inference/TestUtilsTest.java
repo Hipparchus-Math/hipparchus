@@ -191,15 +191,14 @@ public class TestUtilsTest {
 
     private double[] tooShortObs = { 1.0 };
     private double[] emptyObs = {};
-    private SummaryStatistics emptyStats = new SummaryStatistics();
+    private SummaryStatistics emptyStats = SummaryStatistics.create();
 
     @Test
     public void testOneSampleT() {
         double[] observed =
             {93.0, 103.0, 95.0, 101.0, 91.0, 105.0, 96.0, 94.0, 101.0,  88.0, 98.0, 94.0, 101.0, 92.0, 95.0 };
         double mu = 100.0;
-        SummaryStatistics sampleStats = null;
-        sampleStats = new SummaryStatistics();
+        SummaryStatistics sampleStats = SummaryStatistics.create();
         for (int i = 0; i < observed.length; i++) {
             sampleStats.addValue(observed[i]);
         }
@@ -273,7 +272,7 @@ public class TestUtilsTest {
     public void testOneSampleTTest() {
         double[] oneSidedP =
             {2d, 0d, 6d, 6d, 3d, 3d, 2d, 3d, -6d, 6d, 6d, 6d, 3d, 0d, 1d, 1d, 0d, 2d, 3d, 3d };
-        SummaryStatistics oneSidedPStats = new SummaryStatistics();
+        SummaryStatistics oneSidedPStats = SummaryStatistics.create();
         for (int i = 0; i < oneSidedP.length; i++) {
             oneSidedPStats.addValue(oneSidedP[i]);
         }
@@ -311,11 +310,11 @@ public class TestUtilsTest {
     public void testTwoSampleTHeterscedastic() {
         double[] sample1 = { 7d, -4d, 18d, 17d, -3d, -5d, 1d, 10d, 11d, -2d };
         double[] sample2 = { -1d, 12d, -1d, -3d, 3d, -5d, 5d, 2d, -11d, -1d, -3d };
-        SummaryStatistics sampleStats1 = new SummaryStatistics();
+        SummaryStatistics sampleStats1 = SummaryStatistics.create();
         for (int i = 0; i < sample1.length; i++) {
             sampleStats1.addValue(sample1[i]);
         }
-        SummaryStatistics sampleStats2 = new SummaryStatistics();
+        SummaryStatistics sampleStats2 = SummaryStatistics.create();
         for (int i = 0; i < sample2.length; i++) {
             sampleStats2.addValue(sample2[i]);
         }
@@ -398,11 +397,11 @@ public class TestUtilsTest {
     public void testTwoSampleTHomoscedastic() {
         double[] sample1 ={2, 4, 6, 8, 10, 97};
         double[] sample2 = {4, 6, 8, 10, 16};
-        SummaryStatistics sampleStats1 = new SummaryStatistics();
+        SummaryStatistics sampleStats1 = SummaryStatistics.create();
         for (int i = 0; i < sample1.length; i++) {
             sampleStats1.addValue(sample1[i]);
         }
-        SummaryStatistics sampleStats2 = new SummaryStatistics();
+        SummaryStatistics sampleStats2 = SummaryStatistics.create();
         for (int i = 0; i < sample2.length; i++) {
             sampleStats2.addValue(sample2[i]);
         }

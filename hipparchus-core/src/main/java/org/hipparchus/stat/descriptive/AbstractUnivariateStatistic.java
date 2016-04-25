@@ -30,6 +30,21 @@ public abstract class AbstractUnivariateStatistic
     /** Stored data. */
     private double[] storedData;
 
+    /** Default constructor. */
+    protected AbstractUnivariateStatistic() {}
+
+    /**
+     * Copy constructor, creates an identical copy
+     * of the {@code original}.
+     *
+     * @param original the instance to copy
+     * @throws org.hipparchus.exception.NullArgumentException  if original is null
+     */
+    protected AbstractUnivariateStatistic(AbstractUnivariateStatistic original) {
+        MathUtils.checkNotNull(original);
+        this.storedData = original.storedData != null ? original.storedData.clone() : null;
+    }
+
     /** {@inheritDoc} */
     @Override
     public abstract double evaluate(final double[] values, final int begin, final int length)

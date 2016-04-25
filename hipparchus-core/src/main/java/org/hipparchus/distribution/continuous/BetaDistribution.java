@@ -106,9 +106,9 @@ public class BetaDistribution extends AbstractRealDistribution {
 
         this.alpha = alpha;
         this.beta  = beta;
-        this.z     = Gamma.logGamma(alpha)
-                        + Gamma.logGamma(beta)
-                        - Gamma.logGamma(alpha + beta);
+        this.z     = Gamma.logGamma(alpha) +
+                     Gamma.logGamma(beta)  -
+                     Gamma.logGamma(alpha + beta);
     }
 
     /**

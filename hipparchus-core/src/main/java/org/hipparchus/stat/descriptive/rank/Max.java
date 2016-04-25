@@ -66,7 +66,9 @@ public class Max extends AbstractStorelessUnivariateStatistic implements Seriali
      * @throws NullArgumentException if original is null
      */
     public Max(Max original) throws NullArgumentException {
-        copy(original, this);
+        MathUtils.checkNotNull(original);
+        this.n     = original.n;
+        this.value = original.value;
     }
 
     /** {@inheritDoc} */
@@ -141,20 +143,4 @@ public class Max extends AbstractStorelessUnivariateStatistic implements Seriali
         return new Max(this);
     }
 
-    /**
-     * Copies source to dest.
-     * <p>
-     * Neither source nor dest can be null.
-     *
-     * @param source Max to copy
-     * @param dest Max to copy to
-     * @throws NullArgumentException if either source or dest is null
-     */
-    public static void copy(Max source, Max dest)
-        throws NullArgumentException {
-        MathUtils.checkNotNull(source);
-        MathUtils.checkNotNull(dest);
-        dest.n = source.n;
-        dest.value = source.value;
-    }
 }
