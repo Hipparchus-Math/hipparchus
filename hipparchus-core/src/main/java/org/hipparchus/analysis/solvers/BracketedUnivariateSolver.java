@@ -18,6 +18,10 @@
 package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.util.FastMath;
 
 /** Interface for {@link UnivariateSolver (univariate real) root-finding
  * algorithms} that maintain a bracketed solution. There are several advantages
@@ -87,5 +91,162 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      */
     double solve(int maxEval, FUNC f, double min, double max, double startValue,
                  AllowedSolution allowedSolution);
+
+    /**
+     * Solve for a zero in the given interval and return a tolerance interval surrounding
+     * the root.
+     *
+     * <p> It is required that the starting interval brackets a root.
+     *
+     * @param maxEval Maximum number of evaluations.
+     * @param f       Function to solve.
+     * @param min     Lower bound for the interval. f(min) != 0.0.
+     * @param max     Upper bound for the interval. f(max) != 0.0.
+     * @return an interval [ta, tb] such that for some t in [ta, tb] f(t) == 0.0 or has a
+     * step wise discontinuity that crosses zero. Both end points also satisfy the
+     * convergence criteria so either one could be used as the root. That is the interval
+     * satisfies the condition (| tb - ta | <= {@link #getAbsoluteAccuracy() absolute}
+     * accuracy + max(ta, tb) * {@link #getRelativeAccuracy() relative} accuracy) or (
+     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}). The width of the
+     * interval (tb - ta) may be zero.
+     * @throws MathIllegalArgumentException if the arguments do not satisfy the
+     *                                      requirements specified by the solver.
+     * @throws MathIllegalStateException    if the allowed number of evaluations is
+     *                                      exceeded.
+     */
+    default Interval solveInterval(int maxEval, FUNC f, double min, double max)
+            throws MathIllegalArgumentException, MathIllegalStateException {
+        return this.solveInterval(maxEval, f, min, max, min + 0.5 * (max - min));
+    }
+
+    /**
+     * Solve for a zero in the given interval and return a tolerance interval surrounding
+     * the root.
+     *
+     * <p> It is required that the starting interval brackets a root.
+     *
+     * @param maxEval    Maximum number of evaluations.
+     * @param startValue start value to use.
+     * @param f          Function to solve.
+     * @param min        Lower bound for the interval. f(min) != 0.0.
+     * @param max        Upper bound for the interval. f(max) != 0.0.
+     * @return an interval [ta, tb] such that for some t in [ta, tb] f(t) == 0.0 or has a
+     * step wise discontinuity that crosses zero. Both end points also satisfy the
+     * convergence criteria so either one could be used as the root. That is the interval
+     * satisfies the condition (| tb - ta | <= {@link #getAbsoluteAccuracy() absolute}
+     * accuracy + max(ta, tb) * {@link #getRelativeAccuracy() relative} accuracy) or (
+     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}). The width of the
+     * interval (tb - ta) may be zero.
+     * @throws MathIllegalArgumentException if the arguments do not satisfy the
+     *                                      requirements specified by the solver.
+     * @throws MathIllegalStateException    if the allowed number of evaluations is
+     *                                      exceeded.
+     */
+    Interval solveInterval(int maxEval, FUNC f, double min, double max, double startValue)
+            throws MathIllegalArgumentException, MathIllegalStateException;
+
+    /**
+     * An interval of a function that brackets a root.
+     *
+     * <p> Contains two end points and the value of the function at the two end points.
+     *
+     * @see #solveInterval(int, UnivariateFunction, double, double, double)
+     */
+    class Interval {
+
+        /** Abscissa on the left end of the interval. */
+        private final double leftAbscissa;
+        /** Function value at {@link #leftAbscissa}. */
+        private final double leftValue;
+        /** Abscissa on the right end of the interval, >= {@link #leftAbscissa}. */
+        private final double rightAbscissa;
+        /** Function value at {@link #rightAbscissa}. */
+        private final double rightValue;
+
+        /**
+         * Construct a new interval with the given end points.
+         *
+         * @param leftAbscissa  is the abscissa value at the left side of the interval.
+         * @param leftValue     is the function value at {@code leftAbscissa}.
+         * @param rightAbscissa is the abscissa value on the right side of the interval.
+         *                      Must be greater than or equal to {@code leftAbscissa}.
+         * @param rightValue    is the function value at {@code rightAbscissa}.
+         */
+        public Interval(final double leftAbscissa,
+                        final double leftValue,
+                        final double rightAbscissa,
+                        final double rightValue) {
+            this.leftAbscissa = leftAbscissa;
+            this.leftValue = leftValue;
+            this.rightAbscissa = rightAbscissa;
+            this.rightValue = rightValue;
+        }
+
+        /**
+         * Get the left abscissa.
+         *
+         * @return abscissa of the start of the interval.
+         */
+        public double getLeftAbscissa() {
+            return leftAbscissa;
+        }
+
+        /**
+         * Get the right abscissa.
+         *
+         * @return abscissa of the end of the interval.
+         */
+        public double getRightAbscissa() {
+            return rightAbscissa;
+        }
+
+        /**
+         * Get the function value at {@link #getLeftAbscissa()}.
+         *
+         * @return value of the function at the start of the interval.
+         */
+        public double getLeftValue() {
+            return leftValue;
+        }
+
+        /**
+         * Get the function value at {@link #getRightAbscissa()}.
+         *
+         * @return value of the function at the end of the interval.
+         */
+        public double getRightValue() {
+            return rightValue;
+        }
+
+        /**
+         * Get the abscissa corresponding to the allowed side.
+         *
+         * @param allowed side of the root.
+         * @return the abscissa on the selected side of the root.
+         */
+        public double getSide(final AllowedSolution allowed) {
+            final double xA = this.getLeftAbscissa();
+            final double yA = this.getLeftValue();
+            final double xB = this.getRightAbscissa();
+            switch (allowed) {
+                case ANY_SIDE:
+                    final double absYA = FastMath.abs(this.getLeftValue());
+                    final double absYB = FastMath.abs(this.getRightValue());
+                    return absYA < absYB ? xA : xB;
+                case LEFT_SIDE:
+                    return xA;
+                case RIGHT_SIDE:
+                    return xB;
+                case BELOW_SIDE:
+                    return (yA <= 0) ? xA : xB;
+                case ABOVE_SIDE:
+                    return (yA < 0) ? xB : xA;
+                default:
+                    // this should never happen
+                    throw MathRuntimeException.createInternalError();
+            }
+        }
+
+    }
 
 }

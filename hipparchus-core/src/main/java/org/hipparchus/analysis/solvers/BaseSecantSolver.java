@@ -19,6 +19,7 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -126,6 +127,17 @@ public abstract class BaseSecantSolver
         return solve(maxEval, f, min, max, startValue, AllowedSolution.ANY_SIDE);
     }
 
+    @Override
+    public Interval solveInterval(final int maxEval,
+                                  final UnivariateFunction f,
+                                  final double min,
+                                  final double max,
+                                  final double startValue) throws MathIllegalArgumentException, MathIllegalStateException {
+        setup(maxEval, f, min, max, startValue);
+        this.allowed = null;
+        return doSolveInterval();
+    }
+
     /**
      * {@inheritDoc}
      *
@@ -134,6 +146,17 @@ public abstract class BaseSecantSolver
      */
     @Override
     protected final double doSolve() throws MathIllegalStateException {
+        return doSolveInterval().getSide(allowed);
+    }
+
+    /**
+     * Find a root and return the containing interval.
+     *
+     * @return an interval containing the root such that the selected end point meets the
+     * convergence criteria.
+     * @throws MathIllegalStateException if convergence fails.
+     */
+    protected final Interval doSolveInterval() throws MathIllegalStateException {
         // Get initial solution
         double x0 = getMin();
         double x1 = getMax();
@@ -144,10 +167,10 @@ public abstract class BaseSecantSolver
         // not under-approximations or over-approximations, we can return them
         // regardless of the allowed solutions.
         if (f0 == 0.0) {
-            return x0;
+            return new Interval(x0, f0, x0, f0);
         }
         if (f1 == 0.0) {
-            return x1;
+            return new Interval(x1, f1, x1, f1);
         }
 
         // Verify bracketing of initial solution.
@@ -172,7 +195,7 @@ public abstract class BaseSecantSolver
             // this is not an under-approximation or an over-approximation,
             // we can return it regardless of the allowed solutions.
             if (fx == 0.0) {
-                return x;
+                return new Interval(x, fx, x, fx);
             }
 
             // Update the bounds with the new approximation.
@@ -206,55 +229,18 @@ public abstract class BaseSecantSolver
             x1 = x;
             f1 = fx;
 
-            // If the function value of the last approximation is too small,
-            // given the function value accuracy, then we can't get closer to
-            // the root than we already are.
-            if (FastMath.abs(f1) <= ftol) {
-                switch (allowed) {
-                case ANY_SIDE:
-                    return x1;
-                case LEFT_SIDE:
-                    if (inverted) {
-                        return x1;
-                    }
-                    break;
-                case RIGHT_SIDE:
-                    if (!inverted) {
-                        return x1;
-                    }
-                    break;
-                case BELOW_SIDE:
-                    if (f1 <= 0) {
-                        return x1;
-                    }
-                    break;
-                case ABOVE_SIDE:
-                    if (f1 >= 0) {
-                        return x1;
-                    }
-                    break;
-                default:
-                    throw MathRuntimeException.createInternalError();
-                }
-            }
-
             // If the current interval is within the given accuracies, we
             // are satisfied with the current approximation.
-            if (FastMath.abs(x1 - x0) < FastMath.max(rtol * FastMath.abs(x1),
-                                                     atol)) {
-                switch (allowed) {
-                case ANY_SIDE:
-                    return x1;
-                case LEFT_SIDE:
-                    return inverted ? x1 : x0;
-                case RIGHT_SIDE:
-                    return inverted ? x0 : x1;
-                case BELOW_SIDE:
-                    return (f1 <= 0) ? x1 : x0;
-                case ABOVE_SIDE:
-                    return (f1 >= 0) ? x1 : x0;
-                default:
-                    throw MathRuntimeException.createInternalError();
+            if (FastMath.abs(x1 - x0) < FastMath.max(rtol * FastMath.abs(x1), atol) ||
+                    (FastMath.abs(f1) < ftol && (allowed == AllowedSolution.ANY_SIDE  ||
+                            (inverted && allowed == AllowedSolution.LEFT_SIDE) ||
+                            (!inverted && allowed == AllowedSolution.RIGHT_SIDE) ||
+                            (f1 <= 0.0 && allowed == AllowedSolution.BELOW_SIDE) ||
+                            (f1 >= 0.0 && allowed == AllowedSolution.ABOVE_SIDE)))) {
+                if (inverted) {
+                    return new Interval(x1, f1, x0, f0);
+                } else {
+                    return new Interval(x0, f0, x1, f1);
                 }
             }
         }
