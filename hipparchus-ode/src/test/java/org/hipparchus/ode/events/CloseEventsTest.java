@@ -537,6 +537,59 @@ public class CloseEventsTest {
         Assert.assertSame(detectorA, events.get(0).getHandler());
     }
 
+    /**
+     * test when one event detector changes the definition of another's g function before
+     * the end of the step as a result of a continue action. Not sure if this should be
+     * officially supported, but it is used in Orekit's DateDetector, it's useful, and not
+     * too hard to implement.
+     */
+    @Test
+    public void testEventChangesGFunctionDefinition() {
+        // setup
+        double maxCheck = 5;
+        double tolerance = 1e-6;
+        double t1 = 11, t2 = 19;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // mutable boolean
+        boolean[] swap = new boolean[1];
+        final TimeDetector detectorA = new ContinuousDetector(events, t1) {
+            @Override
+            public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
+                swap[0] = true;
+                return super.eventOccurred(state, increasing);
+            }
+        };
+        final TimeDetector detectorB = new ContinuousDetector(events, t2);
+        BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
+
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (swap[0]) {
+                    return detectorB.g(state);
+                } else {
+                    return -1;
+                }
+            }
+
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+
+        // verify
+        Assert.assertEquals(2, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t2, events.get(1).getT(), tolerance);
+        Assert.assertEquals(true, events.get(1).isIncreasing());
+        Assert.assertSame(detectorC, events.get(1).getHandler());
+    }
 
     /* The following tests are copies of the above tests, except that they propagate in
      * the reverse direction and all the signs on the time values are negated.
@@ -1042,6 +1095,60 @@ public class CloseEventsTest {
         Assert.assertEquals(t1, events.get(0).getT(), 1e-3);
         Assert.assertEquals(true, events.get(0).isIncreasing());
         Assert.assertSame(detectorA, events.get(0).getHandler());
+    }
+
+    /**
+     * test when one event detector changes the definition of another's g function before
+     * the end of the step as a result of a continue action. Not sure if this should be
+     * officially supported, but it is used in Orekit's DateDetector, it's useful, and not
+     * too hard to implement.
+     */
+    @Test
+    public void testEventChangesGFunctionDefinitionReverse() {
+        // setup
+        double maxCheck = 5;
+        double tolerance = 1e-6;
+        double t1 = -11, t2 = -19;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // mutable boolean
+        boolean[] swap = new boolean[1];
+        final TimeDetector detectorA = new ContinuousDetector(events, t1) {
+            @Override
+            public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
+                swap[0] = true;
+                return super.eventOccurred(state, increasing);
+            }
+        };
+        final TimeDetector detectorB = new ContinuousDetector(events, t2);
+        BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
+
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (swap[0]) {
+                    return detectorB.g(state);
+                } else {
+                    return 1;
+                }
+            }
+
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+
+        // verify
+        Assert.assertEquals(2, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t2, events.get(1).getT(), tolerance);
+        Assert.assertEquals(true, events.get(1).isIncreasing());
+        Assert.assertSame(detectorC, events.get(1).getHandler());
     }
 
 
