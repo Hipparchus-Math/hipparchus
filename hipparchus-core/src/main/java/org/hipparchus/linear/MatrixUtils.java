@@ -914,8 +914,7 @@ public class MatrixUtils {
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveLowerTriangularSystem(RealMatrix rm, RealVector b)
-        throws MathIllegalArgumentException, MathRuntimeException,
-        MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    (rm == null) ? 0 : rm.getRowDimension(),
@@ -959,8 +958,7 @@ public class MatrixUtils {
      * coefficient of {@code rm} is lower than {@link Precision#SAFE_MIN}
      */
     public static void solveUpperTriangularSystem(RealMatrix rm, RealVector b)
-        throws MathIllegalArgumentException, MathRuntimeException,
-        MathIllegalArgumentException {
+        throws MathIllegalArgumentException, MathRuntimeException {
         if ((rm == null) || (b == null) || ( rm.getRowDimension() != b.getDimension())) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    (rm == null) ? 0 : rm.getRowDimension(),

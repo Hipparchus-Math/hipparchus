@@ -227,7 +227,7 @@ public class WilcoxonSignedRankTest {
          * largerRankSums / m gives the one-sided p-value, so it's multiplied
          * with 2 to get the two-sided p-value
          */
-        return 2 * ((double) largerRankSums) / (m);
+        return 2 * ((double) largerRankSums) / m;
     }
 
     /**

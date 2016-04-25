@@ -71,6 +71,8 @@ public interface SummaryStatistics extends StatisticalSummary {
      * for all statistical values.
      * <p>
      * The returned instance is <b>not</b> thread-safe.
+     *
+     * @return a new SummaryStatistics instance using default statistic implementations
      */
     static SummaryStatistics create() {
         return builder().build();
@@ -202,26 +204,39 @@ public interface SummaryStatistics extends StatisticalSummary {
     /**
      * A mutable builder for a SummaryStatistics.
      */
-    public static class Builder {
+    class Builder {
         /** Second moment can not be set externally, needed for other statistics. */
-        final SecondMoment secondMoment = new SecondMoment();
+        protected final SecondMoment secondMoment = new SecondMoment();
 
-        StorelessUnivariateStatistic maxImpl;
-        StorelessUnivariateStatistic minImpl;
-        StorelessUnivariateStatistic sumImpl;
-        StorelessUnivariateStatistic sumOfSquaresImpl;
-        StorelessUnivariateStatistic sumOfLogsImpl;
-        StorelessUnivariateStatistic meanImpl;
-        StorelessUnivariateStatistic varianceImpl;
-        StorelessUnivariateStatistic geoMeanImpl;
+        /** Maximum statistic implementation. */
+        protected StorelessUnivariateStatistic maxImpl;
+        /** Minimum statistic implementation. */
+        protected StorelessUnivariateStatistic minImpl;
+        /** Sum statistic implementation. */
+        protected StorelessUnivariateStatistic sumImpl;
+        /** Sum of square statistic implementation. */
+        protected StorelessUnivariateStatistic sumOfSquaresImpl;
+        /** Sum of logs statistic implementation. */
+        protected StorelessUnivariateStatistic sumOfLogsImpl;
+        /** Mean statistic implementation. */
+        protected StorelessUnivariateStatistic meanImpl;
+        /** Variance statistic implementation. */
+        protected StorelessUnivariateStatistic varianceImpl;
+        /** Geometric mean statistic implementation. */
+        protected StorelessUnivariateStatistic geoMeanImpl;
 
-        boolean meanUsesExternalMoment;
-        boolean varianceUsesExternalMoment;
-        boolean geometricMeanUsesExternalSumOfLogs;
+        /** Indicates if the mean implementation uses an external moment. */
+        protected boolean meanUsesExternalMoment;
+        /** Indicates if the variance implementation uses an external moment. */
+        protected boolean varianceUsesExternalMoment;
+        /** Indicates if the geometric mean implementation uses an external SumOfLogs. */
+        protected boolean geometricMeanUsesExternalSumOfLogs;
 
-        boolean threadsafe;
+        /** Indicates if the returned implementation shall be thread-safe. */
+        protected boolean threadsafe;
 
-        Builder() {}
+        /** Create a new Builder for SummaryStatistics. */
+        protected Builder() {}
 
         /**
          * Sets the max implementation to use.

@@ -87,7 +87,7 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
      * @param original the {@code SummaryStatistics} instance to copy
      * @throws NullArgumentException if original is null
      */
-    public SummaryStatisticsImpl(SummaryStatisticsImpl original) throws NullArgumentException {
+    SummaryStatisticsImpl(SummaryStatisticsImpl original) throws NullArgumentException {
         MathUtils.checkNotNull(original);
 
         this.n                = original.n;

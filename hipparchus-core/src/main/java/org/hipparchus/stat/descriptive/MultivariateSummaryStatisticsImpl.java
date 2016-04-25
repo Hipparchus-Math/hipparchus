@@ -81,11 +81,9 @@ class MultivariateSummaryStatisticsImpl
     private long n = 0;
 
     /**
-     * Construct a MultivariateSummaryStatistics instance
-     * @param k dimension of the data
-     * @param isCovarianceBiasCorrected if true, the unbiased sample
-     * covariance is computed, otherwise the biased population covariance
-     * is computed
+     * Construct a MultivariateSummaryStatistics instance.
+     *
+     * @param builder the builder to use
      */
     MultivariateSummaryStatisticsImpl(Builder builder) {
         this.k = builder.k;

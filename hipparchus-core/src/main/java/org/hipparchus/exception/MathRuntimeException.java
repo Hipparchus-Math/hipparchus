@@ -58,6 +58,7 @@ public class MathRuntimeException extends RuntimeException implements LocalizedE
     }
 
     /** Create an exception for an internal error.
+     * @return a new runtime exception indicating an internal error
      */
     public static MathRuntimeException createInternalError() {
         return new MathRuntimeException(LocalizedCoreFormats.INTERNAL_ERROR, REPORT_URL);
@@ -65,6 +66,8 @@ public class MathRuntimeException extends RuntimeException implements LocalizedE
 
     /** Create an exception for an internal error.
      * @param cause root cause
+     * @return a new runtime exception, indicating an internal error and wrapping the
+     * given throwable
      */
     public static MathRuntimeException createInternalError(final Throwable cause) {
         return new MathRuntimeException(cause, LocalizedCoreFormats.INTERNAL_ERROR, REPORT_URL);
