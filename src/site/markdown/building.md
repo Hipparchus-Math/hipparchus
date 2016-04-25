@@ -1,4 +1,4 @@
-# Building Hipparchus
+## Building Hipparchus
 
 Hipparchus is a pure java library without any dependencies,
 split into several modules. It is designed to be built using
@@ -7,7 +7,7 @@ using an IDE like [Eclipse](http://www.eclipse.org),
 [NetBeans](https://netbeans.org), [IntelliJ IDEA](https://www.jetbrains.com/idea/)
 or any other. We will describe only a few possibilities here.
 
-### Maven build
+## Maven build
 
 As Hipparchus is a multi-modules maven project, its build
 is slightly different from a single module project. Once
@@ -79,7 +79,7 @@ the `site:stage` goal, otherwise maven would clean the staged sites
 for the previous modules just before processing the final aggregator
 module, so only the top level part of the site would be accessible.
 
-### Eclipse build
+## Eclipse build
 
 If you want to build Hipparchus using the Eclipse IDE, the
 simplest way is to rely on the `m2e` plugin (which is

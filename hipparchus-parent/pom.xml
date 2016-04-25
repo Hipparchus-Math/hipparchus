@@ -437,7 +437,7 @@
     <hipparchus.maven-project-info-reports-plugin.version>2.8</hipparchus.maven-project-info-reports-plugin.version>
     <hipparchus.maven-pmd-plugin.version>3.5</hipparchus.maven-pmd-plugin.version>
     <hipparchus.maven-resources-plugin.version>2.7</hipparchus.maven-resources-plugin.version>
-    <hipparchus.maven-site-plugin.version>3.5</hipparchus.maven-site-plugin.version>
+    <hipparchus.maven-site-plugin.version>3.4</hipparchus.maven-site-plugin.version>
     <hipparchus.maven-source-plugin.version>2.4</hipparchus.maven-source-plugin.version>
     <hipparchus.maven-surefire-plugin.version>2.18.1</hipparchus.maven-surefire-plugin.version>
     <hipparchus.maven-surefire-report-plugin.version>2.18.1</hipparchus.maven-surefire-report-plugin.version>
@@ -718,6 +718,18 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${hipparchus.maven-site-plugin.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>lt.velykis.maven.skins</groupId>
+              <artifactId>reflow-velocity-tools</artifactId>
+              <version>${hipparchus.reflow-velocity-tools.version}</version>
+            </dependency>
+              <dependency>
+              <groupId>org.apache.velocity</groupId>
+              <artifactId>velocity</artifactId>
+              <version>${hipparchus.velocity.version}</version>
+            </dependency>
+          </dependencies>
           <configuration>
             <!-- this is an abuse of maven, we use a staging area in the top-level build directory -->
             <stagingDirectory>${project.basedir}/../target/staging</stagingDirectory>

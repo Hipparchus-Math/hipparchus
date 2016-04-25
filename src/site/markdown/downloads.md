@@ -31,6 +31,8 @@ artifact to help migrating from Apache Commons Math.
 Maven internal mechanism will download automatically all artifacts
 and dependencies as required.
 
+---
+
 |     package       |                                  link                                                 |
 |-------------------|---------------------------------------------------------------------------------------|
 |  source (zip)     | [hipparchus-1.0-src.zip](https://hipparchus.org/downloads/hipparchus-1.0-src.zip)     |
