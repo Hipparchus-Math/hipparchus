@@ -50,7 +50,8 @@
  * (this is called a G-stop facility), the state vector can be changed,
  * or integration can simply go on. The latter case is useful to handle
  * discontinuities in the differential equations gracefully and get
- * accurate dense output even close to the discontinuity.
+ * accurate dense output even close to the discontinuity. See
+ * {@link org.hipparchus.ode.events} for more on how events are handled.
  * </p>
  *
  * <p>

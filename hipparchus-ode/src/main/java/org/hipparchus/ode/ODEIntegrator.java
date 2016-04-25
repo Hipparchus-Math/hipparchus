@@ -69,33 +69,41 @@ public interface ODEIntegrator  {
      */
     void clearStepHandlers();
 
-    /** Add an event handler to the integrator.
-     * Uses a default {@link UnivariateSolver}
-     * with an absolute accuracy equal to the given convergence threshold,
-     * as root-finding algorithm to detect the state events.
-     * @param handler event handler
-     * @param maxCheckInterval maximal time interval between switching
-     * function checks (this interval prevents missing sign changes in
-     * case the integration steps becomes very large)
-     * @param convergence convergence threshold in the event time search
-     * @param maxIterationCount upper limit of the iteration count in
-     * the event time search
+    /**
+     * Add an event handler to the integrator.
+     *
+     * <p> Uses a default {@link UnivariateSolver} with an absolute accuracy equal to the
+     * given convergence threshold, as root-finding algorithm to detect the state events.
+     *
+     * @param handler           event handler
+     * @param maxCheckInterval  maximal time interval between switching function checks
+     *                          (this interval prevents missing sign changes in case the
+     *                          integration steps becomes very large)
+     * @param convergence       convergence threshold in the event time search. Must be
+     *                          smaller than {@code maxCheckInterval} and should be small
+     *                          compared to time scale of the ODE dynamics.
+     * @param maxIterationCount upper limit of the iteration count in the event time
+     *                          search
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      */
     void addEventHandler(ODEEventHandler handler, double maxCheckInterval,
                          double convergence, int maxIterationCount);
 
-    /** Add an event handler to the integrator.
-     * @param handler event handler
-     * @param maxCheckInterval maximal time interval between switching
-     * function checks (this interval prevents missing sign changes in
-     * case the integration steps becomes very large)
-     * @param convergence convergence threshold in the event time search
-     * @param maxIterationCount upper limit of the iteration count in
-     * the event time search
-     * @param solver The root-finding algorithm to use to detect the state
-     * events.
+    /**
+     * Add an event handler to the integrator.
+     *
+     * @param handler           event handler
+     * @param maxCheckInterval  maximal time interval between switching function checks
+     *                          (this interval prevents missing sign changes in case the
+     *                          integration steps becomes very large)
+     * @param convergence       convergence threshold in the event time search. Must be
+     *                          smaller than {@code maxCheckInterval} and should be small
+     *                          compared to time scale of the ODE dynamics.
+     * @param maxIterationCount upper limit of the iteration count in the event time
+     *                          search
+     * @param solver            The root-finding algorithm to use to detect the state
+     *                          events.
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      */
@@ -132,7 +140,7 @@ public interface ODEIntegrator  {
 
     /** Get the state at step start time t<sub>i</sub>.
      * <p>This method can be called during integration (typically by
-     * the object implementing the {@link FirstOrderDifferentialEquations
+     * the object implementing the {@link OrdinaryDifferentialEquation
      * differential equations} problem) if the value of the current step that
      * is attempted is needed.</p>
      * <p>The result is undefined if the method is called outside of
@@ -143,7 +151,7 @@ public interface ODEIntegrator  {
 
     /** Get the current signed value of the integration stepsize.
      * <p>This method can be called during integration (typically by
-     * the object implementing the {@link FirstOrderDifferentialEquations
+     * the object implementing the {@link OrdinaryDifferentialEquation
      * differential equations} problem) if the signed value of the current stepsize
      * that is tried is needed.</p>
      * <p>The result is undefined if the method is called outside of

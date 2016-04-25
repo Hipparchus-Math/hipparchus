@@ -16,6 +16,8 @@
  */
 /**
  *
+ * <h2>Events</h2>
+ *
  * <p>
  * This package provides classes to handle discrete events occurring during
  * Ordinary Differential Equations integration.
@@ -92,6 +94,43 @@
  * </pre>
  * </p>
  *
+ * <h2>Rules of Event Handling</h2>
+ *
+ * <p> These rules formalize the concept of event detection and are used to determine when
+ * an event must be reported to the user and the order in which events must occur. These
+ * rules assume the event handler and g function conform to the documentation on
+ * {@link org.hipparchus.ode.events.ODEEventHandler ODEEventHandler} and
+ * {@link org.hipparchus.ode.ODEIntegrator ODEIntegrator}.
+ *
+ * <ol>
+ *     <li> An event must be detected if the g function has changed signs for longer than
+ *     maxCheck. Formally, if r is a root of g(t), g has one sign on [r-maxCheck, r) and
+ *     the opposite sign on (r, r+maxCheck] then r must be detected. Otherwise the root
+ *     may or may not be detected. </li>
+ *     <li> For a given tolerance, h, and root, r, the event may occur at any point on the
+ *     interval [r-h, r+h]. The tolerance is the larger of the {@code convergence}
+ *     parameter and the convergence settings of the root finder specified when
+ *     {@link org.hipparchus.ode.ODEIntegrator#addEventHandler(org.hipparchus.ode.events.ODEEventHandler, double, double, int, org.hipparchus.analysis.solvers.BracketedUnivariateSolver) adding}
+ *     the event handler. </li>
+ *     <li> At most one event is triggered per root. </li>
+ *     <li> Events from the same event detector must alternate between increasing and
+ *     decreasing events. That is, for every pair of increasing events there must exist an
+ *     intervening decreasing event and vice-versa. </li>
+ *     <li> An event starts occurring when the
+ *     {@link org.hipparchus.ode.events.ODEEventHandler#eventOccurred(org.hipparchus.ode.ODEStateAndDerivative, boolean) eventOccurred()}
+ *     method is called. An event stops occurring when eventOccurred() returns or when the
+ *     handler's
+ *     {@link org.hipparchus.ode.events.ODEEventHandler#resetState(org.hipparchus.ode.ODEStateAndDerivative) resetState()}
+ *     method returns if eventOccured() returned
+ *     {@link org.hipparchus.ode.events.Action#RESET_STATE RESET_STATE}. </li>
+ *     <li> If event A happens before event B then the effects of A occurring are visible
+ *     to B. (Including resetting the state or derivatives, or stopping) </li>
+ *     <li> Events occur in chronological order. If integration is forward and event A
+ *     happens before event B then the time of event B is greater than or equal to the
+ *     time of event A. </li>
+ *     <li> There is a total order on events. That is for two events A and B either A
+ *     happens before B or B happens before A. </li>
+ * </ol>
  *
  */
 package org.hipparchus.ode.events;
