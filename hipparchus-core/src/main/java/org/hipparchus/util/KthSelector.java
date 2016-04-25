@@ -39,7 +39,7 @@ public class KthSelector implements Serializable {
     private final PivotingStrategy pivotingStrategy;
 
     /**
-     * Constructor with default {@link PivotingStrategy#medianOf3() median of 3}
+     * Constructor with default {@link PivotingStrategy#MEDIAN_OF_3 median of 3}
      * pivoting strategy.
      */
     public KthSelector() {
