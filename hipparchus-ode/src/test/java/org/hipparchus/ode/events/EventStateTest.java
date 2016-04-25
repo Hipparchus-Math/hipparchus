@@ -76,8 +76,8 @@ public class EventStateTest {
                                                                         mapper);
         Assert.assertTrue(es.evaluateStep(interpolatorB));
         Assert.assertEquals(r1, es.getEventTime(), tolerance);
-        ODEStateAndDerivative osdAtEvent    = new ODEStateAndDerivative(r1, a, a);
-        es.stepAccepted(osdAtEvent);
+        ODEStateAndDerivative osdAtEvent    = new ODEStateAndDerivative(es.getEventTime(), a, a);
+        es.doEvent(osdAtEvent);
 
         ODEStateAndDerivative osdAfterSecond = new ODEStateAndDerivative(r2 + 0.4 * gap, a, a);
         ODEStateInterpolator interpolatorC  = new DummyStepInterpolator(true,

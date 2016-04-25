@@ -18,8 +18,8 @@
 package org.hipparchus.ode.events;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.solvers.AllowedSolution;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
+import org.hipparchus.analysis.solvers.BracketedUnivariateSolver.Interval;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEState;
@@ -27,7 +27,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
-/** This class handles the state for one {@link EventHandler
+/** This class handles the state for one {@link ODEEventHandler
  * event handler} during integration steps.
  *
  * <p>Each time the integrator proposes a step, the event handler
@@ -67,8 +67,14 @@ public class EventState {
     /** Occurrence time of the pending event. */
     private double pendingEventTime;
 
-    /** Occurrence time of the previous event. */
-    private double previousEventTime;
+    /** Time after the current event. */
+    private double afterEvent;
+
+    /** Value of the g function after the current event. */
+    private double afterG;
+
+    /** The earliest time considered for events. */
+    private double earliestTimeConsidered;
 
     /** Integration direction. */
     private boolean forward;
@@ -77,9 +83,6 @@ public class EventState {
      *  (this is considered with respect to the integration direction)
      */
     private boolean increasing;
-
-    /** Next action indicator. */
-    private Action nextAction;
 
     /** Root-finding algorithm to use to detect state events. */
     private final BracketedUnivariateSolver<UnivariateFunction> solver;
@@ -109,10 +112,10 @@ public class EventState {
         g0Positive        = true;
         pendingEvent      = false;
         pendingEventTime  = Double.NaN;
-        previousEventTime = Double.NaN;
         increasing        = true;
-        nextAction        = Action.CONTINUE;
-
+        earliestTimeConsidered = Double.NaN;
+        afterEvent = Double.NaN;
+        afterG = Double.NaN;
     }
 
     /** Get the underlying event handler.
@@ -171,22 +174,27 @@ public class EventState {
             final double epsilon = FastMath.max(solver.getAbsoluteAccuracy(),
                                                 FastMath.abs(solver.getRelativeAccuracy() * t0));
             final double tStart = t0 + 0.5 * epsilon;
+            t0 = tStart;
             g0 = handler.g(interpolator.getInterpolatedState(tStart));
         }
-        g0Positive = g0 >= 0;
+        g0Positive = g0 > 0;
+        // "last" event was increasing
+        increasing = g0Positive;
 
     }
 
-    /** Evaluate the impact of the proposed step on the event handler.
+    /**
+     * Evaluate the impact of the proposed step on the event handler.
+     *
      * @param interpolator step interpolator for the proposed step
-     * @return true if the event handler triggers an event before
-     * the end of the proposed step
-     * @exception MathIllegalStateException if the interpolator throws one because
-     * the number of functions evaluations is exceeded
-     * @exception MathIllegalArgumentException if the event cannot be bracketed
+     * @return true if the event handler triggers an event before the end of the proposed
+     * step
+     * @throws MathIllegalStateException    if the interpolator throws one because the
+     *                                      number of functions evaluations is exceeded
+     * @throws MathIllegalArgumentException if the event cannot be bracketed
      */
     public boolean evaluateStep(final ODEStateInterpolator interpolator)
-        throws MathIllegalArgumentException, MathIllegalStateException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         forward = interpolator.isForward();
         final ODEStateAndDerivative s1 = interpolator.getCurrentState();
@@ -196,16 +204,10 @@ public class EventState {
             // we cannot do anything on such a small step, don't trigger any events
             return false;
         }
-        final int    n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / maxCheckInterval));
-        final double h = dt / n;
+        // number of points to check in the current step
+        final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / maxCheckInterval));
+        final double h = dt / (n);
 
-        final UnivariateFunction f = new UnivariateFunction() {
-            /** {@inheritDoc} */
-            @Override
-            public double value(final double t) {
-                return handler.g(interpolator.getInterpolatedState(t));
-            }
-        };
 
         double ta = t0;
         double ga = g0;
@@ -216,51 +218,11 @@ public class EventState {
             final double gb = handler.g(interpolator.getInterpolatedState(tb));
 
             // check events occurrence
-            if (g0Positive ^ (gb >= 0)) {
+            if (gb == 0.0 || (g0Positive ^ (gb > 0))) {
                 // there is a sign change: an event is expected during this step
-
-                // variation direction, with respect to the integration direction
-                increasing = gb >= ga;
-
-                // find the event time making sure we select a solution just at or past the exact root
-                final double root = forward ?
-                                    solver.solve(maxIterationCount, f, ta, tb, AllowedSolution.RIGHT_SIDE) :
-                                    solver.solve(maxIterationCount, f, tb, ta, AllowedSolution.LEFT_SIDE);
-
-                if ((!Double.isNaN(previousEventTime)) &&
-                    (FastMath.abs(root - ta) <= convergence) &&
-                    (FastMath.abs(root - previousEventTime) <= convergence)) {
-                    // we have either found nothing or found (again ?) a past event,
-                    // retry the substep excluding this value, and taking care to have the
-                    // required sign in case the g function is noisy around its zero and
-                    // crosses the axis several times
-                    do {
-                        ta = forward ? ta + convergence : ta - convergence;
-                        ga = f.value(ta);
-                    } while ((g0Positive ^ (ga >= 0)) && (forward ^ (ta >= tb)));
-
-                    if (forward ^ (ta >= tb)) {
-                        // we were able to skip this spurious root
-                        --i;
-                    } else {
-                        // we can't avoid this root before the end of the step,
-                        // we have to handle it despite it is close to the former one
-                        // maybe we have two very close roots
-                        pendingEventTime = root;
-                        pendingEvent = true;
-                        return true;
-                    }
-                } else if (Double.isNaN(previousEventTime) ||
-                                (FastMath.abs(previousEventTime - root) > convergence)) {
-                    pendingEventTime = root;
-                    pendingEvent = true;
+                if (findRoot(interpolator, ta, ga, tb, gb)) {
                     return true;
-                } else {
-                    // no sign change: there is no event for now
-                    ta = tb;
-                    ga = gb;
                 }
-
             } else {
                 // no sign change: there is no event for now
                 ta = tb;
@@ -276,9 +238,121 @@ public class EventState {
 
     }
 
-    /** Get the occurrence time of the event triggered in the current step.
-     * @return occurrence time of the event triggered in the current
-     * step or infinity if no events are triggered
+    /**
+     * Find a root in a bracketing interval.
+     *
+     * <p> When calling this method one of the following must be true. Either ga == 0, gb
+     * == 0, (ga < 0  and gb > 0), or (ga > 0 and gb < 0).
+     *
+     * @param interpolator that covers the interval.
+     * @param ta           earliest possible time for root.
+     * @param ga           g(ta).
+     * @param tb           latest possible time for root.
+     * @param gb           g(tb).
+     * @return if a zero crossing was found.
+     */
+    private boolean findRoot(final ODEStateInterpolator interpolator,
+                             double ta,
+                             double ga,
+                             final double tb,
+                             final double gb) {
+        assert ga == 0.0 || gb == 0.0 || (ga > 0.0 && gb < 0.0) || (ga < 0.0 && gb > 0.0);
+
+        final UnivariateFunction f = t -> handler.g(interpolator.getInterpolatedState(t));
+
+        while (true) {
+            // event time, just at or before the actual root.
+            final double beforeRoot;
+            // time on the other sie of the root
+            double afterRoot;
+            if (ga == 0.0) {
+                // ga == 0.0 and gb may or may not be 0.0
+                // handle the root at ta first
+                beforeRoot = ta;
+                afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
+            } else if (gb == 0.0) {
+                // hard: ga != 0.0 and gb == 0.0
+                // look past gb by up to convergence to find next sign
+                // throw an exception if g(t) = 0.0 in [tb, tb + convergence]
+                beforeRoot = tb;
+                afterRoot = shiftedBy(beforeRoot, convergence);
+            } else if (ta == tb) {
+                // both non-zero but times are the same. Probably due to reset state
+                beforeRoot = ta;
+                afterRoot = shiftedBy(beforeRoot, convergence);
+            } else if (ga > 0 != f.value(ta) > 0) {
+                // both non-zero, step sign change at ta, possibly due to reset state
+                // this should only be able to happen the first time through the loop
+                beforeRoot = ta;
+                afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
+            } else {
+                // both non-zero, the usual case, use a root finder.
+                if (forward) {
+                    final Interval interval =
+                            solver.solveInterval(maxIterationCount, f, ta, tb);
+                    beforeRoot = interval.getLeftAbscissa();
+                    afterRoot = interval.getRightAbscissa();
+                } else {
+                    final Interval interval =
+                            solver.solveInterval(maxIterationCount, f, tb, ta);
+                    beforeRoot = interval.getRightAbscissa();
+                    afterRoot = interval.getLeftAbscissa();
+                }
+            }
+            // tolerance is set to less than 1 ulp
+            // assume tolerance is 1 ulp
+            if (beforeRoot == afterRoot) {
+                afterRoot = nextAfter(afterRoot);
+            }
+            // afterRoot and beforeRoot must be different
+            assert (forward && afterRoot > beforeRoot) || (!forward && afterRoot < beforeRoot);
+
+            final double afterRootG = f.value(afterRoot);
+            if (afterRootG == 0.0 || afterRootG > 0.0 == g0Positive) {
+                // didn't see expected sign change, skip this root,
+                // likely an extrema at g = 0.0
+                if (tb == afterRoot || strictlyAfter(tb, afterRoot)) {
+                    // can't try again within this step.
+                    return false;
+                } else {
+                    // try again within these bounds
+                    ta = afterRoot;
+                    ga = afterRootG;
+                }
+            } else {
+                // real crossing
+                // variation direction, with respect to the integration direction
+                increasing = !g0Positive;
+                pendingEventTime = beforeRoot;
+                pendingEvent = true;
+                afterEvent = afterRoot;
+                afterG = afterRootG;
+
+                assert afterG > 0 == increasing;
+                assert increasing == gb >= ga;
+
+                return true;
+            }
+        }
+    }
+
+    /**
+     * Get the next number after the given number in the current propagation direction.
+     *
+     * @param t input time
+     * @return t +/- 1 ulp depending on the direction.
+     */
+    private double nextAfter(final double t) {
+        // direction
+        final double dir = forward ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;
+        return FastMath.nextAfter(t, dir);
+    }
+
+    /**
+     * Get the occurrence time of the event triggered in the current step.
+     *
+     * @return occurrence time of the event triggered in the current step or infinity if
+     * no events are triggered
      */
     public double getEventTime() {
         return pendingEvent ?
@@ -286,56 +360,191 @@ public class EventState {
                (forward ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY);
     }
 
-    /** Acknowledge the fact the step has been accepted by the integrator.
-     * @param state state at the end of the step
+    /**
+     * Try to accept the current history up to the given time.
+     *
+     * <p> It is not necessary to call this method before calling {@link
+     * #doEvent(ODEStateAndDerivative)} with the same state. It is necessary to call this
+     * method before you call {@link #doEvent(ODEStateAndDerivative)} on some other event
+     * detector.
+     *
+     * @param state        to try to accept.
+     * @param interpolator to use to find the new root, if any.
+     * @return if the event detector has an event it has not detected before that is on or
+     * before the same time as {@code state}. In other words {@code false} means continue
+     * on while {@code true} means stop and handle my event first.
      */
-    public void stepAccepted(final ODEStateAndDerivative state) {
+    public boolean tryAdvance(final ODEStateAndDerivative state,
+                              final ODEStateInterpolator interpolator) {
+        // check for illegal states.
+        // These exceptions should be impossible for the user to cause.
+        assert !(pendingEvent && strictlyAfter(pendingEventTime, state.getTime()));
 
-        t0 = state.getTime();
-        g0 = handler.g(state);
+        final double t = state.getTime();
 
-        if (pendingEvent && (FastMath.abs(pendingEventTime - state.getTime()) <= convergence)) {
-            // force the sign to its value "just after the event"
-            previousEventTime = state.getTime();
-            g0Positive        = increasing;
-            nextAction        = handler.eventOccurred(state, !(increasing ^ forward));
+        // just found an event and we know the next time we want to search again
+        if (strictlyAfter(t, earliestTimeConsidered)) {
+            return false;
+        }
+
+        final double g = handler.g(state);
+        final boolean positive = g > 0;
+
+        if ((g == 0.0 && pendingEventTime == t) || positive == g0Positive) {
+            // at a root we already found, or g function has expected sign
+            t0 = t;
+            g0 = g; // g0Positive is the same
+            return false;
         } else {
-            g0Positive = g0 >= 0;
-            nextAction = Action.CONTINUE;
+            // found a root we didn't expect -> find precise location
+            return findRoot(interpolator, t0, g0, t, g);
         }
     }
 
-    /** Check if the integration should be stopped at the end of the
-     * current step.
-     * @return true if the integration should be stopped
+    /**
+     * Notify the user's listener of the event. The event occurs wholly within this method
+     * call including a call to {@link ODEEventHandler#resetState(ODEStateAndDerivative)}
+     * if necessary.
+     *
+     * @param state the state at the time of the event. This must be at the same time as
+     *              the current value of {@link #getEventTime()}.
+     * @return the user's requested action and the new state if the action is {@link
+     * Action#RESET_STATE}. Otherwise the new state is {@code state}. The stop time
+     * indicates what time propagation should stop if the action is {@link Action#STOP}.
+     * This guarantees the integration will stop on or after the root, so that integration
+     * may be restarted safely.
      */
-    public boolean stop() {
-        return nextAction == Action.STOP;
-    }
+    public EventOccurrence doEvent(final ODEStateAndDerivative state) {
+        // check for illegal states.
+        // These exceptions should be impossible for the user to cause.
+        assert pendingEvent;
+        assert state.getTime() == this.pendingEventTime;
 
-    /** Let the event handler reset the state if it wants.
-     * @param state state at the beginning of the next step
-     * @return reset state (may by the same as initial state if only
-     * derivatives should be reset), or null if nothing is reset
-     */
-    public ODEState reset(final ODEStateAndDerivative state) {
-
-        if (!(pendingEvent && (FastMath.abs(pendingEventTime - state.getTime()) <= convergence))) {
-            return null;
-        }
-
+        final Action action = handler.eventOccurred(state, increasing == forward);
         final ODEState newState;
-        if (nextAction == Action.RESET_STATE) {
+        if (action == Action.RESET_STATE) {
             newState = handler.resetState(state);
-        } else if (nextAction == Action.RESET_DERIVATIVES) {
-            newState = state;
         } else {
-            newState = null;
+            newState = state;
         }
-        pendingEvent      = false;
-        pendingEventTime  = Double.NaN;
+        // clear pending event
+        pendingEvent = false;
+        pendingEventTime = Double.NaN;
+        // setup for next search
+        earliestTimeConsidered = afterEvent;
+        t0 = afterEvent;
+        g0 = afterG;
+        g0Positive = increasing;
+        assert g0 == 0.0 || g0Positive == (g0 > 0);
+        return new EventOccurrence(action, newState, earliestTimeConsidered);
+    }
 
-        return newState;
+    /**
+     * Shift a time value along the current integration direction: {@link #forward}.
+     *
+     * @param t     the time to shift.
+     * @param delta the amount to shift.
+     * @return t + delta if forward, else t - delta. If the result has to be rounded it
+     * will be rounded to be before the true value of t + delta.
+     */
+    private double shiftedBy(final double t, final double delta) {
+        if (forward) {
+            final double ret = t + delta;
+            if (ret - t > delta) {
+                return FastMath.nextDown(ret);
+            } else {
+                return ret;
+            }
+        } else {
+            final double ret = t - delta;
+            if (t - ret > delta) {
+                return FastMath.nextUp(ret);
+            } else {
+                return ret;
+            }
+        }
+    }
+
+    /**
+     * Get the time that happens first along the current propagation direction: {@link
+     * #forward}.
+     *
+     * @param a first time
+     * @param b second time
+     * @return min(a, b) if forward, else max (a, b)
+     */
+    private double minTime(final double a, final double b) {
+        return forward ? FastMath.min(a, b) : FastMath.max(a, b);
+    }
+
+    /**
+     * Check the ordering of two times.
+     *
+     * @param t1 the first time.
+     * @param t2 the second time.
+     * @return true if {@code t2} is strictly after {@code t1} in the propagation
+     * direction.
+     */
+    private boolean strictlyAfter(final double t1, final double t2) {
+        return forward ? t1 < t2 : t2 < t1;
+    }
+
+    /**
+     * Class to hold the data related to an event occurrence that is needed to decide how
+     * to modify integration.
+     */
+    public static class EventOccurrence {
+
+        /** User requested action. */
+        private final Action action;
+        /** New state for a reset action. */
+        private final ODEState newState;
+        /** The time to stop propagation if the action is a stop event. */
+        private final double stopTime;
+
+        /**
+         * Create a new occurrence of an event.
+         *
+         * @param action   the user requested action.
+         * @param newState for a reset event. Should be the current state unless the
+         *                 action is {@link Action#RESET_STATE}.
+         * @param stopTime to stop propagation if the action is {@link Action#STOP}. Used
+         *                 to move the stop time to just after the root.
+         */
+        EventOccurrence(final Action action,
+                        final ODEState newState,
+                        final double stopTime) {
+            this.action = action;
+            this.newState = newState;
+            this.stopTime = stopTime;
+        }
+
+        /**
+         * Get the user requested action.
+         *
+         * @return the action.
+         */
+        public Action getAction() {
+            return action;
+        }
+
+        /**
+         * Get the new state for a reset action.
+         *
+         * @return the new state.
+         */
+        public ODEState getNewState() {
+            return newState;
+        }
+
+        /**
+         * Get the new time for a stop action.
+         *
+         * @return when to stop propagation.
+         */
+        public double getStopTime() {
+            return stopTime;
+        }
 
     }
 
