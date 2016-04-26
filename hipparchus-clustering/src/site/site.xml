@@ -53,7 +53,19 @@
       <item name="User Guide"                    href="../user-guide.html" />
     </menu>
     
-    <menu name="Modules" ref="modules"/>
+    <menu name="Modules">
+        <item name="Hipparchus::Core"                             href="../hipparchus-core/index.html" />
+        <item name="Hipparchus::Computational Geometry"           href="../hipparchus-geometry/index.html" />
+        <item name="Hipparchus::Genetic Algorithms"               href="../hipparchus-genetics/index.html" />
+        <item name="Hipparchus::Ordinary Differential Equations"  href="../hipparchus-ode/index.html" />
+        <item name="Hipparchus::Optimization"                     href="../hipparchus-optim/index.html" />
+        <item name="Hipparchus::Fitting"                          href="../hipparchus-fitting/index.html" />
+        <item name="Hipparchus::Performance Tests"                href="../hipparchus-perf/index.html" />
+        <item name="Hipparchus::Samples"                          href="../hipparchus-samples/index.html" />
+        <item name="Hipparchus::Fast Fourier Transforms"          href="../hipparchus-fft/index.html" />
+        <item name="Hipparchus::Cluster Algorithms"               href="../hipparchus-clustering/index.html" />
+        <item name="Hipparchus::Migration Code "                  href="../hipparchus-migration/index.html" />
+    </menu>
 
     <menu name="Reports" ref="reports"/>
 
