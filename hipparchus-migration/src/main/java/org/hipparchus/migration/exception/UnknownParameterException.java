@@ -14,29 +14,40 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.ode;
+package org.hipparchus.migration.exception;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.migration.exception.util.LocalizedFormats;
 
-/** Interface to compute by finite difference Jacobian matrix for some parameter
- *  when computing {@link VariationalEquation partial derivatives equations}.
+/**
+ * Exception to be thrown when a parameter is unknown.
  *
+ * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalArgumentException}
  */
+@Deprecated
+public class UnknownParameterException extends MathIllegalArgumentException {
 
-public interface ParametersController extends Parameterizable {
+    /** Serializable version Id. */
+    private static final long serialVersionUID = 20120902L;
 
-    /** Get parameter value from its name.
-     * @param name parameter name
-     * @return parameter value
-     * @exception MathIllegalArgumentException if parameter is not supported
+    /** Parameter name. */
+    private final String name;
+
+    /**
+     * Construct an exception from the unknown parameter.
+     *
+     * @param name parameter name.
      */
-    double getParameter(String name) throws MathIllegalArgumentException;
+    public UnknownParameterException(final String name) {
+        super(LocalizedFormats.UNKNOWN_PARAMETER, name);
+        this.name = name;
+    }
 
-    /** Set the value for a given parameter.
-     * @param name parameter name
-     * @param value parameter value
-     * @exception MathIllegalArgumentException if parameter is not supported
+    /**
+     * @return the name of the unknown parameter.
      */
-    void setParameter(String name, double value) throws MathIllegalArgumentException;
+    public String getName() {
+        return name;
+    }
 
 }

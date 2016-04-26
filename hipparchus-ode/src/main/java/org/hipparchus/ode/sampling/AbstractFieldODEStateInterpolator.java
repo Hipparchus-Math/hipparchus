@@ -31,7 +31,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
  * previous and the current grid points (dense output).</p>
  *
  * @see org.hipparchus.ode.FieldODEIntegrator
- * @see StepHandler
+ * @see FieldODEStepHandler
  *
  * @param <T> the type of the field elements
  */

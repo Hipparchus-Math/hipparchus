@@ -15,9 +15,12 @@
  * limitations under the License.
  */
 
-package org.hipparchus.ode;
+package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.DenseOutputModel;
+import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.SecondaryODE;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 
 /**
@@ -72,7 +75,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
  * org.hipparchus.ode.nonstiff.AdaptiveStepsizeIntegrator adaptive
  * step size integrators}).</p>
  *
- * @see org.hipparchus.ode.sampling.StepHandler
+ * @see org.hipparchus.migration.ode.StepHandler
  * @see ODEStateInterpolator
  * @deprecated as of 1.0, replaced with {@link DenseOutputModel}
  */

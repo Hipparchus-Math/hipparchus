@@ -15,8 +15,10 @@
  * limitations under the License.
  */
 
-package org.hipparchus.ode;
+package org.hipparchus.migration.ode;
 
+import org.hipparchus.ode.FirstOrderConverter;
+import org.hipparchus.ode.SecondOrderODE;
 
 /** This interface represents a second order differential equations set.
 

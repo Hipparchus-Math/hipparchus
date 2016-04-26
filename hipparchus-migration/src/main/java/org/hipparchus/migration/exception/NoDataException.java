@@ -14,29 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.ode;
+package org.hipparchus.migration.exception;
 
+import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.migration.exception.util.LocalizedFormats;
 
-/** Interface to compute by finite difference Jacobian matrix for some parameter
- *  when computing {@link VariationalEquation partial derivatives equations}.
+/**
+ * Exception to be thrown when the required data is missing.
  *
+ * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalArgumentException}
  */
+@Deprecated
+public class NoDataException extends MathIllegalArgumentException {
 
-public interface ParametersController extends Parameterizable {
+    /** Serializable version Id. */
+    private static final long serialVersionUID = -3629324471511904459L;
 
-    /** Get parameter value from its name.
-     * @param name parameter name
-     * @return parameter value
-     * @exception MathIllegalArgumentException if parameter is not supported
+    /**
+     * Construct the exception.
      */
-    double getParameter(String name) throws MathIllegalArgumentException;
-
-    /** Set the value for a given parameter.
-     * @param name parameter name
-     * @param value parameter value
-     * @exception MathIllegalArgumentException if parameter is not supported
+    public NoDataException() {
+        this(LocalizedFormats.NO_DATA);
+    }
+    /**
+     * Construct the exception with a specific context.
+     *
+     * @param specific Contextual information on what caused the exception.
      */
-    void setParameter(String name, double value) throws MathIllegalArgumentException;
-
+    public NoDataException(Localizable specific) {
+        super(specific);
+    }
 }

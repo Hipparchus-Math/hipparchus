@@ -39,7 +39,7 @@ package org.hipparchus.ode;
  *
  * @see ODEIntegrator
  * @see FirstOrderConverter
- * @see SecondOrderDifferentialEquations
+ * @see SecondOrderODE
  *
  */
 public interface OrdinaryDifferentialEquation {

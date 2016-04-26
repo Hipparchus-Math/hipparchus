@@ -14,9 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.ode;
+package org.hipparchus.migration.ode;
 
 import java.lang.reflect.Array;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +26,16 @@ import java.util.List;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.LocalizedODEFormats;
+import org.hipparchus.ode.NamedParameterJacobianProvider;
+import org.hipparchus.ode.ODEState;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
+import org.hipparchus.ode.ParameterConfiguration;
+import org.hipparchus.ode.Parameterizable;
+import org.hipparchus.ode.ParametersController;
+import org.hipparchus.ode.SecondaryODE;
+import org.hipparchus.ode.VariationalEquation;
 
 /**
  * This class defines a set of {@link SecondaryODE secondary equations} to
@@ -406,18 +418,34 @@ public class JacobianMatrices {
                                            final double[] z)
             throws MathIllegalArgumentException, MathIllegalStateException {
 
-            final double[] zDot = new double[z.length];
+            try {
 
-            // Lazy initialization
-            if (dirtyParameter && (paramDim != 0)) {
-                ParameterConfiguration [] immutable = new ParameterConfiguration[selectedParameters.length];
-                for (int i = 0; i < selectedParameters.length; ++i) {
-                    immutable[i] = new ParameterConfiguration(selectedParameters[i].getParameterName(),
-                                                              selectedParameters[i].getHP());
+                // Lazy initialization
+                Constructor<ParameterConfiguration> configCtr =
+                                ParameterConfiguration.class.getDeclaredConstructor(String.class, Double.TYPE);
+                configCtr.setAccessible(true);
+                @SuppressWarnings("unchecked")
+                Constructor<NamedParameterJacobianProvider> providerCtr =
+                (Constructor<NamedParameterJacobianProvider>)
+                Class.forName("org.hipparchus.ode.ParameterJacobianWrapper").getDeclaredConstructor(OrdinaryDifferentialEquation.class,
+                                                                                                    double[].class,
+                                                                                                    ParametersController.class,
+                                                                                                    ParameterConfiguration[].class);
+                providerCtr.setAccessible(true);
+                if (dirtyParameter && (paramDim != 0)) {
+                    ParameterConfiguration [] immutable = new ParameterConfiguration[selectedParameters.length];
+                    for (int i = 0; i < selectedParameters.length; ++i) {
+                        immutable[i] = configCtr.newInstance(selectedParameters[i].getParameterName(),
+                                                             selectedParameters[i].getHP());
+                    }
+                    jacobianProviders.add(providerCtr.newInstance(jode, new double[jode.getDimension()],
+                                                                  parametersController, immutable));
+                    dirtyParameter = false;
                 }
-                jacobianProviders.add(new ParameterJacobianWrapper(jode, new double[jode.getDimension()],
-                                                                   parametersController, immutable));
-                dirtyParameter = false;
+
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException |
+                     InvocationTargetException | NoSuchMethodException | SecurityException | ClassNotFoundException e) {
+                throw new MathIllegalStateException(LocalizedCoreFormats.SIMPLE_MESSAGE, e.getLocalizedMessage());
             }
 
             // variational equations:
@@ -427,6 +455,7 @@ public class JacobianMatrices {
             double[][] dFdY = jode.computeMainStateJacobian(t, y, yDot);
 
             // Dispatch Jacobian matrix in the compound secondary state vector
+            final double[] zDot = new double[z.length];
             for (int i = 0; i < stateDim; ++i) {
                 final double[] dFdYi = dFdY[i];
                 for (int j = 0; j < stateDim; ++j) {

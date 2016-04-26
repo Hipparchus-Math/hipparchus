@@ -14,10 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.ode;
+package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.ODEJacobiansProvider;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
 
 /** Interface expanding {@link FirstOrderDifferentialEquations first order
  *  differential equations} in order to compute exactly the main state jacobian

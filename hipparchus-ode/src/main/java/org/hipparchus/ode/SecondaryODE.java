@@ -30,7 +30,7 @@ import org.hipparchus.exception.MathIllegalStateException;
  * </p>
  * <p>
  * This interface allows users to add such equations to a primary set of {@link
- * FirstOrderDifferentialEquations first order differential equations}
+ * OrdinaryDifferentialEquation first order differential equations}
  * thanks to the {@link
  * ExpandableODE#addSecondaryEquations(SecondaryODE)}
  * method.

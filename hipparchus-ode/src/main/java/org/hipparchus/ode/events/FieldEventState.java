@@ -28,7 +28,7 @@ import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
-/** This class handles the state for one {@link EventHandler
+/** This class handles the state for one {@link FieldODEEventHandler
  * event handler} during integration steps.
  *
  * <p>Each time the integrator proposes a step, the event handler
@@ -158,7 +158,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         g0 = handler.g(s0);
         if (g0.getReal() == 0) {
             // excerpt from MATH-421 issue:
-            // If an ODE solver is setup with an EventHandler that return STOP
+            // If an ODE solver is setup with a FieldODEEventHandler that return STOP
             // when the even is triggered, the integrator stops (which is exactly
             // the expected behavior). If however the user wants to restart the
             // solver from the final state reached at the event with the same

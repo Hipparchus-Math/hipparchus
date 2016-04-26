@@ -80,6 +80,7 @@ OUT_OF_RANGE_RIGHT = {0} hors du domaine [{1}, {2})
 POLYNOMIAL_INTERPOLANTS_MISMATCH_SEGMENTS = le nombre d''interpolants polynômiaux doit correspondre au nombre de segments ({0} != {1} - 1)
 POWER_NEGATIVE_PARAMETERS = impossible d''élever une valeur entière à une puissance négative ({0}^{1})
 ROW_INDEX_OUT_OF_RANGE = l''index de ligne {0} est hors du domaine autorisé [{1}, {2}]
+SAME_SIGN_AT_ENDPOINTS = les valeurs aux bornes de la fonction devraient avoir des signes diffférents ; bornes : [{0}, {1}], valeurs : [{2}, {3}]
 UNABLE_TO_BRACKET_OPTIMUM_IN_LINE_SEARCH = impossible d''encadrer l''optimum lors de la recherche linéaire
 UNABLE_TO_COMPUTE_COVARIANCE_SINGULAR_PROBLEM = impossible de calculer les covariances : problème singulier
 UNABLE_TO_FIRST_GUESS_HARMONIC_COEFFICIENTS = impossible de faire une première estimation des coefficients harmoniques

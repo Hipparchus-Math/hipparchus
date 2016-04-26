@@ -118,7 +118,7 @@ public interface ODEIntegrator  {
 
     /** Get the current value of the step start time t<sub>i</sub>.
      * <p>This method can be called during integration (typically by
-     * the object implementing the {@link FirstOrderDifferentialEquations
+     * the object implementing the {@link OrdinaryDifferentialEquation
      * differential equations} problem) if the value of the current step that
      * is attempted is needed.</p>
      * <p>The result is undefined if the method is called outside of
@@ -132,7 +132,7 @@ public interface ODEIntegrator  {
 
     /** Get the state at step start time t<sub>i</sub>.
      * <p>This method can be called during integration (typically by
-     * the object implementing the {@link FirstOrderDifferentialEquations
+     * the object implementing the {@link OrdinaryDifferentialEquation
      * differential equations} problem) if the value of the current step that
      * is attempted is needed.</p>
      * <p>The result is undefined if the method is called outside of
@@ -143,7 +143,7 @@ public interface ODEIntegrator  {
 
     /** Get the current signed value of the integration stepsize.
      * <p>This method can be called during integration (typically by
-     * the object implementing the {@link FirstOrderDifferentialEquations
+     * the object implementing the {@link OrdinaryDifferentialEquation
      * differential equations} problem) if the signed value of the current stepsize
      * that is tried is needed.</p>
      * <p>The result is undefined if the method is called outside of
@@ -240,7 +240,7 @@ public interface ODEIntegrator  {
      * @deprecated as of 1.0, replaced with {@link #integrate(ExpandableODE, ODEState, double)}
      */
     @Deprecated
-    default double integrate(final FirstOrderDifferentialEquations equations,
+    default double integrate(final OrdinaryDifferentialEquation equations,
                              final double t0, final double[] y0, final double t, final double[] y)
         throws MathIllegalArgumentException, MathIllegalStateException {
 

@@ -14,10 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.ode;
+package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.NamedParameterJacobianProvider;
 
 /** Interface to compute exactly Jacobian matrix for some parameter
  *  when computing {@link JacobianMatrices partial derivatives equations}.

@@ -15,12 +15,20 @@
  * limitations under the License.
  */
 
-package org.hipparchus.ode;
+package org.hipparchus.migration.ode;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.migration.ode.ContinuousOutputModel;
+import org.hipparchus.migration.ode.FirstOrderDifferentialEquations;
+import org.hipparchus.ode.EquationsMapper;
+import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.TestProblem3;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.sampling.DummyStepInterpolator;
@@ -164,12 +172,22 @@ public class ContinuousOutputModelTest {
     }
 
     private ODEStateInterpolator buildInterpolator(double t0, double[] y0, double t1) {
+        EquationsMapper mapper = null;
+        try {
+            Constructor<EquationsMapper> ctr;
+            ctr = EquationsMapper.class.getDeclaredConstructor(EquationsMapper.class, Integer.TYPE);
+            ctr.setAccessible(true);
+            mapper = ctr.newInstance(null, y0.length);
+        } catch (NoSuchMethodException | SecurityException | InstantiationException |
+                 IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            Assert.fail(e.getLocalizedMessage());
+        }
         return new DummyStepInterpolator(t1 >= t0,
                                          new ODEStateAndDerivative(t0, y0,  new double[y0.length]),
                                          new ODEStateAndDerivative(t1, y0,  new double[y0.length]),
                                          new ODEStateAndDerivative(t0, y0,  new double[y0.length]),
                                          new ODEStateAndDerivative(t1, y0,  new double[y0.length]),
-                                         new EquationsMapper(null, y0.length));
+                                         mapper);
     }
 
     public void checkValue(double value, double reference) {

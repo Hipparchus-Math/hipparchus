@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 
-package org.hipparchus.ode.sampling;
+package org.hipparchus.migration.ode;
 
 import java.io.Serializable;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
 
 /** This interface represents an interpolator over the last step
  * during an ODE integration.
@@ -36,10 +37,10 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * @see org.hipparchus.ode.FirstOrderIntegrator
  * @see StepHandler
  * @deprecated as of 1.0, this class is a temporary wrapper between
- * {@link ODEStateInterpolator} and {@link StepInterpolator}
+ * {@link ODEStateInterpolator} and {@link MigrationStepInterpolator}
  */
 @Deprecated
-class MigrationStepInterpolator implements StepInterpolator {
+class MigrationStepInterpolator implements org.hipparchus.migration.ode.StepInterpolator {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20160328L;

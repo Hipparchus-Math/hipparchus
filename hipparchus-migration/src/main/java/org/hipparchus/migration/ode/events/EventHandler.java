@@ -15,10 +15,12 @@
  * limitations under the License.
  */
 
-package org.hipparchus.ode.events;
+package org.hipparchus.migration.ode.events;
 
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.events.Action;
+import org.hipparchus.ode.events.ODEEventHandler;
 
 /** This interface represents a handler for discrete events triggered
  * during ODE integration.
@@ -184,7 +186,7 @@ public interface EventHandler extends ODEEventHandler {
      * the step handler itself is called (see below for scheduling). It
      * allows the user to update his internal data to acknowledge the fact
      * the event has been handled (for example setting a flag in the {@link
-     * org.hipparchus.ode.FirstOrderDifferentialEquations
+     * org.hipparchus.migration.ode.FirstOrderDifferentialEquations
      * differential equations} to switch the derivatives computation in
      * case of discontinuity), or to direct the integrator to either stop
      * or continue integration, possibly with a reset state or derivatives.</p>
@@ -192,7 +194,7 @@ public interface EventHandler extends ODEEventHandler {
      * <ul>
      *   <li>if {@link Action#STOP} is returned, the step handler will be called
      *   with the <code>isLast</code> flag of the {@link
-     *   org.hipparchus.ode.sampling.StepHandler#handleStep handleStep}
+     *   org.hipparchus.migration.ode.StepHandler#handleStep handleStep}
      *   method set to true and the integration will be stopped,</li>
      *   <li>if {@link Action#RESET_STATE} is returned, the {@link #resetState
      *   resetState} method will be called once the step handler has
@@ -206,8 +208,8 @@ public interface EventHandler extends ODEEventHandler {
      * </ul>
 
      * <p>The scheduling between this method and the {@link
-     * org.hipparchus.ode.sampling.StepHandler StepHandler} method {@link
-     * org.hipparchus.ode.sampling.StepHandler#handleStep(
+     * org.hipparchus.migration.ode.StepHandler StepHandler} method {@link
+     * org.hipparchus.migration.ode.StepHandler#handleStep(
      * org.hipparchus.ode.sampling.StepInterpolator, boolean)
      * handleStep(interpolator, isLast)} is to call this method first and
      * <code>handleStep</code> afterwards. This scheduling allows the integrator to
@@ -225,7 +227,7 @@ public interface EventHandler extends ODEEventHandler {
      * <code>eventOccurred</code> method with t = 10 first and call its
      * <code>handleStep</code> method with t = 9 afterwards. Such out of order
      * calls are limited to the size of the integration step for {@link
-     * org.hipparchus.ode.sampling.StepHandler variable step handlers} and
+     * org.hipparchus.migration.ode.StepHandler variable step handlers} and
      * to the size of the fixed step for {@link
      * org.hipparchus.ode.sampling.ODEFixedStepHandler fixed step handlers}.</p>
 

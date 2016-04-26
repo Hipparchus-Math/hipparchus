@@ -15,12 +15,13 @@
  * limitations under the License.
  */
 
-package org.hipparchus.ode.sampling;
+package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.SecondaryODE;
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
 
 /** This interface represents an interpolator over the last step
  * during an ODE integration.

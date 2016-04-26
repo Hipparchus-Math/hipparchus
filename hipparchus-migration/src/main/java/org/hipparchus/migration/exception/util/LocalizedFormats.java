@@ -24,6 +24,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.fitting.LocalizedFittingFormats;
 import org.hipparchus.genetics.LocalizedGeneticsFormats;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
+import org.hipparchus.migration.LocalizedMigrationFormats;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.transform.LocalizedFFTFormats;
@@ -326,6 +327,7 @@ public enum LocalizedFormats implements Localizable {
     ROW_INDEX_OUT_OF_RANGE(org.hipparchus.migration.LocalizedMigrationFormats.ROW_INDEX_OUT_OF_RANGE),
     ROW_INDEX(LocalizedCoreFormats.ROW_INDEX),
     NOT_BRACKETING_INTERVAL(LocalizedCoreFormats.NOT_BRACKETING_INTERVAL),
+    SAME_SIGN_AT_ENDPOINTS(LocalizedMigrationFormats.SAME_SIGN_AT_ENDPOINTS),
     SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE(LocalizedCoreFormats.SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE),
     SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE(LocalizedCoreFormats.SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE),
     SIMPLEX_NEED_ONE_POINT(LocalizedOptimFormats.SIMPLEX_NEED_ONE_POINT),

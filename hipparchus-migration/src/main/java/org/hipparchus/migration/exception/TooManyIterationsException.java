@@ -14,29 +14,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.ode;
+package org.hipparchus.migration.exception;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 
-/** Interface to compute by finite difference Jacobian matrix for some parameter
- *  when computing {@link VariationalEquation partial derivatives equations}.
+/**
+ * Exception to be thrown when the maximal number of iterations is exceeded.
  *
+ * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalArgumentException}
  */
+@Deprecated
+public class TooManyIterationsException extends MaxCountExceededException {
+    /** Serializable version Id. */
+    private static final long serialVersionUID = 20121211L;
 
-public interface ParametersController extends Parameterizable {
-
-    /** Get parameter value from its name.
-     * @param name parameter name
-     * @return parameter value
-     * @exception MathIllegalArgumentException if parameter is not supported
+    /**
+     * Construct the exception.
+     *
+     * @param max Maximum number of evaluations.
      */
-    double getParameter(String name) throws MathIllegalArgumentException;
-
-    /** Set the value for a given parameter.
-     * @param name parameter name
-     * @param value parameter value
-     * @exception MathIllegalArgumentException if parameter is not supported
-     */
-    void setParameter(String name, double value) throws MathIllegalArgumentException;
-
+    public TooManyIterationsException(Number max) {
+        super(max);
+    }
 }

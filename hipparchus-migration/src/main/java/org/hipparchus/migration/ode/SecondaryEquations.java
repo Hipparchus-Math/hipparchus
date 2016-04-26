@@ -15,10 +15,12 @@
  * limitations under the License.
  */
 
-package org.hipparchus.ode;
+package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.SecondaryODE;
 
 /**
  * This interface allows users to add secondary differential equations to a primary

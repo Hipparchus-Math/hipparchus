@@ -15,10 +15,13 @@
  * limitations under the License.
  */
 
-package org.hipparchus.ode;
+package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.FirstOrderConverter;
+import org.hipparchus.ode.ODEIntegrator;
+import org.hipparchus.ode.OrdinaryDifferentialEquation;
 
 
 

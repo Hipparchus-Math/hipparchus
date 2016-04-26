@@ -15,7 +15,10 @@
  * limitations under the License.
  */
 
-package org.hipparchus.ode.sampling;
+package org.hipparchus.migration.ode.sampling;
+
+import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.hipparchus.ode.sampling.ODEStepHandler;
 
 /**
  * This class is a step handler that does nothing.
