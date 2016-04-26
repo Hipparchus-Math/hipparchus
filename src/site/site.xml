@@ -73,31 +73,9 @@
       <item name="Latest API docs (development)" href="apidocs/index.html"/>
       <item name="Source Repository (current)"   href="https://github.com/Hipparchus-Math/hipparchus"/>
       <item name="Developers Guide"              href="developers.html"/>
+      <item name="User Guide"                    href="user-guide.html" />
     </menu>
     
-    <menu name="User Guide">
-      <item name="Contents"                        href="userguide/index.html"/>
-      <item name="Overview"                        href="userguide/overview.html"/>
-      <item name="Statistics"                      href="userguide/stat.html"/>
-      <item name="Data Generation"                 href="userguide/random.html"/>
-      <item name="Linear Algebra"                  href="userguide/linear.html"/>
-      <item name="Numerical Analysis"              href="userguide/analysis.html"/>
-      <item name="Special Functions"               href="userguide/special.html"/>
-      <item name="Utilities"                       href="userguide/utilities.html"/>
-      <item name="Complex Numbers"                 href="userguide/complex.html"/>
-      <item name="Distributions"                   href="userguide/distribution.html"/>
-      <item name="Fractions"                       href="userguide/fraction.html"/>
-      <item name="Transform Methods"               href="userguide/transform.html"/>
-      <item name="Geometry"                        href="userguide/geometry.html"/>
-      <item name="Optimization"                    href="userguide/optimization.html"/>
-      <item name="Curve Fitting"                   href="userguide/fitting.html"/>
-      <item name="Least Squares"                   href="userguide/leastsquares.html"/>
-      <item name="Ordinary Differential Equations" href="userguide/ode.html"/>
-      <item name="Genetic Algorithms"              href="userguide/genetics.html"/>
-      <item name="Machine Learning"                href="userguide/ml.html"/>
-      <item name="Exceptions"                      href="userguide/exceptions.html"/>
-    </menu>
-
     <menu name="Parent" ref="parent" />
 
     <menu name="Modules" ref="modules"/>

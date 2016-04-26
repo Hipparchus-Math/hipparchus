@@ -28,11 +28,11 @@ it's just meant to give a feel for the kinds of things that Hipparchus provides.
 * Miscellaneous mathematical functions such as factorials, binomial coefficients and "special functions" (e.g. gamma, beta functions)
 
 We are actively seeking ideas for additional components that fit into the
-[Hipparchus vision](../index.html#summary) of a set of lightweight,
+[Hipparchus vision](index.html#summary) of a set of lightweight,
 self-contained math/stat components useful for solving common programming problems.
 Suggestions for new components or enhancements to existing functionality are always welcome!
 All feedback/suggestions for improvement should be sent to the
-[developers mailing list](../mail-lists.html).
+[developers mailing list](mail-lists.html).
 
 
 
@@ -52,7 +52,7 @@ Hipparchus is divided into sixteen subpackages, based on functionality provided.
 * Performing statistical significance tests
 * Miscellaneous mathematical functions such as factorials, binomial coefficients and "special functions" (e.g. gamma, beta functions)
 
-Package javadocs are [here](../apidocs/index.html)
+Package javadocs are [here](apidocs/index.html)
 
 
 
@@ -67,9 +67,9 @@ values/objects or state changes.
 
 When the actual parameters provided to a method or the internal state of an object
 make a computation meaningless, a
-[MathIllegalArgumentException](../apidocs/org/hipparchus/exception/MathIllegalArgumentException.html)
+[MathIllegalArgumentException](apidocs/org/hipparchus/exception/MathIllegalArgumentException.html)
 or
-[MathIllegalStateException](../apidocs/org/hipparchus/exception/MathIllegalStateException.html)
+[MathIllegalStateException](apidocs/org/hipparchus/exception/MathIllegalStateException.html)
 may be thrown. Exact conditions under which runtime
 exceptions (and any other exceptions) are thrown are specified in the javadoc method
 comments.
@@ -80,7 +80,7 @@ or other special values are returned are fully specified in the javadoc method c
 
 As of version 2.2, the policy for dealing with null references is as
 follows: When an argument is unexpectedly null, a
-[NullArgumentException](../apidocs/org/hipparchus/exception/NullArgumentException.html)
+[NullArgumentException](apidocs/org/hipparchus/exception/NullArgumentException.html)
 is raised to signal the illegal argument. Note that this
 class does not inherit from the standard `NullPointerException` but is a subclass
 of `MathIllegalArgumentException`.
@@ -94,5 +94,5 @@ Hipparchus requires JDK 1.8+ and has no runtime dependencies.
 
 ## 0.6 License
 Hipparchus is distributed under the terms of the Apache License, Version 2.0:
-[.    ](http://www.apache.org/licenses/LICENSE-2.0)
+[.    ](license.html)
 
