@@ -35,7 +35,7 @@ package org.hipparchus.ode;
  * transformation process and that for each call to {@link
  * #computeDerivatives computeDerivatives}, this wrapper does copy 4n
  * scalars : 2n before the call to {@link
- * SecondOrderDifferentialEquations#computeSecondDerivatives
+ * SecondOrderODE#computeSecondDerivatives
  * computeSecondDerivatives} in order to dispatch the y state vector
  * into z and zDot, and 2n after the call to gather zDot and zDDot
  * into yDot. Since the underlying problem by itself perhaps also

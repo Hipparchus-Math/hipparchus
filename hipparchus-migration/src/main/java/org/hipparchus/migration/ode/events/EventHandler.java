@@ -19,7 +19,6 @@ package org.hipparchus.migration.ode.events;
 
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
-import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.ODEEventHandler;
 
 /** This interface represents a handler for discrete events triggered
@@ -116,7 +115,7 @@ public interface EventHandler extends ODEEventHandler {
          * #eventOccurred eventOccurred} method when the integration should
          * go on after the event ending the current step, with a new derivatives
          * vector (which will be retrieved thanks to the {@link
-         * org.hipparchus.ode.FirstOrderDifferentialEquations#computeDerivatives}
+         * org.hipparchus.ode.OrdinaryDifferentialEquation#computeDerivatives}
          * method).</p>
          */
         RESET_DERIVATIVES,
@@ -209,9 +208,8 @@ public interface EventHandler extends ODEEventHandler {
 
      * <p>The scheduling between this method and the {@link
      * org.hipparchus.migration.ode.StepHandler StepHandler} method {@link
-     * org.hipparchus.migration.ode.StepHandler#handleStep(
-     * org.hipparchus.ode.sampling.StepInterpolator, boolean)
-     * handleStep(interpolator, isLast)} is to call this method first and
+     * org.hipparchus.migration.ode.StepHandler#handleStep(org.hipparchus.migration.ode.MigrationStepInterpolator,
+     * boolean) handleStep(interpolator, isLast)} is to call this method first and
      * <code>handleStep</code> afterwards. This scheduling allows the integrator to
      * pass <code>true</code> as the <code>isLast</code> parameter to the step
      * handler to make it aware the step will be the last one if this method
@@ -222,14 +220,14 @@ public interface EventHandler extends ODEEventHandler {
      * code called by step handlers may experience apparently out of order values
      * of the independent time variable. As an example, if the same user object
      * implements both this {@link EventHandler EventHandler} interface and the
-     * {@link org.hipparchus.ode.sampling.ODEFixedStepHandler ODEFixedStepHandler}
+     * {@link org.hipparchus.migration.ode.sampling.FixedStepHandler FixedStepHandler}
      * interface, a <em>forward</em> integration may call its
      * <code>eventOccurred</code> method with t = 10 first and call its
      * <code>handleStep</code> method with t = 9 afterwards. Such out of order
      * calls are limited to the size of the integration step for {@link
      * org.hipparchus.migration.ode.StepHandler variable step handlers} and
      * to the size of the fixed step for {@link
-     * org.hipparchus.ode.sampling.ODEFixedStepHandler fixed step handlers}.</p>
+     * org.hipparchus.migration.ode.sampling.FixedStepHandler fixed step handlers}.</p>
 
      * @param t current value of the independent <i>time</i> variable
      * @param y array containing the current value of the state vector

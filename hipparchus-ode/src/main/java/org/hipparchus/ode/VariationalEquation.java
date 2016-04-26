@@ -101,7 +101,6 @@ public class VariationalEquation {
      * @param hY step used for finite difference computation with respect to state vector
      * @param controller controller to change parameters
      * @param paramsAndSteps parameters and steps to compute the Jacobians df/dp
-     * @see ParametersController#setParameterStep(String, double)
      * @exception MismatchedEquations if the primary set of the expandable set does
      * not match the {@code ode}
      */
