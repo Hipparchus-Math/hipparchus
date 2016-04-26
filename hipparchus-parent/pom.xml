@@ -380,6 +380,12 @@
       </dependency>
       <dependency>
         <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-ode</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
         <artifactId>hipparchus-optim</artifactId>
         <version>${project.version}</version>
       </dependency>

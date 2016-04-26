@@ -17,13 +17,11 @@
 
 package org.hipparchus.ode;
 
-
 /** This class converts second order differential equations to first
  * order ones.
  *
- * <p>This class is a wrapper around a {@link
- * SecondOrderDifferentialEquations} which allow to use a {@link
- * ODEIntegrator} to integrate it.</p>
+ * <p>This class is a wrapper around a {@link SecondOrderODE} which
+ * allow to use a {@link ODEIntegrator} to integrate it.</p>
  *
  * <p>The transformation is done by changing the n dimension state
  * vector to a 2n dimension vector, where the first n components are
@@ -48,8 +46,8 @@ package org.hipparchus.ode;
  * and then avoid using this class.</p>
  *
  * @see ODEIntegrator
- * @see FirstOrderDifferentialEquations
- * @see SecondOrderDifferentialEquations
+ * @see OrdinaryDifferentialEquation
+ * @see SecondOrderODE
  */
 
 public class FirstOrderConverter implements OrdinaryDifferentialEquation {

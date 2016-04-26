@@ -32,7 +32,7 @@ import org.hipparchus.ode.sampling.FieldODEStepHandler;
  * <p>The classes which are devoted to solve first order differential
  * equations should implement this interface. The problems which can
  * be handled should implement the {@link
- * FirstOrderDifferentialEquations} interface.</p>
+ * FieldOrdinaryDifferentialEquation} interface.</p>
  *
  * @see FieldOrdinaryDifferentialEquation
  * @param <T> the type of the field elements
@@ -119,7 +119,7 @@ public interface FieldODEIntegrator<T extends RealFieldElement<T>> {
 
     /** Get the state at step start time t<sub>i</sub>.
      * <p>This method can be called during integration (typically by
-     * the object implementing the {@link FirstOrderDifferentialEquations
+     * the object implementing the {@link FieldOrdinaryDifferentialEquation
      * differential equations} problem) if the value of the current step that
      * is attempted is needed.</p>
      * <p>The result is undefined if the method is called outside of
@@ -130,7 +130,7 @@ public interface FieldODEIntegrator<T extends RealFieldElement<T>> {
 
     /** Get the current signed value of the integration stepsize.
      * <p>This method can be called during integration (typically by
-     * the object implementing the {@link FirstOrderDifferentialEquations
+     * the object implementing the {@link FieldOrdinaryDifferentialEquation
      * differential equations} problem) if the signed value of the current stepsize
      * that is tried is needed.</p>
      * <p>The result is undefined if the method is called outside of

@@ -21,17 +21,14 @@
     <artifactId>reflow-maven-skin</artifactId>
     <version>1.1.1</version>
   </skin>
+  <bannerLeft>
+    <name><![CDATA[<img src="images/logo-hipparchus-blue.png" style="width:209px;height:136px;"/>]]></name>
+    <href>index.html</href>
+  </bannerLeft>
   <custom>
     <reflowSkin>
       <theme>bootswatch-readable</theme>
       <highlightJs>true</highlightJs>
-      <brand>
-        <name><![CDATA[
-      <src>resources/images/logo-hipparchus-blue.png</src><span class="color-highlight">Hipparchus</span>
-      ]]></name>
-      <href>https://hipparchus.org/</href>
-      </brand>
-      <slogan>a pure Java mathematical library</slogan>
       <titleTemplate>%2$s | %1$s</titleTemplate>
       <toc>top</toc>
       <topNav>Hipparchus|User Guide|Parent|Modules|Reports</topNav>
@@ -56,15 +53,13 @@
           </sections>
         </index>
         <building>
-          <columns>2</columns>
-        </building>
-        <developers>
-          <columns>2</columns>
-        </developers>
-        <downloads>
-          <columns>2</columns>
+          <highlightJs>false</highlightJs>
           <body/>
-        </downloads>
+        </building>
+        <license>
+          <highlightJs>false</highlightJs>
+          <body/>
+        </license>
       </pages>
     </reflowSkin>
   </custom>
@@ -78,31 +73,9 @@
       <item name="Latest API docs (development)" href="apidocs/index.html"/>
       <item name="Source Repository (current)"   href="https://github.com/Hipparchus-Math/hipparchus"/>
       <item name="Developers Guide"              href="developers.html"/>
+      <item name="User Guide"                    href="user-guide.html" />
     </menu>
     
-    <menu name="User Guide">
-      <item name="Contents"                        href="userguide/index.html"/>
-      <item name="Overview"                        href="userguide/overview.html"/>
-      <item name="Statistics"                      href="userguide/stat.html"/>
-      <item name="Data Generation"                 href="userguide/random.html"/>
-      <item name="Linear Algebra"                  href="userguide/linear.html"/>
-      <item name="Numerical Analysis"              href="userguide/analysis.html"/>
-      <item name="Special Functions"               href="userguide/special.html"/>
-      <item name="Utilities"                       href="userguide/utilities.html"/>
-      <item name="Complex Numbers"                 href="userguide/complex.html"/>
-      <item name="Distributions"                   href="userguide/distribution.html"/>
-      <item name="Fractions"                       href="userguide/fraction.html"/>
-      <item name="Transform Methods"               href="userguide/transform.html"/>
-      <item name="Geometry"                        href="userguide/geometry.html"/>
-      <item name="Optimization"                    href="userguide/optimization.html"/>
-      <item name="Curve Fitting"                   href="userguide/fitting.html"/>
-      <item name="Least Squares"                   href="userguide/leastsquares.html"/>
-      <item name="Ordinary Differential Equations" href="userguide/ode.html"/>
-      <item name="Genetic Algorithms"              href="userguide/genetics.html"/>
-      <item name="Machine Learning"                href="userguide/ml.html"/>
-      <item name="Exceptions"                      href="userguide/exceptions.html"/>
-    </menu>
-
     <menu name="Parent" ref="parent" />
 
     <menu name="Modules" ref="modules"/>

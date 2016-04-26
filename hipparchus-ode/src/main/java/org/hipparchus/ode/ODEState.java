@@ -21,8 +21,8 @@ import java.io.Serializable;
 
 /** Container for time, main and secondary state vectors.
 
- * @see FirstOrderDifferentialEquations
- * @see SecondaryEquations
+ * @see OrdinaryDifferentialEquation
+ * @see SecondaryODE
  * @see ODEIntegrator
  * @see ODEStateAndDerivative
  */

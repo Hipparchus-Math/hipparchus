@@ -20,7 +20,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 
 /** Interface to compute exactly Jacobian matrix for some parameter
- *  when computing {@link JacobianMatrices partial derivatives equations}.
+ *  when computing {@link VariationalEquation partial derivatives equations}.
  *
  */
 public interface NamedParameterJacobianProvider extends Parameterizable {
