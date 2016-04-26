@@ -26,7 +26,7 @@
       <theme>bootswatch-readable</theme>
       <highlightJs>true</highlightJs>
       <brand>
-        <name><![CDATA[<img src="../images/logo-hipparchus-blue.png" style="width:63px;height:40px;"/>]]></name>
+        <name><![CDATA[<img src="../images/logo-hipparchus-blue.png" style="width:63px;height:40px;"/> ${project.name}]]></name>
         <href>../index.html</href>
       </brand>
       <titleTemplate>%2$s | %1$s</titleTemplate>
