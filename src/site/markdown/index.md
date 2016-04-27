@@ -40,7 +40,8 @@ Apache Commons Math 3.6.1 with some elements of the development version
 that would ultimately lead to Apache Commons Math 4.0 which was not released
 at fork time.
 
-In order to help users who would like to follow Hipparchus, a migration module
+In order to help users who would like to follow Hipparchus, a
+[migration module](hipparchus-migration/index.html)
 as been set up with some temporary classes that can be used to continue
 using some of the initial APIs and migration scripts that can be applied to
 source code in order to convert them to rely on Hipparchus.
