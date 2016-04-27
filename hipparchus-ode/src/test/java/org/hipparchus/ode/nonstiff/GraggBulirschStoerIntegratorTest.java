@@ -17,6 +17,7 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.hamcrest.Matchers;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEIntegrator;
@@ -186,15 +187,19 @@ public class GraggBulirschStoerIntegratorTest {
         TestProblemHandler handler = new TestProblemHandler(pb, integ);
         integ.addStepHandler(handler);
         ODEEventHandler[] functions = pb.getEventsHandlers();
-        double convergence = 1.0e-8 * maxStep;
+        // since state is approx. linear at g=0 need convergence <= (state tolerance) / 2.
+        double convergence = 1.0e-11;
         for (int l = 0; l < functions.length; ++l) {
             integ.addEventHandler(functions[l], Double.POSITIVE_INFINITY, convergence, 1000);
         }
         Assert.assertEquals(functions.length, integ.getEventHandlers().size());
         integ.integrate(pb, pb.getInitialState(), pb.getFinalTime());
 
-        Assert.assertTrue(handler.getMaximalValueError() < 2.5e-11);
-        Assert.assertEquals(0, handler.getMaximalTimeError(), convergence);
+        Assert.assertThat(handler.getMaximalValueError(),
+                Matchers.lessThan(2.5e-11));
+        // integration error builds up by the last event,
+        // so tolerance is slightly more than the convergence.
+        Assert.assertEquals(0, handler.getMaximalTimeError(), 1.5 * convergence);
         Assert.assertEquals(12.0, handler.getLastTime(), convergence);
         integ.clearEventHandlers();
         Assert.assertEquals(0, integ.getEventHandlers().size());

@@ -16,13 +16,17 @@
  */
 package org.hipparchus.ode.events;
 
+import org.hipparchus.Field;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
-import org.hipparchus.ode.ODEIntegrator;
-import org.hipparchus.ode.ODEState;
-import org.hipparchus.ode.ODEStateAndDerivative;
-import org.hipparchus.ode.OrdinaryDifferentialEquation;
-import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
-import org.hipparchus.util.FastMath;
+import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
+import org.hipparchus.ode.FieldExpandableODE;
+import org.hipparchus.ode.FieldODEIntegrator;
+import org.hipparchus.ode.FieldODEState;
+import org.hipparchus.ode.FieldODEStateAndDerivative;
+import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
+import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
+import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -35,7 +39,14 @@ import java.util.List;
  *
  * @author Evan Ward
  */
-public class CloseEventsTest {
+public class FieldCloseEventsTest {
+
+    /** type of field. */
+    private static final Field<Decimal64> field = Decimal64Field.getInstance();
+    private static final Decimal64 zero = field.getZero();
+    private static final Decimal64 one = field.getOne();
+    private static final FieldODEState<Decimal64> initialState =
+            new FieldODEState<>(zero, new Decimal64[]{zero, zero});
 
     @Test
     public void testCloseEventsFirstOneIsReset() {
@@ -49,8 +60,8 @@ public class CloseEventsTest {
         // and end of the interval so we need another event less than half a max
         // check interval after d2 so that the g function will be negative at
         // all three times. Then we get a non bracketing exception.
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(Action.RESET_DERIVATIVES, 9);
         integrator.addEventHandler(detector1, 10, 1e-9, 100);
@@ -58,7 +69,7 @@ public class CloseEventsTest {
         integrator.addEventHandler(detector2, 11, 1e-9, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 20);
+        integrator.integrate(new Equation(), initialState, zero.add(20));
 
         // verify
         List<Event> events1 = detector1.getEvents();
@@ -72,8 +83,8 @@ public class CloseEventsTest {
     public void testCloseEvents() {
         // setup
         double e = 1e-15;
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, e, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(5);
         integrator.addEventHandler(detector1, 10, 1, 100);
@@ -81,7 +92,7 @@ public class CloseEventsTest {
         integrator.addEventHandler(detector2, 10, 1, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 20);
+        integrator.integrate(new Equation(), initialState, one.add(20));
 
         // verify
         List<Event> events1 = detector1.getEvents();
@@ -95,8 +106,8 @@ public class CloseEventsTest {
     @Test
     public void testSimultaneousEvents() {
         // setup
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(5);
         integrator.addEventHandler(detector1, 10, 1, 100);
@@ -104,7 +115,7 @@ public class CloseEventsTest {
         integrator.addEventHandler(detector2, 10, 1, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 20);
+        integrator.integrate(new Equation(), initialState, zero.add(20));
 
         // verify
         List<Event> events1 = detector1.getEvents();
@@ -124,14 +135,14 @@ public class CloseEventsTest {
     public void testFastSwitching() {
         // setup
         // step size of 10 to land in between two events we would otherwise miss
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(9.9, 10.1, 12);
         integrator.addEventHandler(detector1, 10, 0.2, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 20);
+        integrator.integrate(new Equation(), initialState, zero.add(20));
 
         //verify
         // finds one or three events. Not 2.
@@ -154,14 +165,14 @@ public class CloseEventsTest {
         TimeDetector detectorB = new TimeDetector(events, -10, t1, t2, t5);
         TimeDetector detectorC = new TimeDetector(Action.RESET_DERIVATIVES, events, t4);
 
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
@@ -192,13 +203,13 @@ public class CloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(events, t2);
         TimeDetector detectorB = new FlatDetector(events, t3);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, 1e-6, 100);
         integrator.addEventHandler(detectorB, maxCheck, 0.5, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         // if these fail the event finding did its job,
@@ -227,13 +238,13 @@ public class CloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(events, t2);
         TimeDetector detectorB = new TimeDetector(events, t1, t3);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, 1e-6, 100);
         integrator.addEventHandler(detectorB, maxCheck, toleranceB, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         // we only care that the rules are satisfied, there are other solutions
@@ -241,12 +252,12 @@ public class CloseEventsTest {
         Assert.assertEquals(t1, events.get(0).getT(), toleranceB);
         Assert.assertEquals(true, events.get(0).isIncreasing());
         Assert.assertSame(detectorB, events.get(0).getHandler());
-        Assert.assertEquals(t3, events.get(1).getT(), toleranceB);
-        Assert.assertEquals(false, events.get(1).isIncreasing());
-        Assert.assertSame(detectorB, events.get(1).getHandler());
-        Assert.assertEquals(t2, events.get(2).getT(), tolerance);
-        Assert.assertEquals(true, events.get(2).isIncreasing());
-        Assert.assertSame(detectorA, events.get(2).getHandler());
+        Assert.assertEquals(t2, events.get(1).getT(), tolerance);
+        Assert.assertEquals(true, events.get(1).isIncreasing());
+        Assert.assertSame(detectorA, events.get(1).getHandler());
+        Assert.assertEquals(t3, events.get(2).getT(), toleranceB);
+        Assert.assertEquals(false, events.get(2).isIncreasing());
+        Assert.assertSame(detectorB, events.get(2).getHandler());
         // chronological
         for (int i = 1; i < events.size(); i++) {
             Assert.assertTrue(events.get(i).getT() >= events.get(i - 1).getT());
@@ -264,12 +275,12 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorB = new FlatDetector(events, t1, t2, t3);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         // allowed to find t1 or t3.
@@ -293,13 +304,13 @@ public class CloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(events, t1);
         TimeDetector detectorB = new TimeDetector(events, t1, t1);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         Assert.assertEquals(1, events.size());
@@ -307,9 +318,9 @@ public class CloseEventsTest {
         Assert.assertEquals(true, events.get(0).isIncreasing());
         Assert.assertSame(detectorA, events.get(0).getHandler());
         // detector worked correctly
-        Assert.assertTrue(detectorB.g(state(t1)) == 0.0);
-        Assert.assertTrue(detectorB.g(state(t1 - 1e-6)) < 0);
-        Assert.assertTrue(detectorB.g(state(t1 + 1e-6)) < 0);
+        Assert.assertTrue(detectorB.g(state(t1)).getReal() == 0.0);
+        Assert.assertTrue(detectorB.g(state(t1 - 1e-6)).getReal() < 0);
+        Assert.assertTrue(detectorB.g(state(t1 + 1e-6)).getReal() < 0);
     }
 
     /**
@@ -327,13 +338,13 @@ public class CloseEventsTest {
         TimeDetector detectorA = new TimeDetector(events, t1);
         TimeDetector detectorB = new ContinuousDetector(events, -20, t1, t1);
         detectorB.g(state(t1));
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         Assert.assertEquals(1, events.size());
@@ -341,9 +352,9 @@ public class CloseEventsTest {
         Assert.assertEquals(true, events.get(0).isIncreasing());
         Assert.assertSame(detectorA, events.get(0).getHandler());
         // detector worked correctly
-        Assert.assertEquals(0.0, detectorB.g(state(t1)), 0.0);
-        Assert.assertTrue(detectorB.g(state(t1 - 1e-6)) > 0);
-        Assert.assertTrue(detectorB.g(state(t1 + 1e-6)) > 0);
+        Assert.assertEquals(0.0, detectorB.g(state(t1)).getReal(), 0.0);
+        Assert.assertTrue(detectorB.g(state(t1 - 1e-6)).getReal() > 0);
+        Assert.assertTrue(detectorB.g(state(t1 + 1e-6)).getReal() > 0);
     }
 
     /** check root finding when zero at both ends. */
@@ -356,12 +367,12 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(events, t1, t2);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         Assert.assertEquals(2, events.size());
@@ -383,12 +394,12 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(events, -10, t1, t2);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         Assert.assertEquals(2, events.size());
@@ -413,14 +424,14 @@ public class CloseEventsTest {
         TimeDetector detectorB = new ContinuousDetector(events, t1, t3, t4, t7);
         TimeDetector detectorC = new ContinuousDetector(events, t2, t5);
 
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
@@ -459,19 +470,20 @@ public class CloseEventsTest {
         double maxCheck = 10;
         double tolerance = 1e-6;
         double t1 = 15.0;
-        final ODEState newState = new ODEState(t1, new double[]{-20, 0});
+        final FieldODEState newState = new FieldODEState<>(
+                zero.add(t1), new Decimal64[]{zero.add(-20), zero});
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ResetDetector(events, newState, t1);
         BaseDetector detectorB = new StateDetector(events, -1);
 
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 40.0);
+        integrator.integrate(new Equation(), initialState, zero.add(40.0));
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
@@ -497,12 +509,12 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(events, t1);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         Assert.assertEquals(1, events.size());
@@ -521,13 +533,13 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new FlatDetector(events, t1);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100,
-                new BracketingNthOrderBrentSolver(1e-3, 5));
+                new FieldBracketingNthOrderBrentSolver<>(zero, zero.add(1e-3), zero, 5));
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         Assert.assertEquals(1, events.size());
@@ -555,7 +567,7 @@ public class CloseEventsTest {
         boolean[] swap = new boolean[1];
         final TimeDetector detectorA = new ContinuousDetector(events, t1) {
             @Override
-            public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
+            public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state, boolean increasing) {
                 swap[0] = true;
                 return super.eventOccurred(state, increasing);
             }
@@ -564,22 +576,22 @@ public class CloseEventsTest {
         BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
 
             @Override
-            public double g(ODEStateAndDerivative state) {
+            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
                 if (swap[0]) {
                     return detectorB.g(state);
                 } else {
-                    return -1;
+                    return zero.add(-1);
                 }
             }
 
         };
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
 
         // verify
         Assert.assertEquals(2, events.size());
@@ -608,8 +620,8 @@ public class CloseEventsTest {
         // and end of the interval so we need another event less than half a max
         // check interval after d2 so that the g function will be negative at
         // all three times. Then we get a non bracketing exception.
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
 
         // switched for 9 to 1 to be close to the start of the step
         double t1 = -1;
@@ -619,7 +631,7 @@ public class CloseEventsTest {
         integrator.addEventHandler(detector2, 11, 1e-9, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -20);
+        integrator.integrate(new Equation(), initialState, zero.add(-20));
 
         // verify
         List<Event> events1 = detector1.getEvents();
@@ -633,8 +645,8 @@ public class CloseEventsTest {
     public void testCloseEventsReverse() {
         // setup
         double e = 1e-15;
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(e, 100.0, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, e, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(-5);
         integrator.addEventHandler(detector1, 10, 1, 100);
@@ -642,7 +654,7 @@ public class CloseEventsTest {
         integrator.addEventHandler(detector2, 10, 1, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -20);
+        integrator.integrate(new Equation(), initialState, zero.add(-20));
 
         // verify
         List<Event> events1 = detector1.getEvents();
@@ -656,8 +668,8 @@ public class CloseEventsTest {
     @Test
     public void testSimultaneousEventsReverse() {
         // setup
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 100.0, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 100.0, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(-5);
         integrator.addEventHandler(detector1, 10, 1, 100);
@@ -665,7 +677,7 @@ public class CloseEventsTest {
         integrator.addEventHandler(detector2, 10, 1, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -20);
+        integrator.integrate(new Equation(), initialState, zero.add(-20));
 
         // verify
         List<Event> events1 = detector1.getEvents();
@@ -685,14 +697,14 @@ public class CloseEventsTest {
     public void testFastSwitchingReverse() {
         // setup
         // step size of 10 to land in between two events we would otherwise miss
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
 
         TimeDetector detector1 = new TimeDetector(-9.9, -10.1, -12);
         integrator.addEventHandler(detector1, 10, 0.2, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -20);
+        integrator.integrate(new Equation(), initialState, zero.add(-20));
 
         //verify
         // finds one or three events. Not 2.
@@ -715,14 +727,14 @@ public class CloseEventsTest {
         TimeDetector detectorB = new TimeDetector(events, -50, t1, t2, t5);
         TimeDetector detectorC = new TimeDetector(Action.RESET_DERIVATIVES, events, t4);
 
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
@@ -753,13 +765,13 @@ public class CloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(events, t2);
         FlatDetector detectorB = new FlatDetector(events, t3);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, 1e-6, 100);
         integrator.addEventHandler(detectorB, maxCheck, 0.5, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         // if these fail the event finding did its job,
@@ -788,13 +800,13 @@ public class CloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(events, t2);
         TimeDetector detectorB = new TimeDetector(events, -50, t1, t3);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, toleranceB, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         // we only care that the rules are satisfied. There are multiple solutions.
@@ -824,12 +836,12 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorB = new FlatDetector(events, t1, t2, t3);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         // allowed to report t1 or t3.
@@ -853,13 +865,13 @@ public class CloseEventsTest {
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new TimeDetector(events, t1);
         TimeDetector detectorB = new TimeDetector(events, t1, t1);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         Assert.assertEquals(1, events.size());
@@ -867,9 +879,9 @@ public class CloseEventsTest {
         Assert.assertEquals(true, events.get(0).isIncreasing());
         Assert.assertSame(detectorA, events.get(0).getHandler());
         // detector worked correctly
-        Assert.assertTrue(detectorB.g(state(t1)) == 0.0);
-        Assert.assertTrue(detectorB.g(state(t1 + 1e-6)) < 0);
-        Assert.assertTrue(detectorB.g(state(t1 - 1e-6)) < 0);
+        Assert.assertTrue(detectorB.g(state(t1)).getReal() == 0.0);
+        Assert.assertTrue(detectorB.g(state(t1 + 1e-6)).getReal() < 0);
+        Assert.assertTrue(detectorB.g(state(t1 - 1e-6)).getReal() < 0);
     }
 
     /**
@@ -887,13 +899,13 @@ public class CloseEventsTest {
         TimeDetector detectorA = new TimeDetector(events, t1);
         TimeDetector detectorB = new ContinuousDetector(events, -50, t1, t1);
         detectorB.g(state(t1));
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         Assert.assertEquals(1, events.size());
@@ -901,9 +913,9 @@ public class CloseEventsTest {
         Assert.assertEquals(true, events.get(0).isIncreasing());
         Assert.assertSame(detectorA, events.get(0).getHandler());
         // detector worked correctly
-        Assert.assertEquals(0.0, detectorB.g(state(t1)), 0.0);
-        Assert.assertTrue(detectorB.g(state(t1 + 1e-6)) > 0);
-        Assert.assertTrue(detectorB.g(state(t1 - 1e-6)) > 0);
+        Assert.assertEquals(0.0, detectorB.g(state(t1)).getReal(), 0.0);
+        Assert.assertTrue(detectorB.g(state(t1 + 1e-6)).getReal() > 0);
+        Assert.assertTrue(detectorB.g(state(t1 - 1e-6)).getReal() > 0);
     }
 
     /** check root finding when zero at both ends. */
@@ -916,12 +928,12 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(events, -50, t1, t2);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         Assert.assertEquals(2, events.size());
@@ -943,12 +955,12 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(events, t1, t2);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         Assert.assertEquals(2, events.size());
@@ -973,14 +985,14 @@ public class CloseEventsTest {
         TimeDetector detectorB = new ContinuousDetector(events, -50, t1, t3, t4, t7);
         TimeDetector detectorC = new ContinuousDetector(events, -50, t2, t5);
 
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
@@ -1019,19 +1031,20 @@ public class CloseEventsTest {
         double maxCheck = 10;
         double tolerance = 1e-6;
         double t1 = -15.0;
-        final ODEState newState = new ODEState(t1, new double[]{20, 0});
+        final FieldODEState<Decimal64> newState =
+                new FieldODEState<>(zero.add(t1), new Decimal64[]{zero.add(20), zero});
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ResetDetector(events, newState, t1);
         BaseDetector detectorB = new StateDetector(events, 1);
 
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -40.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-40.0));
 
         //verify
         // really we only care that the Rules of Event Handling are not violated,
@@ -1057,12 +1070,12 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new ContinuousDetector(events, t1);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         Assert.assertEquals(1, events.size());
@@ -1081,13 +1094,13 @@ public class CloseEventsTest {
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
         TimeDetector detectorA = new FlatDetector(events, t1);
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100,
-                new BracketingNthOrderBrentSolver(1e-3, 5));
+                new FieldBracketingNthOrderBrentSolver<>(zero, zero.add(1e-3), zero, 5));
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         Assert.assertEquals(1, events.size());
@@ -1115,7 +1128,7 @@ public class CloseEventsTest {
         boolean[] swap = new boolean[1];
         final TimeDetector detectorA = new ContinuousDetector(events, t1) {
             @Override
-            public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
+            public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state, boolean increasing) {
                 swap[0] = true;
                 return super.eventOccurred(state, increasing);
             }
@@ -1124,22 +1137,22 @@ public class CloseEventsTest {
         BaseDetector detectorC = new BaseDetector(Action.CONTINUE, events) {
 
             @Override
-            public double g(ODEStateAndDerivative state) {
+            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
                 if (swap[0]) {
                     return detectorB.g(state);
                 } else {
-                    return 1;
+                    return one;
                 }
             }
 
         };
-        ODEIntegrator integrator =
-                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
         integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
         integrator.addEventHandler(detectorC, maxCheck, tolerance, 100);
 
         // action
-        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
 
         // verify
         Assert.assertEquals(2, events.size());
@@ -1161,12 +1174,13 @@ public class CloseEventsTest {
      * @param t time of state.
      * @return new state.
      */
-    private ODEStateAndDerivative state(double t) {
-        return new ODEStateAndDerivative(t, new double[0], new double[0]);
+    private FieldODEStateAndDerivative<Decimal64> state(double t) {
+        return new FieldODEStateAndDerivative<>(
+                zero.add(t), new Decimal64[0], new Decimal64[0]);
     }
 
     /** Base class to record events that occured. */
-    private static abstract class BaseDetector implements ODEEventHandler {
+    private static abstract class BaseDetector implements FieldODEEventHandler<Decimal64> {
 
         protected final Action action;
 
@@ -1188,7 +1202,8 @@ public class CloseEventsTest {
         }
 
         @Override
-        public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
+        public Action eventOccurred(FieldODEStateAndDerivative<Decimal64> state,
+                                    boolean increasing) {
             events.add(new Event(state, increasing, this));
             return this.action;
         }
@@ -1196,7 +1211,7 @@ public class CloseEventsTest {
     }
 
     /** Trigger an event at a particular time. */
-    private static class TimeDetector extends BaseDetector implements ODEEventHandler {
+    private static class TimeDetector extends BaseDetector {
 
         /** time of the event to trigger. */
         protected final double[] eventTs;
@@ -1225,18 +1240,18 @@ public class CloseEventsTest {
         }
 
         @Override
-        public double g(final ODEStateAndDerivative state) {
-            final double t = state.getTime();
+        public Decimal64 g(final FieldODEStateAndDerivative<Decimal64> state) {
+            final Decimal64 t = state.getTime();
             int i = 0;
-            while (i < eventTs.length && t > eventTs[i]) {
+            while (i < eventTs.length && t.getReal() > eventTs[i]) {
                 i++;
             }
             i--;
             if (i < 0) {
-                return t - eventTs[0];
+                return t.subtract(eventTs[0]);
             } else {
                 int sign = (i % 2) * 2 - 1;
-                return -sign * (t - eventTs[i]);
+                return t.subtract(eventTs[i]).multiply(-sign);
             }
         }
 
@@ -1244,13 +1259,13 @@ public class CloseEventsTest {
 
     private static class Event {
 
-        private final ODEStateAndDerivative state;
+        private final FieldODEStateAndDerivative<Decimal64> state;
         private final boolean increasing;
-        private final ODEEventHandler handler;
+        private final FieldODEEventHandler<Decimal64> handler;
 
-        public Event(ODEStateAndDerivative state,
+        public Event(FieldODEStateAndDerivative<Decimal64> state,
                      boolean increasing,
-                     ODEEventHandler handler) {
+                     FieldODEEventHandler<Decimal64> handler) {
             this.increasing = increasing;
             this.state = state;
             this.handler = handler;
@@ -1261,14 +1276,14 @@ public class CloseEventsTest {
         }
 
         public double getT() {
-            return state.getTime();
+            return state.getTime().getReal();
         }
 
-        public ODEStateAndDerivative getState() {
+        public FieldODEStateAndDerivative<Decimal64> getState() {
             return this.state;
         }
 
-        public ODEEventHandler getHandler() {
+        public FieldODEEventHandler<Decimal64> getHandler() {
             return handler;
         }
 
@@ -1293,9 +1308,9 @@ public class CloseEventsTest {
         }
 
         @Override
-        public double g(ODEStateAndDerivative state) {
-            final double g = super.g(state);
-            return FastMath.signum(g);
+        public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            final Decimal64 g = super.g(state);
+            return g.signum();
         }
 
     }
@@ -1308,21 +1323,21 @@ public class CloseEventsTest {
         }
 
         @Override
-        public double g(ODEStateAndDerivative state) {
-            final double t = state.getTime();
+        public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            final Decimal64 t = state.getTime();
             int i = 0;
-            while (i < eventTs.length && t > eventTs[i]) {
+            while (i < eventTs.length && t.getReal() > eventTs[i]) {
                 i++;
             }
             i--;
             if (i < 0) {
-                return t - eventTs[0];
+                return t.subtract(eventTs[0]);
             } else if (i < eventTs.length - 1) {
                 int sign = (i % 2) * 2 - 1;
-                return -sign * (t - eventTs[i]) * (eventTs[i + 1] - t);
+                return t.subtract(eventTs[i]).multiply(t.negate().add(eventTs[i + 1])).multiply(-sign);
             } else {
                 int sign = (i % 2) * 2 - 1;
-                return -sign * (t - eventTs[i]);
+                return t.subtract(eventTs[i]).multiply(-sign);
             }
         }
     }
@@ -1330,15 +1345,15 @@ public class CloseEventsTest {
     /** Reset the state at a particular time. */
     private static class ResetDetector extends TimeDetector {
 
-        private final ODEState resetState;
+        private final FieldODEState<Decimal64> resetState;
 
-        public ResetDetector(List<Event> events, ODEState state, double eventT) {
+        public ResetDetector(List<Event> events, FieldODEState<Decimal64> state, double eventT) {
             super(Action.RESET_STATE, events, eventT);
             this.resetState = state;
         }
 
         @Override
-        public ODEState resetState(ODEStateAndDerivative state) {
+        public FieldODEState resetState(FieldODEStateAndDerivative<Decimal64> state) {
             return resetState;
         }
 
@@ -1355,20 +1370,28 @@ public class CloseEventsTest {
         }
 
         @Override
-        public double g(ODEStateAndDerivative state) {
-            return state.getPrimaryState()[0] - this.triggerState;
+        public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+            return state.getPrimaryState()[0].subtract(this.triggerState);
         }
     }
 
     /** Some basic equations to integrate. */
-    public static class Equation implements OrdinaryDifferentialEquation {
+    public static class Equation extends FieldExpandableODE<Decimal64> {
+        public Equation() {
+            super(new EquationODE());
+        }
+    }
+
+    /** Some basic equations to integrate. */
+    public static class EquationODE implements FieldOrdinaryDifferentialEquation<Decimal64> {
 
         public int getDimension() {
             return 2;
         }
 
-        public double[] computeDerivatives(double t, double[] y) {
-            return new double[]{1.0, 2.0};
+        @Override
+        public Decimal64[] computeDerivatives(Decimal64 t, Decimal64[] y) {
+            return new Decimal64[]{one, one.multiply(2)};
         }
 
     }

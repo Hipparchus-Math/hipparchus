@@ -89,7 +89,7 @@ public interface EventHandler extends ODEEventHandler {
     }
 
     /** Enumerate for actions to be performed when an event occurs.
-     * @deprecated as of 1.0, replaced with {@link Action}
+     * @deprecated as of 1.0, replaced with {@link org.hipparchus.ode.events.Action}
      */
     @Deprecated
     enum Action {

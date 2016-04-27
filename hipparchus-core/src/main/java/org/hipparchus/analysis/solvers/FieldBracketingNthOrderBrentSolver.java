@@ -22,6 +22,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.Incrementor;
@@ -189,6 +190,17 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
                    final T min, final T max, final T startValue,
                    final AllowedSolution allowedSolution)
         throws MathIllegalArgumentException, NullArgumentException {
+        // find interval containing root
+        return solveInterval(maxEval, f, min, max, startValue).getSide(allowedSolution);
+    }
+
+    @Override
+    public Interval<T> solveInterval(int maxEval,
+                                     RealFieldUnivariateFunction<T> f,
+                                     T min,
+                                     T max,
+                                     T startValue)
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         // Checks.
         MathUtils.checkNotNull(f);
@@ -210,7 +222,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
         y[1] = f.value(x[1]);
         if (Precision.equals(y[1].getReal(), 0.0, 1)) {
             // return the initial guess if it is a perfect root.
-            return x[1];
+            return new Interval<>(x[1], y[1], x[1], y[1]);
         }
 
         // evaluate first endpoint
@@ -218,7 +230,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
         y[0] = f.value(x[0]);
         if (Precision.equals(y[0].getReal(), 0.0, 1)) {
             // return the first endpoint if it is a perfect root.
-            return x[0];
+            return new Interval<>(x[0], y[0], x[0], y[0]);
         }
 
         int nbPoints;
@@ -236,7 +248,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
             y[2] = f.value(x[2]);
             if (Precision.equals(y[2].getReal(), 0.0, 1)) {
                 // return the second endpoint if it is a perfect root.
-                return x[2];
+                return new Interval<>(x[2], y[2], x[2], y[2]);
             }
 
             if (y[1].multiply(y[2]).getReal() < 0) {
@@ -275,21 +287,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
             final T xTol = absoluteAccuracy.add(relativeAccuracy.multiply(maxX));
             if (xB.subtract(xA).subtract(xTol).getReal() <= 0 ||
                 maxY.subtract(functionValueAccuracy).getReal() < 0) {
-                switch (allowedSolution) {
-                case ANY_SIDE :
-                    return absYA.subtract(absYB).getReal() < 0 ? xA : xB;
-                case LEFT_SIDE :
-                    return xA;
-                case RIGHT_SIDE :
-                    return xB;
-                case BELOW_SIDE :
-                    return yA.getReal() <= 0 ? xA : xB;
-                case ABOVE_SIDE :
-                    return yA.getReal() < 0 ? xB : xA;
-                default :
-                    // this should never happen
-                    throw new MathRuntimeException(null);
-                }
+                return new Interval<>(xA, yA, xB, yB);
             }
 
             // target for the next evaluation point
@@ -349,7 +347,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
             if (Precision.equals(nextY.getReal(), 0.0, 1)) {
                 // we have found an exact root, since it is not an approximation
                 // we don't need to bother about the allowed solutions setting
-                return nextX;
+                return new Interval<>(nextX, nextY, nextX, nextY);
             }
 
             if ((nbPoints > 2) && (end - start != nbPoints)) {

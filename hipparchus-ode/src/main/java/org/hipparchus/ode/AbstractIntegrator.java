@@ -17,26 +17,27 @@
 
 package org.hipparchus.ode;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
-
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
 import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.events.Action;
 import org.hipparchus.ode.events.EventState;
+import org.hipparchus.ode.events.EventState.EventOccurrence;
 import org.hipparchus.ode.events.ODEEventHandler;
 import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStepHandler;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Incrementor;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 /**
  * Base class managing common boilerplate for all integrators.
@@ -84,10 +85,10 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
      */
     protected AbstractIntegrator(final String name) {
         this.name         = name;
-        stepHandlers      = new ArrayList<ODEStepHandler>();
+        stepHandlers      = new ArrayList<>();
         stepStart         = null;
         stepSize          = Double.NaN;
-        eventsStates      = new ArrayList<EventState>();
+        eventsStates      = new ArrayList<>();
         statesInitialized = false;
         evaluations       = new Incrementor();
     }
@@ -277,13 +278,13 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
      */
     protected ODEStateAndDerivative acceptStep(final AbstractODEStateInterpolator interpolator,
                                                final double tEnd)
-        throws MathIllegalArgumentException, MathIllegalStateException {
+            throws MathIllegalArgumentException, MathIllegalStateException {
 
         ODEStateAndDerivative previousState = interpolator.getGlobalPreviousState();
         final ODEStateAndDerivative currentState = interpolator.getGlobalCurrentState();
 
         // initialize the events states if needed
-        if (! statesInitialized) {
+        if (!statesInitialized) {
             for (EventState state : eventsStates) {
                 state.reinitializeBegin(interpolator);
             }
@@ -292,14 +293,12 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
 
         // search for next events that may occur during the step
         final int orderingSign = interpolator.isForward() ? +1 : -1;
-        SortedSet<EventState> occurringEvents = new TreeSet<EventState>(new Comparator<EventState>() {
-
+        final Queue<EventState> occurringEvents = new PriorityQueue<>(new Comparator<EventState>() {
             /** {@inheritDoc} */
             @Override
-            public int compare(EventState es0, EventState es1) {
+            public int compare(final EventState es0, final EventState es1) {
                 return orderingSign * Double.compare(es0.getEventTime(), es1.getEventTime());
             }
-
         });
 
         for (final EventState state : eventsStates) {
@@ -310,63 +309,90 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
         }
 
         AbstractODEStateInterpolator restricted = interpolator;
-        while (!occurringEvents.isEmpty()) {
 
-            // handle the chronologically first event
-            final Iterator<EventState> iterator = occurringEvents.iterator();
-            final EventState currentEvent = iterator.next();
-            iterator.remove();
+        do {
 
-            // get state at event time
-            final ODEStateAndDerivative eventState = restricted.getInterpolatedState(currentEvent.getEventTime());
+            eventLoop:
+            while (!occurringEvents.isEmpty()) {
 
-            // restrict the interpolator to the first part of the step, up to the event
-            restricted = restricted.restrictStep(previousState, eventState);
+                // handle the chronologically first event
+                final EventState currentEvent = occurringEvents.poll();
 
-            // advance all event states to current time
+                // get state at event time
+                ODEStateAndDerivative eventState = restricted.getInterpolatedState(currentEvent.getEventTime());
+
+                // restrict the interpolator to the first part of the step, up to the event
+                restricted = restricted.restrictStep(previousState, eventState);
+
+                // try to advance all event states to current time
+                for (final EventState state : eventsStates) {
+                    if (state != currentEvent && state.tryAdvance(eventState, interpolator)) {
+                        // we need to handle another event first
+                        occurringEvents.add(currentEvent);
+                        occurringEvents.remove(state); // remove if already has pending event
+                        occurringEvents.add(state);
+                        continue eventLoop;
+                    }
+                }
+                // all event detectors agree we can advance to the current event time
+
+                final EventOccurrence occurrence = currentEvent.doEvent(eventState);
+                final Action action = occurrence.getAction();
+                isLastStep = action == Action.STOP;
+
+                if (isLastStep) {
+                    // ensure the event is after the root if it is returned STOP
+                    // this lets the user integrate to a STOP event and then restart
+                    // integration from the same time.
+                    eventState = interpolator.getInterpolatedState(occurrence.getStopTime());
+                    restricted = interpolator.restrictStep(previousState, eventState);
+                }
+
+                // handle the first part of the step, up to the event
+                for (final ODEStepHandler handler : stepHandlers) {
+                    handler.handleStep(restricted, isLastStep);
+                }
+
+                if (isLastStep) {
+                    // the event asked to stop integration
+                    return eventState;
+                }
+
+                resetOccurred = false;
+                if (action == Action.RESET_DERIVATIVES || action == Action.RESET_STATE) {
+                    // some event handler has triggered changes that
+                    // invalidate the derivatives, we need to recompute them
+                    final ODEState newState = occurrence.getNewState();
+                    final double[] y = newState.getCompleteState();
+                    final double[] yDot = computeDerivatives(newState.getTime(), y);
+                    resetOccurred = true;
+                    return equations.getMapper().mapStateAndDerivative(newState.getTime(), y, yDot);
+                }
+                // at this point we know action == Action.CONTINUE
+
+                // prepare handling of the remaining part of the step
+                previousState = eventState;
+                restricted = restricted.restrictStep(eventState, currentState);
+
+                // check if the same event occurs again in the remaining part of the step
+                if (currentEvent.evaluateStep(restricted)) {
+                    // the event occurs during the current step
+                    occurringEvents.add(currentEvent);
+                }
+
+            }
+
+            // last part of the step, after the last event
+            // may be a new event here if the last event modified the g function of
+            // another event detector.
             for (final EventState state : eventsStates) {
-                state.stepAccepted(eventState);
-                isLastStep = isLastStep || state.stop();
+                if (state.tryAdvance(currentState, interpolator)) {
+                    occurringEvents.add(state);
+                }
             }
 
-            // handle the first part of the step, up to the event
-            for (final ODEStepHandler handler : stepHandlers) {
-                handler.handleStep(restricted, isLastStep);
-            }
+        } while (!occurringEvents.isEmpty());
 
-            if (isLastStep) {
-                // the event asked to stop integration
-                return eventState;
-            }
-
-            resetOccurred = false;
-            final ODEState newState = currentEvent.reset(eventState);
-            if (newState != null) {
-                // some event handler has triggered changes that
-                // invalidate the derivatives, we need to recompute them
-                final double[] y    = newState.getCompleteState();
-                final double[] yDot = computeDerivatives(newState.getTime(), y);
-                resetOccurred = true;
-                return equations.getMapper().mapStateAndDerivative(newState.getTime(), y, yDot);
-            }
-
-            // prepare handling of the remaining part of the step
-            previousState = eventState;
-            restricted = restricted.restrictStep(eventState, currentState);
-
-            // check if the same event occurs again in the remaining part of the step
-            if (currentEvent.evaluateStep(restricted)) {
-                // the event occurs during the current step
-                occurringEvents.add(currentEvent);
-            }
-
-        }
-
-        // last part of the step, after the last event
-        for (final EventState state : eventsStates) {
-            state.stepAccepted(currentState);
-            isLastStep = isLastStep || state.stop();
-        }
         isLastStep = isLastStep || FastMath.abs(currentState.getTime() - tEnd) <= FastMath.ulp(tEnd);
 
         // handle the remaining part of the step, after all events if any

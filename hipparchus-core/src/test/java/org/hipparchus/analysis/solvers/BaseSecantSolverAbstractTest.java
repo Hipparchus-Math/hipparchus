@@ -108,7 +108,8 @@ public abstract class BaseSecantSolverAbstractTest {
 
             // Check solution.
             Assert.assertEquals(result, testData[2], atol);
-            Assert.assertTrue(solver.getEvaluations() <= counts[i] + 1);
+            Assert.assertTrue("" + solver.getEvaluations() + " <= " + (counts[i] + 1),
+                    solver.getEvaluations() <= counts[i] + 1);
         }
     }
 

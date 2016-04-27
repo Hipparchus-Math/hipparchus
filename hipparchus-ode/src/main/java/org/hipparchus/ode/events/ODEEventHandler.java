@@ -46,8 +46,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * error (this event handling feature is available for all integrators,
  * including fixed step ones).</p>
  *
+ * @see org.hipparchus.ode.events
  */
-
 public interface ODEEventHandler  {
 
     /** Initialize event handler at the start of an ODE integration.
@@ -74,12 +74,11 @@ public interface ODEEventHandler  {
      * The switching function must be continuous in its roots neighborhood
      * (but not necessarily smooth), as the integrator will need to find its
      * roots to locate precisely the events.</p>
-     * <p>Also note that the integrator expect that once an event has occurred,
-     * the sign of the switching function at the start of the next step (i.e.
-     * just after the event) is the opposite of the sign just before the event.
-     * This consistency between the steps <string>must</strong> be preserved,
-     * otherwise {@link org.hipparchus.exception.MathIllegalArgumentException
-     * exceptions} related to root not being bracketed will occur.</p>
+     *
+     * <p>Also note that for the integrator to detect an event the sign of the switching
+     * function must have opposite signs just before and after the event. If this
+     * consistency is not preserved the integrator may not detect any events.
+     *
      * <p>This need for consistency is sometimes tricky to achieve. A typical
      * example is using an event to model a ball bouncing on the floor. The first
      * idea to represent this would be to have {@code g(state) = h(state)} where h is the
@@ -96,9 +95,16 @@ public interface ODEEventHandler  {
      * {@code h(state)} is not. Basically, the event is used to <em>fold</em> {@code h(state)}
      * at bounce points, and {@code sign} is used to <em>unfold</em> it back, so the
      * solvers sees a {@code g(state)} function which behaves smoothly even across events.</p>
+     *
+     * <p> Calling this multiple times with the same state will result in the same value.
+     * The definition of the g function may change when an
+     * {@link #eventOccurred(ODEStateAndDerivative, boolean) event occurs}, as in the
+     * above example.
+     *
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative
      * @return value of the g switching function
+     * @see org.hipparchus.ode.events
      */
     double g(ODEStateAndDerivative state);
 
@@ -109,11 +115,12 @@ public interface ODEEventHandler  {
      * the step handler itself is called (see below for scheduling). It
      * allows the user to update his internal data to acknowledge the fact
      * the event has been handled (for example setting a flag in the {@link
+     * org.hipparchus.ode.OrdinaryDifferentialEquation
      * org.hipparchus.migration.ode.FirstOrderDifferentialEquations
      * differential equations} to switch the derivatives computation in
      * case of discontinuity), or to direct the integrator to either stop
      * or continue integration, possibly with a reset state or derivatives.</p>
-
+     *
      * <ul>
      *   <li>if {@link Action#STOP} is returned, the step handler will be called
      *   with the <code>isLast</code> flag of the {@link
@@ -129,7 +136,7 @@ public interface ODEEventHandler  {
      *   be taken (apart from having called this method) and integration
      *   will continue.</li>
      * </ul>
-
+     *
      * <p>The scheduling between this method and the {@link
      * org.hipparchus.ode.sampling.ODEStepHandler ODEStepHandler} method {@link
      * org.hipparchus.ode.sampling.ODEStepHandler#handleStep(org.hipparchus.ode.sampling.ODEStateInterpolator,
@@ -152,7 +159,7 @@ public interface ODEEventHandler  {
      * org.hipparchus.ode.sampling.ODEStepHandler variable step handlers} and
      * to the size of the fixed step for {@link
      * org.hipparchus.ode.sampling.ODEFixedStepHandler fixed step handlers}.</p>
-
+     *
      * @param state current value of the independent <i>time</i> variable, state vector
      * and derivative
      * @param increasing if true, the value of the switching function increases
@@ -165,7 +172,7 @@ public interface ODEEventHandler  {
     Action eventOccurred(ODEStateAndDerivative state, boolean increasing);
 
     /** Reset the state prior to continue the integration.
-
+     *
      * <p>This method is called after the step handler has returned and
      * before the next step is started, but only when {@link
      * #eventOccurred} has itself returned the {@link Action#RESET_STATE}

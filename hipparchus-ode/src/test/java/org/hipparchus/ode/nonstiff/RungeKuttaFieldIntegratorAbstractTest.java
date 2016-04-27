@@ -231,9 +231,10 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                 TestFieldProblemHandler<T> handler = new TestFieldProblemHandler<T>(pb, integ);
                 integ.addStepHandler(handler);
                 FieldODEEventHandler<T>[] functions = pb.getEventsHandlers();
+                final T eventTol = step.multiply(1.0e-6);
                 for (int l = 0; l < functions.length; ++l) {
                     integ.addEventHandler(functions[l],
-                                          Double.POSITIVE_INFINITY, 1.0e-6 * step.getReal(), 1000);
+                                          Double.POSITIVE_INFINITY, eventTol.getReal(), 1000);
                 }
                 Assert.assertEquals(functions.length, integ.getEventHandlers().size());
                 FieldODEStateAndDerivative<T> stop = integ.integrate(new FieldExpandableODE<T>(pb),
@@ -251,7 +252,9 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
                 T timeError = handler.getMaximalTimeError();
                 if (i > 4) {
-                    Assert.assertTrue(timeError.subtract(previousTimeError.abs().multiply(safetyTimeFactor)).getReal() <= 0);
+                    // can't expect time error to be less than event finding tolerance
+                    T timeTol = max(eventTol, previousTimeError.abs().multiply(safetyTimeFactor));
+                    Assert.assertTrue(timeError.subtract(timeTol).getReal() <= 0);
                 }
                 previousTimeError = timeError;
 
@@ -261,6 +264,17 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
         }
 
+    }
+
+    /**
+     * Get the larger of two numbers.
+     *
+     * @param a first number.
+     * @param b second number.
+     * @return the larger of a and b.
+     */
+    private <T extends RealFieldElement<T>> T max(T a, T b) {
+        return a.getReal() > b.getReal() ? a : b;
     }
 
     @Test

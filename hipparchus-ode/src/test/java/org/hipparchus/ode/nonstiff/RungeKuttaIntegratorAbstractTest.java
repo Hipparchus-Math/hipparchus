@@ -25,6 +25,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Random;
 
+import org.hamcrest.Matchers;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -166,9 +167,10 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 TestProblemHandler handler = new TestProblemHandler(pb, integ);
                 integ.addStepHandler(handler);
                 ODEEventHandler[] functions = pb.getEventsHandlers();
+                double eventTol = 1.0e-6 * step;
                 for (int l = 0; l < functions.length; ++l) {
                     integ.addEventHandler(functions[l],
-                                          Double.POSITIVE_INFINITY, 1.0e-6 * step, 1000);
+                                          Double.POSITIVE_INFINITY, eventTol, 1000);
                 }
                 Assert.assertEquals(functions.length, integ.getEventHandlers().size());
                 ODEStateAndDerivative stop = integ.integrate(new ExpandableODE(pb),
@@ -185,8 +187,13 @@ public abstract class RungeKuttaIntegratorAbstractTest {
                 previousValueError = error;
 
                 double timeError = handler.getMaximalTimeError();
+                // can't expect time error to be less than event finding tolerance
+                double timeTol = FastMath.max(eventTol, FastMath.abs(previousTimeError * safetyTimeFactor));
                 if (i > 4) {
-                    Assert.assertTrue(timeError <= FastMath.abs(previousTimeError * safetyTimeFactor));
+                    Assert.assertThat(
+                            "Problem=" + pb + ", i=" + i + ", step=" + step,
+                            timeError,
+                            Matchers.lessThanOrEqualTo(timeTol));
                 }
                 previousTimeError = timeError;
 

@@ -69,33 +69,41 @@ public interface ODEIntegrator  {
      */
     void clearStepHandlers();
 
-    /** Add an event handler to the integrator.
-     * Uses a default {@link UnivariateSolver}
-     * with an absolute accuracy equal to the given convergence threshold,
-     * as root-finding algorithm to detect the state events.
-     * @param handler event handler
-     * @param maxCheckInterval maximal time interval between switching
-     * function checks (this interval prevents missing sign changes in
-     * case the integration steps becomes very large)
-     * @param convergence convergence threshold in the event time search
-     * @param maxIterationCount upper limit of the iteration count in
-     * the event time search
+    /**
+     * Add an event handler to the integrator.
+     *
+     * <p> Uses a default {@link UnivariateSolver} with an absolute accuracy equal to the
+     * given convergence threshold, as root-finding algorithm to detect the state events.
+     *
+     * @param handler           event handler
+     * @param maxCheckInterval  maximal time interval between switching function checks
+     *                          (this interval prevents missing sign changes in case the
+     *                          integration steps becomes very large)
+     * @param convergence       convergence threshold in the event time search. Must be
+     *                          smaller than {@code maxCheckInterval} and should be small
+     *                          compared to time scale of the ODE dynamics.
+     * @param maxIterationCount upper limit of the iteration count in the event time
+     *                          search
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      */
     void addEventHandler(ODEEventHandler handler, double maxCheckInterval,
                          double convergence, int maxIterationCount);
 
-    /** Add an event handler to the integrator.
-     * @param handler event handler
-     * @param maxCheckInterval maximal time interval between switching
-     * function checks (this interval prevents missing sign changes in
-     * case the integration steps becomes very large)
-     * @param convergence convergence threshold in the event time search
-     * @param maxIterationCount upper limit of the iteration count in
-     * the event time search
-     * @param solver The root-finding algorithm to use to detect the state
-     * events.
+    /**
+     * Add an event handler to the integrator.
+     *
+     * @param handler           event handler
+     * @param maxCheckInterval  maximal time interval between switching function checks
+     *                          (this interval prevents missing sign changes in case the
+     *                          integration steps becomes very large)
+     * @param convergence       convergence threshold in the event time search. Must be
+     *                          smaller than {@code maxCheckInterval} and should be small
+     *                          compared to time scale of the ODE dynamics.
+     * @param maxIterationCount upper limit of the iteration count in the event time
+     *                          search
+     * @param solver            The root-finding algorithm to use to detect the state
+     *                          events.
      * @see #getEventHandlers()
      * @see #clearEventHandlers()
      */

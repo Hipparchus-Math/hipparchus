@@ -21,7 +21,6 @@ import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
@@ -142,8 +141,17 @@ public class BracketingNthOrderBrentSolver
      * {@inheritDoc}
      */
     @Override
-    protected double doSolve()
-        throws MathIllegalArgumentException, MathIllegalStateException {
+    protected double doSolve() {
+        return doSolveInterval().getSide(allowed);
+    }
+
+    /**
+     * Find a root and return the containing interval.
+     *
+     * @return an interval containing the root such that both end points meet the
+     * convergence criteria.
+     */
+    protected Interval doSolveInterval() {
         // prepare arrays with the first points
         final double[] x = new double[maximalOrder + 1];
         final double[] y = new double[maximalOrder + 1];
@@ -156,14 +164,14 @@ public class BracketingNthOrderBrentSolver
         y[1] = computeObjectiveValue(x[1]);
         if (Precision.equals(y[1], 0.0, 1)) {
             // return the initial guess if it is a perfect root.
-            return x[1];
+            return new Interval(x[1], y[1], x[1], y[1]);
         }
 
         // evaluate first  endpoint
         y[0] = computeObjectiveValue(x[0]);
         if (Precision.equals(y[0], 0.0, 1)) {
             // return the first endpoint if it is a perfect root.
-            return x[0];
+            return new Interval(x[0], y[0], x[0], y[0]);
         }
 
         int nbPoints;
@@ -180,7 +188,7 @@ public class BracketingNthOrderBrentSolver
             y[2] = computeObjectiveValue(x[2]);
             if (Precision.equals(y[2], 0.0, 1)) {
                 // return the second endpoint if it is a perfect root.
-                return x[2];
+                return new Interval(x[2], y[2], x[2], y[2]);
             }
 
             if (y[1] * y[2] < 0) {
@@ -214,21 +222,7 @@ public class BracketingNthOrderBrentSolver
             final double xTol = getAbsoluteAccuracy() +
                                 getRelativeAccuracy() * FastMath.max(FastMath.abs(xA), FastMath.abs(xB));
             if (((xB - xA) <= xTol) || (FastMath.max(absYA, absYB) < getFunctionValueAccuracy())) {
-                switch (allowed) {
-                case ANY_SIDE :
-                    return absYA < absYB ? xA : xB;
-                case LEFT_SIDE :
-                    return xA;
-                case RIGHT_SIDE :
-                    return xB;
-                case BELOW_SIDE :
-                    return (yA <= 0) ? xA : xB;
-                case ABOVE_SIDE :
-                    return (yA <  0) ? xB : xA;
-                default :
-                    // this should never happen
-                    throw MathRuntimeException.createInternalError();
-                }
+                return new Interval(xA, yA, xB, yB);
             }
 
             // target for the next evaluation point
@@ -293,7 +287,7 @@ public class BracketingNthOrderBrentSolver
             if (Precision.equals(nextY, 0.0, 1)) {
                 // we have found an exact root, since it is not an approximation
                 // we don't need to bother about the allowed solutions setting
-                return nextX;
+                return new Interval(nextX, nextY, nextX, nextY);
             }
 
             if ((nbPoints > 2) && (end - start != nbPoints)) {
@@ -405,6 +399,19 @@ public class BracketingNthOrderBrentSolver
         throws MathIllegalArgumentException, MathIllegalStateException {
         this.allowed = allowedSolution;
         return super.solve(maxEval, f, min, max, startValue);
+
+    }
+
+    @Override
+    public Interval solveInterval(final int maxEval,
+                                final UnivariateFunction f,
+                                final double min,
+                                final double max,
+                                final double startValue)
+            throws MathIllegalArgumentException, MathIllegalStateException {
+        setup(maxEval, f, min, max, startValue);
+        this.allowed = null;
+        return doSolveInterval();
     }
 
 }
