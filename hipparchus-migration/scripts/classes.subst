@@ -370,8 +370,6 @@ org.apache.commons.math3.geometry.partitioning.RegionFactory                    
 org.apache.commons.math3.geometry.partitioning.Side                                             org.hipparchus.geometry.partitioning.Side
 org.apache.commons.math3.geometry.partitioning.SubHyperplane                                    org.hipparchus.geometry.partitioning.SubHyperplane
 org.apache.commons.math3.geometry.partitioning.Transform                                        org.hipparchus.geometry.partitioning.Transform
-org.apache.commons.math3.geometry.partitioning.utilities.AVLTree                                org.hipparchus.geometry.partitioning.utilities.AVLTree
-org.apache.commons.math3.geometry.partitioning.utilities.OrderedTuple                           org.hipparchus.geometry.partitioning.utilities.OrderedTuple
 org.apache.commons.math3.geometry.Point                                                         org.hipparchus.geometry.Point
 org.apache.commons.math3.geometry.Space                                                         org.hipparchus.geometry.Space
 org.apache.commons.math3.geometry.spherical.oned.Arc                                            org.hipparchus.geometry.spherical.oned.Arc
