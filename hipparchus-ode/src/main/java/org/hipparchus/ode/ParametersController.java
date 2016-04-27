@@ -19,7 +19,7 @@ package org.hipparchus.ode;
 import org.hipparchus.exception.MathIllegalArgumentException;
 
 /** Interface to compute by finite difference Jacobian matrix for some parameter
- *  when computing {@link JacobianMatrices partial derivatives equations}.
+ *  when computing {@link VariationalEquation partial derivatives equations}.
  *
  */
 

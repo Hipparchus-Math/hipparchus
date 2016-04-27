@@ -53,9 +53,6 @@ import org.hipparchus.util.MathArrays;
  */
 public class SemiVariance extends AbstractUnivariateStatistic implements Serializable {
 
-    /** Serializable version identifier */
-    private static final long serialVersionUID = 20150412L;
-
     /**
      * The UPSIDE Direction is used to specify that the observations above the
      * cutoff point will be used to calculate SemiVariance.
@@ -67,6 +64,9 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      * the cutoff point will be used to calculate SemiVariance
      */
     public static final Direction DOWNSIDE_VARIANCE = Direction.DOWNSIDE;
+
+    /** Serializable version identifier */
+    private static final long serialVersionUID = 20150412L;
 
     /**
      * Determines whether or not bias correction is applied when computing the
@@ -290,7 +290,7 @@ public class SemiVariance extends AbstractUnivariateStatistic implements Seriali
      /**
       * Returns a copy of this instance with the given direction setting.
       *
-      * @param varianceDirection the direction of the semivariance
+      * @param direction the direction of the semivariance
       * @return a copy of this instance with the given direction setting
       */
      public SemiVariance withVarianceDirection(Direction direction) {

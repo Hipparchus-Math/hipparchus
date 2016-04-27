@@ -226,11 +226,11 @@ public class StandardDeviation extends AbstractStorelessUnivariateStatistic
      * Returns a new copy of this standard deviation with the given
      * bias correction setting.
      *
-     * @param isBiasCorrected The isBiasCorrected to set.
+     * @param biasCorrection The bias correction flag to set.
      * @return a copy of this instance with the given bias correction setting
      */
-    public StandardDeviation withBiasCorrected(boolean isBiasCorrected) {
-        return new StandardDeviation(variance.withBiasCorrected(isBiasCorrected));
+    public StandardDeviation withBiasCorrection(boolean biasCorrection) {
+        return new StandardDeviation(variance.withBiasCorrection(biasCorrection));
     }
 
     /** {@inheritDoc} */

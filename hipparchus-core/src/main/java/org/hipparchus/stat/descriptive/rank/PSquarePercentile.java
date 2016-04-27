@@ -32,6 +32,7 @@ import org.hipparchus.analysis.interpolation.NevilleInterpolator;
 import org.hipparchus.analysis.interpolation.UnivariateInterpolator;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.util.MathArrays;
@@ -126,6 +127,13 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
         this(DEFAULT_QUANTILE_DESIRED);
     }
 
+    /**
+     * Copy constructor, creates a new {@code PSquarePercentile} identical
+     * to the {@code original}.
+     *
+     * @param original the {@code PSquarePercentile} instance to copy
+     * @throws NullArgumentException if original is null
+     */
     public PSquarePercentile(PSquarePercentile original) {
         super();
 

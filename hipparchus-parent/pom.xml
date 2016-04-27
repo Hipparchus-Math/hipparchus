@@ -380,6 +380,12 @@
       </dependency>
       <dependency>
         <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-ode</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
         <artifactId>hipparchus-optim</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -447,6 +453,7 @@
     <hipparchus.maven-source-plugin.version>2.4</hipparchus.maven-source-plugin.version>
     <hipparchus.maven-surefire-plugin.version>2.18.1</hipparchus.maven-surefire-plugin.version>
     <hipparchus.maven-surefire-report-plugin.version>2.18.1</hipparchus.maven-surefire-report-plugin.version>
+    <hipparchus.maven-enforcer-plugin.version>1.4.1</hipparchus.maven-enforcer-plugin.version>
     <hipparchus.jgit.buildnumber.version>1.2.10</hipparchus.jgit.buildnumber.version>
     <hipparchus.maven-release-plugin.version>2.5.3</hipparchus.maven-release-plugin.version>
     <hipparchus.wagon-ssh.version>2.10</hipparchus.wagon-ssh.version>
@@ -788,6 +795,26 @@
           <releaseProfiles>release</releaseProfiles>
           <goals>deploy</goals>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${hipparchus.maven-enforcer-plugin.version}</version>
+        <executions>
+          <execution>
+            <id>enforce-java</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireJavaVersion>
+                  <version>1.8.0</version>
+                </requireJavaVersion>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

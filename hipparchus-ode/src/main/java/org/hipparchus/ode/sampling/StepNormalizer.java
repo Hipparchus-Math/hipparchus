@@ -23,8 +23,8 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
 /**
- * This class wraps an object implementing {@link FixedStepHandler}
- * into a {@link StepHandler}.
+ * This class wraps an object implementing {@link ODEFixedStepHandler}
+ * into a {@link ODEStepHandler}.
 
  * <p>This wrapper allows to use fixed step handlers with general
  * integrators which cannot guaranty their integration steps will
@@ -32,8 +32,8 @@ import org.hipparchus.util.Precision;
  * handlers.</p>
  *
  * <p>The stepsize used is selected at construction time. The {@link
- * FixedStepHandler#handleStep handleStep} method of the underlying
- * {@link FixedStepHandler} object is called at normalized times. The
+ * ODEFixedStepHandler#handleStep handleStep} method of the underlying
+ * {@link ODEFixedStepHandler} object is called at normalized times. The
  * normalized times can be influenced by the {@link StepNormalizerMode} and
  * {@link StepNormalizerBounds}.</p>
  *
@@ -82,8 +82,8 @@ import org.hipparchus.util.Precision;
  * </table>
  * </p>
  *
- * @see StepHandler
- * @see FixedStepHandler
+ * @see ODEStepHandler
+ * @see ODEFixedStepHandler
  * @see StepNormalizerMode
  * @see StepNormalizerBounds
  */

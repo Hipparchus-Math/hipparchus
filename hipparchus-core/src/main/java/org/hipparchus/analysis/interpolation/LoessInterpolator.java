@@ -442,7 +442,7 @@ public class LoessInterpolator
      * Check that all elements of an array are finite real numbers.
      *
      * @param values Values array.
-     * @throws org.hipparchus.exception.NotFiniteNumberException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if one of the values is not a finite real number.
      */
     private static void checkAllFiniteReal(final double[] values) {

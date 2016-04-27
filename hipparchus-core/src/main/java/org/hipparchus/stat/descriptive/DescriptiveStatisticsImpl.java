@@ -49,7 +49,7 @@ class DescriptiveStatisticsImpl implements DescriptiveStatistics, Serializable {
     private static final long serialVersionUID = 20160411L;
 
     /** The statistic used to calculate the population variance - fixed. */
-    private static final UnivariateStatistic populationVariance = new Variance(false);
+    private static final UnivariateStatistic POPULATION_VARIANCE = new Variance(false);
 
     /** Stored data values. */
     private final ResizableDoubleArray eDA;
@@ -196,7 +196,7 @@ class DescriptiveStatisticsImpl implements DescriptiveStatistics, Serializable {
     /** {@inheritDoc} */
     @Override
     public double getPopulationVariance() {
-        return apply(populationVariance);
+        return apply(POPULATION_VARIANCE);
     }
 
     /** {@inheritDoc} */

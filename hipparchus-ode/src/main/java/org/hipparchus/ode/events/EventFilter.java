@@ -24,8 +24,8 @@ import org.hipparchus.ode.ODEStateAndDerivative;
 
 /** Wrapper used to detect only increasing or decreasing events.
  *
- * <p>General {@link EventHandler events} are defined implicitly
- * by a {@link EventHandler#g(double, double[]) g function} crossing
+ * <p>General {@link ODEEventHandler events} are defined implicitly
+ * by a {@link ODEEventHandler#g(ODEStateAndDerivative) g function} crossing
  * zero. This function needs to be continuous in the event neighborhood,
  * and its sign must remain consistent between events. This implies that
  * during an ODE integration, events triggered are alternately events
@@ -39,18 +39,18 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * cases, looking precisely for all events location and triggering
  * events that will later be ignored is a waste of computing time.</p>
  *
- * <p>Users can wrap a regular {@link EventHandler event handler} in
+ * <p>Users can wrap a regular {@link ODEEventHandler event handler} in
  * an instance of this class and provide this wrapping instance to
  * the {@link org.hipparchus.ode.ODEIntegrator ODE solver}
  * in order to avoid wasting time looking for uninteresting events.
  * The wrapper will intercept the calls to the {@link
- * EventHandler#g(double, double[]) g function} and to the {@link
- * EventHandler#eventOccurred(double, double[], boolean)
+ * ODEEventHandler#g(ODEStateAndDerivative) g function} and to the {@link
+ * ODEEventHandler#eventOccurred(ODEStateAndDerivative, boolean)
  * eventOccurred} method in order to ignore uninteresting events. The
- * wrapped regular {@link EventHandler event handler} will the see only
+ * wrapped regular {@link ODEEventHandler event handler} will the see only
  * the interesting events, i.e. either only {@code increasing} events or
  * {@code decreasing} events. the number of calls to the {@link
- * EventHandler#g(double, double[]) g function} will also be reduced.</p>
+ * ODEEventHandler#g(ODEStateAndDerivative) g function} will also be reduced.</p>
  *
  */
 
@@ -77,7 +77,7 @@ public class EventFilter implements ODEEventHandler {
     /** Extreme time encountered so far. */
     private double extremeT;
 
-    /** Wrap an {@link EventHandler event handler}.
+    /** Wrap an {@link ODEEventHandler event handler}.
      * @param rawHandler event handler to wrap
      * @param filter filter to use
      */

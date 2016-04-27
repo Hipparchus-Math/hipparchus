@@ -26,10 +26,9 @@
       <theme>bootswatch-readable</theme>
       <highlightJs>true</highlightJs>
       <brand>
-        <name>Hipparchus</name>
-        <href>https://hipparchus.org/</href>
+        <name><![CDATA[<img src="../images/logo-hipparchus-blue.png" style="width:63px;height:40px;"/> ${project.name}]]></name>
+        <href>index.html</href>
       </brand>
-      <slogan>a pure Java mathematical library</slogan>
       <titleTemplate>%2$s | %1$s</titleTemplate>
       <toc>top</toc>
       <topNav>Hipparchus|User Guide|Modules|Reports</topNav>
@@ -39,13 +38,6 @@
       <endContent>
        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
      </endContent>
-      <pages>
-        <index project="hipparchus-perf">
-          <sections>
-            <body/>
-          </sections>
-        </index>
-      </pages>
     </reflowSkin>
   </custom>
 
@@ -58,32 +50,22 @@
       <item name="Latest API docs (development)" href="../apidocs/index.html"/>
       <item name="Source Repository (current)"   href="https://github.com/Hipparchus-Math/hipparchus"/>
       <item name="Developers Guide"              href="../developers.html"/>
-    </menu>
-    
-    <menu name="User Guide">
-      <item name="Contents"                        href="../userguide/index.html"/>
-      <item name="Overview"                        href="../userguide/overview.html"/>
-      <item name="Statistics"                      href="../userguide/stat.html"/>
-      <item name="Data Generation"                 href="../userguide/random.html"/>
-      <item name="Linear Algebra"                  href="../userguide/linear.html"/>
-      <item name="Numerical Analysis"              href="../userguide/analysis.html"/>
-      <item name="Special Functions"               href="../userguide/special.html"/>
-      <item name="Utilities"                       href="../userguide/utilities.html"/>
-      <item name="Complex Numbers"                 href="../userguide/complex.html"/>
-      <item name="Distributions"                   href="../userguide/distribution.html"/>
-      <item name="Fractions"                       href="../userguide/fraction.html"/>
-      <item name="Transform Methods"               href="../userguide/transform.html"/>
-      <item name="Geometry"                        href="../userguide/geometry.html"/>
-      <item name="Optimization"                    href="../userguide/optimization.html"/>
-      <item name="Curve Fitting"                   href="../userguide/fitting.html"/>
-      <item name="Least Squares"                   href="../userguide/leastsquares.html"/>
-      <item name="Ordinary Differential Equations" href="../userguide/ode.html"/>
-      <item name="Genetic Algorithms"              href="../userguide/genetics.html"/>
-      <item name="Machine Learning"                href="../userguide/ml.html"/>
-      <item name="Exceptions"                      href="../userguide/exceptions.html"/>
+      <item name="User Guide"                    href="../user-guide.html" />
     </menu>
 
-    <menu name="Modules" ref="modules"/>
+    <menu name="Modules">
+        <item name="Hipparchus::Core"                             href="../hipparchus-core/index.html" />
+        <item name="Hipparchus::Computational Geometry"           href="../hipparchus-geometry/index.html" />
+        <item name="Hipparchus::Genetic Algorithms"               href="../hipparchus-genetics/index.html" />
+        <item name="Hipparchus::Ordinary Differential Equations"  href="../hipparchus-ode/index.html" />
+        <item name="Hipparchus::Optimization"                     href="../hipparchus-optim/index.html" />
+        <item name="Hipparchus::Fitting"                          href="../hipparchus-fitting/index.html" />
+        <item name="Hipparchus::Performance Tests"                href="../hipparchus-perf/index.html" />
+        <item name="Hipparchus::Samples"                          href="../hipparchus-samples/index.html" />
+        <item name="Hipparchus::Fast Fourier Transforms"          href="../hipparchus-fft/index.html" />
+        <item name="Hipparchus::Cluster Algorithms"               href="../hipparchus-clustering/index.html" />
+        <item name="Hipparchus::Migration Code "                  href="../hipparchus-migration/index.html" />
+    </menu>
 
     <menu name="Reports" ref="reports"/>
 

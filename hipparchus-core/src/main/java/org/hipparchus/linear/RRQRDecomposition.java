@@ -237,7 +237,8 @@ public class RRQRDecomposition extends QRDecomposition {
 
         /**
          * {@inheritDoc}
-         * @throws MathIllegalArgumentException if the decomposed matrix is singular.
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
+         * if the decomposed matrix is singular.
          */
         @Override
         public RealMatrix getInverse() {

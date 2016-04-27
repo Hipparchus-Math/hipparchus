@@ -63,9 +63,10 @@ public interface MultivariateSummaryStatistics
      * The returned instance is <b>not</b> thread-safe.
      *
      * @param k dimension of the data
+     * @return a new MultivariateSummaryStatistics instance with the given dimension
      */
     static MultivariateSummaryStatistics of(int k) {
-        return builder(k).withCovarianceBiasCorrected(true).build();
+        return builder(k).withBiasCorrectedCovariance(true).build();
     }
 
     /**
@@ -125,12 +126,20 @@ public interface MultivariateSummaryStatistics
     /**
      * A mutable builder for a MultivariateSummaryStatistics.
      */
-    public static class Builder {
-        final int k;
-        boolean   covarianceBiasCorrected = true;
-        boolean   threadsafe;
+    class Builder {
+        /** The dimension of the data. */
+        protected final int k;
+        /** Indicates if the covariance shall be bias corrected. */
+        protected boolean   covarianceBiasCorrected = true;
+        /** Indicates if the returned instance shall be thread-safe. */
+        protected boolean   threadsafe;
 
-        Builder(int k) {
+        /**
+         * Create a new Builder for a k-dimensional MultivariateSummaryStatistics.
+         *
+         * @param k the dimension of the data
+         */
+        protected Builder(int k) {
             this.k = k;
         }
 
@@ -143,7 +152,7 @@ public interface MultivariateSummaryStatistics
          * is computed
          * @return the builder
          */
-        public Builder withCovarianceBiasCorrected(boolean biasCorrected) {
+        public Builder withBiasCorrectedCovariance(boolean biasCorrected) {
             this.covarianceBiasCorrected = biasCorrected;
             return this;
         }

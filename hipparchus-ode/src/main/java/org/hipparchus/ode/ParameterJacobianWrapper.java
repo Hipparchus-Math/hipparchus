@@ -49,7 +49,7 @@ class ParameterJacobianWrapper implements ODEJacobiansProvider {
      * @param hY step used for finite difference computation with respect to state vector
      * @param controller controller to change parameters
      * @param paramsAndSteps parameters and steps to compute the Jacobians df/dp
-     * @see JacobianMatrices#setParameterStep(String, double)
+     * @see ParametersController#setParameterStep(String, double)
      */
     ParameterJacobianWrapper(final OrdinaryDifferentialEquation ode, final double[] hY,
                              final ParametersController controller,

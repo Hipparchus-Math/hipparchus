@@ -116,6 +116,7 @@ public interface ODEEventHandler  {
      * allows the user to update his internal data to acknowledge the fact
      * the event has been handled (for example setting a flag in the {@link
      * org.hipparchus.ode.OrdinaryDifferentialEquation
+     * org.hipparchus.migration.ode.FirstOrderDifferentialEquations
      * differential equations} to switch the derivatives computation in
      * case of discontinuity), or to direct the integrator to either stop
      * or continue integration, possibly with a reset state or derivatives.</p>

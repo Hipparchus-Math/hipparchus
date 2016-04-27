@@ -78,7 +78,7 @@ public interface DescriptiveStatistics extends StatisticalSummary {
      * returns this value, there is no limit to the number of data values
      * that can be stored in the dataset.
      */
-    static final int INFINITE_WINDOW = -1;
+    int INFINITE_WINDOW = -1;
 
     /**
      * Returns a builder for a {@link DescriptiveStatistics}.
@@ -91,6 +91,7 @@ public interface DescriptiveStatistics extends StatisticalSummary {
 
     /**
      * Construct a DescriptiveStatistics instance with an infinite window.
+     * @return a new DescriptiveStatistics instance with an infinte window
      */
     static DescriptiveStatistics create() {
         return builder().build();
@@ -100,6 +101,7 @@ public interface DescriptiveStatistics extends StatisticalSummary {
      * Construct a DescriptiveStatistics instance with the specified window.
      *
      * @param window the window size.
+     * @return a new DescriptiveStatistics instance with the given window size
      * @throws MathIllegalArgumentException if window size is less than 1 but
      * not equal to {@link #INFINITE_WINDOW}
      */
@@ -112,6 +114,7 @@ public interface DescriptiveStatistics extends StatisticalSummary {
      * and the initial data values in double[] initialDoubleArray.
      *
      * @param initialDoubleArray the initial double[].
+     * @return a new DescriptiveStatistics instance with the given initial values
      * @throws NullArgumentException if the input array is null
      */
     static DescriptiveStatistics of(double[] initialDoubleArray) {
@@ -339,22 +342,36 @@ public interface DescriptiveStatistics extends StatisticalSummary {
     /**
      * A mutable builder for a DescriptiveStatistics.
      */
-    public static class Builder {
-        UnivariateStatistic          maxImpl           = new Max();
-        UnivariateStatistic          minImpl           = new Min();
-        UnivariateStatistic          sumImpl           = new Sum();
-        UnivariateStatistic          sumsqImpl         = new SumOfSquares();
-        UnivariateStatistic          meanImpl          = new Mean();
-        UnivariateStatistic          varianceImpl      = new Variance();
-        UnivariateStatistic          geometricMeanImpl = new GeometricMean();
-        UnivariateStatistic          kurtosisImpl      = new Kurtosis();
-        UnivariateStatistic          skewnessImpl      = new Skewness();
-        QuantiledUnivariateStatistic percentileImpl    = new Percentile();
+    class Builder {
+        /** Maximum statistic implementation. */
+        protected UnivariateStatistic          maxImpl           = new Max();
+        /** Minimum statistic implementation. */
+        protected UnivariateStatistic          minImpl           = new Min();
+        /** Sum statistic implementation. */
+        protected UnivariateStatistic          sumImpl           = new Sum();
+        /** Sum of squares statistic implementation. */
+        protected UnivariateStatistic          sumsqImpl         = new SumOfSquares();
+        /** Mean statistic implementation. */
+        protected UnivariateStatistic          meanImpl          = new Mean();
+        /** Variance statistic implementation. */
+        protected UnivariateStatistic          varianceImpl      = new Variance();
+        /** Geometric mean statistic implementation. */
+        protected UnivariateStatistic          geometricMeanImpl = new GeometricMean();
+        /** Kurtosis statistic implementation. */
+        protected UnivariateStatistic          kurtosisImpl      = new Kurtosis();
+        /** Skewness statistic implementation. */
+        protected UnivariateStatistic          skewnessImpl      = new Skewness();
+        /** Percentile statistic implementation. */
+        protected QuantiledUnivariateStatistic percentileImpl    = new Percentile();
 
-        int      windowSize = INFINITE_WINDOW;
-        double[] initialValues;
-        boolean  threadsafe;
+        /** Windows size. */
+        protected int      windowSize = INFINITE_WINDOW;
+        /** Initial values array. */
+        protected double[] initialValues;
+        /** Flag indicating if the returned implementation shall be thread-safe. */
+        protected boolean  threadsafe;
 
+        /** Create a new Builder to DescriptiveStatistics. */
         protected Builder() {}
 
         /**

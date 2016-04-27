@@ -78,7 +78,7 @@ public class CorrelatedRandomVectorGenerator
      * considered to be dependent on previous ones and are discarded
      * @param generator underlying generator for uncorrelated normalized
      * components.
-     * @throws org.hipparchus.linear.MathIllegalArgumentException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the covariance matrix is not strictly positive definite.
      * @throws MathIllegalArgumentException if the mean and covariance
      * arrays dimensions do not match.
@@ -111,7 +111,7 @@ public class CorrelatedRandomVectorGenerator
      * considered to be dependent on previous ones and are discarded.
      * @param generator Underlying generator for uncorrelated normalized
      * components.
-     * @throws org.hipparchus.linear.MathIllegalArgumentException
+     * @throws org.hipparchus.exception.MathIllegalArgumentException
      * if the covariance matrix is not strictly positive definite.
      */
     public CorrelatedRandomVectorGenerator(RealMatrix covariance, double small,

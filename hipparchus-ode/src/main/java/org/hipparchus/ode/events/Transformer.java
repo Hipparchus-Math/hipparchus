@@ -21,7 +21,7 @@ import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 
 
-/** Transformer for {@link EventHandler#g(double, double[]) g functions}.
+/** Transformer for {@link ODEEventHandler#g(org.hipparchus.ode.ODEStateAndDerivative) g functions}.
  * @see EventFilter
  * @see FilterType
  */

@@ -923,10 +923,9 @@ public class SymmLQ
      * positive definite
      * @throws MathIllegalArgumentException if {@code a} is ill-conditioned
      */
-    public RealVector solve(final RealLinearOperator a,
-        final RealLinearOperator m, final RealVector b, final boolean goodb,
-        final double shift) throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException,
-        MathIllegalArgumentException {
+    public RealVector solve(final RealLinearOperator a, final RealLinearOperator m,
+                            final RealVector b, final boolean goodb, final double shift)
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         return solveInPlace(a, m, b, x, goodb, shift);
@@ -1006,8 +1005,8 @@ public class SymmLQ
      * @throws MathIllegalArgumentException if {@code a} is ill-conditioned
      */
     public RealVector solve(final RealLinearOperator a, final RealVector b,
-        final boolean goodb, final double shift) throws MathIllegalArgumentException, NullArgumentException, MathIllegalArgumentException,
-        MathIllegalStateException {
+                            final boolean goodb, final double shift)
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         MathUtils.checkNotNull(a);
         final RealVector x = new ArrayRealVector(a.getColumnDimension());
         return solveInPlace(a, null, b, x, goodb, shift);
@@ -1088,16 +1087,13 @@ public class SymmLQ
      * has been set at construction of the {@link IterationManager}
      * @throws MathIllegalArgumentException if {@link #getCheck()} is
      * {@code true}, and {@code a} or {@code m} is not self-adjoint
-     * @throws MathIllegalArgumentException if {@code m} is not positive
-     * definite
+     * @throws MathIllegalArgumentException if {@code m} is not positive definite
      * @throws MathIllegalArgumentException if {@code a} is ill-conditioned
      */
     public RealVector solveInPlace(final RealLinearOperator a,
-        final RealLinearOperator m, final RealVector b,
-        final RealVector x, final boolean goodb, final double shift)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalArgumentException,
-        MathIllegalStateException {
+                                   final RealLinearOperator m, final RealVector b,
+                                   final RealVector x, final boolean goodb, final double shift)
+        throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
         checkParameters(a, m, b, x);
 
         final IterationManager manager = getIterationManager();

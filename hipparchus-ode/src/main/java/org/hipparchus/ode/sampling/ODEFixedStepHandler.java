@@ -27,7 +27,7 @@ import org.hipparchus.ode.ODEStateAndDerivative;
  * in getting the solution of an ordinary differential equation at
  * fixed time steps. Objects implementing this interface should be
  * wrapped within an instance of {@link StepNormalizer} that itself
- * is used as the general {@link StepHandler} by the integrator. The
+ * is used as the general {@link ODEStepHandler} by the integrator. The
  * {@link StepNormalizer} object is called according to the integrator
  * internal algorithms and it calls objects implementing this
  * interface as necessary at fixed time steps.</p>

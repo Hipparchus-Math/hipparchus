@@ -22,6 +22,7 @@
 <!-- Hipparchus customization of default Checkstyle behavior -->
 <module name="Checker">
   <property name="localeLanguage" value="en"/>
+  <property name="severity" value="warning" />
 
   <module name="TreeWalker">
 

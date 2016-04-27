@@ -24,7 +24,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 
 /** Interface expanding {@link OrdinaryDifferentialEquation first order
  *  differential equations} in order to compute exactly the Jacobian
- *  matrices for {@link JacobianMatrices partial derivatives equations}.
+ *  matrices for {@link VariationalEquation partial derivatives equations}.
  */
 public interface ODEJacobiansProvider
     extends OrdinaryDifferentialEquation, NamedParameterJacobianProvider {

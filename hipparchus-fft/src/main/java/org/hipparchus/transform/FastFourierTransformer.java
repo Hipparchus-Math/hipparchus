@@ -167,7 +167,7 @@ public class FastFourierTransformer implements Serializable {
         switch (normalization) {
             case STANDARD:
                 if (type == TransformType.INVERSE) {
-                    final double scaleFactor = 1.0 / (n);
+                    final double scaleFactor = 1.0 / n;
                     for (int i = 0; i < n; i++) {
                         dataR[i] *= scaleFactor;
                         dataI[i] *= scaleFactor;

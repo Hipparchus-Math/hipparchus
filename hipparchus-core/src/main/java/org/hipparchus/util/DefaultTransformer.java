@@ -40,6 +40,11 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
     private static final DefaultTransformer INSTANCE = new DefaultTransformer();
 
     /**
+     * Class is a singleton, prevent instantiation.
+     */
+    private DefaultTransformer() {}
+
+    /**
      * Factory returning the singleton instance.
      *
      * @return the singleton instance
@@ -47,11 +52,6 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
     public static DefaultTransformer getInstance() {
         return DefaultTransformer.INSTANCE;
     }
-
-    /**
-     * Class is a singleton, prevent instantiation.
-     */
-    private DefaultTransformer() {}
 
     /**
      * @param o  the object that gets transformed.
@@ -81,6 +81,7 @@ public class DefaultTransformer implements NumberTransformer, Serializable {
 
     /**
      * Always return the singleton instance when de-serializing this transformer.
+     * @return the singleton instance
      */
     private Object readResolve() {
         return INSTANCE;
