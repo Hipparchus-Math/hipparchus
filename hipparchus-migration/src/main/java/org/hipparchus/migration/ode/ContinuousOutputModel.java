@@ -19,7 +19,6 @@ package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.DenseOutputModel;
-import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.SecondaryODE;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 
