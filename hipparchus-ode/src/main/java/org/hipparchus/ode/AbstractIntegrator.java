@@ -189,10 +189,13 @@ public abstract class AbstractIntegrator implements ODEIntegrator {
         return evaluations.getCount();
     }
 
-    /** Prepare the start of an integration.
+    /**
+     * Prepare the start of an integration.
+     *
      * @param eqn equations to integrate
-     * @param s0 initial state vector
-     * @param t target time for the integration
+     * @param s0  initial state vector
+     * @param t   target time for the integration
+     * @return Initial state with computed derivatives.
      */
     protected ODEStateAndDerivative initIntegration(final ExpandableODE eqn,
                                                     final ODEState s0, final double t) {

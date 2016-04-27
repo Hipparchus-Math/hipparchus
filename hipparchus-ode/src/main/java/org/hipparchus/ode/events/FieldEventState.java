@@ -279,9 +279,9 @@ public class FieldEventState<T extends RealFieldElement<T>> {
                              final T tb,
                              final T gb) {
         // check there appears to be a root in [ta, tb]
-        check(ga.getReal() == 0.0 || gb.getReal() == 0.0
-                || (ga.getReal() > 0.0 && gb.getReal() < 0.0)
-                || (ga.getReal() < 0.0 && gb.getReal() > 0.0));
+        check(ga.getReal() == 0.0 || gb.getReal() == 0.0 ||
+                (ga.getReal() > 0.0 && gb.getReal() < 0.0) ||
+                (ga.getReal() < 0.0 && gb.getReal() > 0.0));
 
         final RealFieldUnivariateFunction<T> f =
                 t -> handler.g(interpolator.getInterpolatedState(t));

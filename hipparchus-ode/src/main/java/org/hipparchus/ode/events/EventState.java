@@ -208,7 +208,7 @@ public class EventState {
         }
         // number of points to check in the current step
         final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt) / maxCheckInterval));
-        final double h = dt / (n);
+        final double h = dt / n;
 
 
         double ta = t0;

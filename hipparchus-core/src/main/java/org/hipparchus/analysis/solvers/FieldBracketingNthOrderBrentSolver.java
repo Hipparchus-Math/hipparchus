@@ -23,7 +23,6 @@ import org.hipparchus.analysis.RealFieldUnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.MathArrays;
@@ -194,6 +193,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
         return solveInterval(maxEval, f, min, max, startValue).getSide(allowedSolution);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Interval<T> solveInterval(int maxEval,
                                      RealFieldUnivariateFunction<T> f,

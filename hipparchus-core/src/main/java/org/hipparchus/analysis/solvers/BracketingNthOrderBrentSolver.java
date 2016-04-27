@@ -402,6 +402,7 @@ public class BracketingNthOrderBrentSolver
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public Interval solveInterval(final int maxEval,
                                 final UnivariateFunction f,

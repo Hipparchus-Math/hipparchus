@@ -127,6 +127,7 @@ public abstract class BaseSecantSolver
         return solve(maxEval, f, min, max, startValue, AllowedSolution.ANY_SIDE);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Interval solveInterval(final int maxEval,
                                   final UnivariateFunction f,
