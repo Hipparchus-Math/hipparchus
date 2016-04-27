@@ -44,20 +44,21 @@ def processDir(rootDir, args):
 
 
 def processFile(file, args):
-	log("processing file " + file, args, False)
+	log('processing file ' + file, args, False)
 
 	g = os.path.basename(file)
 	tmpfile = os.path.join(args.tempdir, g)
-	with open(file, "r") as sources:
+	with open(file, 'r') as sources:
 		lines = sources.readlines()
-	with open(tmpfile, "w") as sources:
-		for line in lines:
-			line = packageReplace(line, args)
-			line = classesReplace(line, args)
+		
+	modified = processLines(lines, args)
+
+	with open(tmpfile, 'w') as sources:
+		for line in modified:
 			sources.write(line)
 
 	if filecmp.cmp(file, tmpfile) == False:
-		log("-> changed", args)
+		log('-> changed', args)
 
 		if args.dry_run == True:
 			if args.verbose == False:
@@ -65,47 +66,103 @@ def processFile(file, args):
 			os.remove(tmpfile)
 		else:
 			if args.save == True:
-				shutil.move(file, file + ".orig")
+				shutil.move(file, file + '.orig')
 			shutil.move(tmpfile, file)
 	else:
-		log("-> unchanged", args)
+		log('-> unchanged', args)
 
-def packageReplace(line, args):
-	for p in args.packages_subst_pattern:
-		line = re.sub(p[0], p[2], line)
-	return line
+def processLines(lines, args):
+	imported_subpackages = {}
+	found_classes = {}
 
-def parsePackageSubstitutionRules(args):
-	with open(args.packages_subst, "r") as sources:
-		lines = sources.readlines()
+	import_pattern = re.compile(r'^\s*import\s*([a-zA-Z0-9\.\*]+);')
 
+	# collect all classnames that appear in the
+	# source file, except if they are in import
+	# statements.
 	for line in lines:
-		pattern = re.sub(r'^\s*"([^"]*)"\s*"([^"]*)"\s*', r's:\1:\2', line)
-		if pattern.startswith('s:'):
-			tokens = pattern.split(':')
-			tokens[0] = re.compile(tokens[1])
-			args.packages_subst_pattern.append(tokens)
+		m = re.match(import_pattern, line)
+		if m == None:
+			for classname, subpackage in args.classnames.iteritems():
+				if subpackage in imported_subpackages and line.find(classname) >= 0:
+					# search rule for class names, taking care of *not* finding
+					# names where the pattern is only a substring of the name in
+					# the file so if we want to substitute OriginalClass with
+					# ReplacementClass, we do not want to substitute MyOwnOriginalClass
+					# or OriginalClassExtended.
+					classname_pattern = '(^|[^A-Za-z0-9_])' + classname + '([^A-Za-z0-9_]|$)'
+					if re.search(classname_pattern, line):
+						found_classes[classname] = True
+		else:
+			import_string = m.group(1)
+			prefix_len = prefixLength(import_string, args)
+			if prefix_len > 0:
+				subpackage = import_string[prefix_len+1:import_string.rfind('.')]
+				imported_subpackages[subpackage] = True
 
-def classesReplace(line, args):
-	for p in args.classes_subst_pattern:
-		line = re.sub(p[0], p[2], line)
-	return line
+	if len(found_classes) == 0:
+		return lines
+
+	# now re-process all source lines again:
+	#  * add import statements for all used classes
+	#  * remove other import statements that contain
+	#    either a from or to prefix
+	#  * other lines are just appended
+	modified = []
+	first_import = True
+	for line in lines:
+		if 'import ' in line:
+			if first_import:
+				modified.extend(addImports(found_classes, args))
+				first_import = False
+			
+			if not containsAnyFromPrefix(line, args) and not args.to_prefix in line:
+				modified.append(line)
+		else:
+			modified.append(line)
+	
+	return modified
+
+def addImports(found_classes, args):
+	imports = []
+	for classname in found_classes:
+		imports.append('import ' + args.classes_subst_pattern[classname] + ';\n')
+	
+	imports.sort()
+	return imports
 
 def parseClassSubstitutionRules(args):
-	with open(args.classes_subst, "r") as sources:
+	with open(args.classes_subst, 'r') as sources:
 		lines = sources.readlines()
 
-	# substitution rules for class names, taking care of *not* substituting
-	# names where the pattern is only a substring of the name in the file
-	# so if we want to substitute OriginalClass with ReplacementClass, we
-	# do not want to substitute MyOwnOriginalClass or OriginalClassExtended
+	args.classnames = {}
+	args.classes_subst_pattern = {}
 	for line in lines:
-		pattern = re.sub(r'^\s*([A-Za-z_][A-Za-z0-9_]*)\s*([A-Za-z_][A-Za-z0-9_]*)\s*$', r's:(^|[^A-Za-z0-9_])\1([^A-Za-z0-9_]|$):\\1\2\\2', line)
-		if pattern.startswith('s:'):
-			tokens = pattern.split(':')
-			tokens[0] = re.compile(tokens[1])
-			args.classes_subst_pattern.append(tokens)
+		tokens = line.split()
+		oldname = tokens[0]
+		newname = tokens[1]
+		
+		index = oldname.rfind('.')
+		classname = oldname[index+1:]
+		subpackage = oldname[len('${fromprefix}')+1:oldname.rfind('.')]
+		args.classnames[classname] = subpackage
 
+		newname = newname.replace('${toprefix}', args.to_prefix)
+		args.classes_subst_pattern[classname] = newname
+
+def containsAnyFromPrefix(line, args):
+	for prefix in args.from_prefix:
+		if prefix in line:
+			return True
+	
+	return False
+
+def prefixLength(str, args):
+	for prefix in args.from_prefix:
+		if prefix in str:
+			return len(prefix)
+
+	return -1
 
 # start main
 
@@ -114,7 +171,8 @@ parser.add_argument('--dir', action='append', required=True, type=lambda x: is_v
 parser.add_argument('--ignore', action='append', default=[])
 parser.add_argument('--ext', action='append', required=True)
 parser.add_argument('--nosave', action='store_false', dest='save', default=True)
-parser.add_argument('--packages-subst', default=None)
+parser.add_argument('--from-prefix', action='append', dest='from_prefix', default=['org.apache.commons.math3', 'org.apache.commons.math4'])
+parser.add_argument('--to-prefix', dest='to_prefix', default='org.hipparchus')
 parser.add_argument('--classes-subst', default=None)
 parser.add_argument('--dry-run', action='store_true', default=False)
 parser.add_argument('--verbose', '-v', action='store_true', dest='verbose', default=False)
@@ -125,23 +183,14 @@ tempdir = tempfile.mkdtemp()
 atexit.register(lambda dir=tempdir: shutil.rmtree(dir))
 args.tempdir = tempdir
 
-if args.packages_subst == None:
-	args.packages_subst = os.path.join(os.path.dirname(os.path.abspath(__file__)), "packages.subst")
-
 if args.classes_subst == None:
-	args.classes_subst = os.path.join(os.path.dirname(os.path.abspath(__file__)), "classes.subst")
-
-args.packages_subst_pattern = []
-if args.packages_subst == "":
-	print 'WARNING: package substitutions disabled at user request'
-else:
-	parsePackageSubstitutionRules(args)
+	args.classes_subst = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'classes.subst')
 
 args.classes_subst_pattern = []
 parseClassSubstitutionRules(args)
 
 # process the files
 for dir in args.dir:
-	log("Processing files in dir " + dir, args)
+	log('Processing files in dir ' + dir, args)
 	processDir(dir, args)
 
