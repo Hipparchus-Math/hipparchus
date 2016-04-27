@@ -17,7 +17,6 @@
 
 package org.hipparchus.migration.ode.sampling;
 
-import org.hipparchus.migration.ode.StepHandler;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.ODEFixedStepHandler;
 import org.hipparchus.ode.sampling.StepNormalizer;

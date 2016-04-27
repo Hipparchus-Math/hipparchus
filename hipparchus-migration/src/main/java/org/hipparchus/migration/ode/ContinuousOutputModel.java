@@ -74,7 +74,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
  * org.hipparchus.ode.nonstiff.AdaptiveStepsizeIntegrator adaptive
  * step size integrators}).</p>
  *
- * @see org.hipparchus.migration.ode.StepHandler
+ * @see org.hipparchus.migration.ode.sampling.StepHandler
  * @see ODEStateInterpolator
  * @deprecated as of 1.0, replaced with {@link DenseOutputModel}
  */

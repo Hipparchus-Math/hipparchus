@@ -19,6 +19,8 @@ package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.migration.ode.events.DeprecatedEventHandler;
+import org.hipparchus.migration.ode.sampling.DeprecatedStepHandler;
 import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853Integrator;
 import org.hipparchus.ode.nonstiff.DormandPrince853IntegratorTest;
@@ -50,10 +52,10 @@ public class IntegratorDeprecatedMethodTest extends DormandPrince853IntegratorTe
         double finalT = integ.integrate(pb, 0.0, y, 10.0, y);
 
         Assert.assertTrue(pb.initCalled);
-        Assert.assertTrue(stepHandler.initCalled);
-        Assert.assertTrue(stepHandler.lastStepSeen);
-        Assert.assertTrue(eventHandler.initCalled);
-        Assert.assertTrue(eventHandler.resetCalled);
+        Assert.assertTrue(stepHandler.isInitCalled());
+        Assert.assertTrue(stepHandler.isLastStepSeen());
+        Assert.assertTrue(eventHandler.isInitCalled());
+        Assert.assertTrue(eventHandler.isResetCalled());
 
         Assert.assertEquals(4.0, finalT, 1.0e-10);
 
@@ -74,56 +76,6 @@ public class IntegratorDeprecatedMethodTest extends DormandPrince853IntegratorTe
 
         public void computeDerivatives(double t, double[] y, double[] yDot) {
             yDot[0] = 1.0;
-        }
-
-    }
-
-    private static class DeprecatedStepHandler
-    implements org.hipparchus.migration.ode.StepHandler {
-
-        private final ODEIntegrator integrator;
-        private boolean initCalled   = false;
-        private boolean lastStepSeen = false;
-
-        public DeprecatedStepHandler(final ODEIntegrator integrator) {
-            this.integrator = integrator;
-        }
-
-        public void init(double t0, double[] y0, double t) {
-            initCalled = true;
-        }
-
-        public void handleStep(MigrationStepInterpolator interpolator, boolean isLast) {
-            Assert.assertEquals(interpolator.getPreviousTime(),
-                                integrator.getCurrentStepStart(),
-                                1.0e-10);
-            if (isLast) {
-                lastStepSeen = true;
-            }
-        }
-
-    }
-
-    private static class DeprecatedEventHandler
-    implements org.hipparchus.migration.ode.events.EventHandler {
-
-        private boolean initCalled = false;
-        private boolean resetCalled = false;
-
-        public void init(double t0, double[] y0, double t) {
-            initCalled = true;
-        }
-
-        public double g(double t, double[] y) {
-            return (t - 2.0) * (t - 4.0);
-        }
-
-        public Action eventOccurred(double t, double[] y, boolean increasing) {
-            return t < 3 ? Action.RESET_STATE : Action.STOP;
-        }
-
-        public void resetState(double t, double[] y) {
-            resetCalled = true;
         }
 
     }

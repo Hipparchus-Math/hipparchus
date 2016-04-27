@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.hipparchus.migration.ode;
+package org.hipparchus.migration.ode.sampling;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ODEStateAndDerivative;

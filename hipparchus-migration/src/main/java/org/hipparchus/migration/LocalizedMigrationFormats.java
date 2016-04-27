@@ -56,6 +56,7 @@ public enum LocalizedMigrationFormats implements Localizable {
     CANNOT_SET_AT_NEGATIVE_INDEX("cannot set an element at a negative index {0}"),
     CLASS_DOESNT_IMPLEMENT_COMPARABLE("class ({0}) does not implement Comparable"),
     COLUMN_INDEX_OUT_OF_RANGE("column index {0} out of allowed range [{1}, {2}]"),
+    DIMENSIONS_MISMATCH_SIMPLE("{0} != {1}"),
     EMPTY_STRING_FOR_IMAGINARY_CHARACTER("empty string for imaginary character"),
     FUNCTION_NOT_DIFFERENTIABLE("function is not differentiable"),
     FUNCTION_NOT_POLYNOMIAL("function is not polynomial"),

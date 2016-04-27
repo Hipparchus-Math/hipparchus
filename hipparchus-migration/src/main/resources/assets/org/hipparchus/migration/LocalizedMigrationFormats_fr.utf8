@@ -24,6 +24,7 @@ CANNOT_RETRIEVE_AT_NEGATIVE_INDEX = impossible d''extraire un élément à un in
 CANNOT_SET_AT_NEGATIVE_INDEX = impossible de mettre un élément à un index négatif ({0})
 CLASS_DOESNT_IMPLEMENT_COMPARABLE = la classe ({0}) n''implante pas l''interface Comparable
 COLUMN_INDEX_OUT_OF_RANGE = l''index de colonne {0} est hors du domaine autorisé [{1}, {2}]
+DIMENSIONS_MISMATCH_SIMPLE = {0} != {1}
 EMPTY_STRING_FOR_IMAGINARY_CHARACTER = chaîne vide pour le caractère imaginaire
 FUNCTION_NOT_DIFFERENTIABLE = la fonction n''est pas différentiable
 FUNCTION_NOT_POLYNOMIAL = la fonction n''est pas polynômiale

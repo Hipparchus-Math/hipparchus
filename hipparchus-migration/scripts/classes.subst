@@ -235,7 +235,7 @@ org.apache.commons.math3.exception.util.DummyLocalizable                        
 org.apache.commons.math3.exception.util.ExceptionContext                                        org.hipparchus.migration.exception.util.ExceptionContext
 org.apache.commons.math3.exception.util.ExceptionContextProvider                                org.hipparchus.migration.exception.util.ExceptionContextProvider
 org.apache.commons.math3.exception.util.Localizable                                             org.hipparchus.exception.Localizable
-org.apache.commons.math3.exception.util.LocalizedFormats                                        org.hipparchus.migration.exception.LocalizedFormats
+org.apache.commons.math3.exception.util.LocalizedFormats                                        org.hipparchus.migration.exception.util.LocalizedFormats
 org.apache.commons.math3.exception.ZeroException                                                org.hipparchus.migration.exception.ZeroException
 org.apache.commons.math3.Field                                                                  org.hipparchus.Field
 org.apache.commons.math3.FieldElement                                                           org.hipparchus.FieldElement
@@ -1056,7 +1056,7 @@ org.apache.commons.math4.exception.util.DummyLocalizable                        
 org.apache.commons.math4.exception.util.ExceptionContext                                        org.hipparchus.migration.exception.util.ExceptionContext
 org.apache.commons.math4.exception.util.ExceptionContextProvider                                org.hipparchus.migration.exception.util.ExceptionContextProvider
 org.apache.commons.math4.exception.util.Localizable                                             org.hipparchus.exception.Localizable
-org.apache.commons.math4.exception.util.LocalizedFormats                                        org.hipparchus.migration.exception.LocalizedFormats
+org.apache.commons.math4.exception.util.LocalizedFormats                                        org.hipparchus.migration.exception.util.LocalizedFormats
 org.apache.commons.math4.exception.ZeroException                                                org.hipparchus.migration.exception.ZeroException
 org.apache.commons.math4.Field                                                                  org.hipparchus.Field
 org.apache.commons.math4.FieldElement                                                           org.hipparchus.FieldElement

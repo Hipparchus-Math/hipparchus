@@ -193,7 +193,7 @@ public interface EventHandler extends ODEEventHandler {
      * <ul>
      *   <li>if {@link Action#STOP} is returned, the step handler will be called
      *   with the <code>isLast</code> flag of the {@link
-     *   org.hipparchus.migration.ode.StepHandler#handleStep handleStep}
+     *   org.hipparchus.migration.ode.sampling.StepHandler#handleStep handleStep}
      *   method set to true and the integration will be stopped,</li>
      *   <li>if {@link Action#RESET_STATE} is returned, the {@link #resetState
      *   resetState} method will be called once the step handler has
@@ -207,8 +207,8 @@ public interface EventHandler extends ODEEventHandler {
      * </ul>
 
      * <p>The scheduling between this method and the {@link
-     * org.hipparchus.migration.ode.StepHandler StepHandler} method {@link
-     * org.hipparchus.migration.ode.StepHandler#handleStep(org.hipparchus.migration.ode.MigrationStepInterpolator,
+     * org.hipparchus.migration.ode.sampling.StepHandler StepHandler} method {@link
+     * org.hipparchus.migration.ode.sampling.StepHandler#handleStep(org.hipparchus.migration.ode.MigrationStepInterpolator,
      * boolean) handleStep(interpolator, isLast)} is to call this method first and
      * <code>handleStep</code> afterwards. This scheduling allows the integrator to
      * pass <code>true</code> as the <code>isLast</code> parameter to the step
@@ -225,7 +225,7 @@ public interface EventHandler extends ODEEventHandler {
      * <code>eventOccurred</code> method with t = 10 first and call its
      * <code>handleStep</code> method with t = 9 afterwards. Such out of order
      * calls are limited to the size of the integration step for {@link
-     * org.hipparchus.migration.ode.StepHandler variable step handlers} and
+     * org.hipparchus.migration.ode.sampling.StepHandler variable step handlers} and
      * to the size of the fixed step for {@link
      * org.hipparchus.migration.ode.sampling.FixedStepHandler fixed step handlers}.</p>
 

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.hipparchus.migration.ode;
+package org.hipparchus.migration.ode.sampling;
 
 import java.io.Serializable;
 
@@ -40,7 +40,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
  * {@link ODEStateInterpolator} and {@link MigrationStepInterpolator}
  */
 @Deprecated
-class MigrationStepInterpolator implements org.hipparchus.migration.ode.StepInterpolator {
+class MigrationStepInterpolator implements org.hipparchus.migration.ode.sampling.StepInterpolator {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20160328L;

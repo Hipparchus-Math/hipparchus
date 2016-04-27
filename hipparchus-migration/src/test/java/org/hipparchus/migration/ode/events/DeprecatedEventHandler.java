@@ -1,4 +1,3 @@
-package org.hipparchus.migration;
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -16,21 +15,36 @@ package org.hipparchus.migration;
  * limitations under the License.
  */
 
-
-
-import org.hipparchus.exception.LocalizedFormatsAbstractTest;
+package org.hipparchus.migration.ode.events;
 
 @Deprecated
-public class LocalizedMigrationFormatsTest extends LocalizedFormatsAbstractTest {
+public class DeprecatedEventHandler implements EventHandler {
 
-    @Override
-    protected Class<LocalizedMigrationFormats> getFormatsClass() {
-        return LocalizedMigrationFormats.class;
+    private boolean initCalled = false;
+    private boolean resetCalled = false;
+
+    public void init(double t0, double[] y0, double t) {
+        initCalled = true;
     }
 
-    @Override
-    protected int getExpectedNumber() {
-        return 78;
+    public double g(double t, double[] y) {
+        return (t - 2.0) * (t - 4.0);
+    }
+
+    public Action eventOccurred(double t, double[] y, boolean increasing) {
+        return t < 3 ? Action.RESET_STATE : Action.STOP;
+    }
+
+    public void resetState(double t, double[] y) {
+        resetCalled = true;
+    }
+
+    public boolean isInitCalled() {
+        return initCalled;
+    }
+
+    public boolean isResetCalled() {
+        return resetCalled;
     }
 
 }
