@@ -19,16 +19,17 @@ package org.hipparchus.ode.events;
 
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
-import org.hipparchus.analysis.solvers.AllowedSolution;
 import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver;
-import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.analysis.solvers.BracketedRealFieldUnivariateSolver.Interval;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 
-/** This class handles the state for one {@link EventHandler
+/** This class handles the state for one {@link FieldODEEventHandler
  * event handler} during integration steps.
  *
  * <p>Each time the integrator proposes a step, the event handler
@@ -60,7 +61,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
     /** Value of the events handler at the beginning of the step. */
     private T g0;
 
-    /** Simulated sign of g0 (we cheat when crossing events). */
+    /** Sign of g0. */
     private boolean g0Positive;
 
     /** Indicator of event expected during the step. */
@@ -69,8 +70,14 @@ public class FieldEventState<T extends RealFieldElement<T>> {
     /** Occurrence time of the pending event. */
     private T pendingEventTime;
 
-    /** Occurrence time of the previous event. */
-    private T previousEventTime;
+    /** Time after the current event. */
+    private T afterEvent;
+
+    /** Value of the g function after the current event. */
+    private T afterG;
+
+    /** The earliest time considered for events. */
+    private T earliestTimeConsidered;
 
     /** Integration direction. */
     private boolean forward;
@@ -79,9 +86,6 @@ public class FieldEventState<T extends RealFieldElement<T>> {
      *  (this is considered with respect to the integration direction)
      */
     private boolean increasing;
-
-    /** Next action indicator. */
-    private Action nextAction;
 
     /** Root-finding algorithm to use to detect state events. */
     private final BracketedRealFieldUnivariateSolver<T> solver;
@@ -111,9 +115,10 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         g0Positive        = true;
         pendingEvent      = false;
         pendingEventTime  = null;
-        previousEventTime = null;
         increasing        = true;
-        nextAction        = Action.CONTINUE;
+        earliestTimeConsidered = null;
+        afterEvent = null;
+        afterG = null;
 
     }
 
@@ -170,13 +175,38 @@ public class FieldEventState<T extends RealFieldElement<T>> {
 
             // extremely rare case: there is a zero EXACTLY at interval start
             // we will use the sign slightly after step beginning to force ignoring this zero
-            final double epsilon = FastMath.max(solver.getAbsoluteAccuracy().getReal(),
-                                                FastMath.abs(solver.getRelativeAccuracy().multiply(t0).getReal()));
-            final T tStart = t0.add(0.5 * epsilon);
+            final T epsilon = max(solver.getAbsoluteAccuracy(),
+                    solver.getRelativeAccuracy().multiply(t0).abs());
+            final T tStart = t0.add(epsilon.multiply(0.5));
+            t0 = tStart;
             g0 = handler.g(interpolator.getInterpolatedState(tStart));
         }
-        g0Positive = g0.getReal() >= 0;
+        g0Positive = g0.getReal() > 0;
+        // "last" event was increasing
+        increasing = g0Positive;
 
+    }
+
+    /**
+     * Get the larger of two numbers.
+     *
+     * @param a first number.
+     * @param b second number.
+     * @return the larger of a and b.
+     */
+    private T max(T a, T b) {
+        return a.getReal() > b.getReal() ? a : b;
+    }
+
+    /**
+     * Get the smaller of two numbers.
+     *
+     * @param a first number.
+     * @param b second number.
+     * @return the smaller of a and b.
+     */
+    private T min(T a, T b) {
+        return a.getReal() < b.getReal() ? a : b;
     }
 
     /** Evaluate the impact of the proposed step on the event handler.
@@ -201,14 +231,6 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         final int n = FastMath.max(1, (int) FastMath.ceil(FastMath.abs(dt.getReal()) / maxCheckInterval));
         final T   h = dt.divide(n);
 
-        final RealFieldUnivariateFunction<T> f = new RealFieldUnivariateFunction<T>() {
-            /** {@inheritDoc} */
-            @Override
-            public T value(final T t) {
-                return handler.g(interpolator.getInterpolatedState(t));
-            }
-        };
-
         T ta = t0;
         T ga = g0;
         for (int i = 0; i < n; ++i) {
@@ -218,51 +240,11 @@ public class FieldEventState<T extends RealFieldElement<T>> {
             final T gb = handler.g(interpolator.getInterpolatedState(tb));
 
             // check events occurrence
-            if (g0Positive ^ (gb.getReal() >= 0)) {
+            if (gb.getReal() == 0.0 || (g0Positive ^ (gb.getReal() > 0))) {
                 // there is a sign change: an event is expected during this step
-
-                // variation direction, with respect to the integration direction
-                increasing = gb.subtract(ga).getReal() >= 0;
-
-                // find the event time making sure we select a solution just at or past the exact root
-                final T root = forward ?
-                               solver.solve(maxIterationCount, f, ta, tb, AllowedSolution.RIGHT_SIDE) :
-                               solver.solve(maxIterationCount, f, tb, ta, AllowedSolution.LEFT_SIDE);
-
-                if (previousEventTime != null &&
-                    root.subtract(ta).abs().subtract(convergence).getReal() <= 0 &&
-                    root.subtract(previousEventTime).abs().subtract(convergence).getReal() <= 0) {
-                    // we have either found nothing or found (again ?) a past event,
-                    // retry the substep excluding this value, and taking care to have the
-                    // required sign in case the g function is noisy around its zero and
-                    // crosses the axis several times
-                    do {
-                        ta = forward ? ta.add(convergence) : ta.subtract(convergence);
-                        ga = f.value(ta);
-                    } while ((g0Positive ^ (ga.getReal() >= 0)) && (forward ^ (ta.subtract(tb).getReal() >= 0)));
-
-                    if (forward ^ (ta.subtract(tb).getReal() >= 0)) {
-                        // we were able to skip this spurious root
-                        --i;
-                    } else {
-                        // we can't avoid this root before the end of the step,
-                        // we have to handle it despite it is close to the former one
-                        // maybe we have two very close roots
-                        pendingEventTime = root;
-                        pendingEvent     = true;
-                        return true;
-                    }
-                } else if (previousEventTime == null ||
-                           previousEventTime.subtract(root).abs().subtract(convergence).getReal() > 0) {
-                    pendingEventTime = root;
-                    pendingEvent     = true;
+                if (findRoot(interpolator, ta, ga, tb, gb)) {
                     return true;
-                } else {
-                    // no sign change: there is no event for now
-                    ta = tb;
-                    ga = gb;
                 }
-
             } else {
                 // no sign change: there is no event for now
                 ta = tb;
@@ -278,6 +260,267 @@ public class FieldEventState<T extends RealFieldElement<T>> {
 
     }
 
+    /**
+     * Find a root in a bracketing interval.
+     *
+     * <p> When calling this method one of the following must be true. Either ga == 0, gb
+     * == 0, (ga < 0  and gb > 0), or (ga > 0 and gb < 0).
+     *
+     * @param interpolator that covers the interval.
+     * @param ta           earliest possible time for root.
+     * @param ga           g(ta).
+     * @param tb           latest possible time for root.
+     * @param gb           g(tb).
+     * @return if a zero crossing was found.
+     */
+    private boolean findRoot(final FieldODEStateInterpolator<T> interpolator,
+                             T ta,
+                             T ga,
+                             final T tb,
+                             final T gb) {
+        // check there appears to be a root in [ta, tb]
+        check(ga.getReal() == 0.0 || gb.getReal() == 0.0
+                || (ga.getReal() > 0.0 && gb.getReal() < 0.0)
+                || (ga.getReal() < 0.0 && gb.getReal() > 0.0));
+
+        final RealFieldUnivariateFunction<T> f =
+                t -> handler.g(interpolator.getInterpolatedState(t));
+
+        // loop to skip through "fake" roots, i.e. where g(t) = g'(t) = 0.0
+        while (true) {
+            // event time, just at or before the actual root.
+            final T beforeRoot;
+            // time on the other sie of the root
+            T afterRoot;
+            if (ga.getReal() == 0.0) {
+                // ga == 0.0 and gb may or may not be 0.0
+                // handle the root at ta first
+                beforeRoot = ta;
+                afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
+            } else if (gb.getReal() == 0.0) {
+                // hard: ga != 0.0 and gb == 0.0
+                // look past gb by up to convergence to find next sign
+                beforeRoot = tb;
+                afterRoot = shiftedBy(beforeRoot, convergence);
+            } else if (ta.getReal() == tb.getReal()) {
+                // both non-zero but times are the same. Probably due to reset state
+                beforeRoot = ta;
+                afterRoot = shiftedBy(beforeRoot, convergence);
+            } else if (ga.getReal() > 0 != f.value(ta).getReal() > 0) {
+                // both non-zero, step sign change at ta, possibly due to reset state
+                // this should only be able to happen the first time through the loop
+                beforeRoot = ta;
+                afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
+            } else {
+                // both non-zero, the usual case, use a root finder.
+                if (forward) {
+                    final Interval<T> interval =
+                            solver.solveInterval(maxIterationCount, f, ta, tb);
+                    beforeRoot = interval.getLeftAbscissa();
+                    afterRoot = interval.getRightAbscissa();
+                } else {
+                    final Interval<T> interval =
+                            solver.solveInterval(maxIterationCount, f, tb, ta);
+                    beforeRoot = interval.getRightAbscissa();
+                    afterRoot = interval.getLeftAbscissa();
+                }
+            }
+            // tolerance is set to less than 1 ulp
+            // assume tolerance is 1 ulp
+            if (beforeRoot == afterRoot) {
+                afterRoot = nextAfter(afterRoot);
+            }
+            // check loop is making some progress
+            check((forward && afterRoot.getReal() > beforeRoot.getReal()) ||
+                    (!forward && afterRoot.getReal() < beforeRoot.getReal()));
+
+            final T afterRootG = f.value(afterRoot);
+            if (afterRootG.getReal() == 0.0 || afterRootG.getReal() > 0.0 == g0Positive) {
+                // didn't see expected sign change, skip this root,
+                // likely an extrema at g = 0.0
+                if (tb == afterRoot || strictlyAfter(tb, afterRoot)) {
+                    // can't try again within this step.
+                    return false;
+                } else {
+                    // try again within these bounds
+                    ta = afterRoot;
+                    ga = afterRootG;
+                }
+            } else {
+                // real crossing
+                // variation direction, with respect to the integration direction
+                increasing = !g0Positive;
+                pendingEventTime = beforeRoot;
+                pendingEvent = true;
+                afterEvent = afterRoot;
+                afterG = afterRootG;
+
+                // check increasing set correctly
+                check(afterG.getReal() > 0 == increasing);
+                check(increasing == gb.getReal() >= ga.getReal());
+
+                return true;
+            }
+        }
+    }
+
+    /**
+     * Try to accept the current history up to the given time.
+     *
+     * <p> It is not necessary to call this method before calling {@link
+     * #doEvent(FieldODEStateAndDerivative)} with the same state. It is necessary to call this
+     * method before you call {@link #doEvent(FieldODEStateAndDerivative)} on some other event
+     * detector.
+     *
+     * @param state        to try to accept.
+     * @param interpolator to use to find the new root, if any.
+     * @return if the event detector has an event it has not detected before that is on or
+     * before the same time as {@code state}. In other words {@code false} means continue
+     * on while {@code true} means stop and handle my event first.
+     */
+    public boolean tryAdvance(final FieldODEStateAndDerivative<T> state,
+                              final FieldODEStateInterpolator<T> interpolator) {
+        // check this is only called before a pending event.
+        check(!(pendingEvent && strictlyAfter(pendingEventTime, state.getTime())));
+
+        final T t = state.getTime();
+
+        // just found an event and we know the next time we want to search again
+        if (earliestTimeConsidered != null && strictlyAfter(t, earliestTimeConsidered)) {
+            return false;
+        }
+
+        final T g = handler.g(state);
+        final boolean positive = g.getReal() > 0;
+
+        if ((g.getReal() == 0.0 && pendingEventTime == t) || positive == g0Positive) {
+            // at a root we already found, or g function has expected sign
+            t0 = t;
+            g0 = g; // g0Positive is the same
+            return false;
+        } else {
+            // found a root we didn't expect -> find precise location
+            return findRoot(interpolator, t0, g0, t, g);
+        }
+    }
+
+    /**
+     * Notify the user's listener of the event. The event occurs wholly within this method
+     * call including a call to {@link FieldODEEventHandler#resetState(FieldODEStateAndDerivative)}
+     * if necessary.
+     *
+     * @param state the state at the time of the event. This must be at the same time as
+     *              the current value of {@link #getEventTime()}.
+     * @return the user's requested action and the new state if the action is {@link
+     * Action#RESET_STATE}. Otherwise the new state is {@code state}. The stop time
+     * indicates what time propagation should stop if the action is {@link Action#STOP}.
+     * This guarantees the integration will stop on or after the root, so that integration
+     * may be restarted safely.
+     */
+    public EventOccurrence<T> doEvent(final FieldODEStateAndDerivative<T> state) {
+        // check event is pending and is at the same time
+        check(pendingEvent);
+        check(state.getTime() == this.pendingEventTime);
+
+        final Action action = handler.eventOccurred(state, increasing == forward);
+        final FieldODEState<T> newState;
+        if (action == Action.RESET_STATE) {
+            newState = handler.resetState(state);
+        } else {
+            newState = state;
+        }
+        // clear pending event
+        pendingEvent = false;
+        pendingEventTime = null;
+        // setup for next search
+        earliestTimeConsidered = afterEvent;
+        t0 = afterEvent;
+        g0 = afterG;
+        g0Positive = increasing;
+        // check g0Positive set correctly
+        check(g0.getReal() == 0.0 || g0Positive == (g0.getReal() > 0));
+        return new EventOccurrence<>(action, newState, earliestTimeConsidered);
+    }
+
+    /**
+     * Check the ordering of two times.
+     *
+     * @param t1 the first time.
+     * @param t2 the second time.
+     * @return true if {@code t2} is strictly after {@code t1} in the propagation
+     * direction.
+     */
+    private boolean strictlyAfter(final T t1, final T t2) {
+        return forward ? t1.getReal() < t2.getReal() : t2.getReal() < t1.getReal();
+    }
+
+    /**
+     * Get the next number after the given number in the current propagation direction.
+     *
+     * <p> Assumes T has the same precision as a double.
+     *
+     * @param t input time
+     * @return t +/- 1 ulp depending on the direction.
+     */
+    private T nextAfter(final T t) {
+        // direction
+        final int sign = forward ? 1 : -1;
+        final double ulp = FastMath.ulp(t.getReal());
+        return t.add(sign * ulp);
+    }
+
+    /**
+     * Same as keyword assert, but throw a {@link MathRuntimeException}.
+     *
+     * @param condition to check
+     * @throws MathRuntimeException if {@code condition} is false.
+     */
+    private void check(final boolean condition) throws MathRuntimeException {
+        if (!condition) {
+            throw MathRuntimeException.createInternalError();
+        }
+    }
+
+    /**
+     * Get the time that happens first along the current propagation direction: {@link
+     * #forward}.
+     *
+     * @param a first time
+     * @param b second time
+     * @return min(a, b) if forward, else max (a, b)
+     */
+    private T minTime(final T a, final T b) {
+        return forward ? min(a, b) : max(a, b);
+    }
+
+    /**
+     * Shift a time value along the current integration direction: {@link #forward}.
+     *
+     * @param t     the time to shift.
+     * @param delta the amount to shift.
+     * @return t + delta if forward, else t - delta. If the result has to be rounded it
+     * will be rounded to be before the true value of t + delta.
+     */
+    private T shiftedBy(final T t, final T delta) {
+        if (forward) {
+            final T ret = t.add(delta);
+            if (ret.subtract(t).getReal() > delta.getReal()) {
+                // nextDown(ret)
+                return ret.subtract(FastMath.ulp(ret.getReal()));
+            } else {
+                return ret;
+            }
+        } else {
+            final T ret = t.subtract(delta);
+            if (t.subtract(ret).getReal() > delta.getReal()) {
+                // nextUp(ret)
+                return ret.add(FastMath.ulp(ret.getReal()));
+            } else {
+                return ret;
+            }
+        }
+    }
+
     /** Get the occurrence time of the event triggered in the current step.
      * @return occurrence time of the event triggered in the current
      * step or infinity if no events are triggered
@@ -288,56 +531,62 @@ public class FieldEventState<T extends RealFieldElement<T>> {
                t0.getField().getZero().add(forward ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY);
     }
 
-    /** Acknowledge the fact the step has been accepted by the integrator.
-     * @param state state at the end of the step
+    /**
+     * Class to hold the data related to an event occurrence that is needed to decide how
+     * to modify integration.
      */
-    public void stepAccepted(final FieldODEStateAndDerivative<T> state) {
+    public static class EventOccurrence<T extends RealFieldElement<T>> {
 
-        t0 = state.getTime();
-        g0 = handler.g(state);
+        /** User requested action. */
+        private final Action action;
+        /** New state for a reset action. */
+        private final FieldODEState<T> newState;
+        /** The time to stop propagation if the action is a stop event. */
+        private final T stopTime;
 
-        if (pendingEvent && pendingEventTime.subtract(state.getTime()).abs().subtract(convergence).getReal() <= 0) {
-            // force the sign to its value "just after the event"
-            previousEventTime = state.getTime();
-            g0Positive        = increasing;
-            nextAction        = handler.eventOccurred(state, !(increasing ^ forward));
-        } else {
-            g0Positive = g0.getReal() >= 0;
-            nextAction = Action.CONTINUE;
-        }
-    }
-
-    /** Check if the integration should be stopped at the end of the
-     * current step.
-     * @return true if the integration should be stopped
-     */
-    public boolean stop() {
-        return nextAction == Action.STOP;
-    }
-
-    /** Let the event handler reset the state if it wants.
-     * @param state state at the beginning of the next step
-     * @return reset state (may by the same as initial state if only
-     * derivatives should be reset), or null if nothing is reset
-     */
-    public FieldODEState<T> reset(final FieldODEStateAndDerivative<T> state) {
-
-        if (!(pendingEvent && pendingEventTime.subtract(state.getTime()).abs().subtract(convergence).getReal() <= 0)) {
-            return null;
+        /**
+         * Create a new occurrence of an event.
+         *
+         * @param action   the user requested action.
+         * @param newState for a reset event. Should be the current state unless the
+         *                 action is {@link Action#RESET_STATE}.
+         * @param stopTime to stop propagation if the action is {@link Action#STOP}. Used
+         *                 to move the stop time to just after the root.
+         */
+        EventOccurrence(final Action action,
+                        final FieldODEState<T> newState,
+                        final T stopTime) {
+            this.action = action;
+            this.newState = newState;
+            this.stopTime = stopTime;
         }
 
-        final FieldODEState<T> newState;
-        if (nextAction == Action.RESET_STATE) {
-            newState = handler.resetState(state);
-        } else if (nextAction == Action.RESET_DERIVATIVES) {
-            newState = state;
-        } else {
-            newState = null;
+        /**
+         * Get the user requested action.
+         *
+         * @return the action.
+         */
+        public Action getAction() {
+            return action;
         }
-        pendingEvent      = false;
-        pendingEventTime  = null;
 
-        return newState;
+        /**
+         * Get the new state for a reset action.
+         *
+         * @return the new state.
+         */
+        public FieldODEState<T> getNewState() {
+            return newState;
+        }
+
+        /**
+         * Get the new time for a stop action.
+         *
+         * @return when to stop propagation.
+         */
+        public T getStopTime() {
+            return stopTime;
+        }
 
     }
 
