@@ -48,9 +48,25 @@ are the following ones:
      class not found. The exception context feature that was present in Apache Commons
      Math has been merged into the `MathRuntimeException` base class. Its `getValue(key)`
      method is essentially replaced by `getParts[index]`.
-  * `AVLTree`, `OrderedTuple` and several other classes not found
+  * classes from packages `org.apache.commons.math[34].geometry.partitioning.utilities`
+     or `org.apache.commons.math[34].optimization` not found
      almost all the classes that were already deprecated in Apache Commons Math have been
-     removed from Hipparchus, users must  replace them before performing the migration
+     removed from Hipparchus, users must  replace them before performing the migration.
+  * method `derivative()` in class `PolynomialFunction` not found.
+     Despite this method was not deprecated it was removed as superseded by the
+     already existing `polynomialDerivative` method which is fully compatible with it
+     as it returns a more specialized type
+  * `getDimension()` and `getFirstIndex() not found in `EquationsMapper` and
+     `getSecondaryMappers()` not present in `ExpandableODE`.
+     There is now only one equations mapper for both the primary equation and
+     the various secondary equations in an ODE, so the way to map the composite
+     state into primary and secondary states is different, and in fact much simpler.
+     Users must retrieve the single mapper by calling `getMapper()` and then
+     get directly the primary and secondary states from this single mapper.
+   * cannot instantiate `SummaryStatistics`.
+     Building `SummaryStatistics` is now done using a builder. If using only
+     default settings, usears can replace `new SummaryStatistics()` with
+     `SummaryStatistics.create()` to solve the problem.
 
 ### Checking everything runs
 
