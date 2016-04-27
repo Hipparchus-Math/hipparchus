@@ -34,6 +34,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
+      <action dev="evan" type="bug">
+        Enhance reliability of event detection with multiple event detectors.
+      </action>
       <action dev="luc" type="update">
         Revamped Ordinary Differential Equations API to match
         the new API introduced with field-based ODE.
