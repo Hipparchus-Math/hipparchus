@@ -35,13 +35,15 @@ often than what would be possible in a large monolithic library.
  
 Hipparchus started as a fork of [Apache Commons Math](https://commons.apache.org/math/).
 The fork was initiated by most of the main developers and a few contributors of
-Apache Commons Math. Version 1.0 of Hipparchus is therefore very similar to
+Apache Commons Math.
+
+Version 1.0 of Hipparchus is therefore very similar to
 Apache Commons Math 3.6.1 with some elements of the development version
 that would ultimately lead to Apache Commons Math 4.0 which was not released
 at fork time.
 
 In order to help users who would like to follow Hipparchus, a
 [migration module](hipparchus-migration/index.html)
-as been set up with some temporary classes that can be used to continue
+has been set up with some temporary classes that can be used to continue
 using some of the initial APIs and migration scripts that can be applied to
 source code in order to convert them to rely on Hipparchus.
