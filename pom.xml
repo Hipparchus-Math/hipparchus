@@ -86,7 +86,6 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>${hipparchus.maven-site-plugin.version}</version>
           <configuration>
             <!-- override the value hacked in the parent pom, only for the aggregator module -->
             <stagingDirectory>${project.build.directory}/staging</stagingDirectory>
