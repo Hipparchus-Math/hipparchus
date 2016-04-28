@@ -261,7 +261,7 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
             while (error >= 1.0) {
 
                 // predict a first estimate of the state at step end
-                predictedY = stepEnd.getPrimaryState();
+                predictedY = stepEnd.getCompleteState();
 
                 // evaluate the derivative
                 final double[] yDot = computeDerivatives(stepEnd.getTime(), predictedY);

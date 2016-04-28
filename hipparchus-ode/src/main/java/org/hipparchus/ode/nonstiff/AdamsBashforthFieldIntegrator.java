@@ -266,7 +266,7 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
             while (error.subtract(1.0).getReal() >= 0.0) {
 
                 // predict a first estimate of the state at step end
-                predictedY = stepEnd.getPrimaryState();
+                predictedY = stepEnd.getCompleteState();
 
                 // evaluate the derivative
                 final T[] yDot = computeDerivatives(stepEnd.getTime(), predictedY);
