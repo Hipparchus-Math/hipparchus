@@ -29,7 +29,6 @@ import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.stat.descriptive.moment.Variance;
 import org.hipparchus.stat.descriptive.rank.Max;
 import org.hipparchus.stat.descriptive.rank.Min;
-import org.hipparchus.stat.descriptive.rank.Percentile;
 import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.stat.descriptive.summary.SumOfSquares;
 import org.hipparchus.util.Precision;
@@ -41,27 +40,7 @@ import org.junit.Test;
 public class DescriptiveStatisticsTest {
 
     protected DescriptiveStatistics createDescriptiveStatistics() {
-        return DescriptiveStatistics.create();
-    }
-
-    protected DescriptiveStatistics.Builder createBuilder() {
-        return DescriptiveStatistics.builder();
-    }
-
-    @Test
-    public void testCustomMeanImpl() {
-        DescriptiveStatistics stats = createDescriptiveStatistics();
-        stats.addValue(1);
-        stats.addValue(3);
-        assertEquals(2, stats.getMean(), 1E-10);
-
-        // Now lets try some new math
-        DescriptiveStatistics stats2 =
-                createBuilder().withMeanImpl(new DeepMean())
-                               .withInitialValues(stats.getValues())
-                               .build();
-
-        assertEquals(42, stats2.getMean(), 1E-10);
+        return new DescriptiveStatistics();
     }
 
     @Test
@@ -119,7 +98,7 @@ public class DescriptiveStatisticsTest {
     @Test
     public void testQuadraticMean() {
         final double[] values = { 1.2, 3.4, 5.6, 7.89 };
-        final DescriptiveStatistics stats = DescriptiveStatistics.of(values);
+        final DescriptiveStatistics stats = new DescriptiveStatistics(values);
 
         final int len = values.length;
         double expected = 0;
@@ -160,29 +139,11 @@ public class DescriptiveStatisticsTest {
         stats.addValue(2);
         stats.addValue(3);
         assertEquals(2, stats.getPercentile(50.0), 1E-10);
-
-        // Try wrapper impl
-        DescriptiveStatistics stats1 =
-            DescriptiveStatistics.builder()
-                                 .withInitialValues(stats.getValues())
-                                 .withPercentileImpl(new GoodPercentile())
-                                 .build();
-
-        assertEquals(2, stats1.getPercentile(50.0), 1E-10);
-
-        // Try "new math" impl
-        DescriptiveStatistics stats2 =
-            DescriptiveStatistics.builder()
-                                 .withInitialValues(stats.getValues())
-                                 .withPercentileImpl(new SubPercentile())
-                                 .build();
-
-        assertEquals(10.0, stats2.getPercentile(10.0), 1E-10);
     }
 
     @Test
     public void test20090720() {
-        DescriptiveStatistics descriptiveStatistics = DescriptiveStatistics.of(100);
+        DescriptiveStatistics descriptiveStatistics = new DescriptiveStatistics(100);
         for (int i = 0; i < 161; i++) {
             descriptiveStatistics.addValue(1.2);
         }
@@ -205,7 +166,7 @@ public class DescriptiveStatisticsTest {
     @Test
     public void testSummaryConsistency() {
         final int windowSize = 5;
-        final DescriptiveStatistics dstats = DescriptiveStatistics.of(windowSize);
+        final DescriptiveStatistics dstats = new DescriptiveStatistics(windowSize);
         final SummaryStatistics sstats = SummaryStatistics.create();
         final double tol = 1E-12;
         for (int i = 0; i < 20; i++) {
@@ -255,7 +216,7 @@ public class DescriptiveStatisticsTest {
             -0.09944199541668033
         };
 
-        final DescriptiveStatistics ds = DescriptiveStatistics.of(data);
+        final DescriptiveStatistics ds = new DescriptiveStatistics(data);
 
         final double t = ds.getPercentile(75);
         final double o = ds.getPercentile(25);
@@ -282,85 +243,4 @@ public class DescriptiveStatisticsTest {
         assertTrue(Precision.equalsIncludingNaN(mean3, dstat.getMean()));
     }
 
-    // Test UnivariateStatistics impls for custom statistics tests.
-
-    /**
-     * A new way to compute the mean.
-     */
-    static class DeepMean implements UnivariateStatistic {
-
-        @Override
-        public double evaluate(double[] values, int begin, int length) {
-            return 42;
-        }
-
-        @Override
-        public double evaluate(double[] values) {
-            return 42;
-        }
-        @Override
-        public UnivariateStatistic copy() {
-            return new DeepMean();
-        }
-    }
-
-    /**
-     * Test percentile implementation - wraps a Percentile.
-     */
-    static class GoodPercentile implements QuantiledUnivariateStatistic {
-
-        private final Percentile percentile = new Percentile();
-
-        @Override
-        public void setQuantile(double quantile) {
-            percentile.setQuantile(quantile);
-        }
-
-        @Override
-        public double getQuantile() {
-            return percentile.getQuantile();
-        }
-
-        @Override
-        public double evaluate(double[] values, int begin, int length, double p) {
-            return percentile.evaluate(values, begin, length, p);
-        }
-
-        @Override
-        public double evaluate(double[] values, int begin, int length) {
-            return percentile.evaluate(values, begin, length);
-        }
-
-        @Override
-        public QuantiledUnivariateStatistic copy() {
-            GoodPercentile result = new GoodPercentile();
-            result.setQuantile(percentile.getQuantile());
-            return result;
-        }
-    }
-
-    /**
-     * Test percentile subclass - another "new math" impl
-     * Always returns currently set quantile.
-     */
-    static class SubPercentile extends Percentile {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public double evaluate(double[] values, int begin, int length, double p) {
-            return getQuantile();
-        }
-
-        @Override
-        public double evaluate(double[] values, double p) {
-            return getQuantile();
-        }
-
-        @Override
-        public Percentile copy() {
-            SubPercentile result = new SubPercentile();
-            result.setQuantile(this.getQuantile());
-            return result;
-        }
-    }
 }

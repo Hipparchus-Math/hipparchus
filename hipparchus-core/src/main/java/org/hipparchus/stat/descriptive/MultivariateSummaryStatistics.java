@@ -16,11 +16,24 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.stat.descriptive.moment.GeometricMean;
+import org.hipparchus.stat.descriptive.moment.Mean;
+import org.hipparchus.stat.descriptive.rank.Max;
+import org.hipparchus.stat.descriptive.rank.Min;
+import org.hipparchus.stat.descriptive.summary.Sum;
+import org.hipparchus.stat.descriptive.summary.SumOfLogs;
+import org.hipparchus.stat.descriptive.summary.SumOfSquares;
+import org.hipparchus.stat.descriptive.vector.VectorialCovariance;
+import org.hipparchus.stat.descriptive.vector.VectorialStorelessStatistic;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 
 /**
  * Computes summary statistics for a stream of n-tuples added using the
@@ -39,21 +52,35 @@ import org.hipparchus.util.FastMath;
  * <code>getSum</code> will return a three-element array with values {0+3+6, 1+4+7, 2+5+8}
  * <p>
  * Note: This class is not thread-safe.
- * Use {@link #synchronizedSummaryStatistics(MultivariateSummaryStatistics)}
- * if concurrent access from multiple threads is required.
  */
-public interface MultivariateSummaryStatistics
-    extends StatisticalMultivariateSummary {
+public class MultivariateSummaryStatistics
+    implements StatisticalMultivariateSummary, Serializable {
 
-    /**
-     * Returns a builder for a {@link MultivariateSummaryStatistics}.
-     *
-     * @param k the dimension of the data
-     * @return a summary statistics builder.
-     */
-    static Builder builder(int k) {
-        return new Builder(k);
-    }
+    /** Serialization UID */
+    private static final long serialVersionUID = 20160424L;
+
+    /** Dimension of the data. */
+    private final int k;
+
+    /** Sum statistic implementation */
+    private final StorelessMultivariateStatistic sumImpl;
+    /** Sum of squares statistic implementation */
+    private final StorelessMultivariateStatistic sumSqImpl;
+    /** Minimum statistic implementation */
+    private final StorelessMultivariateStatistic minImpl;
+    /** Maximum statistic implementation */
+    private final StorelessMultivariateStatistic maxImpl;
+    /** Sum of log statistic implementation */
+    private final StorelessMultivariateStatistic sumLogImpl;
+    /** Geometric mean statistic implementation */
+    private final StorelessMultivariateStatistic geoMeanImpl;
+    /** Mean statistic implementation */
+    private final StorelessMultivariateStatistic meanImpl;
+    /** Covariance statistic implementation */
+    private final VectorialCovariance covarianceImpl;
+
+    /** Count of values that have been added */
+    private long n = 0;
 
     /**
      * Construct a MultivariateSummaryStatistics instance for the given
@@ -62,27 +89,34 @@ public interface MultivariateSummaryStatistics
      * <p>
      * The returned instance is <b>not</b> thread-safe.
      *
-     * @param k dimension of the data
-     * @return a new MultivariateSummaryStatistics instance with the given dimension
+     * @param dimension dimension of the data
      */
-    static MultivariateSummaryStatistics of(int k) {
-        return builder(k).withBiasCorrectedCovariance(true).build();
+    public MultivariateSummaryStatistics(int dimension) {
+        this(dimension, true);
     }
 
     /**
-     * Decorates another MultivariateSummaryStatistics to synchronize its behaviour
-     * for a multi-threaded environment.
+     * Construct a MultivariateSummaryStatistics instance for the given
+     * dimension.
      * <p>
-     * Methods are synchronized, then forwarded to the decorated MultivariateSummaryStatistics.
+     * The returned instance is <b>not</b> thread-safe.
      *
-     * @param statistic the summary statistic to decorate
-     * @return a synchronized wrapper for the summary statistic
+     * @param dimension dimension of the data
+     * @param covarianceBiasCorrection if true, the returned instance will compute
+     * the unbiased sample covariance, otherwise the population covariance
      */
-    static MultivariateSummaryStatistics synchronizedSummaryStatistics(MultivariateSummaryStatistics statistic) {
-        if (statistic instanceof SynchronizedMultivariateSummaryStatistics) {
-            return statistic;
-        }
-        return new SynchronizedMultivariateSummaryStatistics(statistic);
+    public MultivariateSummaryStatistics(int dimension, boolean covarianceBiasCorrection) {
+        this.k = dimension;
+
+        sumImpl     = new VectorialStorelessStatistic(k, new Sum());
+        sumSqImpl   = new VectorialStorelessStatistic(k, new SumOfSquares());
+        minImpl     = new VectorialStorelessStatistic(k, new Min());
+        maxImpl     = new VectorialStorelessStatistic(k, new Max());
+        sumLogImpl  = new VectorialStorelessStatistic(k, new SumOfLogs());
+        geoMeanImpl = new VectorialStorelessStatistic(k, new GeometricMean());
+        meanImpl    = new VectorialStorelessStatistic(k, new Mean());
+
+        covarianceImpl = new VectorialCovariance(k, covarianceBiasCorrection);
     }
 
     /**
@@ -92,12 +126,94 @@ public interface MultivariateSummaryStatistics
      * @throws MathIllegalArgumentException if the array is null or the length
      * of the array does not match the one used at construction
      */
-    void addValue(double[] value) throws MathIllegalArgumentException;
+    public void addValue(double[] value) throws MathIllegalArgumentException {
+        MathUtils.checkNotNull(value, LocalizedCoreFormats.INPUT_ARRAY);
+        MathUtils.checkDimension(value.length, k);
+        sumImpl.increment(value);
+        sumSqImpl.increment(value);
+        minImpl.increment(value);
+        maxImpl.increment(value);
+        sumLogImpl.increment(value);
+        geoMeanImpl.increment(value);
+        meanImpl.increment(value);
+        covarianceImpl.increment(value);
+        n++;
+    }
 
     /**
      * Resets all statistics and storage.
      */
-    void clear();
+    public void clear() {
+        this.n = 0;
+        minImpl.clear();
+        maxImpl.clear();
+        sumImpl.clear();
+        sumLogImpl.clear();
+        sumSqImpl.clear();
+        geoMeanImpl.clear();
+        meanImpl.clear();
+        covarianceImpl.clear();
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public int getDimension() {
+        return k;
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public long getN() {
+        return n;
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public double[] getSum() {
+        return sumImpl.getResult();
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public double[] getSumSq() {
+        return sumSqImpl.getResult();
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public double[] getSumLog() {
+        return sumLogImpl.getResult();
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public double[] getMean() {
+        return meanImpl.getResult();
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public RealMatrix getCovariance() {
+        return covarianceImpl.getResult();
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public double[] getMax() {
+        return maxImpl.getResult();
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public double[] getMin() {
+        return minImpl.getResult();
+    }
+
+    /** {@inheritDoc} **/
+    @Override
+    public double[] getGeometricMean() {
+        return geoMeanImpl.getResult();
+    }
 
     /**
      * Returns an array whose i<sup>th</sup> entry is the standard deviation of the
@@ -107,8 +223,7 @@ public interface MultivariateSummaryStatistics
      * @return the array of component standard deviations
      */
     @Override
-    default double[] getStandardDeviation() {
-        final int k = getDimension();
+    public double[] getStandardDeviation() {
         double[] stdDev = new double[k];
         if (getN() < 1) {
             Arrays.fill(stdDev, Double.NaN);
@@ -124,60 +239,92 @@ public interface MultivariateSummaryStatistics
     }
 
     /**
-     * A mutable builder for a MultivariateSummaryStatistics.
+     * Generates a text report displaying
+     * summary statistics from values that
+     * have been added.
+     * @return String with line feeds displaying statistics
      */
-    class Builder {
-        /** The dimension of the data. */
-        protected final int k;
-        /** Indicates if the covariance shall be bias corrected. */
-        protected boolean   covarianceBiasCorrected = true;
-        /** Indicates if the returned instance shall be thread-safe. */
-        protected boolean   threadsafe;
+    @Override
+    public String toString() {
+        final String separator = ", ";
+        final String suffix = System.getProperty("line.separator");
+        StringBuilder outBuffer = new StringBuilder();
+        outBuffer.append("MultivariateSummaryStatistics:" + suffix);
+        outBuffer.append("n: " + getN() + suffix);
+        append(outBuffer, getMin(), "min: ", separator, suffix);
+        append(outBuffer, getMax(), "max: ", separator, suffix);
+        append(outBuffer, getMean(), "mean: ", separator, suffix);
+        append(outBuffer, getGeometricMean(), "geometric mean: ", separator, suffix);
+        append(outBuffer, getSumSq(), "sum of squares: ", separator, suffix);
+        append(outBuffer, getSumLog(), "sum of logarithms: ", separator, suffix);
+        append(outBuffer, getStandardDeviation(), "standard deviation: ", separator, suffix);
+        outBuffer.append("covariance: " + getCovariance().toString() + suffix);
+        return outBuffer.toString();
+    }
 
-        /**
-         * Create a new Builder for a k-dimensional MultivariateSummaryStatistics.
-         *
-         * @param k the dimension of the data
-         */
-        protected Builder(int k) {
-            this.k = k;
+    /**
+     * Append a text representation of an array to a buffer.
+     * @param buffer buffer to fill
+     * @param data data array
+     * @param prefix text prefix
+     * @param separator elements separator
+     * @param suffix text suffix
+     */
+    private void append(StringBuilder buffer, double[] data,
+                        String prefix, String separator, String suffix) {
+        buffer.append(prefix);
+        for (int i = 0; i < data.length; ++i) {
+            if (i > 0) {
+                buffer.append(separator);
+            }
+            buffer.append(data[i]);
         }
+        buffer.append(suffix);
+    }
 
-        /**
-         * Indicates if the returned instance shall compute the unbiased
-         * sample or biased population covariance.
-         *
-         * @param biasCorrected if true, the unbiased sample
-         * covariance is computed, otherwise the biased population covariance
-         * is computed
-         * @return the builder
-         */
-        public Builder withBiasCorrectedCovariance(boolean biasCorrected) {
-            this.covarianceBiasCorrected = biasCorrected;
-            return this;
+    /**
+     * Returns true iff <code>object</code> is a <code>MultivariateSummaryStatistics</code>
+     * instance and all statistics have the same values as this.
+     * @param object the object to test equality against.
+     * @return true if object equals this
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (object == this ) {
+            return true;
         }
+        if (object instanceof MultivariateSummaryStatistics == false) {
+            return false;
+        }
+        MultivariateSummaryStatistics other = (MultivariateSummaryStatistics) object;
+        return other.getN() == getN()                                                      &&
+               MathArrays.equalsIncludingNaN(other.getGeometricMean(), getGeometricMean()) &&
+               MathArrays.equalsIncludingNaN(other.getMax(),           getMax())           &&
+               MathArrays.equalsIncludingNaN(other.getMean(),          getMean())          &&
+               MathArrays.equalsIncludingNaN(other.getMin(),           getMin())           &&
+               MathArrays.equalsIncludingNaN(other.getSum(),           getSum())           &&
+               MathArrays.equalsIncludingNaN(other.getSumSq(),         getSumSq())         &&
+               MathArrays.equalsIncludingNaN(other.getSumLog(),        getSumLog())        &&
+               other.getCovariance().equals(getCovariance());
+    }
 
-        /**
-         * Indicates if the returned instance shall be thread-safe,
-         * i.e. all access is synchronized.
-         *
-         * @return the builder
-         */
-        public Builder threadsafe() {
-            this.threadsafe = true;
-            return this;
-        }
-
-        /**
-         * Constructs a new MultivariateSummaryStatistics instance with the values
-         * stored in this builder.
-         *
-         * @return a new MultivariateSummaryStatistics instance.
-         */
-        public MultivariateSummaryStatistics build() {
-            final MultivariateSummaryStatistics instance = new MultivariateSummaryStatisticsImpl(this);
-            return threadsafe ? synchronizedSummaryStatistics(instance) : instance;
-        }
+    /**
+     * Returns hash code based on values of statistics
+     *
+     * @return hash code
+     */
+    @Override
+    public int hashCode() {
+        int result = 31 + MathUtils.hash(getN());
+        result = result * 31 + MathUtils.hash(getGeometricMean());
+        result = result * 31 + MathUtils.hash(getMax());
+        result = result * 31 + MathUtils.hash(getMean());
+        result = result * 31 + MathUtils.hash(getMin());
+        result = result * 31 + MathUtils.hash(getSum());
+        result = result * 31 + MathUtils.hash(getSumSq());
+        result = result * 31 + MathUtils.hash(getSumLog());
+        result = result * 31 + getCovariance().hashCode();
+        return result;
     }
 
 }

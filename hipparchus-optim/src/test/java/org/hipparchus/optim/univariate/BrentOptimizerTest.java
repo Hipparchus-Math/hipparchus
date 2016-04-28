@@ -143,7 +143,7 @@ public final class BrentOptimizerTest {
 
         final DescriptiveStatistics[] stat = new DescriptiveStatistics[2];
         for (int i = 0; i < stat.length; i++) {
-            stat[i] = DescriptiveStatistics.create();
+            stat[i] = new DescriptiveStatistics();
         }
 
         final double min = -0.75;

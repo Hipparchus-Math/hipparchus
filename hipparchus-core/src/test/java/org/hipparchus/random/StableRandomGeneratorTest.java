@@ -71,7 +71,7 @@ public class StableRandomGeneratorTest {
     @Test
     public void testCauchyCase() {
         StableRandomGenerator generator = new StableRandomGenerator(rg, 1d, 0.0);
-        DescriptiveStatistics summary = DescriptiveStatistics.create();
+        DescriptiveStatistics summary = new DescriptiveStatistics();
 
         for (int i = 0; i < sampleSize; ++i) {
             double sample = generator.nextNormalizedDouble();

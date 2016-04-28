@@ -263,8 +263,8 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         gls.newCovarianceData(cov.getData());
 
         // Create aggregators for stats measuring model performance
-        DescriptiveStatistics olsBetaStats = DescriptiveStatistics.create();
-        DescriptiveStatistics glsBetaStats = DescriptiveStatistics.create();
+        DescriptiveStatistics olsBetaStats = new DescriptiveStatistics();
+        DescriptiveStatistics glsBetaStats = new DescriptiveStatistics();
 
         // Generate Y vectors for 10000 models, estimate GLS and OLS and
         // Verify that OLS estimates are better

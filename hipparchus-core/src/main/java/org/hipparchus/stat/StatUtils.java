@@ -743,7 +743,7 @@ public final class StatUtils {
      * @return normalized (standardized) sample.
      */
     public static double[] normalize(final double[] sample) {
-        DescriptiveStatistics stats = DescriptiveStatistics.create();
+        DescriptiveStatistics stats = new DescriptiveStatistics();
 
         // Add the data from the series to stats
         for (int i = 0; i < sample.length; i++) {

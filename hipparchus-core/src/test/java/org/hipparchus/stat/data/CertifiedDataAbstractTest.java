@@ -46,7 +46,7 @@ public abstract class CertifiedDataAbstractTest {
 
     @Before
     public void setUp() throws IOException {
-        descriptives = DescriptiveStatistics.create();
+        descriptives = new DescriptiveStatistics();
         summaries = SummaryStatistics.create();
         certifiedValues = new HashMap<String, Double>();
 

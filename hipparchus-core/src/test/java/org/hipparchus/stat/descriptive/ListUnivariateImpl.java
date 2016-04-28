@@ -27,7 +27,7 @@ import org.hipparchus.util.NumberTransformer;
 
 /**
  */
-public class ListUnivariateImpl extends DescriptiveStatisticsImpl implements Serializable {
+public class ListUnivariateImpl extends DescriptiveStatistics implements Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = -8837442489133392138L;
@@ -62,7 +62,7 @@ public class ListUnivariateImpl extends DescriptiveStatisticsImpl implements Ser
      * @param transformer the number transformer used to convert the list items.
      */
     public ListUnivariateImpl(List<Object> list, NumberTransformer transformer) {
-        super(DescriptiveStatistics.builder());
+        super();
         this.list = list;
         this.transformer = transformer;
     }

@@ -203,11 +203,12 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
 
     /**
      * An interval of a function that brackets a root.
-     *
-     * <p> Contains two end points and the value of the function at the two end points.
+     * <p>
+     * Contains two end points and the value of the function at the two end points.
      *
      * @see #solveInterval(int, RealFieldUnivariateFunction, RealFieldElement,
      * RealFieldElement)
+     * @param <T> the element type
      */
     class Interval<T extends RealFieldElement<T>> {
 

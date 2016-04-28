@@ -34,10 +34,8 @@ import org.junit.Test;
  */
 public class MultivariateSummaryStatisticsTest {
 
-    protected MultivariateSummaryStatistics createMultivariateSummaryStatistics(int k, boolean isCovarianceBiasCorrected) {
-        return MultivariateSummaryStatistics.builder(k)
-                                            .withBiasCorrectedCovariance(isCovarianceBiasCorrected)
-                                            .build();
+    protected MultivariateSummaryStatistics createMultivariateSummaryStatistics(int k, boolean covarianceBiasCorrected) {
+        return new MultivariateSummaryStatistics(k, covarianceBiasCorrected);
     }
 
     @Test
