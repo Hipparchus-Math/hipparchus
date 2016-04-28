@@ -53,4 +53,19 @@ public class EulerStateInterpolatorTest extends RungeKuttaStateInterpolatorAbstr
         doInterpolationInside(3.3e-4, 7.9e-3);
     }
 
+    @Override
+    public void restrictPrevious() {
+        doRestrictPrevious(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictCurrent() {
+        doRestrictCurrent(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictBothEnds() {
+        doRestrictBothEnds(1.0e-15, 1.0e-15);
+    }
+
 }

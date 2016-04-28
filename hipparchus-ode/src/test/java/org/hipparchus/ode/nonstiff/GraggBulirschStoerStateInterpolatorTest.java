@@ -22,24 +22,13 @@ import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.ODEStateAndDerivative;
-import org.hipparchus.ode.sampling.ODEStateInterpolator;
-import org.junit.Test;
+import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 
 public class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
 
-    @Test
-    public void interpolationAtBounds() {
-        doInterpolationAtBounds(1.0e-15);
-    }
-
-    @Test
-    public void interpolationInside() {
-        doInterpolationInside(3.5e-18, 1.2e-16);
-    }
-
-    protected ODEStateInterpolator setUpInterpolator(final ReferenceODE eqn,
-                                                     final double t0, final double[] y0,
-                                                     final double t1) {
+    protected AbstractODEStateInterpolator setUpInterpolator(final ReferenceODE eqn,
+                                                             final double t0, final double[] y0,
+                                                             final double t1) {
 
         // evaluate scaled derivatives at mid-step
         final int derivationOrder = 7;
@@ -66,6 +55,31 @@ public class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolato
                                                                 mapper, yMidDots, derivationOrder);
         return interpolator;
 
+    }
+
+    @Override
+    public void interpolationAtBounds() {
+        doInterpolationAtBounds(1.0e-15);
+    }
+
+    @Override
+    public void interpolationInside() {
+        doInterpolationInside(3.5e-18, 1.2e-16);
+    }
+
+    @Override
+    public void restrictPrevious() {
+        doRestrictPrevious(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictCurrent() {
+        doRestrictCurrent(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictBothEnds() {
+        doRestrictBothEnds(1.0e-15, 1.0e-15);
     }
 
 }

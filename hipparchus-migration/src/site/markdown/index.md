@@ -67,6 +67,17 @@ are the following ones:
      Building `SummaryStatistics` is now done using a builder. If using only
      default settings, usears can replace `new SummaryStatistics()` with
      `SummaryStatistics.create()` to solve the problem.
+   * `Action` enumerate not found. The `Action` enumerate used as a return
+     value in events handlers `eventOccurred` method was an internal enumerate
+     defined in the `EventHandler` interface, so no dedicated `import` statement
+     was needed. It is now a separate enumerate, shared by both the double-based
+     and field-based events handlers, and needs to be imported specifically.
+   * conflicts between application class names and Apache Commons Math
+     class names. As the script is based on text substitution without knowledge
+     about the Java language syntax, names from the application may be confused
+     by the script with similar names in the Apache Commons Math library even if
+     they are in different packages. Such names may be converted despite they should
+     not be touched, so the change must be reverted manually for these classes.
 
 ### Checking everything runs
 

@@ -53,4 +53,19 @@ public class MidpointStateInterpolatorTest extends RungeKuttaStateInterpolatorAb
         doInterpolationInside(3.3e-4, 1.1e-5);
     }
 
+    @Override
+    public void restrictPrevious() {
+        doRestrictPrevious(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictCurrent() {
+        doRestrictCurrent(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictBothEnds() {
+        doRestrictBothEnds(1.0e-15, 1.0e-15);
+    }
+
 }

@@ -35,7 +35,7 @@ public class LutherIntegratorTest extends RungeKuttaIntegratorAbstractTest {
 
     @Override
     public void testDecreasingSteps() {
-        doTestDecreasingSteps(1.0, 1.0, 1.0e-10);
+        doTestDecreasingSteps(3.6, 1.0, 1.0e-10);
     }
 
     @Override

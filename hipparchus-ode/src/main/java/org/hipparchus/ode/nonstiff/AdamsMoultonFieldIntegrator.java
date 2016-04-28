@@ -241,7 +241,7 @@ public class AdamsMoultonFieldIntegrator<T extends RealFieldElement<T>> extends 
             while (error.subtract(1.0).getReal() >= 0.0) {
 
                 // predict a first estimate of the state at step end (P in the PECE sequence)
-                predictedY = stepEnd.getPrimaryState();
+                predictedY = stepEnd.getCompleteState();
 
                 // evaluate a first estimate of the derivative (first E in the PECE sequence)
                 final T[] yDot = computeDerivatives(stepEnd.getTime(), predictedY);
