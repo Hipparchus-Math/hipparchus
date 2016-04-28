@@ -19,7 +19,9 @@ package org.hipparchus.ode.nonstiff;
 
 
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
+import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -72,14 +74,103 @@ public abstract class ODEStateInterpolatorAbstractTest {
 
     }
 
+    @Test
+    public abstract void restrictPrevious();
+
+    protected void doRestrictPrevious(double epsilon, double epsilonDot) {
+
+        AbstractODEStateInterpolator original   = setUpInterpolator(new SinCos(), 0.0, new double[] { 0.0, 1.0 }, 0.125);
+        AbstractODEStateInterpolator restricted = original.restrictStep(original.getInterpolatedState(1.0 / 32),
+                                                                        original.getCurrentState());
+
+        Assert.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
+        Assert.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
+        Assert.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
+        Assert.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
+        Assert.assertNotSame(restricted.getPreviousState(),  restricted.getGlobalPreviousState());
+        Assert.assertSame(restricted.getCurrentState(),      restricted.getGlobalCurrentState());
+        Assert.assertEquals(1.0 / 32, restricted.getPreviousState().getTime(), 1.0e-15);
+
+        checkRestricted(original, restricted, epsilon, epsilonDot);
+
+    }
+
+    @Test
+    public abstract void restrictCurrent();
+
+    protected void doRestrictCurrent(double epsilon, double epsilonDot) {
+
+        AbstractODEStateInterpolator original   = setUpInterpolator(new SinCos(), 0.0, new double[] { 0.0, 1.0 }, 0.125);
+        AbstractODEStateInterpolator restricted = original.restrictStep(original.getPreviousState(),
+                                                                        original.getInterpolatedState(3.0 / 32));
+
+        Assert.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
+        Assert.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
+        Assert.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
+        Assert.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
+        Assert.assertSame(restricted.getPreviousState(),     restricted.getGlobalPreviousState());
+        Assert.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
+        Assert.assertEquals(3.0 / 32, restricted.getCurrentState().getTime(), 1.0e-15);
+
+        checkRestricted(original, restricted, epsilon, epsilonDot);
+
+    }
+
+    @Test
+    public abstract void restrictBothEnds();
+
+    protected void doRestrictBothEnds(double epsilon, double epsilonDot) {
+
+        AbstractODEStateInterpolator original   = setUpInterpolator(new SinCos(), 0.0, new double[] { 0.0, 1.0 }, 0.125);
+        AbstractODEStateInterpolator restricted = original.restrictStep(original.getInterpolatedState(1.0 / 32),
+                                                                        original.getInterpolatedState(3.0 / 32));
+
+        Assert.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
+        Assert.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
+        Assert.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
+        Assert.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
+        Assert.assertNotSame(restricted.getPreviousState(),  restricted.getGlobalPreviousState());
+        Assert.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
+        Assert.assertEquals(1.0 / 32, restricted.getPreviousState().getTime(), 1.0e-15);
+        Assert.assertEquals(3.0 / 32, restricted.getCurrentState().getTime(), 1.0e-15);
+
+        checkRestricted(original, restricted, epsilon, epsilonDot);
+
+    }
+
+    private void checkRestricted(AbstractODEStateInterpolator original, AbstractODEStateInterpolator restricted,
+                                 double epsilon, double epsilonDot) {
+        for (double t = restricted.getPreviousState().getTime();
+             t <= restricted.getCurrentState().getTime();
+             t += 1.0 / 256) {
+            ODEStateAndDerivative originalInterpolated   = original.getInterpolatedState(t);
+            ODEStateAndDerivative restrictedInterpolated = restricted.getInterpolatedState(t);
+            Assert.assertEquals(t, originalInterpolated.getTime(), 1.0e-15);
+            Assert.assertEquals(t, restrictedInterpolated.getTime(), 1.0e-15);
+            Assert.assertEquals(originalInterpolated.getPrimaryState()[0],
+                                restrictedInterpolated.getPrimaryState()[0],
+                                epsilon);
+            Assert.assertEquals(originalInterpolated.getPrimaryState()[1],
+                                restrictedInterpolated.getPrimaryState()[1],
+                                epsilon);
+            Assert.assertEquals(originalInterpolated.getPrimaryDerivative()[0],
+                                restrictedInterpolated.getPrimaryDerivative()[0],
+                                epsilonDot);
+            Assert.assertEquals(originalInterpolated.getPrimaryDerivative()[1],
+                                restrictedInterpolated.getPrimaryDerivative()[1],
+                                epsilonDot);
+        }
+
+    }
+
     public interface ReferenceODE extends OrdinaryDifferentialEquation {
         double[]              theoreticalState(double t);
         DerivativeStructure[] theoreticalState(DerivativeStructure t);
     }
 
-    protected abstract ODEStateInterpolator setUpInterpolator(final ReferenceODE eqn,
-                                                              final double t0, final double[] y0,
-                                                              final double t1);
+    protected abstract AbstractODEStateInterpolator setUpInterpolator(final ReferenceODE eqn,
+                                                                      final double t0, final double[] y0,
+                                                                      final double t1);
 
     private static class SinCos implements ReferenceODE {
         public int getDimension() {

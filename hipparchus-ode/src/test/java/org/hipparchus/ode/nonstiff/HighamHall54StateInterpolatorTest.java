@@ -53,4 +53,19 @@ public class HighamHall54StateInterpolatorTest extends RungeKuttaStateInterpolat
         doInterpolationInside(4.0e-13, 2.7e-15);
     }
 
+    @Override
+    public void restrictPrevious() {
+        doRestrictPrevious(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictCurrent() {
+        doRestrictCurrent(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictBothEnds() {
+        doRestrictBothEnds(1.0e-15, 1.0e-15);
+    }
+
 }

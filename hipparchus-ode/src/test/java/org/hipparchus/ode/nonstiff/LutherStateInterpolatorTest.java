@@ -53,4 +53,19 @@ public class LutherStateInterpolatorTest extends RungeKuttaStateInterpolatorAbst
         doInterpolationInside(1.1e-7, 9.6e-9);
     }
 
+    @Override
+    public void restrictPrevious() {
+        doRestrictPrevious(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictCurrent() {
+        doRestrictCurrent(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictBothEnds() {
+        doRestrictBothEnds(1.0e-15, 1.0e-15);
+    }
+
 }

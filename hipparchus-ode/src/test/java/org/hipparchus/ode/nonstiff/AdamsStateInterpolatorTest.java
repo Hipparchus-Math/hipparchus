@@ -21,12 +21,12 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.ODEStateAndDerivative;
-import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.hipparchus.ode.sampling.AbstractODEStateInterpolator;
 
 public class AdamsStateInterpolatorTest extends ODEStateInterpolatorAbstractTest {
 
     @Override
-    protected ODEStateInterpolator
+    protected AbstractODEStateInterpolator
         setUpInterpolator(ReferenceODE eqn, double t0, double[] y0, double t1) {
         final int        nSteps   = 12;
         final double     h        = (t1 - t0) / (nSteps - 1);
@@ -68,6 +68,21 @@ public class AdamsStateInterpolatorTest extends ODEStateInterpolatorAbstractTest
     @Override
     public void interpolationInside() {
         doInterpolationInside(3.3e-10, 1.4e-6);
+    }
+
+    @Override
+    public void restrictPrevious() {
+        doRestrictPrevious(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictCurrent() {
+        doRestrictCurrent(1.0e-15, 1.0e-15);
+    }
+
+    @Override
+    public void restrictBothEnds() {
+        doRestrictBothEnds(1.0e-15, 1.0e-15);
     }
 
 }
