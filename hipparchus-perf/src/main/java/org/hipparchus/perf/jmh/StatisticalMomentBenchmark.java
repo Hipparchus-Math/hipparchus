@@ -29,8 +29,8 @@ import org.openjdk.jmh.annotations.State;
 
 /**
  * Tests performance of statistical moments.
- * The test checks whether using a final Mean instance is still slower
- * than using a FirstMoment directly. Previously with non-final instances
+ * The test checks whether using an immutable Mean instance is still slower
+ * than using a FirstMoment directly. Previously with mutable instances
  * it was slower as the jvm could not optimize as aggressive as it can with
  * final instances.
  */
