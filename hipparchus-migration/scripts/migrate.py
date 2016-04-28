@@ -75,7 +75,8 @@ def processLines(lines, args):
 	imported_subpackages = {}
 	found_classes = {}
 
-	import_pattern = re.compile(r'^\s*import\s*([a-zA-Z0-9\.\*]+);')
+	import_pattern = re.compile(r'^\s*import\s+([a-zA-Z0-9\.\*]+);')
+	static_import_pattern = re.compile(r'^\s*import\s+static\s+([a-zA-Z0-9\.\*]+);')
 
 	# collect all classnames that appear in the
 	# source file, except if they are in import
@@ -83,6 +84,9 @@ def processLines(lines, args):
 	for line in lines:
 		m = re.match(import_pattern, line)
 		if m == None:
+			if re.match(static_import_pattern, line) != None:
+				continue
+
 			for classname, subpackage in args.classnames.iteritems():
 				if subpackage in imported_subpackages and line.find(classname) >= 0:
 					# search rule for class names, taking care of *not* finding
@@ -92,7 +96,9 @@ def processLines(lines, args):
 					# or OriginalClassExtended.
 					classname_pattern = '(^|[^A-Za-z0-9_])' + classname + '([^A-Za-z0-9_]|$)'
 					if re.search(classname_pattern, line):
-						found_classes[classname] = True
+						subst = args.class_substitutions[classname]
+						new_classname = subst[subst.rfind('.')+1:]
+						found_classes[classname] = new_classname
 		else:
 			import_string = m.group(1)
 			prefix_len = prefixLength(import_string, args)
@@ -111,14 +117,27 @@ def processLines(lines, args):
 	modified = []
 	first_import = True
 	for line in lines:
-		if 'import ' in line:
+		if re.match(import_pattern, line) != None:
 			if first_import:
 				modified.extend(addImports(found_classes, args))
 				first_import = False
 			
 			if not containsAnyFromPrefix(line, args) and not args.to_prefix in line:
 				modified.append(line)
+		elif re.match(static_import_pattern, line) != None:
+			if containsAnyFromPrefix(line, args) and not args.to_prefix in line:
+				for prefix in args.from_prefix:
+					if prefix in line:
+						line = re.sub(prefix, args.to_prefix, line)
+				modified.append(line)
+			else:
+				modified.append(line)
 		else:
+			for classname in found_classes:
+				new_classname = found_classes[classname]
+				if classname in line:
+					classname_pattern = r'(^|[^A-Za-z0-9_])' + classname + r'([^A-Za-z0-9_]|$)'
+					line = re.sub(classname_pattern, r'\1' + new_classname + r'\2', line)
 			modified.append(line)
 	
 	return modified
@@ -126,7 +145,7 @@ def processLines(lines, args):
 def addImports(found_classes, args):
 	imports = []
 	for classname in found_classes:
-		imports.append('import ' + args.classes_subst_pattern[classname] + ';\n')
+		imports.append('import ' + args.class_substitutions[classname] + ';\n')
 	
 	imports.sort()
 	return imports
@@ -136,7 +155,7 @@ def parseClassSubstitutionRules(args):
 		lines = sources.readlines()
 
 	args.classnames = {}
-	args.classes_subst_pattern = {}
+	args.class_substitutions = {}
 	for line in lines:
 		tokens = line.split()
 		oldname = tokens[0]
@@ -148,7 +167,7 @@ def parseClassSubstitutionRules(args):
 		args.classnames[classname] = subpackage
 
 		newname = newname.replace('${toprefix}', args.to_prefix)
-		args.classes_subst_pattern[classname] = newname
+		args.class_substitutions[classname] = newname
 
 def containsAnyFromPrefix(line, args):
 	for prefix in args.from_prefix:
@@ -186,7 +205,6 @@ args.tempdir = tempdir
 if args.classes_subst == None:
 	args.classes_subst = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'classes.subst')
 
-args.classes_subst_pattern = []
 parseClassSubstitutionRules(args)
 
 # process the files
