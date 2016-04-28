@@ -731,8 +731,6 @@ ${fromprefix}.stat.descriptive.SummaryStatistics                                
 ${fromprefix}.stat.descriptive.summary.Sum                                           ${toprefix}.stat.descriptive.summary.Sum
 ${fromprefix}.stat.descriptive.summary.SumOfLogs                                     ${toprefix}.stat.descriptive.summary.SumOfLogs
 ${fromprefix}.stat.descriptive.summary.SumOfSquares                                  ${toprefix}.stat.descriptive.summary.SumOfSquares
-${fromprefix}.stat.descriptive.SynchronizedDescriptiveStatistics                     ${toprefix}.stat.descriptive.SynchronizedDescriptiveStatistics
-${fromprefix}.stat.descriptive.SynchronizedMultivariateSummaryStatistics             ${toprefix}.stat.descriptive.SynchronizedMultivariateSummaryStatistics
 ${fromprefix}.stat.descriptive.SynchronizedSummaryStatistics                         ${toprefix}.stat.descriptive.SynchronizedSummaryStatistics
 ${fromprefix}.stat.descriptive.UnivariateStatistic                                   ${toprefix}.stat.descriptive.UnivariateStatistic
 ${fromprefix}.stat.descriptive.WeightedEvaluation                                    ${toprefix}.stat.descriptive.WeightedEvaluation
