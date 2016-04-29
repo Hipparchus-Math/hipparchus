@@ -1,5 +1,5 @@
-# 15 Ordinary Differential Equations Integration
-## 15.1 Overview
+# Ordinary Differential Equations Integration
+## Overview
 The ode package provides classes to solve Ordinary Differential Equations problems.
 
 This package solves Initial Value Problems of the form `\(y'=f(t,y)\)` with `\(t_0\)`
@@ -8,13 +8,13 @@ and `\(y(t_0)=y_0\)` known. The `\(f\)` function is the
 to be solved. The provided integrators compute an estimate of `\(y(t)\)` from `\(t=t_0\)`
 to `\(t=t_1\)`.
 
-All integrators provide dense output. This means that besides computing the state vector
+All integrators provide [dense output](#Dense_Output). This means that besides computing the state vector
 at discrete times, they also provide a cheap mean to get both the state and its derivative
 between the time steps. They do so through classes extending the
 [ODEStateInterpolator](../apidocs/org/hipparchus/ode/sampling/ODEStateInterpolator.html)
 abstract class, which are made available to the user at the end of each step.
 
-All integrators handle multiple discrete events detection based on switching
+All integrators handle multiple [discrete events detection](#Discrete_Events_Handling) based on switching
 functions. This means that the integrator can be driven by user specified discrete events
 (occurring when the sign of user-supplied _switching function_ changes). The steps are
 shortened as needed to ensure the events occur at step boundaries (even if the integrator
@@ -31,12 +31,10 @@ maximal number of evaluation is set to `Integer.MAX_VALUE` (i.e. `\(2^{31}-1\)`
 or 2147483647). It is recommended to set this maximal number to a value suited to the ODE
 problem, integration range, and step size or error control settings.
 
-All integrators support expanding the primary ODE with one or more secondary ODE to manage
+All integrators support expanding the primary ODE with one or more [secondary ODE](#Secondary_States) to manage
 additional states that will be integrated together with the primary state. This can be used
-for example to integrate [variational equations](../apidocs/org/hipparchus/ode/VariationalEquation.html)
-and compute not only the primary state but also its partial derivatives with respect to either
-the initial state or some parameters, these derivatives being handled be secondary ODE (see
-below for an example).
+for example to compute [partial derivatives](#Derivatives) of the primary state with respect to either
+the initial state or some parameters (see below for an example).
 
 Two parallel APIs are available. The first is devoted to solve ode for which the integration free
 variable t and the state y(t) are primitive double and primitive double array respectively. The
@@ -51,12 +49,10 @@ manually or if derivatives with orders higher than 1 is needed, which cannot be 
 [variational equations](../apidocs/org/hipparchus/ode/VariationalEquation.html). Another example is to use
 [Dfp](../apidocs/org/hipparchus/analysis/dfp/Dfp.html) elements in order to solve ode with extended precision.
 
+## Basic Use
 The user should describe his problem in his own classes which should implement the
 [OrdinaryDifferentialEquation](../apidocs/org/hipparchus/ode/OrdinaryDifferentialEquation.html)
 interface (or  [FieldOrdinaryDifferentialEquation](../apidocs/org/hipparchus/ode/FieldOrdinaryDifferentialEquation.html)
-interface). Then he should pass it to the integrator he prefers among all the classes that implement
-the [ODEIntegrator](../apidocs/org/hipparchus/ode/ODEIntegrator.html)
-interface (or the [FieldODEIntegrator](../apidocs/org/hipparchus/ode/FieldODEIntegrator.html)
 interface). The following example shows how to implement a simple two-dimensional problem using double primitives:
 `\[
   \begin{align*}
@@ -98,9 +94,12 @@ interface also defines an `init` method that can be used is some initialization 
 be performed at the start of the integration. There is a default implementation that does nothing,
 so the method must be implemented only if really needed.
 
-Computing the state `\(y(16.0)\)` starting from `\(y(0.0) = (0.0, 1.0)\)` and integrating the ODE
+The user must also set up an initial state as an [ODEState](../apidocs/org/hipparchus/ode/ODEState.html) instance.
+Then he should pass both the equations and the initial state to the integrator he prefers among all the classes that implement
+the [ODEIntegrator](../apidocs/org/hipparchus/ode/ODEIntegrator.html)
+interface (or the [FieldODEIntegrator](../apidocs/org/hipparchus/ode/FieldODEIntegrator.html)
+interface). Computing the state `\(y(16.0)\)` starting from `\(y(0.0) = (0.0, 1.0)\)` and integrating the ODE
 is done as follows (using Dormand-Prince 8(5,3) integrator as an example):
-
 
     ODEIntegrator                dp853        = new DormandPrince853Integrator(1.0e-8, 100.0, 1.0e-10, 1.0e-10);
     OrdinaryDifferentialEquation ode          = new Circle1(new double[] { 1.0, 1.0 }, 0.1);
@@ -110,12 +109,13 @@ is done as follows (using Dormand-Prince 8(5,3) integrator as an example):
     double[]                     y            = finalState.getPrimaryState();
     System.out.format(Locale.US, "final state at %4.1f: %6.3f %6.3f%n", t, y[0], y[1]);
 
-## 15.2 Dense Output
-The solution of the integration problem is provided by two means. The first one is aimed towards
-simple use: the state vector at the end of the integration process is copied in the y array of the
-`FirstOrderIntegrator.integrate` method, as shown by previous example. The second one
-should be used when more in-depth information is needed throughout the integration process. The user
-can register an object implementing the
+## Dense Output
+The solution of the integration problem is provided by two means. The first one, shown in the previous
+example, is aimed towards simple use: the state vector at the end of the integration process is returned
+by the `ODEIntegrator.integrate` method, in an
+[ODEStateAndDerivative](../apidocs/org/hipparchus/ode/ODEStateAndDerivative.html) instance. The second one
+should be used when more in-depth information is needed throughout the integration process and not
+only at the end. The user can register an object implementing the
 [ODEStepHandler](../apidocs/org/hipparchus/ode/sampling/ODEStepHandler.html) interface or a
 [StepNormalizer](../apidocs/org/hipparchus/ode/sampling/StepNormalizer.html) object wrapping
 a user-specified object implementing the
@@ -146,7 +146,7 @@ interface also defines an `init` method that can be used is some initialization 
 be performed at the start of the integration. There is a default implementation that does nothing,
 so the method must be implemented only if really needed.
 
-[ContinuousOutputModel](../apidocs/org/hipparchus/ode/ContinuousOutputModel.html)
+[DenseOutputModel](../apidocs/org/hipparchus/ode/DenseOutputModel.html)
 is a special-purpose step handler that is able to store all steps and to provide transparent access to
 any intermediate result once the integration is over. An important feature of this class is that it
 implements the `Serializable` interface. This means that a complete continuous model of the
@@ -156,13 +156,15 @@ Only the result of the integration is stored, there is no reference to the integ
 
 Another predefined implementations of the [ODEStepHandler](../apidocs/org/hipparchus/ode/sampling/ODEStepHandler.html)
 interface, [StepNormalizer](../apidocs/org/hipparchus/ode/sampling/StepNormalizer.html)) is devoted
-to normalized step to a fixed size even if the integrator is a variable step integrator.
+to normalize steps to a fixed size even if the integrator is a variable step integrator. This allows for
+example to print a regular ephemeris for a trajectory.
+
 Specific implementations can be developed by users for specific needs. As an example, if an application
 is to be completely driven by the integration process, then most of the application code will be
 run inside a step handler specific to this application.
 
 Some integrators (the simple ones) use fixed steps that are set at creation time. The more efficient
-integrators use variable steps that are handled internally in order to control the integration error
+integrators use variable steps that are handled internally in order to control the local integration error
 of the main state with respect to a specified accuracy (these integrators extend the
 [AdaptiveStepsizeIntegrator](../apidocs/org/hipparchus/ode/nonstiff/AdaptiveStepsizeIntegrator.html)
 abstract class). The secondary equations are explicitly ignored for step size control, in order to get reproducible
@@ -175,7 +177,7 @@ however the user can specify it if he prefers to retain full control over the in
 automatic guess is wrong.
 
 
-## 15.3 Discrete Events Handling
+## Discrete Events Handling
 ODE problems are continuous ones. However, sometimes discrete events may be
 taken into account. The most frequent case is the stop condition of the integrator
 is not defined by the time t but by a target condition on state `\(y\)` (say `\(y[0] = 1.0\)`
@@ -239,8 +241,7 @@ A simple example is:
     }
     
     public Action eventOccurred(ODEStateAndDerivative state, boolean increasing) {
-        logger.log("y0(t) and y1(t) curves cross at t = " +
-                   state.getTime());
+        logger.log("y0(t) and y1(t) curves cross at t = " + v state.getTime());
         return Action.CONTINUE;
     }
 
@@ -250,7 +251,7 @@ integration process reaches a point where the `g` switching function
 sign changes, then it will call the `eventOccurred` method and its
 behaviour will depend on the value returned by this call.
 
-## 15.4 Available Integrators
+## Available Integrators
 The tables below show the various integrators available for non-stiff problems. Note that the
 implementations of Adams-Bashforth and Adams-Moulton are adaptive stepsize, not fixed stepsize
 as is usual for these multi-step integrators. This is due to the fact the implementation relies
@@ -277,7 +278,24 @@ on the Nordsieck vector representation of the state.
 | [Adams-Moulton](../apidocs/org/hipparchus/ode/nonstiff/AdamsMoultonIntegrator.html) | variable | variable |
 
 
-## 15.5 Derivatives
+## Secondary States
+In some cases, the ordinary differential equations is split into a primary
+state and some additional, secondary states. This can be done by providing
+an [ExpandableODE](../apidocs/org/hipparchus/ode/ExpandableODE.html))
+instance to the integrator instead of a regular
+[Ordinary Differential Equation](../apidocs/org/hipparchus/ode/OrdinaryDifferentialEquation.html)
+and add [SecondaryODE](../apidocs/org/hipparchus/ode/SecondaryODE.html) to this expandable
+equation.
+
+The [ODEState](../apidocs/org/hipparchus/ode/ODEState.html) initial state and
+[ODEStateAndDerivative](../apidocs/org/hipparchus/ode/ODEStateAndDerivative.html) final state
+contains data pertaining to both the primary state and all the secondary states.
+
+The adaptive stepsize integrators rely only on the primary state for stepsize control by design.
+If some components should be used for step size control, then they must be part of the
+primary state and not added as secondary states.
+
+## Derivatives
 In some cases, the sensitivity `\(dy/dy_0\)` of the final state with respect to the initial
 state `\(y_0\)` (often called state transition matrix) or the sensitivity `\(dy/dp_k)\)` of
 the final state with respect to some parameters `\(p_k\)` of the ODE are needed, in addition
