@@ -335,12 +335,12 @@ and to configure a way to compute the required derivatives using finite differen
 
 Note that if the [VariationalEquation](../apidocs/org/hipparchus/ode/VariationalEquation.html) instance
 is known by [step handlers](../apidocs/org/hipparchus/ode/sampling/ODEStepHandler.html) or
-[event handles](../apidocs/org/hipparchus/ode/events/ODEEventHandler.html), it is possible to
+[event handlers](../apidocs/org/hipparchus/ode/events/ODEEventHandler.html), it is possible to
 retrieve the current values of the state transition matrix and the parameters derivatives
 during the integration process.
 
 
-As the variational equation automatically inserts secondary differential equations, in the
+As the variational equation automatically inserts secondary differential equations in the
 [expandable ODE](../apidocs/org/hipparchus/ode/ExpandableODE.html), data for initial state
 must also be inserted before integration and matrices result must be extracted after integration.
 This implies a precise scheduling of the calls to the various methods of this class. The
