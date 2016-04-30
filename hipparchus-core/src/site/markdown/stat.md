@@ -1,19 +1,13 @@
-# 1 Statistics
-## 1.1 Overview
+# Statistics
+
+## Overview
+
 The statistics package provides frameworks and implementations for
 basic Descriptive statistics, frequency distributions, bivariate regression,
 and t-, chi-square and ANOVA test statistics.
 
-[Descriptive statistics](#1-2-descriptive-statistics)<br/>
-[Frequency distributions](#1-3-frequency-distributions)<br/>
-[Simple Regression](#1-4-simple-regression)<br/>
-[Multiple Regression](#1-5-multiple-linear-regression)<br/>
-[Rank transformations](#1-6-rank-transformations)<br/>
-[Covariance and correlation](#1-7-covariance-and-correlation)<br/>
-[Statistical Tests](#1-8-statistical-tests)<br/>
+## Descriptive statistics
 
-
-## 1.2 Descriptive statistics
 The stat package includes a framework and default implementations for
 the following Descriptive statistics:
 
@@ -72,22 +66,14 @@ the full array of values.
 
 `SummaryStatistics` can be aggregated using
 [AggregateSummaryStatistics.](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html)
-This class can be used to concurrently gather statistics for
-multiple datasets as well as for a combined sample including all
-of the data.
+This class can be used to concurrently gather statistics for multiple datasets
+as well as for a combined sample including all of the data.
 
-`MultivariateSummaryStatistics` is similar to
-`SummaryStatistics` but handles n-tuple values instead of
-scalar values. It can also compute the full covariance matrix for the
-input data.
+`MultivariateSummaryStatistics` is similar to `SummaryStatistics` but
+handles n-tuple values instead of scalar values. It can also compute the
+full covariance matrix for the input data.
 
 Neither `DescriptiveStatistics` nor `SummaryStatistics` is thread-safe.
-[SynchronizedDescriptiveStatistics](../apidocs/org/hipparchus/stat/descriptive/SynchronizedDescriptiveStatistics.html)
-and [SynchronizedSummaryStatistics](../apidocs/org/hipparchus/stat/descriptive/SynchronizedSummaryStatistics.html), respectively, provide thread-safe
-versions for applications that require concurrent access to statistical
-aggregates by multiple threads.
-[SynchronizedMultivariateSummaryStatistics](../apidocs/org/hipparchus/stat/descriptive/SynchronizedMultiVariateSummaryStatistics.html) provides thread-safe
-`MultivariateSummaryStatistics.`
 
 There is also a utility class,
 [StatUtils](../apidocs/org/hipparchus/stat/StatUtils.html), that provides
@@ -103,7 +89,7 @@ Using the `DescriptiveStatistics` aggregate (values are stored in memory):
     DescriptiveStatistics stats = new DescriptiveStatistics();
     
     // Add the data from the array
-    for( int i = 0; i &lt; inputArray.length; i++) {
+    for( int i = 0; i < inputArray.length; i++) {
             stats.addValue(inputArray[i]);
     }
     
@@ -112,7 +98,7 @@ Using the `DescriptiveStatistics` aggregate (values are stored in memory):
     double std  = stats.getStandardDeviation();
     double median = stats.getPercentile(50);
 
-Using the `SummaryStatistics` aggregate (values are <strong>not</strong> stored in memory):
+Using the `SummaryStatistics` aggregate (values are __not__ stored in memory):
 
     // Get a SummaryStatistics instance
     SummaryStatistics stats = new SummaryStatistics();
@@ -162,21 +148,13 @@ Use a `DescriptiveStatistics` instance with window size set to 100
     }
     in.close();
 
-__Compute statistics in a thread-safe manner__
-
-Use a `SynchronizedDescriptiveStatistics` instance
-
-    // Create a SynchronizedDescriptiveStatistics instance and
-    // use as any other DescriptiveStatistics instance
-    DescriptiveStatistics stats = new SynchronizedDescriptiveStatistics();
-
 __Compute statistics for multiple samples and overall statistics concurrently__
 
 There are two ways to do this using `AggregateSummaryStatistics.`
 The first is to use an `AggregateSummaryStatistics` instance
 to accumulate overall statistics contributed by `SummaryStatistics`
 instances created using
-[AggregateSummaryStatistics.createContributingStatistics()](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html#createContributingStatistics()):
+[AggregateSummaryStatistics.createContributingStatistics\(\)](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html#createContributingStatistics--):
 
     // Create a AggregateSummaryStatistics instance to accumulate the overall statistics 
     // and AggregatingSummaryStatistics for the subsamples
@@ -196,7 +174,8 @@ The above approach has the disadvantages that the `addValue` calls must be synch
 `SummaryStatistics` instance maintained by the aggregate and each value addition updates the
 aggregate as well as the subsample. For applications that can wait to do the aggregation until all values
 have been added, a static
-[aggregate](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html#aggregate(java.util.Collection)) method is available, as shown in the following example.
+[aggregate](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html#aggregate-java.util.Collection-)
+method is available, as shown in the following example.
 This method should be used when aggregation needs to be done across threads.
 
     // Create SummaryStatistics instances for the subsample data
@@ -209,7 +188,7 @@ This method should be used when aggregation needs to be done across threads.
     setTwoStats.addValue(4);
     ...
     // Aggregate the subsample statistics
-    Collection&lt;SummaryStatistics&gt; aggregate = new ArrayList&lt;SummaryStatistics&gt;();
+    Collection<SummaryStatistics> aggregate = new ArrayList<>();
     aggregate.add(setOneStats);
     aggregate.add(setTwoStats);
     StatisticalSummary aggregatedStats = AggregateSummaryStatistics.aggregate(aggregate);
@@ -217,11 +196,10 @@ This method should be used when aggregation needs to be done across threads.
     // Full sample data is reported by aggregatedStats
     double totalSampleSum = aggregatedStats.getSum();
 
-## 1.3 Frequency distributions
-[Frequency](../apidocs/org/hipparchus/stat/Frequency.html)
+## Frequency distributions
 
-provides a simple interface for maintaining counts and percentages of discrete
-values.
+[Frequency](../apidocs/org/hipparchus/stat/Frequency.html) provides a simple interface
+for maintaining counts and percentages of discrete values.
 
 Strings, integers, longs and chars are all supported as value types,
 as well as instances of any class that implements `Comparable.`
@@ -271,7 +249,7 @@ Using case-insensitive comparator:
     System.out.println(f.getCumPct("z"));  // displays 1
 
 
-## 1.4 Simple regression
+## Simple regression
 [SimpleRegression](../apidocs/org/hipparchus/stat/regression/SimpleRegression.html)
 provides ordinary least squares regression with one independent variable
 estimating the linear model:
@@ -294,7 +272,7 @@ __Usage Notes:__
 
 * When there are fewer than two observations in the model, or when there is no variation in the x values (i.e. all x values are the same) all statistics return `NaN`. At least two observations with different x coordinates are required to estimate a bivariate regression model.
 * getters for the statistics always compute values based on the current set of observations -- i.e., you can get statistics, then add more data and get updated statistics without using a new instance. There is no "compute" method that updates all statistics. Each of the getters performs the necessary computations to return the requested statistic.
-* The intercept term may be suppressed by passing false to the [SimpleRegression(boolean)](../apidocs/org/hipparchus/stat/regression/SimpleRegression.html#SimpleRegression(boolean)) constructor. When the `hasIntercept` property is `false`, the model is estimated without a constant term and `getIntercept()` returns 0.
+* The intercept term may be suppressed by passing false to the [SimpleRegression(boolean)](../apidocs/org/hipparchus/stat/regression/SimpleRegression.html#SimpleRegression-boolean-) constructor. When the `hasIntercept` property is `false`, the model is estimated without a constant term and `getIntercept()` returns 0.
 
 __Implementation Notes:__
 
@@ -390,7 +368,7 @@ Caution must be exercised when interpreting the slope when no constant is being 
 The slope may be biased.
 
 
-## 1.5 Multiple linear regression
+## Multiple linear regression
 [OLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html)
 and
 [GLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html)
@@ -414,9 +392,9 @@ or using a `double[][]` array with rows corresponding to observations.
 
 GLS models also require a `double[][]` array representing the covariance matrix of
 the error terms. See
-[AbstractMultipleLinearRegression#newSampleData(double[],int,int)](../apidocs/org/hipparchus/stat/regression/AbstractMultipleLinearRegression.html#newSampleData(double[], int, int)),
-[OLSMultipleLinearRegression#newSampleData(double[], double[][])](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html#newSampleData(double[], double[][]))
-and [GLSMultipleLinearRegression#newSampleData(double[],double[][],double[][])](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html#newSampleData(double[], double[][], double[][]))
+[AbstractMultipleLinearRegression#newSampleData(double[],int,int)](../apidocs/org/hipparchus/stat/regression/AbstractMultipleLinearRegression.html#newSampleData-double:A-int-int-),
+[OLSMultipleLinearRegression#newSampleData(double[], double[][])](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html#newSampleData-double:A-double:A:A-)
+and [GLSMultipleLinearRegression#newSampleData(double[],double[][],double[][])](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html#newSampleData-double:A-double:A:A-double:A:A-)
 for details.
 
  __Usage Notes:__
@@ -473,7 +451,7 @@ Instantiate a GLS regression object and load a dataset:
     regression.newSampleData(y, x, omega); 
 
 
-## 1.6 Rank transformations
+## Rank transformations
 
 Some statistical algorithms require that input data be replaced by ranks.
 The [org.hipparchus.stat.ranking](../apidocs/org/hipparchus/stat/ranking/package-summary.html)
@@ -509,7 +487,7 @@ and [NaNStrategy](../apidocs/org/hipparchus/stat/ranking/NaNStrategy.html)
 for details on these configuration options.
 
 
-## 1.7 Covariance and correlation
+## Covariance and correlation
 The [org.hipparchus.stat.correlation](../apidocs/org/hipparchus/stat/correlation/package-summary.html)
 package computes covariances and correlations for pairs of arrays or columns of a matrix.
 [Covariance](../apidocs/org/hipparchus/stat/correlation/Covariance.html)
@@ -622,7 +600,7 @@ To compute the Kendall's tau rank correlation between two double arrays `x` and 
     new KendallsCorrelation().correlation(x, y)
 
 
-## 1.8 Statistical tests
+## Statistical tests
 The [org.hipparchus.stat.inference](../apidocs/org/hipparchus/stat/inference/)
 package provides implementations for
 [Student's t](http://www.itl.nist.gov/div898/handbook/prc/section2/prc22.htm),
@@ -683,7 +661,7 @@ to a fixed value:
     double[] observed ={1d, 2d, 3d};
     double mu = 2.5d;
     SummaryStatistics sampleStats = new SummaryStatistics();
-    for (int i = 0; i &lt; observed.length; i++) {
+    for (int i = 0; i < observed.length; i++) {
         sampleStats.addValue(observed[i]);
     }
     System.out.println(TestUtils.t(mu, observed));
@@ -704,7 +682,7 @@ To perform the test using a fixed significance level, use:
 
     TestUtils.tTest(mu, observed, alpha);
 
-where `0 &lt; alpha &lt; 0.5` is the significance level of
+where `0 < alpha < 0.5` is the significance level of
 the test.  The boolean value returned will be `true` iff the
 null hypothesis can be rejected with confidence `1 - alpha`.
 To test, for example at the 95% level of confidence, use `alpha = 0.05`
@@ -744,7 +722,7 @@ not store the dataset that it describes in memory, but it does compute all
 statistics necessary to perform t-tests, so this method can be used to
 conduct t-tests with very large samples.  One-sample tests can also be
 performed this way.
-(See [Descriptive statistics](#1-2-descriptive-statistics) for details
+(See [Descriptive statistics](#Descriptive_statistics) for details
 on the `SummaryStatistics` class.)
 
 To compute the t-statistic:
@@ -780,7 +758,7 @@ To get the p-value associated with the null hypothesis that `observed` conforms 
     TestUtils.chiSquareTest(expected, observed);
 
 To test the null hypothesis that `observed` conforms to `expected` with `alpha` significance level
-(equiv. `100 * (1-alpha)%` confidence) where `0 &lt; alpha &lt; 1 ` use:
+(equiv. `100 * (1-alpha)%` confidence) where `0 < alpha < 1 ` use:
 
     TestUtils.chiSquareTest(expected, observed, alpha);
 
@@ -807,7 +785,7 @@ table are independent of the rows, use:
 
 To perform a chi-square test of independence with `alpha`
 significance level (equiv. `100 * (1-alpha)%` confidence)
-where `0 &lt; alpha &lt; 1 ` use:
+where `0 < alpha < 1 ` use:
 
     TestUtils.chiSquareTest(counts, alpha);
 
@@ -837,8 +815,8 @@ To get the p-value associated with the null hypothesis that `observed` conforms 
 
     TestUtils.gTest(expected, observed);
 
-To test the null hypothesis that `observed` conforms to `expected` with `alpha` siginficance level
-(equiv. `100 * (1-alpha)%` confidence) where `0 &lt; alpha &lt; 1 ` use:
+To test the null hypothesis that `observed` conforms to `expected` with `alpha` significance level
+(equiv. `100 * (1-alpha)%` confidence) where `0 < alpha < 1 ` use:
 
     TestUtils.gTest(expected, observed, alpha);
 

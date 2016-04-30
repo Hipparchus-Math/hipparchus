@@ -1,12 +1,11 @@
-# 9 Fractions
-## 9.1 Overview
+# Fractions
+## Overview
 The fraction packages provides a fraction number type as well as
 fraction number formatting.
 
-
-## 9.2 Fraction Numbers
-[          Fraction](../apidocs/org/hipparchus/fraction/Fraction.html)
-and [          BigFraction](../apidocs/org/hipparchus/fraction/BigFraction.html)
+## Fraction Numbers
+[Fraction](../apidocs/org/hipparchus/fraction/Fraction.html)
+and [BigFraction](../apidocs/org/hipparchus/fraction/BigFraction.html)
 provide fraction number type that forms the basis for
 the fraction functionality found in Hipparchus. The former one can be
 used for fractions whose numerators and denominators are small enough
@@ -37,13 +36,11 @@ subtract, multiple and, divide fractions along with other functions similar to t
 
 Like fraction construction, for each of the fraction functions, the resulting fraction is reduced to lowest terms.
 
-
-## 9.3 Fraction Formatting and Parsing
-`Fraction` instances can be converted to and from strings
-using the[          FractionFormat](../apidocs/org/hipparchus/fraction/FractionFormat.html)
-class. `FractionFormat` is a
-`java.text.Format` extension and, as such, is used like other
-formatting objects (e.g. `java.text.SimpleDateFormat`):
+## Fraction Formatting and Parsing
+`Fraction` instances can be converted to and from strings using the
+[FractionFormat](../apidocs/org/hipparchus/fraction/FractionFormat.html) class.
+`FractionFormat` is a `java.text.Format` extension and, as such,
+is used like other formatting objects (e.g. `java.text.SimpleDateFormat`):
 
     FractionFormat format = new FractionFormat(); // default format
     Fraction f = new Fraction(2, 4);
@@ -73,5 +70,3 @@ simply call the `parse` method:
 
     FractionFormat ff = new FractionFormat();
     Fraction f = ff.parse("-10 / 21");
-
-

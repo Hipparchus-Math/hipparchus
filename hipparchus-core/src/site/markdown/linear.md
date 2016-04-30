@@ -1,21 +1,21 @@
-# 3 Linear Algebra
-## 3.1 Overview
+# Linear Algebra
+## Overview
 Linear algebra support in Hipparchus provides operations on real matrices
 (both dense and sparse matrices are supported) and vectors. It features basic
 operations (addition, subtraction ...) and decomposition algorithms that can
 be used to solve linear systems either in exact sense and in least squares sense.
 
 
-## 3.2 Real matrices
-The [          RealMatrix](../apidocs/org/hipparchus/linear/RealMatrix.html)
-interface represents a matrix with real numbers as
-entries.  The following basic matrix operations are supported:
+## Real matrices
+The [RealMatrix](../apidocs/org/hipparchus/linear/RealMatrix.html)
+interface represents a matrix with real numbers as entries.
+The following basic matrix operations are supported:
+
 * Matrix addition, subtraction, multiplication
 * Scalar addition and multiplication
 * transpose
 * Norm and Trace
 * Operation on a vector
-
 
 Example:
 
@@ -39,35 +39,31 @@ Example:
     // Invert p, using LU decomposition
     RealMatrix pInverse = new LUDecomposition(p).getSolver().getInverse();
 
-The three main implementations of the interface are <a
-href="../apidocs/org.hipparchus/linear/Array2DRowRealMatrix.html">
-Array2DRowRealMatrix</a> and <a
-href="../apidocs/org.hipparchus/linear/BlockRealMatrix.html">
-BlockRealMatrix</a> for dense matrices (the second one being more suited to
-dimensions above 50 or 100) and <a
-href="../apidocs/org.hipparchus/linear/SparseRealMatrix.html">
-SparseRealMatrix</a> for sparse matrices.
+The three main implementations of the interface are
+[Array2DRowRealMatrix](../apidocs/org.hipparchus/linear/Array2DRowRealMatrix.html) and
+[BlockRealMatrix](../apidocs/org.hipparchus/linear/BlockRealMatrix.html) for dense matrices
+(the second one being more suited to dimensions above 50 or 100) and
+[SparseRealMatrix](../apidocs/org.hipparchus/linear/SparseRealMatrix.html) for sparse matrices.
 
+## Real vectors
 
-## 3.3 Real vectors
-The [          RealVector](../apidocs/org/hipparchus/linear/RealVector.html)
+The [RealVector](../apidocs/org/hipparchus/linear/RealVector.html)
 interface represents a vector with real numbers as
 entries.  The following basic matrix operations are supported:
+
 * Matrix addition, subtraction, multiplication
 * Scalar addition and multiplication
 * transpose
 * Norm and Trace
 * Operation on a vector
 
-
-The [          RealVectorFormat](../apidocs/org/hipparchus/linear/RealVectorFormat.html)
-class handles input/output of vectors in a customizable
-textual format.
+The [RealVectorFormat](../apidocs/org/hipparchus/linear/RealVectorFormat.html)
+class handles input/output of vectors in a customizable textual format.
 
 
-## 3.4 Solving linear systems
-The `solve()` methods of the <a
-href="../apidocs/org.hipparchus/linear/DecompositionSolver.html">DecompositionSolver</a>
+## Solving linear systems
+The `solve()` methods of the
+[DecompositionSolver](../apidocs/org.hipparchus/linear/DecompositionSolver.html)
 interface support solving linear systems of equations of the form AX=B, either
 in linear sense or in least square sense. A `RealMatrix` instance is
 used to represent the coefficient matrix of the system. Solving the system is a
@@ -86,14 +82,18 @@ Start by decomposing the coefficient matrix A (in this case using LU decompositi
 and build a solver
 
     RealMatrix coefficients =
-        new Array2DRowRealMatrix(new double[][] { { 2, 3, -2 }, { -1, 7, 6 }, { 4, -3, -5 } },
-                           false);
+        new Array2DRowRealMatrix(new double[][] { { 2, 3, -2 },
+                                                  { -1, 7, 6 },
+                                                  { 4, -3, -5 } },
+                                 false);
     DecompositionSolver solver = new LUDecomposition(coefficients).getSolver();
+
 Next create a `RealVector` array to represent the constant
 vector B and use `solve(RealVector)` to solve the system
 
     RealVector constants = new ArrayRealVector(new double[] { 1, -2, 1 }, false);
     RealVector solution = solver.solve(constants);
+
 The `solution` vector will contain values for x
 (`solution.getEntry(0)`), y (`solution.getEntry(1)`),
 and z (`solution.getEntry(2)`) that solve the system.
@@ -130,7 +130,8 @@ to the constant vectors for the systems to be solved and use `solve(RealMatrix),
 which returns a matrix with column vectors representing the solutions.
 
 
-## 3.5 Eigenvalues/eigenvectors and singular values/singular vectors
+## Decomposition
+
 Decomposition algorithms may be used for themselves and not only for linear system solving.
 This is of prime interest with eigen decomposition and singular value decomposition.
 
@@ -146,15 +147,14 @@ real scalar, and where the Xi and Yi vectors form orthogonal bases of their resp
 vector spaces (which may have different dimensions).
 
 
-## 3.6 Non-real fields (complex, fractions ...)
-In addition to the real field, matrices and vectors using non-real <a
-href="../apidocs/org.hipparchus/FieldElement.html">field elements</a> can be used.
+## Non-real fields
+
+In addition to the real field, matrices and vectors using non-real
+[field elements](../apidocs/org.hipparchus/FieldElement.html) can be used.
 The fields already supported by the library are:
+
 * Matrix addition, subtraction, multiplication
 * Scalar addition and multiplication
 * transpose
 * Norm and Trace
 * Operation on a vector
-
-
-

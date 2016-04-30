@@ -1,12 +1,13 @@
-# 7 Complex Numbers
-## 7.1 Overview
+# Complex Numbers
+## Overview
+
 The complex packages provides a complex number type as well as complex
 versions of common transcendental functions and complex number
 formatting.
 
+## Complex Numbers
 
-## 7.2 Complex Numbers
-[          Complex](../apidocs/org/hipparchus/complex/Complex.html)
+[Complex](../apidocs/org/hipparchus/complex/Complex.html)
 provides a complex number type that forms the basis for
 the complex functionality found in Hipparchus.
 
@@ -16,9 +17,9 @@ following the rules for `java.lang.Double` arithmetic in
 handling infinite and `NaN` values.  No attempt is made
 to comply with ANSII/IEC C99x Annex G or any other standard for
 Complex arithmetic.  See the class and method javadocs for the
-[           Complex](../apidocs/org/hipparchus/complex/Complex.html)
+[Complex](../apidocs/org/hipparchus/complex/Complex.html)
 and
-[           ComplexUtils](../apidocs/org/hipparchus/complex/ComplexUtils.html)
+[ComplexUtils](../apidocs/org/hipparchus/complex/ComplexUtils.html)
 classes for details on computing formulas.
 
 To create a complex number, simply call the constructor passing in two
@@ -27,8 +28,7 @@ complex number and the second being the imaginary part:
 `Complex c = new Complex(1.0, 3.0); // 1 + 3i`
 
 Complex numbers may also be created from polar representations
-using the `polar2Complex` method in
-`ComplexUtils`.
+using the `polar2Complex` method in `ComplexUtils`.
 
 The `Complex` class provides basic unary and binary
 complex number operations.  These operations provide the means to add,
@@ -45,8 +45,9 @@ complex number functions similar to the real number functions found in
             answer = lhs.conjugate(rhs); // complex conjugate
 
 
-## 7.3 Complex Transcendental Functions
-[          Complex](../apidocs/org/hipparchus/complex/Complex.html)
+## Complex Transcendental Functions
+
+[Complex](../apidocs/org/hipparchus/complex/Complex.html)
 also provides implementations of serveral transcendental
 functions involving complex number arguments.
 These operations provide the means to compute the log, sine, tangent,
@@ -60,13 +61,12 @@ and other complex values :
             answer = first.pow(second);  // first raised to the power of second
 
 
-## 7.4 Complex Formatting and Parsing
-`Complex` instances can be converted to and from strings
-using the[          ComplexFormat](../apidocs/org/hipparchus/complex/ComplexFormat.html)
-class.
-`ComplexFormat` is a `java.text.Format`
-extension and, as such, is used like other formatting objects (e.g.
-`java.text.SimpleDateFormat`):
+## Complex Formatting and Parsing
+
+`Complex` instances can be converted to and from strings using the
+[ComplexFormat](../apidocs/org/hipparchus/complex/ComplexFormat.html) class.
+`ComplexFormat` is a `java.text.Format` extension and, as such, is used
+like other formatting objects (e.g. `java.text.SimpleDateFormat`):
 
     ComplexFormat format = new ComplexFormat(); // default format
     Complex c = new Complex(1.1111, 2.2222);
@@ -96,10 +96,9 @@ formatting of the real and imaginary values of the complex number:
     cf = new ComplexFormat(nf, nf2);
     s = format.format(c); // s contains "1.110 + 2.2i"
 
-Another formatting customization provided by
-`ComplexFormat` is the text used for the imaginary
-designation.  By default, the imaginary notation is "i" but, it can be
-manipulated using the `setImaginaryCharacter` method.
+Another formatting customization provided by `ComplexFormat` is the text
+used for the imaginary designation.  By default, the imaginary notation is "i" but,
+it can be manipulated using the `setImaginaryCharacter` method.
 
 Formatting inverse operation, parsing, can also be performed by
 `ComplexFormat`.  Parse a complex number from a string,
@@ -107,5 +106,4 @@ simply call the `parse` method:
 
     ComplexFormat cf = new ComplexFormat();
     Complex c = cf.parse("1.110 + 2.222i");
-
 

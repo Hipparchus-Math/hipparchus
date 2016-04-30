@@ -1,27 +1,24 @@
+# Utilities
 
-# 6 Utilities
+## Overview
 
-## 6.1 Overview
-The [    org.hipparchus.util](../apidocs/org/hipparchus/util/package-summary.html)
-package collects a group of array utilities,
-value transformers,  and numerical routines used by implementation classes in
-Hipparchus.
-
+The [org.hipparchus.util](../apidocs/org/hipparchus/util/package-summary.html)
+package collects a group of array utilities, value transformers, and numerical
+routines used by implementation classes in Hipparchus.
 
 
-## 6.2 Double array utilities
+## Double array utilities
+
 To maintain statistics based on a "rolling" window of values, a resizable
 array implementation was developed and is provided for reuse in the
 `util` package.  The core functionality provided is described in
 the documentation for the interface,
-[    DoubleArray](../apidocs/org/hipparchus/util/DoubleArray.html)
-.  This interface adds one method,
-`addElementRolling(double)` to basic list accessors.
-The `addElementRolling` method adds an element
-(the actual parameter) to the end of the list and removes the first element
-in the list.
+[DoubleArray](../apidocs/org/hipparchus/util/DoubleArray.html). 
+This interface adds one method, `addElementRolling(double)` to basic list accessors.
+The `addElementRolling` method adds an element (the actual parameter) to the end
+of the list and removes the first element in the list.
 
-The [    ResizableDoubleArray](../apidocs/org/hipparchus/util/ResizableDoubleArray.html)
+The [ResizableDoubleArray](../apidocs/org/hipparchus/util/ResizableDoubleArray.html)
 class provides a configurable, array-backed
 implementation of the `DoubleArray` interface.
 When `addElementRolling` is invoked, the underlying
@@ -35,34 +32,32 @@ the end needs to be created.  Both of these operations are handled
 automatically, with frequency / effect driven by the configuration
 properties `expansionMode`, `expansionFactor` and
 `contractionCriteria.`  See
-[    ResizableDoubleArray](../apidocs/org/hipparchus/util/ResizableDoubleArray.html)
-
+[ResizableDoubleArray](../apidocs/org/hipparchus/util/ResizableDoubleArray.html)
 for details.
 
 
+## Primitive int/double hash map
 
-## 6.3 int/double hash map
-The [    OpenIntToDoubleHashMap](../apidocs/org/hipparchus/util/OpenIntToDoubleHashMap.html)
-class provides a specialized hash map
-implementation for int/double. This implementation has a much smaller memory
-overhead than standard `java.util.HashMap` class. It uses open addressing
-and primitive arrays, which greatly reduces the number of intermediate objects and
-improve data locality.
-
+The [OpenIntToDoubleHashMap](../apidocs/org/hipparchus/util/OpenIntToDoubleHashMap.html)
+class provides a specialized hash map implementation for int/double. This implementation
+has a much smaller memory overhead than standard `java.util.HashMap` class.
+It uses open addressing and primitive arrays, which greatly reduces the number of
+intermediate objects and improve data locality.
 
 
-## 6.4 Continued Fractions
-The [    ContinuedFraction](../apidocs/org/hipparchus/util/ContinuedFraction.html)
-class provides a generic way to create and evaluate
-continued fractions.  The easiest way to create a continued fraction is
-to subclass `ContinuedFraction` and override the
-`getA` and `getB` methods which return
+## Continued Fractions
+
+The [ContinuedFraction](../apidocs/org/hipparchus/util/ContinuedFraction.html)
+class provides a generic way to create and evaluate continued fractions.
+The easiest way to create a continued fraction is to subclass `ContinuedFraction`
+and override the `getA` and `getB` methods which return
 the continued fraction terms.  The precise definition of these terms is
-explained in [    Continued Fraction, equation (1)](http://mathworld.wolfram.com/ContinuedFraction.html)
+explained in [Continued Fraction, equation (1)](http://mathworld.wolfram.com/ContinuedFraction.html)
 from MathWorld.
 
-As an example, the constant Pi can be computed using a [continued fraction](http://functions.wolfram.com/Constants/Pi/10/0002/).  The following anonymous class
-provides the implementation:
+As an example, the constant Pi can be computed using a
+[continued fraction](http://functions.wolfram.com/Constants/Pi/10/0002/).
+The following anonymous class provides the implementation:
 
     ContinuedFraction c = new ContinuedFraction() {
         public double getA(int n, double x) {
@@ -78,11 +73,11 @@ provides the implementation:
         }
     }
 
-Then, to evalute Pi, simply call any of the `evalute` methods
-(Note, the point of evalution in this example is meaningless since Pi is a
-constant).
+Then, to evaluate Pi, simply call any of the `evaluate` methods
+(Note, the point of evaluation in this example is meaningless since Pi is a constant).
 
-For a more practical use of continued fractions, consider the [exponential function](http://functions.wolfram.com/ElementaryFunctions/Exp/10/).
+For a more practical use of continued fractions, consider the
+[exponential function](http://functions.wolfram.com/ElementaryFunctions/Exp/10/).
 The following anonymous class provides its implementation:
 
     ContinuedFraction c = new ContinuedFraction() {
@@ -106,26 +101,14 @@ The following anonymous class provides its implementation:
         }
     }
 
-Then, to evalute <i>e</i><sup>x</sup> for any value x, simply call any of the
-`evalute` methods.
+Then, to evaluate *e*<sup>x</sup> for any value x, simply call any of the
+`evaluate` methods.
 
 
+## Fast mathematical functions
 
-## 6.5 Binomial coefficients, factorials, Stirling numbers and other common math functions
-A collection of reusable math functions is provided in the
-[ArithmeticUtils](../apidocs/org/hipparchus/util/ArithmeticUtils.html)
-* Binomial coefficients -- "n choose k" available as an (exact) long value, `binomialCoefficient(int, int)` for small n, k; as a double, `binomialCoefficientDouble(int, int)` for larger values; and in a "super-sized" version, `binomialCoefficientLog(int, int)` that returns the natural logarithm of the value.
-* Stirling numbers of the second kind -- S(n,k) as an exact long value `stirlingS2(int, int)` for small n, k.
-* Factorials -- like binomial coefficients, these are available as exact long values, `factorial(int)`; doubles, `factorialDouble(int)`; or logs, `factorialLog(int)`.
-* Least common multiple and greatest common denominator functions.
-
-
-
-
-## 6.6 Fast mathematical functions
 Hipparchus provides a faster, more accurate, portable alternative
-to the regular `Math` and `StrictMath`classes for large
-scale computation.
+to the regular `Math` and `StrictMath`classes for large scale computation.
 
 FastMath is a drop-in replacement for both Math and StrictMath. This
 means that for any method in Math (say `Math.sin(x)` or
@@ -157,26 +140,37 @@ href="http://en.wikipedia.org/wiki/Rounding#The_table-maker.27s_dilemma">Table
 Maker's Dilemma</a>).
 
 FastMath additionally implements the following methods not found in Math/StrictMath:
+
+* asinh(double)
+* acosh(double)
+* atanh(double)
+* pow(double,int)
+
+The following methods are found in Math/StrictMath since 1.6 only, they are provided by FastMath even in 1.5 Java virtual machines
+
+* copySign(double, double)
+* getExponent(double)
+* nextAfter(double,double)
+* nextUp(double)
+* scalb(double, int)
+* copySign(float, float)
+* getExponent(float)
+* nextAfter(float,double)
+* nextUp(float)
+* scalb(float, int)
+
+
+## Miscellaneous
+
+A collection of reusable math functions is provided in the
+[ArithmeticUtils](../apidocs/org/hipparchus/util/ArithmeticUtils.html)
+
 * Binomial coefficients -- "n choose k" available as an (exact) long value, `binomialCoefficient(int, int)` for small n, k; as a double, `binomialCoefficientDouble(int, int)` for larger values; and in a "super-sized" version, `binomialCoefficientLog(int, int)` that returns the natural logarithm of the value.
 * Stirling numbers of the second kind -- S(n,k) as an exact long value `stirlingS2(int, int)` for small n, k.
 * Factorials -- like binomial coefficients, these are available as exact long values, `factorial(int)`; doubles, `factorialDouble(int)`; or logs, `factorialLog(int)`.
 * Least common multiple and greatest common denominator functions.
 
-The following methods are found in Math/StrictMath since 1.6 only, they are
-provided by FastMath even in 1.5 Java virtual machines
-* Binomial coefficients -- "n choose k" available as an (exact) long value, `binomialCoefficient(int, int)` for small n, k; as a double, `binomialCoefficientDouble(int, int)` for larger values; and in a "super-sized" version, `binomialCoefficientLog(int, int)` that returns the natural logarithm of the value.
-* Stirling numbers of the second kind -- S(n,k) as an exact long value `stirlingS2(int, int)` for small n, k.
-* Factorials -- like binomial coefficients, these are available as exact long values, `factorial(int)`; doubles, `factorialDouble(int)`; or logs, `factorialLog(int)`.
-* Least common multiple and greatest common denominator functions.
-
-
-
-
-## 6.7 Miscellaneous
-The [    MultidimensionalCounter](../apidocs/org/hipparchus/util/MultidimensionalCounter.html)
-is a utility class that converts a set of indices
-(identifying points in a multidimensional space) to a single index (e.g. identifying
-a location in a one-dimensional array.
-
-
+The [MultidimensionalCounter](../apidocs/org/hipparchus/util/MultidimensionalCounter.html)
+is a utility class that converts a set of indices (identifying points in a multidimensional
+space) to a single index (e.g. identifying a location in a one-dimensional array.
 

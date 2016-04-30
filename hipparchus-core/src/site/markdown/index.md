@@ -6,13 +6,14 @@ library. All other modules depends on it.
 
 The core features provided by this module are:
 
-  * [analysis](analysis.html)
-  * [complex numbers](complex.html)
-  * [distribution](distribution.html)
-  * [exceptions management](exceptions.html)
-  * [fractions](fraction.html)
-  * [pseudo-random numbers generators](random.html)
-  * [special functions](special.html)
-  * [statistics](stat.html)
-  * [utilities](utilities.html)
+  * [Analysis](analysis.html)
+  * [Complex numbers](complex.html)
+  * [Probability distributions](distribution.html)
+  * [Exceptions management](exceptions.html)
+  * [Fractions](fraction.html)
+  * [Linear algebra](linear.html)
+  * [Pseudo-random numbers generators](random.html)
+  * [Special functions](special.html)
+  * [Statistics](stat.html)
+  * [Utilities](utilities.html)
 
