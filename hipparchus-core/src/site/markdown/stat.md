@@ -392,9 +392,9 @@ or using a `double[][]` array with rows corresponding to observations.
 
 GLS models also require a `double[][]` array representing the covariance matrix of
 the error terms. See
-[AbstractMultipleLinearRegression#newSampleData(double[],int,int)](../apidocs/org/hipparchus/stat/regression/AbstractMultipleLinearRegression.html#newSampleData-double:A-int-int-),
-[OLSMultipleLinearRegression#newSampleData(double[], double[][])](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html#newSampleData-double:A-double:A:A-)
-and [GLSMultipleLinearRegression#newSampleData(double[],double[][],double[][])](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html#newSampleData-double:A-double:A:A-double:A:A-)
+[AbstractMultipleLinearRegression#newSampleData\(double\[\],int,int\)](../apidocs/org/hipparchus/stat/regression/AbstractMultipleLinearRegression.html#newSampleData-double:A-int-int-),
+[OLSMultipleLinearRegression#newSampleData\(double\[\], double\[\]\[\]\)](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html#newSampleData-double:A-double:A:A-)
+and [GLSMultipleLinearRegression#newSampleData\(double\[\],double\[\]\[\],double\[\]\[\]\)](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html#newSampleData-double:A-double:A:A-double:A:A-)
 for details.
 
  __Usage Notes:__
@@ -557,8 +557,8 @@ Then the matrix of standard errors is
 
     correlation.getCorrelationStandardErrors();
 
-The formula used to compute the standard error is <br/>
-`SE<sub>r</sub> = ((1 - r<sup>2</sup>) / (n - 2))<sup>1/2</sup>`<br/>
+The formula used to compute the standard error is
+`\(SE_r = \sqrt{(1 - r^2) / (n - 2)}\)`<br/>
 where `r` is the estimated correlation coefficient and `n` is the number of
 observations in the source dataset.
 
@@ -567,13 +567,12 @@ a correlation matrix are zero populate the RealMatrix returned by
 
     correlation.getCorrelationPValues()
     
-`getCorrelationPValues().getEntry(i,j)` is the
-probability that a random variable distributed as `t<sub>n-2</sub>` takes
-a value with absolute value greater than or equal to <br/>
-`|r<sub>ij</sub>|((n - 2) / (1 - r<sub>ij</sub><sup>2</sup>))<sup>1/2</sup>`,
-where `r<sub>ij</sub>` is the estimated correlation between the ith and jth
-columns of the source array or RealMatrix. This is sometimes referred to as the
-<i>significance</i> of the coefficient.<br/><br/>
+`getCorrelationPValues().getEntry(i,j)` is the probability that a random variable
+distributed as `\(t_{n-2}\)` takes a value with absolute value greater than or equal to
+`\(|r_{ij}|\sqrt{(n - 2) / (1 - r_{ij}^2)}\)`, where `\(r_{ij}\)` is the estimated
+correlation between the ith and jth columns of the source array or RealMatrix.
+This is sometimes referred to as the *significance* of the coefficient.
+
 For example, if `data` is a RealMatrix with 2 columns and 10 rows, then
 
     new PearsonsCorrelation(data).getCorrelationPValues().getEntry(0,1)
