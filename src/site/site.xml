@@ -77,8 +77,6 @@
       <item name="User Guide"                    href="user-guide.html" />
     </menu>
     
-    <menu name="Parent" ref="parent" />
-
     <menu name="Modules" ref="modules"/>
 
     <menu name="Reports" ref="reports"/>
