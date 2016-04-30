@@ -16,6 +16,9 @@
  limitations under the License.
 -->
 <project name="Hipparchus::Core">
+  <publishDate position="bottom" format="yyyy-MM-dd"/>
+  <version position="bottom"/>
+
   <skin>
     <groupId>lt.velykis.maven.skins</groupId>
     <artifactId>reflow-maven-skin</artifactId>
@@ -25,6 +28,7 @@
     <reflowSkin>
       <theme>bootswatch-readable</theme>
       <highlightJs>true</highlightJs>
+      <breadcrumbs>false</breadcrumbs>
       <brand>
         <name><![CDATA[<img src="../images/logo-hipparchus-blue.png" style="width:63px;height:40px;"/> ${project.name}]]></name>
         <href>index.html</href>
@@ -37,11 +41,20 @@
       </bottomNav>
       <endContent>
        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-     </endContent>
+      </endContent>
+      <pages>
+        <index>
+          <toc>false</toc>
+        </index>
+      </pages>
     </reflowSkin>
   </custom>
 
   <body>
+    <head>
+      <link href="../css/site.css" rel="stylesheet"/>
+    </head>
+  
     <menu name="Hipparchus">
       <item name="Overview"                      href="../index.html"/>
       <item name="Building"                      href="../building.html"/>
@@ -51,6 +64,19 @@
       <item name="Source Repository (current)"   href="https://github.com/Hipparchus-Math/hipparchus"/>
       <item name="Developers Guide"              href="../developers.html"/>
       <item name="User Guide"                    href="../user-guide.html" />
+    </menu>
+
+    <menu name="User Guide">
+      <item name="Analysis"                      href="analysis.html"/>
+      <item name="Complex Numbers"               href="complex.html"/>
+      <item name="Distributions"                 href="distribution.html"/>
+      <item name="Exceptions"                    href="exceptions.html"/>
+      <item name="Fractions"                     href="fraction.html"/>
+      <item name="Linear Algebra"                href="linear.html"/>
+      <item name="Random Data"                   href="random.html"/>
+      <item name="Special Functions"             href="special.html"/>
+      <item name="Statistics"                    href="stat.html" />
+      <item name="Utilities"                     href="utilities.html" />
     </menu>
     
     <menu name="Modules">
