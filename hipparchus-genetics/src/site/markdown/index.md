@@ -1,10 +1,10 @@
-# 16 Genetic Algorithms
-## 16.1 Overview
+# Genetic Algorithms
+## Overview
 The genetics package provides a framework and implementations for
 genetic algorithms.
 
 
-## 16.2 GA Framework
+## GA Framework
 [      GeneticAlgorithm](../apidocs/org/hipparchus/genetics/GeneticAlgorithm.html)
 provides an execution framework for Genetic Algorithms (GA).
 [      Populations,](../apidocs/org/hipparchus/genetics/Population.html)
@@ -37,7 +37,7 @@ The `nextGeneration` method implements the following algorithm:
 
 
 
-## 16.3 Implementation
+## Implementation
 Here is an example GA execution:
 
     // initialize a new genetic algorithm

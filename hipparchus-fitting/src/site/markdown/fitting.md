@@ -1,5 +1,5 @@
-# 13 Curve Fitting
-## 13.1 Overview
+# Curve Fitting
+## Overview
 The fitting package deals with curve fitting for univariate real functions.
 When a univariate real function y = f(x) does depend on some unknown parameters
 p<sub>0</sub>, p<sub>1</sub> ... p<sub>n-1</sub>, curve fitting can be used to
@@ -37,7 +37,7 @@ internally call the guessing procedure.
 
 
 
-## 13.2 Implemented Functions
+## Implemented Functions
 
 Fitting of specific functions are provided through the following classes:
 * create an instance of the fitter using the `create` factory method of the appropriate class,
@@ -66,7 +66,7 @@ The following example shows how to fit data with a polynomial function.
 
 
 
-## 13.3 General Case
+## General Case
 The [            AbstractCurveFitter](../apidocs/org/hipparchus/fitting/AbstractCurveFitter.html)
 class provides the basic functionality for implementing other
 curve fitting classes.

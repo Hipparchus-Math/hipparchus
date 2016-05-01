@@ -1,4 +1,4 @@
-# 12 Optimization
+# Optimization
 <em>The contents of this section currently describes deprecated classes.</em>
 Please refer to the new [API        description](../apidocs/org/hipparchus/optim/package-summary.html)
 .
@@ -8,7 +8,7 @@ in a dedicated least-squares sub-package described in the [least squares](./leas
 section.
 
 
-## 12.1 Overview
+## Overview
 The optimization package provides algorithms to optimize (i.e. either minimize
 or maximize) some objective or cost function. The package is split in several
 sub-packages dedicated to different kind of functions or algorithms.
@@ -63,7 +63,7 @@ and returns the best optimum found or all optima if desired. This is a classical
 prevent being trapped into a local extremum when looking for a global one.
 
 
-## 12.2 Univariate Functions
+## Univariate Functions
 A [          UnivariateOptimizer](../apidocs/org/hipparchus/optimization/univariate/UnivariateOptimizer.html)
 is used to find the minimal values of a univariate real-valued
 function `f`.
@@ -73,13 +73,13 @@ in the analysis package. The main difference is that the `solve` methods in root
 finding algorithms is replaced by `optimize` methods.
 
 
-## 12.3 Linear Programming
+## Linear Programming
 This package provides an implementation of George Dantzig's simplex algorithm
 for solving linear optimization problems with linear equality and inequality
 constraints.
 
 
-## 12.4 Direct Methods
+## Direct Methods
 Direct search methods only use cost function values, they don't
 need derivatives and don't either try to compute approximation of
 the derivatives. According to a 1996 paper by Margaret H. Wright
@@ -140,7 +140,7 @@ The last methods do handle simple bounds constraints directly, so the adapters a
 with them.
 
 
-## 12.5 General Case
+## General Case
 The general package deals with non-linear vectorial optimization problems when
 the partial derivatives of the objective function are available.
 

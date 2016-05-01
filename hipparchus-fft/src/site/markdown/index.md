@@ -1,4 +1,4 @@
-# 10 Transform methods
+# Transform methods
 This package provides a few transformers for signal analysis. All transformers
 provide both direct and inverse transforms.
 * [FastFourierTransformer](../apidocs/org/hipparchus/transform/FastFourierTransformer.html) (produces `Complex` results)

@@ -1,7 +1,7 @@
 
 # Overview
 
-## 0.1 About The User Guide
+## About The User Guide
 This guide is intended to help programmers quickly find what they need to develop
 solutions using Hipparchus.  It also provides a supplement to the javadoc API documentation,
 providing a little more explanation of the mathematical objects and functions included
@@ -9,7 +9,7 @@ in the package.
 
 
 
-## 0.2 What's in hipparchus
+## What's in hipparchus
 Hipparchus is made up of a small set of math/stat utilities addressing
 programming problems like the ones in the list below.  This list is not exhaustive,
 it's just meant to give a feel for the kinds of things that Hipparchus provides.
@@ -36,7 +36,7 @@ All feedback/suggestions for improvement should be sent to the
 
 
 
-## 0.3 How Hipparchus is organized
+## How Hipparchus is organized
 Hipparchus is divided into sixteen subpackages, based on functionality provided.
 * Computing means, variances and other summary statistics for a list of numbers
 * Fitting a line to a set of data points using linear regression
@@ -56,7 +56,7 @@ Package javadocs are [here](apidocs/index.html)
 
 
 
-## 0.4 How interface contracts are specified in hipparchus javadoc
+## How interface contracts are specified in hipparchus javadoc
 You should always read the javadoc class and method comments carefully when using
 Hipparchus components in your programs.  The javadoc provides references to the algorithms
 that are used, usage notes about limitations, performance, etc. as well as interface contracts.
@@ -87,12 +87,11 @@ of `MathIllegalArgumentException`.
 
 
 
-## 0.5 Dependencies
+## Dependencies
 Hipparchus requires JDK 1.8+ and has no runtime dependencies.
 
 
 
-## 0.6 License
-Hipparchus is distributed under the terms of the Apache License, Version 2.0:
-[.    ](license.html)
+## License
+Hipparchus is distributed under the terms of the [Apache License, Version 2.0](license.html)
 

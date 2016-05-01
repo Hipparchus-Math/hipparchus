@@ -1,5 +1,5 @@
-# 14 Least squares
-## 14.1 Overview
+# Least squares
+## Overview
 The least squares package fits a non-linear parametric model to a set of observed
 values by minimizing a cost function with a specific form.
 The fitting consists in finding the values
@@ -28,7 +28,7 @@ Levenberg-Marquardt</a> method.
 
 
 
-## 14.2 LeastSquaresBuilder and LeastSquaresFactory
+## LeastSquaresBuilder and LeastSquaresFactory
 
 In order to solve a least-squares fitting problem, the user must provide the following elements:
 * an implementation of the measurement model \( \mathbf{f}(\mathbf{p}) \) and its Jacobian, \( \frac{\partial\mathbf{f}}{\partial\mathbf{p}} \). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html).
@@ -62,7 +62,7 @@ to one of the static `LeastSquaresFactory.create` method.
 
 
 
-## 14.3 Model Function
+## Model Function
 The model function is used by the least squares engine to evaluate the model
 \( \mathbf{f}(\mathbf{p}) \). It is therefore a multivariate
 function (it depends on the various \( p_k \)) and it is vector-valued (it has several
@@ -119,7 +119,7 @@ misses required functionality.
 
 
 
-## 14.4 Parameters Validation
+## Parameters Validation
 In some cases, the model function requires parameters to lie within a specific domain. For example
 a parameter may be used in a square root and needs to be positive, or another parameter represents
 the sine of an angle and should be within -1 and +1, or several parameters may need to remain in
@@ -154,7 +154,7 @@ sustained by an instrument, ...).
 
 
 
-## 14.5 Tuning
+## Tuning
 Among the elements to be provided to the least squares problem builder or factory
 are some tuning parameters for the solver.
 
@@ -201,7 +201,7 @@ interface.
 
 
 
-## 14.6 Optimization Engine
+## Optimization Engine
 Once the least squares problem has been created, using either the builder or the factory,
 it is passed to an optimization engine for solving. Two engines devoted to least-squares
 problems are available. The first one is
@@ -231,7 +231,7 @@ default is QR decomposition) would be done as follows:
 
 
 
-## 14.7 Solving
+## Solving
 Solving the least squares problem is done by calling the `optimize` method of the
 optimizer and passing the least squares problem as the single parameter:
 
@@ -249,7 +249,7 @@ class and correspond to the point (i.e. the parameters), cost, Jacobian, RMS, co
 
 
 
-## 14.8 Example
+## Example
 The following simple example shows how to find the center of a circle of known radius to
 to best fit observed 2D points. It is a simplified version of one of the JUnit test cases.
 In the complete test case, both the circle center and its radius are fitted, here the

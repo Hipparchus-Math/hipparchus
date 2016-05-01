@@ -1,5 +1,5 @@
-# 11 Geometry
-## 11.1 Overview
+# Geometry
+## Overview
 The geometry package provides classes useful for many physical simulations
 in Euclidean spaces, like vectors and rotations in 3D, as well as on the
 sphere. It also provides a general implementation of Binary Space Partitioning
@@ -41,7 +41,7 @@ function in a root solver to determine when a moving point crosses the region bo
 
 
 
-## 11.2 Euclidean spaces
+## Euclidean spaces
 [          Vector1D](../apidocs/org/hipparchus/geometry/euclidean/oned/Vector1D.html)
 , [          Vector2D](../apidocs/org/hipparchus/geometry/euclidean/twod/Vector2D.html)
 and [          Vector3D](../apidocs/org/hipparchus/geometry/euclidean/threed/Vector3D.html)
@@ -150,7 +150,7 @@ shortcuts `applyTo(Rotation)` which is equivalent to
 `composeInverse(Rotation, RotationConvention.VECTOR_OPERATOR)`.
 
 
-## 11.3 n-Sphere
+## n-Sphere
 The Hipparchus library provides a few classes dealing with geometry
 on the 1-sphere (i.e. the one dimensional circle corresponding to the boundary of
 a two-dimensional disc) and the 2-sphere (i.e. the two dimensional sphere surface
@@ -160,7 +160,7 @@ this package correspond to the region explained above, i.e.
 and [SphericalPolygonsSet](../apidocs/org/hipparchus/geometry/spherical/twod/SphericalPolygonsSet.html).
 
 
-## 11.4 Binary Space Partitioning
+## Binary Space Partitioning
 [          BSP trees](../apidocs/org/hipparchus/geometry/partitioning/BSPTree.html)
 are an efficient way to represent space partitions and
 to associate attributes with each cell. Each node in a BSP tree
@@ -200,7 +200,7 @@ internal nodes may become leaf nodes and some leaf nodes may become
 internal nodes.
 
 
-## 11.5 Regions
+## Regions
 The regions in all Euclidean and spherical spaces are based on BSP-tree using a `Boolean`
 attribute in the leaf cells representing the inside status of the corresponding cell
 (true for inside cells, false for outside cells). They all need a `tolerance` setting that
