@@ -40,7 +40,7 @@ The various options of the script are:
                      (default is both `org.apache.commons.math3` and `org.apache.commons.math4`)
   * `--to-prefix`: top level package prefix of classes to substitute to
                    (default is `org.hipparchus`)
-  * `--classes-subst`: substitution names for classes, generally not specified to use the one provided by the module
+  * `--classes-subst`: substitution names for classes, default value is `classes-update-deprecated-exceptions.subst`
   * `--dry-run`: allow to see what would be changed, but without changing anything
   * `-v` or `--verbose`: if specified, display messages about files changed and not changed 
 
@@ -75,3 +75,24 @@ A typical run is shown below:
     luc@lehrin%
 
 The script is not foolproof, but does most of the boring job automatically.
+
+There are two classes substitution patterns available: `classes-update-deprecated-exceptions.subst`
+and `classes-keep-deprecated-exceptions.subst`. The default value is the first one (`update`), which
+should cover most regular use cases. This default substitutions file replaces all occurrences of
+exceptions that have been deprecated in Hipparchus by the new simpler exceptions (`MathIllegalArgumentException`,
+`MathIllegalStateException` and `MathRuntimeException`). This is suitable for applications that
+only catch the exceptions declared by the mathematical library and do not throw these exceptions
+by themselves. It is not suitable for applications that mainly create and throw such exceptions by
+themselves (typically when they extend the library classes) and that do rarely catch them. The reason
+is that the constructors signatures of the replacement classes do not match the constructors signature
+of the deprecated exceptions. For such applications, setting the `--classes-subst` option to
+`classes-keep-deprecated-exceptions.subst` may be desirable. With this setting, the deprecated exceptions
+will be preserved, as they are indeed available in the `hipparchus-migration` jar. So instead
+of compilation errors due to wrong constructor arguments, migrated code will have deprecation
+warnings as they use directly these deprecated exceptions. Applications that both create and catch
+exceptions from the mathematical library should rather rely on the default (`update`) patterns
+and fix the compilation errors in the constructors rather than keeping the deprecated exceptions.
+The reason is that the deprecated exceptions are _not_ thrown anymore by Hipparchus and hence the
+`catch` statements in application code would never be triggered, resulting in a different code path
+being followed in application codes. In other words, the `classes-keep-deprecated-exceptions.subst`
+pattern is really intended for expert use.

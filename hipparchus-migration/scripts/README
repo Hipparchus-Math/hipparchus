@@ -36,7 +36,7 @@ The various options of the script are:
                      (default is both `org.apache.commons.math3` and `org.apache.commons.math4`)
   * `--to-prefix`: top level package prefix of classes to substitute to
                    (default is `org.hipparchus`)
-  * `--classes-subst`: substitution names for classes, generally not specified to use the one provided by the module
+  * `--classes-subst`: substitution names for classes, default value is `classes-update-deprecated-exceptions.subst`
   * `--dry-run`: allow to see what would be changed, but without changing anything
   * `-v` or `--verbose`: if specified, display messages about files changed and not changed 
 

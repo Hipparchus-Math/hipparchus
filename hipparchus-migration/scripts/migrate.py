@@ -203,7 +203,7 @@ atexit.register(lambda dir=tempdir: shutil.rmtree(dir))
 args.tempdir = tempdir
 
 if args.classes_subst == None:
-	args.classes_subst = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'classes.subst')
+	args.classes_subst = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'classes-update-deprecated-exceptions.subst')
 
 parseClassSubstitutionRules(args)
 

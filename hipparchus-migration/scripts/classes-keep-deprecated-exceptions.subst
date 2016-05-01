@@ -209,7 +209,7 @@ ${fromprefix}.exception.DimensionMismatchException                              
 ${fromprefix}.exception.InsufficientDataException                                    ${toprefix}.migration.exception.InsufficientDataException
 ${fromprefix}.exception.MathArithmeticException                                      ${toprefix}.migration.exception.MathArithmeticException
 ${fromprefix}.exception.MathIllegalArgumentException                                 ${toprefix}.exception.MathIllegalArgumentException
-${fromprefix}.exception.MathIllegalNumberException                                   ${toprefix}.migration.exception.MathIllegalArgumentException
+${fromprefix}.exception.MathIllegalNumberException                                   ${toprefix}.migration.exception.MathIllegalNumberException
 ${fromprefix}.exception.MathIllegalStateException                                    ${toprefix}.exception.MathIllegalStateException
 ${fromprefix}.exception.MathInternalError                                            ${toprefix}.migration.exception.MathInternalError
 ${fromprefix}.exception.MathParseException                                           ${toprefix}.migration.exception.MathParseException
@@ -316,7 +316,7 @@ ${fromprefix}.geometry.euclidean.oned.OrientedPoint                             
 ${fromprefix}.geometry.euclidean.oned.SubOrientedPoint                               ${toprefix}.geometry.euclidean.oned.SubOrientedPoint
 ${fromprefix}.geometry.euclidean.oned.Vector1D                                       ${toprefix}.geometry.euclidean.oned.Vector1D
 ${fromprefix}.geometry.euclidean.oned.Vector1DFormat                                 ${toprefix}.geometry.euclidean.oned.Vector1DFormat
-${fromprefix}.geometry.euclidean.threed.CardanEulerSingularityException              ${toprefix}.migration.exception.CardanEulerSingularityException
+${fromprefix}.geometry.euclidean.threed.CardanEulerSingularityException              ${toprefix}.migration.geometry.euclidean.threed.CardanEulerSingularityException
 ${fromprefix}.geometry.euclidean.threed.Euclidean3D                                  ${toprefix}.geometry.euclidean.threed.Euclidean3D
 ${fromprefix}.geometry.euclidean.threed.FieldRotation                                ${toprefix}.geometry.euclidean.threed.FieldRotation
 ${fromprefix}.geometry.euclidean.threed.FieldVector3D                                ${toprefix}.geometry.euclidean.threed.FieldVector3D
@@ -582,7 +582,7 @@ ${fromprefix}.ode.sampling.StepNormalizerMode                                   
 ${fromprefix}.ode.SecondaryEquations                                                 ${toprefix}.migration.ode.SecondaryEquations
 ${fromprefix}.ode.SecondOrderDifferentialEquations                                   ${toprefix}.migration.ode.SecondOrderDifferentialEquations
 ${fromprefix}.ode.SecondOrderIntegrator                                              ${toprefix}.ode.SecondOrderIntegrator
-${fromprefix}.ode.UnknownParameterException                                          ${toprefix}.migration.exception.UnknownParameterException
+${fromprefix}.ode.UnknownParameterException                                          ${toprefix}.ode.UnknownParameterException
 ${fromprefix}.optim.AbstractConvergenceChecker                                       ${toprefix}.optim.AbstractConvergenceChecker
 ${fromprefix}.optim.AbstractOptimizationProblem                                      ${toprefix}.optim.AbstractOptimizationProblem
 ${fromprefix}.optim.BaseMultiStartMultivariateOptimizer                              ${toprefix}.optim.BaseMultiStartMultivariateOptimizer
