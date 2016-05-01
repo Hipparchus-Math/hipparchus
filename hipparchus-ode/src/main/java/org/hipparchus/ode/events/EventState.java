@@ -269,49 +269,56 @@ public class EventState {
             final double beforeRoot;
             // time on the other sie of the root
             double afterRoot;
+            double afterRootG;
             if (ga == 0.0) {
                 // ga == 0.0 and gb may or may not be 0.0
                 // handle the root at ta first
                 beforeRoot = ta;
-                afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
+                afterRoot  = minTime(shiftedBy(beforeRoot, convergence), tb);
+                afterRootG = f.value(afterRoot);
             } else if (gb == 0.0) {
                 // hard: ga != 0.0 and gb == 0.0
                 // look past gb by up to convergence to find next sign
                 // throw an exception if g(t) = 0.0 in [tb, tb + convergence]
                 beforeRoot = tb;
-                afterRoot = shiftedBy(beforeRoot, convergence);
+                afterRoot  = shiftedBy(beforeRoot, convergence);
+                afterRootG = f.value(afterRoot);
             } else if (ta == tb) {
                 // both non-zero but times are the same. Probably due to reset state
                 beforeRoot = ta;
-                afterRoot = shiftedBy(beforeRoot, convergence);
+                afterRoot  = shiftedBy(beforeRoot, convergence);
+                afterRootG = f.value(afterRoot);
             } else if (ga > 0 != f.value(ta) > 0) {
                 // both non-zero, step sign change at ta, possibly due to reset state
                 // this should only be able to happen the first time through the loop
                 beforeRoot = ta;
-                afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
+                afterRoot  = minTime(shiftedBy(beforeRoot, convergence), tb);
+                afterRootG = f.value(afterRoot);
             } else {
                 // both non-zero, the usual case, use a root finder.
                 if (forward) {
                     final Interval interval =
                             solver.solveInterval(maxIterationCount, f, ta, tb);
                     beforeRoot = interval.getLeftAbscissa();
-                    afterRoot = interval.getRightAbscissa();
+                    afterRoot  = interval.getRightAbscissa();
+                    afterRootG = interval.getRightValue();
                 } else {
                     final Interval interval =
                             solver.solveInterval(maxIterationCount, f, tb, ta);
                     beforeRoot = interval.getRightAbscissa();
-                    afterRoot = interval.getLeftAbscissa();
+                    afterRoot  = interval.getLeftAbscissa();
+                    afterRootG = interval.getLeftValue();
                 }
             }
             // tolerance is set to less than 1 ulp
             // assume tolerance is 1 ulp
             if (beforeRoot == afterRoot) {
-                afterRoot = nextAfter(afterRoot);
+                afterRoot  = nextAfter(afterRoot);
+                afterRootG = f.value(afterRoot);
             }
             // check loop is making some progress
             check((forward && afterRoot > beforeRoot) || (!forward && afterRoot < beforeRoot));
 
-            final double afterRootG = f.value(afterRoot);
             if (afterRootG == 0.0 || afterRootG > 0.0 == g0Positive) {
                 // didn't see expected sign change, skip this root,
                 // likely an extrema at g = 0.0
