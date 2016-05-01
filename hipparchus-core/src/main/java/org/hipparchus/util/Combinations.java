@@ -22,7 +22,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 
 /**
@@ -150,10 +149,8 @@ public class Combinations implements Iterable<int[]> {
      * Its {@code compare(int[],int[])} method will throw exceptions if
      * passed combinations that are inconsistent with this instance:
      * <ul>
-     *  <li>{@code MathIllegalArgumentException} if the array lengths are not
-     *      equal to {@code k},</li>
-     *  <li>{@code MathIllegalArgumentException} if an element of the array is not
-     *      within the interval [0, {@code n}).</li>
+     *  <li>if the array lengths are not equal to {@code k},</li>
+     *  <li>if an element of the array is not within the interval [0, {@code n}).</li>
      * </ul>
      * @return a lexicographic comparator.
      */
@@ -347,10 +344,10 @@ public class Combinations implements Iterable<int[]> {
         /**
          * {@inheritDoc}
          *
-         * @throws MathIllegalArgumentException if the array lengths are not
-         * equal to {@code k}.
-         * @throws MathIllegalArgumentException if an element of the array is not
-         * within the interval [0, {@code n}).
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
+         * if the array lengths are not equal to {@code k}.
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
+         * if an element of the array is not within the interval [0, {@code n}).
          */
         @Override
         public int compare(int[] c1, int[] c2) {
@@ -384,8 +381,8 @@ public class Combinations implements Iterable<int[]> {
          *
          * @param c Input array.
          * @return the lexicographic norm.
-         * @throws MathIllegalArgumentException if an element of the array is not
-         * within the interval [0, {@code n}).
+         * @throws org.hipparchus.exception.MathIllegalArgumentException
+         * if an element of the array is not within the interval [0, {@code n}).
          */
         private long lexNorm(int[] c) {
             long ret = 0;

@@ -28,7 +28,6 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.BigFractionField;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -175,7 +174,7 @@ public class KolmogorovSmirnovTest {
      * @return the p-value associated with the null hypothesis that {@code data} is a sample from
      *         {@code distribution}
      * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
-     * @throws NullArgumentException if {@code data} is null
+     * @throws org.hipparchus.exception.NullArgumentException if {@code data} is null
      */
     public double kolmogorovSmirnovTest(RealDistribution distribution, double[] data, boolean exact) {
         return 1d - cdf(kolmogorovSmirnovStatistic(distribution, data), data.length, exact);
@@ -191,7 +190,7 @@ public class KolmogorovSmirnovTest {
      * @param data sample being evaluated
      * @return Kolmogorov-Smirnov statistic \(D_n\)
      * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
-     * @throws NullArgumentException if {@code data} is null
+     * @throws org.hipparchus.exception.NullArgumentException if {@code data} is null
      */
     public double kolmogorovSmirnovStatistic(RealDistribution distribution, double[] data) {
         checkArray(data);
@@ -245,7 +244,7 @@ public class KolmogorovSmirnovTest {
      *         samples from the same distribution
      * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
-     * @throws NullArgumentException if either {@code x} or {@code y} is null
+     * @throws org.hipparchus.exception.NullArgumentException if either {@code x} or {@code y} is null
      * @see #bootstrap(double[], double[], int, boolean)
      */
     public double kolmogorovSmirnovTest(double[] x, double[] y, boolean strict) {
@@ -279,7 +278,7 @@ public class KolmogorovSmirnovTest {
      *         samples from the same distribution
      * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
-     * @throws NullArgumentException if either {@code x} or {@code y} is null
+     * @throws org.hipparchus.exception.NullArgumentException if either {@code x} or {@code y} is null
      */
     public double kolmogorovSmirnovTest(double[] x, double[] y) {
         return kolmogorovSmirnovTest(x, y, true);
@@ -297,7 +296,7 @@ public class KolmogorovSmirnovTest {
      *         {@code y} represent samples from the same underlying distribution
      * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
-     * @throws NullArgumentException if either {@code x} or {@code y} is null
+     * @throws org.hipparchus.exception.NullArgumentException if either {@code x} or {@code y} is null
      */
     public double kolmogorovSmirnovStatistic(double[] x, double[] y) {
         return integralKolmogorovSmirnovStatistic(x, y)/((double)(x.length * (long)y.length));
@@ -316,7 +315,7 @@ public class KolmogorovSmirnovTest {
      *         {@code y} represent samples from the same underlying distribution
      * @throws MathIllegalArgumentException if either {@code x} or {@code y} does not have length at
      *         least 2
-     * @throws NullArgumentException if either {@code x} or {@code y} is null
+     * @throws org.hipparchus.exception.NullArgumentException if either {@code x} or {@code y} is null
      */
     private long integralKolmogorovSmirnovStatistic(double[] x, double[] y) {
         checkArray(x);
@@ -365,7 +364,7 @@ public class KolmogorovSmirnovTest {
      * @return the p-value associated with the null hypothesis that {@code data} is a sample from
      *         {@code distribution}
      * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
-     * @throws NullArgumentException if {@code data} is null
+     * @throws org.hipparchus.exception.NullArgumentException if {@code data} is null
      */
     public double kolmogorovSmirnovTest(RealDistribution distribution, double[] data) {
         return kolmogorovSmirnovTest(distribution, data, false);
@@ -381,7 +380,7 @@ public class KolmogorovSmirnovTest {
      * @return true iff the null hypothesis that {@code data} is a sample from {@code distribution}
      *         can be rejected with confidence 1 - {@code alpha}
      * @throws MathIllegalArgumentException if {@code data} does not have length at least 2
-     * @throws NullArgumentException if {@code data} is null
+     * @throws org.hipparchus.exception.NullArgumentException if {@code data} is null
      */
     public boolean kolmogorovSmirnovTest(RealDistribution distribution, double[] data, double alpha) {
         if ((alpha <= 0) || (alpha > 0.5)) {
@@ -903,7 +902,7 @@ public class KolmogorovSmirnovTest {
      * Verifies that {@code array} has length at least 2.
      *
      * @param array array to test
-     * @throws NullArgumentException if array is null
+     * @throws org.hipparchus.exception.NullArgumentException if array is null
      * @throws MathIllegalArgumentException if array is too short
      */
     private void checkArray(double[] array) {

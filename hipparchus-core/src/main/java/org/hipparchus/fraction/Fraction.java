@@ -23,7 +23,6 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -428,7 +427,7 @@ public class Fraction
      *
      * @param fraction  the fraction to add, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
-     * @throws NullArgumentException if the fraction is {@code null}
+     * @throws org.hipparchus.exception.NullArgumentException if the fraction is {@code null}
      * @throws MathRuntimeException if the resulting numerator or denominator exceeds
      *  {@code Integer.MAX_VALUE}
      */
@@ -452,7 +451,7 @@ public class Fraction
      *
      * @param fraction  the fraction to subtract, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
-     * @throws NullArgumentException if the fraction is {@code null}
+     * @throws org.hipparchus.exception.NullArgumentException if the fraction is {@code null}
      * @throws MathRuntimeException if the resulting numerator or denominator
      *   cannot be represented in an {@code int}.
      */
@@ -476,7 +475,7 @@ public class Fraction
      * @param fraction the fraction to subtract, must not be {@code null}
      * @param isAdd true to add, false to subtract
      * @return a {@code Fraction} instance with the resulting values
-     * @throws NullArgumentException if the fraction is {@code null}
+     * @throws org.hipparchus.exception.NullArgumentException if the fraction is {@code null}
      * @throws MathRuntimeException if the resulting numerator or denominator
      *   cannot be represented in an {@code int}.
      */
@@ -532,7 +531,7 @@ public class Fraction
      *
      * @param fraction  the fraction to multiply by, must not be {@code null}
      * @return a {@code Fraction} instance with the resulting values
-     * @throws NullArgumentException if the fraction is {@code null}
+     * @throws org.hipparchus.exception.NullArgumentException if the fraction is {@code null}
      * @throws MathRuntimeException if the resulting numerator or denominator exceeds
      *  {@code Integer.MAX_VALUE}
      */
@@ -547,8 +546,8 @@ public class Fraction
         int d1 = ArithmeticUtils.gcd(numerator, fraction.denominator);
         int d2 = ArithmeticUtils.gcd(fraction.numerator, denominator);
         return getReducedFraction
-        (ArithmeticUtils.mulAndCheck(numerator/d1, fraction.numerator/d2),
-                ArithmeticUtils.mulAndCheck(denominator/d2, fraction.denominator/d1));
+                (ArithmeticUtils.mulAndCheck(numerator/d1, fraction.numerator/d2),
+                 ArithmeticUtils.mulAndCheck(denominator/d2, fraction.denominator/d1));
     }
 
     /**

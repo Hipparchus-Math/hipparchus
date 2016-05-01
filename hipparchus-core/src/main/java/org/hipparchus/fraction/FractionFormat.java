@@ -25,7 +25,6 @@ import java.util.Locale;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NullArgumentException;
 
 /**
  * Formats a Fraction number in proper format or improper format.
@@ -49,7 +48,7 @@ public class FractionFormat extends AbstractFormat {
      * Create an improper formatting instance with a custom number format for
      * both the numerator and denominator.
      * @param format the custom format for both the numerator and denominator.
-     * @throws NullArgumentException if the provided format is null.
+     * @throws org.hipparchus.exception.NullArgumentException if the provided format is null.
      */
     public FractionFormat(final NumberFormat format) {
         super(format);
@@ -60,7 +59,7 @@ public class FractionFormat extends AbstractFormat {
      * the numerator and a custom number format for the denominator.
      * @param numeratorFormat the custom format for the numerator.
      * @param denominatorFormat the custom format for the denominator.
-     * @throws NullArgumentException if either provided format is null.
+     * @throws org.hipparchus.exception.NullArgumentException if either provided format is null.
      */
     public FractionFormat(final NumberFormat numeratorFormat,
                           final NumberFormat denominatorFormat) {
@@ -138,7 +137,7 @@ public class FractionFormat extends AbstractFormat {
      * @param fraction the object to format.
      * @param toAppendTo where the text is to be appended
      * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
     public StringBuffer format(final Fraction fraction,
@@ -163,7 +162,7 @@ public class FractionFormat extends AbstractFormat {
      * @param obj the object to format.
      * @param toAppendTo where the text is to be appended
      * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * offsets of the alignment field
      * @return the value passed in as toAppendTo.
      * @see java.text.Format#format(java.lang.Object, java.lang.StringBuffer, java.text.FieldPosition)
      * @throws MathIllegalStateException if the number cannot be converted to a fraction
@@ -191,7 +190,7 @@ public class FractionFormat extends AbstractFormat {
      * @param source the string to parse
      * @return the parsed {@link Fraction} object.
      * @exception MathIllegalStateException if the beginning of the specified string
-     *            cannot be parsed.
+     * cannot be parsed.
      */
     @Override
     public Fraction parse(final String source) throws MathIllegalStateException {

@@ -60,7 +60,7 @@ public interface StorelessUnivariateStatistic extends UnivariateStatistic {
         throws MathIllegalArgumentException {
 
         if (MathArrays.verifyValues(values, begin, length)) {
-            final StorelessUnivariateStatistic stat = copy();
+            StorelessUnivariateStatistic stat = copy();
             stat.clear();
             stat.incrementAll(values, begin, length);
             return stat.getResult();
