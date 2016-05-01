@@ -175,7 +175,7 @@ public class EventState {
             // we will use the sign slightly after step beginning to force ignoring this zero
             final double epsilon = FastMath.max(solver.getAbsoluteAccuracy(),
                                                 FastMath.abs(solver.getRelativeAccuracy() * t0));
-            final double tStart = t0 + 0.5 * epsilon;
+            final double tStart = t0 + (interpolator.isForward() ? 0.5 : -0.5) * epsilon;
             t0 = tStart;
             g0 = handler.g(interpolator.getInterpolatedState(tStart));
         }
@@ -267,7 +267,7 @@ public class EventState {
         while (true) {
             // event time, just at or before the actual root.
             final double beforeRoot;
-            // time on the other sie of the root
+            // time on the other side of the root
             double afterRoot;
             double afterRootG;
             if (ga == 0.0) {
