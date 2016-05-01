@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.hipparchus.migration.exception;
+package org.hipparchus.migration.geometry.euclidean;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;

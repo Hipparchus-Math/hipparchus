@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.migration.exception;
+package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.migration.exception.util.LocalizedFormats;
