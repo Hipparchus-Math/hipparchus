@@ -28,7 +28,7 @@ public class MathRuntimeException extends RuntimeException implements LocalizedE
     private static final long serialVersionUID = 20160217L;
 
     /** URL for reporting problems for internal errors. */
-    private static final String REPORT_URL = "https://www.orekit.org/forge/projects/hipparchus/issues";
+    private static final String REPORT_URL = "https://github.com/Hipparchus-Math/hipparchus/issues";
 
     /** Format specifier (to be translated). */
     private final Localizable specifier;
