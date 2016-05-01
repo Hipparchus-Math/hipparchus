@@ -22,7 +22,6 @@ import java.util.Arrays;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Kurtosis;
 import org.hipparchus.stat.descriptive.moment.Mean;
@@ -120,7 +119,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * and the initial data values in double[] initialDoubleArray.
      *
      * @param initialDoubleArray the initial double[].
-     * @throws NullArgumentException if the input array is null
+     * @throws org.hipparchus.exception.NullArgumentException if the input array is null
      */
     public DescriptiveStatistics(double[] initialDoubleArray) {
         this(INFINITE_WINDOW, true, initialDoubleArray);
@@ -133,7 +132,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * is a copy of original.
      *
      * @param original DescriptiveStatistics instance to copy
-     * @throws NullArgumentException if original is null
+     * @throws org.hipparchus.exception.NullArgumentException if original is null
      */
     protected DescriptiveStatistics(DescriptiveStatistics original) {
         MathUtils.checkNotNull(original);
@@ -161,7 +160,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
      * @param windowSize the window size
      * @param hasInitialValues if initial values have been provided
      * @param initialValues the initial values
-     * @throws NullArgumentException if initialValues is null
+     * @throws org.hipparchus.exception.NullArgumentException if initialValues is null
      * @throws MathIllegalArgumentException if window size is less than 1 but
      * not equal to {@link #INFINITE_WINDOW}
      */

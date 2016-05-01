@@ -16,7 +16,6 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
@@ -131,7 +130,7 @@ public interface SummaryStatistics extends StatisticalSummary {
      * have been added.
      */
     default double getQuadraticMean() {
-        final long size = getN();
+        long size = getN();
         return size > 0 ? FastMath.sqrt(getSumOfSquares() / size) : Double.NaN;
     }
 
@@ -144,7 +143,7 @@ public interface SummaryStatistics extends StatisticalSummary {
      */
     @Override
     default double getStandardDeviation() {
-        final long size = getN();
+        long size = getN();
         if (size > 0) {
             return size > 1 ? FastMath.sqrt(getVariance()) : 0.0;
         } else {
@@ -243,7 +242,7 @@ public interface SummaryStatistics extends StatisticalSummary {
          *
          * @param impl the max implementation
          * @return the builder
-         * @throws NullArgumentException if impl is null
+         * @throws org.hipparchus.exception.NullArgumentException if impl is null
          */
         public Builder withMaxImpl(StorelessUnivariateStatistic impl) {
             MathUtils.checkNotNull(impl);
@@ -256,7 +255,7 @@ public interface SummaryStatistics extends StatisticalSummary {
          *
          * @param impl the min implementation
          * @return the builder
-         * @throws NullArgumentException if impl is null
+         * @throws org.hipparchus.exception.NullArgumentException if impl is null
          */
         public Builder withMinImpl(StorelessUnivariateStatistic impl) {
             MathUtils.checkNotNull(impl);
@@ -269,7 +268,7 @@ public interface SummaryStatistics extends StatisticalSummary {
          *
          * @param impl the mean implementation
          * @return the builder
-         * @throws NullArgumentException if impl is null
+         * @throws org.hipparchus.exception.NullArgumentException if impl is null
          */
         public Builder withMeanImpl(StorelessUnivariateStatistic impl) {
             MathUtils.checkNotNull(impl);
@@ -282,7 +281,7 @@ public interface SummaryStatistics extends StatisticalSummary {
          *
          * @param impl the geometric mean implementation
          * @return the builder
-         * @throws NullArgumentException if impl is null
+         * @throws org.hipparchus.exception.NullArgumentException if impl is null
          */
         public Builder withGeometricMeanImpl(StorelessUnivariateStatistic impl) {
             MathUtils.checkNotNull(impl);
@@ -295,7 +294,7 @@ public interface SummaryStatistics extends StatisticalSummary {
          *
          * @param impl the variance implementation
          * @return the builder
-         * @throws NullArgumentException if impl is null
+         * @throws org.hipparchus.exception.NullArgumentException if impl is null
          */
         public Builder withVarianceImpl(StorelessUnivariateStatistic impl) {
             MathUtils.checkNotNull(impl);
@@ -308,7 +307,7 @@ public interface SummaryStatistics extends StatisticalSummary {
          *
          * @param impl the sum implementation
          * @return the builder
-         * @throws NullArgumentException if impl is null
+         * @throws org.hipparchus.exception.NullArgumentException if impl is null
          */
         public Builder withSumImpl(StorelessUnivariateStatistic impl) {
             MathUtils.checkNotNull(impl);
@@ -321,7 +320,7 @@ public interface SummaryStatistics extends StatisticalSummary {
          *
          * @param impl the sum of squares implementation
          * @return the builder
-         * @throws NullArgumentException if impl is null
+         * @throws org.hipparchus.exception.NullArgumentException if impl is null
          */
         public Builder withSumOfSquaresImpl(StorelessUnivariateStatistic impl) {
             MathUtils.checkNotNull(impl);
@@ -334,7 +333,7 @@ public interface SummaryStatistics extends StatisticalSummary {
          *
          * @param impl the sum of logs implementation
          * @return the builder
-         * @throws NullArgumentException if impl is null
+         * @throws org.hipparchus.exception.NullArgumentException if impl is null
          */
         public Builder withSumOfLogsImpl(StorelessUnivariateStatistic impl) {
             MathUtils.checkNotNull(impl);

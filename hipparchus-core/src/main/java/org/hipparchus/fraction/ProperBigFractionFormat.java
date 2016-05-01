@@ -22,7 +22,6 @@ import java.text.NumberFormat;
 import java.text.ParsePosition;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -53,7 +52,7 @@ public class ProperBigFractionFormat extends BigFractionFormat {
      * Create a proper formatting instance with a custom number format for the
      * whole, numerator, and denominator.
      * @param format the custom format for the whole, numerator, and denominator.
-     * @throws NullArgumentException if the provided format is null.
+     * @throws org.hipparchus.exception.NullArgumentException if the provided format is null.
      */
     public ProperBigFractionFormat(final NumberFormat format) {
         this(format, (NumberFormat)format.clone(), (NumberFormat)format.clone());
@@ -65,7 +64,7 @@ public class ProperBigFractionFormat extends BigFractionFormat {
      * @param wholeFormat the custom format for the whole.
      * @param numeratorFormat the custom format for the numerator.
      * @param denominatorFormat the custom format for the denominator.
-     * @throws NullArgumentException if either provided format is null.
+     * @throws org.hipparchus.exception.NullArgumentException if either provided format is null.
      */
     public ProperBigFractionFormat(final NumberFormat wholeFormat,
                                    final NumberFormat numeratorFormat,
@@ -83,7 +82,7 @@ public class ProperBigFractionFormat extends BigFractionFormat {
      * @param fraction the object to format.
      * @param toAppendTo where the text is to be appended
      * @param pos On input: an alignment field, if desired. On output: the
-     *            offsets of the alignment field
+     * offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
     @Override
