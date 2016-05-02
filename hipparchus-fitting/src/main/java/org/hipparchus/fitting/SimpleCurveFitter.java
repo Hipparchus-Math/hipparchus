@@ -19,9 +19,9 @@ package org.hipparchus.fitting;
 import java.util.Collection;
 
 import org.hipparchus.analysis.ParametricUnivariateFunction;
-import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;
+import org.hipparchus.optim.leastsquares.LeastSquaresBuilder;
+import org.hipparchus.optim.leastsquares.LeastSquaresProblem;
 
 /**
  * Fits points to a user-defined {@link ParametricUnivariateFunction function}.

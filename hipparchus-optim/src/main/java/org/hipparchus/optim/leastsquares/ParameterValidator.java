@@ -14,20 +14,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.optim;
+package org.hipparchus.optim.leastsquares;
 
-import org.hipparchus.exception.LocalizedFormatsAbstractTest;
+import org.hipparchus.linear.RealVector;
 
-public class LocalizedOptimFormatsTest extends LocalizedFormatsAbstractTest {
-
-    @Override
-    protected Class<LocalizedOptimFormats> getFormatsClass() {
-        return LocalizedOptimFormats.class;
-    }
-
-    @Override
-    protected int getExpectedNumber() {
-        return 11;
-    }
-
+/**
+ * Interface for validating a set of model parameters.
+ *
+ */
+public interface ParameterValidator {
+    /**
+     * Validates the set of parameters.
+     *
+     * @param params Input parameters.
+     * @return the validated values.
+     */
+    RealVector validate(RealVector params);
 }

@@ -20,9 +20,9 @@ import java.util.Collection;
 
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.fitting.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.fitting.leastsquares.LeastSquaresProblem;
 import org.hipparchus.linear.DiagonalMatrix;
+import org.hipparchus.optim.leastsquares.LeastSquaresBuilder;
+import org.hipparchus.optim.leastsquares.LeastSquaresProblem;
 
 /**
  * Fits points to a {@link

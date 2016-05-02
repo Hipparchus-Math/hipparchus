@@ -14,20 +14,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.optim;
+package org.hipparchus.optim.leastsquares;
 
-import org.hipparchus.exception.LocalizedFormatsAbstractTest;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
 
-public class LocalizedOptimFormatsTest extends LocalizedFormatsAbstractTest {
+/**
+ * A interface for functions that compute a vector of values and can compute their
+ * derivatives (Jacobian).
+ *
+ */
+public interface ValueAndJacobianFunction extends MultivariateJacobianFunction {
+    /**
+     * Compute the value.
+     *
+     * @param params Point.
+     * @return the value at the given point.
+     */
+    RealVector computeValue(final double[] params);
 
-    @Override
-    protected Class<LocalizedOptimFormats> getFormatsClass() {
-        return LocalizedOptimFormats.class;
-    }
-
-    @Override
-    protected int getExpectedNumber() {
-        return 11;
-    }
-
+    /**
+     * Compute the Jacobian.
+     *
+     * @param params Point.
+     * @return the Jacobian at the given point.
+     */
+    RealMatrix computeJacobian(final double[] params);
 }
