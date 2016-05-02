@@ -27,7 +27,6 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
-import org.hipparchus.util.Precision;
 
 /**
  * This class implements a modification of the <a
@@ -220,7 +219,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
         // evaluate initial guess
         evaluations.increment();
         y[1] = f.value(x[1]);
-        if (Precision.equals(y[1].getReal(), 0.0, 1)) {
+        if (y[1].getReal() == 0.0) {
             // return the initial guess if it is a perfect root.
             return new Interval<>(x[1], y[1], x[1], y[1]);
         }
@@ -228,7 +227,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
         // evaluate first endpoint
         evaluations.increment();
         y[0] = f.value(x[0]);
-        if (Precision.equals(y[0].getReal(), 0.0, 1)) {
+        if (y[0].getReal() == 0.0) {
             // return the first endpoint if it is a perfect root.
             return new Interval<>(x[0], y[0], x[0], y[0]);
         }
@@ -246,7 +245,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
             // evaluate second endpoint
             evaluations.increment();
             y[2] = f.value(x[2]);
-            if (Precision.equals(y[2].getReal(), 0.0, 1)) {
+            if (y[2].getReal() == 0.0) {
                 // return the second endpoint if it is a perfect root.
                 return new Interval<>(x[2], y[2], x[2], y[2]);
             }
@@ -344,7 +343,7 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
             // evaluate the function at the guessed root
             evaluations.increment();
             final T nextY = f.value(nextX);
-            if (Precision.equals(nextY.getReal(), 0.0, 1)) {
+            if (nextY.getReal() == 0.0) {
                 // we have found an exact root, since it is not an approximation
                 // we don't need to bother about the allowed solutions setting
                 return new Interval<>(nextX, nextY, nextX, nextY);
