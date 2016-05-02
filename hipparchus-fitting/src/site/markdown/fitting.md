@@ -12,9 +12,9 @@ least-squares problem.
 
 For all provided curve fitters, the operating principle is the same.
 Users must
+
 * create an instance of the fitter using the `create` factory method of the appropriate class,
 * call the [fit](../apidocs/org/hipparchus/fitting/AbstractCurveFitter) with a `Collection` of [ observed data points](../apidocs/org/hipparchus/fitting/WeightedObservedPoint.html) as argument, which will return an array with the parameters that best fit the given data points.
-
 
 The list of observed data points to be passed to `fit` can be built by incrementally
 adding instances to an instance of [WeightedObservedPoints](../apidocs/org/hipparchus/fitting/WeightedObservedPoints.html),
@@ -34,20 +34,14 @@ values based on the user-supplied data.
 When initial values are required but are not provided, the `fit` method will
 internally call the guessing procedure.
 
-
-
-
 ## Implemented Functions
 
 Fitting of specific functions are provided through the following classes:
+
 * create an instance of the fitter using the `create` factory method of the appropriate class,
 * call the [fit](../apidocs/org/hipparchus/fitting/AbstractCurveFitter) with a `Collection` of [ observed data points](../apidocs/org/hipparchus/fitting/WeightedObservedPoint.html) as argument, which will return an array with the parameters that best fit the given data points.
 
-
-
 The following example shows how to fit data with a polynomial function.
-
-
 
     // Collect data.
     final WeightedObservedPoints obs = new WeightedObservedPoints();
@@ -65,14 +59,10 @@ The following example shows how to fit data with a polynomial function.
     final double[] coeff = fitter.fit(obs.toList());
 
 
-
 ## General Case
-The [            AbstractCurveFitter](../apidocs/org/hipparchus/fitting/AbstractCurveFitter.html)
-class provides the basic functionality for implementing other
-curve fitting classes.
+
+The [AbstractCurveFitter](../apidocs/org/hipparchus/fitting/AbstractCurveFitter.html)
+class provides the basic functionality for implementing other curve fitting classes.
 Users must provide their own implementation of the curve template as a class that implements
-the [            ParametricUnivariateFunction](../apidocs/org/hipparchus/analysis/ParametricUnivariateFunction.html)
+the [ParametricUnivariateFunction](../apidocs/org/hipparchus/analysis/ParametricUnivariateFunction.html)
 interface.
-
-
-

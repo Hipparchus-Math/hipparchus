@@ -1,8 +1,6 @@
 
 ## Hipparchus Fitting
 
-The fitting module provides two feature:
+The fitting module provides curve fitting implementations for different functions:
 
-  * [curve fitting](fitting.html)
-  * [least squares problems solving](leastsquares.html)
-
+  * [Curve fitting](fitting.html)
