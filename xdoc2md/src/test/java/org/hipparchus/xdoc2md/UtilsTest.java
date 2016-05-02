@@ -125,7 +125,7 @@ public class UtilsTest {
         final List<String> inline = new ArrayList<String>();
         inline.add(" <?xml version=1.0?>");
         inline.add("<!--");
-        inline.add("Licensed to the Apache Software Foundation (ASF) under one or more");
+        inline.add("Licensed to the Hipparchus project under one or more");
         inline.add("blah");
         inline.add("blah");
         inline.add("<document>");
