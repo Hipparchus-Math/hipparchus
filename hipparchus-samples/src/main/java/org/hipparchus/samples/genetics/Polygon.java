@@ -51,7 +51,7 @@ public class Polygon {
         final int polygonSize = 4 + 2 * length;
 
         final RandomGenerator random = GeneticAlgorithm.getRandomGenerator();
-        
+
         Polygon p = new Polygon();
         p.data = new float[polygonSize];
 
@@ -59,10 +59,10 @@ public class Polygon {
         p.data[1] = random.nextFloat(); // g
         p.data[2] = random.nextFloat(); // b
         p.data[3] = FastMath.max(0.2f, random.nextFloat() * random.nextFloat()); // a
-        
+
         float px = random.nextFloat();
         float py = random.nextFloat();
-        
+
         for (int k = 0; k < length; k++) {
             p.data[4 + 2*k] = px + (random.nextFloat() - 0.5f);
             p.data[5 + 2*k] = py + (random.nextFloat() - 0.5f);
@@ -76,7 +76,7 @@ public class Polygon {
      * Each component of the Polygon may be mutated according to the specified mutation rate.
      * In case a component is going to be mutated, its value will be randomly modified in the
      * uniform range of [-mutationAmount, +mutationAmount].
-     * 
+     *
      * @param mutationRate the mutation rate
      * @param mutationAmount the mutation amount
      * @return a new Polygon
@@ -89,7 +89,7 @@ public class Polygon {
             float val = this.data[i];
             if (GeneticAlgorithm.getRandomGenerator().nextFloat() < mutationRate) {
                 val += GeneticAlgorithm.getRandomGenerator().nextFloat() * mutationAmount * 2 - mutationAmount;
-                
+
                 if (val < 0f) {
                     val = 0f;
                 } else if (val > 1f) {
@@ -99,7 +99,7 @@ public class Polygon {
             mutated.data[i] = val;
         }
         return mutated;
-    }    
+    }
 
     /**
      * Draw the Polygon to the buffer of the given size.
@@ -109,7 +109,7 @@ public class Polygon {
 
         GeneralPath path = new GeneralPath();
         path.moveTo(data[4] * width, data[5] * height);
-        
+
         int polygonLength = (data.length - 4) / 2;
         for (int j = 1; j < polygonLength; j++) {
             path.lineTo(data[4 + j * 2] * width, data[5 + j * 2] * height);

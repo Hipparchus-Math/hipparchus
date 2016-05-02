@@ -120,22 +120,22 @@ public class RealDistributionComparison {
         chart.getStyleManager().setLegendPadding(6);
         chart.getStyleManager().setLegendSeriesLineLength(6);
         chart.getStyleManager().setAxisTickLabelsFont(new Font("Arial", Font.PLAIN, 9));
-        
+
         chart.getStyleManager().setXAxisMin(minX);
         chart.getStyleManager().setXAxisMax(maxX);
         chart.getStyleManager().setChartBackgroundColor(Color.white);
         chart.getStyleManager().setChartPadding(4);
-        
+
         chart.getStyleManager().setChartType(ChartType.Line);
         return chart;
     }
-    
+
     public static JComponent createComponent(String distributionName, int minX, int maxX, String[] seriesText, RealDistribution... series) {
         JComponent container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
-        
+
         container.add(new JLabel(distributionName));
-        
+
         Chart chart = createChart("PDF", minX, maxX, LegendPosition.InsideNE);
         int i = 0;
         for (RealDistribution d : series) {
@@ -153,19 +153,19 @@ public class RealDistributionComparison {
         container.setBorder(BorderFactory.createLineBorder(Color.black, 1));
         return container;
     }
-    
+
     @SuppressWarnings("serial")
     public static class Display extends ExampleFrame {
-        
+
         private JComponent container;
 
         public Display() {
             setTitle("Hipparchus: Real distributions overview");
             setSize(1320, 920);
-            
+
             container = new JPanel();
             container.setLayout(new GridBagLayout());
-            
+
             GridBagConstraints c = new GridBagConstraints();
             c.fill = GridBagConstraints.VERTICAL;
             c.gridx = 0;
@@ -200,7 +200,7 @@ public class RealDistributionComparison {
                                    new CauchyDistribution(0, 2),
                                    new CauchyDistribution(-2, 1));
             container.add(comp, c);
-            
+
             c.gridx++;
             comp = createComponent("ChiSquared", 0, 5,
                                    new String[] { "k=1", "k=2", "k=3", "k=4", "k=6" },
@@ -218,7 +218,7 @@ public class RealDistributionComparison {
                                    new ExponentialDistribution(0.5),
                                    new ExponentialDistribution(1),
                                    new ExponentialDistribution(1.5),
-                                   new ExponentialDistribution(2.5));                               
+                                   new ExponentialDistribution(2.5));
             container.add(comp, c);
 
             c.gridx++;
@@ -270,7 +270,7 @@ public class RealDistributionComparison {
                                    new ParetoDistribution(1, 1),
                                    new ParetoDistribution(1, 2),
                                    new ParetoDistribution(1, 3),
-                                   new ParetoDistribution(1, 10));                               
+                                   new ParetoDistribution(1, 10));
             container.add(comp, c);
 
             c.gridx++;
@@ -279,7 +279,7 @@ public class RealDistributionComparison {
                                    new TDistribution(1),
                                    new TDistribution(2),
                                    new TDistribution(5),
-                                   new TDistribution(10000));                               
+                                   new TDistribution(10000));
             container.add(comp, c);
 
             c.gridx++;
@@ -290,10 +290,10 @@ public class RealDistributionComparison {
                                    new WeibullDistribution(1.5, 1),
                                    new WeibullDistribution(5, 1));
             container.add(comp, c);
-            
+
             JScrollPane scrollPane = new JScrollPane(container);
             add(scrollPane);
-            
+
         }
 
         @Override

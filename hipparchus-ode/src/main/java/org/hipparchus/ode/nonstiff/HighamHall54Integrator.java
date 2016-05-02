@@ -83,7 +83,7 @@ public class HighamHall54Integrator extends EmbeddedRungeKuttaIntegrator {
     /** {@inheritDoc} */
     @Override
     public double[] getC() {
-        return new double[] {                   
+        return new double[] {
             2.0/9.0, 1.0/3.0, 1.0/2.0, 3.0/5.0, 1.0, 1.0
         };
     }
@@ -104,7 +104,7 @@ public class HighamHall54Integrator extends EmbeddedRungeKuttaIntegrator {
     /** {@inheritDoc} */
     @Override
     public double[] getB() {
-        return new double[] {            
+        return new double[] {
             1.0/12.0, 0.0, 27.0/32.0, -4.0/3.0, 125.0/96.0, 5.0/48.0, 0.0
         };
     }

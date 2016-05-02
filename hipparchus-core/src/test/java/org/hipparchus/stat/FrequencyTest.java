@@ -39,7 +39,7 @@ public final class FrequencyTest {
     private static final int  TWO = 2;
     private static final int  THREE = 3 ;
     private static final char CHAR_A = 'a';
-    
+
     private static final double TOLERANCE = 10E-15d;
 
     /** test freq counts */
@@ -115,7 +115,7 @@ public final class FrequencyTest {
     @Test
     public void testCountsCharacter() {
         Frequency<Character> f = new Frequency<>();
-        
+
         assertEquals(0L, f.getCount('a'));
         assertEquals(0L, f.getCumFreq('b'));
         TestUtils.assertEquals(Double.NaN, f.getPct('a'), 0.0);
@@ -193,7 +193,7 @@ public final class FrequencyTest {
     @Test
     public void testToString() throws Exception {
         Frequency<Long> f = new Frequency<>();
-        
+
         f.addValue(ONE_LONG);
         f.addValue(TWO_LONG);
         f.addValue((long) ONE);

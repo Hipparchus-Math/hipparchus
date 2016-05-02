@@ -54,20 +54,20 @@ import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 public class ImageClusteringExample {
 
     public static class Display extends ExampleFrame {
-        
+
         private BufferedImage referenceImage;
         private BufferedImage clusterImage;
-        
+
         private Raster referenceRaster;
-        
+
         private ImagePainter painter;
-        
+
         private JSpinner clusterSizeSpinner;
 
         public Display() throws Exception {
             setTitle("Hipparchus: Image Clustering Example");
             setSize(900, 350);
-            
+
             setLayout(new FlowLayout());
 
             Box bar = Box.createHorizontalBox();
@@ -94,14 +94,14 @@ public class ImageClusteringExample {
             JPanel controlBox = new JPanel();
             controlBox.setLayout(new GridLayout(5, 1));
             controlBox.setBorder(BorderFactory.createLineBorder(Color.black, 1));
-            
+
             JPanel sizeBox = new JPanel();
             JLabel sizeLabel = new JLabel("Clusters:");
             sizeBox.add(sizeLabel);
-            
+
             SpinnerNumberModel model = new SpinnerNumberModel(3, 2, 10, 1);
             clusterSizeSpinner = new JSpinner(model);
-            
+
             sizeLabel.setLabelFor(clusterSizeSpinner);
             sizeBox.add(clusterSizeSpinner);
             controlBox.add(sizeBox, BorderLayout.NORTH);
@@ -120,7 +120,7 @@ public class ImageClusteringExample {
                 }
             });
         }
-        
+
         private void clusterImage() {
             List<PixelClusterable> pixels = new ArrayList<PixelClusterable>();
             for (int row = 0; row < referenceImage.getHeight(); row++) {
@@ -128,12 +128,12 @@ public class ImageClusteringExample {
                     pixels.add(new PixelClusterable(col, row));
                 }
             }
-            
+
             int clusterSize = ((Number) clusterSizeSpinner.getValue()).intValue();
             KMeansPlusPlusClusterer<PixelClusterable> clusterer =
                     new KMeansPlusPlusClusterer<PixelClusterable>(clusterSize);
             List<CentroidCluster<PixelClusterable>> clusters = clusterer.cluster(pixels);
-            
+
             WritableRaster raster = clusterImage.getRaster();
             for (CentroidCluster<PixelClusterable> cluster : clusters) {
                 double[] color = cluster.getCenter().getPoint();
@@ -141,16 +141,16 @@ public class ImageClusteringExample {
                     raster.setPixel(pixel.x, pixel.y, color);
                 }
             }
-            
+
             Display.this.repaint();
         }
 
         private class PixelClusterable implements Clusterable {
-            
+
             private final int x;
             private final int y;
             private double[] color;
-            
+
             public PixelClusterable(int x, int y) {
                 this.x = x;
                 this.y = y;
@@ -168,7 +168,7 @@ public class ImageClusteringExample {
         }
 
         private class ImagePainter extends Component {
-            
+
             private int width;
             private int height;
 

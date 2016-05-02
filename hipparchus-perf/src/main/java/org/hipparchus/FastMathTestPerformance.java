@@ -285,7 +285,7 @@ public class FastMathTestPerformance {
         report("cos",strictTime,fastTime,mathTime);
         assertTrue(!Double.isNaN(x));
     }
-            
+
     private static void testAcos() {
         double x = 0;
         long time = System.nanoTime();
@@ -591,7 +591,7 @@ public class FastMathTestPerformance {
         report("tanh",strictTime,fastTime,mathTime);
         assertTrue(!Double.isNaN(x));
     }
-     
+
     private static void testExpm1() {
         double x = 0;
         long time = System.nanoTime();

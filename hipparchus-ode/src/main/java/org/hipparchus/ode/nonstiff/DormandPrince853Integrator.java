@@ -153,7 +153,7 @@ public class DormandPrince853Integrator extends EmbeddedRungeKuttaIntegrator {
     @Override
     public double[] getC() {
         final double sqrt6 = FastMath.sqrt(6.0);
-        return new double[] {                   
+        return new double[] {
             (12.0 - 2.0 * sqrt6) / 135.0,
             (6.0 - sqrt6) / 45.0,
             (6.0 - sqrt6) / 30.0,
@@ -322,7 +322,7 @@ public class DormandPrince853Integrator extends EmbeddedRungeKuttaIntegrator {
     /** {@inheritDoc} */
     @Override
     public double[] getB() {
-        return new double[] {            
+        return new double[] {
             104257.0/1920240.0,
             0.0,
             0.0,

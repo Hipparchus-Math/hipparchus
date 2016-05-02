@@ -110,7 +110,7 @@ public class DormandPrince54Integrator extends EmbeddedRungeKuttaIntegrator {
     /** {@inheritDoc} */
     @Override
     public double[] getC() {
-        return new double[] {                   
+        return new double[] {
             1.0 / 5.0, 3.0 / 10.0, 4.0 / 5.0, 8.0 / 9.0, 1.0, 1.0
         };
     }
@@ -131,7 +131,7 @@ public class DormandPrince54Integrator extends EmbeddedRungeKuttaIntegrator {
     /** {@inheritDoc} */
     @Override
     public double[] getB() {
-        return new double[] {            
+        return new double[] {
             35.0 / 384.0, 0.0, 500.0 / 1113.0, 125.0 / 192.0, -2187.0 / 6784.0, 11.0 / 84.0, 0.0
         };
     }

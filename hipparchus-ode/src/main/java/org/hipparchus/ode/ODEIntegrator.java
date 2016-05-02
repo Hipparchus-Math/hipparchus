@@ -271,7 +271,7 @@ public interface ODEIntegrator  {
         // extract results back from the stateful equations
         System.arraycopy(finalState.getPrimaryState(), 0, y, 0, y.length);
         return finalState.getTime();
-        
+
     }
 
 }

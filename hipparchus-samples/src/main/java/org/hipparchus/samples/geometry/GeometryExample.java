@@ -57,8 +57,8 @@ import org.piccolo2d.nodes.PText;
 
 /**
  * Simple example illustrating some parts of the geometry package.
- * 
- * TODO: 
+ *
+ * TODO:
  *  - select tolerance level
  *  - allow editing of the point set
  */
@@ -74,7 +74,7 @@ public class GeometryExample {
             points.add(new Vector2D(FastMath.round(random.nextDouble() * 400 + 100),
                     FastMath.round(random.nextDouble() * 400 + 100)));
         }
-        
+
         return points;
     }
 
@@ -87,13 +87,13 @@ public class GeometryExample {
             Vector2D circle = new Vector2D(FastMath.cos(angle), FastMath.sin(angle));
             points.add(circle.scalarMultiply(200).add(center));
         }
-        
+
         return points;
     }
 
     public static List<Vector2D> createCross() {
         List<Vector2D> points = new ArrayList<Vector2D>();
-        
+
         for (int i = 100; i < 500; i += 10) {
             points.add(new Vector2D(300, i));
             points.add(new Vector2D(i, 300));
@@ -105,7 +105,7 @@ public class GeometryExample {
     public static PCanvas createCanvas() {
         final PCanvas canvas = new PCanvas();
         final PCamera camera = canvas.getCamera();
-        
+
         final PText tooltipNode = new PText();
         tooltipNode.setPickable(false);
         camera.addChild(tooltipNode);
@@ -172,7 +172,7 @@ public class GeometryExample {
 //                @Override
                 public void actionPerformed(ActionEvent e) {
                     canvas.getLayer().removeAllChildren();
-                    
+
                     points = createRandomPoints(1000);
                     paintConvexHull();
                 }
@@ -186,7 +186,7 @@ public class GeometryExample {
 //                @Override
                 public void actionPerformed(ActionEvent e) {
                     canvas.getLayer().removeAllChildren();
-                    
+
                     points = createCircle(100);
                     paintConvexHull();
                 }
@@ -200,7 +200,7 @@ public class GeometryExample {
 //                @Override
                 public void actionPerformed(ActionEvent e) {
                     canvas.getLayer().removeAllChildren();
-                    
+
                     points = createCross();
                     paintConvexHull();
                 }
@@ -210,7 +210,7 @@ public class GeometryExample {
             splitpane.setDividerLocation(600);
 
             add(splitpane);
-            
+
             points = createRandomPoints(1000);
             paintConvexHull();
         }
@@ -219,7 +219,7 @@ public class GeometryExample {
         public Component getMainPanel() {
             return container;
         }
-        
+
         public void paintConvexHull() {
             PNode pointSet = new PNode();
             for (Vector2D point : points) {

@@ -23,7 +23,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for {@link LogNormalDistribution}. 
+ * Test cases for {@link LogNormalDistribution}.
  */
 public class LogNormalDistributionTest extends RealDistributionAbstractTest {
 

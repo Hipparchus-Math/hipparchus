@@ -70,7 +70,7 @@ public class IncrementorTest {
         while (i.canIncrement(2)) {
             i.increment(2);
         }
-        
+
         Assert.assertEquals(2, i.getCount());
     }
 
@@ -135,7 +135,7 @@ public class IncrementorTest {
         i.increment(1);
         Assert.assertEquals(3, i.getCount());
     }
-    
+
     @Test(expected=MathIllegalStateException.class)
     public void testBulkIncrementExceeded() {
         final Incrementor i = new Incrementor(3);
@@ -149,11 +149,11 @@ public class IncrementorTest {
     public void testWithMaximalValue()
     {
         final Incrementor i = new Incrementor(3);
-        
+
         Assert.assertEquals(3, i.getMaximalCount());
-        
+
         Incrementor i2 = i.withMaximalCount(10);
-        
+
         Assert.assertNotEquals(i, i2);
         Assert.assertEquals(3, i.getMaximalCount());
         Assert.assertEquals(10, i2.getMaximalCount());

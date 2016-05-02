@@ -94,7 +94,7 @@ public class DenseOutputModelTest {
 
         // theoretical solution: y[0] = cos(t), y[1] = sin(t)
         OrdinaryDifferentialEquation problem =
-                        new OrdinaryDifferentialEquation() {        
+                        new OrdinaryDifferentialEquation() {
             @Override
             public double[] computeDerivatives(double t, double[] y) {
                 return new double[] { -y[1], y[0] };

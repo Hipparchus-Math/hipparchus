@@ -63,7 +63,7 @@ public class RandomGeneratorBenchmark {
     RandomGenerator well44497b;
     RandomGenerator well512a;
 
-    
+
     @Setup(Level.Trial)
     public void up() {
         jdkRandom          = new Random();

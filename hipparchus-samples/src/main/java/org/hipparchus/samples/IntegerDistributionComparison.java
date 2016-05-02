@@ -109,23 +109,23 @@ public class IntegerDistributionComparison {
         chart.getStyleManager().setLegendPadding(6);
         chart.getStyleManager().setLegendSeriesLineLength(6);
         chart.getStyleManager().setAxisTickLabelsFont(new Font("Arial", Font.PLAIN, 9));
-        
+
         chart.getStyleManager().setXAxisMin(minX);
         chart.getStyleManager().setXAxisMax(maxX);
         chart.getStyleManager().setChartBackgroundColor(Color.white);
         chart.getStyleManager().setChartPadding(4);
-        
+
         chart.getStyleManager().setChartType(ChartType.Line);
         return chart;
     }
-    
+
     public static JComponent createComponent(String distributionName, int minX, int maxX, String[] seriesText,
                                              IntegerDistribution... series) {
         JComponent container = new JPanel();
         container.setLayout(new BoxLayout(container, BoxLayout.PAGE_AXIS));
-        
+
         container.add(new JLabel(distributionName));
-        
+
         Chart chart = createChart("PDF", minX, maxX, LegendPosition.InsideNE);
         int i = 0;
         for (IntegerDistribution d : series) {
@@ -143,19 +143,19 @@ public class IntegerDistributionComparison {
         container.setBorder(BorderFactory.createLineBorder(Color.black, 1));
         return container;
     }
-    
+
     @SuppressWarnings("serial")
     public static class Display extends ExampleFrame {
-        
+
         private JComponent container;
 
         public Display() {
             setTitle("Hipparchus: Integer distributions overview");
             setSize(1320, 920);
-            
+
             container = new JPanel();
             container.setLayout(new GridBagLayout());
-            
+
             GridBagConstraints c = new GridBagConstraints();
             c.fill = GridBagConstraints.VERTICAL;
             c.gridx = 0;
@@ -223,7 +223,7 @@ public class IntegerDistributionComparison {
 
             JScrollPane scrollPane = new JScrollPane(container);
             add(scrollPane);
-            
+
         }
 
         @Override

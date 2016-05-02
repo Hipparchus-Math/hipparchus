@@ -63,7 +63,7 @@ public class ClusterAlgorithmComparison {
         if (factor < 0 || factor > 1) {
             throw new IllegalArgumentException();
         }
-        
+
         NormalDistribution dist = new NormalDistribution(random, 0.0, noise);
 
         List<Vector2D> points = new ArrayList<Vector2D>();
@@ -72,11 +72,11 @@ public class ClusterAlgorithmComparison {
         for (double angle = 0; angle < range; angle += step) {
             Vector2D outerCircle = new Vector2D(FastMath.cos(angle), FastMath.sin(angle));
             Vector2D innerCircle = outerCircle.scalarMultiply(factor);
-            
+
             points.add(outerCircle.add(generateNoiseVector(dist)));
             points.add(innerCircle.add(generateNoiseVector(dist)));
         }
-        
+
         if (shuffle) {
             Collections.shuffle(points, new RandomAdaptor(random));
         }
@@ -89,7 +89,7 @@ public class ClusterAlgorithmComparison {
 
         int nSamplesOut = samples / 2;
         int nSamplesIn = samples - nSamplesOut;
-        
+
         List<Vector2D> points = new ArrayList<Vector2D>();
         double range = FastMath.PI;
         double step = range / (nSamplesOut / 2.0);
@@ -103,7 +103,7 @@ public class ClusterAlgorithmComparison {
             Vector2D innerCircle = new Vector2D(1 - FastMath.cos(angle), 1 - FastMath.sin(angle) - 0.5);
             points.add(innerCircle.add(generateNoiseVector(dist)));
         }
-        
+
         if (shuffle) {
             Collections.shuffle(points, new RandomAdaptor(random));
         }
@@ -123,15 +123,15 @@ public class ClusterAlgorithmComparison {
             double y = random.nextDouble() * range + min;
             centerPoints[i] = new Vector2D(x, y);
         }
-        
+
         int[] nSamplesPerCenter = new int[centers];
         int count = samples / centers;
         Arrays.fill(nSamplesPerCenter, count);
-        
+
         for (int i = 0; i < samples % centers; i++) {
             nSamplesPerCenter[i]++;
         }
-        
+
         List<Vector2D> points = new ArrayList<Vector2D>();
         for (int i = 0; i < centers; i++) {
             for (int j = 0; j < nSamplesPerCenter[i]; j++) {
@@ -139,14 +139,14 @@ public class ClusterAlgorithmComparison {
                 points.add(point.add(centerPoints[i]));
             }
         }
-        
+
         if (shuffle) {
             Collections.shuffle(points, new RandomAdaptor(random));
         }
 
         return points;
     }
-    
+
     public static List<Vector2D> makeRandom(int samples) {
         SobolSequenceGenerator generator = new SobolSequenceGenerator(2);
         generator.skipTo(999999);
@@ -158,14 +158,14 @@ public class ClusterAlgorithmComparison {
             Vector2D point = new Vector2D(vector);
             points.add(point);
         }
-        
+
         return points;
     }
 
     public static Vector2D generateNoiseVector(NormalDistribution distribution) {
         return new Vector2D(distribution.sample(), distribution.sample());
     }
-    
+
     public static List<DoublePoint> normalize(final List<Vector2D> input, double minX, double maxX, double minY, double maxY) {
         double rangeX = maxX - minX;
         double rangeY = maxY - minY;
@@ -178,18 +178,18 @@ public class ClusterAlgorithmComparison {
         }
         return points;
     }
-    
+
     @SuppressWarnings("serial")
     public static class Display extends ExampleFrame {
-        
+
         public Display() {
             setTitle("Hipparchus: Cluster algorithm comparison");
             setSize(800, 800);
-            
+
             setLayout(new GridBagLayout());
-            
+
             int nSamples = 1500;
-            
+
             RandomGenerator rng = new Well19937c(0);
             List<List<DoublePoint>> datasets = new ArrayList<List<DoublePoint>>();
 
@@ -199,13 +199,13 @@ public class ClusterAlgorithmComparison {
             datasets.add(normalize(makeRandom(nSamples), -1, 1, -1, 1));
 
             List<Pair<String, Clusterer<DoublePoint>>> algorithms = new ArrayList<Pair<String, Clusterer<DoublePoint>>>();
-            
-            algorithms.add(new Pair<String, Clusterer<DoublePoint>>("KMeans\n(k=2)", new KMeansPlusPlusClusterer<DoublePoint>(2)));            
+
+            algorithms.add(new Pair<String, Clusterer<DoublePoint>>("KMeans\n(k=2)", new KMeansPlusPlusClusterer<DoublePoint>(2)));
             algorithms.add(new Pair<String, Clusterer<DoublePoint>>("KMeans\n(k=3)", new KMeansPlusPlusClusterer<DoublePoint>(3)));
             algorithms.add(new Pair<String, Clusterer<DoublePoint>>("FuzzyKMeans\n(k=3, fuzzy=2)", new FuzzyKMeansClusterer<DoublePoint>(3, 2)));
             algorithms.add(new Pair<String, Clusterer<DoublePoint>>("FuzzyKMeans\n(k=3, fuzzy=10)", new FuzzyKMeansClusterer<DoublePoint>(3, 10)));
             algorithms.add(new Pair<String, Clusterer<DoublePoint>>("DBSCAN\n(eps=.1, min=3)", new DBSCANClusterer<DoublePoint>(0.1, 3)));
-            
+
             GridBagConstraints c = new GridBagConstraints();
             c.fill = GridBagConstraints.VERTICAL;
             c.gridx = 0;
@@ -229,7 +229,7 @@ public class ClusterAlgorithmComparison {
                     c.gridx++;
                 }
                 c.gridy++;
-            }            
+            }
         }
 
     }
@@ -246,7 +246,7 @@ public class ClusterAlgorithmComparison {
             this.clusters = clusters;
             this.duration = duration;
         }
-        
+
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -258,10 +258,10 @@ public class ClusterAlgorithmComparison {
             int h = getHeight();
 
             g2.clearRect(0, 0, w, h);
-            
+
             g2.setPaint(Color.black);
             g2.drawRect(0, 0, w - 1, h - 1);
-            
+
             int index = 0;
             Color[] colors = new Color[] { Color.red, Color.blue, Color.green.darker() };
             for (Cluster<DoublePoint> cluster : clusters) {
@@ -271,21 +271,21 @@ public class ClusterAlgorithmComparison {
                     double[] arr = p.getPoint();
                     g2.fill(new Ellipse2D.Double(arr[0] - 1, arr[1] - 1, 3, 3));
                 }
-                
+
                 if (cluster instanceof CentroidCluster) {
                     Clusterable p = transform(((CentroidCluster<?>) cluster).getCenter(), w, h);
                     double[] arr = p.getPoint();
-                    Shape s = new Ellipse2D.Double(arr[0] - 4, arr[1] - 4, 8, 8); 
+                    Shape s = new Ellipse2D.Double(arr[0] - 4, arr[1] - 4, 8, 8);
                     g2.fill(s);
                     g2.setPaint(Color.black);
                     g2.draw(s);
                 }
             }
-            
+
             g2.setPaint(Color.black);
             g2.drawString(String.format("%.2f s", duration / 1e3), w - 40, h - 5);
-        }        
-        
+        }
+
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(150, 150);

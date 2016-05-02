@@ -86,7 +86,7 @@ public class DefaultTransformerTest {
         Assert.assertEquals(DefaultTransformer.getInstance(),
                             TestUtils.serializeAndRecover(DefaultTransformer.getInstance()));
     }
-    
+
     @Test
     public void testEquals() {
         Assert.assertEquals(DefaultTransformer.getInstance(),
