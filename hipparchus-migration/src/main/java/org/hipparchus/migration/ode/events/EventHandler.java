@@ -208,8 +208,8 @@ public interface EventHandler extends ODEEventHandler {
 
      * <p>The scheduling between this method and the {@link
      * org.hipparchus.migration.ode.sampling.StepHandler StepHandler} method {@link
-     * org.hipparchus.migration.ode.sampling.StepHandler#handleStep(org.hipparchus.migration.ode.MigrationStepInterpolator,
-     * boolean) handleStep(interpolator, isLast)} is to call this method first and
+     * org.hipparchus.migration.ode.sampling.StepHandler#handleStep(org.hipparchus.ode.sampling.ODEStateInterpolator, boolean)
+     * handleStep} is to call this method first and
      * <code>handleStep</code> afterwards. This scheduling allows the integrator to
      * pass <code>true</code> as the <code>isLast</code> parameter to the step
      * handler to make it aware the step will be the last one if this method
