@@ -21,7 +21,6 @@ import java.util.Locale;
 import org.hipparchus.clustering.LocalizedClusteringFormats;
 import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.fitting.LocalizedFittingFormats;
 import org.hipparchus.genetics.LocalizedGeneticsFormats;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.migration.LocalizedMigrationFormats;
@@ -158,7 +157,7 @@ public enum LocalizedFormats implements Localizable {
     INVALID_BINARY_CHROMOSOME(LocalizedGeneticsFormats.INVALID_BINARY_CHROMOSOME),
     INVALID_BRACKETING_PARAMETERS(org.hipparchus.migration.LocalizedMigrationFormats.INVALID_BRACKETING_PARAMETERS),
     INVALID_FIXED_LENGTH_CHROMOSOME(LocalizedGeneticsFormats.INVALID_FIXED_LENGTH_CHROMOSOME),
-    INVALID_IMPLEMENTATION(LocalizedFittingFormats.INVALID_IMPLEMENTATION),
+    INVALID_IMPLEMENTATION(LocalizedOptimFormats.INVALID_IMPLEMENTATION),
     INVALID_INTERVAL_INITIAL_VALUE_PARAMETERS(org.hipparchus.migration.LocalizedMigrationFormats.INVALID_INTERVAL_INITIAL_VALUE_PARAMETERS),
     INVALID_ITERATIONS_LIMITS(org.hipparchus.migration.LocalizedMigrationFormats.INVALID_ITERATIONS_LIMITS),
     INVALID_MAX_ITERATIONS(LocalizedCoreFormats.INVALID_MAX_ITERATIONS),
@@ -340,10 +339,10 @@ public enum LocalizedFormats implements Localizable {
     TOO_LARGE_TOURNAMENT_ARITY(LocalizedGeneticsFormats.TOO_LARGE_TOURNAMENT_ARITY),
     TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY(LocalizedCoreFormats.TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY),
     TOO_MANY_REGRESSORS(LocalizedCoreFormats.TOO_MANY_REGRESSORS),
-    TOO_SMALL_COST_RELATIVE_TOLERANCE(LocalizedFittingFormats.TOO_SMALL_COST_RELATIVE_TOLERANCE),
+    TOO_SMALL_COST_RELATIVE_TOLERANCE(LocalizedOptimFormats.TOO_SMALL_COST_RELATIVE_TOLERANCE),
     TOO_SMALL_INTEGRATION_INTERVAL(LocalizedODEFormats.TOO_SMALL_INTEGRATION_INTERVAL),
-    TOO_SMALL_ORTHOGONALITY_TOLERANCE(LocalizedFittingFormats.TOO_SMALL_ORTHOGONALITY_TOLERANCE),
-    TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE(LocalizedFittingFormats.TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE),
+    TOO_SMALL_ORTHOGONALITY_TOLERANCE(LocalizedOptimFormats.TOO_SMALL_ORTHOGONALITY_TOLERANCE),
+    TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE(LocalizedOptimFormats.TOO_SMALL_PARAMETERS_RELATIVE_TOLERANCE),
     TRUST_REGION_STEP_FAILED(LocalizedOptimFormats.TRUST_REGION_STEP_FAILED),
     TWO_OR_MORE_CATEGORIES_REQUIRED(LocalizedCoreFormats.TWO_OR_MORE_CATEGORIES_REQUIRED),
     TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED(LocalizedCoreFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED),
@@ -351,7 +350,7 @@ public enum LocalizedFormats implements Localizable {
     UNABLE_TO_COMPUTE_COVARIANCE_SINGULAR_PROBLEM(org.hipparchus.migration.LocalizedMigrationFormats.UNABLE_TO_COMPUTE_COVARIANCE_SINGULAR_PROBLEM),
     UNABLE_TO_FIRST_GUESS_HARMONIC_COEFFICIENTS(org.hipparchus.migration.LocalizedMigrationFormats.UNABLE_TO_FIRST_GUESS_HARMONIC_COEFFICIENTS),
     UNABLE_TO_ORTHOGONOLIZE_MATRIX(LocalizedGeometryFormats.UNABLE_TO_ORTHOGONOLIZE_MATRIX),
-    UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN(LocalizedFittingFormats.UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN),
+    UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN(LocalizedOptimFormats.UNABLE_TO_PERFORM_QR_DECOMPOSITION_ON_JACOBIAN),
     UNBOUNDED_SOLUTION(LocalizedOptimFormats.UNBOUNDED_SOLUTION),
     UNKNOWN_MODE(LocalizedCoreFormats.UNKNOWN_MODE),
     UNKNOWN_PARAMETER(LocalizedODEFormats.UNKNOWN_PARAMETER),
