@@ -591,6 +591,41 @@ public class CloseEventsTest {
         Assert.assertSame(detectorC, events.get(1).getHandler());
     }
 
+    /** check when root finding tolerance > event finding tolerance. */
+    @Test
+    public void testToleranceStop() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1e-18; // less than 1 ulp
+        double t1 = 15.1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        TimeDetector detectorA = new FlatDetector(Action.STOP, events, t1);
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+
+        // action
+        ODEStateAndDerivative finalState =
+                integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+
+        // verify
+        Assert.assertEquals(1, events.size());
+        // use root finder tolerance instead of event finder tolerance.
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t1, finalState.getTime(), tolerance);
+
+        // try to resume propagation
+        finalState = integrator.integrate(new Equation(), finalState, 30.0);
+
+        // verify it got to the end
+        Assert.assertEquals(30.0, finalState.getTime(), 0.0);
+    }
+
+
+
     /* The following tests are copies of the above tests, except that they propagate in
      * the reverse direction and all the signs on the time values are negated.
      */
@@ -1151,6 +1186,39 @@ public class CloseEventsTest {
         Assert.assertSame(detectorC, events.get(1).getHandler());
     }
 
+    /** check when root finding tolerance > event finding tolerance. */
+    @Test
+    public void testToleranceStopReverse() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1e-18; // less than 1 ulp
+        double t1 = -15.1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        TimeDetector detectorA = new FlatDetector(Action.STOP, events, t1);
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+
+        // action
+        ODEStateAndDerivative finalState =
+                integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+
+        // verify
+        Assert.assertEquals(1, events.size());
+        // use root finder tolerance instead of event finder tolerance.
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t1, finalState.getTime(), tolerance);
+
+        // try to resume propagation
+        finalState = integrator.integrate(new Equation(), finalState, -30.0);
+
+        // verify it got to the end
+        Assert.assertEquals(-30.0, finalState.getTime(), 0.0);
+    }
+
 
 
     /* utility classes and methods */
@@ -1292,6 +1360,10 @@ public class CloseEventsTest {
             super(events, eventTs);
         }
 
+        public FlatDetector(Action action, List<Event> events, double... eventTs) {
+            super(action, events, eventTs);
+        }
+
         @Override
         public double g(ODEStateAndDerivative state) {
             final double g = super.g(state);
@@ -1305,6 +1377,10 @@ public class CloseEventsTest {
 
         public ContinuousDetector(List<Event> events, double... eventTs) {
             super(events, eventTs);
+        }
+
+        public ContinuousDetector(Action action, List<Event> events, double... eventTs) {
+            super(action, events, eventTs);
         }
 
         @Override

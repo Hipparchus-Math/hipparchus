@@ -70,6 +70,12 @@ public class FieldEventState<T extends RealFieldElement<T>> {
     /** Occurrence time of the pending event. */
     private T pendingEventTime;
 
+    /**
+     * Time to stop propagation if the event is a stop event. Used to enable stopping at
+     * an event and then restarting after that event.
+     */
+    private T stopTime;
+
     /** Time after the current event. */
     private T afterEvent;
 
@@ -158,6 +164,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
     public void reinitializeBegin(final FieldODEStateInterpolator<T> interpolator)
         throws MathIllegalStateException {
 
+        forward = interpolator.isForward();
         final FieldODEStateAndDerivative<T> s0 = interpolator.getPreviousState();
         t0 = s0.getTime();
         g0 = handler.g(s0);
@@ -177,7 +184,10 @@ public class FieldEventState<T extends RealFieldElement<T>> {
             // we will use the sign slightly after step beginning to force ignoring this zero
             final T epsilon = max(solver.getAbsoluteAccuracy(),
                     solver.getRelativeAccuracy().multiply(t0).abs());
-            final T tStart = t0.add(epsilon.multiply(0.5));
+            T tStart = t0.add(epsilon.multiply(forward ? 0.5 : -0.5));
+            if (tStart.equals(t0)) {
+                tStart = nextAfter(t0);
+            }
             t0 = tStart;
             g0 = handler.g(interpolator.getInterpolatedState(tStart));
         }
@@ -289,27 +299,31 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         // loop to skip through "fake" roots, i.e. where g(t) = g'(t) = 0.0
         while (true) {
             // event time, just at or before the actual root.
-            final T beforeRoot;
+            final T beforeRoot, beforeTootG;
             // time on the other sie of the root
             T afterRoot;
             if (ga.getReal() == 0.0) {
                 // ga == 0.0 and gb may or may not be 0.0
                 // handle the root at ta first
                 beforeRoot = ta;
+                beforeTootG = ga;
                 afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
             } else if (gb.getReal() == 0.0) {
                 // hard: ga != 0.0 and gb == 0.0
                 // look past gb by up to convergence to find next sign
                 beforeRoot = tb;
+                beforeTootG = gb;
                 afterRoot = shiftedBy(beforeRoot, convergence);
             } else if (ta.getReal() == tb.getReal()) {
                 // both non-zero but times are the same. Probably due to reset state
                 beforeRoot = ta;
+                beforeTootG = ga;
                 afterRoot = shiftedBy(beforeRoot, convergence);
             } else if (ga.getReal() > 0 != f.value(ta).getReal() > 0) {
                 // both non-zero, step sign change at ta, possibly due to reset state
                 // this should only be able to happen the first time through the loop
                 beforeRoot = ta;
+                beforeTootG = ga;
                 afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
             } else {
                 // both non-zero, the usual case, use a root finder.
@@ -317,11 +331,13 @@ public class FieldEventState<T extends RealFieldElement<T>> {
                     final Interval<T> interval =
                             solver.solveInterval(maxIterationCount, f, ta, tb);
                     beforeRoot = interval.getLeftAbscissa();
+                    beforeTootG = interval.getLeftValue();
                     afterRoot = interval.getRightAbscissa();
                 } else {
                     final Interval<T> interval =
                             solver.solveInterval(maxIterationCount, f, tb, ta);
                     beforeRoot = interval.getRightAbscissa();
+                    beforeTootG = interval.getRightValue();
                     afterRoot = interval.getLeftAbscissa();
                 }
             }
@@ -351,6 +367,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
                 // variation direction, with respect to the integration direction
                 increasing = !g0Positive;
                 pendingEventTime = beforeRoot;
+                stopTime = beforeTootG.getReal() == 0.0 ? beforeRoot : afterRoot;
                 pendingEvent = true;
                 afterEvent = afterRoot;
                 afterG = afterRootG;
@@ -439,7 +456,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         g0Positive = increasing;
         // check g0Positive set correctly
         check(g0.getReal() == 0.0 || g0Positive == (g0.getReal() > 0));
-        return new EventOccurrence<>(action, newState, earliestTimeConsidered);
+        return new EventOccurrence<>(action, newState, stopTime);
     }
 
     /**

@@ -68,6 +68,12 @@ public class EventState {
     /** Occurrence time of the pending event. */
     private double pendingEventTime;
 
+    /**
+     * Time to stop propagation if the event is a stop event. Used to enable stopping at
+     * an event and then restarting after that event.
+     */
+    private double stopTime;
+
     /** Time after the current event. */
     private double afterEvent;
 
@@ -156,6 +162,7 @@ public class EventState {
     public void reinitializeBegin(final ODEStateInterpolator interpolator)
         throws MathIllegalStateException {
 
+        forward = interpolator.isForward();
         final ODEStateAndDerivative s0 = interpolator.getPreviousState();
         t0 = s0.getTime();
         g0 = handler.g(s0);
@@ -175,7 +182,11 @@ public class EventState {
             // we will use the sign slightly after step beginning to force ignoring this zero
             final double epsilon = FastMath.max(solver.getAbsoluteAccuracy(),
                                                 FastMath.abs(solver.getRelativeAccuracy() * t0));
-            final double tStart = t0 + (interpolator.isForward() ? 0.5 : -0.5) * epsilon;
+            double tStart = t0 + (forward ? 0.5 : -0.5) * epsilon;
+            // check for case where tolerance is too small to make a difference
+            if (tStart == t0) {
+                tStart = nextAfter(t0);
+            }
             t0 = tStart;
             g0 = handler.g(interpolator.getInterpolatedState(tStart));
         }
@@ -266,7 +277,7 @@ public class EventState {
         // loop to skip through "fake" roots, i.e. where g(t) = g'(t) = 0.0
         while (true) {
             // event time, just at or before the actual root.
-            final double beforeRoot;
+            final double beforeRoot, beforeRootG;
             // time on the other side of the root
             double afterRoot;
             double afterRootG;
@@ -274,6 +285,7 @@ public class EventState {
                 // ga == 0.0 and gb may or may not be 0.0
                 // handle the root at ta first
                 beforeRoot = ta;
+                beforeRootG = ga;
                 afterRoot  = minTime(shiftedBy(beforeRoot, convergence), tb);
                 afterRootG = f.value(afterRoot);
             } else if (gb == 0.0) {
@@ -281,17 +293,20 @@ public class EventState {
                 // look past gb by up to convergence to find next sign
                 // throw an exception if g(t) = 0.0 in [tb, tb + convergence]
                 beforeRoot = tb;
+                beforeRootG = gb;
                 afterRoot  = shiftedBy(beforeRoot, convergence);
                 afterRootG = f.value(afterRoot);
             } else if (ta == tb) {
                 // both non-zero but times are the same. Probably due to reset state
                 beforeRoot = ta;
+                beforeRootG = ga;
                 afterRoot  = shiftedBy(beforeRoot, convergence);
                 afterRootG = f.value(afterRoot);
             } else if (ga > 0 != f.value(ta) > 0) {
                 // both non-zero, step sign change at ta, possibly due to reset state
                 // this should only be able to happen the first time through the loop
                 beforeRoot = ta;
+                beforeRootG = f.value(ta);
                 afterRoot  = minTime(shiftedBy(beforeRoot, convergence), tb);
                 afterRootG = f.value(afterRoot);
             } else {
@@ -300,12 +315,14 @@ public class EventState {
                     final Interval interval =
                             solver.solveInterval(maxIterationCount, f, ta, tb);
                     beforeRoot = interval.getLeftAbscissa();
+                    beforeRootG = interval.getLeftValue();
                     afterRoot  = interval.getRightAbscissa();
                     afterRootG = interval.getRightValue();
                 } else {
                     final Interval interval =
                             solver.solveInterval(maxIterationCount, f, tb, ta);
                     beforeRoot = interval.getRightAbscissa();
+                    beforeRootG = interval.getRightValue();
                     afterRoot  = interval.getLeftAbscissa();
                     afterRootG = interval.getLeftValue();
                 }
@@ -335,6 +352,7 @@ public class EventState {
                 // variation direction, with respect to the integration direction
                 increasing = !g0Positive;
                 pendingEventTime = beforeRoot;
+                stopTime = beforeRootG == 0.0 ? beforeRoot : afterRoot;
                 pendingEvent = true;
                 afterEvent = afterRoot;
                 afterG = afterRootG;
@@ -447,7 +465,7 @@ public class EventState {
         g0Positive = increasing;
         // check g0Positive set correctly
         check(g0 == 0.0 || g0Positive == (g0 > 0));
-        return new EventOccurrence(action, newState, earliestTimeConsidered);
+        return new EventOccurrence(action, newState, stopTime);
     }
 
     /**
