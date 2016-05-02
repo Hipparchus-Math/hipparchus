@@ -603,6 +603,41 @@ public class FieldCloseEventsTest {
         Assert.assertSame(detectorC, events.get(1).getHandler());
     }
 
+    /** check when root finding tolerance > event finding tolerance. */
+    @Test
+    public void testToleranceStop() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1e-18; // less than 1 ulp
+        double t1 = 15.1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        TimeDetector detectorA = new FlatDetector(Action.STOP, events, t1);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+
+        // action
+        FieldODEStateAndDerivative<Decimal64> finalState =
+                integrator.integrate(new Equation(), initialState, zero.add(30.0));
+
+        // verify
+        Assert.assertEquals(1, events.size());
+        // use root finder tolerance instead of event finder tolerance.
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t1, finalState.getTime().getReal(), tolerance);
+
+        // try to resume propagation
+        finalState = integrator.integrate(new Equation(), finalState, zero.add(30.0));
+
+        // verify it got to the end
+        Assert.assertEquals(30.0, finalState.getTime().getReal(), 0.0);
+    }
+
+
+
     /* The following tests are copies of the above tests, except that they propagate in
      * the reverse direction and all the signs on the time values are negated.
      */
@@ -1164,6 +1199,39 @@ public class FieldCloseEventsTest {
         Assert.assertSame(detectorC, events.get(1).getHandler());
     }
 
+    /** check when root finding tolerance > event finding tolerance. */
+    @Test
+    public void testToleranceStopReverse() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1e-18; // less than 1 ulp
+        double t1 = -15.1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        TimeDetector detectorA = new FlatDetector(Action.STOP, events, t1);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+
+        // action
+        FieldODEStateAndDerivative<Decimal64> finalState =
+                integrator.integrate(new Equation(), initialState, zero.add(-30.0));
+
+        // verify
+        Assert.assertEquals(1, events.size());
+        // use root finder tolerance instead of event finder tolerance.
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t1, finalState.getTime().getReal(), tolerance);
+
+        // try to resume propagation
+        finalState = integrator.integrate(new Equation(), finalState, zero.add(-30.0));
+
+        // verify it got to the end
+        Assert.assertEquals(-30.0, finalState.getTime().getReal(), 0.0);
+    }
+
 
 
     /* utility classes and methods */
@@ -1307,6 +1375,10 @@ public class FieldCloseEventsTest {
             super(events, eventTs);
         }
 
+        public FlatDetector(Action action, List<Event> events, double... eventTs) {
+            super(action, events, eventTs);
+        }
+
         @Override
         public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
             final Decimal64 g = super.g(state);
@@ -1320,6 +1392,10 @@ public class FieldCloseEventsTest {
 
         public ContinuousDetector(List<Event> events, double... eventTs) {
             super(events, eventTs);
+        }
+
+        public ContinuousDetector(Action action, List<Event> events, double... eventTs) {
+            super(action, events, eventTs);
         }
 
         @Override

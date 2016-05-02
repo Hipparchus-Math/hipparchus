@@ -23,6 +23,13 @@
 -->
 <FindBugsFilter>
 
+  <!-- Floating point equality is acceptable when the algorithm is designed for it. -->
+  <Match>
+    <Class name="org.hipparchus.ode.events.EventState"/>
+    <Method name="reinitializeBegin"/>
+    <Bug pattern="FE_FLOATING_POINT_EQUALITY"/>
+  </Match>
+
   <!-- Serialization is handled by an internal class -->
   <Match>
     <Class name="org.hipparchus.ode.sampling.DummyStepInterpolator"/>

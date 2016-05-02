@@ -47,10 +47,10 @@ import java.util.Queue;
 public abstract class AbstractFieldIntegrator<T extends RealFieldElement<T>> implements FieldODEIntegrator<T> {
 
     /** Default relative accuracy. */
-    private static final double DEFAULT_RELATIVE_ACCURACY = 1e-14;
+    private static final double DEFAULT_RELATIVE_ACCURACY = 0;
 
     /** Default function value accuracy. */
-    private static final double DEFAULT_FUNCTION_VALUE_ACCURACY = 1e-15;
+    private static final double DEFAULT_FUNCTION_VALUE_ACCURACY = 0;
 
     /** Step handler. */
     private Collection<FieldODEStepHandler<T>> stepHandlers;

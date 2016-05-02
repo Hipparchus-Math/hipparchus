@@ -22,7 +22,6 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
-import org.hipparchus.util.Precision;
 
 /**
  * This class implements a modification of the <a
@@ -162,14 +161,14 @@ public class BracketingNthOrderBrentSolver
 
         // evaluate initial guess
         y[1] = computeObjectiveValue(x[1]);
-        if (Precision.equals(y[1], 0.0, 1)) {
+        if (y[1] == 0.0) {
             // return the initial guess if it is a perfect root.
             return new Interval(x[1], y[1], x[1], y[1]);
         }
 
         // evaluate first  endpoint
         y[0] = computeObjectiveValue(x[0]);
-        if (Precision.equals(y[0], 0.0, 1)) {
+        if (y[0] == 0.0) {
             // return the first endpoint if it is a perfect root.
             return new Interval(x[0], y[0], x[0], y[0]);
         }
@@ -186,7 +185,7 @@ public class BracketingNthOrderBrentSolver
 
             // evaluate second endpoint
             y[2] = computeObjectiveValue(x[2]);
-            if (Precision.equals(y[2], 0.0, 1)) {
+            if (y[2] == 0.0) {
                 // return the second endpoint if it is a perfect root.
                 return new Interval(x[2], y[2], x[2], y[2]);
             }
@@ -284,7 +283,7 @@ public class BracketingNthOrderBrentSolver
 
             // evaluate the function at the guessed root
             final double nextY = computeObjectiveValue(nextX);
-            if (Precision.equals(nextY, 0.0, 1)) {
+            if (nextY == 0.0) {
                 // we have found an exact root, since it is not an approximation
                 // we don't need to bother about the allowed solutions setting
                 return new Interval(nextX, nextY, nextX, nextY);
