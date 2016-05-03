@@ -25,8 +25,8 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.DiagonalMatrix;
-import org.hipparchus.optim.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.optim.leastsquares.LeastSquaresProblem;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
 import org.hipparchus.util.FastMath;
 
 /**

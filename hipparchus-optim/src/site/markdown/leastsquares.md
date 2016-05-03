@@ -20,34 +20,34 @@ variance. That is $$ o_i = N(f_i(\mathbf{p}), \sigma) $$ and
 $$ w_i = \frac{1}{\sigma^2} $$ where \( N(\mu, \sigma) \) denotes a normal distribution
 with mean \( \mu \) and standard deviation \( \sigma \). For more on non-linear least
 squares, its theory, and its properties the reader is encouraged to consult a text book
-such as [[1](#ref1)].
+such as \[[1](#ref1)\].
 
 Two engines devoted to least-squares problems are available. The first one is
-based on the [Gauss-Newton](../apidocs/org/hipparchus/fitting/leastsquares/GaussNewtonOptimizer.html)
+based on the [Gauss-Newton](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/GaussNewtonOptimizer.html)
 method. The second one is the
-[Levenberg-Marquardt](../apidocs/org/hipparchus/fitting/leastsquares/LevenbergMarquardtOptimizer.html) method.
+[Levenberg-Marquardt](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LevenbergMarquardtOptimizer.html) method.
 
 
 ## LeastSquaresBuilder and LeastSquaresFactory
 
 In order to solve a least-squares fitting problem, the user must provide the following elements:
 
-* an implementation of the measurement model \( \mathbf{f}(\mathbf{p}) \) and its Jacobian, \( \frac{\partial\mathbf{f}}{\partial\mathbf{p}} \). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html).
+* an implementation of the measurement model \( \mathbf{f}(\mathbf{p}) \) and its Jacobian, \( \frac{\partial\mathbf{f}}{\partial\mathbf{p}} \). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
 * the observed (or target) values: \( \mathbf{o} \).
 * the start values for all parameters: \( \mathbf{s} \).
-* optionally a validator for the parameters \( \mathbf{p} \). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/fitting/leastsquares/ParameterValidator.html).
+* optionally a validator for the parameters \( \mathbf{p} \). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
 * optionally weights for sample point: \( \mathbf{w} \), this defaults to 1.0 if not provided.
 * a maximum number of iterations.
 * a maximum number of model evaluations, which may be different than iterations for Levenberg-Marquardt.
 * a convergence criterion, which is an implementation of [ConvergenceChecker&lt;Evaluation&gt;](../apidocs/org/hipparchus/optim/ConvergenceChecker.html)
 
 The elements of the list above can be provided as an implementation of the
-[LeastSquaresProblem](../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresProblem.html)
+[LeastSquaresProblem](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LeastSquaresProblem.html)
 interface. However, this may be cumbersome to do directly, so some
 helper classes are available. The first helper is a mutable builder:
-[LeastSquaresBuilder](../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresBuilder.html).
+[LeastSquaresBuilder](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LeastSquaresBuilder.html).
 The second helper is an utility factory:
-[LeastSquaresFactory](../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresFactory.html).
+[LeastSquaresFactory](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LeastSquaresFactory.html).
 
 The builder class is better suited when setting the various elements of the least squares
 problem is done progressively in different places in the user code. In this case, the user
@@ -77,10 +77,10 @@ As the least squares engine uses the Jacobians matrices of the model function, b
 its value and its derivatives <em>with respect to the parameters, \( \mathbf{p} \)</em>,
 must be available. There are two ways to provide this:
 
-* an implementation of the measurement model \( \mathbf{f}(\mathbf{p}) \) and its Jacobian, \( \frac{\partial\mathbf{f}}{\partial\mathbf{p}} \). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html).
+* an implementation of the measurement model \( \mathbf{f}(\mathbf{p}) \) and its Jacobian, \( \frac{\partial\mathbf{f}}{\partial\mathbf{p}} \). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
 * the observed (or target) values: \( \mathbf{o} \).
 * the start values for all parameters: \( \mathbf{s} \).
-* optionally a validator for the parameters \( \mathbf{p} \). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/fitting/leastsquares/ParameterValidator.html).
+* optionally a validator for the parameters \( \mathbf{p} \). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
 * optionally weights for sample point: \( \mathbf{w} \), this defaults to 1.0 if not provided.
 * a maximum number of iterations.
 * a maximum number of model evaluations, which may be different than iterations for Levenberg-Marquardt.
@@ -94,7 +94,7 @@ both the values and derivatives in one sweep saves a lot of work.
 The `point` parameter of the `value` methods in the
 [MultivariateVectorFunction](../apidocs/org/hipparchus/analysis/MultivariateVectorFunction.html),
 [MultivariateMatrixFunction](../apidocs/org/hipparchus/analysis/MultivariateMatrixFunction.html),
-or [MultivariateJacobianFunction](../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html)
+or [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html)
 interfaces will contain the parameter vector \( \mathbf{p} \). The values will be the
 model values \( \mathbf{f}(\mathbf{p}) \) and the derivatives will be the derivatives of
 the model values with respect to the parameters
@@ -113,7 +113,7 @@ can save some calls for engines that evaluate the value and the Jacobians in dif
 if the model functions are themselves separated, i.e. it can be used only with the first
 alternative above. Setting up the `lazyEvaluation` flag to `true` in the builder
 or factory and setting up the model function as one
-[MultivariateJacobianFunction](../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html)
+[MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html)
 instance at the same time will trigger an illegal state exception telling that the model function
 misses required functionality.
 
@@ -128,7 +128,7 @@ in Hipparchus currently don't allow to set up constraints on the parameters. Thi
 known missing feature. There are two ways to circumvent this.
 
 Both ways are achieved by setting up a
-[ParameterValidator](../apidocs/org/hipparchus/fitting/leastsquares/ParameterValidator.html)
+[ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html)
 instance. The input of the value and jacobian model functions will always be the output of
 the parameter validator if one exists.
 
@@ -179,7 +179,7 @@ think of these parameters as the divergence criteria.
 Convergence checking is delegated to a dedicated interface from the `optim`
 package: [ConvergenceChecker](../apidocs/org/hipparchus/optim/ConvergenceChecker.html),
 parameterized with either the specific
-[Evaluation](../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresProblem.Evaluation.html)
+[Evaluation](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LeastSquaresProblem.Evaluation.html)
 class used for least squares problems or the general
 [PointVectorValuePair](../apidocs/org/hipparchus/optim/PointVectorValuePair.html).
 Each time convergence is checked, both the previous
@@ -187,10 +187,10 @@ and the current evaluations of the least squares problem are provided, so the ch
 compare them and decide whether convergence has been reached or not. The predefined convergence
 checker implementations that can be useful for least squares fitting are:
 
-* an implementation of the measurement model \( \mathbf{f}(\mathbf{p}) \) and its Jacobian, \( \frac{\partial\mathbf{f}}{\partial\mathbf{p}} \). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/fitting/leastsquares/MultivariateJacobianFunction.html).
+* an implementation of the measurement model \( \mathbf{f}(\mathbf{p}) \) and its Jacobian, \( \frac{\partial\mathbf{f}}{\partial\mathbf{p}} \). This is best done by implementing [MultivariateJacobianFunction](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/MultivariateJacobianFunction.html).
 * the observed (or target) values: \( \mathbf{o} \).
 * the start values for all parameters: \( \mathbf{s} \).
-* optionally a validator for the parameters \( \mathbf{p} \). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/fitting/leastsquares/ParameterValidator.html).
+* optionally a validator for the parameters \( \mathbf{p} \). This is an implementation of [ParameterValidator](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/ParameterValidator.html).
 * optionally weights for sample point: \( \mathbf{w} \), this defaults to 1.0 if not provided.
 * a maximum number of iterations.
 * a maximum number of model evaluations, which may be different than iterations for Levenberg-Marquardt.
@@ -205,8 +205,8 @@ Of course, users can also provide their own implementation of the
 Once the least squares problem has been created, using either the builder or the factory,
 it is passed to an optimization engine for solving. Two engines devoted to least-squares
 problems are available. The first one is
-based on the [Gauss-Newton](../apidocs/org/hipparchus/fitting/leastsquares/GaussNewtonOptimizer.html)
-method. The second one is the [Levenberg-Marquardt](../apidocs/org/hipparchus/fitting/leastsquares/LevenbergMarquardtOptimizer.html)
+based on the [Gauss-Newton](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/GaussNewtonOptimizer.html)
+method. The second one is the [Levenberg-Marquardt](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LevenbergMarquardtOptimizer.html)
 method. For both increased readability and in order to leverage
 possible future changes in the configuration, it is recommended to use the fluent-style API to
 build and configure the optimizers. This means creating a first temporary version of the optimizer
@@ -235,12 +235,12 @@ optimizer and passing the least squares problem as the single parameter:
       LeastSquaresOptimizer.Optimum optimum = optimizer.optimize(leastSquaresProblem);
 
 The
-[LeastSquaresOptimizer.Optimum](../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresOptimizer.Optimum.html)
+[LeastSquaresOptimizer.Optimum](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LeastSquaresOptimizer.Optimum.html)
 class is a specialized
-[Evaluation](../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresProblem.Evaluation.html)
+[Evaluation](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LeastSquaresProblem.Evaluation.html)
 with additional methods te retrieve the number of evaluations and number of iterations performed.
 The most important methods are inherited from the
-[Evaluation](../apidocs/org/hipparchus/fitting/leastsquares/LeastSquaresProblem.Evaluation.html)
+[Evaluation](../apidocs/org/hipparchus/optim/nonlinear/vector/leastsquares/LeastSquaresProblem.Evaluation.html)
 class and correspond to the point (i.e. the parameters), cost, Jacobian, RMS, covariance ...
 
 

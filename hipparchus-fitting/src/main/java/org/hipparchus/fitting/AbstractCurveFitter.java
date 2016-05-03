@@ -21,9 +21,9 @@ import java.util.Collection;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
-import org.hipparchus.optim.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.optim.leastsquares.LeastSquaresProblem;
-import org.hipparchus.optim.leastsquares.LevenbergMarquardtOptimizer;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LevenbergMarquardtOptimizer;
 
 /**
  * Base class that contains common code for fitting parametric univariate

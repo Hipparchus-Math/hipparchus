@@ -21,8 +21,8 @@ import java.util.Collection;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.linear.DiagonalMatrix;
-import org.hipparchus.optim.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.optim.leastsquares.LeastSquaresProblem;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
 
 /**
  * Fits points to a {@link

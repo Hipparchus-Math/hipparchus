@@ -20,8 +20,8 @@ import java.util.Collection;
 
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.linear.DiagonalMatrix;
-import org.hipparchus.optim.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.optim.leastsquares.LeastSquaresProblem;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder;
+import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
 
 /**
  * Fits points to a user-defined {@link ParametricUnivariateFunction function}.
