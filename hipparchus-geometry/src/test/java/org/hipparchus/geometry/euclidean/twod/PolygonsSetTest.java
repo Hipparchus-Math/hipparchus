@@ -1159,7 +1159,6 @@ public class PolygonsSetTest {
 
     }
 
-    @SuppressWarnings("unchecked")
     @Test(expected=MathIllegalArgumentException.class)
     public void testInconsistentHyperplanes() {
         double tolerance = 1.0e-10;
