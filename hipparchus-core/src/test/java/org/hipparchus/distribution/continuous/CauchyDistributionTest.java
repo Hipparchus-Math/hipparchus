@@ -17,9 +17,11 @@
 
 package org.hipparchus.distribution.continuous;
 
-import org.hipparchus.distribution.continuous.CauchyDistribution;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -82,26 +84,26 @@ public class CauchyDistributionTest extends RealDistributionAbstractTest {
     @Test
     public void testMedian() {
         CauchyDistribution distribution = (CauchyDistribution) getDistribution();
-        Assert.assertEquals(1.2, distribution.getMedian(), 0.0);
+        assertEquals(1.2, distribution.getMedian(), 0.0);
     }
 
     @Test
     public void testScale() {
         CauchyDistribution distribution = (CauchyDistribution) getDistribution();
-        Assert.assertEquals(2.1, distribution.getScale(), 0.0);
+        assertEquals(2.1, distribution.getScale(), 0.0);
     }
 
     @Test
     public void testPreconditions() {
         try {
             new CauchyDistribution(0, 0);
-            Assert.fail("Cannot have zero scale");
+            fail("Cannot have zero scale");
         } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
         try {
             new CauchyDistribution(0, -1);
-            Assert.fail("Cannot have negative scale");
+            fail("Cannot have negative scale");
         } catch (MathIllegalArgumentException ex) {
             // Expected.
         }
@@ -112,11 +114,11 @@ public class CauchyDistributionTest extends RealDistributionAbstractTest {
         CauchyDistribution dist;
 
         dist = new CauchyDistribution(10.2, 0.15);
-        Assert.assertTrue(Double.isNaN(dist.getNumericalMean()));
-        Assert.assertTrue(Double.isNaN(dist.getNumericalVariance()));
+        assertTrue(Double.isNaN(dist.getNumericalMean()));
+        assertTrue(Double.isNaN(dist.getNumericalVariance()));
 
         dist = new CauchyDistribution(23.12, 2.12);
-        Assert.assertTrue(Double.isNaN(dist.getNumericalMean()));
-        Assert.assertTrue(Double.isNaN(dist.getNumericalVariance()));
+        assertTrue(Double.isNaN(dist.getNumericalMean()));
+        assertTrue(Double.isNaN(dist.getNumericalVariance()));
     }
 }

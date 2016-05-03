@@ -16,17 +16,18 @@
  */
 package org.hipparchus.distribution.continuous;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+
 import java.util.Arrays;
 
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.continuous.BetaDistribution;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.random.Well19937a;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.inference.KolmogorovSmirnovTest;
 import org.hipparchus.stat.inference.TestUtils;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class BetaDistributionTest {
@@ -157,11 +158,11 @@ public class BetaDistributionTest {
     private void checkCumulative(double alpha, double beta, double[] x, double[] cumes) {
         BetaDistribution d = new BetaDistribution(alpha, beta);
         for (int i = 0; i < x.length; i++) {
-            Assert.assertEquals(cumes[i], d.cumulativeProbability(x[i]), 1e-8);
+            assertEquals(cumes[i], d.cumulativeProbability(x[i]), 1e-8);
         }
 
         for (int i = 1; i < x.length - 1; i++) {
-            Assert.assertEquals(x[i], d.inverseCumulativeProbability(cumes[i]), 1e-5);
+            assertEquals(x[i], d.inverseCumulativeProbability(cumes[i]), 1e-5);
         }
     }
 
@@ -300,7 +301,7 @@ public class BetaDistributionTest {
     private void checkDensity(double alpha, double beta, double[] x, double[] expected) {
         BetaDistribution d = new BetaDistribution(alpha, beta);
         for (int i = 0; i < x.length; i++) {
-            Assert.assertEquals(String.format("density at x=%.1f for alpha=%.1f, beta=%.1f", x[i], alpha, beta), expected[i], d.density(x[i]), 1e-5);
+            assertEquals(String.format("density at x=%.1f for alpha=%.1f, beta=%.1f", x[i], alpha, beta), expected[i], d.density(x[i]), 1e-5);
         }
     }
 
@@ -310,12 +311,12 @@ public class BetaDistributionTest {
         BetaDistribution dist;
 
         dist = new BetaDistribution(1, 1);
-        Assert.assertEquals(dist.getNumericalMean(), 0.5, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 1.0 / 12.0, tol);
+        assertEquals(dist.getNumericalMean(), 0.5, tol);
+        assertEquals(dist.getNumericalVariance(), 1.0 / 12.0, tol);
 
         dist = new BetaDistribution(2, 5);
-        Assert.assertEquals(dist.getNumericalMean(), 2.0 / 7.0, tol);
-        Assert.assertEquals(dist.getNumericalVariance(), 10.0 / (49.0 * 8.0), tol);
+        assertEquals(dist.getNumericalMean(), 2.0 / 7.0, tol);
+        assertEquals(dist.getNumericalVariance(), 10.0 / (49.0 * 8.0), tol);
     }
 
     @Test
@@ -329,29 +330,30 @@ public class BetaDistributionTest {
                 Arrays.sort(observed);
 
                 final String distribution = String.format("Beta(%.2f, %.2f)", alpha, beta);
-                Assert.assertEquals(String.format("E[%s]", distribution),
-                                    betaDistribution.getNumericalMean(),
-                                    StatUtils.mean(observed), epsilon);
-                Assert.assertEquals(String.format("Var[%s]", distribution),
-                                    betaDistribution.getNumericalVariance(),
-                                    StatUtils.variance(observed), epsilon);
+                assertEquals(String.format("E[%s]", distribution),
+                             betaDistribution.getNumericalMean(),
+                             StatUtils.mean(observed), epsilon);
+                assertEquals(String.format("Var[%s]", distribution),
+                             betaDistribution.getNumericalVariance(),
+                             StatUtils.variance(observed), epsilon);
             }
         }
     }
 
     @Test
     public void testGoodnessOfFit() {
-        RandomGenerator random = new Well19937a(0x237db1db907b089fl);
+        final RandomGenerator random = new Well19937a(0x237db1db907b089fl);
+        final KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
         final int numSamples = 1000;
         final double level = 0.01;
         for (final double alpha : alphaBetas) {
             for (final double beta : alphaBetas) {
                 final BetaDistribution betaDistribution = new BetaDistribution(random, alpha, beta);
                 final double[] observed = betaDistribution.sample(numSamples);
-                Assert.assertFalse("G goodness-of-fit test rejected null at alpha = " + level,
-                                   gTest(betaDistribution, observed) < level);
-                Assert.assertFalse("KS goodness-of-fit test rejected null at alpha = " + level,
-                                   new KolmogorovSmirnovTest(random).kolmogorovSmirnovTest(betaDistribution, observed) < level);
+                assertFalse("G goodness-of-fit test rejected null at alpha = " + level,
+                            gTest(betaDistribution, observed) < level);
+                assertFalse("KS goodness-of-fit test rejected null at alpha = " + level,
+                            ksTest.kolmogorovSmirnovTest(betaDistribution, observed) < level);
             }
         }
     }

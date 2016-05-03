@@ -17,9 +17,9 @@
 
 package org.hipparchus.distribution.continuous;
 
+import static org.junit.Assert.assertEquals;
+
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.continuous.ConstantRealDistribution;
-import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -46,19 +46,19 @@ public class ConstantRealDistributionTest extends RealDistributionAbstractTest {
     /** Creates the default cumulative probability distribution test input values */
     @Override
     public double[] makeCumulativeTestPoints() {
-        return new double[] {0, 0.5, 1};
+        return new double[] { 0, 0.5, 1 };
     }
 
     /** Creates the default cumulative probability distribution test expected values */
     @Override
     public double[] makeCumulativeTestValues() {
-        return new double[] {0, 0, 1};
+        return new double[] { 0, 0, 1 };
     }
 
     /** Creates the default probability density test expected values */
     @Override
     public double[] makeDensityTestValues() {
-        return new double[] {0, 0, 1};
+        return new double[] { 0, 0, 1 };
     }
 
     /** Override default test, verifying that inverse cum is constant */
@@ -67,7 +67,7 @@ public class ConstantRealDistributionTest extends RealDistributionAbstractTest {
     public void testInverseCumulativeProbabilities() {
         RealDistribution dist = getDistribution();
         for (double x : getCumulativeTestValues()) {
-            Assert.assertEquals(1,dist.inverseCumulativeProbability(x), 0);
+            assertEquals(1,dist.inverseCumulativeProbability(x), 0);
         }
     }
 
@@ -78,15 +78,16 @@ public class ConstantRealDistributionTest extends RealDistributionAbstractTest {
         ConstantRealDistribution dist;
 
         dist = new ConstantRealDistribution(-1);
-        Assert.assertEquals(dist.getNumericalMean(), -1, 0d);
-        Assert.assertEquals(dist.getNumericalVariance(), 0, 0d);
+        assertEquals(dist.getNumericalMean(), -1, 0d);
+        assertEquals(dist.getNumericalVariance(), 0, 0d);
     }
 
+    @Override
     @Test
     public void testSampling() {
         ConstantRealDistribution dist = new ConstantRealDistribution(0);
         for (int i = 0; i < 10; i++) {
-            Assert.assertEquals(0, dist.sample(), 0);
+            assertEquals(0, dist.sample(), 0);
         }
 
     }
