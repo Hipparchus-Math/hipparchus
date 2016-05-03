@@ -1332,10 +1332,6 @@ public class CloseEventsTest {
             return state.getTime();
         }
 
-        public ODEStateAndDerivative getState() {
-            return this.state;
-        }
-
         public ODEEventHandler getHandler() {
             return handler;
         }

@@ -16,8 +16,11 @@
  */
 package org.hipparchus.ode.events;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.hipparchus.Field;
-import org.hipparchus.analysis.solvers.BracketingNthOrderBrentSolver;
 import org.hipparchus.analysis.solvers.FieldBracketingNthOrderBrentSolver;
 import org.hipparchus.ode.FieldExpandableODE;
 import org.hipparchus.ode.FieldODEIntegrator;
@@ -29,10 +32,6 @@ import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.Decimal64Field;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Check events are detected correctly when the event times are close.
@@ -470,7 +469,7 @@ public class FieldCloseEventsTest {
         double maxCheck = 10;
         double tolerance = 1e-6;
         double t1 = 15.0;
-        final FieldODEState newState = new FieldODEState<>(
+        final FieldODEState<Decimal64> newState = new FieldODEState<>(
                 zero.add(t1), new Decimal64[]{zero.add(-20), zero});
         // shared event list so we know the order in which they occurred
         List<Event> events = new ArrayList<>();
@@ -1347,10 +1346,6 @@ public class FieldCloseEventsTest {
             return state.getTime().getReal();
         }
 
-        public FieldODEStateAndDerivative<Decimal64> getState() {
-            return this.state;
-        }
-
         public FieldODEEventHandler<Decimal64> getHandler() {
             return handler;
         }
@@ -1429,7 +1424,7 @@ public class FieldCloseEventsTest {
         }
 
         @Override
-        public FieldODEState resetState(FieldODEStateAndDerivative<Decimal64> state) {
+        public FieldODEState<Decimal64> resetState(FieldODEStateAndDerivative<Decimal64> state) {
             return resetState;
         }
 
