@@ -22,6 +22,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -275,6 +276,10 @@ public class AdamsBashforthIntegrator extends AdamsIntegrator {
 
                 // evaluate error
                 error = errorEstimation(y, predictedY, predictedScaled, predictedNordsieck);
+                if (Double.isNaN(error)) {
+                    throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
+                                                        stepEnd.getTime());
+                }
 
                 if (error >= 1.0) {
                     // reject the step and attempt to reduce error by stepsize control

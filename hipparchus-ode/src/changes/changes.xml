@@ -34,6 +34,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
+      <action dev="luc" type="update">
+        Added early detection of NaNs appearing during integration.
+      </action>
       <action dev="evan" type="bug">
         Enhance reliability of event detection with multiple event detectors.
       </action>

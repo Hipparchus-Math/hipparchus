@@ -49,7 +49,8 @@ public enum LocalizedODEFormats implements Localizable {
     PROPAGATION_DIRECTION_MISMATCH("propagation direction mismatch"),
     TOO_SMALL_INTEGRATION_INTERVAL("too small integration interval: length = {0}"),
     UNKNOWN_PARAMETER("unknown parameter {0}"),
-    UNMATCHED_ODE_IN_EXPANDED_SET("ode does not match the main ode set in the extended set");
+    UNMATCHED_ODE_IN_EXPANDED_SET("ode does not match the main ode set in the extended set"),
+    NAN_APPEARING_DURING_INTEGRATION("NaN appears during integration near time {0}");
 
     // CHECKSTYLE: resume JavadocVariable
     // CHECKSTYLE: resume MultipleVariableDeclarations

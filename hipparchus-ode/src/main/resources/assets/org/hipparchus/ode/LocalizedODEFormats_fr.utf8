@@ -21,3 +21,4 @@ PROPAGATION_DIRECTION_MISMATCH = directions de propagation incohérentes
 TOO_SMALL_INTEGRATION_INTERVAL = intervalle d''intégration trop petit : {0}
 UNKNOWN_PARAMETER = paramètre {0} inconnu
 UNMATCHED_ODE_IN_EXPANDED_SET = l''équation différentielle ne correspond pas à l''équation principale du jeu étendu
+NAN_APPEARING_DURING_INTEGRATION = apparition de NaN pendant l''intégration aux environs du temps {0}

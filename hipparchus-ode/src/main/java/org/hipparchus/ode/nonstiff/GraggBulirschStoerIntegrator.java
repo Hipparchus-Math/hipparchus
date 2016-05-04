@@ -20,6 +20,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -630,6 +631,10 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                             error += e * e;
                         }
                         error = FastMath.sqrt(error / mainSetDimension);
+                        if (Double.isNaN(error)) {
+                            throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
+                                                                nextT);
+                        }
 
                         if ((error > 1.0e15) || ((k > 1) && (error > maxError))) {
                             // error is too big, we reduce the global step

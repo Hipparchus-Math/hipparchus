@@ -32,6 +32,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.DenseOutputModel;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.LocalizedODEFormats;
+import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
@@ -414,6 +415,25 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         double step = 0.001 * (pb.getFinalTime() - pb.getInitialState().getTime());
         RungeKuttaIntegrator integ = createIntegrator(step);
         StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.001, 1.0e-10);
+    }
+
+    @Test
+    public void testNaNAppearing() {
+        try {
+            ODEIntegrator integ = createIntegrator(0.3);
+            integ.integrate(new OrdinaryDifferentialEquation() {
+                public int getDimension() {
+                    return 1;
+                }
+                public double[] computeDerivatives(double t, double[] y) {
+                    return new double[] { FastMath.log(t) };
+                }
+            }, new ODEState(1.0, new double[] { 1.0 }), -1.0);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
+            Assert.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+        }
     }
 
     @Test

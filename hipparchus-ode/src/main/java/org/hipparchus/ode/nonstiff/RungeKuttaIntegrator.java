@@ -23,6 +23,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
@@ -153,6 +154,11 @@ public abstract class RungeKuttaIntegrator extends AbstractIntegrator implements
                     sum    += b[l] * yDotK[l][j];
                 }
                 yTmp[j] = y[j] + getStepSize() * sum;
+                if (Double.isNaN(yTmp[j])) {
+                    throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
+                                                        getStepStart().getTime() + getStepSize());
+                }
+
             }
             final double stepEnd   = getStepStart().getTime() + getStepSize();
             final double[] yDotTmp = computeDerivatives(stepEnd, yTmp);

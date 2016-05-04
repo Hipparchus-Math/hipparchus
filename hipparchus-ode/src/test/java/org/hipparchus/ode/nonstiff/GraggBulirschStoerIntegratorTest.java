@@ -20,6 +20,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hamcrest.Matchers;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
@@ -322,6 +323,25 @@ public class GraggBulirschStoerIntegratorTest {
             }
         }, new ODEState(t0, y), tend);
 
+    }
+
+    @Test
+    public void testNaNAppearing() {
+        try {
+            ODEIntegrator integ = new GraggBulirschStoerIntegrator(0.01, 100.0, 1.0e5, 1.0e5);
+            integ.integrate(new OrdinaryDifferentialEquation() {
+                public int getDimension() {
+                    return 1;
+                }
+                public double[] computeDerivatives(double t, double[] y) {
+                    return new double[] { FastMath.log(t) };
+                }
+            }, new ODEState(1.0, new double[] { 1.0 }), -1.0);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
+            Assert.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+        }
     }
 
     private static class KeplerStepHandler implements ODEStepHandler {

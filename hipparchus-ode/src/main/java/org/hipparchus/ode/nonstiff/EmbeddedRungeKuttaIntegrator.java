@@ -21,6 +21,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -268,6 +269,10 @@ public abstract class EmbeddedRungeKuttaIntegrator
 
                 // estimate the error at the end of the step
                 error = estimateError(yDotK, y, yTmp, getStepSize());
+                if (Double.isNaN(error)) {
+                    throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
+                                                        getStepStart().getTime() + getStepSize());
+                }
                 if (error >= 1.0) {
                     // reject the step and attempt to reduce error by stepsize control
                     final double factor =

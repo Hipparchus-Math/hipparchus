@@ -681,6 +681,25 @@ public abstract class EmbeddedRungeKuttaIntegratorAbstractTest {
 
     }
 
+    @Test
+    public void testNaNAppearing() {
+        try {
+            ODEIntegrator integ = createIntegrator(0.01, 1.0, 0.1, 0.1);
+            integ.integrate(new OrdinaryDifferentialEquation() {
+                public int getDimension() {
+                    return 1;
+                }
+                public double[] computeDerivatives(double t, double[] y) {
+                    return new double[] { FastMath.log(t) };
+                }
+            }, new ODEState(1.0, new double[] { 1.0 }), -1.0);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalStateException mise) {
+            Assert.assertEquals(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION, mise.getSpecifier());
+            Assert.assertTrue(((Double) mise.getParts()[0]).doubleValue() <= 0.0);
+        }
+    }
+
     private static class SinCos implements ODEJacobiansProvider {
 
         public static String OMEGA_PARAMETER = "omega";

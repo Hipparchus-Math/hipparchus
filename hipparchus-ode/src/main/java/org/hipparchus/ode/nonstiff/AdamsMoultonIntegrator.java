@@ -24,6 +24,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrixPreservingVisitor;
 import org.hipparchus.ode.ExpandableODE;
+import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -248,6 +249,10 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
 
                 // apply correction (C in the PECE sequence)
                 error = predictedNordsieck.walkInOptimizedOrder(new Corrector(y, predictedScaled, predictedY));
+                if (Double.isNaN(error)) {
+                    throw new MathIllegalStateException(LocalizedODEFormats.NAN_APPEARING_DURING_INTEGRATION,
+                                                        stepEnd.getTime());
+                }
 
                 if (error >= 1.0) {
                     // reject the step and attempt to reduce error by stepsize control
