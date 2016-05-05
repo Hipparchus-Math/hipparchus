@@ -284,8 +284,8 @@ public class FieldEventState<T extends RealFieldElement<T>> {
      * @return if a zero crossing was found.
      */
     private boolean findRoot(final FieldODEStateInterpolator<T> interpolator,
-                             T ta,
-                             T ga,
+                             final T ta,
+                             final T ga,
                              final T tb,
                              final T gb) {
         // check there appears to be a root in [ta, tb]
@@ -296,88 +296,104 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         final RealFieldUnivariateFunction<T> f =
                 t -> handler.g(interpolator.getInterpolatedState(t));
 
+        // event time, just at or before the actual root.
+        T beforeRootT = null, beforeRootG = null;
+        // time on the other side of the root.
+        // Initialized the the loop below executes once.
+        T afterRootT = ta, afterRootG = ga.getField().getZero();
+
+        // check for some conditions that the root finders don't like
+        // these conditions cannot not happen in the loop below
+        // the ga == 0.0 case is handled by the loop below
+        if (ta.getReal() == tb.getReal()) {
+            // both non-zero but times are the same. Probably due to reset state
+            beforeRootT = ta;
+            beforeRootG = ga;
+            afterRootT = shiftedBy(beforeRootT, convergence);
+            afterRootG = f.value(afterRootT);
+        } else if (ga.getReal() != 0.0 && gb.getReal() == 0.0) {
+            // hard: ga != 0.0 and gb == 0.0
+            // look past gb by up to convergence to find next sign
+            // throw an exception if g(t) = 0.0 in [tb, tb + convergence]
+            beforeRootT = tb;
+            beforeRootG = gb;
+            afterRootT = shiftedBy(beforeRootT, convergence);
+            afterRootG = f.value(afterRootT);
+        } else if (ga.getReal() != 0.0) {
+            final T newGa = f.value(ta);
+            if (ga.getReal() > 0 != newGa.getReal() > 0) {
+                // both non-zero, step sign change at ta, possibly due to reset state
+                beforeRootT = ta;
+                beforeRootG = newGa;
+                afterRootT = minTime(shiftedBy(beforeRootT, convergence), tb);
+                afterRootG = f.value(afterRootT);
+            }
+        }
+
         // loop to skip through "fake" roots, i.e. where g(t) = g'(t) = 0.0
-        while (true) {
-            // event time, just at or before the actual root.
-            final T beforeRoot, beforeTootG;
-            // time on the other sie of the root
-            T afterRoot;
-            if (ga.getReal() == 0.0) {
+        // executed once if we didn't hit a special case above
+        T loopT = ta, loopG = ga;
+        while ((afterRootG.getReal() == 0.0 || afterRootG.getReal() > 0.0 == g0Positive)
+                && strictlyAfter(afterRootT, tb)) {
+            if (loopG.getReal() == 0.0) {
                 // ga == 0.0 and gb may or may not be 0.0
                 // handle the root at ta first
-                beforeRoot = ta;
-                beforeTootG = ga;
-                afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
-            } else if (gb.getReal() == 0.0) {
-                // hard: ga != 0.0 and gb == 0.0
-                // look past gb by up to convergence to find next sign
-                beforeRoot = tb;
-                beforeTootG = gb;
-                afterRoot = shiftedBy(beforeRoot, convergence);
-            } else if (ta.getReal() == tb.getReal()) {
-                // both non-zero but times are the same. Probably due to reset state
-                beforeRoot = ta;
-                beforeTootG = ga;
-                afterRoot = shiftedBy(beforeRoot, convergence);
-            } else if (ga.getReal() > 0 != f.value(ta).getReal() > 0) {
-                // both non-zero, step sign change at ta, possibly due to reset state
-                // this should only be able to happen the first time through the loop
-                beforeRoot = ta;
-                beforeTootG = ga;
-                afterRoot = minTime(shiftedBy(beforeRoot, convergence), tb);
+                beforeRootT = loopT;
+                beforeRootG = loopG;
+                afterRootT = minTime(shiftedBy(beforeRootT, convergence), tb);
+                afterRootG = f.value(afterRootT);
             } else {
                 // both non-zero, the usual case, use a root finder.
                 if (forward) {
                     final Interval<T> interval =
-                            solver.solveInterval(maxIterationCount, f, ta, tb);
-                    beforeRoot = interval.getLeftAbscissa();
-                    beforeTootG = interval.getLeftValue();
-                    afterRoot = interval.getRightAbscissa();
+                            solver.solveInterval(maxIterationCount, f, loopT, tb);
+                    beforeRootT = interval.getLeftAbscissa();
+                    beforeRootG = interval.getLeftValue();
+                    afterRootT = interval.getRightAbscissa();
+                    afterRootG = interval.getRightValue();
                 } else {
                     final Interval<T> interval =
-                            solver.solveInterval(maxIterationCount, f, tb, ta);
-                    beforeRoot = interval.getRightAbscissa();
-                    beforeTootG = interval.getRightValue();
-                    afterRoot = interval.getLeftAbscissa();
+                            solver.solveInterval(maxIterationCount, f, tb, loopT);
+                    beforeRootT = interval.getRightAbscissa();
+                    beforeRootG = interval.getRightValue();
+                    afterRootT = interval.getLeftAbscissa();
+                    afterRootG = interval.getLeftValue();
                 }
             }
             // tolerance is set to less than 1 ulp
             // assume tolerance is 1 ulp
-            if (beforeRoot == afterRoot) {
-                afterRoot = nextAfter(afterRoot);
+            if (beforeRootT == afterRootT) {
+                afterRootT = nextAfter(afterRootT);
+                afterRootG = f.value(afterRootT);
             }
             // check loop is making some progress
-            check((forward && afterRoot.getReal() > beforeRoot.getReal()) ||
-                    (!forward && afterRoot.getReal() < beforeRoot.getReal()));
+            check((forward && afterRootT.getReal() > beforeRootT.getReal())
+                    || (!forward && afterRootT.getReal() < beforeRootT.getReal()));
+            // setup next iteration
+            loopT = afterRootT;
+            loopG = afterRootG;
+        }
 
-            final T afterRootG = f.value(afterRoot);
-            if (afterRootG.getReal() == 0.0 || afterRootG.getReal() > 0.0 == g0Positive) {
-                // didn't see expected sign change, skip this root,
-                // likely an extrema at g = 0.0
-                if (tb == afterRoot || strictlyAfter(tb, afterRoot)) {
-                    // can't try again within this step.
-                    return false;
-                } else {
-                    // try again within these bounds
-                    ta = afterRoot;
-                    ga = afterRootG;
-                }
-            } else {
-                // real crossing
-                // variation direction, with respect to the integration direction
-                increasing = !g0Positive;
-                pendingEventTime = beforeRoot;
-                stopTime = beforeTootG.getReal() == 0.0 ? beforeRoot : afterRoot;
-                pendingEvent = true;
-                afterEvent = afterRoot;
-                afterG = afterRootG;
+        // figure out the result of root finding, and return accordingly
+        if (afterRootG.getReal() == 0.0 || afterRootG.getReal() > 0.0 == g0Positive) {
+            // loop gave up and didn't find any crossing within this step
+            return false;
+        } else {
+            // real crossing
+            check(beforeRootT != null && beforeRootG != null);
+            // variation direction, with respect to the integration direction
+            increasing = !g0Positive;
+            pendingEventTime = beforeRootT;
+            stopTime = beforeRootG.getReal() == 0.0 ? beforeRootT : afterRootT;
+            pendingEvent = true;
+            afterEvent = afterRootT;
+            afterG = afterRootG;
 
-                // check increasing set correctly
-                check(afterG.getReal() > 0 == increasing);
-                check(increasing == gb.getReal() >= ga.getReal());
+            // check increasing set correctly
+            check(afterG.getReal() > 0 == increasing);
+            check(increasing == gb.getReal() >= ga.getReal());
 
-                return true;
-            }
+            return true;
         }
     }
 
