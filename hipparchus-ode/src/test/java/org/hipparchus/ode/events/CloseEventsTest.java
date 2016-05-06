@@ -624,7 +624,37 @@ public class CloseEventsTest {
         Assert.assertEquals(30.0, finalState.getTime(), 0.0);
     }
 
+    /**
+     * Test when g function is initially zero for longer than the tolerance. Can occur
+     * when restarting after a stop and cancellation occurs in the g function.
+     */
+    @Test
+    public void testLongInitialZero() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        TimeDetector detectorA = new TimeDetector(Action.STOP, events, -50) {
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (state.getTime() < 2) {
+                    return 0;
+                } else {
+                    return super.g(state);
+                }
+            }
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
 
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), 30.0);
+
+        // verify
+        Assert.assertEquals(0, events.size());
+    }
 
     /* The following tests are copies of the above tests, except that they propagate in
      * the reverse direction and all the signs on the time values are negated.
@@ -1217,6 +1247,38 @@ public class CloseEventsTest {
 
         // verify it got to the end
         Assert.assertEquals(-30.0, finalState.getTime(), 0.0);
+    }
+
+    /**
+     * Test when g function is initially zero for longer than the tolerance. Can occur
+     * when restarting after a stop and cancellation occurs in the g function.
+     */
+    @Test
+    public void testLongInitialZeroReverse() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        TimeDetector detectorA = new TimeDetector(Action.STOP, events, 50) {
+            @Override
+            public double g(ODEStateAndDerivative state) {
+                if (state.getTime() > -2) {
+                    return 0;
+                } else {
+                    return super.g(state);
+                }
+            }
+        };
+        ODEIntegrator integrator =
+                new DormandPrince853Integrator(10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), new ODEState(0, new double[2]), -30.0);
+
+        // verify
+        Assert.assertEquals(0, events.size());
     }
 
 

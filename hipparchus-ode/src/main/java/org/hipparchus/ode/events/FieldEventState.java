@@ -168,7 +168,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
         final FieldODEStateAndDerivative<T> s0 = interpolator.getPreviousState();
         t0 = s0.getTime();
         g0 = handler.g(s0);
-        if (g0.getReal() == 0) {
+        while (g0.getReal() == 0) {
             // excerpt from MATH-421 issue:
             // If an ODE solver is setup with a FieldODEEventHandler that return STOP
             // when the even is triggered, the integrator stops (which is exactly

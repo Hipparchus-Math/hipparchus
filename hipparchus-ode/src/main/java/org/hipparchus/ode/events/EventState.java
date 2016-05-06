@@ -166,7 +166,7 @@ public class EventState {
         final ODEStateAndDerivative s0 = interpolator.getPreviousState();
         t0 = s0.getTime();
         g0 = handler.g(s0);
-        if (g0 == 0) {
+        while (g0 == 0) {
             // excerpt from MATH-421 issue:
             // If an ODE solver is setup with an ODEEventHandler that return STOP
             // when the even is triggered, the integrator stops (which is exactly
@@ -176,7 +176,8 @@ public class EventState {
             // later time), then the integrator may fail to start. It can get stuck
             // at the previous event. The use case for the bug MATH-421 is fairly
             // general, so events occurring exactly at start in the first step should
-            // be ignored.
+            // be ignored. Some g functions may be zero for multiple adjacent values of t
+            // so keep skipping roots while g(t) is zero.
 
             // extremely rare case: there is a zero EXACTLY at interval start
             // we will use the sign slightly after step beginning to force ignoring this zero

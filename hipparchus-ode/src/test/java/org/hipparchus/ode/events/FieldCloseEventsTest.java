@@ -635,6 +635,38 @@ public class FieldCloseEventsTest {
         Assert.assertEquals(30.0, finalState.getTime().getReal(), 0.0);
     }
 
+    /**
+     * Test when g function is initially zero for longer than the tolerance. Can occur
+     * when restarting after a stop and cancellation occurs in the g function.
+     */
+    @Test
+    public void testLongInitialZero() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        TimeDetector detectorA = new TimeDetector(Action.STOP, events, -50) {
+            @Override
+            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+                if (state.getTime().getReal() < 2) {
+                    return zero;
+                } else {
+                    return super.g(state);
+                }
+            }
+        };
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
+
+        // verify
+        Assert.assertEquals(0, events.size());
+    }
+
 
 
     /* The following tests are copies of the above tests, except that they propagate in
@@ -1229,6 +1261,38 @@ public class FieldCloseEventsTest {
 
         // verify it got to the end
         Assert.assertEquals(-30.0, finalState.getTime().getReal(), 0.0);
+    }
+
+    /**
+     * Test when g function is initially zero for longer than the tolerance. Can occur
+     * when restarting after a stop and cancellation occurs in the g function.
+     */
+    @Test
+    public void testLongInitialZeroReverse() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        TimeDetector detectorA = new TimeDetector(Action.STOP, events, 50) {
+            @Override
+            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+                if (state.getTime().getReal() > -2) {
+                    return zero;
+                } else {
+                    return super.g(state);
+                }
+            }
+        };
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
+
+        // verify
+        Assert.assertEquals(0, events.size());
     }
 
 
