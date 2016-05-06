@@ -30,6 +30,7 @@ import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.nonstiff.DormandPrince853FieldIntegrator;
 import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.Decimal64Field;
+import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -667,6 +668,55 @@ public class FieldCloseEventsTest {
         Assert.assertEquals(0, events.size());
     }
 
+    /**
+     * The root finder requires the start point to be in the interval (a, b) which is hard
+     * when there aren't many numbers between a and b. This test uses a second event
+     * detector to force a very small window for the first event detector.
+     */
+    @Test
+    public void testShortBracketingInterval() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1e-6;
+        final double t1 = FastMath.nextUp(10.0), t2 = 10.5;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // never zero so there is no easy way out
+        TimeDetector detectorA = new TimeDetector(events) {
+            @Override
+            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+                final Decimal64 t = state.getTime();
+                if (t.getReal() < t1) {
+                    return one.negate();
+                } else if (t.getReal() < t2) {
+                    return one;
+                } else {
+                    return one.negate();
+                }
+            }
+        };
+        TimeDetector detectorB = new TimeDetector(events, t1);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), initialState, zero.add(30.0));
+
+        // verify
+        Assert.assertEquals(3, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(true, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t1, events.get(1).getT(), tolerance);
+        Assert.assertEquals(true, events.get(1).isIncreasing());
+        Assert.assertSame(detectorB, events.get(1).getHandler());
+        Assert.assertEquals(t2, events.get(2).getT(), tolerance);
+        Assert.assertEquals(false, events.get(2).isIncreasing());
+        Assert.assertSame(detectorA, events.get(2).getHandler());
+    }
+
 
 
     /* The following tests are copies of the above tests, except that they propagate in
@@ -1293,6 +1343,55 @@ public class FieldCloseEventsTest {
 
         // verify
         Assert.assertEquals(0, events.size());
+    }
+
+    /**
+     * The root finder requires the start point to be in the interval (a, b) which is hard
+     * when there aren't many numbers between a and b. This test uses a second event
+     * detector to force a very small window for the first event detector.
+     */
+    @Test
+    public void testShortBracketingIntervalReverse() {
+        // setup
+        double maxCheck = 10;
+        double tolerance = 1e-6;
+        final double t1 = FastMath.nextDown(-10.0), t2 = -10.5;
+        // shared event list so we know the order in which they occurred
+        List<Event> events = new ArrayList<>();
+        // never zero so there is no easy way out
+        TimeDetector detectorA = new TimeDetector(events) {
+            @Override
+            public Decimal64 g(FieldODEStateAndDerivative<Decimal64> state) {
+                final Decimal64 t = state.getTime();
+                if (t.getReal() > t1) {
+                    return one.negate();
+                } else if (t.getReal() > t2) {
+                    return one;
+                } else {
+                    return one.negate();
+                }
+            }
+        };
+        TimeDetector detectorB = new TimeDetector(events, t1);
+        FieldODEIntegrator<Decimal64> integrator =
+                new DormandPrince853FieldIntegrator<>(field, 10, 10, 1e-7, 1e-7);
+        integrator.addEventHandler(detectorA, maxCheck, tolerance, 100);
+        integrator.addEventHandler(detectorB, maxCheck, tolerance, 100);
+
+        // action
+        integrator.integrate(new Equation(), initialState, zero.add(-30.0));
+
+        // verify
+        Assert.assertEquals(3, events.size());
+        Assert.assertEquals(t1, events.get(0).getT(), tolerance);
+        Assert.assertEquals(false, events.get(0).isIncreasing());
+        Assert.assertSame(detectorA, events.get(0).getHandler());
+        Assert.assertEquals(t1, events.get(1).getT(), tolerance);
+        Assert.assertEquals(true, events.get(1).isIncreasing());
+        Assert.assertSame(detectorB, events.get(1).getHandler());
+        Assert.assertEquals(t2, events.get(2).getT(), tolerance);
+        Assert.assertEquals(true, events.get(2).isIncreasing());
+        Assert.assertSame(detectorA, events.get(2).getHandler());
     }
 
 

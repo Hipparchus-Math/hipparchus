@@ -157,7 +157,11 @@ public class BracketingNthOrderBrentSolver
         x[0] = getMin();
         x[1] = getStartValue();
         x[2] = getMax();
-        verifySequence(x[0], x[1], x[2]);
+        verifyInterval(x[0], x[2]);
+        if (x[1] < x[0] || x[2] < x[1]) {
+            throw new MathIllegalArgumentException(
+                    LocalizedCoreFormats.START_POINT_NOT_IN_INTERVAL, x[1], x[0], x[2]);
+        }
 
         // evaluate initial guess
         y[1] = computeObjectiveValue(x[1]);

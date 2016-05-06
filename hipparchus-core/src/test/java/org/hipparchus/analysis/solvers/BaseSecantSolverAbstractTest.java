@@ -134,6 +134,18 @@ public abstract class BaseSecantSolverAbstractTest {
     }
 
     @Test
+    public void testCloseEndpoints() {
+        UnivariateFunction f = new XMinus5Function();
+        UnivariateSolver solver = getSolver();
+
+        double result = solver.solve(100, f, 5.0, FastMath.nextUp(5.0));
+        Assert.assertEquals(5.0, result, 0.0);
+
+        result = solver.solve(100, f, FastMath.nextDown(5.0), 5.0);
+        Assert.assertEquals(5.0, result, 0.0);
+    }
+
+    @Test
     public void testBadEndpoints() {
         UnivariateFunction f = new Sin();
         UnivariateSolver solver = getSolver();

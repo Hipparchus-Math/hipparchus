@@ -96,12 +96,13 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * Solve for a zero in the given interval and return a tolerance interval surrounding
      * the root.
      *
-     * <p> It is required that the starting interval brackets a root.
+     * <p> It is required that the starting interval brackets a root or that the function
+     * value at either end point is 0.0.
      *
      * @param maxEval Maximum number of evaluations.
      * @param f       Function to solve.
-     * @param min     Lower bound for the interval. f(min) != 0.0.
-     * @param max     Upper bound for the interval. f(max) != 0.0.
+     * @param min     Lower bound for the interval.
+     * @param max     Upper bound for the interval. Must be greater than {@code min}.
      * @return an interval [ta, tb] such that for some t in [ta, tb] f(t) == 0.0 or has a
      * step wise discontinuity that crosses zero. Both end points also satisfy the
      * convergence criteria so either one could be used as the root. That is the interval
@@ -123,13 +124,14 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * Solve for a zero in the given interval and return a tolerance interval surrounding
      * the root.
      *
-     * <p> It is required that the starting interval brackets a root.
+     * <p> It is required that the starting interval brackets a root or that the function
+     * value at either end point is 0.0.
      *
      * @param maxEval    Maximum number of evaluations.
-     * @param startValue start value to use.
+     * @param startValue start value to use. Must be in the interval [min, max].
      * @param f          Function to solve.
-     * @param min        Lower bound for the interval. f(min) != 0.0.
-     * @param max        Upper bound for the interval. f(max) != 0.0.
+     * @param min        Lower bound for the interval.
+     * @param max     Upper bound for the interval. Must be greater than {@code min}.
      * @return an interval [ta, tb] such that for some t in [ta, tb] f(t) == 0.0 or has a
      * step wise discontinuity that crosses zero. Both end points also satisfy the
      * convergence criteria so either one could be used as the root. That is the interval
