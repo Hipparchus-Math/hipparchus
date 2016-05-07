@@ -650,7 +650,8 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                             double fac = stepControl2 / FastMath.pow(error / stepControl1, exp);
                             final double pow = FastMath.pow(stepControl3, exp);
                             fac = FastMath.max(pow / stepControl4, FastMath.min(1 / pow, fac));
-                            optimalStep[k]     = FastMath.abs(filterStep(getStepSize() * fac, forward, true));
+                            final boolean acceptSmall = k < targetIter;
+                            optimalStep[k]     = FastMath.abs(filterStep(getStepSize() * fac, forward, acceptSmall));
                             costPerTimeUnit[k] = costPerStep[k] / optimalStep[k];
 
                             // check convergence

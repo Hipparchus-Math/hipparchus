@@ -34,6 +34,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
+      <action dev="luc" type="fix">
+        Fixed infinite loop when some step reduction was silently filtered to min step
+        in Gragg-Bulirsch-Stoer integrator.
+      </action>
       <action dev="luc" type="update">
         Added early detection of NaNs appearing during integration.
       </action>
