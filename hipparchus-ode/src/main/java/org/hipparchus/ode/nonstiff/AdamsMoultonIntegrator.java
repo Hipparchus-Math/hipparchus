@@ -288,32 +288,35 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
 
             if (!isLastStep()) {
 
-                System.arraycopy(predictedY, 0, y, 0, y.length);
-
                 if (resetOccurred()) {
+
                     // some events handler has triggered changes that
                     // invalidate the derivatives, we need to restart from scratch
                     start(equations, getStepStart(), finalTime);
+                    System.arraycopy(getStepStart().getCompleteState(), 0, y, 0, y.length);
+
+                } else {
+
+                    // stepsize control for next step
+                    final double  factor     = computeStepGrowShrinkFactor(error);
+                    final double  scaledH    = getStepSize() * factor;
+                    final double  nextT      = getStepStart().getTime() + scaledH;
+                    final boolean nextIsLast = forward ? (nextT >= finalTime) : (nextT <= finalTime);
+                    double hNew = filterStep(scaledH, forward, nextIsLast);
+
+                    final double  filteredNextT      = getStepStart().getTime() + hNew;
+                    final boolean filteredNextIsLast = forward ?
+                                                       (filteredNextT >= finalTime) :
+                                                       (filteredNextT <= finalTime);
+                    if (filteredNextIsLast) {
+                        hNew = finalTime - getStepStart().getTime();
+                    }
+
+                    rescale(hNew);
+                    System.arraycopy(predictedY, 0, y, 0, y.length);
+
                 }
 
-                // stepsize control for next step
-                final double  factor     = computeStepGrowShrinkFactor(error);
-                final double  scaledH    = getStepSize() * factor;
-                final double  nextT      = getStepStart().getTime() + scaledH;
-                final boolean nextIsLast = forward ?
-                                           (nextT >= finalTime) :
-                                           (nextT <= finalTime);
-                double hNew = filterStep(scaledH, forward, nextIsLast);
-
-                final double  filteredNextT      = getStepStart().getTime() + hNew;
-                final boolean filteredNextIsLast = forward ?
-                                                   (filteredNextT >= finalTime) :
-                                                   (filteredNextT <= finalTime);
-                if (filteredNextIsLast) {
-                    hNew = finalTime - getStepStart().getTime();
-                }
-
-                rescale(hNew);
                 stepEnd = AdamsStateInterpolator.taylor(equations.getMapper(), getStepStart(),
                                                         getStepStart().getTime() + getStepSize(),
                                                         getStepSize(), scaled, nordsieck);

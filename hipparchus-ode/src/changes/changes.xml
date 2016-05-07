@@ -35,6 +35,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
       <action dev="luc" type="fix">
+        Fixed wrong handling of state resets in Adams-Bashforth and Adams-Moulton integrators.
+      </action>
+      <action dev="luc" type="fix">
         Fixed infinite loop when some step reduction was silently filtered to min step
         in Gragg-Bulirsch-Stoer integrator.
       </action>
