@@ -305,32 +305,37 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
 
             if (!isLastStep()) {
 
-                System.arraycopy(predictedY, 0, y, 0, y.length);
-
                 if (resetOccurred()) {
+
                     // some events handler has triggered changes that
                     // invalidate the derivatives, we need to restart from scratch
                     start(equations, getStepStart(), finalTime);
+                    System.arraycopy(getStepStart().getCompleteState(), 0, y, 0, y.length);
+
+                } else {
+
+                    // stepsize control for next step
+                    final T       factor     = computeStepGrowShrinkFactor(error);
+                    final T       scaledH    = getStepSize().multiply(factor);
+                    final T       nextT      = getStepStart().getTime().add(scaledH);
+                    final boolean nextIsLast = forward ?
+                                               nextT.subtract(finalTime).getReal() >= 0 :
+                                               nextT.subtract(finalTime).getReal() <= 0;
+                    T hNew = filterStep(scaledH, forward, nextIsLast);
+
+                    final T       filteredNextT      = getStepStart().getTime().add(hNew);
+                    final boolean filteredNextIsLast = forward ?
+                                                       filteredNextT.subtract(finalTime).getReal() >= 0 :
+                                                       filteredNextT.subtract(finalTime).getReal() <= 0;
+                    if (filteredNextIsLast) {
+                        hNew = finalTime.subtract(getStepStart().getTime());
+                    }
+
+                    rescale(hNew);
+                    System.arraycopy(predictedY, 0, y, 0, y.length);
+
                 }
 
-                // stepsize control for next step
-                final T       factor     = computeStepGrowShrinkFactor(error);
-                final T       scaledH    = getStepSize().multiply(factor);
-                final T       nextT      = getStepStart().getTime().add(scaledH);
-                final boolean nextIsLast = forward ?
-                                           nextT.subtract(finalTime).getReal() >= 0 :
-                                           nextT.subtract(finalTime).getReal() <= 0;
-                T hNew = filterStep(scaledH, forward, nextIsLast);
-
-                final T       filteredNextT      = getStepStart().getTime().add(hNew);
-                final boolean filteredNextIsLast = forward ?
-                                                   filteredNextT.subtract(finalTime).getReal() >= 0 :
-                                                   filteredNextT.subtract(finalTime).getReal() <= 0;
-                if (filteredNextIsLast) {
-                    hNew = finalTime.subtract(getStepStart().getTime());
-                }
-
-                rescale(hNew);
                 stepEnd = AdamsFieldStateInterpolator.taylor(getStepStart(), getStepStart().getTime().add(getStepSize()),
                                                             getStepSize(), scaled, nordsieck);
 
