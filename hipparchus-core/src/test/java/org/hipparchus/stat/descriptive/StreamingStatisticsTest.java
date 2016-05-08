@@ -341,7 +341,7 @@ public class StreamingStatisticsTest {
          * fact that <aggregate> gets values in exactly the same order
          * as <totalStats>.
          */
-        assertSummaryStatisticsEquals(totalStats, aggregate, 1e-12);
+        assertSummaryStatisticsEquals(totalStats, aggregate, 1e-10);
     }
 
     @Test
@@ -370,7 +370,7 @@ public class StreamingStatisticsTest {
         StreamingStatistics aggregatedStats = new StreamingStatistics();
         aggregatedStats.aggregate(subSampleStats);
 
-        assertSummaryStatisticsEquals(totalStats, aggregatedStats, 10e-12);
+        assertSummaryStatisticsEquals(totalStats, aggregatedStats, 10e-10);
     }
 
     @Test
@@ -399,7 +399,7 @@ public class StreamingStatisticsTest {
         StreamingStatistics aggregatedStats = new StreamingStatistics();
         aggregatedStats.aggregate(subSampleStats);
 
-        assertSummaryStatisticsEquals(totalStats, aggregatedStats, 10e-12);
+        assertSummaryStatisticsEquals(totalStats, aggregatedStats, 10e-10);
     }
 
     /**
