@@ -37,8 +37,7 @@ state information as values are added using the `increment()` method.
 Abstract implementations of the top level interfaces are provided in
 [AbstractUnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/AbstractUnivariateStatistic.html)
 and
-[AbstractStorelessUnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/AbstractStorelessUnivariateStatistic.html)
-respectively.
+[AbstractStorelessUnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/AbstractStorelessUnivariateStatistic.html) respectively.
 
 Each statistic is implemented as a separate class, in one of the
 subpackages (moment, rank, summary) and each extends one of the abstract
@@ -48,13 +47,13 @@ Statistics can be instantiated and used directly,  but it is generally more conv
 (and efficient) to access them using the provided aggregates,
 [DescriptiveStatistics](../apidocs/org/hipparchus/stat/descriptive/DescriptiveStatistics.html)
 and
-[SummaryStatistics.](../apidocs/org/hipparchus/stat/descriptive/SummaryStatistics.html).
+[StreamingStatistics.](../apidocs/org/hipparchus/stat/descriptive/StreamingStatistics.html).
 
 `DescriptiveStatistics` maintains the input data in memory
 and has the capability of producing "rolling" statistics computed from a
 "window" consisting of the most recently added values.
 
-`SummaryStatistics` does not store the input data values
+`StreamingStatistics` does not store the input data values
 in memory, so the statistics included in this aggregate are limited to those
 that can be computed in one pass through the data without access to
 the full array of values.
@@ -62,18 +61,15 @@ the full array of values.
 | Aggregate | Statistics Included | Values stored? | "Rolling" capability? |
 | --- | --- | --- | --- |
 | [ DescriptiveStatistics](../apidocs/org/hipparchus/stat/descriptive/DescriptiveStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance, percentiles, skewness, kurtosis, median | Yes | Yes |
-| [ SummaryStatistics](../apidocs/org/hipparchus/stat/descriptive/SummaryStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance | No | No |
+| [ StreamingStatistics](../apidocs/org/hipparchus/stat/descriptive/StreamingStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance | No | No |
 
-`SummaryStatistics` can be aggregated using
-[AggregateSummaryStatistics.](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html)
-This class can be used to concurrently gather statistics for multiple datasets
-as well as for a combined sample including all of the data.
+`StreamingStatistics` supports aggregation of results using various `aggregate` methods.
 
-`MultivariateSummaryStatistics` is similar to `SummaryStatistics` but
+`MultivariateSummaryStatistics` is similar to `StreamingStatistics` but
 handles n-tuple values instead of scalar values. It can also compute the
 full covariance matrix for the input data.
 
-Neither `DescriptiveStatistics` nor `SummaryStatistics` is thread-safe.
+Neither `DescriptiveStatistics` nor `StreamingStatistics` is thread-safe.
 
 There is also a utility class,
 [StatUtils](../apidocs/org/hipparchus/stat/StatUtils.html), that provides
@@ -98,10 +94,10 @@ Using the `DescriptiveStatistics` aggregate (values are stored in memory):
     double std  = stats.getStandardDeviation();
     double median = stats.getPercentile(50);
 
-Using the `SummaryStatistics` aggregate (values are __not__ stored in memory):
+Using the `StreamingStatistics` aggregate (values are __not__ stored in memory):
 
-    // Get a SummaryStatistics instance
-    SummaryStatistics stats = new SummaryStatistics();
+    // Get a StreamingStatistics instance
+    StreamingStatistics stats = new StreamingStatistics();
     
     // Read data from an input stream,
     // adding values and updating sums, counters, etc.
@@ -148,50 +144,40 @@ Use a `DescriptiveStatistics` instance with window size set to 100
     }
     in.close();
 
-__Compute statistics for multiple samples and overall statistics concurrently__
+__Compute statistics for multiple samples and aggregate results__
 
-There are two ways to do this using `AggregateSummaryStatistics.`
-The first is to use an `AggregateSummaryStatistics` instance
-to accumulate overall statistics contributed by `SummaryStatistics`
-instances created using
-[AggregateSummaryStatistics.createContributingStatistics\(\)](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html#createContributingStatistics--):
+Use multiple `StreamingStatistics` instances and aggregate them into a final result:
 
-    // Create a AggregateSummaryStatistics instance to accumulate the overall statistics 
-    // and AggregatingSummaryStatistics for the subsamples
-    AggregateSummaryStatistics aggregate = new AggregateSummaryStatistics();
-    SummaryStatistics setOneStats = aggregate.createContributingStatistics();
-    SummaryStatistics setTwoStats = aggregate.createContributingStatistics();
+    // Create individual StreamingStatistics instances to accumulate
+    // statistics for the subsamples
+    StreamingStatistics setOneStats = new StreamingStatistics();
+    StreamingStatistics setTwoStats = new StreamingStatistics();
     // Add values to the subsample aggregates
     setOneStats.addValue(2);
     setOneStats.addValue(3);
     setTwoStats.addValue(2);
     setTwoStats.addValue(4);
     ...
+    // Aggregate the results
+    StreamingStatistics aggregate = new StreamingStatistics();
+    aggregate.aggregate(setOneStats, setTwoStats);
+    
     // Full sample data is reported by the aggregate
     double totalSampleSum = aggregate.getSum();
 
-The above approach has the disadvantages that the `addValue` calls must be synchronized on the
-`SummaryStatistics` instance maintained by the aggregate and each value addition updates the
-aggregate as well as the subsample. For applications that can wait to do the aggregation until all values
-have been added, a static
-[aggregate](../apidocs/org/hipparchus/stat/descriptive/AggregateSummaryStatistics.html#aggregate-java.util.Collection-)
-method is available, as shown in the following example.
-This method should be used when aggregation needs to be done across threads.
+Additionally, `StatisticalSummary` instances can be aggregated as well:
 
-    // Create SummaryStatistics instances for the subsample data
-    SummaryStatistics setOneStats = new SummaryStatistics();
-    SummaryStatistics setTwoStats = new SummaryStatistics();
-    // Add values to the subsample SummaryStatistics instances
+    // Create StreamingStatistic instances for the subsample data
+    StreamingStatistics setOneStats = new StreamingStatistics();
+    StreamingStatistics setTwoStats = new StreamingStatistics();
+    // Add values to the subsample StreamingStatistic instances
     setOneStats.addValue(2);
     setOneStats.addValue(3);
     setTwoStats.addValue(2);
     setTwoStats.addValue(4);
     ...
     // Aggregate the subsample statistics
-    Collection<SummaryStatistics> aggregate = new ArrayList<>();
-    aggregate.add(setOneStats);
-    aggregate.add(setTwoStats);
-    StatisticalSummary aggregatedStats = AggregateSummaryStatistics.aggregate(aggregate);
+    StatisticalSummary aggregatedStats = StatisticalSummary.aggregate(setOneStats, setTwoStats);
     
     // Full sample data is reported by aggregatedStats
     double totalSampleSum = aggregatedStats.getSum();
@@ -659,7 +645,7 @@ to a fixed value:
 
     double[] observed ={1d, 2d, 3d};
     double mu = 2.5d;
-    SummaryStatistics sampleStats = new SummaryStatistics();
+    StreamingStatistics sampleStats = new StreamingStatistics();
     for (int i = 0; i < observed.length; i++) {
         sampleStats.addValue(observed[i]);
     }
@@ -709,20 +695,20 @@ The last example will return `true` iff the p-value returned by
 `StatisticalSummary` instances, without assuming that
 subpopulation variances are equal.
 First create the `StatisticalSummary` instances.  Both
-`DescriptiveStatistics` and `SummaryStatistics`
+`DescriptiveStatistics` and `StreamingStatistics`
 implement this interface.  Assume that `summary1` and
-`summary2` are `SummaryStatistics` instances,
+`summary2` are `StreamingStatistics` instances,
 each of which has had at least 2 values added to the (virtual) dataset that
 it describes.  The sample sizes do not have to be the same -- all that is required
 is that both samples have at least 2 elements.
 
-__Note:__ The `SummaryStatistics` class does
+__Note:__ The `StreamingStatistics` class does
 not store the dataset that it describes in memory, but it does compute all
 statistics necessary to perform t-tests, so this method can be used to
 conduct t-tests with very large samples.  One-sample tests can also be
 performed this way.
 (See [Descriptive statistics](#Descriptive_statistics) for details
-on the `SummaryStatistics` class.)
+on the `StreamingStatistics` class.)
 
 To compute the t-statistic:
 

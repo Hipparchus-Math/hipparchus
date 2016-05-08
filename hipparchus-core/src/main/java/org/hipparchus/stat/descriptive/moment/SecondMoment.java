@@ -19,6 +19,7 @@ package org.hipparchus.stat.descriptive.moment;
 import java.io.Serializable;
 
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.descriptive.AggregatableStatistic;
 
 /**
  * Computes a statistic related to the Second Central Moment.  Specifically,
@@ -32,7 +33,7 @@ import org.hipparchus.exception.NullArgumentException;
  * </ul>
  * Then
  * <p>
- * new value = old value + dev^2 * (n -1) / n.
+ * new value = old value + dev^2 * (n - 1) / n.
  * <p>
  * Returns <code>Double.NaN</code> if no data values have been added and
  * returns <code>0</code> if there is just one value in the data set.
@@ -44,7 +45,8 @@ import org.hipparchus.exception.NullArgumentException;
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.
  */
-public class SecondMoment extends FirstMoment implements Serializable {
+public class SecondMoment extends FirstMoment
+    implements AggregatableStatistic<SecondMoment>, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -93,6 +95,20 @@ public class SecondMoment extends FirstMoment implements Serializable {
     @Override
     public double getResult() {
         return m2;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(SecondMoment other) {
+        if (other.n > 0) {
+            final double oldN = n;
+            super.aggregate(other);
+            if (oldN == 0) {
+                m2 = other.m2;
+            } else {
+                m2 += other.m2 + (other.n * oldN) / n * dev * dev;
+            }
+        }
     }
 
     /** {@inheritDoc} */

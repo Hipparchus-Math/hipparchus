@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
+import org.hipparchus.stat.descriptive.AggregatableStatistic;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -39,7 +40,8 @@ import org.hipparchus.util.MathUtils;
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.
  */
-public class Min extends AbstractStorelessUnivariateStatistic implements Serializable {
+public class Min extends AbstractStorelessUnivariateStatistic
+    implements AggregatableStatistic<Min>, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -97,6 +99,18 @@ public class Min extends AbstractStorelessUnivariateStatistic implements Seriali
     @Override
     public long getN() {
         return n;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(Min other) {
+        MathUtils.checkNotNull(other);
+        if (other.n > 0) {
+            if (other.value < this.value || Double.isNaN(this.value)) {
+                this.value = other.value;
+            }
+            this.n += other.n;
+        }
     }
 
     /**

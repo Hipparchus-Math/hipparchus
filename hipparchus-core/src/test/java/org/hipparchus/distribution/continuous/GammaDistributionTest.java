@@ -24,7 +24,7 @@ import java.io.InputStreamReader;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.special.Gamma;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -220,9 +220,9 @@ public class GammaDistributionTest extends RealDistributionAbstractTest {
         final double meanOF, final double sdOF,
         final String resourceName) throws IOException {
         final GammaDistribution distribution = new GammaDistribution(shape, 1.0);
-        final SummaryStatistics statOld = SummaryStatistics.create();
-        final SummaryStatistics statNewNoOF = SummaryStatistics.create();
-        final SummaryStatistics statNewOF = SummaryStatistics.create();
+        final StreamingStatistics statOld = new StreamingStatistics();
+        final StreamingStatistics statNewNoOF = new StreamingStatistics();
+        final StreamingStatistics statNewOF = new StreamingStatistics();
 
         final InputStream resourceAsStream;
         resourceAsStream = this.getClass().getResourceAsStream(resourceName);

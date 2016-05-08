@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
+import org.hipparchus.stat.descriptive.AggregatableStatistic;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -46,7 +47,7 @@ import org.hipparchus.util.MathUtils;
  * <code>clear()</code> method, it must be synchronized externally.
  */
 public class SumOfLogs extends AbstractStorelessUnivariateStatistic
-    implements Serializable {
+    implements AggregatableStatistic<SumOfLogs>, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -102,6 +103,16 @@ public class SumOfLogs extends AbstractStorelessUnivariateStatistic
     public void clear() {
         value = 0d;
         n = 0;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(SumOfLogs other) {
+        MathUtils.checkNotNull(other);
+        if (other.n > 0) {
+            this.n     += other.n;
+            this.value += other.value;
+        }
     }
 
     /**

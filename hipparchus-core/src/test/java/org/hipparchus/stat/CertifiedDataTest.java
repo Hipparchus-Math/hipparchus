@@ -21,7 +21,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -40,7 +40,7 @@ public class CertifiedDataTest {
     */
     @Test
     public void testSummaryStatistics() throws Exception {
-        SummaryStatistics u = SummaryStatistics.create();
+        StreamingStatistics u = new StreamingStatistics();
         loadStats("data/PiDigits.txt", u);
         Assert.assertEquals("PiDigits: std", std, u.getStandardDeviation(), 1E-13);
         Assert.assertEquals("PiDigits: mean", mean, u.getMean(), 1E-13);
@@ -98,12 +98,12 @@ public class CertifiedDataTest {
     private void loadStats(String resource, Object u) throws Exception {
 
         DescriptiveStatistics d = null;
-        SummaryStatistics s = null;
+        StreamingStatistics s = null;
         if (u instanceof DescriptiveStatistics) {
             d = (DescriptiveStatistics) u;
             d.clear();
         } else {
-            s = (SummaryStatistics) u;
+            s = (StreamingStatistics) u;
             s.clear();
         }
 

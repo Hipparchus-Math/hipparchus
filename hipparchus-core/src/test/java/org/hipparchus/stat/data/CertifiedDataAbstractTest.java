@@ -28,7 +28,7 @@ import java.util.Map;
 
 import org.hipparchus.TestUtils;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -40,14 +40,14 @@ public abstract class CertifiedDataAbstractTest {
 
     private DescriptiveStatistics descriptives;
 
-    private SummaryStatistics summaries;
+    private StreamingStatistics summaries;
 
     private Map<String, Double> certifiedValues;
 
     @Before
     public void setUp() throws IOException {
         descriptives = new DescriptiveStatistics();
-        summaries = SummaryStatistics.create();
+        summaries = new StreamingStatistics();
         certifiedValues = new HashMap<String, Double>();
 
         loadData();

@@ -36,7 +36,7 @@ import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Before;
@@ -289,7 +289,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     private void tstGen(double tolerance)throws Exception {
         empiricalDistribution.load(url);
         empiricalDistribution.reSeed(1000);
-        SummaryStatistics stats = SummaryStatistics.create();
+        StreamingStatistics stats = new StreamingStatistics();
         for (int i = 1; i < 1000; i++) {
             stats.addValue(empiricalDistribution.getNextValue());
         }
@@ -300,7 +300,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     private void tstDoubleGen(double tolerance)throws Exception {
         empiricalDistribution2.load(dataArray);
         empiricalDistribution2.reSeed(1000);
-        SummaryStatistics stats = SummaryStatistics.create();
+        StreamingStatistics stats = new StreamingStatistics();
         for (int i = 1; i < 1000; i++) {
             stats.addValue(empiricalDistribution2.getNextValue());
         }
@@ -549,7 +549,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         }
         // Use constant distribution equal to bin mean within bin
         @Override
-        protected RealDistribution getKernel(SummaryStatistics bStats) {
+        protected RealDistribution getKernel(StreamingStatistics bStats) {
             return new ConstantRealDistribution(bStats.getMean());
         }
     }
@@ -563,7 +563,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
             super(i);
         }
         @Override
-        protected RealDistribution getKernel(SummaryStatistics bStats) {
+        protected RealDistribution getKernel(StreamingStatistics bStats) {
             return new UniformRealDistribution(randomData.getRandomGenerator(), bStats.getMin(), bStats.getMax());
         }
     }

@@ -27,7 +27,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -82,7 +82,7 @@ public class PerfTestUtils {
         final int len = methods.length;
         final StatisticalSummary[] stats = new StatisticalSummary[len];
         for (int j = 0; j < len; j++) {
-            final SummaryStatistics s = SummaryStatistics.create();
+            final StreamingStatistics s = new StreamingStatistics();
             for (int k = 0; k < repeatStat; k++) {
                 s.addValue(times[j][k][0]);
             }

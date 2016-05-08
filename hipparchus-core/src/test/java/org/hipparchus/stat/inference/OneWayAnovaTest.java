@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -105,18 +105,18 @@ public class OneWayAnovaTest {
     @Test
     public void testAnovaPValueSummaryStatistics() {
         // Target comparison values computed using R version 2.6.0 (Linux version)
-        List<SummaryStatistics> threeClasses = new ArrayList<SummaryStatistics>();
-        SummaryStatistics statsA = SummaryStatistics.create();
+        List<StreamingStatistics> threeClasses = new ArrayList<StreamingStatistics>();
+        StreamingStatistics statsA = new StreamingStatistics();
         for (double a : classA) {
             statsA.addValue(a);
         }
         threeClasses.add(statsA);
-        SummaryStatistics statsB = SummaryStatistics.create();
+        StreamingStatistics statsB = new StreamingStatistics();
         for (double b : classB) {
             statsB.addValue(b);
         }
         threeClasses.add(statsB);
-        SummaryStatistics statsC = SummaryStatistics.create();
+        StreamingStatistics statsC = new StreamingStatistics();
         for (double c : classC) {
             statsC.addValue(c);
         }
@@ -125,7 +125,7 @@ public class OneWayAnovaTest {
         Assert.assertEquals("ANOVA P-value", 6.959446E-06,
                  testStatistic.anovaPValue(threeClasses, true), 1E-12);
 
-        List<SummaryStatistics> twoClasses = new ArrayList<SummaryStatistics>();
+        List<StreamingStatistics> twoClasses = new ArrayList<StreamingStatistics>();
         twoClasses.add(statsA);
         twoClasses.add(statsB);
 

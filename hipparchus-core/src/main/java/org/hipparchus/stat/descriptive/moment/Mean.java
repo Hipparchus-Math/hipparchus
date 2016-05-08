@@ -22,6 +22,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
+import org.hipparchus.stat.descriptive.AggregatableStatistic;
 import org.hipparchus.stat.descriptive.WeightedEvaluation;
 import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.util.MathArrays;
@@ -63,7 +64,7 @@ import org.hipparchus.util.MathUtils;
  * <code>clear()</code> method, it must be synchronized externally.
  */
 public class Mean extends AbstractStorelessUnivariateStatistic
-    implements Serializable, WeightedEvaluation {
+    implements AggregatableStatistic<Mean>, WeightedEvaluation, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -140,6 +141,15 @@ public class Mean extends AbstractStorelessUnivariateStatistic
     @Override
     public long getN() {
         return moment.getN();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(Mean other) {
+        MathUtils.checkNotNull(other);
+        if (incMoment) {
+            this.moment.aggregate(other.moment);
+        }
     }
 
     /**

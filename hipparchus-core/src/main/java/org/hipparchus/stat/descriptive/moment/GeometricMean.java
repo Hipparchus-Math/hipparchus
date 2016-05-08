@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
+import org.hipparchus.stat.descriptive.AggregatableStatistic;
 import org.hipparchus.stat.descriptive.summary.SumOfLogs;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -46,7 +47,8 @@ import org.hipparchus.util.MathUtils;
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.
  */
-public class GeometricMean extends AbstractStorelessUnivariateStatistic implements Serializable {
+public class GeometricMean extends AbstractStorelessUnivariateStatistic
+    implements AggregatableStatistic<GeometricMean>, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -121,6 +123,15 @@ public class GeometricMean extends AbstractStorelessUnivariateStatistic implemen
     public void clear() {
         if (incSumOfLogs) {
             sumOfLogs.clear();
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(GeometricMean other) {
+        MathUtils.checkNotNull(other);
+        if (incSumOfLogs) {
+            this.sumOfLogs.aggregate(other.sumOfLogs);
         }
     }
 

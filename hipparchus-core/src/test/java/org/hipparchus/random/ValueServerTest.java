@@ -22,7 +22,7 @@ import java.util.Arrays;
 import org.hipparchus.RetryRunner;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,7 +57,7 @@ public final class ValueServerTest {
         vs.computeDistribution();
         Assert.assertTrue("empirical distribution property",
                           vs.getEmpiricalDistribution() != null);
-        SummaryStatistics stats = SummaryStatistics.create();
+        StreamingStatistics stats = new StreamingStatistics();
         for (int i = 1; i < 1000; i++) {
             next = vs.getNext();
             stats.addValue(next);
@@ -67,7 +67,7 @@ public final class ValueServerTest {
             tolerance);
 
         vs.computeDistribution(500);
-        stats = SummaryStatistics.create();
+        stats = new StreamingStatistics();
         for (int i = 1; i < 1000; i++) {
             next = vs.getNext();
             stats.addValue(next);

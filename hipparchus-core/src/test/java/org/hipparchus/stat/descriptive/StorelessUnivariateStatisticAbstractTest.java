@@ -21,6 +21,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.hipparchus.TestUtils;
+import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
 import org.hipparchus.util.FastMath;
 import org.junit.Test;
@@ -224,6 +225,50 @@ public abstract class StorelessUnivariateStatisticAbstractTest
 
         assertEquals(savedStatistic.getResult(), stat.getResult(), 0.0);
         assertEquals(savedStatistic.getN(), stat.getN());
+    }
+
+    /**
+     * Test that the aggregate operation is consistent with individual increment.
+     */
+    @Test
+    @SuppressWarnings("unchecked")
+    public <T> void testAggregate() {
+        // Union of both statistics.
+        StorelessUnivariateStatistic statU = getUnivariateStatistic();
+        if (!(statU instanceof AggregatableStatistic<?>)) {
+            return;
+        }
+
+        // A randomly picked distribution.
+        TDistribution dist = new TDistribution(4.2d);
+
+        // Aggregated statistic.
+        AggregatableStatistic<T> aggregated = (AggregatableStatistic<T>) getUnivariateStatistic();
+        StorelessUnivariateStatistic statAgg = (StorelessUnivariateStatistic) aggregated;
+
+        // Create Set A
+        StorelessUnivariateStatistic statA = getUnivariateStatistic();
+        for (int i = 0; i < 10; i++) {
+            final double val = dist.sample();
+            statA.increment(val);
+            statU.increment(val);
+        }
+
+        aggregated.aggregate((T) statA);
+        assertEquals(statA.getN(), statAgg.getN(), getTolerance());
+        assertEquals(statA.getResult(), statAgg.getResult(), getTolerance());
+
+        // Create Set B
+        StorelessUnivariateStatistic statB = getUnivariateStatistic();
+        for (int i = 0; i < 4; i++) {
+            final double val = dist.sample();
+            statB.increment(val);
+            statU.increment(val);
+        }
+
+        aggregated.aggregate((T) statB);
+        assertEquals(statU.getN(), statAgg.getN(), getTolerance());
+        assertEquals(statU.getResult(), statAgg.getResult(), getTolerance());
     }
 
 }

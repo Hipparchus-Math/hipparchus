@@ -20,10 +20,8 @@ import java.util.List;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -87,15 +85,15 @@ public class EvaluationTestValidation {
         final int numParams = 2;
 
         // Parameters found for each of Monte-Carlo run.
-        final SummaryStatistics[] paramsFoundByDirectSolution = new SummaryStatistics[numParams];
+        final StreamingStatistics[] paramsFoundByDirectSolution = new StreamingStatistics[numParams];
         // Sigma estimations (square-root of the diagonal elements of the
         // covariance matrix), for each Monte-Carlo run.
-        final SummaryStatistics[] sigmaEstimate = new SummaryStatistics[numParams];
+        final StreamingStatistics[] sigmaEstimate = new StreamingStatistics[numParams];
 
         // Initialize statistics accumulators.
         for (int i = 0; i < numParams; i++) {
-            paramsFoundByDirectSolution[i] = SummaryStatistics.create();
-            sigmaEstimate[i] = SummaryStatistics.create();
+            paramsFoundByDirectSolution[i] = new StreamingStatistics();
+            sigmaEstimate[i] = new StreamingStatistics();
         }
 
         final RealVector init = new ArrayRealVector(new double[]{ slope, offset }, false);

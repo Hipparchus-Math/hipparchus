@@ -22,6 +22,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
+import org.hipparchus.stat.descriptive.AggregatableStatistic;
 import org.hipparchus.stat.descriptive.WeightedEvaluation;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -69,7 +70,7 @@ import org.hipparchus.util.MathUtils;
  * <code>clear()</code> method, it must be synchronized externally.
  */
 public class Variance extends AbstractStorelessUnivariateStatistic
-    implements Serializable, WeightedEvaluation {
+    implements AggregatableStatistic<Variance>, WeightedEvaluation, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -216,6 +217,15 @@ public class Variance extends AbstractStorelessUnivariateStatistic
     public void clear() {
         if (incMoment) {
             moment.clear();
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(Variance other) {
+        MathUtils.checkNotNull(other);
+        if (incMoment) {
+            this.moment.aggregate(other.moment);
         }
     }
 

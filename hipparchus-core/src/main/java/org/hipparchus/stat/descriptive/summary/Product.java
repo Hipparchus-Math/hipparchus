@@ -21,6 +21,7 @@ import java.io.Serializable;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
+import org.hipparchus.stat.descriptive.AggregatableStatistic;
 import org.hipparchus.stat.descriptive.WeightedEvaluation;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -30,7 +31,7 @@ import org.hipparchus.util.MathUtils;
  * Returns the product of the available values.
  * <p>
  * If there are no values in the dataset, then 1 is returned.
- *  If any of the values are
+ * If any of the values are
  * <code>NaN</code>, then <code>NaN</code> is returned.
  * <p>
  * <strong>Note that this implementation is not synchronized.</strong> If
@@ -39,7 +40,7 @@ import org.hipparchus.util.MathUtils;
  * <code>clear()</code> method, it must be synchronized externally.
  */
 public class Product extends AbstractStorelessUnivariateStatistic
-    implements Serializable, WeightedEvaluation {
+    implements AggregatableStatistic<Product>, WeightedEvaluation, Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -95,6 +96,16 @@ public class Product extends AbstractStorelessUnivariateStatistic
     public void clear() {
         value = 1;
         n = 0;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(Product other) {
+        MathUtils.checkNotNull(other);
+        if (other.n > 0) {
+            this.n     += other.n;
+            this.value *= other.value;
+        }
     }
 
     /**

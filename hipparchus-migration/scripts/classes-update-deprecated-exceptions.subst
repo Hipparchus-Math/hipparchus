@@ -687,7 +687,6 @@ ${fromprefix}.stat.correlation.StorelessBivariateCovariance                     
 ${fromprefix}.stat.correlation.StorelessCovariance                                   ${toprefix}.stat.correlation.StorelessCovariance
 ${fromprefix}.stat.descriptive.AbstractStorelessUnivariateStatistic                  ${toprefix}.stat.descriptive.AbstractStorelessUnivariateStatistic
 ${fromprefix}.stat.descriptive.AbstractUnivariateStatistic                           ${toprefix}.stat.descriptive.AbstractUnivariateStatistic
-${fromprefix}.stat.descriptive.AggregateSummaryStatistics                            ${toprefix}.stat.descriptive.AggregateSummaryStatistics
 ${fromprefix}.stat.descriptive.DescriptiveStatistics                                 ${toprefix}.stat.descriptive.DescriptiveStatistics
 ${fromprefix}.stat.descriptive.moment.FirstMoment                                    ${toprefix}.stat.descriptive.moment.FirstMoment
 ${fromprefix}.stat.descriptive.moment.FourthMoment                                   ${toprefix}.stat.descriptive.moment.FourthMoment
@@ -712,11 +711,10 @@ ${fromprefix}.stat.descriptive.StatisticalSummary                               
 ${fromprefix}.stat.descriptive.StatisticalSummaryValues                              ${toprefix}.stat.descriptive.StatisticalSummaryValues
 ${fromprefix}.stat.descriptive.StorelessUnivariateStatistic                          ${toprefix}.stat.descriptive.StorelessUnivariateStatistic
 ${fromprefix}.stat.descriptive.summary.Product                                       ${toprefix}.stat.descriptive.summary.Product
-${fromprefix}.stat.descriptive.SummaryStatistics                                     ${toprefix}.stat.descriptive.SummaryStatistics
+${fromprefix}.stat.descriptive.SummaryStatistics                                     ${toprefix}.stat.descriptive.StreamingStatistics
 ${fromprefix}.stat.descriptive.summary.Sum                                           ${toprefix}.stat.descriptive.summary.Sum
 ${fromprefix}.stat.descriptive.summary.SumOfLogs                                     ${toprefix}.stat.descriptive.summary.SumOfLogs
 ${fromprefix}.stat.descriptive.summary.SumOfSquares                                  ${toprefix}.stat.descriptive.summary.SumOfSquares
-${fromprefix}.stat.descriptive.SynchronizedSummaryStatistics                         ${toprefix}.stat.descriptive.SynchronizedSummaryStatistics
 ${fromprefix}.stat.descriptive.UnivariateStatistic                                   ${toprefix}.stat.descriptive.UnivariateStatistic
 ${fromprefix}.stat.descriptive.WeightedEvaluation                                    ${toprefix}.stat.descriptive.WeightedEvaluation
 ${fromprefix}.stat.Frequency                                                         ${toprefix}.stat.Frequency

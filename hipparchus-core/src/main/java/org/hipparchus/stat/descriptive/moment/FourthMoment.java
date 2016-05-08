@@ -114,6 +114,14 @@ class FourthMoment extends ThirdMoment implements Serializable{
         m4 = Double.NaN;
     }
 
+    /**
+     * Throws {@link UnsupportedOperationException}.
+     */
+    @Override
+    public void aggregate(SecondMoment other) {
+        throw new UnsupportedOperationException();
+    }
+
     /** {@inheritDoc} */
     @Override
     public FourthMoment copy() {

@@ -24,7 +24,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -130,12 +130,12 @@ public class OneWayAnova {
     }
 
     /**
-     * Computes the ANOVA P-value for a collection of {@link SummaryStatistics}.
+     * Computes the ANOVA P-value for a collection of {@link StreamingStatistics}.
      *
      * <p><strong>Preconditions</strong>: <ul>
      * <li>The categoryData <code>Collection</code> must contain
-     * {@link SummaryStatistics}.</li>
-     * <li> There must be at least two {@link SummaryStatistics} in the
+     * {@link StreamingStatistics}.</li>
+     * <li> There must be at least two {@link StreamingStatistics} in the
      * <code>categoryData</code> collection and each of these statistics must
      * contain at least two values.</li></ul></p><p>
      * This implementation uses the
@@ -146,19 +146,19 @@ public class OneWayAnova {
      * where <code>F</code> is the F value and <code>cumulativeProbability</code>
      * is the Hipparchus implementation of the F distribution.</p>
      *
-     * @param categoryData <code>Collection</code> of {@link SummaryStatistics}
+     * @param categoryData <code>Collection</code> of {@link StreamingStatistics}
      * each containing data for one category
      * @param allowOneElementData if true, allow computation for one catagory
      * only or for one data element per category
      * @return Pvalue
      * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
      * @throws MathIllegalArgumentException if the length of the <code>categoryData</code>
-     * array is less than 2 or a contained {@link SummaryStatistics} does not have
+     * array is less than 2 or a contained {@link StreamingStatistics} does not have
      * at least two values
      * @throws MathIllegalStateException if the p-value can not be computed due to a convergence error
      * @throws MathIllegalStateException if the maximum number of iterations is exceeded
      */
-    public double anovaPValue(final Collection<SummaryStatistics> categoryData,
+    public double anovaPValue(final Collection<StreamingStatistics> categoryData,
                               final boolean allowOneElementData)
         throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
@@ -190,12 +190,12 @@ public class OneWayAnova {
 
         MathUtils.checkNotNull(categoryData);
 
-        final Collection<SummaryStatistics> categoryDataSummaryStatistics =
-                new ArrayList<SummaryStatistics>(categoryData.size());
+        final Collection<StreamingStatistics> categoryDataSummaryStatistics =
+                new ArrayList<StreamingStatistics>(categoryData.size());
 
         // convert arrays to SummaryStatistics
         for (final double[] data : categoryData) {
-            final SummaryStatistics dataSummaryStatistics = SummaryStatistics.create();
+            final StreamingStatistics dataSummaryStatistics = new StreamingStatistics();
             categoryDataSummaryStatistics.add(dataSummaryStatistics);
             for (final double val : data) {
                 dataSummaryStatistics.addValue(val);
@@ -266,7 +266,7 @@ public class OneWayAnova {
      * categories is less than 2 or a contained SummaryStatistics does not contain
      * at least two values
      */
-    private AnovaStats anovaStats(final Collection<SummaryStatistics> categoryData,
+    private AnovaStats anovaStats(final Collection<StreamingStatistics> categoryData,
                                   final boolean allowOneElementData)
         throws MathIllegalArgumentException, NullArgumentException {
 
@@ -280,7 +280,7 @@ public class OneWayAnova {
             }
 
             // check if each category has enough data
-            for (final SummaryStatistics array : categoryData) {
+            for (final StreamingStatistics array : categoryData) {
                 if (array.getN() <= 1) {
                     throw new MathIllegalArgumentException(LocalizedCoreFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED,
                                                          (int) array.getN(), 2);
@@ -294,7 +294,7 @@ public class OneWayAnova {
         double totsumsq = 0;
         int totnum = 0;
 
-        for (final SummaryStatistics data : categoryData) {
+        for (final StreamingStatistics data : categoryData) {
 
             final double sum = data.getSum();
             final double sumsq = data.getSumOfSquares();

@@ -23,7 +23,12 @@ import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
 import org.hipparchus.stat.descriptive.moment.Variance;
+import org.hipparchus.stat.descriptive.rank.Max;
+import org.hipparchus.stat.descriptive.rank.Min;
+import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.stat.descriptive.summary.SumOfLogs;
+import org.hipparchus.stat.descriptive.summary.SumOfSquares;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
 
@@ -33,19 +38,10 @@ import org.hipparchus.util.Precision;
  * memory, so this class can be used to compute statistics for very large data
  * streams.
  * <p>
- * The {@link StorelessUnivariateStatistic} instances used to maintain summary
- * state and compute statistics are configurable via a builder. For example, the
- * default implementation for the variance can be overridden by calling
- * <pre>
- *    SummaryStatistics stats =
- *        SummaryStatistics.builder()
- *                         .withVariance(new MyVarianceImpl())
- *                         .build();
- * </pre>
- * <p>
  * Note: This class is not thread-safe.
  */
-class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
+public class StreamingStatistics
+    implements StatisticalSummary, AggregatableStatistic<StreamingStatistics>, Serializable {
 
     /** Serialization UID */
     private static final long serialVersionUID = 20160422L;
@@ -56,30 +52,42 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
     /** SecondMoment is used to compute the mean and variance */
     private final SecondMoment secondMoment;
     /** min of values that have been added */
-    private final StorelessUnivariateStatistic minImpl;
+    private final Min minImpl;
     /** max of values that have been added */
-    private final StorelessUnivariateStatistic maxImpl;
+    private final Max maxImpl;
     /** sum of values that have been added */
-    private final StorelessUnivariateStatistic sumImpl;
+    private final Sum sumImpl;
     /** sum of the square of each value that has been added */
-    private final StorelessUnivariateStatistic sumOfSquaresImpl;
+    private final SumOfSquares sumOfSquaresImpl;
     /** sumLog of values that have been added */
-    private final StorelessUnivariateStatistic sumOfLogsImpl;
+    private final SumOfLogs sumOfLogsImpl;
     /** mean of values that have been added */
-    private final StorelessUnivariateStatistic meanImpl;
+    private final Mean meanImpl;
     /** variance of values that have been added */
-    private final StorelessUnivariateStatistic varianceImpl;
+    private final Variance varianceImpl;
     /** geoMean of values that have been added */
-    private final StorelessUnivariateStatistic geoMeanImpl;
+    private final GeometricMean geoMeanImpl;
     /** population variance of values that have been added */
-    private final StorelessUnivariateStatistic populationVariance;
+    private final Variance populationVariance;
 
-    /** Indicates if the mean impl uses an external moment */
-    private final boolean meanUsesExternalMoment;
-    /** Indicates if the variance impl uses an external moment */
-    private final boolean varianceUsesExternalMoment;
-    /** Indicates if the geo mean impl uses an external sum of logs */
-    private final boolean geoMeanUsesExternalSumOfLogs;
+    /**
+     * Construct a new SummaryStatistics instance.
+     */
+    public StreamingStatistics() {
+        this.secondMoment     = new SecondMoment();
+        this.maxImpl          = new Max();
+        this.minImpl          = new Min();
+        this.sumImpl          = new Sum();
+        this.sumOfSquaresImpl = new SumOfSquares();
+        this.sumOfLogsImpl    = new SumOfLogs();
+        this.meanImpl         = new Mean(this.secondMoment);
+        this.varianceImpl     = new Variance(this.secondMoment);
+        this.geoMeanImpl      = new GeometricMean(this.sumOfLogsImpl);
+
+        // the population variance can not be overridden
+        // it will always use the second moment.
+        this.populationVariance = new Variance(false, this.secondMoment);
+    }
 
     /**
      * A copy constructor. Creates a deep-copy of the {@code original}.
@@ -87,7 +95,7 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
      * @param original the {@code SummaryStatistics} instance to copy
      * @throws NullArgumentException if original is null
      */
-    SummaryStatisticsImpl(SummaryStatisticsImpl original) throws NullArgumentException {
+    StreamingStatistics(StreamingStatistics original) throws NullArgumentException {
         MathUtils.checkNotNull(original);
 
         this.n                = original.n;
@@ -99,72 +107,36 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
         this.sumOfSquaresImpl = original.sumOfSquaresImpl.copy();
 
         // Keep default statistics with embedded moments in synch
-        if (original.meanUsesExternalMoment) {
-            this.meanImpl = new Mean(this.secondMoment);
-        } else {
-            this.meanImpl = original.meanImpl.copy();
-        }
-        this.meanUsesExternalMoment = original.meanUsesExternalMoment;
-
-        if (original.varianceUsesExternalMoment) {
-            this.varianceImpl = new Variance(this.secondMoment);
-        } else {
-            this.varianceImpl = original.varianceImpl.copy();
-        }
-        this.varianceUsesExternalMoment = original.varianceUsesExternalMoment;
-
-        if (original.geoMeanUsesExternalSumOfLogs &&
-            this.sumOfLogsImpl instanceof SumOfLogs) {
-            this.geoMeanImpl = new GeometricMean((SumOfLogs) this.sumOfLogsImpl);
-        } else {
-            this.geoMeanImpl = original.geoMeanImpl.copy();
-        }
-        this.geoMeanUsesExternalSumOfLogs = original.geoMeanUsesExternalSumOfLogs;
+        this.meanImpl     = new Mean(this.secondMoment);
+        this.varianceImpl = new Variance(this.secondMoment);
+        this.geoMeanImpl  = new GeometricMean(this.sumOfLogsImpl);
 
         this.populationVariance = new Variance(false, this.secondMoment);
     }
 
     /**
-     * Construct a new SummaryStatistics instance based
-     * on the data provided by a builder.
+     * Returns a copy of this SummaryStatistics instance with the same internal state.
      *
-     * @param builder the builder to use.
+     * @return a copy of this
      */
-    protected SummaryStatisticsImpl(Builder builder) {
-        this.secondMoment       = builder.secondMoment;
-        this.maxImpl            = builder.maxImpl;
-        this.minImpl            = builder.minImpl;
-        this.meanImpl           = builder.meanImpl;
-        this.sumImpl            = builder.sumImpl;
-        this.sumOfSquaresImpl   = builder.sumOfSquaresImpl;
-        this.sumOfLogsImpl      = builder.sumOfLogsImpl;
-        this.varianceImpl       = builder.varianceImpl;
-        this.geoMeanImpl        = builder.geoMeanImpl;
-
-        // the population variance can not be overridden
-        // it will always use the second moment.
-        this.populationVariance = new Variance(false, this.secondMoment);
-
-        this.meanUsesExternalMoment       = builder.meanUsesExternalMoment;
-        this.varianceUsesExternalMoment   = builder.varianceUsesExternalMoment;
-        this.geoMeanUsesExternalSumOfLogs = builder.geometricMeanUsesExternalSumOfLogs;
+    public StreamingStatistics copy() {
+        return new StreamingStatistics(this);
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public SummaryStatistics copy() {
-        return new SummaryStatisticsImpl(this);
-    }
-
-    /** {@inheritDoc} */
-    @Override
+    /**
+     * Return a {@link StatisticalSummaryValues} instance reporting current
+     * statistics.
+     * @return Current values of statistics
+     */
     public StatisticalSummary getSummary() {
         return new StatisticalSummaryValues(getMean(), getVariance(), getN(),
                                             getMax(), getMin(), getSum());
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /**
+     * Add a value to the data
+     * @param value the value to add
+     */
     public void addValue(double value) {
         secondMoment.increment(value);
         minImpl.increment(value);
@@ -173,24 +145,15 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
         sumOfSquaresImpl.increment(value);
         sumOfLogsImpl.increment(value);
 
-        // update mean/variance/geoMean if they
-        // do not use external moments / sumOfLogs.
-
-        if (!meanUsesExternalMoment) {
-            meanImpl.increment(value);
-        }
-        if (!varianceUsesExternalMoment) {
-            varianceImpl.increment(value);
-        }
-        if (!geoMeanUsesExternalSumOfLogs) {
-            geoMeanImpl.increment(value);
-        }
+        // Do not update mean/variance/geoMean
+        // as they use external moments.
 
         n++;
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /**
+     * Resets all statistics and storage.
+     */
     public void clear() {
         this.n = 0;
         minImpl.clear();
@@ -199,51 +162,15 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
         sumOfLogsImpl.clear();
         sumOfSquaresImpl.clear();
         secondMoment.clear();
-        if (!meanUsesExternalMoment) {
-            meanImpl.clear();
-        }
-        if (!varianceUsesExternalMoment) {
-            varianceImpl.clear();
-        }
-        if (!geoMeanUsesExternalSumOfLogs) {
-            geoMeanImpl.clear();
-        }
+
+        // No need to clear mean/variance/geoMean
+        // as they use external moments.
     }
 
     /** {@inheritDoc} */
     @Override
     public long getN() {
         return n;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public double getSum() {
-        return sumImpl.getResult();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public double getSumOfSquares() {
-        return sumOfSquaresImpl.getResult();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public double getMean() {
-        return meanImpl.getResult();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public double getVariance() {
-        return varianceImpl.getResult();
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public double getPopulationVariance() {
-        return populationVariance.getResult();
     }
 
     /** {@inheritDoc} */
@@ -260,20 +187,125 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
 
     /** {@inheritDoc} */
     @Override
+    public double getSum() {
+        return sumImpl.getResult();
+    }
+
+    /**
+     * Returns the sum of the squares of the values that have been added.
+     * <p>
+     * Double.NaN is returned if no values have been added.
+     *
+     * @return The sum of squares
+     */
+    public double getSumOfSquares() {
+        return sumOfSquaresImpl.getResult();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double getMean() {
+        return meanImpl.getResult();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public double getVariance() {
+        return varianceImpl.getResult();
+    }
+
+    /**
+     * Returns the <a href="http://en.wikibooks.org/wiki/Statistics/Summary/Variance">
+     * population variance</a> of the values that have been added.
+     * <p>
+     * Double.NaN is returned if no values have been added.
+     *
+     * @return the population variance
+     */
+    public double getPopulationVariance() {
+        return populationVariance.getResult();
+    }
+
+    /**
+     * Returns the geometric mean of the values that have been added.
+     * <p>
+     * Double.NaN is returned if no values have been added.
+     *
+     * @return the geometric mean
+     */
     public double getGeometricMean() {
         return geoMeanImpl.getResult();
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /**
+     * Returns the sum of the logs of the values that have been added.
+     * <p>
+     * Double.NaN is returned if no values have been added.
+     *
+     * @return the sum of logs
+     */
     public double getSumOfLogs() {
         return sumOfLogsImpl.getResult();
     }
 
-    /** {@inheritDoc} */
-    @Override
+    /**
+     * Returns a statistic related to the Second Central Moment. Specifically,
+     * what is returned is the sum of squared deviations from the sample mean
+     * among the values that have been added.
+     * <p>
+     * Returns <code>Double.NaN</code> if no data values have been added and
+     * returns <code>0</code> if there is just one value in the data set.
+     *
+     * @return second central moment statistic
+     */
     public double getSecondMoment() {
         return secondMoment.getResult();
+    }
+
+    /**
+     * Returns the quadratic mean, a.k.a.
+     * <a href="http://mathworld.wolfram.com/Root-Mean-Square.html">
+     * root-mean-square</a> of the available values
+     *
+     * @return The quadratic mean or {@code Double.NaN} if no values
+     * have been added.
+     */
+    public double getQuadraticMean() {
+        long size = getN();
+        return size > 0 ? FastMath.sqrt(getSumOfSquares() / size) : Double.NaN;
+    }
+
+    /**
+     * Returns the standard deviation of the values that have been added.
+     * <p>
+     * Double.NaN is returned if no values have been added.
+     *
+     * @return the standard deviation
+     */
+    @Override
+    public double getStandardDeviation() {
+        long size = getN();
+        if (size > 0) {
+            return size > 1 ? FastMath.sqrt(getVariance()) : 0.0;
+        } else {
+            return Double.NaN;
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void aggregate(StreamingStatistics other) {
+        MathUtils.checkNotNull(other);
+
+        if (other.n > 0) {
+            this.n += other.n;
+            this.secondMoment.aggregate(other.secondMoment);
+            this.minImpl.aggregate(other.minImpl);
+            this.maxImpl.aggregate(other.maxImpl);
+            this.sumImpl.aggregate(other.sumImpl);
+            this.sumOfLogsImpl.aggregate(other.sumOfLogsImpl);
+            this.sumOfSquaresImpl.aggregate(other.sumOfSquaresImpl);
+        }
     }
 
     /**
@@ -314,10 +346,10 @@ class SummaryStatisticsImpl implements SummaryStatistics, Serializable {
         if (object == this) {
             return true;
         }
-        if (object instanceof SummaryStatistics == false) {
+        if (object instanceof StreamingStatistics == false) {
             return false;
         }
-        SummaryStatistics other = (SummaryStatistics)object;
+        StreamingStatistics other = (StreamingStatistics)object;
         return other.getN() == getN()                                                     &&
                Precision.equalsIncludingNaN(other.getMax(),           getMax())           &&
                Precision.equalsIncludingNaN(other.getMin(),           getMin())           &&

@@ -111,6 +111,14 @@ class ThirdMoment extends SecondMoment implements Serializable {
         nDevSq = Double.NaN;
     }
 
+    /**
+     * Throws {@link UnsupportedOperationException}.
+     */
+    @Override
+    public void aggregate(SecondMoment other) {
+        throw new UnsupportedOperationException();
+    }
+
     /** {@inheritDoc} */
     @Override
     public ThirdMoment copy() {

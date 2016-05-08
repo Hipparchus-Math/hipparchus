@@ -63,10 +63,6 @@ are the following ones:
      state into primary and secondary states is different, and in fact much simpler.
      Users must retrieve the single mapper by calling `getMapper()` and then
      get directly the primary and secondary states from this single mapper.
-   * cannot instantiate `SummaryStatistics`.
-     Building `SummaryStatistics` is now done using a builder. If using only
-     default settings, usears can replace `new SummaryStatistics()` with
-     `SummaryStatistics.create()` to solve the problem.
    * `Action` enumerate not found. The `Action` enumerate used as a return
      value in events handlers `eventOccurred` method was an internal enumerate
      defined in the `EventHandler` interface, so no dedicated `import` statement

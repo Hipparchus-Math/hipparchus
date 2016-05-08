@@ -125,19 +125,19 @@ public abstract class UnivariateStatisticAbstractTest {
         System.arraycopy(testArray, 0, arrayZero, 0, 5);
         System.arraycopy(testWeightsArray, 0, weightZero, 0, 5);
         Assert.assertEquals(stat.evaluate(arrayZero, weightZero),
-                stat.evaluate(testArray, testWeightsArray, 0, 5), 0);
+                            stat.evaluate(testArray, testWeightsArray, 0, 5), 0);
         final double[] arrayOne = new double[5];
         final double[] weightOne = new double[5];
         System.arraycopy(testArray, 5, arrayOne, 0, 5);
         System.arraycopy(testWeightsArray, 5, weightOne, 0, 5);
         Assert.assertEquals(stat.evaluate(arrayOne, weightOne),
-                stat.evaluate(testArray, testWeightsArray, 5, 5), 0);
+                            stat.evaluate(testArray, testWeightsArray, 5, 5), 0);
         final double[] arrayEnd = new double[5];
         final double[] weightEnd = new double[5];
         System.arraycopy(testArray, testArray.length - 5, arrayEnd, 0, 5);
         System.arraycopy(testWeightsArray, testArray.length - 5, weightEnd, 0, 5);
         Assert.assertEquals(stat.evaluate(arrayEnd, weightEnd),
-                stat.evaluate(testArray, testWeightsArray, testArray.length - 5, 5), 0);
+                            stat.evaluate(testArray, testWeightsArray, testArray.length - 5, 5), 0);
     }
 
     @Test
@@ -227,7 +227,7 @@ public abstract class UnivariateStatisticAbstractTest {
 
         // Check consistency of weighted evaluation methods
         Assert.assertEquals(weightedStatistic.evaluate(values, weights, 0, values.length),
-                weightedStatistic.evaluate(values, weights), Double.MIN_VALUE);
+                            weightedStatistic.evaluate(values, weights), Double.MIN_VALUE);
 
     }
 

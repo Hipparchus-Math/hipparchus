@@ -34,6 +34,32 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
+      <action dev="tn" type="add">
+        Added "AggregatableStatistic" interface for statistics that can
+        aggregate results.
+      </action>
+      <action dev="tn" type="update">
+        Added aggregation capabilities to "StreamingStatistics", replacing
+        the removed class "AggregatingSummaryStatistics".
+      </action>
+      <action dev="tn" type="remove">
+        Removed "SynchronizedSummaryStatistics", "SynchronizedDescriptiveStatistics"
+        and "SynchronizedMultivariateSummaryStatistics". All implementations
+        are considered to be not threadsafe. Aggregation of results is preferred
+        over synchronization.
+      </action>
+      <action dev="tn" type="update">
+        Renamed "SummaryStatistics" to "StreamingStatistics".
+        Additionally, removed support for setting custom statistics
+        implementations.
+      </action>
+      <action dev="tn" type="update">
+        Replaced "VectorialMean" with a more generic class "VectorialStorelessStatistic"
+        which supports to apply any "StorelessUnivariateStatistic" on vector data.
+      </action>
+      <action dev="tn" type="remove">
+        Removed static "copy(A, B)" methods for storeless statistics.
+      </action>
       <action dev="luc" type="update">
         Simplified exception hierarchy.
       </action>

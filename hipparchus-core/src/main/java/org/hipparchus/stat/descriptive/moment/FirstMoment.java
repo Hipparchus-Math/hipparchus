@@ -68,7 +68,7 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
     /**
      * Deviation of most recently added value from previous first moment,
      * normalized by previous sample size.  Retained to prevent repeated
-     * computation in higher order moments
+     * computation in higher order moments.
      */
     protected double nDev;
 
@@ -129,6 +129,25 @@ class FirstMoment extends AbstractStorelessUnivariateStatistic
     @Override
     public long getN() {
         return n;
+    }
+
+    /**
+     * Aggregates the results of the provided instance
+     * into this instance.
+     *
+     * @param other the instance to aggregate from
+     */
+    protected void aggregate(FirstMoment other) {
+        MathUtils.checkNotNull(other);
+        if (other.n > 0) {
+            if (this.n == 0) {
+                this.m1 = 0.0;
+            }
+            this.n   += other.n;
+            this.dev  = other.m1 - this.m1;
+            this.nDev = this.dev / this.n;
+            this.m1  += other.n / (double) this.n * this.dev;
+        }
     }
 
     /** {@inheritDoc} */

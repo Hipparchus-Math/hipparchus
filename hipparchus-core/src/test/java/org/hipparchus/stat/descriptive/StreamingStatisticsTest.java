@@ -22,18 +22,18 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.stat.StatUtils;
-import org.hipparchus.stat.descriptive.moment.GeometricMean;
-import org.hipparchus.stat.descriptive.moment.Mean;
-import org.hipparchus.stat.descriptive.moment.Variance;
-import org.hipparchus.stat.descriptive.summary.Sum;
+import org.hipparchus.distribution.IntegerDistribution;
+import org.hipparchus.distribution.RealDistribution;
+import org.hipparchus.distribution.continuous.UniformRealDistribution;
+import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
 import org.hipparchus.util.FastMath;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link SummaryStatistics} class.
+ * Test cases for the {@link StreamingStatistics} class.
  */
-public class SummaryStatisticsTest {
+public class StreamingStatisticsTest {
 
     private final double one = 1;
     private final float twoF = 2;
@@ -50,18 +50,14 @@ public class SummaryStatisticsTest {
     private final double max = 3;
     private final double tolerance = 10E-15;
 
-    protected SummaryStatistics createSummaryStatistics() {
-        return SummaryStatistics.create();
-    }
-
-    protected SummaryStatistics.Builder createBuilder() {
-        return SummaryStatistics.builder();
+    protected StreamingStatistics createSummaryStatistics() {
+        return new StreamingStatistics();
     }
 
     /** test stats */
     @Test
     public void testStats() {
-        SummaryStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createSummaryStatistics();
         assertEquals("total count",0,u.getN(),tolerance);
         u.addValue(one);
         u.addValue(twoF);
@@ -82,7 +78,7 @@ public class SummaryStatisticsTest {
 
     @Test
     public void testN0andN1Conditions() {
-        SummaryStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createSummaryStatistics();
         assertTrue("Mean of n = 0 set should be NaN", Double.isNaN( u.getMean() ) );
         assertTrue("Standard Deviation of n = 0 set should be NaN",
                    Double.isNaN( u.getStandardDeviation() ) );
@@ -104,7 +100,7 @@ public class SummaryStatisticsTest {
 
     @Test
     public void testProductAndGeometricMean() {
-        SummaryStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createSummaryStatistics();
         u.addValue( 1.0 );
         u.addValue( 2.0 );
         u.addValue( 3.0 );
@@ -115,7 +111,7 @@ public class SummaryStatisticsTest {
 
     @Test
     public void testNaNContracts() {
-        SummaryStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createSummaryStatistics();
         assertTrue("mean not NaN",Double.isNaN(u.getMean()));
         assertTrue("min not NaN",Double.isNaN(u.getMin()));
         assertTrue("std dev not NaN",Double.isNaN(u.getStandardDeviation()));
@@ -124,9 +120,9 @@ public class SummaryStatisticsTest {
 
         u.addValue(1.0);
 
-        assertEquals("mean not expected", 1.0, u.getMean(), Double.MIN_VALUE);
-        assertEquals("variance not expected", 0.0, u.getVariance(), Double.MIN_VALUE);
-        assertEquals("geometric mean not expected", 1.0, u.getGeometricMean(), Double.MIN_VALUE);
+        assertEquals("mean", 1.0, u.getMean(), Double.MIN_VALUE);
+        assertEquals("variance", 0.0, u.getVariance(), Double.MIN_VALUE);
+        assertEquals("geometric mean", 1.0, u.getGeometricMean(), Double.MIN_VALUE);
 
         u.addValue(-1.0);
 
@@ -141,7 +137,7 @@ public class SummaryStatisticsTest {
 
     @Test
     public void testGetSummary() {
-        SummaryStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createSummaryStatistics();
         StatisticalSummary summary = u.getSummary();
         verifySummary(u, summary);
         u.addValue(1d);
@@ -157,10 +153,10 @@ public class SummaryStatisticsTest {
 
     @Test
     public void testSerialization() {
-        SummaryStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createSummaryStatistics();
         // Empty test
         TestUtils.checkSerializedEquality(u);
-        SummaryStatistics s = (SummaryStatistics) TestUtils.serializeAndRecover(u);
+        StreamingStatistics s = (StreamingStatistics) TestUtils.serializeAndRecover(u);
         StatisticalSummary summary = s.getSummary();
         verifySummary(u, summary);
 
@@ -173,15 +169,15 @@ public class SummaryStatisticsTest {
 
         // Test again
         TestUtils.checkSerializedEquality(u);
-        s = (SummaryStatistics) TestUtils.serializeAndRecover(u);
+        s = (StreamingStatistics) TestUtils.serializeAndRecover(u);
         summary = s.getSummary();
         verifySummary(u, summary);
     }
 
     @Test
     public void testEqualsAndHashCode() {
-        SummaryStatistics u = createSummaryStatistics();
-        SummaryStatistics t = null;
+        StreamingStatistics u = createSummaryStatistics();
+        StreamingStatistics t = null;
         int emptyHash = u.hashCode();
         assertTrue("reflexive", u.equals(u));
         assertFalse("non-null compared to null", u.equals(t));
@@ -221,12 +217,12 @@ public class SummaryStatisticsTest {
 
     @Test
     public void testCopy() {
-        SummaryStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createSummaryStatistics();
         u.addValue(2d);
         u.addValue(1d);
         u.addValue(3d);
         u.addValue(4d);
-        SummaryStatistics v = u.copy();
+        StreamingStatistics v = u.copy();
         assertEquals(u, v);
         assertEquals(v, u);
 
@@ -243,7 +239,7 @@ public class SummaryStatisticsTest {
         assertEquals(v, u);
     }
 
-    private void verifySummary(SummaryStatistics u, StatisticalSummary s) {
+    private void verifySummary(StreamingStatistics u, StatisticalSummary s) {
         assertEquals("N",s.getN(),u.getN());
         TestUtils.assertEquals("sum",s.getSum(),u.getSum(),tolerance);
         TestUtils.assertEquals("var",s.getVariance(),u.getVariance(),tolerance);
@@ -254,29 +250,9 @@ public class SummaryStatisticsTest {
     }
 
     @Test
-    public void testSetterInjection() {
-        SummaryStatistics u =
-                createBuilder()
-                    .withMeanImpl(new Sum())
-                    .withSumOfLogsImpl(new Sum())
-                    .build();
-
-        u.addValue(1);
-        u.addValue(3);
-        assertEquals(4, u.getMean(), 1E-14);
-        assertEquals(4, u.getSumOfLogs(), 1E-14);
-        assertEquals(StatUtils.geometricMean(new double[] { 1, 3}),
-                     u.getGeometricMean(), 1E-14);
-        u.clear();
-        u.addValue(1);
-        u.addValue(2);
-        assertEquals(3, u.getMean(), 1E-14);
-    }
-
-    @Test
     public void testQuadraticMean() {
         final double[] values = { 1.2, 3.4, 5.6, 7.89 };
-        final SummaryStatistics stats = createSummaryStatistics();
+        final StreamingStatistics stats = createSummaryStatistics();
 
         final int len = values.length;
         double expected = 0;
@@ -291,43 +267,9 @@ public class SummaryStatisticsTest {
         assertEquals(expected, stats.getQuadraticMean(), Math.ulp(expected));
     }
 
-    /**
-     * JIRA: MATH-691
-     */
-    @Test
-    public void testOverrideVarianceWithMathClass() {
-        double[] scores = {1, 2, 3, 4};
-        // use "population variance"
-        SummaryStatistics stats = createBuilder().withVarianceImpl(new Variance(false)).build();
-        for(double i : scores) {
-          stats.addValue(i);
-        }
-        assertEquals((new Variance(false)).evaluate(scores),stats.getVariance(), 0);
-    }
-
-    @Test
-    public void testOverrideMeanWithMathClass() {
-        double[] scores = {1, 2, 3, 4};
-        SummaryStatistics stats = createBuilder().withMeanImpl(new Mean()).build();
-        for(double i : scores) {
-          stats.addValue(i);
-        }
-        assertEquals((new Mean()).evaluate(scores),stats.getMean(), 0);
-    }
-
-    @Test
-    public void testOverrideGeoMeanWithMathClass() {
-        double[] scores = {1, 2, 3, 4};
-        SummaryStatistics stats = createBuilder().withGeometricMeanImpl(new GeometricMean()).build();
-        for(double i : scores) {
-          stats.addValue(i);
-        }
-        assertEquals((new GeometricMean()).evaluate(scores),stats.getGeometricMean(), 0);
-    }
-
     @Test
     public void testToString() {
-        SummaryStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createSummaryStatistics();
         for (int i = 0; i < 5; i++) {
             u.addValue(i);
         }
@@ -346,4 +288,194 @@ public class SummaryStatisticsTest {
             assertTrue(toString.indexOf(labels[i] + ": " + String.valueOf(values[i])) > 0);
         }
     }
+
+    /**
+     * Verify that aggregating over a partition gives the same results
+     * as direct computation.
+     *
+     *  1) Randomly generate a dataset of 10-100 values
+     *     from [-100, 100]
+     *  2) Divide the dataset it into 2-5 partitions
+     *  3) Create an AggregateSummaryStatistic and ContributingStatistics
+     *     for each partition
+     *  4) Compare results from the AggregateSummaryStatistic with values
+     *     returned by a single SummaryStatistics instance that is provided
+     *     the full dataset
+     */
+    @Test
+    public void testAggregationConsistency() {
+
+        // Generate a random sample and random partition
+        double[] totalSample = generateSample();
+        double[][] subSamples = generatePartition(totalSample);
+        int nSamples = subSamples.length;
+
+        // Create aggregator and total stats for comparison
+        StreamingStatistics aggregate = new StreamingStatistics();
+        StreamingStatistics totalStats = new StreamingStatistics();
+
+        // Create array of component stats
+        StreamingStatistics componentStats[] = new StreamingStatistics[nSamples];
+
+        for (int i = 0; i < nSamples; i++) {
+
+            // Make componentStats[i] a contributing statistic to aggregate
+            componentStats[i] = new StreamingStatistics();
+
+            // Add values from subsample
+            for (int j = 0; j < subSamples[i].length; j++) {
+                componentStats[i].addValue(subSamples[i][j]);
+            }
+        }
+
+        aggregate.aggregate(componentStats);
+
+        // Compute totalStats directly
+        for (int i = 0; i < totalSample.length; i++) {
+            totalStats.addValue(totalSample[i]);
+        }
+
+        /*
+         * Compare statistics in totalStats with aggregate.
+         * Note that guaranteed success of this comparison depends on the
+         * fact that <aggregate> gets values in exactly the same order
+         * as <totalStats>.
+         */
+        assertSummaryStatisticsEquals(totalStats, aggregate, 1e-12);
+    }
+
+    @Test
+    public void testAggregateDegenerate() {
+        double[] totalSample = {1, 2, 3, 4, 5};
+        double[][] subSamples = {{1}, {2}, {3}, {4}, {5}};
+
+        // Compute combined stats directly
+        StreamingStatistics totalStats = new StreamingStatistics();
+        for (int i = 0; i < totalSample.length; i++) {
+            totalStats.addValue(totalSample[i]);
+        }
+
+        // Now compute subsample stats individually and aggregate
+        StreamingStatistics[] subSampleStats = new StreamingStatistics[5];
+        for (int i = 0; i < 5; i++) {
+            subSampleStats[i] = new StreamingStatistics();
+        }
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < subSamples[i].length; j++) {
+                subSampleStats[i].addValue(subSamples[i][j]);
+            }
+        }
+
+        // Compare values
+        StreamingStatistics aggregatedStats = new StreamingStatistics();
+        aggregatedStats.aggregate(subSampleStats);
+
+        assertSummaryStatisticsEquals(totalStats, aggregatedStats, 10e-12);
+    }
+
+    @Test
+    public void testAggregateSpecialValues() {
+        double[] totalSample = {Double.POSITIVE_INFINITY, 2, 3, Double.NaN, 5};
+        double[][] subSamples = {{Double.POSITIVE_INFINITY, 2}, {3}, {Double.NaN}, {5}};
+
+        // Compute combined stats directly
+        StreamingStatistics totalStats = new StreamingStatistics();
+        for (int i = 0; i < totalSample.length; i++) {
+            totalStats.addValue(totalSample[i]);
+        }
+
+        // Now compute subsample stats individually and aggregate
+        StreamingStatistics[] subSampleStats = new StreamingStatistics[4];
+        for (int i = 0; i < 4; i++) {
+            subSampleStats[i] = new StreamingStatistics();
+        }
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < subSamples[i].length; j++) {
+                subSampleStats[i].addValue(subSamples[i][j]);
+            }
+        }
+
+        // Compare values
+        StreamingStatistics aggregatedStats = new StreamingStatistics();
+        aggregatedStats.aggregate(subSampleStats);
+
+        assertSummaryStatisticsEquals(totalStats, aggregatedStats, 10e-12);
+    }
+
+    /**
+     * Verifies that a StatisticalSummary and a StatisticalSummaryValues are equal up
+     * to delta, with NaNs, infinities returned in the same spots. For max, min, n, values
+     * have to agree exactly, delta is used only for sum, mean, variance, std dev.
+     */
+    protected static void assertSummaryStatisticsEquals(StreamingStatistics expected,
+                                                        StreamingStatistics observed,
+                                                        double delta) {
+        TestUtils.assertEquals(expected.getMax(), observed.getMax(), 0);
+        TestUtils.assertEquals(expected.getMin(), observed.getMin(), 0);
+        Assert.assertEquals(expected.getN(), observed.getN());
+        TestUtils.assertEquals(expected.getSum(), observed.getSum(), delta);
+        TestUtils.assertEquals(expected.getMean(), observed.getMean(), delta);
+        TestUtils.assertEquals(expected.getStandardDeviation(), observed.getStandardDeviation(), delta);
+        TestUtils.assertEquals(expected.getVariance(), observed.getVariance(), delta);
+    }
+
+
+    /**
+     * Generates a random sample of double values.
+     * Sample size is random, between 10 and 100 and values are
+     * uniformly distributed over [-100, 100].
+     *
+     * @return array of random double values
+     */
+    private double[] generateSample() {
+        final IntegerDistribution size = new UniformIntegerDistribution(10, 100);
+        final RealDistribution randomData = new UniformRealDistribution(-100, 100);
+        final int sampleSize = size.sample();
+        final double[] out = randomData.sample(sampleSize);
+        return out;
+    }
+
+    /**
+     * Generates a partition of <sample> into up to 5 sequentially selected
+     * subsamples with randomly selected partition points.
+     *
+     * @param sample array to partition
+     * @return rectangular array with rows = subsamples
+     */
+    private double[][] generatePartition(double[] sample) {
+        final int length = sample.length;
+        final double[][] out = new double[5][];
+        int cur = 0;          // beginning of current partition segment
+        int offset = 0;       // end of current partition segment
+        int sampleCount = 0;  // number of segments defined
+        for (int i = 0; i < 5; i++) {
+            if (cur == length || offset == length) {
+                break;
+            }
+            final int next;
+            if (i == 4 || cur == length - 1) {
+                next = length - 1;
+            } else {
+                next = (new UniformIntegerDistribution(cur, length - 1)).sample();
+            }
+            final int subLength = next - cur + 1;
+            out[i] = new double[subLength];
+            System.arraycopy(sample, offset, out[i], 0, subLength);
+            cur = next + 1;
+            sampleCount++;
+            offset += subLength;
+        }
+        if (sampleCount < 5) {
+            double[][] out2 = new double[sampleCount][];
+            for (int j = 0; j < sampleCount; j++) {
+                final int curSize = out[j].length;
+                out2[j] = new double[curSize];
+                System.arraycopy(out[j], 0, out2[j], 0, curSize);
+            }
+            return out2;
+        } else {
+            return out;
+        }
+    }
+
 }

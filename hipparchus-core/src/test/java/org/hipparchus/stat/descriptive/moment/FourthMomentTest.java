@@ -17,6 +17,7 @@
 package org.hipparchus.stat.descriptive.moment;
 
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
+import org.junit.Test;
 
 /**
  * Test cases for the {@link FourthMoment} class.
@@ -32,5 +33,12 @@ public class FourthMomentTest extends StorelessUnivariateStatisticAbstractTest{
     public double expectedValue() {
        return this.fourthMoment;
     }
+
+    /**
+     * Test not supported for fourth moment.
+     */
+    @Override
+    @Test
+    public <T> void testAggregate() {}
 
 }

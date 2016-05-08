@@ -38,7 +38,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
-import org.hipparchus.stat.descriptive.SummaryStatistics;
+import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -113,10 +113,10 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     protected final RandomDataGenerator randomData;
 
     /** List of SummaryStatistics objects characterizing the bins */
-    private final List<SummaryStatistics> binStats;
+    private final List<StreamingStatistics> binStats;
 
     /** Sample statistics */
-    private SummaryStatistics sampleStats = null;
+    private StreamingStatistics sampleStats = null;
 
     /** Max loaded value */
     private double max = Double.NEGATIVE_INFINITY;
@@ -192,7 +192,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         }
         this.binCount = binCount;
         this.randomData = randomData;
-        binStats = new ArrayList<SummaryStatistics>();
+        binStats = new ArrayList<StreamingStatistics>();
     }
 
     /**
@@ -331,7 +331,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             double val = 0.0d;
             while ((str = inputStream.readLine()) != null) {
                 val = Double.parseDouble(str);
-                SummaryStatistics stats = binStats.get(findBin(val));
+                StreamingStatistics stats = binStats.get(findBin(val));
                 stats.addValue(val);
             }
 
@@ -344,7 +344,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         public void computeStats() throws IOException {
             String str = null;
             double val = 0.0;
-            sampleStats = SummaryStatistics.create();
+            sampleStats = new StreamingStatistics();
             while ((str = inputStream.readLine()) != null) {
                 val = Double.parseDouble(str);
                 sampleStats.addValue(val);
@@ -377,7 +377,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         /** {@inheritDoc} */
         @Override
         public void computeStats() throws IOException {
-            sampleStats = SummaryStatistics.create();
+            sampleStats = new StreamingStatistics();
             for (int i = 0; i < inputArray.length; i++) {
                 sampleStats.addValue(inputArray[i]);
             }
@@ -387,7 +387,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         @Override
         public void computeBinStats() throws IOException {
             for (int i = 0; i < inputArray.length; i++) {
-                SummaryStatistics stats =
+                StreamingStatistics stats =
                     binStats.get(findBin(inputArray[i]));
                 stats.addValue(inputArray[i]);
             }
@@ -412,7 +412,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             binStats.clear();
         }
         for (int i = 0; i < binCount; i++) {
-            SummaryStatistics stats = SummaryStatistics.create();
+            StreamingStatistics stats = new StreamingStatistics();
             binStats.add(i,stats);
         }
 
@@ -480,13 +480,13 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     }
 
     /**
-     * Returns a List of {@link SummaryStatistics} instances containing
+     * Returns a List of {@link StreamingStatistics} instances containing
      * statistics describing the values in each of the bins.  The list is
      * indexed on the bin number.
      *
      * @return List of bin statistics.
      */
-    public List<SummaryStatistics> getBinStats() {
+    public List<StreamingStatistics> getBinStats() {
         return binStats;
     }
 
@@ -771,7 +771,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * @param bStats summary statistics for the bin
      * @return within-bin kernel parameterized by bStats
      */
-    protected RealDistribution getKernel(SummaryStatistics bStats) {
+    protected RealDistribution getKernel(StreamingStatistics bStats) {
         if (bStats.getN() == 1 || bStats.getVariance() == 0) {
             return new ConstantRealDistribution(bStats.getMean());
         } else {
