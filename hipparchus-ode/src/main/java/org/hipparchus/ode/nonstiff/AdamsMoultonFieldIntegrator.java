@@ -26,6 +26,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.linear.FieldMatrixPreservingVisitor;
 import org.hipparchus.ode.FieldExpandableODE;
+import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.util.MathArrays;
@@ -56,6 +57,13 @@ import org.hipparchus.util.MathUtils;
  * </ul>
  *
  * <p>A k-steps Adams-Moulton method is of order k+1.</p>
+ *
+ * <p> There must be sufficient time for the {@link #setStarterIntegrator(FieldODEIntegrator)
+ * starter integrator} to take several steps between the the last reset event, and the end
+ * of integration, otherwise an exception may be thrown during integration. The user can
+ * adjust the end date of integration, or the step size of the starter integrator to
+ * ensure a sufficient number of steps can be completed before the end of integration.
+ * </p>
  *
  * <h3>Implementation details</h3>
  *
