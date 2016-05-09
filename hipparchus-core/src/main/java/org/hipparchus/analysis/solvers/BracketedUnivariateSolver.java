@@ -108,8 +108,9 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * convergence criteria so either one could be used as the root. That is the interval
      * satisfies the condition (| tb - ta | <= {@link #getAbsoluteAccuracy() absolute}
      * accuracy + max(ta, tb) * {@link #getRelativeAccuracy() relative} accuracy) or (
-     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}). The width of the
-     * interval (tb - ta) may be zero.
+     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}) or there are no
+     * floating point numbers between ta and tb. The width of the interval (tb - ta) may
+     * be zero.
      * @throws MathIllegalArgumentException if the arguments do not satisfy the
      *                                      requirements specified by the solver.
      * @throws MathIllegalStateException    if the allowed number of evaluations is
@@ -137,8 +138,9 @@ public interface BracketedUnivariateSolver<FUNC extends UnivariateFunction>
      * convergence criteria so either one could be used as the root. That is the interval
      * satisfies the condition (| tb - ta | <= {@link #getAbsoluteAccuracy() absolute}
      * accuracy + max(ta, tb) * {@link #getRelativeAccuracy() relative} accuracy) or (
-     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}). The width of the
-     * interval (tb - ta) may be zero.
+     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}) or there are no
+     * floating point numbers between ta and tb. The width of the interval (tb - ta) may
+     * be zero.
      * @throws MathIllegalArgumentException if the arguments do not satisfy the
      *                                      requirements specified by the solver.
      * @throws MathIllegalStateException    if the allowed number of evaluations is

@@ -22,6 +22,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Precision;
 
 /**
  * This class implements a modification of the <a
@@ -224,7 +225,9 @@ public class BracketingNthOrderBrentSolver
             // check convergence of bracketing interval
             final double xTol = getAbsoluteAccuracy() +
                                 getRelativeAccuracy() * FastMath.max(FastMath.abs(xA), FastMath.abs(xB));
-            if (((xB - xA) <= xTol) || (FastMath.max(absYA, absYB) < getFunctionValueAccuracy())) {
+            if (xB - xA <= xTol ||
+                    FastMath.max(absYA, absYB) < getFunctionValueAccuracy() ||
+                    Precision.equals(xA, xB, 1)) {
                 return new Interval(xA, yA, xB, yB);
             }
 
