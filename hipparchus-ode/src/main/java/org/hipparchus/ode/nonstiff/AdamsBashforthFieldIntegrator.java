@@ -310,6 +310,14 @@ public class AdamsBashforthFieldIntegrator<T extends RealFieldElement<T>> extend
                     // some events handler has triggered changes that
                     // invalidate the derivatives, we need to restart from scratch
                     start(equations, getStepStart(), finalTime);
+
+                    final T  nextT      = getStepStart().getTime().add(getStepSize());
+                    final boolean nextIsLast = forward ?
+                                               nextT.subtract(finalTime).getReal() >= 0 :
+                                               nextT.subtract(finalTime).getReal() <= 0;
+                    final T hNew = nextIsLast ? finalTime.subtract(getStepStart().getTime()) : getStepSize();
+
+                    rescale(hNew);
                     System.arraycopy(getStepStart().getCompleteState(), 0, y, 0, y.length);
 
                 } else {

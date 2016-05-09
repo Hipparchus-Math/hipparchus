@@ -398,7 +398,9 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
             if (count == t.length - 1) {
 
                 // this was the last point we needed, we can compute the derivatives
-                setStepSize(t[t.length - 1].subtract(t[0]).divide(t.length - 1));
+                setStepStart(savedStart);
+                final T rawStep = (t[t.length - 1].subtract(t[0]).divide(t.length - 1));
+                setStepSize(filterStep(rawStep, rawStep.getReal() >= 0, true));
 
                 // first scaled derivative
                 scaled = MathArrays.buildArray(getField(), yDot[0].length);
@@ -410,7 +412,6 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
                 nordsieck = initializeHighOrderDerivatives(getStepSize(), t, y, yDot);
 
                 // stop the integrator now that all needed steps have been handled
-                setStepStart(savedStart);
                 throw new InitializationCompletedMarkerException();
 
             }

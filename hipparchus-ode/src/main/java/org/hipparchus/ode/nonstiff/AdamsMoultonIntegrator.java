@@ -293,6 +293,14 @@ public class AdamsMoultonIntegrator extends AdamsIntegrator {
                     // some events handler has triggered changes that
                     // invalidate the derivatives, we need to restart from scratch
                     start(equations, getStepStart(), finalTime);
+
+                    final double  nextT      = getStepStart().getTime() + getStepSize();
+                    final boolean nextIsLast = forward ?
+                                               (nextT >= finalTime) :
+                                               (nextT <= finalTime);
+                    final double hNew = nextIsLast ? finalTime - getStepStart().getTime() : getStepSize();
+
+                    rescale(hNew);
                     System.arraycopy(getStepStart().getCompleteState(), 0, y, 0, y.length);
 
                 } else {
