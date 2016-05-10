@@ -284,8 +284,10 @@ public class FieldBracketingNthOrderBrentSolver<T extends RealFieldElement<T>>
             T maxX = absXA.subtract(absXB).getReal() < 0 ? absXB : absXA;
             T maxY = absYA.subtract(absYB).getReal() < 0 ? absYB : absYA;
             final T xTol = absoluteAccuracy.add(relativeAccuracy.multiply(maxX));
+            final T midpoint = xA.add(xB.subtract(xA).divide(2));
             if (xB.subtract(xA).subtract(xTol).getReal() <= 0 ||
-                maxY.subtract(functionValueAccuracy).getReal() < 0) {
+                maxY.subtract(functionValueAccuracy).getReal() < 0 ||
+                    xA.equals(midpoint) || xB.equals(midpoint)) {
                 return new Interval<>(xA, yA, xB, yB);
             }
 

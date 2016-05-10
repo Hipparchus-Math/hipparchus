@@ -156,17 +156,18 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
      * convergence criteria so either one could be used as the root. That is the interval
      * satisfies the condition (| tb - ta | <= {@link #getAbsoluteAccuracy() absolute}
      * accuracy + max(ta, tb) * {@link #getRelativeAccuracy() relative} accuracy) or (
-     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}). The width of the
-     * interval (tb - ta) may be zero.
+     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}) or there are no
+     * numbers in the field between ta and tb. The width of the interval (tb - ta) may be
+     * zero.
      * @throws MathIllegalArgumentException if the arguments do not satisfy the
      *                                      requirements specified by the solver.
      * @throws MathIllegalStateException    if the allowed number of evaluations is
      *                                      exceeded.
      */
     default Interval<T> solveInterval(int maxEval,
-                                   RealFieldUnivariateFunction<T> f,
-                                   T min,
-                                   T max)
+                                      RealFieldUnivariateFunction<T> f,
+                                      T min,
+                                      T max)
             throws MathIllegalArgumentException, MathIllegalStateException {
         return this.solveInterval(maxEval, f, min, max, min.add(max.subtract(min).multiply(0.5)));
     }
@@ -187,18 +188,18 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
      * convergence criteria so either one could be used as the root. That is the interval
      * satisfies the condition (| tb - ta | <= {@link #getAbsoluteAccuracy() absolute}
      * accuracy + max(ta, tb) * {@link #getRelativeAccuracy() relative} accuracy) or (
-     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}). The width of the
-     * interval (tb - ta) may be zero.
+     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}) or numbers in the
+     * field between ta and tb. The width of the interval (tb - ta) may be zero.
      * @throws MathIllegalArgumentException if the arguments do not satisfy the
      *                                      requirements specified by the solver.
      * @throws MathIllegalStateException    if the allowed number of evaluations is
      *                                      exceeded.
      */
     Interval<T> solveInterval(int maxEval,
-                           RealFieldUnivariateFunction<T> f,
-                           T min,
-                           T max,
-                           T startValue)
+                              RealFieldUnivariateFunction<T> f,
+                              T min,
+                              T max,
+                              T startValue)
             throws MathIllegalArgumentException, MathIllegalStateException;
 
     /**

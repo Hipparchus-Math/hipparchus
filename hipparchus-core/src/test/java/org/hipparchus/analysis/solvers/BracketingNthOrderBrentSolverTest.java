@@ -27,6 +27,7 @@ import org.hipparchus.analysis.solvers.NewtonRaphsonSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -97,6 +98,18 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         Assert.assertEquals(0, sharpTurn.value(result), solver.getFunctionValueAccuracy());
         Assert.assertTrue(sharpTurn.value(result) >= 0);
         Assert.assertEquals(-0.5, result, 1.0e-10);
+    }
+
+    @Test
+    public void testToleranceLessThanUlp() {
+        // function that is never zero
+        UnivariateFunction f = (x) -> x < 2.1 ? -1 : 1;
+        // tolerance less than 1 ulp(x)
+        UnivariateSolver solver = new BracketingNthOrderBrentSolver(0, 1e-18, 0, 5);
+
+        // make sure it doesn't throw a maxIterations exception
+        double result = solver.solve(100, f, 0.0, 5.0);
+        Assert.assertEquals(2.1, result, 0.0);
     }
 
     @Test

@@ -24,6 +24,7 @@ import org.hipparchus.dfp.DfpField;
 import org.hipparchus.dfp.DfpMath;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -75,6 +76,22 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         Assert.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
         Assert.assertTrue(f.value(result).positiveOrNull());
         Assert.assertTrue(result.add(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).negativeOrNull());
+    }
+
+    @Test
+    public void testToleranceLessThanUlp() {
+        // function that is never zero
+        Dfp zero = field.getZero();
+        Dfp one = field.getOne();
+        RealFieldUnivariateFunction<Dfp> f = (x) -> x.getReal() <= 2.1 ? one.negate(): one;
+        // tolerance less than 1 ulp(x)
+        FieldBracketingNthOrderBrentSolver<Dfp> solver =
+                new FieldBracketingNthOrderBrentSolver<>(zero, field.newDfp(1e-55), zero, 5);
+
+        // make sure it doesn't throw a maxIterations exception
+        Dfp result = solver.solve(200, f, zero, zero.add(5.0), AllowedSolution.LEFT_SIDE);
+        double difference = field.newDfp(2.1).subtract(result).abs().getReal();
+        Assert.assertTrue("difference: " + difference, difference < FastMath.ulp(2.1));
     }
 
     @Test
