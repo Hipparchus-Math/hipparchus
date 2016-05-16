@@ -244,8 +244,18 @@ public abstract class AdamsFieldIntegratorAbstractTest {
             return getInterpolatedState(previousTime);
         }
 
+        @Override
+        public boolean isPreviousStateInterpolated() {
+            return false;
+        }
+
         public FieldODEStateAndDerivative<T> getCurrentState() {
             return getInterpolatedState(currentTime);
+        }
+
+        @Override
+        public boolean isCurrentStateInterpolated() {
+            return false;
         }
 
         public FieldODEStateAndDerivative<T> getInterpolatedState(T time) {

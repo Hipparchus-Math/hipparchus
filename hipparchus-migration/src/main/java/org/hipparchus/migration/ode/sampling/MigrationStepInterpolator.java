@@ -135,8 +135,20 @@ class MigrationStepInterpolator implements org.hipparchus.migration.ode.sampling
 
     /** {@inheritDoc} */
     @Override
+    public boolean isPreviousStateInterpolated() {
+        return interpolator.isPreviousStateInterpolated();
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public ODEStateAndDerivative getCurrentState() {
         return interpolator.getCurrentState();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isCurrentStateInterpolated() {
+        return interpolator.isCurrentStateInterpolated();
     }
 
     /** {@inheritDoc} */

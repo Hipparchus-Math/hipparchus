@@ -58,6 +58,8 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
                                 epsilon);
         }
 
+        Assert.assertEquals(false, interpolator.isPreviousStateInterpolated());
+        Assert.assertEquals(false, interpolator.isCurrentStateInterpolated());
     }
 
     @Test
@@ -85,6 +87,8 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
         Assert.assertEquals(0.0, maxErrorSin, epsilonSin);
         Assert.assertEquals(0.0, maxErrorCos, epsilonCos);
 
+        Assert.assertEquals(false, interpolator.isPreviousStateInterpolated());
+        Assert.assertEquals(false, interpolator.isCurrentStateInterpolated());
     }
 
     @Test

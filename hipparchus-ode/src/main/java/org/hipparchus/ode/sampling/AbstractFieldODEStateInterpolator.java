@@ -134,8 +134,20 @@ public abstract class AbstractFieldODEStateInterpolator<T extends RealFieldEleme
 
     /** {@inheritDoc} */
     @Override
+    public boolean isPreviousStateInterpolated() {
+        return softPreviousState != globalPreviousState;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public FieldODEStateAndDerivative<T> getCurrentState() {
         return softCurrentState;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isCurrentStateInterpolated() {
+        return softCurrentState != globalCurrentState;
     }
 
     /** {@inheritDoc} */
