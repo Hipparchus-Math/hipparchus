@@ -44,10 +44,38 @@ public interface ODEStateInterpolator extends Serializable {
     ODEStateAndDerivative getPreviousState();
 
     /**
+     * Determines if the {@link #getPreviousState() previous state} is computed directly
+     * by the integrator, or if it is calculated using {@link #getInterpolatedState(double)
+     * interpolation}.
+     *
+     * <p> Typically the previous state is directly computed by the integrator, but when
+     * events are detected the steps are shortened so that events occur on step boundaries
+     * which means the previous state may be computed by the interpolator.
+     *
+     * @return {@code true} if the previous state was calculated by the interpolator and
+     * false if it was computed directly by the integrator.
+     */
+    boolean isPreviousStateInterpolated();
+
+    /**
      * Get the state at current grid point time.
      * @return state at current grid point time
      */
     ODEStateAndDerivative getCurrentState();
+
+    /**
+     * Determines if the {@link #getCurrentState() current state} is computed directly by
+     * the integrator, or if it is calculated using {@link #getInterpolatedState(double)
+     * interpolation}.
+     *
+     * <p> Typically the current state is directly computed by the integrator, but when
+     * events are detected the steps are shortened so that events occur on step boundaries
+     * which means the current state may be computed by the interpolator.
+     *
+     * @return {@code true} if the current state was calculated by the interpolator and
+     * false if it was computed directly by the integrator.
+     */
+    boolean isCurrentStateInterpolated();
 
     /**
      * Get the state at interpolated time.

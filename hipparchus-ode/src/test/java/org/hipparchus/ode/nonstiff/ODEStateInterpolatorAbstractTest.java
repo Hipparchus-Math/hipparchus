@@ -47,6 +47,8 @@ public abstract class ODEStateInterpolatorAbstractTest {
                                 interpolator.getInterpolatedState(interpolator.getCurrentState().getTime()).getPrimaryState()[i],
                                 epsilon);
         }
+        Assert.assertEquals(false, interpolator.isPreviousStateInterpolated());
+        Assert.assertEquals(false, interpolator.isCurrentStateInterpolated());
     }
 
     @Test
@@ -72,6 +74,8 @@ public abstract class ODEStateInterpolatorAbstractTest {
         Assert.assertEquals(0.0, maxErrorSin, epsilonSin);
         Assert.assertEquals(0.0, maxErrorCos, epsilonCos);
 
+        Assert.assertEquals(false, interpolator.isPreviousStateInterpolated());
+        Assert.assertEquals(false, interpolator.isCurrentStateInterpolated());
     }
 
     @Test
@@ -80,6 +84,10 @@ public abstract class ODEStateInterpolatorAbstractTest {
     protected void doRestrictPrevious(double epsilon, double epsilonDot) {
 
         AbstractODEStateInterpolator original   = setUpInterpolator(new SinCos(), 0.0, new double[] { 0.0, 1.0 }, 0.125);
+
+        Assert.assertEquals(false, original.isPreviousStateInterpolated());
+        Assert.assertEquals(false, original.isCurrentStateInterpolated());
+
         AbstractODEStateInterpolator restricted = original.restrictStep(original.getInterpolatedState(1.0 / 32),
                                                                         original.getCurrentState());
 
@@ -90,6 +98,8 @@ public abstract class ODEStateInterpolatorAbstractTest {
         Assert.assertNotSame(restricted.getPreviousState(),  restricted.getGlobalPreviousState());
         Assert.assertSame(restricted.getCurrentState(),      restricted.getGlobalCurrentState());
         Assert.assertEquals(1.0 / 32, restricted.getPreviousState().getTime(), 1.0e-15);
+        Assert.assertEquals(true, restricted.isPreviousStateInterpolated());
+        Assert.assertEquals(false, restricted.isCurrentStateInterpolated());
 
         checkRestricted(original, restricted, epsilon, epsilonDot);
 
@@ -101,6 +111,10 @@ public abstract class ODEStateInterpolatorAbstractTest {
     protected void doRestrictCurrent(double epsilon, double epsilonDot) {
 
         AbstractODEStateInterpolator original   = setUpInterpolator(new SinCos(), 0.0, new double[] { 0.0, 1.0 }, 0.125);
+
+        Assert.assertEquals(false, original.isPreviousStateInterpolated());
+        Assert.assertEquals(false, original.isCurrentStateInterpolated());
+
         AbstractODEStateInterpolator restricted = original.restrictStep(original.getPreviousState(),
                                                                         original.getInterpolatedState(3.0 / 32));
 
@@ -111,6 +125,8 @@ public abstract class ODEStateInterpolatorAbstractTest {
         Assert.assertSame(restricted.getPreviousState(),     restricted.getGlobalPreviousState());
         Assert.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
         Assert.assertEquals(3.0 / 32, restricted.getCurrentState().getTime(), 1.0e-15);
+        Assert.assertEquals(false, restricted.isPreviousStateInterpolated());
+        Assert.assertEquals(true, restricted.isCurrentStateInterpolated());
 
         checkRestricted(original, restricted, epsilon, epsilonDot);
 
@@ -122,6 +138,10 @@ public abstract class ODEStateInterpolatorAbstractTest {
     protected void doRestrictBothEnds(double epsilon, double epsilonDot) {
 
         AbstractODEStateInterpolator original   = setUpInterpolator(new SinCos(), 0.0, new double[] { 0.0, 1.0 }, 0.125);
+
+        Assert.assertEquals(false, original.isPreviousStateInterpolated());
+        Assert.assertEquals(false, original.isCurrentStateInterpolated());
+
         AbstractODEStateInterpolator restricted = original.restrictStep(original.getInterpolatedState(1.0 / 32),
                                                                         original.getInterpolatedState(3.0 / 32));
 
@@ -133,6 +153,8 @@ public abstract class ODEStateInterpolatorAbstractTest {
         Assert.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
         Assert.assertEquals(1.0 / 32, restricted.getPreviousState().getTime(), 1.0e-15);
         Assert.assertEquals(3.0 / 32, restricted.getCurrentState().getTime(), 1.0e-15);
+        Assert.assertEquals(true, restricted.isPreviousStateInterpolated());
+        Assert.assertEquals(true, restricted.isCurrentStateInterpolated());
 
         checkRestricted(original, restricted, epsilon, epsilonDot);
 

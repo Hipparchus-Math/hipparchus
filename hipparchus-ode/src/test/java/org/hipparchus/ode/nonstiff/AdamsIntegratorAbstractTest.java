@@ -255,8 +255,18 @@ public abstract class AdamsIntegratorAbstractTest {
             return getInterpolatedState(previousTime);
         }
 
+        @Override
+        public boolean isPreviousStateInterpolated() {
+            return false;
+        }
+
         public ODEStateAndDerivative getCurrentState() {
             return getInterpolatedState(currentTime);
+        }
+
+        @Override
+        public boolean isCurrentStateInterpolated() {
+            return false;
         }
 
         public ODEStateAndDerivative getInterpolatedState(double time) {

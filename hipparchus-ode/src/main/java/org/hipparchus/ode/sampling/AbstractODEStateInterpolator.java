@@ -134,8 +134,20 @@ public abstract class AbstractODEStateInterpolator
 
     /** {@inheritDoc} */
     @Override
+    public boolean isPreviousStateInterpolated() {
+        return softPreviousState != globalPreviousState;
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public ODEStateAndDerivative getCurrentState() {
         return softCurrentState;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean isCurrentStateInterpolated() {
+        return softCurrentState != globalCurrentState;
     }
 
     /** {@inheritDoc} */
