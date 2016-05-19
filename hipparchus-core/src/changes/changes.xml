@@ -35,6 +35,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
       <action dev="tn" type="add">
+        Added Gauss-Laguerre quadrature for integration of improper integrals.
+      </action>
+      <action dev="tn" type="add">
         Added "AggregatableStatistic" interface for statistics that can
         aggregate results.
       </action>
