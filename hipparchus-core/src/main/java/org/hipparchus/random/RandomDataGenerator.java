@@ -44,15 +44,6 @@ import org.hipparchus.util.ResizableDoubleArray;
 public class RandomDataGenerator implements RandomGenerator, Serializable {
 
     /**
-     * Cached random normal value.  The default implementation for
-     * {@link #nextGaussian} generates pairs of values and this field caches the
-     * second value so that the full algorithm is not executed for every
-     * activation.  The value {@code Double.NaN} signals that there is
-     * no cached value.
-     */
-    private double cachedNormalDeviate = Double.NaN;
-
-    /**
      * Used when generating Exponential samples.
      * Table containing the constants
      * q_i = sum_{j=1}^i (ln 2)^j/j! = ln 2 + (ln 2)^2/2 + ... + (ln 2)^i/i!
@@ -70,18 +61,25 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
     /** Serializable version identifier. */
     private static final long serialVersionUID = 2306581345647615033L;
 
-    /** Source of random data */
-    private final RandomGenerator randomGenerator;
-
+    /** Map of <classname, switch constant> for continuous distributions */
     private static final HashMap<String, Integer> CONTINUOUS_NAMES = new HashMap<String, Integer>();
+    /** Map of <classname, switch constant> for discrete distributions */
     private static final HashMap<String, Integer> DISCRETE_NAMES = new HashMap<String, Integer>();
+    /** beta distribution */
     private static final int BETA = 0;
+    /** gamma distribution */
     private static final int GAMMA = 1;
+    /** exponential distribution */
     private static final int EXPONENTIAL = 2;
+    /** normal distribution */
     private static final int NORMAL = 3;
+    /** poisson distribution */
     private static final int POISSON = 4;
+    /** uniform integer distribution */
     private static final int UNIFORM_INT = 5;
+    /** uniform real distribution */
     private static final int UNIFORM_REAL = 6;
+    /** log normal distribution */
     private static final int LOG_NORMAL = 7;
 
     /**
@@ -121,6 +119,18 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
         DISCRETE_NAMES.put("PoissonDistribution", POISSON);
         DISCRETE_NAMES.put("UniformIntegerDistribution", UNIFORM_INT);
     }
+
+    /**
+     * Cached random normal value.  The default implementation for
+     * {@link #nextGaussian} generates pairs of values and this field caches the
+     * second value so that the full algorithm is not executed for every
+     * activation.  The value {@code Double.NaN} signals that there is
+     * no cached value.
+     */
+    private double cachedNormalDeviate = Double.NaN;
+
+    /** Source of random data */
+    private final RandomGenerator randomGenerator;
 
     /**
      * Construct a RandomDataGenerator with a default RandomGenerator as its source of random data.
@@ -270,12 +280,16 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
         return randomGenerator.nextLong();
     }
 
+    /** {@inheritDoc} */
+    @Override
     public void setSeed(int seed) {
         if (randomGenerator != null) {
             randomGenerator.setSeed(seed);
         }
     }
 
+    /** {@inheritDoc} */
+    @Override
     public void setSeed(int[] seed) {
         if (randomGenerator != null) {
             randomGenerator.setSeed(seed);
@@ -502,7 +516,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      *
      * @param mean expected value
      * @return poisson deviate
-     * @throws MathIllegalArgument exception if mean is not strictly positive
+     * @throws MathIllegalArgumentException if mean is not strictly positive
      */
     public int nextPoisson(double mean) {
         if (mean <= 0) {
@@ -687,7 +701,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
 
     /**
      * Returns one Beta sample using Cheng's BB algorithm, when both &alpha; and &beta; are greater than 1.
-     * @param random random generator to use
+     *
      * @param a0 distribution first shape parameter (&alpha;)
      * @param a min(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
      * @param b max(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
@@ -730,16 +744,14 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      * Returns a Beta-distribute value using Cheng's BC algorithm, when at least one of &alpha; and &beta;
      * is smaller than 1.
      *
-     * @param random random generator to use
      * @param a0 distribution first shape parameter (&alpha;)
      * @param a max(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
      * @param b min(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
      * @return sampled value
      */
-    private double algorithmBC(
-                                      final double a0,
-                                      final double a,
-                                      final double b) {
+    private double algorithmBC(final double a0,
+                               final double a,
+                               final double b) {
         final double alpha = a + b;
         final double beta = 1. / b;
         final double delta = 1. + a - b;
@@ -1034,7 +1046,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      * positive.
      * @return  a pseudorandom, uniformly distributed {@code long}
      * value between 0 (inclusive) and n (exclusive).
-     * @throws IllegalArgumentException  if n is not positive.
+     * @throws MathIllegalArgumentException  if n is not positive.
      */
     private long nextLong(final long n) throws MathIllegalArgumentException {
         if (n > 0) {
