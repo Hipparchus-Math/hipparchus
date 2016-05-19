@@ -94,8 +94,8 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
     public EnumeratedRealDistribution(final double[] singletons, final double[] probabilities)
         throws MathIllegalArgumentException {
         super();
-        innerDistribution = new EnumeratedDistribution<Double>(
-                createDistribution(singletons, probabilities));
+        innerDistribution =
+                new EnumeratedDistribution<Double>(createDistribution(singletons, probabilities));
     }
 
 

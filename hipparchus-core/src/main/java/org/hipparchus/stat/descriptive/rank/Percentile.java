@@ -24,7 +24,6 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
-import org.hipparchus.stat.descriptive.QuantiledUnivariateStatistic;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.KthSelector;
@@ -88,8 +87,7 @@ import org.hipparchus.util.Precision;
  * one of the threads invokes the <code>increment()</code> or
  * <code>clear()</code> method, it must be synchronized externally.
  */
-public class Percentile extends AbstractUnivariateStatistic
-    implements QuantiledUnivariateStatistic, Serializable {
+public class Percentile extends AbstractUnivariateStatistic implements Serializable {
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20150412L;
@@ -265,6 +263,34 @@ public class Percentile extends AbstractUnivariateStatistic
 
     /**
      * Returns an estimate of the <code>p</code>th percentile of the values
+     * in the <code>values</code> array.
+     * <p>
+     * <ul>
+     * <li>Returns <code>Double.NaN</code> if <code>values</code> has length
+     * <code>0</code></li>
+     * <li>Returns (for any value of <code>p</code>) <code>values[0]</code>
+     *  if <code>values</code> has length <code>1</code></li>
+     * <li>Throws <code>MathIllegalArgumentException</code> if <code>values</code>
+     * is null or p is not a valid quantile value (p must be greater than 0
+     * and less than or equal to 100) </li>
+     * </ul>
+     * <p>
+     * The default implementation delegates to
+     * <code>evaluate(double[], int, int, double)</code> in the natural way.
+     *
+     * @param values input array of values
+     * @param p the percentile value to compute
+     * @return the percentile value or Double.NaN if the array is empty
+     * @throws MathIllegalArgumentException if <code>values</code> is null or p is invalid
+     */
+    public double evaluate(final double[] values, final double p)
+        throws MathIllegalArgumentException {
+        MathUtils.checkNotNull(values, LocalizedCoreFormats.INPUT_ARRAY);
+        return evaluate(values, 0, values.length, p);
+    }
+
+    /**
+     * Returns an estimate of the <code>p</code>th percentile of the values
      * in the <code>values</code> array, starting with the element in (0-based)
      * position <code>begin</code> in the array and including <code>length</code>
      * values.
@@ -293,7 +319,6 @@ public class Percentile extends AbstractUnivariateStatistic
      * @throws MathIllegalArgumentException if the parameters are not valid or the
      * input array is null
      */
-    @Override
     public double evaluate(final double[] values, final int begin,
                            final int length, final double p)
         throws MathIllegalArgumentException {
@@ -322,7 +347,6 @@ public class Percentile extends AbstractUnivariateStatistic
      *
      * @return quantile set while construction or {@link #setQuantile(double)}
      */
-    @Override
     public double getQuantile() {
         return quantile;
     }
@@ -335,7 +359,6 @@ public class Percentile extends AbstractUnivariateStatistic
      * @throws MathIllegalArgumentException  if p is not greater than 0 and less
      * than or equal to 100
      */
-    @Override
     public void setQuantile(final double p) throws MathIllegalArgumentException {
         if (p <= 0 || p > 100) {
             throw new MathIllegalArgumentException(

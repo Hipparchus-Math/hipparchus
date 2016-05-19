@@ -43,9 +43,8 @@ public class LaplaceDistribution extends AbstractRealDistribution {
      * @param beta scale parameter (must be positive)
      * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
-    public LaplaceDistribution(double mu, double beta) {
-        super();
-
+    public LaplaceDistribution(double mu, double beta)
+        throws MathIllegalArgumentException {
         if (beta <= 0.0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_SCALE, beta);
         }

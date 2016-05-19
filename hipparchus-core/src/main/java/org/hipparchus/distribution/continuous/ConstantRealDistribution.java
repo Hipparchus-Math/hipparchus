@@ -36,7 +36,6 @@ public class ConstantRealDistribution extends AbstractRealDistribution {
      * @param value the constant value of this distribution
      */
     public ConstantRealDistribution(double value) {
-        super();  // Avoid creating RandomGenerator
         this.value = value;
     }
 

@@ -29,29 +29,31 @@ import org.hipparchus.util.MathUtils;
 /**
  * An implementation for Student's t-tests.
  * <p>
- * Tests can be:<ul>
+ * Tests can be:
+ * <ul>
  * <li>One-sample or two-sample</li>
  * <li>One-sided or two-sided</li>
  * <li>Paired or unpaired (for two-sample tests)</li>
  * <li>Homoscedastic (equal variance assumption) or heteroscedastic
  * (for two sample tests)</li>
- * <li>Fixed significance level (boolean-valued) or returning p-values.
- * </li></ul></p>
+ * <li>Fixed significance level (boolean-valued) or returning p-values.</li>
+ * </ul>
  * <p>
  * Test statistics are available for all tests.  Methods including "Test" in
  * in their names perform tests, all other methods return t-statistics.  Among
  * the "Test" methods, <code>double-</code>valued methods return p-values;
  * <code>boolean-</code>valued methods perform fixed significance level tests.
  * Significance levels are always specified as numbers between 0 and 0.5
- * (e.g. tests at the 95% level  use <code>alpha=0.05</code>).</p>
+ * (e.g. tests at the 95% level  use <code>alpha=0.05</code>).
  * <p>
  * Input to tests can be either <code>double[]</code> arrays or
- * {@link StatisticalSummary} instances.</p><p>
+ * {@link StatisticalSummary} instances.
+ * <p>
  * Uses Hipparchus {@link org.hipparchus.distribution.continuous.TDistribution}
- * implementation to estimate exact p-values.</p>
- *
+ * implementation to estimate exact p-values.
  */
 public class TTest {
+
     /**
      * Computes a paired, 2-sample t-statistic based on the data in the input
      * arrays.  The t-statistic returned is equivalent to what would be returned by
@@ -82,7 +84,6 @@ public class TTest {
         return t(meanDifference, 0,
                  StatUtils.varianceDifference(sample1, sample2, meanDifference),
                  sample1.length);
-
     }
 
     /**
@@ -128,7 +129,6 @@ public class TTest {
         return tTest(meanDifference, 0,
                 StatUtils.varianceDifference(sample1, sample2, meanDifference),
                 sample1.length);
-
     }
 
     /**
@@ -198,8 +198,7 @@ public class TTest {
         checkSampleData(observed);
         // No try-catch or advertised exception because args have just been checked
         return t(StatUtils.mean(observed), mu, StatUtils.variance(observed),
-                observed.length);
-
+                 observed.length);
     }
 
     /**
@@ -225,7 +224,6 @@ public class TTest {
         checkSampleData(sampleStats);
         return t(sampleStats.getMean(), mu, sampleStats.getVariance(),
                  sampleStats.getN());
-
     }
 
     /**
@@ -271,7 +269,6 @@ public class TTest {
         return homoscedasticT(StatUtils.mean(sample1), StatUtils.mean(sample2),
                               StatUtils.variance(sample1), StatUtils.variance(sample2),
                               sample1.length, sample2.length);
-
     }
 
     /**
@@ -312,7 +309,6 @@ public class TTest {
         return t(StatUtils.mean(sample1), StatUtils.mean(sample2),
                  StatUtils.variance(sample1), StatUtils.variance(sample2),
                  sample1.length, sample2.length);
-
     }
 
     /**
@@ -356,7 +352,6 @@ public class TTest {
         return t(sampleStats1.getMean(), sampleStats2.getMean(),
                  sampleStats1.getVariance(), sampleStats2.getVariance(),
                  sampleStats1.getN(), sampleStats2.getN());
-
     }
 
     /**
@@ -404,7 +399,6 @@ public class TTest {
         return homoscedasticT(sampleStats1.getMean(), sampleStats2.getMean(),
                               sampleStats1.getVariance(), sampleStats2.getVariance(),
                               sampleStats1.getN(), sampleStats2.getN());
-
     }
 
     /**
@@ -442,7 +436,6 @@ public class TTest {
         // No try-catch or advertised exception because args have just been checked
         return tTest(StatUtils.mean(sample), mu, StatUtils.variance(sample),
                      sample.length);
-
     }
 
     /**
@@ -487,7 +480,6 @@ public class TTest {
 
         checkSignificanceLevel(alpha);
         return tTest(mu, sample) < alpha;
-
     }
 
     /**
@@ -526,7 +518,6 @@ public class TTest {
         checkSampleData(sampleStats);
         return tTest(sampleStats.getMean(), mu, sampleStats.getVariance(),
                      sampleStats.getN());
-
     }
 
     /**
@@ -569,11 +560,11 @@ public class TTest {
      */
     public boolean tTest(final double mu, final StatisticalSummary sampleStats,
                          final double alpha)
-    throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
+        throws MathIllegalArgumentException, NullArgumentException,
+               MathIllegalStateException {
 
         checkSignificanceLevel(alpha);
         return tTest(mu, sampleStats) < alpha;
-
     }
 
     /**
@@ -615,7 +606,7 @@ public class TTest {
      */
     public double tTest(final double[] sample1, final double[] sample2)
         throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalStateException {
+               MathIllegalStateException {
 
         checkSampleData(sample1);
         checkSampleData(sample2);
@@ -623,7 +614,6 @@ public class TTest {
         return tTest(StatUtils.mean(sample1), StatUtils.mean(sample2),
                      StatUtils.variance(sample1), StatUtils.variance(sample2),
                      sample1.length, sample2.length);
-
     }
 
     /**
@@ -672,7 +662,6 @@ public class TTest {
                                   StatUtils.variance(sample1),
                                   StatUtils.variance(sample2),
                                   sample1.length, sample2.length);
-
     }
 
     /**
@@ -733,7 +722,6 @@ public class TTest {
 
         checkSignificanceLevel(alpha);
         return tTest(sample1, sample2) < alpha;
-
     }
 
     /**
@@ -795,7 +783,6 @@ public class TTest {
 
         checkSignificanceLevel(alpha);
         return homoscedasticTTest(sample1, sample2) < alpha;
-
     }
 
     /**
@@ -843,7 +830,6 @@ public class TTest {
         return tTest(sampleStats1.getMean(), sampleStats2.getMean(),
                      sampleStats1.getVariance(), sampleStats2.getVariance(),
                      sampleStats1.getN(), sampleStats2.getN());
-
     }
 
     /**
@@ -892,7 +878,6 @@ public class TTest {
                                   sampleStats1.getVariance(),
                                   sampleStats2.getVariance(),
                                   sampleStats1.getN(), sampleStats2.getN());
-
     }
 
     /**
@@ -957,7 +942,6 @@ public class TTest {
 
         checkSignificanceLevel(alpha);
         return tTest(sampleStats1, sampleStats2) < alpha;
-
     }
 
     //----------------------------------------------- Protected methods
@@ -1045,7 +1029,6 @@ public class TTest {
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         final double t = FastMath.abs(t(m, mu, v, n));
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final TDistribution distribution = new TDistribution( n - 1);
         return 2.0 * distribution.cumulativeProbability(-t);
 
@@ -1075,7 +1058,6 @@ public class TTest {
 
         final double t = FastMath.abs(t(m1, m2, v1, v2, n1, n2));
         final double degreesOfFreedom = df(v1, v2, n1, n2);
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final TDistribution distribution = new TDistribution(degreesOfFreedom);
         return 2.0 * distribution.cumulativeProbability(-t);
 
@@ -1105,7 +1087,6 @@ public class TTest {
 
         final double t = FastMath.abs(homoscedasticT(m1, m2, v1, v2, n1, n2));
         final double degreesOfFreedom = n1 + n2 - 2;
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final TDistribution distribution = new TDistribution(degreesOfFreedom);
         return 2.0 * distribution.cumulativeProbability(-t);
 

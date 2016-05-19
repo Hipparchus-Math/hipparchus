@@ -42,7 +42,6 @@ import org.hipparchus.clustering.DBSCANClusterer;
 import org.hipparchus.clustering.DoublePoint;
 import org.hipparchus.clustering.FuzzyKMeansClusterer;
 import org.hipparchus.clustering.KMeansPlusPlusClusterer;
-import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.random.RandomAdaptor;
 import org.hipparchus.random.RandomDataGenerator;
@@ -64,8 +63,6 @@ public class ClusterAlgorithmComparison {
         if (factor < 0 || factor > 1) {
             throw new IllegalArgumentException();
         }
-
-        NormalDistribution dist = new NormalDistribution(random, 0.0, noise);
 
         List<Vector2D> points = new ArrayList<Vector2D>();
         double range = 2.0 * FastMath.PI;

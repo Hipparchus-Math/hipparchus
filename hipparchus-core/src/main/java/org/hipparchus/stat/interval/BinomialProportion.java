@@ -36,7 +36,7 @@ public class BinomialProportion {
      * The standard normal distribution to calculate the inverse cumulative probability.
      * Accessed and used in a thread-safe way.
      */
-    private static final NormalDistribution NORMAL_DISTRIBUTION = new NormalDistribution(null, 0, 1);
+    private static final NormalDistribution NORMAL_DISTRIBUTION = new NormalDistribution(0, 1);
 
     /** Utility class, prevent instantiation. */
     private BinomialProportion() {}

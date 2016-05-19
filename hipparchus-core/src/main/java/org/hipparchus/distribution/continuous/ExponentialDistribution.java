@@ -41,7 +41,8 @@ public class ExponentialDistribution extends AbstractRealDistribution {
      * @param mean Mean of this distribution.
      * @throws MathIllegalArgumentException if {@code mean <= 0}.
      */
-    public ExponentialDistribution(double mean) {
+    public ExponentialDistribution(double mean)
+        throws MathIllegalArgumentException {
         if (mean <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.MEAN, mean);
         }

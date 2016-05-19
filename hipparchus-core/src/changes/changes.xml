@@ -35,6 +35,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
       <action dev="tn" type="add">
+        Added Gauss-Laguerre quadrature for integration of improper integrals.
+      </action>
+      <action dev="tn" type="add">
         Added "AggregatableStatistic" interface for statistics that can
         aggregate results.
       </action>
@@ -59,6 +62,45 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="tn" type="remove">
         Removed static "copy(A, B)" methods for storeless statistics.
+      </action>
+      <action dev="tn" type="update">
+        "Median" does not extend from "Percentile" anymore, but uses composition instead.
+      </action>
+      <action dev="tn" type="update">
+        Summary statistics based on external moments (e.g. Mean, Variance)
+        are now immutable.
+      </action>
+      <action dev="tn" type="update">
+        Simplified "BinomialConfidenceInterval" and its implementations
+        into class "BinomialProportion".
+      </action>
+      <action dev="tn" type="remove">
+        Removed accuracy parameter in constructors of "RealDistribution" implementations
+        that calculate the inverse cumulative probability analytically.
+      </action>
+      <action dev="tn" type="update">
+        Refactored distribution implementations into separate sub-packages:
+        "discrete", "continuous" and "multivariate".
+      </action>
+      <action dev="tn" type="remove">
+        Removed "copyOf" and "copyOfRange" methods in "MathArrays". "Object#clone()"
+        and "Arrays#copyOfRange(...)" should be used instead.
+      </action>
+      <action dev="tn" type="update">
+        Simplified "PivotingStrategyInterface" and implementations into single
+        enum class "PivotingStrategy".
+      </action>
+      <action dev="tn" type="update">
+        "RealVector#Entry" is now public.
+      </action>
+      <action dev="tn" type="update">
+        "RealLinearOperator" is now an interface.
+      </action>
+      <action dev="tn" type="update">
+        "Frequency" class now uses generics. For similar functionality as previous
+        class wrt integer numbers, use "LongFrequency" which supports adding
+        different integer number types (e.g. int, long, short) to the same
+        "LongFrequency" instance. 
       </action>
       <action dev="luc" type="update">
         Simplified exception hierarchy.

@@ -44,14 +44,14 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @throws MathIllegalArgumentException if {@code mu < 0.5}
      * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
-    public NakagamiDistribution(double mu, double omega) {
+    public NakagamiDistribution(double mu, double omega)
+        throws MathIllegalArgumentException {
         this(mu, omega, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
     /**
      * Build a new instance.
      *
-     * @param rng Random number generator
      * @param mu shape parameter
      * @param omega scale parameter (must be positive)
      * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
@@ -61,7 +61,8 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      */
     public NakagamiDistribution(double mu,
                                 double omega,
-                                double inverseAbsoluteAccuracy) {
+                                double inverseAbsoluteAccuracy)
+        throws MathIllegalArgumentException {
         super(inverseAbsoluteAccuracy);
 
         if (mu < 0.5) {

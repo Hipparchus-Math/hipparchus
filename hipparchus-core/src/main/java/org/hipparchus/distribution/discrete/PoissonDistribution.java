@@ -16,7 +16,6 @@
  */
 package org.hipparchus.distribution.discrete;
 
-import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -39,8 +38,6 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
     private static final long serialVersionUID = 20160320L;
     /** Distribution used to compute normal approximation. */
     private final NormalDistribution normal;
-    /** Distribution needed for the {@link #sample()} method. */
-    private final ExponentialDistribution exponential;
     /** Mean of the distribution. */
     private final double mean;
 
@@ -77,7 +74,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      * @throws MathIllegalArgumentException if {@code p <= 0}.
      */
     public PoissonDistribution(double p, double epsilon, int maxIterations)
-    throws MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (p <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.MEAN, p);
         }
@@ -86,8 +83,7 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
         this.maxIterations = maxIterations;
 
         // Use the same RNG instance as the parent class.
-        normal      = new NormalDistribution(p, FastMath.sqrt(p));
-        exponential = new ExponentialDistribution(1);
+        normal = new NormalDistribution(p, FastMath.sqrt(p));
     }
 
     /**

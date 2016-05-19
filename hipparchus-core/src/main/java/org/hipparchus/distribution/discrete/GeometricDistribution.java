@@ -44,7 +44,8 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
      * @param p probability of success.
      * @throws MathIllegalArgumentException if {@code p <= 0} or {@code p > 1}.
      */
-    public GeometricDistribution(double p) {
+    public GeometricDistribution(double p)
+        throws MathIllegalArgumentException {
         if (p <= 0 || p > 1) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, p, 0, 1);
         }

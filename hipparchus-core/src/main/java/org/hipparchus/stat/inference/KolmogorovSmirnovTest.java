@@ -50,7 +50,6 @@ import org.hipparchus.util.MathUtils;
  * \(F_n\) is the empirical distribution of the \(n\) sample data points. The distribution of
  * \(D_n\) is estimated using a method based on [1] with certain quick decisions for extreme values
  * given in [2].
- * </p>
  * <p>
  * Two-sample tests are also supported, evaluating the null hypothesis that the two samples
  * {@code x} and {@code y} come from the same underlying distribution. In this case, the test
@@ -66,19 +65,18 @@ import org.hipparchus.util.MathUtils;
  * <li>When the product of the sample sizes exceeds {@value #LARGE_SAMPLE_PRODUCT}, the asymptotic
  * distribution of \(D_{n,m}\) is used. See {@link #approximateP(double, int, int)} for details on
  * the approximation.</li>
- * </ul></p><p>
+ * </ul>
+ * <p>
  * If the product of the sample sizes is less than {@value #LARGE_SAMPLE_PRODUCT} and the sample
  * data contains ties, random jitter is added to the sample data to break ties before applying
  * the algorithm above. Alternatively, the {@link #bootstrap(double[], double[], int, boolean)}
  * method, modeled after <a href="http://sekhon.berkeley.edu/matching/ks.boot.html">ks.boot</a>
  * in the R Matching package [3], can be used if ties are known to be present in the data.
- * </p>
  * <p>
  * In the two-sample case, \(D_{n,m}\) has a discrete distribution. This makes the p-value
  * associated with the null hypothesis \(H_0 : D_{n,m} \ge d \) differ from \(H_0 : D_{n,m} > d \)
  * by the mass of the observed value \(d\). To distinguish these, the two-sample tests use a boolean
  * {@code strict} parameter. This parameter is ignored for large samples.
- * </p>
  * <p>
  * The methods used by the 2-sample default implementation are also exposed directly:
  * <ul>
@@ -88,7 +86,6 @@ import org.hipparchus.util.MathUtils;
  * expressed using strict or non-strict inequality. See
  * {@link #kolmogorovSmirnovTest(double[], double[], boolean)}.</li>
  * </ul>
- * </p>
  * <p>
  * References:
  * <ul>
@@ -102,11 +99,9 @@ import org.hipparchus.util.MathUtils;
  * <li>[4] Wilcox, Rand. 2012. Introduction to Robust Estimation and Hypothesis Testing,
  * Chapter 5, 3rd Ed. Academic Press.</li>
  * </ul>
- * <br/>
+ * <p>
  * Note that [1] contains an error in computing h, refer to <a
  * href="https://issues.apache.org/jira/browse/MATH-437">MATH-437</a> for details.
- * </p>
- *
  */
 public class KolmogorovSmirnovTest {
 
@@ -128,7 +123,8 @@ public class KolmogorovSmirnovTest {
     protected static final int LARGE_SAMPLE_PRODUCT = 10000;
 
     /**
-     * RandomDataGenerator used by {@link #bootstrap(double[], double[], int)} or to generate jitter to break ties in the data.
+     * RandomDataGenerator used by {@link #bootstrap(double[], double[], int)}
+     * or to generate jitter to break ties in the data.
      */
     private final RandomDataGenerator gen = new RandomDataGenerator();
 
@@ -140,8 +136,10 @@ public class KolmogorovSmirnovTest {
     }
 
     /**
-     * Construct a KolmogorovSmirnovTest instance providing a seed for the PRNG used by the {@link #bootstrap(double[], double[], int)}
-     * method.
+     * Construct a KolmogorovSmirnovTest instance providing a seed for the PRNG
+     * used by the {@link #bootstrap(double[], double[], int)} method.
+     *
+     * @param seed the seed for the PRNG
      */
     public KolmogorovSmirnovTest(long seed) {
         super();

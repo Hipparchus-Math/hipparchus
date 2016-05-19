@@ -50,9 +50,8 @@ public class GumbelDistribution extends AbstractRealDistribution {
      * @param beta scale parameter (must be positive)
      * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
-    public GumbelDistribution(double mu, double beta) {
-        super();
-
+    public GumbelDistribution(double mu, double beta)
+        throws MathIllegalArgumentException {
         if (beta <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE, beta);
         }
