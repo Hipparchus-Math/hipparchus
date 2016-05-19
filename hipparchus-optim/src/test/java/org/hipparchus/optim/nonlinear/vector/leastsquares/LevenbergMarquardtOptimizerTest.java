@@ -246,7 +246,7 @@ public class LevenbergMarquardtOptimizerTest
         Assert.assertEquals(expectedRms, rms, tol);
     }
 
-    //@Test
+    @Test
     public void testCircleFitting2() {
         final double xCenter = 123.456;
         final double yCenter = 654.321;
@@ -278,9 +278,9 @@ public class LevenbergMarquardtOptimizerTest
         final double[] asymptoticStandardErrorFound = optimum.getSigma(1e-14).toArray();
 
         // Check that the parameters are found within the assumed error bars.
-        Assert.assertEquals(xCenter, paramFound[0], asymptoticStandardErrorFound[0]);
-        Assert.assertEquals(yCenter, paramFound[1], asymptoticStandardErrorFound[1]);
-        Assert.assertEquals(radius, paramFound[2], asymptoticStandardErrorFound[2]);
+        Assert.assertEquals(xCenter, paramFound[0], 3 * asymptoticStandardErrorFound[0]);
+        Assert.assertEquals(yCenter, paramFound[1], 3 * asymptoticStandardErrorFound[1]);
+        Assert.assertEquals(radius,  paramFound[2], 3 * asymptoticStandardErrorFound[2]);
     }
 
     @Test
