@@ -123,7 +123,6 @@ public class OneWayAnova {
 
         final AnovaStats a = anovaStats(categoryData);
         // No try-catch or advertised exception because args are valid
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final FDistribution fdist = new FDistribution(a.dfbg, a.dfwg);
         return 1.0 - fdist.cumulativeProbability(a.F);
 
@@ -164,7 +163,6 @@ public class OneWayAnova {
         MathIllegalStateException {
 
         final AnovaStats a = anovaStats(categoryData, allowOneElementData);
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final FDistribution fdist = new FDistribution(a.dfbg, a.dfwg);
         return 1.0 - fdist.cumulativeProbability(a.F);
 
@@ -250,7 +248,6 @@ public class OneWayAnova {
                     alpha, 0, 0.5);
         }
         return anovaPValue(categoryData) < alpha;
-
     }
 
     /**
@@ -258,7 +255,7 @@ public class OneWayAnova {
      *
      * @param categoryData <code>Collection</code> of <code>double[]</code>
      * arrays each containing data for one category
-     * @param allowOneElementData if true, allow computation for one catagory
+     * @param allowOneElementData if true, allow computation for one category
      * only or for one data element per category
      * @return computed AnovaStats
      * @throws NullArgumentException if <code>categoryData</code> is <code>null</code>
@@ -276,14 +273,14 @@ public class OneWayAnova {
             // check if we have enough categories
             if (categoryData.size() < 2) {
                 throw new MathIllegalArgumentException(LocalizedCoreFormats.TWO_OR_MORE_CATEGORIES_REQUIRED,
-                                                     categoryData.size(), 2);
+                                                       categoryData.size(), 2);
             }
 
             // check if each category has enough data
             for (final StreamingStatistics array : categoryData) {
                 if (array.getN() <= 1) {
                     throw new MathIllegalArgumentException(LocalizedCoreFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED,
-                                                         (int) array.getN(), 2);
+                                                           (int) array.getN(), 2);
                 }
             }
         }
@@ -320,9 +317,9 @@ public class OneWayAnova {
     }
 
     /**
-        Convenience class to pass dfbg,dfwg,F values around within OneWayAnova.
-        No get/set methods provided.
-    */
+     * Convenience class to pass dfbg,dfwg,F values around within OneWayAnova.
+     * No get/set methods provided.
+     */
     private static class AnovaStats {
 
         /** Degrees of freedom in numerator (between groups). */

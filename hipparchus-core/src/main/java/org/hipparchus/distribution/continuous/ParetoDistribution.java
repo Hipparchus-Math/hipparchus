@@ -19,7 +19,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -60,13 +59,6 @@ public class ParetoDistribution extends AbstractRealDistribution {
 
     /**
      * Create a Pareto distribution using the specified scale and shape.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param scale the scale parameter of this distribution
      * @param shape the shape parameter of this distribution

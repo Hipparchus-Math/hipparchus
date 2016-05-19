@@ -27,14 +27,13 @@ import org.hipparchus.util.MathUtils;
 /**
  * Implements <a href="http://en.wikipedia.org/wiki/G-test">G Test</a>
  * statistics.
- *
- * <p>This is known in statistical genetics as the McDonald-Kreitman test.
- * The implementation handles both known and unknown distributions.</p>
- *
- * <p>Two samples tests can be used when the distribution is unknown <i>a priori</i>
+ * <p>
+ * This is known in statistical genetics as the McDonald-Kreitman test.
+ * The implementation handles both known and unknown distributions.
+ * <p>
+ * Two samples tests can be used when the distribution is unknown <i>a priori</i>
  * but provided by one sample, or when the hypothesis under test is that the two
- * samples come from the same underlying distribution.</p>
- *
+ * samples come from the same underlying distribution.
  */
 public class GTest {
 
@@ -42,23 +41,25 @@ public class GTest {
      * Computes the <a href="http://en.wikipedia.org/wiki/G-test">G statistic
      * for Goodness of Fit</a> comparing {@code observed} and {@code expected}
      * frequency counts.
-     *
-     * <p>This statistic can be used to perform a G test (Log-Likelihood Ratio
+     * <p>
+     * This statistic can be used to perform a G test (Log-Likelihood Ratio
      * Test) evaluating the null hypothesis that the observed counts follow the
-     * expected distribution.</p>
-     *
-     * <p><strong>Preconditions</strong>: <ul>
-     * <li>Expected counts must all be positive. </li>
-     * <li>Observed counts must all be &ge; 0. </li>
+     * expected distribution.
+     * <p>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>Expected counts must all be positive.</li>
+     * <li>Observed counts must all be &ge; 0.</li>
      * <li>The observed and expected arrays must have the same length and their
-     * common length must be at least 2. </li></ul></p>
-     *
-     * <p>If any of the preconditions are not met, a
-     * {@code MathIllegalArgumentException} is thrown.</p>
-     *
-     * <p><strong>Note:</strong>This implementation rescales the
+     * common length must be at least 2. </li>
+     * </ul>
+     * <p>
+     * If any of the preconditions are not met, a
+     * {@code MathIllegalArgumentException} is thrown.
+     * <p>
+     * <strong>Note:</strong>This implementation rescales the
      * {@code expected} array if necessary to ensure that the sum of the
-     * expected and observed counts are equal.</p>
+     * expected and observed counts are equal.
      *
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
@@ -145,7 +146,6 @@ public class GTest {
     public double gTest(final double[] expected, final long[] observed)
             throws MathIllegalArgumentException, MathIllegalStateException {
 
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
                 new ChiSquaredDistribution(expected.length - 1.0);
         return 1.0 - distribution.cumulativeProbability(g(expected, observed));
@@ -175,7 +175,6 @@ public class GTest {
     public double gTestIntrinsic(final double[] expected, final long[] observed)
             throws MathIllegalArgumentException, MathIllegalStateException {
 
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
                 new ChiSquaredDistribution(expected.length - 2.0);
         return 1.0 - distribution.cumulativeProbability(g(expected, observed));
@@ -463,7 +462,6 @@ public class GTest {
             throws MathIllegalArgumentException,
             MathIllegalStateException {
 
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
                 new ChiSquaredDistribution((double) observed1.length - 1);
         return 1 - distribution.cumulativeProbability(

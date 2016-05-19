@@ -28,6 +28,7 @@ import org.hipparchus.util.MathUtils;
 
 /**
  * Base class for probability distributions on the reals.
+ * <p>
  * Default implementations are provided for some of the methods
  * that do not vary from distribution to distribution.
  */
@@ -73,7 +74,7 @@ public abstract class AbstractRealDistribution
      */
     @Override
     public double probability(double x0,
-                              double x1) {
+                              double x1) throws MathIllegalArgumentException {
         if (x0 > x1) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT,
                                                    x0, x1, true);

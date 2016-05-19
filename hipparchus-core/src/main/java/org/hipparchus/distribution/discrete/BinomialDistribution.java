@@ -45,7 +45,8 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
      * @throws MathIllegalArgumentException if {@code trials < 0}.
      * @throws MathIllegalArgumentException if {@code p < 0} or {@code p > 1}.
      */
-    public BinomialDistribution(int trials, double p) {
+    public BinomialDistribution(int trials, double p)
+        throws MathIllegalArgumentException {
         if (trials < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_TRIALS,
                                            trials);

@@ -51,9 +51,8 @@ public class CauchyDistribution extends AbstractRealDistribution {
      * @param scale Scale parameter for this distribution
      * @throws MathIllegalArgumentException if {@code scale <= 0}
      */
-    public CauchyDistribution(double median, double scale) {
-        super();
-
+    public CauchyDistribution(double median, double scale)
+        throws MathIllegalArgumentException {
         if (scale <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE, scale);
         }

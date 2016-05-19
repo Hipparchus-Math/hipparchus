@@ -44,9 +44,8 @@ public class LogisticDistribution extends AbstractRealDistribution {
      * @param s scale parameter (must be positive)
      * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
-    public LogisticDistribution(double mu, double s) {
-        super();
-
+    public LogisticDistribution(double mu, double s)
+        throws MathIllegalArgumentException {
         if (s <= 0.0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_SCALE,
                                                    s);

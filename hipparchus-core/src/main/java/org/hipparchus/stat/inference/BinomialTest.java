@@ -112,7 +112,6 @@ public class BinomialTest {
         }
         MathUtils.checkNotNull(alternativeHypothesis);
 
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final BinomialDistribution distribution = new BinomialDistribution(numberOfTrials, probability);
         switch (alternativeHypothesis) {
         case GREATER_THAN:

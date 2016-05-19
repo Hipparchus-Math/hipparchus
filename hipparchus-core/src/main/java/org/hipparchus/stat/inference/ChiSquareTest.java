@@ -27,13 +27,12 @@ import org.hipparchus.util.MathUtils;
 
 /**
  * Implements Chi-Square test statistics.
- *
- * <p>This implementation handles both known and unknown distributions.</p>
- *
- * <p>Two samples tests can be used when the distribution is unknown <i>a priori</i>
+ * <p>
+ * This implementation handles both known and unknown distributions.
+ * <p>
+ * Two samples tests can be used when the distribution is unknown <i>a priori</i>
  * but provided by one sample, or when the hypothesis under test is that the two
- * samples come from the same underlying distribution.</p>
- *
+ * samples come from the same underlying distribution.
  */
 public class ChiSquareTest {
 
@@ -50,21 +49,22 @@ public class ChiSquareTest {
      * frequency counts.
      * <p>
      * This statistic can be used to perform a Chi-Square test evaluating the null
-     * hypothesis that the observed counts follow the expected distribution.</p>
+     * hypothesis that the observed counts follow the expected distribution.
      * <p>
-     * <strong>Preconditions</strong>: <ul>
-     * <li>Expected counts must all be positive.
-     * </li>
-     * <li>Observed counts must all be &ge; 0.
-     * </li>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>Expected counts must all be positive.</li>
+     * <li>Observed counts must all be &ge; 0.</li>
      * <li>The observed and expected arrays must have the same length and
-     * their common length must be at least 2.
-     * </li></ul></p><p>
+     * their common length must be at least 2.</li>
+     * </ul>
+     * <p>
      * If any of the preconditions are not met, an
-     * <code>IllegalArgumentException</code> is thrown.</p>
-     * <p><strong>Note: </strong>This implementation rescales the
+     * <code>IllegalArgumentException</code> is thrown.
+     * <p>
+     * <strong>Note: </strong>This implementation rescales the
      * <code>expected</code> array if necessary to ensure that the sum of the
-     * expected and observed counts are equal.</p>
+     * expected and observed counts are equal.
      *
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
@@ -108,7 +108,6 @@ public class ChiSquareTest {
             }
         }
         return sumSq;
-
     }
 
     /**
@@ -121,21 +120,22 @@ public class ChiSquareTest {
      * <p>
      * The number returned is the smallest significance level at which one can reject
      * the null hypothesis that the observed counts conform to the frequency distribution
-     * described by the expected counts.</p>
+     * described by the expected counts.
      * <p>
-     * <strong>Preconditions</strong>: <ul>
-     * <li>Expected counts must all be positive.
-     * </li>
-     * <li>Observed counts must all be &ge; 0.
-     * </li>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>Expected counts must all be positive.</li>
+     * <li>Observed counts must all be &ge; 0.</li>
      * <li>The observed and expected arrays must have the same length and
-     * their common length must be at least 2.
-     * </li></ul></p><p>
+     * their common length must be at least 2.</li>
+     * </ul>
+     * <p>
      * If any of the preconditions are not met, an
-     * <code>IllegalArgumentException</code> is thrown.</p>
-     * <p><strong>Note: </strong>This implementation rescales the
+     * <code>IllegalArgumentException</code> is thrown.
+     * <p>
+     * <strong>Note: </strong>This implementation rescales the
      * <code>expected</code> array if necessary to ensure that the sum of the
-     * expected and observed counts are equal.</p>
+     * expected and observed counts are equal.
      *
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
@@ -149,9 +149,7 @@ public class ChiSquareTest {
     public double chiSquareTest(final double[] expected, final long[] observed)
         throws MathIllegalArgumentException, MathIllegalStateException {
 
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
-        final ChiSquaredDistribution distribution =
-            new ChiSquaredDistribution(expected.length - 1.0);
+        final ChiSquaredDistribution distribution = new ChiSquaredDistribution(expected.length - 1.0);
         return 1.0 - distribution.cumulativeProbability(chiSquare(expected, observed));
     }
 
@@ -164,23 +162,24 @@ public class ChiSquareTest {
      * <p>
      * <strong>Example:</strong><br>
      * To test the hypothesis that <code>observed</code> follows
-     * <code>expected</code> at the 99% level, use </p><p>
-     * <code>chiSquareTest(expected, observed, 0.01) </code></p>
+     * <code>expected</code> at the 99% level, use
+     * <code>chiSquareTest(expected, observed, 0.01)</code>
      * <p>
-     * <strong>Preconditions</strong>: <ul>
-     * <li>Expected counts must all be positive.
-     * </li>
-     * <li>Observed counts must all be &ge; 0.
-     * </li>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>Expected counts must all be positive.</li>
+     * <li>Observed counts must all be &ge; 0.</li>
      * <li>The observed and expected arrays must have the same length and
-     * their common length must be at least 2.
-     * <li> <code> 0 &lt; alpha &lt; 0.5 </code>
-     * </li></ul></p><p>
+     * their common length must be at least 2.</li>
+     * <li><code> 0 &lt; alpha &lt; 0.5</code></li>
+     * </ul>
+     * <p>
      * If any of the preconditions are not met, an
-     * <code>IllegalArgumentException</code> is thrown.</p>
-     * <p><strong>Note: </strong>This implementation rescales the
+     * <code>IllegalArgumentException</code> is thrown.
+     * <p>
+     * <strong>Note: </strong>This implementation rescales the
      * <code>expected</code> array if necessary to ensure that the sum of the
-     * expected and observed counts are equal.</p>
+     * expected and observed counts are equal.
      *
      * @param observed array of observed frequency counts
      * @param expected array of expected frequency counts
@@ -207,26 +206,25 @@ public class ChiSquareTest {
     }
 
     /**
-     *  Computes the Chi-Square statistic associated with a
+     * Computes the Chi-Square statistic associated with a
      * <a href="http://www.itl.nist.gov/div898/handbook/prc/section4/prc45.htm">
-     *  chi-square test of independence</a> based on the input <code>counts</code>
-     *  array, viewed as a two-way table.
+     * chi-square test of independence</a> based on the input <code>counts</code>
+     * array, viewed as a two-way table.
      * <p>
      * The rows of the 2-way table are
-     * <code>count[0], ... , count[count.length - 1] </code></p>
+     * <code>count[0], ... , count[count.length - 1] </code>
      * <p>
-     * <strong>Preconditions</strong>: <ul>
-     * <li>All counts must be &ge; 0.
-     * </li>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>All counts must be &ge; 0.</li>
      * <li>The count array must be rectangular (i.e. all count[i] subarrays
-     *  must have the same length).
-     * </li>
+     * must have the same length).</li>
      * <li>The 2-way table represented by <code>counts</code> must have at
-     *  least 2 columns and at least 2 rows.
-     * </li>
-     * </li></ul></p><p>
+     * least 2 columns and at least 2 rows.</li>
+     * </ul>
+     * <p>
      * If any of the preconditions are not met, an
-     * <code>IllegalArgumentException</code> is thrown.</p>
+     * <code>IllegalArgumentException</code> is thrown.
      *
      * @param counts array representation of 2-way table
      * @return chiSquare test statistic
@@ -264,7 +262,6 @@ public class ChiSquareTest {
             }
         }
         return sumSq;
-
     }
 
     /**
@@ -276,20 +273,19 @@ public class ChiSquareTest {
      * array, viewed as a two-way table.
      * <p>
      * The rows of the 2-way table are
-     * <code>count[0], ... , count[count.length - 1] </code></p>
+     * <code>count[0], ... , count[count.length - 1] </code>
      * <p>
-     * <strong>Preconditions</strong>: <ul>
-     * <li>All counts must be &ge; 0.
-     * </li>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>All counts must be &ge; 0.</li>
      * <li>The count array must be rectangular (i.e. all count[i] subarrays must have
-     *     the same length).
-     * </li>
+     * the same length).</li>
      * <li>The 2-way table represented by <code>counts</code> must have at least 2
-     *     columns and at least 2 rows.
-     * </li>
-     * </li></ul></p><p>
+     * columns and at least 2 rows.</li>
+     * </ul>
+     * <p>
      * If any of the preconditions are not met, an
-     * <code>IllegalArgumentException</code> is thrown.</p>
+     * <code>IllegalArgumentException</code> is thrown.
      *
      * @param counts array representation of 2-way table
      * @return p-value
@@ -303,10 +299,8 @@ public class ChiSquareTest {
 
         checkArray(counts);
         double df = ((double) counts.length -1) * ((double) counts[0].length - 1);
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution = new ChiSquaredDistribution(df);
         return 1 - distribution.cumulativeProbability(chiSquare(counts));
-
     }
 
     /**
@@ -318,24 +312,25 @@ public class ChiSquareTest {
      * confidence.
      * <p>
      * The rows of the 2-way table are
-     * <code>count[0], ... , count[count.length - 1] </code></p>
+     * <code>count[0], ... , count[count.length - 1] </code>
      * <p>
      * <strong>Example:</strong><br>
      * To test the null hypothesis that the counts in
      * <code>count[0], ... , count[count.length - 1] </code>
-     *  all correspond to the same underlying probability distribution at the 99% level, use</p>
-     * <p><code>chiSquareTest(counts, 0.01)</code></p>
+     * all correspond to the same underlying probability distribution at the 99% level,
+     * use <code>chiSquareTest(counts, 0.01)</code>.
      * <p>
-     * <strong>Preconditions</strong>: <ul>
-     * <li>All counts must be &ge; 0.
-     * </li>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>All counts must be &ge; 0.</li>
      * <li>The count array must be rectangular (i.e. all count[i] subarrays must have the
-     *     same length).</li>
+     * same length).</li>
      * <li>The 2-way table represented by <code>counts</code> must have at least 2 columns and
-     *     at least 2 rows.</li>
-     * </li></ul></p><p>
+     * at least 2 rows.</li>
+     * </ul>
+     * <p>
      * If any of the preconditions are not met, an
-     * <code>IllegalArgumentException</code> is thrown.</p>
+     * <code>IllegalArgumentException</code> is thrown.
      *
      * @param counts array representation of 2-way table
      * @param alpha significance level of the test
@@ -355,36 +350,39 @@ public class ChiSquareTest {
                                           alpha, 0, 0.5);
         }
         return chiSquareTest(counts) < alpha;
-
     }
 
     /**
-     * <p>Computes a
+     * Computes a
      * <a href="http://www.itl.nist.gov/div898/software/dataplot/refman1/auxillar/chi2samp.htm">
      * Chi-Square two sample test statistic</a> comparing bin frequency counts
-     * in <code>observed1</code> and <code>observed2</code>.  The
-     * sums of frequency counts in the two samples are not required to be the
-     * same.  The formula used to compute the test statistic is</p>
+     * in <code>observed1</code> and <code>observed2</code>.
+     * <p>
+     * The sums of frequency counts in the two samples are not required to be the
+     * same. The formula used to compute the test statistic is
+     * <p>
      * <code>
      * &sum;[(K * observed1[i] - observed2[i]/K)<sup>2</sup> / (observed1[i] + observed2[i])]
-     * </code> where
-     * <br/><code>K = &sqrt;[&sum(observed2 / &sum;(observed1)]</code>
-     * </p>
-     * <p>This statistic can be used to perform a Chi-Square test evaluating the
-     * null hypothesis that both observed counts follow the same distribution.</p>
+     * </code>
      * <p>
-     * <strong>Preconditions</strong>: <ul>
-     * <li>Observed counts must be non-negative.
-     * </li>
-     * <li>Observed counts for a specific bin must not both be zero.
-     * </li>
-     * <li>Observed counts for a specific sample must not all be 0.
-     * </li>
+     * where
+     * <p>
+     * <code>K = &sqrt;[&sum(observed2 / &sum;(observed1)]</code>
+     * <p>
+     * This statistic can be used to perform a Chi-Square test evaluating the
+     * null hypothesis that both observed counts follow the same distribution.
+     * <p>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>Observed counts must be non-negative.</li>
+     * <li>Observed counts for a specific bin must not both be zero.</li>
+     * <li>Observed counts for a specific sample must not all be 0.</li>
      * <li>The arrays <code>observed1</code> and <code>observed2</code> must have
-     * the same length and their common length must be at least 2.
-     * </li></ul></p><p>
+     * the same length and their common length must be at least 2.</li>
+     * </ul>
+     * <p>
      * If any of the preconditions are not met, an
-     * <code>IllegalArgumentException</code> is thrown.</p>
+     * <code>IllegalArgumentException</code> is thrown.
      *
      * @param observed1 array of observed frequency counts of the first data set
      * @param observed2 array of observed frequency counts of the second data set
@@ -451,34 +449,32 @@ public class ChiSquareTest {
     }
 
     /**
-     * <p>Returns the <i>observed significance level</i>, or <a href=
+     * Returns the <i>observed significance level</i>, or <a href=
      * "http://www.cas.lancs.ac.uk/glossary_v1.1/hyptest.html#pvalue">
      * p-value</a>, associated with a Chi-Square two sample test comparing
      * bin frequency counts in <code>observed1</code> and
      * <code>observed2</code>.
-     * </p>
-     * <p>The number returned is the smallest significance level at which one
+     * <p>
+     * The number returned is the smallest significance level at which one
      * can reject the null hypothesis that the observed counts conform to the
      * same distribution.
-     * </p>
-     * <p>See {@link #chiSquareDataSetsComparison(long[], long[])} for details
+     * <p>
+     * See {@link #chiSquareDataSetsComparison(long[], long[])} for details
      * on the formula used to compute the test statistic. The degrees of
      * of freedom used to perform the test is one less than the common length
      * of the input observed count arrays.
-     * </p>
-     * <strong>Preconditions</strong>: <ul>
-     * <li>Observed counts must be non-negative.
-     * </li>
-     * <li>Observed counts for a specific bin must not both be zero.
-     * </li>
-     * <li>Observed counts for a specific sample must not all be 0.
-     * </li>
+     * <p>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>Observed counts must be non-negative.</li>
+     * <li>Observed counts for a specific bin must not both be zero.</li>
+     * <li>Observed counts for a specific sample must not all be 0.</li>
      * <li>The arrays <code>observed1</code> and <code>observed2</code> must
-     * have the same length and
-     * their common length must be at least 2.
-     * </li></ul><p>
+     * have the same length and their common length must be at least 2.</li>
+     * </ul>
+     * <p>
      * If any of the preconditions are not met, an
-     * <code>IllegalArgumentException</code> is thrown.</p>
+     * <code>IllegalArgumentException</code> is thrown.
      *
      * @param observed1 array of observed frequency counts of the first data set
      * @param observed2 array of observed frequency counts of the second data set
@@ -495,40 +491,36 @@ public class ChiSquareTest {
         throws MathIllegalArgumentException,
         MathIllegalStateException {
 
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
         final ChiSquaredDistribution distribution =
                 new ChiSquaredDistribution((double) observed1.length - 1);
         return 1 - distribution.cumulativeProbability(
                 chiSquareDataSetsComparison(observed1, observed2));
-
     }
 
     /**
-     * <p>Performs a Chi-Square two sample test comparing two binned data
+     * Performs a Chi-Square two sample test comparing two binned data
      * sets. The test evaluates the null hypothesis that the two lists of
      * observed counts conform to the same frequency distribution, with
      * significance level <code>alpha</code>.  Returns true iff the null
      * hypothesis can be rejected with 100 * (1 - alpha) percent confidence.
-     * </p>
-     * <p>See {@link #chiSquareDataSetsComparison(long[], long[])} for
+     * <p>
+     * See {@link #chiSquareDataSetsComparison(long[], long[])} for
      * details on the formula used to compute the Chisquare statistic used
      * in the test. The degrees of of freedom used to perform the test is
      * one less than the common length of the input observed count arrays.
-     * </p>
-     * <strong>Preconditions</strong>: <ul>
-     * <li>Observed counts must be non-negative.
-     * </li>
-     * <li>Observed counts for a specific bin must not both be zero.
-     * </li>
-     * <li>Observed counts for a specific sample must not all be 0.
-     * </li>
+     * <p>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>Observed counts must be non-negative.</li>
+     * <li>Observed counts for a specific bin must not both be zero.</li>
+     * <li>Observed counts for a specific sample must not all be 0.</li>
      * <li>The arrays <code>observed1</code> and <code>observed2</code> must
-     * have the same length and their common length must be at least 2.
-     * </li>
-     * <li> <code> 0 < alpha < 0.5 </code>
-     * </li></ul><p>
+     * have the same length and their common length must be at least 2.</li>
+     * <li><code> 0 < alpha < 0.5</code></li>
+     * </ul>
+     * <p>
      * If any of the preconditions are not met, an
-     * <code>IllegalArgumentException</code> is thrown.</p>
+     * <code>IllegalArgumentException</code> is thrown.
      *
      * @param observed1 array of observed frequency counts of the first data set
      * @param observed2 array of observed frequency counts of the second data set
@@ -582,7 +574,6 @@ public class ChiSquareTest {
 
         MathArrays.checkRectangular(in);
         MathArrays.checkNonNegative(in);
-
     }
 
 }

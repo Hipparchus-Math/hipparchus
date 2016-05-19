@@ -47,9 +47,8 @@ public class WeibullDistribution extends AbstractRealDistribution {
      * @param beta Scale parameter.
      * @throws MathIllegalArgumentException if {@code alpha <= 0} or {@code beta <= 0}.
      */
-    public WeibullDistribution(double alpha, double beta) {
-        super();
-
+    public WeibullDistribution(double alpha, double beta)
+        throws MathIllegalArgumentException {
         if (alpha <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SHAPE,
                                                    alpha);

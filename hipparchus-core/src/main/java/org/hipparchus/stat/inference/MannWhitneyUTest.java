@@ -28,7 +28,6 @@ import org.hipparchus.util.FastMath;
 
 /**
  * An implementation of the Mann-Whitney U test (also called Wilcoxon rank-sum test).
- *
  */
 public class MannWhitneyUTest {
 
@@ -42,17 +41,15 @@ public class MannWhitneyUTest {
      */
     public MannWhitneyUTest() {
         naturalRanking = new NaturalRanking(NaNStrategy.FIXED,
-                TiesStrategy.AVERAGE);
+                                            TiesStrategy.AVERAGE);
     }
 
     /**
      * Create a test instance using the given strategies for NaN's and ties.
      * Only use this if you are sure of what you are doing.
      *
-     * @param nanStrategy
-     *            specifies the strategy that should be used for Double.NaN's
-     * @param tiesStrategy
-     *            specifies the strategy that should be used for ties
+     * @param nanStrategy specifies the strategy that should be used for Double.NaN's
+     * @param tiesStrategy specifies the strategy that should be used for ties
      */
     public MannWhitneyUTest(final NaNStrategy nanStrategy,
                             final TiesStrategy tiesStrategy) {
@@ -80,7 +77,9 @@ public class MannWhitneyUTest {
         }
     }
 
-    /** Concatenate the samples into one array.
+    /**
+     * Concatenate the samples into one array.
+     *
      * @param x first sample
      * @param y second sample
      * @return concatenated array
@@ -102,19 +101,16 @@ public class MannWhitneyUTest {
      * <p>
      * This statistic can be used to perform a Mann-Whitney U test evaluating
      * the null hypothesis that the two independent samples has equal mean.
-     * </p>
      * <p>
      * Let X<sub>i</sub> denote the i'th individual of the first sample and
      * Y<sub>j</sub> the j'th individual in the second sample. Note that the
      * samples would often have different length.
-     * </p>
      * <p>
      * <strong>Preconditions</strong>:
      * <ul>
      * <li>All observations in the two samples are independent.</li>
      * <li>The observations are at least ordinal (continuous are also ordinal).</li>
      * </ul>
-     * </p>
      *
      * @param x the first sample
      * @param y the second sample
@@ -181,33 +177,31 @@ public class MannWhitneyUTest {
         final double z = (Umin - EU) / FastMath.sqrt(VarU);
 
         // No try-catch or advertised exception because args are valid
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
-        final NormalDistribution standardNormal = new NormalDistribution(null, 0, 1);
+        final NormalDistribution standardNormal = new NormalDistribution(0, 1);
 
         return 2 * standardNormal.cumulativeProbability(z);
     }
 
     /**
-     * Returns the asymptotic <i>observed significance level</i>, or <a href=
-     * "http://www.cas.lancs.ac.uk/glossary_v1.1/hyptest.html#pvalue">
-     * p-value</a>, associated with a <a
-     * href="http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U"> Mann-Whitney
+     * Returns the asymptotic <i>observed significance level</i>, or
+     * <a href="http://www.cas.lancs.ac.uk/glossary_v1.1/hyptest.html#pvalue">
+     * p-value</a>, associated with a
+     * <a href="http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U">Mann-Whitney
      * U statistic</a> comparing mean for two independent samples.
      * <p>
      * Let X<sub>i</sub> denote the i'th individual of the first sample and
      * Y<sub>j</sub> the j'th individual in the second sample. Note that the
      * samples would often have different length.
-     * </p>
      * <p>
      * <strong>Preconditions</strong>:
      * <ul>
      * <li>All observations in the two samples are independent.</li>
      * <li>The observations are at least ordinal (continuous are also ordinal).</li>
      * </ul>
-     * </p><p>
-     * Ties give rise to biased variance at the moment. See e.g. <a
-     * href="http://mlsc.lboro.ac.uk/resources/statistics/Mannwhitney.pdf"
-     * >http://mlsc.lboro.ac.uk/resources/statistics/Mannwhitney.pdf</a>.</p>
+     * <p>
+     * Ties give rise to biased variance at the moment. See e.g.
+     * <a href="http://mlsc.lboro.ac.uk/resources/statistics/Mannwhitney.pdf">
+     * http://mlsc.lboro.ac.uk/resources/statistics/Mannwhitney.pdf</a>.
      *
      * @param x the first sample
      * @param y the second sample

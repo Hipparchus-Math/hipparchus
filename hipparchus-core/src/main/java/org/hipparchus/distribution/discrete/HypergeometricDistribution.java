@@ -52,27 +52,27 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
      * or {@code sampleSize > populationSize}.
      */
     public HypergeometricDistribution(int populationSize, int numberOfSuccesses, int sampleSize)
-    throws MathIllegalArgumentException {
+        throws MathIllegalArgumentException {
         if (populationSize <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.POPULATION_SIZE,
                                                    populationSize);
         }
         if (numberOfSuccesses < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SUCCESSES,
-                                           numberOfSuccesses);
+                                                   numberOfSuccesses);
         }
         if (sampleSize < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES,
-                                           sampleSize);
+                                                   sampleSize);
         }
 
         if (numberOfSuccesses > populationSize) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE,
-                                                numberOfSuccesses, populationSize, true);
+                                                   numberOfSuccesses, populationSize, true);
         }
         if (sampleSize > populationSize) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SAMPLE_SIZE_LARGER_THAN_POPULATION_SIZE,
-                                                sampleSize, populationSize, true);
+                                                   sampleSize, populationSize, true);
         }
 
         this.numberOfSuccesses = numberOfSuccesses;

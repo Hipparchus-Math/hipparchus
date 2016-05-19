@@ -68,7 +68,8 @@ public class ZipfDistribution extends AbstractIntegerDistribution {
      * @exception MathIllegalArgumentException if {@code numberOfElements <= 0}
      * or {@code exponent <= 0}.
      */
-    public ZipfDistribution(final int numberOfElements, final double exponent) {
+    public ZipfDistribution(final int numberOfElements, final double exponent)
+        throws MathIllegalArgumentException {
         if (numberOfElements <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSION,
                                                    numberOfElements);

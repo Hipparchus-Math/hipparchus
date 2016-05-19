@@ -19,8 +19,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Erf;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -46,13 +44,6 @@ public class NormalDistribution extends AbstractRealDistribution {
     /**
      * Create a normal distribution with mean equal to zero and standard
      * deviation equal to one.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      */
     public NormalDistribution() {
         this(0, 1);
@@ -60,13 +51,6 @@ public class NormalDistribution extends AbstractRealDistribution {
 
     /**
      * Create a normal distribution using the given mean, standard deviation.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param mean Mean for this distribution.
      * @param sd Standard deviation for this distribution.
@@ -74,23 +58,6 @@ public class NormalDistribution extends AbstractRealDistribution {
      */
     public NormalDistribution(double mean, double sd)
         throws MathIllegalArgumentException {
-        this(new Well19937c(), mean, sd);
-    }
-
-    /**
-     * Creates a normal distribution.
-     *
-     * @param rng Random number generator.
-     * @param mean Mean for this distribution.
-     * @param sd Standard deviation for this distribution.
-     * @throws MathIllegalArgumentException if {@code sd <= 0}.
-     */
-    public NormalDistribution(RandomGenerator rng,
-                              double mean,
-                              double sd)
-        throws MathIllegalArgumentException {
-        super();
-
         if (sd <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.STANDARD_DEVIATION, sd);
         }

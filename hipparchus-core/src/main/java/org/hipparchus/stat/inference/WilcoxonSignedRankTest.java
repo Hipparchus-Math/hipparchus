@@ -29,7 +29,6 @@ import org.hipparchus.util.MathArrays;
 
 /**
  * An implementation of the Wilcoxon signed-rank test.
- *
  */
 public class WilcoxonSignedRankTest {
 
@@ -43,17 +42,15 @@ public class WilcoxonSignedRankTest {
      */
     public WilcoxonSignedRankTest() {
         naturalRanking = new NaturalRanking(NaNStrategy.FIXED,
-                TiesStrategy.AVERAGE);
+                                            TiesStrategy.AVERAGE);
     }
 
     /**
      * Create a test instance using the given strategies for NaN's and ties.
      * Only use this if you are sure of what you are doing.
      *
-     * @param nanStrategy
-     *            specifies the strategy that should be used for Double.NaN's
-     * @param tiesStrategy
-     *            specifies the strategy that should be used for ties
+     * @param nanStrategy specifies the strategy that should be used for Double.NaN's
+     * @param tiesStrategy specifies the strategy that should be used for ties
      */
     public WilcoxonSignedRankTest(final NaNStrategy nanStrategy,
                                   final TiesStrategy tiesStrategy) {
@@ -248,8 +245,7 @@ public class WilcoxonSignedRankTest {
         final double z = (Wmin - ES - 0.5) / FastMath.sqrt(VarS);
 
         // No try-catch or advertised exception because args are valid
-        // pass a null rng to avoid unneeded overhead as we will not sample from this distribution
-        final NormalDistribution standardNormal = new NormalDistribution(null, 0, 1);
+        final NormalDistribution standardNormal = new NormalDistribution(0, 1);
 
         return 2*standardNormal.cumulativeProbability(z);
     }
