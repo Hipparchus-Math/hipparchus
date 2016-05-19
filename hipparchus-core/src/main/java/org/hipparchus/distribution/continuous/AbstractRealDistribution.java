@@ -50,6 +50,9 @@ public abstract class AbstractRealDistribution
         this.solverAbsoluteAccuracy = solverAbsoluteAccuracy;
     }
 
+    /**
+     * Create a real distribution with default solver absolute accuracy.
+     */
     protected AbstractRealDistribution() {
         this.solverAbsoluteAccuracy = DEFAULT_SOLVER_ABSOLUTE_ACCURACY;
     }
