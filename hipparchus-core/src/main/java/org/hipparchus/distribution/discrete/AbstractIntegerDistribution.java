@@ -22,7 +22,6 @@ import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -36,16 +35,6 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
 
     /** Serializable version identifier */
     private static final long serialVersionUID = 20160320L;
-
-    /** RNG instance used to generate samples from the distribution. */
-    protected final RandomGenerator random;
-
-    /**
-     * @param rng Random number generator.
-     */
-    protected AbstractIntegerDistribution(RandomGenerator rng) {
-        random = rng;
-    }
 
     /**
      * {@inheritDoc}
@@ -152,43 +141,6 @@ public abstract class AbstractIntegerDistribution implements IntegerDistribution
             }
         }
         return upper;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void reseedRandomGenerator(long seed) {
-        random.setSeed(seed);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * The default implementation uses the
-     * <a href="http://en.wikipedia.org/wiki/Inverse_transform_sampling">
-     * inversion method</a>.
-     */
-    @Override
-    public int sample() {
-        return inverseCumulativeProbability(random.nextDouble());
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * The default implementation generates the sample by calling
-     * {@link #sample()} in a loop.
-     */
-    @Override
-    public int[] sample(int sampleSize) {
-        if (sampleSize <= 0) {
-            throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.NUMBER_OF_SAMPLES, sampleSize);
-        }
-        int[] out = new int[sampleSize];
-        for (int i = 0; i < sampleSize; i++) {
-            out[i] = sample();
-        }
-        return out;
     }
 
     /**

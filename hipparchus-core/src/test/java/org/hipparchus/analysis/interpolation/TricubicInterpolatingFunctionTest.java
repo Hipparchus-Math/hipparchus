@@ -17,10 +17,8 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.TrivariateFunction;
-import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -378,16 +376,12 @@ public final class TricubicInterpolatingFunctionTest {
             }
         }
 
-        final RandomGenerator rng = new Well19937c(1234567L);
-        final UniformRealDistribution distX = new UniformRealDistribution(rng, xValues[0], xValues[xValues.length - 1]);
-        final UniformRealDistribution distY = new UniformRealDistribution(rng, yValues[0], yValues[yValues.length - 1]);
-        final UniformRealDistribution distZ = new UniformRealDistribution(rng, zValues[0], zValues[zValues.length - 1]);
-
+        final RandomDataGenerator gen = new RandomDataGenerator(1234567L);
         double sumError = 0;
         for (int i = 0; i < numberOfSamples; i++) {
-            currentX = distX.sample();
-            currentY = distY.sample();
-            currentZ = distZ.sample();
+            currentX = gen.nextUniform(xValues[0], xValues[xValues.length - 1]);
+            currentY = gen.nextUniform(yValues[0], yValues[yValues.length - 1]);
+            currentZ = gen.nextUniform(zValues[0], zValues[zValues.length - 1]);
             expected = f.value(currentX, currentY, currentZ);
 
             actual = interpolation.value(currentX, currentY, currentZ);

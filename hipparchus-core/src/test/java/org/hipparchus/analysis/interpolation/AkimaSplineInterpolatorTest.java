@@ -20,11 +20,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -210,14 +208,12 @@ public class AkimaSplineInterpolatorTest
             assertTrue( Precision.equals( expected, actual ) );
         }
 
-        final RandomGenerator rng = new Well19937c( 1234567L ); // "tol" depends on the seed.
-        final UniformRealDistribution distX =
-            new UniformRealDistribution( rng, xValues[0], xValues[xValues.length - 1] );
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(1234567L);
 
         double sumError = 0;
         for ( int i = 0; i < numberOfSamples; i++ )
         {
-            currentX = distX.sample();
+            currentX = randomDataGenerator.nextUniform(xValues[0], xValues[xValues.length - 1]);
             expected = f.value( currentX );
             actual = interpolation.value( currentX );
             sumError += FastMath.abs( actual - expected );

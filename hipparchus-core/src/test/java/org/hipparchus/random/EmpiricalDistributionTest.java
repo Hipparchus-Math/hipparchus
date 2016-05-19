@@ -244,23 +244,6 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     }
 
     @Test
-    public void testGeneratorConfig() {
-        double[] testData = {0, 1, 2, 3, 4};
-        RandomGenerator generator = new RandomAdaptorTest.ConstantGenerator(0.5);
-
-        EmpiricalDistribution dist = new EmpiricalDistribution(5, generator);
-        dist.load(testData);
-        for (int i = 0; i < 5; i++) {
-            Assert.assertEquals(2.0, dist.getNextValue(), 0d);
-        }
-
-        // Verify no NPE with null generator argument
-        dist = new EmpiricalDistribution(5, (RandomGenerator) null);
-        dist.load(testData);
-        dist.getNextValue();
-    }
-
-    @Test
     public void testReSeed() throws Exception {
         empiricalDistribution.load(url);
         empiricalDistribution.reSeed(100);
@@ -431,7 +414,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         dist.load(data);
         dist.reseedRandomGenerator(1000);
         for (int i = 0; i < 1000; i++) {
-            final double dev = dist.sample();
+            final double dev = dist.getNextValue();
             Assert.assertTrue(dev < 1);
             Assert.assertTrue(dev > 0);
         }
@@ -447,7 +430,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         dist.load(data);
         dist.reseedRandomGenerator(1000);
         for (int i = 0; i < 1000; i++) {
-            final double dev = dist.sample();
+            final double dev = dist.getNextValue();
             Assert.assertTrue(dev == 0 || dev == 1);
         }
         Assert.assertEquals(0.5, dist.cumulativeProbability(0), Double.MIN_VALUE);
@@ -490,7 +473,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         // Bin masses concentrated on 2, 5, 8, 11, 14 <- effectively discrete uniform distribution over these
         double[] values = {2d, 5d, 8d, 11d, 14d};
         for (int i = 0; i < 20; i++) {
-            Assert.assertTrue(Arrays.binarySearch(values, dist.sample()) >= 0);
+            Assert.assertTrue(Arrays.binarySearch(values, dist.getNextValue()) >= 0);
         }
         final double tol = 10E-12;
         Assert.assertEquals(0.0, dist.cumulativeProbability(1), tol);
@@ -517,7 +500,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         final double bounds[] = {3d, 6d, 9d, 12d};
         final double tol = 10E-12;
         for (int i = 0; i < 20; i++) {
-            final double v = dist.sample();
+            final double v = dist.getNextValue();
             // Make sure v is not in the excluded range between bins - that is (bounds[i], bounds[i] + 1)
             for (int j = 0; j < bounds.length; j++) {
                 Assert.assertFalse(v > bounds[j] + tol && v < bounds[j] + 1 - tol);
@@ -564,7 +547,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         }
         @Override
         protected RealDistribution getKernel(StreamingStatistics bStats) {
-            return new UniformRealDistribution(randomData.getRandomGenerator(), bStats.getMin(), bStats.getMax());
+            return new UniformRealDistribution(bStats.getMin(), bStats.getMax());
         }
     }
 }

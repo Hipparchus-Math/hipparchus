@@ -19,11 +19,7 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
 import java.awt.geom.Point2D;
 
-import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.continuous.NormalDistribution;
-import org.hipparchus.distribution.continuous.UniformRealDistribution;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well44497b;
+import org.hipparchus.random.RandomDataGenerator;
 
 /**
  * Factory for generating a cloud of points that approximate a straight line.
@@ -33,10 +29,14 @@ public class RandomStraightLinePointGenerator {
     private final double slope;
     /** Intercept. */
     private final double intercept;
-    /** RNG for the x-coordinate. */
-    private final RealDistribution x;
-    /** RNG for the error on the y-coordinate. */
-    private final RealDistribution error;
+    /** Lowest value of the x-coordinate. */
+    private final double lo;
+    /** Highest value of the x-coordinate. */
+    private final double hi;
+    /** Standard deviation on the y-coordinate of the point. */
+    private final double sigma;
+    /** Source of random data */
+    private final RandomDataGenerator randomDataGenerator;
 
     /**
      * The generator will create a cloud of points whose x-coordinates
@@ -61,11 +61,12 @@ public class RandomStraightLinePointGenerator {
                                             double lo,
                                             double hi,
                                             long seed) {
-        final RandomGenerator rng = new Well44497b(seed);
+        randomDataGenerator = new RandomDataGenerator(seed);
         slope = a;
         intercept = b;
-        error = new NormalDistribution(rng, 0, sigma);
-        x = new UniformRealDistribution(rng, lo, hi);
+        this.lo = lo;
+        this.hi = hi;
+        this.sigma = sigma;
     }
 
     /**
@@ -88,9 +89,9 @@ public class RandomStraightLinePointGenerator {
      * @return a point.
      */
     private Point2D.Double create() {
-        final double abscissa = x.sample();
+        final double abscissa = randomDataGenerator.nextUniform(lo, hi);
         final double yModel = slope * abscissa + intercept;
-        final double ordinate = yModel + error.sample();
+        final double ordinate = yModel + randomDataGenerator.nextNormal(0, sigma);
 
         return new Point2D.Double(abscissa, ordinate);
     }

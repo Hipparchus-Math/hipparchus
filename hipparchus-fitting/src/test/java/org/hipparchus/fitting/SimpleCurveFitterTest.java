@@ -21,10 +21,7 @@ import java.util.Random;
 import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
-import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.continuous.UniformRealDistribution;
-import org.hipparchus.fitting.SimpleCurveFitter;
-import org.hipparchus.fitting.WeightedObservedPoints;
+import org.hipparchus.random.RandomDataGenerator;
 import org.junit.Test;
 
 /**
@@ -34,8 +31,7 @@ public class SimpleCurveFitterTest {
     @Test
     public void testPolynomialFit() {
         final Random randomizer = new Random(53882150042L);
-        final RealDistribution rng = new UniformRealDistribution(-100, 100);
-        rng.reseedRandomGenerator(64925784252L);
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(64925784252L);
 
         final double[] coeff = { 12.9, -3.4, 2.1 }; // 12.9 - 3.4 x + 2.1 x^2
         final PolynomialFunction f = new PolynomialFunction(coeff);
@@ -43,7 +39,7 @@ public class SimpleCurveFitterTest {
         // Collect data from a known polynomial.
         final WeightedObservedPoints obs = new WeightedObservedPoints();
         for (int i = 0; i < 100; i++) {
-            final double x = rng.sample();
+            final double x = randomDataGenerator.nextUniform(-100, 100);
             obs.add(x, f.value(x) + 0.1 * randomizer.nextGaussian());
         }
 

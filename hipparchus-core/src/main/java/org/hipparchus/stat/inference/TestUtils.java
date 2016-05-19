@@ -473,14 +473,6 @@ public class TestUtils  {
         return KS_TEST.approximateP(d, n, m);
     }
 
-    /**
-     * @see KolmogorovSmirnovTest#monteCarloP(double, int, int, boolean, int)
-     */
-    public static double monteCarloP(double d, int n, int m, boolean strict, int iterations) {
-        return KS_TEST.monteCarloP(d, n, m, strict, iterations);
-    }
-
-
     // CHECKSTYLE: resume JavadocMethodCheck
 
 }

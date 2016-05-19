@@ -18,8 +18,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -47,32 +45,13 @@ public class GumbelDistribution extends AbstractRealDistribution {
 
     /**
      * Build a new instance.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param mu location parameter
      * @param beta scale parameter (must be positive)
      * @throws MathIllegalArgumentException if {@code beta <= 0}
      */
     public GumbelDistribution(double mu, double beta) {
-        this(new Well19937c(), mu, beta);
-    }
-
-    /**
-     * Build a new instance.
-     *
-     * @param rng Random number generator
-     * @param mu location parameter
-     * @param beta scale parameter (must be positive)
-     * @throws MathIllegalArgumentException if {@code beta <= 0}
-     */
-    public GumbelDistribution(RandomGenerator rng, double mu, double beta) {
-        super(rng);
+        super();
 
         if (beta <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE, beta);

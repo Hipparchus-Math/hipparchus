@@ -132,8 +132,7 @@ public class BinomialProportion {
         final int numberOfSuccesses = (int) (numberOfTrials * probabilityOfSuccess);
 
         final FDistribution distributionLowerBound =
-                new FDistribution(null,
-                                  2 * (numberOfTrials - numberOfSuccesses + 1),
+                new FDistribution(2 * (numberOfTrials - numberOfSuccesses + 1),
                                   2 * numberOfSuccesses);
 
         if (numberOfSuccesses > 0) {
@@ -144,8 +143,7 @@ public class BinomialProportion {
         }
 
         final FDistribution distributionUpperBound =
-                new FDistribution(null,
-                                  2 * (numberOfSuccesses + 1),
+                new FDistribution(2 * (numberOfSuccesses + 1),
                                   2 * (numberOfTrials - numberOfSuccesses));
 
         if (numberOfSuccesses > 0) {

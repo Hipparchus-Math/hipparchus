@@ -21,14 +21,8 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.hipparchus.distribution.EnumeratedDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.util.FastMath;
-import org.hipparchus.util.Pair;
 import org.junit.Test;
 
 /**
@@ -166,34 +160,6 @@ public class EnumeratedRealDistributionTest {
         assertTrue(testDistribution.isSupportConnected());
     }
 
-    /**
-     * Tests sampling.
-     */
-    @Test
-    public void testSample() {
-        final int n = 1000000;
-        testDistribution.reseedRandomGenerator(-334759360); // fixed seed
-        final double[] samples = testDistribution.sample(n);
-        assertEquals(n, samples.length);
-        double sum = 0;
-        double sumOfSquares = 0;
-        for (int i = 0; i < samples.length; i++) {
-            sum += samples[i];
-            sumOfSquares += samples[i] * samples[i];
-        }
-        assertEquals(testDistribution.getNumericalMean(),
-                     sum / n, 1e-2);
-        assertEquals(testDistribution.getNumericalVariance(),
-                     sumOfSquares / n - FastMath.pow(sum / n, 2), 1e-2);
-    }
-
-    @Test
-    public void testIssue942() {
-        List<Pair<Object,Double>> list = new ArrayList<Pair<Object, Double>>();
-        list.add(new Pair<Object, Double>(new Object() {}, new Double(0)));
-        list.add(new Pair<Object, Double>(new Object() {}, new Double(1)));
-        assertEquals(1, new EnumeratedDistribution<Object>(list).sample(1).length);
-    }
 
     @Test
     public void testIssue1065() {

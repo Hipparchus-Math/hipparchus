@@ -19,7 +19,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
 
@@ -79,54 +78,18 @@ public class ParetoDistribution extends AbstractRealDistribution {
     }
 
     /**
-     * Create a Pareto distribution using the specified scale, shape and
-     * inverse cumulative distribution accuracy.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
-     *
-     * @param scale the scale parameter of this distribution
-     * @param shape the shape parameter of this distribution
-     * @param inverseCumAccuracy Inverse cumulative probability accuracy.
-     * @throws MathIllegalArgumentException if {@code scale <= 0} or {@code shape <= 0}.
-     */
-    public ParetoDistribution(double scale, double shape, double inverseCumAccuracy)
-        throws MathIllegalArgumentException {
-        this(new Well19937c(), scale, shape, inverseCumAccuracy);
-    }
-
-    /**
      * Creates a Pareto distribution.
      *
-     * @param rng Random number generator.
-     * @param scale Scale parameter of this distribution.
-     * @param shape Shape parameter of this distribution.
-     * @throws MathIllegalArgumentException if {@code scale <= 0} or {@code shape <= 0}.
-     */
-    public ParetoDistribution(RandomGenerator rng, double scale, double shape)
-        throws MathIllegalArgumentException {
-        this(rng, scale, shape, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Creates a Pareto distribution.
-     *
-     * @param rng Random number generator.
      * @param scale Scale parameter of this distribution.
      * @param shape Shape parameter of this distribution.
      * @param inverseCumAccuracy Inverse cumulative probability accuracy.
      * @throws MathIllegalArgumentException if {@code scale <= 0} or {@code shape <= 0}.
      */
-    public ParetoDistribution(RandomGenerator rng,
-                              double scale,
+    public ParetoDistribution(double scale,
                               double shape,
                               double inverseCumAccuracy)
         throws MathIllegalArgumentException {
-        super(rng, inverseCumAccuracy);
+        super(inverseCumAccuracy);
 
         if (scale <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SCALE, scale);
@@ -274,12 +237,5 @@ public class ParetoDistribution extends AbstractRealDistribution {
     @Override
     public boolean isSupportConnected() {
         return true;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public double sample()  {
-        final double n = random.nextDouble();
-        return scale / FastMath.pow(n, 1 / shape);
     }
 }

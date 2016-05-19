@@ -20,10 +20,7 @@ import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Gamma;
-import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -61,13 +58,6 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
 
     /**
      * Creates a new Poisson distribution with specified mean.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param p the Poisson mean
      * @throws MathIllegalArgumentException if {@code p <= 0}.
@@ -79,13 +69,6 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
     /**
      * Creates a new Poisson distribution with specified mean, convergence
      * criterion and maximum number of iterations.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param p Poisson mean.
      * @param epsilon Convergence criterion for cumulative probabilities.
@@ -95,27 +78,6 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
      */
     public PoissonDistribution(double p, double epsilon, int maxIterations)
     throws MathIllegalArgumentException {
-        this(new Well19937c(), p, epsilon, maxIterations);
-    }
-
-    /**
-     * Creates a new Poisson distribution with specified mean, convergence
-     * criterion and maximum number of iterations.
-     *
-     * @param rng Random number generator.
-     * @param p Poisson mean.
-     * @param epsilon Convergence criterion for cumulative probabilities.
-     * @param maxIterations the maximum number of iterations for cumulative
-     * probabilities.
-     * @throws MathIllegalArgumentException if {@code p <= 0}.
-     */
-    public PoissonDistribution(RandomGenerator rng,
-                               double p,
-                               double epsilon,
-                               int maxIterations)
-    throws MathIllegalArgumentException {
-        super(rng);
-
         if (p <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.MEAN, p);
         }
@@ -124,8 +86,8 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
         this.maxIterations = maxIterations;
 
         // Use the same RNG instance as the parent class.
-        normal      = new NormalDistribution(rng, p, FastMath.sqrt(p));
-        exponential = new ExponentialDistribution(rng, 1);
+        normal      = new NormalDistribution(p, FastMath.sqrt(p));
+        exponential = new ExponentialDistribution(1);
     }
 
     /**
@@ -270,121 +232,5 @@ public class PoissonDistribution extends AbstractIntegerDistribution {
     @Override
     public boolean isSupportConnected() {
         return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     * <p>
-     * <strong>Algorithm Description</strong>:
-     * <ul>
-     *  <li>For small means, uses simulation of a Poisson process
-     *   using Uniform deviates, as described
-     *   <a href="http://mathaa.epfl.ch/cours/PMMI2001/interactive/rng7.htm"> here</a>.
-     *   The Poisson process (and hence value returned) is bounded by 1000 * mean.
-     *  </li>
-     *  <li>For large means, uses the rejection algorithm described in
-     *   <blockquote>
-     *    Devroye, Luc. (1981).<i>The Computer Generation of Poisson Random Variables</i><br>
-     *    <strong>Computing</strong> vol. 26 pp. 197-207.<br>
-     *   </blockquote>
-     *  </li>
-     * </ul>
-     * </p>
-     *
-     * @return a random value.
-     */
-    @Override
-    public int sample() {
-        return (int) FastMath.min(nextPoisson(mean), Integer.MAX_VALUE);
-    }
-
-    /**
-     * @param meanPoisson Mean of the Poisson distribution.
-     * @return the next sample.
-     */
-    private long nextPoisson(double meanPoisson) {
-        final double pivot = 40.0d;
-        if (meanPoisson < pivot) {
-            double p = FastMath.exp(-meanPoisson);
-            long n = 0;
-            double r = 1.0d;
-            double rnd = 1.0d;
-
-            while (n < 1000 * meanPoisson) {
-                rnd = random.nextDouble();
-                r *= rnd;
-                if (r >= p) {
-                    n++;
-                } else {
-                    return n;
-                }
-            }
-            return n;
-        } else {
-            final double lambda = FastMath.floor(meanPoisson);
-            final double lambdaFractional = meanPoisson - lambda;
-            final double logLambda = FastMath.log(lambda);
-            final double logLambdaFactorial = CombinatoricsUtils.factorialLog((int) lambda);
-            final long y2 = lambdaFractional < Double.MIN_VALUE ? 0 : nextPoisson(lambdaFractional);
-            final double delta = FastMath.sqrt(lambda * FastMath.log(32 * lambda / FastMath.PI + 1));
-            final double halfDelta = delta / 2;
-            final double twolpd = 2 * lambda + delta;
-            final double a1 = FastMath.sqrt(FastMath.PI * twolpd) * FastMath.exp(1 / (8 * lambda));
-            final double a2 = (twolpd / delta) * FastMath.exp(-delta * (1 + delta) / twolpd);
-            final double aSum = a1 + a2 + 1;
-            final double p1 = a1 / aSum;
-            final double p2 = a2 / aSum;
-            final double c1 = 1 / (8 * lambda);
-
-            double x = 0;
-            double y = 0;
-            double v = 0;
-            int a = 0;
-            double t = 0;
-            double qr = 0;
-            double qa = 0;
-            for (;;) {
-                final double u = random.nextDouble();
-                if (u <= p1) {
-                    final double n = random.nextGaussian();
-                    x = n * FastMath.sqrt(lambda + halfDelta) - 0.5d;
-                    if (x > delta || x < -lambda) {
-                        continue;
-                    }
-                    y = x < 0 ? FastMath.floor(x) : FastMath.ceil(x);
-                    final double e = exponential.sample();
-                    v = -e - (n * n / 2) + c1;
-                } else {
-                    if (u > p1 + p2) {
-                        y = lambda;
-                        break;
-                    } else {
-                        x = delta + (twolpd / delta) * exponential.sample();
-                        y = FastMath.ceil(x);
-                        v = -exponential.sample() - delta * (x + 1) / twolpd;
-                    }
-                }
-                a = x < 0 ? 1 : 0;
-                t = y * (y + 1) / (2 * lambda);
-                if (v < -t && a == 0) {
-                    y = lambda + y;
-                    break;
-                }
-                qr = t * ((2 * y + 1) / (6 * lambda) - 1);
-                qa = qr - (t * t) / (3 * (lambda + a * (y + 1)));
-                if (v < qa) {
-                    y = lambda + y;
-                    break;
-                }
-                if (v > qr) {
-                    continue;
-                }
-                if (v < y * logLambda - CombinatoricsUtils.factorialLog((int) (y + lambda)) + logLambdaFactorial) {
-                    y = lambda + y;
-                    break;
-                }
-            }
-            return y2 + (long) y;
-        }
     }
 }

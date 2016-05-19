@@ -19,8 +19,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -44,35 +42,13 @@ public class WeibullDistribution extends AbstractRealDistribution {
 
     /**
      * Create a Weibull distribution with the given shape and scale.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param alpha Shape parameter.
      * @param beta Scale parameter.
      * @throws MathIllegalArgumentException if {@code alpha <= 0} or {@code beta <= 0}.
      */
     public WeibullDistribution(double alpha, double beta) {
-        this(new Well19937c(), alpha, beta);
-    }
-
-    /**
-     * Creates a Weibull distribution.
-     *
-     * @param rng Random number generator.
-     * @param alpha Shape parameter.
-     * @param beta Scale parameter.
-     * @throws MathIllegalArgumentException if {@code alpha <= 0} or {@code beta <= 0}.
-     */
-    public WeibullDistribution(RandomGenerator rng,
-                               double alpha,
-                               double beta)
-        throws MathIllegalArgumentException {
-        super(rng);
+        super();
 
         if (alpha <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SHAPE,

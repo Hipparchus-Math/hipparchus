@@ -20,10 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.continuous.NormalDistribution;
-import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -192,19 +189,18 @@ public abstract class UnivariateStatisticAbstractTest {
 
         // Fill weights array with random int values between 1 and 5
         int[] intWeights = new int[len];
-        final IntegerDistribution weightDist = new UniformIntegerDistribution(1, 5);
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
         for (int i = 0; i < len; i++) {
-            intWeights[i] = weightDist.sample();
+            intWeights[i] = randomDataGenerator.nextInt(1, 5);
             weights[i] = intWeights[i];
         }
 
         // Fill values array with random data from N(mu, sigma)
         // and fill valuesList with values from values array with
         // values[i] repeated weights[i] times, each i
-        final RealDistribution valueDist = new NormalDistribution(mu, sigma);
         List<Double> valuesList = new ArrayList<Double>();
         for (int i = 0; i < len; i++) {
-            double value = valueDist.sample();
+            double value = randomDataGenerator.nextNormal(mu, sigma);
             values[i] = value;
             for (int j = 0; j < intWeights[i]; j++) {
                 valuesList.add(new Double(value));

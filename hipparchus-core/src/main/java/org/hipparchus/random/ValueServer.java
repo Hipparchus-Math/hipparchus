@@ -85,7 +85,7 @@ public class ValueServer {
     /** File pointer for REPLAY_MODE. */
     private BufferedReader filePointer = null;
 
-    /** RandomDataImpl to use for random data generation. */
+    /** RandomDataGenerator to use for random data generation. */
     private final RandomDataGenerator randomData;
 
     // Data generation modes ======================================
@@ -200,7 +200,7 @@ public class ValueServer {
      * @throws MathIllegalArgumentException if URL contains no data
      */
     public void computeDistribution(int binCount) throws NullArgumentException, IOException, MathIllegalArgumentException {
-        empiricalDistribution = new EmpiricalDistribution(binCount, randomData.getRandomGenerator());
+        empiricalDistribution = new EmpiricalDistribution(binCount, randomData);
         empiricalDistribution.load(valuesFileURL);
         mu = empiricalDistribution.getSampleStats().getMean();
         sigma = empiricalDistribution.getSampleStats().getStandardDeviation();
@@ -349,7 +349,7 @@ public class ValueServer {
      * used to generate random data.
      */
     public void reSeed(long seed) {
-        randomData.reSeed(seed);
+        randomData.setSeed(seed);
     }
 
     //------------- private methods ---------------------------------
@@ -437,7 +437,7 @@ public class ValueServer {
      * @throws MathIllegalArgumentException if the underlying random generator throws one
      */
     private double getNextGaussian() throws MathIllegalArgumentException {
-        return randomData.nextGaussian(mu, sigma);
+        return randomData.nextNormal(mu, sigma);
     }
 
 }

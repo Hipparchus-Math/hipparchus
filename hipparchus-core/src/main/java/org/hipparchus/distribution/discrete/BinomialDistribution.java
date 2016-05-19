@@ -18,8 +18,6 @@ package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -41,13 +39,6 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
     /**
      * Create a binomial distribution with the given number of trials and
      * probability of success.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param trials Number of trials.
      * @param p Probability of success.
@@ -55,23 +46,6 @@ public class BinomialDistribution extends AbstractIntegerDistribution {
      * @throws MathIllegalArgumentException if {@code p < 0} or {@code p > 1}.
      */
     public BinomialDistribution(int trials, double p) {
-        this(new Well19937c(), trials, p);
-    }
-
-    /**
-     * Creates a binomial distribution.
-     *
-     * @param rng Random number generator.
-     * @param trials Number of trials.
-     * @param p Probability of success.
-     * @throws MathIllegalArgumentException if {@code trials < 0}.
-     * @throws MathIllegalArgumentException if {@code p < 0} or {@code p > 1}.
-     */
-    public BinomialDistribution(RandomGenerator rng,
-                                int trials,
-                                double p) {
-        super(rng);
-
         if (trials < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_TRIALS,
                                            trials);

@@ -22,7 +22,6 @@ import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.stat.Frequency;
 import org.hipparchus.stat.LongFrequency;
 import org.hipparchus.stat.inference.KolmogorovSmirnovTest;
 import org.hipparchus.util.FastMath;
@@ -69,26 +68,6 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
     public void setUp() {
         generator = makeGenerator();
     }
-
-    // Omit secureXxx tests, since they do not use the provided generator
-    @Override
-    public void testNextSecureLongIAE() {}
-    @Override
-    public void testNextSecureLongNegativeToPositiveRange() {}
-    @Override
-    public void testNextSecureLongNegativeRange() {}
-    @Override
-    public void testNextSecureLongPositiveRange() {}
-    @Override
-    public void testNextSecureIntIAE() {}
-    @Override
-    public void testNextSecureIntNegativeToPositiveRange() {}
-    @Override
-    public void testNextSecureIntNegativeRange() {}
-    @Override
-    public void testNextSecureIntPositiveRange() {}
-    @Override
-    public void testNextSecureHex() {}
 
     @Test
     /**

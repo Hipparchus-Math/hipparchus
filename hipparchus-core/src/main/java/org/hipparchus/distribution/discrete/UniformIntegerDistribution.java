@@ -19,7 +19,6 @@ package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 
 /**
@@ -53,24 +52,6 @@ public class UniformIntegerDistribution extends AbstractIntegerDistribution {
      */
     public UniformIntegerDistribution(int lower, int upper)
         throws MathIllegalArgumentException {
-        this(new Well19937c(), lower, upper);
-    }
-
-    /**
-     * Creates a new uniform integer distribution using the given lower and
-     * upper bounds (both inclusive).
-     *
-     * @param rng Random number generator.
-     * @param lower Lower bound (inclusive) of this distribution.
-     * @param upper Upper bound (inclusive) of this distribution.
-     * @throws MathIllegalArgumentException if {@code lower > upper}.
-     */
-    public UniformIntegerDistribution(RandomGenerator rng,
-                                      int lower,
-                                      int upper)
-        throws MathIllegalArgumentException {
-        super(rng);
-
         if (lower > upper) {
             throw new MathIllegalArgumentException(
                             LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
@@ -160,26 +141,5 @@ public class UniformIntegerDistribution extends AbstractIntegerDistribution {
     @Override
     public boolean isSupportConnected() {
         return true;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public int sample() {
-        final int max = (upper - lower) + 1;
-        if (max <= 0) {
-            // The range is too wide to fit in a positive int (larger
-            // than 2^31); as it covers more than half the integer range,
-            // we use a simple rejection method.
-            while (true) {
-                final int r = random.nextInt();
-                if (r >= lower &&
-                    r <= upper) {
-                    return r;
-                }
-            }
-        } else {
-            // We can shift the range and directly generate a positive int.
-            return lower + random.nextInt(max);
-        }
     }
 }

@@ -140,27 +140,4 @@ public interface IntegerDistribution {
      */
     boolean isSupportConnected();
 
-    /**
-     * Reseed the random generator used to generate samples.
-     *
-     * @param seed the new seed
-     */
-    void reseedRandomGenerator(long seed);
-
-    /**
-     * Generate a random value sampled from this distribution.
-     *
-     * @return a random value
-     */
-    int sample();
-
-    /**
-     * Generate a random sample from the distribution.
-     *
-     * @param sampleSize the number of random values to generate
-     * @return an array representing the random sample
-     * @throws org.hipparchus.exception.MathIllegalArgumentException
-     * if {@code sampleSize} is not positive
-     */
-    int[] sample(int sampleSize);
 }

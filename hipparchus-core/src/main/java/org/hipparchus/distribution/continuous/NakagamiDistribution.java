@@ -18,7 +18,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
@@ -59,27 +58,6 @@ public class NakagamiDistribution extends AbstractRealDistribution {
 
     /**
      * Build a new instance.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
-     *
-     * @param mu shape parameter
-     * @param omega scale parameter (must be positive)
-     * @param inverseAbsoluteAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
-     * @throws MathIllegalArgumentException if {@code mu < 0.5}
-     * @throws MathIllegalArgumentException if {@code omega <= 0}
-     */
-    public NakagamiDistribution(double mu, double omega, double inverseAbsoluteAccuracy) {
-        this(new Well19937c(), mu, omega, inverseAbsoluteAccuracy);
-    }
-
-    /**
-     * Build a new instance.
      *
      * @param rng Random number generator
      * @param mu shape parameter
@@ -89,11 +67,10 @@ public class NakagamiDistribution extends AbstractRealDistribution {
      * @throws MathIllegalArgumentException if {@code mu < 0.5}
      * @throws MathIllegalArgumentException if {@code omega <= 0}
      */
-    public NakagamiDistribution(RandomGenerator rng,
-                                double mu,
+    public NakagamiDistribution(double mu,
                                 double omega,
                                 double inverseAbsoluteAccuracy) {
-        super(rng, inverseAbsoluteAccuracy);
+        super(inverseAbsoluteAccuracy);
 
         if (mu < 0.5) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,

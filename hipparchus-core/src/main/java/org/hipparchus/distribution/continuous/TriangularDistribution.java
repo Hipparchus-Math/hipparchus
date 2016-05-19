@@ -19,8 +19,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -43,13 +41,6 @@ public class TriangularDistribution extends AbstractRealDistribution {
     /**
      * Creates a triangular real distribution using the given lower limit,
      * upper limit, and mode.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param a Lower limit of this distribution (inclusive).
      * @param b Upper limit of this distribution (inclusive).
@@ -59,25 +50,7 @@ public class TriangularDistribution extends AbstractRealDistribution {
      */
     public TriangularDistribution(double a, double c, double b)
         throws MathIllegalArgumentException {
-        this(new Well19937c(), a, c, b);
-    }
-
-    /**
-     * Creates a triangular distribution.
-     *
-     * @param rng Random number generator.
-     * @param a Lower limit of this distribution (inclusive).
-     * @param b Upper limit of this distribution (inclusive).
-     * @param c Mode of this distribution.
-     * @throws MathIllegalArgumentException if {@code a >= b} or if {@code c > b}.
-     * @throws MathIllegalArgumentException if {@code c < a}.
-     */
-    public TriangularDistribution(RandomGenerator rng,
-                                  double a,
-                                  double c,
-                                  double b)
-        throws MathIllegalArgumentException {
-        super(rng);
+        super();
 
         if (a >= b) {
             throw new MathIllegalArgumentException(

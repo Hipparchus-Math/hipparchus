@@ -17,8 +17,6 @@
 package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Erf;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -43,33 +41,17 @@ public class LevyDistribution extends AbstractRealDistribution {
 
     /**
      * Build a new instance.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param mu location parameter
      * @param c scale parameter
      */
     public LevyDistribution(final double mu, final double c) {
-        this(new Well19937c(), mu, c);
-    }
-
-    /**
-     * Creates a LevyDistribution.
-     * @param rng random generator to be used for sampling
-     * @param mu location
-     * @param c scale parameter
-     */
-    public LevyDistribution(final RandomGenerator rng, final double mu, final double c) {
-        super(rng);
+        super();
         this.mu    = mu;
         this.c     = c;
         this.halfC = 0.5 * c;
     }
+
 
     /** {@inheritDoc}
     * <p>

@@ -18,7 +18,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
@@ -110,16 +109,9 @@ public class GammaDistribution extends AbstractRealDistribution {
         this(shape, scale, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
+
     /**
-     * Creates a new gamma distribution with specified values of the shape and
-     * scale parameters.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
+     * Creates a Gamma distribution.
      *
      * @param shape the shape parameter
      * @param scale the scale parameter
@@ -129,43 +121,11 @@ public class GammaDistribution extends AbstractRealDistribution {
      * @throws MathIllegalArgumentException if {@code shape <= 0} or
      * {@code scale <= 0}.
      */
-    public GammaDistribution(double shape, double scale, double inverseCumAccuracy)
-        throws MathIllegalArgumentException {
-        this(new Well19937c(), shape, scale, inverseCumAccuracy);
-    }
-
-    /**
-     * Creates a Gamma distribution.
-     *
-     * @param rng Random number generator.
-     * @param shape the shape parameter
-     * @param scale the scale parameter
-     * @throws MathIllegalArgumentException if {@code shape <= 0} or
-     * {@code scale <= 0}.
-     */
-    public GammaDistribution(RandomGenerator rng, double shape, double scale)
-        throws MathIllegalArgumentException {
-        this(rng, shape, scale, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Creates a Gamma distribution.
-     *
-     * @param rng Random number generator.
-     * @param shape the shape parameter
-     * @param scale the scale parameter
-     * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
-     * @throws MathIllegalArgumentException if {@code shape <= 0} or
-     * {@code scale <= 0}.
-     */
-    public GammaDistribution(final RandomGenerator rng,
-                             final double shape,
+    public GammaDistribution(final double shape,
                              final double scale,
                              final double inverseCumAccuracy)
         throws MathIllegalArgumentException {
-        super(rng, inverseCumAccuracy);
+        super(inverseCumAccuracy);
 
         if (shape <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SHAPE, shape);
@@ -382,86 +342,5 @@ public class GammaDistribution extends AbstractRealDistribution {
     @Override
     public boolean isSupportConnected() {
         return true;
-    }
-
-    /**
-     * This implementation uses the following algorithms:
-     * <p>
-     * For 0 < shape < 1: <br/>
-     * Ahrens, J. H. and Dieter, U., <i>Computer methods for
-     * sampling from gamma, beta, Poisson and binomial distributions.</i>
-     * Computing, 12, 223-246, 1974.
-     * <p>
-     * For shape >= 1: <br/>
-     * Marsaglia and Tsang, <i>A Simple Method for Generating
-     * Gamma Variables.</i> ACM Transactions on Mathematical Software,
-     * Volume 26 Issue 3, September, 2000.
-     *
-     * @return random value sampled from the Gamma(shape, scale) distribution
-     */
-    @Override
-    public double sample()  {
-        if (shape < 1) {
-            // [1]: p. 228, Algorithm GS
-
-            while (true) {
-                // Step 1:
-                final double u = random.nextDouble();
-                final double bGS = 1 + shape / FastMath.E;
-                final double p = bGS * u;
-
-                if (p <= 1) {
-                    // Step 2:
-
-                    final double x = FastMath.pow(p, 1 / shape);
-                    final double u2 = random.nextDouble();
-
-                    if (u2 > FastMath.exp(-x)) {
-                        // Reject
-                        continue;
-                    } else {
-                        return scale * x;
-                    }
-                } else {
-                    // Step 3:
-
-                    final double x = -1 * FastMath.log((bGS - p) / shape);
-                    final double u2 = random.nextDouble();
-
-                    if (u2 > FastMath.pow(x, shape - 1)) {
-                        // Reject
-                        continue;
-                    } else {
-                        return scale * x;
-                    }
-                }
-            }
-        }
-
-        // Now shape >= 1
-
-        final double d = shape - 0.333333333333333333;
-        final double c = 1 / (3 * FastMath.sqrt(d));
-
-        while (true) {
-            final double x = random.nextGaussian();
-            final double v = (1 + c * x) * (1 + c * x) * (1 + c * x);
-
-            if (v <= 0) {
-                continue;
-            }
-
-            final double x2 = x * x;
-            final double u = random.nextDouble();
-
-            // Squeeze
-            if (u < 1 - 0.0331 * x2 * x2) {
-                return scale * d * v;
-            }
-
-            if (FastMath.log(u) < 0.5 * x2 + d * (1 - v + FastMath.log(v))) {
-                return scale * d * v;
-            }
-        }
     }
 }

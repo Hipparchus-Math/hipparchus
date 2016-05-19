@@ -20,15 +20,8 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.linear.ArrayRealVector;
-import org.hipparchus.linear.EigenDecomposition;
-import org.hipparchus.linear.LUDecomposition;
-import org.hipparchus.linear.MatrixUtils;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
-import org.hipparchus.linear.TriDiagonalTransformer;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
@@ -466,8 +459,8 @@ public class EigenDecompositionTest {
     @Ignore
     public void testNormalDistributionUnsymmetricMatrix() {
         for (int run = 0; run < 100; run++) {
-            Random r = new Random(System.currentTimeMillis());
-            NormalDistribution dist = new NormalDistribution(0.0, r.nextDouble() * 5);
+            final Random r = new Random(System.currentTimeMillis());
+            final RandomDataGenerator gen = new RandomDataGenerator(100);
 
             // matrix size
             int size = r.nextInt(20) + 4;
@@ -475,7 +468,7 @@ public class EigenDecompositionTest {
             double[][] data = new double[size][size];
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    data[i][j] = dist.sample();
+                    data[i][j] = gen.nextNormal(0.0, r.nextDouble() * 5);
                 }
             }
 

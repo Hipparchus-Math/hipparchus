@@ -185,7 +185,6 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      */
     private EmpiricalDistribution(int binCount,
                                   RandomDataGenerator randomData) {
-        super(randomData.getRandomGenerator());
         if (binCount <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED,
                                                    binCount, 0);
@@ -455,7 +454,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
             throw new MathIllegalStateException(LocalizedCoreFormats.DISTRIBUTION_NOT_LOADED);
         }
 
-        return sample();
+        return inverseCumulativeProbability(randomData.nextDouble());
     }
 
     /**
@@ -541,7 +540,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * @param seed random generator seed
      */
     public void reSeed(long seed) {
-        randomData.reSeed(seed);
+        randomData.setSeed(seed);
     }
 
     // Distribution methods ---------------------------
@@ -702,9 +701,8 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     /**
      * {@inheritDoc}
      */
-    @Override
     public void reseedRandomGenerator(long seed) {
-        randomData.reSeed(seed);
+        randomData.setSeed(seed);
     }
 
     /**
@@ -775,8 +773,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         if (bStats.getN() == 1 || bStats.getVariance() == 0) {
             return new ConstantRealDistribution(bStats.getMean());
         } else {
-            return new NormalDistribution(randomData.getRandomGenerator(),
-                                          bStats.getMean(),
+            return new NormalDistribution(bStats.getMean(),
                                           bStats.getStandardDeviation());
         }
     }

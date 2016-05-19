@@ -16,9 +16,6 @@
  */
 package org.hipparchus.distribution.continuous;
 
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
-
 /**
  * Implementation of the chi-squared distribution.
  *
@@ -43,14 +40,8 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
     /**
      * Create a Chi-Squared distribution with the given degrees of freedom and
      * inverse cumulative probability accuracy.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
+     * @param rng Random number generator.
      * @param degreesOfFreedom Degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates (defaults to
@@ -58,33 +49,7 @@ public class ChiSquaredDistribution extends AbstractRealDistribution {
      */
     public ChiSquaredDistribution(double degreesOfFreedom,
                                   double inverseCumAccuracy) {
-        this(new Well19937c(), degreesOfFreedom, inverseCumAccuracy);
-    }
-
-    /**
-     * Create a Chi-Squared distribution with the given degrees of freedom.
-     *
-     * @param rng Random number generator.
-     * @param degreesOfFreedom Degrees of freedom.
-     */
-    public ChiSquaredDistribution(RandomGenerator rng, double degreesOfFreedom) {
-        this(rng, degreesOfFreedom, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Create a Chi-Squared distribution with the given degrees of freedom and
-     * inverse cumulative probability accuracy.
-     *
-     * @param rng Random number generator.
-     * @param degreesOfFreedom Degrees of freedom.
-     * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates (defaults to
-     * {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
-     */
-    public ChiSquaredDistribution(RandomGenerator rng,
-                                  double degreesOfFreedom,
-                                  double inverseCumAccuracy) {
-        super(rng, inverseCumAccuracy);
+        super(inverseCumAccuracy);
 
         gamma = new GammaDistribution(degreesOfFreedom / 2, 2);
     }

@@ -34,8 +34,6 @@ import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.hipparchus.distribution.continuous.NormalDistribution;
-import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.clustering.CentroidCluster;
 import org.hipparchus.clustering.Cluster;
 import org.hipparchus.clustering.Clusterable;
@@ -44,7 +42,10 @@ import org.hipparchus.clustering.DBSCANClusterer;
 import org.hipparchus.clustering.DoublePoint;
 import org.hipparchus.clustering.FuzzyKMeansClusterer;
 import org.hipparchus.clustering.KMeansPlusPlusClusterer;
+import org.hipparchus.distribution.continuous.NormalDistribution;
+import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.random.RandomAdaptor;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.SobolSequenceGenerator;
 import org.hipparchus.random.Well19937c;
@@ -73,8 +74,8 @@ public class ClusterAlgorithmComparison {
             Vector2D outerCircle = new Vector2D(FastMath.cos(angle), FastMath.sin(angle));
             Vector2D innerCircle = outerCircle.scalarMultiply(factor);
 
-            points.add(outerCircle.add(generateNoiseVector(dist)));
-            points.add(innerCircle.add(generateNoiseVector(dist)));
+            points.add(outerCircle.add(generateNoiseVector(random, noise)));
+            points.add(innerCircle.add(generateNoiseVector(random, noise)));
         }
 
         if (shuffle) {
@@ -85,7 +86,6 @@ public class ClusterAlgorithmComparison {
     }
 
     public static List<Vector2D> makeMoons(int samples, boolean shuffle, double noise, RandomGenerator random) {
-        NormalDistribution dist = new NormalDistribution(random, 0.0, noise);
 
         int nSamplesOut = samples / 2;
         int nSamplesIn = samples - nSamplesOut;
@@ -95,13 +95,13 @@ public class ClusterAlgorithmComparison {
         double step = range / (nSamplesOut / 2.0);
         for (double angle = 0; angle < range; angle += step) {
             Vector2D outerCircle = new Vector2D(FastMath.cos(angle), FastMath.sin(angle));
-            points.add(outerCircle.add(generateNoiseVector(dist)));
+            points.add(outerCircle.add(generateNoiseVector(random, noise)));
         }
 
         step = range / (nSamplesIn / 2.0);
         for (double angle = 0; angle < range; angle += step) {
             Vector2D innerCircle = new Vector2D(1 - FastMath.cos(angle), 1 - FastMath.sin(angle) - 0.5);
-            points.add(innerCircle.add(generateNoiseVector(dist)));
+            points.add(innerCircle.add(generateNoiseVector(random, noise)));
         }
 
         if (shuffle) {
@@ -114,7 +114,8 @@ public class ClusterAlgorithmComparison {
     public static List<Vector2D> makeBlobs(int samples, int centers, double clusterStd,
                                            double min, double max, boolean shuffle, RandomGenerator random) {
 
-        NormalDistribution dist = new NormalDistribution(random, 0.0, clusterStd);
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(random);
+        //NormalDistribution dist = new NormalDistribution(random, 0.0, clusterStd);
 
         double range = max - min;
         Vector2D[] centerPoints = new Vector2D[centers];
@@ -135,7 +136,8 @@ public class ClusterAlgorithmComparison {
         List<Vector2D> points = new ArrayList<Vector2D>();
         for (int i = 0; i < centers; i++) {
             for (int j = 0; j < nSamplesPerCenter[i]; j++) {
-                Vector2D point = new Vector2D(dist.sample(), dist.sample());
+                Vector2D point = new Vector2D(randomDataGenerator.nextNormal(0, clusterStd),
+                                              randomDataGenerator.nextNormal(0, clusterStd));
                 points.add(point.add(centerPoints[i]));
             }
         }
@@ -162,8 +164,9 @@ public class ClusterAlgorithmComparison {
         return points;
     }
 
-    public static Vector2D generateNoiseVector(NormalDistribution distribution) {
-        return new Vector2D(distribution.sample(), distribution.sample());
+    public static Vector2D generateNoiseVector(RandomGenerator randomGenerator, double noise) {
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(randomGenerator);
+        return new Vector2D(randomDataGenerator.nextNormal(0, noise), randomDataGenerator.nextNormal(0, noise));
     }
 
     public static List<DoublePoint> normalize(final List<Vector2D> input, double minX, double maxX, double minY, double maxY) {

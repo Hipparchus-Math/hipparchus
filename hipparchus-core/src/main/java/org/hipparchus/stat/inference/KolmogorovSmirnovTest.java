@@ -22,8 +22,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.continuous.EnumeratedRealDistribution;
-import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -34,9 +32,8 @@ import org.hipparchus.linear.Array2DRowFieldMatrix;
 import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.random.JDKRandomGenerator;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -124,41 +121,31 @@ public class KolmogorovSmirnovTest {
     /** Convergence criterion for the sums in #pelzGood(double, double, int)} */
     protected static final double PG_SUM_RELATIVE_ERROR = 1.0e-10;
 
-    /** No longer used. */
-    @Deprecated
-    protected static final int SMALL_SAMPLE_PRODUCT = 200;
-
     /**
      * When product of sample sizes exceeds this value, 2-sample K-S test uses asymptotic
      * distribution to compute the p-value.
      */
     protected static final int LARGE_SAMPLE_PRODUCT = 10000;
 
-    /** Default number of iterations used by {@link #monteCarloP(double, int, int, boolean, int)}.
-     *  Deprecated as of version 3.6, as this method is no longer needed. */
-    @Deprecated
-    protected static final int MONTE_CARLO_ITERATIONS = 1000000;
-
-    /** Random data generator used by {@link #monteCarloP(double, int, int, boolean, int)} */
-    private final RandomGenerator rng;
+    /**
+     * RandomDataGenerator used by {@link #bootstrap(double[], double[], int)} or to generate jitter to break ties in the data.
+     */
+    private final RandomDataGenerator gen = new RandomDataGenerator();
 
     /**
-     * Construct a KolmogorovSmirnovTest instance with a default random data generator.
+     * Construct a KolmogorovSmirnovTest instance.
      */
     public KolmogorovSmirnovTest() {
-        rng = new Well19937c();
+        super();
     }
 
     /**
-     * Construct a KolmogorovSmirnovTest with the provided random data generator.
-     * The #monteCarloP(double, int, int, boolean, int) that uses the generator supplied to this
-     * constructor is deprecated as of version 3.6.
-     *
-     * @param rng random data generator used by {@link #monteCarloP(double, int, int, boolean, int)}
+     * Construct a KolmogorovSmirnovTest instance providing a seed for the PRNG used by the {@link #bootstrap(double[], double[], int)}
+     * method.
      */
-    @Deprecated
-    public KolmogorovSmirnovTest(RandomGenerator rng) {
-        this.rng = rng;
+    public KolmogorovSmirnovTest(long seed) {
+        super();
+        gen.setSeed(seed);
     }
 
     /**
@@ -413,7 +400,6 @@ public class KolmogorovSmirnovTest {
         final double[] combined = new double[xLength + yLength];
         System.arraycopy(x, 0, combined, 0, xLength);
         System.arraycopy(y, 0, combined, xLength, yLength);
-        final EnumeratedRealDistribution dist = new EnumeratedRealDistribution(rng, combined);
         final long d = integralKolmogorovSmirnovStatistic(x, y);
         int greaterCount = 0;
         int equalCount = 0;
@@ -421,8 +407,8 @@ public class KolmogorovSmirnovTest {
         double[] curY;
         long curD;
         for (int i = 0; i < iterations; i++) {
-            curX = dist.sample(xLength);
-            curY = dist.sample(yLength);
+            curX = resample(combined, xLength);
+            curY = resample(combined, yLength);
             curD = integralKolmogorovSmirnovStatistic(curX, curY);
             if (curD > d) {
                 greaterCount++;
@@ -446,6 +432,22 @@ public class KolmogorovSmirnovTest {
      */
     public double bootstrap(double[] x, double[] y, int iterations) {
         return bootstrap(x, y, iterations, true);
+    }
+
+    /**
+     * Return a bootstrap sample (with replacement) of size k from sample.
+     *
+     * @param sample array to sample from
+     * @param size of bootstrap sample
+     * @return bootstrap sample
+     */
+    private double[] resample(double[] sample, int k) {
+        final int len = sample.length;
+        final double[] out = new double[k];
+        for (int i = 0; i < k; i++) {
+            out[i] = gen.nextInt(len);
+        }
+        return out;
     }
 
     /**
@@ -1043,76 +1045,6 @@ public class KolmogorovSmirnovTest {
     }
 
     /**
-     * Uses Monte Carlo simulation to approximate \(P(D_{n,m} > d)\) where \(D_{n,m}\) is the
-     * 2-sample Kolmogorov-Smirnov statistic. See
-     * {@link #kolmogorovSmirnovStatistic(double[], double[])} for the definition of \(D_{n,m}\).
-     * <p>
-     * The simulation generates {@code iterations} random partitions of {@code m + n} into an
-     * {@code n} set and an {@code m} set, computing \(D_{n,m}\) for each partition and returning
-     * the proportion of values that are greater than {@code d}, or greater than or equal to
-     * {@code d} if {@code strict} is {@code false}.
-     * </p>
-     *
-     * @param d D-statistic value
-     * @param n first sample size
-     * @param m second sample size
-     * @param iterations number of random partitions to generate
-     * @param strict whether or not the probability to compute is expressed as a strict inequality
-     * @return proportion of randomly generated m-n partitions of m + n that result in \(D_{n,m}\)
-     *         greater than (resp. greater than or equal to) {@code d}
-     */
-    public double monteCarloP(final double d, final int n, final int m, final boolean strict,
-                              final int iterations) {
-        return integralMonteCarloP(calculateIntegralD(d, n, m, strict), n, m, iterations);
-    }
-
-    /**
-     * Uses Monte Carlo simulation to approximate \(P(D_{n,m} >= d/(n*m))\) where \(D_{n,m}\) is the
-     * 2-sample Kolmogorov-Smirnov statistic.
-     * <p>
-     * Here d is the D-statistic represented as long value.
-     * The real D-statistic is obtained by dividing d by n*m.
-     * See also {@link #monteCarloP(double, int, int, boolean, int)}.
-     *
-     * @param d integral D-statistic
-     * @param n first sample size
-     * @param m second sample size
-     * @param iterations number of random partitions to generate
-     * @return proportion of randomly generated m-n partitions of m + n that result in \(D_{n,m}\)
-     *         greater than or equal to {@code d/(n*m))}
-     */
-    private double integralMonteCarloP(final long d, final int n, final int m, final int iterations) {
-
-        // ensure that nn is always the max of (n, m) to require fewer random numbers
-        final int nn = FastMath.max(n, m);
-        final int mm = FastMath.min(n, m);
-        final int sum = nn + mm;
-
-        int tail = 0;
-        final boolean b[] = new boolean[sum];
-        for (int i = 0; i < iterations; i++) {
-            fillBooleanArrayRandomlyWithFixedNumberTrueValues(b, nn, rng);
-            long curD = 0l;
-            for(int j = 0; j < b.length; ++j) {
-                if (b[j]) {
-                    curD += mm;
-                    if (curD >= d) {
-                        tail++;
-                        break;
-                    }
-                } else {
-                    curD -= nn;
-                    if (curD <= -d) {
-                        tail++;
-                        break;
-                    }
-                }
-            }
-        }
-        return (double) tail / iterations;
-    }
-
-    /**
      * If there are no ties in the combined dataset formed from x and y, this
      * method is a no-op.  If there are ties, a uniform random deviate in
      * (-minDelta / 2, minDelta / 2) - {0} is added to each value in x and y, where
@@ -1126,7 +1058,7 @@ public class KolmogorovSmirnovTest {
      * @param x first sample
      * @param y second sample
      */
-    private static void fixTies(double[] x, double[] y) {
+    private void fixTies(double[] x, double[] y) {
        final double[] values = MathArrays.unique(MathArrays.concatenate(x,y));
        if (values.length == x.length + y.length) {
            return;  // There are no ties
@@ -1147,16 +1079,15 @@ public class KolmogorovSmirnovTest {
 
        // Add jitter using a fixed seed (so same arguments always give same results),
        // low-initialization-overhead generator
-       final RealDistribution dist =
-               new UniformRealDistribution(new JDKRandomGenerator(100), -minDelta, minDelta);
+       gen.setSeed(100);
 
        // It is theoretically possible that jitter does not break ties, so repeat
        // until all ties are gone.  Bound the loop and throw MIE if bound is exceeded.
        int ct = 0;
        boolean ties = true;
        do {
-           jitter(x, dist);
-           jitter(y, dist);
+           jitter(x, minDelta);
+           jitter(y, minDelta);
            ties = hasTies(x, y);
            ct++;
        } while (ties && ct < 1000);
@@ -1189,18 +1120,18 @@ public class KolmogorovSmirnovTest {
     }
 
     /**
-     * Adds random jitter to {@code data} using deviates sampled from {@code dist}.
+     * Adds random jitter to {@code data} using uniform deviates between {@code -delta} and {@code delta}.
      * <p>
      * Note that jitter is applied in-place - i.e., the array
      * values are overwritten with the result of applying jitter.</p>
      *
      * @param data input/output data array - entries overwritten by the method
-     * @param dist probability distribution to sample for jitter values
+     * @param max magnitude of jitter
      * @throws NullPointerException if either of the parameters is null
      */
-    private static void jitter(double[] data, RealDistribution dist) {
+    private void jitter(double[] data, double delta) {
         for (int i = 0; i < data.length; i++) {
-            data[i] += dist.sample();
+            data[i] += gen.nextUniform(-delta, delta);
         }
     }
 

@@ -34,6 +34,7 @@ import org.hipparchus.distribution.continuous.LogNormalDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
@@ -671,35 +672,36 @@ public class PSquarePercentileTest extends
 //        doCalculatePercentile(50, data, 0.0001);
 //        doCalculatePercentile(95, data, 0.0001);
 
-        data = distribution.sample(LARGE);
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
+        data = randomDataGenerator.nextDeviates(distribution, LARGE);
         doCalculatePercentile(50, data, 0.001);
         doCalculatePercentile(95, data, 0.001);
 
-        data = distribution.sample(VERY_BIG);
+        data = randomDataGenerator.nextDeviates(distribution, VERY_BIG);
         doCalculatePercentile(50, data, 0.001);
         doCalculatePercentile(95, data, 0.001);
 
-        data = distribution.sample(BIG);
+        data = randomDataGenerator.nextDeviates(distribution, BIG);
         doCalculatePercentile(50, data, 0.001);
         doCalculatePercentile(95, data, 0.001);
 
-        data = distribution.sample(STANDARD);
+        data = randomDataGenerator.nextDeviates(distribution, STANDARD);
         doCalculatePercentile(50, data, 0.005);
         doCalculatePercentile(95, data, 0.005);
 
-        data = distribution.sample(MEDIUM);
+        data = randomDataGenerator.nextDeviates(distribution, MEDIUM);
         doCalculatePercentile(50, data, 0.005);
         doCalculatePercentile(95, data, 0.005);
 
-        data = distribution.sample(NOMINAL);
+        data = randomDataGenerator.nextDeviates(distribution, NOMINAL);
         doCalculatePercentile(50, data, 0.01);
         doCalculatePercentile(95, data, 0.01);
 
-        data = distribution.sample(SMALL);
+        data = randomDataGenerator.nextDeviates(distribution, SMALL);
         doCalculatePercentile(50, data, 0.01);
         doCalculatePercentile(95, data, 0.01);
 
-        data = distribution.sample(TINY);
+        data = randomDataGenerator.nextDeviates(distribution, TINY);
         doCalculatePercentile(50, data, 0.05);
         doCalculatePercentile(95, data, 0.05);
     }
@@ -709,8 +711,8 @@ public class PSquarePercentileTest extends
      */
     @Test
     public void testDistribution() {
-        doDistributionTest(new NormalDistribution(randomGenerator, 4000, 50));
-        doDistributionTest(new LogNormalDistribution(randomGenerator,4000, 50));
+        doDistributionTest(new NormalDistribution(4000, 50));
+        doDistributionTest(new LogNormalDistribution(4000, 50));
         // doDistributionTest((new ExponentialDistribution(4000));
         // doDistributionTest(new GammaDistribution(5d,1d),0.1);
     }

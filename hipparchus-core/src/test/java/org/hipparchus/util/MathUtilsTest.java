@@ -13,8 +13,6 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -93,12 +91,11 @@ public final class MathUtilsTest {
     public void testPermutedArrayHash() {
         double[] original = new double[10];
         double[] permuted = new double[10];
-        RandomDataGenerator random = new RandomDataGenerator();
+        RandomDataGenerator random = new RandomDataGenerator(100);
 
         // Generate 10 distinct random values
         for (int i = 0; i < 10; i++) {
-            final RealDistribution u = new UniformRealDistribution(i + 0.5, i + 0.75);
-            original[i] = u.sample();
+            original[i] = random.nextUniform(i + 0.5, i + 0.75);
         }
 
         // Generate a random permutation, making sure it is not the identity

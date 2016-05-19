@@ -19,8 +19,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -40,13 +38,6 @@ public class UniformRealDistribution extends AbstractRealDistribution {
     /**
      * Create a standard uniform real distribution with lower bound (inclusive)
      * equal to zero and upper bound (exclusive) equal to one.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      */
     public UniformRealDistribution() {
         this(0, 1);
@@ -55,13 +46,6 @@ public class UniformRealDistribution extends AbstractRealDistribution {
     /**
      * Create a uniform real distribution using the given lower and upper
      * bounds.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param lower Lower bound of this distribution (inclusive).
      * @param upper Upper bound of this distribution (exclusive).
@@ -69,22 +53,7 @@ public class UniformRealDistribution extends AbstractRealDistribution {
      */
     public UniformRealDistribution(double lower, double upper)
         throws MathIllegalArgumentException {
-        this(new Well19937c(), lower, upper);
-    }
-
-    /**
-     * Creates a uniform distribution.
-     *
-     * @param rng Random number generator.
-     * @param lower Lower bound of this distribution (inclusive).
-     * @param upper Upper bound of this distribution (exclusive).
-     * @throws MathIllegalArgumentException if {@code lower >= upper}.
-     */
-    public UniformRealDistribution(RandomGenerator rng,
-                                   double lower,
-                                   double upper)
-        throws MathIllegalArgumentException {
-        super(rng);
+        super();
         if (lower >= upper) {
             throw new MathIllegalArgumentException(
                             LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
@@ -185,10 +154,4 @@ public class UniformRealDistribution extends AbstractRealDistribution {
         return true;
     }
 
-    /** {@inheritDoc} */
-    @Override
-    public double sample()  {
-        final double u = random.nextDouble();
-        return u * upper + (1 - u) * lower;
-    }
 }

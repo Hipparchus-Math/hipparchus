@@ -17,9 +17,7 @@
 package org.hipparchus.distribution;
 
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -27,7 +25,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.MathArrays;
-import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Pair;
 
 /**
@@ -50,11 +47,6 @@ public class EnumeratedDistribution<T> implements Serializable {
 
     /** Serializable UID. */
     private static final long serialVersionUID = 20123308L;
-
-    /**
-     * RNG instance used to generate samples from the distribution.
-     */
-    protected final RandomGenerator random;
 
     /**
      * List of random variable values.
@@ -108,7 +100,6 @@ public class EnumeratedDistribution<T> implements Serializable {
      */
     public EnumeratedDistribution(final RandomGenerator rng, final List<Pair<T, Double>> pmf)
         throws MathIllegalArgumentException {
-        random = rng;
 
         singletons = new ArrayList<T>(pmf.size());
         final double[] probs = new double[pmf.size()];
@@ -137,15 +128,6 @@ public class EnumeratedDistribution<T> implements Serializable {
             sum += probabilities[i];
             cumulativeProbabilities[i] = sum;
         }
-    }
-
-    /**
-     * Reseed the random generator used to generate samples.
-     *
-     * @param seed the new seed
-     */
-    public void reseedRandomGenerator(long seed) {
-        random.setSeed(seed);
     }
 
     /**
@@ -191,92 +173,6 @@ public class EnumeratedDistribution<T> implements Serializable {
         }
 
         return samples;
-    }
-
-    /**
-     * Generate a random value sampled from this distribution.
-     *
-     * @return a random value.
-     */
-    public T sample() {
-        final double randomValue = random.nextDouble();
-
-        int index = Arrays.binarySearch(cumulativeProbabilities, randomValue);
-        if (index < 0) {
-            index = -index-1;
-        }
-
-        if (index >= 0 &&
-            index < probabilities.length &&
-            randomValue < cumulativeProbabilities[index]) {
-            return singletons.get(index);
-        }
-
-        /* This should never happen, but it ensures we will return a correct
-         * object in case there is some floating point inequality problem
-         * wrt the cumulative probabilities. */
-        return singletons.get(singletons.size() - 1);
-    }
-
-    /**
-     * Generate a random sample from the distribution.
-     *
-     * @param sampleSize the number of random values to generate.
-     * @return an array representing the random sample.
-     * @throws MathIllegalArgumentException if {@code sampleSize} is not
-     * positive.
-     */
-    public Object[] sample(int sampleSize) throws MathIllegalArgumentException {
-        if (sampleSize <= 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES,
-                    sampleSize);
-        }
-
-        final Object[] out = new Object[sampleSize];
-
-        for (int i = 0; i < sampleSize; i++) {
-            out[i] = sample();
-        }
-
-        return out;
-
-    }
-
-    /**
-     * Generate a random sample from the distribution.
-     * <p>
-     * If the requested samples fit in the specified array, it is returned
-     * therein. Otherwise, a new array is allocated with the runtime type of
-     * the specified array and the size of this collection.
-     *
-     * @param sampleSize the number of random values to generate.
-     * @param array the array to populate.
-     * @return an array representing the random sample.
-     * @throws MathIllegalArgumentException if {@code sampleSize} is not positive.
-     * @throws org.hipparchus.exception.NullArgumentException if {@code array} is null
-     */
-    public T[] sample(int sampleSize, final T[] array) throws MathIllegalArgumentException {
-        if (sampleSize <= 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES, sampleSize);
-        }
-
-        MathUtils.checkNotNull(array, LocalizedCoreFormats.INPUT_ARRAY);
-
-        T[] out;
-        if (array.length < sampleSize) {
-            @SuppressWarnings("unchecked") // safe as both are of type T
-            final T[] unchecked = (T[]) Array.newInstance(array.getClass().getComponentType(), sampleSize);
-            out = unchecked;
-        } else {
-            out = array;
-        }
-
-        for (int i = 0; i < sampleSize; i++) {
-            out[i] = sample();
-        }
-
-        return out;
-
     }
 
 }

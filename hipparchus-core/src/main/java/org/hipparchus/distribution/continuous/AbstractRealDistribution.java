@@ -23,7 +23,6 @@ import org.hipparchus.analysis.solvers.UnivariateSolverUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -40,30 +39,19 @@ public abstract class AbstractRealDistribution
     /** Serializable version identifier */
     private static final long serialVersionUID = 20160320L;
 
-    /**
-     * RNG instance used to generate samples from the distribution.
-     */
-    protected final RandomGenerator random;
-
     /** Inverse cumulative probability accuracy. */
     private final double solverAbsoluteAccuracy;
 
     /**
-     * @param rng Random number generator.
-     */
-    protected AbstractRealDistribution(final RandomGenerator rng) {
-        this(rng, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * @param rng Random number generator.
      * @param solverAbsoluteAccuracy the absolute accuracy to use when
      * computing the inverse cumulative probability.
      */
-    protected AbstractRealDistribution(final RandomGenerator rng,
-                                       final double solverAbsoluteAccuracy) {
-        this.random = rng;
+    protected AbstractRealDistribution(double solverAbsoluteAccuracy) {
         this.solverAbsoluteAccuracy = solverAbsoluteAccuracy;
+    }
+
+    protected AbstractRealDistribution() {
+        this.solverAbsoluteAccuracy = DEFAULT_SOLVER_ABSOLUTE_ACCURACY;
     }
 
     /**
@@ -214,44 +202,6 @@ public abstract class AbstractRealDistribution
      */
     protected double getSolverAbsoluteAccuracy() {
         return solverAbsoluteAccuracy;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void reseedRandomGenerator(long seed) {
-        random.setSeed(seed);
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * The default implementation uses the
-     * <a href="http://en.wikipedia.org/wiki/Inverse_transform_sampling">
-     * inversion method.
-     * </a>
-     */
-    @Override
-    public double sample() {
-        return inverseCumulativeProbability(random.nextDouble());
-    }
-
-    /**
-     * {@inheritDoc}
-     *
-     * The default implementation generates the sample by calling
-     * {@link #sample()} in a loop.
-     */
-    @Override
-    public double[] sample(int sampleSize) {
-        if (sampleSize <= 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES,
-                    sampleSize);
-        }
-        double[] out = new double[sampleSize];
-        for (int i = 0; i < sampleSize; i++) {
-            out[i] = sample();
-        }
-        return out;
     }
 
     /**

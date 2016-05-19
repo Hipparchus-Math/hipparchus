@@ -21,29 +21,14 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import org.hipparchus.Retry;
 import org.hipparchus.RetryRunner;
 import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.continuous.BetaDistribution;
-import org.hipparchus.distribution.continuous.CauchyDistribution;
-import org.hipparchus.distribution.continuous.ChiSquaredDistribution;
 import org.hipparchus.distribution.continuous.ExponentialDistribution;
-import org.hipparchus.distribution.continuous.FDistribution;
 import org.hipparchus.distribution.continuous.GammaDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
-import org.hipparchus.distribution.continuous.TDistribution;
-import org.hipparchus.distribution.continuous.WeibullDistribution;
-import org.hipparchus.distribution.discrete.BinomialDistribution;
-import org.hipparchus.distribution.discrete.BinomialDistributionTest;
-import org.hipparchus.distribution.discrete.HypergeometricDistribution;
-import org.hipparchus.distribution.discrete.HypergeometricDistributionTest;
-import org.hipparchus.distribution.discrete.PascalDistribution;
-import org.hipparchus.distribution.discrete.PascalDistributionTest;
 import org.hipparchus.distribution.discrete.PoissonDistribution;
-import org.hipparchus.distribution.discrete.ZipfDistribution;
-import org.hipparchus.distribution.discrete.ZipfDistributionTest;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.stat.Frequency;
 import org.hipparchus.stat.LongFrequency;
 import org.hipparchus.stat.inference.ChiSquareTest;
@@ -60,8 +45,8 @@ import org.junit.runner.RunWith;
 public class RandomDataGeneratorTest {
 
     public RandomDataGeneratorTest() {
-        randomData = new RandomDataGenerator();
-        randomData.reSeed(1000);
+        randomData = new RandomDataGenerator(new Well19937c());
+        randomData.setSeed(100);
     }
 
     protected final long smallSampleSize = 1000;
@@ -247,122 +232,6 @@ public class RandomDataGeneratorTest {
         Assert.assertTrue(ratio > 0.99999);
     }
 
-    @Test
-    public void testNextSecureLongIAE() {
-        try {
-            randomData.nextSecureLong(4, 3);
-            Assert.fail("MathIllegalArgumentException expected");
-        } catch (MathIllegalArgumentException ex) {
-            // ignored
-        }
-    }
-
-    @Test
-    @Retry(3)
-    public void testNextSecureLongNegativeToPositiveRange() {
-        for (int i = 0; i < 5; i++) {
-            checkNextSecureLongUniform(-3, 5);
-            checkNextSecureLongUniform(-3, 6);
-        }
-    }
-
-    @Test
-    @Retry(3)
-    public void testNextSecureLongNegativeRange() {
-        for (int i = 0; i < 5; i++) {
-            checkNextSecureLongUniform(-7, -4);
-            checkNextSecureLongUniform(-15, -2);
-        }
-    }
-
-    @Test
-    @Retry(3)
-    public void testNextSecureLongPositiveRange() {
-        for (int i = 0; i < 5; i++) {
-            checkNextSecureLongUniform(0, 3);
-            checkNextSecureLongUniform(2, 12);
-        }
-    }
-
-    private void checkNextSecureLongUniform(int min, int max) {
-        final LongFrequency freq = new LongFrequency();
-        for (int i = 0; i < smallSampleSize; i++) {
-            final long value = randomData.nextSecureLong(min, max);
-            Assert.assertTrue("nextLong range", (value >= min) && (value <= max));
-            freq.addValue(value);
-        }
-        final int len = max - min + 1;
-        final long[] observed = new long[len];
-        for (int i = 0; i < len; i++) {
-            observed[i] = freq.getCount(min + i);
-        }
-        final double[] expected = new double[len];
-        for (int i = 0; i < len; i++) {
-            expected[i] = 1d / len;
-        }
-
-        TestUtils.assertChiSquareAccept(expected, observed, 0.0001);
-    }
-
-    @Test
-    public void testNextSecureIntIAE() {
-        try {
-            randomData.nextSecureInt(4, 3);
-            Assert.fail("MathIllegalArgumentException expected");
-        } catch (MathIllegalArgumentException ex) {
-            // ignored
-        }
-    }
-
-    @Test
-    @Retry(3)
-    public void testNextSecureIntNegativeToPositiveRange() {
-        for (int i = 0; i < 5; i++) {
-            checkNextSecureIntUniform(-3, 5);
-            checkNextSecureIntUniform(-3, 6);
-        }
-    }
-
-    @Test
-    @Retry(3)
-    public void testNextSecureIntNegativeRange() {
-        for (int i = 0; i < 5; i++) {
-            checkNextSecureIntUniform(-7, -4);
-            checkNextSecureIntUniform(-15, -2);
-        }
-    }
-
-    @Test
-    @Retry(3)
-    public void testNextSecureIntPositiveRange() {
-        for (int i = 0; i < 5; i++) {
-            checkNextSecureIntUniform(0, 3);
-            checkNextSecureIntUniform(2, 12);
-        }
-    }
-
-    private void checkNextSecureIntUniform(int min, int max) {
-        final LongFrequency freq = new LongFrequency();
-        for (int i = 0; i < smallSampleSize; i++) {
-            final int value = randomData.nextSecureInt(min, max);
-            Assert.assertTrue("nextInt range", (value >= min) && (value <= max));
-            freq.addValue(value);
-        }
-        final int len = max - min + 1;
-        final long[] observed = new long[len];
-        for (int i = 0; i < len; i++) {
-            observed[i] = freq.getCount(min + i);
-        }
-        final double[] expected = new double[len];
-        for (int i = 0; i < len; i++) {
-            expected[i] = 1d / len;
-        }
-
-        TestUtils.assertChiSquareAccept(expected, observed, 0.0001);
-    }
-
-
-
     /**
      * Make sure that empirical distribution of random Poisson(4)'s has P(X <=
      * 5) close to actual cumulative Poisson probability and that nextPoisson
@@ -393,7 +262,7 @@ public class RandomDataGeneratorTest {
         final int len = 5;
         PoissonDistribution poissonDistribution = new PoissonDistribution(mean);
         LongFrequency f = new LongFrequency();
-        randomData.reSeed(1000);
+        randomData.setSeed(1000);
         for (int i = 0; i < largeSampleSize; i++) {
             f.addValue(randomData.nextPoisson(mean));
         }
@@ -603,55 +472,6 @@ public class RandomDataGeneratorTest {
         TestUtils.assertChiSquareAccept(expected, observed, 0.001);
     }
 
-    /** test dispersion and failure modes for nextHex() */
-    @Test
-    @Retry(3)
-    public void testNextSecureHex() {
-        try {
-            randomData.nextSecureHexString(-1);
-            Assert.fail("negative length -- MathIllegalArgumentException expected");
-        } catch (MathIllegalArgumentException ex) {
-            // ignored
-        }
-        try {
-            randomData.nextSecureHexString(0);
-            Assert.fail("zero length -- MathIllegalArgumentException expected");
-        } catch (MathIllegalArgumentException ex) {
-            // ignored
-        }
-        String hexString = randomData.nextSecureHexString(3);
-        if (hexString.length() != 3) {
-            Assert.fail("incorrect length for generated string");
-        }
-        hexString = randomData.nextSecureHexString(1);
-        if (hexString.length() != 1) {
-            Assert.fail("incorrect length for generated string");
-        }
-        try {
-            hexString = randomData.nextSecureHexString(0);
-            Assert.fail("zero length requested -- expecting MathIllegalArgumentException");
-        } catch (MathIllegalArgumentException ex) {
-            // ignored
-        }
-        Frequency<String> f = new Frequency<>();
-        for (int i = 0; i < smallSampleSize; i++) {
-            hexString = randomData.nextSecureHexString(100);
-            if (hexString.length() != 100) {
-                Assert.fail("incorrect length for generated string");
-            }
-            for (int j = 0; j < hexString.length(); j++) {
-                f.addValue(hexString.substring(j, j + 1));
-            }
-        }
-        double[] expected = new double[16];
-        long[] observed = new long[16];
-        for (int i = 0; i < 16; i++) {
-            expected[i] = (double) smallSampleSize * 100 / 16;
-            observed[i] = f.getCount(hex[i]);
-        }
-        TestUtils.assertChiSquareAccept(expected, observed, 0.001);
-    }
-
     @Test
     public void testNextUniformIAE() {
         try {
@@ -761,16 +581,16 @@ public class RandomDataGeneratorTest {
     @Test
     public void testNextGaussian() {
         try {
-            randomData.nextGaussian(0, 0);
+            randomData.nextNormal(0, 0);
             Assert.fail("zero sigma -- MathIllegalArgumentException expected");
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
         double[] quartiles = TestUtils.getDistributionQuartiles(new NormalDistribution(0,1));
         long[] counts = new long[4];
-        randomData.reSeed(1000);
+        randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
-            double value = randomData.nextGaussian(0, 1);
+            double value = randomData.nextNormal(0, 1);
             TestUtils.updateCounts(value, counts, quartiles);
         }
         TestUtils.assertChiSquareAccept(expected, counts, 0.001);
@@ -797,7 +617,7 @@ public class RandomDataGeneratorTest {
         // Mean 1
         quartiles = TestUtils.getDistributionQuartiles(new ExponentialDistribution(1));
         counts = new long[4];
-        randomData.reSeed(1000);
+        randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextExponential(1);
             TestUtils.updateCounts(value, counts, quartiles);
@@ -807,7 +627,7 @@ public class RandomDataGeneratorTest {
         // Mean 5
         quartiles = TestUtils.getDistributionQuartiles(new ExponentialDistribution(5));
         counts = new long[4];
-        randomData.reSeed(1000);
+        randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextExponential(5);
             TestUtils.updateCounts(value, counts, quartiles);
@@ -818,50 +638,12 @@ public class RandomDataGeneratorTest {
     /** test reseeding, algorithm/provider games */
     @Test
     public void testConfig() {
-        randomData.reSeed(1000);
+        randomData.setSeed(1000);
         double v = randomData.nextUniform(0, 1);
-        randomData.reSeed();
+        randomData.setSeed(System.currentTimeMillis());
         Assert.assertTrue("different seeds", FastMath.abs(v - randomData.nextUniform(0, 1)) > 10E-12);
-        randomData.reSeed(1000);
+        randomData.setSeed(1000);
         Assert.assertEquals("same seeds", v, randomData.nextUniform(0, 1), 10E-12);
-        randomData.reSeedSecure(1000);
-        String hex = randomData.nextSecureHexString(40);
-        randomData.reSeedSecure();
-        Assert.assertTrue("different seeds", !hex.equals(randomData
-                .nextSecureHexString(40)));
-        randomData.reSeedSecure(1000);
-        Assert.assertTrue("same seeds", !hex
-                .equals(randomData.nextSecureHexString(40)));
-
-        /*
-         * remove this test back soon, since it takes about 4 seconds
-         *
-         * try { randomData.setSecureAlgorithm("SHA1PRNG","SUN"); } catch
-         * (NoSuchProviderException ex) { ; } Assert.assertTrue("different seeds",
-         * !hex.equals(randomData.nextSecureHexString(40))); try {
-         * randomData.setSecureAlgorithm("NOSUCHTHING","SUN");
-         * Assert.fail("expecting NoSuchAlgorithmException"); } catch
-         * (NoSuchProviderException ex) { ; } catch (NoSuchAlgorithmException
-         * ex) { ; }
-         *
-         * try { randomData.setSecureAlgorithm("SHA1PRNG","NOSUCHPROVIDER");
-         * Assert.fail("expecting NoSuchProviderException"); } catch
-         * (NoSuchProviderException ex) { ; }
-         */
-
-        // test reseeding without first using the generators
-        RandomDataGenerator rd = new RandomDataGenerator();
-        rd.reSeed(100);
-        rd.nextLong(1, 2);
-        RandomDataGenerator rd2 = new RandomDataGenerator();
-        rd2.reSeedSecure(2000);
-        rd2.nextSecureLong(1, 2);
-        rd = new RandomDataGenerator();
-        rd.reSeed();
-        rd.nextLong(1, 2);
-        rd2 = new RandomDataGenerator();
-        rd2.reSeedSecure();
-        rd2.nextSecureLong(1, 2);
     }
 
     /** tests for nextSample() sampling from Collection */
@@ -1015,45 +797,9 @@ public class RandomDataGeneratorTest {
     public void testNextBeta() {
         double[] quartiles = TestUtils.getDistributionQuartiles(new BetaDistribution(2,5));
         long[] counts = new long[4];
-        randomData.reSeed(1000);
+        randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextBeta(2, 5);
-            TestUtils.updateCounts(value, counts, quartiles);
-        }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
-    }
-
-    @Test
-    public void testNextCauchy() {
-        double[] quartiles = TestUtils.getDistributionQuartiles(new CauchyDistribution(1.2, 2.1));
-        long[] counts = new long[4];
-        randomData.reSeed(1000);
-        for (int i = 0; i < 1000; i++) {
-            double value = randomData.nextCauchy(1.2, 2.1);
-            TestUtils.updateCounts(value, counts, quartiles);
-        }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
-    }
-
-    @Test
-    public void testNextChiSquare() {
-        double[] quartiles = TestUtils.getDistributionQuartiles(new ChiSquaredDistribution(12));
-        long[] counts = new long[4];
-        randomData.reSeed(1000);
-        for (int i = 0; i < 1000; i++) {
-            double value = randomData.nextChiSquare(12);
-            TestUtils.updateCounts(value, counts, quartiles);
-        }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
-    }
-
-    @Test
-    public void testNextF() {
-        double[] quartiles = TestUtils.getDistributionQuartiles(new FDistribution(12, 5));
-        long[] counts = new long[4];
-        randomData.reSeed(1000);
-        for (int i = 0; i < 1000; i++) {
-            double value = randomData.nextF(12, 5);
             TestUtils.updateCounts(value, counts, quartiles);
         }
         TestUtils.assertChiSquareAccept(expected, counts, 0.001);
@@ -1067,7 +813,7 @@ public class RandomDataGeneratorTest {
         // Tests shape > 1, one case in the rejection sampling
         quartiles = TestUtils.getDistributionQuartiles(new GammaDistribution(4, 2));
         counts = new long[4];
-        randomData.reSeed(1000);
+        randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextGamma(4, 2);
             TestUtils.updateCounts(value, counts, quartiles);
@@ -1077,151 +823,12 @@ public class RandomDataGeneratorTest {
         // Tests shape <= 1, another case in the rejection sampling
         quartiles = TestUtils.getDistributionQuartiles(new GammaDistribution(0.3, 3));
         counts = new long[4];
-        randomData.reSeed(1000);
+        randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextGamma(0.3, 3);
             TestUtils.updateCounts(value, counts, quartiles);
         }
         TestUtils.assertChiSquareAccept(expected, counts, 0.001);
-    }
-
-    @Test
-    public void testNextT() {
-        double[] quartiles = TestUtils.getDistributionQuartiles(new TDistribution(10));
-        long[] counts = new long[4];
-        randomData.reSeed(1000);
-        for (int i = 0; i < 1000; i++) {
-            double value = randomData.nextT(10);
-            TestUtils.updateCounts(value, counts, quartiles);
-        }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
-    }
-
-    @Test
-    public void testNextWeibull() {
-        double[] quartiles = TestUtils.getDistributionQuartiles(new WeibullDistribution(1.2, 2.1));
-        long[] counts = new long[4];
-        randomData.reSeed(1000);
-        for (int i = 0; i < 1000; i++) {
-            double value = randomData.nextWeibull(1.2, 2.1);
-            TestUtils.updateCounts(value, counts, quartiles);
-        }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
-    }
-
-    @Test
-    public void testNextBinomial() {
-        BinomialDistributionTest testInstance = new BinomialDistributionTest();
-        int[] densityPoints = testInstance.makeDensityTestPoints();
-        double[] densityValues = testInstance.makeDensityTestValues();
-        int sampleSize = 1000;
-        int length = TestUtils.eliminateZeroMassPoints(densityPoints, densityValues);
-        BinomialDistribution distribution = (BinomialDistribution) testInstance.makeDistribution();
-        double[] expectedCounts = new double[length];
-        long[] observedCounts = new long[length];
-        for (int i = 0; i < length; i++) {
-            expectedCounts[i] = sampleSize * densityValues[i];
-        }
-        randomData.reSeed(1000);
-        for (int i = 0; i < sampleSize; i++) {
-          int value = randomData.nextBinomial(distribution.getNumberOfTrials(),
-                  distribution.getProbabilityOfSuccess());
-          for (int j = 0; j < length; j++) {
-              if (value == densityPoints[j]) {
-                  observedCounts[j]++;
-              }
-          }
-        }
-        TestUtils.assertChiSquareAccept(densityPoints, expectedCounts, observedCounts, .001);
-    }
-
-    @Test
-    public void testNextHypergeometric() {
-        HypergeometricDistributionTest testInstance = new HypergeometricDistributionTest();
-        int[] densityPoints = testInstance.makeDensityTestPoints();
-        double[] densityValues = testInstance.makeDensityTestValues();
-        int sampleSize = 1000;
-        int length = TestUtils.eliminateZeroMassPoints(densityPoints, densityValues);
-        HypergeometricDistribution distribution = (HypergeometricDistribution) testInstance.makeDistribution();
-        double[] expectedCounts = new double[length];
-        long[] observedCounts = new long[length];
-        for (int i = 0; i < length; i++) {
-            expectedCounts[i] = sampleSize * densityValues[i];
-        }
-        randomData.reSeed(1000);
-        for (int i = 0; i < sampleSize; i++) {
-          int value = randomData.nextHypergeometric(distribution.getPopulationSize(),
-                  distribution.getNumberOfSuccesses(), distribution.getSampleSize());
-          for (int j = 0; j < length; j++) {
-              if (value == densityPoints[j]) {
-                  observedCounts[j]++;
-              }
-          }
-        }
-        TestUtils.assertChiSquareAccept(densityPoints, expectedCounts, observedCounts, .001);
-    }
-
-    @Test
-    public void testNextPascal() {
-        PascalDistributionTest testInstance = new PascalDistributionTest();
-        int[] densityPoints = testInstance.makeDensityTestPoints();
-        double[] densityValues = testInstance.makeDensityTestValues();
-        int sampleSize = 1000;
-        int length = TestUtils.eliminateZeroMassPoints(densityPoints, densityValues);
-        PascalDistribution distribution = (PascalDistribution) testInstance.makeDistribution();
-        double[] expectedCounts = new double[length];
-        long[] observedCounts = new long[length];
-        for (int i = 0; i < length; i++) {
-            expectedCounts[i] = sampleSize * densityValues[i];
-        }
-        randomData.reSeed(1000);
-        for (int i = 0; i < sampleSize; i++) {
-          int value = randomData.nextPascal(distribution.getNumberOfSuccesses(), distribution.getProbabilityOfSuccess());
-          for (int j = 0; j < length; j++) {
-              if (value == densityPoints[j]) {
-                  observedCounts[j]++;
-              }
-          }
-        }
-        TestUtils.assertChiSquareAccept(densityPoints, expectedCounts, observedCounts, .001);
-    }
-
-    @Test
-    public void testNextZipf() {
-        ZipfDistributionTest testInstance = new ZipfDistributionTest();
-        int[] densityPoints = testInstance.makeDensityTestPoints();
-        double[] densityValues = testInstance.makeDensityTestValues();
-        int sampleSize = 1000;
-        int length = TestUtils.eliminateZeroMassPoints(densityPoints, densityValues);
-        ZipfDistribution distribution = (ZipfDistribution) testInstance.makeDistribution();
-        double[] expectedCounts = new double[length];
-        long[] observedCounts = new long[length];
-        for (int i = 0; i < length; i++) {
-            expectedCounts[i] = sampleSize * densityValues[i];
-        }
-        randomData.reSeed(1000);
-        for (int i = 0; i < sampleSize; i++) {
-          int value = randomData.nextZipf(distribution.getNumberOfElements(), distribution.getExponent());
-          for (int j = 0; j < length; j++) {
-              if (value == densityPoints[j]) {
-                  observedCounts[j]++;
-              }
-          }
-        }
-        TestUtils.assertChiSquareAccept(densityPoints, expectedCounts, observedCounts, .001);
-    }
-
-    @Test
-    /**
-     * MATH-720
-     */
-    public void testReseed() {
-        PoissonDistribution x = new PoissonDistribution(3.0);
-        x.reseedRandomGenerator(0);
-        final double u = x.sample();
-        PoissonDistribution y = new PoissonDistribution(3.0);
-        y.reseedRandomGenerator(0);
-        Assert.assertEquals(u, y.sample(), 0);
     }
 
 }

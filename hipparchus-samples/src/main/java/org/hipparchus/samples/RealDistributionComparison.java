@@ -245,11 +245,11 @@ public class RealDistributionComparison {
             RandomGenerator rng = new MersenneTwister(0);
             comp = createComponent("Levy", 0, 3,
                                    new String[] { "c=0.5", "c=1", "c=2", "c=4", "c=8" },
-                                   new LevyDistribution(rng, 0, 0.5),
-                                   new LevyDistribution(rng, 0, 1),
-                                   new LevyDistribution(rng, 0, 2),
-                                   new LevyDistribution(rng, 0, 4),
-                                   new LevyDistribution(rng, 0, 8));
+                                   new LevyDistribution(0, 0.5),
+                                   new LevyDistribution(0, 1),
+                                   new LevyDistribution(0, 2),
+                                   new LevyDistribution(0, 4),
+                                   new LevyDistribution(0, 8));
             container.add(comp, c);
 
             c.gridy++;

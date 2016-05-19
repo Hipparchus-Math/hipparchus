@@ -19,8 +19,6 @@ package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
 
 /**
@@ -44,13 +42,6 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
     /**
      * Construct a new hypergeometric distribution with the specified population
      * size, number of successes in the population, and sample size.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param populationSize Population size.
      * @param numberOfSuccesses Number of successes in the population.
@@ -62,28 +53,6 @@ public class HypergeometricDistribution extends AbstractIntegerDistribution {
      */
     public HypergeometricDistribution(int populationSize, int numberOfSuccesses, int sampleSize)
     throws MathIllegalArgumentException {
-        this(new Well19937c(), populationSize, numberOfSuccesses, sampleSize);
-    }
-
-    /**
-     * Creates a new hypergeometric distribution.
-     *
-     * @param rng Random number generator.
-     * @param populationSize Population size.
-     * @param numberOfSuccesses Number of successes in the population.
-     * @param sampleSize Sample size.
-     * @throws MathIllegalArgumentException if {@code numberOfSuccesses < 0}.
-     * @throws MathIllegalArgumentException if {@code populationSize <= 0}.
-     * @throws MathIllegalArgumentException if {@code numberOfSuccesses > populationSize},
-     * or {@code sampleSize > populationSize}.
-     */
-    public HypergeometricDistribution(RandomGenerator rng,
-                                      int populationSize,
-                                      int numberOfSuccesses,
-                                      int sampleSize)
-    throws MathIllegalArgumentException {
-        super(rng);
-
         if (populationSize <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.POPULATION_SIZE,
                                                    populationSize);

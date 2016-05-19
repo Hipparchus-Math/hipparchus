@@ -18,17 +18,12 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;
 import org.hipparchus.special.Gamma;
 import org.hipparchus.util.FastMath;
 
 /**
  * Implementation of Student's t-distribution.
- *
- * @see "<a href='http://en.wikipedia.org/wiki/Student&apos;s_t-distribution'>Student's t-distribution (Wikipedia)</a>"
- * @see "<a href='http://mathworld.wolfram.com/Studentst-Distribution.html'>Student's t-distribution (MathWorld)</a>"
  */
 public class TDistribution extends AbstractRealDistribution {
     /** Serializable version identifier */
@@ -40,13 +35,6 @@ public class TDistribution extends AbstractRealDistribution {
 
     /**
      * Create a t distribution using the given degrees of freedom.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param degreesOfFreedom Degrees of freedom.
      * @throws MathIllegalArgumentException if {@code degreesOfFreedom <= 0}
@@ -59,13 +47,6 @@ public class TDistribution extends AbstractRealDistribution {
     /**
      * Create a t distribution using the given degrees of freedom and the
      * specified inverse cumulative probability absolute accuracy.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param degreesOfFreedom Degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
@@ -75,36 +56,7 @@ public class TDistribution extends AbstractRealDistribution {
      */
     public TDistribution(double degreesOfFreedom, double inverseCumAccuracy)
         throws MathIllegalArgumentException {
-        this(new Well19937c(), degreesOfFreedom, inverseCumAccuracy);
-    }
-
-    /**
-     * Creates a t distribution.
-     *
-     * @param rng Random number generator.
-     * @param degreesOfFreedom Degrees of freedom.
-     * @throws MathIllegalArgumentException if {@code degreesOfFreedom <= 0}
-     */
-    public TDistribution(RandomGenerator rng, double degreesOfFreedom)
-        throws MathIllegalArgumentException {
-        this(rng, degreesOfFreedom, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Creates a t distribution.
-     *
-     * @param rng Random number generator.
-     * @param degreesOfFreedom Degrees of freedom.
-     * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates
-     * (defaults to {@link #DEFAULT_SOLVER_ABSOLUTE_ACCURACY}).
-     * @throws MathIllegalArgumentException if {@code degreesOfFreedom <= 0}
-     */
-    public TDistribution(RandomGenerator rng,
-                         double degreesOfFreedom,
-                         double inverseCumAccuracy)
-        throws MathIllegalArgumentException {
-        super(rng, inverseCumAccuracy);
+        super(inverseCumAccuracy);
 
         if (degreesOfFreedom <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DEGREES_OF_FREEDOM,

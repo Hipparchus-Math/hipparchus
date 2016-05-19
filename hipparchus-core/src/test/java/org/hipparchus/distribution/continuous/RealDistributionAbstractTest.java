@@ -17,11 +17,6 @@
 package org.hipparchus.distribution.continuous;
 
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -321,23 +316,6 @@ public abstract class RealDistributionAbstractTest {
     }
 
     /**
-     * Test sampling
-     */
-    @Test
-    public void testSampling() {
-        final int sampleSize = 1000;
-        distribution.reseedRandomGenerator(1000); // Use fixed seed
-        double[] sample = distribution.sample(sampleSize);
-        double[] quartiles = TestUtils.getDistributionQuartiles(distribution);
-        double[] expected = {250, 250, 250, 250};
-        long[] counts = new long[4];
-        for (int i = 0; i < sampleSize; i++) {
-            TestUtils.updateCounts(sample[i], counts, quartiles);
-        }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
-    }
-
-    /**
      * Verify that density integrals match the distribution.
      * The (filtered, sorted) cumulativeTestPoints array is used to source
      * integration limits. The integral of the density (estimated using a
@@ -374,24 +352,6 @@ public abstract class RealDistributionAbstractTest {
                                     d, integrationTestPoints.get(0),
                                     integrationTestPoints.get(i)), tol);
         }
-    }
-
-    @Test
-    public void testDistributionClone()
-        throws IOException,
-               ClassNotFoundException {
-        // Construct a distribution and initialize its internal random
-        // generator, using a fixed seed for deterministic results.
-        distribution.reseedRandomGenerator(123);
-        distribution.sample();
-
-        // Clone the distribution.
-        final RealDistribution cloned = deepClone();
-
-        // Make sure they still produce the same samples.
-        final double s1 = distribution.sample();
-        final double s2 = cloned.sample();
-        Assert.assertEquals(s1, s2, 0d);
     }
 
     //------------------ Getters / Setters for test instance data -----------
@@ -487,24 +447,4 @@ public abstract class RealDistributionAbstractTest {
         this.tolerance = tolerance;
     }
 
-    /**
-     * Serialization and deserialization loop of the {@link #distribution}.
-     */
-    private RealDistribution deepClone()
-        throws IOException,
-               ClassNotFoundException {
-        // Serialize to byte array.
-        final ByteArrayOutputStream bOut = new ByteArrayOutputStream();
-        final ObjectOutputStream oOut = new ObjectOutputStream(bOut);
-        oOut.writeObject(distribution);
-        final byte[] data = bOut.toByteArray();
-
-        // Deserialize from byte array.
-        final ByteArrayInputStream bIn = new ByteArrayInputStream(data);
-        final ObjectInputStream oIn = new ObjectInputStream(bIn);
-        final Object clone = oIn.readObject();
-        oIn.close();
-
-        return (RealDistribution) clone;
-    }
 }

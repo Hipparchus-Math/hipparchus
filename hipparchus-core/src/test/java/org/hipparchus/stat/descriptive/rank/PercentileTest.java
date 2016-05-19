@@ -26,8 +26,7 @@ import java.util.Arrays;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.random.JDKRandomGenerator;
-import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.UnivariateStatisticAbstractTest;
 import org.hipparchus.stat.descriptive.rank.Percentile.EstimationType;
@@ -538,10 +537,10 @@ public class PercentileTest extends UnivariateStatisticAbstractTest{
 
     @Test
     public void testStoredVsDirect() {
-        final RandomGenerator rand= new JDKRandomGenerator();
-        rand.setSeed(Long.MAX_VALUE);
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
+        final NormalDistribution normalDistribution = new NormalDistribution(4000, 50);
         for (final int sampleSize:sampleSizes) {
-            final double[] data = new NormalDistribution(rand,4000, 50).sample(sampleSize);
+            final double[] data = randomDataGenerator.nextDeviates(normalDistribution, sampleSize);
             for (final double p:new double[] {50d,95d}) {
                 for (final Percentile.EstimationType e : Percentile.EstimationType.values()) {
                     reset(p, e);

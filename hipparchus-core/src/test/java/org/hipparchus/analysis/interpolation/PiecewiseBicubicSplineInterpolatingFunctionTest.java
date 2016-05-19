@@ -17,11 +17,9 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
-import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -248,14 +246,12 @@ public final class PiecewiseBicubicSplineInterpolatingFunctionTest {
             }
         }
 
-        final RandomGenerator rng = new Well19937c(1234567L);
-        final UniformRealDistribution distX = new UniformRealDistribution(rng, xValues[0], xValues[xValues.length - 1]);
-        final UniformRealDistribution distY = new UniformRealDistribution(rng, yValues[0], yValues[yValues.length - 1]);
+        final RandomDataGenerator gen = new RandomDataGenerator(1234567L);
 
         double sumError = 0;
         for (int i = 0; i < numberOfSamples; i++) {
-            currentX = distX.sample();
-            currentY = distY.sample();
+            currentX = gen.nextUniform(xValues[0], xValues[xValues.length - 1]);
+            currentY = gen.nextUniform(yValues[0], yValues[yValues.length - 1]);
             expected = f.value(currentX, currentY);
             actual = interpolation.value(currentX, currentY);
             sumError += FastMath.abs(actual - expected);

@@ -82,13 +82,4 @@ public class ConstantRealDistributionTest extends RealDistributionAbstractTest {
         assertEquals(dist.getNumericalVariance(), 0, 0d);
     }
 
-    @Override
-    @Test
-    public void testSampling() {
-        ConstantRealDistribution dist = new ConstantRealDistribution(0);
-        for (int i = 0; i < 10; i++) {
-            assertEquals(0, dist.sample(), 0);
-        }
-
-    }
 }

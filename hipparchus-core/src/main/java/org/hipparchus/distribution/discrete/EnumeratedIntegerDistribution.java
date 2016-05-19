@@ -24,8 +24,6 @@ import java.util.Map.Entry;
 
 import org.hipparchus.distribution.EnumeratedDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Pair;
 
@@ -52,13 +50,6 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
     /**
      * Create a discrete distribution using the given probability mass function
      * definition.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param singletons array of random variable values.
      * @param probabilities array of probabilities.
@@ -70,40 +61,18 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
      */
     public EnumeratedIntegerDistribution(final int[] singletons, final double[] probabilities)
         throws MathIllegalArgumentException {
-        this(new Well19937c(), singletons, probabilities);
-    }
-
-    /**
-     * Create a discrete distribution using the given random number generator
-     * and probability mass function definition.
-     *
-     * @param rng random number generator.
-     * @param singletons array of random variable values.
-     * @param probabilities array of probabilities.
-     * @throws MathIllegalArgumentException if
-     * {@code singletons.length != probabilities.length}
-     * @throws MathIllegalArgumentException if any of the probabilities are negative.
-     * @throws MathIllegalArgumentException if any of the probabilities are NaN.
-     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
-     */
-    public EnumeratedIntegerDistribution(final RandomGenerator rng,
-                                         final int[] singletons,
-                                         final double[] probabilities)
-        throws MathIllegalArgumentException {
-        super(rng);
         innerDistribution =
-                new EnumeratedDistribution<Integer>(rng, createDistribution(singletons, probabilities));
+                new EnumeratedDistribution<Integer>(createDistribution(singletons, probabilities));
     }
 
     /**
      * Create a discrete integer-valued distribution from the input data.  Values are assigned
-     * mass based on their frequency.
+     * mass based on their frequency.  For example, [0,1,1,2] as input creates a distribution
+     * with values 0, 1 and 2 having probability masses 0.25, 0.5 and 0.25 respectively,
      *
-     * @param rng random number generator used for sampling
      * @param data input dataset
      */
-    public EnumeratedIntegerDistribution(final RandomGenerator rng, final int[] data) {
-        super(rng);
+    public EnumeratedIntegerDistribution(final int[] data) {
         final Map<Integer, Integer> dataMap = new HashMap<Integer, Integer>();
         for (int value : data) {
             Integer count = dataMap.get(value);
@@ -123,18 +92,7 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
             index++;
         }
         innerDistribution =
-                new EnumeratedDistribution<Integer>(rng, createDistribution(values, probabilities));
-    }
-
-    /**
-     * Create a discrete integer-valued distribution from the input data.  Values are assigned
-     * mass based on their frequency.  For example, [0,1,1,2] as input creates a distribution
-     * with values 0, 1 and 2 having probability masses 0.25, 0.5 and 0.25 respectively,
-     *
-     * @param data input dataset
-     */
-    public EnumeratedIntegerDistribution(final int[] data) {
-        this(new Well19937c(), data);
+                new EnumeratedDistribution<Integer>(createDistribution(values, probabilities));
     }
 
     /**
@@ -263,11 +221,4 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public int sample() {
-        return innerDistribution.sample();
-    }
 }

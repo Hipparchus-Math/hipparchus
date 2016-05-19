@@ -18,8 +18,6 @@ package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -42,31 +40,11 @@ public class GeometricDistribution extends AbstractIntegerDistribution {
 
     /**
      * Create a geometric distribution with the given probability of success.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param p probability of success.
      * @throws MathIllegalArgumentException if {@code p <= 0} or {@code p > 1}.
      */
     public GeometricDistribution(double p) {
-        this(new Well19937c(), p);
-    }
-
-    /**
-     * Creates a geometric distribution.
-     *
-     * @param rng Random number generator.
-     * @param p Probability of success.
-     * @throws MathIllegalArgumentException if {@code p <= 0} or {@code p > 1}.
-     */
-    public GeometricDistribution(RandomGenerator rng, double p) {
-        super(rng);
-
         if (p <= 0 || p > 1) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE_LEFT, p, 0, 1);
         }

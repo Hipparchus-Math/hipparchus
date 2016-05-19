@@ -18,8 +18,6 @@ package org.hipparchus.distribution.discrete;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
@@ -73,13 +71,6 @@ public class PascalDistribution extends AbstractIntegerDistribution {
     /**
      * Create a Pascal distribution with the given number of successes and
      * probability of success.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
      *
      * @param r Number of successes.
      * @param p Probability of success.
@@ -89,26 +80,6 @@ public class PascalDistribution extends AbstractIntegerDistribution {
      */
     public PascalDistribution(int r, double p)
         throws MathIllegalArgumentException {
-        this(new Well19937c(), r, p);
-    }
-
-    /**
-     * Create a Pascal distribution with the given number of successes and
-     * probability of success.
-     *
-     * @param rng Random number generator.
-     * @param r Number of successes.
-     * @param p Probability of success.
-     * @throws MathIllegalArgumentException if the number of successes is not positive
-     * @throws MathIllegalArgumentException if the probability of success is not in the
-     * range {@code [0, 1]}.
-     */
-    public PascalDistribution(RandomGenerator rng,
-                              int r,
-                              double p)
-        throws MathIllegalArgumentException {
-        super(rng);
-
         if (r <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SUCCESSES,
                                                    r);

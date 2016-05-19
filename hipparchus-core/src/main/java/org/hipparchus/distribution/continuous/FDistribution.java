@@ -19,7 +19,6 @@ package org.hipparchus.distribution.continuous;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.special.Beta;
 import org.hipparchus.util.FastMath;
@@ -63,66 +62,22 @@ public class FDistribution extends AbstractRealDistribution {
              DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
     }
 
+
     /**
-     * Creates an F distribution using the given degrees of freedom
-     * and inverse cumulative probability accuracy.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
+     * Creates an F distribution.
      *
      * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
      * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
      * @param inverseCumAccuracy the maximum absolute error in inverse
      * cumulative probability estimates.
-     * @throws MathIllegalArgumentException if
-     * {@code numeratorDegreesOfFreedom <= 0} or
+     * @throws MathIllegalArgumentException if {@code numeratorDegreesOfFreedom <= 0} or
      * {@code denominatorDegreesOfFreedom <= 0}.
      */
     public FDistribution(double numeratorDegreesOfFreedom,
                          double denominatorDegreesOfFreedom,
                          double inverseCumAccuracy)
         throws MathIllegalArgumentException {
-        this(new Well19937c(), numeratorDegreesOfFreedom,
-             denominatorDegreesOfFreedom, inverseCumAccuracy);
-    }
-
-    /**
-     * Creates an F distribution.
-     *
-     * @param rng Random number generator.
-     * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
-     * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
-     * @throws MathIllegalArgumentException if {@code numeratorDegreesOfFreedom <= 0} or
-     * {@code denominatorDegreesOfFreedom <= 0}.
-     */
-    public FDistribution(RandomGenerator rng,
-                         double numeratorDegreesOfFreedom,
-                         double denominatorDegreesOfFreedom)
-        throws MathIllegalArgumentException {
-        this(rng, numeratorDegreesOfFreedom, denominatorDegreesOfFreedom, DEFAULT_SOLVER_ABSOLUTE_ACCURACY);
-    }
-
-    /**
-     * Creates an F distribution.
-     *
-     * @param rng Random number generator.
-     * @param numeratorDegreesOfFreedom Numerator degrees of freedom.
-     * @param denominatorDegreesOfFreedom Denominator degrees of freedom.
-     * @param inverseCumAccuracy the maximum absolute error in inverse
-     * cumulative probability estimates.
-     * @throws MathIllegalArgumentException if {@code numeratorDegreesOfFreedom <= 0} or
-     * {@code denominatorDegreesOfFreedom <= 0}.
-     */
-    public FDistribution(RandomGenerator rng,
-                         double numeratorDegreesOfFreedom,
-                         double denominatorDegreesOfFreedom,
-                         double inverseCumAccuracy)
-        throws MathIllegalArgumentException {
-        super(rng, inverseCumAccuracy);
+        super(inverseCumAccuracy);
 
         if (numeratorDegreesOfFreedom <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DEGREES_OF_FREEDOM,

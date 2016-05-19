@@ -17,17 +17,10 @@
 
 package org.hipparchus.distribution.discrete;
 
-import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.discrete.ZipfDistribution;
-import org.hipparchus.distribution.discrete.ZipfDistribution.ZipfRejectionInversionSampler;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.AbstractRandomGenerator;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -122,124 +115,6 @@ public class ZipfDistributionTest extends IntegerDistributionAbstractTest {
         dist = new ZipfDistribution(2, 0.5);
         Assert.assertEquals(dist.getNumericalMean(), FastMath.sqrt(2), tol);
         Assert.assertEquals(dist.getNumericalVariance(), 0.24264068711928521, tol);
-    }
-
-
-    /**
-     * Test sampling for various number of points and exponents.
-     */
-    @Test
-    public void testSamplingExtended() {
-        int sampleSize = 1000;
-
-        int[] numPointsValues = {
-            2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100
-        };
-        double[] exponentValues = {
-            1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 2e-1, 5e-1,
-            1. - 1e-9, 1.0, 1. + 1e-9, 1.1, 1.2, 1.3, 1.5, 1.6, 1.7, 1.8, 2.0,
-            2.5, 3.0, 4., 5., 6., 7., 8., 9., 10., 20., 30., 100., 150.
-        };
-
-        for (int numPoints : numPointsValues) {
-            for (double exponent : exponentValues) {
-                double weightSum = 0.;
-                double[] weights = new double[numPoints];
-                for (int i = numPoints; i>=1; i-=1) {
-                    weights[i-1] = Math.pow(i, -exponent);
-                    weightSum += weights[i-1];
-                }
-
-                ZipfDistribution distribution = new ZipfDistribution(numPoints, exponent);
-                distribution.reseedRandomGenerator(6); // use fixed seed, the test is expected to fail for more than 50% of all seeds because each test case can fail with probability 0.001, the chance that all test cases do not fail is 0.999^(32*22) = 0.49442874426
-
-                double[] expectedCounts = new double[numPoints];
-                long[] observedCounts = new long[numPoints];
-                for (int i = 0; i < numPoints; i++) {
-                    expectedCounts[i] = sampleSize * (weights[i]/weightSum);
-                }
-                int[] sample = distribution.sample(sampleSize);
-                for (int s : sample) {
-                    observedCounts[s-1]++;
-                }
-                TestUtils.assertChiSquareAccept(expectedCounts, observedCounts, 0.001);
-            }
-        }
-    }
-
-    @Test
-    public void testSamplerHelper1() {
-        final double tol = 1e-12;
-        final double[] testValues = {
-            Math.nextUp(-1.), -1e-1, -1e-2, -1e-3, -1e-4, -1e-5, -1e-6, -1e-7, -1e-8,
-            -1e-9, -1e-10, -1e-11, 0., 1e-11, 1e-10, 1e-9, 1e-8, 1e-7, 1e-6,
-            1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e0
-        };
-        for (final double testValue : testValues) {
-            final double expected = FastMath.log1p(testValue);
-            TestUtils.assertRelativelyEquals(expected, ZipfRejectionInversionSampler.helper1(testValue)*testValue, tol);
-        }
-    }
-
-
-    @Test
-    public void testSamplerHelper1Minus1() {
-        Assert.assertEquals(Double.POSITIVE_INFINITY, ZipfRejectionInversionSampler.helper1(-1d), 0d);
-    }
-
-    @Test
-    public void testSamplerHelper2() {
-        final double tol = 1e-12;
-        final double[] testValues = {
-            -1e0, -1e-1, -1e-2, -1e-3, -1e-4, -1e-5, -1e-6, -1e-7, -1e-8,
-            -1e-9, -1e-10, -1e-11, 0., 1e-11, 1e-10, 1e-9, 1e-8, 1e-7, 1e-6,
-            1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 1e0
-        };
-        for (double testValue : testValues) {
-            final double expected = FastMath.expm1(testValue);
-            TestUtils.assertRelativelyEquals(expected, ZipfRejectionInversionSampler.helper2(testValue)*testValue, tol);
-        }
-    }
-
-    @Ignore
-    @Test
-    public void testSamplerPerformance() {
-        int[] numPointsValues = {1, 2, 5, 10, 100, 1000, 10000};
-        double[] exponentValues = {1e-3, 1e-2, 1e-1, 1., 2., 5., 10.};
-        int  numGeneratedSamples = 1000000;
-
-        long sum = 0;
-
-        for (int numPoints : numPointsValues) {
-            for (double exponent : exponentValues) {
-                long start = System.currentTimeMillis();
-                final int[] randomNumberCounter = new int[1];
-
-                RandomGenerator randomGenerator  = new AbstractRandomGenerator() {
-
-                    private final RandomGenerator r = new Well1024a(0L);
-
-                    @Override
-                    public void setSeed(long seed) {
-                    }
-
-                    @Override
-                    public double nextDouble() {
-                        randomNumberCounter[0]+=1;
-                        return r.nextDouble();
-                    }
-                };
-
-                final ZipfDistribution distribution = new ZipfDistribution(randomGenerator, numPoints, exponent);
-                for (int i = 0; i < numGeneratedSamples; ++i) {
-                    sum += distribution.sample();
-                }
-
-                long end = System.currentTimeMillis();
-                System.out.println("n = " + numPoints + ", exponent = " + exponent + ", avg number consumed random values = " + (double)(randomNumberCounter[0])/numGeneratedSamples + ", measured time = " + (end-start)/1000. + "s");
-            }
-        }
-        System.out.println(sum);
     }
 
 }

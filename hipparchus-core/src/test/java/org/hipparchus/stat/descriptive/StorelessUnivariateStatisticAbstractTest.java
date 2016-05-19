@@ -21,7 +21,7 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.distribution.continuous.TDistribution;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
 import org.hipparchus.util.FastMath;
 import org.junit.Test;
@@ -239,17 +239,15 @@ public abstract class StorelessUnivariateStatisticAbstractTest
             return;
         }
 
-        // A randomly picked distribution.
-        TDistribution dist = new TDistribution(4.2d);
-
         // Aggregated statistic.
         AggregatableStatistic<T> aggregated = (AggregatableStatistic<T>) getUnivariateStatistic();
         StorelessUnivariateStatistic statAgg = (StorelessUnivariateStatistic) aggregated;
 
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
         // Create Set A
         StorelessUnivariateStatistic statA = getUnivariateStatistic();
         for (int i = 0; i < 10; i++) {
-            final double val = dist.sample();
+            final double val = randomDataGenerator.nextGaussian();
             statA.increment(val);
             statU.increment(val);
         }
@@ -261,7 +259,7 @@ public abstract class StorelessUnivariateStatisticAbstractTest
         // Create Set B
         StorelessUnivariateStatistic statB = getUnivariateStatistic();
         for (int i = 0; i < 4; i++) {
-            final double val = dist.sample();
+            final double val = randomDataGenerator.nextGaussian();
             statB.increment(val);
             statU.increment(val);
         }

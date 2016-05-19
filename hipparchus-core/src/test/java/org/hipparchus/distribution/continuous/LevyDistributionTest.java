@@ -16,8 +16,6 @@
  */
 package org.hipparchus.distribution.continuous;
 
-import org.hipparchus.distribution.continuous.LevyDistribution;
-import org.hipparchus.random.Well19937a;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
@@ -41,7 +39,7 @@ public class LevyDistributionTest extends RealDistributionAbstractTest {
 
     @Override
     public LevyDistribution makeDistribution() {
-        return new LevyDistribution(new Well19937a(0xc5a5506bbb17e57al), 1.2, 0.4);
+        return new LevyDistribution(1.2, 0.4);
     }
 
     @Override

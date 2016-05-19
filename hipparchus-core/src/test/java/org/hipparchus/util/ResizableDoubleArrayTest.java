@@ -19,10 +19,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.hipparchus.distribution.IntegerDistribution;
-import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.ResizableDoubleArray.ExpansionMode;
 import org.junit.After;
 import org.junit.Before;
@@ -324,8 +323,8 @@ public class ResizableDoubleArrayTest
         ResizableDoubleArray eDA2 = new ResizableDoubleArray(2);
         assertEquals("Initial number of elements should be 0", 0, eDA2.getNumElements());
 
-        final IntegerDistribution randomData = new UniformIntegerDistribution(100, 1000);
-        final int iterations = randomData.sample();
+        final RandomDataGenerator gen = new RandomDataGenerator(1000);
+        final int iterations = gen.nextInt(100, 1000);
 
         for (int i = 0; i < iterations; i++) {
             eDA2.addElement(i);
@@ -346,8 +345,8 @@ public class ResizableDoubleArrayTest
         ResizableDoubleArray eDA3 = new ResizableDoubleArray(3, 3.0, 3.5);
         assertEquals("Initial number of elements should be 0", 0, eDA3.getNumElements());
 
-        final IntegerDistribution randomData = new UniformIntegerDistribution(100, 3000);
-        final int iterations = randomData.sample();
+        final RandomDataGenerator gen = new RandomDataGenerator(1000);
+        final int iterations = gen.nextInt(100, 1000);
 
         for (int i = 0; i < iterations; i++) {
             eDA3.addElement(i);

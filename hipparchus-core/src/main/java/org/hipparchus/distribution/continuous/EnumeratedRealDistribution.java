@@ -24,8 +24,6 @@ import java.util.Map.Entry;
 
 import org.hipparchus.distribution.EnumeratedDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Pair;
@@ -58,63 +56,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @param data input dataset
      */
     public EnumeratedRealDistribution(final double[] data) {
-        this(new Well19937c(), data);
-    }
-
-    /**
-     * Create a discrete real-valued distribution using the given probability mass function
-     * enumeration.
-     * <p>
-     * <b>Note:</b> this constructor will implicitly create an instance of
-     * {@link Well19937c} as random generator to be used for sampling only (see
-     * {@link #sample()} and {@link #sample(int)}). In case no sampling is
-     * needed for the created distribution, it is advised to pass {@code null}
-     * as random generator via the appropriate constructors to avoid the
-     * additional initialisation overhead.
-     *
-     * @param singletons array of random variable values.
-     * @param probabilities array of probabilities.
-     * @throws MathIllegalArgumentException if
-     * {@code singletons.length != probabilities.length}
-     * @throws MathIllegalArgumentException if any of the probabilities are negative.
-     * @throws MathIllegalArgumentException if any of the probabilities are NaN.
-     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
-     */
-    public EnumeratedRealDistribution(final double[] singletons, final double[] probabilities)
-        throws MathIllegalArgumentException {
-        this(new Well19937c(), singletons, probabilities);
-    }
-
-    /**
-     * Create a discrete real-valued distribution using the given random number generator
-     * and probability mass function enumeration.
-     *
-     * @param rng random number generator.
-     * @param singletons array of random variable values.
-     * @param probabilities array of probabilities.
-     * @throws MathIllegalArgumentException if
-     * {@code singletons.length != probabilities.length}
-     * @throws MathIllegalArgumentException if any of the probabilities are negative.
-     * @throws MathIllegalArgumentException if any of the probabilities are NaN.
-     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
-     */
-    public EnumeratedRealDistribution(final RandomGenerator rng,
-                                      final double[] singletons, final double[] probabilities)
-        throws MathIllegalArgumentException {
-        super(rng);
-        innerDistribution = new EnumeratedDistribution<Double>(
-                rng, createDistribution(singletons, probabilities));
-    }
-
-    /**
-     * Create a discrete real-valued distribution from the input data.  Values are assigned
-     * mass based on their frequency.
-     *
-     * @param rng random number generator used for sampling
-     * @param data input dataset
-     */
-    public EnumeratedRealDistribution(final RandomGenerator rng, final double[] data) {
-        super(rng);
+        super();
         final Map<Double, Integer> dataMap = new HashMap<Double, Integer>();
         for (double value : data) {
             Integer count = dataMap.get(value);
@@ -134,8 +76,28 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
             index++;
         }
         innerDistribution =
-                new EnumeratedDistribution<Double>(rng, createDistribution(values, probabilities));
+                new EnumeratedDistribution<Double>(createDistribution(values, probabilities));
     }
+
+    /**
+     * Create a discrete real-valued distribution using the given probability mass function
+     * enumeration.
+     *
+     * @param singletons array of random variable values.
+     * @param probabilities array of probabilities.
+     * @throws MathIllegalArgumentException if
+     * {@code singletons.length != probabilities.length}
+     * @throws MathIllegalArgumentException if any of the probabilities are negative.
+     * @throws MathIllegalArgumentException if any of the probabilities are NaN.
+     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
+     */
+    public EnumeratedRealDistribution(final double[] singletons, final double[] probabilities)
+        throws MathIllegalArgumentException {
+        super();
+        innerDistribution = new EnumeratedDistribution<Double>(
+                createDistribution(singletons, probabilities));
+    }
+
 
     /**
      * Create the list of Pairs representing the distribution from singletons and probabilities.
@@ -308,13 +270,5 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
     @Override
     public boolean isSupportConnected() {
         return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public double sample() {
-        return innerDistribution.sample();
     }
 }

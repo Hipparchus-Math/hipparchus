@@ -21,10 +21,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.hipparchus.TestUtils;
-import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
-import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
+import org.hipparchus.random.RandomDataGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -192,10 +191,10 @@ public class StatisticalSummaryTest {
      * @return array of random double values
      */
     private double[] generateSample() {
-        final IntegerDistribution size = new UniformIntegerDistribution(10, 100);
-        final RealDistribution randomData = new UniformRealDistribution(-100, 100);
-        final int sampleSize = size.sample();
-        final double[] out = randomData.sample(sampleSize);
+        final RealDistribution uniformDist = new UniformRealDistribution(-100, 100);
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
+        final int sampleSize = randomDataGenerator.nextInt(10,  100);
+        final double[] out = randomDataGenerator.nextDeviates(uniformDist, sampleSize);
         return out;
     }
 
@@ -207,6 +206,7 @@ public class StatisticalSummaryTest {
      * @return rectangular array with rows = subsamples
      */
     private double[][] generatePartition(double[] sample) {
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
         final int length = sample.length;
         final double[][] out = new double[5][];
         int cur = 0;          // beginning of current partition segment
@@ -220,7 +220,7 @@ public class StatisticalSummaryTest {
             if (i == 4 || cur == length - 1) {
                 next = length - 1;
             } else {
-                next = (new UniformIntegerDistribution(cur, length - 1)).sample();
+                next = randomDataGenerator.nextInt(cur, length - 1);
             }
             final int subLength = next - cur + 1;
             out[i] = new double[subLength];

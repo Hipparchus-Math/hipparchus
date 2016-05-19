@@ -89,7 +89,7 @@ public class NormalDistribution extends AbstractRealDistribution {
                               double mean,
                               double sd)
         throws MathIllegalArgumentException {
-        super(rng);
+        super();
 
         if (sd <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.STANDARD_DEVIATION, sd);
@@ -230,11 +230,5 @@ public class NormalDistribution extends AbstractRealDistribution {
     @Override
     public boolean isSupportConnected() {
         return true;
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public double sample()  {
-        return standardDeviation * random.nextGaussian() + mean;
     }
 }

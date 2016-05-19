@@ -18,10 +18,8 @@ package org.hipparchus.distribution.discrete;
 
 import static org.junit.Assert.assertEquals;
 
-import org.hipparchus.distribution.discrete.EnumeratedIntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -145,27 +143,6 @@ public class EnumeratedIntegerDistributionTest {
     @Test
     public void testIsSupportConnected() {
         Assert.assertTrue(testDistribution.isSupportConnected());
-    }
-
-    /**
-     * Tests sampling.
-     */
-    @Test
-    public void testSample() {
-        final int n = 1000000;
-        testDistribution.reseedRandomGenerator(-334759360); // fixed seed
-        final int[] samples = testDistribution.sample(n);
-        Assert.assertEquals(n, samples.length);
-        double sum = 0;
-        double sumOfSquares = 0;
-        for (int i = 0; i < samples.length; i++) {
-            sum += samples[i];
-            sumOfSquares += samples[i] * samples[i];
-        }
-        Assert.assertEquals(testDistribution.getNumericalMean(),
-                sum / n, 1e-2);
-        Assert.assertEquals(testDistribution.getNumericalVariance(),
-                sumOfSquares / n - FastMath.pow(sum / n, 2), 1e-2);
     }
 
     @Test

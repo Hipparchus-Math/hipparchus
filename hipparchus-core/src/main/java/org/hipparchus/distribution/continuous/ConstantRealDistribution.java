@@ -36,7 +36,7 @@ public class ConstantRealDistribution extends AbstractRealDistribution {
      * @param value the constant value of this distribution
      */
     public ConstantRealDistribution(double value) {
-        super(null);  // Avoid creating RandomGenerator
+        super();  // Avoid creating RandomGenerator
         this.value = value;
     }
 
@@ -99,17 +99,4 @@ public class ConstantRealDistribution extends AbstractRealDistribution {
     public boolean isSupportConnected() {
         return true;
     }
-
-    /** {@inheritDoc} */
-    @Override
-    public double sample()  {
-        return value;
-    }
-
-    /**
-     * Override with no-op (there is no generator).
-     * @param seed (ignored)
-     */
-    @Override
-    public void reseedRandomGenerator(long seed) {}
 }

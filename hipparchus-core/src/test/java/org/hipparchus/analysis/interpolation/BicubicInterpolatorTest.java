@@ -17,10 +17,8 @@
 package org.hipparchus.analysis.interpolation;
 
 import org.hipparchus.analysis.BivariateFunction;
-import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937c;
+import org.hipparchus.random.RandomDataGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -145,14 +143,11 @@ public final class BicubicInterpolatorTest {
         final BicubicInterpolatingFunction p = interpolator.interpolate(xval, yval, zval);
         double x, y;
 
-        final RandomGenerator rng = new Well19937c();
-        final UniformRealDistribution distX = new UniformRealDistribution(rng, xval[0], xval[xval.length - 1]);
-        final UniformRealDistribution distY = new UniformRealDistribution(rng, yval[0], yval[yval.length - 1]);
-
+        final RandomDataGenerator gen = new RandomDataGenerator(1234567L);
         int count = 0;
         while (true) {
-            x = distX.sample();
-            y = distY.sample();
+            x = gen.nextUniform(xval[0], xval[xval.length - 1]);
+            y = gen.nextUniform(yval[0], yval[yval.length - 1]);
             if (!p.isValidPoint(x, y)) {
                 if (print) {
                     System.out.println("# " + x + " " + y);

@@ -19,9 +19,9 @@ package org.hipparchus.linear;
 
 import java.util.Random;
 
-import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.random.RandomDataGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -114,7 +114,7 @@ public class SchurTransformerTest {
     public void testRandomDataNormalDistribution() {
         for (int run = 0; run < 100; run++) {
             Random r = new Random(System.currentTimeMillis());
-            NormalDistribution dist = new NormalDistribution(0.0, r.nextDouble() * 5);
+            RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
 
             // matrix size
             int size = r.nextInt(20) + 4;
@@ -122,7 +122,7 @@ public class SchurTransformerTest {
             double[][] data = new double[size][size];
             for (int i = 0; i < size; i++) {
                 for (int j = 0; j < size; j++) {
-                    data[i][j] = dist.sample();
+                    data[i][j] = randomDataGenerator.nextNormal(0.0, r.nextDouble() * 5);
                 }
             }
 

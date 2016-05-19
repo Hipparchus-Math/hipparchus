@@ -312,67 +312,6 @@ public class KolmogorovSmirnovTestTest {
         Assert.assertFalse(Double.isNaN(test.kolmogorovSmirnovTest(x, y)));
     }
 
-    /**
-     * Verifies that Monte Carlo simulation gives results close to exact p values.
-     */
-    @Test
-    public void testTwoSampleMonteCarlo() {
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(new Well19937c(1000));
-        final int sampleSize = 14;
-        final double tol = .001;
-        final double[] shortUniform = new double[sampleSize];
-        System.arraycopy(uniform, 0, shortUniform, 0, sampleSize);
-        final double[] shortGaussian = new double[sampleSize];
-        final double[] shortGaussian2 = new double[sampleSize];
-        System.arraycopy(gaussian, 0, shortGaussian, 0, sampleSize);
-        System.arraycopy(gaussian, 10, shortGaussian2, 0, sampleSize);
-        final double[] d = {
-            test.kolmogorovSmirnovStatistic(shortGaussian, shortUniform),
-            test.kolmogorovSmirnovStatistic(shortGaussian2, shortGaussian)
-        };
-        for (double dv : d) {
-            double exactPStrict = test.exactP(dv, sampleSize, sampleSize, true);
-            double exactPNonStrict = test.exactP(dv, sampleSize, sampleSize, false);
-            double montePStrict = test.monteCarloP(dv, sampleSize, sampleSize, true,
-                                                   KolmogorovSmirnovTest.MONTE_CARLO_ITERATIONS);
-            double montePNonStrict = test.monteCarloP(dv, sampleSize, sampleSize, false,
-                                                      KolmogorovSmirnovTest.MONTE_CARLO_ITERATIONS);
-            Assert.assertEquals(exactPStrict, montePStrict, tol);
-            Assert.assertEquals(exactPNonStrict, montePNonStrict, tol);
-        }
-    }
-
-    @Test
-    public void testTwoSampleMonteCarloDifferentSampleSizes() {
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(new Well19937c(1000));
-        final int sampleSize1 = 14;
-        final int sampleSize2 = 7;
-        final double d = 0.3;
-        final boolean strict = false;
-        final double tol = 1e-2;
-        Assert.assertEquals(test.exactP(d, sampleSize1, sampleSize2, strict),
-                            test.monteCarloP(d, sampleSize1, sampleSize2, strict,
-                                             KolmogorovSmirnovTest.MONTE_CARLO_ITERATIONS),
-                            tol);
-    }
-
-    /**
-     * Performance test for monteCarlo method. Disabled by default.
-     */
-    // @Test
-    public void testTwoSampleMonteCarloPerformance() {
-        int numIterations = 100_000;
-        int N = (int)Math.sqrt(KolmogorovSmirnovTest.LARGE_SAMPLE_PRODUCT);
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(new Well19937c(1000));
-        for (int n = 2; n <= N; ++n) {
-            long startMillis = System.currentTimeMillis();
-            int m = KolmogorovSmirnovTest.LARGE_SAMPLE_PRODUCT/n;
-            Assert.assertEquals(0d, test.monteCarloP(Double.POSITIVE_INFINITY, n, m, true, numIterations), 0d);
-            long endMillis = System.currentTimeMillis();
-            System.out.println("n=" + n + ", m=" + m + ", time=" + (endMillis-startMillis)/1000d + "s");
-        }
-    }
-
     @Test
     public void testTwoSampleWithManyTies() {
         // MATH-1197
@@ -438,7 +377,6 @@ public class KolmogorovSmirnovTestTest {
 
     @Test
     public void testTwoSamplesAllEqual() {
-        int iterations = 10_000;
         final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest();
         for (int i = 2; i < 30; ++i) {
             // testing values with ties
@@ -457,9 +395,6 @@ public class KolmogorovSmirnovTestTest {
                 Assert.assertEquals(1.0, test.exactP(0, values.length, values.length, true), 0.);
                 Assert.assertEquals(1.0, test.exactP(0, values.length, values.length, false), 0.);
             }
-
-            Assert.assertEquals(1.0, test.monteCarloP(0, values.length, values.length, true, iterations), 0.);
-            Assert.assertEquals(1.0, test.monteCarloP(0, values.length, values.length, false, iterations), 0.);
 
             Assert.assertEquals(1.0, test.approximateP(0, values.length, values.length), 0.);
             Assert.assertEquals(1.0, test.approximateP(0, values.length, values.length), 0.);
@@ -487,34 +422,6 @@ public class KolmogorovSmirnovTestTest {
         final double[] x2 = {4, 6, 7, 8, 9, 10, 11};
         final double[] y2 = {0, 1, 2, 3, 5};
         Assert.assertEquals(0.015151515151515027, test.kolmogorovSmirnovTest(x2, y2, false), tol);
-    }
-
-    /**
-     * JIRA: MATH-1245
-     *
-     * Verify that D-values are not viewed as distinct when they are mathematically equal
-     * when computing p-statistics for small sample tests. Reference values are from R 3.2.0.
-     */
-    @Test
-    public void testDRoundingMonteCarlo() {
-        final double tol = 1e-2;
-        final int iterations = 1000000;
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(new Well19937c(1000));
-
-        final double[] x = {0, 2, 3, 4, 5, 6, 7, 8, 9, 12};
-        final double[] y = {1, 10, 11, 13, 14, 15, 16, 17, 18};
-        double d = test.kolmogorovSmirnovStatistic(x, y);
-        Assert.assertEquals(0.0027495724090154106, test.monteCarloP(d, x.length, y.length, false, iterations), tol);
-
-        final double[] x1 = {2, 4, 6, 8, 9, 10, 11, 12, 13};
-        final double[] y1 = {0, 1, 3, 5, 7};
-        d = test.kolmogorovSmirnovStatistic(x1, y1);
-        Assert.assertEquals(0.085914085914085896, test.monteCarloP(d, x1.length, y1.length, false, iterations), tol);
-
-        final double[] x2 = {4, 6, 7, 8, 9, 10, 11};
-        final double[] y2 = {0, 1, 2, 3, 5};
-        d = test.kolmogorovSmirnovStatistic(x2, y2);
-        Assert.assertEquals(0.015151515151515027, test.monteCarloP(d, x2.length, y2.length, false, iterations), tol);
     }
 
     @Test
@@ -575,7 +482,7 @@ public class KolmogorovSmirnovTestTest {
     public void testBootstrapSmallSamplesWithTies() {
         final double[] x = {0, 2, 4, 6, 8, 8, 10, 15, 22, 30, 33, 36, 38};
         final double[] y = {9, 17, 20, 33, 40, 51, 60, 60, 72, 90, 101};
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(new Well19937c(2000));
+        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(1000);
         Assert.assertEquals(0.0059, test.bootstrap(x, y, 10000, false), 1E-3);
     }
 
@@ -585,7 +492,7 @@ public class KolmogorovSmirnovTestTest {
      */
     @Test
     public void testBootstrapLargeSamples() {
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(new Well19937c(1000));
+        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(1000);
         Assert.assertEquals(0.0237, test.bootstrap(gaussian, gaussian2, 10000), 1E-2);
     }
 
@@ -598,7 +505,7 @@ public class KolmogorovSmirnovTestTest {
     public void testBootstrapRounding() {
         final double[] x = {2,4,6,8,9,10,11,12,13};
         final double[] y = {0,1,3,5,7};
-        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(new Well19937c(1000));
+        final KolmogorovSmirnovTest test = new KolmogorovSmirnovTest(1000);
         Assert.assertEquals(0.06303, test.bootstrap(x, y, 10000, false), 1E-2);
     }
 
@@ -700,7 +607,8 @@ public class KolmogorovSmirnovTestTest {
         Method method = KolmogorovSmirnovTest.class.getDeclaredMethod("fixTies",
                                              double[].class, double[].class);
         method.setAccessible(true);
-        method.invoke(KolmogorovSmirnovTest.class, x, y);
+        KolmogorovSmirnovTest ksTest = new KolmogorovSmirnovTest();
+        method.invoke(ksTest, x, y);
     }
 
     /**
