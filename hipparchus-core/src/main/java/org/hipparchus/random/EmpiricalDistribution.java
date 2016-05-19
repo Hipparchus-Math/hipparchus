@@ -699,7 +699,9 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
     }
 
     /**
-     * {@inheritDoc}
+     * Reseed the underlying PRNG.
+     *
+     * @param seed new seed value
      */
     public void reseedRandomGenerator(long seed) {
         randomData.setSeed(seed);
