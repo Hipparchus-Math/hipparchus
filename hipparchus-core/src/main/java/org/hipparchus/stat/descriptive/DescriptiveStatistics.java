@@ -88,7 +88,7 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
     /** Skewness statistic implementation. */
     private final UnivariateStatistic          skewnessImpl;
     /** Percentile statistic implementation. */
-    private final QuantiledUnivariateStatistic percentileImpl;
+    private final Percentile                   percentileImpl;
 
     /** holds the window size. */
     private int windowSize;
