@@ -436,7 +436,7 @@ public class KolmogorovSmirnovTest {
      * Return a bootstrap sample (with replacement) of size k from sample.
      *
      * @param sample array to sample from
-     * @param size of bootstrap sample
+     * @param k size of bootstrap sample
      * @return bootstrap sample
      */
     private double[] resample(double[] sample, int k) {
@@ -1124,7 +1124,7 @@ public class KolmogorovSmirnovTest {
      * values are overwritten with the result of applying jitter.</p>
      *
      * @param data input/output data array - entries overwritten by the method
-     * @param max magnitude of jitter
+     * @param delta max magnitude of jitter
      * @throws NullPointerException if either of the parameters is null
      */
     private void jitter(double[] data, double delta) {
