@@ -16,18 +16,20 @@
  */
 package org.hipparchus.random;
 
+import java.io.Serializable;
 import java.util.Random;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.MathUtils;
 
 /**
  * A {@link RandomGenerator} adapter that delegates the random number
  * generation to the standard {@link java.util.Random} class.
- *
  */
 public class JDKRandomGenerator
-    implements RandomGenerator {
+    implements RandomGenerator, Serializable {
+
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20151227L;
     /** JDK's RNG. */
@@ -49,10 +51,22 @@ public class JDKRandomGenerator
         delegate = new Random(seed);
     }
 
+    /**
+     * Creates an instance that wraps the given {@link Random} instance.
+     *
+     * @param random JDK {@link Random} instance that will generate the
+     * the random data.
+     * @throws MathIllegalArgumentException if random is null
+     */
+    public JDKRandomGenerator(Random random) {
+        MathUtils.checkNotNull(random);
+        delegate = random;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void setSeed(int seed) {
-        delegate.setSeed((long) seed);
+        delegate.setSeed(seed);
     }
 
     /** {@inheritDoc} */
@@ -64,7 +78,7 @@ public class JDKRandomGenerator
     /** {@inheritDoc} */
     @Override
     public void setSeed(int[] seed) {
-        delegate.setSeed(RandomGeneratorFactory.convertToLong(seed));
+        delegate.setSeed(convertToLong(seed));
     }
 
     /** {@inheritDoc} */
@@ -119,4 +133,24 @@ public class JDKRandomGenerator
                                                    n, 0);
         }
     }
+
+    /**
+     * Converts seed from one representation to another.
+     *
+     * @param seed Original seed.
+     * @return the converted seed.
+     */
+    private static long convertToLong(int[] seed) {
+        // The following number is the largest prime that fits
+        // in 32 bits (i.e. 2^32 - 5).
+        final long prime = 4294967291l;
+
+        long combined = 0l;
+        for (int s : seed) {
+            combined = combined * prime + s;
+        }
+
+        return combined;
+    }
+
 }

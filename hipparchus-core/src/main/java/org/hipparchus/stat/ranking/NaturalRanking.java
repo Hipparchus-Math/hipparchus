@@ -22,9 +22,9 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.LocalizedCoreFormats;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.util.FastMath;
@@ -141,7 +141,7 @@ public class NaturalRanking implements RankingAlgorithm {
         super();
         this.tiesStrategy = TiesStrategy.RANDOM;
         nanStrategy = DEFAULT_NAN_STRATEGY;
-        randomData = new RandomDataGenerator(randomGenerator);
+        randomData = RandomDataGenerator.of(randomGenerator);
     }
 
 
@@ -157,7 +157,7 @@ public class NaturalRanking implements RankingAlgorithm {
         super();
         this.nanStrategy = nanStrategy;
         this.tiesStrategy = TiesStrategy.RANDOM;
-        randomData = new RandomDataGenerator(randomGenerator);
+        randomData = RandomDataGenerator.of(randomGenerator);
     }
 
     /**

@@ -45,7 +45,7 @@ import org.junit.runner.RunWith;
 public class RandomDataGeneratorTest {
 
     public RandomDataGeneratorTest() {
-        randomData = new RandomDataGenerator(new Well19937c());
+        randomData = RandomDataGenerator.of(new Well19937c());
         randomData.setSeed(100);
     }
 

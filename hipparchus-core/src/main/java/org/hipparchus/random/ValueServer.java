@@ -102,7 +102,7 @@ public class ValueServer {
      * @param generator source of random data
      */
     public ValueServer(RandomGenerator generator) {
-        this.randomData = new RandomDataGenerator(generator);
+        this.randomData = RandomDataGenerator.of(generator);
     }
 
     /**

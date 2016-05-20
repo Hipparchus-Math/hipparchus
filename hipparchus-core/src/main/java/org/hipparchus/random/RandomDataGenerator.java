@@ -25,24 +25,30 @@ import java.util.Map;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.BetaDistribution;
+import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.GammaDistribution;
 import org.hipparchus.distribution.continuous.LogNormalDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
+import org.hipparchus.distribution.continuous.UniformRealDistribution;
+import org.hipparchus.distribution.discrete.PoissonDistribution;
+import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
 import org.hipparchus.util.ResizableDoubleArray;
 
 /**
- *
  * A class for generating random data.
- *
  */
-public class RandomDataGenerator implements RandomGenerator, Serializable {
+public class RandomDataGenerator extends ForwardingRandomGenerator
+    implements RandomGenerator, Serializable {
+
+    /** Serializable version identifier. */
+    private static final long serialVersionUID = 2306581345647615033L;
 
     /**
      * Used when generating Exponential samples.
@@ -59,29 +65,48 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      */
     private static final double[] EXPONENTIAL_SA_QI;
 
-    /** Serializable version identifier. */
-    private static final long serialVersionUID = 2306581345647615033L;
-
     /** Map of <classname, switch constant> for continuous distributions */
-    private static final Map<String, Integer> CONTINUOUS_NAMES = new HashMap<String, Integer>();
+    private static final Map<Class<? extends RealDistribution>, RealDistributionSampler> CONTINUOUS_SAMPLERS = new HashMap<>();
     /** Map of <classname, switch constant> for discrete distributions */
-    private static final Map<String, Integer> DISCRETE_NAMES = new HashMap<String, Integer>();
-    /** beta distribution */
-    private static final int BETA = 0;
-    /** gamma distribution */
-    private static final int GAMMA = 1;
-    /** exponential distribution */
-    private static final int EXPONENTIAL = 2;
-    /** normal distribution */
-    private static final int NORMAL = 3;
-    /** poisson distribution */
-    private static final int POISSON = 4;
-    /** uniform integer distribution */
-    private static final int UNIFORM_INT = 5;
-    /** uniform real distribution */
-    private static final int UNIFORM_REAL = 6;
-    /** log normal distribution */
-    private static final int LOG_NORMAL = 7;
+    private static final Map<Class<? extends IntegerDistribution>, IntegerDistributionSampler> DISCRETE_SAMPLERS = new HashMap<>();
+
+    /**
+     * Interface for samplers of continuous distributions.
+     */
+    @FunctionalInterface
+    private interface RealDistributionSampler {
+        /**
+         * Return the next sample following the given distribution.
+         *
+         * @param generator the random data generator to use
+         * @param distribution the distribution to use
+         * @return the next sample
+         */
+        double nextSample(RandomDataGenerator generator, RealDistribution distribution);
+    }
+
+    /**
+     * Interface for samplers of discrete distributions.
+     */
+    @FunctionalInterface
+    private interface IntegerDistributionSampler {
+        /**
+         * Return the next sample following the given distribution.
+         *
+         * @param generator the random data generator to use
+         * @param distribution the distribution to use
+         * @return the next sample
+         */
+        int nextSample(RandomDataGenerator generator, IntegerDistribution distribution);
+    }
+
+    /** The default sampler for continuous distributions using the inversion technique. */
+    private static final RealDistributionSampler DEFAULT_REAL_SAMPLER =
+            (generator, dist) -> dist.inverseCumulativeProbability(generator.nextDouble());
+
+    /** The default sampler for discrete distributions using the inversion technique. */
+    private static final IntegerDistributionSampler DEFAULT_INTEGER_SAMPLER =
+            (generator, dist) -> dist.inverseCumulativeProbability(generator.nextDouble());
 
     /**
      * Initialize tables.
@@ -111,15 +136,53 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
 
         EXPONENTIAL_SA_QI = ra.getElements();
 
-        CONTINUOUS_NAMES.put("BetaDistribution", BETA);
-        CONTINUOUS_NAMES.put("GammaDistribution", GAMMA);
-        CONTINUOUS_NAMES.put("ExponentialDistribution", EXPONENTIAL);
-        CONTINUOUS_NAMES.put("NormalDistribution", NORMAL);
-        CONTINUOUS_NAMES.put("LogNormalDistribution", LOG_NORMAL);
-        CONTINUOUS_NAMES.put("UniformDistribution", UNIFORM_REAL);
-        DISCRETE_NAMES.put("PoissonDistribution", POISSON);
-        DISCRETE_NAMES.put("UniformIntegerDistribution", UNIFORM_INT);
+        // Continuous samplers
+
+        CONTINUOUS_SAMPLERS.put(BetaDistribution.class,
+                                (generator, dist) -> {
+                                    BetaDistribution beta = (BetaDistribution) dist;
+                                    return generator.nextBeta(beta.getAlpha(), beta.getBeta());
+                                });
+
+        CONTINUOUS_SAMPLERS.put(ExponentialDistribution.class,
+                                (generator, dist) -> generator.nextExponential(dist.getNumericalMean()));
+
+        CONTINUOUS_SAMPLERS.put(GammaDistribution.class,
+                                (generator, dist) -> {
+                                    GammaDistribution gamma = (GammaDistribution) dist;
+                                    return generator.nextGamma(gamma.getShape(), gamma.getScale());
+                                });
+
+        CONTINUOUS_SAMPLERS.put(NormalDistribution.class,
+                                (generator, dist) -> {
+                                    NormalDistribution normal = (NormalDistribution) dist;
+                                    return generator.nextNormal(normal.getMean(),
+                                                                normal.getStandardDeviation());
+                                });
+
+        CONTINUOUS_SAMPLERS.put(LogNormalDistribution.class,
+                                (generator, dist) -> {
+                                    LogNormalDistribution logNormal = (LogNormalDistribution) dist;
+                                    return generator.nextLogNormal(logNormal.getShape(),
+                                                                   logNormal.getScale());
+                                });
+
+        CONTINUOUS_SAMPLERS.put(UniformRealDistribution.class,
+                                (generator, dist) -> generator.nextUniform(dist.getSupportLowerBound(),
+                                                                           dist.getSupportUpperBound()));
+
+        // Discrete samplers
+
+        DISCRETE_SAMPLERS.put(PoissonDistribution.class,
+                              (generator, dist) -> generator.nextPoisson(dist.getNumericalMean()));
+
+        DISCRETE_SAMPLERS.put(UniformIntegerDistribution.class,
+                              (generator, dist) -> generator.nextInt(dist.getSupportLowerBound(),
+                                                                     dist.getSupportUpperBound()));
     }
+
+    /** Source of random data */
+    private final RandomGenerator randomGenerator;
 
     /**
      * Cached random normal value.  The default implementation for
@@ -130,23 +193,11 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      */
     private double cachedNormalDeviate = Double.NaN;
 
-    /** Source of random data */
-    private final RandomGenerator randomGenerator;
-
     /**
      * Construct a RandomDataGenerator with a default RandomGenerator as its source of random data.
      */
     public RandomDataGenerator() {
         this(new Well19937c());
-    }
-
-    /**
-     * Construct a RandomDataGenerator using the given RandomGenerator as its source of random data.
-     *
-     * @param randomGenerator the underlying PRNG
-     */
-    public RandomDataGenerator(RandomGenerator randomGenerator) {
-        this.randomGenerator = randomGenerator;
     }
 
     /**
@@ -160,15 +211,14 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
     }
 
     /**
-     * Construct a RandomDataGenerator using the given RandomGenerator as its source of random data, initialized
-     * with the given seed.
+     * Construct a RandomDataGenerator using the given RandomGenerator as its source of random data.
      *
      * @param randomGenerator the underlying PRNG
-     * @param seed seed for the PRNG
+     * @throws MathIllegalArgumentException if randomGenerator is null
      */
-    public RandomDataGenerator(long seed, RandomGenerator randomGenerator) {
+    private RandomDataGenerator(RandomGenerator randomGenerator) {
+        MathUtils.checkNotNull(randomGenerator);
         this.randomGenerator = randomGenerator;
-        randomGenerator.setSeed(seed);
     }
 
     /**
@@ -177,132 +227,16 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      *
      * @param randomGenerator source of random bits
      * @return a RandomData using the given RandomGenerator to source bits
+     * @throws MathIllegalArgumentException if randomGenerator is null
      */
     public static RandomDataGenerator of(RandomGenerator randomGenerator) {
         return new RandomDataGenerator(randomGenerator);
     }
 
-    /**
-     * Returns the next pseudo-random, uniformly distributed
-     * <code>boolean</code> value from this random number generator's
-     * sequence.
-     *
-     * @return  the next pseudo-random, uniformly distributed
-     * <code>boolean</code> value from this random number generator's
-     * sequence
-     */
-    @Override
-    public boolean nextBoolean() {
-        return randomGenerator.nextBoolean();
-    }
-
-     /**
-     * Generates random bytes and places them into a user-supplied
-     * byte array.  The number of random bytes produced is equal to
-     * the length of the byte array.
-     *
-     * @param bytes the non-null byte array in which to put the
-     * random bytes
-     */
-    @Override
-    public void nextBytes(byte[] bytes) {
-        randomGenerator.nextBytes(bytes);
-    }
-
-     /**
-     * Returns the next pseudo-random, uniformly distributed
-     * <code>double</code> value between <code>0.0</code> and
-     * <code>1.0</code> from this random number generator's sequence.
-     *
-     * @return  the next pseudo-random, uniformly distributed
-     *  <code>double</code> value between <code>0.0</code> and
-     *  <code>1.0</code> from this random number generator's sequence
-     */
-    @Override
-    public double nextDouble() {
-        return randomGenerator.nextDouble();
-    }
-
-    /**
-     * Returns the next pseudo-random, uniformly distributed <code>float</code>
-     * value between <code>0.0</code> and <code>1.0</code> from this random
-     * number generator's sequence.
-     *
-     * @return  the next pseudo-random, uniformly distributed <code>float</code>
-     * value between <code>0.0</code> and <code>1.0</code> from this
-     * random number generator's sequence
-     */
-    @Override
-    public float nextFloat() {
-        return randomGenerator.nextFloat();
-    }
-
-     /**
-     * Returns the next pseudo-random, uniformly distributed <code>int</code>
-     * value from this random number generator's sequence.
-     * All 2<font size="-1"><sup>32</sup></font> possible {@code int} values
-     * should be produced with  (approximately) equal probability.
-     *
-     * @return the next pseudo-random, uniformly distributed <code>int</code>
-     *  value from this random number generator's sequence
-     */
-    @Override
-    public int nextInt() {
-        return randomGenerator.nextInt();
-    }
-
-    /**
-     * Returns a pseudo-random, uniformly distributed {@code int} value
-     * between 0 (inclusive) and the specified value (exclusive), drawn from
-     * this random number generator's sequence.
-     *
-     * @param n the bound on the random number to be returned.  Must be
-     * positive.
-     * @return  a pseudo-random, uniformly distributed {@code int}
-     * value between 0 (inclusive) and n (exclusive).
-     * @throws IllegalArgumentException  if n is not positive.
-     */
-    @Override
-    public int nextInt(int n) {
-        return randomGenerator.nextInt(n);
-    }
-
-    /**
-     * Returns the next pseudo-random, uniformly distributed <code>long</code>
-     * value from this random number generator's sequence.  All
-     * 2<font size="-1"><sup>64</sup></font> possible {@code long} values
-     * should be produced with (approximately) equal probability.
-     *
-     * @return  the next pseudo-random, uniformly distributed <code>long</code>
-     *value from this random number generator's sequence
-     */
-    @Override
-    public long nextLong() {
-        return randomGenerator.nextLong();
-    }
-
     /** {@inheritDoc} */
     @Override
-    public void setSeed(int seed) {
-        if (randomGenerator != null) {
-            randomGenerator.setSeed(seed);
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setSeed(int[] seed) {
-        if (randomGenerator != null) {
-            randomGenerator.setSeed(seed);
-        }
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setSeed(long seed) {
-        if (randomGenerator != null) {
-            randomGenerator.setSeed(seed);
-        }
+    protected RandomGenerator delegate() {
+        return randomGenerator;
     }
 
     /**
@@ -346,22 +280,15 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
     }
 
     /**
-     * Returns the next pseudo-random beta-distributed value with the given shape and scale parameters.
+     * Returns the next pseudo-random beta-distributed value with the given
+     * shape and scale parameters.
      *
      * @param alpha First shape parameter (must be positive).
      * @param beta Second shape parameter (must be positive).
      * @return beta-distributed random deviate
      */
     public double nextBeta(double alpha, double beta) {
-        // TODO: validate parameters
-        final double a = FastMath.min(alpha, beta);
-        final double b = FastMath.max(alpha, beta);
-
-        if (a > 1) {
-            return algorithmBB(alpha, a, b);
-        } else {
-            return algorithmBC(alpha, b, a);
-        }
+        return ChengBetaSampler.sample(randomGenerator, alpha, beta);
     }
 
     /**
@@ -615,31 +542,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      * @return a random value following the given distribution
      */
     public double nextDeviate(RealDistribution dist) {
-        String className = dist.getClass().getSimpleName();
-        Integer val = CONTINUOUS_NAMES.get(className);
-        if (val != null) {
-            switch(val) {
-                case EXPONENTIAL:
-                    return nextExponential(dist.getNumericalMean());
-                case GAMMA:
-                    GammaDistribution gammaDist = (GammaDistribution) dist;
-                    return nextGamma(gammaDist.getShape(), gammaDist.getScale());
-                case NORMAL:
-                    NormalDistribution normalDist = (NormalDistribution) dist;
-                    return nextNormal(normalDist.getMean(), normalDist.getStandardDeviation());
-                case LOG_NORMAL:
-                    LogNormalDistribution logNormalDist = (LogNormalDistribution) dist;
-                    return nextLogNormal(logNormalDist.getShape(), logNormalDist.getScale());
-                case BETA:
-                    BetaDistribution betaDist = (BetaDistribution) dist;
-                    return nextBeta(betaDist.getAlpha(), betaDist.getBeta());
-                case UNIFORM_REAL:
-                    return nextUniform(dist.getSupportLowerBound(), dist.getSupportUpperBound());
-                default:
-                    throw new MathRuntimeException(LocalizedCoreFormats.INTERNAL_ERROR);
-            }
-        }
-        return dist.inverseCumulativeProbability(randomGenerator.nextDouble());
+        return getSampler(dist).nextSample(this, dist);
     }
 
     /**
@@ -648,13 +551,15 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      * @param dist the distribution to sample from
      * @param size the number of values to return
      *
-     * @return an array of {@code size }values following the given distribution
+     * @return an array of {@code size} values following the given distribution
      */
     public double[] nextDeviates(RealDistribution dist, int size) {
         //TODO: check parameters
+
+        RealDistributionSampler sampler = getSampler(dist);
         double[] out = new double[size];
         for (int i = 0; i < size; i++) {
-            out[i] = nextDeviate(dist);
+            out[i] = sampler.nextSample(this, dist);
         }
         return out;
     }
@@ -666,21 +571,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      * @return a random value following the given distribution
      */
     public int nextDeviate(IntegerDistribution dist) {
-        String className = dist.getClass().getSimpleName();
-        Integer val = DISCRETE_NAMES.get(className);
-        if (val != null) {
-            switch(val) {
-                case POISSON:
-                    return nextPoisson(dist.getNumericalMean());
-                case UNIFORM_INT:
-                    return nextInt(dist.getSupportLowerBound(), dist.getSupportUpperBound());
-
-                default:
-                    throw new MathRuntimeException(LocalizedCoreFormats.INTERNAL_ERROR);
-            }
-        }
-
-        return dist.inverseCumulativeProbability(randomGenerator.nextDouble());
+        return getSampler(dist).nextSample(this, dist);
     }
 
     /**
@@ -693,103 +584,39 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
      */
     public int[] nextDeviates(IntegerDistribution dist, int size) {
         //TODO: check parameters
+
+        IntegerDistributionSampler sampler = getSampler(dist);
         int[] out = new int[size];
         for (int i = 0; i < size; i++) {
-            out[i] = nextDeviate(dist);
+            out[i] = sampler.nextSample(this, dist);
         }
         return out;
     }
 
     /**
-     * Returns one Beta sample using Cheng's BB algorithm, when both &alpha; and &beta; are greater than 1.
-     *
-     * @param a0 distribution first shape parameter (&alpha;)
-     * @param a min(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
-     * @param b max(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
-     * @return sampled value
+     * Returns a sampler for the given continuous distribution.
+     * @param dist the distribution
+     * @return a sampler for the distribution
      */
-    private double algorithmBB(
-                                      final double a0,
-                                      final double a,
-                                      final double b) {
-        final double alpha = a + b;
-        final double beta = FastMath.sqrt((alpha - 2.) / (2. * a * b - alpha));
-        final double gamma = a + 1. / beta;
-
-        double r;
-        double w;
-        double t;
-        do {
-            final double u1 = randomGenerator.nextDouble();
-            final double u2 = randomGenerator.nextDouble();
-            final double v = beta * (FastMath.log(u1) - FastMath.log1p(-u1));
-            w = a * FastMath.exp(v);
-            final double z = u1 * u1 * u2;
-            r = gamma * v - 1.3862944;
-            final double s = a + r - w;
-            if (s + 2.609438 >= 5 * z) {
-                break;
-            }
-
-            t = FastMath.log(z);
-            if (s >= t) {
-                break;
-            }
-        } while (r + alpha * (FastMath.log(alpha) - FastMath.log(b + w)) < t);
-
-        w = FastMath.min(w, Double.MAX_VALUE);
-        return Precision.equals(a, a0) ? w / (b + w) : b / (b + w);
+    private RealDistributionSampler getSampler(RealDistribution dist) {
+        RealDistributionSampler sampler = CONTINUOUS_SAMPLERS.get(dist.getClass());
+        if (sampler != null) {
+            return sampler;
+        }
+        return DEFAULT_REAL_SAMPLER;
     }
 
     /**
-     * Returns a Beta-distribute value using Cheng's BC algorithm, when at least one of &alpha; and &beta;
-     * is smaller than 1.
-     *
-     * @param a0 distribution first shape parameter (&alpha;)
-     * @param a max(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
-     * @param b min(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
-     * @return sampled value
+     * Returns a sampler for the given discrete distribution.
+     * @param dist the distribution
+     * @return a sampler for the distribution
      */
-    private double algorithmBC(final double a0,
-                               final double a,
-                               final double b) {
-        final double alpha = a + b;
-        final double beta = 1. / b;
-        final double delta = 1. + a - b;
-        final double k1 = delta * (0.0138889 + 0.0416667 * b) / (a * beta - 0.777778);
-        final double k2 = 0.25 + (0.5 + 0.25 / delta) * b;
-
-        double w;
-        for (;;) {
-            final double u1 = randomGenerator.nextDouble();
-            final double u2 = randomGenerator.nextDouble();
-            final double y = u1 * u2;
-            final double z = u1 * y;
-            if (u1 < 0.5) {
-                if (0.25 * u2 + z - y >= k1) {
-                    continue;
-                }
-            } else {
-                if (z <= 0.25) {
-                    final double v = beta * (FastMath.log(u1) - FastMath.log1p(-u1));
-                    w = a * FastMath.exp(v);
-                    break;
-                }
-
-                if (z >= k2) {
-                    continue;
-                }
-            }
-
-            final double v = beta * (FastMath.log(u1) - FastMath.log1p(-u1));
-            w = a * FastMath.exp(v);
-            if (alpha * (FastMath.log(alpha) - FastMath.log(b + w) + v) - 1.3862944 >= FastMath.log(z)) {
-                break;
-            }
+    private IntegerDistributionSampler getSampler(IntegerDistribution dist) {
+        IntegerDistributionSampler sampler = DISCRETE_SAMPLERS.get(dist.getClass());
+        if (sampler != null) {
+            return sampler;
         }
-
-        w = FastMath.min(w, Double.MAX_VALUE);
-        return Precision.equals(a, a0) ? w / (b + w) : b / (b + w);
+        return DEFAULT_INTEGER_SAMPLER;
     }
 
     /**
@@ -803,7 +630,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
     public int nextInt(int lower, int upper) {
         if (lower >= upper) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
-                                                lower, upper);
+                                                   lower, upper);
         }
         final int max = (upper - lower) + 1;
         if (max <= 0) {
@@ -834,7 +661,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
     public long nextLong(final long lower, final long upper) throws MathIllegalArgumentException {
         if (lower >= upper) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND,
-                                                lower, upper);
+                                                   lower, upper);
         }
         final long max = (upper - lower) + 1;
         if (max <= 0) {
@@ -853,6 +680,36 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
             // we can shift the range and generate directly a positive long
             return lower + nextLong(max);
         }
+    }
+
+    /**
+     * Returns a pseudorandom, uniformly distributed {@code long} value
+     * between 0 (inclusive) and the specified value (exclusive), drawn from
+     * this random number generator's sequence.
+     *
+     * @param n the bound on the random number to be returned.  Must be
+     * positive.
+     * @return  a pseudorandom, uniformly distributed {@code long}
+     * value between 0 (inclusive) and n (exclusive).
+     * @throws MathIllegalArgumentException  if n is not positive.
+     */
+    private long nextLong(final long n) throws MathIllegalArgumentException {
+        if (n > 0) {
+            final byte[] byteArray = new byte[8];
+            long bits;
+            long val;
+            do {
+                randomGenerator.nextBytes(byteArray);
+                bits = 0;
+                for (final byte b : byteArray) {
+                    bits = (bits << 8) | (b & 0xffL);
+                }
+                bits &= 0x7fffffffffffffffL;
+                val  = bits % n;
+            } while (bits - val + (n - 1) < 0);
+            return val;
+        }
+        throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, n);
     }
 
     /**
@@ -950,7 +807,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
         throws MathIllegalArgumentException {
         if (k > n) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.PERMUTATION_EXCEEDS_N,
-                                                k, n, true);
+                                                   k, n, true);
         }
         if (k <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.PERMUTATION_SIZE,
@@ -989,7 +846,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
         int len = c.size();
         if (k > len) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE,
-                                                k, len, true);
+                                                   k, len, true);
         }
         if (k <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES, k);
@@ -1025,7 +882,7 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
         int len = a.length;
         if (k > len) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SAMPLE_SIZE_EXCEEDS_COLLECTION_SIZE,
-                                                k, len, true);
+                                                   k, len, true);
         }
         if (k <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_OF_SAMPLES, k);
@@ -1039,33 +896,135 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
     }
 
     /**
-     * Returns a pseudorandom, uniformly distributed {@code long} value
-     * between 0 (inclusive) and the specified value (exclusive), drawn from
-     * this random number generator's sequence.
+     * Utility class implementing Cheng's algorithms for beta distribution sampling.
      *
-     * @param n the bound on the random number to be returned.  Must be
-     * positive.
-     * @return  a pseudorandom, uniformly distributed {@code long}
-     * value between 0 (inclusive) and n (exclusive).
-     * @throws MathIllegalArgumentException  if n is not positive.
+     * <blockquote>
+     * <pre>
+     * R. C. H. Cheng,
+     * "Generating beta variates with nonintegral shape parameters",
+     * Communications of the ACM, 21, 317-322, 1978.
+     * </pre>
+     * </blockquote>
      */
-    private long nextLong(final long n) throws MathIllegalArgumentException {
-        if (n > 0) {
-            final byte[] byteArray = new byte[8];
-            long bits;
-            long val;
-            do {
-                randomGenerator.nextBytes(byteArray);
-                bits = 0;
-                for (final byte b : byteArray) {
-                    bits = (bits << 8) | (((long) b) & 0xffL);
-                }
-                bits &= 0x7fffffffffffffffL;
-                val  = bits % n;
-            } while (bits - val + (n - 1) < 0);
-            return val;
-        }
-        throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, n);
-    }
+    private static class ChengBetaSampler {
 
+        /**
+         * Returns the next sample following a beta distribution
+         * with given alpha and beta parameters.
+         *
+         * @param generator the random generator to use
+         * @param alpha the alpha parameter
+         * @param beta the beta parameter
+         * @return the next sample
+         */
+        public static double sample(RandomGenerator generator,
+                                    double alpha,
+                                    double beta) {
+            // TODO: validate parameters
+            final double a = FastMath.min(alpha, beta);
+            final double b = FastMath.max(alpha, beta);
+
+            if (a > 1) {
+                return algorithmBB(generator, alpha, a, b);
+            } else {
+                return algorithmBC(generator, alpha, b, a);
+            }
+        }
+
+        /**
+         * Returns one Beta sample using Cheng's BB algorithm,
+         * when both &alpha; and &beta; are greater than 1.
+         *
+         * @param generator the random generator to use
+         * @param a0 distribution first shape parameter (&alpha;)
+         * @param a min(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
+         * @param b max(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
+         * @return sampled value
+         */
+        private static double algorithmBB(final RandomGenerator generator,
+                                          final double a0,
+                                          final double a,
+                                          final double b) {
+            final double alpha = a + b;
+            final double beta = FastMath.sqrt((alpha - 2.) / (2. * a * b - alpha));
+            final double gamma = a + 1. / beta;
+
+            double r;
+            double w;
+            double t;
+            do {
+                final double u1 = generator.nextDouble();
+                final double u2 = generator.nextDouble();
+                final double v = beta * (FastMath.log(u1) - FastMath.log1p(-u1));
+                w = a * FastMath.exp(v);
+                final double z = u1 * u1 * u2;
+                r = gamma * v - 1.3862944;
+                final double s = a + r - w;
+                if (s + 2.609438 >= 5 * z) {
+                    break;
+                }
+
+                t = FastMath.log(z);
+                if (s >= t) {
+                    break;
+                }
+            } while (r + alpha * (FastMath.log(alpha) - FastMath.log(b + w)) < t);
+
+            w = FastMath.min(w, Double.MAX_VALUE);
+            return Precision.equals(a, a0) ? w / (b + w) : b / (b + w);
+        }
+
+        /**
+         * Returns a Beta-distribute value using Cheng's BC algorithm,
+         * when at least one of &alpha; and &beta; is smaller than 1.
+         *
+         * @param generator the random generator to use
+         * @param a0 distribution first shape parameter (&alpha;)
+         * @param a max(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
+         * @param b min(&alpha;, &beta;) where &alpha;, &beta; are the two distribution shape parameters
+         * @return sampled value
+         */
+        private static double algorithmBC(final RandomGenerator generator,
+                                          final double a0,
+                                          final double a,
+                                          final double b) {
+            final double alpha = a + b;
+            final double beta = 1. / b;
+            final double delta = 1. + a - b;
+            final double k1 = delta * (0.0138889 + 0.0416667 * b) / (a * beta - 0.777778);
+            final double k2 = 0.25 + (0.5 + 0.25 / delta) * b;
+
+            double w;
+            for (;;) {
+                final double u1 = generator.nextDouble();
+                final double u2 = generator.nextDouble();
+                final double y = u1 * u2;
+                final double z = u1 * y;
+                if (u1 < 0.5) {
+                    if (0.25 * u2 + z - y >= k1) {
+                        continue;
+                    }
+                } else {
+                    if (z <= 0.25) {
+                        final double v = beta * (FastMath.log(u1) - FastMath.log1p(-u1));
+                        w = a * FastMath.exp(v);
+                        break;
+                    }
+
+                    if (z >= k2) {
+                        continue;
+                    }
+                }
+
+                final double v = beta * (FastMath.log(u1) - FastMath.log1p(-u1));
+                w = a * FastMath.exp(v);
+                if (alpha * (FastMath.log(alpha) - FastMath.log(b + w) + v) - 1.3862944 >= FastMath.log(z)) {
+                    break;
+                }
+            }
+
+            w = FastMath.min(w, Double.MAX_VALUE);
+            return Precision.equals(a, a0) ? w / (b + w) : b / (b + w);
+        }
+    }
 }

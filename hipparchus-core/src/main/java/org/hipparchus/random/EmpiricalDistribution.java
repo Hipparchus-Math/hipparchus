@@ -162,7 +162,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
      * @throws MathIllegalArgumentException if {@code binCount <= 0}.
      */
     public EmpiricalDistribution(int binCount, RandomGenerator generator) {
-        this(binCount, new RandomDataGenerator(generator));
+        this(binCount, RandomDataGenerator.of(generator));
     }
 
     /**

@@ -21,7 +21,6 @@ import java.util.Random;
 /**
  * Extension of <code>java.util.Random</code> wrapping a
  * {@link RandomGenerator}.
- *
  */
 public class RandomAdaptor extends Random implements RandomGenerator {
 
@@ -35,7 +34,9 @@ public class RandomAdaptor extends Random implements RandomGenerator {
      * Prevent instantiation without a generator argument
      */
     @SuppressWarnings("unused")
-    private RandomAdaptor() { randomGenerator = null; }
+    private RandomAdaptor() {
+        randomGenerator = null;
+    }
 
     /**
      * Construct a RandomAdaptor wrapping the supplied RandomGenerator.
@@ -164,7 +165,7 @@ public class RandomAdaptor extends Random implements RandomGenerator {
      * should be produced with (approximately) equal probability.
      *
      * @return  the next pseudorandom, uniformly distributed <code>long</code>
-     *value from this random number generator's sequence
+     * value from this random number generator's sequence
      */
     @Override
     public long nextLong() {

@@ -111,7 +111,7 @@ public class ClusterAlgorithmComparison {
     public static List<Vector2D> makeBlobs(int samples, int centers, double clusterStd,
                                            double min, double max, boolean shuffle, RandomGenerator random) {
 
-        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(random);
+        final RandomDataGenerator randomDataGenerator = RandomDataGenerator.of(random);
         //NormalDistribution dist = new NormalDistribution(random, 0.0, clusterStd);
 
         double range = max - min;
@@ -162,7 +162,7 @@ public class ClusterAlgorithmComparison {
     }
 
     public static Vector2D generateNoiseVector(RandomGenerator randomGenerator, double noise) {
-        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(randomGenerator);
+        final RandomDataGenerator randomDataGenerator = RandomDataGenerator.of(randomGenerator);
         return new Vector2D(randomDataGenerator.nextNormal(0, noise), randomDataGenerator.nextNormal(0, noise));
     }
 

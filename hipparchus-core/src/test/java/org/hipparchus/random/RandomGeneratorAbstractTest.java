@@ -58,7 +58,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
      */
     public RandomGeneratorAbstractTest() {
         generator = makeGenerator();
-        randomData = new RandomDataGenerator(generator);
+        randomData = RandomDataGenerator.of(generator);
     }
 
     /**
