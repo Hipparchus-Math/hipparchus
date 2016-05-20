@@ -18,6 +18,9 @@ package org.hipparchus.random;
 
 import java.util.Random;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.MathUtils;
+
 /**
  * Extension of <code>java.util.Random</code> wrapping a
  * {@link RandomGenerator}.
@@ -31,19 +34,13 @@ public class RandomAdaptor extends Random implements RandomGenerator {
     private final RandomGenerator randomGenerator;
 
     /**
-     * Prevent instantiation without a generator argument
-     */
-    @SuppressWarnings("unused")
-    private RandomAdaptor() {
-        randomGenerator = null;
-    }
-
-    /**
      * Construct a RandomAdaptor wrapping the supplied RandomGenerator.
      *
      * @param randomGenerator  the wrapped generator
+     * @throws MathIllegalArgumentException if randomGenerator is null
      */
     public RandomAdaptor(RandomGenerator randomGenerator) {
+        MathUtils.checkNotNull(randomGenerator);
         this.randomGenerator = randomGenerator;
     }
 
@@ -54,7 +51,7 @@ public class RandomAdaptor extends Random implements RandomGenerator {
      * @param randomGenerator  wrapped RandomGenerator instance
      * @return a Random instance wrapping the RandomGenerator
      */
-    public static Random createAdaptor(RandomGenerator randomGenerator) {
+    public static Random of(RandomGenerator randomGenerator) {
         return new RandomAdaptor(randomGenerator);
     }
 

@@ -18,22 +18,18 @@ package org.hipparchus.random;
 
 import java.util.Random;
 
-import org.hipparchus.random.RandomAdaptor;
-import org.hipparchus.random.RandomGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * Test cases for the RandomAdaptor class
- *
  */
-
 public class RandomAdaptorTest {
 
     @Test
     public void testAdaptor() {
         ConstantGenerator generator = new ConstantGenerator();
-        Random random = RandomAdaptor.createAdaptor(generator);
+        Random random = RandomAdaptor.of(generator);
         checkConstant(random);
         RandomAdaptor randomAdaptor = new RandomAdaptor(generator);
         checkConstant(randomAdaptor);
