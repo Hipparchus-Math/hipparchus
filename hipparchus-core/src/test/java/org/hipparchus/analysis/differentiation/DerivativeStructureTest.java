@@ -28,6 +28,7 @@ import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -320,6 +321,27 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
                 Assert.assertTrue(Double.isNaN(zeroZero.getPartialDerivative(1, 1, 0)));
             }
 
+            // very special case: 0^0 where the power is a primitive
+            DerivativeStructure zeroDsZeroDouble = new DerivativeStructure(3,  maxOrder, 0, 0.0).pow(0.0);
+            boolean first = true;
+            for (final double d : zeroDsZeroDouble.getAllDerivatives()) {
+                if (first) {
+                    Assert.assertEquals(1.0, d, Precision.EPSILON);
+                    first = false;
+                } else {
+                    Assert.assertEquals(0.0, d, Precision.SAFE_MIN);
+                }
+            }
+            DerivativeStructure zeroDsZeroInt = new DerivativeStructure(3,  maxOrder, 0, 0.0).pow(0);
+            first = true;
+            for (final double d : zeroDsZeroInt.getAllDerivatives()) {
+                if (first) {
+                    Assert.assertEquals(1.0, d, Precision.EPSILON);
+                    first = false;
+                } else {
+                    Assert.assertEquals(0.0, d, Precision.SAFE_MIN);
+                }
+            }
         }
 
     }
