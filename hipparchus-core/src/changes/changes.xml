@@ -37,6 +37,10 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="tn" type="fix">
         Fix "FastMath#round(..)" to comply to changed contract of "Math#round()" in Java 8.
       </action>
+      <action dev="luc" type="fix">
+        Fixed DerivativeStructure.pow(0.0) which was NaN when the DS was 0, despite it should
+        always be 1.0 in this case, regardless of the base (even if the base is NaN, in fact).
+      </action>
       <action dev="tn" type="add">
         Added Gauss-Laguerre quadrature for integration of improper integrals.
       </action>
