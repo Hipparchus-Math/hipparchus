@@ -20,6 +20,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.RealDistribution;
@@ -62,9 +63,9 @@ public class RandomDataGenerator implements RandomGenerator, Serializable {
     private static final long serialVersionUID = 2306581345647615033L;
 
     /** Map of <classname, switch constant> for continuous distributions */
-    private static final HashMap<String, Integer> CONTINUOUS_NAMES = new HashMap<String, Integer>();
+    private static final Map<String, Integer> CONTINUOUS_NAMES = new HashMap<String, Integer>();
     /** Map of <classname, switch constant> for discrete distributions */
-    private static final HashMap<String, Integer> DISCRETE_NAMES = new HashMap<String, Integer>();
+    private static final Map<String, Integer> DISCRETE_NAMES = new HashMap<String, Integer>();
     /** beta distribution */
     private static final int BETA = 0;
     /** gamma distribution */
