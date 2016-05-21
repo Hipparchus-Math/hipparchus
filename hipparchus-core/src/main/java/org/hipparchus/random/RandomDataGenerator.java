@@ -420,7 +420,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
      */
     public double nextNormal(double mean, double standardDeviation) {
         if (standardDeviation <= 0) {
-            throw new MathIllegalArgumentException (LocalizedCoreFormats.NUMBER_TOO_SMALL, mean, 0);
+            throw new MathIllegalArgumentException (LocalizedCoreFormats.NUMBER_TOO_SMALL, standardDeviation, 0);
         }
         return standardDeviation * nextGaussian() + mean;
     }
