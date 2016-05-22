@@ -439,4 +439,9 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         Assert.assertArrayEquals("chunkSize=" + chunkSize + " numChunks=" + numChunks,
                                  b2, b3);
     }
+
+    @Override
+    public void testNextZipf() {
+        // Skip this test for the individual generators
+    }
 }

@@ -71,7 +71,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     /** Map of <classname, switch constant> for discrete distributions */
     private static final Map<Class<? extends IntegerDistribution>, IntegerDistributionSampler> DISCRETE_SAMPLERS = new HashMap<>();
     /** The sampler to be used for the nextZipF method */
-    private transient ZipfRejectionInversionSampler zipFSampler;
+    private transient ZipfRejectionInversionSampler zipfSampler;
 
     /**
      * Interface for samplers of continuous distributions.
@@ -750,10 +750,10 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
      * @return random Zipf value
      */
     public int nextZipf(int numberOfElements, double exponent) {
-        if (zipFSampler == null) {
-            zipFSampler = new ZipfRejectionInversionSampler(numberOfElements, exponent);
+        if (zipfSampler == null || zipfSampler.getExponent() != exponent || zipfSampler.getNumberOfElements() != numberOfElements) {
+            zipfSampler = new ZipfRejectionInversionSampler(numberOfElements, exponent);
         }
-        return zipFSampler.sample(randomGenerator);
+        return zipfSampler.sample(randomGenerator);
     }
 
     /**
@@ -1213,6 +1213,20 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
                 t = -1;
             }
             return FastMath.exp(helper1(t)*x);
+        }
+
+        /**
+         * @return the exponent of the distribution being sampled
+         */
+        public double getExponent() {
+            return exponent;
+        }
+
+        /**
+         * @return the number of elements of the distribution being sampled
+         */
+        public int getNumberOfElements() {
+            return numberOfElements;
         }
 
         /**

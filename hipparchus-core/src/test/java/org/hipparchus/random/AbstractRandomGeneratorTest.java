@@ -16,7 +16,6 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.random.RandomGenerator;
 
 /**
  * Test cases for the AbstractRandomGenerator class.

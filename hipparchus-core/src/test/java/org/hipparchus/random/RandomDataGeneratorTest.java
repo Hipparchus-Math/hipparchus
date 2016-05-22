@@ -28,6 +28,7 @@ import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.GammaDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.distribution.discrete.PoissonDistribution;
+import org.hipparchus.distribution.discrete.ZipfDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.Frequency;
 import org.hipparchus.stat.LongFrequency;
@@ -829,6 +830,46 @@ public class RandomDataGeneratorTest {
             TestUtils.updateCounts(value, counts, quartiles);
         }
         TestUtils.assertChiSquareAccept(expected, counts, 0.001);
+    }
+
+
+    @Test
+    public void testNextZipf() {
+        int sampleSize = 1000;
+
+        int[] numPointsValues = {
+            2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 70, 80, 90, 100
+        };
+        double[] exponentValues = {
+            1e-10, 1e-9, 1e-8, 1e-7, 1e-6, 1e-5, 1e-4, 1e-3, 1e-2, 1e-1, 2e-1, 5e-1,
+            1. - 1e-9, 1.0, 1. + 1e-9, 1.1, 1.2, 1.3, 1.5, 1.6, 1.7, 1.8, 2.0,
+            2.5, 3.0, 4., 5., 6., 7., 8., 9., 10., 20., 30., 100., 150.
+        };
+
+        for (int numPoints : numPointsValues) {
+            for (double exponent : exponentValues) {
+                double weightSum = 0.;
+                double[] weights = new double[numPoints];
+                for (int i = numPoints; i>=1; i-=1) {
+                    weights[i-1] = Math.pow(i, -exponent);
+                    weightSum += weights[i-1];
+                }
+                // use fixed seed, the test is expected to fail for more than 50% of all seeds because each test case can fail
+                // with probability 0.001, the chance that all test cases do not fail is 0.999^(32*22) = 0.49442874426
+                ZipfDistribution distribution = new ZipfDistribution(numPoints, exponent);
+                randomData.setSeed(1001);
+                double[] expectedCounts = new double[numPoints];
+                long[] observedCounts = new long[numPoints];
+                for (int i = 0; i < numPoints; i++) {
+                    expectedCounts[i] = sampleSize * (weights[i]/weightSum);
+                }
+                int[] sample = randomData.nextDeviates(distribution,sampleSize);
+                for (int s : sample) {
+                    observedCounts[s-1]++;
+                }
+                TestUtils.assertChiSquareAccept(expectedCounts, observedCounts, 0.001);
+            }
+        }
     }
 
 }
