@@ -280,6 +280,13 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
     }
 
     /**
+     * @return the quantile estimated by this statistic
+     */
+    public double getQuantile() {
+        return quantile;
+    }
+
+    /**
      * @return maximum in the data set added to this statistic
      */
     private double maximum() {
