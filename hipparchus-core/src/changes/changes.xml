@@ -34,6 +34,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
+      <action dev="luc" type="fix" due-to="Andrea Antolino">
+        Fix DerivativeStructure.pow for 0 argument and power less than 1.
+      </action>
       <action dev="tn" type="fix">
         Fix "FastMath#round(..)" to comply to changed contract of "Math#round()" in Java 8.
       </action>
