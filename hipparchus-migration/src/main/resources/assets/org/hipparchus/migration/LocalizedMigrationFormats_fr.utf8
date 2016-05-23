@@ -22,6 +22,7 @@ CANNOT_FORMAT_INSTANCE_AS_REAL_VECTOR = impossible de formater une instance de {
 CANNOT_INCREMENT_STATISTIC_CONSTRUCTED_FROM_EXTERNAL_MOMENTS = les statistiques basées sur des moments externes ne peuvent pas être incrémentées
 CANNOT_RETRIEVE_AT_NEGATIVE_INDEX = impossible d''extraire un élément à un index négatif ({0})
 CANNOT_SET_AT_NEGATIVE_INDEX = impossible de mettre un élément à un index négatif ({0})
+CANNOT_TRANSFORM_TO_DOUBLE = Exception de conversion dans une transformation : {0}
 CLASS_DOESNT_IMPLEMENT_COMPARABLE = la classe ({0}) n''implante pas l''interface Comparable
 COLUMN_INDEX_OUT_OF_RANGE = l''index de colonne {0} est hors du domaine autorisé [{1}, {2}]
 DIMENSIONS_MISMATCH_SIMPLE = {0} != {1}
@@ -75,6 +76,7 @@ NO_DENSITY_FOR_THIS_DISTRIBUTION = La fonction de densité pour cette distributi
 NO_RESULT_AVAILABLE = aucun résultat n''est disponible
 NO_SUCH_MATRIX_ENTRY = pas d''élément ({0}, {1}) dans une matrice {2}x{3}
 N_POINTS_GAUSS_LEGENDRE_INTEGRATOR_NOT_SUPPORTED = l''intégrateur de Legendre-Gauss en {0} points n''est pas disponible, le nombre de points doit être entre {1} et {2}
+OBJECT_TRANSFORMATION = exception de conversion dans une transformation
 OBSERVED_COUNTS_ALL_ZERO = aucune occurrence dans le tableau des observations {0}
 OUT_OF_ORDER_ABSCISSA_ARRAY = les abscisses doivent être en ordre strictement croissant, mais l''élément {0} vaut {1} alors que l''élément {2} vaut {3}
 OUT_OF_RANGE_RIGHT = {0} hors du domaine [{1}, {2})

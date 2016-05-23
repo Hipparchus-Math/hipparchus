@@ -57,7 +57,6 @@ public enum LocalizedCoreFormats implements Localizable {
     CANNOT_FORMAT_INSTANCE_AS_COMPLEX("cannot format a {0} instance as a complex number"),
     CANNOT_FORMAT_OBJECT_TO_FRACTION("cannot format given object as a fraction number"),
     CANNOT_SUBSTITUTE_ELEMENT_FROM_EMPTY_ARRAY("cannot substitute an element from an empty array"),
-    CANNOT_TRANSFORM_TO_DOUBLE("Conversion Exception in Transformation: {0}"),
     COLUMN_INDEX("column index ({0})"), /* keep */
     CONSTRAINT("constraint"), /* keep */
     CONTINUED_FRACTION_INFINITY_DIVERGENCE("Continued fraction convergents diverged to +/- infinity for value {0}"),
@@ -176,7 +175,6 @@ public enum LocalizedCoreFormats implements Localizable {
     INPUT_ARRAY("input array"), /* keep */
     NUMERATOR("numerator"), /* keep */
     NUMERATOR_FORMAT("numerator format"), /* keep */
-    OBJECT_TRANSFORMATION("conversion exception in transformation"), /* keep */
     REAL_FORMAT("real format"), /* keep */
     WHOLE_FORMAT("whole format"), /* keep */
     NUMBER_TOO_LARGE("{0} is larger than the maximum ({1})"), /* keep */
@@ -228,7 +226,7 @@ public enum LocalizedCoreFormats implements Localizable {
     URL_CONTAINS_NO_DATA("URL {0} contains no data"),
     VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC("{0} values have been added before statistic is configured"),
     VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT("vector must have at least one element"),
-    WEIGHT_AT_LEAST_ONE_NON_ZERO("weigth array must contain at least one non-zero value"),
+    WEIGHT_AT_LEAST_ONE_NON_ZERO("weight array must contain at least one non-zero value"),
     WRONG_NUMBER_OF_POINTS("{0} points are required, got only {1}"),
     NUMBER_OF_POINTS("number of points ({0})"), /* keep */
     ZERO_DENOMINATOR("denominator must be different from 0"), /* keep */

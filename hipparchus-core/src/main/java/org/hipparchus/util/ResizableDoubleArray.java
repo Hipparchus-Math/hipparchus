@@ -25,7 +25,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 
 /**
- * A variable length {@link DoubleArray} implementation that automatically
+ * A variable length primitive double array implementation that automatically
  * handles expanding and contracting its internal storage array as elements
  * are added and removed.
  * <p>
@@ -71,7 +71,7 @@ import org.hipparchus.exception.NullArgumentException;
  * <p>
  * <b>Note:</b> this class is <b>NOT</b> thread-safe.
  */
-public class ResizableDoubleArray implements DoubleArray, Serializable {
+public class ResizableDoubleArray implements Serializable {
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20160327L;
 
@@ -309,7 +309,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param value Value to be added to end of array.
      */
-    @Override
     public void addElement(final double value) {
         if (internalArray.length <= startIndex + numElements) {
             expand();
@@ -322,7 +321,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @param values Values to be added to end of array.
      */
-    @Override
     public void addElements(final double[] values) {
         final double[] tempArray = new double[numElements + values.length + 1];
         System.arraycopy(internalArray, startIndex, tempArray, 0, numElements);
@@ -346,7 +344,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @return the value which has been discarded or "pushed" out of the array
      * by this rolling insert.
      */
-    @Override
     public double addElementRolling(double value) {
         double discarded = internalArray[startIndex];
 
@@ -422,7 +419,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
     /**
      * Clear the array contents, resetting the number of elements to zero.
      */
-    @Override
     public void clear() {
         numElements = 0;
         startIndex = 0;
@@ -572,7 +568,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @throws ArrayIndexOutOfBoundsException if {@code index} is less than
      * zero or is greater than {@code getNumElements() - 1}.
      */
-    @Override
     public double getElement(int index) {
         if (index >= numElements) {
             throw new ArrayIndexOutOfBoundsException(index);
@@ -591,7 +586,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @return the double array.
      */
-    @Override
     public double[] getElements() {
         final double[] elementArray = new double[numElements];
         System.arraycopy(internalArray, startIndex, elementArray, 0, numElements);
@@ -642,7 +636,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      *
      * @return the number of elements.
      */
-    @Override
     public int getNumElements() {
         return numElements;
     }
@@ -707,7 +700,6 @@ public class ResizableDoubleArray implements DoubleArray, Serializable {
      * @param value value to store at the specified index
      * @throws ArrayIndexOutOfBoundsException if {@code index < 0}.
      */
-    @Override
     public void setElement(int index, double value) {
         if (index < 0) {
             throw new ArrayIndexOutOfBoundsException(index);
