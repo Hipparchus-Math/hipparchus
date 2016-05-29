@@ -21,7 +21,7 @@ import java.util.Random;
 
 import org.junit.Test;
 import org.junit.Assert;
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
@@ -1237,7 +1237,7 @@ public final class BlockRealMatrixTest {
     @Test
     public void testSerial()  {
         BlockRealMatrix m = new BlockRealMatrix(testData);
-        Assert.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
+        Assert.assertEquals(m,TestUtils.serializeAndRecover(m));
     }
 
     private static class SetVisitor extends DefaultRealMatrixChangingVisitor {

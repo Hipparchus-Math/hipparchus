@@ -20,7 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.ExtendedFieldElementAbstractTest;
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
@@ -1109,7 +1109,7 @@ public class SparseGradientTest extends ExtendedFieldElementAbstractTest<SparseG
     @Test
     public void testSerialization() {
         SparseGradient a = SparseGradient.createVariable(0, 1.3);
-        SparseGradient b = (SparseGradient) UnitTestUtils.serializeAndRecover(a);
+        SparseGradient b = (SparseGradient) TestUtils.serializeAndRecover(a);
         Assert.assertEquals(a, b);
     }
 

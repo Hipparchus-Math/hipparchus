@@ -17,7 +17,7 @@
 package org.hipparchus.util;
 
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.util.BigReal;
 import org.hipparchus.util.BigRealField;
 import org.junit.Assert;
@@ -39,7 +39,7 @@ public class BigRealFieldTest {
     public void testSerial() {
         // deserializing the singleton should give the singleton itself back
         BigRealField field = BigRealField.getInstance();
-        Assert.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        Assert.assertTrue(field == TestUtils.serializeAndRecover(field));
     }
 
 }

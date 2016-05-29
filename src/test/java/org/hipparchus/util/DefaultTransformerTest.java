@@ -19,7 +19,7 @@ package org.hipparchus.util;
 
 import java.math.BigDecimal;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.DefaultTransformer;
@@ -99,7 +99,7 @@ public class DefaultTransformerTest {
 
     @Test
     public void testSerial() {
-        Assert.assertEquals(new DefaultTransformer(), UnitTestUtils.serializeAndRecover(new DefaultTransformer()));
+        Assert.assertEquals(new DefaultTransformer(), TestUtils.serializeAndRecover(new DefaultTransformer()));
     }
 
 }

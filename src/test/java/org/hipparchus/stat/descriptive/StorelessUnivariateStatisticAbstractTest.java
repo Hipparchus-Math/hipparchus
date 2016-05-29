@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.descriptive;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.UnivariateStatistic;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
@@ -83,17 +83,17 @@ public abstract class StorelessUnivariateStatisticAbstractTest
         StorelessUnivariateStatistic statistic =
             (StorelessUnivariateStatistic) getUnivariateStatistic();
 
-        UnitTestUtils.checkSerializedEquality(statistic);
+        TestUtils.checkSerializedEquality(statistic);
 
         statistic.clear();
 
         for (int i = 0; i < testArray.length; i++) {
             statistic.increment(testArray[i]);
             if(i % 5 == 0)
-                statistic = (StorelessUnivariateStatistic)UnitTestUtils.serializeAndRecover(statistic);
+                statistic = (StorelessUnivariateStatistic)TestUtils.serializeAndRecover(statistic);
         }
 
-        UnitTestUtils.checkSerializedEquality(statistic);
+        TestUtils.checkSerializedEquality(statistic);
 
         Assert.assertEquals(expectedValue(), statistic.getResult(), getTolerance());
 
@@ -175,7 +175,7 @@ public abstract class StorelessUnivariateStatisticAbstractTest
             for (int j =0; j < smallSamples[i].length; j++) {
                 stat.increment(smallSamples[i][j]);
             }
-            UnitTestUtils.assertEquals(stat.getResult(), stat.evaluate(smallSamples[i]), getTolerance());
+            TestUtils.assertEquals(stat.getResult(), stat.evaluate(smallSamples[i]), getTolerance());
         }
     }
 
@@ -215,7 +215,7 @@ public abstract class StorelessUnivariateStatisticAbstractTest
     public void testSerial() {
         StorelessUnivariateStatistic s =
             (StorelessUnivariateStatistic) getUnivariateStatistic();
-        Assert.assertEquals(s, UnitTestUtils.serializeAndRecover(s));
+        Assert.assertEquals(s, TestUtils.serializeAndRecover(s));
     }
 
     /**

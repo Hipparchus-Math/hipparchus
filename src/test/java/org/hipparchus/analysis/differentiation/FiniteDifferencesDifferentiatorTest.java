@@ -17,7 +17,7 @@
 
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.UnivariateMatrixFunction;
@@ -52,7 +52,7 @@ public class FiniteDifferencesDifferentiatorTest {
         FiniteDifferencesDifferentiator differentiator =
                 new FiniteDifferencesDifferentiator(3, 1.0e-3);
         FiniteDifferencesDifferentiator recovered =
-                (FiniteDifferencesDifferentiator) UnitTestUtils.serializeAndRecover(differentiator);
+                (FiniteDifferencesDifferentiator) TestUtils.serializeAndRecover(differentiator);
         Assert.assertEquals(differentiator.getNbPoints(), recovered.getNbPoints());
         Assert.assertEquals(differentiator.getStepSize(), recovered.getStepSize(), 1.0e-15);
     }

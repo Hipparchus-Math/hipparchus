@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
@@ -53,7 +53,7 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
                 0.976470588235294, 0.997058823529412, 0.9941176470588236, 0.685294117647059, 0.2264705882352941, 1, 1,
                 0.976470588235294, 0.997058823529412, 0.9941176470588236, 0.685294117647059, 0.2264705882352941, 1, 1
         };
-        UnitTestUtils.assertEquals("Spearman's correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
+        TestUtils.assertEquals("Spearman's correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
     }
 
     /**
@@ -71,7 +71,7 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
                -0.443257690360988, -0.650463814145816, 0.674603831406147, 1, -0.1444163088302244,
                 0.4136455623012432, 0.2886878090882852, -0.4750575257171745, -0.1444163088302244, 1
         };
-        UnitTestUtils.assertEquals("Spearman's correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
+        TestUtils.assertEquals("Spearman's correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
     }
 
     /**
@@ -118,7 +118,7 @@ public class SpearmansRankCorrelationTest extends PearsonsCorrelationTest {
         double[] y = matrix.getColumn(1);
         Assert.assertEquals(new SpearmansCorrelation().correlation(x, y),
                 corrInstance.getCorrelationMatrix().getEntry(0, 1), Double.MIN_VALUE);
-        UnitTestUtils.assertEquals("Correlation matrix", corrInstance.getCorrelationMatrix(),
+        TestUtils.assertEquals("Correlation matrix", corrInstance.getCorrelationMatrix(),
                 new SpearmansCorrelation().computeCorrelationMatrix(data), Double.MIN_VALUE);
     }
 

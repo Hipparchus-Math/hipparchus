@@ -17,7 +17,7 @@
 
 package org.hipparchus.distribution;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.ZipfDistribution.ZipfRejectionInversionSampler;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.random.AbstractRandomGenerator;
@@ -162,7 +162,7 @@ public class ZipfDistributionTest extends IntegerDistributionAbstractTest {
                 for (int s : sample) {
                     observedCounts[s-1]++;
                 }
-                UnitTestUtils.assertChiSquareAccept(expectedCounts, observedCounts, 0.001);
+                TestUtils.assertChiSquareAccept(expectedCounts, observedCounts, 0.001);
             }
         }
     }
@@ -177,7 +177,7 @@ public class ZipfDistributionTest extends IntegerDistributionAbstractTest {
         };
         for (final double testValue : testValues) {
             final double expected = FastMath.log1p(testValue);
-            UnitTestUtils.assertRelativelyEquals(expected, ZipfRejectionInversionSampler.helper1(testValue)*testValue, tol);
+            TestUtils.assertRelativelyEquals(expected, ZipfRejectionInversionSampler.helper1(testValue)*testValue, tol);
         }
     }
 
@@ -197,7 +197,7 @@ public class ZipfDistributionTest extends IntegerDistributionAbstractTest {
         };
         for (double testValue : testValues) {
             final double expected = FastMath.expm1(testValue);
-            UnitTestUtils.assertRelativelyEquals(expected, ZipfRejectionInversionSampler.helper2(testValue)*testValue, tol);
+            TestUtils.assertRelativelyEquals(expected, ZipfRejectionInversionSampler.helper2(testValue)*testValue, tol);
         }
     }
 

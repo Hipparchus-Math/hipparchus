@@ -15,7 +15,7 @@ package org.hipparchus.util;
 
 import java.math.BigDecimal;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -390,7 +390,7 @@ public class PrecisionTest {
         Assert.assertEquals(39.25, Precision.round(39.245, 2, BigDecimal.ROUND_HALF_UP), 0.0);
 
         // special values
-        UnitTestUtils.assertEquals(Double.NaN, Precision.round(Double.NaN, 2), 0.0);
+        TestUtils.assertEquals(Double.NaN, Precision.round(Double.NaN, 2), 0.0);
         Assert.assertEquals(0.0, Precision.round(0.0, 2), 0.0);
         Assert.assertEquals(Double.POSITIVE_INFINITY, Precision.round(Double.POSITIVE_INFINITY, 2), 0.0);
         Assert.assertEquals(Double.NEGATIVE_INFINITY, Precision.round(Double.NEGATIVE_INFINITY, 2), 0.0);
@@ -490,7 +490,7 @@ public class PrecisionTest {
         }
 
         // special values
-        UnitTestUtils.assertEquals(Float.NaN, Precision.round(Float.NaN, 2), 0.0f);
+        TestUtils.assertEquals(Float.NaN, Precision.round(Float.NaN, 2), 0.0f);
         Assert.assertEquals(0.0f, Precision.round(0.0f, 2), 0.0f);
         Assert.assertEquals(Float.POSITIVE_INFINITY, Precision.round(Float.POSITIVE_INFINITY, 2), 0.0f);
         Assert.assertEquals(Float.NEGATIVE_INFINITY, Precision.round(Float.NEGATIVE_INFINITY, 2), 0.0f);

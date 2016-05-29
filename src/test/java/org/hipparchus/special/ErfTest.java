@@ -17,7 +17,7 @@
 
 package org.hipparchus.special;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.special.Erf;
 import org.hipparchus.util.FastMath;
 import org.junit.Test;
@@ -191,7 +191,7 @@ public class ErfTest {
         for (int i = 0; i < 15; i++) {
             final double result = 0.5*Erf.erfc(ref[i][0]/FastMath.sqrt(2));
             Assert.assertEquals(ref[i][1], result, 1E-15);
-            UnitTestUtils.assertRelativelyEquals(ref[i][1], result, 1E-13);
+            TestUtils.assertRelativelyEquals(ref[i][1], result, 1E-13);
         }
     }
 

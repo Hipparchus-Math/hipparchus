@@ -17,7 +17,7 @@
 
 package org.hipparchus.stat.descriptive.moment;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.stat.descriptive.moment.VectorialMean;
 import org.junit.Test;
@@ -82,6 +82,6 @@ public class VectorialMeanTest {
         for (int i = 0; i < points.length; ++i) {
             stat.increment(points[i]);
         }
-        Assert.assertEquals(stat, UnitTestUtils.serializeAndRecover(stat));
+        Assert.assertEquals(stat, TestUtils.serializeAndRecover(stat));
     }
 }

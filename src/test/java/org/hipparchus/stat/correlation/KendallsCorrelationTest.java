@@ -18,7 +18,7 @@ package org.hipparchus.stat.correlation;
 
 import java.util.Arrays;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.RandomGenerator;
@@ -59,7 +59,7 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
                 0.9666666666666666, 0.4666666666666666, 0.05, 1, 0.9999999999999999, 0.8999999999999999,
                 0.9833333333333333, 0.9666666666666666, 0.4666666666666666, 0.05, 0.9999999999999999, 1
         };
-        UnitTestUtils.assertEquals("Kendall's correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
+        TestUtils.assertEquals("Kendall's correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
     }
 
     /**
@@ -77,7 +77,7 @@ public class KendallsCorrelationTest extends PearsonsCorrelationTest {
                 -0.3306111613580587, -0.4761645631778491, 0.528943683925829, 1, -0.08479652265379604,
                 0.2453703703703704, 0.2054604569820847, -0.3212755391722673, -0.08479652265379604, 1
         };
-        UnitTestUtils.assertEquals("Kendall's correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
+        TestUtils.assertEquals("Kendall's correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
     }
 
     @Test

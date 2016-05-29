@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 
 import org.junit.Test;
 import org.junit.Assert;
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
 import org.hipparchus.linear.Array2DRowFieldMatrix;
@@ -95,14 +95,14 @@ public class FieldLUDecompositionTest {
         FieldMatrix<Fraction> l = lu.getL();
         FieldMatrix<Fraction> u = lu.getU();
         FieldMatrix<Fraction> p = lu.getP();
-        UnitTestUtils.assertEquals(p.multiply(matrix), l.multiply(u));
+        TestUtils.assertEquals(p.multiply(matrix), l.multiply(u));
 
         matrix = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), testDataMinus);
         lu = new FieldLUDecomposition<Fraction>(matrix);
         l = lu.getL();
         u = lu.getU();
         p = lu.getP();
-        UnitTestUtils.assertEquals(p.multiply(matrix), l.multiply(u));
+        TestUtils.assertEquals(p.multiply(matrix), l.multiply(u));
 
         matrix = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), 17, 17);
         for (int i = 0; i < matrix.getRowDimension(); ++i) {
@@ -112,7 +112,7 @@ public class FieldLUDecompositionTest {
         l = lu.getL();
         u = lu.getU();
         p = lu.getP();
-        UnitTestUtils.assertEquals(p.multiply(matrix), l.multiply(u));
+        TestUtils.assertEquals(p.multiply(matrix), l.multiply(u));
 
         matrix = new Array2DRowFieldMatrix<Fraction>(FractionField.getInstance(), singular);
         lu = new FieldLUDecomposition<Fraction>(matrix);
@@ -168,7 +168,7 @@ public class FieldLUDecompositionTest {
         for (int i = 0; i < id.getRowDimension(); ++i) {
             id.setEntry(i, i, Fraction.ONE);
         }
-        UnitTestUtils.assertEquals(id, ppT);
+        TestUtils.assertEquals(id, ppT);
 
         for (int i = 0; i < p.getRowDimension(); i++) {
             int zeroCount  = 0;
@@ -247,11 +247,11 @@ public class FieldLUDecompositionTest {
 
         // check values against known references
         FieldMatrix<Fraction> l = lu.getL();
-        UnitTestUtils.assertEquals(lRef, l);
+        TestUtils.assertEquals(lRef, l);
         FieldMatrix<Fraction> u = lu.getU();
-        UnitTestUtils.assertEquals(uRef, u);
+        TestUtils.assertEquals(uRef, u);
         FieldMatrix<Fraction> p = lu.getP();
-        UnitTestUtils.assertEquals(pRef, p);
+        TestUtils.assertEquals(pRef, p);
         int[] pivot = lu.getPivot();
         for (int i = 0; i < pivotRef.length; ++i) {
             Assert.assertEquals(pivotRef[i], pivot[i]);
@@ -288,11 +288,11 @@ public class FieldLUDecompositionTest {
 
         // check values against known references
         FieldMatrix<Fraction> l = lu.getL();
-        UnitTestUtils.assertEquals(lRef, l);
+        TestUtils.assertEquals(lRef, l);
         FieldMatrix<Fraction> u = lu.getU();
-        UnitTestUtils.assertEquals(uRef, u);
+        TestUtils.assertEquals(uRef, u);
         FieldMatrix<Fraction> p = lu.getP();
-        UnitTestUtils.assertEquals(pRef, p);
+        TestUtils.assertEquals(pRef, p);
         int[] pivot = lu.getPivot();
         for (int i = 0; i < pivotRef.length; ++i) {
             Assert.assertEquals(pivotRef[i], pivot[i]);

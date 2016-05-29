@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.Frequency;
 import org.junit.Assert;
@@ -111,8 +111,8 @@ public final class FrequencyTest {
         f = new Frequency();
         Assert.assertEquals(0L, f.getCount('a'));
         Assert.assertEquals(0L, f.getCumFreq('b'));
-        UnitTestUtils.assertEquals(Double.NaN, f.getPct('a'), 0.0);
-        UnitTestUtils.assertEquals(Double.NaN, f.getCumPct('b'), 0.0);
+        TestUtils.assertEquals(Double.NaN, f.getPct('a'), 0.0);
+        TestUtils.assertEquals(Double.NaN, f.getCumPct('b'), 0.0);
         f.addValue('a');
         f.addValue('b');
         f.addValue('c');
@@ -273,7 +273,7 @@ public final class FrequencyTest {
         f.addValue(TWO_LONG);
         f.addValue(ONE);
         f.addValue(TWO);
-        Assert.assertEquals(f, UnitTestUtils.serializeAndRecover(f));
+        Assert.assertEquals(f, TestUtils.serializeAndRecover(f));
     }
 
     @Test

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.distribution;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.AbstractIntegerDistribution;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -289,7 +289,7 @@ public abstract class IntegerDistributionAbstractTest {
         int[] densityPoints = makeDensityTestPoints();
         double[] densityValues = makeDensityTestValues();
         int sampleSize = 1000;
-        int length = UnitTestUtils.eliminateZeroMassPoints(densityPoints, densityValues);
+        int length = TestUtils.eliminateZeroMassPoints(densityPoints, densityValues);
         AbstractIntegerDistribution distribution = (AbstractIntegerDistribution) makeDistribution();
         double[] expectedCounts = new double[length];
         long[] observedCounts = new long[length];
@@ -305,7 +305,7 @@ public abstract class IntegerDistributionAbstractTest {
               }
           }
         }
-        UnitTestUtils.assertChiSquareAccept(densityPoints, expectedCounts, observedCounts, .001);
+        TestUtils.assertChiSquareAccept(densityPoints, expectedCounts, observedCounts, .001);
     }
 
     //------------------ Getters / Setters for test instance data -----------

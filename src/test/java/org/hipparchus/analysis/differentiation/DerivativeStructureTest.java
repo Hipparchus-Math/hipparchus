@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.ExtendedFieldElementAbstractTest;
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.DimensionMismatchException;
@@ -1365,7 +1365,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         double[] derivatives = new double[] { cos, -sin, -cos, sin, cos };
         DerivativeStructure y = new DerivativeStructure(1,  4, derivatives);
         checkEquals(yRef, y, 1.0e-15);
-        UnitTestUtils.assertEquals(derivatives, y.getAllDerivatives(), 1.0e-15);
+        TestUtils.assertEquals(derivatives, y.getAllDerivatives(), 1.0e-15);
     }
 
     @Test
@@ -1387,7 +1387,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         double[] derivatives = new double[] { x + y - z, 1.0, 1.0, -1.0 };
         DerivativeStructure t = new DerivativeStructure(3, 1, derivatives);
         checkEquals(xRef.add(yRef.subtract(zRef)), t, 1.0e-15);
-        UnitTestUtils.assertEquals(derivatives, xRef.add(yRef.subtract(zRef)).getAllDerivatives(), 1.0e-15);
+        TestUtils.assertEquals(derivatives, xRef.add(yRef.subtract(zRef)).getAllDerivatives(), 1.0e-15);
     }
 
     @Test
@@ -1534,7 +1534,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     @Test
     public void testSerialization() {
         DerivativeStructure a = new DerivativeStructure(3, 2, 0, 1.3);
-        DerivativeStructure b = (DerivativeStructure) UnitTestUtils.serializeAndRecover(a);
+        DerivativeStructure b = (DerivativeStructure) TestUtils.serializeAndRecover(a);
         Assert.assertEquals(a.getFreeParameters(), b.getFreeParameters());
         Assert.assertEquals(a.getOrder(), b.getOrder());
         checkEquals(a, b, 1.0e-15);

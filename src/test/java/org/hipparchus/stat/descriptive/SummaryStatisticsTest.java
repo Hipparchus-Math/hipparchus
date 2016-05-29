@@ -17,7 +17,7 @@
 package org.hipparchus.stat.descriptive;
 
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.SummaryStatistics;
@@ -165,8 +165,8 @@ public class SummaryStatisticsTest {
     public void testSerialization() {
         SummaryStatistics u = createSummaryStatistics();
         // Empty test
-        UnitTestUtils.checkSerializedEquality(u);
-        SummaryStatistics s = (SummaryStatistics) UnitTestUtils.serializeAndRecover(u);
+        TestUtils.checkSerializedEquality(u);
+        SummaryStatistics s = (SummaryStatistics) TestUtils.serializeAndRecover(u);
         StatisticalSummary summary = s.getSummary();
         verifySummary(u, summary);
 
@@ -178,8 +178,8 @@ public class SummaryStatisticsTest {
         u.addValue(5d);
 
         // Test again
-        UnitTestUtils.checkSerializedEquality(u);
-        s = (SummaryStatistics) UnitTestUtils.serializeAndRecover(u);
+        TestUtils.checkSerializedEquality(u);
+        s = (SummaryStatistics) TestUtils.serializeAndRecover(u);
         summary = s.getSummary();
         verifySummary(u, summary);
 
@@ -260,12 +260,12 @@ public class SummaryStatisticsTest {
 
     private void verifySummary(SummaryStatistics u, StatisticalSummary s) {
         Assert.assertEquals("N",s.getN(),u.getN());
-        UnitTestUtils.assertEquals("sum",s.getSum(),u.getSum(),tolerance);
-        UnitTestUtils.assertEquals("var",s.getVariance(),u.getVariance(),tolerance);
-        UnitTestUtils.assertEquals("std",s.getStandardDeviation(),u.getStandardDeviation(),tolerance);
-        UnitTestUtils.assertEquals("mean",s.getMean(),u.getMean(),tolerance);
-        UnitTestUtils.assertEquals("min",s.getMin(),u.getMin(),tolerance);
-        UnitTestUtils.assertEquals("max",s.getMax(),u.getMax(),tolerance);
+        TestUtils.assertEquals("sum",s.getSum(),u.getSum(),tolerance);
+        TestUtils.assertEquals("var",s.getVariance(),u.getVariance(),tolerance);
+        TestUtils.assertEquals("std",s.getStandardDeviation(),u.getStandardDeviation(),tolerance);
+        TestUtils.assertEquals("mean",s.getMean(),u.getMean(),tolerance);
+        TestUtils.assertEquals("min",s.getMin(),u.getMin(),tolerance);
+        TestUtils.assertEquals("max",s.getMax(),u.getMax(),tolerance);
     }
 
     @Test

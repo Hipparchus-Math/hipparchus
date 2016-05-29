@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -597,7 +597,7 @@ public class ArrayFieldVectorTest {
     @Test
     public void testSerial()  {
         ArrayFieldVector<Fraction> v = new ArrayFieldVector<Fraction>(vec1);
-        Assert.assertEquals(v,UnitTestUtils.serializeAndRecover(v));
+        Assert.assertEquals(v,TestUtils.serializeAndRecover(v));
     }
 
     @Test

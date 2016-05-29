@@ -15,7 +15,7 @@ package org.hipparchus.util;
 
 import java.util.Arrays;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -1006,18 +1006,18 @@ public class MathArraysTest {
     @Test
     public void testNormalizeArray() {
         double[] testValues1 = new double[] {1, 1, 2};
-        UnitTestUtils.assertEquals( new double[] {.25, .25, .5},
+        TestUtils.assertEquals( new double[] {.25, .25, .5},
                                 MathArrays.normalizeArray(testValues1, 1),
                                 Double.MIN_VALUE);
 
         double[] testValues2 = new double[] {-1, -1, 1};
-        UnitTestUtils.assertEquals( new double[] {1, 1, -1},
+        TestUtils.assertEquals( new double[] {1, 1, -1},
                                 MathArrays.normalizeArray(testValues2, 1),
                                 Double.MIN_VALUE);
 
         // Ignore NaNs
         double[] testValues3 = new double[] {-1, -1, Double.NaN, 1, Double.NaN};
-        UnitTestUtils.assertEquals( new double[] {1, 1,Double.NaN, -1, Double.NaN},
+        TestUtils.assertEquals( new double[] {1, 1,Double.NaN, -1, Double.NaN},
                                 MathArrays.normalizeArray(testValues3, 1),
                                 Double.MIN_VALUE);
 

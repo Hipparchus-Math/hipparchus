@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.euclidean.twod;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
@@ -38,7 +38,7 @@ public class Euclidean2DTest {
     @Test
     public void testSerialization() {
         Space e2 = Euclidean2D.getInstance();
-        Space deserialized = (Space) UnitTestUtils.serializeAndRecover(e2);
+        Space deserialized = (Space) TestUtils.serializeAndRecover(e2);
         Assert.assertTrue(e2 == deserialized);
     }
 

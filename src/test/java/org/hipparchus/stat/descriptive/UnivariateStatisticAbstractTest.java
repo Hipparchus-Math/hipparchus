@@ -19,7 +19,7 @@ package org.hipparchus.stat.descriptive;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.RealDistribution;
@@ -207,7 +207,7 @@ public abstract class UnivariateStatisticAbstractTest {
         // Compare result of weighted statistic computation with direct computation
         // on array of repeated values
         WeightedEvaluation weightedStatistic = (WeightedEvaluation) statistic;
-        UnitTestUtils.assertRelativelyEquals(statistic.evaluate(repeatedValues),
+        TestUtils.assertRelativelyEquals(statistic.evaluate(repeatedValues),
                 weightedStatistic.evaluate(values, weights, 0, values.length),
                 10E-12);
 

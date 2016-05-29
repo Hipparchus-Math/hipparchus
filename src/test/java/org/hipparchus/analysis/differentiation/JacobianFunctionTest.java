@@ -17,7 +17,7 @@
 
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,7 +39,7 @@ public class JacobianFunctionTest {
                 double[][] testJacobian       = j.value(point);
                 Assert.assertEquals(referenceJacobian.length, testJacobian.length);
                 for (int i = 0; i < 3; ++i) {
-                    UnitTestUtils.assertEquals(referenceJacobian[i], testJacobian[i], 2.0e-15);
+                    TestUtils.assertEquals(referenceJacobian[i], testJacobian[i], 2.0e-15);
                 }
             }
         }

@@ -19,7 +19,7 @@ package org.hipparchus.special;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NumberIsTooSmallException;
 import org.hipparchus.exception.OutOfRangeException;
@@ -76,12 +76,12 @@ public class BetaTest {
     private void testRegularizedBeta(double expected, double x,
                                      double a, double b) {
         double actual = Beta.regularizedBeta(x, a, b);
-        UnitTestUtils.assertEquals(expected, actual, 10e-15);
+        TestUtils.assertEquals(expected, actual, 10e-15);
     }
 
     private void testLogBeta(double expected, double a, double b) {
         double actual = Beta.logBeta(a, b);
-        UnitTestUtils.assertEquals(expected, actual, 10e-15);
+        TestUtils.assertEquals(expected, actual, 10e-15);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class BetaTest {
     public void testRegularizedBetaTinyArgument() {
         double actual = Beta.regularizedBeta(1e-17, 1.0, 1e12);
         // This value is from R: pbeta(1e-17,1,1e12)
-        UnitTestUtils.assertEquals(9.999950000166648e-6, actual, 1e-16);
+        TestUtils.assertEquals(9.999950000166648e-6, actual, 1e-16);
     }
 
     @Test

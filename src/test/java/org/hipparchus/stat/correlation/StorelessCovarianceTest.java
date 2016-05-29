@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.ISAACRandom;
@@ -122,7 +122,7 @@ public class StorelessCovarianceTest {
         for(int i=0;i<longleyDataSimple.length;i++){
             cov.increment(longleyDataSimple[i][0],longleyDataSimple[i][0]);
         }
-        UnitTestUtils.assertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
+        TestUtils.assertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
     }
 
     @Test
@@ -132,7 +132,7 @@ public class StorelessCovarianceTest {
         for(int i=0;i<longleyDataSimple.length;i++){
             cov.increment(longleyDataSimple[i][0], longleyDataSimple[i][1]);
         }
-        UnitTestUtils.assertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
+        TestUtils.assertEquals("simple covariance test", rCov, cov.getResult(), 10E-7);
     }
 
     /**
@@ -173,7 +173,7 @@ public class StorelessCovarianceTest {
 
         RealMatrix covarianceMatrix = covMatrix.getCovarianceMatrix();
 
-        UnitTestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 7, 7), covarianceMatrix, 10E-7);
+        TestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 7, 7), covarianceMatrix, 10E-7);
 
     }
 
@@ -200,7 +200,7 @@ public class StorelessCovarianceTest {
 
         RealMatrix covarianceMatrix = covMatrix.getCovarianceMatrix();
 
-        UnitTestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 5, 5), covarianceMatrix, 10E-13);
+        TestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 5, 5), covarianceMatrix, 10E-13);
     }
 
     /**
@@ -247,7 +247,7 @@ public class StorelessCovarianceTest {
            chk.append(covs);
         }
 
-        UnitTestUtils.assertEquals("covariance subset test", chk.getResult(), cov.getResult(), 10E-7);
+        TestUtils.assertEquals("covariance subset test", chk.getResult(), cov.getResult(), 10E-7);
     }
 
     protected RealMatrix createRealMatrix(double[] data, int nRows, int nCols) {

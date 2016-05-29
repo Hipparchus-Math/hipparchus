@@ -17,7 +17,7 @@
 
 package org.hipparchus.optim;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.optim.PointVectorValuePair;
 import org.junit.Assert;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class PointVectorValuePairTest {
     public void testSerial() {
         PointVectorValuePair pv1 = new PointVectorValuePair(new double[] { 1.0, 2.0, 3.0 },
                                                             new double[] { 4.0, 5.0 });
-        PointVectorValuePair pv2 = (PointVectorValuePair) UnitTestUtils.serializeAndRecover(pv1);
+        PointVectorValuePair pv2 = (PointVectorValuePair) TestUtils.serializeAndRecover(pv1);
         Assert.assertEquals(pv1.getKey().length, pv2.getKey().length);
         for (int i = 0; i < pv1.getKey().length; ++i) {
             Assert.assertEquals(pv1.getKey()[i], pv2.getKey()[i], 1.0e-15);

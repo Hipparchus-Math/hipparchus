@@ -16,7 +16,7 @@
  */
 package org.hipparchus.complex;
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexField;
 import org.junit.Assert;
@@ -38,7 +38,7 @@ public class ComplexFieldTest {
     public void testSerial() {
         // deserializing the singleton should give the singleton itself back
         ComplexField field = ComplexField.getInstance();
-        Assert.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        Assert.assertTrue(field == TestUtils.serializeAndRecover(field));
     }
 
 }

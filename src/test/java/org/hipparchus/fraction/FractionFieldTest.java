@@ -17,7 +17,7 @@
 package org.hipparchus.fraction;
 
 
-import org.hipparchus.UnitTestUtils;
+import org.hipparchus.TestUtils;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
 import org.junit.Assert;
@@ -39,7 +39,7 @@ public class FractionFieldTest {
     public void testSerial() {
         // deserializing the singleton should give the singleton itself back
         FractionField field = FractionField.getInstance();
-        Assert.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
+        Assert.assertTrue(field == TestUtils.serializeAndRecover(field));
     }
 
 }
