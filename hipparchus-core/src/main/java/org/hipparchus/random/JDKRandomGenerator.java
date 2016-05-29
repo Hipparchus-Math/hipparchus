@@ -27,11 +27,11 @@ import org.hipparchus.util.MathUtils;
  * A {@link RandomGenerator} adapter that delegates the random number
  * generation to the standard {@link java.util.Random} class.
  */
-public class JDKRandomGenerator
-    implements RandomGenerator, Serializable {
+public class JDKRandomGenerator extends IntRandomGenerator implements Serializable {
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20151227L;
+
     /** JDK's RNG. */
     private final Random delegate;
 
@@ -72,7 +72,7 @@ public class JDKRandomGenerator
     /** {@inheritDoc} */
     @Override
     public void setSeed(long seed) {
-        delegate.setSeed( seed);
+        delegate.setSeed(seed);
     }
 
     /** {@inheritDoc} */

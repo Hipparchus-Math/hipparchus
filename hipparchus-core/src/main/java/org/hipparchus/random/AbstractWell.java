@@ -21,19 +21,21 @@ import java.io.Serializable;
 import org.hipparchus.util.FastMath;
 
 
-/** This abstract class implements the WELL class of pseudo-random number generator
+/**
+ * This abstract class implements the WELL class of pseudo-random number generator
  * from Fran&ccedil;ois Panneton, Pierre L'Ecuyer and Makoto Matsumoto.
  * <p>
  * This generator is described in a paper by Fran&ccedil;ois Panneton,
- * Pierre L'Ecuyer and Makoto Matsumoto <a
- * href="http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng.pdf">Improved
- * Long-Period Generators Based on Linear Recurrences Modulo 2</a> ACM
- * Transactions on Mathematical Software, 32, 1 (2006). The errata for the paper
- * are in <a href="http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng-errata.txt">wellrng-errata.txt</a>.</p>
+ * Pierre L'Ecuyer and Makoto Matsumoto
+ * <a href="http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng.pdf">
+ * Improved Long-Period Generators Based on Linear Recurrences Modulo 2</a>
+ * ACM Transactions on Mathematical Software, 32, 1 (2006). The errata for the paper
+ * are in <a href="http://www.iro.umontreal.ca/~lecuyer/myftp/papers/wellrng-errata.txt">
+ * wellrng-errata.txt</a>.
  *
  * @see <a href="http://www.iro.umontreal.ca/~panneton/WELLRNG.html">WELL Random number generator</a>
  */
-public abstract class AbstractWell extends BitsStreamGenerator implements Serializable {
+public abstract class AbstractWell extends IntRandomGenerator implements Serializable {
 
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20150223L;
@@ -61,7 +63,8 @@ public abstract class AbstractWell extends BitsStreamGenerator implements Serial
         this(k, new int[] { seed });
     }
 
-    /** Creates a new random number generator using an int array seed.
+    /**
+     * Creates a new random number generator using an int array seed.
      * @param k number of bits in the pool (not necessarily a multiple of 32)
      * @param seed the initial seed (32 bits integers array), if null
      * the seed of the generator will be related to the current time
@@ -74,10 +77,10 @@ public abstract class AbstractWell extends BitsStreamGenerator implements Serial
 
         // initialize the pool content
         setSeed(seed);
-
     }
 
-    /** Creates a new random number generator using a single long seed.
+    /**
+     * Creates a new random number generator using a single long seed.
      * @param k number of bits in the pool (not necessarily a multiple of 32)
      * @param seed the initial seed (64 bits integer)
      */
@@ -85,19 +88,12 @@ public abstract class AbstractWell extends BitsStreamGenerator implements Serial
         this(k, new int[] { (int) (seed >>> 32), (int) (seed & 0xffffffffl) });
     }
 
-    /** Reinitialize the generator as if just built with the given int seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
-     * @param seed the initial seed (32 bits integer)
-     */
-    @Override
-    public void setSeed(final int seed) {
-        setSeed(new int[] { seed });
-    }
-
-    /** Reinitialize the generator as if just built with the given int array seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
+    /**
+     * Reinitialize the generator as if just built with the given int array seed.
+     * <p>
+     * The state of the generator is exactly the same as a new
+     * generator built with the same seed.
+     *
      * @param seed the initial seed (32 bits integers array). If null
      * the seed of the generator will be the system time plus the system identity
      * hash code of the instance.
@@ -119,24 +115,11 @@ public abstract class AbstractWell extends BitsStreamGenerator implements Serial
         }
 
         index = 0;
-        clear();  // Clear normal deviate cache
+        clearCache(); // Clear normal deviate cache
     }
 
-    /** Reinitialize the generator as if just built with the given long seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
-     * @param seed the initial seed (64 bits integer)
-     */
-    @Override
-    public void setSeed(final long seed) {
-        setSeed(new int[] { (int) (seed >>> 32), (int) (seed & 0xffffffffl) });
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    protected abstract int next(final int bits);
-
-    /** Calculate the number of 32-bits blocks.
+    /**
+     * Calculate the number of 32-bits blocks.
      * @param k number of bits in the pool (not necessarily a multiple of 32)
      * @return the number of 32-bits blocks
      */
@@ -150,27 +133,42 @@ public abstract class AbstractWell extends BitsStreamGenerator implements Serial
     }
 
     /**
-     * Inner class used to store the indirection index table which is fixed for a given type of WELL class
-     * of pseudo-random number generator.
-     *
+     * Inner class used to store the indirection index table which is fixed
+     * for a given type of WELL class of pseudo-random number generator.
      */
     protected static final class IndexTable {
-        /** Index indirection table giving for each index its predecessor taking table size into account. */
+        /**
+         * Index indirection table giving for each index its predecessor
+         * taking table size into account.
+         */
         private final int[] iRm1;
 
-        /** Index indirection table giving for each index its second predecessor taking table size into account. */
+        /**
+         * Index indirection table giving for each index its second predecessor
+         * taking table size into account.
+         */
         private final int[] iRm2;
 
-        /** Index indirection table giving for each index the value index + m1 taking table size into account. */
+        /**
+         * Index indirection table giving for each index the value index + m1
+         * taking table size into account.
+         */
         private final int[] i1;
 
-        /** Index indirection table giving for each index the value index + m2 taking table size into account. */
+        /**
+         * Index indirection table giving for each index the value index + m2
+         * taking table size into account.
+         */
         private final int[] i2;
 
-        /** Index indirection table giving for each index the value index + m3 taking table size into account. */
+        /**
+         * Index indirection table giving for each index the value index + m3
+         * taking table size into account.
+         */
         private final int[] i3;
 
-        /** Creates a new pre-calculated indirection index table.
+        /**
+         * Creates a new pre-calculated indirection index table.
          * @param k number of bits in the pool (not necessarily a multiple of 32)
          * @param m1 first parameter of the algorithm
          * @param m2 second parameter of the algorithm

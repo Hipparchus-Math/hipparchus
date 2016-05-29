@@ -16,8 +16,6 @@
  */
 package org.hipparchus.random;
 
-import org.hipparchus.random.MersenneTwister;
-import org.hipparchus.random.RandomGenerator;
 import org.junit.Assert;
 import org.junit.Test;
 

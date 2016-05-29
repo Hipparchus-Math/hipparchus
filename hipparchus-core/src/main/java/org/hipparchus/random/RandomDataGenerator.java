@@ -49,7 +49,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     implements RandomGenerator, Serializable {
 
     /** Serializable version identifier. */
-    private static final long serialVersionUID = 2306581345647615033L;
+    private static final long serialVersionUID = 20160529L;
 
     /**
      * Used when generating Exponential samples.
@@ -70,8 +70,6 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     private static final Map<Class<? extends RealDistribution>, RealDistributionSampler> CONTINUOUS_SAMPLERS = new HashMap<>();
     /** Map of <classname, switch constant> for discrete distributions */
     private static final Map<Class<? extends IntegerDistribution>, IntegerDistributionSampler> DISCRETE_SAMPLERS = new HashMap<>();
-    /** The sampler to be used for the nextZipF method */
-    private transient ZipfRejectionInversionSampler zipfSampler;
 
     /**
      * Interface for samplers of continuous distributions.
@@ -193,14 +191,8 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     /** Source of random data */
     private final RandomGenerator randomGenerator;
 
-    /**
-     * Cached random normal value.  The default implementation for
-     * {@link #nextGaussian} generates pairs of values and this field caches the
-     * second value so that the full algorithm is not executed for every
-     * activation.  The value {@code Double.NaN} signals that there is
-     * no cached value.
-     */
-    private double cachedNormalDeviate = Double.NaN;
+    /** The sampler to be used for the nextZipF method */
+    private transient ZipfRejectionInversionSampler zipfSampler;
 
     /**
      * Construct a RandomDataGenerator with a default RandomGenerator as its source of random data.
@@ -246,46 +238,6 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     @Override
     protected RandomGenerator delegate() {
         return randomGenerator;
-    }
-
-    /**
-     * Returns the next pseudo-random, Gaussian ("normally") distributed
-     * {@code double} value with mean {@code 0.0} and standard
-     * deviation {@code 1.0} from this random number generator's sequence.
-     * <p>
-     * The default implementation uses the <em>Polar Method</em>
-     * due to G.E.P. Box, M.E. Muller and G. Marsaglia, as described in
-     * D. Knuth, <u>The Art of Computer Programming</u>, 3.4.1C.</p>
-     * <p>
-     * The algorithm generates a pair of independent random values.  One of
-     * these is cached for reuse, so the full algorithm is not executed on each
-     * activation.</p>
-     *
-     * @return  the next pseudorandom, Gaussian ("normally") distributed
-     * {@code double} value with mean {@code 0.0} and
-     * standard deviation {@code 1.0} from this random number
-     *  generator's sequence
-     */
-    @Override
-    public double nextGaussian() {
-        if (!Double.isNaN(cachedNormalDeviate)) {
-            double dev = cachedNormalDeviate;
-            cachedNormalDeviate = Double.NaN;
-            return dev;
-        }
-        double v1 = 0;
-        double v2 = 0;
-        double s = 1;
-        while (s >=1 ) {
-            v1 = 2 * randomGenerator.nextDouble() - 1;
-            v2 = 2 * randomGenerator.nextDouble() - 1;
-            s = v1 * v1 + v2 * v2;
-        }
-        if (s != 0) {
-            s = FastMath.sqrt(-2 * FastMath.log(s) / s);
-        }
-        cachedNormalDeviate = v2 * s;
-        return v1 * s;
     }
 
     /**
@@ -689,36 +641,6 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
             // we can shift the range and generate directly a positive long
             return lower + nextLong(max);
         }
-    }
-
-    /**
-     * Returns a pseudorandom, uniformly distributed {@code long} value
-     * between 0 (inclusive) and the specified value (exclusive), drawn from
-     * this random number generator's sequence.
-     *
-     * @param n the bound on the random number to be returned.  Must be
-     * positive.
-     * @return  a pseudorandom, uniformly distributed {@code long}
-     * value between 0 (inclusive) and n (exclusive).
-     * @throws MathIllegalArgumentException  if n is not positive.
-     */
-    private long nextLong(final long n) throws MathIllegalArgumentException {
-        if (n > 0) {
-            final byte[] byteArray = new byte[8];
-            long bits;
-            long val;
-            do {
-                randomGenerator.nextBytes(byteArray);
-                bits = 0;
-                for (final byte b : byteArray) {
-                    bits = (bits << 8) | (b & 0xffL);
-                }
-                bits &= 0x7fffffffffffffffL;
-                val  = bits % n;
-            } while (bits - val + (n - 1) < 0);
-            return val;
-        }
-        throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, n);
     }
 
     /**

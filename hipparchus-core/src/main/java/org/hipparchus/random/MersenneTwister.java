@@ -21,36 +21,36 @@ import java.io.Serializable;
 import org.hipparchus.util.FastMath;
 
 
-/** This class implements a powerful pseudo-random number generator
+/**
+ * This class implements a powerful pseudo-random number generator
  * developed by Makoto Matsumoto and Takuji Nishimura during
  * 1996-1997.
- *
+ * <p>
  * <b>Caveat:</b> It is recommended to use one of WELL generators rather
  * than the MersenneTwister generator (see
  * <a href="http://www.iro.umontreal.ca/~panneton/WELLRNG.html">
  * this paper</a> for more information).
- *
- * <p>This generator features an extremely long period
+ * <p>
+ * This generator features an extremely long period
  * (2<sup>19937</sup>-1) and 623-dimensional equidistribution up to 32
  * bits accuracy. The home page for this generator is located at <a
  * href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html">
- * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</a>.</p>
-
- * <p>This generator is described in a paper by Makoto Matsumoto and
+ * http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/emt.html</a>.
+ * <p>
+ * This generator is described in a paper by Makoto Matsumoto and
  * Takuji Nishimura in 1998: <a
  * href="http://www.math.sci.hiroshima-u.ac.jp/~m-mat/MT/ARTICLES/mt.pdf">Mersenne
  * Twister: A 623-Dimensionally Equidistributed Uniform Pseudo-Random
  * Number Generator</a>, ACM Transactions on Modeling and Computer
- * Simulation, Vol. 8, No. 1, January 1998, pp 3--30</p>
-
- * <p>This class is mainly a Java port of the 2002-01-26 version of
+ * Simulation, Vol. 8, No. 1, January 1998, pp 3--30.
+ * <p>
+ * This class is mainly a Java port of the 2002-01-26 version of
  * the generator written in C by Makoto Matsumoto and Takuji
- * Nishimura. Here is their original copyright:</p>
-
+ * Nishimura. Here is their original copyright:
+ * <p>
  * <table border="0" width="80%" cellpadding="10" align="center" bgcolor="#E0E0E0">
  * <tr><td>Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
  *     All rights reserved.</td></tr>
-
  * <tr><td>Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions
  * are met:
@@ -64,7 +64,7 @@ import org.hipparchus.util.FastMath;
  *       products derived from this software without specific prior written
  *       permission.</li>
  * </ol></td></tr>
-
+ *
  * <tr><td><strong>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND
  * CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES,
  * INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
@@ -79,13 +79,11 @@ import org.hipparchus.util.FastMath;
  * USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
  * DAMAGE.</strong></td></tr>
  * </table>
-
-
  */
-public class MersenneTwister extends BitsStreamGenerator implements Serializable {
+public class MersenneTwister extends IntRandomGenerator implements Serializable {
 
     /** Serializable version identifier. */
-    private static final long serialVersionUID = 8661194735290153518L;
+    private static final long serialVersionUID = 20160529L;
 
     /** Size of the bytes pool. */
     private static final int   N     = 624;
@@ -102,16 +100,19 @@ public class MersenneTwister extends BitsStreamGenerator implements Serializable
     /** Current index in the bytes pool. */
     private int   mti;
 
-    /** Creates a new random number generator.
-     * <p>The instance is initialized using the current time plus the
-     * system identity hash code of this instance as the seed.</p>
+    /**
+     * Creates a new random number generator.
+     * <p>
+     * The instance is initialized using the current time plus the
+     * system identity hash code of this instance as the seed.
      */
     public MersenneTwister() {
         mt = new int[N];
         setSeed(System.currentTimeMillis() + System.identityHashCode(this));
     }
 
-    /** Creates a new random number generator using a single int seed.
+    /**
+     * Creates a new random number generator using a single int seed.
      * @param seed the initial seed (32 bits integer)
      */
     public MersenneTwister(int seed) {
@@ -119,7 +120,8 @@ public class MersenneTwister extends BitsStreamGenerator implements Serializable
         setSeed(seed);
     }
 
-    /** Creates a new random number generator using an int array seed.
+    /**
+     * Creates a new random number generator using an int array seed.
      * @param seed the initial seed (32 bits integers array), if null
      * the seed of the generator will be related to the current time
      */
@@ -128,7 +130,8 @@ public class MersenneTwister extends BitsStreamGenerator implements Serializable
         setSeed(seed);
     }
 
-    /** Creates a new random number generator using a single long seed.
+    /**
+     * Creates a new random number generator using a single long seed.
      * @param seed the initial seed (64 bits integer)
      */
     public MersenneTwister(long seed) {
@@ -136,16 +139,20 @@ public class MersenneTwister extends BitsStreamGenerator implements Serializable
         setSeed(seed);
     }
 
-    /** Reinitialize the generator as if just built with the given int seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
+    /**
+     * Reinitialize the generator as if just built with the given int seed.
+     * <p>
+     * The state of the generator is exactly the same as a new
+     * generator built with the same seed.
+     *
      * @param seed the initial seed (32 bits integer)
      */
     @Override
     public void setSeed(int seed) {
         // we use a long masked by 0xffffffffL as a poor man unsigned int
-        long longMT = seed;
-        // NB: unlike original C code, we are working with java longs, the cast below makes masking unnecessary
+        long longMT = seed & 0xffffffffL;
+        // NB: unlike original C code, we are working with java longs,
+        // the cast below makes masking unnecessary
         mt[0]= (int) longMT;
         for (mti = 1; mti < N; ++mti) {
             // See Knuth TAOCP Vol2. 3rd Ed. P.106 for multiplier.
@@ -154,12 +161,15 @@ public class MersenneTwister extends BitsStreamGenerator implements Serializable
             mt[mti]= (int) longMT;
         }
 
-        clear(); // Clear normal deviate cache
+        clearCache(); // Clear normal deviate cache
     }
 
-    /** Reinitialize the generator as if just built with the given int array seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
+    /**
+     * Reinitialize the generator as if just built with the given int array seed.
+     * <p>
+     * The state of the generator is exactly the same as a new
+     * generator built with the same seed.
+     *
      * @param seed the initial seed (32 bits integers array), if null
      * the seed of the generator will be the current system time plus the
      * system identity hash code of this instance
@@ -205,31 +215,12 @@ public class MersenneTwister extends BitsStreamGenerator implements Serializable
 
         mt[0] = 0x80000000; // MSB is 1; assuring non-zero initial array
 
-        clear(); // Clear normal deviate cache
-
+        clearCache(); // Clear normal deviate cache
     }
 
-    /** Reinitialize the generator as if just built with the given long seed.
-     * <p>The state of the generator is exactly the same as a new
-     * generator built with the same seed.</p>
-     * @param seed the initial seed (64 bits integer)
-     */
+    /** {@inheritDoc} */
     @Override
-    public void setSeed(long seed) {
-        setSeed(new int[] { (int) (seed >>> 32), (int) (seed & 0xffffffffl) });
-    }
-
-    /** Generate next pseudorandom number.
-     * <p>This method is the core generation algorithm. It is used by all the
-     * public generation methods for the various primitive types {@link
-     * #nextBoolean()}, {@link #nextBytes(byte[])}, {@link #nextDouble()},
-     * {@link #nextFloat()}, {@link #nextGaussian()}, {@link #nextInt()},
-     * {@link #next(int)} and {@link #nextLong()}.</p>
-     * @param bits number of random bits to produce
-     * @return random bits generated
-     */
-    @Override
-    protected int next(int bits) {
+    public int nextInt() {
 
         int y;
 
@@ -261,8 +252,7 @@ public class MersenneTwister extends BitsStreamGenerator implements Serializable
         y ^= (y <<  15) & 0xefc60000;
         y ^=  y >>> 18;
 
-        return y >>> (32 - bits);
-
+        return y;
     }
 
 }

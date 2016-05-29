@@ -16,6 +16,10 @@
  */
 package org.hipparchus.random;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
 import java.util.Arrays;
 
 import org.hipparchus.TestUtils;
@@ -32,16 +36,14 @@ import org.junit.Test;
 
 /**
  * Base class for RandomGenerator tests.
- *
+ * <p>
  * Tests RandomGenerator methods directly and also executes RandomDataTest
  * test cases against a RandomDataImpl created using the provided generator.
- *
+ * <p>
  * RandomGenerator test classes should extend this class, implementing
  * makeGenerator() to provide a concrete generator to test. The generator
  * returned by makeGenerator should be seeded with a fixed seed.
- *
  */
-
 public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTest {
 
     /** RandomGenerator under test */
@@ -69,7 +71,6 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         generator = makeGenerator();
     }
 
-    @Test
     /**
      * Tests uniformity of nextInt(int) distribution by generating 1000
      * samples for each of 10 test values and for each sample performing
@@ -82,6 +83,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
      * other tests and the generator is not reseeded, so this is a fixed seed
      * test.
      */
+    @Test
     public void testNextIntDirect() {
         // Set up test values - end of the array filled randomly
         int[] testValues = new int[] {4, 10, 12, 32, 100, 10000, 0, 0, 0, 0};
@@ -123,7 +125,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                 Arrays.fill(observed, 0);
                 for (int k = 0; k < smallSampleSize; k++) {
                     final int value = generator.nextInt(n);
-                    Assert.assertTrue("nextInt range",(value >= 0) && (value < n));
+                    assertTrue("nextInt range",(value >= 0) && (value < n));
                     for (int l = 0; l < binCount; l++) {
                         if (binUpperBounds[l] >= value) {
                             observed[l]++;
@@ -136,8 +138,8 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                 }
             }
             if ((double) numFailures / (double) numTests > 0.02) {
-                Assert.fail("Too many failures for n = " + n +
-                " " + numFailures + " out of " + numTests + " tests failed.");
+                fail("Too many failures for n = " + n +
+                     " " + numFailures + " out of " + numTests + " tests failed.");
             }
         }
     }
@@ -151,7 +153,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         LongFrequency freq = new LongFrequency();
         long val = 0;
         int value = 0;
-        for (int i=0; i<smallSampleSize; i++) {
+        for (int i = 0; i < smallSampleSize; i++) {
             val = generator.nextLong();
             val = val < 0 ? -val : val;
             if (val < q1) {
@@ -173,8 +175,8 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         /* Use ChiSquare dist with df = 4-1 = 3, alpha = .001
          * Change to 11.34 for alpha = .01
          */
-        Assert.assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                          testStatistic.chiSquare(expected,observed) < 16.27);
+        assertTrue("chi-square test -- will fail about 1 in 1000 times",
+                   testStatistic.chiSquare(expected,observed) < 16.27);
     }
 
     @Test
@@ -192,8 +194,8 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         /* Use ChiSquare dist with df = 2-1 = 1, alpha = .001
          * Change to 6.635 for alpha = .01
          */
-        Assert.assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                testStatistic.chiSquare(expected,observed) < 10.828);
+        assertTrue("chi-square test -- will fail about 1 in 1000 times",
+                   testStatistic.chiSquare(expected,observed) < 10.828);
     }
 
     @Test
@@ -222,8 +224,8 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         /* Use ChiSquare dist with df = 4-1 = 3, alpha = .001
          * Change to 11.34 for alpha = .01
          */
-        Assert.assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                testStatistic.chiSquare(expected,observed) < 16.27);
+        assertTrue("chi-square test -- will fail about 1 in 1000 times",
+                   testStatistic.chiSquare(expected,observed) < 16.27);
     }
 
     @Test
@@ -234,7 +236,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         }
         final RealDistribution uniformDistribution = new UniformRealDistribution(0,1);
         final KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest();
-        Assert.assertFalse(ks.kolmogorovSmirnovTest(uniformDistribution, sample, .01));
+        assertFalse(ks.kolmogorovSmirnovTest(uniformDistribution, sample, .01));
     }
 
 
@@ -259,9 +261,9 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                --walk;
            }
         }
-        Assert.assertTrue("Walked too far astray: " + walk + "\nNote: This " +
-                "test will fail randomly about 1 in 100 times.",
-                FastMath.abs(walk) < FastMath.sqrt(N) * 2.576);
+        assertTrue("Walked too far astray: " + walk + "\nNote: This " +
+                   "test will fail randomly about 1 in 100 times.",
+                   FastMath.abs(walk) < FastMath.sqrt(N) * 2.576);
     }
 
     @Test
@@ -275,9 +277,9 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                --walk;
            }
         }
-        Assert.assertTrue("Walked too far astray: " + walk + "\nNote: This " +
-                "test will fail randomly about 1 in 100 times.",
-                FastMath.abs(walk) < FastMath.sqrt(N) * 2.576);
+        assertTrue("Walked too far astray: " + walk + "\nNote: This " +
+                   "test will fail randomly about 1 in 100 times.",
+                   FastMath.abs(walk) < FastMath.sqrt(N) * 2.576);
     }
 
     @Test
@@ -291,9 +293,9 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                --walk;
            }
         }
-        Assert.assertTrue("Walked too far astray: " + walk + "\nNote: This " +
-                "test will fail randomly about 1 in 100 times.",
-                FastMath.abs(walk) < FastMath.sqrt(N) * 2.576);
+        assertTrue("Walked too far astray: " + walk + "\nNote: This " +
+                   "test will fail randomly about 1 in 100 times.",
+                   FastMath.abs(walk) < FastMath.sqrt(N) * 2.576);
     }
 
     @Test
@@ -315,7 +317,6 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         }
 
         TestUtils.assertChiSquareAccept(expected, count, 0.001);
-
     }
 
     // MATH-1300
@@ -366,49 +367,49 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextDouble();
         }
-        Assert.assertTrue(Arrays.equals(values[0], values[1]));
+        assertTrue(Arrays.equals(values[0], values[1]));
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextFloat();
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextFloat();
         }
-        Assert.assertTrue(Arrays.equals(values[0], values[1]));
+        assertTrue(Arrays.equals(values[0], values[1]));
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextInt();
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextInt();
         }
-        Assert.assertTrue(Arrays.equals(values[0], values[1]));
+        assertTrue(Arrays.equals(values[0], values[1]));
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextLong();
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextLong();
         }
-        Assert.assertTrue(Arrays.equals(values[0], values[1]));
+        assertTrue(Arrays.equals(values[0], values[1]));
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextInt(len);
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextInt(len);
         }
-        Assert.assertTrue(Arrays.equals(values[0], values[1]));
+        assertTrue(Arrays.equals(values[0], values[1]));
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextBoolean() ? 1 : 0;
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextBoolean() ? 1 : 0;
         }
-        Assert.assertTrue(Arrays.equals(values[0], values[1]));
+        assertTrue(Arrays.equals(values[0], values[1]));
         for (int i = 0; i < len; i++) {
             values[0][i] = gen1.nextGaussian();
         }
         for (int i = 0; i < len; i++) {
             values[1][i] = gen2.nextGaussian();
         }
-        Assert.assertTrue(Arrays.equals(values[0], values[1]));
+        assertTrue(Arrays.equals(values[0], values[1]));
     }
 
     // MATH-1300

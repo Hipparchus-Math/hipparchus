@@ -22,13 +22,13 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathUtils;
 
 /**
- * Extension of <code>java.util.Random</code> wrapping a
+ * Extension of {@link java.util.Random} wrapping a
  * {@link RandomGenerator}.
  */
 public class RandomAdaptor extends Random implements RandomGenerator {
 
     /** Serializable version identifier. */
-    private static final long serialVersionUID = 2306581345647615033L;
+    private static final long serialVersionUID = 20160529L;
 
     /** Wrapped randomGenerator instance */
     private final RandomGenerator randomGenerator;
@@ -69,7 +69,7 @@ public class RandomAdaptor extends Random implements RandomGenerator {
         return randomGenerator.nextBoolean();
     }
 
-     /**
+    /**
      * Generates random bytes and places them into a user-supplied
      * byte array.  The number of random bytes produced is equal to
      * the length of the byte array.
@@ -82,7 +82,13 @@ public class RandomAdaptor extends Random implements RandomGenerator {
         randomGenerator.nextBytes(bytes);
     }
 
-     /**
+    /** {@inheritDoc} */
+    @Override
+    public void nextBytes(byte[] bytes, int offset, int len) {
+        randomGenerator.nextBytes(bytes, offset, len);
+    }
+
+    /**
      * Returns the next pseudorandom, uniformly distributed
      * <code>double</code> value between <code>0.0</code> and
      * <code>1.0</code> from this random number generator's sequence.
@@ -167,6 +173,12 @@ public class RandomAdaptor extends Random implements RandomGenerator {
     @Override
     public long nextLong() {
         return randomGenerator.nextLong();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public long nextLong(long n) {
+        return randomGenerator.nextLong(n);
     }
 
     /** {@inheritDoc} */

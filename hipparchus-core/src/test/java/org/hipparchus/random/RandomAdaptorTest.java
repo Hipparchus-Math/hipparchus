@@ -22,7 +22,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * Test cases for the RandomAdaptor class
+ * Test cases for the RandomAdaptor class.
  */
 public class RandomAdaptorTest {
 
@@ -77,6 +77,10 @@ public class RandomAdaptorTest {
         }
 
         @Override
+        public void nextBytes(byte[] bytes, int offset, int len) {
+        }
+
+        @Override
         public double nextDouble() {
             return value;
         }
@@ -103,6 +107,11 @@ public class RandomAdaptorTest {
 
         @Override
         public long nextLong() {
+            return (int) value;
+        }
+
+        @Override
+        public long nextLong(long n) {
             return (int) value;
         }
 

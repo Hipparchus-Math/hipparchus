@@ -59,6 +59,12 @@ abstract class ForwardingRandomGenerator implements RandomGenerator {
 
     /** {@inheritDoc} */
     @Override
+    public void nextBytes(byte[] bytes, int offset, int length) {
+        delegate().nextBytes(bytes, offset, length);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public int nextInt() {
         return delegate().nextInt();
     }
@@ -73,6 +79,12 @@ abstract class ForwardingRandomGenerator implements RandomGenerator {
     @Override
     public long nextLong() {
         return delegate().nextLong();
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public long nextLong(long n) {
+        return delegate().nextLong(n);
     }
 
     /** {@inheritDoc} */

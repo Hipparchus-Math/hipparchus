@@ -38,11 +38,10 @@ import org.hipparchus.util.FastMath;
  *
  * @see  <a href="http://burtleburtle.net/bob/rand/isaacafa.html">
  * ISAAC: a fast cryptographic pseudo-random number generator</a>
- *
  */
-public class ISAACRandom extends BitsStreamGenerator implements Serializable {
+public class ISAACRandom extends IntRandomGenerator implements Serializable {
     /** Serializable version identifier */
-    private static final long serialVersionUID = 7288197941165002400L;
+    private static final long serialVersionUID = 20160529L;
     /** Log of size of rsl[] and mem[] */
     private static final int SIZE_L = 8;
     /** Size of rsl[] and mem[] */
@@ -106,18 +105,6 @@ public class ISAACRandom extends BitsStreamGenerator implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public void setSeed(int seed) {
-        setSeed(new int[]{seed});
-    }
-
-    /** {@inheritDoc} */
-    @Override
-    public void setSeed(long seed) {
-        setSeed(new int[]{(int) (seed >>> 32), (int) (seed & 0xffffffffL)});
-    }
-
-    /** {@inheritDoc} */
-    @Override
     public void setSeed(int[] seed) {
         if (seed == null) {
             setSeed(System.currentTimeMillis() + System.identityHashCode(this));
@@ -137,12 +124,12 @@ public class ISAACRandom extends BitsStreamGenerator implements Serializable {
 
     /** {@inheritDoc} */
     @Override
-    protected int next(int bits) {
+    public int nextInt() {
         if (count < 0) {
             isaac();
             count = SIZE - 1;
         }
-        return rsl[count--] >>> 32 - bits;
+        return rsl[count--];
     }
 
     /** Generate 256 results */
@@ -225,7 +212,7 @@ public class ISAACRandom extends BitsStreamGenerator implements Serializable {
         }
         isaac();
         count = SIZE - 1;
-        clear();
+        clearCache();
     }
 
     /** Shuffle array. */

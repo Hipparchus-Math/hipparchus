@@ -22,9 +22,9 @@ package org.hipparchus.random;
  * This is achieved by enclosing calls to the methods of the actual
  * generator inside the overridden {@code synchronized} methods of this
  * class.
- *
  */
 public class SynchronizedRandomGenerator implements RandomGenerator {
+
     /** Object to which all calls will be delegated. */
     private final RandomGenerator wrapped;
 
@@ -41,89 +41,79 @@ public class SynchronizedRandomGenerator implements RandomGenerator {
         wrapped = rng;
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized void setSeed(int seed) {
         wrapped.setSeed(seed);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized void setSeed(int[] seed) {
         wrapped.setSeed(seed);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized void setSeed(long seed) {
         wrapped.setSeed(seed);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized void nextBytes(byte[] bytes) {
         wrapped.nextBytes(bytes);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
+    @Override
+    public synchronized void nextBytes(byte[] bytes, int offset, int len) {
+        wrapped.nextBytes(bytes, offset, len);
+    }
+
+    /** {@inheritDoc} */
     @Override
     public synchronized int nextInt() {
         return wrapped.nextInt();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized int nextInt(int n) {
         return wrapped.nextInt(n);
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized long nextLong() {
         return wrapped.nextLong();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
+    @Override
+    public synchronized long nextLong(long n) {
+        return wrapped.nextLong(n);
+    }
+
+    /** {@inheritDoc} */
     @Override
     public synchronized boolean nextBoolean() {
         return wrapped.nextBoolean();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized float nextFloat() {
         return wrapped.nextFloat();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double nextDouble() {
         return wrapped.nextDouble();
     }
 
-    /**
-     * {@inheritDoc}
-     */
+    /** {@inheritDoc} */
     @Override
     public synchronized double nextGaussian() {
         return wrapped.nextGaussian();
