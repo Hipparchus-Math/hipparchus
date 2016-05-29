@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.integration.BaseAbstractUnivariateIntegrator;
 import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
@@ -175,7 +175,7 @@ public abstract class RealDistributionAbstractTest {
     protected void verifyCumulativeProbabilities() {
         // verify cumulativeProbability(double)
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
-            TestUtils.assertEquals("Incorrect cumulative probability value returned for "
+            UnitTestUtils.assertEquals("Incorrect cumulative probability value returned for "
                 + cumulativeTestPoints[i], cumulativeTestValues[i],
                 distribution.cumulativeProbability(cumulativeTestPoints[i]),
                 getTolerance());
@@ -184,7 +184,7 @@ public abstract class RealDistributionAbstractTest {
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
             for (int j = 0; j < cumulativeTestPoints.length; j++) {
                 if (cumulativeTestPoints[i] <= cumulativeTestPoints[j]) {
-                    TestUtils.assertEquals(cumulativeTestValues[j] - cumulativeTestValues[i],
+                    UnitTestUtils.assertEquals(cumulativeTestValues[j] - cumulativeTestValues[i],
                         distribution.probability(cumulativeTestPoints[i], cumulativeTestPoints[j]),
                         getTolerance());
                 } else {
@@ -205,7 +205,7 @@ public abstract class RealDistributionAbstractTest {
      */
     protected void verifyInverseCumulativeProbabilities() {
         for (int i = 0; i < inverseCumulativeTestPoints.length; i++) {
-            TestUtils.assertEquals("Incorrect inverse cumulative probability value returned for "
+            UnitTestUtils.assertEquals("Incorrect inverse cumulative probability value returned for "
                 + inverseCumulativeTestPoints[i], inverseCumulativeTestValues[i],
                  distribution.inverseCumulativeProbability(inverseCumulativeTestPoints[i]),
                  getTolerance());
@@ -217,7 +217,7 @@ public abstract class RealDistributionAbstractTest {
      */
     protected void verifyDensities() {
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
-            TestUtils.assertEquals("Incorrect probability density value returned for "
+            UnitTestUtils.assertEquals("Incorrect probability density value returned for "
                 + cumulativeTestPoints[i], densityTestValues[i],
                  distribution.density(cumulativeTestPoints[i]),
                  getTolerance());
@@ -229,7 +229,7 @@ public abstract class RealDistributionAbstractTest {
      */
     protected void verifyLogDensities() {
         for (int i = 0; i < cumulativeTestPoints.length; i++) {
-            TestUtils.assertEquals("Incorrect probability density value returned for "
+            UnitTestUtils.assertEquals("Incorrect probability density value returned for "
                     + cumulativeTestPoints[i], logDensityTestValues[i],
                     distribution.logDensity(cumulativeTestPoints[i]),
                     getTolerance());
@@ -282,7 +282,7 @@ public abstract class RealDistributionAbstractTest {
         for (int i=1; i < cumulativeTestPoints.length; i++) {
 
             // check that cdf(x, x) = 0
-            TestUtils.assertEquals(0d,
+            UnitTestUtils.assertEquals(0d,
                distribution.probability
                  (cumulativeTestPoints[i], cumulativeTestPoints[i]), tolerance);
 
@@ -292,7 +292,7 @@ public abstract class RealDistributionAbstractTest {
             double diff = distribution.cumulativeProbability(upper) -
                 distribution.cumulativeProbability(lower);
             double direct = distribution.probability(lower, upper);
-            TestUtils.assertEquals("Inconsistent probability for ("
+            UnitTestUtils.assertEquals("Inconsistent probability for ("
                     + lower + "," + upper + ")", diff, direct, tolerance);
         }
     }
@@ -330,13 +330,13 @@ public abstract class RealDistributionAbstractTest {
         final int sampleSize = 1000;
         distribution.reseedRandomGenerator(1000); // Use fixed seed
         double[] sample = distribution.sample(sampleSize);
-        double[] quartiles = TestUtils.getDistributionQuartiles(distribution);
+        double[] quartiles = UnitTestUtils.getDistributionQuartiles(distribution);
         double[] expected = {250, 250, 250, 250};
         long[] counts = new long[4];
         for (int i = 0; i < sampleSize; i++) {
-            TestUtils.updateCounts(sample[i], counts, quartiles);
+            UnitTestUtils.updateCounts(sample[i], counts, quartiles);
         }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, counts, 0.001);
     }
 
     /**

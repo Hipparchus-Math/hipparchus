@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import org.junit.Test;
 import org.junit.Assert;
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NoDataException;
 import org.hipparchus.exception.NullArgumentException;
@@ -669,7 +669,7 @@ public final class SparseRealMatrixTest {
     @Test
     public void testSerial()  {
         OpenMapRealMatrix m = createSparseMatrix(testData);
-        Assert.assertEquals(m,TestUtils.serializeAndRecover(m));
+        Assert.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
     }
 
     // --------------- -----------------Protected methods

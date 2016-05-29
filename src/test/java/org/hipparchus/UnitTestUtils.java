@@ -38,11 +38,11 @@ import org.junit.Assert;
 
 /**
  */
-public class TestUtils {
+public class UnitTestUtils {
     /**
      * Collection of static methods used in math unit tests.
      */
-    private TestUtils() {
+    private UnitTestUtils() {
         super();
     }
 

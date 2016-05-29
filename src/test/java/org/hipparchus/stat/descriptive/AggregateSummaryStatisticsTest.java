@@ -20,7 +20,7 @@ package org.hipparchus.stat.descriptive;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformIntegerDistribution;
@@ -262,13 +262,13 @@ public class AggregateSummaryStatisticsTest {
      * have to agree exactly, delta is used only for sum, mean, variance, std dev.
      */
     protected static void assertEquals(StatisticalSummary expected, StatisticalSummary observed, double delta) {
-        TestUtils.assertEquals(expected.getMax(), observed.getMax(), 0);
-        TestUtils.assertEquals(expected.getMin(), observed.getMin(), 0);
+        UnitTestUtils.assertEquals(expected.getMax(), observed.getMax(), 0);
+        UnitTestUtils.assertEquals(expected.getMin(), observed.getMin(), 0);
         Assert.assertEquals(expected.getN(), observed.getN());
-        TestUtils.assertEquals(expected.getSum(), observed.getSum(), delta);
-        TestUtils.assertEquals(expected.getMean(), observed.getMean(), delta);
-        TestUtils.assertEquals(expected.getStandardDeviation(), observed.getStandardDeviation(), delta);
-        TestUtils.assertEquals(expected.getVariance(), observed.getVariance(), delta);
+        UnitTestUtils.assertEquals(expected.getSum(), observed.getSum(), delta);
+        UnitTestUtils.assertEquals(expected.getMean(), observed.getMean(), delta);
+        UnitTestUtils.assertEquals(expected.getStandardDeviation(), observed.getStandardDeviation(), delta);
+        UnitTestUtils.assertEquals(expected.getVariance(), observed.getVariance(), delta);
     }
 
 

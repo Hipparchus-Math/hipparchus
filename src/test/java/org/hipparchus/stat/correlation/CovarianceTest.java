@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -130,7 +130,7 @@ public class CovarianceTest {
          2973.033333333333, 1382.433333333333, 32917.40000000, 22.66666666666667
         };
 
-        TestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 7, 7), covarianceMatrix, 10E-9);
+        UnitTestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 7, 7), covarianceMatrix, 10E-9);
 
     }
 
@@ -150,7 +150,7 @@ public class CovarianceTest {
             241.5632030527289, 379.9043755781684, -190.56061054579092, -61.6988297872340, 1739.2945371877890
          };
 
-         TestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 5, 5), covarianceMatrix, 10E-13);
+         UnitTestUtils.assertEquals("covariance matrix", createRealMatrix(rData, 5, 5), covarianceMatrix, 10E-13);
     }
 
     /**
@@ -231,9 +231,9 @@ public class CovarianceTest {
 
         // Check bias-correction defaults
         double[][] data = matrix.getData();
-        TestUtils.assertEquals("Covariances",
+        UnitTestUtils.assertEquals("Covariances",
                 covarianceMatrix, new Covariance().computeCovarianceMatrix(data),Double.MIN_VALUE);
-        TestUtils.assertEquals("Covariances",
+        UnitTestUtils.assertEquals("Covariances",
                 covarianceMatrix, new Covariance().computeCovarianceMatrix(data, true),Double.MIN_VALUE);
 
         double[] x = data[0];

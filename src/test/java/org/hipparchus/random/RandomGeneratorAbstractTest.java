@@ -18,7 +18,7 @@ package org.hipparchus.random;
 
 import java.util.Arrays;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -334,7 +334,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
            }
         }
 
-        TestUtils.assertChiSquareAccept(expected, count, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, count, 0.001);
 
     }
 

@@ -21,7 +21,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Abs;
 import org.hipparchus.analysis.function.Acos;
@@ -234,7 +234,7 @@ public abstract class RealVectorAbstractTest {
             final double newValue = oldValue + 1d;
             expected[i] = newValue;
             actual.setEntry(i, newValue);
-            TestUtils.assertEquals("while setting entry #" + i, expected,
+            UnitTestUtils.assertEquals("while setting entry #" + i, expected,
                 actual, 0d);
             expected[i] = oldValue;
             actual.setEntry(i, oldValue);
@@ -248,7 +248,7 @@ public abstract class RealVectorAbstractTest {
             final double newValue = x;
             expected[i] = newValue;
             actual.setEntry(i, newValue);
-            TestUtils.assertEquals("while setting entry #" + i, expected,
+            UnitTestUtils.assertEquals("while setting entry #" + i, expected,
                 actual, 0d);
             expected[i] = oldValue;
             actual.setEntry(i, oldValue);
@@ -281,7 +281,7 @@ public abstract class RealVectorAbstractTest {
             final double oldValue = data1[i];
             expected[i] += increment;
             actual.addToEntry(i, increment);
-            TestUtils.assertEquals("while incrementing entry #" + i, expected,
+            UnitTestUtils.assertEquals("while incrementing entry #" + i, expected,
                 actual, 0d);
             expected[i] = oldValue;
             actual.setEntry(i, oldValue);
@@ -295,7 +295,7 @@ public abstract class RealVectorAbstractTest {
             increment = x - oldValue;
             expected[i] = x;
             actual.addToEntry(i, increment);
-            TestUtils.assertEquals("while incrementing entry #" + i, expected,
+            UnitTestUtils.assertEquals("while incrementing entry #" + i, expected,
                 actual, 0d);
             expected[i] = oldValue;
             actual.setEntry(i, oldValue);
@@ -371,7 +371,7 @@ public abstract class RealVectorAbstractTest {
         final RealVector actual = create(data).getSubVector(index, n);
         final double[] expected = new double[n];
         System.arraycopy(data, index, expected, 0, n);
-        TestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.assertEquals("", expected, actual, 0d);
     }
 
     @Test(expected = OutOfRangeException.class)
@@ -410,7 +410,7 @@ public abstract class RealVectorAbstractTest {
         for (int i = 0; i < sub.length; i++){
             expected[index + i] = sub[i];
         }
-        TestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.assertEquals("", expected, actual, 0d);
     }
 
     @Test
@@ -425,7 +425,7 @@ public abstract class RealVectorAbstractTest {
         for (int i = 0; i < sub.length; i++){
             expected[index + i] = sub[i];
         }
-        TestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.assertEquals("", expected, actual, 0d);
     }
 
     @Test(expected = OutOfRangeException.class)
@@ -808,7 +808,7 @@ public abstract class RealVectorAbstractTest {
                         throw new AssertionError("unexpected value");
                 }
             }
-            TestUtils.assertEquals(Double.toString(d), expected, actual, 0d);
+            UnitTestUtils.assertEquals(Double.toString(d), expected, actual, 0d);
         }
     }
 
@@ -874,7 +874,7 @@ public abstract class RealVectorAbstractTest {
         } else {
             actual = v.map(f);
         }
-        TestUtils.assertEquals(f.getClass().getSimpleName(), expected, actual, 1E-16);
+        UnitTestUtils.assertEquals(f.getClass().getSimpleName(), expected, actual, 1E-16);
     }
 
     protected UnivariateFunction[] createFunctions() {
@@ -968,7 +968,7 @@ public abstract class RealVectorAbstractTest {
             v2 = create(data2);
         }
         final RealVector actual = v1.projection(v2);
-        TestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.assertEquals("", expected, actual, 0d);
     }
 
     @Test
@@ -1038,7 +1038,7 @@ public abstract class RealVectorAbstractTest {
             actual = v.unitVector();
             Assert.assertNotSame(v, actual);
         }
-        TestUtils.assertEquals("", expected, actual, 0d);
+        UnitTestUtils.assertEquals("", expected, actual, 0d);
     }
 
     @Test
@@ -1126,7 +1126,7 @@ public abstract class RealVectorAbstractTest {
                 } else {
                     actual = v1.combine(a1, a2, v2);
                 }
-                TestUtils.assertEquals("a1 = " + a1 + ", a2 = " + a2, expected,
+                UnitTestUtils.assertEquals("a1 = " + a1 + ", a2 = " + a2, expected,
                     actual, 0.);
             }
         }
@@ -1192,7 +1192,7 @@ public abstract class RealVectorAbstractTest {
         final RealVector v = create(values);
         final RealVector w = v.copy();
         Assert.assertNotSame(v, w);
-        TestUtils.assertEquals("", values, w, 0d);
+        UnitTestUtils.assertEquals("", values, w, 0d);
     }
 
     private void doTestDotProductRegularValues(final boolean mixed) {
@@ -1353,7 +1353,7 @@ public abstract class RealVectorAbstractTest {
     @Test
     public void testSerial()  {
         RealVector v = create(new double[] { 0, 1, 2 });
-        Assert.assertEquals(v,TestUtils.serializeAndRecover(v));
+        Assert.assertEquals(v,UnitTestUtils.serializeAndRecover(v));
     }
 
     @Test

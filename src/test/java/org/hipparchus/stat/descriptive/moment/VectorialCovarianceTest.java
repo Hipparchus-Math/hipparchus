@@ -17,7 +17,7 @@
 
 package org.hipparchus.stat.descriptive.moment;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.stat.descriptive.moment.VectorialCovariance;
@@ -87,6 +87,6 @@ public class VectorialCovarianceTest {
     @Test
     public void testSerial(){
         VectorialCovariance stat = new VectorialCovariance(points[0].length, true);
-        Assert.assertEquals(stat, TestUtils.serializeAndRecover(stat));
+        Assert.assertEquals(stat, UnitTestUtils.serializeAndRecover(stat));
     }
 }

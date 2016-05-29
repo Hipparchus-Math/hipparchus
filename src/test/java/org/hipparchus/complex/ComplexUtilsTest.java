@@ -17,7 +17,7 @@
 
 package org.hipparchus.complex;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -42,15 +42,15 @@ public class ComplexUtilsTest {
 
     @Test
     public void testPolar2Complex() {
-        TestUtils.assertEquals(Complex.ONE,
+        UnitTestUtils.assertEquals(Complex.ONE,
                 ComplexUtils.polar2Complex(1, 0), 10e-12);
-        TestUtils.assertEquals(Complex.ZERO,
+        UnitTestUtils.assertEquals(Complex.ZERO,
                 ComplexUtils.polar2Complex(0, 1), 10e-12);
-        TestUtils.assertEquals(Complex.ZERO,
+        UnitTestUtils.assertEquals(Complex.ZERO,
                 ComplexUtils.polar2Complex(0, -1), 10e-12);
-        TestUtils.assertEquals(Complex.I,
+        UnitTestUtils.assertEquals(Complex.I,
                 ComplexUtils.polar2Complex(1, pi/2), 10e-12);
-        TestUtils.assertEquals(Complex.I.negate(),
+        UnitTestUtils.assertEquals(Complex.I.negate(),
                 ComplexUtils.polar2Complex(1, -pi/2), 10e-12);
         double r = 0;
         for (int i = 0; i < 5; i++) {
@@ -58,13 +58,13 @@ public class ComplexUtilsTest {
           double theta = 0;
           for (int j =0; j < 20; j++) {
               theta += pi / 6;
-              TestUtils.assertEquals(altPolar(r, theta),
+              UnitTestUtils.assertEquals(altPolar(r, theta),
                       ComplexUtils.polar2Complex(r, theta), 10e-12);
           }
           theta = -2 * pi;
           for (int j =0; j < 20; j++) {
               theta -= pi / 6;
-              TestUtils.assertEquals(altPolar(r, theta),
+              UnitTestUtils.assertEquals(altPolar(r, theta),
                       ComplexUtils.polar2Complex(r, theta), 10e-12);
           }
         }
@@ -81,25 +81,25 @@ public class ComplexUtilsTest {
 
     @Test
     public void testPolar2ComplexNaN() {
-        TestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(nan, 1));
-        TestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(1, nan));
-        TestUtils.assertSame(Complex.NaN,
+        UnitTestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(nan, 1));
+        UnitTestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(1, nan));
+        UnitTestUtils.assertSame(Complex.NaN,
                 ComplexUtils.polar2Complex(nan, nan));
     }
 
     @Test
     public void testPolar2ComplexInf() {
-        TestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(1, inf));
-        TestUtils.assertSame(Complex.NaN,
+        UnitTestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(1, inf));
+        UnitTestUtils.assertSame(Complex.NaN,
                 ComplexUtils.polar2Complex(1, negInf));
-        TestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(inf, inf));
-        TestUtils.assertSame(Complex.NaN,
+        UnitTestUtils.assertSame(Complex.NaN, ComplexUtils.polar2Complex(inf, inf));
+        UnitTestUtils.assertSame(Complex.NaN,
                 ComplexUtils.polar2Complex(inf, negInf));
-        TestUtils.assertSame(infInf, ComplexUtils.polar2Complex(inf, pi/4));
-        TestUtils.assertSame(infNaN, ComplexUtils.polar2Complex(inf, 0));
-        TestUtils.assertSame(infNegInf, ComplexUtils.polar2Complex(inf, -pi/4));
-        TestUtils.assertSame(negInfInf, ComplexUtils.polar2Complex(inf, 3*pi/4));
-        TestUtils.assertSame(negInfNegInf, ComplexUtils.polar2Complex(inf, 5*pi/4));
+        UnitTestUtils.assertSame(infInf, ComplexUtils.polar2Complex(inf, pi/4));
+        UnitTestUtils.assertSame(infNaN, ComplexUtils.polar2Complex(inf, 0));
+        UnitTestUtils.assertSame(infNegInf, ComplexUtils.polar2Complex(inf, -pi/4));
+        UnitTestUtils.assertSame(negInfInf, ComplexUtils.polar2Complex(inf, 3*pi/4));
+        UnitTestUtils.assertSame(negInfNegInf, ComplexUtils.polar2Complex(inf, 5*pi/4));
     }
 
     @Test

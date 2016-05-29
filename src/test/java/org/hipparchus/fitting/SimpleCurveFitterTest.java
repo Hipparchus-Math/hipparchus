@@ -18,7 +18,7 @@ package org.hipparchus.fitting;
 
 import java.util.Random;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.distribution.RealDistribution;
@@ -54,6 +54,6 @@ public class SimpleCurveFitterTest {
                                        new double[] { -1e20, 3e15, -5e25 });
         final double[] best = fitter.fit(obs.toList());
 
-        TestUtils.assertEquals("best != coeff", coeff, best, 2e-2);
+        UnitTestUtils.assertEquals("best != coeff", coeff, best, 2e-2);
     }
 }

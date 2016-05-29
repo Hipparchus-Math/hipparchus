@@ -19,7 +19,7 @@ package org.hipparchus.stat.descriptive;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -137,7 +137,7 @@ public final class ListUnivariateImplTest {
         u.addValue(one);
         u.addValue(two);
 
-        DescriptiveStatistics u2 = (DescriptiveStatistics)TestUtils.serializeAndRecover(u);
+        DescriptiveStatistics u2 = (DescriptiveStatistics)UnitTestUtils.serializeAndRecover(u);
 
         u2.addValue(two);
         u2.addValue(three);

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.spherical.oned;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.junit.Assert;
@@ -37,7 +37,7 @@ public class Sphere1Test {
     @Test
     public void testSerialization() {
         Space s1 = Sphere1D.getInstance();
-        Space deserialized = (Space) TestUtils.serializeAndRecover(s1);
+        Space deserialized = (Space) UnitTestUtils.serializeAndRecover(s1);
         Assert.assertTrue(s1 == deserialized);
     }
 

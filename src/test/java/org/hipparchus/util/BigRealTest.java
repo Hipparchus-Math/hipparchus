@@ -20,7 +20,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.MathContext;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathArithmeticException;
 import org.hipparchus.util.BigReal;
 import org.hipparchus.util.FastMath;
@@ -185,7 +185,7 @@ public class BigRealTest {
             new BigReal(FastMath.PI), new BigReal(-2.5)
         };
         for (BigReal Real : Reals) {
-            Assert.assertEquals(Real, TestUtils.serializeAndRecover(Real));
+            Assert.assertEquals(Real, UnitTestUtils.serializeAndRecover(Real));
         }
     }
 }

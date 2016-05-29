@@ -19,7 +19,7 @@ package org.hipparchus.stat.descriptive;
 
 import java.util.Locale;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.stat.descriptive.MultivariateSummaryStatistics;
@@ -124,13 +124,13 @@ public class MultivariateSummaryStatisticsTest {
             shuffled.addValue(new double[] {i, i});
         }
 
-        TestUtils.assertEquals(reference.getMean(),          shuffled.getGeometricMean(), 1.0e-10);
-        TestUtils.assertEquals(reference.getMax(),           shuffled.getMean(),          1.0e-10);
-        TestUtils.assertEquals(reference.getMin(),           shuffled.getMax(),           1.0e-10);
-        TestUtils.assertEquals(reference.getSum(),           shuffled.getMin(),           1.0e-10);
-        TestUtils.assertEquals(reference.getSumSq(),         shuffled.getSum(),           1.0e-10);
-        TestUtils.assertEquals(reference.getSumLog(),        shuffled.getSumSq(),         1.0e-10);
-        TestUtils.assertEquals(reference.getGeometricMean(), shuffled.getSumLog(),        1.0e-10);
+        UnitTestUtils.assertEquals(reference.getMean(),          shuffled.getGeometricMean(), 1.0e-10);
+        UnitTestUtils.assertEquals(reference.getMax(),           shuffled.getMean(),          1.0e-10);
+        UnitTestUtils.assertEquals(reference.getMin(),           shuffled.getMax(),           1.0e-10);
+        UnitTestUtils.assertEquals(reference.getSum(),           shuffled.getMin(),           1.0e-10);
+        UnitTestUtils.assertEquals(reference.getSumSq(),         shuffled.getSum(),           1.0e-10);
+        UnitTestUtils.assertEquals(reference.getSumLog(),        shuffled.getSumSq(),         1.0e-10);
+        UnitTestUtils.assertEquals(reference.getGeometricMean(), shuffled.getSumLog(),        1.0e-10);
 
     }
 
@@ -261,8 +261,8 @@ public class MultivariateSummaryStatisticsTest {
     public void testSerialization() {
         MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(2, true);
         // Empty test
-        TestUtils.checkSerializedEquality(u);
-        MultivariateSummaryStatistics s = (MultivariateSummaryStatistics) TestUtils.serializeAndRecover(u);
+        UnitTestUtils.checkSerializedEquality(u);
+        MultivariateSummaryStatistics s = (MultivariateSummaryStatistics) UnitTestUtils.serializeAndRecover(u);
         Assert.assertEquals(u, s);
 
         // Add some data
@@ -273,8 +273,8 @@ public class MultivariateSummaryStatisticsTest {
         u.addValue(new double[] { 5d, 1d });
 
         // Test again
-        TestUtils.checkSerializedEquality(u);
-        s = (MultivariateSummaryStatistics) TestUtils.serializeAndRecover(u);
+        UnitTestUtils.checkSerializedEquality(u);
+        s = (MultivariateSummaryStatistics) UnitTestUtils.serializeAndRecover(u);
         Assert.assertEquals(u, s);
 
     }

@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import java.math.BigDecimal;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NotStrictlyPositiveException;
 import org.hipparchus.exception.NullArgumentException;
@@ -323,7 +323,7 @@ public final class MatrixUtilsTest {
                        false);
         RealVector b = new ArrayRealVector(new double[] { 2,3,4,8 }, false);
         MatrixUtils.solveLowerTriangularSystem(rm, b);
-        TestUtils.assertEquals( new double[]{1,2,-1.66666666666667, 1.0}  , b.toArray() , 1.0e-12);
+        UnitTestUtils.assertEquals( new double[]{1,2,-1.66666666666667, 1.0}  , b.toArray() , 1.0e-12);
     }
 
 
@@ -337,7 +337,7 @@ public final class MatrixUtilsTest {
                        false);
         RealVector b = new ArrayRealVector(new double[] { 8,4,2 }, false);
         MatrixUtils.solveUpperTriangularSystem(rm, b);
-        TestUtils.assertEquals( new double[]{-1,3,1}  , b.toArray() , 1.0e-12);
+        UnitTestUtils.assertEquals( new double[]{-1,3,1}  , b.toArray() , 1.0e-12);
     }
 
     /**
@@ -479,7 +479,7 @@ public final class MatrixUtilsTest {
         final RealMatrix inverse = MatrixUtils.inverse(m);
 
         final RealMatrix result = m.multiply(inverse);
-        TestUtils.assertEquals("MatrixUtils.inverse() returns wrong result",
+        UnitTestUtils.assertEquals("MatrixUtils.inverse() returns wrong result",
                 MatrixUtils.createRealIdentityMatrix(data.length), result, Math.ulp(1d));
     }
 
@@ -489,7 +489,7 @@ public final class MatrixUtilsTest {
         final RealMatrix inverse = MatrixUtils.inverse(m);
 
         final RealMatrix result = m.multiply(inverse);
-        TestUtils.assertEquals("MatrixUtils.inverse() returns wrong result",
+        UnitTestUtils.assertEquals("MatrixUtils.inverse() returns wrong result",
                 MatrixUtils.createRealIdentityMatrix(testData.length), result, 1e-12);
     }
 

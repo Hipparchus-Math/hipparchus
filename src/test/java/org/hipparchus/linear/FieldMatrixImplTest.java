@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import org.junit.Test;
 import org.junit.Assert;
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -162,7 +162,7 @@ public final class FieldMatrixImplTest {
     public void testPlusMinus() {
         Array2DRowFieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
         Array2DRowFieldMatrix<Fraction> m2 = new Array2DRowFieldMatrix<Fraction>(testDataInv);
-        TestUtils.assertEquals(m.subtract(m2),m2.scalarMultiply(new Fraction(-1)).add(m));
+        UnitTestUtils.assertEquals(m.subtract(m2),m2.scalarMultiply(new Fraction(-1)).add(m));
         try {
             m.subtract(new Array2DRowFieldMatrix<Fraction>(testData2));
             Assert.fail("Expecting illegalArgumentException");
@@ -178,11 +178,11 @@ public final class FieldMatrixImplTest {
         Array2DRowFieldMatrix<Fraction> mInv = new Array2DRowFieldMatrix<Fraction>(testDataInv);
         Array2DRowFieldMatrix<Fraction> identity = new Array2DRowFieldMatrix<Fraction>(id);
         Array2DRowFieldMatrix<Fraction> m2 = new Array2DRowFieldMatrix<Fraction>(testData2);
-        TestUtils.assertEquals(m.multiply(mInv), identity);
-        TestUtils.assertEquals(mInv.multiply(m), identity);
-        TestUtils.assertEquals(m.multiply(identity), m);
-        TestUtils.assertEquals(identity.multiply(mInv), mInv);
-        TestUtils.assertEquals(m2.multiply(identity), m2);
+        UnitTestUtils.assertEquals(m.multiply(mInv), identity);
+        UnitTestUtils.assertEquals(mInv.multiply(m), identity);
+        UnitTestUtils.assertEquals(m.multiply(identity), m);
+        UnitTestUtils.assertEquals(identity.multiply(mInv), mInv);
+        UnitTestUtils.assertEquals(m2.multiply(identity), m2);
         try {
             m.multiply(new Array2DRowFieldMatrix<Fraction>(bigSingular));
             Assert.fail("Expecting illegalArgumentException");
@@ -202,7 +202,7 @@ public final class FieldMatrixImplTest {
        FieldMatrix<Fraction> m3 = new Array2DRowFieldMatrix<Fraction>(d3);
        FieldMatrix<Fraction> m4 = new Array2DRowFieldMatrix<Fraction>(d4);
        FieldMatrix<Fraction> m5 = new Array2DRowFieldMatrix<Fraction>(d5);
-       TestUtils.assertEquals(m3.multiply(m4), m5);
+       UnitTestUtils.assertEquals(m3.multiply(m4), m5);
    }
 
     @Test
@@ -212,13 +212,13 @@ public final class FieldMatrixImplTest {
         FieldMatrix<Fraction> mPlusInv = new Array2DRowFieldMatrix<Fraction>(testDataPlusInv);
         FieldMatrix<Fraction> identity = new Array2DRowFieldMatrix<Fraction>(id);
 
-        TestUtils.assertEquals(m.power(0), identity);
-        TestUtils.assertEquals(mInv.power(0), identity);
-        TestUtils.assertEquals(mPlusInv.power(0), identity);
+        UnitTestUtils.assertEquals(m.power(0), identity);
+        UnitTestUtils.assertEquals(mInv.power(0), identity);
+        UnitTestUtils.assertEquals(mPlusInv.power(0), identity);
 
-        TestUtils.assertEquals(m.power(1), m);
-        TestUtils.assertEquals(mInv.power(1), mInv);
-        TestUtils.assertEquals(mPlusInv.power(1), mPlusInv);
+        UnitTestUtils.assertEquals(m.power(1), m);
+        UnitTestUtils.assertEquals(mInv.power(1), mInv);
+        UnitTestUtils.assertEquals(mPlusInv.power(1), mPlusInv);
 
         FieldMatrix<Fraction> C1 = m.copy();
         FieldMatrix<Fraction> C2 = mInv.copy();
@@ -230,9 +230,9 @@ public final class FieldMatrixImplTest {
             C2 = C2.multiply(mInv);
             C3 = C3.multiply(mPlusInv);
 
-            TestUtils.assertEquals(m.power(i), C1);
-            TestUtils.assertEquals(mInv.power(i), C2);
-            TestUtils.assertEquals(mPlusInv.power(i), C3);
+            UnitTestUtils.assertEquals(m.power(i), C1);
+            UnitTestUtils.assertEquals(mInv.power(i), C2);
+            UnitTestUtils.assertEquals(mPlusInv.power(i), C3);
         }
 
         try {
@@ -269,15 +269,15 @@ public final class FieldMatrixImplTest {
     @Test
     public void testScalarAdd() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
-        TestUtils.assertEquals(new Array2DRowFieldMatrix<Fraction>(testDataPlus2), m.scalarAdd(new Fraction(2)));
+        UnitTestUtils.assertEquals(new Array2DRowFieldMatrix<Fraction>(testDataPlus2), m.scalarAdd(new Fraction(2)));
     }
 
     /** test operate */
     @Test
     public void testOperate() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(id);
-        TestUtils.assertEquals(testVector, m.operate(testVector));
-        TestUtils.assertEquals(testVector, m.operate(new ArrayFieldVector<Fraction>(testVector)).toArray());
+        UnitTestUtils.assertEquals(testVector, m.operate(testVector));
+        UnitTestUtils.assertEquals(testVector, m.operate(new ArrayFieldVector<Fraction>(testVector)).toArray());
         m = new Array2DRowFieldMatrix<Fraction>(bigSingular);
         try {
             m.operate(testVector);
@@ -306,18 +306,18 @@ public final class FieldMatrixImplTest {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
         FieldMatrix<Fraction> mIT = new FieldLUDecomposition<Fraction>(m).getSolver().getInverse().transpose();
         FieldMatrix<Fraction> mTI = new FieldLUDecomposition<Fraction>(m.transpose()).getSolver().getInverse();
-        TestUtils.assertEquals(mIT, mTI);
+        UnitTestUtils.assertEquals(mIT, mTI);
         m = new Array2DRowFieldMatrix<Fraction>(testData2);
         FieldMatrix<Fraction> mt = new Array2DRowFieldMatrix<Fraction>(testData2T);
-        TestUtils.assertEquals(mt, m.transpose());
+        UnitTestUtils.assertEquals(mt, m.transpose());
     }
 
     /** test preMultiply by vector */
     @Test
     public void testPremultiplyVector() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
-        TestUtils.assertEquals(m.preMultiply(testVector), preMultTest);
-        TestUtils.assertEquals(m.preMultiply(new ArrayFieldVector<Fraction>(testVector).toArray()),
+        UnitTestUtils.assertEquals(m.preMultiply(testVector), preMultTest);
+        UnitTestUtils.assertEquals(m.preMultiply(new ArrayFieldVector<Fraction>(testVector).toArray()),
                                preMultTest);
         m = new Array2DRowFieldMatrix<Fraction>(bigSingular);
         try {
@@ -333,15 +333,15 @@ public final class FieldMatrixImplTest {
         FieldMatrix<Fraction> m3 = new Array2DRowFieldMatrix<Fraction>(d3);
         FieldMatrix<Fraction> m4 = new Array2DRowFieldMatrix<Fraction>(d4);
         FieldMatrix<Fraction> m5 = new Array2DRowFieldMatrix<Fraction>(d5);
-        TestUtils.assertEquals(m4.preMultiply(m3), m5);
+        UnitTestUtils.assertEquals(m4.preMultiply(m3), m5);
 
         Array2DRowFieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
         Array2DRowFieldMatrix<Fraction> mInv = new Array2DRowFieldMatrix<Fraction>(testDataInv);
         Array2DRowFieldMatrix<Fraction> identity = new Array2DRowFieldMatrix<Fraction>(id);
-        TestUtils.assertEquals(m.preMultiply(mInv), identity);
-        TestUtils.assertEquals(mInv.preMultiply(m), identity);
-        TestUtils.assertEquals(m.preMultiply(identity), m);
-        TestUtils.assertEquals(identity.preMultiply(mInv), mInv);
+        UnitTestUtils.assertEquals(m.preMultiply(mInv), identity);
+        UnitTestUtils.assertEquals(mInv.preMultiply(m), identity);
+        UnitTestUtils.assertEquals(m.preMultiply(identity), m);
+        UnitTestUtils.assertEquals(identity.preMultiply(mInv), mInv);
         try {
             m.preMultiply(new Array2DRowFieldMatrix<Fraction>(bigSingular));
             Assert.fail("Expecting illegalArgumentException");
@@ -353,8 +353,8 @@ public final class FieldMatrixImplTest {
     @Test
     public void testGetVectors() {
         FieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
-        TestUtils.assertEquals(m.getRow(0), testDataRow1);
-        TestUtils.assertEquals(m.getColumn(2), testDataCol3);
+        UnitTestUtils.assertEquals(m.getRow(0), testDataRow1);
+        UnitTestUtils.assertEquals(m.getColumn(2), testDataCol3);
         try {
             m.getRow(10);
             Assert.fail("expecting OutOfRangeException");
@@ -1064,7 +1064,7 @@ public final class FieldMatrixImplTest {
     @Test
     public void testSerial()  {
         Array2DRowFieldMatrix<Fraction> m = new Array2DRowFieldMatrix<Fraction>(testData);
-        Assert.assertEquals(m,TestUtils.serializeAndRecover(m));
+        Assert.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
     }
 
     private static class SetVisitor extends DefaultFieldMatrixChangingVisitor<Fraction> {

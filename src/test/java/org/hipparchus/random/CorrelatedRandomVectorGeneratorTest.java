@@ -19,7 +19,7 @@ package org.hipparchus.random;
 
 import java.util.Arrays;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -194,7 +194,7 @@ public class CorrelatedRandomVectorGeneratorTest {
 
         double[][] sampleCov = cov.getData();
         for (int r = 0; r < covMatrix.length; ++r) {
-            TestUtils.assertEquals(covMatrix[r], sampleCov[r], epsilon);
+            UnitTestUtils.assertEquals(covMatrix[r], sampleCov[r], epsilon);
         }
 
     }

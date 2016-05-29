@@ -20,7 +20,7 @@ package org.hipparchus.stat.inference;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.NormalDistribution;
 import org.hipparchus.distribution.UniformRealDistribution;
 import org.hipparchus.random.RandomGenerator;
@@ -564,7 +564,7 @@ public class KolmogorovSmirnovTestTest {
             }
 
             Assert.assertEquals(numCombinations, observedIdx);
-            TestUtils.assertChiSquareAccept(expected, observed, alpha);
+            UnitTestUtils.assertChiSquareAccept(expected, observed, alpha);
         }
     }
 

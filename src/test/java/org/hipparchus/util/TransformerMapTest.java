@@ -17,7 +17,7 @@
 
 package org.hipparchus.util;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.util.DefaultTransformer;
 import org.hipparchus.util.NumberTransformer;
 import org.hipparchus.util.TransformerMap;
@@ -119,7 +119,7 @@ public class TransformerMapTest {
         NumberTransformer expected = new DefaultTransformer();
         TransformerMap map = new TransformerMap();
         map.putTransformer(TransformerMapTest.class, expected);
-        Assert.assertEquals(map, TestUtils.serializeAndRecover(map));
+        Assert.assertEquals(map, UnitTestUtils.serializeAndRecover(map));
     }
 
 }

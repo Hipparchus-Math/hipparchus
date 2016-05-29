@@ -17,7 +17,7 @@
 
 package org.hipparchus.stat.descriptive.moment;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.moment.SemiVariance;
@@ -70,12 +70,12 @@ public class SemiVarianceTest {
         final double mean = StatUtils.mean(values); // 6.333...
         final SemiVariance sv = new SemiVariance();  // Default bias correction is true
         final double downsideSemiVariance = sv.evaluate(values); // Downside is the default
-        Assert.assertEquals(TestUtils.sumSquareDev(new double[] {-2d, 2d, 4d, -2d, 3d, 5d}, mean) / (length - 1),
+        Assert.assertEquals(UnitTestUtils.sumSquareDev(new double[] {-2d, 2d, 4d, -2d, 3d, 5d}, mean) / (length - 1),
                 downsideSemiVariance, 1E-14);
 
         sv.setVarianceDirection(SemiVariance.UPSIDE_VARIANCE);
         final double upsideSemiVariance = sv.evaluate(values);
-        Assert.assertEquals(TestUtils.sumSquareDev(new double[] {22d, 11d, 14d}, mean) / (length - 1),
+        Assert.assertEquals(UnitTestUtils.sumSquareDev(new double[] {22d, 11d, 14d}, mean) / (length - 1),
                 upsideSemiVariance, 1E-14);
 
         // Verify that upper + lower semivariance against the mean sum to variance
@@ -101,11 +101,11 @@ public class SemiVarianceTest {
         SemiVariance sv = new SemiVariance(false); // Turn off bias correction - use df = length
 
         double singletest = sv.evaluate(values, 1.0d, SemiVariance.DOWNSIDE_VARIANCE, false, 0, values.length);
-        Assert.assertEquals(TestUtils.sumSquareDev(new double[] { -2d, -2d }, 1.0d) / values.length,
+        Assert.assertEquals(UnitTestUtils.sumSquareDev(new double[] { -2d, -2d }, 1.0d) / values.length,
                 singletest, 0.01d);
 
         singletest = sv.evaluate(values, 3.0d, SemiVariance.UPSIDE_VARIANCE, false, 0, values.length);
-        Assert.assertEquals(TestUtils.sumSquareDev(new double[] { 4d, 22d, 11d, 14d, 5d }, 3.0d) / values.length, singletest,
+        Assert.assertEquals(UnitTestUtils.sumSquareDev(new double[] { 4d, 22d, 11d, 14d, 5d }, 3.0d) / values.length, singletest,
                 0.01d);
     }
 
@@ -134,7 +134,7 @@ public class SemiVarianceTest {
     public void testVarianceDecompNonMeanCutoff() {
         double[] values = { -2.0d, 2.0d, 4.0d, -2.0d, 22.0d, 11.0d, 3.0d, 14.0d, 5.0d };
         double target = 0;
-        double totalSumOfSquares = TestUtils.sumSquareDev(values, target);
+        double totalSumOfSquares = UnitTestUtils.sumSquareDev(values, target);
         SemiVariance sv = new SemiVariance(true); // Bias corrected
         sv.setVarianceDirection(SemiVariance.DOWNSIDE_VARIANCE);
         double lower = sv.evaluate(values, target);

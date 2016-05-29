@@ -18,7 +18,7 @@ package org.hipparchus.linear;
 
 import org.junit.Test;
 import org.junit.Assert;
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.DimensionMismatchException;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -182,7 +182,7 @@ public final class Array2DRowRealMatrixTest {
     public void testPlusMinus() {
         Array2DRowRealMatrix m = new Array2DRowRealMatrix(testData);
         Array2DRowRealMatrix m2 = new Array2DRowRealMatrix(testDataInv);
-        TestUtils.assertEquals("m-n = m + -n",m.subtract(m2),
+        UnitTestUtils.assertEquals("m-n = m + -n",m.subtract(m2),
             m2.scalarMultiply(-1d).add(m),entryTolerance);
         try {
             m.subtract(new Array2DRowRealMatrix(testData2));
@@ -199,15 +199,15 @@ public final class Array2DRowRealMatrixTest {
         Array2DRowRealMatrix mInv = new Array2DRowRealMatrix(testDataInv);
         Array2DRowRealMatrix identity = new Array2DRowRealMatrix(id);
         Array2DRowRealMatrix m2 = new Array2DRowRealMatrix(testData2);
-        TestUtils.assertEquals("inverse multiply",m.multiply(mInv),
+        UnitTestUtils.assertEquals("inverse multiply",m.multiply(mInv),
             identity,entryTolerance);
-        TestUtils.assertEquals("inverse multiply",mInv.multiply(m),
+        UnitTestUtils.assertEquals("inverse multiply",mInv.multiply(m),
             identity,entryTolerance);
-        TestUtils.assertEquals("identity multiply",m.multiply(identity),
+        UnitTestUtils.assertEquals("identity multiply",m.multiply(identity),
             m,entryTolerance);
-        TestUtils.assertEquals("identity multiply",identity.multiply(mInv),
+        UnitTestUtils.assertEquals("identity multiply",identity.multiply(mInv),
             mInv,entryTolerance);
-        TestUtils.assertEquals("identity multiply",m2.multiply(identity),
+        UnitTestUtils.assertEquals("identity multiply",m2.multiply(identity),
             m2,entryTolerance);
         try {
             m.multiply(new Array2DRowRealMatrix(bigSingular));
@@ -228,7 +228,7 @@ public final class Array2DRowRealMatrixTest {
        RealMatrix m3 = new Array2DRowRealMatrix(d3);
        RealMatrix m4 = new Array2DRowRealMatrix(d4);
        RealMatrix m5 = new Array2DRowRealMatrix(d5);
-       TestUtils.assertEquals("m3*m4=m5", m3.multiply(m4), m5, entryTolerance);
+       UnitTestUtils.assertEquals("m3*m4=m5", m3.multiply(m4), m5, entryTolerance);
    }
 
     @Test
@@ -238,18 +238,18 @@ public final class Array2DRowRealMatrixTest {
         Array2DRowRealMatrix mPlusInv = new Array2DRowRealMatrix(testDataPlusInv);
         Array2DRowRealMatrix identity = new Array2DRowRealMatrix(id);
 
-        TestUtils.assertEquals("m^0", m.power(0),
+        UnitTestUtils.assertEquals("m^0", m.power(0),
             identity, entryTolerance);
-        TestUtils.assertEquals("mInv^0", mInv.power(0),
+        UnitTestUtils.assertEquals("mInv^0", mInv.power(0),
                 identity, entryTolerance);
-        TestUtils.assertEquals("mPlusInv^0", mPlusInv.power(0),
+        UnitTestUtils.assertEquals("mPlusInv^0", mPlusInv.power(0),
                 identity, entryTolerance);
 
-        TestUtils.assertEquals("m^1", m.power(1),
+        UnitTestUtils.assertEquals("m^1", m.power(1),
                 m, entryTolerance);
-        TestUtils.assertEquals("mInv^1", mInv.power(1),
+        UnitTestUtils.assertEquals("mInv^1", mInv.power(1),
                 mInv, entryTolerance);
-        TestUtils.assertEquals("mPlusInv^1", mPlusInv.power(1),
+        UnitTestUtils.assertEquals("mPlusInv^1", mPlusInv.power(1),
                 mPlusInv, entryTolerance);
 
         RealMatrix C1 = m.copy();
@@ -261,11 +261,11 @@ public final class Array2DRowRealMatrixTest {
             C2 = C2.multiply(mInv);
             C3 = C3.multiply(mPlusInv);
 
-            TestUtils.assertEquals("m^" + i, m.power(i),
+            UnitTestUtils.assertEquals("m^" + i, m.power(i),
                     C1, entryTolerance);
-            TestUtils.assertEquals("mInv^" + i, mInv.power(i),
+            UnitTestUtils.assertEquals("mInv^" + i, mInv.power(i),
                     C2, entryTolerance);
-            TestUtils.assertEquals("mPlusInv^" + i, mPlusInv.power(i),
+            UnitTestUtils.assertEquals("mPlusInv^" + i, mPlusInv.power(i),
                     C3, entryTolerance);
         }
 
@@ -303,7 +303,7 @@ public final class Array2DRowRealMatrixTest {
     @Test
     public void testScalarAdd() {
         RealMatrix m = new Array2DRowRealMatrix(testData);
-        TestUtils.assertEquals("scalar add",new Array2DRowRealMatrix(testDataPlus2),
+        UnitTestUtils.assertEquals("scalar add",new Array2DRowRealMatrix(testDataPlus2),
             m.scalarAdd(2d),entryTolerance);
     }
 
@@ -311,9 +311,9 @@ public final class Array2DRowRealMatrixTest {
     @Test
     public void testOperate() {
         RealMatrix m = new Array2DRowRealMatrix(id);
-        TestUtils.assertEquals("identity operate", testVector,
+        UnitTestUtils.assertEquals("identity operate", testVector,
                     m.operate(testVector), entryTolerance);
-        TestUtils.assertEquals("identity operate", testVector,
+        UnitTestUtils.assertEquals("identity operate", testVector,
                     m.operate(new ArrayRealVector(testVector)).toArray(), entryTolerance);
         m = new Array2DRowRealMatrix(bigSingular);
         try {
@@ -343,19 +343,19 @@ public final class Array2DRowRealMatrixTest {
         RealMatrix m = new Array2DRowRealMatrix(testData);
         RealMatrix mIT = new LUDecomposition(m).getSolver().getInverse().transpose();
         RealMatrix mTI = new LUDecomposition(m.transpose()).getSolver().getInverse();
-        TestUtils.assertEquals("inverse-transpose", mIT, mTI, normTolerance);
+        UnitTestUtils.assertEquals("inverse-transpose", mIT, mTI, normTolerance);
         m = new Array2DRowRealMatrix(testData2);
         RealMatrix mt = new Array2DRowRealMatrix(testData2T);
-        TestUtils.assertEquals("transpose",mt,m.transpose(),normTolerance);
+        UnitTestUtils.assertEquals("transpose",mt,m.transpose(),normTolerance);
     }
 
     /** test preMultiply by vector */
     @Test
     public void testPremultiplyVector() {
         RealMatrix m = new Array2DRowRealMatrix(testData);
-        TestUtils.assertEquals("premultiply", m.preMultiply(testVector),
+        UnitTestUtils.assertEquals("premultiply", m.preMultiply(testVector),
                     preMultTest, normTolerance);
-        TestUtils.assertEquals("premultiply", m.preMultiply(new ArrayRealVector(testVector).toArray()),
+        UnitTestUtils.assertEquals("premultiply", m.preMultiply(new ArrayRealVector(testVector).toArray()),
                     preMultTest, normTolerance);
         m = new Array2DRowRealMatrix(bigSingular);
         try {
@@ -371,18 +371,18 @@ public final class Array2DRowRealMatrixTest {
         RealMatrix m3 = new Array2DRowRealMatrix(d3);
         RealMatrix m4 = new Array2DRowRealMatrix(d4);
         RealMatrix m5 = new Array2DRowRealMatrix(d5);
-        TestUtils.assertEquals("m3*m4=m5", m4.preMultiply(m3), m5, entryTolerance);
+        UnitTestUtils.assertEquals("m3*m4=m5", m4.preMultiply(m3), m5, entryTolerance);
 
         Array2DRowRealMatrix m = new Array2DRowRealMatrix(testData);
         Array2DRowRealMatrix mInv = new Array2DRowRealMatrix(testDataInv);
         Array2DRowRealMatrix identity = new Array2DRowRealMatrix(id);
-        TestUtils.assertEquals("inverse multiply",m.preMultiply(mInv),
+        UnitTestUtils.assertEquals("inverse multiply",m.preMultiply(mInv),
                 identity,entryTolerance);
-        TestUtils.assertEquals("inverse multiply",mInv.preMultiply(m),
+        UnitTestUtils.assertEquals("inverse multiply",mInv.preMultiply(m),
                 identity,entryTolerance);
-        TestUtils.assertEquals("identity multiply",m.preMultiply(identity),
+        UnitTestUtils.assertEquals("identity multiply",m.preMultiply(identity),
                 m,entryTolerance);
-        TestUtils.assertEquals("identity multiply",identity.preMultiply(mInv),
+        UnitTestUtils.assertEquals("identity multiply",identity.preMultiply(mInv),
                 mInv,entryTolerance);
         try {
             m.preMultiply(new Array2DRowRealMatrix(bigSingular));
@@ -395,8 +395,8 @@ public final class Array2DRowRealMatrixTest {
     @Test
     public void testGetVectors() {
         RealMatrix m = new Array2DRowRealMatrix(testData);
-        TestUtils.assertEquals("get row",m.getRow(0),testDataRow1,entryTolerance);
-        TestUtils.assertEquals("get col",m.getColumn(2),testDataCol3,entryTolerance);
+        UnitTestUtils.assertEquals("get row",m.getRow(0),testDataRow1,entryTolerance);
+        UnitTestUtils.assertEquals("get col",m.getColumn(2),testDataCol3,entryTolerance);
         try {
             m.getRow(10);
             Assert.fail("expecting OutOfRangeException");
@@ -1086,7 +1086,7 @@ public final class Array2DRowRealMatrixTest {
     @Test
     public void testSerial()  {
         Array2DRowRealMatrix m = new Array2DRowRealMatrix(testData);
-        Assert.assertEquals(m,TestUtils.serializeAndRecover(m));
+        Assert.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
     }
 
 

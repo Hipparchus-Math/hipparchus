@@ -17,7 +17,7 @@
 package org.hipparchus.stat.regression;
 
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.Array2DRowRealMatrix;
@@ -78,11 +78,11 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
     @Test
     public void testPerfectFit() {
         double[] betaHat = regression.estimateRegressionParameters();
-        TestUtils.assertEquals(betaHat,
+        UnitTestUtils.assertEquals(betaHat,
                                new double[]{ 11.0, 1.0 / 2.0, 2.0 / 3.0, 3.0 / 4.0, 4.0 / 5.0, 5.0 / 6.0 },
                                1e-14);
         double[] residuals = regression.estimateResiduals();
-        TestUtils.assertEquals(residuals, new double[]{0d,0d,0d,0d,0d,0d},
+        UnitTestUtils.assertEquals(residuals, new double[]{0d,0d,0d,0d,0d,0d},
                                1e-14);
         RealMatrix errors =
             new Array2DRowRealMatrix(regression.estimateRegressionParametersVariance(), false);
@@ -147,7 +147,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check expected beta values from NIST
         double[] betaHat = model.estimateRegressionParameters();
-        TestUtils.assertEquals(betaHat,
+        UnitTestUtils.assertEquals(betaHat,
           new double[]{-3482258.63459582, 15.0618722713733,
                 -0.358191792925910E-01,-2.02022980381683,
                 -1.03322686717359,-0.511041056535807E-01,
@@ -155,7 +155,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check expected residuals from R
         double[] residuals = model.estimateResiduals();
-        TestUtils.assertEquals(residuals, new double[]{
+        UnitTestUtils.assertEquals(residuals, new double[]{
                 267.340029759711,-94.0139423988359,46.28716775752924,
                 -410.114621930906,309.7145907602313,-249.3112153297231,
                 -164.0489563956039,-13.18035686637081,14.30477260005235,
@@ -166,7 +166,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check standard errors from NIST
         double[] errors = model.estimateRegressionParametersStandardErrors();
-        TestUtils.assertEquals(new double[] {890420.383607373,
+        UnitTestUtils.assertEquals(new double[] {890420.383607373,
                        84.9149257747669,
                        0.334910077722432E-01,
                        0.488399681651699,
@@ -189,20 +189,20 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check expected beta values from R
         betaHat = model.estimateRegressionParameters();
-        TestUtils.assertEquals(betaHat,
+        UnitTestUtils.assertEquals(betaHat,
           new double[]{-52.99357013868291, 0.07107319907358,
                 -0.42346585566399,-0.57256866841929,
                 -0.41420358884978, 48.41786562001326}, 1E-11);
 
         // Check standard errors from R
         errors = model.estimateRegressionParametersStandardErrors();
-        TestUtils.assertEquals(new double[] {129.54486693117232, 0.03016640003786,
+        UnitTestUtils.assertEquals(new double[] {129.54486693117232, 0.03016640003786,
                 0.41773654056612, 0.27899087467676, 0.32128496193363,
                 17.68948737819961}, errors, 1E-11);
 
         // Check expected residuals from R
         residuals = model.estimateResiduals();
-        TestUtils.assertEquals(residuals, new double[]{
+        UnitTestUtils.assertEquals(residuals, new double[]{
                 279.90274927293092, -130.32465380836874, 90.73228661967445, -401.31252201634948,
                 -440.46768772620027, -543.54512853774793, 201.32111639536299, 215.90889365977932,
                 73.09368242049943, 913.21694494481869, 424.82484953610174, -8.56475876776709,
@@ -283,7 +283,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check expected beta values from R
         double[] betaHat = model.estimateRegressionParameters();
-        TestUtils.assertEquals(betaHat,
+        UnitTestUtils.assertEquals(betaHat,
                 new double[]{91.05542390271397,
                 -0.22064551045715,
                 -0.26058239824328,
@@ -292,7 +292,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check expected residuals from R
         double[] residuals = model.estimateResiduals();
-        TestUtils.assertEquals(residuals, new double[]{
+        UnitTestUtils.assertEquals(residuals, new double[]{
                 7.1044267859730512,1.6580347433531366,
                 4.6944952770029644,8.4548022690166160,13.6547432343186212,
                -9.3586864458500774,7.5822446330520386,15.5568995563859289,
@@ -313,7 +313,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check standard errors from R
         double[] errors = model.estimateRegressionParametersStandardErrors();
-        TestUtils.assertEquals(new double[] {6.94881329475087,
+        UnitTestUtils.assertEquals(new double[] {6.94881329475087,
                 0.07360008972340,
                 0.27410957467466,
                 0.19454551679325,
@@ -335,7 +335,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check expected beta values from R
         betaHat = model.estimateRegressionParameters();
-        TestUtils.assertEquals(betaHat,
+        UnitTestUtils.assertEquals(betaHat,
                 new double[]{0.52191832900513,
                   2.36588087917963,
                   -0.94770353802795,
@@ -343,7 +343,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check expected residuals from R
         residuals = model.estimateResiduals();
-        TestUtils.assertEquals(residuals, new double[]{
+        UnitTestUtils.assertEquals(residuals, new double[]{
                 44.138759883538249, 27.720705122356215, 35.873200836126799,
                 34.574619581211977, 26.600168342080213, 15.074636243026923, -12.704904871199814,
                 1.497443824078134, 2.691972687079431, 5.582798774291231, -4.422986561283165,
@@ -360,7 +360,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         // Check standard errors from R
         errors = model.estimateRegressionParametersStandardErrors();
-        TestUtils.assertEquals(new double[] {0.10470063765677, 0.41684100584290,
+        UnitTestUtils.assertEquals(new double[] {0.10470063765677, 0.41684100584290,
                 0.43370143099691, 0.07694953606522}, errors, 1E-10);
 
         // Check regression standard error against R
@@ -437,7 +437,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         double[] residuals = model.estimateResiduals();
         RealMatrix I = MatrixUtils.createRealIdentityMatrix(10);
         double[] hatResiduals = I.subtract(hat).operate(model.getY()).toArray();
-        TestUtils.assertEquals(residuals, hatResiduals, 10e-12);
+        UnitTestUtils.assertEquals(residuals, hatResiduals, 10e-12);
     }
 
     /**
@@ -450,7 +450,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
         model.newSampleData(y, x);
-        TestUtils.assertEquals(model.calculateYVariance(), 3.5, 0);
+        UnitTestUtils.assertEquals(model.calculateYVariance(), 3.5, 0);
     }
 
     /**
@@ -459,12 +459,12 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
      */
     protected void checkVarianceConsistency(OLSMultipleLinearRegression model) {
         // Check Y variance consistency
-        TestUtils.assertEquals(StatUtils.variance(model.getY().toArray()), model.calculateYVariance(), 0);
+        UnitTestUtils.assertEquals(StatUtils.variance(model.getY().toArray()), model.calculateYVariance(), 0);
 
         // Check residual variance consistency
         double[] residuals = model.calculateResiduals().toArray();
         RealMatrix X = model.getX();
-        TestUtils.assertEquals(
+        UnitTestUtils.assertEquals(
                 StatUtils.variance(model.calculateResiduals().toArray()) * (residuals.length - 1),
                 model.calculateErrorVariance() * (X.getRowDimension() - X.getColumnDimension()), 1E-20);
 
@@ -560,22 +560,22 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         }
         model.newSampleData(tmp, nobs, nvars);
         double[] betaHat = model.estimateRegressionParameters();
-        TestUtils.assertEquals(betaHat,
+        UnitTestUtils.assertEquals(betaHat,
                 new double[]{1.0,
                     1.0, 1.0,
                     1.0, 1.0,
                     1.0}, 1E-8);
 
         double[] se = model.estimateRegressionParametersStandardErrors();
-        TestUtils.assertEquals(se,
+        UnitTestUtils.assertEquals(se,
                 new double[]{0.0,
                     0.0, 0.0,
                     0.0, 0.0,
                     0.0}, 1E-8);
 
-        TestUtils.assertEquals(1.0, model.calculateRSquared(), 1.0e-10);
-        TestUtils.assertEquals(0, model.estimateErrorVariance(), 1.0e-7);
-        TestUtils.assertEquals(0.00, model.calculateResidualSumOfSquares(), 1.0e-6);
+        UnitTestUtils.assertEquals(1.0, model.calculateRSquared(), 1.0e-10);
+        UnitTestUtils.assertEquals(0, model.estimateErrorVariance(), 1.0e-7);
+        UnitTestUtils.assertEquals(0.00, model.calculateResidualSumOfSquares(), 1.0e-6);
 
         return;
     }
@@ -628,7 +628,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         }
         model.newSampleData(tmp, nobs, nvars);
         double[] betaHat = model.estimateRegressionParameters();
-        TestUtils.assertEquals(betaHat,
+        UnitTestUtils.assertEquals(betaHat,
                 new double[]{
                     1.0,
                     1.0e-1,
@@ -637,14 +637,14 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
                     1.0e-5}, 1E-8);
 
         double[] se = model.estimateRegressionParametersStandardErrors();
-        TestUtils.assertEquals(se,
+        UnitTestUtils.assertEquals(se,
                 new double[]{0.0,
                     0.0, 0.0,
                     0.0, 0.0,
                     0.0}, 1E-8);
-        TestUtils.assertEquals(1.0, model.calculateRSquared(), 1.0e-10);
-        TestUtils.assertEquals(0, model.estimateErrorVariance(), 1.0e-7);
-        TestUtils.assertEquals(0.00, model.calculateResidualSumOfSquares(), 1.0e-6);
+        UnitTestUtils.assertEquals(1.0, model.calculateRSquared(), 1.0e-10);
+        UnitTestUtils.assertEquals(0, model.estimateErrorVariance(), 1.0e-7);
+        UnitTestUtils.assertEquals(0.00, model.calculateResidualSumOfSquares(), 1.0e-6);
         return;
     }
 
@@ -695,7 +695,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         }
         model.newSampleData(tmp, nobs, nvars);
         double[] betaHat = model.estimateRegressionParameters();
-        TestUtils.assertEquals(betaHat,
+        UnitTestUtils.assertEquals(betaHat,
                 new double[]{
                     1.0,
                     1.0,
@@ -705,15 +705,15 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
                     1.0}, 1E-8);
 
         double[] se = model.estimateRegressionParametersStandardErrors();
-        TestUtils.assertEquals(se,
+        UnitTestUtils.assertEquals(se,
                 new double[]{2152.32624678170,
                     2363.55173469681, 779.343524331583,
                     101.475507550350, 5.64566512170752,
                     0.112324854679312}, 1E-8); //
 
-        TestUtils.assertEquals(.999995559025820, model.calculateRSquared(), 1.0e-10);
-        TestUtils.assertEquals(5570284.53333333, model.estimateErrorVariance(), 1.0e-6);
-        TestUtils.assertEquals(83554268.0000000, model.calculateResidualSumOfSquares(), 1.0e-5);
+        UnitTestUtils.assertEquals(.999995559025820, model.calculateRSquared(), 1.0e-10);
+        UnitTestUtils.assertEquals(5570284.53333333, model.estimateErrorVariance(), 1.0e-6);
+        UnitTestUtils.assertEquals(83554268.0000000, model.calculateResidualSumOfSquares(), 1.0e-5);
         return;
     }
 
@@ -764,7 +764,7 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         }
         model.newSampleData(tmp, nobs, nvars);
         double[] betaHat = model.estimateRegressionParameters();
-        TestUtils.assertEquals(betaHat,
+        UnitTestUtils.assertEquals(betaHat,
                 new double[]{
                     1.0,
                     1.0,
@@ -774,15 +774,15 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
                     1.0}, 1E-6);
 
         double[] se = model.estimateRegressionParametersStandardErrors();
-        TestUtils.assertEquals(se,
+        UnitTestUtils.assertEquals(se,
                 new double[]{215232.624678170,
                     236355.173469681, 77934.3524331583,
                     10147.5507550350, 564.566512170752,
                     11.2324854679312}, 1E-8);
 
-        TestUtils.assertEquals(.957478440825662, model.calculateRSquared(), 1.0e-10);
-        TestUtils.assertEquals(55702845333.3333, model.estimateErrorVariance(), 1.0e-4);
-        TestUtils.assertEquals(835542680000.000, model.calculateResidualSumOfSquares(), 1.0e-3);
+        UnitTestUtils.assertEquals(.957478440825662, model.calculateRSquared(), 1.0e-10);
+        UnitTestUtils.assertEquals(55702845333.3333, model.estimateErrorVariance(), 1.0e-4);
+        UnitTestUtils.assertEquals(835542680000.000, model.calculateResidualSumOfSquares(), 1.0e-3);
         return;
     }
 
