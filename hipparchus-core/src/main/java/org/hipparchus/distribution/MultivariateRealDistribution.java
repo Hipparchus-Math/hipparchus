@@ -20,7 +20,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Base interface for multivariate continuous distributions.
- *
+ * <p>
  * This is based largely on the RealDistribution interface, but cumulative
  * distribution functions are not required because they are often quite
  * difficult to compute for multivariate distributions.

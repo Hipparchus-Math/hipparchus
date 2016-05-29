@@ -57,7 +57,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      */
     public EnumeratedRealDistribution(final double[] data) {
         super();
-        final Map<Double, Integer> dataMap = new HashMap<Double, Integer>();
+        final Map<Double, Integer> dataMap = new HashMap<>();
         for (double value : data) {
             Integer count = dataMap.get(value);
             if (count == null) {
@@ -109,10 +109,10 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
     private static List<Pair<Double, Double>> createDistribution(double[] singletons,
                                                                  double[] probabilities) {
         MathArrays.checkEqualLength(singletons, probabilities);
-        final List<Pair<Double, Double>> samples = new ArrayList<Pair<Double, Double>>(singletons.length);
+        final List<Pair<Double, Double>> samples = new ArrayList<>(singletons.length);
 
         for (int i = 0; i < singletons.length; i++) {
-            samples.add(new Pair<Double, Double>(singletons[i], probabilities[i]));
+            samples.add(new Pair<>(singletons[i], probabilities[i]));
         }
         return samples;
     }

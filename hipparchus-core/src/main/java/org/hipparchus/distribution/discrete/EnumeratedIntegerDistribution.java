@@ -73,7 +73,7 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
      * @param data input dataset
      */
     public EnumeratedIntegerDistribution(final int[] data) {
-        final Map<Integer, Integer> dataMap = new HashMap<Integer, Integer>();
+        final Map<Integer, Integer> dataMap = new HashMap<>();
         for (int value : data) {
             Integer count = dataMap.get(value);
             if (count == null) {
@@ -105,10 +105,10 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
     private static List<Pair<Integer, Double>> createDistribution(int[] singletons,
                                                                   double[] probabilities) {
         MathUtils.checkDimension(singletons.length, probabilities.length);
-        final List<Pair<Integer, Double>> samples = new ArrayList<Pair<Integer, Double>>(singletons.length);
+        final List<Pair<Integer, Double>> samples = new ArrayList<>(singletons.length);
 
         for (int i = 0; i < singletons.length; i++) {
-            samples.add(new Pair<Integer, Double>(singletons[i], probabilities[i]));
+            samples.add(new Pair<>(singletons[i], probabilities[i]));
         }
         return samples;
     }
