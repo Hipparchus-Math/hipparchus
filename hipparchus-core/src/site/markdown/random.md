@@ -12,15 +12,8 @@ The Hipparchus random package includes utilities for
 * generating data for grouped frequency distributions or histograms
 
 The source of random data used by the data generation utilities is
-pluggable.  By default, the JDK-supplied PseudoRandom Number Generator
-(PRNG) is used, but alternative generators can be "plugged in" using an
-adaptor framework, which provides a generic facility for replacing
-`java.util.Random` with an alternative PRNG. Other very
-good PRNG suitable for Monte-Carlo analysis (but <strong>not</strong>
-for cryptography) provided by the library are the Mersenne twister from
-Makoto Matsumoto and Takuji Nishimura and the more recent WELL generators
-(Well Equidistributed Long-period Linear) from Fran&#231;ois Panneton, Pierre
-L&#39;Ecuyer and Makoto Matsumoto.
+pluggable.  In most cases, the default is a Well generator.  Whenever a default is provided, the javadoc indicates what the default is. Other good PRNGs suitable for Monte-Carlo analysis (but <strong>not</strong>
+for cryptography) provided by the library in the  [raondom](../apidocs/org/hipparchus/random/package.html).
 
 Sections 2.2-2.6 below show how to use the Hipparchus API to generate
 different kinds of random data.  The examples all use the default
@@ -47,13 +40,20 @@ which means that the values are evenly spread over the interval  between 0 and 1
 with no sub-interval having a greater probability of containing generated values than
 any other interval of the same length.  The mathematical concept of a
 [probability distribution](http://www.itl.nist.gov/div898/handbook/eda/section3/eda36.htm)
-basically amounts to asserting that different ranges in the set  of possible values of
+basically amounts to asserting that different ranges in the set of possible values of
 a random variable have different probabilities of containing the value. Hipparchus supports
 generating random sequences from each of the distributions in the
 [distributions](../apidocs/org/hipparchus/distribution/package-summary.html) package.
 The javadoc for the `nextXxx` methods in
 [RandomDataGenerator](../apidocs/org/hipparchus/random/RandomDataGenerator.html)
-describes the algorithms used to generate random deviates.
+describes the algorithms used to generate random deviates.  The `nextXxx` methods allow you to get random deviates directly, without instantiating distributions.  For example, to get a random value following a normal (Gaussian) distribution with mean 3 and standard deviation 1.5, you can use
+
+    RandomDataGenerator randomDataGenerator = new RandomDataGenerator(1000)
+    randomDataGenerator.nextNormal(3,1.5)
+
+Here the default Well generator is used the source of randomness and 1000 is passed to it as initial seed.  To generate a sequence of random values to use in a simulation, you should always just create one RandomDataGenerator instance and reuse it.
+
+For user-defined distributions, or Hipparchus distributions not included among the `nextXxx` methods of `RandomDataGenerator`, one can use the `nextDeviate` methods, which take real or integer distribution instances as arguments, implementing a generic inversion-based sampling method for arbitrary distributions.  There are also `nextDeviates` methods that take a distribution and an integer as arguments.  These are handy when you want to generate an array of random values.  Any distribution, including thos covered by the `nextXxx` methods, can be passed to these methods and `RandomDataGenerator` will use the best implementation that it has.
 
 ### Cryptographically secure random sequences
 
@@ -73,21 +73,12 @@ fast cryptographically secure pseudorandom number generator.
 ### Seeding pseudo-random number generators
 
 By default, the implementation provided in `RandomDataGenerator`
-uses the JDK-provided PRNG.  Like most other PRNGs, the JDK generator
-generates sequences of random numbers based on an initial "seed value."
-For the non-secure methods, starting with the same seed always produces the
-same sequence of values.  Secure sequences started with the same seeds will
-diverge. When a new `RandomDataGenerator` is created, the underlying
-random number generators are __not__ initialized. The first
-call to a data generation method, or to a `reSeed()` method
-initializes the appropriate generator.  If you do not explicitly seed the
-generator, it is by default seeded with the current time in milliseconds.
-Therefore, to generate sequences of random data values, you should always
+uses a Well19937c generator seeded with the system time and its system identity hashcode. For the non-secure methods, starting with the same seed always produces the
+same sequence of values.  Secure sequences started with the same seeds will diverge. To generate sequences of random data values, you should always
 instantiate __one__ ` RandomDataGenerator` and use it
 repeatedly instead of creating new instances for subsequent values in the
 sequence.  For example, the following will generate a random sequence of 50
-long integers between 1 and 1,000,000, using the current time in
-milliseconds as the seed for the JDK PRNG:
+long integers between 1 and 1,000,000:
 
     RandomDataGenerator randomData = new RandomDataGenerator(); 
     for (int i = 0; i &lt; 1000; i++) {
@@ -95,7 +86,7 @@ milliseconds as the seed for the JDK PRNG:
     }
 
 The following will not in general produce a good random sequence, since the
-PRNG is reseeded each time through the loop with the current time in milliseconds:
+PRNG is reseeded each time through the loop:
 
     for (int i = 0; i &lt; 1000; i++) {
         RandomDataGenerator randomData = new RandomDataGenerator(); 
@@ -104,8 +95,7 @@ PRNG is reseeded each time through the loop with the current time in millisecond
 
 The following will produce the same random sequence each time it is executed:
 
-    RandomDataGenerator randomData = new RandomDataGenerator(); 
-    randomData.reSeed(1000);
+    RandomDataGenerator randomData = new RandomDataGenerator(1000); 
     for (int i = 0; i = 1000; i++) {
         value = randomData.nextLong(1, 1000000);
     }
