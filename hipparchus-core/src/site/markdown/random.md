@@ -207,8 +207,8 @@ in the interval [0, 1]. Roughly speaking, such sequences "fill" the respective s
 The methods `nextHexString` and `nextSecureHexString`
 can be used to generate random strings of hexadecimal characters.  Both
 of these methods produce sequences of strings with good dispersion
-properties.  The difference between the two methods is that the second is
-cryptographically secure.  Specifically, the implementation of
+properties.  The difference between the two methods is that the second can be
+cryptographically secure (depending on the quality of the secure algorithm provider).  The implementation of
 `nextHexString(n)` in `RandomDataGenerator` uses the
 following simple algorithm to generate a string of `n` hex digits:
 
@@ -249,7 +249,7 @@ unique -- i.e., the sampling is without replacement among the object
 references in the collection.
 
 If `randomData` is a `RandomDataGenerator` instance, and
-`n` and `k` are integers with ` k &lt;= n`, then
+`n` and `k` are integers with `k <= n`, then
 `randomData.nextPermutation(n, k)` returns an `int[]`
 array of length `k` whose whose entries are selected randomly,
 without repetition, from the integers `0` through
