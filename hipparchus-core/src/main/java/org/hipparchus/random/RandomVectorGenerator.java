@@ -18,8 +18,8 @@
 package org.hipparchus.random;
 
 
-/** This interface represents a random generator for whole vectors.
- *
+/**
+ * This interface represents a random generator for whole vectors.
  */
 public interface RandomVectorGenerator {
 

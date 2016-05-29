@@ -21,11 +21,11 @@ import org.hipparchus.util.FastMath;
 
 /**
  * This class implements a normalized uniform random generator.
- * <p>Since it is a normalized random generator, it generates values
+ * <p>
+ * Since it is a normalized random generator, it generates values
  * from a uniform distribution with mean equal to 0 and standard
  * deviation equal to 1. Generated values fall in the range
- * [-&#x0221A;3, +&#x0221A;3].</p>
- *
+ * [-&#x0221A;3, +&#x0221A;3].
  */
 public class UniformRandomGenerator implements NormalizedRandomGenerator {
 
@@ -42,9 +42,12 @@ public class UniformRandomGenerator implements NormalizedRandomGenerator {
         this.generator = generator;
     }
 
-    /** Generate a random scalar with null mean and unit standard deviation.
-     * <p>The number generated is uniformly distributed between -&sqrt;(3)
-     * and +&sqrt;(3).</p>
+    /**
+     * Generate a random scalar with null mean and unit standard deviation.
+     * <p>
+     * The number generated is uniformly distributed between -&sqrt;(3)
+     * and +&sqrt;(3).
+     *
      * @return a random scalar with null mean and unit standard deviation
      */
     @Override

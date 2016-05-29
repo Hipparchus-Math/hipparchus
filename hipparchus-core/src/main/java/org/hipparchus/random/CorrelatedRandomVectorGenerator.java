@@ -25,11 +25,13 @@ import org.hipparchus.linear.RectangularCholeskyDecomposition;
 /**
  * A {@link RandomVectorGenerator} that generates vectors with with
  * correlated components.
- * <p>Random vectors with correlated components are built by combining
+ * <p>
+ * Random vectors with correlated components are built by combining
  * the uncorrelated components of another random vector in such a way that
  * the resulting correlations are the ones specified by a positive
- * definite covariance matrix.</p>
- * <p>The main use for correlated random vector generation is for Monte-Carlo
+ * definite covariance matrix.
+ * <p>
+ * The main use for correlated random vector generation is for Monte-Carlo
  * simulation of physical problems with several variables, for example to
  * generate error vectors to be added to a nominal vector. A particularly
  * interesting case is when the generated vector should be drawn from a <a
@@ -38,8 +40,9 @@ import org.hipparchus.linear.RectangularCholeskyDecomposition;
  * decomposition is quite usual in this case. However, it can be extended
  * to other cases as long as the underlying random generator provides
  * {@link NormalizedRandomGenerator normalized values} like {@link
- * GaussianRandomGenerator} or {@link UniformRandomGenerator}.</p>
- * <p>Sometimes, the covariance matrix for a given simulation is not
+ * GaussianRandomGenerator} or {@link UniformRandomGenerator}.
+ * <p>
+ * Sometimes, the covariance matrix for a given simulation is not
  * strictly positive definite. This means that the correlations are
  * not all independent from each other. In this case, however, the non
  * strictly positive elements found during the Cholesky decomposition
@@ -53,10 +56,8 @@ import org.hipparchus.linear.RectangularCholeskyDecomposition;
  * the rank of the covariance matrix, and it is the dimension of the
  * uncorrelated random vector that is needed to compute the component
  * of the correlated vector. This class handles this situation
- * automatically.</p>
- *
+ * automatically.
  */
-
 public class CorrelatedRandomVectorGenerator
     implements RandomVectorGenerator {
     /** Mean vector. */
@@ -180,7 +181,6 @@ public class CorrelatedRandomVectorGenerator
         }
 
         return correlated;
-
     }
 
 }
