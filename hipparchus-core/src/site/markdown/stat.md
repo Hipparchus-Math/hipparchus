@@ -2,14 +2,11 @@
 
 ## Overview
 
-The statistics package provides frameworks and implementations for
-basic Descriptive statistics, frequency distributions, bivariate regression,
-and t-, chi-square and ANOVA test statistics.
+The statistics package provides basic descriptive statistics, frequency distributions, linear regression, analysis of variance, correlation and a variety of inference tests.
 
 ## Descriptive statistics
 
-The stat package includes a framework and default implementations for
-the following Descriptive statistics:
+The stat package includes the following Descriptive statistics in the `descriptive` subpackage:
 
 * arithmetic and geometric means
 * variance and standard deviation
@@ -22,7 +19,7 @@ With the exception of percentiles and the median, all of these
 statistics can be computed without maintaining the full list of input
 data values in memory.  The stat package provides interfaces and
 implementations that do not require value storage as well as
-implementations that operate on arrays of stored values.
+implementations that operate on arrays of stored values.  There is a `PSquarePercentile` class that uses the algorithm in the class name to approximate percentiles without storing all data in memory.
 
 The top level interface is
 [UnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/UnivariateStatistic.html).
@@ -31,8 +28,8 @@ This interface, implemented by all statistics, consists of
 and return the value of the statistic. This interface is extended by
 [StorelessUnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/StorelessUnivariateStatistic.html)
 , which adds `increment()`, `getResult()` and associated methods to support
-"storageless" implementations that maintain counters, sums or other
-state information as values are added using the `increment()` method.
+streaming implementations that maintain counters, sums or other
+state information as values are added using the `increment()` method. Statistics that implement this interface can be assumed to use bounded storage, regardless of the length of the data stream injested by their `increment()` methods.
 
 Abstract implementations of the top level interfaces are provided in
 [AbstractUnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/AbstractUnivariateStatistic.html)
@@ -40,7 +37,7 @@ and
 [AbstractStorelessUnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/AbstractStorelessUnivariateStatistic.html) respectively.
 
 Each statistic is implemented as a separate class, in one of the
-subpackages (moment, rank, summary) and each extends one of the abstract
+subpackages (`moment`, `rank`, `summary`) and each extends one of the abstract
 classes above (depending on whether or not value storage is required to
 compute the statistic). There are several ways to instantiate and use statistics.
 Statistics can be instantiated and used directly,  but it is generally more convenient
@@ -259,6 +256,7 @@ __Usage Notes:__
 * When there are fewer than two observations in the model, or when there is no variation in the x values (i.e. all x values are the same) all statistics return `NaN`. At least two observations with different x coordinates are required to estimate a bivariate regression model.
 * getters for the statistics always compute values based on the current set of observations -- i.e., you can get statistics, then add more data and get updated statistics without using a new instance. There is no "compute" method that updates all statistics. Each of the getters performs the necessary computations to return the requested statistic.
 * The intercept term may be suppressed by passing false to the [SimpleRegression(boolean)](../apidocs/org/hipparchus/stat/regression/SimpleRegression.html#SimpleRegression-boolean-) constructor. When the `hasIntercept` property is `false`, the model is estimated without a constant term and `getIntercept()` returns 0.
+* The `SimpleRegression` class is not thread-safe.  If multiple threads concurrently access a single instance of this class, their access to methods that add data or compute statistics must be externally synchronized.
 
 __Implementation Notes:__
 
@@ -355,9 +353,8 @@ The slope may be biased.
 
 
 ## Multiple linear regression
-[OLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html)
-and
-[GLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html)
+[OLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html),
+[GLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html) and [MillerUpdatingRegression](../apidocs/org/hipparchus/stat/regression/MillerUpdatingRegression.html)
 provide least squares regression to fit the linear model:
 
 	Y = X * b + u
@@ -367,26 +364,30 @@ __regressors__, b is k-vector of __regression parameters__ and u is an n-vector
 of __error terms__ or __residuals__.
 
 [OLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html)
-provides Ordinary Least Squares Regression, and
+provides Ordinary Least Squares (OLS) Regression,
 [GLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html)
-implements Generalized Least Squares.  See the javadoc for these
+implements Generalized Least Squares and [MillerUpdatingRegression](../apidocs/org/hipparchus/stat/regression/MillerUpdatingRegression.html) provides a streaming implemnentation of OLS regression.  See the javadoc for these
 classes for details on the algorithms and formulas used.
 
-Data for OLS models can be loaded in a single double[] array, consisting of concatenated
+Data for `OLSMultipleLinearRegression` models can be loaded in a single double[] array, consisting of concatenated
 rows of data, each containing the regressand (Y) value, followed by regressor values;
 or using a `double[][]` array with rows corresponding to observations.
 
-GLS models also require a `double[][]` array representing the covariance matrix of
+`GLSMultipleLinearRegression` models also require a `double[][]` array representing the covariance matrix of
 the error terms. See
 [AbstractMultipleLinearRegression#newSampleData\(double\[\],int,int\)](../apidocs/org/hipparchus/stat/regression/AbstractMultipleLinearRegression.html#newSampleData-double:A-int-int-),
 [OLSMultipleLinearRegression#newSampleData\(double\[\], double\[\]\[\]\)](../apidocs/org/hipparchus/stat/regression/OLSMultipleLinearRegression.html#newSampleData-double:A-double:A:A-)
 and [GLSMultipleLinearRegression#newSampleData\(double\[\],double\[\]\[\],double\[\]\[\]\)](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html#newSampleData-double:A-double:A:A-double:A:A-)
 for details.
 
+`MillerUpdatingRegression` models implement the `UpdatingMultipleLinearRegression` interface, which includes methods similar to those provided by `OLSMultipleLinearRegression` for adding data. Simlarly to `StorelessUnivariateStatistics`, the contract for `UpdatingMultipleLinearRegression` is that implementations use bounded storage, so there is no limit to the number of observations streamed to them via the `addObservation` methods.
+
  __Usage Notes:__
 
 * Data are validated when invoking any of the newSample, newX, newY or newCovariance methods and `IllegalArgumentException` is thrown when input data arrays do not have matching dimensions or do not contain sufficient data to estimate the model.
 * By default, regression models are estimated with intercept terms. In the notation above, this implies that the X matrix contains an initial row identically equal to 1. X data supplied to the newX or newSample methods should not include this column - the data loading methods will create it automatically. To estimate a model without an intercept term, set the `noIntercept` property to true.
+* None of the multiple regression classes are thread-safe.  If multiple threads concurrently access a single instance of one of these classes, their access to methods that add data or compute statistics must be externally synchronized.
+
 
 Here are some examples.
 
@@ -436,6 +437,47 @@ Instantiate a GLS regression object and load a dataset:
     omega[5] = new double[]{0, 0, 0, 0, 0, 6.6};
     regression.newSampleData(y, x, omega); 
 
+__Streaming regression__
+
+Instantiate a streaming OLS regression object and load a dataset:
+
+    // Create a streaming regression with 3 regressors
+    // and an intercept term
+    MillerUpdatingRegression regression = new MillerUpdatingRegression(3, true); 
+    
+    // Add one observation to the model
+    double[] x = {1.0, 1.0, 1.0};
+    double y = {1.0};
+    instance.addObservation(x, y);
+    
+    // Add two observations at once
+    double[][] xMult = {{2.0, 4.0, 5.0}, {1.4, 2.4, 2.1}};
+    double[] yMult = {2.0, 8.0};
+    instance.addObservations(xMult, yMult);
+    
+    // Add more observations - not stored in memory...
+    
+Get regression parameters:
+
+    RegressionResults result = regression.regress();
+    double[] parameters =  result.getParameterEstimates();
+    
+Since this model has an intercept, `parameters[0]` is the intercept estimate. `parameters[1]`, `[2]` and `[3]` are estimates of regression coefficients for the three independent variables.
+
+Standard errors for parameter estimates (in the same order):
+
+    double[] stdErrs = result.getStdErrorOfEstimates();
+    
+R-square, SSE, MSE:
+
+    double Rsquare = result.getRSquared();
+    double MSE = result.getMeanSquareError();
+    double SSE = result.getErrorSumSquares();
+
+Covariance of parameters 1 and 2:
+
+    double cov = result.getCovarianceOfParameters(1, 2) 
+    
 
 ## Rank transformations
 
@@ -609,7 +651,7 @@ The respective test classes are
 [WilcoxonSignedRankTest](../apidocs/org/hipparchus/stat/inference/WilcoxonSignedRankTest.html),
 [BinomialTest](../apidocs/org/hipparchus/stat/inference/BinomialTest.html) and
 [KolmogorovSmirnovTest](../apidocs/org/hipparchus/stat/inference/KolmogorovSmirnovTest.html).
-The [TestUtils](../apidocs/org/hipparchus/stat/inference/TestUtils.html)
+The [InferenceTestUtils](../apidocs/org/hipparchus/stat/inference/InferenceTestUtils.html)
 class provides static methods to get test instances or
 to compute test statistics directly.  The examples below all use the
 static methods in `TestUtils` to execute tests.  To get
@@ -634,7 +676,7 @@ To compare the mean of a double[] array to a fixed value:
 
     double[] observed = {1d, 2d, 3d};
     double mu = 2.5d;
-    System.out.println(TestUtils.t(mu, observed));
+    System.out.println(InferenceTestUtils.t(mu, observed));
 
 The code above will display the t-statistic associated with a one-sample
 t-test comparing the mean of the `observed` values against `mu`.
@@ -649,7 +691,7 @@ to a fixed value:
     for (int i = 0; i < observed.length; i++) {
         sampleStats.addValue(observed[i]);
     }
-    System.out.println(TestUtils.t(mu, observed));
+    System.out.println(TestUtils.t(mu, sampleStats));
 
 To compute the p-value associated with the null hypothesis that the mean
 of a set of values equals a point estimate, against the two-sided alternative that
@@ -882,11 +924,9 @@ to compute the D-statistic and
 
 for the p-value associated with the null hypothesis that `x` and
 `y` come from the same distribution. By default, here and above strict
-inequality is used in the null hypothesis - i.e., we evaluate \(H_0 : D_{n,m} > d \).
+inequality is used in the null hypothesis - i.e., we evaluate H_0 : D_{n,m} > d.
 To make the inequality above non-strict, add `false` as an actual parameter
-above. For large samples, this parameter makes no difference.
-
-To force exact computation of the p-value (overriding the selection of estimation
+above. For large samples, this parameter makes no difference.  When the product of the sample sizes is less than 10,000, `KolmogorovSmirnnov` computes p-values exactly; otherwise the Kolmogorov approximation to the distribution of the D statistic is used. To force exact computation of the p-value (overriding the selection of estimation
 method), first compute the d-statistic and then use the `exactP` method
 
     final double d = TestUtils.kolmogorovSmirnovStatistic(x, y);
@@ -894,3 +934,6 @@ method), first compute the d-statistic and then use the `exactP` method
     
 assuming that the non-strict form of the null hypothesis is desired. Note, however,
 that exact computation for large samples takes a long time.
+
+When there are ties in the data in a 2-sample Kolmogorov-Smirnov test, the p-value is strictly speaking undefined. If the combined sample size is less than 10,000 and there are ties in the data, random jitter is by default added to break the ties.  If ties are known to be present in the data, the `bootstrap` method may be used as an alternative for estimating the p-value. See the javadoc for details on the p-value estimation algorithms used and how they are selected.
+
