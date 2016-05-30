@@ -85,33 +85,33 @@ Hipparchus includes implementations of the several root-finding algorithms:
 | [Ridder's Method](../apidocs/org/hipparchus/analysis/solvers/RiddersSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | super-linear | yes | no |
 | [Secant Method](../apidocs/org/hipparchus/analysis/solvers/SecantSolver.html) | [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) | super-linear, non-guaranteed | yes | no |
 
-Some algorithms require that the initial search interval brackets the root
+Some algorithms require that the initial search interval bracket the root
 (i.e. the function values at interval end points have opposite signs).
-Some algorithms preserve bracketing throughout computation and allow user
+Some algorithms preserve bracketing throughout computation and allow the user
 to specify which side of the convergence interval to select as the root.
 It is also possible to force a side selection after a root has been found
 even for algorithms that do not provide this feature by themselves. 
 This is useful for example in sequential search, for which a new search interval
-is started after a root has been found in order to find the next root. In this case,
-user must select a side to ensure his loop is not stuck on one root and always return
+is started after a root has been found in order to find the next root. In this case, the
+user must select a side to ensure that the loop does not get stuck on one root, always returning
 the same solution without making any progress.
 
-There are numerous non-obvious traps and pitfalls in root finding.
+There are numerous non-obvious traps and pitfalls in root-finding.
 First, the usual disclaimers due to the way real world computers
 calculate values apply.  If the computation of the function provides
 numerical instabilities, for example due to bit cancellation, the root
 finding algorithms may behave badly and fail to converge or even
 return bogus values. There will not necessarily be an indication that
-the computed root is way off the true value.  Secondly, the root finding
+the computed root is way off the true value.  Secondly, the root-finding
 problem itself may be inherently ill-conditioned.  There is a
 "domain of indeterminacy", the interval for which the function has
-near zero absolute values around the true root,  which may be large.
+near zero absolute values around the true root, which may be large.
 Even worse, small problems like roundoff error may cause the function
 value to "numerically oscillate" between negative and positive values.
 This may again result in roots way off the true value, without
 indication.  There is not much a generic algorithm can do if
 ill-conditioned problems are met.  A way around this is to transform
-the problem in order to get a better conditioned function.  Proper
+the problem in order to get a better-conditioned function.  Proper
 selection of a root-finding algorithm and its configuration parameters
 requires knowledge of the analytical properties of the function under
 analysis and numerical analysis techniques.  Users are encouraged
@@ -121,14 +121,14 @@ selecting and configuring a solver.
 In order to use the root-finding features, first a solver object must
 be created by calling its constructor, often providing relative and absolute
 accuracy. Using a solver object, roots of functions are easily found using
-the `solve` methods.  These methods takes a maximum iteration count `maxEval`,
+the `solve` methods.  These methods take a maximum iteration count `maxEval`,
 a function `f`, and either two domain values, `min` and `max`, or a
-`startValue` as parameters. If the maximal number of iterations count is exceeded,
-non-convergence is assumed and a `ConvergenceException` exception is thrown.
+`startValue` as parameters. If the maximum number of iterations is exceeded,
+non-convergence is assumed and a `MathIllegalStateException` exception is thrown.
 A suggested value is 100, which should be plenty, given that a
 bisection algorithm can't get any more accurate after 52 iterations because of the
 number of mantissa bits in a double precision floating point number. If a number of
-ill-conditioned problems is to be solved, this number can be decreased in order
+ill-conditioned problems are to be solved, this number can be decreased in order
 to avoid wasting time.
 [Bracketed
 solvers](../apidocs/org/hipparchus/analysis/solvers/BracketedUnivariateSolver.html) also take an
@@ -137,10 +137,10 @@ enum parameter to specify which side of the final convergence interval should be
 selected as the root. It can be `ANY_SIDE`, `LEFT_SIDE`, `RIGHT_SIDE`,
 `BELOW_SIDE` or `ABOVE_SIDE`. Left and right are used to specify the root along
 the function parameter axis while below and above refer to the function value axis. The solve methods
-compute a value `c` such that:
+compute a value `\(c\)` such that:
 
-* `f(c) = 0.0` (see "function value accuracy")
-* `min &lt;= c &lt;= max` (except for the secant method, which may find a solution outside the interval)
+* `\(f(c) = 0.0\)` (see "function value accuracy")
+* `\(min \le c \le max \)` (except for the secant method, which may find a solution outside the interval)
 
 Typical usage:
 
@@ -197,7 +197,7 @@ be the algorithm of choice for selecting a specific side of the convergence
 interval.
 
 The `BisectionSolver` is included for completeness and for
-establishing a fall back in cases of emergency.  The algorithm is
+establishing a fallback in cases of emergency.  The algorithm is
 simple, most likely bug free and guaranteed to converge even in very
 adverse circumstances which might cause other algorithms to
 malfunction.  The drawback is of course that it is also guaranteed
@@ -207,17 +207,18 @@ The `UnivariateSolver` interface exposes many
 properties to control the convergence of a solver.  The accuracy properties
 are set at solver instance creation and cannot be changed afterwards,
 there are only getters to retrieve their values, no setters are available.
+
 | Property | Purpose |
 | --- | --- |
-| Absolute accuracy | The Absolute Accuracy is (estimated) maximal difference between the computed root and the true root of the function. This is what most people think of as "accuracy" intuitively. The default value is chosen as a sane value for most real world problems, for roots in the range from -100 to +100. For accurate computation of roots near zero, in the range form -0.0001 to +0.0001, the value may be decreased. For computing roots much larger in absolute value than 100, the default absolute accuracy may never be reached because the given relative accuracy is reached first. |
-| Relative accuracy | The Relative Accuracy is the maximal difference between the computed root and the true root, divided by the maximum of the absolute values of the numbers. This accuracy measurement is better suited for numerical calculations with computers, due to the way floating point numbers are represented. The default value is chosen so that algorithms will get a result even for roots with large absolute values, even while it may be impossible to reach the given absolute accuracy. |
+| Absolute accuracy | The Absolute Accuracy is (estimated) maximum difference between the computed root and the true root of the function. This is what most people think of as "accuracy" intuitively. The default value is chosen as a sane value for most real-world problems, for roots in the range from -100 to +100. For accurate computation of roots near zero, in the range form -0.0001 to +0.0001, the value may be decreased. For computing roots much larger in absolute value than 100, the default absolute accuracy may never be reached because the given relative accuracy is reached first. |
+| Relative accuracy | The Relative Accuracy is the maximum difference between the computed root and the true root, divided by the maximum of the absolute values of the numbers. This accuracy measurement is better suited for numerical calculations with computers, due to the way floating point numbers are represented. The default value is chosen so that algorithms will get a result even for roots with large absolute values, even while it may be impossible to reach the given absolute accuracy. |
 | Function value accuracy | This value is used by some algorithms in order to prevent numerical instabilities. If the function is evaluated to an absolute value smaller than the Function Value Accuracy, the algorithms assume they hit a root and return the value immediately. The default value is a "very small value". If the goal is to get a near zero function value rather than an accurate root, computation may be sped up by setting this value appropriately. |
 
 ## Interpolation
 
 A [UnivariateInterpolator](../apidocs/org/hipparchus/analysis/interpolation/UnivariateInterpolator.html)
 is used to find a univariate real-valued function `f` which for a given set of ordered pairs
-(`x<sub>i</sub>`,`y<sub>i</sub>`) yields `f(x<sub>i</sub>)=y<sub>i</sub>` to the
+`\((x_i,y_i)\)` yields `\(f(x_i)=y_i\)` to the
 best accuracy possible. The result is provided as an object implementing the
 [Univariate](../apidocs/org/hipparchus/analysis/UnivariateFunction.html) interface.
 It can therefore be evaluated at any point, including point not belonging to the original set.
@@ -245,7 +246,7 @@ value pairs consists of `N-1` polynomials. The function
 is continuous, smooth and can be differentiated twice.  The second
 derivative is continuous but not smooth.  The x values passed to the
 interpolator must be ordered in ascending order.  It is not valid to
-evaluate the function for values outside the range `x<sub>0</sub>`..`x<sub>N</sub>`.
+evaluate the function for values outside the range `\(x_0...x_N\)`.
 
 The polynomial function returned by the Neville's algorithm is a single
 polynomial guaranteed to pass exactly through the interpolation points.
@@ -292,13 +293,13 @@ no requirements for a regular grid) and some points may provide derivatives whil
 
 A [BivariateGridInterpolator](../apidocs/org/hipparchus/analysis/interpolation/BivariateGridInterpolator.html)
 is used to find a bivariate real-valued function `f` which for a given set of tuples
-(`x<sub>i</sub>`,`y<sub>j</sub>`,`f<sub>ij</sub>`)
-yields `f(x<sub>i</sub>,y<sub>j</sub>)=f<sub>ij</sub>` to the best accuracy
+`\((x_i,y_j,f_{ij})\)`
+yields `\(f(x_i,y_j)=f_{ij}\)` to the best accuracy
 possible. The result is provided as an object implementing the
 [BivariateFunction](../apidocs/org/hipparchus/analysis/BivariateFunction.html)
 interface. It can therefore be evaluated at any point,
 including a point not belonging to the original set.
-The arrays `x<sub>i</sub>` and `y<sub>j</sub>` must be
+The arrays `\(x_i\)` and `\(y_j\)` must be
 sorted in increasing order in order to define a two-dimensional grid.
 
 In [bicubic interpolation](http://en.wikipedia.org/wiki/Bicubic_interpolation),
@@ -316,12 +317,12 @@ curves along each of the coordinate axes.
 
 A [TrivariateGridInterpolator](../apidocs/org/hipparchus/analysis/interpolation/TrivariateGridInterpolator.html)
 is used to find a trivariate real-valued function `f` which for a given set of tuples
-(`x<sub>i</sub>`,`y<sub>j</sub>`,`z<sub>k</sub>`, `f<sub>ijk</sub>`)
-yields `f(x<sub>i</sub>,y<sub>j</sub>,z<sub>k</sub>)=f<sub>ijk</sub>`
+`\((x_i,y_j,z_k, f_{ijk})\)`
+yields `\(f(x_i,y_j,z_k)=f_{ijk}\)`
 to the best accuracy possible. The result is provided as an object implementing the
 [TrivariateFunction](../apidocs/org/hipparchus/analysis/TrivariateFunction.html)
 interface. It can therefore be evaluated at any point, including a point not belonging to the original set.
-The arrays `x<sub>i</sub>`, `y<sub>j</sub>` and `z<sub>k</sub>` must be sorted in
+The arrays `\(x_i\)`, `\(y_j\)` and `\(z_k\)` must be sorted in
 increasing order in order to define a three-dimensional grid.
 
 In [tricubic interpolation](http://en.wikipedia.org/wiki/Tricubic_interpolation),
@@ -340,8 +341,8 @@ A [UnivariateIntegrator](../apidocs/org/hipparchus/analysis/integration/Univaria
 provides the means to numerically integrate
 [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html).
 
-* `f(c) = 0.0` (see "function value accuracy")
-* `min &lt;= c &lt;= max` (except for the secant method, which may find a solution outside the interval)
+* `\(f(c) = 0.0\)` (see "function value accuracy")
+* `\(min \le c \le max\)` (except for the secant method, which may find a solution outside the interval)
 
 
 ## Polynomials
@@ -381,13 +382,12 @@ number of free parameters. Rall's numbers therefore can be seen as derivative st
 one derivative and one free parameter, and primitive real numbers can be seen as derivative structures
 with zero order derivative and no free parameters.
 
-The workflow of computation of a derivatives of an expression `y=f(x)` is the following
-one. First we configure an input parameter `x` of type <a
+The workflow of computation of a derivatives of an expression `y=f(x)` is as follows. First we configure an input parameter `x` of type <a
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
 DerivativeStructure</a> so it will drive the function to compute all derivatives up to order 3 for
-example. Then we compute `y=f(x)` normally by passing this parameter to the f function.At
+example. Then we compute `y=f(x)` normally by passing this parameter to the f function. At
 the end, we extract from `y` the value and the derivatives we want. As we have specified
-3<sup>rd</sup> order when we built `x`, we can retrieve the derivatives up to 3<sup>rd</sup>
+3<sup>rd</sup> order when we built `x`, we can retrieve the derivatives up to `\(3^{rd}\)`
 order from `y`. The following example shows that (the 0 parameter in the DerivativeStructure
 constructor will be explained in the next paragraph):
 
@@ -439,7 +439,7 @@ done by setting up identity function, i.e. functions that represent the variable
 only unit first derivative.
 
 This design also allow a very interesting feature which can be explained with the following example.
-Suppose we have a two arguments function `f` and a one argument function `g`. If
+Suppose we have a two-argument function `f` and a one-argument function `g`. If
 we compute `g(f(x, y))` with `x` and `y` be two variables, we
 want to be able to compute the partial derivatives `dg/dx`, `dg/dy`,
 `d2g/dx2` `d2g/dxdy` `d2g/dy2`. This does make sense since we combined
@@ -475,16 +475,16 @@ UnivariateDifferentiableFunction</a> interface. The first method is to simply wr
 the appropriate methods from [DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
 to compute addition, subtraction, sine, cosine... This is often quite
 straigthforward and there is no need to remember the rules for differentiation: the user code only
-represent the function itself, the differentials will be computed automatically under the hood. The
+represents the function itself, the differentials will be computed automatically under the hood. The
 second method is to write a classical <a
 href="../apidocs/org/hipparchus/analysis/UnivariateFunction.html">UnivariateFunction</a> and to
 pass it to an existing implementation of the <a
 href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateFunctionDifferentiator.html">
 UnivariateFunctionDifferentiator</a> interface to retrieve a differentiated version of the same function.
-The first method is more suited to small functions for which user already control all the underlying code.
-The second method is more suited to either large functions that would be cumbersome to write using the
+The first method is more suited to small functions for which the user already controls all the underlying code.
+The second method is better suited to either large functions that would be cumbersome to write using the
 [DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
-API, or functions for which user does not have control to the full underlying code
+API, or functions for which the user does not have control over the full underlying code
 (for example functions that call external libraries).
 
 Hipparchus provides one implementation of the <a
@@ -530,17 +530,17 @@ an example on how this implementation can be used:
 
 Note that using <a
 href="../apidocs/org/hipparchus/analysis/differentiation/FiniteDifferencesDifferentiator.html">
-FiniteDifferencesDifferentiator</a>a> in order to have a <a
+FiniteDifferencesDifferentiator</a> in order to have a <a
 href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDifferentiableFunction.html">
 UnivariateDifferentiableFunction</a> that can be provided to a [Newton-Raphson's](../apidocs/org/hipparchus/analysis/solvers/NewtonRaphsonSolver.html)
-solver is a very bad idea. The reason is that finite differences are not really accurate and needs lots
-of additional calls to the basic underlying function. If user initially have only the basic function
+solver is a very bad idea. The reason is that finite differences are not really accurate and need lots
+of additional calls to the basic underlying function. If the user initially has only the basic function
 available and needs to find its roots, it is <em>much</em> more accurate and <em>much</em> more
 efficient to use a solver that only requires the function values and not the derivatives. A good choice is
 to use [bracketing n](../apidocs/org/hipparchus/analysis/solvers/BracketingNthOrderBrentSolver.html)
 method, which in fact converges faster than <a
 href="../apidocs/org/hipparchus/analysis/solvers/NewtonRaphsonSolver.html">Newton-Raphson's</a> and
-can be configured to a highere order (typically 5) than Newton-Raphson which is an order 2 method.
+can be configured to a higher order (typically 5) than Newton-Raphson which is an order 2 method.
 
 Another implementation of the <a
 href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateFunctionDifferentiator.html">
