@@ -529,8 +529,8 @@ computes Kendall's tau rank correlation.
 
 __Implementation Notes__
 
-* Unbiased covariances are given by the formula `cov(X, Y) = sum [(xi - E(X))(yi - E(Y))] / (n - 1)` where `E(X)` is the mean of X and `E(Y)` is the mean of the Y values. Non-bias-corrected estimates use n in place of `n - 1`. Whether or not covariances are bias-corrected is determined by the optional parameter, "biasCorrected," which defaults to true.
-* `PearsonsCorrelation` computes correlations defined by the formula `cor(X, Y) = sum[(xi - E(X))(yi - E(Y))] / [(n - 1)s(X)s(Y)]` where `E(X)` and `E(Y)` are means of X and Y and `s(X)`, `s(Y)` are standard deviations.
+* Unbiased covariances are given by the formula `\(cov(X, Y) = \sum{(x_i - E(X))(y_i - E(Y))} / (n - 1)\)` where `\(E(X)\)` is the mean of X and `\(E(Y)\)` is the mean of the Y values. Non-bias-corrected estimates use n in place of `\(n - 1\)`. Whether or not covariances are bias-corrected is determined by the optional parameter, "biasCorrected," which defaults to true.
+* `PearsonsCorrelation` computes correlations defined by the formula `\(cor(X, Y) = \sum{(x_i - E(X))(y_i - E(Y))} / (n - 1)s(X)s(Y)\)` where `\(E(X)\)` and `\(E(Y)\)` are means of X and Y and `\(s(X)\)`, `\(s(Y)\)` are standard deviations.
 * `SpearmansCorrelation` applies a rank transformation to the input data and computes Pearson's correlation on the ranked data. The ranking algorithm is configurable. By default, NaturalRanking with default strategies for handling ties and NaN values is used.
 * `KendallsCorrelation` computes the association between two measured quantities. A tau test is a non-parametric hypothesis test for statistical dependence based on the tau coefficient.
 
@@ -587,7 +587,7 @@ Then the matrix of standard errors is
 
 The formula used to compute the standard error is
 `\(SE_r = \sqrt{(1 - r^2) / (n - 2)}\)`<br/>
-where `r` is the estimated correlation coefficient and `n` is the number of
+where `\(r\)` is the estimated correlation coefficient and `\(n\)` is the number of
 observations in the source dataset.
 
 __p-values__ for the (2-sided) null hypotheses that elements of
@@ -655,7 +655,7 @@ The [InferenceTestUtils](../apidocs/org/hipparchus/stat/inference/InferenceTestU
 class provides static methods to get test instances or
 to compute test statistics directly.  The examples below all use the
 static methods in `TestUtils` to execute tests.  To get
-test object instances, either use e.g., `TestUtils.getTTest()`
+test object instances, either use e.g., `InferenceTestUtils.getTTest()`
 or use the implementation constructors directly, e.g. `new TTest()`.
 
  __Implementation Notes__
@@ -720,18 +720,18 @@ __Two-Sample t-tests__
 (paired) elements of the `double[]` arrays `sample1` and `sample2` is zero.
 To compute the t-statistic:
 
-    TestUtils.pairedT(sample1, sample2);
+    InferenceTestUtils.pairedT(sample1, sample2);
 
 To compute the p-value:
 
-    TestUtils.pairedTTest(sample1, sample2);
+    InferenceTestUtils.pairedTTest(sample1, sample2);
 
 To perform a fixed significance level test with alpha = .05:
 
-    TestUtils.pairedTTest(sample1, sample2, .05);
+    InferenceTestUtils.pairedTTest(sample1, sample2, .05);
 
 The last example will return `true` iff the p-value returned by
-`TestUtils.pairedTTest(sample1, sample2)` is less than `.05`
+`InferenceTestUtils.pairedTTest(sample1, sample2)` is less than `.05`
 
 *Example 2:* unpaired, two-sided, two-sample t-test using
 `StatisticalSummary` instances, without assuming that
@@ -754,15 +754,15 @@ on the `StreamingStatistics` class.)
 
 To compute the t-statistic:
 
-    TestUtils.t(summary1, summary2);
+    InferenceTestUtils.t(summary1, summary2);
 
 To compute the p-value:
 
-    TestUtils.tTest(sample1, sample2);
+    InferenceTestUtils.tTest(sample1, sample2);
 
 To perform a fixed significance level test with alpha = .05:
 
-    TestUtils.tTest(sample1, sample2, .05);
+    InferenceTestUtils.tTest(sample1, sample2, .05);
 
 In each case above, the test does not assume that the subpopulation
 variances are equal.  To perform the tests under this assumption,
@@ -776,18 +776,18 @@ array of expected counts, use:
 
     long[] observed = {10, 9, 11};
     double[] expected = {10.1, 9.8, 10.3};
-    System.out.println(TestUtils.chiSquare(expected, observed));
+    System.out.println(InferenceTestUtils.chiSquare(expected, observed));
 
-the value displayed will be `sum((expected[i] - observed[i])^2 / expected[i])`
+the value displayed will be `\(\sum{(expected[i] - observed[i])^2 / expected[i])}\)`
 
 To get the p-value associated with the null hypothesis that `observed` conforms to `expected` use:
 
-    TestUtils.chiSquareTest(expected, observed);
+    InferenceTestUtils.chiSquareTest(expected, observed);
 
 To test the null hypothesis that `observed` conforms to `expected` with `alpha` significance level
 (equiv. `100 * (1-alpha)%` confidence) where `0 < alpha < 1 ` use:
 
-    TestUtils.chiSquareTest(expected, observed, alpha);
+    InferenceTestUtils.chiSquareTest(expected, observed, alpha);
 
 The boolean value returned will be `true` iff the null hypothesis
 can be rejected with confidence `1 - alpha`.
@@ -796,7 +796,7 @@ To compute a chi-square statistic statistic associated with a
 [chi-square test of independence](http://www.itl.nist.gov/div898/handbook/prc/section4/prc45.htm)
 based on a two-dimensional (`long[][]`) `counts` array viewed as a two-way table, use:
 
-    TestUtils.chiSquareTest(counts);
+    InferenceTestUtils.chiSquareTest(counts);
 
 The rows of the 2-way table are `count[0], ... , count[count.length - 1]. `
 
@@ -808,13 +808,13 @@ To compute the p-value associated with the null hypothesis that
 the classifications represented by the counts in the columns of the input 2-way
 table are independent of the rows, use:
 
-     TestUtils.chiSquareTest(counts);
+     InferenceTestUtils.chiSquareTest(counts);
 
 To perform a chi-square test of independence with `alpha`
 significance level (equiv. `100 * (1-alpha)%` confidence)
 where `0 < alpha < 1 ` use:
 
-    TestUtils.chiSquareTest(counts, alpha);
+    InferenceTestUtils.chiSquareTest(counts, alpha);
 
 The boolean value returned will be `true` iff the null
 hypothesis can be rejected with confidence `1 - alpha`.
@@ -840,12 +840,12 @@ the value displayed will be `2 * sum(observed[i]) * log(observed[i]/expected[i])
 
 To get the p-value associated with the null hypothesis that `observed` conforms to `expected` use:
 
-    TestUtils.gTest(expected, observed);
+    InferenceTestUtils.gTest(expected, observed);
 
 To test the null hypothesis that `observed` conforms to `expected` with `alpha` significance level
 (equiv. `100 * (1-alpha)%` confidence) where `0 < alpha < 1 ` use:
 
-    TestUtils.gTest(expected, observed, alpha);
+    InferenceTestUtils.gTest(expected, observed, alpha);
 
 The boolean value returned will be `true` iff the null hypothesis
 can be rejected with confidence `1 - alpha`.
@@ -856,8 +856,8 @@ same underlying distribution, use long[] arrays for the counts and
 
     long[] obs1 = new long[]{268, 199, 42};
     long[] obs2 = new long[]{807, 759, 184};
-    System.out.println(TestUtils.gDataSetsComparison(obs1, obs2)); // G statistic
-    System.out.println(TestUtils.gTestDataSetsComparison(obs1, obs2)); // p-value
+    System.out.println(InferenceTestUtils.gDataSetsComparison(obs1, obs2)); // G statistic
+    System.out.println(InferenceTestUtils.gTestDataSetsComparison(obs1, obs2)); // p-value
 
 For 2 x 2 designs, the `rootLogLikelihoodRatio` method computes the
 [signed root log likelihood ratio.](http://tdunning.blogspot.com/2008/03/surprise-and-coincidence.html)
@@ -888,15 +888,15 @@ null hypothesis that the class means are all the same
 using a `OneWayAnova` instance or `TestUtils`
 methods:
 
-    double fStatistic = TestUtils.oneWayAnovaFValue(classes); // F-value
-    double pValue = TestUtils.oneWayAnovaPValue(classes);     // P-value
+    double fStatistic = InferenceTestUtils.oneWayAnovaFValue(classes); // F-value
+    double pValue = InferenceTestUtils.oneWayAnovaPValue(classes); // P-value
 
 To test perform a One-Way ANOVA test with significance level set at 0.01
 (so the test will, assuming assumptions are met, reject the null
 hypothesis incorrectly only about one in 100 times), use
 
-    TestUtils.oneWayAnovaTest(classes, 0.01); // returns a boolean
-                                              // true means reject null hypothesis
+    InferenceTestUtils.oneWayAnovaTest(classes, 0.01); // returns a boolean
+                                     // true means reject null hypothesis
 
 __Kolmogorov-Smirnov tests__
 
@@ -904,11 +904,11 @@ Given a double[] array `data` of values, to evaluate the
 null hypothesis that the values are drawn from a unit normal distribution
 
     final NormalDistribution unitNormal = new NormalDistribution(0d, 1d);
-    TestUtils.kolmogorovSmirnovTest(unitNormal, sample, false)
+    InferenceTestUtils.kolmogorovSmirnovTest(unitNormal, sample, false)
 
 returns the p-value and
 
-    TestUtils.kolmogorovSmirnovStatistic(unitNormal, sample)
+    InferenceTestUtils.kolmogorovSmirnovStatistic(unitNormal, sample)
 
 returns the D-statistic.
 
@@ -916,15 +916,15 @@ If `y` is a double array, to evaluate the null hypothesis that
 `x` and `y` are drawn from the same underlying distribution,
 use
 
-    TestUtils.kolmogorovSmirnovStatistic(x, y)
+    InferenceTestUtils.kolmogorovSmirnovStatistic(x, y)
 
 to compute the D-statistic and
 
-    TestUtils.kolmogorovSmirnovTest(x, y)
+    InferenceTestUtils.kolmogorovSmirnovTest(x, y)
 
 for the p-value associated with the null hypothesis that `x` and
 `y` come from the same distribution. By default, here and above strict
-inequality is used in the null hypothesis - i.e., we evaluate H_0 : D_{n,m} > d.
+inequality is used in the null hypothesis - i.e., we evaluate `\(H_0 : D_{n,m} > d\)`.
 To make the inequality above non-strict, add `false` as an actual parameter
 above. For large samples, this parameter makes no difference.  When the product of the sample sizes is less than 10,000, `KolmogorovSmirnnov` computes p-values exactly; otherwise the Kolmogorov approximation to the distribution of the D statistic is used. To force exact computation of the p-value (overriding the selection of estimation
 method), first compute the d-statistic and then use the `exactP` method
