@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Licensed to the Apache Software Foundation (ASF) under one or more
+ contributor license agreements.  See the NOTICE file distributed with
+ this work for additional information regarding copyright ownership.
+ The ASF licenses this file to You under the Apache License, Version 2.0
+ (the "License"); you may not use this file except in compliance with
+ the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<project name="Hipparchus::Geometry">
+  <skin>
+    <groupId>lt.velykis.maven.skins</groupId>
+    <artifactId>reflow-maven-skin</artifactId>
+    <version>1.1.1</version>
+  </skin>
+  <custom>
+    <reflowSkin>
+      <theme>bootswatch-readable</theme>
+      <highlightJs>true</highlightJs>
+      <brand>
+        <name><![CDATA[<img src="../images/logo-hipparchus-blue.png" style="width:63px;height:40px;"/> ${project.name}]]></name>
+        <href>index.html</href>
+      </brand>
+      <titleTemplate>%2$s | %1$s</titleTemplate>
+      <toc>top</toc>
+      <topNav>Hipparchus|User Guide|Modules|Reports</topNav>
+      <bottomNav>
+        <column>License</column>
+      </bottomNav>
+      <endContent>
+       <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+     </endContent>
+    </reflowSkin>
+  </custom>
+
+  <body>
+    <menu name="Hipparchus">
+      <item name="Overview"                      href="../index.html"/>
+      <item name="Building"                      href="../building.html"/>
+      <item name="Downloads"                     href="../downloads.html"/>
+      <item name="Mailing lists"                 href="../mail-lists.html"/>
+      <item name="Latest API docs (development)" href="../apidocs/index.html"/>
+      <item name="Source Repository (current)"   href="https://github.com/Hipparchus-Math/hipparchus"/>
+      <item name="Developers Guide"              href="../developers.html"/>
+      <item name="User Guide"                    href="../user-guide.html" />
+    </menu>
+
+    <menu name="Modules">
+        <item name="Hipparchus::Core"                             href="../hipparchus-core/index.html" />
+        <item name="Hipparchus::Computational Geometry"           href="../hipparchus-geometry/index.html" />
+        <item name="Hipparchus::Genetic Algorithms"               href="../hipparchus-genetics/index.html" />
+        <item name="Hipparchus::Ordinary Differential Equations"  href="../hipparchus-ode/index.html" />
+        <item name="Hipparchus::Optimization"                     href="../hipparchus-optim/index.html" />
+        <item name="Hipparchus::Fitting"                          href="../hipparchus-fitting/index.html" />
+        <item name="Hipparchus::Performance Tests"                href="../hipparchus-perf/index.html" />
+        <item name="Hipparchus::Samples"                          href="../hipparchus-samples/index.html" />
+        <item name="Hipparchus::Fast Fourier Transforms"          href="../hipparchus-fft/index.html" />
+        <item name="Hipparchus::Cluster Algorithms"               href="../hipparchus-clustering/index.html" />
+        <item name="Hipparchus::Migration Code "                  href="../hipparchus-migration/index.html" />
+    </menu>
+
+    <menu name="Reports" ref="reports"/>
+
+    <menu name ="License">
+      <item name="License" href="../license.html"/>
+    </menu>
+  </body>
+
+</project>

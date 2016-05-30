@@ -201,8 +201,8 @@
    limitations under the License.
 
 
-Apache Commons Math includes the following code provided to the ASF under the
-Apache License 2.0:
+Hipparchus includes the following code provided to the Apache
+Software Foundation under the Apache License 2.0:
 
  - The inverse error function implementation in the Erf class is based on CUDA
    code developed by Mike Giles, Oxford-Man Institute of Quantitative Finance,
@@ -210,22 +210,34 @@ Apache License 2.0:
    March 23th 2013)
  - The LinearConstraint, LinearObjectiveFunction, LinearOptimizer,
    RelationShip, SimplexSolver and SimplexTableau classes in package
-   org.apache.commons.math3.optimization.linear include software developed by
+   org.hipparchus.optim.linear include software developed by
    Benjamin McCann (http://www.benmccann.com) and distributed with
-   the following copyright: Copyright 2009 Google Inc. (grant received on
-   March 16th 2009)
- - The class "org.apache.commons.math3.exception.util.LocalizedFormatsTest" which
+   the following copyright: Copyright 2009 Google Inc. (grant received by
+   Apache Software Foundation on March 16th 2009)
+ - The class "org.hipparchus.exception.util.LocalizedFormatsTest" which
    is an adapted version of "OrekitMessagesTest" test class for the Orekit library
- - The "org.apache.commons.math3.analysis.interpolation.HermiteInterpolator"
+ - The "org.hipparchus.analysis.interpolation.HermiteInterpolator"
    has been imported from the Orekit space flight dynamics library.
 
 ===============================================================================
  
 
 
-APACHE COMMONS MATH DERIVATIVE WORKS: 
+Apache Commons Math fork
 
-The Apache commons-math library includes a number of subcomponents
+The Hipparchus library started as a fork of Apache Commons Math
+(http://commons.apache.org/commons-math). As such, most of its
+original code came from the Apache Software Foundation contributors
+and developers. This code was already distributed under the terms
+of the Apache Software Licence V2.0.
+
+===============================================================================
+ 
+
+
+Hipparchus DERIVATIVE WORKS: 
+
+The Hipparchus library includes a number of subcomponents
 whose implementation is derived from original sources written
 in C or Fortran.  License terms of the original sources
 are reproduced below.
@@ -233,7 +245,7 @@ are reproduced below.
 ===============================================================================
 For the lmder, lmpar and qrsolv Fortran routine from minpack and translated in
 the LevenbergMarquardtOptimizer class in package
-org.apache.commons.math3.optimization.general 
+org.hipparchus.fitting.leastsquares
 Original source copyright and license statement:
 
 Minpack Copyright Notice (1999) University of Chicago.  All rights reserved
@@ -291,7 +303,7 @@ POSSIBILITY OF SUCH LOSS OR DAMAGES.
 
 Copyright and license statement for the odex Fortran routine developed by
 E. Hairer and G. Wanner and translated in GraggBulirschStoerIntegrator class
-in package org.apache.commons.math3.ode.nonstiff:
+in package org.hipparchus.ode.nonstiff:
 
 
 Copyright (c) 2004, Ernst Hairer
@@ -322,7 +334,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Copyright and license statement for the original Mersenne twister C
 routines translated in MersenneTwister class in package 
-org.apache.commons.math3.random:
+org.hipparchus.random:
 
    Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
    All rights reserved.                          
@@ -357,8 +369,8 @@ org.apache.commons.math3.random:
 ===============================================================================
 
 The initial code for shuffling an array (originally in class
-"org.apache.commons.math3.random.RandomDataGenerator", now replaced by
-a method in class "org.apache.commons.math3.util.MathArrays") was
+"org.apache.hipparchus.random.RandomDataGenerator", now replaced by
+a method in class "org.hipparchus.util.MathArrays") was
 inspired from the algorithm description provided in
 "Algorithms", by Ian Craw and John Pulham (University of Aberdeen 1999).
 The textbook (containing a proof that the shuffle is uniformly random) is
@@ -402,13 +414,13 @@ ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ===============================================================================
 
-The initial commit of package "org.apache.commons.math3.ml.neuralnet" is
+The initial commit of package "org.hipparchus.ml.neuralnet" is
 an adapted version of code developed in the context of the Data Processing
 and Analysis Consortium (DPAC) of the "Gaia" project of the European Space
 Agency (ESA).
 ===============================================================================
 
-The initial commit of the class "org.apache.commons.math3.special.BesselJ" is
+The initial commit of the class "org.hipparchus.special.BesselJ" is
 an adapted version of code translated from the netlib Fortran program, rjbesl
 http://www.netlib.org/specfun/rjbesl by R.J. Cody at Argonne National
 Laboratory (USA).  There is no license or copyright statement included with the
@@ -416,8 +428,8 @@ original Fortran sources.
 ===============================================================================
 
 
-The BracketFinder (package org.apache.commons.math3.optimization.univariate)
-and PowellOptimizer (package org.apache.commons.math3.optimization.general)
+The BracketFinder (package org.apache.hipparchus.optim.univariate)
+and PowellOptimizer (package org.hipparchus.optim.lonlinear.scalar.noderiv)
 classes are based on the Python code in module "optimize.py" (version 0.5)
 developed by Travis E. Oliphant for the SciPy library (http://www.scipy.org/)
 Copyright © 2003-2009 SciPy Developers.
