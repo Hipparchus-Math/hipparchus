@@ -832,6 +832,37 @@ public class RandomDataGeneratorTest {
         UnitTestUtils.assertChiSquareAccept(expected, counts, 0.001);
     }
 
+    @Test
+    public void testNextGamma2() {
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(1000);
+        final int sampleSize = 1000;
+        final double alpha = 0.001;
+        GammaDistribution dist = new GammaDistribution(3, 1);
+        double[] values = randomDataGenerator.nextDeviates(dist, sampleSize);
+        UnitTestUtils.assertKolmogorovSmirnovTest(dist, values, alpha);
+        UnitTestUtils.assertGTest(dist, values, alpha);
+        dist = new GammaDistribution(.4, 2);
+        values = randomDataGenerator.nextDeviates(dist, sampleSize);
+        UnitTestUtils.assertKolmogorovSmirnovTest(dist, values, alpha);
+        UnitTestUtils.assertGTest(dist, values, alpha);
+    }
+
+    @Test
+    public void testNextBeta2() {
+        final double[] alphaBetas = {0.1, 1, 10, 100, 1000};
+        final RandomGenerator random = new Well1024a(0x7829862c82fec2dal);
+        final RandomDataGenerator randomDataGenerator = RandomDataGenerator.of(random);
+        final int sampleSize = 1000;
+        final double alphaCrit = 0.001;
+        for (final double alpha : alphaBetas) {
+            for (final double beta : alphaBetas) {
+                final BetaDistribution betaDistribution = new BetaDistribution(alpha, beta);
+                final double[] values = randomDataGenerator.nextDeviates(betaDistribution, sampleSize);
+                UnitTestUtils.assertKolmogorovSmirnovTest(betaDistribution, values, alphaCrit);
+                UnitTestUtils.assertGTest(betaDistribution, values, alphaCrit);
+            }
+        }
+    }
 
     @Test
     public void testNextZipf() {
