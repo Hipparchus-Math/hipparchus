@@ -21,8 +21,7 @@ The distribution framework provides the means to compute probability density
 functions (`density(...)`), probability mass functions (`probability(...)`)
 and distribution functions (`cumulativeProbability(...)`) for both discrete
 (integer-valued) and continuous probability distributions.
-The framework also allows for the computation of inverse cumulative probabilities
-and sampling from distributions.
+The framework also allows for the computation of inverse cumulative probabilities.
 
 For an instance `f` of a distribution `F`, and a domain value, `x`,
 `f.cumulativeProbability(x)` computes `P(X <= x)` where `X` is a random variable
@@ -39,13 +38,6 @@ case, this will usually be identically 0.
     TDistribution t = new TDistribution(29);
     double lowerTail = t.cumulativeProbability(-2.656);     // P(T(29) <= -2.656)
     double upperTail = 1.0 - t.cumulativeProbability(2.75); // P(T(29) >= 2.75)
-
-All distributions implement a `sample()` method to support random sampling from the
-distribution. Implementation classes expose constructors allowing the default
-[RandomGenerator](../apidocs/org/hipparchus/random/RandomGenerator.html)
-used by the sampling algorithm to be overridden.  If sampling is not going to be used, providing
-a null `RandomGenerator` constructor argument will avoid the overhead of initializing
-the default generator.
 
 Inverse distribution functions can be computed using the
 `inverseCumulativeProbability` methods.  For continuous `f`
