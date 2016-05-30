@@ -18,7 +18,7 @@ package org.hipparchus.stat.descriptive;
 
 import java.util.Locale;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,8 +30,8 @@ public final class StatisticalSummaryValuesTest {
     @Test
     public void testSerialization() {
         StatisticalSummaryValues u = new StatisticalSummaryValues(1, 2, 3, 4, 5, 6);
-        TestUtils.checkSerializedEquality(u);
-        StatisticalSummaryValues t = (StatisticalSummaryValues) TestUtils.serializeAndRecover(u);
+        UnitTestUtils.checkSerializedEquality(u);
+        StatisticalSummaryValues t = (StatisticalSummaryValues) UnitTestUtils.serializeAndRecover(u);
         verifyEquality(u, t);
     }
 
@@ -54,12 +54,12 @@ public final class StatisticalSummaryValuesTest {
 
     private void verifyEquality(StatisticalSummaryValues s, StatisticalSummaryValues u) {
         Assert.assertEquals("N",s.getN(),u.getN());
-        TestUtils.assertEquals("sum",s.getSum(),u.getSum(), 0);
-        TestUtils.assertEquals("var",s.getVariance(),u.getVariance(), 0);
-        TestUtils.assertEquals("std",s.getStandardDeviation(),u.getStandardDeviation(), 0);
-        TestUtils.assertEquals("mean",s.getMean(),u.getMean(), 0);
-        TestUtils.assertEquals("min",s.getMin(),u.getMin(), 0);
-        TestUtils.assertEquals("max",s.getMax(),u.getMax(), 0);
+        UnitTestUtils.assertEquals("sum",s.getSum(),u.getSum(), 0);
+        UnitTestUtils.assertEquals("var",s.getVariance(),u.getVariance(), 0);
+        UnitTestUtils.assertEquals("std",s.getStandardDeviation(),u.getStandardDeviation(), 0);
+        UnitTestUtils.assertEquals("mean",s.getMean(),u.getMean(), 0);
+        UnitTestUtils.assertEquals("min",s.getMin(),u.getMin(), 0);
+        UnitTestUtils.assertEquals("max",s.getMax(),u.getMax(), 0);
     }
 
     @Test

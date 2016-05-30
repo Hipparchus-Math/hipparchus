@@ -20,7 +20,7 @@ package org.hipparchus.stat.descriptive.vector;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.RealMatrix;
 import org.junit.Test;
@@ -88,6 +88,6 @@ public class VectorialCovarianceTest {
     @Test
     public void testSerial(){
         VectorialCovariance stat = new VectorialCovariance(points[0].length, true);
-        assertEquals(stat, TestUtils.serializeAndRecover(stat));
+        assertEquals(stat, UnitTestUtils.serializeAndRecover(stat));
     }
 }

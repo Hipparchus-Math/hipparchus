@@ -18,7 +18,7 @@ package org.hipparchus.fitting;
 
 import java.util.Random;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.random.RandomDataGenerator;
@@ -49,7 +49,7 @@ public class PolynomialCurveFitterTest {
             = PolynomialCurveFitter.create(0).withStartPoint(new double[] { -1e-20, 3e15, -5e25 });
         final double[] best = fitter.fit(obs.toList());
 
-        TestUtils.assertEquals("best != coeff", coeff, best, 1e-12);
+        UnitTestUtils.assertEquals("best != coeff", coeff, best, 1e-12);
     }
 
     @Test

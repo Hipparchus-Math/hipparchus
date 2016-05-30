@@ -22,7 +22,7 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.Space;
@@ -61,7 +61,7 @@ public class Vector3DTest {
         Space space = new Vector3D(1, 2, 2).getSpace();
         Assert.assertEquals(3, space.getDimension());
         Assert.assertEquals(2, space.getSubSpace().getDimension());
-        Space deserialized = (Space) TestUtils.serializeAndRecover(space);
+        Space deserialized = (Space) UnitTestUtils.serializeAndRecover(space);
         Assert.assertTrue(space == deserialized);
     }
 

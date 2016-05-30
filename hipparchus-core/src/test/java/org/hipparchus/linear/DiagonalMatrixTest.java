@@ -16,7 +16,7 @@
  */
 package org.hipparchus.linear;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.Precision;
@@ -240,7 +240,7 @@ public class DiagonalMatrixTest {
         final double[] diagResult = diag.operate(v);
         final double[] denseResult = dense.operate(v);
 
-        TestUtils.assertEquals(diagResult, denseResult, 0d);
+        UnitTestUtils.assertEquals(diagResult, denseResult, 0d);
     }
 
     @Test
@@ -253,7 +253,7 @@ public class DiagonalMatrixTest {
         final double[] diagResult = diag.preMultiply(v);
         final double[] denseResult = dense.preMultiply(v);
 
-        TestUtils.assertEquals(diagResult, denseResult, 0d);
+        UnitTestUtils.assertEquals(diagResult, denseResult, 0d);
     }
 
     @Test
@@ -267,7 +267,7 @@ public class DiagonalMatrixTest {
         final RealVector diagResult = diag.preMultiply(vector);
         final RealVector denseResult = dense.preMultiply(vector);
 
-        TestUtils.assertEquals("preMultiply(Vector) returns wrong result", diagResult, denseResult, 0d);
+        UnitTestUtils.assertEquals("preMultiply(Vector) returns wrong result", diagResult, denseResult, 0d);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
@@ -359,7 +359,7 @@ public class DiagonalMatrixTest {
         final DiagonalMatrix inverse = m.inverse();
 
         final DiagonalMatrix result = m.multiply(inverse);
-        TestUtils.assertEquals("DiagonalMatrix.inverse() returns wrong result",
+        UnitTestUtils.assertEquals("DiagonalMatrix.inverse() returns wrong result",
                 MatrixUtils.createRealIdentityMatrix(data.length), result, Math.ulp(1d));
     }
 

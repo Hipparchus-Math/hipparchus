@@ -17,7 +17,7 @@
 
 package org.hipparchus.analysis.differentiation;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Test;
@@ -35,7 +35,7 @@ public class GradientFunctionTest {
         for (double x = -10; x < 10; x += 0.5) {
             for (double y = -10; y < 10; y += 0.5) {
                 double[] point = new double[] { x, y };
-                TestUtils.assertEquals(f.gradient(point), g.value(point), 1.0e-15);
+                UnitTestUtils.assertEquals(f.gradient(point), g.value(point), 1.0e-15);
             }
         }
     }
@@ -48,7 +48,7 @@ public class GradientFunctionTest {
             for (double y = -10; y < 10; y += 0.5) {
                 for (double z = -10; z < 10; z += 0.5) {
                     double[] point = new double[] { x, y, z };
-                    TestUtils.assertEquals(f.gradient(point), g.value(point), 1.0e-15);
+                    UnitTestUtils.assertEquals(f.gradient(point), g.value(point), 1.0e-15);
                 }
             }
         }

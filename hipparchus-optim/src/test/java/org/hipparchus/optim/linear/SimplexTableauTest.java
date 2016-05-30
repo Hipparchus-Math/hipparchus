@@ -19,7 +19,7 @@ package org.hipparchus.optim.linear;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.optim.linear.LinearConstraint;
 import org.hipparchus.optim.linear.LinearObjectiveFunction;
 import org.hipparchus.optim.linear.Relationship;
@@ -86,7 +86,7 @@ public class SimplexTableauTest {
         Collection<LinearConstraint> constraints = createConstraints();
         SimplexTableau tableau =
             new SimplexTableau(f, constraints, GoalType.MAXIMIZE, false, 1.0e-6);
-        Assert.assertEquals(tableau, TestUtils.serializeAndRecover(tableau));
+        Assert.assertEquals(tableau, UnitTestUtils.serializeAndRecover(tableau));
     }
 
     private LinearObjectiveFunction createFunction() {

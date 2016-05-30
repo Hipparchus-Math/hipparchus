@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.regression;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.MatrixUtils;
@@ -162,7 +162,7 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
 
         GLSMultipleLinearRegression model = new GLSMultipleLinearRegression();
         model.newSampleData(y, x, omega);
-        TestUtils.assertEquals(model.calculateYVariance(), 3.5, 0);
+        UnitTestUtils.assertEquals(model.calculateYVariance(), 3.5, 0);
     }
 
     /**
@@ -207,7 +207,7 @@ public class GLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
         // TODO:  Should have assertRelativelyEquals(double[], double[], eps) in TestUtils
         //        Should also add RealVector and RealMatrix versions
         for (int i = 0; i < olsBeta.length; i++) {
-            TestUtils.assertRelativelyEquals(olsBeta[i], glsBeta[i], 10E-7);
+            UnitTestUtils.assertRelativelyEquals(olsBeta[i], glsBeta[i], 10E-7);
         }
     }
 

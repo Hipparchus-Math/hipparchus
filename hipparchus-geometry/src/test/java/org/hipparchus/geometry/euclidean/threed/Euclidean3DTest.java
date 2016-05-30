@@ -16,7 +16,7 @@
  */
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
 import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
@@ -38,7 +38,7 @@ public class Euclidean3DTest {
     @Test
     public void testSerialization() {
         Space e3 = Euclidean3D.getInstance();
-        Space deserialized = (Space) TestUtils.serializeAndRecover(e3);
+        Space deserialized = (Space) UnitTestUtils.serializeAndRecover(e3);
         Assert.assertTrue(e3 == deserialized);
     }
 

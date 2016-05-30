@@ -17,7 +17,7 @@
 package org.hipparchus.fraction;
 
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.BigFractionField;
 import org.junit.Assert;
@@ -39,7 +39,7 @@ public class BigFractionFieldTest {
     public void testSerial() {
         // deserializing the singleton should give the singleton itself back
         BigFractionField field = BigFractionField.getInstance();
-        Assert.assertTrue(field == TestUtils.serializeAndRecover(field));
+        Assert.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
     }
 
 }

@@ -16,7 +16,7 @@
  */
 package org.hipparchus.fraction;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -622,7 +622,7 @@ public class FractionTest {
             new Fraction(-5, 2)
         };
         for (Fraction fraction : fractions) {
-            Assert.assertEquals(fraction, TestUtils.serializeAndRecover(fraction));
+            Assert.assertEquals(fraction, UnitTestUtils.serializeAndRecover(fraction));
         }
     }
 

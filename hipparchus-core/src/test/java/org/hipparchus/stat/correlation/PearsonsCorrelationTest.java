@@ -16,7 +16,7 @@
  */
 package org.hipparchus.stat.correlation;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
@@ -124,7 +124,7 @@ public class PearsonsCorrelationTest {
                 0.971329459192119, 0.9911491900672053, 0.9952734837647849, 0.6682566045621746,
                 0.4172451498349454, 0.993952846232926, 1.0000000000000000
         };
-        TestUtils.assertEquals("correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
+        UnitTestUtils.assertEquals("correlation matrix", createRealMatrix(rData, 7, 7), correlationMatrix, 10E-15);
 
         double[] rPvalues = new double[] {
                 4.38904690369668e-10,
@@ -136,7 +136,7 @@ public class PearsonsCorrelationTest {
         };
         RealMatrix rPMatrix = createLowerTriangularRealMatrix(rPvalues, 7);
         fillUpper(rPMatrix, 0d);
-        TestUtils.assertEquals("correlation p values", rPMatrix, corrInstance.getCorrelationPValues(), 10E-15);
+        UnitTestUtils.assertEquals("correlation p values", rPMatrix, corrInstance.getCorrelationPValues(), 10E-15);
     }
 
     /**
@@ -154,7 +154,7 @@ public class PearsonsCorrelationTest {
                 -0.6637888570350691, -0.6395225189483201, 0.6984152962884830, 1.0000000000000000, -0.1538589170909148,
                  0.4636847006517939, 0.4010950530487398, -0.5727418060641666, -0.1538589170909148, 1.0000000000000000
          };
-         TestUtils.assertEquals("correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
+         UnitTestUtils.assertEquals("correlation matrix", createRealMatrix(rData, 5, 5), correlationMatrix, 10E-15);
 
          double[] rPvalues = new double[] {
                  0.01491720061472623,
@@ -164,7 +164,7 @@ public class PearsonsCorrelationTest {
          };
          RealMatrix rPMatrix = createLowerTriangularRealMatrix(rPvalues, 5);
          fillUpper(rPMatrix, 0d);
-         TestUtils.assertEquals("correlation p values", rPMatrix, corrInstance.getCorrelationPValues(), 10E-15);
+         UnitTestUtils.assertEquals("correlation p values", rPMatrix, corrInstance.getCorrelationPValues(), 10E-15);
     }
 
     /**
@@ -255,20 +255,20 @@ public class PearsonsCorrelationTest {
         PearsonsCorrelation corrInstance = new PearsonsCorrelation(matrix);
         Covariance covInstance = new Covariance(matrix);
         PearsonsCorrelation corrFromCovInstance = new PearsonsCorrelation(covInstance);
-        TestUtils.assertEquals("correlation values", corrInstance.getCorrelationMatrix(),
+        UnitTestUtils.assertEquals("correlation values", corrInstance.getCorrelationMatrix(),
                 corrFromCovInstance.getCorrelationMatrix(), 10E-15);
-        TestUtils.assertEquals("p values", corrInstance.getCorrelationPValues(),
+        UnitTestUtils.assertEquals("p values", corrInstance.getCorrelationPValues(),
                 corrFromCovInstance.getCorrelationPValues(), 10E-15);
-        TestUtils.assertEquals("standard errors", corrInstance.getCorrelationStandardErrors(),
+        UnitTestUtils.assertEquals("standard errors", corrInstance.getCorrelationStandardErrors(),
                 corrFromCovInstance.getCorrelationStandardErrors(), 10E-15);
 
         PearsonsCorrelation corrFromCovInstance2 =
             new PearsonsCorrelation(covInstance.getCovarianceMatrix(), 16);
-        TestUtils.assertEquals("correlation values", corrInstance.getCorrelationMatrix(),
+        UnitTestUtils.assertEquals("correlation values", corrInstance.getCorrelationMatrix(),
                 corrFromCovInstance2.getCorrelationMatrix(), 10E-15);
-        TestUtils.assertEquals("p values", corrInstance.getCorrelationPValues(),
+        UnitTestUtils.assertEquals("p values", corrInstance.getCorrelationPValues(),
                 corrFromCovInstance2.getCorrelationPValues(), 10E-15);
-        TestUtils.assertEquals("standard errors", corrInstance.getCorrelationStandardErrors(),
+        UnitTestUtils.assertEquals("standard errors", corrInstance.getCorrelationStandardErrors(),
                 corrFromCovInstance2.getCorrelationStandardErrors(), 10E-15);
     }
 
@@ -282,7 +282,7 @@ public class PearsonsCorrelationTest {
         double[] y = matrix.getColumn(1);
         Assert.assertEquals(new PearsonsCorrelation().correlation(x, y),
                 corrInstance.getCorrelationMatrix().getEntry(0, 1), Double.MIN_VALUE);
-        TestUtils.assertEquals("Correlation matrix", corrInstance.getCorrelationMatrix(),
+        UnitTestUtils.assertEquals("Correlation matrix", corrInstance.getCorrelationMatrix(),
                 new PearsonsCorrelation().computeCorrelationMatrix(data), Double.MIN_VALUE);
     }
 

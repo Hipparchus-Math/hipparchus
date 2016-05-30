@@ -24,7 +24,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.integration.BaseAbstractUnivariateIntegrator;
 import org.hipparchus.analysis.integration.IterativeLegendreGaussIntegrator;
@@ -204,12 +204,12 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     public void testSerialization() {
         // Empty
         EmpiricalDistribution dist = new EmpiricalDistribution();
-        EmpiricalDistribution dist2 = (EmpiricalDistribution) TestUtils.serializeAndRecover(dist);
+        EmpiricalDistribution dist2 = (EmpiricalDistribution) UnitTestUtils.serializeAndRecover(dist);
         verifySame(dist, dist2);
 
         // Loaded
         empiricalDistribution2.load(dataArray);
-        dist2 = (EmpiricalDistribution) TestUtils.serializeAndRecover(empiricalDistribution2);
+        dist2 = (EmpiricalDistribution) UnitTestUtils.serializeAndRecover(empiricalDistribution2);
         verifySame(empiricalDistribution2, dist2);
     }
 
@@ -239,8 +239,8 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         double[] expectedBinUpperBounds = {2, 4, 6, 8, 10};
         double[] expectedGeneratorUpperBounds = {4d/13d, 7d/13d, 9d/13d, 11d/13d, 1};
         double tol = 10E-12;
-        TestUtils.assertEquals(expectedBinUpperBounds, dist.getUpperBounds(), tol);
-        TestUtils.assertEquals(expectedGeneratorUpperBounds, dist.getGeneratorUpperBounds(), tol);
+        UnitTestUtils.assertEquals(expectedBinUpperBounds, dist.getUpperBounds(), tol);
+        UnitTestUtils.assertEquals(expectedGeneratorUpperBounds, dist.getGeneratorUpperBounds(), tol);
     }
 
     @Test

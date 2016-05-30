@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.polynomials;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -219,7 +219,7 @@ public final class PolynomialFunctionTest {
     @Test
     public void testSerial() {
         PolynomialFunction p2 = new PolynomialFunction(new double[] { 3, 2, 1 });
-        Assert.assertEquals(p2, TestUtils.serializeAndRecover(p2));
+        Assert.assertEquals(p2, UnitTestUtils.serializeAndRecover(p2));
     }
 
     /**

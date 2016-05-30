@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.hipparchus.RetryRunner;
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.BetaDistribution;
 import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.GammaDistribution;
@@ -137,7 +137,7 @@ public class RandomDataGeneratorTest {
             expected[i] = 1d / len;
         }
 
-        TestUtils.assertChiSquareAccept(expected, observed, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, observed, 0.001);
     }
 
     @Test
@@ -212,7 +212,7 @@ public class RandomDataGeneratorTest {
             expected[i] = 1d / len;
         }
 
-        TestUtils.assertChiSquareAccept(expected, observed, 0.01);
+        UnitTestUtils.assertChiSquareAccept(expected, observed, 0.01);
     }
 
     @Test
@@ -276,7 +276,7 @@ public class RandomDataGeneratorTest {
             expected[i] = poissonDistribution.probability(i + 1) * largeSampleSize;
         }
 
-        TestUtils.assertChiSquareAccept(expected, observed, 0.0001);
+        UnitTestUtils.assertChiSquareAccept(expected, observed, 0.0001);
     }
 
     @Test
@@ -470,7 +470,7 @@ public class RandomDataGeneratorTest {
             expected[i] = (double) smallSampleSize * 100 / 16;
             observed[i] = f.getCount(hex[i]);
         }
-        TestUtils.assertChiSquareAccept(expected, observed, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, observed, 0.001);
     }
 
     @Test
@@ -566,7 +566,7 @@ public class RandomDataGeneratorTest {
             expected[i] = 1d / binCount;
         }
 
-        TestUtils.assertChiSquareAccept(expected, observed, 0.01);
+        UnitTestUtils.assertChiSquareAccept(expected, observed, 0.01);
     }
 
     /** test exclusive endpoints of nextUniform **/
@@ -587,14 +587,14 @@ public class RandomDataGeneratorTest {
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
-        double[] quartiles = TestUtils.getDistributionQuartiles(new NormalDistribution(0,1));
+        double[] quartiles = UnitTestUtils.getDistributionQuartiles(new NormalDistribution(0,1));
         long[] counts = new long[4];
         randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextNormal(0, 1);
-            TestUtils.updateCounts(value, counts, quartiles);
+            UnitTestUtils.updateCounts(value, counts, quartiles);
         }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, counts, 0.001);
     }
 
     /** test failure modes and distribution of nextExponential() */
@@ -616,24 +616,24 @@ public class RandomDataGeneratorTest {
         long[] counts;
 
         // Mean 1
-        quartiles = TestUtils.getDistributionQuartiles(new ExponentialDistribution(1));
+        quartiles = UnitTestUtils.getDistributionQuartiles(new ExponentialDistribution(1));
         counts = new long[4];
         randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextExponential(1);
-            TestUtils.updateCounts(value, counts, quartiles);
+            UnitTestUtils.updateCounts(value, counts, quartiles);
         }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, counts, 0.001);
 
         // Mean 5
-        quartiles = TestUtils.getDistributionQuartiles(new ExponentialDistribution(5));
+        quartiles = UnitTestUtils.getDistributionQuartiles(new ExponentialDistribution(5));
         counts = new long[4];
         randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextExponential(5);
-            TestUtils.updateCounts(value, counts, quartiles);
+            UnitTestUtils.updateCounts(value, counts, quartiles);
         }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, counts, 0.001);
     }
 
     /** test reseeding, algorithm/provider games */
@@ -739,7 +739,7 @@ public class RandomDataGeneratorTest {
 
         String[] labels = {"{0, 1, 2}", "{ 0, 2, 1 }", "{ 1, 0, 2 }",
                 "{ 1, 2, 0 }", "{ 2, 0, 1 }", "{ 2, 1, 0 }"};
-        TestUtils.assertChiSquareAccept(labels, expected, observed, 0.001);
+        UnitTestUtils.assertChiSquareAccept(labels, expected, observed, 0.001);
 
         // Check size = 1 boundary case
         int[] perm = randomData.nextPermutation(1, 1);
@@ -796,14 +796,14 @@ public class RandomDataGeneratorTest {
 
     @Test
     public void testNextBeta() {
-        double[] quartiles = TestUtils.getDistributionQuartiles(new BetaDistribution(2,5));
+        double[] quartiles = UnitTestUtils.getDistributionQuartiles(new BetaDistribution(2,5));
         long[] counts = new long[4];
         randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextBeta(2, 5);
-            TestUtils.updateCounts(value, counts, quartiles);
+            UnitTestUtils.updateCounts(value, counts, quartiles);
         }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, counts, 0.001);
     }
 
     @Test
@@ -812,24 +812,24 @@ public class RandomDataGeneratorTest {
         long[] counts;
 
         // Tests shape > 1, one case in the rejection sampling
-        quartiles = TestUtils.getDistributionQuartiles(new GammaDistribution(4, 2));
+        quartiles = UnitTestUtils.getDistributionQuartiles(new GammaDistribution(4, 2));
         counts = new long[4];
         randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextGamma(4, 2);
-            TestUtils.updateCounts(value, counts, quartiles);
+            UnitTestUtils.updateCounts(value, counts, quartiles);
         }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, counts, 0.001);
 
         // Tests shape <= 1, another case in the rejection sampling
-        quartiles = TestUtils.getDistributionQuartiles(new GammaDistribution(0.3, 3));
+        quartiles = UnitTestUtils.getDistributionQuartiles(new GammaDistribution(0.3, 3));
         counts = new long[4];
         randomData.setSeed(1000);
         for (int i = 0; i < 1000; i++) {
             double value = randomData.nextGamma(0.3, 3);
-            TestUtils.updateCounts(value, counts, quartiles);
+            UnitTestUtils.updateCounts(value, counts, quartiles);
         }
-        TestUtils.assertChiSquareAccept(expected, counts, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, counts, 0.001);
     }
 
 
@@ -867,7 +867,7 @@ public class RandomDataGeneratorTest {
                 for (int s : sample) {
                     observedCounts[s-1]++;
                 }
-                TestUtils.assertChiSquareAccept(expectedCounts, observedCounts, 0.001);
+                UnitTestUtils.assertChiSquareAccept(expectedCounts, observedCounts, 0.001);
             }
         }
     }

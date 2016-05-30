@@ -18,7 +18,7 @@ package org.hipparchus.distribution.continuous;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 /**
@@ -153,10 +153,10 @@ public class TDistributionTest extends RealDistributionAbstractTest {
         double[] args10 = new double[]{1.372,1.812,2.228,2.764,3.169,4.143};
         double[] args30 = new double[]{1.310,1.697,2.042,2.457,2.750,3.385};
         double[] args100= new double[]{1.290,1.660,1.984,2.364,2.626,3.174};
-        TestUtils.assertEquals(prob, makeNistResults(args2, 2), 1.0e-4);
-        TestUtils.assertEquals(prob, makeNistResults(args10, 10), 1.0e-4);
-        TestUtils.assertEquals(prob, makeNistResults(args30, 30), 1.0e-4);
-        TestUtils.assertEquals(prob, makeNistResults(args100, 100), 1.0e-4);
+        UnitTestUtils.assertEquals(prob, makeNistResults(args2, 2), 1.0e-4);
+        UnitTestUtils.assertEquals(prob, makeNistResults(args10, 10), 1.0e-4);
+        UnitTestUtils.assertEquals(prob, makeNistResults(args30, 30), 1.0e-4);
+        UnitTestUtils.assertEquals(prob, makeNistResults(args100, 100), 1.0e-4);
         return;
     }
     private double[] makeNistResults(double[] args, int df){

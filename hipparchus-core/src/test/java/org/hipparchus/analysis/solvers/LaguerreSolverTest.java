@@ -16,7 +16,7 @@
  */
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -127,7 +127,7 @@ public final class LaguerreSolverTest {
                                                 new Complex(0.5, -0.5 * FastMath.sqrt(3.0)) }) {
             final double tolerance = FastMath.max(solver.getAbsoluteAccuracy(),
                                                   FastMath.abs(expected.abs() * solver.getRelativeAccuracy()));
-            TestUtils.assertContains(result, expected, tolerance);
+            UnitTestUtils.assertContains(result, expected, tolerance);
         }
     }
 

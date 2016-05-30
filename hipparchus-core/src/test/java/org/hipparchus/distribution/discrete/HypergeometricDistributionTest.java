@@ -19,7 +19,7 @@ package org.hipparchus.distribution.discrete;
 
 import static org.junit.Assert.assertEquals;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Precision;
@@ -235,15 +235,15 @@ public class HypergeometricDistributionTest extends IntegerDistributionAbstractT
             int x = (int)data[i][0];
             double pmf = data[i][1];
             double actualPmf = dist.probability(x);
-            TestUtils.assertRelativelyEquals("Expected equals for <"+x+"> pmf",pmf, actualPmf, 1.0e-9);
+            UnitTestUtils.assertRelativelyEquals("Expected equals for <"+x+"> pmf",pmf, actualPmf, 1.0e-9);
 
             double cdf = data[i][2];
             double actualCdf = dist.cumulativeProbability(x);
-            TestUtils.assertRelativelyEquals("Expected equals for <"+x+"> cdf",cdf, actualCdf, 1.0e-9);
+            UnitTestUtils.assertRelativelyEquals("Expected equals for <"+x+"> cdf",cdf, actualCdf, 1.0e-9);
 
             double cdf1 = data[i][3];
             double actualCdf1 = dist.upperCumulativeProbability(x);
-            TestUtils.assertRelativelyEquals("Expected equals for <"+x+"> cdf1",cdf1, actualCdf1, 1.0e-9);
+            UnitTestUtils.assertRelativelyEquals("Expected equals for <"+x+"> cdf1",cdf1, actualCdf1, 1.0e-9);
         }
     }
 

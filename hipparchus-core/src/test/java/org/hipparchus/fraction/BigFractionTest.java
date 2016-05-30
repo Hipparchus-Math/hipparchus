@@ -19,7 +19,7 @@ package org.hipparchus.fraction;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -633,7 +633,7 @@ public class BigFractionTest {
             new BigFraction(-5, 2)
         };
         for (BigFraction fraction : fractions) {
-            Assert.assertEquals(fraction, TestUtils.serializeAndRecover(fraction));
+            Assert.assertEquals(fraction, UnitTestUtils.serializeAndRecover(fraction));
         }
     }
 

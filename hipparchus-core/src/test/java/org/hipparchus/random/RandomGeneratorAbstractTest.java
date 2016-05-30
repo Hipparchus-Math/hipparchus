@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -316,7 +316,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
            }
         }
 
-        TestUtils.assertChiSquareAccept(expected, count, 0.001);
+        UnitTestUtils.assertChiSquareAccept(expected, count, 0.001);
     }
 
     // MATH-1300

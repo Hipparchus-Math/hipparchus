@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.junit.After;
@@ -118,14 +118,14 @@ public abstract class CertifiedDataAbstractTest {
 
             Double summariesValue = getProperty(summaries, name);
             if (summariesValue != null) {
-                TestUtils.assertEquals("summary value for " + name + " is incorrect.",
+                UnitTestUtils.assertEquals("summary value for " + name + " is incorrect.",
                                        summariesValue.doubleValue(), expectedValue.doubleValue(),
                                        getMaximumAbsoluteError());
             }
 
             Double descriptivesValue = getProperty(descriptives, name);
             if (descriptivesValue != null) {
-                TestUtils.assertEquals("descriptive value for " + name + " is incorrect.",
+                UnitTestUtils.assertEquals("descriptive value for " + name + " is incorrect.",
                                        descriptivesValue.doubleValue(), expectedValue.doubleValue(),
                                        getMaximumAbsoluteError());
             }

@@ -16,7 +16,7 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -110,7 +110,7 @@ public class EvaluationTest {
                 .evaluate(point);
 
         //action
-        TestUtils.assertEquals(
+        UnitTestUtils.assertEquals(
                 "covariance",
                 evaluation.getCovariances(FastMath.nextAfter(1e-4, 0.0)),
                 MatrixUtils.createRealMatrix(new double[][]{{1, 0}, {0, 1e4}}),
@@ -155,7 +155,7 @@ public class EvaluationTest {
         //verify
         Assert.assertArrayEquals(evaluation.getPoint().toArray(), point.toArray(), 0);
         Assert.assertArrayEquals(new double[]{-12, -8}, residuals.toArray(), Precision.EPSILON);
-        TestUtils.assertEquals(
+        UnitTestUtils.assertEquals(
                 "jacobian",
                 jacobian,
                 MatrixUtils.createRealMatrix(new double[][]{{20, 24},{14, 16}}),

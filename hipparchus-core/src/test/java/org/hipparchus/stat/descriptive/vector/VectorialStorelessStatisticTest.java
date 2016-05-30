@@ -20,7 +20,7 @@ package org.hipparchus.stat.descriptive.vector;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.moment.Mean;
 import org.junit.Test;
@@ -87,6 +87,6 @@ public class VectorialStorelessStatisticTest {
         for (int i = 0; i < points.length; ++i) {
             stat.increment(points[i]);
         }
-        assertEquals(stat, TestUtils.serializeAndRecover(stat));
+        assertEquals(stat, UnitTestUtils.serializeAndRecover(stat));
     }
 }

@@ -27,7 +27,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.dfp.DfpMath;
@@ -1284,7 +1284,7 @@ public class FastMathTest {
         assertEquals(1.0, FastMath.signum(2.0), delta);
         assertEquals(0.0, FastMath.signum(0.0), delta);
         assertEquals(-1.0, FastMath.signum(-2.0), delta);
-        TestUtils.assertSame(-0. / 0., FastMath.signum(Double.NaN));
+        UnitTestUtils.assertSame(-0. / 0., FastMath.signum(Double.NaN));
     }
 
     @Test
@@ -1293,7 +1293,7 @@ public class FastMathTest {
         assertEquals(1.0F, FastMath.signum(2.0F), delta);
         assertEquals(0.0F, FastMath.signum(0.0F), delta);
         assertEquals(-1.0F, FastMath.signum(-2.0F), delta);
-        TestUtils.assertSame(Float.NaN, FastMath.signum(Float.NaN));
+        UnitTestUtils.assertSame(Float.NaN, FastMath.signum(Float.NaN));
     }
 
     @Test

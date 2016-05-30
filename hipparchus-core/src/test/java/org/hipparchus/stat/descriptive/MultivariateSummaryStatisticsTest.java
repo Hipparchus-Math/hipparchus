@@ -24,7 +24,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Locale;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Test;
@@ -143,8 +143,8 @@ public class MultivariateSummaryStatisticsTest {
     public void testSerialization() {
         MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(2, true);
         // Empty test
-        TestUtils.checkSerializedEquality(u);
-        MultivariateSummaryStatistics s = (MultivariateSummaryStatistics) TestUtils.serializeAndRecover(u);
+        UnitTestUtils.checkSerializedEquality(u);
+        MultivariateSummaryStatistics s = (MultivariateSummaryStatistics) UnitTestUtils.serializeAndRecover(u);
         assertEquals(u, s);
 
         // Add some data
@@ -155,8 +155,8 @@ public class MultivariateSummaryStatisticsTest {
         u.addValue(new double[] { 5d, 1d });
 
         // Test again
-        TestUtils.checkSerializedEquality(u);
-        s = (MultivariateSummaryStatistics) TestUtils.serializeAndRecover(u);
+        UnitTestUtils.checkSerializedEquality(u);
+        s = (MultivariateSummaryStatistics) UnitTestUtils.serializeAndRecover(u);
         assertEquals(u, s);
 
     }

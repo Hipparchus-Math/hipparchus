@@ -19,7 +19,7 @@ package org.hipparchus.linear;
 import java.util.Arrays;
 import java.util.Random;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.FastMath;
@@ -1193,7 +1193,7 @@ public final class BlockRealMatrixTest {
     @Test
     public void testSerial()  {
         BlockRealMatrix m = new BlockRealMatrix(testData);
-        Assert.assertEquals(m,TestUtils.serializeAndRecover(m));
+        Assert.assertEquals(m,UnitTestUtils.serializeAndRecover(m));
     }
 
     private static class SetVisitor extends DefaultRealMatrixChangingVisitor {

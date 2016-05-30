@@ -20,7 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
 import org.hipparchus.util.FastMath;
@@ -81,17 +81,17 @@ public abstract class StorelessUnivariateStatisticAbstractTest
     public void testSerialization() {
         StorelessUnivariateStatistic statistic = getUnivariateStatistic();
 
-        TestUtils.checkSerializedEquality(statistic);
+        UnitTestUtils.checkSerializedEquality(statistic);
         statistic.clear();
 
         for (int i = 0; i < testArray.length; i++) {
             statistic.increment(testArray[i]);
             if(i % 5 == 0) {
-                statistic = (StorelessUnivariateStatistic)TestUtils.serializeAndRecover(statistic);
+                statistic = (StorelessUnivariateStatistic)UnitTestUtils.serializeAndRecover(statistic);
             }
         }
 
-        TestUtils.checkSerializedEquality(statistic);
+        UnitTestUtils.checkSerializedEquality(statistic);
         assertEquals(expectedValue(), statistic.getResult(), getTolerance());
 
         statistic.clear();
@@ -169,7 +169,7 @@ public abstract class StorelessUnivariateStatisticAbstractTest
             for (int j =0; j < smallSamples[i].length; j++) {
                 stat.increment(smallSamples[i][j]);
             }
-            TestUtils.assertEquals(stat.getResult(), stat.evaluate(smallSamples[i]), getTolerance());
+            UnitTestUtils.assertEquals(stat.getResult(), stat.evaluate(smallSamples[i]), getTolerance());
         }
     }
 
@@ -205,7 +205,7 @@ public abstract class StorelessUnivariateStatisticAbstractTest
     @Test
     public void testSerial() {
         StorelessUnivariateStatistic s = getUnivariateStatistic();
-        assertEquals(s, TestUtils.serializeAndRecover(s));
+        assertEquals(s, UnitTestUtils.serializeAndRecover(s));
     }
 
     /**

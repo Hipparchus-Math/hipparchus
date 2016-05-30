@@ -17,7 +17,7 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.threed.SphericalCoordinates;
@@ -178,7 +178,7 @@ public class SphericalCoordinatesTest {
     @Test
     public void testSerialization() {
         SphericalCoordinates a = new SphericalCoordinates(3, 2, 1);
-        SphericalCoordinates b = (SphericalCoordinates) TestUtils.serializeAndRecover(a);
+        SphericalCoordinates b = (SphericalCoordinates) UnitTestUtils.serializeAndRecover(a);
         Assert.assertEquals(0, a.getCartesian().distance(b.getCartesian()), 1.0e-10);
         Assert.assertEquals(a.getR(),     b.getR(),     1.0e-10);
         Assert.assertEquals(a.getTheta(), b.getTheta(), 1.0e-10);

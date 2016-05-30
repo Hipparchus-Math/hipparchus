@@ -22,7 +22,7 @@ import static org.junit.Assert.fail;
 
 import java.util.Locale;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
 import org.hipparchus.stat.descriptive.moment.Mean;
@@ -176,23 +176,23 @@ public class DescriptiveStatisticsTest {
             for (int j = 0; j < values.length; j++) {
                 sstats.addValue(values[j]);
             }
-            TestUtils.assertEquals(dstats.getMean(), sstats.getMean(), tol);
-            TestUtils.assertEquals(new Mean().evaluate(values), dstats.getMean(), tol);
-            TestUtils.assertEquals(dstats.getMax(), sstats.getMax(), tol);
-            TestUtils.assertEquals(new Max().evaluate(values), dstats.getMax(), tol);
-            TestUtils.assertEquals(dstats.getGeometricMean(), sstats.getGeometricMean(), tol);
-            TestUtils.assertEquals(new GeometricMean().evaluate(values), dstats.getGeometricMean(), tol);
-            TestUtils.assertEquals(dstats.getMin(), sstats.getMin(), tol);
-            TestUtils.assertEquals(new Min().evaluate(values), dstats.getMin(), tol);
-            TestUtils.assertEquals(dstats.getStandardDeviation(), sstats.getStandardDeviation(), tol);
-            TestUtils.assertEquals(dstats.getVariance(), sstats.getVariance(), tol);
-            TestUtils.assertEquals(new Variance().evaluate(values), dstats.getVariance(), tol);
-            TestUtils.assertEquals(dstats.getSum(), sstats.getSum(), tol);
-            TestUtils.assertEquals(new Sum().evaluate(values), dstats.getSum(), tol);
-            TestUtils.assertEquals(dstats.getSumOfSquares(), sstats.getSumOfSquares(), tol);
-            TestUtils.assertEquals(new SumOfSquares().evaluate(values), dstats.getSumOfSquares(), tol);
-            TestUtils.assertEquals(dstats.getPopulationVariance(), sstats.getPopulationVariance(), tol);
-            TestUtils.assertEquals(new Variance(false).evaluate(values), dstats.getPopulationVariance(), tol);
+            UnitTestUtils.assertEquals(dstats.getMean(), sstats.getMean(), tol);
+            UnitTestUtils.assertEquals(new Mean().evaluate(values), dstats.getMean(), tol);
+            UnitTestUtils.assertEquals(dstats.getMax(), sstats.getMax(), tol);
+            UnitTestUtils.assertEquals(new Max().evaluate(values), dstats.getMax(), tol);
+            UnitTestUtils.assertEquals(dstats.getGeometricMean(), sstats.getGeometricMean(), tol);
+            UnitTestUtils.assertEquals(new GeometricMean().evaluate(values), dstats.getGeometricMean(), tol);
+            UnitTestUtils.assertEquals(dstats.getMin(), sstats.getMin(), tol);
+            UnitTestUtils.assertEquals(new Min().evaluate(values), dstats.getMin(), tol);
+            UnitTestUtils.assertEquals(dstats.getStandardDeviation(), sstats.getStandardDeviation(), tol);
+            UnitTestUtils.assertEquals(dstats.getVariance(), sstats.getVariance(), tol);
+            UnitTestUtils.assertEquals(new Variance().evaluate(values), dstats.getVariance(), tol);
+            UnitTestUtils.assertEquals(dstats.getSum(), sstats.getSum(), tol);
+            UnitTestUtils.assertEquals(new Sum().evaluate(values), dstats.getSum(), tol);
+            UnitTestUtils.assertEquals(dstats.getSumOfSquares(), sstats.getSumOfSquares(), tol);
+            UnitTestUtils.assertEquals(new SumOfSquares().evaluate(values), dstats.getSumOfSquares(), tol);
+            UnitTestUtils.assertEquals(dstats.getPopulationVariance(), sstats.getPopulationVariance(), tol);
+            UnitTestUtils.assertEquals(new Variance(false).evaluate(values), dstats.getPopulationVariance(), tol);
         }
     }
 

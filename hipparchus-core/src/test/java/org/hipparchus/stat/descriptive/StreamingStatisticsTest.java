@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.random.RandomDataGenerator;
@@ -154,8 +154,8 @@ public class StreamingStatisticsTest {
     public void testSerialization() {
         StreamingStatistics u = createSummaryStatistics();
         // Empty test
-        TestUtils.checkSerializedEquality(u);
-        StreamingStatistics s = (StreamingStatistics) TestUtils.serializeAndRecover(u);
+        UnitTestUtils.checkSerializedEquality(u);
+        StreamingStatistics s = (StreamingStatistics) UnitTestUtils.serializeAndRecover(u);
         StatisticalSummary summary = s.getSummary();
         verifySummary(u, summary);
 
@@ -167,8 +167,8 @@ public class StreamingStatisticsTest {
         u.addValue(5d);
 
         // Test again
-        TestUtils.checkSerializedEquality(u);
-        s = (StreamingStatistics) TestUtils.serializeAndRecover(u);
+        UnitTestUtils.checkSerializedEquality(u);
+        s = (StreamingStatistics) UnitTestUtils.serializeAndRecover(u);
         summary = s.getSummary();
         verifySummary(u, summary);
     }
@@ -240,12 +240,12 @@ public class StreamingStatisticsTest {
 
     private void verifySummary(StreamingStatistics u, StatisticalSummary s) {
         assertEquals("N",s.getN(),u.getN());
-        TestUtils.assertEquals("sum",s.getSum(),u.getSum(),tolerance);
-        TestUtils.assertEquals("var",s.getVariance(),u.getVariance(),tolerance);
-        TestUtils.assertEquals("std",s.getStandardDeviation(),u.getStandardDeviation(),tolerance);
-        TestUtils.assertEquals("mean",s.getMean(),u.getMean(),tolerance);
-        TestUtils.assertEquals("min",s.getMin(),u.getMin(),tolerance);
-        TestUtils.assertEquals("max",s.getMax(),u.getMax(),tolerance);
+        UnitTestUtils.assertEquals("sum",s.getSum(),u.getSum(),tolerance);
+        UnitTestUtils.assertEquals("var",s.getVariance(),u.getVariance(),tolerance);
+        UnitTestUtils.assertEquals("std",s.getStandardDeviation(),u.getStandardDeviation(),tolerance);
+        UnitTestUtils.assertEquals("mean",s.getMean(),u.getMean(),tolerance);
+        UnitTestUtils.assertEquals("min",s.getMin(),u.getMin(),tolerance);
+        UnitTestUtils.assertEquals("max",s.getMax(),u.getMax(),tolerance);
     }
 
     @Test
@@ -409,13 +409,13 @@ public class StreamingStatisticsTest {
     protected static void assertSummaryStatisticsEquals(StreamingStatistics expected,
                                                         StreamingStatistics observed,
                                                         double delta) {
-        TestUtils.assertEquals(expected.getMax(), observed.getMax(), 0);
-        TestUtils.assertEquals(expected.getMin(), observed.getMin(), 0);
+        UnitTestUtils.assertEquals(expected.getMax(), observed.getMax(), 0);
+        UnitTestUtils.assertEquals(expected.getMin(), observed.getMin(), 0);
         Assert.assertEquals(expected.getN(), observed.getN());
-        TestUtils.assertEquals(expected.getSum(), observed.getSum(), delta);
-        TestUtils.assertEquals(expected.getMean(), observed.getMean(), delta);
-        TestUtils.assertEquals(expected.getStandardDeviation(), observed.getStandardDeviation(), delta);
-        TestUtils.assertEquals(expected.getVariance(), observed.getVariance(), delta);
+        UnitTestUtils.assertEquals(expected.getSum(), observed.getSum(), delta);
+        UnitTestUtils.assertEquals(expected.getMean(), observed.getMean(), delta);
+        UnitTestUtils.assertEquals(expected.getStandardDeviation(), observed.getStandardDeviation(), delta);
+        UnitTestUtils.assertEquals(expected.getVariance(), observed.getVariance(), delta);
     }
 
 

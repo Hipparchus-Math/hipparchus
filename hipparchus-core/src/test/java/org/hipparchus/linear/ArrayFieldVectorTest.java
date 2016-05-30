@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
@@ -590,7 +590,7 @@ public class ArrayFieldVectorTest {
     @Test
     public void testSerial()  {
         ArrayFieldVector<Fraction> v = new ArrayFieldVector<Fraction>(vec1);
-        Assert.assertEquals(v,TestUtils.serializeAndRecover(v));
+        Assert.assertEquals(v,UnitTestUtils.serializeAndRecover(v));
     }
 
     @Test

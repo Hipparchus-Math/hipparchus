@@ -16,7 +16,7 @@
  */
 package org.hipparchus.special;
 
-import org.hipparchus.TestUtils;
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -28,13 +28,13 @@ public class GammaTest {
     private void testRegularizedGamma(double expected, double a, double x) {
         double actualP = Gamma.regularizedGammaP(a, x);
         double actualQ = Gamma.regularizedGammaQ(a, x);
-        TestUtils.assertEquals(expected, actualP, 10e-15);
-        TestUtils.assertEquals(actualP, 1.0 - actualQ, 10e-15);
+        UnitTestUtils.assertEquals(expected, actualP, 10e-15);
+        UnitTestUtils.assertEquals(actualP, 1.0 - actualQ, 10e-15);
     }
 
     private void testLogGamma(double expected, double x) {
         double actual = Gamma.logGamma(x);
-        TestUtils.assertEquals(expected, actual, 10e-15);
+        UnitTestUtils.assertEquals(expected, actual, 10e-15);
     }
 
     @Test
