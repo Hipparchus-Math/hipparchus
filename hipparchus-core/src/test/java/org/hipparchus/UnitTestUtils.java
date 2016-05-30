@@ -23,8 +23,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 
-import org.hipparchus.FieldElement;
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexFormat;
 import org.hipparchus.distribution.RealDistribution;
@@ -32,6 +32,7 @@ import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.stat.inference.ChiSquareTest;
+import org.hipparchus.stat.inference.TestUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -460,6 +461,89 @@ public class UnitTestUtils {
             labels[i] = Integer.toString(i + 1);
         }
         assertChiSquareAccept(labels, expected, observed, alpha);
+    }
+
+    /**
+     * Asserts the null hypothesis that the sample follows the given distribution, using a G-test
+     *
+     * @param expectedDistribution distribution values are supposed to follow
+     * @param values sample data
+     * @param alpha significance level of the test
+     */
+    public static void assertGTest(final RealDistribution expectedDistribution, final double[] values, double alpha) {
+        final int numBins = values.length / 30;
+        final double[] breaks = new double[numBins];
+        for (int b = 0; b < breaks.length; b++) {
+            breaks[b] = expectedDistribution.inverseCumulativeProbability((double) b / numBins);
+        }
+
+        final long[] observed = new long[numBins];
+        for (final double value : values) {
+            int b = 0;
+            do {
+                b++;
+            } while (b < numBins && value >= breaks[b]);
+
+            observed[b - 1]++;
+        }
+
+        final double[] expected = new double[numBins];
+        Arrays.fill(expected, (double) values.length / numBins);
+
+        assertGTest(expected, observed, alpha);
+    }
+
+    /**
+     * Asserts the null hypothesis that the sample follows the given distribution,
+     * using a Kolmogorov-Smirnov test.
+     *
+     * @param expectedDistribution distribution values are supposed to follow
+     * @param values sample data
+     * @param alpha significance level of the test
+     */
+    public static void assertKolmogorovSmirnovTest(final RealDistribution expectedDistribution,
+                                                   final double[] values, double alpha) {
+        if (TestUtils.kolmogorovSmirnovTest(expectedDistribution, values, alpha)) {
+            StringBuilder msgBuffer = new StringBuilder();
+            msgBuffer.append("Kolmogorov-Smirnov test failed");
+            msgBuffer.append(" p-value = ");
+            msgBuffer.append(TestUtils.kolmogorovSmirnovTest(expectedDistribution, values));
+            msgBuffer.append(". \n");
+            msgBuffer.append("This test can fail randomly due to sampling error with probability ");
+            msgBuffer.append(alpha);
+            msgBuffer.append(".");
+            Assert.fail(msgBuffer.toString());
+        }
+    }
+
+    /**
+     * Asserts the null hypothesis that the observed counts follow the given distribution implied by expected,
+     * using a G-test
+     *
+     * @param expected expected counts
+     * @param observed observed counts
+     * @param alpha significance level of the test
+     */
+    public static void assertGTest(final double[] expected, long[] observed, double alpha) {
+        if (TestUtils.gTest(expected, observed, alpha)) {
+            StringBuilder msgBuffer = new StringBuilder();
+            DecimalFormat df = new DecimalFormat("#.##");
+            msgBuffer.append("G test failed");
+            msgBuffer.append(" p-value = ");
+            msgBuffer.append(TestUtils.gTest(expected, observed));
+            msgBuffer.append(". \n");
+            msgBuffer.append("value\texpected\tobserved\n");
+            for (int i = 0; i < expected.length; i++) {
+                msgBuffer.append(df.format(expected[i]));
+                msgBuffer.append("\t\t");
+                msgBuffer.append(observed[i]);
+                msgBuffer.append("\n");
+            }
+            msgBuffer.append("This test can fail randomly due to sampling error with probability ");
+            msgBuffer.append(alpha);
+            msgBuffer.append(".");
+            Assert.fail(msgBuffer.toString());
+        }
     }
 
     /**
