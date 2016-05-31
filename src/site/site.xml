@@ -34,6 +34,7 @@
       <topNav>Hipparchus|User Guide|Parent|Modules|Reports</topNav>
       <bottomNav>
         <column>License</column>
+        <column>GitHub</column>
         <column>Migrating from Apache Commons Math</column>
       </bottomNav>
       <bottomDescription>
@@ -83,6 +84,10 @@
 
     <menu name ="License">
       <item name="License" href="license.html"/>
+    </menu>
+
+    <menu name ="GitHub">
+      <item name="GitHub repository" href="https://github.com/Hipparchus-Math/hipparchus"/>
     </menu>
 
     <menu name ="Migrating from Apache Commons Math">

@@ -34,6 +34,7 @@
       <topNav>Hipparchus|User Guide|Modules|Reports</topNav>
       <bottomNav>
         <column>License</column>
+        <column>GitHub</column>
       </bottomNav>
       <endContent>
        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
@@ -72,6 +73,11 @@
     <menu name ="License">
       <item name="License" href="../license.html"/>
     </menu>
+
+    <menu name ="GitHub">
+      <item name="GitHub repository" href="https://github.com/Hipparchus-Math/hipparchus"/>
+    </menu>
+
   </body>
 
 </project>
