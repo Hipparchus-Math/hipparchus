@@ -557,7 +557,7 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${hipparchus.maven-javadoc-plugin.version}</version>
           <configuration>
-            <additionalparam>-Xdoclint:none -header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
+            <additionalparam>-Xdoclint:none -header &apos;&lt;script type=&quot;text/javascript&quot; src=&quot;https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML&quot;&gt;&lt;/script&gt;&apos;</additionalparam>
           </configuration>
         </plugin>
         <plugin>
