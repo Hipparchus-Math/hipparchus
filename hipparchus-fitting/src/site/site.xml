@@ -39,6 +39,12 @@
       <endContent>
        <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
      </endContent>
+     <pages>
+        <license>
+          <highlightJs>false</highlightJs>
+          <body/>
+        </license>
+     </pages>
     </reflowSkin>
   </custom>
 

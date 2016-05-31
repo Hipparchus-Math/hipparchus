@@ -47,7 +47,11 @@
         <index>
           <toc>false</toc>
         </index>
-      </pages>
+        <license>
+          <highlightJs>false</highlightJs>
+          <body/>
+        </license>
+     </pages>
     </reflowSkin>
   </custom>
 
