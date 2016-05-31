@@ -64,7 +64,7 @@
     </repository>
     <site>
       <id>publishedSite</id>
-      <url>https://hipparchus.org/static/</url>
+      <url>https://hipparchus.org/</url>
     </site>
   </distributionManagement>
 
