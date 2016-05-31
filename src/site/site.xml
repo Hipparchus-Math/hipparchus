@@ -62,6 +62,10 @@
           <highlightJs>false</highlightJs>
           <body/>
         </license>
+        <rat-report>
+          <highlightJs>false</highlightJs>
+          <body/>
+        </rat-report>
       </pages>
     </reflowSkin>
   </custom>
