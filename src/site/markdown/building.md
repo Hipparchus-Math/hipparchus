@@ -70,7 +70,7 @@ The first goal (`site`) will create separate sub-sites in all modules
 (in `target/site` folders), including the aggregator module.  All
 inter-module links in these temporary folders fail because they are
 not combined. The second goal (`site:stage`) combines all these
-sub-sites together in one consitent and fully linked site in a
+sub-sites together in one consistent and fully linked site in a
 single staging folder common to all modules. This single staging
 folder is created as `target/staging` folder in the aggregator
 project. Beware that you should _not_ run `mvn clean site site:stage`,
