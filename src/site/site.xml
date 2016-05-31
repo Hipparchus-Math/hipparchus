@@ -28,6 +28,7 @@
   <custom>
     <reflowSkin>
       <theme>bootswatch-readable</theme>
+      <localResources>true</localResources>
       <highlightJs>true</highlightJs>
       <titleTemplate>%2$s | %1$s</titleTemplate>
       <toc>top</toc>
@@ -69,8 +70,13 @@
       </pages>
     </reflowSkin>
   </custom>
-  
+
   <body>
+    <head>
+      <link rel="stylesheet" href="https://yandex.st/highlightjs/7.5/styles/default.min.css"/>
+      <script src="https://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+    </head>
+
     <menu name="Hipparchus">
       <item name="Overview"                      href="index.html"/>
       <item name="Building"                      href="building.html"/>
@@ -81,7 +87,7 @@
       <item name="Developers Guide"              href="developers.html"/>
       <item name="User Guide"                    href="user-guide.html" />
     </menu>
-    
+
     <menu name="Modules" ref="modules"/>
 
     <menu name="Reports" ref="reports"/>

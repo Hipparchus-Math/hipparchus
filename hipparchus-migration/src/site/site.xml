@@ -16,6 +16,9 @@
  limitations under the License.
 -->
 <project name="Hipparchus::Migration">
+  <publishDate position="bottom" format="yyyy-MM-dd"/>
+  <version position="bottom"/>
+
   <skin>
     <groupId>lt.velykis.maven.skins</groupId>
     <artifactId>reflow-maven-skin</artifactId>
@@ -24,6 +27,8 @@
   <custom>
     <reflowSkin>
       <theme>bootswatch-readable</theme>
+      <localResources>true</localResources>
+      <absoluteResourceURL>https://www.hipparchus.org/</absoluteResourceURL>
       <highlightJs>true</highlightJs>
       <brand>
         <name><![CDATA[<img src="../images/logo-hipparchus-blue.png" style="width:63px;height:40px;"/> ${project.name}]]></name>
@@ -53,6 +58,11 @@
   </custom>
 
   <body>
+    <head>
+      <link rel="stylesheet" href="https://yandex.st/highlightjs/7.5/styles/default.min.css"/>
+      <script src="https://yandex.st/highlightjs/7.5/highlight.min.js"></script>
+    </head>
+
     <menu name="Hipparchus">
       <item name="Overview"                      href="../index.html"/>
       <item name="Building"                      href="../building.html"/>

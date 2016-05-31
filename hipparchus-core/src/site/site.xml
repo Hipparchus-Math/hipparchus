@@ -27,6 +27,8 @@
   <custom>
     <reflowSkin>
       <theme>bootswatch-readable</theme>
+      <localResources>true</localResources>
+      <absoluteResourceURL>https://www.hipparchus.org/</absoluteResourceURL>
       <highlightJs>true</highlightJs>
       <breadcrumbs>false</breadcrumbs>
       <brand>
@@ -61,9 +63,10 @@
 
   <body>
     <head>
-      <link href="../css/site.css" rel="stylesheet"/>
+      <link rel="stylesheet" href="https://yandex.st/highlightjs/7.5/styles/default.min.css"/>
+      <script src="https://yandex.st/highlightjs/7.5/highlight.min.js"></script>
     </head>
-  
+
     <menu name="Hipparchus">
       <item name="Overview"                      href="../index.html"/>
       <item name="Building"                      href="../building.html"/>
@@ -87,7 +90,7 @@
       <item name="Statistics"                    href="stat.html" />
       <item name="Utilities"                     href="utilities.html" />
     </menu>
-    
+
     <menu name="Modules">
         <item name="Hipparchus::Core"                             href="../hipparchus-core/index.html" />
         <item name="Hipparchus::Computational Geometry"           href="../hipparchus-geometry/index.html" />
