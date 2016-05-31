@@ -42,8 +42,7 @@ import org.hipparchus.transform.LocalizedFFTFormats;
  * translation is missing.
  * </p>
  * @deprecated this class is only meant as a migration help from Apache Commons Math,
- * it is really replaced by {@link LocalizedCoreFormats},
- * {@link LocalizedFittingFormats}, {@link LocalizedGeneticsFormats},
+ * it is really replaced by {@link LocalizedCoreFormats}, {@link LocalizedGeneticsFormats},
  * {@link LocalizedGeometryFormats}, {@link LocalizedODEFormats},
  * {@link LocalizedOptimFormats} and {@link LocalizedFFTFormats}
  */

@@ -681,8 +681,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     /**
      * Generates a random string of hex characters of length {@code len}.
      * <p>
-     * The generated string will be random, but not cryptographically secure. To generate
-     * cryptographically secure strings, use {@link #nextSecureHexString(int)}.
+     * The generated string will be random, but not cryptographically secure.
      * <p>
      * <strong>Algorithm Description:</strong> hex strings are generated using a
      * 2-step process.
