@@ -25,7 +25,7 @@ or any other. We will describe only a few possibilities here.
 
 ## Maven build
 
-As Hipparchus is a multi-modules maven project, its build
+As Hipparchus is a multi-module maven project, its build
 is slightly different from a single module project. Once
 you have retrieved the complete source tree, either by
 cloning the git repository or by unpacking a source distribution,
