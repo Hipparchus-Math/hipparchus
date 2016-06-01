@@ -157,7 +157,12 @@ in the git book for explanation about how to configure these settings and more.
   * All new source file submissions _must_ include the Apache Software
     License in a comment that begins the file
   * All contributions must comply with the terms of the Hipparchus
-    [FIXME! Contributor License Agreement (CLA)](https://hipparchus.org/licenses/#clas)
+    Individual Contributor License Agreement (ICLA)
+    ([Open Document Format](https://hipparchus.org/clas/ICLA.odt),
+    ([Portable Document Format](https://hipparchus.org/clas/ICLA.pdf))
+    or Corporate Contributor License Agreement (CCLA)
+    ([Open Document Format](https://hipparchus.org/clas/CCLA.odt),
+    ([Portable Document Format](https://hipparchus.org/clas/CCLA.pdf))
   * Patches _must_ be accompanied by a clear reference to a _source_, - if code has been
     _ported_ from another language, clearly state the source of the original implementation.
     If the _expression_ of a given algorithm is derivative, please note the original source

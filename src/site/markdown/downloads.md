@@ -29,7 +29,7 @@ be easily adapted if you are using one of the numerous Git graphical
 user interface available or if Git is supported by you integrated
 development environment:
 
-    git clone https://github.com/Hipparchus-Math/hipparchus
+    git clone https://github.com/Hipparchus-Math/hipparchus.git
 
 ## Released Library versions
 
@@ -49,10 +49,10 @@ and dependencies as required.
 
 ---
 
-|     package       |                                  link                                                 |
-|-------------------|---------------------------------------------------------------------------------------|
-|  source (zip)     | [hipparchus-1.0-src.zip](https://hipparchus.org/downloads/hipparchus-1.0-src.zip)     |
-|  source (tar.bz2) | [hipparchus-1.0-src.zip](https://hipparchus.org/downloads/hipparchus-1.0-src.tar.bz2) |
-|  binary (zip)     | [hipparchus-1.0-bin.zip](https://hipparchus.org/downloads/hipparchus-1.0-bin.zip)     |
-|  binary (tar.bz2) | [hipparchus-1.0-bin.zip](https://hipparchus.org/downloads/hipparchus-1.0-bin.bz2)     |
+|     package       |                                  link                                                     |
+|-------------------|-------------------------------------------------------------------------------------------|
+|  source (zip)     | [hipparchus-1.0-src.zip](https://hipparchus.org/downloads/hipparchus-1.0-src.zip)         |
+|  source (tar.bz2) | [hipparchus-1.0-src.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.0-src.tar.bz2) |
+|  binary (zip)     | [hipparchus-1.0-bin.zip](https://hipparchus.org/downloads/hipparchus-1.0-bin.zip)         |
+|  binary (tar.bz2) | [hipparchus-1.0-bin.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.0-bin.tar.bz2) |
 version 1.0 downloads (release date: TBC)
