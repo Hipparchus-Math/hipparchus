@@ -128,25 +128,24 @@ public class BinomialProportion {
 
         double lowerBound = 0;
         double upperBound = 0;
-        final double alpha = (1.0 - confidenceLevel) / 2.0;
         final int numberOfSuccesses = (int) (numberOfTrials * probabilityOfSuccess);
 
-        final FDistribution distributionLowerBound =
-                new FDistribution(2 * (numberOfTrials - numberOfSuccesses + 1),
-                                  2 * numberOfSuccesses);
-
         if (numberOfSuccesses > 0) {
+            final double alpha = (1.0 - confidenceLevel) / 2.0;
+
+            final FDistribution distributionLowerBound =
+                    new FDistribution(2 * (numberOfTrials - numberOfSuccesses + 1),
+                                      2 * numberOfSuccesses);
+
             final double fValueLowerBound =
                     distributionLowerBound.inverseCumulativeProbability(1 - alpha);
             lowerBound = numberOfSuccesses /
                          (numberOfSuccesses + (numberOfTrials - numberOfSuccesses + 1) * fValueLowerBound);
-        }
 
-        final FDistribution distributionUpperBound =
-                new FDistribution(2 * (numberOfSuccesses + 1),
-                                  2 * (numberOfTrials - numberOfSuccesses));
+            final FDistribution distributionUpperBound =
+                    new FDistribution(2 * (numberOfSuccesses + 1),
+                                      2 * (numberOfTrials - numberOfSuccesses));
 
-        if (numberOfSuccesses > 0) {
             final double fValueUpperBound =
                     distributionUpperBound.inverseCumulativeProbability(1 - alpha);
             upperBound = (numberOfSuccesses + 1) * fValueUpperBound /
