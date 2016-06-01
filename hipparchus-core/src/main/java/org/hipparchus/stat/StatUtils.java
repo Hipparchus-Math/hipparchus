@@ -88,7 +88,7 @@ public final class StatUtils {
      * @return the sum of the values or <code>Double.NaN</code> if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double sum(final double[] values) throws MathIllegalArgumentException {
+    public static double sum(final double... values) throws MathIllegalArgumentException {
         return SUM.evaluate(values);
     }
 
@@ -120,7 +120,7 @@ public final class StatUtils {
      * @return the sum of the squared values or <code>Double.NaN</code> if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double sumSq(final double[] values) throws MathIllegalArgumentException {
+    public static double sumSq(final double... values) throws MathIllegalArgumentException {
         return SUM_OF_SQUARES.evaluate(values);
     }
 
@@ -153,7 +153,7 @@ public final class StatUtils {
      * @return the product of the values or Double.NaN if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double product(final double[] values) throws MathIllegalArgumentException {
+    public static double product(final double... values) throws MathIllegalArgumentException {
         return PRODUCT.evaluate(values);
     }
 
@@ -188,7 +188,7 @@ public final class StatUtils {
      * @return the sum of the natural logs of the values or Double.NaN if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double sumLog(final double[] values) throws MathIllegalArgumentException {
+    public static double sumLog(final double... values) throws MathIllegalArgumentException {
         return SUM_OF_LOGS.evaluate(values);
     }
 
@@ -226,7 +226,7 @@ public final class StatUtils {
      * @return the mean of the values or Double.NaN if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double mean(final double[] values) throws MathIllegalArgumentException {
+    public static double mean(final double... values) throws MathIllegalArgumentException {
         return MEAN.evaluate(values);
     }
 
@@ -265,7 +265,7 @@ public final class StatUtils {
      * @return the geometric mean of the values or Double.NaN if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double geometricMean(final double[] values) throws MathIllegalArgumentException {
+    public static double geometricMean(final double... values) throws MathIllegalArgumentException {
         return GEOMETRIC_MEAN.evaluate(values);
     }
 
@@ -310,7 +310,7 @@ public final class StatUtils {
      * @return the variance of the values or Double.NaN if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double variance(final double[] values) throws MathIllegalArgumentException {
+    public static double variance(final double... values) throws MathIllegalArgumentException {
         return VARIANCE.evaluate(values);
     }
 
@@ -424,7 +424,7 @@ public final class StatUtils {
      * @return the population variance of the values or Double.NaN if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double populationVariance(final double[] values) throws MathIllegalArgumentException {
+    public static double populationVariance(final double... values) throws MathIllegalArgumentException {
         return new Variance(false).evaluate(values);
     }
 
@@ -530,7 +530,7 @@ public final class StatUtils {
      * @return the maximum of the values or Double.NaN if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double max(final double[] values) throws MathIllegalArgumentException {
+    public static double max(final double... values) throws MathIllegalArgumentException {
         return MAX.evaluate(values);
     }
 
@@ -577,7 +577,7 @@ public final class StatUtils {
      * @return the minimum of the values or Double.NaN if the array is empty
      * @throws MathIllegalArgumentException if the array is null
      */
-    public static double min(final double[] values) throws MathIllegalArgumentException {
+    public static double min(final double... values) throws MathIllegalArgumentException {
         return MIN.evaluate(values);
     }
 
@@ -742,7 +742,7 @@ public final class StatUtils {
      * @param sample Sample to normalize.
      * @return normalized (standardized) sample.
      */
-    public static double[] normalize(final double[] sample) {
+    public static double[] normalize(final double... sample) {
         DescriptiveStatistics stats = new DescriptiveStatistics();
 
         // Add the data from the series to stats
@@ -784,7 +784,7 @@ public final class StatUtils {
      * @return array of array of the most frequently occurring element(s) sorted in ascending order.
      * @throws MathIllegalArgumentException if the indices are invalid or the array is null
      */
-    public static double[] mode(double[] sample) throws MathIllegalArgumentException {
+    public static double[] mode(double... sample) throws MathIllegalArgumentException {
         MathUtils.checkNotNull(sample, LocalizedCoreFormats.INPUT_ARRAY);
         return getMode(sample, 0, sample.length);
     }
