@@ -28,6 +28,7 @@ in the package.
 Hipparchus is made up of a small set of math/stat utilities addressing
 programming problems like the ones in the list below.  This list is not exhaustive,
 it's just meant to give a feel for the kinds of things that Hipparchus provides.
+
 * Computing means, variances and other summary statistics for a list of numbers
 * Fitting a line to a set of data points using linear regression
 * Fitting a curve to a set of data points
@@ -53,6 +54,7 @@ All feedback/suggestions for improvement should be sent to the
 
 ## How Hipparchus is organized
 Hipparchus is divided into sixteen subpackages, based on functionality provided.
+
 * Computing means, variances and other summary statistics for a list of numbers
 * Fitting a line to a set of data points using linear regression
 * Fitting a curve to a set of data points
