@@ -33,26 +33,5 @@ development environment:
 
 ## Released Library versions
 
-Hipparchus is provided in several packaging systems. You can pick 
-the one that better suits your needs. Source packages are the most complete
-ones since the other packages (binary jars, javadoc jars and even the bulk
-of this site) are created from these sources.
+Hipparchus has not yet published any releases.
 
-Hipparchus is also available in maven central repository,
-with groupID org.hipparchus and artifactId hipparchus-core,
-hipparchus-clustering, hipparchus-fft, hipparchus-fitting,
-hipparchus-genetics, hipparchus-geometry, hipparchus-ode,
-and hipparchus-optim. There is also an hipparchus-migration
-artifact to help migrating from Apache Commons Math.
-Maven internal mechanism will download automatically all artifacts
-and dependencies as required.
-
----
-
-|     package       |                                  link                                                     |
-|-------------------|-------------------------------------------------------------------------------------------|
-|  source (zip)     | [hipparchus-1.0-src.zip](https://hipparchus.org/downloads/hipparchus-1.0-src.zip)         |
-|  source (tar.bz2) | [hipparchus-1.0-src.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.0-src.tar.bz2) |
-|  binary (zip)     | [hipparchus-1.0-bin.zip](https://hipparchus.org/downloads/hipparchus-1.0-bin.zip)         |
-|  binary (tar.bz2) | [hipparchus-1.0-bin.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.0-bin.tar.bz2) |
-version 1.0 downloads (release date: TBC)
