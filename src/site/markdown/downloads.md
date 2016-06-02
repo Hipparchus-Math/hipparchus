@@ -33,7 +33,7 @@ development environment:
 
 ## Released Library versions
 
-Hipparchus is provided both in several packaging systems. You can pick up
+Hipparchus is provided in several packaging systems. You can pick 
 the one that better suits your needs. Source packages are the most complete
 ones since the other packages (binary jars, javadoc jars and even the bulk
 of this site) are created from these sources.
