@@ -16,17 +16,17 @@
 -->
 # Hipparchus Mailing Lists
 
-Hipparchus has two discussion mailing lists, one announces list
-and one admin list:
+Hipparchus has two discussion mailing lists and one announce list
+to which anybody can subscribe:
 
   * users@hipparchus.org
   * developers@hipparchus.org
-  * announces@hipparchus.org
+  * announce@hipparchus.org
 
 Questions related to the usage of Hipparchus should be posted to the
 users list. The developers list is for questions and discussion related
 to the development of Hipparchus. Please do not cross-post; developers
-are also subscribed to the users list. The announces list is read-only
+are also subscribed to the users list. The announce list is read-only
 and devoted to announce important news (like new releases).
 
 The archives of the lists are available at [https://lists.hipparchus.org/](https://lists.hipparchus.org/).
