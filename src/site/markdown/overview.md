@@ -95,7 +95,7 @@ for floating point arithmetic and with java.lang.Math, Hipparchus
 methods return `Double.NaN` values. Conditions under which `Double.NaN`
 or other special values are returned are fully specified in the javadoc method comments.
 
-As of version 2.2, the policy for dealing with null references is as
+The policy for dealing with null references is as
 follows: When an argument is unexpectedly null, a
 [NullArgumentException](apidocs/org/hipparchus/exception/NullArgumentException.html)
 is raised to signal the illegal argument. Note that this
