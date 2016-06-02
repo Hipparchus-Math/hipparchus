@@ -28,7 +28,7 @@ import org.hipparchus.stat.descriptive.StatisticalSummary;
  * A collection of static methods to create inference test instances or to
  * perform inference tests.
  */
-public class TestUtils  {
+public class InferenceTestUtils  {
 
     /** Singleton TTest instance. */
     private static final TTest T_TEST = new TTest();
@@ -48,7 +48,7 @@ public class TestUtils  {
     /**
      * Prevent instantiation.
      */
-    private TestUtils() {
+    private InferenceTestUtils() {
         super();
     }
 

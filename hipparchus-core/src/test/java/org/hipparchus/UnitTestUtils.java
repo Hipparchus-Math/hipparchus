@@ -32,7 +32,7 @@ import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.stat.inference.ChiSquareTest;
-import org.hipparchus.stat.inference.TestUtils;
+import org.hipparchus.stat.inference.InferenceTestUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -503,11 +503,11 @@ public class UnitTestUtils {
      */
     public static void assertKolmogorovSmirnovTest(final RealDistribution expectedDistribution,
                                                    final double[] values, double alpha) {
-        if (TestUtils.kolmogorovSmirnovTest(expectedDistribution, values, alpha)) {
+        if (InferenceTestUtils.kolmogorovSmirnovTest(expectedDistribution, values, alpha)) {
             StringBuilder msgBuffer = new StringBuilder();
             msgBuffer.append("Kolmogorov-Smirnov test failed");
             msgBuffer.append(" p-value = ");
-            msgBuffer.append(TestUtils.kolmogorovSmirnovTest(expectedDistribution, values));
+            msgBuffer.append(InferenceTestUtils.kolmogorovSmirnovTest(expectedDistribution, values));
             msgBuffer.append(". \n");
             msgBuffer.append("This test can fail randomly due to sampling error with probability ");
             msgBuffer.append(alpha);
@@ -525,12 +525,12 @@ public class UnitTestUtils {
      * @param alpha significance level of the test
      */
     public static void assertGTest(final double[] expected, long[] observed, double alpha) {
-        if (TestUtils.gTest(expected, observed, alpha)) {
+        if (InferenceTestUtils.gTest(expected, observed, alpha)) {
             StringBuilder msgBuffer = new StringBuilder();
             DecimalFormat df = new DecimalFormat("#.##");
             msgBuffer.append("G test failed");
             msgBuffer.append(" p-value = ");
-            msgBuffer.append(TestUtils.gTest(expected, observed));
+            msgBuffer.append(InferenceTestUtils.gTest(expected, observed));
             msgBuffer.append(". \n");
             msgBuffer.append("value\texpected\tobserved\n");
             for (int i = 0; i < expected.length; i++) {
