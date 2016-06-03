@@ -725,7 +725,7 @@ ${fromprefix}.stat.inference.GTest                                              
 ${fromprefix}.stat.inference.KolmogorovSmirnovTest                                   ${toprefix}.stat.inference.KolmogorovSmirnovTest
 ${fromprefix}.stat.inference.MannWhitneyUTest                                        ${toprefix}.stat.inference.MannWhitneyUTest
 ${fromprefix}.stat.inference.OneWayAnova                                             ${toprefix}.stat.inference.OneWayAnova
-${fromprefix}.stat.inference.TestUtils                                               ${toprefix}.stat.inference.TestUtils
+${fromprefix}.stat.inference.TestUtils                                               ${toprefix}.stat.inference.InferenceTestUtils
 ${fromprefix}.stat.inference.TTest                                                   ${toprefix}.stat.inference.TTest
 ${fromprefix}.stat.inference.WilcoxonSignedRankTest                                  ${toprefix}.stat.inference.WilcoxonSignedRankTest
 ${fromprefix}.stat.interval.BinomialConfidenceInterval                               ${toprefix}.stat.interval.BinomialProportion
