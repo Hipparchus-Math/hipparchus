@@ -14,8 +14,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus;
+package org.hipparchus.util;
 
+import org.hipparchus.PerfTestUtils;
+import org.hipparchus.PerfTestUtils.RunTest;
 import org.hipparchus.util.FastMath;
 
 /**

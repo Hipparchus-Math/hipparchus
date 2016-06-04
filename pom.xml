@@ -53,7 +53,6 @@
     <module>hipparchus-ode</module>
     <module>hipparchus-optim</module>
     <module>hipparchus-fitting</module>
-    <module>hipparchus-perf</module>
     <module>hipparchus-samples</module>
     <module>hipparchus-fft</module>
     <module>hipparchus-clustering</module>
