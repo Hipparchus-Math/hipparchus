@@ -54,6 +54,10 @@ If the output is not quite correct, check for invisible trailing spaces!
         Moved sampling (random deviate generation) from distribution implementations 
         to RandomDataGenerator in the random package.
       </action>
+      <action dev="psteitz" type="update">
+        Renamed TestUtils in core stat.inference to InferenceTestUtils and TestUtils in
+        the core unit test package to UnitTestUtils.
+      </action>
       <action dev="tn" type="update">
         Refactored descriptive statistics package to simplify API and implementations and use
         more meaningful class names.
