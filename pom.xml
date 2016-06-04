@@ -50,13 +50,12 @@
     <module>hipparchus-parent</module>
     <module>hipparchus-core</module>
     <module>hipparchus-geometry</module>
-    <module>hipparchus-genetics</module>
     <module>hipparchus-ode</module>
     <module>hipparchus-optim</module>
     <module>hipparchus-fitting</module>
     <module>hipparchus-perf</module>
     <module>hipparchus-samples</module>
-    <module>hipparchus-fft</module> <!-- marked for deletion -->
+    <module>hipparchus-fft</module>
     <module>hipparchus-clustering</module>
     <module>hipparchus-migration</module>
   </modules>
