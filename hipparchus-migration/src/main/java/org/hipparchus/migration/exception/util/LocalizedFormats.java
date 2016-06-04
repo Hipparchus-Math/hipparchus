@@ -21,7 +21,6 @@ import java.util.Locale;
 import org.hipparchus.clustering.LocalizedClusteringFormats;
 import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.genetics.LocalizedGeneticsFormats;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.migration.LocalizedMigrationFormats;
 import org.hipparchus.ode.LocalizedODEFormats;
@@ -93,10 +92,8 @@ public enum LocalizedFormats implements Localizable {
     CONTRACTION_CRITERIA_SMALLER_THAN_ONE(LocalizedCoreFormats.CONTRACTION_CRITERIA_SMALLER_THAN_ONE),
     CONVERGENCE_FAILED(LocalizedCoreFormats.CONVERGENCE_FAILED),
     CROSSING_BOUNDARY_LOOPS(LocalizedGeometryFormats.CROSSING_BOUNDARY_LOOPS),
-    CROSSOVER_RATE(LocalizedGeneticsFormats.CROSSOVER_RATE),
     CUMULATIVE_PROBABILITY_RETURNED_NAN(LocalizedCoreFormats.CUMULATIVE_PROBABILITY_RETURNED_NAN),
     DIFFERENT_ROWS_LENGTHS(LocalizedCoreFormats.DIFFERENT_ROWS_LENGTHS),
-    DIFFERENT_ORIG_AND_PERMUTED_DATA(LocalizedGeneticsFormats.DIFFERENT_ORIG_AND_PERMUTED_DATA),
     DIGEST_NOT_INITIALIZED(LocalizedCoreFormats.DIGEST_NOT_INITIALIZED),
     DIMENSIONS_MISMATCH_2x2(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2),
     DIMENSIONS_MISMATCH_SIMPLE(LocalizedMigrationFormats.DIMENSIONS_MISMATCH_SIMPLE),
@@ -105,7 +102,6 @@ public enum LocalizedFormats implements Localizable {
     DISTRIBUTION_NOT_LOADED(LocalizedCoreFormats.DISTRIBUTION_NOT_LOADED),
     DUPLICATED_ABSCISSA_DIVISION_BY_ZERO(LocalizedCoreFormats.DUPLICATED_ABSCISSA_DIVISION_BY_ZERO),
     EDGE_CONNECTED_TO_ONE_FACET(LocalizedGeometryFormats.EDGE_CONNECTED_TO_ONE_FACET),
-    ELITISM_RATE(LocalizedGeneticsFormats.ELITISM_RATE),
     EMPTY_CLUSTER_IN_K_MEANS(LocalizedClusteringFormats.EMPTY_CLUSTER_IN_K_MEANS),
     EMPTY_INTERPOLATION_SAMPLE(LocalizedCoreFormats.EMPTY_INTERPOLATION_SAMPLE),
     EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY),
@@ -152,10 +148,7 @@ public enum LocalizedFormats implements Localizable {
     INSUFFICIENT_ROWS_AND_COLUMNS(LocalizedCoreFormats.INSUFFICIENT_ROWS_AND_COLUMNS),
     INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS(LocalizedODEFormats.INTEGRATION_METHOD_NEEDS_AT_LEAST_TWO_PREVIOUS_POINTS),
     INTERNAL_ERROR(LocalizedCoreFormats.INTERNAL_ERROR),
-    INVALID_BINARY_DIGIT(LocalizedGeneticsFormats.INVALID_BINARY_DIGIT),
-    INVALID_BINARY_CHROMOSOME(LocalizedGeneticsFormats.INVALID_BINARY_CHROMOSOME),
     INVALID_BRACKETING_PARAMETERS(org.hipparchus.migration.LocalizedMigrationFormats.INVALID_BRACKETING_PARAMETERS),
-    INVALID_FIXED_LENGTH_CHROMOSOME(LocalizedGeneticsFormats.INVALID_FIXED_LENGTH_CHROMOSOME),
     INVALID_IMPLEMENTATION(LocalizedOptimFormats.INVALID_IMPLEMENTATION),
     INVALID_INTERVAL_INITIAL_VALUE_PARAMETERS(org.hipparchus.migration.LocalizedMigrationFormats.INVALID_INTERVAL_INITIAL_VALUE_PARAMETERS),
     INVALID_ITERATIONS_LIMITS(org.hipparchus.migration.LocalizedMigrationFormats.INVALID_ITERATIONS_LIMITS),
@@ -168,7 +161,6 @@ public enum LocalizedFormats implements Localizable {
     ITERATIONS(LocalizedCoreFormats.ITERATIONS),
     LCM_OVERFLOW_32_BITS(LocalizedCoreFormats.LCM_OVERFLOW_32_BITS),
     LCM_OVERFLOW_64_BITS(LocalizedCoreFormats.LCM_OVERFLOW_64_BITS),
-    LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE(LocalizedGeneticsFormats.LIST_OF_CHROMOSOMES_BIGGER_THAN_POPULATION_SIZE),
     LOESS_EXPECTS_AT_LEAST_ONE_POINT(org.hipparchus.migration.LocalizedMigrationFormats.LOESS_EXPECTS_AT_LEAST_ONE_POINT),
     LOWER_BOUND_NOT_BELOW_UPPER_BOUND(LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND),
     LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT(LocalizedCoreFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT),
@@ -179,7 +171,6 @@ public enum LocalizedFormats implements Localizable {
     MAX_ITERATIONS_EXCEEDED(org.hipparchus.migration.LocalizedMigrationFormats.MAX_ITERATIONS_EXCEEDED),
     MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION(LocalizedODEFormats.MINIMAL_STEPSIZE_REACHED_DURING_INTEGRATION),
     MISMATCHED_LOESS_ABSCISSA_ORDINATE_ARRAYS(org.hipparchus.migration.LocalizedMigrationFormats.MISMATCHED_LOESS_ABSCISSA_ORDINATE_ARRAYS),
-    MUTATION_RATE(LocalizedGeneticsFormats.MUTATION_RATE),
     NAN_ELEMENT_AT_INDEX(LocalizedCoreFormats.NAN_ELEMENT_AT_INDEX),
     NAN_VALUE_CONVERSION(LocalizedCoreFormats.NAN_VALUE_CONVERSION),
     NEGATIVE_BRIGHTNESS_EXPONENT(org.hipparchus.migration.LocalizedMigrationFormats.NEGATIVE_BRIGHTNESS_EXPONENT),
@@ -317,10 +308,8 @@ public enum LocalizedFormats implements Localizable {
     PERMUTATION_EXCEEDS_N(LocalizedCoreFormats.PERMUTATION_EXCEEDS_N),
     POLYNOMIAL(LocalizedCoreFormats.POLYNOMIAL),
     POLYNOMIAL_INTERPOLANTS_MISMATCH_SEGMENTS(org.hipparchus.migration.LocalizedMigrationFormats.POLYNOMIAL_INTERPOLANTS_MISMATCH_SEGMENTS),
-    POPULATION_LIMIT_NOT_POSITIVE(LocalizedGeneticsFormats.POPULATION_LIMIT_NOT_POSITIVE),
     POWER_NEGATIVE_PARAMETERS(org.hipparchus.migration.LocalizedMigrationFormats.POWER_NEGATIVE_PARAMETERS),
     PROPAGATION_DIRECTION_MISMATCH(LocalizedODEFormats.PROPAGATION_DIRECTION_MISMATCH),
-    RANDOMKEY_MUTATION_WRONG_CLASS(LocalizedGeneticsFormats.RANDOMKEY_MUTATION_WRONG_CLASS),
     ROOTS_OF_UNITY_NOT_COMPUTED_YET(LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET),
     ROTATION_MATRIX_DIMENSIONS(LocalizedGeometryFormats.ROTATION_MATRIX_DIMENSIONS),
     ROW_INDEX_OUT_OF_RANGE(org.hipparchus.migration.LocalizedMigrationFormats.ROW_INDEX_OUT_OF_RANGE),
@@ -335,7 +324,6 @@ public enum LocalizedFormats implements Localizable {
     SINGULAR_OPERATOR(LocalizedCoreFormats.SINGULAR_OPERATOR),
     SUBARRAY_ENDS_AFTER_ARRAY_END(LocalizedCoreFormats.SUBARRAY_ENDS_AFTER_ARRAY_END),
     TOO_LARGE_CUTOFF_SINGULAR_VALUE(LocalizedCoreFormats.TOO_LARGE_CUTOFF_SINGULAR_VALUE),
-    TOO_LARGE_TOURNAMENT_ARITY(LocalizedGeneticsFormats.TOO_LARGE_TOURNAMENT_ARITY),
     TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY(LocalizedCoreFormats.TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY),
     TOO_MANY_REGRESSORS(LocalizedCoreFormats.TOO_MANY_REGRESSORS),
     TOO_SMALL_COST_RELATIVE_TOLERANCE(LocalizedOptimFormats.TOO_SMALL_COST_RELATIVE_TOLERANCE),

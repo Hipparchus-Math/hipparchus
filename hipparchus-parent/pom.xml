@@ -386,11 +386,6 @@
       </dependency>
       <dependency>
         <groupId>org.hipparchus</groupId>
-        <artifactId>hipparchus-genetics</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.hipparchus</groupId>
         <artifactId>hipparchus-ode</artifactId>
         <version>${project.version}</version>
       </dependency>
