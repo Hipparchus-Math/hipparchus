@@ -50,6 +50,14 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
+      <action dev="psteitz" type="update">
+        Moved sampling (random deviate generation) from distribution implementations 
+        to RandomDataGenerator in the random package.
+      </action>
+      <action dev="tn" type="update">
+        Refactored descriptive statistics package to simplify API and implementations and use
+        more meaningful class names.
+      </action>
       <action dev="luc" type="update">
         Revamped Ordinary Differential Equations API to match
         the new API introduced with field-based ODE.
