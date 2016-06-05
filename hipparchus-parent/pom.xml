@@ -476,11 +476,6 @@
     <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
     <hipparchus.reflow-velocity-tools.version>1.1.1</hipparchus.reflow-velocity-tools.version>
     <hipparchus.velocity.version>1.7</hipparchus.velocity.version>
-
-    <!-- old Apache staging properties - to be removed -->
-    <hipparchus.staging.id>hipparchus-staging</hipparchus.staging.id>
-    <hipparchus.staging.url>scp://www.hipparchus.org/</hipparchus.staging.url>
-    <hipparchus.staging.directory>/home/hipparchus/staging/</hipparchus.staging.directory>
   </properties>
 
   <build>
@@ -854,13 +849,7 @@
           <reportSet>
             <reports>
               <report>pmd</report>
-              <!-- As of 3.x series, the cpd report sees (correctly) numerous
-                duplications -->
-              <!-- This is due to packages being renamed, and the old name
-                still needs to be -->
-              <!-- available for compatibility. They will be removed in 4.0 -->
-              <!-- So we temporarily disable the CPD report -->
-              <!-- <report>cpd</report> -->
+              <report>cpd</report>
             </reports>
           </reportSet>
         </reportSets>
