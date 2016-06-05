@@ -97,7 +97,6 @@
 * [Discrete Events Handling](hipparchus-ode/index.html#Discrete_Events_Handling)
 * [Available Integrators](hipparchus-ode/index.html#Available_Integrators)
 * [Derivatives](hipparchus-ode/index.html#Derivatives)
-* [Genetics algorithms](hipparchus-genetics/index.html#Overview)
 * [GA Framework](hipparchus-genetics/index.html#GA_Framework)
 * [Implementation and Examples](hipparchus-genetics/index.html#Implementation)
 * [Clustering](hipparchus-clustering/index.html#overview)
