@@ -25,7 +25,7 @@ Hipparchus is a library of lightweight, self-contained
 Hipparchus is a large library, so it has been split into several
 modules. Users can select only the modules they need
 and developers can update modules more easily and more
-often than what would be possible in a large monolithic library.
+often than would be possible in a large monolithic library.
 
 ---
 

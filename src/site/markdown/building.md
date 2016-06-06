@@ -100,12 +100,12 @@ module, so only the top level part of the site would be accessible.
 If you want to build Hipparchus using the Eclipse IDE, the
 simplest way is to rely on the `m2e` plugin (which is
 automatically included in recent Eclipse IDE for Java
-developers) as this plugin automatically integrate
+developers) as this plugin automatically integrates
 maven projects and supports multi-module projects.
 
 Just as in the maven build, you should first retrieve the Hipparchus
 source tree (Eclipse is also able to retrieve this tree directly from
-git if you want). Once the source tree is available, you should select
+git if you want). Once the source tree is available, you should select the
 `Import...` entry in the context menu in the Package Explorer tab in
 the left hand side view in the Java perspective, and select `Maven ->
 Existing Maven Projects` in the wizard. Then in the `Import Maven
@@ -113,7 +113,7 @@ Project` wizard, when selecting the root folder, browse to the top
 level hipparchus folder. This folder contains the aggregator project
 that references all the modules, so Eclipse will be aware of them and
 will be able to configure everything properly, including the
-inter-module dependencies. Once the `hipparchus-aggregator` project as
+inter-module dependencies. Once the `hipparchus-aggregator` project has
 been selected, the wizard should show all the projects at
 once. Pressing the `Finish` button will configure and compile
 everything.

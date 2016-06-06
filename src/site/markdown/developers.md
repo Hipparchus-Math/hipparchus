@@ -85,10 +85,10 @@ Thanks in advance!
 
 ## Coding Style
 
-Hipparchus follows specific coding style, similar to the ones used
+Hipparchus follows a specific coding style, similar to the ones used
 in Apache Commons projects or the Orekit project. The reference
-settings corresponds to the `src/conf/checkstyle.xml` file found in the
-Hipparchus source tree. There is also an `src/conf/hipparchus-eclipse.xml`
+settings correspond to the `src/conf/checkstyle.xml` file found in the
+Hipparchus source tree. There is also a `src/conf/hipparchus-eclipse.xml`
 file that configures the eclipse formater in a mostly compatible way
 (there are some parts that cannot be configured automatically in
 Eclipse to match checkstyle settings, mainly in the indentation parts).
@@ -116,7 +116,7 @@ in the git book for explanation about how to configure these settings and more.
     of values, exceptions or special return values.
   * External references or full statements of definitions for all mathematical
     terms used in component documentation _must_ be provided.
-  * Hipparchus javadoc generation now supports embedded LaTeX formulas via the
+  * Hipparchus javadoc generation supports embedded LaTeX formulas via the
     [MathJax](http://www.mathjax.org) javascript display engine. To
     embed mathematical expressions formatted in LaTeX in javadoc, simply surround
     the expression to be formatted with either `\\(` and  `\\)` for inline
@@ -189,7 +189,7 @@ interface will link to a definition contained in these documents.
 
 ### Numerical analysis
 
-  * [Scientific Computing FAQ @ Mathcom](http://www.mathcom.com/corpdir/techinfo.mdir/scifaq/index.html
+  * [Scientific Computing FAQ @ Mathcom](http://www.mathcom.com/corpdir/techinfo.mdir/scifaq/index.html)
   * [Bibliography of accuracy and stability of numerical algorithms](http://www.ma.man.ac.uk/~higham/asna/asna2.pdf)
   * [SUNY Stony Brook numerical methods page](http://tonic.physics.sunysb.edu/docs/num_meth.html)
   * [SIAM Journal of Numerical Analysis Online](http://epubs.siam.org/sam-bin/dbq/toclist/SINUM)
