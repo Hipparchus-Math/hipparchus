@@ -58,12 +58,10 @@ public abstract class AbstractRealMatrix
         final int columnDimension)
         throws MathIllegalArgumentException {
         if (rowDimension < 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
-                                                   rowDimension, 1);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_ROW);
         }
         if (columnDimension < 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
-                                                   columnDimension, 1);
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.AT_LEAST_ONE_COLUMN);
         }
     }
 
