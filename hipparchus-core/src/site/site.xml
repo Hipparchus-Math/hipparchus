@@ -93,6 +93,7 @@
 
     <menu name="Modules">
         <item name="Hipparchus::Core"                             href="../hipparchus-core/index.html" />
+        <item name="Hipparchus::Statistics"                       href="../hipparchus-stat/index.html" />
         <item name="Hipparchus::Computational Geometry"           href="../hipparchus-geometry/index.html" />
         <item name="Hipparchus::Ordinary Differential Equations"  href="../hipparchus-ode/index.html" />
         <item name="Hipparchus::Optimization"                     href="../hipparchus-optim/index.html" />

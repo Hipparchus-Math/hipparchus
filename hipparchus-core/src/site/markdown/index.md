@@ -30,6 +30,5 @@ The core features provided by this module are:
   * [Linear algebra](linear.html)
   * [Pseudo-random numbers generators](random.html)
   * [Special functions](special.html)
-  * [Statistics](stat.html)
   * [Utilities](utilities.html)
 

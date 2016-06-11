@@ -15,7 +15,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project name="Hipparchus::Clustering">
+<project name="Hipparchus::Statistics">
   <publishDate position="bottom" format="yyyy-MM-dd"/>
   <version position="bottom"/>
 
@@ -48,7 +48,7 @@
         <license>
           <highlightJs>false</highlightJs>
           <body/>
-          </license>
+        </license>
         <rat-report>
           <highlightJs>false</highlightJs>
           <body/>
