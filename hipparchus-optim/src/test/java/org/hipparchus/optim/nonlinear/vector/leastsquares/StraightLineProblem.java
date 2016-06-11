@@ -19,10 +19,11 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
 import java.util.ArrayList;
 
+import org.hipparchus.UnitTestUtils;
+import org.hipparchus.UnitTestUtils.SimpleRegression;
 import org.hipparchus.analysis.MultivariateMatrixFunction;
 import org.hipparchus.analysis.MultivariateVectorFunction;
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.stat.regression.SimpleRegression;
 
 /**
  * Class that models a straight line defined as {@code y = a x + b}.
@@ -123,7 +124,7 @@ class StraightLineProblem {
      * class.
      */
     public double[] solve() {
-        final SimpleRegression regress = new SimpleRegression(true);
+        final UnitTestUtils.SimpleRegression regress = new UnitTestUtils.SimpleRegression();
         for (double[] d : points) {
             regress.addData(d[0], d[1]);
         }

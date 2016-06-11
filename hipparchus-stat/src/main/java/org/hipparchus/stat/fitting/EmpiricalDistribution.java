@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.hipparchus.random;
+package org.hipparchus.stat.fitting;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -37,6 +37,8 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.RandomDataGenerator;
+import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;

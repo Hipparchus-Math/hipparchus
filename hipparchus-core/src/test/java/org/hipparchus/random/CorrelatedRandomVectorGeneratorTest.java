@@ -23,10 +23,6 @@ import org.hipparchus.UnitTestUtils;
 import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.stat.correlation.StorelessCovariance;
-import org.hipparchus.stat.descriptive.moment.Mean;
-import org.hipparchus.stat.descriptive.vector.VectorialCovariance;
-import org.hipparchus.stat.descriptive.vector.VectorialStorelessStatistic;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -118,19 +114,20 @@ public class CorrelatedRandomVectorGeneratorTest {
     @Test
     public void testMeanAndCovariance() {
 
-        VectorialStorelessStatistic meanStat =
-                new VectorialStorelessStatistic(mean.length, new Mean());
-        VectorialCovariance covStat = new VectorialCovariance(mean.length, true);
+        final double[] meanStat = new double[mean.length];
+        final RealMatrix matrix = new Array2DRowRealMatrix(5000, mean.length);
         for (int i = 0; i < 5000; ++i) {
             double[] v = generator.nextVector();
-            meanStat.increment(v);
-            covStat.increment(v);
+            matrix.setRow(i, v);
         }
 
-        double[] estimatedMean = meanStat.getResult();
-        RealMatrix estimatedCovariance = covStat.getResult();
-        for (int i = 0; i < estimatedMean.length; ++i) {
-            Assert.assertEquals(mean[i], estimatedMean[i], 0.07);
+        for (int i = 0; i < mean.length; i++) {
+            meanStat[i] = UnitTestUtils.mean(matrix.getColumn(i));
+        }
+
+        RealMatrix estimatedCovariance = UnitTestUtils.covarianceMatrix(matrix);
+        for (int i = 0; i < meanStat.length; ++i) {
+            Assert.assertEquals(mean[i], meanStat[i], 0.07);
             for (int j = 0; j <= i; ++j) {
                 Assert.assertEquals(covariance.getEntry(i, j),
                                     estimatedCovariance.getEntry(i, j),
@@ -183,15 +180,15 @@ public class CorrelatedRandomVectorGeneratorTest {
 
     private void testSampler(final double[][] covMatrix, int samples, double epsilon) {
         CorrelatedRandomVectorGenerator sampler = createSampler(covMatrix);
+        RealMatrix matrix = new Array2DRowRealMatrix(samples, covMatrix.length);
 
-        StorelessCovariance cov = new StorelessCovariance(covMatrix.length);
         for (int i = 0; i < samples; ++i) {
-            cov.increment(sampler.nextVector());
+            matrix.setRow(i, sampler.nextVector());
         }
 
-        double[][] sampleCov = cov.getData();
+        RealMatrix sampleCov = UnitTestUtils.covarianceMatrix(matrix);
         for (int r = 0; r < covMatrix.length; ++r) {
-            UnitTestUtils.assertEquals(covMatrix[r], sampleCov[r], epsilon);
+            UnitTestUtils.assertEquals(covMatrix[r], sampleCov.getColumn(r), epsilon);
         }
 
     }

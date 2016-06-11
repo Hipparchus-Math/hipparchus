@@ -17,10 +17,9 @@
 
 package org.hipparchus.random;
 
+import org.hipparchus.UnitTestUtils;
+import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.stat.descriptive.moment.Mean;
-import org.hipparchus.stat.descriptive.vector.VectorialCovariance;
-import org.hipparchus.stat.descriptive.vector.VectorialStorelessStatistic;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,19 +40,22 @@ public class UncorrelatedRandomVectorGeneratorTest {
 
     @Test
     public void testMeanAndCorrelation() {
-
-        VectorialStorelessStatistic meanStat =
-                new VectorialStorelessStatistic(mean.length, new Mean());
-        VectorialCovariance covStat = new VectorialCovariance(mean.length, true);
+        final int n = generator.nextVector().length;
+        final double[] estimatedMean = new double[generator.nextVector().length];
+        final RealMatrix matrix = new Array2DRowRealMatrix(10000, n);
         for (int i = 0; i < 10000; ++i) {
             double[] v = generator.nextVector();
-            meanStat.increment(v);
-            covStat.increment(v);
+            matrix.setRow(i, v);
         }
 
-        double[] estimatedMean = meanStat.getResult();
+        for (int i = 0; i < n; i++) {
+            estimatedMean[i] = UnitTestUtils.mean(matrix.getColumn(i));
+        }
+
+        // double[] estimatedMean = meanStat.getResult();
         double scale;
-        RealMatrix estimatedCorrelation = covStat.getResult();
+        RealMatrix estimatedCorrelation = UnitTestUtils.covarianceMatrix(matrix);
+        //RealMatrix estimatedCorrelation = covStat.getResult();
         for (int i = 0; i < estimatedMean.length; ++i) {
             Assert.assertEquals(mean[i], estimatedMean[i], 0.07);
             for (int j = 0; j < i; ++j) {

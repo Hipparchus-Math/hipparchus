@@ -49,6 +49,7 @@
   <modules>
     <module>hipparchus-parent</module>
     <module>hipparchus-core</module>
+    <module>hipparchus-stat</module>
     <module>hipparchus-geometry</module>
     <module>hipparchus-ode</module>
     <module>hipparchus-optim</module>

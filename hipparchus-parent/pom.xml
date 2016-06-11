@@ -365,6 +365,11 @@
       </dependency>
       <dependency>
         <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-stat</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
         <artifactId>hipparchus-core</artifactId>
         <version>${project.version}</version>
         <type>test-jar</type>

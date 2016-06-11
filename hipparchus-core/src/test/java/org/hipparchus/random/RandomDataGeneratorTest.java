@@ -30,9 +30,6 @@ import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.distribution.discrete.PoissonDistribution;
 import org.hipparchus.distribution.discrete.ZipfDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.stat.Frequency;
-import org.hipparchus.stat.LongFrequency;
-import org.hipparchus.stat.inference.ChiSquareTest;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -56,7 +53,6 @@ public class RandomDataGeneratorTest {
     private final String[] hex = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
             "a", "b", "c", "d", "e", "f" };
     protected RandomDataGenerator randomData = null;
-    protected final ChiSquareTest testStatistic = new ChiSquareTest();
 
     @Test
     public void testNextIntExtremeValues() {
@@ -121,13 +117,13 @@ public class RandomDataGeneratorTest {
     }
 
     private void checkNextIntUniform(int min, int max) {
-        final LongFrequency freq = new LongFrequency();
+        final int len = max - min + 1;
+        final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
         for (int i = 0; i < smallSampleSize; i++) {
             final int value = randomData.nextInt(min, max);
             Assert.assertTrue("nextInt range", (value >= min) && (value <= max));
             freq.addValue(value);
         }
-        final int len = max - min + 1;
         final long[] observed = new long[len];
         for (int i = 0; i < len; i++) {
             observed[i] = freq.getCount(min + i);
@@ -195,17 +191,17 @@ public class RandomDataGeneratorTest {
     }
 
     private void checkNextLongUniform(long min, long max) {
-        final LongFrequency freq = new LongFrequency();
+        final int len = ((int) (max - min)) + 1;
+        final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
         for (int i = 0; i < smallSampleSize; i++) {
             final long value = randomData.nextLong(min, max);
             Assert.assertTrue("nextLong range: " + value + " " + min + " " + max,
                               (value >= min) && (value <= max));
-            freq.addValue(value);
+            freq.addValue((int)value);
         }
-        final int len = ((int) (max - min)) + 1;
         final long[] observed = new long[len];
         for (int i = 0; i < len; i++) {
-            observed[i] = freq.getCount(min + i);
+            observed[i] = freq.getCount((int) min + i);
         }
         final double[] expected = new double[len];
         for (int i = 0; i < len; i++) {
@@ -262,14 +258,14 @@ public class RandomDataGeneratorTest {
         final double mean = 4.0d;
         final int len = 5;
         PoissonDistribution poissonDistribution = new PoissonDistribution(mean);
-        LongFrequency f = new LongFrequency();
+        final UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
         randomData.setSeed(1000);
         for (int i = 0; i < largeSampleSize; i++) {
-            f.addValue(randomData.nextPoisson(mean));
+            freq.addValue(randomData.nextPoisson(mean));
         }
         final long[] observed = new long[len];
         for (int i = 0; i < len; i++) {
-            observed[i] = f.getCount(i + 1);
+            observed[i] = freq.getCount(i + 1);
         }
         final double[] expected = new double[len];
         for (int i = 0; i < len; i++) {
@@ -311,7 +307,7 @@ public class RandomDataGeneratorTest {
         final int minExpectedCount = 7;     // Minimum size of expected bin count
         long maxObservedValue = 0;
         final double alpha = 0.001;         // Probability of false failure
-        LongFrequency frequency = new LongFrequency();
+        UnitTestUtils.Frequency<Long> frequency = new UnitTestUtils.Frequency<Long>();
         for (int i = 0; i < sampleSize; i++) {
             long value = randomData.nextPoisson(mean);
             if (value > maxObservedValue) {
@@ -371,14 +367,14 @@ public class RandomDataGeneratorTest {
         // Bottom bin
         observed[0] = 0;
         for (int i = 0; i < lower; i++) {
-            observed[0] += frequency.getCount(i);
+            observed[0] += frequency.getCount((long)i);
         }
         expected[0] = poissonDistribution.cumulativeProbability(lower - 1) * sampleSize;
 
         // Top bin
         observed[binCount - 1] = 0;
         for (int i = upper; i <= maxObservedValue; i++) {
-            observed[binCount - 1] += frequency.getCount(i);
+            observed[binCount - 1] += frequency.getCount((long)i);
         }
         expected[binCount - 1] = (1 - poissonDistribution.cumulativeProbability(upper - 1)) * sampleSize;
 
@@ -386,24 +382,23 @@ public class RandomDataGeneratorTest {
         for (int i = 1; i < binCount - 1; i++) {
             observed[i] = 0;
             for (int j = binBounds.get(i - 1); j < binBounds.get(i); j++) {
-                observed[i] += frequency.getCount(j);
+                observed[i] += frequency.getCount((long)j);
             } // Expected count is (mass in [binBounds[i-1], binBounds[i])) * sampleSize
             expected[i] = (poissonDistribution.cumulativeProbability(binBounds.get(i) - 1) -
                 poissonDistribution.cumulativeProbability(binBounds.get(i - 1) -1)) * sampleSize;
         }
 
         // Use chisquare test to verify that generated values are poisson(mean)-distributed
-        ChiSquareTest chiSquareTest = new ChiSquareTest();
-            // Fail if we can reject null hypothesis that distributions are the same
-        if (chiSquareTest.chiSquareTest(expected, observed, alpha)) {
+        // Fail if we can reject null hypothesis that distributions are the same
+        if (UnitTestUtils.chiSquareTest(expected, observed) <  alpha) {
             StringBuilder msgBuffer = new StringBuilder();
             DecimalFormat df = new DecimalFormat("#.##");
             msgBuffer.append("Chisquare test failed for mean = ");
             msgBuffer.append(mean);
             msgBuffer.append(" p-value = ");
-            msgBuffer.append(chiSquareTest.chiSquareTest(expected, observed));
+            msgBuffer.append(UnitTestUtils.chiSquareTest(expected, observed));
             msgBuffer.append(" chisquare statistic = ");
-            msgBuffer.append(chiSquareTest.chiSquare(expected, observed));
+            msgBuffer.append(UnitTestUtils.chiSquare(expected, observed));
             msgBuffer.append(". \n");
             msgBuffer.append("bin\t\texpected\tobserved\n");
             for (int i = 0; i < expected.length; i++) {
@@ -454,7 +449,7 @@ public class RandomDataGeneratorTest {
         } catch (MathIllegalArgumentException ex) {
             // ignored
         }
-        Frequency<String> f = new Frequency<>();
+        UnitTestUtils.Frequency<String> f = new UnitTestUtils.Frequency<String> ();
         for (int i = 0; i < smallSampleSize; i++) {
             hexString = randomData.nextHexString(100);
             if (hexString.length() != 100) {
@@ -545,7 +540,7 @@ public class RandomDataGeneratorTest {
             binBounds[i] = binBounds[i - 1] + binSize;  // + instead of * to avoid overflow in extreme case
         }
 
-        final LongFrequency freq = new LongFrequency();
+        UnitTestUtils.Frequency<Integer> freq = new UnitTestUtils.Frequency<Integer>();
         for (int i = 0; i < smallSampleSize; i++) {
             final double value = randomData.nextUniform(min, max);
             Assert.assertTrue("nextUniform range", (value > min) && (value < max));
@@ -679,7 +674,7 @@ public class RandomDataGeneratorTest {
          * for alpha = .01
          */
         Assert.assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                testStatistic.chiSquare(expected, observed) < 27.88);
+                UnitTestUtils.chiSquare(expected, observed) < 27.88);
 
         // Make sure sample of size = size of collection returns same collection
         HashSet<Object> hs = new HashSet<Object>();
@@ -773,11 +768,6 @@ public class RandomDataGeneratorTest {
         }
     }
 
-    // Disable until we have equals
-    //public void testSerial() {
-    //    Assert.assertEquals(randomData, TestUtils.serializeAndRecover(randomData));
-    //}
-
     private int findPerm(int[][] p, int[] samp) {
         for (int i = 0; i < p.length; i++) {
             boolean good = true;
@@ -839,11 +829,9 @@ public class RandomDataGeneratorTest {
         final double alpha = 0.001;
         GammaDistribution dist = new GammaDistribution(3, 1);
         double[] values = randomDataGenerator.nextDeviates(dist, sampleSize);
-        UnitTestUtils.assertKolmogorovSmirnovTest(dist, values, alpha);
         UnitTestUtils.assertGTest(dist, values, alpha);
         dist = new GammaDistribution(.4, 2);
         values = randomDataGenerator.nextDeviates(dist, sampleSize);
-        UnitTestUtils.assertKolmogorovSmirnovTest(dist, values, alpha);
         UnitTestUtils.assertGTest(dist, values, alpha);
     }
 
@@ -858,7 +846,6 @@ public class RandomDataGeneratorTest {
             for (final double beta : alphaBetas) {
                 final BetaDistribution betaDistribution = new BetaDistribution(alpha, beta);
                 final double[] values = randomDataGenerator.nextDeviates(betaDistribution, sampleSize);
-                UnitTestUtils.assertKolmogorovSmirnovTest(betaDistribution, values, alphaCrit);
                 UnitTestUtils.assertGTest(betaDistribution, values, alphaCrit);
             }
         }
