@@ -27,7 +27,7 @@ Documentation
 -------------
 
 More information can be found on the [homepage](https://hipparchus.org/).
-The [JavaDoc](https://hipparchus.org/static/apidocs) can be browsed.
+The [JavaDoc](https://hipparchus.org/apidocs) can be browsed.
 Questions related to the usage of Hipparchus should be posted to the [users mailing list][FIXME! ml].
 
 Where can I get the latest release?
