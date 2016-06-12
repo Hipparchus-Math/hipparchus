@@ -83,6 +83,7 @@ public class Median extends AbstractUnivariateStatistic implements Serializable 
         this.percentile = original.percentile.copy();
     }
 
+    /** {@inheritDoc} */
     @Override
     public double evaluate(double[] values, int begin, int length)
         throws MathIllegalArgumentException {
