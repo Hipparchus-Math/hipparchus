@@ -742,11 +742,13 @@ public class UnitTestUtils {
      * @return estimated median
      */
     public static double median(final double[] values) {
-        Arrays.sort(values);
-        if (values.length % 2 == 0) {
-            return ((double)values[values.length/2] + (double)values[values.length/2 - 1])/2;
+        final int len = values.length;
+        final double[] sortedValues = Arrays.copyOf(values, len);
+        Arrays.sort(sortedValues);
+        if (len % 2 == 0) {
+            return ((double)sortedValues[len/2] + (double)sortedValues[len/2 - 1])/2;
         } else {
-            return (double) values[values.length/2];
+            return (double) sortedValues[len/2];
         }
     }
 
@@ -759,12 +761,12 @@ public class UnitTestUtils {
      */
     public static double covariance(final double[] xArray, final double[] yArray) {
         double result = 0d;
-        int length = xArray.length;
-        double xMean = mean(xArray);
-        double yMean = mean(yArray);
+        final int length = xArray.length;
+        final double xMean = mean(xArray);
+        final double yMean = mean(yArray);
         for (int i = 0; i < length; i++) {
-            double xDev = xArray[i] - xMean;
-            double yDev = yArray[i] - yMean;
+            final double xDev = xArray[i] - xMean;
+            final double yDev = yArray[i] - yMean;
             result += (xDev * yDev - result) / (i + 1);
         }
         return result * ((double) length / (double)(length - 1));
@@ -778,10 +780,10 @@ public class UnitTestUtils {
      */
     public static RealMatrix covarianceMatrix(RealMatrix matrix) {
         int dimension = matrix.getColumnDimension();
-        RealMatrix outMatrix = new BlockRealMatrix(dimension, dimension);
+        final RealMatrix outMatrix = new BlockRealMatrix(dimension, dimension);
         for (int i = 0; i < dimension; i++) {
             for (int j = 0; j < i; j++) {
-                double cov = covariance(matrix.getColumn(i), matrix.getColumn(j));
+                final double cov = covariance(matrix.getColumn(i), matrix.getColumn(j));
                 outMatrix.setEntry(i, j, cov);
                 outMatrix.setEntry(j, i, cov);
             }
@@ -822,7 +824,7 @@ public class UnitTestUtils {
      * @param values list of Double
      * @return double array
      */
-    public static double[] unpack(List<Double> values) {
+    private static double[] unpack(List<Double> values) {
         int n = values.size();
         if (values == null || n == 0) {
             return new double[] {};
