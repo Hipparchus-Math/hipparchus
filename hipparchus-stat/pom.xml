@@ -117,6 +117,7 @@
             <exclude>src/test/resources/org/hipparchus/stat/data/NumAcc4.txt</exclude>
             <exclude>src/test/resources/org/hipparchus/stat/data/Michelso.txt</exclude>
             <exclude>src/test/resources/org/hipparchus/stat/data/Mavro.txt</exclude>
+            <exclude>src/test/resources/org/hipparchus/stat/fitting/testData.txt</exclude>
           </excludes>
         </configuration>
       </plugin>
