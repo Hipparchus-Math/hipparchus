@@ -101,17 +101,17 @@ limitations under the License.
       </includes>
     </fileSet>
     <fileSet>
-      <directory>hipparchus-perf/target/</directory>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>hipparchus-perf-${project.version}.jar</include>
-      </includes>
-    </fileSet>
-    <fileSet>
       <directory>hipparchus-samples/target/</directory>
       <outputDirectory></outputDirectory>
       <includes>
         <include>hipparchus-samples-${project.version}.jar</include>
+      </includes>
+    </fileSet>
+    <fileSet>
+      <directory>hipparchus-stat/target/</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>hipparchus-stat-${project.version}.jar</include>
       </includes>
     </fileSet>
   </fileSets>
