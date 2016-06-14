@@ -17,6 +17,7 @@
 package org.hipparchus.optim.univariate;
 
 
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
@@ -28,7 +29,6 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.MaxEval;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
-import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -141,9 +141,9 @@ public final class BrentOptimizerTest {
         UnivariateFunction f = new QuinticFunction();
         UnivariateOptimizer optimizer = new BrentOptimizer(1e-11, 1e-14);
 
-        final DescriptiveStatistics[] stat = new DescriptiveStatistics[2];
+        final UnitTestUtils.SimpleStatistics[] stat = new UnitTestUtils.SimpleStatistics[2];
         for (int i = 0; i < stat.length; i++) {
-            stat[i] = new DescriptiveStatistics();
+            stat[i] = new UnitTestUtils.SimpleStatistics();
         }
 
         final double min = -0.75;
@@ -160,7 +160,7 @@ public final class BrentOptimizerTest {
         }
 
         final double meanOptValue = stat[0].getMean();
-        final double medianEval = stat[1].getPercentile(50);
+        final double medianEval = stat[1].getMedian();
         Assert.assertTrue(meanOptValue > -0.2719561281);
         Assert.assertTrue(meanOptValue < -0.2719561280);
         Assert.assertEquals(23, (int) medianEval);

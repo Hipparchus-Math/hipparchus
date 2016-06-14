@@ -17,11 +17,10 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.stat.descriptive.StatisticalSummary;
-import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -85,15 +84,15 @@ public class EvaluationTestValidation {
         final int numParams = 2;
 
         // Parameters found for each of Monte-Carlo run.
-        final StreamingStatistics[] paramsFoundByDirectSolution = new StreamingStatistics[numParams];
+        final UnitTestUtils.SimpleStatistics[] paramsFoundByDirectSolution = new UnitTestUtils.SimpleStatistics[numParams];
         // Sigma estimations (square-root of the diagonal elements of the
         // covariance matrix), for each Monte-Carlo run.
-        final StreamingStatistics[] sigmaEstimate = new StreamingStatistics[numParams];
+        final UnitTestUtils.SimpleStatistics[] sigmaEstimate = new UnitTestUtils.SimpleStatistics[numParams];
 
         // Initialize statistics accumulators.
         for (int i = 0; i < numParams; i++) {
-            paramsFoundByDirectSolution[i] = new StreamingStatistics();
-            sigmaEstimate[i] = new StreamingStatistics();
+            paramsFoundByDirectSolution[i] = new UnitTestUtils.SimpleStatistics();
+            sigmaEstimate[i] = new UnitTestUtils.SimpleStatistics();
         }
 
         final RealVector init = new ArrayRealVector(new double[]{ slope, offset }, false);
@@ -137,23 +136,21 @@ public class EvaluationTestValidation {
             System.out.println(line);
             System.out.println("Parameter #" + i);
 
-            StatisticalSummary s = paramsFoundByDirectSolution[i].getSummary();
             System.out.printf("              %+.6e   %+.6e   %+.6e\n",
                               init.getEntry(i),
-                              s.getMean(),
-                              s.getStandardDeviation());
+                              paramsFoundByDirectSolution[i].getMean(),
+                              paramsFoundByDirectSolution[i].getStandardDeviation());
 
-            s = sigmaEstimate[i].getSummary();
             System.out.printf("sigma: %+.6e (%+.6e)\n",
-                              s.getMean(),
-                              s.getStandardDeviation());
+                              sigmaEstimate[i].getMean(),
+                              sigmaEstimate[i].getStandardDeviation());
         }
         System.out.println(line);
 
         // Check the error estimation.
         for (int i = 0; i < numParams; i++) {
-            Assert.assertEquals(paramsFoundByDirectSolution[i].getSummary().getStandardDeviation(),
-                                sigmaEstimate[i].getSummary().getMean(),
+            Assert.assertEquals(paramsFoundByDirectSolution[i].getStandardDeviation(),
+                                sigmaEstimate[i].getMean(),
                                 8e-2);
         }
     }

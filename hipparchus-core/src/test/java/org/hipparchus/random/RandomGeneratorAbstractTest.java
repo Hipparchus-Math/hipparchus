@@ -16,18 +16,13 @@
  */
 package org.hipparchus.random;
 
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.distribution.RealDistribution;
-import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.stat.LongFrequency;
-import org.hipparchus.stat.inference.KolmogorovSmirnovTest;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Before;
@@ -133,7 +128,7 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
                         }
                     }
                 }
-                if (testStatistic.chiSquareTest(expected, observed) < 0.01) {
+                if (UnitTestUtils.chiSquareTest(expected, observed) < 0.01) {
                     numFailures++;
                 }
             }
@@ -150,33 +145,27 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
         long q2 = 2 *  q1;
         long q3 = 3 * q1;
 
-        LongFrequency freq = new LongFrequency();
+        long[] observed = new long[4];
         long val = 0;
-        int value = 0;
         for (int i = 0; i < smallSampleSize; i++) {
             val = generator.nextLong();
             val = val < 0 ? -val : val;
             if (val < q1) {
-                value = 0;
+               observed[0] = ++observed[0];
             } else if (val < q2) {
-                value = 1;
+               observed[1] = ++observed[1];
             } else if (val < q3) {
-                value = 2;
+               observed[2] = ++observed[2];
             } else {
-                value = 3;
+               observed[3] = ++observed[3];
             }
-            freq.addValue(value);
-        }
-        long[] observed = new long[4];
-        for (int i=0; i<4; i++) {
-            observed[i] = freq.getCount(i);
         }
 
         /* Use ChiSquare dist with df = 4-1 = 3, alpha = .001
          * Change to 11.34 for alpha = .01
          */
         assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                   testStatistic.chiSquare(expected,observed) < 16.27);
+                   UnitTestUtils.chiSquare(expected,observed) < 16.27);
     }
 
     @Test
@@ -195,48 +184,47 @@ public abstract class RandomGeneratorAbstractTest extends RandomDataGeneratorTes
          * Change to 6.635 for alpha = .01
          */
         assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                   testStatistic.chiSquare(expected,observed) < 10.828);
+                   UnitTestUtils.chiSquare(expected,observed) < 10.828);
     }
 
     @Test
     public void testNextFloatDirect() {
-        LongFrequency freq = new LongFrequency();
-        float val = 0;
-        int value = 0;
-        for (int i=0; i<smallSampleSize; i++) {
-            val = generator.nextFloat();
-            if (val < 0.25) {
-                value = 0;
-            } else if (val < 0.5) {
-                value = 1;
-            } else if (val < 0.75) {
-                value = 2;
-            } else {
-                value = 3;
-            }
-            freq.addValue(value);
-        }
         long[] observed = new long[4];
-        for (int i=0; i<4; i++) {
-            observed[i] = freq.getCount(i);
+        for (int i=0; i<smallSampleSize; i++) {
+            float val = generator.nextFloat();
+            if (val < 0.25) {
+                observed[0] = ++observed[0];
+            } else if (val < 0.5) {
+                observed[1] = ++observed[1];
+            } else if (val < 0.75) {
+                observed[2] = ++observed[2];
+            } else {
+                observed[3] = ++observed[3];
+            }
         }
 
         /* Use ChiSquare dist with df = 4-1 = 3, alpha = .001
          * Change to 11.34 for alpha = .01
          */
         assertTrue("chi-square test -- will fail about 1 in 1000 times",
-                   testStatistic.chiSquare(expected,observed) < 16.27);
+                   UnitTestUtils.chiSquare(expected,observed) < 16.27);
     }
 
     @Test
     public void testNextDouble() {
-        final double[] sample = new double[1000];
+        final double[] sample = new double[10000];
+        final double[] expected = new double[100];
+        final long[] observed = new long[100];
+        Arrays.fill(expected, 100d);
         for (int i = 0; i < sample.length; i++) {
             sample[i] = generator.nextDouble();
+            int j = 0;
+            while (sample[i] < j / 100) {
+                j++;
+            }
+            observed[j] = observed[j]++;
         }
-        final RealDistribution uniformDistribution = new UniformRealDistribution(0,1);
-        final KolmogorovSmirnovTest ks = new KolmogorovSmirnovTest();
-        assertFalse(ks.kolmogorovSmirnovTest(uniformDistribution, sample, .01));
+        UnitTestUtils.assertChiSquareAccept(expected, observed, 0.01);
     }
 
 

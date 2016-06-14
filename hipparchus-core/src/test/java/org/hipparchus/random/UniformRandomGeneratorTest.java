@@ -17,10 +17,7 @@
 
 package org.hipparchus.random;
 
-import org.hipparchus.random.JDKRandomGenerator;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.UniformRandomGenerator;
-import org.hipparchus.stat.StatUtils;
+import org.hipparchus.UnitTestUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,8 +33,8 @@ public class UniformRandomGeneratorTest {
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = generator.nextNormalizedDouble();
         }
-        Assert.assertEquals(0.0, StatUtils.mean(sample), 0.07);
-        Assert.assertEquals(1.0, StatUtils.variance(sample), 0.02);
+        Assert.assertEquals(0.0, UnitTestUtils.mean(sample), 0.07);
+        Assert.assertEquals(1.0, UnitTestUtils.variance(sample), 0.02);
     }
 
 }

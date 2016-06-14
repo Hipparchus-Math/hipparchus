@@ -365,6 +365,11 @@
       </dependency>
       <dependency>
         <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-stat</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
         <artifactId>hipparchus-core</artifactId>
         <version>${project.version}</version>
         <type>test-jar</type>
@@ -943,6 +948,11 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-gpg-plugin</artifactId>
             <version>${hipparchus.maven-gpg-plugin.version}</version>
+            <configuration>
+              <gpgArguments>
+                <arg>--digest-algo=SHA512</arg>
+              </gpgArguments>
+            </configuration>
             <executions>
               <execution>
                 <id>sign-artifacts</id>
@@ -952,6 +962,12 @@
                 </goals>
               </execution>
             </executions>
+          </plugin>
+          <plugin>
+            <artifactId>maven-install-plugin</artifactId>
+              <configuration>
+                <createChecksum>true</createChecksum>
+              </configuration>
           </plugin>
         </plugins>
       </build>

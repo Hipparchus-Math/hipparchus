@@ -16,10 +16,9 @@
  */
 package org.hipparchus.random;
 
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.stat.StatUtils;
-import org.hipparchus.stat.descriptive.DescriptiveStatistics;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -47,7 +46,7 @@ public class StableRandomGeneratorTest {
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = generator.nextNormalizedDouble();
         }
-        Assert.assertEquals(0.0, StatUtils.mean(sample), 0.3);
+        Assert.assertEquals(0.0, UnitTestUtils.mean(sample), 0.3);
     }
 
     /**
@@ -61,8 +60,8 @@ public class StableRandomGeneratorTest {
         for (int i = 0; i < sample.length; ++i) {
             sample[i] = generator.nextNormalizedDouble();
         }
-        Assert.assertEquals(0.0, StatUtils.mean(sample), 0.02);
-        Assert.assertEquals(1.0, StatUtils.variance(sample), 0.02);
+        Assert.assertEquals(0.0, UnitTestUtils.mean(sample), 0.02);
+        Assert.assertEquals(1.0, UnitTestUtils.variance(sample), 0.02);
     }
 
     /**
@@ -71,15 +70,14 @@ public class StableRandomGeneratorTest {
     @Test
     public void testCauchyCase() {
         StableRandomGenerator generator = new StableRandomGenerator(rg, 1d, 0.0);
-        DescriptiveStatistics summary = new DescriptiveStatistics();
 
+        final double[] values = new double[sampleSize];
         for (int i = 0; i < sampleSize; ++i) {
-            double sample = generator.nextNormalizedDouble();
-            summary.addValue(sample);
+            values[i] = generator.nextNormalizedDouble();
         }
 
         // Standard Cauchy distribution should have zero median and mode
-        double median = summary.getPercentile(50);
+        double median = UnitTestUtils.median(values);
         Assert.assertEquals(0.0, median, 0.2);
     }
 

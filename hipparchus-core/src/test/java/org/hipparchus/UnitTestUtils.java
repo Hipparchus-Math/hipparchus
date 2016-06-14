@@ -23,16 +23,20 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.hipparchus.complex.Complex;
 import org.hipparchus.complex.ComplexFormat;
 import org.hipparchus.distribution.RealDistribution;
+import org.hipparchus.distribution.continuous.ChiSquaredDistribution;
+import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.FieldMatrix;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
-import org.hipparchus.stat.inference.ChiSquareTest;
-import org.hipparchus.stat.inference.InferenceTestUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -402,17 +406,16 @@ public class UnitTestUtils {
      * @param alpha significance level of the test
      */
     public static void assertChiSquareAccept(String[] valueLabels, double[] expected, long[] observed, double alpha) {
-        ChiSquareTest chiSquareTest = new ChiSquareTest();
 
         // Fail if we can reject null hypothesis that distributions are the same
-        if (chiSquareTest.chiSquareTest(expected, observed, alpha)) {
+        if (chiSquareTest(expected, observed) <= alpha) {
             StringBuilder msgBuffer = new StringBuilder();
             DecimalFormat df = new DecimalFormat("#.##");
             msgBuffer.append("Chisquare test failed");
             msgBuffer.append(" p-value = ");
-            msgBuffer.append(chiSquareTest.chiSquareTest(expected, observed));
+            msgBuffer.append(chiSquareTest(expected, observed));
             msgBuffer.append(" chisquare statistic = ");
-            msgBuffer.append(chiSquareTest.chiSquare(expected, observed));
+            msgBuffer.append(chiSquare(expected, observed));
             msgBuffer.append(". \n");
             msgBuffer.append("value\texpected\tobserved\n");
             for (int i = 0; i < expected.length; i++) {
@@ -494,29 +497,6 @@ public class UnitTestUtils {
     }
 
     /**
-     * Asserts the null hypothesis that the sample follows the given distribution,
-     * using a Kolmogorov-Smirnov test.
-     *
-     * @param expectedDistribution distribution values are supposed to follow
-     * @param values sample data
-     * @param alpha significance level of the test
-     */
-    public static void assertKolmogorovSmirnovTest(final RealDistribution expectedDistribution,
-                                                   final double[] values, double alpha) {
-        if (InferenceTestUtils.kolmogorovSmirnovTest(expectedDistribution, values, alpha)) {
-            StringBuilder msgBuffer = new StringBuilder();
-            msgBuffer.append("Kolmogorov-Smirnov test failed");
-            msgBuffer.append(" p-value = ");
-            msgBuffer.append(InferenceTestUtils.kolmogorovSmirnovTest(expectedDistribution, values));
-            msgBuffer.append(". \n");
-            msgBuffer.append("This test can fail randomly due to sampling error with probability ");
-            msgBuffer.append(alpha);
-            msgBuffer.append(".");
-            Assert.fail(msgBuffer.toString());
-        }
-    }
-
-    /**
      * Asserts the null hypothesis that the observed counts follow the given distribution implied by expected,
      * using a G-test
      *
@@ -525,12 +505,12 @@ public class UnitTestUtils {
      * @param alpha significance level of the test
      */
     public static void assertGTest(final double[] expected, long[] observed, double alpha) {
-        if (InferenceTestUtils.gTest(expected, observed, alpha)) {
+        if (gTest(expected, observed) <  alpha) {
             StringBuilder msgBuffer = new StringBuilder();
             DecimalFormat df = new DecimalFormat("#.##");
             msgBuffer.append("G test failed");
             msgBuffer.append(" p-value = ");
-            msgBuffer.append(InferenceTestUtils.gTest(expected, observed));
+            msgBuffer.append(gTest(expected, observed));
             msgBuffer.append(". \n");
             msgBuffer.append("value\texpected\tobserved\n");
             for (int i = 0; i < expected.length; i++) {
@@ -602,5 +582,357 @@ public class UnitTestUtils {
             System.arraycopy(newValues,0,densityValues,0,positiveMassCount);
         }
         return positiveMassCount;
+    }
+
+    /*************************************************************************************
+     * Stripped-down implementations of some basic statistics borrowed from hipparchus-stat.
+     * NOTE: These implementations are NOT intended for reuse.  They are neither robust,
+     * nor efficient; nor do they handle NaN, infinity or other corner cases in
+     * a predictable way. They DO NOT CHECK PARAMETERS - the assumption is that incorrect
+     * or meaningless results from bad parameters will trigger test failures in unit
+     * tests using these methods.
+     ************************************************************************************/
+
+    /**
+     * Returns p-value associated with null hypothesis that observed counts follow
+     * expected distribution.  Will normalize inputs if necessary.
+     *
+     * @param expected expected counts
+     * @param observed observed counts
+     * @return p-value of Chi-square test
+     */
+    public static double chiSquareTest(final double[] expected, final long[] observed) {
+            final org.hipparchus.distribution.continuous.ChiSquaredDistribution distribution =
+                new ChiSquaredDistribution(expected.length - 1.0);
+            return 1.0 - distribution.cumulativeProbability(chiSquare(expected, observed));
+    }
+
+    /**
+     * Returns chi-square test statistic for expected and observed arrays. Rescales arrays
+     * if necessary.
+     *
+     * @param expected expected counts
+     * @param observed observed counts
+     * @return chi-square statistic
+     */
+    public static double chiSquare(final double[] expected, final long[] observed) {
+            double sumExpected = 0d;
+            double sumObserved = 0d;
+            for (int i = 0; i < observed.length; i++) {
+                sumExpected += expected[i];
+                sumObserved += observed[i];
+            }
+            double ratio = 1.0d;
+            boolean rescale = false;
+            if (FastMath.abs(sumExpected - sumObserved) > 10E-6) {
+                ratio = sumObserved / sumExpected;
+                rescale = true;
+            }
+            double sumSq = 0.0d;
+            for (int i = 0; i < observed.length; i++) {
+                if (rescale) {
+                    final double dev = observed[i] - ratio * expected[i];
+                    sumSq += dev * dev / (ratio * expected[i]);
+                } else {
+                    final double dev = observed[i] - expected[i];
+                    sumSq += dev * dev / expected[i];
+                }
+            }
+            return sumSq;
+
+        }
+
+    /**
+     * Computes G-test statistic for expected, observed counts.
+     * @param expected expected counts
+     * @param observed observed counts
+     * @return G statistic
+     */
+    private static double g(final double[] expected, final long[] observed) {
+        double sumExpected = 0d;
+        double sumObserved = 0d;
+        for (int i = 0; i < observed.length; i++) {
+            sumExpected += expected[i];
+            sumObserved += observed[i];
+        }
+        double ratio = 1d;
+        boolean rescale = false;
+        if (FastMath.abs(sumExpected - sumObserved) > 10E-6) {
+            ratio = sumObserved / sumExpected;
+            rescale = true;
+        }
+        double sum = 0d;
+        for (int i = 0; i < observed.length; i++) {
+            final double dev = rescale ?
+                    FastMath.log(observed[i] / (ratio * expected[i])) :
+                        FastMath.log(observed[i] / expected[i]);
+            sum += (observed[i]) * dev;
+        }
+        return 2d * sum;
+    }
+
+    /**
+     * Computes p-value for G-test.
+     *
+     * @param expected expected counts
+     * @param observed observed counts
+     * @return p-value
+     */
+    private static double gTest(final double[] expected, final long[] observed) {
+        final ChiSquaredDistribution distribution =
+                new ChiSquaredDistribution(expected.length - 1.0);
+        return 1.0 - distribution.cumulativeProbability(g(expected, observed));
+    }
+
+    /**
+     * Computes the mean of the values in the array.
+     *
+     * @param values input values
+     * @return arithmetic mean
+     */
+    public static double mean(final double[] values) {
+        double sum = 0;
+        for (double val : values) {
+            sum += val;
+        }
+        return sum / values.length;
+    }
+
+    /**
+     * Computes the (bias-adjusted) variance of the values in the input array.
+     *
+     * @param values input values
+     * @return bias-adjusted variance
+     */
+    public static double variance(final double[] values) {
+        final int length = values.length;
+        final double mean = mean(values);
+        double var = Double.NaN;
+        if (length == 1) {
+            var = 0.0;
+        } else if (length > 1) {
+            double accum = 0.0;
+            double dev = 0.0;
+            double accum2 = 0.0;
+            for (int i = 0; i < length; i++) {
+                dev = values[i] - mean;
+                accum += dev * dev;
+                accum2 += dev;
+            }
+            final double len = length;
+            var = (accum - (accum2 * accum2 / len)) / (len - 1.0);
+        }
+        return var;
+    }
+
+    /**
+     * Computes the standard deviation of the values in the input array.
+     *
+     * @param values input values
+     * @return standard deviation
+     */
+    public static double standardDeviation(final double[] values) {
+        return FastMath.sqrt(variance(values));
+    }
+
+    /**
+     * Computes the median of the values in the input array.
+     *
+     * @param values input values
+     * @return estimated median
+     */
+    public static double median(final double[] values) {
+        final int len = values.length;
+        final double[] sortedValues = Arrays.copyOf(values, len);
+        Arrays.sort(sortedValues);
+        if (len % 2 == 0) {
+            return ((double)sortedValues[len/2] + (double)sortedValues[len/2 - 1])/2;
+        } else {
+            return (double) sortedValues[len/2];
+        }
+    }
+
+    /**
+     * Computes the covariance of the two input arrays.
+     *
+     * @param xArray first covariate
+     * @param yArray second covariate
+     * @return covariance
+     */
+    public static double covariance(final double[] xArray, final double[] yArray) {
+        double result = 0d;
+        final int length = xArray.length;
+        final double xMean = mean(xArray);
+        final double yMean = mean(yArray);
+        for (int i = 0; i < length; i++) {
+            final double xDev = xArray[i] - xMean;
+            final double yDev = yArray[i] - yMean;
+            result += (xDev * yDev - result) / (i + 1);
+        }
+        return result * ((double) length / (double)(length - 1));
+    }
+
+    /**
+     * Computes a covariance matrix from a matrix whose columns represent covariates.
+     *
+     * @param matrix input matrix
+     * @return covariance matrix
+     */
+    public static RealMatrix covarianceMatrix(RealMatrix matrix) {
+        int dimension = matrix.getColumnDimension();
+        final RealMatrix outMatrix = new BlockRealMatrix(dimension, dimension);
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < i; j++) {
+                final double cov = covariance(matrix.getColumn(i), matrix.getColumn(j));
+                outMatrix.setEntry(i, j, cov);
+                outMatrix.setEntry(j, i, cov);
+            }
+            outMatrix.setEntry(i, i, variance(matrix.getColumn(i)));
+        }
+        return outMatrix;
+    }
+
+    public static double min(final double[] values) {
+        double min = values[0];
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] < min) {
+                min = values[i];
+            }
+        }
+        return min;
+    }
+
+    /**
+     * Computes the maximum of the values in the input array.
+     *
+     * @param values input array
+     * @return the maximum value
+     */
+    public static double max(final double[] values) {
+        double max = values[0];
+        for (int i = 1; i < values.length; i++) {
+            if (values[i] > max) {
+                max = values[i];
+            }
+        }
+        return max;
+    }
+
+    /**
+     * Unpacks a list of Doubles into a double[].
+     *
+     * @param values list of Double
+     * @return double array
+     */
+    private static double[] unpack(List<Double> values) {
+        int n = values.size();
+        if (values == null || n == 0) {
+            return new double[] {};
+        }
+        double[] out = new double[n];
+        for (int i = 0; i < n; i++) {
+            out[i] = values.get(i);
+        }
+        return out;
+    }
+
+    /**
+     * Keeps track of the number of occurrences of distinct T instances
+     * added via {@link #addValue(Object)}.
+     *
+     * @param <T> type of objects being tracked
+     */
+    public static class Frequency<T> {
+        private Map<T, Integer> counts = new HashMap<T, Integer>();
+        public void addValue(T value) {
+           Integer old = counts.put(value, 0);
+           if (old != null) {
+               counts.put(value, old++);
+           }
+        }
+        public int getCount(T value) {
+           Integer ret = counts.get(value);
+           return ret == null ? 0 : ret;
+        }
+    }
+
+    /**
+     * Stripped down implementation of StreamingStatistics from o.h.stat.descriptive.
+     * Actually holds all values in memory, so not suitable for very large streams of data.
+     */
+    public static class SimpleStatistics {
+        private final List<Double> values = new ArrayList<Double>();
+        public void addValue(double value) {
+            values.add(value);
+        }
+        public double getMean() {
+            return mean(unpack(values));
+        }
+        public double getStandardDeviation() {
+            return standardDeviation(unpack(values));
+        }
+        public double getMin() {
+            return min(unpack(values));
+        }
+        public double getMax() {
+            return max(unpack(values));
+        }
+        public double getMedian() {
+            return median(unpack(values));
+        }
+        public double getVariance() {
+            return variance(unpack(values));
+        }
+        public long getN() {
+            return values.size();
+        }
+    }
+
+    /**
+     * Stripped-down version of the bivariate regression class with the same name
+     * in o.h.stat.regression.
+     * Always estimates the model with an intercept term.
+     */
+    public static class SimpleRegression {
+        private double sumX = 0d;
+        private double sumXX = 0d;
+        private double sumY = 0d;
+        private double sumXY = 0d;
+        private long n = 0;
+        private double xbar = 0;
+        private double ybar = 0;
+
+        public void addData(double x, double y) {
+            if (n == 0) {
+                xbar = x;
+                ybar = y;
+            } else {
+                final double fact1 = 1.0 + n;
+                final double fact2 = n / (1.0 + n);
+                final double dx = x - xbar;
+                final double dy = y - ybar;
+                sumXX += dx * dx * fact2;
+                sumXY += dx * dy * fact2;
+                xbar += dx / fact1;
+                ybar += dy / fact1;
+            }
+            sumX += x;
+            sumY += y;
+            n++;
+        }
+
+        public double getSlope() {
+            if (n < 2) {
+                return Double.NaN; //not enough data
+            }
+            if (FastMath.abs(sumXX) < 10 * Double.MIN_VALUE) {
+                return Double.NaN; //not enough variation in x
+            }
+            return sumXY / sumXX;
+        }
+
+        public double getIntercept() {
+            return (sumY - getSlope() * sumX) / n;
+        }
     }
 }

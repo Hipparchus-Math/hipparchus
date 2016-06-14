@@ -20,11 +20,11 @@ package org.hipparchus.ode;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.VariationalEquation.MismatchedEquations;
 import org.hipparchus.ode.nonstiff.DormandPrince54Integrator;
-import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -46,8 +46,8 @@ public class VariationalEquationTest {
         ODEIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         double hP = 1.0e-12;
-        StreamingStatistics residualsP0 = new StreamingStatistics();
-        StreamingStatistics residualsP1 = new StreamingStatistics();
+        UnitTestUtils.SimpleStatistics residualsP0 = new  UnitTestUtils.SimpleStatistics();
+        UnitTestUtils.SimpleStatistics residualsP1 = new  UnitTestUtils.SimpleStatistics();
         for (double b = 2.88; b < 3.08; b += 0.001) {
             Brusselator brusselator = new Brusselator(b);
             double[] y = { 1.3, b };
@@ -69,8 +69,8 @@ public class VariationalEquationTest {
         ODEIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-10, 1.0e-10 }, new double[] { 1.0e-10, 1.0e-10 });
         double hP = 1.0e-12;
-        StreamingStatistics residualsP0 = new StreamingStatistics();
-        StreamingStatistics residualsP1 = new StreamingStatistics();
+        UnitTestUtils.SimpleStatistics residualsP0 = new  UnitTestUtils.SimpleStatistics();
+        UnitTestUtils.SimpleStatistics residualsP1 = new  UnitTestUtils.SimpleStatistics();
         for (double b = 2.88; b < 3.08; b += 0.001) {
             ParamBrusselator brusselator = new ParamBrusselator(b);
             double[] y = { 1.3, b };
@@ -111,8 +111,8 @@ public class VariationalEquationTest {
                         new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
         double hP = 1.0e-12;
         double hY = 1.0e-12;
-        StreamingStatistics residualsP0 = new StreamingStatistics();
-        StreamingStatistics residualsP1 = new StreamingStatistics();
+        UnitTestUtils.SimpleStatistics residualsP0 = new  UnitTestUtils.SimpleStatistics();
+        UnitTestUtils.SimpleStatistics residualsP1 = new  UnitTestUtils.SimpleStatistics();
         for (double b = 2.88; b < 3.08; b += 0.001) {
                 ParamBrusselator brusselator = new ParamBrusselator(b);
                 brusselator.setParameter(ParamBrusselator.B, b);
@@ -146,8 +146,8 @@ public class VariationalEquationTest {
         throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
         AbstractIntegrator integ =
             new DormandPrince54Integrator(1.0e-8, 100.0, new double[] { 1.0e-4, 1.0e-4 }, new double[] { 1.0e-4, 1.0e-4 });
-        StreamingStatistics residualsP0 = new StreamingStatistics();
-        StreamingStatistics residualsP1 = new StreamingStatistics();
+        UnitTestUtils.SimpleStatistics residualsP0 = new  UnitTestUtils.SimpleStatistics();
+        UnitTestUtils.SimpleStatistics residualsP1 = new  UnitTestUtils.SimpleStatistics();
         for (double b = 2.88; b < 3.08; b += 0.001) {
             Brusselator brusselator = new Brusselator(b);
             double[] z = { 1.3, b };

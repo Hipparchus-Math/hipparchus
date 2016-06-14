@@ -17,13 +17,12 @@
 
 package org.hipparchus.distribution.multivariate;
 
-import org.hipparchus.distribution.continuous.NormalDistribution;
-import org.hipparchus.distribution.multivariate.MultivariateNormalDistribution;
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.stat.correlation.Covariance;
-
 import java.util.Random;
 
+import org.hipparchus.UnitTestUtils;
+import org.hipparchus.distribution.continuous.NormalDistribution;
+import org.hipparchus.linear.Array2DRowRealMatrix;
+import org.hipparchus.linear.RealMatrix;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -95,10 +94,11 @@ public class MultivariateNormalDistributionTest {
             Assert.assertEquals(mu[j], sampleMeans[j], sampledValueTolerance);
         }
 
-        final double[][] sampleSigma = new Covariance(samples).getCovarianceMatrix().getData();
+        //final double[][] sampleSigma = new Covariance(samples).getCovarianceMatrix().getData();
+        final RealMatrix sampleSigma = UnitTestUtils.covarianceMatrix(new Array2DRowRealMatrix(samples));
         for (int i = 0; i < dim; i++) {
             for (int j = 0; j < dim; j++) {
-                Assert.assertEquals(sigma[i][j], sampleSigma[i][j], sampledValueTolerance);
+                Assert.assertEquals(sigma[i][j], sampleSigma.getEntry(i, j), sampledValueTolerance);
             }
         }
     }

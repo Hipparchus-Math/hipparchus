@@ -18,13 +18,12 @@ package org.hipparchus.distribution.continuous;
 
 import static org.junit.Assert.assertEquals;
 
-import org.hipparchus.stat.StatUtils;
 import org.junit.Test;
 
 public class BetaDistributionTest {
 
     static final double[] alphaBetas = {0.1, 1, 10, 100, 1000};
-    static final double epsilon = StatUtils.min(alphaBetas);
+    static final double epsilon = 0.1;
 
     @Test
     public void testCumulative() {
