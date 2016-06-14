@@ -51,6 +51,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
       <action dev="psteitz" type="update">
+        Moved EmpiricalDistribution and MultivariateNormalExpectationMaximization from
+        the random package into stat.fitting and dropped ValueServer.
+      </action>
+      <action dev="psteitz" type="update">
         Moved sampling (random deviate generation) from distribution implementations 
         to RandomDataGenerator in the random package.
       </action>
@@ -78,7 +82,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         (hipparchus-core, hipparchus-clustering, hipparchus-fft,
          hipparchus-fitting, hipparchus-genetics, hipparchus-geometry,
          hipparchus-geometry, hipparchus-ode, hipparchus-optim,
-         hipparchus-perf, hipparchus-samples).
+         hipparchus-samples, hipparchus-stat).
       </action>
       <action dev="psteitz" type="update">
         Forked from the Apache Commons Math library.
