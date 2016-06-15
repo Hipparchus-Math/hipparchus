@@ -507,6 +507,10 @@
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-changes-plugin</artifactId>
           <version>${hipparchus.maven-changes-plugin.version}</version>
+          <configuration>
+            <templateDirectory>src/changes</templateDirectory>
+            <template>release-notes.vm</template>
+          </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
