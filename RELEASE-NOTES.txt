@@ -1,31 +1,41 @@
 
-              Hipparchus RELEASE NOTES
+              Hipparchus 1.0 RELEASE NOTES
 
-The Hipparchus team is pleased to announce the release of hipparchus 1.0
+The Hipparchus team is pleased to announce the release of hipparchus 1.0.
 
-The Hipparchus project is a library of lightweight, self-contained
-mathematics and statistics components addressing the most common
-problems not available in the Java programming language.
+The Hipparchus library is a self-contained library of mathematical components. It started as a
+fork of Apache Commons Math.
 
-This is the first release of the library.
+This is the first release of the library.  Hipparchus is divided into modules.  This release includes all
+modules.  Subsequently, modules may be released separately.
 
-Changes in this version include:
+Following is a summary of the differences between Hipparchus and Apache Commons Math at the time of the fork
+(February, 2016).
 
-o Forked from the Apache Commons Math library.
-o Modularized the library into several components
-  (hipparchus-core, hipparchus-clustering, hipparchus-fft,
+o  The library has been modularized into several components
+   (hipparchus-core, hipparchus-clustering, hipparchus-fft,
    hipparchus-fitting, hipparchus-genetics, hipparchus-geometry,
    hipparchus-geometry, hipparchus-ode, hipparchus-optim,
-   hipparchus-perf, hipparchus-samples)
-o Creation of a migration module and an associated script
-  to help switching from Apache Commons Math to Hipparchus
-o Simplified exception hierarchy
-o Revamped Ordinary Differential Equations API to match
-  the new API introduced with field-based ODE
+   hipparchus-samples, hipparchus-stat).  All other components depend on hipparchus-core,
+   and hipparchus-clustering depends on hipparchus-stat. 
+o  EmpiricalDistribution and MultivariateNormalExpectationMaximization have been moved from
+   the random package into stat.fitting and ValueServer has been dropped. 
+o  Sampling (random deviate generation) has been removed from distribution implementations 
+   and consolidated into RandomDataGenerator in the random package. 
+o  The TestUtils implemendation class in core stat.inference has been renamed to InferenceTestUtils
+   and TestUtils in the core unit test package has been renamed to UnitTestUtils. 
+o  The descriptive statistics package has been refactored to simplify API and implementations
+   and to use more meaningful class names. 
+o  The Ordinary Differential Equations API has been revamped to match the new API introduced with
+   field-based ODE. 
+o  The exceptions hierarchy has been simplified and many exception classes have been eliminated. 
+o  Hipparchus includes a migration module and an associated script
+   to help switching from Apache Commons Math to Hipparchus.
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the Hipparchus website:
 
-http://hipparchus.org/
+https://www.hipparchus.org/
 
+Each module has its own set of reports on the website, including a more detailed changelog.
 
