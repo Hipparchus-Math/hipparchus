@@ -1,4 +1,21 @@
-# 
+#!/bin/sh
+#
+# Licensed to the Hipparchus under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# Hipparchus licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# -----------------------------------------------------------------------------
+#
 # Script to create a full release candidate (all modules).
 #
 # Run from top-level directory in full hipparchus checkout.
@@ -15,7 +32,10 @@ notes=false
 find . -name pom.xml -exec sed -i '' 's/\-SNAPSHOT//g' {} \;
 
 # Release notes - only top-level, refer to the online changelogs for modules
+# Set notes=true to execute this, typically just for the first RC.
+# Remember to check the edited notes in after executing this.
 if $notes
+then
 	mkdir -p hipparchus-parent/src/changes
 	cp src/changes/* hipparchus-parent/src/changes/
 	mvn -Dversion=$version changes:announcement-generate -pl hipparchus-parent
@@ -26,6 +46,7 @@ if $notes
 fi
 
 # Stage the release artifacts
+mvn clean
 mvn deploy -Dgpg.keyname=$keyID -Dwagon.skip=true -Ddescription=Hipparchus_${version}_RC${rc} -DskipStagingRepositoryClose=true -Prelease
 
 # Cleanup target
