@@ -171,6 +171,9 @@
 
             <!-- this one is a regular expression template for Apache headers by itself! -->
             <exclude>src/conf/license-header.txt</exclude>
+            
+            <!-- trivial -->
+            <exclude>src/site/resources/css/site.css</exclude>
 
           </excludes>
         </configuration>
