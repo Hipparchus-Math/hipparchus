@@ -175,6 +175,10 @@
             <!-- trivial -->
             <exclude>src/site/resources/css/site.css</exclude>
 
+            <!-- attributed in NOTICE -->
+            <exclude>src/site/resources/js/html5.js</exclude>
+            <exclude>src/site/resources/js/jquery.min.js</exclude>
+
           </excludes>
         </configuration>
       </plugin>
