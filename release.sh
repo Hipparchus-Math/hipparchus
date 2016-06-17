@@ -25,11 +25,10 @@
 # Config
 keyID=0xCC6CB50E6A59DD12
 version=1.0
-rc=3
 notes=false
 
 # Temporarily drop -SNAPSHOT from version
-find . -name pom.xml -exec sed -i '' 's/\-SNAPSHOT//g' {} \;
+# find . -name pom.xml -exec sed -i '' 's/\-SNAPSHOT//g' {} \;
 
 # Release notes - only top-level, refer to the online changelogs for modules
 # Set notes=true to execute this, typically just for the first RC.
@@ -47,7 +46,7 @@ fi
 
 # Stage the release artifacts
 mvn clean
-mvn deploy -Dgpg.keyname=$keyID -Dwagon.skip=true -Ddescription=Hipparchus_${version}_RC${rc} -DskipStagingRepositoryClose=true -Prelease
+mvn deploy -Dgpg.keyname=$keyID -Dwagon.skip=true -DskipStagingRepositoryClose=true -Prelease
 
 # Cleanup target
 # Add hashes and remove pom files 
@@ -66,6 +65,6 @@ rm *.pom.asc
 cd ..
 
 # Undo pom changes
-find . -name pom.xml -exec git checkout {} \;
+#find . -name pom.xml -exec git checkout {} \;
 
 
