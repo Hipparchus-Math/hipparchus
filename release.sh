@@ -25,7 +25,7 @@
 # Config
 keyID=0xCC6CB50E6A59DD12
 version=1.0
-rc=2
+rc=3
 notes=false
 
 # Temporarily drop -SNAPSHOT from version
