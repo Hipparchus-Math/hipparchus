@@ -62,7 +62,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         Moved sampling (random deviate generation) from distribution implementations 
         to RandomDataGenerator in the random package.
       </action>
-      <action dev="tn" type="remove">
+      <action dev="tn" type="fix">
         Fixed "HypergeometricDistribution#logProbability(int)" which returned NaN
         in case the number of successes equals the population size.
       </action>
