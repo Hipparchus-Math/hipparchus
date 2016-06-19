@@ -63,6 +63,10 @@ If the output is not quite correct, check for invisible trailing spaces!
         to RandomDataGenerator in the random package.
       </action>
       <action dev="tn" type="remove">
+        Fixed "HypergeometricDistribution#logProbability(int)" which returned NaN
+        in case the number of successes equals the population size.
+      </action>
+      <action dev="tn" type="remove">
         Removed interface "DoubleArray".
       </action>
       <action dev="tn" type="remove">
