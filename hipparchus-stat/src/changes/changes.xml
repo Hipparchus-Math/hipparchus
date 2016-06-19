@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
+      <action dev="tn" type="update">
+        Refactored descriptive statistics package to simplify API and implementations and use
+        more meaningful class names.
+      </action>
       <action dev="tn" type="add">
         Added "AggregatableStatistic" interface for statistics that can
         aggregate results.

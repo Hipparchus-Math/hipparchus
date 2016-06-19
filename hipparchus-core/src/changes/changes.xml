@@ -50,6 +50,18 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
+      <action dev="psteitz" type="update">
+        Renamed TestUtils in core stat.inference to InferenceTestUtils and TestUtils in
+        the core unit test package to UnitTestUtils.
+      </action>
+      <action dev="psteitz" type="update">
+        Moved EmpiricalDistribution and MultivariateNormalExpectationMaximization from
+        the random package into stat.fitting and dropped ValueServer.
+      </action>
+      <action dev="psteitz" type="update">
+        Moved sampling (random deviate generation) from distribution implementations 
+        to RandomDataGenerator in the random package.
+      </action>
       <action dev="tn" type="remove">
         Removed interface "DoubleArray".
       </action>
