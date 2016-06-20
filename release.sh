@@ -23,17 +23,26 @@
 #
 
 # Config
+# Id of RM signing key
 keyID=0xCC6CB50E6A59DD12
-version=1.0
-rc=3
+
+# Set to true to generate top-leve release notes draft
 notes=false
 
-# Temporarily drop -SNAPSHOT from version
-find . -name pom.xml -exec sed -i '' 's/\-SNAPSHOT//g' {} \;
+# Set to true to drop -SNAPSHOT from versions in poms
+kill_snap=false
 
-# Release notes - only top-level, refer to the online changelogs for modules
-# Set notes=true to execute this, typically just for the first RC.
-# Remember to check the edited notes in after executing this.
+# Drop -SNAPSHOT from version. Set kill_snap=true to execute this
+# on a newly created release branch.
+if $kill_snap
+then
+    find . -name pom.xml -exec sed -i '' 's/\-SNAPSHOT//g' {} \;
+    # Pause to commit the change
+    read -p "Commit pom changes to release branch, then press [Enter] to continue."
+fi
+
+# Top-level release notes. Set notes=true to execute this, typically just for
+# the first RC.
 if $notes
 then
 	mkdir -p hipparchus-parent/src/changes
@@ -42,15 +51,14 @@ then
 	cp hipparchus-parent/target/announcement/release-notes.vm RELEASE-NOTES.txt
 	rm -rf hipparchus-parent/src
     # Maybe hack the release notes a little ....
-    read -p "Press [Enter] key start building tarballs"
+    read -p "Edit, add module-specific changes and check RELEASE-NOTES.txt in. Then Press [Enter] key start building tarballs."
 fi
 
 # Stage the release artifacts
 mvn clean
-mvn deploy -Dgpg.keyname=$keyID -Dwagon.skip=true -Ddescription=Hipparchus_${version}_RC${rc} -DskipStagingRepositoryClose=true -Prelease
+mvn deploy -Dgpg.keyname=$keyID -Dwagon.skip=true -DskipStagingRepositoryClose=true -Prelease
 
-# Cleanup target
-# Add hashes and remove pom files 
+# Add hashes and remove pom files in target
 cd target
 for f in *.zip
 do
@@ -64,8 +72,3 @@ rm -rf archive-tmp*
 rm *.pom
 rm *.pom.asc
 cd ..
-
-# Undo pom changes
-find . -name pom.xml -exec git checkout {} \;
-
-
