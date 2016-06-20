@@ -510,6 +510,14 @@
           <configuration>
             <templateDirectory>src/changes</templateDirectory>
             <template>release-notes.vm</template>
+            <xmlPath>${basedir}/src/changes/changes.xml</xmlPath>
+            <reportSets>
+              <reportSet>
+                <reports>
+                  <report>changes-report</report>
+                </reports>
+              </reportSet>
+            </reportSets>
           </configuration>
         </plugin>
         <plugin>
@@ -850,6 +858,11 @@
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
         <version>${hipparchus.rat.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-changes-plugin</artifactId>
+        <version>${hipparchus.maven-changes-plugin.version}</version>
       </plugin>
       <plugin>
         <artifactId>maven-pmd-plugin</artifactId>
