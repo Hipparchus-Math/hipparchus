@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.0" date="TBD" description="This is the first release of the library">
+      <action dev="evan" type="fix">
+        Fix out of order event detection in rare cases.
+      </action>
       <action dev="luc" type="fix">
         Fixed wrong handling of state resets in Adams-Bashforth and Adams-Moulton integrators.
       </action>
@@ -60,7 +63,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="update">
         Added early detection of NaNs appearing during integration.
       </action>
-      <action dev="evan" type="bug">
+      <action dev="evan" type="fix">
         Enhance reliability of event detection with multiple event detectors.
       </action>
       <action dev="luc" type="update">
