@@ -53,6 +53,10 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="evan" type="fix">
         Fix out of order event detection in rare cases.
       </action>
+      <action dev="luc" type="update">
+        Revamped Ordinary Differential Equations API to match
+        the new API introduced with field-based ODE.
+      </action>
       <action dev="luc" type="fix">
         Fixed wrong handling of state resets in Adams-Bashforth and Adams-Moulton integrators.
       </action>

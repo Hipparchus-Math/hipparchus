@@ -171,6 +171,13 @@
 
             <!-- this one is a regular expression template for Apache headers by itself! -->
             <exclude>src/conf/license-header.txt</exclude>
+            
+            <!-- trivial -->
+            <exclude>src/site/resources/css/site.css</exclude>
+
+            <!-- attributed in NOTICE -->
+            <exclude>src/site/resources/js/html5.js</exclude>
+            <exclude>src/site/resources/js/jquery.min.js</exclude>
 
           </excludes>
         </configuration>
