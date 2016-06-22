@@ -43,8 +43,8 @@
   </licenses>
 
   <scm>
-    <connection>scm:git:https://github.com/Hipparchus-Math/hipparchus.git</connection>
-    <developerConnection>scm:git:git@github.com:Hipparchus-Math/hipparchus.git</developerConnection>
+    <connection>${hipparchusScmConnection}</connection>
+    <developerConnection>${hipparchusScmDeveloperConnection}</developerConnection>
     <url>https://github.com/Hipparchus-Math/hipparchus</url>
   </scm>
 
@@ -445,6 +445,10 @@
 
     <!-- Root Hipparchus directory so sub-modules can refer to files in the parent directory. -->
     <hipparchusParentDir>${basedir}</hipparchusParentDir>
+
+    <!-- scm connections -->
+    <hipparchusScmConnection>scm:git:https://github.com/Hipparchus-Math/hipparchus.git</hipparchusScmConnection>
+    <hipparchusScmDeveloperConnection>scm:git:ssh://github.com/Hipparchus-Math/hipparchus.git</hipparchusScmDeveloperConnection>
 
     <!-- Project specific plugin versions -->
 
