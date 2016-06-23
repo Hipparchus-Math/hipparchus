@@ -43,9 +43,6 @@ often than would be possible in a large monolithic library.
      core Java platform (at least Java 1.8 starting with version
      1.0 of the library).
 
- ---
-
-
 ## Fork
  
 Hipparchus started as a fork of [Apache Commons Math](https://commons.apache.org/math/).
@@ -57,8 +54,14 @@ Apache Commons Math 3.6.1 with some elements of the development version
 that would ultimately lead to Apache Commons Math 4.0 which was not released
 at fork time.
 
-In order to help users who would like to follow Hipparchus, a
-[migration module](hipparchus-migration/index.html)
-has been set up with some temporary classes that can be used to continue
-using some of the initial APIs and migration scripts that can be applied to
-source code in order to convert them to rely on Hipparchus.
+ ---
+
+## 1.0 Release is out!
+
+Hipparchus 1.0 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.0 release are:
+
+* The library has been divided into modules: a core module including base numerics, PRNGs and probability distributions; and implementation modules (depending on core) for optimization, differential equations, statistics, clustering, fitting, fast-fourier transforms and geometry.
+* A migration module is included to assist users migrating from Apache Commons Math.
+* A samples module is included containing sample code using the library.
+* APIs and implementations have been simplified and improved throughtout the library.
+* The User Guide has been updated and improved.
