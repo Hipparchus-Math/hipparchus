@@ -35,19 +35,16 @@ development environment:
 
 Hipparchus releases are provided in source and binary distributions via the links below.  Source packages are the most complete, since the other packages (binary jars, javadoc jars, source jars, web content) are created from these sources.
 
-Hipparchus is also available in maven central repository,
-with groupID org.hipparchus and artifactIds hipparchus-core,
-hipparchus-clustering, hipparchus-fft, hipparchus-fitting,
-hipparchus-geometry, hipparchus-ode, hipparchus-optim and hipparchus-stat. There is also a hipparchus-migration
-artifact to help migrating from Apache Commons Math.
-Maven's internal mechanism will automatically download any internal dependencies among the artifacts.
+Hipparchus is also available in maven central repository, with groupID org.hipparchus and artifactIds hipparchus-core,
+hipparchus-clustering, hipparchus-fft, hipparchus-fitting, hipparchus-geometry, hipparchus-ode, hipparchus-optim and hipparchus-stat. There is also a hipparchus-migration artifact to help migrating from Apache Commons Math.
+Maven's internal mechanism will automatically download any internal dependencies among the artifacts.  Signatures may be verified using the Hipparchus [KEYS](http://www.hipparchus.org/KEYS).
 
 ---
 
-|     package       |                                  link                                                     |
-|-------------------|-------------------------------------------------------------------------------------------|
-|  source (zip)     | [hipparchus-1.0-src.zip](https://hipparchus.org/downloads/hipparchus-1.0-src.zip)         |
-|  source (tar.bz2) | [hipparchus-1.0-src.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.0-src.tar.bz2) |
-|  binary (zip)     | [hipparchus-1.0-bin.zip](https://hipparchus.org/downloads/hipparchus-1.0-bin.zip)         |
-|  binary (tar.bz2) | [hipparchus-1.0-bin.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.0-bin.tar.bz2) |
+|     package       |                                  link                                                     | hash | signature |
+|-------------------|-------------------------------------------------------------------------------------------|------|-----------|
+|  source (zip)     | [hipparchus-1.0-src.zip](https://hipparchus.org/downloads/hipparchus-1.0-src.zip) | [md5](https://hipparchus.org/downloads/hipparchus-1.0-src.zip.md5)| [sig](https://hipparchus.org/downloads/hipparchus-1.0-src.zip.asc)|
+|  source (tar.bz2) | [hipparchus-1.0-src.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.0-src.tar.bz2) | [md5](https://hipparchus.org/downloads/hipparchus-1.0-src.tar.bz2.md5) | [sig](https://hipparchus.org/downloads/hipparchus-1.0-src.tar.bz2.asc)|
+|  binary (zip)     | [hipparchus-1.0-bin.zip](https://hipparchus.org/downloads/hipparchus-1.0-bin.zip)| [md5](https://hipparchus.org/downloads/hipparchus-1.0-bin.zip.md5) | [sig](https://hipparchus.org/downloads/hipparchus-1.0-bin.zip.asc)|
+|  binary (tar.bz2) | [hipparchus-1.0-bin.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.0-bin.tar.bz2) | [md5](https://hipparchus.org/downloads/hipparchus-1.0-bin.tar.bz2.md5) | [sig](https://hipparchus.org/downloads/hipparchus-1.0-bin.tar.bz2.asc)
 version 1.0 downloads (release date: 23-June-2016)
