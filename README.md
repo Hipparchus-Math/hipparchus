@@ -28,11 +28,11 @@ Documentation
 
 More information can be found on the [homepage](https://hipparchus.org/).
 The [JavaDoc](https://hipparchus.org/apidocs) can be browsed.
-Questions related to the usage of Hipparchus should be posted to the [users mailing list](users@hipparchus.org).
+Questions related to the usage of Hipparchus should be posted to the [users mailing list](mailto:users@hipparchus.org).
 
 Where can I get the latest release?
 -----------------------------------
-You can download source and binaries from our [download page](https://hipparchus.org/downloads/).
+You can download source and binaries from our [download page](https://hipparchus.org/downloads.html).
 
 Alternatively you can pull it from the central Maven repositories:
 
@@ -94,7 +94,7 @@ and you want to switch to Hipparchus, you can also add the temporary migration j
 Contributing
 ------------
 
-We accept PRs via github. The [developers mailing list](developers@hipparchus.org) is the main channel of communication for contributors.
+We accept PRs via github. The [developers mailing list](mailto:developers@hipparchus.org) is the main channel of communication for contributors.
 There are some guidelines which will make applying PRs easier for us:
 
 + No tabs! Please use spaces for indentation.
