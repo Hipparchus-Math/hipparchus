@@ -21,6 +21,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
@@ -33,6 +35,8 @@ import org.junit.Test;
  * Test cases for the {@link StreamingStatistics} class.
  */
 public class StreamingStatisticsTest {
+
+    private final double[] testArray = new double[] { 1, 2, 2, 3 };
 
     private final double one = 1;
     private final float twoF = 2;
@@ -49,35 +53,56 @@ public class StreamingStatisticsTest {
     private final double max = 3;
     private final double tolerance = 10E-15;
 
-    protected StreamingStatistics createSummaryStatistics() {
+    protected StreamingStatistics createStreamingStatistics() {
         return new StreamingStatistics();
     }
 
     /** test stats */
     @Test
     public void testStats() {
-        StreamingStatistics u = createSummaryStatistics();
-        assertEquals("total count",0,u.getN(),tolerance);
+        StreamingStatistics u = createStreamingStatistics();
+        assertEquals("total count", 0, u.getN(), tolerance);
         u.addValue(one);
         u.addValue(twoF);
         u.addValue(twoL);
         u.addValue(three);
-        assertEquals("N",n,u.getN(),tolerance);
-        assertEquals("sum",sum,u.getSum(),tolerance);
-        assertEquals("sumsq",sumSq,u.getSumOfSquares(),tolerance);
-        assertEquals("var",var,u.getVariance(),tolerance);
-        assertEquals("population var",popVar,u.getPopulationVariance(),tolerance);
-        assertEquals("std",std,u.getStandardDeviation(),tolerance);
-        assertEquals("mean",mean,u.getMean(),tolerance);
-        assertEquals("min",min,u.getMin(),tolerance);
-        assertEquals("max",max,u.getMax(),tolerance);
+        assertEquals("N", n, u.getN(), tolerance);
+        assertEquals("sum", sum, u.getSum(), tolerance);
+        assertEquals("sumsq", sumSq, u.getSumOfSquares(), tolerance);
+        assertEquals("var", var, u.getVariance(), tolerance);
+        assertEquals("population var", popVar, u.getPopulationVariance(), tolerance);
+        assertEquals("std", std, u.getStandardDeviation(), tolerance);
+        assertEquals("mean", mean, u.getMean(), tolerance);
+        assertEquals("min", min, u.getMin(), tolerance);
+        assertEquals("max", max, u.getMax(), tolerance);
         u.clear();
-        assertEquals("total count",0,u.getN(),tolerance);
+        assertEquals("total count", 0, u.getN(), tolerance);
+    }
+
+    @Test
+    public void testConsume() {
+        StreamingStatistics u = createStreamingStatistics();
+        assertEquals("total count", 0, u.getN(), tolerance);
+
+        Arrays.stream(testArray)
+              .forEach(u);
+
+        assertEquals("N", n, u.getN(), tolerance);
+        assertEquals("sum", sum, u.getSum(), tolerance);
+        assertEquals("sumsq", sumSq, u.getSumOfSquares(), tolerance);
+        assertEquals("var", var, u.getVariance(), tolerance);
+        assertEquals("population var", popVar, u.getPopulationVariance(), tolerance);
+        assertEquals("std", std, u.getStandardDeviation(), tolerance);
+        assertEquals("mean", mean, u.getMean(), tolerance);
+        assertEquals("min", min, u.getMin(), tolerance);
+        assertEquals("max", max, u.getMax(), tolerance);
+        u.clear();
+        assertEquals("total count", 0, u.getN(), tolerance);
     }
 
     @Test
     public void testN0andN1Conditions() {
-        StreamingStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createStreamingStatistics();
         assertTrue("Mean of n = 0 set should be NaN", Double.isNaN( u.getMean() ) );
         assertTrue("Standard Deviation of n = 0 set should be NaN",
                    Double.isNaN( u.getStandardDeviation() ) );
@@ -99,7 +124,7 @@ public class StreamingStatisticsTest {
 
     @Test
     public void testProductAndGeometricMean() {
-        StreamingStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createStreamingStatistics();
         u.addValue( 1.0 );
         u.addValue( 2.0 );
         u.addValue( 3.0 );
@@ -110,7 +135,7 @@ public class StreamingStatisticsTest {
 
     @Test
     public void testNaNContracts() {
-        StreamingStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createStreamingStatistics();
         assertTrue("mean not NaN",Double.isNaN(u.getMean()));
         assertTrue("min not NaN",Double.isNaN(u.getMin()));
         assertTrue("std dev not NaN",Double.isNaN(u.getStandardDeviation()));
@@ -136,7 +161,7 @@ public class StreamingStatisticsTest {
 
     @Test
     public void testGetSummary() {
-        StreamingStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createStreamingStatistics();
         StatisticalSummary summary = u.getSummary();
         verifySummary(u, summary);
         u.addValue(1d);
@@ -152,7 +177,7 @@ public class StreamingStatisticsTest {
 
     @Test
     public void testSerialization() {
-        StreamingStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createStreamingStatistics();
         // Empty test
         UnitTestUtils.checkSerializedEquality(u);
         StreamingStatistics s = (StreamingStatistics) UnitTestUtils.serializeAndRecover(u);
@@ -175,13 +200,13 @@ public class StreamingStatisticsTest {
 
     @Test
     public void testEqualsAndHashCode() {
-        StreamingStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createStreamingStatistics();
         StreamingStatistics t = null;
         int emptyHash = u.hashCode();
         assertTrue("reflexive", u.equals(u));
         assertFalse("non-null compared to null", u.equals(t));
         assertFalse("wrong type", u.equals(Double.valueOf(0)));
-        t = createSummaryStatistics();
+        t = createStreamingStatistics();
         assertTrue("empty instances should be equal", t.equals(u));
         assertTrue("empty instances should be equal", u.equals(t));
         assertEquals("empty hash code", emptyHash, t.hashCode());
@@ -216,7 +241,7 @@ public class StreamingStatisticsTest {
 
     @Test
     public void testCopy() {
-        StreamingStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createStreamingStatistics();
         u.addValue(2d);
         u.addValue(1d);
         u.addValue(3d);
@@ -251,7 +276,7 @@ public class StreamingStatisticsTest {
     @Test
     public void testQuadraticMean() {
         final double[] values = { 1.2, 3.4, 5.6, 7.89 };
-        final StreamingStatistics stats = createSummaryStatistics();
+        final StreamingStatistics stats = createStreamingStatistics();
 
         final int len = values.length;
         double expected = 0;
@@ -268,7 +293,7 @@ public class StreamingStatisticsTest {
 
     @Test
     public void testToString() {
-        StreamingStatistics u = createSummaryStatistics();
+        StreamingStatistics u = createStreamingStatistics();
         for (int i = 0; i < 5; i++) {
             u.addValue(i);
         }

@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="1.1" date="TBD" description="This is a maintenance release.">
+      <action dev="tn" type="add">
+        "StorelessUnivariateStatistic", "DescriptiveStatistics" and "StreamingStatistics"
+        now extend from "DoubleConsumer", allowing to easily use them within streams.
+      </action>
+    </release>
     <release version="1.0" date="TBD" description="This is the first release of the library">
       <action dev="tn" type="update">
         Refactored descriptive statistics package to simplify API and implementations and use

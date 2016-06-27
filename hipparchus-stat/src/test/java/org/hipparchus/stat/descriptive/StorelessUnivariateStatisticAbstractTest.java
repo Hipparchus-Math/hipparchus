@@ -20,6 +20,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Arrays;
+
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.stat.descriptive.moment.SecondMoment;
@@ -269,4 +271,17 @@ public abstract class StorelessUnivariateStatisticAbstractTest
         assertEquals(statU.getResult(), statAgg.getResult(), getTolerance());
     }
 
+    @Test
+    public void testConsume() {
+        StorelessUnivariateStatistic stat = getUnivariateStatistic();
+
+        Arrays.stream(testArray)
+              .forEach(stat);
+
+        assertEquals(expectedValue(), stat.getResult(), getTolerance());
+
+        StorelessUnivariateStatistic stat2 = getUnivariateStatistic();
+        stat2.incrementAll(testArray);
+        assertEquals(stat2.getResult(), stat.getResult(), getTolerance());
+    }
 }

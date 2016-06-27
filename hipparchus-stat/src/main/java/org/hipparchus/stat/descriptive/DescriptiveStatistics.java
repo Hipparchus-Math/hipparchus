@@ -18,6 +18,7 @@ package org.hipparchus.stat.descriptive;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.function.DoubleConsumer;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -54,7 +55,8 @@ import org.hipparchus.util.ResizableDoubleArray;
  * <p>
  * Note: this class is not threadsafe.
  */
-public class DescriptiveStatistics implements StatisticalSummary, Serializable {
+public class DescriptiveStatistics
+    implements StatisticalSummary, DoubleConsumer, Serializable {
 
     /**
      * Represents an infinite window size.  When the {@link #getWindowSize()}
@@ -219,6 +221,12 @@ public class DescriptiveStatistics implements StatisticalSummary, Serializable {
         } else {
             eDA.addElement(v);
         }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void accept(double v) {
+        addValue(v);
     }
 
     /**

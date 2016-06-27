@@ -16,6 +16,8 @@
  */
 package org.hipparchus.stat.descriptive;
 
+import java.util.function.DoubleConsumer;
+
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
@@ -34,7 +36,8 @@ import org.hipparchus.util.MathUtils;
  * {@link #evaluate(double[], int, int)} methods do <b>NOT</b> alter the internal
  * state of the respective statistic.
  */
-public interface StorelessUnivariateStatistic extends UnivariateStatistic {
+public interface StorelessUnivariateStatistic
+    extends UnivariateStatistic, DoubleConsumer {
 
     /**
      * {@inheritDoc}
@@ -73,6 +76,12 @@ public interface StorelessUnivariateStatistic extends UnivariateStatistic {
      * @param d  the new value.
      */
     void increment(double d);
+
+    /** {@inheritDoc} */
+    @Override
+    default void accept(double value) {
+        increment(value);
+    }
 
     /**
      * Updates the internal state of the statistic to reflect addition of

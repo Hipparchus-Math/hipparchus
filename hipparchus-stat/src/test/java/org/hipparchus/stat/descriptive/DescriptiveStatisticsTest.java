@@ -20,6 +20,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.Arrays;
 import java.util.Locale;
 
 import org.hipparchus.UnitTestUtils;
@@ -31,6 +32,7 @@ import org.hipparchus.stat.descriptive.rank.Max;
 import org.hipparchus.stat.descriptive.rank.Min;
 import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.stat.descriptive.summary.SumOfSquares;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Test;
 
@@ -39,8 +41,68 @@ import org.junit.Test;
  */
 public class DescriptiveStatisticsTest {
 
+    private final double[] testArray = new double[] { 1, 2, 2, 3 };
+
+    private final double one = 1;
+    private final float twoF = 2;
+    private final long twoL = 2;
+    private final int three = 3;
+    private final double mean = 2;
+    private final double sumSq = 18;
+    private final double sum = 8;
+    private final double var = 0.666666666666666666667;
+    private final double popVar = 0.5;
+    private final double std = FastMath.sqrt(var);
+    private final double n = 4;
+    private final double min = 1;
+    private final double max = 3;
+    private final double tolerance = 10E-15;
+
     protected DescriptiveStatistics createDescriptiveStatistics() {
         return new DescriptiveStatistics();
+    }
+
+    /** test stats */
+    @Test
+    public void testStats() {
+        DescriptiveStatistics u = createDescriptiveStatistics();
+        assertEquals("total count", 0, u.getN(), tolerance);
+        u.addValue(one);
+        u.addValue(twoF);
+        u.addValue(twoL);
+        u.addValue(three);
+        assertEquals("N", n, u.getN(), tolerance);
+        assertEquals("sum", sum, u.getSum(), tolerance);
+        assertEquals("sumsq", sumSq, u.getSumOfSquares(), tolerance);
+        assertEquals("var", var, u.getVariance(), tolerance);
+        assertEquals("population var", popVar, u.getPopulationVariance(), tolerance);
+        assertEquals("std", std, u.getStandardDeviation(), tolerance);
+        assertEquals("mean", mean, u.getMean(), tolerance);
+        assertEquals("min", min, u.getMin(), tolerance);
+        assertEquals("max", max, u.getMax(), tolerance);
+        u.clear();
+        assertEquals("total count", 0, u.getN(), tolerance);
+    }
+
+    @Test
+    public void testConsume() {
+        DescriptiveStatistics u = createDescriptiveStatistics();
+        assertEquals("total count", 0, u.getN(), tolerance);
+
+        Arrays.stream(testArray)
+              .forEach(u);
+
+        assertEquals("N", n, u.getN(), tolerance);
+        assertEquals("sum", sum, u.getSum(), tolerance);
+        assertEquals("sumsq", sumSq, u.getSumOfSquares(), tolerance);
+        assertEquals("var", var, u.getVariance(), tolerance);
+        assertEquals("population var", popVar, u.getPopulationVariance(), tolerance);
+        assertEquals("std", std, u.getStandardDeviation(), tolerance);
+        assertEquals("mean", mean, u.getMean(), tolerance);
+        assertEquals("min", min, u.getMin(), tolerance);
+        assertEquals("max", max, u.getMax(), tolerance);
+        u.clear();
+        assertEquals("total count", 0, u.getN(), tolerance);
     }
 
     @Test

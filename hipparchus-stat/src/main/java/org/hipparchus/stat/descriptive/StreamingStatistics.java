@@ -17,6 +17,7 @@
 package org.hipparchus.stat.descriptive;
 
 import java.io.Serializable;
+import java.util.function.DoubleConsumer;
 
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.stat.descriptive.moment.GeometricMean;
@@ -41,7 +42,8 @@ import org.hipparchus.util.Precision;
  * Note: This class is not thread-safe.
  */
 public class StreamingStatistics
-    implements StatisticalSummary, AggregatableStatistic<StreamingStatistics>, Serializable {
+    implements StatisticalSummary, AggregatableStatistic<StreamingStatistics>,
+               DoubleConsumer, Serializable {
 
     /** Serialization UID */
     private static final long serialVersionUID = 20160422L;
@@ -149,6 +151,12 @@ public class StreamingStatistics
         // as they use external moments.
 
         n++;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void accept(double value) {
+        addValue(value);
     }
 
     /**
