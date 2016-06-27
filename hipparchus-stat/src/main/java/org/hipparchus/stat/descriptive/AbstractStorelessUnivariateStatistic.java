@@ -77,4 +77,11 @@ public abstract class AbstractStorelessUnivariateStatistic
         return 31 * (31 + MathUtils.hash(getResult())) + MathUtils.hash(getN());
     }
 
+    @Override
+    public String toString() {
+        return String.format("%s: result=%f, N=%d",
+                             getClass().getSimpleName(),
+                             getResult(),
+                             getN());
+    }
 }
