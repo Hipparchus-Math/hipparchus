@@ -122,7 +122,6 @@
               <includes>hipparchus-${project.version}-bin.*,hipparchus-${project.version}-src.*</includes>
               <serverId>${hipparchus.staging.id}</serverId>
               <url>${hipparchus.staging.url}</url>
-              <toDir>${hipparchus.staging.directory}</toDir>
             </configuration>
           </execution>
         </executions>

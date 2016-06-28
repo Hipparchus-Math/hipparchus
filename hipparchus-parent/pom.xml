@@ -450,6 +450,10 @@
     <hipparchusScmConnection>scm:git:https://github.com/Hipparchus-Math/hipparchus.git</hipparchusScmConnection>
     <hipparchusScmDeveloperConnection>scm:git:ssh://github.com/Hipparchus-Math/hipparchus.git</hipparchusScmDeveloperConnection>
 
+    <!-- upload parameters -->
+    <hipparchus.staging.id>hipparchus-staging</hipparchus.staging.id>
+    <hipparchus.staging.url>https://www.hipparchus.org/rc/</hipparchus.staging.url>
+
     <!-- Project specific plugin versions -->
 
     <hipparchus.findbugs-maven-plugin.version>3.0.1</hipparchus.findbugs-maven-plugin.version>
