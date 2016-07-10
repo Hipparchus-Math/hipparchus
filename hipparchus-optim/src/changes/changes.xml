@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Optim Release Notes</title>
   </properties>
   <body>
-    <release version="1.0" date="TBD" description="This is the first release of the library">
+    <release version="1.0" date="2016-06-23" description="This is the first release of the library">
       <action dev="tn" type="update">
         Modularized the library.
       </action>

@@ -58,7 +58,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         now extend from "DoubleConsumer", allowing to easily use them within streams.
       </action>
     </release>
-    <release version="1.0" date="TBD" description="This is the first release of the library">
+    <release version="1.0" date="2016-06-23" description="This is the first release of the library">
       <action dev="tn" type="update">
         Refactored descriptive statistics package to simplify API and implementations and use
         more meaningful class names.
