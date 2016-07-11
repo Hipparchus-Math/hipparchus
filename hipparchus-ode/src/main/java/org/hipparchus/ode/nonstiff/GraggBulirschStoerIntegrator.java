@@ -100,7 +100,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
     /** step size sequence. */
     private int[] sequence;
 
-    /** overall cost of applying step reduction up to iteration k+1, in number of calls. */
+    /** overall cost of applying step reduction up to iteration k + 1, in number of calls. */
     private int[] costPerStep;
 
     /** cost per unit step. */
@@ -232,14 +232,14 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
 
      * <p>The new step size hNew is computed from the old one h by:
      * <pre>
-     * hNew = h * stepControl2 / (err/stepControl1)^(1/(2k+1))
+     * hNew = h * stepControl2 / (err/stepControl1)^(1/(2k + 1))
      * </pre>
      * where err is the scaled error and k the iteration number of the
      * extrapolation scheme (counting from 0). The default values are
      * 0.65 for stepControl1 and 0.94 for stepControl2.</p>
      * <p>The step size is subject to the restriction:
      * <pre>
-     * stepControl3^(1/(2k+1))/stepControl4 <= hNew/h <= 1/stepControl3^(1/(2k+1))
+     * stepControl3^(1/(2k + 1))/stepControl4 <= hNew/h <= 1/stepControl3^(1/(2k + 1))
      * </pre>
      * The default values are 0.02 for stepControl3 and 4.0 for
      * stepControl4.</p>
@@ -288,8 +288,8 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
      * maximal order that will be used is always even, it is twice the
      * maximal number of columns in the extrapolation table.</p>
      * <pre>
-     * order is decreased if w(k-1) <= w(k)   * orderControl1
-     * order is increased if w(k)   <= w(k-1) * orderControl2
+     * order is decreased if w(k - 1) <= w(k)     * orderControl1
+     * order is increased if w(k)     <= w(k - 1) * orderControl2
      * </pre>
      * <p>where w is the table of work per unit step for each order
      * (number of function calls divided by the step length), and k is
@@ -353,14 +353,14 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
         // (number of function calls for each column of the extrapolation table)
         costPerStep[0] = sequence[0] + 1;
         for (int k = 1; k < size; ++k) {
-            costPerStep[k] = costPerStep[k-1] + sequence[k];
+            costPerStep[k] = costPerStep[k - 1] + sequence[k];
         }
 
         // initialize the extrapolation tables
         for (int k = 0; k < size; ++k) {
             coeff[k] = (k > 0) ? new double[k] : null;
             for (int l = 0; l < k; ++l) {
-                final double ratio = ((double) sequence[k]) / sequence[k-l-1];
+                final double ratio = ((double) sequence[k]) / sequence[k - l - 1];
                 coeff[k][l] = 1.0 / (ratio * ratio - 1.0);
             }
         }
@@ -457,7 +457,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                 yTmp[i]       = middle;
             }
 
-            f[j+1] = computeDerivatives(t, yEnd);
+            f[j + 1] = computeDerivatives(t, yEnd);
 
             // stability check
             if (performTest && (j <= maxChecks) && (k < maxIter)) {
@@ -468,7 +468,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                 }
                 double deltaNorm = 0.0;
                 for (int l = 0; l < scale.length; ++l) {
-                    final double ratio = (f[j+1][l] - f[0][l]) / scale[l];
+                    final double ratio = (f[j + 1][l] - f[0][l]) / scale[l];
                     deltaNorm += ratio * ratio;
                 }
                 if (deltaNorm > 4 * FastMath.max(1.0e-15, initialNorm)) {
@@ -501,15 +501,15 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
         for (int j = 1; j < k; ++j) {
             for (int i = 0; i < last.length; ++i) {
                 // Aitken-Neville's recursive formula
-                diag[k-j-1][i] = diag[k-j][i] +
-                                coeff[k+offset][j-1] * (diag[k-j][i] - diag[k-j-1][i]);
+                diag[k - j - 1][i] = diag[k - j][i] +
+                                coeff[k + offset][j - 1] * (diag[k - j][i] - diag[k - j - 1][i]);
             }
         }
 
         // update the last element
         for (int i = 0; i < last.length; ++i) {
             // Aitken-Neville's recursive formula
-            last[i] = diag[0][i] + coeff[k+offset][k-1] * (diag[0][i] - last[i]);
+            last[i] = diag[0][i] + coeff[k + offset][k - 1] * (diag[0][i] - last[i]);
         }
     }
 
@@ -526,9 +526,9 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
         // create some internal working arrays
         double[]         y        = getStepStart().getCompleteState();
         final double[]   y1       = new double[y.length];
-        final double[][] diagonal = new double[sequence.length-1][];
-        final double[][] y1Diag   = new double[sequence.length-1][];
-        for (int k = 0; k < sequence.length-1; ++k) {
+        final double[][] diagonal = new double[sequence.length - 1][];
+        final double[][] y1Diag   = new double[sequence.length - 1][];
+        for (int k = 0; k < sequence.length - 1; ++k) {
             diagonal[k] = new double[y.length];
             y1Diag[k]   = new double[y.length];
         }
@@ -606,8 +606,8 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
 
                 // modified midpoint integration with the current substep
                 if ( ! tryStep(getStepStart().getTime(), y, getStepSize(), k, scale, fk[k],
-                               (k == 0) ? yMidDots[0] : diagonal[k-1],
-                               (k == 0) ? y1 : y1Diag[k-1])) {
+                               (k == 0) ? yMidDots[0] : diagonal[k - 1],
+                               (k == 0) ? y1 : y1Diag[k - 1])) {
 
                     // the stability check failed, we reduce the global step
                     hNew   = FastMath.abs(filterStep(getStepSize() * stabilityReduction, forward, false));
@@ -677,7 +677,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                                 loop   = false;
                                                 targetIter = k;
                                                 if ((targetIter > 1) &&
-                                                    (costPerTimeUnit[targetIter-1] <
+                                                    (costPerTimeUnit[targetIter - 1] <
                                                                     orderControl1 * costPerTimeUnit[targetIter])) {
                                                     --targetIter;
                                                 }
@@ -695,14 +695,14 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                         // estimate if there is a chance convergence will
                                         // be reached on next iteration, using the
                                         // asymptotic evolution of error
-                                        final double ratio = ((double) sequence[k+1]) / sequence[0];
+                                        final double ratio = ((double) sequence[k + 1]) / sequence[0];
                                         if (error > ratio * ratio) {
                                             // we don't expect to converge on next iteration
                                             // we reject the step immediately
                                             reject = true;
                                             loop = false;
                                             if ((targetIter > 1) &&
-                                                 (costPerTimeUnit[targetIter-1] <
+                                                 (costPerTimeUnit[targetIter - 1] <
                                                                  orderControl1 * costPerTimeUnit[targetIter])) {
                                                 --targetIter;
                                             }
@@ -715,7 +715,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                                     if (error > 1.0) {
                                         reject = true;
                                         if ((targetIter > 1) &&
-                                            (costPerTimeUnit[targetIter-1] <
+                                            (costPerTimeUnit[targetIter - 1] <
                                                             orderControl1 * costPerTimeUnit[targetIter])) {
                                             --targetIter;
                                         }
@@ -756,25 +756,25 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                     double factor = FastMath.pow(0.5 * sequence[l2], l);
                     int middleIndex = fk[l2].length / 2;
                     for (int i = 0; i < y.length; ++i) {
-                        yMidDots[l+1][i] = factor * fk[l2][middleIndex + l][i];
+                        yMidDots[l + 1][i] = factor * fk[l2][middleIndex + l][i];
                     }
                     for (int j = 1; j <= k - l2; ++j) {
                         factor = FastMath.pow(0.5 * sequence[j + l2], l);
-                        middleIndex = fk[l2+j].length / 2;
+                        middleIndex = fk[l2 + j].length / 2;
                         for (int i = 0; i < y.length; ++i) {
-                            diagonal[j-1][i] = factor * fk[l2+j][middleIndex+l][i];
+                            diagonal[j - 1][i] = factor * fk[l2 + j][middleIndex + l][i];
                         }
-                        extrapolate(l2, j, diagonal, yMidDots[l+1]);
+                        extrapolate(l2, j, diagonal, yMidDots[l + 1]);
                     }
                     for (int i = 0; i < y.length; ++i) {
-                        yMidDots[l+1][i] *= getStepSize();
+                        yMidDots[l + 1][i] *= getStepSize();
                     }
 
                     // compute centered differences to evaluate next derivatives
                     for (int j = (l + 1) / 2; j <= k; ++j) {
                         for (int m = fk[j].length - 1; m >= 2 * (l + 1); --m) {
                             for (int i = 0; i < y.length; ++i) {
-                                fk[j][m][i] -= fk[j][m-2][i];
+                                fk[j][m][i] -= fk[j][m - 2][i];
                             }
                         }
                     }
@@ -798,7 +798,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                         // use the interpolation error to limit stepsize
                         final double interpError = interpolator.estimateError(scale);
                         hInt = FastMath.abs(getStepSize() /
-                                                       FastMath.max(FastMath.pow(interpError, 1.0 / (mu+4)), 0.01));
+                                                       FastMath.max(FastMath.pow(interpError, 1.0 / (mu + 4)), 0.01));
                         if (interpError > 10.0) {
                             hNew   = filterStep(hInt, forward, false);
                             reject = true;
@@ -830,14 +830,14 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                     }
                 } else if (k <= targetIter) {
                     optimalIter = k;
-                    if (costPerTimeUnit[k-1] < orderControl1 * costPerTimeUnit[k]) {
-                        optimalIter = k-1;
-                    } else if (costPerTimeUnit[k] < orderControl2 * costPerTimeUnit[k-1]) {
-                        optimalIter = FastMath.min(k+1, sequence.length - 2);
+                    if (costPerTimeUnit[k - 1] < orderControl1 * costPerTimeUnit[k]) {
+                        optimalIter = k - 1;
+                    } else if (costPerTimeUnit[k] < orderControl2 * costPerTimeUnit[k - 1]) {
+                        optimalIter = FastMath.min(k + 1, sequence.length - 2);
                     }
                 } else {
                     optimalIter = k - 1;
-                    if ((k > 2) && (costPerTimeUnit[k-2] < orderControl1 * costPerTimeUnit[k-1])) {
+                    if ((k > 2) && (costPerTimeUnit[k - 2] < orderControl1 * costPerTimeUnit[k - 1])) {
                         optimalIter = k - 2;
                     }
                     if (costPerTimeUnit[k] < orderControl2 * costPerTimeUnit[optimalIter]) {
@@ -856,8 +856,8 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
                         hNew = filterStep(optimalStep[optimalIter], forward, false);
                     } else {
                         if ((k < targetIter) &&
-                                        (costPerTimeUnit[k] < orderControl2 * costPerTimeUnit[k-1])) {
-                            hNew = filterStep(optimalStep[k] * costPerStep[optimalIter+1] / costPerStep[k],
+                                        (costPerTimeUnit[k] < orderControl2 * costPerTimeUnit[k - 1])) {
+                            hNew = filterStep(optimalStep[k] * costPerStep[optimalIter + 1] / costPerStep[k],
                                               forward, false);
                         } else {
                             hNew = filterStep(optimalStep[k] * costPerStep[optimalIter] / costPerStep[k],
