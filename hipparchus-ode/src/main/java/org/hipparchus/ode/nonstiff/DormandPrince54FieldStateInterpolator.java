@@ -241,7 +241,7 @@ class DormandPrince54FieldStateInterpolator<T extends RealFieldElement<T>>
             interpolatedDerivatives = derivativeLinearCombination(coeffDot0, coeffDot1, coeffDot2, coeffDot3,
                                                                   coeffDot4, coeffDot5, coeffDot6);
         }
-        return new FieldODEStateAndDerivative<T>(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

@@ -23,6 +23,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.util.Decimal64Field;
+import org.junit.Test;
 
 public class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
@@ -107,6 +108,11 @@ public class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstract
     @Override
     public void testPartialDerivatives() {
         doTestPartialDerivatives(4.3e-13, new double[] { 2.2e-12, 5.6e-13, 9.4e-14, 9.4e-14, 5.6e-13 });
+    }
+
+    @Test
+    public void testSecondaryEquations() {
+        doTestSecondaryEquations(Decimal64Field.getInstance(), 1.0e-12, 5.6e-13);
     }
 
 }

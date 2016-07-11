@@ -17,6 +17,8 @@
 
 package org.hipparchus.ode.nonstiff;
 
+import org.junit.Test;
+
 public class MidpointIntegratorTest extends RungeKuttaIntegratorAbstractTest {
 
     protected RungeKuttaIntegrator createIntegrator(double step) {
@@ -87,6 +89,11 @@ public class MidpointIntegratorTest extends RungeKuttaIntegratorAbstractTest {
     @Override
     public void testSerialization() {
         doTestSerialization(737825, 1.19);
+    }
+
+    @Test
+    public void testSecondaryEquations() {
+        doTestSecondaryEquations(1.6e-6, 5.6e-13);
     }
 
 }

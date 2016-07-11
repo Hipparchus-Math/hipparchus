@@ -133,10 +133,11 @@ class AdamsFieldStateInterpolator<T extends RealFieldElement<T>> extends Abstrac
     protected FieldODEStateAndDerivative<T> computeInterpolatedStateAndDerivatives(final FieldEquationsMapper<T> equationsMapper,
                                                                                    final T time, final T theta,
                                                                                    final T thetaH, final T oneMinusThetaH) {
-        return taylor(reference, time, scalingH, scaled, nordsieck);
+        return taylor(equationsMapper, reference, time, scalingH, scaled, nordsieck);
     }
 
     /** Estimate state by applying Taylor formula.
+     * @param equationsMapper mapper for ODE equations primary and secondary components
      * @param reference reference state
      * @param time time at which state must be estimated
      * @param stepSize step size used in the scaled and Nordsieck arrays
@@ -145,7 +146,8 @@ class AdamsFieldStateInterpolator<T extends RealFieldElement<T>> extends Abstrac
      * @return estimated state
      * @param <S> the type of the field elements
      */
-    public static <S extends RealFieldElement<S>> FieldODEStateAndDerivative<S> taylor(final FieldODEStateAndDerivative<S> reference,
+    public static <S extends RealFieldElement<S>> FieldODEStateAndDerivative<S> taylor(final FieldEquationsMapper<S> equationsMapper,
+                                                                                       final FieldODEStateAndDerivative<S> reference,
                                                                                        final S time, final S stepSize,
                                                                                        final S[] scaled,
                                                                                        final Array2DRowFieldMatrix<S> nordsieck) {
@@ -172,15 +174,15 @@ class AdamsFieldStateInterpolator<T extends RealFieldElement<T>> extends Abstrac
             }
         }
 
-        S[] estimatedState = reference.getPrimaryState();
+        S[] estimatedState = reference.getCompleteState();
         for (int j = 0; j < stateVariation.length; ++j) {
-            stateVariation[j]    = stateVariation[j].add(scaled[j].multiply(normalizedAbscissa));
+            stateVariation[j] = stateVariation[j].add(scaled[j].multiply(normalizedAbscissa));
             estimatedState[j] = estimatedState[j].add(stateVariation[j]);
             estimatedDerivatives[j] =
                 estimatedDerivatives[j].add(scaled[j].multiply(normalizedAbscissa)).divide(x);
         }
 
-        return new FieldODEStateAndDerivative<S>(time, estimatedState, estimatedDerivatives);
+        return equationsMapper.mapStateAndDerivative(time, estimatedState, estimatedDerivatives);
 
     }
 

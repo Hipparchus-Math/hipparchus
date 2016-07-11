@@ -82,4 +82,9 @@ public class HighamHall54IntegratorTest extends EmbeddedRungeKuttaIntegratorAbst
         doTestPartialDerivatives(1.2e-11, 8.0e-11);
     }
 
+    @Test
+    public void testSecondaryEquations() {
+        doTestSecondaryEquations(9.7e-12, 1.3e-14);
+    }
+
 }

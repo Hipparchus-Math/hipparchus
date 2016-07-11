@@ -36,6 +36,7 @@ import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
+import org.hipparchus.ode.SecondaryODE;
 import org.hipparchus.ode.TestProblem1;
 import org.hipparchus.ode.TestProblem2;
 import org.hipparchus.ode.TestProblem3;
@@ -415,6 +416,79 @@ public abstract class RungeKuttaIntegratorAbstractTest {
         double step = 0.001 * (pb.getFinalTime() - pb.getInitialState().getTime());
         RungeKuttaIntegrator integ = createIntegrator(step);
         StepInterpolatorTestUtils.checkDerivativesConsistency(integ, pb, 0.001, 1.0e-10);
+    }
+
+    @Test
+    public abstract void testSecondaryEquations();
+
+    protected void doTestSecondaryEquations(final double epsilonSinCos,
+                                            final double epsilonLinear) {
+        OrdinaryDifferentialEquation sinCos = new OrdinaryDifferentialEquation() {
+
+            @Override
+            public int getDimension() {
+                return 2;
+            }
+
+            @Override
+            public double[] computeDerivatives(double t, double[] y) {
+                return new double[] { y[1], -y[0] };
+            }
+
+        };
+
+        SecondaryODE linear = new SecondaryODE() {
+
+            @Override
+            public int getDimension() {
+                return 1;
+            }
+
+            @Override
+            public double[] computeDerivatives(double t, double[] primary, double[] primaryDot, double[] secondary) {
+                return new double[] { -1 };
+            }
+
+        };
+
+        ExpandableODE expandable = new ExpandableODE(sinCos);
+        expandable.addSecondaryEquations(linear);
+
+        ODEIntegrator integrator = createIntegrator(0.001);
+        final double[] max = new double[2];
+        integrator.addStepHandler(new ODEStepHandler() {
+            @Override
+            public void handleStep(ODEStateInterpolator interpolator, boolean isLast) {
+                for (int i = 0; i <= 10; ++i) {
+                    double tPrev = interpolator.getPreviousState().getTime();
+                    double tCurr = interpolator.getCurrentState().getTime();
+                    double t     = (tPrev * (10 - i) + tCurr * i) / 10;
+                    ODEStateAndDerivative state = interpolator.getInterpolatedState(t);
+                    Assert.assertEquals(2, state.getPrimaryStateDimension());
+                    Assert.assertEquals(1, state.getNumberOfSecondaryStates());
+                    Assert.assertEquals(2, state.getSecondaryStateDimension(0));
+                    Assert.assertEquals(1, state.getSecondaryStateDimension(1));
+                    Assert.assertEquals(3, state.getCompleteStateDimension());
+                    max[0] = FastMath.max(max[0],
+                                          FastMath.abs(FastMath.sin(t) - state.getPrimaryState()[0]));
+                    max[0] = FastMath.max(max[0],
+                                          FastMath.abs(FastMath.cos(t) - state.getPrimaryState()[1]));
+                    max[1] = FastMath.max(max[1],
+                                          FastMath.abs(1 - t - state.getSecondaryState(1)[0]));
+                }
+            }
+        });
+
+        double[] primary0 = new double[] { 0.0, 1.0 };
+        double[][] secondary0 =  new double[][] { { 1.0 } };
+        ODEState initialState = new ODEState(0.0, primary0, secondary0);
+
+        ODEStateAndDerivative finalState =
+                        integrator.integrate(expandable, initialState, 10.0);
+        Assert.assertEquals(10.0, finalState.getTime(), 1.0e-12);
+        Assert.assertEquals(0, max[0], epsilonSinCos);
+        Assert.assertEquals(0, max[1], epsilonLinear);
+
     }
 
     @Test

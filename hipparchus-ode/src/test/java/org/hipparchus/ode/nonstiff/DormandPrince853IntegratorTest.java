@@ -82,4 +82,9 @@ public class DormandPrince853IntegratorTest extends EmbeddedRungeKuttaIntegrator
         doTestPartialDerivatives(2.6e-12, 2.0e-11);
     }
 
+    @Test
+    public void testSecondaryEquations() {
+        doTestSecondaryEquations(3.3e-12, 8.9e-15);
+    }
+
 }

@@ -100,7 +100,7 @@ class EulerFieldStateInterpolator<T extends RealFieldElement<T>>
             interpolatedDerivatives = derivativeLinearCombination(time.getField().getOne());
         }
 
-        return new FieldODEStateAndDerivative<T>(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

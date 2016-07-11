@@ -216,7 +216,7 @@ class LutherFieldStateInterpolator<T extends RealFieldElement<T>>
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2, coeffDot3, coeffDot4, coeffDot5, coeffDot6, coeffDot7);
         }
 
-        return new FieldODEStateAndDerivative<T>(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

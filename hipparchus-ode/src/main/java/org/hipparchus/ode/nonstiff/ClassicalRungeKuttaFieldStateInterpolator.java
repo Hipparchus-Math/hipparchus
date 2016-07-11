@@ -128,7 +128,7 @@ class ClassicalRungeKuttaFieldStateInterpolator<T extends RealFieldElement<T>>
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot23, coeffDot23, coeffDot4);
         }
 
-        return new FieldODEStateAndDerivative<T>(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

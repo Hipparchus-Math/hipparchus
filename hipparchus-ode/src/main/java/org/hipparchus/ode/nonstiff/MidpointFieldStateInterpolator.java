@@ -110,7 +110,7 @@ class MidpointFieldStateInterpolator<T extends RealFieldElement<T>>
             interpolatedDerivatives = derivativeLinearCombination(coeffDot1, coeffDot2);
         }
 
-        return new FieldODEStateAndDerivative<T>(time, interpolatedState, interpolatedDerivatives);
+        return mapper.mapStateAndDerivative(time, interpolatedState, interpolatedDerivatives);
 
     }
 

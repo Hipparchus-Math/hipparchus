@@ -21,6 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.util.Decimal64Field;
+import org.junit.Test;
 
 public class MidpointFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstractTest {
 
@@ -98,6 +99,11 @@ public class MidpointFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstra
     @Override
     public void testPartialDerivatives() {
         doTestPartialDerivatives(1.7e-4, new double[] { 1.0e-3, 2.8e-4, 3.8e-5, 2.8e-4, 2.8e-4 });
+    }
+
+    @Test
+    public void testSecondaryEquations() {
+        doTestSecondaryEquations(Decimal64Field.getInstance(), 1.6e-6, 5.6e-13);
     }
 
 }

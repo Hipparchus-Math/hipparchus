@@ -29,9 +29,11 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.FieldExpandableODE;
+import org.hipparchus.ode.FieldODEIntegrator;
 import org.hipparchus.ode.FieldODEState;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
+import org.hipparchus.ode.FieldSecondaryODE;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.TestFieldProblem1;
 import org.hipparchus.ode.TestFieldProblem2;
@@ -548,6 +550,88 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                     epsilonPartials[parameter]);
             }
         }
+
+    }
+
+    @Test
+    public abstract void testSecondaryEquations();
+
+    protected <T extends RealFieldElement<T>> void doTestSecondaryEquations(final Field<T> field,
+                                                                            final double epsilonSinCos,
+                                                                            final double epsilonLinear) {
+        FieldOrdinaryDifferentialEquation<T> sinCos = new FieldOrdinaryDifferentialEquation<T>() {
+
+            @Override
+            public int getDimension() {
+                return 2;
+            }
+
+            @Override
+            public T[] computeDerivatives(T t, T[] y) {
+                T[] yDot = y.clone();
+                yDot[0] = y[1];
+                yDot[1] = y[0].negate();
+                return yDot;
+            }
+
+        };
+
+        FieldSecondaryODE<T> linear = new FieldSecondaryODE<T>() {
+
+            @Override
+            public int getDimension() {
+                return 1;
+            }
+
+            @Override
+            public T[] computeDerivatives(T t, T[] primary, T[] primaryDot, T[] secondary) {
+                T[] secondaryDot = secondary.clone();
+                secondaryDot[0] = t.getField().getOne().negate();
+                return secondaryDot;
+            }
+
+        };
+
+        FieldExpandableODE<T> expandable = new FieldExpandableODE<>(sinCos);
+        expandable.addSecondaryEquations(linear);
+
+        FieldODEIntegrator<T> integrator = createIntegrator(field, field.getZero().add(0.001));
+        final double[] max = new double[2];
+        integrator.addStepHandler(new FieldODEStepHandler<T>() {
+            @Override
+            public void handleStep(FieldODEStateInterpolator<T> interpolator, boolean isLast) {
+                for (int i = 0; i <= 10; ++i) {
+                    T tPrev = interpolator.getPreviousState().getTime();
+                    T tCurr = interpolator.getCurrentState().getTime();
+                    T t     = tPrev.multiply(10 - i).add(tCurr.multiply(i)).divide(10);
+                    FieldODEStateAndDerivative<T> state = interpolator.getInterpolatedState(t);
+                    Assert.assertEquals(2, state.getPrimaryStateDimension());
+                    Assert.assertEquals(1, state.getNumberOfSecondaryStates());
+                    Assert.assertEquals(2, state.getSecondaryStateDimension(0));
+                    Assert.assertEquals(1, state.getSecondaryStateDimension(1));
+                    Assert.assertEquals(3, state.getCompleteStateDimension());
+                    max[0] = FastMath.max(max[0],
+                                          t.sin().subtract(state.getPrimaryState()[0]).abs().getReal());
+                    max[0] = FastMath.max(max[0],
+                                          t.cos().subtract(state.getPrimaryState()[1]).abs().getReal());
+                    max[1] = FastMath.max(max[1],
+                                          field.getOne().subtract(t).subtract(state.getSecondaryState(1)[0]).abs().getReal());
+                }
+            }
+        });
+
+        T[] primary0 = MathArrays.buildArray(field, 2);
+        primary0[0] = field.getZero();
+        primary0[1] = field.getOne();
+        T[][] secondary0 = MathArrays.buildArray(field, 1, 1);
+        secondary0[0][0] = field.getOne();
+        FieldODEState<T> initialState = new FieldODEState<T>(field.getZero(), primary0, secondary0);
+
+        FieldODEStateAndDerivative<T> finalState =
+                        integrator.integrate(expandable, initialState, field.getZero().add(10.0));
+        Assert.assertEquals(10.0, finalState.getTime().getReal(), 1.0e-12);
+        Assert.assertEquals(0, max[0], epsilonSinCos);
+        Assert.assertEquals(0, max[1], epsilonLinear);
 
     }
 

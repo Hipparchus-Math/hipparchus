@@ -69,6 +69,11 @@ public class AdamsMoultonFieldIntegratorTest extends AdamsFieldIntegratorAbstrac
         doPolynomial(Decimal64Field.getInstance(), 5, 2.2e-05, 1.1e-11);
     }
 
+    @Test
+    public void testSecondaryEquations() {
+        doTestSecondaryEquations(Decimal64Field.getInstance(), 1.9e-11, 7.2e-15);
+    }
+
     @Test(expected=MathIllegalStateException.class)
     public void testStartFailure() {
         doTestStartFailure(Decimal64Field.getInstance());

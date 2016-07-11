@@ -170,7 +170,7 @@ public abstract class RungeKuttaFieldIntegrator<T extends RealFieldElement<T>>
             }
             final T stepEnd   = getStepStart().getTime().add(getStepSize());
             final T[] yDotTmp = computeDerivatives(stepEnd, yTmp);
-            final FieldODEStateAndDerivative<T> stateTmp = new FieldODEStateAndDerivative<T>(stepEnd, yTmp, yDotTmp);
+            final FieldODEStateAndDerivative<T> stateTmp = equations.getMapper().mapStateAndDerivative(stepEnd, yTmp, yDotTmp);
 
             // discrete events handling
             setStepStart(acceptStep(createInterpolator(forward, yDotK, getStepStart(), stateTmp, equations.getMapper()),

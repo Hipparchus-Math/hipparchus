@@ -71,4 +71,10 @@ public class AdamsBashforthIntegratorTest extends AdamsIntegratorAbstractTest {
         doTestStartFailure();
     }
 
+    @Test
+    public void testSecondaryEquations() {
+        doTestSecondaryEquations(4.3e-10, 6.7e-16);
+    }
+
+
 }

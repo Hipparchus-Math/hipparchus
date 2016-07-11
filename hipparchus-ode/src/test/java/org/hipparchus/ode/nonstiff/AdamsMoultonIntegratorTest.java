@@ -66,6 +66,11 @@ public class AdamsMoultonIntegratorTest extends AdamsIntegratorAbstractTest {
         doPolynomial(5, 2.2e-05, 1.1e-11);
     }
 
+    @Test
+    public void testSecondaryEquations() {
+        doTestSecondaryEquations(1.9e-11, 7.2e-15);
+    }
+
     @Test(expected=MathIllegalStateException.class)
     public void testStartFailure() {
         doTestStartFailure();

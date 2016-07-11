@@ -21,6 +21,7 @@ package org.hipparchus.ode.nonstiff;
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.util.Decimal64Field;
+import org.junit.Test;
 
 public class DormandPrince54FieldIntegratorTest extends EmbeddedRungeKuttaFieldIntegratorAbstractTest {
 
@@ -92,6 +93,11 @@ public class DormandPrince54FieldIntegratorTest extends EmbeddedRungeKuttaFieldI
     @Override
     public void testPartialDerivatives() {
         doTestPartialDerivatives(4.8e-12, new double[] { 2.3e-11, 6.3e-12, 9.0e-13, 7.4e-13, 6.3e-12 });
+    }
+
+    @Test
+    public void testSecondaryEquations() {
+        doTestSecondaryEquations(Decimal64Field.getInstance(), 4.0e-12, 7.2e-15);
     }
 
 }
