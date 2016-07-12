@@ -73,7 +73,7 @@ public class StreamingStatistics
     private final Variance populationVariance;
 
     /**
-     * Construct a new SummaryStatistics instance.
+     * Construct a new StreamingStatistics instance.
      */
     public StreamingStatistics() {
         this.secondMoment     = new SecondMoment();
@@ -94,7 +94,7 @@ public class StreamingStatistics
     /**
      * A copy constructor. Creates a deep-copy of the {@code original}.
      *
-     * @param original the {@code SummaryStatistics} instance to copy
+     * @param original the {@code StreamingStatistics} instance to copy
      * @throws NullArgumentException if original is null
      */
     StreamingStatistics(StreamingStatistics original) throws NullArgumentException {
@@ -117,7 +117,7 @@ public class StreamingStatistics
     }
 
     /**
-     * Returns a copy of this SummaryStatistics instance with the same internal state.
+     * Returns a copy of this StreamingStatistics instance with the same internal state.
      *
      * @return a copy of this
      */
@@ -326,7 +326,7 @@ public class StreamingStatistics
     public String toString() {
         StringBuilder outBuffer = new StringBuilder();
         String endl = "\n";
-        outBuffer.append("SummaryStatistics:").append(endl);
+        outBuffer.append("StreamingStatistics:").append(endl);
         outBuffer.append("n: ").append(getN()).append(endl);
         outBuffer.append("min: ").append(getMin()).append(endl);
         outBuffer.append("max: ").append(getMax()).append(endl);
@@ -343,7 +343,7 @@ public class StreamingStatistics
     }
 
     /**
-     * Returns true iff <code>object</code> is a <code>SummaryStatistics</code>
+     * Returns true iff <code>object</code> is a <code>StreamingStatistics</code>
      * instance and all statistics have the same values as this.
      *
      * @param object the object to test equality against.
