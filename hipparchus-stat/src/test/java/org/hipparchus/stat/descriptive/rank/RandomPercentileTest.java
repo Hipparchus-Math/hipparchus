@@ -1,0 +1,512 @@
+/*
+ * Licensed to the Hipparchus project under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.hipparchus.stat.descriptive.rank;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import org.hipparchus.distribution.RealDistribution;
+import org.hipparchus.distribution.continuous.ExponentialDistribution;
+import org.hipparchus.distribution.continuous.GammaDistribution;
+import org.hipparchus.distribution.continuous.NormalDistribution;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.RandomDataGenerator;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well19937c;
+import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
+import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
+import org.hipparchus.util.FastMath;
+import org.junit.Test;
+
+/**
+ * Test cases for the {@link PSquarePercentile} class which naturally extends
+ * {@link StorelessUnivariateStatisticAbstractTest}.
+ */
+public class RandomPercentileTest extends
+        StorelessUnivariateStatisticAbstractTest {
+
+    protected double tolerance = 10E-12;
+
+    private final RandomGenerator randomGenerator = new Well19937c(1000);
+
+    @Override
+    public RandomPercentile getUnivariateStatistic() {
+        return new RandomPercentile();  // Median with default epsilon and PRNG
+    }
+
+    @Override
+    public double expectedValue() {
+        return this.median;
+    }
+
+    /**
+     * Verifies that copied statistics remain equal to originals when
+     * incremented the same way by making the copy after a majority of elements
+     * are incremented
+     */
+    //@Test
+    public void testCopyConsistencyWithInitialMostElements() {
+
+        StorelessUnivariateStatistic master = getUnivariateStatistic();
+        StorelessUnivariateStatistic replica = null;
+
+        // select a portion of testArray till 75 % of the length to load first
+        long index = FastMath.round(0.75 * testArray.length);
+
+        // Put first half in master and copy master to replica
+        master.incrementAll(testArray, 0, (int) index);
+        replica = master.copy();
+
+        // Check same
+        assertTrue(replica.equals(master));
+        assertTrue(master.equals(replica));
+
+        // Now add second part to both and check again
+        master.incrementAll(testArray, (int) index, (int) (testArray.length - index));
+        replica.incrementAll(testArray, (int) index, (int) (testArray.length - index));
+        assertTrue(replica.equals(master));
+        assertTrue(master.equals(replica));
+    }
+
+    /**
+     * Verifies that copied statistics remain equal to originals when
+     * incremented the same way by way of copying original after just a few
+     * elements are incremented
+     */
+    //@Test
+    public void testCopyConsistencyWithInitialFirstFewElements() {
+
+        StorelessUnivariateStatistic master = getUnivariateStatistic();
+        StorelessUnivariateStatistic replica = null;
+
+        // select a portion of testArray which is 10% of the length to load
+        // first
+        long index = FastMath.round(0.1 * testArray.length);
+
+        // Put first half in master and copy master to replica
+        master.incrementAll(testArray, 0, (int) index);
+        replica = master.copy();
+
+        // Check same
+        assertTrue(replica.equals(master));
+        assertTrue(master.equals(replica));
+        // Now add second part to both and check again
+        master.incrementAll(testArray, (int) index, (int) (testArray.length - index));
+        replica.incrementAll(testArray, (int) index, (int) (testArray.length - index));
+        assertTrue(master.equals(master));
+        assertTrue(replica.equals(replica));
+        assertTrue(replica.equals(master));
+        assertTrue(master.equals(replica));
+    }
+
+
+    //@Test
+    public void testPSquaredEqualsAndMin() {
+        PSquarePercentile ptile = new PSquarePercentile(0);
+        assertEquals(ptile, ptile);
+        assertFalse(ptile.equals(null));
+        assertFalse(ptile.equals(new String()));
+        // Just to check if there is no data get result for zeroth and 100th
+        // ptile returns NAN
+        assertTrue(Double.isNaN(ptile.getResult()));
+        assertTrue(Double.isNaN(new PSquarePercentile(100).getResult()));
+
+        double[] d = new double[] { 1, 3, 2, 4, 9, 10, 11 };
+        ptile.incrementAll(d);
+        assertEquals(ptile, ptile);
+        assertEquals(1d, ptile.getResult(), 1e-02);// this calls min
+    }
+
+    // @Test
+    public void testString() {
+        PSquarePercentile ptile = new PSquarePercentile(95);
+        assertNotNull(ptile.toString());
+        ptile.increment(1);
+        ptile.increment(2);
+        ptile.increment(3);
+        assertNotNull(ptile.toString());
+        assertEquals(expectedValue(), ptile.evaluate(testArray), getTolerance());
+        assertNotNull(ptile.toString());
+    }
+
+    @Test
+    public void testPercentileSmallSample() {
+        double[] d = new double[] { 1, 3, 2, 4 };
+        final RandomPercentile randomPercentile = new RandomPercentile();
+        randomPercentile.incrementAll(d);
+        Percentile p = new Percentile(30d);
+        assertEquals(p.evaluate(d), randomPercentile.getResult(30d), 1.0e-5);
+        p = new Percentile(25);
+        assertEquals(p.evaluate(d), randomPercentile.getResult(25d), 1.0e-5);
+        p = new Percentile(75);
+        assertEquals(p.evaluate(d),randomPercentile.getResult(75d), 1.0e-5);
+        p = new Percentile(50);
+        assertEquals(p.evaluate(d),randomPercentile.getResult(50d), 1.0e-5);
+    }
+
+
+
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testNegativeInvalidValues() {
+        double[] d =
+                new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
+                        95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
+                        95.1682 };
+        RandomPercentile p = new RandomPercentile(-1.0);
+        p.evaluate(d, 0, d.length);
+    }
+
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testPositiveInvalidValues() {
+        double[] d =
+                new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
+                        95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
+                        95.1682 };
+        RandomPercentile p = new RandomPercentile(101.0);
+        p.evaluate(d, 0, d.length);
+    }
+
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testNonPositiveEpsilon() {
+        double[] d =
+                new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
+                        95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
+                        95.1682 };
+        RandomPercentile p = new RandomPercentile(0, 10);
+        p.evaluate(d, 0, d.length);
+    }
+
+    @Test
+    public void testNISTExample() {
+        double[] d =
+                new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
+                        95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
+                        95.1682 };
+        assertEquals(95.1981, new RandomPercentile(90d).evaluate(d), 1.0e-4);
+        assertEquals(95.061, new RandomPercentile(0d).evaluate(d), 0);
+        assertEquals(95.1990, new RandomPercentile(100d).evaluate(d, 0, d.length), 0);
+    }
+
+    @Test
+    public void test5() {
+        RandomPercentile percentile = new RandomPercentile(5d);
+        assertEquals(this.percentile5, percentile.evaluate(testArray), 0.0001);
+    }
+
+    @Test(expected = NullArgumentException.class)
+    public void testNull() {
+        PSquarePercentile percentile = new PSquarePercentile(50d);
+        double[] nullArray = null;
+        percentile.evaluate(nullArray);
+    }
+
+    @Test
+    public void testEmpty() {
+        PSquarePercentile percentile = new PSquarePercentile(50d);
+        double[] emptyArray = new double[] {};
+        assertTrue(Double.isNaN(percentile.evaluate(emptyArray)));
+    }
+
+    @Test
+    public void testSingleton() {
+        RandomPercentile percentile = new RandomPercentile(50d);
+        double[] singletonArray = new double[] { 1d };
+        assertEquals(1d, percentile.evaluate(singletonArray), 0);
+        assertEquals(1d, percentile.evaluate(singletonArray, 0, 1), 0);
+        percentile = new RandomPercentile(5);
+        assertEquals(1d, percentile.evaluate(singletonArray, 0, 1), 0);
+        percentile = new RandomPercentile(100);
+        assertEquals(1d, percentile.evaluate(singletonArray, 0, 1), 0);
+        percentile = new RandomPercentile(100);
+        assertTrue(Double.isNaN(percentile.evaluate(singletonArray, 0, 0)));
+    }
+
+    @Test
+    public void testSpecialValues() {
+        RandomPercentile percentile = new RandomPercentile(50d);
+        double[] specialValues = new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };
+        assertEquals(2d, percentile.evaluate(specialValues), 0);
+        specialValues =
+            new double[] { Double.NEGATIVE_INFINITY, 1d, 2d, 3d, Double.NaN, Double.POSITIVE_INFINITY };
+        assertEquals(2d, percentile.evaluate(specialValues), 0);
+        specialValues =
+            new double[] { 1d, 1d, Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY };
+        assertTrue(Double.isInfinite(percentile.evaluate(specialValues)));
+        specialValues = new double[] { 1d, 1d, Double.NaN, Double.NaN };
+        assertFalse(Double.isNaN(percentile.evaluate(specialValues)));
+        specialValues =
+            new double[] { 1d, 1d, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY };
+        percentile = new RandomPercentile(50d);
+        assertTrue(Double.isNaN(percentile.evaluate(specialValues)));
+    }
+
+    @Test
+    public void testArrayExample() {
+        assertEquals(this.percentile95, new RandomPercentile(95d).evaluate(testArray), getTolerance());
+    }
+
+    @Test
+    public void testSetQuantile() {
+        RandomPercentile percentile = new RandomPercentile(10d);
+
+        percentile = new RandomPercentile(100); // OK
+        assertEquals(1.0, percentile.getQuantile(), 0);
+        try {
+            percentile = new RandomPercentile(-1);
+            fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
+            // expected
+        }
+        try {
+            new RandomPercentile(1000d);
+            fail("Expecting MathIllegalArgumentException");
+        } catch (MathIllegalArgumentException ex) {
+            // expected
+        }
+    }
+
+    private Double[] randomTestData(int factor, int values) {
+        Double[] test = new Double[values];
+        for (int i = 0; i < test.length; i++) {
+            test[i] = Math.abs(randomGenerator.nextDouble() * factor);
+        }
+        return test;
+    }
+
+    @Test
+    public void testAccept() {
+        final RandomPercentile randomPercentile = new RandomPercentile(0.99);
+        assertTrue(Double.isNaN(randomPercentile.getResult()));
+        Double[] test = randomTestData(100, 10000);
+
+        for (Double value : test) {
+            randomPercentile.increment(value);
+            assertTrue(randomPercentile.getResult() >= 0);
+        }
+    }
+
+    private void assertValues(Double a, Double b, double delta) {
+        if (Double.isNaN(a)) {
+            assertTrue("" + b + " is not NaN.", Double.isNaN(a));
+        } else {
+            double max = FastMath.max(a, b);
+            double percentage = FastMath.abs(a - b) / max;
+            double deviation = delta;
+            assertTrue(String.format("Deviated = %f and is beyond %f as a=%f,  b=%f",
+                                     percentage, deviation, a, b), percentage < deviation);
+        }
+    }
+
+    /**
+     * Checks to make sure that the actual quantile position (normalized rank) of value
+     * is within tolerance of quantile
+     *
+     * @param data data array
+     * @param value value to test
+     * @param quantile purported quantile
+     * @param tolerance max difference between actual quantile of value and quantile
+     */
+    private void checkQuantileError(double[] data, double value, double quantile, double tolerance,
+                                    double referenceValue) {
+         final double n = (double) data.length;
+         int nLess = 0;
+         for (double val : data) {
+             if (val < value) {
+                 nLess++;
+             }
+         }
+         if (Double.isNaN(referenceValue)) {
+             assertTrue(Double.isNaN(value));
+         } else {
+             assertTrue("Quantile error exceeded: value returned = " + value +
+                        " Reference value = " + referenceValue +
+                        " quantile = " + quantile + " n = " + n +
+                        " error = " + (quantile - (double) nLess / n),
+                        FastMath.abs(quantile - (double) nLess / n) < tolerance);
+         }
+    }
+
+
+    private void doCalculatePercentile(Double percentile, Number[] test) {
+        doCalculatePercentile(percentile, test, Double.MAX_VALUE);
+    }
+
+
+    private void doCalculatePercentile(Double percentile, Number[] test, double delta) {
+        RandomPercentile random = new RandomPercentile(percentile, new Well19937c(200));
+        for (Number value : test) {
+            random.increment(value.doubleValue());
+        }
+
+        Percentile p2 = new Percentile(percentile * 100);
+
+        double[] dall = new double[test.length];
+        for (int i = 0; i < test.length; i++) {
+            dall[i] = test[i].doubleValue();
+        }
+
+        Double referenceValue = p2.evaluate(dall);
+        assertValues(random.getResult(), referenceValue, delta);
+    }
+
+    private void doCalculatePercentile(double percentile, double[] test, double delta) {
+        RandomPercentile randomEstimated = new RandomPercentile(percentile, new Well19937c(200));
+        for (double value : test) {
+            randomEstimated.increment(value);
+        }
+
+        Percentile p2 = new Percentile(percentile < 1 ? percentile * 100 : percentile);
+        /*
+         * double[] dall = new double[test.length]; for (int i = 0; i <
+         * test.length; i++) dall[i] = test[i];
+         */
+        Double referenceValue = p2.evaluate(test);
+        if (test.length < LARGE) {
+            assertValues(randomEstimated.getResult(), referenceValue, delta);
+        } else {
+            checkQuantileError(test,randomEstimated.getResult(), percentile / 100, delta, referenceValue);
+        }
+    }
+
+    @Test
+    public void testCannedDataSet() {
+        Integer[] seedInput =
+                new Integer[] { 283, 285, 298, 304, 310, 31, 319, 32, 33, 339,
+                        342, 348, 350, 354, 354, 357, 36, 36, 369, 37, 37, 375,
+                        378, 383, 390, 396, 405, 408, 41, 414, 419, 416, 42,
+                        420, 430, 430, 432, 444, 447, 447, 449, 45, 451, 456,
+                        468, 470, 471, 474, 600, 695, 70, 83, 97, 109, 113, 128 };
+        Integer[] input = new Integer[seedInput.length * 100];
+        for (int i = 0; i < input.length; i++) {
+            input[i] = seedInput[i % seedInput.length] + i;
+        }
+        doCalculatePercentile(0.50d, input);
+        doCalculatePercentile(0.95d, input);
+    }
+
+    @Test
+    public void test99Percentile() {
+        Double[] test = randomTestData(100, 10000);
+        doCalculatePercentile(0.99d, test);
+    }
+
+    @Test
+    public void test90Percentile() {
+        Double[] test = randomTestData(100, 10000);
+        doCalculatePercentile(0.90d, test);
+    }
+
+    @Test
+    public void test20Percentile() {
+        Double[] test = randomTestData(100, 100000);
+        doCalculatePercentile(0.20d, test);
+    }
+
+    @Test
+    public void test5Percentile() {
+        Double[] test = randomTestData(50, 990000);
+        doCalculatePercentile(0.50d, test);
+    }
+
+    @Test
+    public void test99PercentileHighValues() {
+        Double[] test = randomTestData(100000, 10000);
+        doCalculatePercentile(0.99d, test);
+    }
+
+    @Test
+    public void test90PercentileHighValues() {
+        Double[] test = randomTestData(100000, 100000);
+        doCalculatePercentile(0.90d, test);
+    }
+
+    @Test
+    public void test20PercentileHighValues() {
+        Double[] test = randomTestData(100000, 100000);
+        doCalculatePercentile(0.20d, test);
+    }
+
+    @Test
+    public void test5PercentileHighValues() {
+        Double[] test = randomTestData(100000, 100000);
+        doCalculatePercentile(0.05d, test);
+    }
+
+    @Test
+    public void test0PercentileValuesWithFewerThan5Values() {
+        double[] test = { 1d, 2d, 3d, 4d };
+        RandomPercentile p = new RandomPercentile(0d);
+        assertEquals(1d, p.evaluate(test), 0);
+    }
+
+
+    final int TINY = 10, SMALL = 50, NOMINAL = 100, MEDIUM = 500,
+              STANDARD = 1000, BIG = 10000, VERY_BIG = 50000, LARGE = 1000000,
+              VERY_LARGE = 10000000;
+
+    private void doDistributionTest(RealDistribution distribution) {
+        double data[];
+
+        final RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
+        data = randomDataGenerator.nextDeviates(distribution, LARGE);
+        doCalculatePercentile(50, data, 0.0005);
+        doCalculatePercentile(95, data, 0.0005);
+
+        data = randomDataGenerator.nextDeviates(distribution, VERY_BIG);
+        doCalculatePercentile(50, data, 0.0001);
+        doCalculatePercentile(95, data, 0.0001);
+
+        data = randomDataGenerator.nextDeviates(distribution, BIG);
+        doCalculatePercentile(50, data, 0.0001);
+        doCalculatePercentile(95, data, 0.0001);
+
+        data = randomDataGenerator.nextDeviates(distribution, STANDARD);
+        doCalculatePercentile(50, data, 0.0001);
+        doCalculatePercentile(95, data, 0.0001);
+
+        data = randomDataGenerator.nextDeviates(distribution, MEDIUM);
+        doCalculatePercentile(50, data, 0.0001);
+        doCalculatePercentile(95, data, 0.0001);
+
+        data = randomDataGenerator.nextDeviates(distribution, NOMINAL);
+        doCalculatePercentile(50, data, 0.0001);
+        doCalculatePercentile(95, data, 0.0001);
+
+        data = randomDataGenerator.nextDeviates(distribution, SMALL);
+        doCalculatePercentile(50, data, 0.0001);
+        doCalculatePercentile(95, data, 0.0001);
+
+        data = randomDataGenerator.nextDeviates(distribution, TINY);
+        doCalculatePercentile(50, data, 0.0001);
+        doCalculatePercentile(95, data, 0.0001);
+    }
+
+    /**
+     * Test Various Dist
+     */
+    @Test
+    public void testDistribution() {
+        doDistributionTest(new NormalDistribution(4000, 50));
+        //doDistributionTest(new LogNormalDistribution(4000, 50));
+        doDistributionTest(new ExponentialDistribution(4000));
+        doDistributionTest(new GammaDistribution(5d,1d));
+    }
+}

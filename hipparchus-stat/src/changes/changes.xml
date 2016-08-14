@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.1" date="TBD" description="This is a maintenance release.">
+      <action dev="psteitz" type="add">
+        Add implementation of RANDOM algorithm for streaming percentile computation.
+      </action>
       <action dev="tn" type="add">
         Add default "toString()" implementation to "AbstractStorelessUnivariateStatistic".
       </action>
