@@ -124,8 +124,8 @@ public class BinomialTest {
             double pTotal = 0;
 
             while (true) {
-                double pLow = distribution.probability(criticalValueLow);
-                double pHigh = distribution.probability(criticalValueHigh);
+                final double pLow = distribution.probability(criticalValueLow);
+                final double pHigh = distribution.probability(criticalValueHigh);
 
                 if (pLow == pHigh) {
                     pTotal += 2 * pLow;
