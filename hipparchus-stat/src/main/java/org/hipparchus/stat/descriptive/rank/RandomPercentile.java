@@ -33,6 +33,48 @@ import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.util.FastMath;
 
+/**
+ * A {@link StorelessUnivariateStatistic} estimating percentiles using the
+ * <a href=http://dimacs.rutgers.edu/~graham/pubs/papers/nquantiles.pdf>RANDOM</a>
+ * Algorithm.
+ * <p>
+ * Storage requirements for the RANDOM algorithm depend on the desired
+ * accuracy of quantile estimates. Quantile estimate accuracy is defined as follows.
+ * <p>
+ * Let \(X\) be the set of all data values consumed from the stream.
+ * If \(\epsilon\) is the configured accuracy, \(q\) is an estimated
+ * quantile (what is returned by {@link #getResult()} or {@link #getResult(double)}),
+ * \(rank(q) = |{x \in X : x < q}|\) is the rank of \(q\) in the data and
+ * \(n = |X|\) is the number of observations, then we can expect
+ * \(rank(q) / n < \epsilon\).
+ * <p>
+ * If the {@code epsilon} configuration parameter is set to \(\epsilon\), then
+ * the algorithm maintains \(\left\lceil {log_{2}(1/\epsilon)}\right\rceil + 1\) buffers
+ * of size \(\left\lceil {1/\epsilon \sqrt{log_2(1/\epsilon)}}\right\rceil\).  When
+ * {@code epsilon} is set to the default value of \(10^{-4}\), this makes 15 buffers
+ * of size 36,453.
+ * <p>
+ * The algorithm uses the buffers to maintain representative samples of data from the
+ * stream.  Up until the point where all buffers are full, the entire sample is stored
+ * in the buffers. If one of the {@code getResult} methods is called when all data are
+ * available in memory and there is room to make a copy of the data (meaning the combined
+ * set of buffers is less than half full), the {@code getResult} method delegates to
+ * {@link Percentile} instance to compute and return the exact value for the desired quantile.
+ * For default {@code epsilon}, this means exact values will be returned whenever fewer than
+ * \(\left\lceil {15 \times 36453 / 2} \right\rceil = 273,398\) values have been consumed
+ * from the data stream.
+ * <p>
+ * When buffers become full, the algorithm merges buffers so that they effectively represent
+ * a larger set of values than they can hold. Subsequently, data values are sampled from the
+ * stream to fill buffers freed by merge operations.  Both the merging and the sampling
+ * require random selection, which is done using a {@code RandomGenerator}.  To get
+ * repeatable results for large data streams, users should provide {@code RandomGenerator}
+ * instances with fixed seeds. {@code RandomPercentile} itself does not reseed or othewise
+ * initialize the {@code RandomGenerator} provided to it.  By default, it uses a {@link Well19937c}
+ * with the default seed.
+ * <p>
+ * Note: This implementation is not thread-safe.
+ */
 public class RandomPercentile
     extends AbstractStorelessUnivariateStatistic implements StorelessUnivariateStatistic, Serializable {
 
