@@ -280,12 +280,13 @@ public class RandomPercentile
     }
 
     /**
-     * Gets the overall rank of value, summing weighted ranks in buffers
+     * Gets the estimated rank of {@code value}, i.e.  \(|\{x \in X : x < value\}|\)
+     * where \(X\) is the set of values that have been consumed from the stream.
      *
      * @param value value whose overall rank is sought
-     * @return estimate of the rank of value in the full dataset
+     * @return estimates the number of sample values that are strictly less than value
      */
-    private double getRank(double value) {
+    public double getRank(double value) {
         double rankSum = 0;
         Iterator<Buffer> bufferIterator = bufferPool.iterator();
         while (bufferIterator.hasNext()) {
@@ -293,6 +294,18 @@ public class RandomPercentile
             rankSum += buffer.rankOf(value) * FastMath.pow(2, buffer.level);
         }
         return rankSum;
+    }
+
+    /**
+     * Returns the estimated quantile position of value in the dataset.
+     * Specifically, what is returned is an estimate of \(|\{x \in X : x < value\}| / |X|\)
+     * where \(X\) is the set of values that have been consumed from the stream.
+     *
+     * @param value value whose quantile rank is sought.
+     * @return
+     */
+    public double getQuantileRank(double value) {
+        return getRank(value) / getN();
     }
 
     @Override
