@@ -58,7 +58,7 @@ import org.hipparchus.util.FastMath;
  * stream.  Up until the point where all buffers are full, the entire sample is stored
  * in the buffers. If one of the {@code getResult} methods is called when all data are
  * available in memory and there is room to make a copy of the data (meaning the combined
- * set of buffers is less than half full), the {@code getResult} method delegates to
+ * set of buffers is less than half full), the {@code getResult} method delegates to a
  * {@link Percentile} instance to compute and return the exact value for the desired quantile.
  * For default {@code epsilon}, this means exact values will be returned whenever fewer than
  * \(\left\lceil {15 \times 36453 / 2} \right\rceil = 273,398\) values have been consumed
@@ -102,10 +102,10 @@ public class RandomPercentile
     public static final double Q1 = 25d;
     public static final double Q3 = 75d;
 
-    public RandomPercentile(double epsilon, RandomGenerator randomGenerator, double quantile) {
-        if (quantile > 100 || quantile < 0) {
+    public RandomPercentile(double epsilon, RandomGenerator randomGenerator, double percentile) {
+        if (percentile > 100 || percentile < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE,
-                                                   quantile, 0, 100);
+                                                   percentile, 0, 100);
         }
         if (epsilon <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
@@ -115,20 +115,20 @@ public class RandomPercentile
         this.s = (int) FastMath.ceil(FastMath.sqrt(log2(1/epsilon)) / epsilon);
         bufferPool = new BufferMap(h + 1, s, randomGenerator);
         currentBuffer = bufferPool.create(0);
-        this.quantile = quantile / 100;
+        this.quantile = percentile / 100;
         this.epsilon = epsilon;
     }
 
-    public RandomPercentile(double epsilon, double quantile) {
-        this(epsilon, new Well19937c(), quantile);
+    public RandomPercentile(double epsilon, double percentile) {
+        this(epsilon, new Well19937c(), percentile);
     }
 
-    public RandomPercentile(double quantile) {
-        this(DEFAULT_EPSILON, new Well19937c(), quantile);
+    public RandomPercentile(double percentile) {
+        this(DEFAULT_EPSILON, new Well19937c(), percentile);
     }
 
-    public RandomPercentile(double quantile, RandomGenerator randomGenerator) {
-        this(DEFAULT_EPSILON, randomGenerator, quantile);
+    public RandomPercentile(double percentile, RandomGenerator randomGenerator) {
+        this(DEFAULT_EPSILON, randomGenerator, percentile);
     }
 
     public RandomPercentile() {
@@ -142,7 +142,6 @@ public class RandomPercentile
      * a generator with the original.
      *
      * @param original the {@code PSquarePercentile} instance to copy
-     * @throws org.hipparchus.exception.NullArgumentException if original is null
      */
     public RandomPercentile(RandomPercentile original) {
         super();
@@ -195,9 +194,20 @@ public class RandomPercentile
 
     }
 
-    public double getResult(double quantile) {
+    /**
+     * Returns an estimate of the given percentile.
+     *
+     * @param percentile desired percentile (scaled 0 - 100)
+     * @return estimated percentile
+     * @throws MathIllegalArgumentException if percentile is out of the range [0, 100]
+     */
+    public double getResult(double percentile) {
+        if (percentile > 100 || percentile < 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE,
+                                                   percentile, 0, 100);
+        }
         // Convert to internal quantile scale
-        final double q = quantile / 100;
+        final double q = percentile / 100;
         // First get global min and max to bound search.
         double min = Double.POSITIVE_INFINITY;
         double max = Double.NEGATIVE_INFINITY;
@@ -230,7 +240,7 @@ public class RandomPercentile
         // See if we have all data in memory and enough free memory to copy.
         // If so, use Percentile to perform exact computation.
         if (bufferPool.halfEmpty()) {
-            return new Percentile(quantile).evaluate(bufferPool.levelZeroData());
+            return new Percentile(percentile).evaluate(bufferPool.levelZeroData());
         }
 
         // Compute target rank
