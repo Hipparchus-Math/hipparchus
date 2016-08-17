@@ -42,11 +42,11 @@ import org.hipparchus.util.FastMath;
  * accuracy of quantile estimates. Quantile estimate accuracy is defined as follows.
  * <p>
  * Let \(X\) be the set of all data values consumed from the stream.
- * If \(\epsilon\) is the configured accuracy, \(q\) is an estimated
+ * If \(\epsilon\) is the configured accuracy, \(\hat{q}\) is an estimated
  * quantile (what is returned by {@link #getResult()} or {@link #getResult(double)}),
- * \(rank(q) = |{x \in X : x < q}|\) is the rank of \(q\) in the data and
+ * \(rank(\hat{q}) = |{x \in X : x < \hat{q}}|\) is the rank of \(\hat{q}\) in the data and
  * \(n = |X|\) is the number of observations, then we can expect
- * \(rank(q) / n < \epsilon\).
+ * \(rank(\hat{q}) / n < \epsilon\).
  * <p>
  * If the {@code epsilon} configuration parameter is set to \(\epsilon\), then
  * the algorithm maintains \(\left\lceil {log_{2}(1/\epsilon)}\right\rceil + 1\) buffers
@@ -54,12 +54,12 @@ import org.hipparchus.util.FastMath;
  * {@code epsilon} is set to the default value of \(10^{-4}\), this makes 15 buffers
  * of size 36,453.
  * <p>
- * The algorithm uses the buffers to maintain representative samples of data from the
- * stream.  Up until the point where all buffers are full, the entire sample is stored
- * in the buffers. If one of the {@code getResult} methods is called when all data are
- * available in memory and there is room to make a copy of the data (meaning the combined
- * set of buffers is less than half full), the {@code getResult} method delegates to a
- * {@link Percentile} instance to compute and return the exact value for the desired quantile.
+ * The algorithm uses the buffers to maintain samples of data from the stream.  Up until
+ * the point where all buffers are full, the entire sample is stored in the buffers.
+ * If one of the {@code getResult} methods is called when all data are available in memory
+ * and there is room to make a copy of the data (meaning the combined set of buffers is
+ * less than half full), the {@code getResult} method delegates to a {@link Percentile}
+ * instance to compute and return the exact value for the desired quantile.
  * For default {@code epsilon}, this means exact values will be returned whenever fewer than
  * \(\left\lceil {15 \times 36453 / 2} \right\rceil = 273,398\) values have been consumed
  * from the data stream.
@@ -70,8 +70,8 @@ import org.hipparchus.util.FastMath;
  * require random selection, which is done using a {@code RandomGenerator}.  To get
  * repeatable results for large data streams, users should provide {@code RandomGenerator}
  * instances with fixed seeds. {@code RandomPercentile} itself does not reseed or othewise
- * initialize the {@code RandomGenerator} provided to it.  By default, it uses a {@link Well19937c}
- * with the default seed.
+ * initialize the {@code RandomGenerator} provided to it.  By default, it uses a
+ * {@link Well19937c} generator with the default seed.
  * <p>
  * Note: This implementation is not thread-safe.
  */
@@ -85,23 +85,27 @@ public class RandomPercentile
     private final int h;
     /** Data structure used to manage buffers */
     private final BufferMap bufferPool;
-    /** Default quantile (what getResult uses) - scaled 0-1 */
+    /** Default quantile (what {@link #getResult()} returns) - scaled 0-1 */
     private final double quantile;
-    /**
-     * Bound on the quantile estimation error
-     * Contract is |actual quantile position of getResult(quantile) - quantile| < epsilon
-     */
+    /** Bound on the quantile estimation error */
     private final double epsilon;
     /** Number of elements consumed from the input data stream */
     private long n = 0;
     /** Buffer currently being filled */
     private Buffer currentBuffer = null;
-
+    /** Default quantile estimation error setting */
     public static final double DEFAULT_EPSILON = 1e-4;
-    public static final double MEDIAN = 50d;
-    public static final double Q1 = 25d;
-    public static final double Q3 = 75d;
 
+    /**
+     * Constructs a {@code RandomPercentile} with quantile estimation error
+     * {@code epsilon} and default percentile {@code percentile}, using
+     * {@code randomGenerator} as its source of random data.
+     *
+     * @param epsilon bound on quantile estimation error (see class javadoc)
+     * @param randomGenerator PRNG used in sampling and merge operations
+     * @param percentile default percentile (what is returned by {@link #getResult()}
+     * @throws MathIllegalArgumentException if percentile is not in the range [0, 100]
+     */
     public RandomPercentile(double epsilon, RandomGenerator randomGenerator, double percentile) {
         if (percentile > 100 || percentile < 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE,
@@ -119,20 +123,52 @@ public class RandomPercentile
         this.epsilon = epsilon;
     }
 
+    /**
+     * Constructs a {@code RandomPercentile} with quantile estimation error
+     * {@code epsilon} and default percentile {@code percentile}, using
+     * the default PRNG as source of random data.
+     *
+     * @param epsilon bound on quantile estimation error (see class javadoc)
+     * @param percentile default percentile (what is returned by {@link #getResult()}
+     * @throws MathIllegalArgumentException if percentile is not in the range [0, 100]
+     */
     public RandomPercentile(double epsilon, double percentile) {
         this(epsilon, new Well19937c(), percentile);
     }
 
+    /**
+     * Constructs a {@code RandomPercentile} with quantile estimation error
+     * set to the default ({@link #DEFAULT_EPSILON}) and default percentile
+     * {@code percentile}, using the default PRNG as source of random data.
+     *
+     * @param percentile default percentile (what is returned by {@link #getResult()}
+     * @throws MathIllegalArgumentException if percentile is not in the range [0, 100]
+     */
     public RandomPercentile(double percentile) {
         this(DEFAULT_EPSILON, new Well19937c(), percentile);
     }
 
+    /**
+     * Constructs a {@code RandomPercentile} with quantile estimation error
+     * set to the default ({@link #DEFAULT_EPSILON}) and default percentile
+     * {@code percentile}, using the {@code randomGenerator} as source of
+     * random data.
+     *
+     * @param randomGenerator PRNG used in sampling and merge operations
+     * @param percentile default percentile (what is returned by {@link #getResult()}
+     * @throws MathIllegalArgumentException if percentile is not in the range [0, 100]
+     */
     public RandomPercentile(double percentile, RandomGenerator randomGenerator) {
         this(DEFAULT_EPSILON, randomGenerator, percentile);
     }
 
+    /**
+     * Constructs a {@code RandomPercentile} with quantile estimation error
+     * set to the default ({@link #DEFAULT_EPSILON}) and default percentile
+     * equal to the median, using the default PRNG as source of random data.
+     */
     public RandomPercentile() {
-        this(DEFAULT_EPSILON, new Well19937c(), MEDIAN);
+        this(DEFAULT_EPSILON, new Well19937c(), 50d);
     }
 
     /**
@@ -284,7 +320,7 @@ public class RandomPercentile
      * where \(X\) is the set of values that have been consumed from the stream.
      *
      * @param value value whose overall rank is sought
-     * @return estimates the number of sample values that are strictly less than value
+     * @return estimated number of sample values that are strictly less than {@code value}
      */
     public double getRank(double value) {
         double rankSum = 0;
@@ -302,7 +338,7 @@ public class RandomPercentile
      * where \(X\) is the set of values that have been consumed from the stream.
      *
      * @param value value whose quantile rank is sought.
-     * @return
+     * @return estimated proportion of sample values that are strictly less than {@code value}
      */
     public double getQuantileRank(double value) {
         return getRank(value) / getN();
