@@ -32,6 +32,7 @@ import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.MathArrays;
 
 /**
  * A {@link StorelessUnivariateStatistic} estimating percentiles using the
@@ -89,6 +90,8 @@ public class RandomPercentile
     private final double quantile;
     /** Bound on the quantile estimation error */
     private final double epsilon;
+    /** Source of random data */
+    private final RandomGenerator randomGenerator;
     /** Number of elements consumed from the input data stream */
     private long n = 0;
     /** Buffer currently being filled */
@@ -117,6 +120,7 @@ public class RandomPercentile
         }
         this.h = (int) FastMath.ceil(log2(1/epsilon));
         this.s = (int) FastMath.ceil(FastMath.sqrt(log2(1/epsilon)) / epsilon);
+        this.randomGenerator = randomGenerator;
         bufferPool = new BufferMap(h + 1, s, randomGenerator);
         currentBuffer = bufferPool.create(0);
         this.quantile = percentile / 100;
@@ -187,6 +191,7 @@ public class RandomPercentile
         this.s = original.s;
         this.epsilon = original.epsilon;
         this.bufferPool = new BufferMap(original.bufferPool);
+        this.randomGenerator = original.randomGenerator;
         Iterator<Buffer> iterator = bufferPool.iterator();
         Buffer current = null;
         Buffer curr = null;
@@ -210,6 +215,19 @@ public class RandomPercentile
 
     public double getQuantile() {
         return quantile;
+    }
+
+    @Override
+    public double evaluate(final double[] values, final int begin, final int length)
+        throws MathIllegalArgumentException {
+        if (MathArrays.verifyValues(values, begin, length)) {
+            RandomPercentile randomPercentile = new RandomPercentile(this.epsilon,
+                                                                     this.randomGenerator,
+                                                                     this.quantile * 100);
+            randomPercentile.incrementAll(values, begin, length);
+            return randomPercentile.getResult();
+        }
+        return Double.NaN;
     }
 
     @Override
