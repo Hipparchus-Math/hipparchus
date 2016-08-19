@@ -62,7 +62,7 @@ public class RandomPercentileTest extends
      * incremented the same way by making the copy after a majority of elements
      * are incremented
      */
-    //@Test
+    @Test
     public void testCopyConsistencyWithInitialMostElements() {
 
         StorelessUnivariateStatistic master = getUnivariateStatistic();
@@ -91,7 +91,7 @@ public class RandomPercentileTest extends
      * incremented the same way by way of copying original after just a few
      * elements are incremented
      */
-    //@Test
+    @Test
     public void testCopyConsistencyWithInitialFirstFewElements() {
 
         StorelessUnivariateStatistic master = getUnivariateStatistic();
