@@ -570,6 +570,8 @@ public class RandomPercentile
         private final int bufferSize;
         /** Backing store for the buffer map */
         final HashMap<Integer,List<Buffer>> bufferMap = new HashMap<>();
+        /** Maximum buffer level */
+        private int maxLevel = 0;
 
         /**
          * Creates a BufferMap that can manage up to capacity buffers.
@@ -633,6 +635,9 @@ public class RandomPercentile
             }
             bufferList.add(buffer);
             count++;
+            if (level > maxLevel) {
+                maxLevel = level;
+            }
             return buffer;
         }
 
@@ -706,9 +711,10 @@ public class RandomPercentile
             int l = 0;
             List<Buffer> mergeCandidates = null;
             // Find the lowest level containing at least two buffers
-            while (mergeCandidates == null && l < bufferMap.size()) {
-                if (bufferMap.get(l).size() > 1) {
-                    mergeCandidates = bufferMap.get(l);
+            while (mergeCandidates == null && l <= maxLevel) {
+                final List<Buffer> bufferList = bufferMap.get(l);
+                if (bufferList != null && bufferList.size() > 1) {
+                    mergeCandidates = bufferList;
                 } else {
                     l++;
                 }
@@ -722,6 +728,10 @@ public class RandomPercentile
             // Remove buffers to be merged
             mergeCandidates.remove(0);
             mergeCandidates.remove(0);
+            // If these are the last level-l buffers, remove the empty list
+            if (bufferMap.get(l).size() == 0) {
+                bufferMap.remove(l);
+            }
             // Merge the buffers
             buffer1.mergeWith(buffer2);
             // Now both buffers have level l+1; buffer1 is full and buffer2 is free.
@@ -733,6 +743,10 @@ public class RandomPercentile
             }
             bufferList.add(buffer1);
             bufferList.add(buffer2);
+            // Update maxLevel
+            if (l + 1 > maxLevel) {
+                maxLevel = l + 1;
+            }
             // Return the free one
             return buffer2;
         }
@@ -767,7 +781,11 @@ public class RandomPercentile
                     if (!bufferIterator.hasNext()) {
                         bufferIterator = levelIterator.next().iterator();
                     }
-                    return bufferIterator.next();
+                    if (bufferIterator.hasNext()) {
+                        return bufferIterator.next();
+                    } else { // Should never happen
+                        throw new MathIllegalStateException(LocalizedCoreFormats.INTERNAL_ERROR);
+                    }
                 }
 
                 @Override
