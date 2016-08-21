@@ -509,4 +509,53 @@ public class RandomPercentileTest extends
         doDistributionTest(new ExponentialDistribution(4000));
         doDistributionTest(new GammaDistribution(5d,1d));
     }
+
+    /**
+     * Large sample storeless tests
+     */
+    @Test
+    public void testDistributionStreaming() {
+        checkQuartiles(new NormalDistribution());
+        checkQuartiles(new ExponentialDistribution(1));
+    }
+
+    /**
+     * Verify the quantile-accuracy contract using a large sample from dist
+     */
+    private void checkQuartiles(RealDistribution dist) {
+        final int sampleSize = 10000000;
+        final double tol = 1e-3;
+        final RandomPercentile randomPercentile = new RandomPercentile(RandomPercentile.DEFAULT_EPSILON,
+                                                                 new Well19937c(100), 50d);
+        RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
+        for (int i = 0; i < sampleSize; i++) {
+            randomPercentile.increment(randomDataGenerator.nextDeviate(dist));
+        }
+        final double q1 = randomPercentile.getResult(25);
+        final double q2 = randomPercentile.getResult();
+        final double q3 = randomPercentile.getResult(75);
+
+        // Respin the sample and (brutally) count to compute actual ranks
+        randomGenerator.setSeed(100);
+        double v;
+        double ct1 = 0;
+        double ct2 = 0;
+        double ct3 = 0;
+        for (int i = 0; i < sampleSize; i++) {
+            v = randomDataGenerator.nextDeviate(dist);
+            if (v < q1) {
+                ct1++;
+                ct2++;
+                ct3++;
+            } else if (v < q2) {
+                ct2++;
+                ct3++;
+            } else if (v < q3) {
+                ct3++;
+            }
+        }
+        assertEquals(ct1/sampleSize, 0.25, tol);
+        assertEquals(ct2/sampleSize, 0.5, tol);
+        assertEquals(ct3/sampleSize, 0.75, tol);
+    }
 }
