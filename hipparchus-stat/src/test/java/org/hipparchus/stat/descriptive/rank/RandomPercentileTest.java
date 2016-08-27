@@ -28,6 +28,7 @@ import org.hipparchus.distribution.continuous.GammaDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
@@ -511,23 +512,27 @@ public class RandomPercentileTest extends
     }
 
     /**
-     * Large sample storeless tests
+     * Large sample streaming tests.
      */
     @Test
     public void testDistributionStreaming() {
-        checkQuartiles(new NormalDistribution());
-        checkQuartiles(new ExponentialDistribution(1));
+        checkQuartiles(new NormalDistribution(), 1000000, 1E-3);
+        checkQuartiles(new ExponentialDistribution(1), 100000, 1E-3);
+        checkQuartiles(new GammaDistribution(4d,2d), 100000, 1E-3);
     }
 
     /**
-     * Verify the quantile-accuracy contract using a large sample from dist
+     * Verify the quantile-accuracy contract using a large sample from dist.
+     *
+     * @param dist distribution to generate sample data from
+     * @param sampleSize size of the generated sample
+     * @param tolerance normalized rank error tolerance (epsilon in contract)
      */
-    private void checkQuartiles(RealDistribution dist) {
-        final int sampleSize = 10000000;
-        final double tol = 1e-3;
+    private void checkQuartiles(RealDistribution dist, int sampleSize, double tolerance) {
+        final long seed = 1000;
+        RandomDataGenerator randomDataGenerator = RandomDataGenerator.of(new MersenneTwister(seed));
         final RandomPercentile randomPercentile = new RandomPercentile(RandomPercentile.DEFAULT_EPSILON,
-                                                                 new Well19937c(100), 50d);
-        RandomDataGenerator randomDataGenerator = new RandomDataGenerator(100);
+                                                                       randomDataGenerator, 50d);
         for (int i = 0; i < sampleSize; i++) {
             randomPercentile.increment(randomDataGenerator.nextDeviate(dist));
         }
@@ -536,7 +541,7 @@ public class RandomPercentileTest extends
         final double q3 = randomPercentile.getResult(75);
 
         // Respin the sample and (brutally) count to compute actual ranks
-        randomGenerator.setSeed(100);
+        randomDataGenerator.setSeed(seed);
         double v;
         double ct1 = 0;
         double ct2 = 0;
@@ -554,8 +559,8 @@ public class RandomPercentileTest extends
                 ct3++;
             }
         }
-        assertEquals(ct1/sampleSize, 0.25, tol);
-        assertEquals(ct2/sampleSize, 0.5, tol);
-        assertEquals(ct3/sampleSize, 0.75, tol);
+        assertEquals(0.25, ct1/sampleSize, tolerance);
+        assertEquals(0.5, ct2/sampleSize, tolerance);
+        assertEquals(0.75, ct3/sampleSize, tolerance);
     }
 }
