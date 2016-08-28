@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.1" date="TBD" description="This is a maintenance release.">
+      <action dev="psteitz" type="fix">
+        Fixed bug in 2-sided binomial test leading to inflated p-values in some
+        cases.  This was reported against Commons Math as MATH-1381.
+      </action>
       <action dev="psteitz" type="add">
         Add implementation of RANDOM algorithm for streaming percentile computation.
       </action>
