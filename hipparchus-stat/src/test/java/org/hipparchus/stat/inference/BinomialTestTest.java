@@ -16,7 +16,9 @@
  */
 package org.hipparchus.stat.inference;
 
+import org.hipparchus.distribution.discrete.BinomialDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -76,5 +78,91 @@ public class BinomialTestTest {
         Assert.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.TWO_SIDED, alpha01));
         Assert.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.GREATER_THAN, alpha01));
         Assert.assertFalse(testStatistic.binomialTest(trials, successes, probability, AlternativeHypothesis.LESS_THAN, alpha05));
+    }
+
+    /**
+     * All successes with p >> 0.5 - p-value picks up all mass points.
+     */
+    @Test
+    public void testAllSuccessesTwoSidedHighP() {
+        Assert.assertEquals(1d, testStatistic.binomialTest(200, 200, 0.9950429, AlternativeHypothesis.TWO_SIDED),
+                            Double.MIN_VALUE);
+    }
+
+    /**
+     * All successes with p = 0.5 - p-value is the sum of the two tails.
+     */
+    @Test
+    public void testAllSuccessesTwoSidedEvenP() {
+        Assert.assertEquals(2 * FastMath.pow(0.5, 5),
+                            testStatistic.binomialTest(5, 5, 0.5,
+                            AlternativeHypothesis.TWO_SIDED),
+                            Double.MIN_VALUE);
+    }
+
+    /**
+     * All successes with p = 0.5 - p-value is the sum of the two tails.
+     */
+    @Test
+    public void testNoSuccessesTwoSidedEvenP() {
+        Assert.assertEquals(2 * FastMath.pow(0.5, 5),
+                            testStatistic.binomialTest(5, 0, 0.5,
+                            AlternativeHypothesis.TWO_SIDED),
+                            Double.MIN_VALUE);
+    }
+
+    /**
+     * All successes with p < 0.5 - p-value is 5 mass point.
+     */
+    @Test
+    public void testAllSuccessesTwoSidedLowP() {
+        final BinomialDistribution dist = new BinomialDistribution(5, 0.4);
+        Assert.assertEquals(dist.probability(5),
+                            testStatistic.binomialTest(5, 5, 0.4,
+                            AlternativeHypothesis.TWO_SIDED),
+                            Double.MIN_VALUE);
+    }
+
+    @Test
+    /**
+     * No successes, p > 0.5 - p-value is 0 mass point.
+     */
+    public void testNoSuccessesTwoSidedHighP() {
+        final BinomialDistribution dist = new BinomialDistribution(5, 0.9);
+        Assert.assertEquals(dist.probability(0),
+                            testStatistic.binomialTest(5, 0, 0.9,
+                            AlternativeHypothesis.TWO_SIDED),
+                            Double.MIN_VALUE);
+    }
+
+
+    /**
+     * In this case, the distribution looks like this:
+     *    0: 0.32768
+     *    1: 0.4096
+     *    2: 0.2048
+     *    3: 0.0512
+     *    4: 0.0064
+     *    5: 3.2E-4
+     *  Algorithm picks up 5, 4, 3, 2 and then 0, so result is 1 - mass at 1.
+     */
+    @Test
+    public void testNoSuccessesTwoSidedLowP() {
+        final BinomialDistribution dist = new BinomialDistribution(5, 0.2);
+        Assert.assertEquals(1 - dist.probability(1),
+                            testStatistic.binomialTest(5, 0, 0.2,
+                            AlternativeHypothesis.TWO_SIDED),
+                            Double.MIN_VALUE);
+    }
+
+    /**
+     * No successes has highest mass, so end up with everything here.
+     */
+    @Test
+    public void testNoSuccessesTwoSidedVeryLowP() {
+        Assert.assertEquals(1d,
+                            testStatistic.binomialTest(5, 0,  0.001,
+                            AlternativeHypothesis.TWO_SIDED),
+                            Double.MIN_VALUE);
     }
 }

@@ -128,7 +128,11 @@ public class BinomialTest {
                 final double pHigh = distribution.probability(criticalValueHigh);
 
                 if (pLow == pHigh) {
-                    pTotal += 2 * pLow;
+                    if (criticalValueLow == criticalValueHigh) { // One side can't move
+                        pTotal += pLow;
+                    } else {
+                        pTotal += 2 * pLow;
+                    }
                     criticalValueLow++;
                     criticalValueHigh--;
                 } else if (pLow < pHigh) {
