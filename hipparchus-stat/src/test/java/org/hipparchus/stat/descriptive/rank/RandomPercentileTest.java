@@ -25,6 +25,7 @@ import static org.junit.Assert.fail;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.GammaDistribution;
+import org.hipparchus.distribution.continuous.LogNormalDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -162,8 +163,6 @@ public class RandomPercentileTest extends
         p = new Percentile(50);
         assertEquals(p.evaluate(d),randomPercentile.getResult(50d), 1.0e-5);
     }
-
-
 
     @Test(expected = MathIllegalArgumentException.class)
     public void testNegativeInvalidValues() {
@@ -307,6 +306,8 @@ public class RandomPercentileTest extends
     private void assertValues(Double a, Double b, double delta) {
         if (Double.isNaN(a)) {
             assertTrue("" + b + " is not NaN.", Double.isNaN(a));
+        } else if (Double.isInfinite(a)) {
+            assertTrue(a.equals(b));
         } else {
             double max = FastMath.max(a, b);
             double percentage = FastMath.abs(a - b) / max;
@@ -336,6 +337,8 @@ public class RandomPercentileTest extends
          }
          if (Double.isNaN(referenceValue)) {
              assertTrue(Double.isNaN(value));
+         } else if (Double.isInfinite(value)) {
+             assertTrue(value == referenceValue);
          } else {
              assertTrue("Quantile error exceeded: value returned = " + value +
                         " Reference value = " + referenceValue +
@@ -506,7 +509,7 @@ public class RandomPercentileTest extends
     @Test
     public void testDistribution() {
         doDistributionTest(new NormalDistribution(4000, 50));
-        //doDistributionTest(new LogNormalDistribution(4000, 50));
+        doDistributionTest(new LogNormalDistribution(4000, 50));
         doDistributionTest(new ExponentialDistribution(4000));
         doDistributionTest(new GammaDistribution(5d,1d));
     }
