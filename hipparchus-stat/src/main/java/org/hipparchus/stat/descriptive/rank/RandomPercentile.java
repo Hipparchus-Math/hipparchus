@@ -70,7 +70,7 @@ import org.hipparchus.util.MathArrays;
  * stream to fill buffers freed by merge operations.  Both the merging and the sampling
  * require random selection, which is done using a {@code RandomGenerator}.  To get
  * repeatable results for large data streams, users should provide {@code RandomGenerator}
- * instances with fixed seeds. {@code RandomPercentile} itself does not reseed or othewise
+ * instances with fixed seeds. {@code RandomPercentile} itself does not reseed or otherwise
  * initialize the {@code RandomGenerator} provided to it.  By default, it uses a
  * {@link Well19937c} generator with the default seed.
  * <p>
@@ -377,6 +377,28 @@ public class RandomPercentile
         currentBuffer.consume(d);
     }
 
+    /**
+     * Maintains a buffer of values sampled from the input data stream.
+     * <p>
+     * The {@link #level} of a buffer determines its sampling frequency.
+     * The {@link #consume(double)} method retains 1 out of every 2^level values
+     * read in from the stream.
+     * <p>
+     * The {@link #size} of the buffer is the number of values that it can store
+     * The buffer is considered full when it has consumed 2^level * size values.
+     * <p>
+     * The {@link #blockSize} of a buffer is 2^level.
+     * The consume method starts each block by generating a random integer in
+     * [0, blockSize - 1].  It then skips over all but the element with that offset
+     * in the block, retaining only the selected value. So after 2^level * size
+     * elements have been consumed, it will have retained size elements - one
+     * from each 2^level block.
+     * <p>
+     * The {@link #mergeWith(Buffer)} method merges this buffer with another one,
+     * The merge operation merges the data from the other buffer into this and clears
+     * the other buffer (so it can consume data). Both buffers have their level
+     * incremented by the merge. This operation is only used on full buffers.
+     */
     private static class Buffer implements Serializable {
         private static final long serialVersionUID = 1L;
         /** Number of values actually stored in the buffer */
@@ -396,6 +418,14 @@ public class RandomPercentile
         /** Index of next value to take in current 2^level block */
         private long nextToTake = 0;
 
+        /**
+         * Creates a new buffer capable of retaining size values with the given level.
+         *
+         * @param size number of values the buffer can retain
+         * @param level the base 2 log of the sampling frequency
+         *        (one out of every 2^level values is retained)
+         * @param randomGenerator PRNG used for sampling and merge operations
+         */
         public Buffer(int size, int level, RandomGenerator randomGenerator) {
             this.size = size;
             data = new double[size];
@@ -452,11 +482,21 @@ public class RandomPercentile
         }
 
         /**
-         * Merge this with other.  After the merge, this will be the merged
-         * buffer and other will be free.  Both will have level+1. Post-merge,
-         * other can be used to accept new data.
+         * Merges this with other.
+         * <p>
+         * After the merge, this will be the merged buffer and other will be free.
+         * Both will have level+1.
+         * Post-merge, other can be used to accept new data.
+         * <p>
+         * The contents of the merged buffer (this after the merge) are determined
+         * by randomly choosing one of the two retained elements in each of the
+         * [0...size - 1] positions in two buffers.
+         * <p>
+         * This and other must have the same level and both must be full.
          *
          * @param other initially full other buffer at the same level as this.
+         * @throws MathIllegalStateException if either buffer is not full or they
+         * have different levels
          */
         public void mergeWith(Buffer other) {
             // Make sure both this and other are full and have the same level
@@ -517,7 +557,7 @@ public class RandomPercentile
         }
 
         /**
-         * Returns the rank of value among the sampled values in this buffer.
+         * Returns the ordinal rank of value among the sampled values in this buffer.
          *
          * @param value value whose rank is sought
          * @return |{v in data : v < value}|
@@ -549,6 +589,12 @@ public class RandomPercentile
         }
     }
 
+    /**
+     * Computes base 2 log of the argument.
+     *
+     * @param x input value
+     * @return the value y such that 2^y = x
+     */
     private static double log2(double x) {
         return Math.log(x) / Math.log(2);
     }
