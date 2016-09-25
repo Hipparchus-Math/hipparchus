@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.1" date="TBD" description="This is a maintenance release.">
+      <action dev="psteitz" type="fix">
+        Improved parameter validation for probabilities provided to enumerated distribution
+        constructors.
+      </action>
       <action dev="psteitz" type="update">
         Added methods to expose the probability mass function to EnumeratedRealDistribution
         and EnumeratedIntegerDistribution.
