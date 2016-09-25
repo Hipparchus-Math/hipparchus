@@ -490,7 +490,7 @@ public class RandomPercentile
          * <p>
          * The contents of the merged buffer (this after the merge) are determined
          * by randomly choosing one of the two retained elements in each of the
-         * [0...size - 1] positions in two buffers.
+         * [0...size - 1] positions in the two buffers.
          * <p>
          * This and other must have the same level and both must be full.
          *
@@ -600,8 +600,8 @@ public class RandomPercentile
     }
 
     /**
-     * A map structure to hold the buffers.  Keys are levels
-     * and values are lists of buffers at the given level.
+     * A map structure to hold the buffers.
+     * Keys are levels and values are lists of buffers at the given level.
      * Overall capacity is limited by the total number of buffers.
      */
     private static class BufferMap implements Iterable<Buffer>, Serializable {
