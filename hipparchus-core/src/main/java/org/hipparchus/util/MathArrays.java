@@ -578,7 +578,7 @@ public class MathArrays {
         throws MathIllegalArgumentException {
         for(int i = 0; i < in.length; i++) {
             if (Double.isNaN(in[i])) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_NOT_ALLOWED);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_ELEMENT_AT_INDEX, i);
             }
         }
     }
@@ -1333,13 +1333,14 @@ public class MathArrays {
      * or sums to 0.
      * <p>
      * Ignores (i.e., copies unchanged to the output array) NaNs in the input array.
+     * The input array is unchanged by this method.
      *
      * @param values Input array to be normalized
      * @param normalizedSum Target sum for the normalized array
-     * @return the normalized array.
+     * @return the normalized array
      * @throws MathRuntimeException if the input array contains infinite
-     * elements or sums to zero.
-     * @throws MathIllegalArgumentException if the target sum is infinite or {@code NaN}.
+     * elements or sums to zero
+     * @throws MathIllegalArgumentException if the target sum is infinite or {@code NaN}
      */
     public static double[] normalizeArray(double[] values, double normalizedSum)
         throws MathIllegalArgumentException, MathRuntimeException {
