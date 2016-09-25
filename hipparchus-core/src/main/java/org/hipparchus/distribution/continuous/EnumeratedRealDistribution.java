@@ -105,14 +105,16 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      * @param singletons values
      * @param probabilities probabilities
      * @return list of value/probability pairs
+     * @throws MathIllegalArgumentException if probabilities contains negative, infinite or NaN values or only 0's
      */
     private static List<Pair<Double, Double>> createDistribution(double[] singletons,
                                                                  double[] probabilities) {
         MathArrays.checkEqualLength(singletons, probabilities);
         final List<Pair<Double, Double>> samples = new ArrayList<>(singletons.length);
 
+        final double[] normalizedProbabilities = EnumeratedDistribution.checkAndNormalize(probabilities);
         for (int i = 0; i < singletons.length; i++) {
-            samples.add(new Pair<>(singletons[i], probabilities[i]));
+            samples.add(new Pair<>(singletons[i], normalizedProbabilities[i]));
         }
         return samples;
     }

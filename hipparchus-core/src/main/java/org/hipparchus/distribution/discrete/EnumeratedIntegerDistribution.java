@@ -55,9 +55,7 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
      * @param probabilities array of probabilities.
      * @throws MathIllegalArgumentException if
      * {@code singletons.length != probabilities.length}
-     * @throws MathIllegalArgumentException if any of the probabilities are negative.
-     * @throws MathIllegalArgumentException if any of the probabilities are NaN.
-     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
+     * @throws MathIllegalArgumentException if probabilities contains negative, infinite or NaN values or only 0's
      */
     public EnumeratedIntegerDistribution(final int[] singletons, final double[] probabilities)
         throws MathIllegalArgumentException {
@@ -101,14 +99,16 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
      * @param singletons values
      * @param probabilities probabilities
      * @return list of value/probability pairs
+     * @throws MathIllegalArgumentException if probabilities contains negative, infinite or NaN values or only 0's
      */
     private static List<Pair<Integer, Double>> createDistribution(int[] singletons,
                                                                   double[] probabilities) {
         MathUtils.checkDimension(singletons.length, probabilities.length);
         final List<Pair<Integer, Double>> samples = new ArrayList<>(singletons.length);
 
+        final double[] normalizedProbabilities = EnumeratedDistribution.checkAndNormalize(probabilities);
         for (int i = 0; i < singletons.length; i++) {
-            samples.add(new Pair<>(singletons[i], probabilities[i]));
+            samples.add(new Pair<>(singletons[i], normalizedProbabilities[i]));
         }
         return samples;
     }

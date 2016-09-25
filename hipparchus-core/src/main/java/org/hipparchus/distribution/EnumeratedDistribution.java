@@ -22,8 +22,8 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Pair;
+import org.hipparchus.util.Precision;
 
 /**
  * A generic implementation of a
@@ -69,14 +69,12 @@ public class EnumeratedDistribution<T> implements Serializable {
     private final double[] cumulativeProbabilities;
 
     /**
-     * Create an enumerated distribution using the given random number generator
-     * and probability mass function enumeration.
+     * Create an enumerated distribution using the given probability mass function
+     * enumeration.
      *
      * @param pmf probability mass function enumerated as a list of &lt;T, probability&gt;
      * pairs.
-     * @throws MathIllegalArgumentException if any of the probabilities are negative.
-     * @throws MathIllegalArgumentException if any of the probabilities are NaN.
-     * @throws MathIllegalArgumentException if any of the probabilities are infinite.
+     * @throws MathIllegalArgumentException of weights includes negative, NaN or infinite values or only 0's
      */
     public EnumeratedDistribution(final List<Pair<T, Double>> pmf)
         throws MathIllegalArgumentException {
@@ -88,19 +86,10 @@ public class EnumeratedDistribution<T> implements Serializable {
             final Pair<T, Double> sample = pmf.get(i);
             singletons.add(sample.getKey());
             final double p = sample.getValue();
-            if (p < 0) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL, p, 0);
-            }
-            if (Double.isInfinite(p)) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_FINITE_NUMBER, p);
-            }
-            if (Double.isNaN(p)) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_NOT_ALLOWED);
-            }
             probs[i] = p;
         }
 
-        probabilities = MathArrays.normalizeArray(probs, 1.0);
+        probabilities = checkAndNormalize(probs);
 
         cumulativeProbabilities = new double[probabilities.length];
         double sum = 0;
@@ -153,6 +142,50 @@ public class EnumeratedDistribution<T> implements Serializable {
         }
 
         return samples;
+    }
+
+    /**
+     * Checks to make sure that weights contains only non-negative, finite, non-NaN values
+     * and if necessary normalizes it to sum to 1.
+     *
+     * @param weights input array to be used as the basis for the values of a PMF
+     * @return a possibly rescaled copy of the array that sums to 1 and contains only valid probability values
+     * @throws MathIllegalArgumentException of weights includes negative, NaN or infinite values or only 0's
+     */
+    public static double[] checkAndNormalize(double[] weights) {
+        final int len = weights.length;
+        double sumWt = 0;
+        boolean posWt = false;
+        for (int i = 0; i < len; i++) {
+            if (weights[i] < 0) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
+                                                       weights[i], 0);
+            }
+            if (weights[i] > 0) {
+                posWt = true;
+            }
+            if (Double.isNaN(weights[i])) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.NAN_ELEMENT_AT_INDEX, i);
+            }
+            if (Double.isInfinite(weights[i])) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.INFINITE_ARRAY_ELEMENT,
+                                                       weights[i], i);
+            }
+            sumWt += weights[i];
+        }
+        if (!posWt) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.WEIGHT_AT_LEAST_ONE_NON_ZERO);
+        }
+        double[] normWt = null;
+        if (Precision.equals(sumWt, 1d, 10)) { // allow small error (10 ulps)
+            normWt = weights;
+        } else {
+            normWt = new double[len];
+            for (int i = 0; i < len; i++) {
+                normWt[i] = weights[i] / sumWt;
+            }
+        }
+        return normWt;
     }
 
 }
