@@ -221,4 +221,13 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
         return true;
     }
 
+    /**
+     * Return the probability mass function as a list of <value, probability> pairs.
+     *
+     * @return the probability mass function.
+     */
+    public List<Pair<Integer, Double>> getPmf() {
+        return innerDistribution.getPmf();
+    }
+
 }

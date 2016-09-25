@@ -21,8 +21,13 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.util.Pair;
 import org.junit.Test;
 
 /**
@@ -210,5 +215,22 @@ public class EnumeratedRealDistributionTest {
         EnumeratedRealDistribution distribution = new EnumeratedRealDistribution(data);
         assertEquals(0.5, distribution.probability(2), 0);
         assertEquals(0.5, distribution.cumulativeProbability(1), 0);
+    }
+
+    @Test
+    public void testGetPmf() {
+        final double[] data = new double[] {0,0,1,1,2,2,2,2,3,4};
+        final EnumeratedRealDistribution distribution = new EnumeratedRealDistribution(data);
+        final List<Pair<Double, Double>> pmf = distribution.getPmf();
+        assertEquals(5, pmf.size());
+        final Map<Double, Double> pmfMap = new HashMap<Double, Double>();
+        pmfMap.put(0d, 0.2);
+        pmfMap.put(1d, 0.2);
+        pmfMap.put(2d, 0.4);
+        pmfMap.put(3d, 0.1);
+        pmfMap.put(4d, 0.1);
+        for (int i = 0; i < 5; i++) {
+            assertEquals(pmf.get(i).getSecond(), pmfMap.get(pmf.get(i).getFirst()), 0);
+        }
     }
 }

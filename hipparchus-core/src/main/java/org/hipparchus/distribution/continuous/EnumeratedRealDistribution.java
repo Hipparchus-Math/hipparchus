@@ -271,4 +271,13 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
     public boolean isSupportConnected() {
         return true;
     }
+
+    /**
+     * Return the probability mass function as a list of <value, probability> pairs.
+     *
+     * @return the probability mass function.
+     */
+    public List<Pair<Double, Double>> getPmf() {
+        return innerDistribution.getPmf();
+    }
 }

@@ -18,8 +18,13 @@ package org.hipparchus.distribution.discrete;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.util.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -151,5 +156,21 @@ public class EnumeratedIntegerDistributionTest {
         EnumeratedIntegerDistribution distribution = new EnumeratedIntegerDistribution(data);
         assertEquals(0.5, distribution.probability(2), 0);
         assertEquals(0.5, distribution.cumulativeProbability(1), 0);
+    }
+
+    @Test
+    public void testGetPmf() {
+        final int[] values = new int[] {0,1,2,3,4};
+        final double[] masses = new double[] {0.2, 0.2, 0.4, 0.1, 0.1};
+        final EnumeratedIntegerDistribution distribution = new EnumeratedIntegerDistribution(values, masses);
+        final List<Pair<Integer, Double>> pmf = distribution.getPmf();
+        assertEquals(5, pmf.size());
+        final Map<Integer, Double> pmfMap = new HashMap<Integer, Double>();
+        for (int i = 0; i < 5; i++) {
+            pmfMap.put(i, masses[i]);
+        }
+        for (int i = 0; i < 5; i++) {
+            assertEquals(pmf.get(i).getSecond(), pmfMap.get(pmf.get(i).getFirst()), 0);
+        }
     }
 }
