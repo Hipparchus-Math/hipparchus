@@ -27,7 +27,6 @@ import org.hipparchus.analysis.solvers.NewtonRaphsonSolver;
 import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
