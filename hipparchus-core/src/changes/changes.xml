@@ -50,6 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.1" date="TBD" description="This is a maintenance release.">
+      <action dev="ebourg" type="update" issue="MATH-1389" due-to="Christoph Dibak">
+        Performance improvement for Array2DRowRealMatrix.getSubMatrix() (and also
+        Array2DRowFieldMatrix.getSubMatrix()).
+        Fixes Github issue #12.
+      </action>
       <action dev="psteitz" type="fix">
         Improved parameter validation for probabilities provided to enumerated distribution
         constructors.
