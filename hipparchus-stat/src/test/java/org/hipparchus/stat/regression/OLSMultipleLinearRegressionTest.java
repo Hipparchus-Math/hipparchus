@@ -26,7 +26,6 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 import org.hipparchus.stat.StatUtils;
-import org.hipparchus.stat.regression.OLSMultipleLinearRegression;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -819,5 +818,23 @@ public class OLSMultipleLinearRegressionTest extends MultipleLinearRegressionAbs
     public void testNoDataNPESSTO() {
         OLSMultipleLinearRegression model = new OLSMultipleLinearRegression();
         model.calculateTotalSumOfSquares();
+    }
+
+    /**
+     * From http://stackoverflow.com/questions/37320008/ols-multiple-linear-regression-with-commons-math
+     */
+    @Test
+    public void testNewSampleDataNoIntercept() {
+        final double[][] x = { { 1, 0, 0, 0 }, { 0, 1, 0, 0 }, { 0, 0, 1, 0}, {  0, 0, 0, 1 } };
+        final double[] y = { 1, 2, 3, 4 };
+
+        final OLSMultipleLinearRegression regression = new OLSMultipleLinearRegression();
+        regression.setNoIntercept(true);
+        regression.newSampleData(y, x);
+
+        final double[] b = regression.estimateRegressionParameters();
+        for (int i = 0; i < y.length; i++) {
+            Assert.assertEquals(b[i], y[i], 0.001);
+        }
     }
 }

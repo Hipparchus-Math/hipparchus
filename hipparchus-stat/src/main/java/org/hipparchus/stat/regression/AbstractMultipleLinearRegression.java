@@ -208,7 +208,8 @@ public abstract class AbstractMultipleLinearRegression implements
      * have the same length
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length
      * @throws MathIllegalArgumentException if the number of rows of {@code x}
-     * is not larger than the number of columns + 1
+     * is not larger than the number of columns + 1 if the model has an intercept;
+     * or the number of columns if there is no intercept term
      */
     protected void validateSampleData(double[][] x, double[] y) throws MathIllegalArgumentException {
         if ((x == null) || (y == null)) {
@@ -218,7 +219,7 @@ public abstract class AbstractMultipleLinearRegression implements
         if (x.length == 0) {  // Must be no y data either
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
-        if (x[0].length + 1 > x.length) {
+        if (x[0].length + (noIntercept ? 0 : 1) > x.length) {
             throw new MathIllegalArgumentException(
                     LocalizedCoreFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                     x.length, x[0].length);
