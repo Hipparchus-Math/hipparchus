@@ -20,7 +20,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.ExponentialDistribution;
@@ -165,32 +164,12 @@ public class RandomPercentileTest extends
     }
 
     @Test(expected = MathIllegalArgumentException.class)
-    public void testNegativeInvalidValues() {
-        double[] d =
-                new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
-                        95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
-                        95.1682 };
-        RandomPercentile p = new RandomPercentile(-1.0);
-        p.evaluate(d, 0, d.length);
-    }
-
-    @Test(expected = MathIllegalArgumentException.class)
-    public void testPositiveInvalidValues() {
-        double[] d =
-                new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
-                        95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
-                        95.1682 };
-        RandomPercentile p = new RandomPercentile(101.0);
-        p.evaluate(d, 0, d.length);
-    }
-
-    @Test(expected = MathIllegalArgumentException.class)
     public void testNonPositiveEpsilon() {
         double[] d =
                 new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
                         95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
                         95.1682 };
-        RandomPercentile p = new RandomPercentile(0, 10);
+        RandomPercentile p = new RandomPercentile(0);
         p.evaluate(d, 0, d.length);
     }
 
@@ -200,15 +179,15 @@ public class RandomPercentileTest extends
                 new double[] { 95.1772, 95.1567, 95.1937, 95.1959, 95.1442,
                         95.0610, 95.1591, 95.1195, 95.1772, 95.0925, 95.1990,
                         95.1682 };
-        assertEquals(95.1981, new RandomPercentile(90d).evaluate(d), 1.0e-4);
-        assertEquals(95.061, new RandomPercentile(0d).evaluate(d), 0);
-        assertEquals(95.1990, new RandomPercentile(100d).evaluate(d, 0, d.length), 0);
+        assertEquals(95.1981, new RandomPercentile().evaluate(90d, d), 1.0e-4);
+        assertEquals(95.061, new RandomPercentile().evaluate(0d, d), 0);
+        assertEquals(95.1990, new RandomPercentile().evaluate(100d, d, 0, d.length), 0);
     }
 
     @Test
     public void test5() {
-        RandomPercentile percentile = new RandomPercentile(5d);
-        assertEquals(this.percentile5, percentile.evaluate(testArray), 0.0001);
+        RandomPercentile percentile = new RandomPercentile();
+        assertEquals(this.percentile5, percentile.evaluate(5, testArray), 0.0001);
     }
 
     @Test(expected = NullArgumentException.class)
@@ -227,21 +206,21 @@ public class RandomPercentileTest extends
 
     @Test
     public void testSingleton() {
-        RandomPercentile percentile = new RandomPercentile(50d);
+        RandomPercentile percentile = new RandomPercentile();
         double[] singletonArray = new double[] { 1d };
         assertEquals(1d, percentile.evaluate(singletonArray), 0);
         assertEquals(1d, percentile.evaluate(singletonArray, 0, 1), 0);
-        percentile = new RandomPercentile(5);
-        assertEquals(1d, percentile.evaluate(singletonArray, 0, 1), 0);
-        percentile = new RandomPercentile(100);
-        assertEquals(1d, percentile.evaluate(singletonArray, 0, 1), 0);
-        percentile = new RandomPercentile(100);
-        assertTrue(Double.isNaN(percentile.evaluate(singletonArray, 0, 0)));
+        percentile = new RandomPercentile();
+        assertEquals(1d, percentile.evaluate(5, singletonArray, 0, 1), 0);
+        percentile = new RandomPercentile();
+        assertEquals(1d, percentile.evaluate(100, singletonArray, 0, 1), 0);
+        percentile = new RandomPercentile();
+        assertTrue(Double.isNaN(percentile.evaluate(100, singletonArray, 0, 0)));
     }
 
     @Test
     public void testSpecialValues() {
-        RandomPercentile percentile = new RandomPercentile(50d);
+        RandomPercentile percentile = new RandomPercentile();
         double[] specialValues = new double[] { 0d, 1d, 2d, 3d, 4d, Double.NaN };
         assertEquals(2d, percentile.evaluate(specialValues), 0);
         specialValues =
@@ -254,33 +233,13 @@ public class RandomPercentileTest extends
         assertFalse(Double.isNaN(percentile.evaluate(specialValues)));
         specialValues =
             new double[] { 1d, 1d, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY };
-        percentile = new RandomPercentile(50d);
+        percentile = new RandomPercentile();
         assertTrue(Double.isNaN(percentile.evaluate(specialValues)));
     }
 
     @Test
     public void testArrayExample() {
-        assertEquals(this.percentile95, new RandomPercentile(95d).evaluate(testArray), getTolerance());
-    }
-
-    @Test
-    public void testSetQuantile() {
-        RandomPercentile percentile = new RandomPercentile(10d);
-
-        percentile = new RandomPercentile(100); // OK
-        assertEquals(1.0, percentile.getQuantile(), 0);
-        try {
-            percentile = new RandomPercentile(-1);
-            fail("Expecting MathIllegalArgumentException");
-        } catch (MathIllegalArgumentException ex) {
-            // expected
-        }
-        try {
-            new RandomPercentile(1000d);
-            fail("Expecting MathIllegalArgumentException");
-        } catch (MathIllegalArgumentException ex) {
-            // expected
-        }
+        assertEquals(this.percentile95, new RandomPercentile().evaluate(95d,testArray), getTolerance());
     }
 
     private Double[] randomTestData(int factor, int values) {
@@ -293,7 +252,7 @@ public class RandomPercentileTest extends
 
     @Test
     public void testAccept() {
-        final RandomPercentile randomPercentile = new RandomPercentile(0.99);
+        final RandomPercentile randomPercentile = new RandomPercentile();
         assertTrue(Double.isNaN(randomPercentile.getResult()));
         Double[] test = randomTestData(100, 10000);
 
@@ -355,7 +314,7 @@ public class RandomPercentileTest extends
 
 
     private void doCalculatePercentile(Double percentile, Number[] test, double delta) {
-        RandomPercentile random = new RandomPercentile(percentile, new Well19937c(200));
+        RandomPercentile random = new RandomPercentile(new Well19937c(200));
         for (Number value : test) {
             random.increment(value.doubleValue());
         }
@@ -368,11 +327,11 @@ public class RandomPercentileTest extends
         }
 
         Double referenceValue = p2.evaluate(dall);
-        assertValues(random.getResult(), referenceValue, delta);
+        assertValues(random.getResult(percentile), referenceValue, delta);
     }
 
     private void doCalculatePercentile(double percentile, double[] test, double delta) {
-        RandomPercentile randomEstimated = new RandomPercentile(percentile, new Well19937c(200));
+        RandomPercentile randomEstimated = new RandomPercentile(new Well19937c(200));
         for (double value : test) {
             randomEstimated.increment(value);
         }
@@ -384,9 +343,9 @@ public class RandomPercentileTest extends
          */
         Double referenceValue = p2.evaluate(test);
         if (test.length < LARGE) {
-            assertValues(randomEstimated.getResult(), referenceValue, delta);
+            assertValues(randomEstimated.getResult(percentile), referenceValue, delta);
         } else {
-            checkQuantileError(test,randomEstimated.getResult(), percentile / 100, delta, referenceValue);
+            checkQuantileError(test,randomEstimated.getResult(percentile), percentile / 100, delta, referenceValue);
         }
     }
 
@@ -457,8 +416,8 @@ public class RandomPercentileTest extends
     @Test
     public void test0PercentileValuesWithFewerThan5Values() {
         double[] test = { 1d, 2d, 3d, 4d };
-        RandomPercentile p = new RandomPercentile(0d);
-        assertEquals(1d, p.evaluate(test), 0);
+        RandomPercentile p = new RandomPercentile();
+        assertEquals(1d, p.evaluate(0d,test), 0);
     }
 
 
@@ -535,7 +494,7 @@ public class RandomPercentileTest extends
         final long seed = 1000;
         RandomDataGenerator randomDataGenerator = RandomDataGenerator.of(new MersenneTwister(seed));
         final RandomPercentile randomPercentile = new RandomPercentile(RandomPercentile.DEFAULT_EPSILON,
-                                                                       randomDataGenerator, 50d);
+                                                                       randomDataGenerator);
         for (int i = 0; i < sampleSize; i++) {
             randomPercentile.increment(randomDataGenerator.nextDeviate(dist));
         }

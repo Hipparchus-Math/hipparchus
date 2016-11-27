@@ -86,8 +86,6 @@ public class RandomPercentile
     private final int h;
     /** Data structure used to manage buffers */
     private final BufferMap bufferPool;
-    /** Default quantile (what {@link #getResult()} returns) - scaled 0-1 */
-    private final double quantile;
     /** Bound on the quantile estimation error */
     private final double epsilon;
     /** Source of random data */
@@ -101,19 +99,13 @@ public class RandomPercentile
 
     /**
      * Constructs a {@code RandomPercentile} with quantile estimation error
-     * {@code epsilon} and default percentile {@code percentile}, using
-     * {@code randomGenerator} as its source of random data.
+     * {@code epsilon} using {@code randomGenerator} as its source of random data.
      *
      * @param epsilon bound on quantile estimation error (see class javadoc)
      * @param randomGenerator PRNG used in sampling and merge operations
-     * @param percentile default percentile (what is returned by {@link #getResult()}
      * @throws MathIllegalArgumentException if percentile is not in the range [0, 100]
      */
-    public RandomPercentile(double epsilon, RandomGenerator randomGenerator, double percentile) {
-        if (percentile > 100 || percentile < 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE,
-                                                   percentile, 0, 100);
-        }
+    public RandomPercentile(double epsilon, RandomGenerator randomGenerator) {
         if (epsilon <= 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_SMALL,
                                                    epsilon, 0);
@@ -123,47 +115,29 @@ public class RandomPercentile
         this.randomGenerator = randomGenerator;
         bufferPool = new BufferMap(h + 1, s, randomGenerator);
         currentBuffer = bufferPool.create(0);
-        this.quantile = percentile / 100;
         this.epsilon = epsilon;
     }
 
     /**
-     * Constructs a {@code RandomPercentile} with quantile estimation error
-     * {@code epsilon} and default percentile {@code percentile}, using
-     * the default PRNG as source of random data.
-     *
-     * @param epsilon bound on quantile estimation error (see class javadoc)
-     * @param percentile default percentile (what is returned by {@link #getResult()}
-     * @throws MathIllegalArgumentException if percentile is not in the range [0, 100]
-     */
-    public RandomPercentile(double epsilon, double percentile) {
-        this(epsilon, new Well19937c(), percentile);
-    }
-
-    /**
-     * Constructs a {@code RandomPercentile} with quantile estimation error
-     * set to the default ({@link #DEFAULT_EPSILON}) and default percentile
-     * {@code percentile}, using the default PRNG as source of random data.
-     *
-     * @param percentile default percentile (what is returned by {@link #getResult()}
-     * @throws MathIllegalArgumentException if percentile is not in the range [0, 100]
-     */
-    public RandomPercentile(double percentile) {
-        this(DEFAULT_EPSILON, new Well19937c(), percentile);
-    }
-
-    /**
-     * Constructs a {@code RandomPercentile} with quantile estimation error
-     * set to the default ({@link #DEFAULT_EPSILON}) and default percentile
-     * {@code percentile}, using the {@code randomGenerator} as source of
-     * random data.
+     * Constructs a {@code RandomPercentile} with default estimation error
+     * using {@code randomGenerator} as its source of random data.
      *
      * @param randomGenerator PRNG used in sampling and merge operations
-     * @param percentile default percentile (what is returned by {@link #getResult()}
      * @throws MathIllegalArgumentException if percentile is not in the range [0, 100]
      */
-    public RandomPercentile(double percentile, RandomGenerator randomGenerator) {
-        this(DEFAULT_EPSILON, randomGenerator, percentile);
+    public RandomPercentile(RandomGenerator randomGenerator) {
+        this(DEFAULT_EPSILON, randomGenerator);
+    }
+
+    /**
+     * Constructs a {@code RandomPercentile} with quantile estimation error
+     * {@code epsilon} using the default PRNG as source of random data.
+     *
+     * @param epsilon bound on quantile estimation error (see class javadoc)
+     * @throws MathIllegalArgumentException if percentile is not in the range [0, 100]
+     */
+    public RandomPercentile(double epsilon) {
+        this(epsilon, new Well19937c());
     }
 
     /**
@@ -172,7 +146,7 @@ public class RandomPercentile
      * equal to the median, using the default PRNG as source of random data.
      */
     public RandomPercentile() {
-        this(DEFAULT_EPSILON, new Well19937c(), 50d);
+        this(DEFAULT_EPSILON, new Well19937c());
     }
 
     /**
@@ -187,7 +161,6 @@ public class RandomPercentile
         super();
         this.h = original.h;
         this.n = original.n;
-        this.quantile = original.quantile;
         this.s = original.s;
         this.epsilon = original.epsilon;
         this.bufferPool = new BufferMap(original.bufferPool);
@@ -213,21 +186,57 @@ public class RandomPercentile
         return n;
     }
 
-    public double getQuantile() {
-        return quantile;
-    }
-
-    @Override
-    public double evaluate(final double[] values, final int begin, final int length)
+    /**
+     * Returns an estimate of the given percentile, computed using the designated
+     * array segment as input data.
+     *
+     * @param values source of input data
+     * @param begin position of the first element of the values array to include
+     * @param length number of array elements to include
+     * @param percentile desired percentile (scaled 0 - 100)
+     *
+     * @return estimated percentile
+     * @throws MathIllegalArgumentException if percentile is out of the range [0, 100]
+     */
+    public double evaluate(final double percentile, final double[] values, final int begin, final int length)
         throws MathIllegalArgumentException {
         if (MathArrays.verifyValues(values, begin, length)) {
             RandomPercentile randomPercentile = new RandomPercentile(this.epsilon,
-                                                                     this.randomGenerator,
-                                                                     this.quantile * 100);
+                                                                     this.randomGenerator);
             randomPercentile.incrementAll(values, begin, length);
-            return randomPercentile.getResult();
+            return randomPercentile.getResult(percentile);
         }
         return Double.NaN;
+    }
+
+    /**
+     * Returns an estimate of the median, computed using the designated
+     * array segment as input data.
+     *
+     * @param values source of input data
+     * @param begin position of the first element of the values array to include
+     * @param length number of array elements to include
+     * @param percentile desired percentile (scaled 0 - 100)
+     *
+     * @return estimated percentile
+     * @throws MathIllegalArgumentException if percentile is out of the range [0, 100]
+     */
+    @Override
+    public double evaluate(final double[] values, final int begin, final int length) {
+        return evaluate(50d, values, begin, length);
+    }
+
+    /**
+     * Returns an estimate of percentile over the given array.
+     *
+     * @param values source of input data
+     * @param percentile desired percentile (scaled 0 - 100)
+     *
+     * @return estimated percentile
+     * @throws MathIllegalArgumentException if percentile is out of the range [0, 100]
+     */
+    public double evaluate(final double percentile, final double[] values) {
+        return evaluate(percentile, values, 0, values.length);
     }
 
     @Override
@@ -242,9 +251,12 @@ public class RandomPercentile
         currentBuffer = bufferPool.create(0);
     }
 
+    /**
+     * Returns an estimate of the median.
+     */
     @Override
     public double getResult() {
-        return getResult(this.quantile * 100);
+        return getResult(50d);
 
     }
 
