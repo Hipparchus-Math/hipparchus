@@ -85,7 +85,7 @@ public class RandomPercentile
     /** Number of buffers minus 1 */
     private final int h;
     /** Data structure used to manage buffers */
-    private final BufferMap bufferPool;
+    private final BufferMap bufferMap;
     /** Bound on the quantile estimation error */
     private final double epsilon;
     /** Source of random data */
@@ -113,8 +113,8 @@ public class RandomPercentile
         this.h = (int) FastMath.ceil(log2(1/epsilon));
         this.s = (int) FastMath.ceil(FastMath.sqrt(log2(1/epsilon)) / epsilon);
         this.randomGenerator = randomGenerator;
-        bufferPool = new BufferMap(h + 1, s, randomGenerator);
-        currentBuffer = bufferPool.create(0);
+        bufferMap = new BufferMap(h + 1, s, randomGenerator);
+        currentBuffer = bufferMap.create(0);
         this.epsilon = epsilon;
     }
 
@@ -163,9 +163,9 @@ public class RandomPercentile
         this.n = original.n;
         this.s = original.s;
         this.epsilon = original.epsilon;
-        this.bufferPool = new BufferMap(original.bufferPool);
+        this.bufferMap = new BufferMap(original.bufferMap);
         this.randomGenerator = original.randomGenerator;
-        Iterator<Buffer> iterator = bufferPool.iterator();
+        Iterator<Buffer> iterator = bufferMap.iterator();
         Buffer current = null;
         Buffer curr = null;
         // See if there is a partially filled buffer - that will be currentBuffer
@@ -247,8 +247,8 @@ public class RandomPercentile
     @Override
     public void clear() {
         n = 0;
-        bufferPool.clear();
-        currentBuffer = bufferPool.create(0);
+        bufferMap.clear();
+        currentBuffer = bufferMap.create(0);
     }
 
     /**
@@ -279,7 +279,7 @@ public class RandomPercentile
         double max = Double.NEGATIVE_INFINITY;
         double bMin;
         double bMax;
-        Iterator<Buffer> bufferIterator = bufferPool.iterator();
+        Iterator<Buffer> bufferIterator = bufferMap.iterator();
         while (bufferIterator.hasNext()) {
             Buffer buffer = bufferIterator.next();
             bMin = StatUtils.min(buffer.getData());
@@ -305,8 +305,8 @@ public class RandomPercentile
 
         // See if we have all data in memory and enough free memory to copy.
         // If so, use Percentile to perform exact computation.
-        if (bufferPool.halfEmpty()) {
-            return new Percentile(percentile).evaluate(bufferPool.levelZeroData());
+        if (bufferMap.halfEmpty()) {
+            return new Percentile(percentile).evaluate(bufferMap.levelZeroData());
         }
 
         // Compute target rank
@@ -354,7 +354,7 @@ public class RandomPercentile
      */
     public double getRank(double value) {
         double rankSum = 0;
-        Iterator<Buffer> bufferIterator = bufferPool.iterator();
+        Iterator<Buffer> bufferIterator = bufferMap.iterator();
         while (bufferIterator.hasNext()) {
             Buffer buffer = bufferIterator.next();
             rankSum += buffer.rankOf(value) * FastMath.pow(2, buffer.level);
@@ -379,11 +379,11 @@ public class RandomPercentile
         n++;
         if (!currentBuffer.hasCapacity()) { // Need to get a new buffer to fill
             // First see if we have not yet created all the buffers
-            if (bufferPool.canCreate()) {
+            if (bufferMap.canCreate()) {
                 final int level = (int) Math.ceil(Math.max(0, log2(n/(s * FastMath.pow(2, h - 1)))));
-                currentBuffer = bufferPool.create(level);
+                currentBuffer = bufferMap.create(level);
             } else { // All buffers have been created - need to merge to free one
-                currentBuffer = bufferPool.merge();
+                currentBuffer = bufferMap.merge();
             }
         }
         currentBuffer.consume(d);
@@ -627,7 +627,7 @@ public class RandomPercentile
         /** Uniform buffer size */
         private final int bufferSize;
         /** Backing store for the buffer map */
-        final HashMap<Integer,List<Buffer>> bufferMap = new HashMap<>();
+        final HashMap<Integer,List<Buffer>> registry = new HashMap<>();
         /** Maximum buffer level */
         private int maxLevel = 0;
 
@@ -686,10 +686,10 @@ public class RandomPercentile
                 return null;
             }
             Buffer buffer = new Buffer(bufferSize, level, randomGenerator);
-            List<Buffer> bufferList = bufferMap.get(level);
+            List<Buffer> bufferList = registry.get(level);
             if (bufferList == null) {
                 bufferList = new ArrayList<Buffer>();
-                bufferMap.put(level, bufferList);
+                registry.put(level, bufferList);
             }
             bufferList.add(buffer);
             count++;
@@ -722,8 +722,8 @@ public class RandomPercentile
          */
         public boolean halfEmpty() {
             return count * 2 < capacity &&
-                    bufferMap.size() == 1 &&
-                    bufferMap.containsKey(0);
+                    registry.size() == 1 &&
+                    registry.containsKey(0);
         }
 
         /**
@@ -732,7 +732,7 @@ public class RandomPercentile
          * @return combined data stored in all level 0 buffers
          */
         public double[] levelZeroData() {
-            List<Buffer> levelZeroBuffers = bufferMap.get(0);
+            List<Buffer> levelZeroBuffers = registry.get(0);
             // First determine the combined size of the data
             int length = 0;
             for (Buffer buffer : levelZeroBuffers) {
@@ -770,7 +770,7 @@ public class RandomPercentile
             List<Buffer> mergeCandidates = null;
             // Find the lowest level containing at least two buffers
             while (mergeCandidates == null && l <= maxLevel) {
-                final List<Buffer> bufferList = bufferMap.get(l);
+                final List<Buffer> bufferList = registry.get(l);
                 if (bufferList != null && bufferList.size() > 1) {
                     mergeCandidates = bufferList;
                 } else {
@@ -787,17 +787,17 @@ public class RandomPercentile
             mergeCandidates.remove(0);
             mergeCandidates.remove(0);
             // If these are the last level-l buffers, remove the empty list
-            if (bufferMap.get(l).size() == 0) {
-                bufferMap.remove(l);
+            if (registry.get(l).size() == 0) {
+                registry.remove(l);
             }
             // Merge the buffers
             buffer1.mergeWith(buffer2);
             // Now both buffers have level l+1; buffer1 is full and buffer2 is free.
             // Register both buffers
-            List<Buffer> bufferList = bufferMap.get(l + 1);
+            List<Buffer> bufferList = registry.get(l + 1);
             if (bufferList == null) {
                 bufferList = new ArrayList<Buffer>();
-                bufferMap.put(l + 1, bufferList);
+                registry.put(l + 1, bufferList);
             }
             bufferList.add(buffer1);
             bufferList.add(buffer2);
@@ -813,10 +813,10 @@ public class RandomPercentile
          * Clears the buffer map.
          */
         public void clear() {
-            for (List<Buffer> bufferList : bufferMap.values()) {
+            for (List<Buffer> bufferList : registry.values()) {
                 bufferList.clear();
             }
-            bufferMap.clear();
+            registry.clear();
             count = 0;
         }
 
@@ -826,7 +826,7 @@ public class RandomPercentile
         @Override
         public Iterator<Buffer> iterator() {
             Iterator<Buffer> it = new Iterator<Buffer>() {
-                final Iterator<List<Buffer>> levelIterator = bufferMap.values().iterator();
+                final Iterator<List<Buffer>> levelIterator = registry.values().iterator();
                 Iterator<Buffer> bufferIterator = levelIterator.next().iterator();
 
                 @Override
