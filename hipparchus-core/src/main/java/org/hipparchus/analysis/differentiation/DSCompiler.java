@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
+import org.hipparchus.Field;
+import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -257,8 +259,8 @@ public class DSCompiler {
      * @return derivatives indirection array
      */
     private static int[][] compileDerivativesIndirection(final int parameters, final int order,
-                                                      final DSCompiler valueCompiler,
-                                                      final DSCompiler derivativeCompiler) {
+                                                         final DSCompiler valueCompiler,
+                                                         final DSCompiler derivativeCompiler) {
 
         if (parameters == 0 || order == 0) {
             return new int[1][parameters];
@@ -305,8 +307,8 @@ public class DSCompiler {
      * @return lower derivatives indirection array
      */
     private static int[] compileLowerIndirection(final int parameters, final int order,
-                                              final DSCompiler valueCompiler,
-                                              final DSCompiler derivativeCompiler) {
+                                                 final DSCompiler valueCompiler,
+                                                 final DSCompiler derivativeCompiler) {
 
         if (parameters == 0 || order <= 1) {
             return new int[] { 0 };
@@ -339,9 +341,9 @@ public class DSCompiler {
      * @return multiplication indirection array
      */
     private static int[][][] compileMultiplicationIndirection(final int parameters, final int order,
-                                                           final DSCompiler valueCompiler,
-                                                           final DSCompiler derivativeCompiler,
-                                                           final int[] lowerIndirection) {
+                                                              final DSCompiler valueCompiler,
+                                                              final DSCompiler derivativeCompiler,
+                                                              final int[] lowerIndirection) {
 
         if ((parameters == 0) || (order == 0)) {
             return new int[][][] { { { 1, 0, 0 } } };
@@ -667,6 +669,48 @@ public class DSCompiler {
     }
 
     /** Compute linear combination.
+     * The derivative structure built will be a1 * ds1 + a2 * ds2
+     * @param a1 first scale factor
+     * @param c1 first base (unscaled) component
+     * @param offset1 offset of first operand in its array
+     * @param a2 second scale factor
+     * @param c2 second base (unscaled) component
+     * @param offset2 offset of second operand in its array
+     * @param result array where result must be stored (it may be
+     * one of the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void linearCombination(final T a1, final T[] c1, final int offset1,
+                                                                  final T a2, final T[] c2, final int offset2,
+                                                                  final T[] result, final int resultOffset) {
+        for (int i = 0; i < getSize(); ++i) {
+            result[resultOffset + i] =
+                    a1.linearCombination(a1, c1[offset1 + i], a2, c2[offset2 + i]);
+        }
+    }
+
+    /** Compute linear combination.
+     * The derivative structure built will be a1 * ds1 + a2 * ds2
+     * @param a1 first scale factor
+     * @param c1 first base (unscaled) component
+     * @param offset1 offset of first operand in its array
+     * @param a2 second scale factor
+     * @param c2 second base (unscaled) component
+     * @param offset2 offset of second operand in its array
+     * @param result array where result must be stored (it may be
+     * one of the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void linearCombination(final double a1, final T[] c1, final int offset1,
+                                                                  final double a2, final T[] c2, final int offset2,
+                                                                  final T[] result, final int resultOffset) {
+        for (int i = 0; i < getSize(); ++i) {
+            result[resultOffset + i] =
+                    c1[offset1].linearCombination(a1, c1[offset1 + i], a2, c2[offset2 + i]);
+        }
+    }
+
+    /** Compute linear combination.
      * The derivative structure built will be a1 * ds1 + a2 * ds2 + a3 * ds3 + a4 * ds4
      * @param a1 first scale factor
      * @param c1 first base (unscaled) component
@@ -704,6 +748,60 @@ public class DSCompiler {
      * @param a3 third scale factor
      * @param c3 third base (unscaled) component
      * @param offset3 offset of third operand in its array
+     * @param result array where result must be stored (it may be
+     * one of the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void linearCombination(final T a1, final T[] c1, final int offset1,
+                                                                  final T a2, final T[] c2, final int offset2,
+                                                                  final T a3, final T[] c3, final int offset3,
+                                                                  final T[] result, final int resultOffset) {
+        for (int i = 0; i < getSize(); ++i) {
+            result[resultOffset + i] =
+                    a1.linearCombination(a1, c1[offset1 + i],
+                                         a2, c2[offset2 + i],
+                                         a3, c3[offset3 + i]);
+        }
+    }
+
+    /** Compute linear combination.
+     * The derivative structure built will be a1 * ds1 + a2 * ds2 + a3 * ds3 + a4 * ds4
+     * @param a1 first scale factor
+     * @param c1 first base (unscaled) component
+     * @param offset1 offset of first operand in its array
+     * @param a2 second scale factor
+     * @param c2 second base (unscaled) component
+     * @param offset2 offset of second operand in its array
+     * @param a3 third scale factor
+     * @param c3 third base (unscaled) component
+     * @param offset3 offset of third operand in its array
+     * @param result array where result must be stored (it may be
+     * one of the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void linearCombination(final double a1, final T[] c1, final int offset1,
+                                                                  final double a2, final T[] c2, final int offset2,
+                                                                  final double a3, final T[] c3, final int offset3,
+                                                                  final T[] result, final int resultOffset) {
+        for (int i = 0; i < getSize(); ++i) {
+            result[resultOffset + i] =
+                    c1[offset1].linearCombination(a1, c1[offset1 + i],
+                                                  a2, c2[offset2 + i],
+                                                  a3, c3[offset3 + i]);
+        }
+    }
+
+    /** Compute linear combination.
+     * The derivative structure built will be a1 * ds1 + a2 * ds2 + a3 * ds3 + a4 * ds4
+     * @param a1 first scale factor
+     * @param c1 first base (unscaled) component
+     * @param offset1 offset of first operand in its array
+     * @param a2 second scale factor
+     * @param c2 second base (unscaled) component
+     * @param offset2 offset of second operand in its array
+     * @param a3 third scale factor
+     * @param c3 third base (unscaled) component
+     * @param offset3 offset of third operand in its array
      * @param a4 fourth scale factor
      * @param c4 fourth base (unscaled) component
      * @param offset4 offset of fourth operand in its array
@@ -725,6 +823,70 @@ public class DSCompiler {
         }
     }
 
+    /** Compute linear combination.
+     * The derivative structure built will be a1 * ds1 + a2 * ds2 + a3 * ds3 + a4 * ds4
+     * @param a1 first scale factor
+     * @param c1 first base (unscaled) component
+     * @param offset1 offset of first operand in its array
+     * @param a2 second scale factor
+     * @param c2 second base (unscaled) component
+     * @param offset2 offset of second operand in its array
+     * @param a3 third scale factor
+     * @param c3 third base (unscaled) component
+     * @param offset3 offset of third operand in its array
+     * @param a4 fourth scale factor
+     * @param c4 fourth base (unscaled) component
+     * @param offset4 offset of fourth operand in its array
+     * @param result array where result must be stored (it may be
+     * one of the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void linearCombination(final T a1, final T[] c1, final int offset1,
+                                                                  final T a2, final T[] c2, final int offset2,
+                                                                  final T a3, final T[] c3, final int offset3,
+                                                                  final T a4, final T[] c4, final int offset4,
+                                                                  final T[] result, final int resultOffset) {
+        for (int i = 0; i < getSize(); ++i) {
+            result[resultOffset + i] =
+                    a1.linearCombination(a1, c1[offset1 + i],
+                                         a2, c2[offset2 + i],
+                                         a3, c3[offset3 + i],
+                                         a4, c4[offset4 + i]);
+        }
+    }
+
+    /** Compute linear combination.
+     * The derivative structure built will be a1 * ds1 + a2 * ds2 + a3 * ds3 + a4 * ds4
+     * @param a1 first scale factor
+     * @param c1 first base (unscaled) component
+     * @param offset1 offset of first operand in its array
+     * @param a2 second scale factor
+     * @param c2 second base (unscaled) component
+     * @param offset2 offset of second operand in its array
+     * @param a3 third scale factor
+     * @param c3 third base (unscaled) component
+     * @param offset3 offset of third operand in its array
+     * @param a4 fourth scale factor
+     * @param c4 fourth base (unscaled) component
+     * @param offset4 offset of fourth operand in its array
+     * @param result array where result must be stored (it may be
+     * one of the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void linearCombination(final double a1, final T[] c1, final int offset1,
+                                                                  final double a2, final T[] c2, final int offset2,
+                                                                  final double a3, final T[] c3, final int offset3,
+                                                                  final double a4, final T[] c4, final int offset4,
+                                                                  final T[] result, final int resultOffset) {
+        for (int i = 0; i < getSize(); ++i) {
+            result[resultOffset + i] =
+                            c1[offset1].linearCombination(a1, c1[offset1 + i],
+                                                          a2, c2[offset2 + i],
+                                                          a3, c3[offset3 + i],
+                                                          a4, c4[offset4 + i]);
+        }
+    }
+
     /** Perform addition of two derivative structures.
      * @param lhs array holding left hand side of addition
      * @param lhsOffset offset of the left hand side in its array
@@ -741,6 +903,24 @@ public class DSCompiler {
             result[resultOffset + i] = lhs[lhsOffset + i] + rhs[rhsOffset + i];
         }
     }
+
+    /** Perform addition of two derivative structures.
+     * @param lhs array holding left hand side of addition
+     * @param lhsOffset offset of the left hand side in its array
+     * @param rhs array right hand side of addition
+     * @param rhsOffset offset of the right hand side in its array
+     * @param result array where result must be stored (it may be
+     * one of the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void add(final T[] lhs, final int lhsOffset,
+                                                    final T[] rhs, final int rhsOffset,
+                                                    final T[] result, final int resultOffset) {
+        for (int i = 0; i < getSize(); ++i) {
+            result[resultOffset + i] = lhs[lhsOffset + i].add(rhs[rhsOffset + i]);
+        }
+    }
+
     /** Perform subtraction of two derivative structures.
      * @param lhs array holding left hand side of subtraction
      * @param lhsOffset offset of the left hand side in its array
@@ -758,7 +938,24 @@ public class DSCompiler {
         }
     }
 
-    /** Perform multiplication of two derivative structures.
+    /** Perform subtraction of two derivative structures.
+     * @param lhs array holding left hand side of subtraction
+     * @param lhsOffset offset of the left hand side in its array
+     * @param rhs array right hand side of subtraction
+     * @param rhsOffset offset of the right hand side in its array
+     * @param result array where result must be stored (it may be
+     * one of the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void subtract(final T[] lhs, final int lhsOffset,
+                                                         final T[] rhs, final int rhsOffset,
+                                                         final T[] result, final int resultOffset) {
+        for (int i = 0; i < getSize(); ++i) {
+            result[resultOffset + i] = lhs[lhsOffset + i].subtract(rhs[rhsOffset + i]);
+        }
+    }
+
+   /** Perform multiplication of two derivative structures.
      * @param lhs array holding left hand side of multiplication
      * @param lhsOffset offset of the left hand side in its array
      * @param rhs array right hand side of multiplication
@@ -783,6 +980,32 @@ public class DSCompiler {
         }
     }
 
+    /** Perform multiplication of two derivative structures.
+     * @param lhs array holding left hand side of multiplication
+     * @param lhsOffset offset of the left hand side in its array
+     * @param rhs array right hand side of multiplication
+     * @param rhsOffset offset of the right hand side in its array
+     * @param result array where result must be stored (for
+     * multiplication the result array <em>cannot</em> be one of
+     * the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void multiply(final T[] lhs, final int lhsOffset,
+                                                         final T[] rhs, final int rhsOffset,
+                                                         final T[] result, final int resultOffset) {
+        T zero = lhs[lhsOffset].getField().getZero();
+        for (int i = 0; i < multIndirection.length; ++i) {
+            final int[][] mappingI = multIndirection[i];
+            T r = zero;
+            for (int j = 0; j < mappingI.length; ++j) {
+                r = r.add(lhs[lhsOffset + mappingI[j][1]].
+                          multiply(rhs[rhsOffset + mappingI[j][2]]).
+                          multiply(mappingI[j][0]));
+            }
+            result[resultOffset + i] = r;
+        }
+    }
+
     /** Perform division of two derivative structures.
      * @param lhs array holding left hand side of division
      * @param lhsOffset offset of the left hand side in its array
@@ -797,6 +1020,24 @@ public class DSCompiler {
                        final double[] rhs, final int rhsOffset,
                        final double[] result, final int resultOffset) {
         final double[] reciprocal = new double[getSize()];
+        pow(rhs, lhsOffset, -1, reciprocal, 0);
+        multiply(lhs, lhsOffset, reciprocal, 0, result, resultOffset);
+    }
+
+    /** Perform division of two derivative structures.
+     * @param lhs array holding left hand side of division
+     * @param lhsOffset offset of the left hand side in its array
+     * @param rhs array right hand side of division
+     * @param rhsOffset offset of the right hand side in its array
+     * @param result array where result must be stored (for
+     * division the result array <em>cannot</em> be one of
+     * the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void divide(final T[] lhs, final int lhsOffset,
+                                                       final T[] rhs, final int rhsOffset,
+                                                       final T[] result, final int resultOffset) {
+        final T[] reciprocal = MathArrays.buildArray(lhs[lhsOffset].getField(), getSize());
         pow(rhs, lhsOffset, -1, reciprocal, 0);
         multiply(lhs, lhsOffset, reciprocal, 0, result, resultOffset);
     }
@@ -824,6 +1065,33 @@ public class DSCompiler {
         // set up partial derivatives
         for (int i = 1; i < getSize(); ++i) {
             result[resultOffset + i] = lhs[lhsOffset + i] - k * rhs[rhsOffset + i];
+        }
+
+    }
+
+    /** Perform remainder of two derivative structures.
+     * @param lhs array holding left hand side of remainder
+     * @param lhsOffset offset of the left hand side in its array
+     * @param rhs array right hand side of remainder
+     * @param rhsOffset offset of the right hand side in its array
+     * @param result array where result must be stored (it may be
+     * one of the input arrays)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void remainder(final T[] lhs, final int lhsOffset,
+                                                          final T[] rhs, final int rhsOffset,
+                                                          final T[] result, final int resultOffset) {
+
+        // compute k such that lhs % rhs = lhs - k rhs
+        final T      rem = lhs[lhsOffset].remainder(rhs[rhsOffset]);
+        final double k   = FastMath.rint((lhs[lhsOffset].getReal() - rem.getReal()) / rhs[rhsOffset].getReal());
+
+        // set up value
+        result[resultOffset] = rem;
+
+        // set up partial derivatives
+        for (int i = 1; i < getSize(); ++i) {
+            result[resultOffset + i] = lhs[lhsOffset + i].subtract(rhs[rhsOffset + i].multiply(k));
         }
 
     }
@@ -860,6 +1128,49 @@ public class DSCompiler {
             final double lnA = FastMath.log(a);
             for (int i = 1; i < function.length; ++i) {
                 function[i] = lnA * function[i - 1];
+            }
+        }
+
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute power of a double to a derivative structure.
+     * @param a number to exponentiate
+     * @param operand array holding the power
+     * @param operandOffset offset of the power in its array
+     * @param result array where result must be stored (for
+     * power the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void pow(final double a,
+                                                    final T[] operand, final int operandOffset,
+                                                    final T[] result, final int resultOffset) {
+
+        final T zero = operand[operandOffset].getField().getZero();
+
+        // create the function value and derivatives
+        // [a^x, ln(a) a^x, ln(a)^2 a^x,, ln(a)^3 a^x, ... ]
+        final T[] function = MathArrays.buildArray(operand[operandOffset].getField(), 1 + order);
+        if (a == 0) {
+            if (operand[operandOffset].getReal() == 0) {
+                function[0] = zero.add(1);
+                T infinity = zero.add(Double.POSITIVE_INFINITY);
+                for (int i = 1; i < function.length; ++i) {
+                    infinity = infinity.negate();
+                    function[i] = infinity;
+                }
+            } else if (operand[operandOffset].getReal() < 0) {
+                Arrays.fill(function, zero.add(Double.NaN));
+            }
+        } else {
+            function[0] = zero.add(a).pow(operand[operandOffset]);
+            final double lnA = FastMath.log(a);
+            for (int i = 1; i < function.length; ++i) {
+                function[i] = function[i - 1].multiply(lnA);
             }
         }
 
@@ -906,6 +1217,53 @@ public class DSCompiler {
         double coefficient = p;
         for (int i = 1; i <= order; ++i) {
             function[i] *= coefficient;
+            coefficient *= p - i;
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute power of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param p power to apply
+     * @param result array where result must be stored (for
+     * power the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void pow(final T[] operand, final int operandOffset, final double p,
+                                                    final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        if (p == 0) {
+            // special case, x^0 = 1 for all x
+            result[resultOffset] = field.getOne();
+            Arrays.fill(result, resultOffset + 1, resultOffset + getSize(), field.getZero());
+            return;
+        }
+
+        if (operand[operandOffset].getReal() == 0) {
+            // special case, 0^p = 0 for all p
+            Arrays.fill(result, resultOffset, resultOffset + getSize(), field.getZero());
+            return;
+        }
+
+        // create the function value and derivatives
+        // [x^p, px^(p-1), p(p-1)x^(p-2), ... ]
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        T xk = operand[operandOffset].pow(p - order);
+        for (int i = order; i > 0; --i) {
+            function[i] = xk;
+            xk = xk.multiply(operand[operandOffset]);
+        }
+        function[0] = xk;
+        double coefficient = p;
+        for (int i = 1; i <= order; ++i) {
+            function[i]  = function[i].multiply(coefficient);
             coefficient *= p - i;
         }
 
@@ -967,6 +1325,61 @@ public class DSCompiler {
 
     }
 
+    /** Compute integer power of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param n power to apply
+     * @param result array where result must be stored (for
+     * power the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void pow(final T[] operand, final int operandOffset, final int n,
+                                                    final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        if (n == 0) {
+            // special case, x^0 = 1 for all x
+            result[resultOffset] = field.getOne();
+            Arrays.fill(result, resultOffset + 1, resultOffset + getSize(), field.getZero());
+            return;
+        }
+
+        // create the power function value and derivatives
+        // [x^n, nx^(n-1), n(n-1)x^(n-2), ... ]
+        T[] function = MathArrays.buildArray(field, 1 + order);
+
+        if (n > 0) {
+            // strictly positive power
+            final int maxOrder = FastMath.min(order, n);
+            T xk = operand[operandOffset].pow(n - maxOrder);
+            for (int i = maxOrder; i > 0; --i) {
+                function[i] = xk;
+                xk = xk.multiply(operand[operandOffset]);
+            }
+            function[0] = xk;
+        } else {
+            // strictly negative power
+            final T inv = operand[operandOffset].reciprocal();
+            T xk = inv.pow(-n);
+            for (int i = 0; i <= order; ++i) {
+                function[i] = xk;
+                xk = xk.multiply(inv);
+            }
+        }
+
+        double coefficient = n;
+        for (int i = 1; i <= order; ++i) {
+            function[i]  = function[i].multiply(coefficient);
+            coefficient *= n - i;
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Compute power of a derivative structure.
      * @param x array holding the base
      * @param xOffset offset of the base in its array
@@ -983,6 +1396,26 @@ public class DSCompiler {
         final double[] logX = new double[getSize()];
         log(x, xOffset, logX, 0);
         final double[] yLogX = new double[getSize()];
+        multiply(logX, 0, y, yOffset, yLogX, 0);
+        exp(yLogX, 0, result, resultOffset);
+    }
+
+    /** Compute power of a derivative structure.
+     * @param x array holding the base
+     * @param xOffset offset of the base in its array
+     * @param y array holding the exponent
+     * @param yOffset offset of the exponent in its array
+     * @param result array where result must be stored (for
+     * power the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void pow(final T[] x, final int xOffset,
+                                                    final T[] y, final int yOffset,
+                                                    final T[] result, final int resultOffset) {
+        final T[] logX = MathArrays.buildArray(x[xOffset].getField(), getSize());
+        log(x, xOffset, logX, 0);
+        final T[] yLogX = MathArrays.buildArray(x[xOffset].getField(), getSize());
         multiply(logX, 0, y, yOffset, yLogX, 0);
         exp(yLogX, 0, result, resultOffset);
     }
@@ -1025,6 +1458,46 @@ public class DSCompiler {
 
     }
 
+    /** Compute n<sup>th</sup> root of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param n order of the root
+     * @param result array where result must be stored (for
+     * n<sup>th</sup> root the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void rootN(final T[] operand, final int operandOffset, final int n,
+                                                      final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        // [x^(1/n), (1/n)x^((1/n)-1), (1-n)/n^2x^((1/n)-2), ... ]
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        T xk;
+        if (n == 2) {
+            function[0] = operand[operandOffset].sqrt();
+            xk          = function[0].add(function[0]).reciprocal();
+        } else if (n == 3) {
+            function[0] = operand[operandOffset].cbrt();
+            xk          = function[0].multiply(function[0]).multiply(3).reciprocal();
+        } else {
+            function[0] = operand[operandOffset].pow(1.0 / n);
+            xk          = function[0].pow(n - 1).multiply(n).reciprocal();
+        }
+        final double nReciprocal = 1.0 / n;
+        final T      xReciprocal = operand[operandOffset].reciprocal();
+        for (int i = 1; i <= order; ++i) {
+            function[i] = xk;
+            xk = xk.multiply(xReciprocal.multiply(nReciprocal - i));
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Compute exponential of a derivative structure.
      * @param operand array holding the operand
      * @param operandOffset offset of the operand in its array
@@ -1039,6 +1512,28 @@ public class DSCompiler {
         // create the function value and derivatives
         double[] function = new double[1 + order];
         Arrays.fill(function, FastMath.exp(operand[operandOffset]));
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute exponential of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * exponential the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void exp(final T[] operand, final int operandOffset,
+                                                    final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        Arrays.fill(function, operand[operandOffset].exp());
 
         // apply function composition
         compose(operand, operandOffset, function, result, resultOffset);
@@ -1066,6 +1561,29 @@ public class DSCompiler {
 
     }
 
+    /** Compute exp(x) - 1 of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * exponential the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void expm1(final T[] operand, final int operandOffset,
+                                                      final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        function[0] = operand[operandOffset].expm1();
+        Arrays.fill(function, 1, 1 + order, operand[operandOffset].exp());
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Compute natural logarithm of a derivative structure.
      * @param operand array holding the operand
      * @param operandOffset offset of the operand in its array
@@ -1086,6 +1604,36 @@ public class DSCompiler {
             for (int i = 1; i <= order; ++i) {
                 function[i] = xk;
                 xk *= -i * inv;
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute natural logarithm of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * logarithm the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void log(final T[] operand, final int operandOffset,
+                                                    final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        function[0] = operand[operandOffset].log();
+        if (order > 0) {
+            T inv = operand[operandOffset].reciprocal();
+            T xk  = inv;
+            for (int i = 1; i <= order; ++i) {
+                function[i] = xk;
+                xk = xk.multiply(inv.multiply(-i));
             }
         }
 
@@ -1121,6 +1669,35 @@ public class DSCompiler {
 
     }
 
+    /** Computes shifted logarithm of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * shifted logarithm the result array <em>cannot</em> be the input array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void log1p(final T[] operand, final int operandOffset,
+                                                      final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        function[0] = operand[operandOffset].log1p();
+        if (order > 0) {
+            T inv = operand[operandOffset].add(1).reciprocal();
+            T xk  = inv;
+            for (int i = 1; i <= order; ++i) {
+                function[i] = xk;
+                xk = xk.multiply(inv.multiply(-i));
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Computes base 10 logarithm of a derivative structure.
      * @param operand array holding the operand
      * @param operandOffset offset of the operand in its array
@@ -1140,6 +1717,35 @@ public class DSCompiler {
             for (int i = 1; i <= order; ++i) {
                 function[i] = xk;
                 xk *= -i * inv;
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Computes base 10 logarithm of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * base 10 logarithm the result array <em>cannot</em> be the input array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void log10(final T[] operand, final int operandOffset,
+                                                      final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        function[0] = operand[operandOffset].log10();
+        if (order > 0) {
+            T inv = operand[operandOffset].reciprocal();
+            T xk  = inv.multiply(1.0 / FastMath.log(10.0));
+            for (int i = 1; i <= order; ++i) {
+                function[i] = xk;
+                xk = xk.multiply(inv.multiply(-i));
             }
         }
 
@@ -1174,6 +1780,42 @@ public class DSCompiler {
 
     }
 
+    /** Compute cosine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * cosine the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void cos(final T[] operand, final int operandOffset,
+                                                    final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T cos = operand[operandOffset].cos();
+        function[0] = cos;
+        if (order > 0) {
+            final T sin = operand[operandOffset].sin();
+            function[1] = sin.negate();
+            if (order > 1) {
+                function[2] = cos.negate();
+                if (order > 2) {
+                    function[3] = sin;
+                    for (int i = 4; i <= order; ++i) {
+                        function[i] = function[i - 4];
+                    }
+                }
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Compute sine of a derivative structure.
      * @param operand array holding the operand
      * @param operandOffset offset of the operand in its array
@@ -1192,6 +1834,42 @@ public class DSCompiler {
             function[1] = FastMath.cos(operand[operandOffset]);
             for (int i = 2; i <= order; ++i) {
                 function[i] = -function[i - 2];
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute sine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * sine the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void sin(final T[] operand, final int operandOffset,
+                                                    final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T sin = operand[operandOffset].sin();
+        function[0] = sin;
+        if (order > 0) {
+            final T cos = operand[operandOffset].cos();
+            function[1] = cos;
+            if (order > 1) {
+                function[2] = sin.negate();
+                if (order > 2) {
+                    function[3] = cos.negate();
+                    for (int i = 4; i <= order; ++i) {
+                        function[i] = function[i - 4];
+                    }
+                }
             }
         }
 
@@ -1243,6 +1921,63 @@ public class DSCompiler {
                 }
                 if ((n & 0x1) == 0) {
                     v *= t;
+                }
+
+                function[n] = v;
+
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute tangent of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * tangent the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void tan(final T[] operand, final int operandOffset,
+                                                    final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T t = operand[operandOffset].tan();
+        function[0] = t;
+
+        if (order > 0) {
+
+            // the nth order derivative of tan has the form:
+            // dn(tan(x)/dxn = P_n(tan(x))
+            // where P_n(t) is a degree n+1 polynomial with same parity as n+1
+            // P_0(t) = t, P_1(t) = 1 + t^2, P_2(t) = 2 t (1 + t^2) ...
+            // the general recurrence relation for P_n is:
+            // P_n(x) = (1+t^2) P_(n-1)'(t)
+            // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
+            final T[] p = MathArrays.buildArray(field, order + 2);
+            p[1] = field.getOne();
+            final T t2 = t.multiply(t);
+            for (int n = 1; n <= order; ++n) {
+
+                // update and evaluate polynomial P_n(t)
+                T v = field.getZero();
+                p[n + 1] = p[n].multiply(n);
+                for (int k = n + 1; k >= 0; k -= 2) {
+                    v = v.multiply(t2).add(p[k]);
+                    if (k > 2) {
+                        p[k - 2] = p[k - 1].multiply(k - 1).add(p[k - 3].multiply(k - 3));
+                    } else if (k == 2) {
+                        p[0] = p[1];
+                    }
+                }
+                if ((n & 0x1) == 0) {
+                    v = v.multiply(t);
                 }
 
                 function[n] = v;
@@ -1312,6 +2047,65 @@ public class DSCompiler {
 
     }
 
+    /** Compute arc cosine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * arc cosine the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void acos(final T[] operand, final int operandOffset,
+                                                     final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T x = operand[operandOffset];
+        function[0] = x.acos();
+        if (order > 0) {
+            // the nth order derivative of acos has the form:
+            // dn(acos(x)/dxn = P_n(x) / [1 - x^2]^((2n-1)/2)
+            // where P_n(x) is a degree n-1 polynomial with same parity as n-1
+            // P_1(x) = -1, P_2(x) = -x, P_3(x) = -2x^2 - 1 ...
+            // the general recurrence relation for P_n is:
+            // P_n(x) = (1-x^2) P_(n-1)'(x) + (2n-3) x P_(n-1)(x)
+            // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
+            final T[] p = MathArrays.buildArray(field, order);
+            p[0] = field.getOne().negate();
+            final T x2    = x.multiply(x);
+            final T f     = x2.subtract(1).negate().reciprocal();
+            T coeff = f.sqrt();
+            function[1] = coeff.multiply(p[0]);
+            for (int n = 2; n <= order; ++n) {
+
+                // update and evaluate polynomial P_n(x)
+                T v = field.getZero();
+                p[n - 1] = p[n - 2].multiply(n - 1);
+                for (int k = n - 1; k >= 0; k -= 2) {
+                    v = v.multiply(x2).add(p[k]);
+                    if (k > 2) {
+                        p[k - 2] = p[k - 1].multiply(k - 1).add(p[k - 3].multiply(2 * n - k));
+                    } else if (k == 2) {
+                        p[0] = p[1];
+                    }
+                }
+                if ((n & 0x1) == 0) {
+                    v = v.multiply(x);
+                }
+
+                coeff = coeff.multiply(f);
+                function[n] = coeff.multiply(v);
+
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Compute arc sine of a derivative structure.
      * @param operand array holding the operand
      * @param operandOffset offset of the operand in its array
@@ -1360,6 +2154,65 @@ public class DSCompiler {
 
                 coeff *= f;
                 function[n] = coeff * v;
+
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute arc sine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * arc sine the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void asin(final T[] operand, final int operandOffset,
+                                                     final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T x = operand[operandOffset];
+        function[0] = x.asin();
+        if (order > 0) {
+            // the nth order derivative of asin has the form:
+            // dn(asin(x)/dxn = P_n(x) / [1 - x^2]^((2n-1)/2)
+            // where P_n(x) is a degree n-1 polynomial with same parity as n-1
+            // P_1(x) = 1, P_2(x) = x, P_3(x) = 2x^2 + 1 ...
+            // the general recurrence relation for P_n is:
+            // P_n(x) = (1-x^2) P_(n-1)'(x) + (2n-3) x P_(n-1)(x)
+            // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
+            final T[] p = MathArrays.buildArray(field, order);
+            p[0] = field.getOne();
+            final T x2    = x.multiply(x);
+            final T f     = x2.subtract(1).negate().reciprocal();
+            T coeff = f.sqrt();
+            function[1] = coeff.multiply(p[0]);
+            for (int n = 2; n <= order; ++n) {
+
+                // update and evaluate polynomial P_n(x)
+                T v = field.getZero();
+                p[n - 1] = p[n - 2].multiply(n - 1);
+                for (int k = n - 1; k >= 0; k -= 2) {
+                    v = v.multiply(x2).add(p[k]);
+                    if (k > 2) {
+                        p[k - 2] = p[k - 1].multiply(k - 1).add(p[k - 3].multiply(2 * n - k));
+                    } else if (k == 2) {
+                        p[0] = p[1];
+                    }
+                }
+                if ((n & 0x1) == 0) {
+                    v = v.multiply(x);
+                }
+
+                coeff = coeff.multiply(f);
+                function[n] = coeff.multiply(v);
 
             }
         }
@@ -1426,6 +2279,65 @@ public class DSCompiler {
 
     }
 
+    /** Compute arc tangent of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * arc tangent the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void atan(final T[] operand, final int operandOffset,
+                                                     final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T x = operand[operandOffset];
+        function[0] = x.atan();
+        if (order > 0) {
+            // the nth order derivative of atan has the form:
+            // dn(atan(x)/dxn = Q_n(x) / (1 + x^2)^n
+            // where Q_n(x) is a degree n-1 polynomial with same parity as n-1
+            // Q_1(x) = 1, Q_2(x) = -2x, Q_3(x) = 6x^2 - 2 ...
+            // the general recurrence relation for Q_n is:
+            // Q_n(x) = (1+x^2) Q_(n-1)'(x) - 2(n-1) x Q_(n-1)(x)
+            // as per polynomial parity, we can store coefficients of both Q_(n-1) and Q_n in the same array
+            final T[] q = MathArrays.buildArray(field, order);
+            q[0] = field.getOne();
+            final T x2    = x.multiply(x);
+            final T f     = x2.add(1).reciprocal();
+            T coeff = f;
+            function[1] = coeff.multiply(q[0]);
+            for (int n = 2; n <= order; ++n) {
+
+                // update and evaluate polynomial Q_n(x)
+                T v = field.getZero();
+                q[n - 1] = q[n - 2].multiply(-n);
+                for (int k = n - 1; k >= 0; k -= 2) {
+                    v = v.multiply(x2).add(q[k]);
+                    if (k > 2) {
+                        q[k - 2] = q[k - 1].multiply(k - 1).add(q[k - 3].multiply(k - 1 - 2 * n));
+                    } else if (k == 2) {
+                        q[0] = q[1];
+                    }
+                }
+                if ((n & 0x1) == 0) {
+                    v = v.multiply(x);
+                }
+
+                coeff = coeff.multiply(f);
+                function[n] = coeff.multiply(v);
+
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Compute two arguments arc tangent of a derivative structure.
      * @param y array holding the first operand
      * @param yOffset offset of the first operand in its array
@@ -1477,6 +2389,59 @@ public class DSCompiler {
 
     }
 
+    /** Compute two arguments arc tangent of a derivative structure.
+     * @param y array holding the first operand
+     * @param yOffset offset of the first operand in its array
+     * @param x array holding the second operand
+     * @param xOffset offset of the second operand in its array
+     * @param result array where result must be stored (for
+     * two arguments arc tangent the result array <em>cannot</em>
+     * be the input array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void atan2(final T[] y, final int yOffset,
+                                                      final T[] x, final int xOffset,
+                                                      final T[] result, final int resultOffset) {
+
+        final Field<T> field = y[yOffset].getField();
+
+        // compute r = sqrt(x^2+y^2)
+        T[] tmp1 = MathArrays.buildArray(field, getSize());
+        multiply(x, xOffset, x, xOffset, tmp1, 0);      // x^2
+        T[] tmp2 = MathArrays.buildArray(field, getSize());
+        multiply(y, yOffset, y, yOffset, tmp2, 0);      // y^2
+        add(tmp1, 0, tmp2, 0, tmp2, 0);                 // x^2 + y^2
+        rootN(tmp2, 0, 2, tmp1, 0);                     // r = sqrt(x^2 + y^2)
+
+        if (x[xOffset].getReal() >= 0) {
+
+            // compute atan2(y, x) = 2 atan(y / (r + x))
+            add(tmp1, 0, x, xOffset, tmp2, 0);          // r + x
+            divide(y, yOffset, tmp2, 0, tmp1, 0);       // y /(r + x)
+            atan(tmp1, 0, tmp2, 0);                     // atan(y / (r + x))
+            for (int i = 0; i < tmp2.length; ++i) {
+                result[resultOffset + i] = tmp2[i].add(tmp2[i]); // 2 * atan(y / (r + x))
+            }
+
+        } else {
+
+            // compute atan2(y, x) = +/- pi - 2 atan(y / (r - x))
+            subtract(tmp1, 0, x, xOffset, tmp2, 0);     // r - x
+            divide(y, yOffset, tmp2, 0, tmp1, 0);       // y /(r - x)
+            atan(tmp1, 0, tmp2, 0);                     // atan(y / (r - x))
+            result[resultOffset] = tmp2[0].add(tmp2[0]).negate().
+                                   add(((tmp2[0].getReal() <= 0) ? -FastMath.PI : FastMath.PI)); // +/-pi - 2 * atan(y / (r - x))
+            for (int i = 1; i < tmp2.length; ++i) {
+                result[resultOffset + i] = tmp2[i].add(tmp2[i]).negate(); // +/-pi - 2 * atan(y / (r - x))
+            }
+
+        }
+
+        // fix value to take special cases (+0/+0, +0/-0, -0/+0, -0/-0, +/-infinity) correctly
+        result[resultOffset] = y[yOffset].atan2(x[xOffset]);
+
+    }
+
     /** Compute hyperbolic cosine of a derivative structure.
      * @param operand array holding the operand
      * @param operandOffset offset of the operand in its array
@@ -1503,6 +2468,34 @@ public class DSCompiler {
 
     }
 
+    /** Compute hyperbolic cosine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * hyperbolic cosine the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void cosh(final T[] operand, final int operandOffset,
+                                                     final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        function[0] = operand[operandOffset].cosh();
+        if (order > 0) {
+            function[1] = operand[operandOffset].sinh();
+            for (int i = 2; i <= order; ++i) {
+                function[i] = function[i - 2];
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Compute hyperbolic sine of a derivative structure.
      * @param operand array holding the operand
      * @param operandOffset offset of the operand in its array
@@ -1519,6 +2512,34 @@ public class DSCompiler {
         function[0] = FastMath.sinh(operand[operandOffset]);
         if (order > 0) {
             function[1] = FastMath.cosh(operand[operandOffset]);
+            for (int i = 2; i <= order; ++i) {
+                function[i] = function[i - 2];
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute hyperbolic sine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * hyperbolic sine the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void sinh(final T[] operand, final int operandOffset,
+                                                     final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        function[0] = operand[operandOffset].sinh();
+        if (order > 0) {
+            function[1] = operand[operandOffset].cosh();
             for (int i = 2; i <= order; ++i) {
                 function[i] = function[i - 2];
             }
@@ -1572,6 +2593,63 @@ public class DSCompiler {
                 }
                 if ((n & 0x1) == 0) {
                     v *= t;
+                }
+
+                function[n] = v;
+
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute hyperbolic tangent of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * hyperbolic tangent the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void tanh(final T[] operand, final int operandOffset,
+                                                     final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T t = operand[operandOffset].tanh();
+        function[0] = t;
+
+        if (order > 0) {
+
+            // the nth order derivative of tanh has the form:
+            // dn(tanh(x)/dxn = P_n(tanh(x))
+            // where P_n(t) is a degree n+1 polynomial with same parity as n+1
+            // P_0(t) = t, P_1(t) = 1 - t^2, P_2(t) = -2 t (1 - t^2) ...
+            // the general recurrence relation for P_n is:
+            // P_n(x) = (1-t^2) P_(n-1)'(t)
+            // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
+            final T[] p = MathArrays.buildArray(field, order + 2);
+            p[1] = field.getOne();
+            final T t2 = t.multiply(t);
+            for (int n = 1; n <= order; ++n) {
+
+                // update and evaluate polynomial P_n(t)
+                T v = field.getZero();
+                p[n + 1] = p[n].multiply(-n);
+                for (int k = n + 1; k >= 0; k -= 2) {
+                    v = v.multiply(t2).add(p[k]);
+                    if (k > 2) {
+                        p[k - 2] = p[k - 1].multiply(k - 1).subtract(p[k - 3].multiply(k - 3));
+                    } else if (k == 2) {
+                        p[0] = p[1];
+                    }
+                }
+                if ((n & 0x1) == 0) {
+                    v = v.multiply(t);
                 }
 
                 function[n] = v;
@@ -1641,6 +2719,65 @@ public class DSCompiler {
 
     }
 
+    /** Compute inverse hyperbolic cosine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * inverse hyperbolic cosine the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void acosh(final T[] operand, final int operandOffset,
+                                                      final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T x = operand[operandOffset];
+        function[0] = x.acosh();
+        if (order > 0) {
+            // the nth order derivative of acosh has the form:
+            // dn(acosh(x)/dxn = P_n(x) / [x^2 - 1]^((2n-1)/2)
+            // where P_n(x) is a degree n-1 polynomial with same parity as n-1
+            // P_1(x) = 1, P_2(x) = -x, P_3(x) = 2x^2 + 1 ...
+            // the general recurrence relation for P_n is:
+            // P_n(x) = (x^2-1) P_(n-1)'(x) - (2n-3) x P_(n-1)(x)
+            // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
+            final T[] p = MathArrays.buildArray(field, order);
+            p[0] = field.getOne();
+            final T x2  = x.multiply(x);
+            final T f   = x2.subtract(1).reciprocal();
+            T coeff = f.sqrt();
+            function[1] = coeff.multiply(p[0]);
+            for (int n = 2; n <= order; ++n) {
+
+                // update and evaluate polynomial P_n(x)
+                T v = field.getZero();
+                p[n - 1] = p[n - 2].multiply(1 - n);
+                for (int k = n - 1; k >= 0; k -= 2) {
+                    v = v.multiply(x2).add(p[k]);
+                    if (k > 2) {
+                        p[k - 2] = p[k - 1].multiply(1 - k).add(p[k - 3].multiply(k - 2 * n));
+                    } else if (k == 2) {
+                        p[0] = p[1].negate();
+                    }
+                }
+                if ((n & 0x1) == 0) {
+                    v = v.multiply(x);
+                }
+
+                coeff = coeff.multiply(f);
+                function[n] = coeff.multiply(v);
+
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Compute inverse hyperbolic sine of a derivative structure.
      * @param operand array holding the operand
      * @param operandOffset offset of the operand in its array
@@ -1689,6 +2826,65 @@ public class DSCompiler {
 
                 coeff *= f;
                 function[n] = coeff * v;
+
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
+    /** Compute inverse hyperbolic sine of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * inverse hyperbolic sine the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void asinh(final T[] operand, final int operandOffset,
+                                                      final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T x = operand[operandOffset];
+        function[0] = x.asinh();
+        if (order > 0) {
+            // the nth order derivative of asinh has the form:
+            // dn(asinh(x)/dxn = P_n(x) / [x^2 + 1]^((2n-1)/2)
+            // where P_n(x) is a degree n-1 polynomial with same parity as n-1
+            // P_1(x) = 1, P_2(x) = -x, P_3(x) = 2x^2 - 1 ...
+            // the general recurrence relation for P_n is:
+            // P_n(x) = (x^2+1) P_(n-1)'(x) - (2n-3) x P_(n-1)(x)
+            // as per polynomial parity, we can store coefficients of both P_(n-1) and P_n in the same array
+            final T[] p = MathArrays.buildArray(field, order);
+            p[0] = field.getOne();
+            final T x2    = x.multiply(x);
+            final T f     = x2.add(1).reciprocal();
+            T coeff = f.sqrt();
+            function[1] = coeff.multiply(p[0]);
+            for (int n = 2; n <= order; ++n) {
+
+                // update and evaluate polynomial P_n(x)
+                T v = field.getZero();
+                p[n - 1] = p[n - 2].multiply(1 - n);
+                for (int k = n - 1; k >= 0; k -= 2) {
+                    v = v.multiply(x2).add(p[k]);
+                    if (k > 2) {
+                        p[k - 2] = p[k - 1].multiply(k - 1).add(p[k - 3].multiply(k - 2 * n));
+                    } else if (k == 2) {
+                        p[0] = p[1];
+                    }
+                }
+                if ((n & 0x1) == 0) {
+                    v = v.multiply(x);
+                }
+
+                coeff = coeff.multiply(f);
+                function[n] = coeff.multiply(v);
 
             }
         }
@@ -1755,6 +2951,65 @@ public class DSCompiler {
 
     }
 
+    /** Compute inverse hyperbolic tangent of a derivative structure.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param result array where result must be stored (for
+     * inverse hyperbolic tangent the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void atanh(final T[] operand, final int operandOffset,
+                                                      final T[] result, final int resultOffset) {
+
+        final Field<T> field = operand[operandOffset].getField();
+
+        // create the function value and derivatives
+        T[] function = MathArrays.buildArray(field, 1 + order);
+        final T x = operand[operandOffset];
+        function[0] = x.atanh();
+        if (order > 0) {
+            // the nth order derivative of atanh has the form:
+            // dn(atanh(x)/dxn = Q_n(x) / (1 - x^2)^n
+            // where Q_n(x) is a degree n-1 polynomial with same parity as n-1
+            // Q_1(x) = 1, Q_2(x) = 2x, Q_3(x) = 6x^2 + 2 ...
+            // the general recurrence relation for Q_n is:
+            // Q_n(x) = (1-x^2) Q_(n-1)'(x) + 2(n-1) x Q_(n-1)(x)
+            // as per polynomial parity, we can store coefficients of both Q_(n-1) and Q_n in the same array
+            final T[] q = MathArrays.buildArray(field, order);
+            q[0] = field.getOne();
+            final T x2 = x.multiply(x);
+            final T f  =x2.subtract(1).negate().reciprocal();
+            T coeff = f;
+            function[1] = coeff.multiply(q[0]);
+            for (int n = 2; n <= order; ++n) {
+
+                // update and evaluate polynomial Q_n(x)
+                T v = field.getZero();
+                q[n - 1] = q[n - 2].multiply(n);
+                for (int k = n - 1; k >= 0; k -= 2) {
+                    v = v.multiply(x2).add(q[k]);
+                    if (k > 2) {
+                        q[k - 2] = q[k - 1].multiply(k - 1).add(q[k - 3].multiply(2 * n - k + 1));
+                    } else if (k == 2) {
+                        q[0] = q[1];
+                    }
+                }
+                if ((n & 0x1) == 0) {
+                    v = v.multiply(x);
+                }
+
+                coeff = coeff.multiply(f);
+                function[n] = coeff.multiply(v);
+
+            }
+        }
+
+        // apply function composition
+        compose(operand, operandOffset, function, result, resultOffset);
+
+    }
+
     /** Compute composition of a derivative structure by a function.
      * @param operand array holding the operand
      * @param operandOffset offset of the operand in its array
@@ -1777,6 +3032,62 @@ public class DSCompiler {
                     product *= operand[operandOffset + mappingIJ[k]];
                 }
                 r += product;
+            }
+            result[resultOffset + i] = r;
+        }
+    }
+
+    /** Compute composition of a derivative structure by a function.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param f array of value and derivatives of the function at
+     * the current point (i.e. at {@code operand[operandOffset]}).
+     * @param result array where result must be stored (for
+     * composition the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void compose(final T[] operand, final int operandOffset, final T[] f,
+                                                        final T[] result, final int resultOffset) {
+        final T zero = f[0].getField().getZero();
+        for (int i = 0; i < compIndirection.length; ++i) {
+            final int[][] mappingI = compIndirection[i];
+            T r = zero;
+            for (int j = 0; j < mappingI.length; ++j) {
+                final int[] mappingIJ = mappingI[j];
+                T product = f[mappingIJ[1]].multiply(mappingIJ[0]);
+                for (int k = 2; k < mappingIJ.length; ++k) {
+                    product = product.multiply(operand[operandOffset + mappingIJ[k]]);
+                }
+                r = r.add(product);
+            }
+            result[resultOffset + i] = r;
+        }
+    }
+
+    /** Compute composition of a derivative structure by a function.
+     * @param operand array holding the operand
+     * @param operandOffset offset of the operand in its array
+     * @param f array of value and derivatives of the function at
+     * the current point (i.e. at {@code operand[operandOffset]}).
+     * @param result array where result must be stored (for
+     * composition the result array <em>cannot</em> be the input
+     * array)
+     * @param resultOffset offset of the result in its array
+     */
+    public <T extends RealFieldElement<T>> void compose(final T[] operand, final int operandOffset, final double[] f,
+                                                        final T[] result, final int resultOffset) {
+        final T zero = operand[operandOffset].getField().getZero();
+        for (int i = 0; i < compIndirection.length; ++i) {
+            final int[][] mappingI = compIndirection[i];
+            T r = zero;
+            for (int j = 0; j < mappingI.length; ++j) {
+                final int[] mappingIJ = mappingI[j];
+                T product = zero.add(f[mappingIJ[1]] * mappingIJ[0]);
+                for (int k = 2; k < mappingIJ.length; ++k) {
+                    product = product.multiply(operand[operandOffset + mappingIJ[k]]);
+                }
+                r = r.add(product);
             }
             result[resultOffset + i] = r;
         }
@@ -1807,6 +3118,68 @@ public class DSCompiler {
                 }
             }
             value += term;
+        }
+        return value;
+    }
+
+    /** Evaluate Taylor expansion of a derivative structure.
+     * @param ds array holding the derivative structure
+     * @param dsOffset offset of the derivative structure in its array
+     * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
+     * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
+     * @throws MathRuntimeException if factorials becomes too large
+     */
+    public <T extends RealFieldElement<T>> T taylor(final T[] ds, final int dsOffset,
+                                                    @SuppressWarnings("unchecked") final T ... delta)
+       throws MathRuntimeException {
+        final Field<T> field = ds[dsOffset].getField();
+        T value = field.getZero();
+        for (int i = getSize() - 1; i >= 0; --i) {
+            final int[] orders = getPartialDerivativeOrders(i);
+            T term = ds[dsOffset + i];
+            for (int k = 0; k < orders.length; ++k) {
+                if (orders[k] > 0) {
+                    try {
+                        term = term.multiply(delta[k].pow(orders[k]).
+                                             divide(CombinatoricsUtils.factorial(orders[k])));
+                    } catch (MathIllegalArgumentException e) {
+                        // this cannot happen
+                        throw MathRuntimeException.createInternalError(e);
+                    }
+                }
+            }
+            value = value.add(term);
+        }
+        return value;
+    }
+
+    /** Evaluate Taylor expansion of a derivative structure.
+     * @param ds array holding the derivative structure
+     * @param dsOffset offset of the derivative structure in its array
+     * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
+     * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
+     * @throws MathRuntimeException if factorials becomes too large
+     */
+    public <T extends RealFieldElement<T>> T taylor(final T[] ds, final int dsOffset,
+                                                    final double ... delta)
+       throws MathRuntimeException {
+        final Field<T> field = ds[dsOffset].getField();
+        T value = field.getZero();
+        for (int i = getSize() - 1; i >= 0; --i) {
+            final int[] orders = getPartialDerivativeOrders(i);
+            T term = ds[dsOffset + i];
+            for (int k = 0; k < orders.length; ++k) {
+                if (orders[k] > 0) {
+                    try {
+                        term = term.multiply(field.getZero().add(delta[k]).pow(orders[k]).
+                                             divide(CombinatoricsUtils.factorial(orders[k])));
+                    } catch (MathIllegalArgumentException e) {
+                        // this cannot happen
+                        throw MathRuntimeException.createInternalError(e);
+                    }
+                }
+            }
+            value = value.add(term);
         }
         return value;
     }

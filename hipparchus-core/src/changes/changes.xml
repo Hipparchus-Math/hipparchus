@@ -50,7 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.1" date="TBD" description="This is a maintenance release.">
-      <action dev="luc" dut-to="Andrea Antolino">
+      <action dev="luc" type="add">
+        Added field-based derivative structures.
+      </action>
+      <action dev="luc" type="fix" due-to="Andrea Antolino">
         Added field-based QR decomposition.
         Fixes Github issue #17.
       </action>

@@ -56,6 +56,7 @@ import org.hipparchus.util.MathUtils;
  * differentiator}.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  * @see DSCompiler
+ * @see FieldDerivativeStructure
  */
 public class DerivativeStructure implements RealFieldElement<DerivativeStructure>, Serializable {
 

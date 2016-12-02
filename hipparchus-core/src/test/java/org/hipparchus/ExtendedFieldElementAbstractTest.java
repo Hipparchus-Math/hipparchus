@@ -501,26 +501,6 @@ public abstract class ExtendedFieldElementAbstractTest<T extends RealFieldElemen
         Assert.assertEquals(expected, obtained.getReal(), 1.0e-15 * (1 + FastMath.abs(expected)));
     }
 
-    @Test
-    public void testEquals() {
-        T t1a = build(1.0);
-        T t1b = build(1.0);
-        T t2  = build(2.0);
-        Assert.assertTrue(t1a.equals(t1a));
-        Assert.assertTrue(t1a.equals(t1b));
-        Assert.assertFalse(t1a.equals(t2));
-        Assert.assertFalse(t1a.equals(new Object()));
-    }
-
-    @Test
-    public void testHash() {
-        T t1a = build(1.0);
-        T t1b = build(1.0);
-        T t2  = build(2.0);
-        Assert.assertEquals(t1a.hashCode(), t1b.hashCode());
-        Assert.assertTrue(t1a.hashCode() != t2.hashCode());
-    }
-
     private double[] generateDouble (final RandomGenerator r, int n) {
         double[] a = new double[n];
         for (int i = 0; i < n; ++i) {
