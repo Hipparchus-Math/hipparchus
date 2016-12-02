@@ -157,7 +157,8 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @throws MathIllegalArgumentException if order is too large
      * @see #getAllDerivatives()
      */
-    public FieldDerivativeStructure<T> build(@SuppressWarnings("unchecked") final T ... derivatives)
+    @SafeVarargs
+    public final FieldDerivativeStructure<T> build(final T ... derivatives)
         throws MathIllegalArgumentException {
 
         final T[] data = buildArray();

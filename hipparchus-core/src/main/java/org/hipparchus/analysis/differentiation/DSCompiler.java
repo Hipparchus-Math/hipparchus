@@ -3129,8 +3129,9 @@ public class DSCompiler {
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
      * @throws MathRuntimeException if factorials becomes too large
      */
-    public <T extends RealFieldElement<T>> T taylor(final T[] ds, final int dsOffset,
-                                                    @SuppressWarnings("unchecked") final T ... delta)
+    @SafeVarargs
+    public final <T extends RealFieldElement<T>> T taylor(final T[] ds, final int dsOffset,
+                                                          final T ... delta)
        throws MathRuntimeException {
         final Field<T> field = ds[dsOffset].getField();
         T value = field.getZero();

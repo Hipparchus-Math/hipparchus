@@ -485,7 +485,8 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * @exception MathIllegalArgumentException if the number of derivatives
      * in the array is not equal to {@link #getOrder() order} + 1
      */
-    public FieldDerivativeStructure<T> compose(@SuppressWarnings("unchecked") final T ... f)
+    @SafeVarargs
+    public final FieldDerivativeStructure<T> compose(final T ... f)
         throws MathIllegalArgumentException {
 
         MathUtils.checkDimension(f.length, getOrder() + 1);
@@ -797,7 +798,8 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
      * @throws MathRuntimeException if factorials becomes too large
      */
-    public T taylor(@SuppressWarnings("unchecked") final T ... delta) throws MathRuntimeException {
+    @SafeVarargs
+    public final T taylor(final T ... delta) throws MathRuntimeException {
         return factory.getCompiler().taylor(data, 0, delta);
     }
 
