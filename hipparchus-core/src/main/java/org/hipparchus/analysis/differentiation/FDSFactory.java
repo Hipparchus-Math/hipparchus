@@ -261,7 +261,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
         @SuppressWarnings("unchecked")
         @Override
         public Class<? extends FieldElement<FieldDerivativeStructure<T>>> getRuntimeClass() {
-            return (Class<? extends FieldElement<FieldDerivativeStructure<T>>>) FieldDerivativeStructure.class;
+            return (Class<? extends FieldElement<FieldDerivativeStructure<T>>>) zero.getClass();
         }
 
     }
