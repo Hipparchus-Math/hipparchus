@@ -890,6 +890,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jxr-plugin</artifactId>
+        <version>${hipparchus.maven-jxr-plugin.version}</version>
          <reportSets>
            <reportSet>
              <id>aggregate</id>
