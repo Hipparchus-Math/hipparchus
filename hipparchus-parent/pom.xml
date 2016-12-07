@@ -487,6 +487,7 @@
     <hipparchus.wagon-maven-plugin.version>1.0</hipparchus.wagon-maven-plugin.version>
     <hipparchus.nexus-staging-maven-plugin.version>1.6.6</hipparchus.nexus-staging-maven-plugin.version>
     <hipparchus.maven-gpg-plugin.version>1.6</hipparchus.maven-gpg-plugin.version>
+    <hipparchus.maven-install-plugin.version>2.5.2</hipparchus.maven-install-plugin.version>
     <hipparchus.rat.version>0.11</hipparchus.rat.version>
     <hipparchus.junit.version>4.12</hipparchus.junit.version>
     <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
@@ -994,10 +995,12 @@
             </executions>
           </plugin>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-install-plugin</artifactId>
-              <configuration>
-                <createChecksum>true</createChecksum>
-              </configuration>
+            <version>${hipparchus.maven-install-plugin.version}</version>
+            <configuration>
+              <createChecksum>true</createChecksum>
+            </configuration>
           </plugin>
         </plugins>
       </build>
