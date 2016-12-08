@@ -459,36 +459,36 @@
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.findbugs-maven-plugin.version>3.0.1</hipparchus.findbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.7.4.201502262128</hipparchus.jacoco-maven-plugin.version>
-    <hipparchus.maven-assembly-plugin.version>2.5.4</hipparchus.maven-assembly-plugin.version>
-    <hipparchus.maven-bundle-plugin.version>3.0.1</hipparchus.maven-bundle-plugin.version>
-    <hipparchus.build-helper-maven-plugin>1.7</hipparchus.build-helper-maven-plugin>
-    <hipparchus.maven-changes-plugin.version>2.11</hipparchus.maven-changes-plugin.version>
+    <hipparchus.findbugs-maven-plugin.version>3.0.3</hipparchus.findbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.7.7.201606060606</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.maven-assembly-plugin.version>3.0.0</hipparchus.maven-assembly-plugin.version>
+    <hipparchus.maven-bundle-plugin.version>3.2.0</hipparchus.maven-bundle-plugin.version>
+    <hipparchus.build-helper-maven-plugin>1.12</hipparchus.build-helper-maven-plugin>
+    <hipparchus.maven-changes-plugin.version>2.12.1</hipparchus.maven-changes-plugin.version>
     <hipparchus.maven-checkstyle-plugin.version>2.17</hipparchus.maven-checkstyle-plugin.version>
-    <hipparchus.checkstyle.version>6.18</hipparchus.checkstyle.version>
+    <hipparchus.checkstyle.version>7.3</hipparchus.checkstyle.version>
     <hipparchus.maven-clean-plugin.version>3.0.0</hipparchus.maven-clean-plugin.version>
-    <hipparchus.maven-compiler-plugin.version>3.5.1</hipparchus.maven-compiler-plugin.version>
-    <hipparchus.maven-javadoc-plugin.version>2.10.3</hipparchus.maven-javadoc-plugin.version>
-    <hipparchus.maven-jar-plugin.version>2.6</hipparchus.maven-jar-plugin.version>
+    <hipparchus.maven-compiler-plugin.version>3.6.0</hipparchus.maven-compiler-plugin.version>
+    <hipparchus.maven-javadoc-plugin.version>2.10.4</hipparchus.maven-javadoc-plugin.version>
+    <hipparchus.maven-jar-plugin.version>3.0.2</hipparchus.maven-jar-plugin.version>
     <hipparchus.maven-jxr-plugin.version>2.5</hipparchus.maven-jxr-plugin.version>
-    <hipparchus.maven-plantuml-plugin.version>7940</hipparchus.maven-plantuml-plugin.version>
-    <hipparchus.maven-project-info-reports-plugin.version>2.8</hipparchus.maven-project-info-reports-plugin.version>
-    <hipparchus.maven-pmd-plugin.version>3.5</hipparchus.maven-pmd-plugin.version>
-    <hipparchus.maven-resources-plugin.version>2.7</hipparchus.maven-resources-plugin.version>
+    <hipparchus.maven-plantuml-plugin.version>7954</hipparchus.maven-plantuml-plugin.version>
+    <hipparchus.maven-project-info-reports-plugin.version>2.9</hipparchus.maven-project-info-reports-plugin.version>
+    <hipparchus.maven-pmd-plugin.version>3.7</hipparchus.maven-pmd-plugin.version>
+    <hipparchus.maven-resources-plugin.version>3.0.1</hipparchus.maven-resources-plugin.version>
     <hipparchus.maven-site-plugin.version>3.4</hipparchus.maven-site-plugin.version>
-    <hipparchus.maven-source-plugin.version>2.4</hipparchus.maven-source-plugin.version>
-    <hipparchus.maven-surefire-plugin.version>2.18.1</hipparchus.maven-surefire-plugin.version>
-    <hipparchus.maven-surefire-report-plugin.version>2.18.1</hipparchus.maven-surefire-report-plugin.version>
+    <hipparchus.maven-source-plugin.version>3.0.1</hipparchus.maven-source-plugin.version>
+    <hipparchus.maven-surefire-plugin.version>2.19.1</hipparchus.maven-surefire-plugin.version>
+    <hipparchus.maven-surefire-report-plugin.version>2.19.1</hipparchus.maven-surefire-report-plugin.version>
     <hipparchus.maven-enforcer-plugin.version>1.4.1</hipparchus.maven-enforcer-plugin.version>
     <hipparchus.jgit.buildnumber.version>1.2.10</hipparchus.jgit.buildnumber.version>
     <hipparchus.maven-release-plugin.version>2.5.3</hipparchus.maven-release-plugin.version>
     <hipparchus.wagon-ssh.version>2.10</hipparchus.wagon-ssh.version>
     <hipparchus.wagon-maven-plugin.version>1.0</hipparchus.wagon-maven-plugin.version>
-    <hipparchus.nexus-staging-maven-plugin.version>1.6.6</hipparchus.nexus-staging-maven-plugin.version>
+    <hipparchus.nexus-staging-maven-plugin.version>1.6.7</hipparchus.nexus-staging-maven-plugin.version>
     <hipparchus.maven-gpg-plugin.version>1.6</hipparchus.maven-gpg-plugin.version>
     <hipparchus.maven-install-plugin.version>2.5.2</hipparchus.maven-install-plugin.version>
-    <hipparchus.rat.version>0.11</hipparchus.rat.version>
+    <hipparchus.rat.version>0.12</hipparchus.rat.version>
     <hipparchus.junit.version>4.12</hipparchus.junit.version>
     <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
     <hipparchus.reflow-velocity-tools.version>1.1.1</hipparchus.reflow-velocity-tools.version>
@@ -565,7 +565,6 @@
           <executions>
             <execution>
               <goals>
-                <goal>jar</goal>
                 <goal>test-jar</goal>
               </goals>
             </execution>
@@ -784,31 +783,6 @@
             <stagingDirectory>${project.basedir}/../target/staging</stagingDirectory>
           </configuration>
         </plugin>
-        <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <versionRange>[${hipparchus.maven-bundle-plugin.version},)</versionRange>
-                    <goals>
-                      <goal>manifest</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore/>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
       </plugins>
     </pluginManagement>
 
@@ -1003,6 +977,45 @@
             </configuration>
           </plugin>
         </plugins>
+      </build>
+    </profile>
+    <profile>
+      <id>eclipse</id>
+      <activation>
+        <property>
+          <name>m2e.version</name>
+        </property>
+      </activation>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+              <groupId>org.eclipse.m2e</groupId>
+              <artifactId>lifecycle-mapping</artifactId>
+              <version>1.0.0</version>
+              <configuration>
+                <lifecycleMappingMetadata>
+                  <pluginExecutions>
+                    <pluginExecution>
+                      <pluginExecutionFilter>
+                        <groupId>org.apache.felix</groupId>
+                        <artifactId>maven-bundle-plugin</artifactId>
+                        <versionRange>[${hipparchus.maven-bundle-plugin.version},)</versionRange>
+                        <goals>
+                          <goal>manifest</goal>
+                        </goals>
+                      </pluginExecutionFilter>
+                      <action>
+                        <ignore></ignore>
+                      </action>
+                     </pluginExecution>
+                  </pluginExecutions>
+                </lifecycleMappingMetadata>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
       </build>
     </profile>
   </profiles>
