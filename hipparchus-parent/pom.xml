@@ -66,6 +66,7 @@
       <id>publishedSite</id>
       <url>https://hipparchus.org/</url>
     </site>
+    <downloadUrl>https://hipparchus.org/downloads.html</downloadUrl>
   </distributionManagement>
 
   <developers>
@@ -428,13 +429,13 @@
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.12</version>
+        <version>${hipparchus.junit.version}</version>
         <scope>test</scope>
       </dependency>
       <dependency>
         <groupId>org.hamcrest</groupId>
         <artifactId>hamcrest-library</artifactId>
-        <version>1.3</version>
+        <version>${hipparchus.hamcrest-library.version}</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
@@ -490,6 +491,7 @@
     <hipparchus.maven-install-plugin.version>2.5.2</hipparchus.maven-install-plugin.version>
     <hipparchus.rat.version>0.12</hipparchus.rat.version>
     <hipparchus.junit.version>4.12</hipparchus.junit.version>
+    <hipparchus.hamcrest-library.version>1.3</hipparchus.hamcrest-library.version>
     <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
     <hipparchus.reflow-velocity-tools.version>1.1.1</hipparchus.reflow-velocity-tools.version>
     <hipparchus.velocity.version>1.7</hipparchus.velocity.version>
