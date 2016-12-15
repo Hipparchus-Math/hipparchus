@@ -51,6 +51,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="1.1" date="TBD" description="Maintenance release">
       <action dev="luc" type="add">
+        Added field based 3D lines.
+      </action>
+      <action dev="luc" type="add">
         Added utility methods for field-based rotations and 3D vectors.
       </action>
     </release>
