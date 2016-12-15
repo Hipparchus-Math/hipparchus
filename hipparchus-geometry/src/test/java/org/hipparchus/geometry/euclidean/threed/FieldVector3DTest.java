@@ -22,12 +22,15 @@ import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import org.hipparchus.Field;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.euclidean.threed.FieldVector3D;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.random.Well1024a;
+import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -173,6 +176,36 @@ public class FieldVector3DTest {
         Assert.assertTrue(createVector(Double.NaN, 1, 1, 3).isNaN());
         Assert.assertFalse(createVector(1, 1, 2, 3).isNaN());
         Assert.assertFalse(createVector(1, 1, Double.NEGATIVE_INFINITY, 3).isNaN());
+    }
+
+    @Test
+    public void testCanonical() {
+
+        final Field<Decimal64> field = Decimal64Field.getInstance();
+
+        Assert.assertEquals(0.0, FieldVector3D.getZero(field).getNorm().getReal(), 1.0e-20);
+        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusI(field), Vector3D.PLUS_I).getReal(),   1.0e-20);
+        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getMinusI(field), Vector3D.MINUS_I).getReal(), 1.0e-20);
+        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusJ(field), Vector3D.PLUS_J).getReal(),   1.0e-20);
+        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getMinusJ(field), Vector3D.MINUS_J).getReal(), 1.0e-20);
+        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getPlusK(field), Vector3D.PLUS_K).getReal(),   1.0e-20);
+        Assert.assertEquals(0.0, FieldVector3D.angle(FieldVector3D.getMinusK(field), Vector3D.MINUS_K).getReal(), 1.0e-20);
+        Assert.assertTrue(FieldVector3D.getNaN(field).isNaN());
+        Assert.assertTrue(FieldVector3D.getPositiveInfinity(field).isInfinite());
+        Assert.assertTrue(FieldVector3D.getNegativeInfinity(field).isInfinite());
+
+        // new instances are created each time
+        Assert.assertNotSame(FieldVector3D.getZero(field),            FieldVector3D.getZero(field));
+        Assert.assertNotSame(FieldVector3D.getPlusI(field),           FieldVector3D.getPlusI(field));
+        Assert.assertNotSame(FieldVector3D.getMinusI(field),          FieldVector3D.getMinusI(field));
+        Assert.assertNotSame(FieldVector3D.getPlusJ(field),           FieldVector3D.getPlusJ(field));
+        Assert.assertNotSame(FieldVector3D.getMinusJ(field),          FieldVector3D.getMinusJ(field));
+        Assert.assertNotSame(FieldVector3D.getPlusK(field),           FieldVector3D.getPlusK(field));
+        Assert.assertNotSame(FieldVector3D.getMinusK(field),          FieldVector3D.getMinusK(field));
+        Assert.assertNotSame(FieldVector3D.getNaN(field),             FieldVector3D.getNaN(field));
+        Assert.assertNotSame(FieldVector3D.getPositiveInfinity(field),FieldVector3D.getPositiveInfinity(field));
+        Assert.assertNotSame(FieldVector3D.getNegativeInfinity(field),FieldVector3D.getNegativeInfinity(field));
+
     }
 
     @Test

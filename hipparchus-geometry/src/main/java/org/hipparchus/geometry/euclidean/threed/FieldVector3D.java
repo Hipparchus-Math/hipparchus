@@ -20,6 +20,7 @@ package org.hipparchus.geometry.euclidean.threed;
 import java.io.Serializable;
 import java.text.NumberFormat;
 
+import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -93,7 +94,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = delta.sin();
     }
 
-    /** Multiplicative constructor
+    /** Multiplicative constructor.
      * Build a vector from another one and a scale factor.
      * The vector built will be a * u
      * @param a scale factor
@@ -105,7 +106,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = a.multiply(u.z);
     }
 
-    /** Multiplicative constructor
+    /** Multiplicative constructor.
      * Build a vector from another one and a scale factor.
      * The vector built will be a * u
      * @param a scale factor
@@ -117,7 +118,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = a.multiply(u.getZ());
     }
 
-    /** Multiplicative constructor
+    /** Multiplicative constructor.
      * Build a vector from another one and a scale factor.
      * The vector built will be a * u
      * @param a scale factor
@@ -129,7 +130,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = u.z.multiply(a);
     }
 
-    /** Linear constructor
+    /** Linear constructor.
      * Build a vector from two other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2
      * @param a1 first scale factor
@@ -145,7 +146,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ());
     }
 
-    /** Linear constructor
+    /** Linear constructor.
      * Build a vector from two other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2
      * @param a1 first scale factor
@@ -161,7 +162,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(u1.getZ(), a1, u2.getZ(), a2);
     }
 
-    /** Linear constructor
+    /** Linear constructor.
      * Build a vector from two other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2
      * @param a1 first scale factor
@@ -177,7 +178,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ());
     }
 
-    /** Linear constructor
+    /** Linear constructor.
      * Build a vector from three other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3
      * @param a1 first scale factor
@@ -196,7 +197,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ(), a3, u3.getZ());
     }
 
-    /** Linear constructor
+    /** Linear constructor.
      * Build a vector from three other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3
      * @param a1 first scale factor
@@ -215,7 +216,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(u1.getZ(), a1, u2.getZ(), a2, u3.getZ(), a3);
     }
 
-    /** Linear constructor
+    /** Linear constructor.
      * Build a vector from three other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3
      * @param a1 first scale factor
@@ -234,7 +235,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ(), a3, u3.getZ());
     }
 
-    /** Linear constructor
+    /** Linear constructor.
      * Build a vector from four other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3 + a4 * u4
      * @param a1 first scale factor
@@ -256,7 +257,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ(), a3, u3.getZ(), a4, u4.getZ());
     }
 
-    /** Linear constructor
+    /** Linear constructor.
      * Build a vector from four other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3 + a4 * u4
      * @param a1 first scale factor
@@ -278,7 +279,7 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.z = prototype.linearCombination(u1.getZ(), a1, u2.getZ(), a2, u3.getZ(), a3, u4.getZ(), a4);
     }
 
-    /** Linear constructor
+    /** Linear constructor.
      * Build a vector from four other ones and corresponding scale factors.
      * The vector built will be a1 * u1 + a2 * u2 + a3 * u3 + a4 * u4
      * @param a1 first scale factor
@@ -298,6 +299,107 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
         this.x = prototype.linearCombination(a1, u1.getX(), a2, u2.getX(), a3, u3.getX(), a4, u4.getX());
         this.y = prototype.linearCombination(a1, u1.getY(), a2, u2.getY(), a3, u3.getY(), a4, u4.getY());
         this.z = prototype.linearCombination(a1, u1.getZ(), a2, u2.getZ(), a3, u3.getZ(), a4, u4.getZ());
+    }
+
+    /** Build a {@link FieldVector3D} from a {@link Vector3D}.
+     * @param field field for the components
+     * @param v vector to convert
+     * @return a new instance
+     */
+    public FieldVector3D(final Field<T> field, final Vector3D v) {
+        this.x = field.getZero().add(v.getX());
+        this.y = field.getZero().add(v.getY());
+        this.z = field.getZero().add(v.getZ());
+    }
+
+    /** Get null vector (coordinates: 0, 0, 0).
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getZero(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.ZERO);
+    }
+
+    /** Get first canonical vector (coordinates: 1, 0, 0).
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getPlusI(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.PLUS_I);
+    }
+
+    /** Get opposite of the first canonical vector (coordinates: -1, 0, 0).
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getMinusI(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.MINUS_I);
+    }
+
+    /** Get second canonical vector (coordinates: 0, 1, 0).
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getPlusJ(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.PLUS_J);
+    }
+
+    /** Get opposite of the second canonical vector (coordinates: 0, -1, 0).
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getMinusJ(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.MINUS_J);
+    }
+
+    /** Get third canonical vector (coordinates: 0, 0, 1).
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getPlusK(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.PLUS_K);
+    }
+
+    /** Get opposite of the third canonical vector (coordinates: 0, 0, -1).
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getMinusK(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.MINUS_K);
+    }
+
+    /** Get a vector with all coordinates set to NaN.
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getNaN(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.NaN);
+    }
+
+    /** Get a vector with all coordinates set to positive infinity.
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getPositiveInfinity(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.POSITIVE_INFINITY);
+    }
+
+    /** Get a vector with all coordinates set to negative infinity.
+     * @param field field for the components
+     * @return a new vector
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldVector3D<T> getNegativeInfinity(final Field<T> field) {
+        return new FieldVector3D<>(field, Vector3D.NEGATIVE_INFINITY);
     }
 
     /** Get the abscissa of the vector.

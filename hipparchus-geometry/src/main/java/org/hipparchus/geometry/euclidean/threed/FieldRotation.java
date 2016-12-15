@@ -160,6 +160,18 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
 
     }
 
+    /** Build a {@link FieldRotation} from a {@link Rotation}.
+     * @param field field for the components
+     * @param r rotation to convert
+     * @return a new instance
+     */
+    public FieldRotation(final Field<T> field, final Rotation r) {
+        this.q0 = field.getZero().add(r.getQ0());
+        this.q1 = field.getZero().add(r.getQ1());
+        this.q2 = field.getZero().add(r.getQ2());
+        this.q3 = field.getZero().add(r.getQ3());
+    }
+
     /** Build a rotation from a 3X3 matrix.
 
      * <p>Rotation matrices are orthogonal matrices, i.e. unit matrices
@@ -369,15 +381,24 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
      */
     public FieldRotation(final RotationOrder order, final RotationConvention convention,
                          final T alpha1, final T alpha2, final T alpha3) {
-        final T one = alpha1.getField().getOne();
-        final FieldRotation<T> r1 = new FieldRotation<T>(new FieldVector3D<T>(one, order.getA1()), alpha1, convention);
-        final FieldRotation<T> r2 = new FieldRotation<T>(new FieldVector3D<T>(one, order.getA2()), alpha2, convention);
-        final FieldRotation<T> r3 = new FieldRotation<T>(new FieldVector3D<T>(one, order.getA3()), alpha3, convention);
+        final Field<T> field = alpha1.getField();
+        final FieldRotation<T> r1 = new FieldRotation<T>(new FieldVector3D<>(field, order.getA1()), alpha1, convention);
+        final FieldRotation<T> r2 = new FieldRotation<T>(new FieldVector3D<>(field, order.getA2()), alpha2, convention);
+        final FieldRotation<T> r3 = new FieldRotation<T>(new FieldVector3D<>(field, order.getA3()), alpha3, convention);
         final FieldRotation<T> composed = r1.compose(r2.compose(r3, convention), convention);
         q0 = composed.q0;
         q1 = composed.q1;
         q2 = composed.q2;
         q3 = composed.q3;
+    }
+
+    /** Get identity rotation.
+     * @param field field for the components
+     * @return a new rotation
+     * @param <T> the type of the field elements
+     */
+    public static <T extends RealFieldElement<T>> FieldRotation<T> getIdentity(final Field<T> field) {
+        return new FieldRotation<>(field, Rotation.IDENTITY);
     }
 
     /** Convert an orthogonal rotation matrix to a quaternion.
