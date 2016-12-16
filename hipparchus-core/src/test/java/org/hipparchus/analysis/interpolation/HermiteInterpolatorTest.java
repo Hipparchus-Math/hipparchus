@@ -65,10 +65,16 @@ public class HermiteInterpolatorTest {
         DerivativeStructure y0 = interpolator.value(new DerivativeStructure(1, 1, 0, 0.0))[0];
         Assert.assertEquals(1.0, y0.getValue(), 1.0e-15);
         Assert.assertEquals(2.0, y0.getPartialDerivative(1), 1.0e-15);
+        double[][] d0 = interpolator.derivatives(0.0, 1);
+        Assert.assertEquals(1.0, d0[0][0], 1.0e-15);
+        Assert.assertEquals(2.0, d0[1][0], 1.0e-15);
         Assert.assertEquals(4.0, interpolator.value(1.0)[0], 1.0e-15);
         DerivativeStructure y2 = interpolator.value(new DerivativeStructure(1, 1, 0, 2.0))[0];
         Assert.assertEquals(5.0, y2.getValue(), 1.0e-15);
         Assert.assertEquals(2.0, y2.getPartialDerivative(1), 1.0e-15);
+        double[][] d2 = interpolator.derivatives(2.0, 1);
+        Assert.assertEquals(5.0, d2[0][0], 1.0e-15);
+        Assert.assertEquals(2.0, d2[1][0], 1.0e-15);
         checkPolynomial(new PolynomialFunction(new double[] { 1.0, 2.0, 4.0, -4.0, 1.0 }),
                         interpolator.getPolynomials()[0]);
     }
