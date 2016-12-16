@@ -361,8 +361,8 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * @param b2 second factor of the second term
      * @param a3 first factor of the third term
      * @param b3 second factor of the third term
-     * @param a4 first factor of the third term
-     * @param b4 second factor of the third term
+     * @param a4 first factor of the fourth term
+     * @param b4 second factor of the fourth term
      * @return a<sub>1</sub>&times;b<sub>1</sub> +
      * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub> +
      * a<sub>4</sub>&times;b<sub>4</sub>
@@ -379,8 +379,8 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * @param b2 second factor of the second term
      * @param a3 first factor of the third term
      * @param b3 second factor of the third term
-     * @param a4 first factor of the third term
-     * @param b4 second factor of the third term
+     * @param a4 first factor of the fourth term
+     * @param b4 second factor of the fourth term
      * @return a<sub>1</sub>&times;b<sub>1</sub> +
      * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub> +
      * a<sub>4</sub>&times;b<sub>4</sub>
