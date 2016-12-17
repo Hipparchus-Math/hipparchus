@@ -49,6 +49,14 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
+    <release version="1.1" date="TBD" description="Maintenance release">
+      <action dev="luc" type="add">
+        Added field based 3D lines.
+      </action>
+      <action dev="luc" type="add">
+        Added utility methods for field-based rotations and 3D vectors.
+      </action>
+    </release>
     <release version="1.0" date="2016-06-23" description="This is the first release of the library">
       <action dev="tn" type="update">
         Modularized the library.

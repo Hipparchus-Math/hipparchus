@@ -27,6 +27,7 @@ section.
 The optimization package provides algorithms to optimize (i.e. either minimize
 or maximize) some objective or cost function. The package is split in several
 sub-packages dedicated to different kind of functions or algorithms.
+
 * the univariate package handles univariate scalar functions,
 * the linear package handles multivariate vector linear functions with linear constraints,
 * the direct package handles multivariate scalar functions using direct search methods (i.e. not using derivatives),
@@ -50,6 +51,7 @@ Optimizers are the algorithms that will either minimize or maximize, the objecti
 function by changing its input variables set until an optimal set is found. There
 are only four interfaces defining the common behavior of optimizers, one for each
 supported type of objective function:
+
 * the univariate package handles univariate scalar functions,
 * the linear package handles multivariate vector linear functions with linear constraints,
 * the direct package handles multivariate scalar functions using direct search methods (i.e. not using derivatives),
@@ -98,7 +100,7 @@ constraints.
 Direct search methods only use cost function values, they don't
 need derivatives and don't either try to compute approximation of
 the derivatives. According to a 1996 paper by Margaret H. Wright
-([Direct          Search Methods: Once Scorned, Now Respectable](http://cm.bell-labs.com/cm/cs/doc/96/4-02.ps.gz)
+([Direct Search Methods: Once Scorned, Now Respectable](http://cm.bell-labs.com/cm/cs/doc/96/4-02.ps.gz)
 ), they are used
 when either the computation of the derivative is impossible (noisy
 functions, unpredictable discontinuities) or difficult (complexity,
@@ -122,6 +124,7 @@ method can be used to retrieve all minima from all starts (including the one
 already provided by the `minimizes` method).
 
 The `direct` package provides four solvers:
+
 * the univariate package handles univariate scalar functions,
 * the linear package handles multivariate vector linear functions with linear constraints,
 * the direct package handles multivariate scalar functions using direct search methods (i.e. not using derivatives),
@@ -141,6 +144,7 @@ points that fulfill the constraints. Note however that using these adapters are 
 poor man solutions to simple bounds optimization constraints. Better solutions are to use an
 optimizer that directly supports simple bounds. Some caveats of the mapping adapter
 solution are that
+
 * the univariate package handles univariate scalar functions,
 * the linear package handles multivariate vector linear functions with linear constraints,
 * the direct package handles multivariate scalar functions using direct search methods (i.e. not using derivatives),
@@ -191,18 +195,16 @@ thus allowing the optimizer to compute the residuals at will. The last parameter
 search for the optimal point.
 
 
-<dl>
-<dt>Quadratic Problem Example</dt>
-<dd>
+## Quadratic Problem Example
 
 
 We are looking to find the best parameters [a, b, c] for the quadratic function
-<b>`f(x) = a x<sup>2</sup> + b x + c`</b>.
+`\(f(x) = a x^2 + b x + c\)`.
 The data set below was generated using [a = 8, b = 10, c = 16].
 A random number between zero and one was added to each y value calculated.
 
-| <b>X</b> | <b>Y</b> |
-| --- | --- |
+| X | Y |
+| --- |
 | 1 | 34.234064369 |
 | 2 | 68.2681162306108 |
 | 3 | 118.615899084602 |
@@ -217,8 +219,6 @@ A random number between zero and one was added to each y value calculated.
 First we need to implement the interface [DifferentiableMultivariateVectorFunction](../apidocs/org/hipparchus/analysis/DifferentiableMultivariateVectorFunction.html).
 This requires the implementation of the method signatures:
 
-
-
 * the univariate package handles univariate scalar functions,
 * the linear package handles multivariate vector linear functions with linear constraints,
 * the direct package handles multivariate scalar functions using direct search methods (i.e. not using derivatives),
@@ -229,20 +229,19 @@ This requires the implementation of the method signatures:
 We'll tackle the implementation of the `MultivariateMatrixFunction jacobian()` method first.  You may wish to familiarize yourself with what a [ Jacobian Matrix](http://en.wikipedia.org/wiki/Jacobian_matrix_and_determinant) is.
 In this case the Jacobian is the partial derivative of the function with respect
 to the parameters a, b and c.  These derivatives are computed as follows:
+
 * the univariate package handles univariate scalar functions,
 * the linear package handles multivariate vector linear functions with linear constraints,
 * the direct package handles multivariate scalar functions using direct search methods (i.e. not using derivatives),
 * the general package handles multivariate scalar or vector functions using derivatives.
 * the fitting package handles curve fitting by univariate real functions
 
-
-
 For a quadratic which has three variables the Jacobian Matrix will have three columns, one for each variable, and the number
 of rows will equal the number of rows in our data set, which in this case is ten.  So for example for <tt>[a = 1, b = 1, c = 1]</tt>, the Jacobian Matrix is (excluding the first column which shows the value of x):
 
 
-| <b>x</b> | <b>d(ax<sup>2</sup> + bx + c)/da</b> | <b>d(ax<sup>2</sup> + bx + c)/db</b> | <b>d(ax<sup>2</sup> + bx + c)/dc</b> |
-| --- | --- | --- | --- |
+| x | `\(\frac{\partial{(ax^2 + bx + c)}}{\partial{a}}\)` | `\(\frac{\partial{(ax^2 + bx + c)}}{\partial{b}}\)` | `\(\frac{\partial{(ax^2 + bx + c)}}{\partial{c}}\)` |
+| --- |
 | 1 | 1 | 1 | 1 |
 | 2 | 4 | 2 | 1 |
 | 3 | 9 | 3 | 1 |
@@ -290,15 +289,13 @@ values the objective function returns per given independent value
 and the current set of variables or parameters,
 can be seen below:
 
-
-
-        public double[] value(double[] variables) {
-            double[] values = new double[x.size()];
-            for (int i = 0; i &lt; values.length; ++i) {
-                values[i] = (variables[0] * x.get(i) + variables[1]) * x.get(i) + variables[2];
-            }
-            return values;
+    public double[] value(double[] variables) {
+        double[] values = new double[x.size()];
+        for (int i = 0; i &lt; values.length; ++i) {
+            values[i] = (variables[0] * x.get(i) + variables[1]) * x.get(i) + variables[2];
         }
+        return values;
+    }
 
 Below is the the class containing all the implementation details
 (Taken from the Hipparchus <b>org.hipparchus.optimization.general.LevenbergMarquardtOptimizerTest</b>):
@@ -362,51 +359,45 @@ The below code shows how to go about using the above class
 and a LevenbergMarquardtOptimizer instance to produce an
 optimal set of quadratic curve fitting parameters:
 
+    QuadraticProblem problem = new QuadraticProblem();
+    
+    problem.addPoint(1, 34.234064369);
+    problem.addPoint(2, 68.2681162306);
+    problem.addPoint(3, 118.6158990846);
+    problem.addPoint(4, 184.1381972386);
+    problem.addPoint(5, 266.5998779163);
+    problem.addPoint(6, 364.1477352516);
+    problem.addPoint(7, 478.0192260919);
+    problem.addPoint(8, 608.1409492707);
+    problem.addPoint(9, 754.5988686671);
+    problem.addPoint(10, 916.1288180859);
+    
+    LevenbergMarquardtOptimizer optimizer = new LevenbergMarquardtOptimizer();
+    
+    final double[] weights = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+    
+    final double[] initialSolution = {1, 1, 1};
+    
+    PointVectorValuePair optimum = optimizer.optimize(100,
+                                                      problem,
+                                                      problem.calculateTarget(),
+                                                      weights,
+                                                      initialSolution);
+   
+    final double[] optimalValues = optimum.getPoint();
+   
+    System.out.println(&quot;A: &quot; + optimalValues[0]);
+    System.out.println(&quot;B: &quot; + optimalValues[1]);
+    System.out.println(&quot;C: &quot; + optimalValues[2]);
 
 
-     QuadraticProblem problem = new QuadraticProblem();
-    
-     problem.addPoint(1, 34.234064369);
-     problem.addPoint(2, 68.2681162306);
-     problem.addPoint(3, 118.6158990846);
-     problem.addPoint(4, 184.1381972386);
-     problem.addPoint(5, 266.5998779163);
-     problem.addPoint(6, 364.1477352516);
-     problem.addPoint(7, 478.0192260919);
-     problem.addPoint(8, 608.1409492707);
-     problem.addPoint(9, 754.5988686671);
-     problem.addPoint(10, 916.1288180859);
-    
-     LevenbergMarquardtOptimizer optimizer = new LevenbergMarquardtOptimizer();
-    
-     final double[] weights = { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-    
-     final double[] initialSolution = {1, 1, 1};
-    
-     PointVectorValuePair optimum = optimizer.optimize(100,
-                                                       problem,
-                                                       problem.calculateTarget(),
-                                                       weights,
-                                                       initialSolution);
-    
-     final double[] optimalValues = optimum.getPoint();
-    
-     System.out.println(&quot;A: &quot; + optimalValues[0]);
-     System.out.println(&quot;B: &quot; + optimalValues[1]);
-     System.out.println(&quot;C: &quot; + optimalValues[2]);
-    
+If you run the above sample you will see the following printed by the console:
 
-If you run the above sample you will see
-the following printed by the console:
+    A: 7.998832172372726
+    B: 10.001841530162448
+    C: 16.324008168386605
 
 
-<pre>
-A: 7.998832172372726
-B: 10.001841530162448
-C: 16.324008168386605
-</pre>
-
-</dd></dl>
 In addition to least squares solving, the <a
 href="../apidocs/org.hipparchus/optimization/general/NonLinearConjugateGradientOptimizer.html">
 NonLinearConjugateGradientOptimizer</a> class provides a non-linear conjugate gradient algorithm

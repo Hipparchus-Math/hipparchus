@@ -26,7 +26,9 @@ import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
+import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.CombinatoricsUtils;
+import org.hipparchus.util.MathUtils;
 
 /** Polynomial interpolator using both sample values and sample derivatives.
  * <p>
@@ -214,6 +216,50 @@ public class HermiteInterpolator implements UnivariateDifferentiableVectorFuncti
         }
 
         return value;
+
+    }
+
+    /** Interpolate value and first derivatives at a specified abscissa.
+     * @param x interpolation abscissa
+     * @param order maximum derivation order
+     * @return interpolated value and derivatives (value in row 0,
+     * 1<sup>st</sup> derivative in row 1, ... n<sup>th</sup> derivative in row n)
+     * @exception MathIllegalArgumentException if sample is empty
+     * @throws NullArgumentException if x is null
+     */
+    public double[][] derivatives(double x, int order)
+        throws MathIllegalArgumentException, NullArgumentException {
+
+        // safety check
+        MathUtils.checkNotNull(x);
+        if (abscissae.isEmpty()) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_INTERPOLATION_SAMPLE);
+        }
+
+        final double[] tj = new double[order + 1];
+        tj[0] = 0.0;
+        for (int i = 0; i < order; ++i) {
+            tj[i + 1] = tj[i] + 1;
+        }
+
+        final double[][] derivatives = new double[order + 1][topDiagonal.get(0).length];
+        final double[] valueCoeff = new double[order + 1];
+        valueCoeff[0] = 1.0;
+        for (int i = 0; i < topDiagonal.size(); ++i) {
+            double[] dividedDifference = topDiagonal.get(i);
+            final double deltaX = x - abscissae.get(i);
+            for (int j = order; j >= 0; --j) {
+                for (int k = 0; k < derivatives[j].length; ++k) {
+                    derivatives[j][k] += dividedDifference[k] * valueCoeff[j];
+                }
+                valueCoeff[j] *= deltaX;
+                if (j > 0) {
+                    valueCoeff[j] += tj[j] * valueCoeff[j - 1];
+                }
+            }
+        }
+
+        return derivatives;
 
     }
 

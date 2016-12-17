@@ -54,6 +54,12 @@ public class FieldRotationDfpTest {
         checkVector(r.applyTo(createVector(0, 0, 1)), createVector(0, 0, 1));
         checkAngle(r.getAngle(), 0);
 
+        r = FieldRotation.getIdentity(new DfpField(20));
+        checkVector(r.applyTo(createVector(1, 0, 0)), createVector(1, 0, 0));
+        checkVector(r.applyTo(createVector(0, 1, 0)), createVector(0, 1, 0));
+        checkVector(r.applyTo(createVector(0, 0, 1)), createVector(0, 0, 1));
+        checkAngle(r.getAngle(), 0);
+
     }
 
     @Test

@@ -26,9 +26,7 @@ import org.hipparchus.stat.descriptive.moment.Variance;
 
 /**
  * Computes the sum of intra-cluster distance variances according to the formula:
- * <pre>
- * \( score = \sum\limits_{i=1}^n \sigma_i^2 \)
- * </pre>
+ * \] score = \sum\limits_{i=1}^n \sigma_i^2 \]
  * where n is the number of clusters and \( \sigma_i^2 \) is the variance of
  * intra-cluster distances of cluster \( c_i \).
  *

@@ -126,6 +126,17 @@ in the git book for explanation about how to configure these settings and more.
     the ends will render the same formula on a separate line.  See the MathJax
     and LaTex documentation for details on how to represent formulas and
     escape special characters.
+  * Hipparchus modules documentation for the web site is generated using
+    markdown syntax. It also supports embedded LaTeX formulas via the
+    [MathJax](http://www.mathjax.org) javascript display engine. To
+    embed mathematical expressions formatted in LaTeX in markdown, simply surround
+    the expression to be formatted with either `\`\\(` and  `\\)\`` for inline
+    formulas, or `\`\\[` and `\\]\`` to have the formula appear on a separate line.
+    For example, `\`\\(a^2 + b^2 = c^2\\)\`` will render an in-line formula
+    saying that (a, b, c) is Pythagorean triplet.  Using `\`\\[` and `\\]\`` on
+    the ends will render the same formula on a separate line.  See the MathJax,
+    markdown and LaTex documentation for details on how to represent formulas and
+    escape special characters.
   * Implementations _should_ use standard algorithms and references or full
     descriptions of all algorithms _should_ be provided.
   * Additions and enhancements _should_ include updates to the User Guide.
