@@ -28,7 +28,7 @@ import org.hipparchus.util.MathUtils;
 public interface AggregatableStatistic<T> {
 
     /**
-     * Aggregates the results from the provided instance into this instance.
+     * Aggregates the provided instance into this instance.
      * <p>
      * This method can be used to combine statistics computed over partitions or
      * subsamples - i.e., the value of this instance after this operation should
