@@ -366,6 +366,15 @@ public class StreamingStatisticsTest {
          * as <totalStats>.
          */
         assertSummaryStatisticsEquals(totalStats, aggregate, 1e-10);
+
+        // Check some percentiles
+        final double tol = 1e-13;
+        assertEquals(totalStats.getPercentile(10), aggregate.getPercentile(10), tol);
+        assertEquals(totalStats.getPercentile(25), aggregate.getPercentile(25), tol);
+        assertEquals(totalStats.getPercentile(50), aggregate.getPercentile(50), tol);
+        assertEquals(totalStats.getPercentile(75), aggregate.getPercentile(75), tol);
+        assertEquals(totalStats.getPercentile(90), aggregate.getPercentile(90), tol);
+        assertEquals(totalStats.getPercentile(99), aggregate.getPercentile(99), tol);
     }
 
     @Test

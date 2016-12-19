@@ -26,6 +26,7 @@ import org.hipparchus.stat.descriptive.moment.SecondMoment;
 import org.hipparchus.stat.descriptive.moment.Variance;
 import org.hipparchus.stat.descriptive.rank.Max;
 import org.hipparchus.stat.descriptive.rank.Min;
+import org.hipparchus.stat.descriptive.rank.RandomPercentile;
 import org.hipparchus.stat.descriptive.summary.Sum;
 import org.hipparchus.stat.descriptive.summary.SumOfLogs;
 import org.hipparchus.stat.descriptive.summary.SumOfSquares;
@@ -71,6 +72,8 @@ public class StreamingStatistics
     private final GeometricMean geoMeanImpl;
     /** population variance of values that have been added */
     private final Variance populationVariance;
+    /** source of percentiles */
+    private final RandomPercentile randomPercentile;
 
     /**
      * Construct a new StreamingStatistics instance.
@@ -89,6 +92,7 @@ public class StreamingStatistics
         // the population variance can not be overridden
         // it will always use the second moment.
         this.populationVariance = new Variance(false, this.secondMoment);
+        this.randomPercentile = new RandomPercentile();
     }
 
     /**
@@ -114,6 +118,7 @@ public class StreamingStatistics
         this.geoMeanImpl  = new GeometricMean(this.sumOfLogsImpl);
 
         this.populationVariance = new Variance(false, this.secondMoment);
+        this.randomPercentile = original.randomPercentile.copy();
     }
 
     /**
@@ -146,6 +151,7 @@ public class StreamingStatistics
         sumImpl.increment(value);
         sumOfSquaresImpl.increment(value);
         sumOfLogsImpl.increment(value);
+        randomPercentile.increment(value);
 
         // Do not update mean/variance/geoMean
         // as they use external moments.
@@ -170,6 +176,7 @@ public class StreamingStatistics
         sumOfLogsImpl.clear();
         sumOfSquaresImpl.clear();
         secondMoment.clear();
+        randomPercentile.clear();
 
         // No need to clear mean/variance/geoMean
         // as they use external moments.
@@ -300,6 +307,14 @@ public class StreamingStatistics
         }
     }
 
+    public double getMedian() {
+        return randomPercentile != null ? randomPercentile.getResult(50d) : Double.NaN;
+    }
+
+    public double getPercentile(double percentile) {
+        return randomPercentile != null ? randomPercentile.getResult(percentile) : Double.NaN;
+    }
+
     /** {@inheritDoc} */
     @Override
     public void aggregate(StreamingStatistics other) {
@@ -313,6 +328,7 @@ public class StreamingStatistics
             this.sumImpl.aggregate(other.sumImpl);
             this.sumOfLogsImpl.aggregate(other.sumOfLogsImpl);
             this.sumOfSquaresImpl.aggregate(other.sumOfSquaresImpl);
+            this.randomPercentile.aggregate(other.randomPercentile);
         }
     }
 
@@ -366,7 +382,8 @@ public class StreamingStatistics
                Precision.equalsIncludingNaN(other.getMean(),          getMean())          &&
                Precision.equalsIncludingNaN(other.getSumOfSquares(),  getSumOfSquares())  &&
                Precision.equalsIncludingNaN(other.getSumOfLogs(),     getSumOfLogs())     &&
-               Precision.equalsIncludingNaN(other.getVariance(),      getVariance());
+               Precision.equalsIncludingNaN(other.getVariance(),      getVariance())      &&
+               Precision.equalsIncludingNaN(other.getMedian(),        getMedian());
     }
 
     /**
@@ -384,6 +401,7 @@ public class StreamingStatistics
         result = result * 31 + MathUtils.hash(getSumOfSquares());
         result = result * 31 + MathUtils.hash(getSumOfLogs());
         result = result * 31 + MathUtils.hash(getVariance());
+        result = result * 31 + MathUtils.hash(getMedian());
         return result;
     }
 

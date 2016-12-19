@@ -21,6 +21,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.GammaDistribution;
@@ -240,6 +243,58 @@ public class RandomPercentileTest extends
     @Test
     public void testArrayExample() {
         assertEquals(this.percentile95, new RandomPercentile().evaluate(95d,testArray), getTolerance());
+    }
+
+    @Test
+    public void testReduceSmallDataSet() {
+        final RandomDataGenerator random = new RandomDataGenerator(1000);
+        final long n = 1000;
+        double[] combined = new double[10000];
+        int i = 0;
+        final List<RandomPercentile> aggregates = new ArrayList<RandomPercentile>();
+        for (int j = 0; j < 10; j++) {
+            final RandomPercentile randomPercentile = new RandomPercentile();
+            for (int k = 0; k < n; k++) {
+                final double value = random.nextGaussian();
+                randomPercentile.accept(value);
+                combined[i++] = value;
+            }
+            aggregates.add(randomPercentile);
+        }
+        // Check some quantiles
+        final Percentile master = new Percentile();
+        final RandomPercentile randomMaster = new RandomPercentile();
+        for (int l = 0; l < 5; l++) {
+            final double percentile = l * 15 + 1;
+            assertEquals(master.evaluate(combined, percentile),
+                    randomMaster.reduce(percentile, aggregates), Double.MIN_VALUE);
+        }
+    }
+
+    @Test
+    public void testReduceLargeDataSet() {
+        final RandomDataGenerator random = new RandomDataGenerator(1000);
+        final long n = 1000000;
+        final RandomGenerator randomGenerator = new RandomDataGenerator(1000);
+        final RandomPercentile randomMaster = new RandomPercentile(randomGenerator);
+        final PSquarePercentile pSquare = new PSquarePercentile(1);
+        final List<RandomPercentile> aggregates = new ArrayList<RandomPercentile>();
+        for (int j = 0; j < 5; j++) {
+            final RandomPercentile randomPercentile = new RandomPercentile(randomGenerator);
+            for (int k = 0; k < n; k++) {
+                final double value = random.nextGaussian();
+                randomPercentile.accept(value);
+                randomMaster.accept(value);
+                pSquare.increment(value);
+            }
+            aggregates.add(randomPercentile);
+        }
+        // Check some quantiles
+        for (int l = 0; l < 5; l++) {
+            final double percentile = l * 13 + 1;
+            assertEquals("percentile = " + percentile, randomMaster.getResult(percentile),
+                    randomMaster.reduce(percentile, aggregates), 5E-3);
+        }
     }
 
     private Double[] randomTestData(int factor, int values) {
@@ -478,7 +533,7 @@ public class RandomPercentileTest extends
      */
     @Test
     public void testDistributionStreaming() {
-        checkQuartiles(new NormalDistribution(), 1000000, 1E-3);
+        checkQuartiles(new NormalDistribution(), 5000000, 5E-3);
         checkQuartiles(new ExponentialDistribution(1), 100000, 1E-3);
         checkQuartiles(new GammaDistribution(4d,2d), 100000, 1E-3);
     }

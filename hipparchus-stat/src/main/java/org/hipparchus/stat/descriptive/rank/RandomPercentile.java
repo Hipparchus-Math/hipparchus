@@ -19,17 +19,22 @@ package org.hipparchus.stat.descriptive.rank;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.UUID;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.AbstractStorelessUnivariateStatistic;
+import org.hipparchus.stat.descriptive.AggregatableStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -77,12 +82,13 @@ import org.hipparchus.util.MathArrays;
  * Note: This implementation is not thread-safe.
  */
 public class RandomPercentile
-    extends AbstractStorelessUnivariateStatistic implements StorelessUnivariateStatistic, Serializable {
+    extends AbstractStorelessUnivariateStatistic implements StorelessUnivariateStatistic,
+    AggregatableStatistic<RandomPercentile>, Serializable {
 
     private static final long serialVersionUID = 1L;
     /** Storage size of each buffer */
     private final int s;
-    /** Number of buffers minus 1 */
+    /** Maximum number of buffers minus 1 */
     private final int h;
     /** Data structure used to manage buffers */
     private final BufferMap bufferMap;
@@ -142,8 +148,8 @@ public class RandomPercentile
 
     /**
      * Constructs a {@code RandomPercentile} with quantile estimation error
-     * set to the default ({@link #DEFAULT_EPSILON}) and default percentile
-     * equal to the median, using the default PRNG as source of random data.
+     * set to the default ({@link #DEFAULT_EPSILON}), using the default PRNG
+     * as source of random data.
      */
     public RandomPercentile() {
         this(DEFAULT_EPSILON, new Well19937c());
@@ -240,7 +246,7 @@ public class RandomPercentile
     }
 
     @Override
-    public StorelessUnivariateStatistic copy() {
+    public RandomPercentile copy() {
         return new RandomPercentile(this);
     }
 
@@ -429,6 +435,8 @@ public class RandomPercentile
         private long consumed = 0;
         /** Index of next value to take in current 2^level block */
         private long nextToTake = 0;
+        /** ID */
+        private final UUID id;
 
         /**
          * Creates a new buffer capable of retaining size values with the given level.
@@ -437,12 +445,14 @@ public class RandomPercentile
          * @param level the base 2 log of the sampling frequency
          *        (one out of every 2^level values is retained)
          * @param randomGenerator PRNG used for sampling and merge operations
+         * @param id unique identifier for this buffer
          */
         public Buffer(int size, int level, RandomGenerator randomGenerator) {
             this.size = size;
             data = new double[size];
             this.level = level;
             this.randomGenerator = randomGenerator;
+            this.id = UUID.randomUUID();
             computeBlockSize();
         }
 
@@ -507,13 +517,13 @@ public class RandomPercentile
          * This and other must have the same level and both must be full.
          *
          * @param other initially full other buffer at the same level as this.
-         * @throws MathIllegalStateException if either buffer is not full or they
+         * @throws MathIllegalArgumentException if either buffer is not full or they
          * have different levels
          */
         public void mergeWith(Buffer other) {
             // Make sure both this and other are full and have the same level
             if (this.hasCapacity() || other.hasCapacity() || other.level != this.level) {
-                throw new MathIllegalStateException(LocalizedCoreFormats.INTERNAL_ERROR);
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.INTERNAL_ERROR);
             }
             // Randomly select one of the two entries for each slot
             for (int i = 0; i < size; i++) {
@@ -528,6 +538,50 @@ public class RandomPercentile
             this.setLevel(level + 1);
             // Clear the free one (and compute new blocksize)
             other.clear();
+        }
+
+        /**
+         * Merge this into a higher-level buffer.
+         * <p>
+         * Does not alter this; but after the merge, higher may have some of its
+         * data replaced by data from this.  Levels are not changed for either buffer.
+         * <p>
+         * Probability of selection into the newly constituted higher buffer is weighted
+         * according to level. So for example, if this has level 0 and higher has level
+         * 2, the ith element of higher is 4 times more likely than the corresponding
+         * element of this to retain its spot.
+         * <p>
+         * This method is only used when aggregating RandomPercentile instances.
+         * <p>
+         * Preconditions:
+         * <ol><li> this.level < higher.level </li>
+         *     <li> this.size = higher.size </li>
+         *     <li> Both buffers are full </li>
+         * </ol>
+         *
+         * @param higher higher-level buffer to merge this into
+         * @throws MathIllegalArgumentException if the buffers have different sizes,
+         * either buffer is not full or this has level greater than or equal to higher
+         */
+        public void mergeInto(Buffer higher) {
+            // Check preconditions
+            if (this.size != higher.size || this.hasCapacity() || higher.hasCapacity() ||
+                    this.level >= higher.level) {
+                throw new MathIllegalArgumentException(LocalizedCoreFormats.INTERNAL_ERROR);
+            }
+            final int levelDifference = higher.level - this.level;
+            int m = 1;
+            for (int i = 0; i < levelDifference; i++) {
+                m *= 2;
+            }
+            // Randomly select one of the two entries for each slot in higher, giving
+            // m-times higher weight to the entries of higher.
+            for (int i = 0; i < size; i++) {
+                // data[i] <-> {0}, higher.data[i] <-> {1, ..., m}
+                if (randomGenerator.nextInt(m + 1) == 0) {
+                    higher.data[i] = data[i];
+                }
+            }
         }
 
         /**
@@ -594,10 +648,39 @@ public class RandomPercentile
         }
 
         /**
+         * @return the smallest value held in this buffer
+         */
+        public double min() {
+            if (!hasCapacity()) {
+                return data[0];
+            } else {
+                return StatUtils.min(data);
+            }
+        }
+
+        /**
+         * @return the largest value held in this buffer
+         */
+        public double max() {
+            if (!hasCapacity()) {
+                return data[data.length - 1];
+            } else {
+                return StatUtils.max(data);
+            }
+        }
+
+        /**
          * @return the level of this buffer
          */
         public int getLevel() {
             return level;
+        }
+
+        /**
+         * @return the id
+         */
+        public UUID getId() {
+            return id;
         }
     }
 
@@ -626,7 +709,7 @@ public class RandomPercentile
         private int count = 0;
         /** Uniform buffer size */
         private final int bufferSize;
-        /** Backing store for the buffer map */
+        /** Backing store for the buffer map. Keys are levels, values are lists of registered buffers. */
         final HashMap<Integer,List<Buffer>> registry = new HashMap<>();
         /** Maximum buffer level */
         private int maxLevel = 0;
@@ -685,6 +768,7 @@ public class RandomPercentile
             if (!canCreate()) {
                 return null;
             }
+            count++;
             Buffer buffer = new Buffer(bufferSize, level, randomGenerator);
             List<Buffer> bufferList = registry.get(level);
             if (bufferList == null) {
@@ -692,7 +776,6 @@ public class RandomPercentile
                 registry.put(level, bufferList);
             }
             bufferList.add(buffer);
-            count++;
             if (level > maxLevel) {
                 maxLevel = level;
             }
@@ -794,17 +877,9 @@ public class RandomPercentile
             buffer1.mergeWith(buffer2);
             // Now both buffers have level l+1; buffer1 is full and buffer2 is free.
             // Register both buffers
-            List<Buffer> bufferList = registry.get(l + 1);
-            if (bufferList == null) {
-                bufferList = new ArrayList<Buffer>();
-                registry.put(l + 1, bufferList);
-            }
-            bufferList.add(buffer1);
-            bufferList.add(buffer2);
-            // Update maxLevel
-            if (l + 1 > maxLevel) {
-                maxLevel = l + 1;
-            }
+            register(buffer1);
+            register(buffer2);
+
             // Return the free one
             return buffer2;
         }
@@ -821,29 +896,83 @@ public class RandomPercentile
         }
 
         /**
-         * Returns an iterator over all of the buffers.
+         * Registers a buffer.
+         *
+         * @param buffer Buffer to be registered.
+         */
+        public void register(Buffer buffer) {
+            final int level = buffer.getLevel();
+            List<Buffer> list = registry.get(level);
+            if (list == null) {
+                list = new ArrayList<Buffer>();
+                registry.put(level, list);
+                if (level > maxLevel) {
+                    maxLevel = level;
+                }
+            }
+            list.add(buffer);
+        }
+
+        /**
+         * De-register a buffer.
+         *
+         * @param buffer Buffer to be de-registered
+         * @throws IllegalStateException if the buffer is not registered
+         */
+        public void deRegister(Buffer buffer) {
+            List<Buffer> bufferList = registry.get(buffer.getLevel());
+            final UUID targetId = buffer.getId();
+            int i = 0;
+            boolean found = false;
+            while (i < bufferList.size() && !found) {
+                if (bufferList.get(i).getId().equals(targetId)) {
+                    bufferList.remove(i);
+                    found = true;
+                    buffer.clear();
+                }
+            }
+            if (!found) {
+                throw new MathIllegalStateException(LocalizedCoreFormats.INTERNAL_ERROR);
+            }
+        }
+
+        /**
+         * Returns an iterator over all of the buffers. Iteration goes by level, with
+         * level 0 first.  Assumes there are no empty buffer lists.
          */
         @Override
         public Iterator<Buffer> iterator() {
             Iterator<Buffer> it = new Iterator<Buffer>() {
-                final Iterator<List<Buffer>> levelIterator = registry.values().iterator();
-                Iterator<Buffer> bufferIterator = levelIterator.next().iterator();
+                Iterator<Integer> levelIterator = registry.keySet().iterator();
+                List<Buffer> currentList = registry.get(levelIterator.next());
+                Iterator<Buffer> bufferIterator = currentList == null ? null : currentList.iterator();
 
                 @Override
                 public boolean hasNext() {
-                    return levelIterator.hasNext() || bufferIterator.hasNext();
+                    if (bufferIterator == null) {
+                        return false;
+                    }
+                    if (bufferIterator.hasNext()) {
+                        return true;
+                    }
+                    // The current level iterator has just finished, try to bump level
+                    if (levelIterator.hasNext()) {
+                        List<Buffer> currentList = registry.get(levelIterator.next());
+                        bufferIterator = currentList.iterator();
+                        return true;
+                    } else {
+                        // Nothing left, signal this by nulling bufferIterator
+                        bufferIterator = null;
+                        return false;
+                    }
                 }
 
                 @Override
                 public Buffer next() {
-                    if (!bufferIterator.hasNext()) {
-                        bufferIterator = levelIterator.next().iterator();
-                    }
-                    if (bufferIterator.hasNext()) {
-                        return bufferIterator.next();
-                    } else { // Should never happen
-                        throw new MathIllegalStateException(LocalizedCoreFormats.INTERNAL_ERROR);
-                    }
+                     if (hasNext()) {
+                         return bufferIterator.next();
+                     }
+                     throw new NoSuchElementException();
                 }
 
                 @Override
@@ -853,5 +982,251 @@ public class RandomPercentile
             };
             return it;
         }
+
+        /**
+         * Absorbs the data in other into this, merging buffers as necessary to trim
+         * the aggregate down to capacity. This method is only used when aggregating
+         * RandomPercentile instances.
+         *
+         * @param other other BufferMap to merge in
+         */
+        public void absorb(BufferMap other) {
+            // Add all of other's buffers to the map - possibly exceeding cap
+            int fullCount = 0;
+            Buffer notFull = null;
+            Iterator<Buffer> otherIterator = other.iterator();
+            while (otherIterator.hasNext()) {
+                Buffer buffer = otherIterator.next();
+                if (buffer.hasCapacity()) {
+                    notFull = buffer;
+                } else {
+                    fullCount++;
+                }
+                register(buffer);
+                count++;
+            }
+            // Determine how many extra buffers we now have: new + old - capacity
+            final int excess = fullCount + (notFull == null ? 0 : 1) + count - capacity;
+            // Now eliminate the excess by merging
+            for (int i = 0; i < excess - 1; i++) {
+                mergeUp();
+                count--;
+            }
+        }
+
+        /**
+         * Find two buffers, first and second, of minimal level. Then merge
+         * first into second and discard first.
+         * <p>
+         * If the buffers have different levels, make second the higher level
+         * buffer and make probability of selection in the merge proportional
+         * to level weight ratio.
+         * <p>
+         * This method is only used when aggregating RandomPercentile instances.
+         */
+        public void mergeUp() {
+            // Find two minimum-level buffers to merge
+            // Loop depends on two invariants:
+            //   0) iterator goes in level order
+            //   1) there are no empty lists in the registry
+            Iterator<Buffer> bufferIterator = iterator();
+            Buffer first = null;
+            Buffer second = null;
+            while ((first == null || second == null) && bufferIterator.hasNext()) {
+                Buffer buffer = bufferIterator.next();
+                if (!buffer.hasCapacity()) { // Skip not full buffers
+                    if (first == null) {
+                        first = buffer;
+                    } else {
+                        second = buffer;
+                    }
+                }
+            }
+            if (first == null || second == null || first.level > second.level) {
+                throw new MathIllegalStateException(LocalizedCoreFormats.INTERNAL_ERROR);
+            }
+            // Merge first into second and deregister first.
+            // Assumes that first has level <= second (checked above).
+            if (first.getLevel() == second.getLevel()) {
+                second.mergeWith(first);
+            } else {
+                first.mergeInto(second);
+            }
+            deRegister(first);
+        }
+    }
+
+    /**
+     * Computes the given percentile by combining the data from the collection
+     * of aggregates. The result describes the combined sample of all data added
+     * to any of the aggregates.
+     *
+     * @param percentile desired percentile (scaled 0-100)
+     * @param aggregates RandomPercentile instances to combine data from
+     * @return estimate of the given percentile using combined data from the aggregates
+     * @throws MathIllegalArgumentException if percentile is out of the range [0, 100]
+     */
+    public double reduce(double percentile, Collection<RandomPercentile> aggregates) {
+        if (percentile > 100 || percentile < 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_RANGE,
+                                                   percentile, 0, 100);
+        }
+
+        // First see if we can copy all data and just compute exactly.
+        // The following could be improved to verify that all have only level 0 buffers
+        // and the sum of the data sizes is less than 1/2 total capacity.  Here we
+        // just check that each of the aggregates is less than half full.
+        Iterator<RandomPercentile> iterator = aggregates.iterator();
+        boolean small = true;
+        while (small && iterator.hasNext()) {
+            small = iterator.next().bufferMap.halfEmpty();
+        }
+        if (small) {
+            iterator = aggregates.iterator();
+            double[] combined = {};
+            while (iterator.hasNext()) {
+               combined = MathArrays.concatenate(combined, iterator.next().bufferMap.levelZeroData());
+            }
+            final Percentile exactP = new Percentile(percentile);
+            return exactP.evaluate(combined);
+        }
+
+        // Below largely duplicates code in getResult(percentile).
+        // Common binary search code with function parameter should be factored out.
+
+        // Get global max and min to bound binary search and total N
+        double min = Double.POSITIVE_INFINITY;
+        double max = Double.NEGATIVE_INFINITY;
+        double combinedN = 0;
+        iterator = aggregates.iterator();
+        while (iterator.hasNext()) {
+            final RandomPercentile curr = iterator.next();
+            final double curMin = curr.getResult(0);
+            final double curMax = curr.getResult(100);
+            if (curMin < min) {
+                min = curMin;
+            }
+            if (curMax > max) {
+                max = curMax;
+            }
+            combinedN += curr.getN();
+        }
+
+        final double q = percentile / 100;
+        // Handle degenerate cases
+        if (Double.compare(q, 0d) == 0) {
+            return min;
+        }
+        if (Double.compare(q, 1) == 0) {
+            return max;
+        }
+
+        // Compute target rank
+        final double targetRank = q * combinedN;
+
+        // Perform binary search using aggregated rank computation
+        // Start with initial guess min + quantile * (max - min).
+        double estimate = min + q * (max - min);
+        double estimateRank = getAggregateRank(estimate, aggregates);
+        double lower;
+        double upper;
+        if (estimateRank == targetRank) {
+            return estimate;
+        }
+        if (estimateRank > targetRank) {
+            upper = estimate;
+            lower = min;
+        } else {
+            lower = estimate;
+            upper = max;
+        }
+        final double eps = epsilon / 2;
+        double intervalWidth = FastMath.abs(upper - lower);
+        while (FastMath.abs(estimateRank / combinedN - q) > eps && intervalWidth > eps / combinedN) {
+            if (estimateRank == targetRank) {
+                return estimate;
+            }
+            if (estimateRank > targetRank) {
+                upper = estimate;
+            } else {
+                lower = estimate;
+            }
+            intervalWidth = FastMath.abs(upper - lower);
+            estimate = lower + intervalWidth / 2;
+            estimateRank = getAggregateRank(estimate, aggregates);
+        }
+        return estimate;
+    }
+
+    /**
+     * Computes the estimated rank of value in the combined dataset of the aggregates.
+     * Sums the values from {@link #getRank(double)}.
+     *
+     * @param value value whose rank is sought
+     * @param aggregates collection to aggregate rank over
+     * @return estimated number of elements in the combined dataset that are less than value
+     */
+    public double getAggregateRank(double value, Collection<RandomPercentile> aggregates) {
+        double result = 0;
+        final Iterator<RandomPercentile> iterator = aggregates.iterator();
+        while (iterator.hasNext()) {
+            result += iterator.next().getRank(value);
+        }
+        return result;
+    }
+
+    /**
+     * Returns the estimated quantile position of value in the combined dataset of the aggregates.
+     * Specifically, what is returned is an estimate of \(|\{x \in X : x < value\}| / |X|\)
+     * where \(X\) is the set of values that have been consumed from all of the datastreams
+     * feeding the aggregates.
+     *
+     * @param value value whose quantile rank is sought.
+     * @param aggregates collection of RandomPercentile instances being combined
+     * @return estimated proportion of combined sample values that are strictly less than {@code value}
+     */
+    public double getAggregateQuantileRank(double value, Collection<RandomPercentile> aggregates) {
+        return getAggregateRank(value, aggregates) / getAggregateN(aggregates);
+    }
+
+    /**
+     * Returns the total number of values that have been consumed by the aggregates.
+     *
+     * @param aggregates collection of RandomPercentile instances whose combined sample size is sought
+     * @return total number of values that have been consumbed by the aggregates
+     */
+    public double getAggregateN(Collection<RandomPercentile> aggregates) {
+        double result = 0;
+        final Iterator<RandomPercentile> iterator = aggregates.iterator();
+        while (iterator.hasNext()) {
+            result += iterator.next().getN();
+        }
+        return result;
+    }
+
+    /**
+     * Aggregates the provided instance into this instance.
+     * <p>
+     * Other must have the same buffer size as this. If the combined data size
+     * exceeds the maximum storage configured for this instance, buffers are
+     * merged to create capacity. If all that is needed is computation of
+     * aggregate results, {@link #reduce(double, Collection)} is faster,
+     * may be more accurate and does not require the buffer sizes to be the same.
+     *
+     * @param other the instance to aggregate into this instance
+     * @throws NullArgumentException if the input is null
+     * @throws IllegalArgumentException if other has different buffer size than this
+     */
+    @Override
+    public void aggregate(RandomPercentile other)
+        throws NullArgumentException {
+        if (other == null) {
+            throw new NullArgumentException();
+        }
+        if (other.s != s) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INTERNAL_ERROR);
+        }
+        bufferMap.absorb(other.bufferMap);
+        n += other.n;
     }
 }
