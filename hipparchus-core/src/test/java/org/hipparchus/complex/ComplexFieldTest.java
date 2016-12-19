@@ -16,9 +16,12 @@
  */
 package org.hipparchus.complex;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.complex.Complex;
-import org.hipparchus.complex.ComplexField;
+import org.hipparchus.util.Decimal64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,6 +35,23 @@ public class ComplexFieldTest {
     @Test
     public void testOne() {
         Assert.assertEquals(Complex.ONE, ComplexField.getInstance().getOne());
+    }
+
+    @Test
+    public void testMap() {
+        Map<Field<?>, Integer> map = new HashMap<>();
+        for (int i = 1; i < 100; ++i) {
+            map.put(new Complex(i).getField(), 0);
+        }
+        // there should be only one field for all values
+        Assert.assertEquals(1, map.size());
+        Assert.assertTrue(ComplexField.getInstance().equals(map.entrySet().iterator().next().getKey()));
+        Assert.assertFalse(ComplexField.getInstance().equals(Decimal64Field.getInstance()));
+    }
+
+    @Test
+    public void testRunTImeClass() {
+        Assert.assertEquals(Complex.class, ComplexField.getInstance().getRuntimeClass());
     }
 
     @Test

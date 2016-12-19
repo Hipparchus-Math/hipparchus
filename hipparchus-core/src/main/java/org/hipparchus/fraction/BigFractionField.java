@@ -63,6 +63,19 @@ public class BigFractionField implements Field<BigFraction>, Serializable  {
     public Class<? extends FieldElement<BigFraction>> getRuntimeClass() {
         return BigFraction.class;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object other) {
+        return this == other;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return 0x7666e832;
+    }
+
     // CHECKSTYLE: stop HideUtilityClassConstructor
     /** Holder for the instance.
      * <p>We use here the Initialization On Demand Holder Idiom.</p>

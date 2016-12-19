@@ -64,6 +64,18 @@ public class ComplexField implements Field<Complex>, Serializable {
         return Complex.class;
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object other) {
+        return this == other;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return 0x49250ae5;
+    }
+
     // CHECKSTYLE: stop HideUtilityClassConstructor
     /** Holder for the instance.
      * <p>We use here the Initialization On Demand Holder Idiom.</p>

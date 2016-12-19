@@ -16,6 +16,8 @@
  */
 package org.hipparchus.util;
 
+import java.io.Serializable;
+
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 
@@ -24,10 +26,10 @@ import org.hipparchus.FieldElement;
  *
  * @see Decimal64
  */
-public class Decimal64Field implements Field<Decimal64> {
+public class Decimal64Field implements Field<Decimal64>, Serializable {
 
-    /** The unique instance of this class. */
-    private static final Decimal64Field INSTANCE = new Decimal64Field();
+    /** Serializable version identifier */
+    private static final long serialVersionUID = 20161219L;
 
     /** Default constructor. */
     private Decimal64Field() {
@@ -40,7 +42,7 @@ public class Decimal64Field implements Field<Decimal64> {
      * @return the unique instance of this class
      */
     public static final Decimal64Field getInstance() {
-        return INSTANCE;
+        return LazyHolder.INSTANCE;
     }
 
     /** {@inheritDoc} */
@@ -60,4 +62,35 @@ public class Decimal64Field implements Field<Decimal64> {
     public Class<? extends FieldElement<Decimal64>> getRuntimeClass() {
         return Decimal64.class;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object other) {
+        return this == other;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return 0x0a04d2bf;
+    }
+
+    // CHECKSTYLE: stop HideUtilityClassConstructor
+    /** Holder for the instance.
+     * <p>We use here the Initialization On Demand Holder Idiom.</p>
+     */
+    private static class LazyHolder {
+        /** Cached field instance. */
+        private static final Decimal64Field INSTANCE = new Decimal64Field();
+    }
+    // CHECKSTYLE: resume HideUtilityClassConstructor
+
+    /** Handle deserialization of the singleton.
+     * @return the singleton instance
+     */
+    private Object readResolve() {
+        // return the singleton instance
+        return LazyHolder.INSTANCE;
+    }
+
 }

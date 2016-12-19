@@ -16,10 +16,14 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hipparchus.ExtendedFieldElementAbstractTest;
+import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.random.Well1024a;
@@ -1111,6 +1115,49 @@ public class SparseGradientTest extends ExtendedFieldElementAbstractTest<SparseG
         SparseGradient a = SparseGradient.createVariable(0, 1.3);
         SparseGradient b = (SparseGradient) UnitTestUtils.serializeAndRecover(a);
         Assert.assertEquals(a, b);
+    }
+
+    @Test
+    public void testZero() {
+        SparseGradient zero = SparseGradient.createVariable(0, 17.0).getField().getZero();
+        Assert.assertEquals(0, zero.numVars());
+        Assert.assertEquals(0.0, zero.getValue(), 1.0e-15);
+        Assert.assertEquals(0.0, zero.getDerivative(0), 1.0e-15);
+    }
+
+    @Test
+    public void testOne() {
+        SparseGradient one = SparseGradient.createVariable(0, 17.0).getField().getOne();
+        Assert.assertEquals(0, one.numVars());
+        Assert.assertEquals(1.0, one.getValue(), 1.0e-15);
+        Assert.assertEquals(0.0, one.getDerivative(0), 1.0e-15);
+    }
+
+    @Test
+    public void testMap() {
+        List<int[]> pairs = new ArrayList<>();
+        for (int parameters = 1; parameters < 5; ++parameters) {
+            for (int order = 0; order < 3; ++order) {
+                pairs.add(new int[] { parameters, order });
+            }
+        }
+        Map<Field<?>, Integer> map = new HashMap<>();
+        for (int i = 0; i < 1000; ++i) {
+            map.put(SparseGradient.createVariable(i, 17.0).getField(), 0);
+        }
+
+        Assert.assertEquals(1, map.size());
+        @SuppressWarnings("unchecked")
+        Field<SparseGradient> first = (Field<SparseGradient>) map.entrySet().iterator().next().getKey();
+        Assert.assertTrue(first.equals(first));
+        Assert.assertFalse(first.equals(new DerivativeStructure(1, 1, 0.0).getField()));
+
+    }
+
+    @Test
+    public void testRunTimeClass() {
+        Field<SparseGradient> field = SparseGradient.createVariable(5, 17.0).getField();
+        Assert.assertEquals(SparseGradient.class, field.getRuntimeClass());
     }
 
     private void checkF0F1(SparseGradient sg, double value, double...derivatives) {

@@ -265,6 +265,28 @@ public class FDSFactory<T extends RealFieldElement<T>> {
             return (Class<? extends FieldElement<FieldDerivativeStructure<T>>>) zero.getClass();
         }
 
+        /** {@inheritDoc} */
+        @Override
+        public boolean equals(final Object other) {
+            if (this == other) {
+                return true;
+            } else if (other instanceof DerivativeField) {
+                FDSFactory<T> lhsFactory = zero.getFactory();
+                FDSFactory<?> rhsFactory = ((DerivativeField<?>) other).zero.getFactory();
+                return lhsFactory.compiler == rhsFactory.compiler &&
+                       lhsFactory.valueField.equals(rhsFactory.valueField);
+            } else {
+                return false;
+            }
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int hashCode() {
+            final DSCompiler compiler = zero.getFactory().getCompiler();
+            return 0x58d35de8 ^ (compiler.getFreeParameters() << 16 & compiler.getOrder());
+        }
+
     }
 
 }

@@ -17,9 +17,11 @@
 package org.hipparchus.util;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.util.BigReal;
-import org.hipparchus.util.BigRealField;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -33,6 +35,23 @@ public class BigRealFieldTest {
     @Test
     public void testOne() {
         Assert.assertEquals(BigReal.ONE, BigRealField.getInstance().getOne());
+    }
+
+    @Test
+    public void testMap() {
+        Map<Field<?>, Integer> map = new HashMap<>();
+        for (int i = 1; i < 100; ++i) {
+            map.put(new BigReal(i).getField(), 0);
+        }
+        // there should be only one field for all values
+        Assert.assertEquals(1, map.size());
+        Assert.assertTrue(BigRealField.getInstance().equals(map.entrySet().iterator().next().getKey()));
+        Assert.assertFalse(BigRealField.getInstance().equals(Decimal64Field.getInstance()));
+    }
+
+    @Test
+    public void testRunTImeClass() {
+        Assert.assertEquals(BigReal.class, BigRealField.getInstance().getRuntimeClass());
     }
 
     @Test

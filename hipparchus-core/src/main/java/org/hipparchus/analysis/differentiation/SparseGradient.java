@@ -304,27 +304,72 @@ public class SparseGradient implements RealFieldElement<SparseGradient>, Seriali
     /** {@inheritDoc} */
     @Override
     public Field<SparseGradient> getField() {
-        return new Field<SparseGradient>() {
+        return SparseGradientField.getInstance();
+    }
 
-            /** {@inheritDoc} */
-            @Override
-            public SparseGradient getZero() {
-                return createConstant(0);
-            }
+    /** Local field for sparse gradient. */
+    private static class SparseGradientField implements Field<SparseGradient> {
 
-            /** {@inheritDoc} */
-            @Override
-            public SparseGradient getOne() {
-                return createConstant(1);
-            }
+        /** Zero constant. */
+        private final SparseGradient zero;
 
-            /** {@inheritDoc} */
-            @Override
-            public Class<? extends FieldElement<SparseGradient>> getRuntimeClass() {
-                return SparseGradient.class;
-            }
+        /** One constant. */
+        private final SparseGradient one;
 
-        };
+        /** Private constructor for the singleton.
+         */
+        private SparseGradientField() {
+            zero = createConstant(0);
+            one  = createConstant(1);
+        }
+
+        /** Get the unique instance.
+         * @return the unique instance
+         */
+        public static SparseGradientField getInstance() {
+            return LazyHolder.INSTANCE;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public SparseGradient getZero() {
+            return zero;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public SparseGradient getOne() {
+            return one;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public Class<? extends FieldElement<SparseGradient>> getRuntimeClass() {
+            return SparseGradient.class;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public boolean equals(final Object other) {
+            return this == other;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public int hashCode() {
+            return 0x142aeff7;
+        }
+
+        // CHECKSTYLE: stop HideUtilityClassConstructor
+        /** Holder for the instance.
+         * <p>We use here the Initialization On Demand Holder Idiom.</p>
+         */
+        private static class LazyHolder {
+            /** Cached field instance. */
+            private static final SparseGradientField INSTANCE = new SparseGradientField();
+        }
+        // CHECKSTYLE: resume HideUtilityClassConstructor
+
     }
 
     /** {@inheritDoc} */

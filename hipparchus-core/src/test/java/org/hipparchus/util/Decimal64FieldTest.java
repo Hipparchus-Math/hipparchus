@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.hipparchus.fraction;
+package org.hipparchus.util;
 
 
 import java.util.HashMap;
@@ -22,46 +22,42 @@ import java.util.Map;
 
 import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
-import org.hipparchus.fraction.BigFraction;
-import org.hipparchus.fraction.BigFractionField;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class BigFractionFieldTest {
+public class Decimal64FieldTest {
 
     @Test
     public void testZero() {
-        Assert.assertEquals(BigFraction.ZERO, BigFractionField.getInstance().getZero());
+        Assert.assertEquals(Decimal64.ZERO, Decimal64Field.getInstance().getZero());
     }
 
     @Test
     public void testOne() {
-        Assert.assertEquals(BigFraction.ONE, BigFractionField.getInstance().getOne());
+        Assert.assertEquals(Decimal64.ONE, Decimal64Field.getInstance().getOne());
     }
 
     @Test
     public void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();
         for (int i = 1; i < 100; ++i) {
-            for (int j = 1; j < 100; ++j) {
-                map.put(new BigFraction(i, j).getField(), 0);
-            }
+            map.put(new Decimal64(i).getField(), 0);
         }
-        // there should be only one field for all fractions
+        // there should be only one field for all values
         Assert.assertEquals(1, map.size());
-        Assert.assertTrue(BigFractionField.getInstance().equals(map.entrySet().iterator().next().getKey()));
-        Assert.assertFalse(BigFractionField.getInstance().equals(FractionField.getInstance()));
+        Assert.assertTrue(Decimal64Field.getInstance().equals(map.entrySet().iterator().next().getKey()));
+        Assert.assertFalse(Decimal64Field.getInstance().equals(BigRealField.getInstance()));
     }
 
     @Test
     public void testRunTImeClass() {
-        Assert.assertEquals(BigFraction.class, BigFractionField.getInstance().getRuntimeClass());
+        Assert.assertEquals(Decimal64.class, Decimal64Field.getInstance().getRuntimeClass());
     }
 
     @Test
     public void testSerial() {
         // deserializing the singleton should give the singleton itself back
-        BigFractionField field = BigFractionField.getInstance();
+        Decimal64Field field = Decimal64Field.getInstance();
         Assert.assertTrue(field == UnitTestUtils.serializeAndRecover(field));
     }
 

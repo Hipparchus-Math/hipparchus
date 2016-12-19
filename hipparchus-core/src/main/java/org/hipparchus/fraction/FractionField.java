@@ -63,6 +63,19 @@ public class FractionField implements Field<Fraction>, Serializable  {
     public Class<? extends FieldElement<Fraction>> getRuntimeClass() {
         return Fraction.class;
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public boolean equals(final Object other) {
+        return this == other;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return 0xac885ac5;
+    }
+
     // CHECKSTYLE: stop HideUtilityClassConstructor
     /** Holder for the instance.
      * <p>We use here the Initialization On Demand Holder Idiom.</p>

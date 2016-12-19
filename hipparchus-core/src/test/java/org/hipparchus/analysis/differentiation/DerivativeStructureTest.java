@@ -17,16 +17,21 @@
 
 package org.hipparchus.analysis.differentiation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hipparchus.ExtendedFieldElementAbstractTest;
+import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.CombinatoricsUtils;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -1570,6 +1575,58 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         Assert.assertEquals(a.getFreeParameters(), b.getFreeParameters());
         Assert.assertEquals(a.getOrder(), b.getOrder());
         checkEquals(a, b, 1.0e-15);
+    }
+
+    @Test
+    public void testZero() {
+        DerivativeStructure zero = new DerivativeStructure(3, 2, 2, 17.0).getField().getZero();
+        double[] a = zero.getAllDerivatives();
+        Assert.assertEquals(10, a.length);
+        for (int i = 0; i < a.length; ++i) {
+            Assert.assertEquals(0.0, a[i], 1.0e-15);
+        }
+    }
+
+    @Test
+    public void testOne() {
+        DerivativeStructure one = new DerivativeStructure(3, 2, 2, 17.0).getField().getOne();
+        double[] a = one.getAllDerivatives();
+        Assert.assertEquals(10, a.length);
+        for (int i = 0; i < a.length; ++i) {
+            Assert.assertEquals(i == 0 ? 1.0 : 0.0, a[i], 1.0e-15);
+        }
+    }
+
+    @Test
+    public void testMap() {
+        List<int[]> pairs = new ArrayList<>();
+        for (int parameters = 1; parameters < 5; ++parameters) {
+            for (int order = 0; order < 3; ++order) {
+                pairs.add(new int[] { parameters, order });
+            }
+        }
+        Map<Field<?>, Integer> map = new HashMap<>();
+        for (int i = 0; i < 1000; ++i) {
+            // create a brand new factory for each derivative
+            int parameters = pairs.get(i % pairs.size())[0];
+            int order      = pairs.get(i % pairs.size())[1];
+            map.put(new DerivativeStructure(parameters, order, 17.0).getField(), 0);
+        }
+
+        // despite we have created numerous factories,
+        // there should be only one field for each pair parameters/order
+        Assert.assertEquals(pairs.size(), map.size());
+        @SuppressWarnings("unchecked")
+        Field<DerivativeStructure> first = (Field<DerivativeStructure>) map.entrySet().iterator().next().getKey();
+        Assert.assertTrue(first.equals(first));
+        Assert.assertFalse(first.equals(Decimal64Field.getInstance()));
+
+    }
+
+    @Test
+    public void testRunTimeClass() {
+        Field<DerivativeStructure> field = new DerivativeStructure(3, 2, 0.0).getField();
+        Assert.assertEquals(DerivativeStructure.class, field.getRuntimeClass());
     }
 
     private void checkF0F1(DerivativeStructure ds, double value, double...derivatives) {

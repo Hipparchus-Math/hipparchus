@@ -17,6 +17,10 @@
 package org.hipparchus.fraction;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.hipparchus.Field;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
@@ -33,6 +37,25 @@ public class FractionFieldTest {
     @Test
     public void testOne() {
         Assert.assertEquals(Fraction.ONE, FractionField.getInstance().getOne());
+    }
+
+    @Test
+    public void testMap() {
+        Map<Field<?>, Integer> map = new HashMap<>();
+        for (int i = 1; i < 100; ++i) {
+            for (int j = 1; j < 100; ++j) {
+                map.put(new Fraction(i, j).getField(), 0);
+            }
+        }
+        // there should be only one field for all fractions
+        Assert.assertEquals(1, map.size());
+        Assert.assertTrue(FractionField.getInstance().equals(map.entrySet().iterator().next().getKey()));
+        Assert.assertFalse(FractionField.getInstance().equals(BigFractionField.getInstance()));
+    }
+
+    @Test
+    public void testRunTImeClass() {
+        Assert.assertEquals(Fraction.class, FractionField.getInstance().getRuntimeClass());
     }
 
     @Test

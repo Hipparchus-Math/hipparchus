@@ -521,6 +521,31 @@ public class DfpField implements Field<Dfp> {
         return ln10;
     }
 
+    /** {@inheritDoc}
+     * <p>
+     * Two fields are considered equals if they have the same number
+     * of radix digits and the same rounding mode.
+     * </p>
+     */
+    @Override
+    public boolean equals(final Object other) {
+        if (this == other) {
+            return true;
+        } else if (other instanceof DfpField) {
+            DfpField rhs = (DfpField) other;
+            return getRadixDigits()  == rhs.getRadixDigits()  &&
+                   getRoundingMode() == rhs.getRoundingMode();
+        } else {
+            return false;
+        }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public int hashCode() {
+        return 0xdf49a2ca ^ ((radixDigits << 16) & (rMode.ordinal() << 5) & ieeeFlags);
+    }
+
     /** Breaks a string representation up into two {@link Dfp}'s.
      * The split is such that the sum of them is equivalent to the input string,
      * but has higher precision than using a single Dfp.

@@ -630,27 +630,58 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     /** {@inheritDoc} */
     @Override
     public Field<DerivativeStructure> getField() {
-        return new Field<DerivativeStructure>() {
+        return new DerivativeStructureField(compiler);
+    }
 
-            /** {@inheritDoc} */
-            @Override
-            public DerivativeStructure getZero() {
-                return new DerivativeStructure(compiler.getFreeParameters(), compiler.getOrder(), 0.0);
+    /** Local Field for DerivativeStructure. */
+    private static class DerivativeStructureField implements Field<DerivativeStructure> {
+
+        /** Compiler for the current dimensions. */
+        private transient DSCompiler compiler;
+
+        /** Simple constructor.
+         * @param compiler compiler for the current dimensions
+         */
+        DerivativeStructureField(final DSCompiler compiler) {
+            this.compiler = compiler;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public DerivativeStructure getZero() {
+            return new DerivativeStructure(compiler.getFreeParameters(), compiler.getOrder(), 0.0);
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public DerivativeStructure getOne() {
+            return new DerivativeStructure(compiler.getFreeParameters(), compiler.getOrder(), 1.0);
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public Class<? extends FieldElement<DerivativeStructure>> getRuntimeClass() {
+            return DerivativeStructure.class;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public boolean equals(final Object other) {
+            if (this == other) {
+                return true;
+            } else if (other instanceof DerivativeStructureField) {
+                return compiler == ((DerivativeStructureField) other).compiler;
+            } else {
+                return false;
             }
+        }
 
-            /** {@inheritDoc} */
-            @Override
-            public DerivativeStructure getOne() {
-                return new DerivativeStructure(compiler.getFreeParameters(), compiler.getOrder(), 1.0);
-            }
+        /** {@inheritDoc} */
+        @Override
+        public int hashCode() {
+            return 0x9943b886 ^ (compiler.getFreeParameters() << 16 & compiler.getOrder());
+        }
 
-            /** {@inheritDoc} */
-            @Override
-            public Class<? extends FieldElement<DerivativeStructure>> getRuntimeClass() {
-                return DerivativeStructure.class;
-            }
-
-        };
     }
 
     /** Compute a<sup>x</sup> where a is a double and x a {@link DerivativeStructure}

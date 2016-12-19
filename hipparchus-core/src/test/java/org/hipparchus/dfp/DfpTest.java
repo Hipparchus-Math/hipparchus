@@ -17,9 +17,11 @@
 
 package org.hipparchus.dfp;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.hipparchus.ExtendedFieldElementAbstractTest;
-import org.hipparchus.dfp.Dfp;
-import org.hipparchus.dfp.DfpField;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Precision;
 import org.junit.After;
@@ -1660,6 +1662,58 @@ public class DfpTest extends ExtendedFieldElementAbstractTest<Dfp> {
 
         // Checks the contract:  equals-hashcode on var5 and var6
         Assert.assertTrue(var5.equals(var6) ? var5.hashCode() == var6.hashCode() : true);
+    }
+
+    @Test
+    public void testZero() {
+        Dfp zero = new DfpField(15).getZero();
+        Assert.assertEquals(0.0, zero.toDouble(), 1.0e-15);
+    }
+
+    @Test
+    public void testOne() {
+        Dfp one = new DfpField(15).getOne();
+        Assert.assertEquals(1.0, one.toDouble(), 1.0e-15);
+    }
+
+    @Test
+    public void testMap() {
+        int[] decimalDigits = new int[] { 10, 50, 100 }; 
+        Map<DfpField, Integer> map = new HashMap<>();
+        for (int i = 0; i < 1000; ++i) {
+            // create a brand new DfpField for each derivative
+            map.put(new DfpField(decimalDigits[i % decimalDigits.length]), 0);
+        }
+
+        // despite we have created numerous DfpField instances,
+        // there should be only one field for each precision
+        Assert.assertEquals(decimalDigits.length, map.size());
+        DfpField first = map.entrySet().iterator().next().getKey();
+        Assert.assertTrue(first.equals(first));
+        Assert.assertFalse(first.equals(Decimal64Field.getInstance()));
+
+    }
+
+    @Test
+    public void testEquals() {
+        DfpField f10A = new DfpField(10);
+        DfpField f10B = new DfpField(10);
+        DfpField f50  = new DfpField(50);
+        Assert.assertNotEquals(f10A, f50);
+        Assert.assertEquals(f10A, f10B);
+        f10B.setRoundingMode(DfpField.RoundingMode.ROUND_DOWN);
+        Assert.assertNotEquals(f10A, f10B);
+        f10B.setRoundingMode(DfpField.RoundingMode.ROUND_HALF_EVEN);
+        Assert.assertEquals(f10A, f10B);
+        f10B.setIEEEFlags(DfpField.FLAG_UNDERFLOW | DfpField.FLAG_OVERFLOW);
+        Assert.assertNotEquals(f10A.getIEEEFlags(), f10B.getIEEEFlags());
+        Assert.assertEquals(f10A, f10B);
+    }
+
+    @Test
+    public void testRunTimeClass() {
+        DfpField field = new DfpField(15);
+        Assert.assertEquals(Dfp.class, field.getRuntimeClass());
     }
 
 }

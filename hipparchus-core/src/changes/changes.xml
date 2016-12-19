@@ -51,6 +51,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="1.1" date="TBD" description="This is a maintenance release.">
       <action dev="luc" type="add">
+        Added proper implementations of equals and hashCode to Fields so they
+        can be used as keys in maps.
+      </action>
+      <action dev="luc" type="add">
         Added a derivatives method in Hermite interpolator, similar to the one
         from FieldHermiteInterpolator.
       </action>

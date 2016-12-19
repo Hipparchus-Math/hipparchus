@@ -17,11 +17,17 @@
 
 package org.hipparchus.analysis.differentiation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hipparchus.ExtendedFieldElementAbstractTest;
+import org.hipparchus.Field;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
+import org.hipparchus.dfp.Dfp;
+import org.hipparchus.dfp.DfpField;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.ArithmeticUtils;
@@ -1876,6 +1882,71 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
             Assert.assertEquals(u[3].getReal(), lin.getPartialDerivative(0, 0, 0, 1).getReal(), 1.0e-15 * FastMath.abs(v[3].getReal()));
 
         }
+    }
+
+    @Test
+    public void testZero() {
+        FDSFactory<Decimal64> factory = new FDSFactory<>(Decimal64Field.getInstance(), 3, 2);
+        FieldDerivativeStructure<Decimal64> zero = factory.build(17).getField().getZero();
+        Decimal64[] a = zero.getAllDerivatives();
+        Assert.assertEquals(10, a.length);
+        for (int i = 0; i < a.length; ++i) {
+            Assert.assertEquals(Decimal64.ZERO, a[i]);
+        }
+    }
+
+    @Test
+    public void testOne() {
+        FDSFactory<Decimal64> factory = new FDSFactory<>(Decimal64Field.getInstance(), 3, 2);
+        FieldDerivativeStructure<Decimal64> one = factory.build(17).getField().getOne();
+        Decimal64[] a = one.getAllDerivatives();
+        Assert.assertEquals(10, a.length);
+        for (int i = 0; i < a.length; ++i) {
+            Assert.assertEquals(i == 0 ? Decimal64.ONE : Decimal64.ZERO, a[i]);
+        }
+    }
+
+    @Test
+    public void testMap() {
+        List<int[]> pairs = new ArrayList<>();
+        for (int parameters = 1; parameters < 5; ++parameters) {
+            for (int order = 0; order < 3; ++order) {
+                pairs.add(new int[] { parameters, order });
+            }
+        }
+        Map<Field<?>, Integer> map = new HashMap<>();
+        for (int i = 0; i < 1000; ++i) {
+            // create a brand new factory for each derivative
+            int parameters = pairs.get(i % pairs.size())[0];
+            int order      = pairs.get(i % pairs.size())[1];
+            FDSFactory<Decimal64> factory = new FDSFactory<>(Decimal64Field.getInstance(), parameters, order);
+            map.put(factory.build(new Decimal64(17)).getField(), 0);
+        }
+
+        // despite we have created numerous factories,
+        // there should be only one field for each pair parameters/order
+        Assert.assertEquals(pairs.size(), map.size());
+        @SuppressWarnings("unchecked")
+        Field<FieldDerivativeStructure<Decimal64>> first = (Field<FieldDerivativeStructure<Decimal64>>) map.entrySet().iterator().next().getKey();
+        Assert.assertTrue(first.equals(first));
+        Assert.assertFalse(first.equals(Decimal64Field.getInstance()));
+
+        // even at same parameters and differentiation orders, different values generate different fields
+        FieldDerivativeStructure<Decimal64> zero64 = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, 2).build();
+        FieldDerivativeStructure<Dfp> zeroDFP = new FDSFactory<Dfp>(new DfpField(15), 3, 2).build();
+        Assert.assertEquals(zero64.getFreeParameters(), zeroDFP.getFreeParameters());
+        Assert.assertEquals(zero64.getOrder(), zeroDFP.getOrder());
+        Assert.assertFalse(zero64.getField().equals(zeroDFP.getField()));
+    }
+
+    @Test
+    public void testRunTimeClass() {
+        FDSFactory<Decimal64> factory = new FDSFactory<>(Decimal64Field.getInstance(), 3, 2);
+        Field<FieldDerivativeStructure<Decimal64>> field = factory.getDerivativeField();
+        Assert.assertEquals(FieldDerivativeStructure.class, field.getRuntimeClass());
+        Assert.assertEquals(Decimal64Field.getInstance(), factory.getValueField());
+        Assert.assertEquals("org.hipparchus.analysis.differentiation.FDSFactory$DerivativeField",
+                            factory.getDerivativeField().getClass().getName());
     }
 
     private void checkF0F1(FieldDerivativeStructure<Decimal64> ds, double value, double...derivatives) {
