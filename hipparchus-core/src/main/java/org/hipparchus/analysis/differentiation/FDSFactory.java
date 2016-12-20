@@ -25,7 +25,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathArrays;
 
-/** Field for {@link FieldDerivativeStructure}.
+/** Factory for {@link FieldDerivativeStructure}.
  * <p>This class is a factory for {@link FieldDerivativeStructure} instances.</p>
  * <p>Instances of this class are guaranteed to be immutable.</p>
  * @see FieldDerivativeStructure
@@ -95,7 +95,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @param value value of the variable
      * @exception MathIllegalArgumentException if index if greater or
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
-     * @see #FieldDerivativeStructure((int, int, T)
+     * @see #FieldDerivativeStructure(int, int, T)
      */
     public FieldDerivativeStructure<T> build(final int index, final T value)
         throws MathIllegalArgumentException {

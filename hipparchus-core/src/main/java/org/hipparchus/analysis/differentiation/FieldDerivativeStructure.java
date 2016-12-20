@@ -377,7 +377,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
     /** {@inheritDoc}
      */
     @Override
-    public FieldDerivativeStructure<T> copySign(final FieldDerivativeStructure<T> sign){
+    public FieldDerivativeStructure<T> copySign(final FieldDerivativeStructure<T> sign) {
         long m = Double.doubleToLongBits(data[0].getReal());
         long s = Double.doubleToLongBits(sign.data[0].getReal());
         if ((m >= 0 && s >= 0) || (m < 0 && s < 0)) { // Sign is currently OK

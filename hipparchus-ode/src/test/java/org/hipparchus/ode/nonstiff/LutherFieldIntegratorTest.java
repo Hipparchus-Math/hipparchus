@@ -107,7 +107,7 @@ public class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstract
 
     @Override
     public void testPartialDerivatives() {
-        doTestPartialDerivatives(4.3e-13, new double[] { 2.2e-12, 5.6e-13, 9.4e-14, 9.4e-14, 5.6e-13 });
+        doTestPartialDerivatives(4.4e-13, new double[] { 2.3e-12, 5.6e-13, 9.5e-14, 9.5e-14, 5.6e-13 });
     }
 
     @Test

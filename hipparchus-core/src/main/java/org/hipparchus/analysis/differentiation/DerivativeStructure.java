@@ -19,9 +19,7 @@ package org.hipparchus.analysis.differentiation;
 import java.io.Serializable;
 
 import org.hipparchus.Field;
-import org.hipparchus.FieldElement;
 import org.hipparchus.RealFieldElement;
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
@@ -61,30 +59,40 @@ import org.hipparchus.util.MathUtils;
 public class DerivativeStructure implements RealFieldElement<DerivativeStructure>, Serializable {
 
     /** Serializable UID. */
-    private static final long serialVersionUID = 20120730L;
+    private static final long serialVersionUID = 20161220L;
 
-    /** Compiler for the current dimensions. */
-    private transient DSCompiler compiler;
+    /** Factory that built the instance. */
+    private final DSFactory factory;
 
     /** Combined array holding all values. */
     private final double[] data;
 
     /** Build an instance with all values and derivatives set to 0.
-     * @param compiler compiler to use for computation
+     * @param factory factory that built the instance
+     * @param data combined array holding all values
      */
-    private DerivativeStructure(final DSCompiler compiler) {
-        this.compiler = compiler;
-        this.data     = new double[compiler.getSize()];
+    DerivativeStructure(final DSFactory factory, final double[] data) {
+        this.factory = factory;
+        this.data    = data;
     }
 
     /** Build an instance with all values and derivatives set to 0.
      * @param parameters number of free parameters
      * @param order derivation order
      * @throws MathIllegalArgumentException if order is too large
+     * @deprecated as of 1.1, replaced by {@link DSFactory#build()}
      */
+    @Deprecated
     public DerivativeStructure(final int parameters, final int order)
         throws MathIllegalArgumentException {
-        this(DSCompiler.getCompiler(parameters, order));
+        this(new DSFactory(parameters, order).build());
+    }
+
+    /** Get the factory that built the instance.
+     * @return factory that built the instance
+     */
+    public DSFactory getFactory() {
+        return factory;
     }
 
     /** Build an instance representing a constant value.
@@ -92,12 +100,12 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param order derivation order
      * @param value value of the constant
      * @throws MathIllegalArgumentException if order is too large
-     * @see #DerivativeStructure(int, int, int, double)
+     * @deprecated as of 1.1, replaced by {@link DSFactory#build(double)}
      */
+    @Deprecated
     public DerivativeStructure(final int parameters, final int order, final double value)
         throws MathIllegalArgumentException {
-        this(parameters, order);
-        this.data[0] = value;
+        this(new DSFactory(parameters, order).build(value));
     }
 
     /** Build an instance representing a variable.
@@ -110,23 +118,13 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param index index of the variable (from 0 to {@code parameters - 1})
      * @param value value of the variable
      * @exception MathIllegalArgumentException if {@code index &ge; parameters}.
-     * @see #DerivativeStructure(int, int, double)
+     * @deprecated as of 1.1, replaced by {@link DSFactory#build(int, double)}
      */
+    @Deprecated
     public DerivativeStructure(final int parameters, final int order,
                                final int index, final double value)
         throws MathIllegalArgumentException {
-        this(parameters, order, value);
-
-        if (index >= parameters) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED,
-                                                   index, parameters);
-        }
-
-        if (order > 0) {
-            // the derivative of the variable with respect to itself is 1.
-            data[DSCompiler.getCompiler(index, order).getSize()] = 1.0;
-        }
-
+        this(new DSFactory(parameters, order).build(index, value));
     }
 
     /** Linear combination constructor.
@@ -136,13 +134,13 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param a2 second scale factor
      * @param ds2 second base (unscaled) derivative structure
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
+     * @deprecated as of 1.1, replaced by {@link #linearCombination(double, DerivativeStructure, double, DerivativeStructure)}
      */
+    @Deprecated
     public DerivativeStructure(final double a1, final DerivativeStructure ds1,
                                final double a2, final DerivativeStructure ds2)
         throws MathIllegalArgumentException {
-        this(ds1.compiler);
-        compiler.checkCompatibility(ds2.compiler);
-        compiler.linearCombination(a1, ds1.data, 0, a2, ds2.data, 0, data, 0);
+        this(ds1.linearCombination(a1, ds1, a2, ds2));
     }
 
     /** Linear combination constructor.
@@ -154,15 +152,15 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param a3 third scale factor
      * @param ds3 third base (unscaled) derivative structure
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
+     * @deprecated as of 1.1, replaced by {@link #linearCombination(double, DerivativeStructure,
+     * double, DerivativeStructure, double, DerivativeStructure))}
      */
+    @Deprecated
     public DerivativeStructure(final double a1, final DerivativeStructure ds1,
                                final double a2, final DerivativeStructure ds2,
                                final double a3, final DerivativeStructure ds3)
         throws MathIllegalArgumentException {
-        this(ds1.compiler);
-        compiler.checkCompatibility(ds2.compiler);
-        compiler.checkCompatibility(ds3.compiler);
-        compiler.linearCombination(a1, ds1.data, 0, a2, ds2.data, 0, a3, ds3.data, 0, data, 0);
+        this(ds1.linearCombination(a1, ds1, a2, ds2, a3, ds3));
     }
 
     /** Linear combination constructor.
@@ -176,19 +174,16 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param a4 fourth scale factor
      * @param ds4 fourth base (unscaled) derivative structure
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
+     * @deprecated as of 1.1, replaced by {@link #linearCombination(double, DerivativeStructure,
+     * double, DerivativeStructure, double, DerivativeStructure, double, DerivativeStructure))}
      */
+    @Deprecated
     public DerivativeStructure(final double a1, final DerivativeStructure ds1,
                                final double a2, final DerivativeStructure ds2,
                                final double a3, final DerivativeStructure ds3,
                                final double a4, final DerivativeStructure ds4)
         throws MathIllegalArgumentException {
-        this(ds1.compiler);
-        compiler.checkCompatibility(ds2.compiler);
-        compiler.checkCompatibility(ds3.compiler);
-        compiler.checkCompatibility(ds4.compiler);
-        compiler.linearCombination(a1, ds1.data, 0, a2, ds2.data, 0,
-                                   a3, ds3.data, 0, a4, ds4.data, 0,
-                                   data, 0);
+        this(ds1.linearCombination(a1, ds1, a2, ds2, a3, ds3, a4, ds4));
     }
 
     /** Build an instance from all its derivatives.
@@ -199,35 +194,36 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @exception MathIllegalArgumentException if derivatives array does not match the
      * {@link DSCompiler#getSize() size} expected by the compiler
      * @throws MathIllegalArgumentException if order is too large
-     * @see #getAllDerivatives()
+     * @deprecated as of 1.1, replaced by {@link DSFactory#build(double...)}
      */
+    @Deprecated
     public DerivativeStructure(final int parameters, final int order, final double ... derivatives)
         throws MathIllegalArgumentException {
-        this(parameters, order);
-        MathArrays.checkEqualLength(derivatives, data);
-        System.arraycopy(derivatives, 0, data, 0, data.length);
+        this(new DSFactory(parameters, order).build(derivatives));
     }
 
     /** Copy constructor.
      * @param ds instance to copy
+     * @deprecated as of 1.1, this method is used only for implementing other deprecated constructors
      */
+    @Deprecated
     private DerivativeStructure(final DerivativeStructure ds) {
-        this.compiler = ds.compiler;
-        this.data     = ds.data.clone();
+        this.factory = ds.factory;
+        this.data    = ds.data.clone();
     }
 
     /** Get the number of free parameters.
      * @return number of free parameters
      */
     public int getFreeParameters() {
-        return compiler.getFreeParameters();
+        return getFactory().getCompiler().getFreeParameters();
     }
 
     /** Get the derivation order.
      * @return derivation order
      */
     public int getOrder() {
-        return compiler.getOrder();
+        return getFactory().getCompiler().getOrder();
     }
 
     /** Create a constant compatible with instance order and number of parameters.
@@ -237,10 +233,11 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * </p>
      * @param c value of the constant
      * @return a constant compatible with instance order and number of parameters
-     * @see #DerivativeStructure(int, int, double)
+     * @deprecated as of 1.1, replaced by {@link DSFactory#build(double)}
      */
+    @Deprecated
     public DerivativeStructure createConstant(final double c) {
-        return new DerivativeStructure(getFreeParameters(), getOrder(), c);
+        return factory.build(c);
     }
 
     /** {@inheritDoc}
@@ -270,7 +267,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     public double getPartialDerivative(final int ... orders)
         throws MathIllegalArgumentException {
-        return data[compiler.getPartialDerivativeIndex(orders)];
+        return data[getFactory().getCompiler().getPartialDerivativeIndex(orders)];
     }
 
     /** Get all partial derivatives.
@@ -285,7 +282,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure add(final double a) {
-        final DerivativeStructure ds = new DerivativeStructure(this);
+        final DerivativeStructure ds = factory.build();
+        System.arraycopy(data, 0, ds.data, 0, data.length);
         ds.data[0] += a;
         return ds;
     }
@@ -297,9 +295,9 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     @Override
     public DerivativeStructure add(final DerivativeStructure a)
         throws MathIllegalArgumentException {
-        compiler.checkCompatibility(a.compiler);
-        final DerivativeStructure ds = new DerivativeStructure(this);
-        compiler.add(data, 0, a.data, 0, ds.data, 0);
+        factory.checkCompatibility(a.factory);
+        final DerivativeStructure ds = factory.build();
+        factory.getCompiler().add(data, 0, a.data, 0, ds.data, 0);
         return ds;
     }
 
@@ -317,9 +315,9 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     @Override
     public DerivativeStructure subtract(final DerivativeStructure a)
         throws MathIllegalArgumentException {
-        compiler.checkCompatibility(a.compiler);
-        final DerivativeStructure ds = new DerivativeStructure(this);
-        compiler.subtract(data, 0, a.data, 0, ds.data, 0);
+        factory.checkCompatibility(a.factory);
+        final DerivativeStructure ds = factory.build();
+        factory.getCompiler().subtract(data, 0, a.data, 0, ds.data, 0);
         return ds;
     }
 
@@ -333,9 +331,9 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure multiply(final double a) {
-        final DerivativeStructure ds = new DerivativeStructure(this);
+        final DerivativeStructure ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] *= a;
+            ds.data[i] = data[i] * a;
         }
         return ds;
     }
@@ -347,9 +345,9 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     @Override
     public DerivativeStructure multiply(final DerivativeStructure a)
         throws MathIllegalArgumentException {
-        compiler.checkCompatibility(a.compiler);
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.multiply(data, 0, a.data, 0, result.data, 0);
+        factory.checkCompatibility(a.factory);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().multiply(data, 0, a.data, 0, result.data, 0);
         return result;
     }
 
@@ -357,9 +355,10 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure divide(final double a) {
-        final DerivativeStructure ds = new DerivativeStructure(this);
+        final DerivativeStructure ds = factory.build();
+        final double inv = 1.0 / a;
         for (int i = 0; i < ds.data.length; ++i) {
-            ds.data[i] /= a;
+            ds.data[i] = data[i] * inv;
         }
         return ds;
     }
@@ -371,16 +370,17 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     @Override
     public DerivativeStructure divide(final DerivativeStructure a)
         throws MathIllegalArgumentException {
-        compiler.checkCompatibility(a.compiler);
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.divide(data, 0, a.data, 0, result.data, 0);
+        factory.checkCompatibility(a.factory);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().divide(data, 0, a.data, 0, result.data, 0);
         return result;
     }
 
     /** {@inheritDoc} */
     @Override
     public DerivativeStructure remainder(final double a) {
-        final DerivativeStructure ds = new DerivativeStructure(this);
+        final DerivativeStructure ds = factory.build();
+        System.arraycopy(data, 0, ds.data, 0, data.length);
         ds.data[0] = FastMath.IEEEremainder(ds.data[0], a);
         return ds;
     }
@@ -392,16 +392,16 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     @Override
     public DerivativeStructure remainder(final DerivativeStructure a)
         throws MathIllegalArgumentException {
-        compiler.checkCompatibility(a.compiler);
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.remainder(data, 0, a.data, 0, result.data, 0);
+        factory.checkCompatibility(a.factory);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().remainder(data, 0, a.data, 0, result.data, 0);
         return result;
     }
 
     /** {@inheritDoc} */
     @Override
     public DerivativeStructure negate() {
-        final DerivativeStructure ds = new DerivativeStructure(compiler);
+        final DerivativeStructure ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
             ds.data[i] = -data[i];
         }
@@ -424,27 +424,21 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure ceil() {
-        return new DerivativeStructure(compiler.getFreeParameters(),
-                                       compiler.getOrder(),
-                                       FastMath.ceil(data[0]));
+        return factory.build(FastMath.ceil(data[0]));
     }
 
     /** {@inheritDoc}
      */
     @Override
     public DerivativeStructure floor() {
-        return new DerivativeStructure(compiler.getFreeParameters(),
-                                       compiler.getOrder(),
-                                       FastMath.floor(data[0]));
+        return factory.build(FastMath.floor(data[0]));
     }
 
     /** {@inheritDoc}
      */
     @Override
     public DerivativeStructure rint() {
-        return new DerivativeStructure(compiler.getFreeParameters(),
-                                       compiler.getOrder(),
-                                       FastMath.rint(data[0]));
+        return factory.build(FastMath.rint(data[0]));
     }
 
     /** {@inheritDoc} */
@@ -457,15 +451,13 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure signum() {
-        return new DerivativeStructure(compiler.getFreeParameters(),
-                                       compiler.getOrder(),
-                                       FastMath.signum(data[0]));
+        return factory.build(FastMath.signum(data[0]));
     }
 
     /** {@inheritDoc}
      */
     @Override
-    public DerivativeStructure copySign(final DerivativeStructure sign){
+    public DerivativeStructure copySign(final DerivativeStructure sign) {
         long m = Double.doubleToLongBits(data[0]);
         long s = Double.doubleToLongBits(sign.data[0]);
         if ((m >= 0 && s >= 0) || (m < 0 && s < 0)) { // Sign is currently OK
@@ -502,7 +494,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure scalb(final int n) {
-        final DerivativeStructure ds = new DerivativeStructure(compiler);
+        final DerivativeStructure ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
             ds.data[i] = FastMath.scalb(data[i], n);
         }
@@ -517,16 +509,12 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     public DerivativeStructure hypot(final DerivativeStructure y)
         throws MathIllegalArgumentException {
 
-        compiler.checkCompatibility(y.compiler);
+        factory.checkCompatibility(y.factory);
 
         if (Double.isInfinite(data[0]) || Double.isInfinite(y.data[0])) {
-            return new DerivativeStructure(compiler.getFreeParameters(),
-                                           compiler.getFreeParameters(),
-                                           Double.POSITIVE_INFINITY);
+            return factory.build(Double.POSITIVE_INFINITY);
         } else if (Double.isNaN(data[0]) || Double.isNaN(y.data[0])) {
-            return new DerivativeStructure(compiler.getFreeParameters(),
-                                           compiler.getFreeParameters(),
-                                           Double.NaN);
+            return factory.build(Double.NaN);
         } else {
 
             final int expX = getExponent();
@@ -591,16 +579,16 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         throws MathIllegalArgumentException {
 
         MathUtils.checkDimension(f.length, getOrder() + 1);
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.compose(data, 0, f, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().compose(data, 0, f, result.data, 0);
         return result;
     }
 
     /** {@inheritDoc} */
     @Override
     public DerivativeStructure reciprocal() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.pow(data, 0, -1, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().pow(data, 0, -1, result.data, 0);
         return result;
     }
 
@@ -622,66 +610,15 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure rootN(final int n) {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.rootN(data, 0, n, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().rootN(data, 0, n, result.data, 0);
         return result;
     }
 
     /** {@inheritDoc} */
     @Override
     public Field<DerivativeStructure> getField() {
-        return new DerivativeStructureField(compiler);
-    }
-
-    /** Local Field for DerivativeStructure. */
-    private static class DerivativeStructureField implements Field<DerivativeStructure> {
-
-        /** Compiler for the current dimensions. */
-        private transient DSCompiler compiler;
-
-        /** Simple constructor.
-         * @param compiler compiler for the current dimensions
-         */
-        DerivativeStructureField(final DSCompiler compiler) {
-            this.compiler = compiler;
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public DerivativeStructure getZero() {
-            return new DerivativeStructure(compiler.getFreeParameters(), compiler.getOrder(), 0.0);
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public DerivativeStructure getOne() {
-            return new DerivativeStructure(compiler.getFreeParameters(), compiler.getOrder(), 1.0);
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public Class<? extends FieldElement<DerivativeStructure>> getRuntimeClass() {
-            return DerivativeStructure.class;
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public boolean equals(final Object other) {
-            if (this == other) {
-                return true;
-            } else if (other instanceof DerivativeStructureField) {
-                return compiler == ((DerivativeStructureField) other).compiler;
-            } else {
-                return false;
-            }
-        }
-
-        /** {@inheritDoc} */
-        @Override
-        public int hashCode() {
-            return 0x9943b886 ^ (compiler.getFreeParameters() << 16 & compiler.getOrder());
-        }
-
+        return factory.getDerivativeField();
     }
 
     /** Compute a<sup>x</sup> where a is a double and x a {@link DerivativeStructure}
@@ -690,8 +627,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @return a<sup>x</sup>
      */
     public static DerivativeStructure pow(final double a, final DerivativeStructure x) {
-        final DerivativeStructure result = new DerivativeStructure(x.compiler);
-        x.compiler.pow(a, x.data, 0, result.data, 0);
+        final DerivativeStructure result = x.factory.build();
+        x.factory.getCompiler().pow(a, x.data, 0, result.data, 0);
         return result;
     }
 
@@ -699,8 +636,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure pow(final double p) {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.pow(data, 0, p, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().pow(data, 0, p, result.data, 0);
         return result;
     }
 
@@ -708,8 +645,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure pow(final int n) {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.pow(data, 0, n, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().pow(data, 0, n, result.data, 0);
         return result;
     }
 
@@ -720,9 +657,9 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     @Override
     public DerivativeStructure pow(final DerivativeStructure e)
         throws MathIllegalArgumentException {
-        compiler.checkCompatibility(e.compiler);
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.pow(data, 0, e.data, 0, result.data, 0);
+        factory.checkCompatibility(e.factory);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().pow(data, 0, e.data, 0, result.data, 0);
         return result;
     }
 
@@ -730,8 +667,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure exp() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.exp(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().exp(data, 0, result.data, 0);
         return result;
     }
 
@@ -739,8 +676,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure expm1() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.expm1(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().expm1(data, 0, result.data, 0);
         return result;
     }
 
@@ -748,8 +685,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure log() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.log(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().log(data, 0, result.data, 0);
         return result;
     }
 
@@ -757,8 +694,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure log1p() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.log1p(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().log1p(data, 0, result.data, 0);
         return result;
     }
 
@@ -767,8 +704,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure log10() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.log10(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().log10(data, 0, result.data, 0);
         return result;
     }
 
@@ -776,8 +713,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure cos() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.cos(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().cos(data, 0, result.data, 0);
         return result;
     }
 
@@ -785,8 +722,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure sin() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.sin(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().sin(data, 0, result.data, 0);
         return result;
     }
 
@@ -794,8 +731,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure tan() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.tan(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().tan(data, 0, result.data, 0);
         return result;
     }
 
@@ -803,8 +740,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure acos() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.acos(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().acos(data, 0, result.data, 0);
         return result;
     }
 
@@ -812,8 +749,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure asin() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.asin(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().asin(data, 0, result.data, 0);
         return result;
     }
 
@@ -821,8 +758,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure atan() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.atan(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().atan(data, 0, result.data, 0);
         return result;
     }
 
@@ -831,9 +768,9 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     @Override
     public DerivativeStructure atan2(final DerivativeStructure x)
         throws MathIllegalArgumentException {
-        compiler.checkCompatibility(x.compiler);
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.atan2(data, 0, x.data, 0, result.data, 0);
+        factory.checkCompatibility(x.factory);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().atan2(data, 0, x.data, 0, result.data, 0);
         return result;
     }
 
@@ -853,8 +790,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure cosh() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.cosh(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().cosh(data, 0, result.data, 0);
         return result;
     }
 
@@ -862,8 +799,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure sinh() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.sinh(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().sinh(data, 0, result.data, 0);
         return result;
     }
 
@@ -871,8 +808,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure tanh() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.tanh(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().tanh(data, 0, result.data, 0);
         return result;
     }
 
@@ -880,8 +817,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure acosh() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.acosh(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().acosh(data, 0, result.data, 0);
         return result;
     }
 
@@ -889,8 +826,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure asinh() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.asinh(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().asinh(data, 0, result.data, 0);
         return result;
     }
 
@@ -898,8 +835,8 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure atanh() {
-        final DerivativeStructure result = new DerivativeStructure(compiler);
-        compiler.atanh(data, 0, result.data, 0);
+        final DerivativeStructure result = factory.build();
+        factory.getCompiler().atanh(data, 0, result.data, 0);
         return result;
     }
 
@@ -907,7 +844,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      *  @return instance converted into degrees
      */
     public DerivativeStructure toDegrees() {
-        final DerivativeStructure ds = new DerivativeStructure(compiler);
+        final DerivativeStructure ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
             ds.data[i] = FastMath.toDegrees(data[i]);
         }
@@ -918,7 +855,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      *  @return instance converted into radians
      */
     public DerivativeStructure toRadians() {
-        final DerivativeStructure ds = new DerivativeStructure(compiler);
+        final DerivativeStructure ds = factory.build();
         for (int i = 0; i < ds.data.length; ++i) {
             ds.data[i] = FastMath.toRadians(data[i]);
         }
@@ -931,7 +868,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @throws MathRuntimeException if factorials becomes too large
      */
     public double taylor(final double ... delta) throws MathRuntimeException {
-        return compiler.taylor(data, 0, delta);
+        return factory.getCompiler().taylor(data, 0, delta);
     }
 
     /** {@inheritDoc}
@@ -1185,7 +1122,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @return data transfer object that will be serialized
      */
     private Object writeReplace() {
-        return new DataTransferObject(compiler.getFreeParameters(), compiler.getOrder(), data);
+        return new DataTransferObject(factory.getCompiler().getFreeParameters(), factory.getCompiler().getOrder(), data);
     }
 
     /** Internal class used only for serialization. */

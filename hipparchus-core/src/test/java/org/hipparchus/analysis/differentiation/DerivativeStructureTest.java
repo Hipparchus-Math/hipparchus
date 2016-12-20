@@ -824,7 +824,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
 
     @Test
     public void testLog10Definition() {
-        double[] epsilon = new double[] { 3.0e-16, 3.0e-16, 8.0e-15, 3.0e-13, 8.0e-12 };
+        double[] epsilon = new double[] { 3.0e-16, 9.0e-16, 8.0e-15, 3.0e-13, 8.0e-12 };
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 DerivativeStructure dsX = new DerivativeStructure(1, maxOrder, 0, x);
