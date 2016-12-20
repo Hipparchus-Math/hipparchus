@@ -597,7 +597,8 @@
             <excludes>
               <exclude>**/*AbstractTest.java</exclude>
             </excludes>
-          </configuration>
+            <argLine>-Xmx2048m</argLine>
+            </configuration>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
