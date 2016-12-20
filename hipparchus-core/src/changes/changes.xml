@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.1" date="TBD" description="This is a maintenance release.">
+      <action dev="psteitz" type="add">
+        Added support for exact integration in PolynomialFunction.
+        Fixes Github issue #18.
+      </action>
       <action dev="luc" type="add">
         Added proper implementations of equals and hashCode to Fields so they
         can be used as keys in maps.

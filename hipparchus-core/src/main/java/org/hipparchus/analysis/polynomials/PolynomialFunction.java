@@ -272,6 +272,43 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
     }
 
     /**
+     * Returns an anti-derivative of this polynomial, with 0 constant term.
+     *
+     * @return a polynomial whose derivative has the same coefficients as this polynomial
+     */
+    public PolynomialFunction antiDerivative() {
+        final int d = degree();
+        final double[] anti = new double[d + 2];
+        anti[0] = 0d;
+        for (int i = 1; i <= d + 1; i++) {
+            anti[i] = coefficients[i - 1]  / i;
+        }
+        return new PolynomialFunction(anti);
+    }
+
+    /**
+     * Returns the definite integral of this polymomial over the given interval.
+     * <p>
+     * [lower, upper] must describe a finite interval (neither can be infinite
+     * and lower must be less than or equal to upper).
+     *
+     * @param lower lower bound for the integration
+     * @param upper upper bound for the integration
+     * @return the integral of this polymomial over the given interval
+     * @throws MathIllegalArgumentException if the bounds do not describe a finite interval
+     */
+    public double integrate(final double lower, final double upper) {
+        if (Double.isInfinite(lower) || Double.isInfinite(upper)) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INFINITE_BOUND);
+        }
+        if (lower > upper) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.LOWER_BOUND_NOT_BELOW_UPPER_BOUND);
+        }
+        final PolynomialFunction anti = antiDerivative();
+        return anti.value(upper) - anti.value(lower);
+    }
+
+    /**
      * Returns the derivative as a {@link PolynomialFunction}.
      *
      * @return the derivative polynomial.

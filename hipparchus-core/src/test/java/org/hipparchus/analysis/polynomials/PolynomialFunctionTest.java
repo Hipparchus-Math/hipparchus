@@ -17,6 +17,8 @@
 package org.hipparchus.analysis.polynomials;
 
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -251,8 +253,85 @@ public final class PolynomialFunctionTest {
         Assert.assertEquals(g.polynomialDerivative().value(FastMath.E),  h.value(FastMath.E),  tolerance);
     }
 
+    @Test
+    public void testAntiDerivative() {
+        // 1 + 2x + 3x^2
+        final double[] coeff = {1, 2, 3};
+        final PolynomialFunction p = new PolynomialFunction(coeff);
+        // x + x^2 + x^3
+        final double[] aCoeff = {0, 1, 1, 1};
+        Assert.assertArrayEquals(aCoeff, p.antiDerivative().getCoefficients(), Double.MIN_VALUE);
+    }
+
+    @Test
+    public void testAntiDerivativeConstant() {
+        final double[] coeff = {2};
+        final PolynomialFunction p = new PolynomialFunction(coeff);
+        final double[] aCoeff = {0, 2};
+        Assert.assertArrayEquals(aCoeff, p.antiDerivative().getCoefficients(), Double.MIN_VALUE);
+    }
+
+    @Test
+    public void testAntiDerivativeZero() {
+        final double[] coeff = {0};
+        final PolynomialFunction p = new PolynomialFunction(coeff);
+        final double[] aCoeff = {0};
+        Assert.assertArrayEquals(aCoeff, p.antiDerivative().getCoefficients(), Double.MIN_VALUE);
+    }
+
+    @Test
+    public void testAntiDerivativeRandom() {
+        final RandomDataGenerator ran = new RandomDataGenerator(1000);
+        double[] coeff = null;
+        PolynomialFunction p = null;
+        int d = 0;
+        for (int i = 0; i < 20; i++) {
+            d = ran.nextInt(1, 50);
+            coeff = new double[d];
+            for (int j = 0; j < d; j++) {
+                coeff[j] = ran.nextUniform(-100, 1000);
+            }
+            p = new PolynomialFunction(coeff);
+            Assert.assertArrayEquals(p.getCoefficients(),
+                                     p.antiDerivative().polynomialDerivative().getCoefficients(),
+                                     1E-12);
+        }
+    }
+
+    @Test
+    public void testIntegrate() {
+        // -x^2
+        final double[] coeff = {0, 0, -1};
+        final PolynomialFunction p = new PolynomialFunction(coeff);
+        Assert.assertEquals(-2d/3d, p.integrate(-1, 1),Double.MIN_VALUE);
+
+        // x(x-1)(x+1) - should integrate to 0 over [-1,1]
+        final PolynomialFunction p2 = new PolynomialFunction(new double[] {0, 1}).
+                multiply(new PolynomialFunction(new double[]{-1,1})).
+                         multiply(new PolynomialFunction(new double[] {1, 1}));
+        Assert.assertEquals(0, p2.integrate(-1, 1), Double.MIN_VALUE);
+    }
+
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testIntegrateInfiniteBounds() {
+        final PolynomialFunction p = new PolynomialFunction(new double[]{1});
+        p.integrate(0, Double.POSITIVE_INFINITY);
+    }
+
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testIntegrateBadInterval() {
+        final PolynomialFunction p = new PolynomialFunction(new double[]{1});
+        p.integrate(0, -1);
+    }
+
     public void checkPolynomial(PolynomialFunction p, String reference) {
         Assert.assertEquals(reference, p.toString());
+    }
+
+    private void checkInverseDifferentiation(PolynomialFunction p) {
+        Assert.assertArrayEquals(p.getCoefficients(),
+                                 p.antiDerivative().polynomialDerivative().getCoefficients(),
+                                 Double.MIN_VALUE);
     }
 
     private void checkNullPolynomial(PolynomialFunction p) {
