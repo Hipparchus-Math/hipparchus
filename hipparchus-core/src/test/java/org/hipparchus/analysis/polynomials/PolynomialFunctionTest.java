@@ -292,9 +292,7 @@ public final class PolynomialFunctionTest {
                 coeff[j] = ran.nextUniform(-100, 1000);
             }
             p = new PolynomialFunction(coeff);
-            Assert.assertArrayEquals(p.getCoefficients(),
-                                     p.antiDerivative().polynomialDerivative().getCoefficients(),
-                                     1E-12);
+            checkInverseDifferentiation(p);
         }
     }
 
@@ -331,7 +329,7 @@ public final class PolynomialFunctionTest {
     private void checkInverseDifferentiation(PolynomialFunction p) {
         Assert.assertArrayEquals(p.getCoefficients(),
                                  p.antiDerivative().polynomialDerivative().getCoefficients(),
-                                 Double.MIN_VALUE);
+                                 1e-12);
     }
 
     private void checkNullPolynomial(PolynomialFunction p) {
