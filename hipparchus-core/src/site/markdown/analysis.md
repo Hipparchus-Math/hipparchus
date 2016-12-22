@@ -359,11 +359,11 @@ provides the means to numerically integrate
 
 Hipparchus includes implementations of the following integration algorithms:
 
-* [Romberg's method](../apidocs/org/apache/commons/math4/analysis/integration/RombergIntegrator.html)
-* [Simpson's method](../apidocs/org/apache/commons/math4/analysis/integration/SimpsonIntegrator.html)
-* [Trapezoid method](./apidocs/org/apache/commons/math4/analysis/integration/TrapezoidIntegrator.html)
-* [Legendre-Gauss method](../apidocs/org/apache/commons/math4/analysis/integration/IterativeLegendreGaussIntegrator.html)
-* [Gaussian quadrature](../apidocs/org/apache/commons/math4/analysis/integration/gauss/GaussIntegrator.html)
+* [Romberg's method](../apidocs/org/hipparchus/analysis/integration/RombergIntegrator.html)
+* [Simpson's method](../apidocs/org/hipparchus/analysis/integration/SimpsonIntegrator.html)
+* [Trapezoid method](./apidocs/org/hipparchus/analysis/integration/TrapezoidIntegrator.html)
+* [Legendre-Gauss method](../apidocs/org/hipparchus/analysis/integration/IterativeLegendreGaussIntegrator.html)
+* [Gaussian quadrature](../apidocs/org/hipparchus/analysis/integration/gauss/GaussIntegrator.html)
 
 
 ## Polynomials
