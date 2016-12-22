@@ -17,6 +17,7 @@
 
 package org.hipparchus.analysis.solvers;
 
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -33,6 +34,9 @@ public abstract class AbstractUnivariateDifferentiableSolver
     /** Function to solve. */
     private UnivariateDifferentiableFunction function;
 
+    /** Factory for DerivativeStructure instances. */
+    private final DSFactory factory;
+
     /**
      * Construct a solver with given absolute accuracy.
      *
@@ -40,6 +44,7 @@ public abstract class AbstractUnivariateDifferentiableSolver
      */
     protected AbstractUnivariateDifferentiableSolver(final double absoluteAccuracy) {
         super(absoluteAccuracy);
+        factory = new DSFactory(1, 1);
     }
 
     /**
@@ -53,6 +58,7 @@ public abstract class AbstractUnivariateDifferentiableSolver
                                                      final double absoluteAccuracy,
                                                      final double functionValueAccuracy) {
         super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy);
+        factory = new DSFactory(1, 1);
     }
 
     /**
@@ -66,7 +72,7 @@ public abstract class AbstractUnivariateDifferentiableSolver
     protected DerivativeStructure computeObjectiveValueAndDerivative(double point)
         throws MathIllegalStateException {
         incrementEvaluationCount();
-        return function.value(new DerivativeStructure(1, 1, 0, point));
+        return function.value(factory.build(0, point));
     }
 
     /**

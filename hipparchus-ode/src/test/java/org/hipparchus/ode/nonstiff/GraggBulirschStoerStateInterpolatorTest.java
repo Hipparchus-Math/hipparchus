@@ -18,6 +18,7 @@
 package org.hipparchus.ode.nonstiff;
 
 
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.ode.EquationsMapper;
 import org.hipparchus.ode.ExpandableODE;
@@ -32,7 +33,7 @@ public class GraggBulirschStoerStateInterpolatorTest extends ODEStateInterpolato
 
         // evaluate scaled derivatives at mid-step
         final int derivationOrder = 7;
-        DerivativeStructure middleT = new DerivativeStructure(1, derivationOrder, 0, 0.5 * (t0 + t1));
+        DerivativeStructure middleT = new DSFactory(1, derivationOrder).build(0, 0.5 * (t0 + t1));
         DerivativeStructure[] derivatives =  eqn.theoreticalState(middleT);
 
         final double[][] yMidDots = new double[derivationOrder + 1][eqn.getDimension()];

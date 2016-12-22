@@ -17,6 +17,7 @@
 
 package org.hipparchus.geometry.euclidean.threed;
 
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -595,6 +596,7 @@ public class FieldRotationDSTest {
     public void testAnglesDeprecated()
             throws MathIllegalStateException {
 
+        DSFactory factory = new DSFactory(3, 1);
         RotationOrder[] CardanOrders = {
             RotationOrder.XYZ, RotationOrder.XZY, RotationOrder.YXZ,
             RotationOrder.YZX, RotationOrder.ZXY, RotationOrder.ZYX
@@ -605,9 +607,9 @@ public class FieldRotationDSTest {
                 for (double alpha2 = -1.55; alpha2 < 1.55; alpha2 += 0.3) {
                     for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 0.3) {
                         FieldRotation<DerivativeStructure> r = new FieldRotation<DerivativeStructure>(CardanOrders[i],
-                                                      new DerivativeStructure(3, 1, 0, alpha1),
-                                                      new DerivativeStructure(3, 1, 1, alpha2),
-                                                      new DerivativeStructure(3, 1, 2, alpha3));
+                                                                                                      factory.build(0, alpha1),
+                                                                                                      factory.build(1, alpha2),
+                                                                                                      factory.build(2, alpha3));
                         DerivativeStructure[] angles = r.getAngles(CardanOrders[i]);
                         checkAngle(angles[0], alpha1);
                         checkAngle(angles[1], alpha2);
@@ -627,9 +629,9 @@ public class FieldRotationDSTest {
                 for (double alpha2 = 0.05; alpha2 < 3.1; alpha2 += 0.3) {
                     for (double alpha3 = 0.1; alpha3 < 6.2; alpha3 += 0.3) {
                         FieldRotation<DerivativeStructure> r = new FieldRotation<DerivativeStructure>(EulerOrders[i],
-                                                      new DerivativeStructure(3, 1, 0, alpha1),
-                                                      new DerivativeStructure(3, 1, 1, alpha2),
-                                                      new DerivativeStructure(3, 1, 2, alpha3));
+                                                                                                      factory.build(0, alpha1),
+                                                                                                      factory.build(1, alpha2),
+                                                                                                      factory.build(2, alpha3));
                         DerivativeStructure[] angles = r.getAngles(EulerOrders[i]);
                         checkAngle(angles[0], alpha1);
                         checkAngle(angles[1], alpha2);
@@ -645,6 +647,7 @@ public class FieldRotationDSTest {
     public void testAngles()
         throws MathIllegalStateException {
 
+        DSFactory factory = new DSFactory(3, 1);
         for (RotationConvention convention : RotationConvention.values()) {
             RotationOrder[] CardanOrders = {
                 RotationOrder.XYZ, RotationOrder.XZY, RotationOrder.YXZ,
@@ -658,9 +661,9 @@ public class FieldRotationDSTest {
                             FieldRotation<DerivativeStructure> r =
                                             new FieldRotation<DerivativeStructure>(CardanOrders[i],
                                                                                    convention,
-                                                                                   new DerivativeStructure(3, 1, 0, alpha1),
-                                                                                   new DerivativeStructure(3, 1, 1, alpha2),
-                                                                                   new DerivativeStructure(3, 1, 2, alpha3));
+                                                                                   factory.build(0, alpha1),
+                                                                                   factory.build(1, alpha2),
+                                                                                   factory.build(2, alpha3));
                             DerivativeStructure[] angles = r.getAngles(CardanOrders[i], convention);
                             checkAngle(angles[0], alpha1);
                             checkAngle(angles[1], alpha2);
@@ -682,9 +685,9 @@ public class FieldRotationDSTest {
                             FieldRotation<DerivativeStructure> r =
                                             new FieldRotation<DerivativeStructure>(EulerOrders[i],
                                                                                    convention,
-                                                                                   new DerivativeStructure(3, 1, 0, alpha1),
-                                                                                   new DerivativeStructure(3, 1, 1, alpha2),
-                                                                                   new DerivativeStructure(3, 1, 2, alpha3));
+                                                                                   factory.build(0, alpha1),
+                                                                                   factory.build(1, alpha2),
+                                                                                   factory.build(2, alpha3));
                             DerivativeStructure[] angles = r.getAngles(EulerOrders[i], convention);
                             checkAngle(angles[0], alpha1);
                             checkAngle(angles[1], alpha2);
@@ -700,6 +703,7 @@ public class FieldRotationDSTest {
     @Test
     public void testSingularities() {
 
+        DSFactory factory = new DSFactory(3, 1);
         for (RotationConvention convention : RotationConvention.values()) {
             RotationOrder[] CardanOrders = {
                 RotationOrder.XYZ, RotationOrder.XZY, RotationOrder.YXZ,
@@ -712,9 +716,9 @@ public class FieldRotationDSTest {
                     FieldRotation<DerivativeStructure> r =
                                     new FieldRotation<DerivativeStructure>(CardanOrders[i],
                                                                            convention,
-                                                                           new DerivativeStructure(3, 1, 0, 0.1),
-                                                                           new DerivativeStructure(3, 1, 1, singularCardanAngle[j]),
-                                                                           new DerivativeStructure(3, 1, 2, 0.3));
+                                                                           factory.build(0, 0.1),
+                                                                           factory.build(1, singularCardanAngle[j]),
+                                                                           factory.build(2, 0.3));
                     try {
                         r.getAngles(CardanOrders[i], convention);
                         Assert.fail("an exception should have been caught");
@@ -735,9 +739,9 @@ public class FieldRotationDSTest {
                     FieldRotation<DerivativeStructure> r =
                                     new FieldRotation<DerivativeStructure>(EulerOrders[i],
                                                                            convention,
-                                                                           new DerivativeStructure(3, 1, 0, 0.1),
-                                                                           new DerivativeStructure(3, 1, 1, singularEulerAngle[j]),
-                                                                           new DerivativeStructure(3, 1, 2, 0.3));
+                                                                           factory.build(0, 0.1),
+                                                                           factory.build(1, singularEulerAngle[j]),
+                                                                           factory.build(2, 0.3));
                     try {
                         r.getAngles(EulerOrders[i], convention);
                         Assert.fail("an exception should have been caught");
@@ -992,15 +996,16 @@ public class FieldRotationDSTest {
 
         Well1024a random = new Well1024a(0x180b41cfeeffaf67l);
         UnitSphereRandomVectorGenerator g = new UnitSphereRandomVectorGenerator(3, random);
+        DSFactory factory = new DSFactory(4, 1);
         for (int i = 0; i < 10; ++i) {
             double[] unit1 = g.nextVector();
             Rotation r1 = new Rotation(new Vector3D(unit1[0], unit1[1], unit1[2]),
                                       random.nextDouble(), RotationConvention.VECTOR_OPERATOR);
-            FieldRotation<DerivativeStructure> r1Prime = new FieldRotation<DerivativeStructure>(new DerivativeStructure(4, 1, 0, r1.getQ0()),
-                                                new DerivativeStructure(4, 1, 1, r1.getQ1()),
-                                                new DerivativeStructure(4, 1, 2, r1.getQ2()),
-                                                new DerivativeStructure(4, 1, 3, r1.getQ3()),
-                                                false);
+            FieldRotation<DerivativeStructure> r1Prime = new FieldRotation<DerivativeStructure>(factory.build(0, r1.getQ0()),
+                                                                                                factory.build(1, r1.getQ1()),
+                                                                                                factory.build(2, r1.getQ2()),
+                                                                                                factory.build(3, r1.getQ3()),
+                                                                                                false);
             double[] unit2 = g.nextVector();
             FieldRotation<DerivativeStructure> r2 = new FieldRotation<DerivativeStructure>(createVector(unit2[0], unit2[1], unit2[2]),
                                                                                            createAngle(random.nextDouble()),
@@ -1231,19 +1236,21 @@ public class FieldRotationDSTest {
 
     private FieldRotation<DerivativeStructure> createRotation(double q0, double q1, double q2, double q3,
                                       boolean needsNormalization) {
-        return new FieldRotation<DerivativeStructure>(new DerivativeStructure(4, 1, 0, q0),
-                              new DerivativeStructure(4, 1, 1, q1),
-                              new DerivativeStructure(4, 1, 2, q2),
-                              new DerivativeStructure(4, 1, 3, q3),
-                              needsNormalization);
+        DSFactory factory = new DSFactory(4, 1);
+        return new FieldRotation<DerivativeStructure>(factory.build(0, q0),
+                                                      factory.build(1, q1),
+                                                      factory.build(2, q2),
+                                                      factory.build(3, q3),
+                                                      needsNormalization);
     }
 
     private FieldRotation<DerivativeStructure> createRotation(double[][] m, double threshold) {
+        DSFactory factory = new DSFactory(4, 1);
         DerivativeStructure[][] mds = new DerivativeStructure[m.length][m[0].length];
         int index = 0;
         for (int i = 0; i < m.length; ++i) {
             for (int j = 0; j < m[i].length; ++j) {
-                mds[i][j] = new DerivativeStructure(4, 1, index, m[i][j]);
+                mds[i][j] = factory.build(index, m[i][j]);
                 index = (index + 1) % 4;
             }
         }
@@ -1251,19 +1258,22 @@ public class FieldRotationDSTest {
     }
 
     private FieldVector3D<DerivativeStructure> createVector(double x, double y, double z) {
-        return new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, x),
-                              new DerivativeStructure(4, 1, y),
-                              new DerivativeStructure(4, 1, z));
+        DSFactory factory = new DSFactory(4, 1);
+        return new FieldVector3D<DerivativeStructure>(factory.build(x),
+                                                      factory.build(y),
+                                                      factory.build(z));
     }
 
     private FieldVector3D<DerivativeStructure> createAxis(double x, double y, double z) {
-        return new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, 0, x),
-                              new DerivativeStructure(4, 1, 1, y),
-                              new DerivativeStructure(4, 1, 2, z));
+        DSFactory factory = new DSFactory(4, 1);
+        return new FieldVector3D<DerivativeStructure>(factory.build(0, x),
+                                                      factory.build(1, y),
+                                                      factory.build(2, z));
     }
 
     private DerivativeStructure createAngle(double alpha) {
-        return new DerivativeStructure(4, 1, 3, alpha);
+        DSFactory factory = new DSFactory(4, 1);
+        return factory.build(3, alpha);
     }
 
     private void checkVector(FieldVector3D<DerivativeStructure> u, FieldVector3D<DerivativeStructure> v) {

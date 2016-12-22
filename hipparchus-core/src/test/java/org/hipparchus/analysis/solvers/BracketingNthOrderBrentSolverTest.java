@@ -19,6 +19,7 @@ package org.hipparchus.analysis.solvers;
 
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.solvers.AllowedSolution;
@@ -217,7 +218,7 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         }
 
         public double value(final double x) {
-            return value(new DerivativeStructure(0, 0, x)).getValue();
+            return value(new DSFactory(0, 0).build(x)).getValue();
         }
 
         public abstract DerivativeStructure value(final DerivativeStructure t);

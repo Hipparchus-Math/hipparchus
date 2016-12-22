@@ -18,6 +18,7 @@ package org.hipparchus.analysis.interpolation;
 
 import java.util.Random;
 
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.polynomials.PolynomialFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -31,8 +32,9 @@ public class HermiteInterpolatorTest {
     public void testZero() {
         HermiteInterpolator interpolator = new HermiteInterpolator();
         interpolator.addSamplePoint(0.0, new double[] { 0.0 });
+        DSFactory factory = new DSFactory(1, 1);
         for (double x = -10; x < 10; x += 1.0) {
-            DerivativeStructure y = interpolator.value(new DerivativeStructure(1, 1, 0, x))[0];
+            DerivativeStructure y = interpolator.value(factory.build(0, x))[0];
             Assert.assertEquals(0.0, y.getValue(), 1.0e-15);
             Assert.assertEquals(0.0, y.getPartialDerivative(1), 1.0e-15);
         }
@@ -46,8 +48,9 @@ public class HermiteInterpolatorTest {
         interpolator.addSamplePoint(0.0, new double[] { 2.0 });
         interpolator.addSamplePoint(1.0, new double[] { 0.0 });
         interpolator.addSamplePoint(2.0, new double[] { 0.0 });
+        DSFactory factory = new DSFactory(1, 1);
         for (double x = -10; x < 10; x += 1.0) {
-            DerivativeStructure y = interpolator.value(new DerivativeStructure(1, 1, 0, x))[0];
+            DerivativeStructure y = interpolator.value(factory.build(0, x))[0];
             Assert.assertEquals((x - 1.0) * (x - 2.0), y.getValue(), 1.0e-15);
             Assert.assertEquals(2 * x - 3.0, y.getPartialDerivative(1), 1.0e-15);
         }
@@ -61,15 +64,16 @@ public class HermiteInterpolatorTest {
         interpolator.addSamplePoint(0.0, new double[] { 1.0 }, new double[] { 2.0 });
         interpolator.addSamplePoint(1.0, new double[] { 4.0 });
         interpolator.addSamplePoint(2.0, new double[] { 5.0 }, new double[] { 2.0 });
+        DSFactory factory = new DSFactory(1, 1);
         Assert.assertEquals(4, interpolator.getPolynomials()[0].degree());
-        DerivativeStructure y0 = interpolator.value(new DerivativeStructure(1, 1, 0, 0.0))[0];
+        DerivativeStructure y0 = interpolator.value(factory.build(0, 0.0))[0];
         Assert.assertEquals(1.0, y0.getValue(), 1.0e-15);
         Assert.assertEquals(2.0, y0.getPartialDerivative(1), 1.0e-15);
         double[][] d0 = interpolator.derivatives(0.0, 1);
         Assert.assertEquals(1.0, d0[0][0], 1.0e-15);
         Assert.assertEquals(2.0, d0[1][0], 1.0e-15);
         Assert.assertEquals(4.0, interpolator.value(1.0)[0], 1.0e-15);
-        DerivativeStructure y2 = interpolator.value(new DerivativeStructure(1, 1, 0, 2.0))[0];
+        DerivativeStructure y2 = interpolator.value(factory.build(0, 2.0))[0];
         Assert.assertEquals(5.0, y2.getValue(), 1.0e-15);
         Assert.assertEquals(2.0, y2.getPartialDerivative(1), 1.0e-15);
         double[][] d2 = interpolator.derivatives(2.0, 1);
@@ -149,8 +153,9 @@ public class HermiteInterpolatorTest {
                 interpolator.addSamplePoint(x, values, derivatives);
             }
 
+            DSFactory factory = new DSFactory(1, 1);
             for (double x = 0; x < 2; x += 0.1) {
-                DerivativeStructure[] y = interpolator.value(new DerivativeStructure(1, 1, 0, x));
+                DerivativeStructure[] y = interpolator.value(factory.build(0, x));
                 Assert.assertEquals(p.length, y.length);
                 for (int k = 0; k < p.length; ++k) {
                     Assert.assertEquals(p[k].value(x), y[k].getValue(), 1.0e-8 * FastMath.abs(p[k].value(x)));
@@ -172,8 +177,9 @@ public class HermiteInterpolatorTest {
         for (double x = 0; x < FastMath.PI; x += 0.5) {
             interpolator.addSamplePoint(x, new double[] { FastMath.sin(x) });
         }
+        DSFactory factory = new DSFactory(1, 2);
         for (double x = 0.1; x <= 2.9; x += 0.01) {
-            DerivativeStructure y = interpolator.value(new DerivativeStructure(1, 2, 0, x))[0];
+            DerivativeStructure y = interpolator.value(factory.build(0, x))[0];
             Assert.assertEquals( FastMath.sin(x), y.getValue(), 3.5e-5);
             Assert.assertEquals( FastMath.cos(x), y.getPartialDerivative(1), 1.3e-4);
             Assert.assertEquals(-FastMath.sin(x), y.getPartialDerivative(2), 2.9e-3);
@@ -186,8 +192,9 @@ public class HermiteInterpolatorTest {
         for (double x = 1.0; x < 3.6; x += 0.5) {
             interpolator.addSamplePoint(x, new double[] { FastMath.sqrt(x) });
         }
+        DSFactory factory = new DSFactory(1, 1);
         for (double x = 1.1; x < 3.5; x += 0.01) {
-            DerivativeStructure y = interpolator.value(new DerivativeStructure(1, 1, 0, x))[0];
+            DerivativeStructure y = interpolator.value(factory.build(0, x))[0];
             Assert.assertEquals(FastMath.sqrt(x), y.getValue(), 1.5e-4);
             Assert.assertEquals(0.5 / FastMath.sqrt(x), y.getPartialDerivative(1), 8.5e-4);
         }
@@ -201,8 +208,9 @@ public class HermiteInterpolatorTest {
         interpolator.addSamplePoint(-1, new double[] { 2 }, new double[] { -8 }, new double[] { 56 });
         interpolator.addSamplePoint( 0, new double[] { 1 }, new double[] {  0 }, new double[] {  0 });
         interpolator.addSamplePoint( 1, new double[] { 2 }, new double[] {  8 }, new double[] { 56 });
+        DSFactory factory = new DSFactory(1, 1);
         for (double x = -1.0; x <= 1.0; x += 0.125) {
-            DerivativeStructure y = interpolator.value(new DerivativeStructure(1, 1, 0, x))[0];
+            DerivativeStructure y = interpolator.value(factory.build(0, x))[0];
             double x2 = x * x;
             double x4 = x2 * x2;
             double x8 = x4 * x4;
@@ -217,8 +225,9 @@ public class HermiteInterpolatorTest {
     public void testOnePointParabola() {
         HermiteInterpolator interpolator = new HermiteInterpolator();
         interpolator.addSamplePoint(0, new double[] { 1 }, new double[] { 1 }, new double[] { 2 });
+        DSFactory factory = new DSFactory(1, 1);
         for (double x = -1.0; x <= 1.0; x += 0.125) {
-            DerivativeStructure y = interpolator.value(new DerivativeStructure(1, 1, 0, x))[0];
+            DerivativeStructure y = interpolator.value(factory.build(0, x))[0];
             Assert.assertEquals(1 + x * (1 + x), y.getValue(), 1.0e-15);
             Assert.assertEquals(1 + 2 * x, y.getPartialDerivative(1), 1.0e-15);
         }

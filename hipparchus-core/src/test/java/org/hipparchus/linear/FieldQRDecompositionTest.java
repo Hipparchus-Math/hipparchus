@@ -21,6 +21,7 @@ import java.util.Random;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.Decimal64Field;
@@ -51,7 +52,7 @@ public class FieldQRDecompositionTest {
             { -4, 24, -41, },
             { -5, 34, 7, }, };
 
-    DerivativeStructure zero = new DerivativeStructure(1, 1, 0, 0);
+    DerivativeStructure zero = new DSFactory(1, 1).build(0, 0);
     Field<DerivativeStructure> DSField = zero.getField();
     private static final double entryTolerance = 10e-16;
 

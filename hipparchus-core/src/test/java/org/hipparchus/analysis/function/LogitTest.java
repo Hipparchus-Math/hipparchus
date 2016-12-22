@@ -19,6 +19,7 @@ package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -69,7 +70,7 @@ public class LogitTest {
         final double lo = 1;
         final double hi = 2;
         final Logit f = new Logit(lo, hi);
-        final DerivativeStructure f15 = f.value(new DerivativeStructure(1, 1, 0, 1.5));
+        final DerivativeStructure f15 = f.value(new DSFactory(1, 1).build(0, 1.5));
 
         Assert.assertEquals(4, f15.getPartialDerivative(1), EPS);
     }
@@ -78,11 +79,12 @@ public class LogitTest {
     public void testDerivativeLargeArguments() {
         final Logit f = new Logit(1, 2);
 
+        DSFactory factory = new DSFactory(1, 1);
         for (double arg : new double[] {
             Double.NEGATIVE_INFINITY, -Double.MAX_VALUE, -1e155, 1e155, Double.MAX_VALUE, Double.POSITIVE_INFINITY
             }) {
             try {
-                f.value(new DerivativeStructure(1, 1, 0, arg));
+                f.value(factory.build(0, arg));
                 Assert.fail("an exception should have been thrown");
             } catch (MathIllegalArgumentException ore) {
                 // expected
@@ -94,7 +96,7 @@ public class LogitTest {
 
     @Test
     public void testDerivativesHighOrder() {
-        DerivativeStructure l = new Logit(1, 3).value(new DerivativeStructure(1, 5, 0, 1.2));
+        DerivativeStructure l = new Logit(1, 3).value(new DSFactory(1, 5).build(0, 1.2));
         Assert.assertEquals(-2.1972245773362193828, l.getPartialDerivative(0), 1.0e-16);
         Assert.assertEquals(5.5555555555555555555,  l.getPartialDerivative(1), 9.0e-16);
         Assert.assertEquals(-24.691358024691358025, l.getPartialDerivative(2), 2.0e-14);
@@ -161,13 +163,14 @@ public class LogitTest {
         final UnivariateDifferentiableFunction id = FunctionUtils.compose((UnivariateDifferentiableFunction) g,
                                                                 (UnivariateDifferentiableFunction) f);
 
+        DSFactory factory = new DSFactory(1, 1);
         for (int i = 0; i < 10; i++) {
             final double x = lo + random.nextDouble() * (hi - lo);
-            Assert.assertEquals(x, id.value(new DerivativeStructure(1, 1, 0, x)).getValue(), EPS);
+            Assert.assertEquals(x, id.value(factory.build(0, x)).getValue(), EPS);
         }
 
-        Assert.assertEquals(lo, id.value(new DerivativeStructure(1, 1, 0, lo)).getValue(), EPS);
-        Assert.assertEquals(hi, id.value(new DerivativeStructure(1, 1, 0, hi)).getValue(), EPS);
+        Assert.assertEquals(lo, id.value(factory.build(0, lo)).getValue(), EPS);
+        Assert.assertEquals(hi, id.value(factory.build(0, hi)).getValue(), EPS);
     }
 
     @Test
@@ -181,10 +184,11 @@ public class LogitTest {
         final UnivariateDifferentiableFunction id =
                 FunctionUtils.compose((UnivariateDifferentiableFunction) g, (UnivariateDifferentiableFunction) f);
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            DSFactory factory = new DSFactory(1, maxOrder);
             double max = 0;
             for (int i = 0; i < 10; i++) {
                 final double x = lo + random.nextDouble() * (hi - lo);
-                final DerivativeStructure dsX = new DerivativeStructure(1, maxOrder, 0, x);
+                final DerivativeStructure dsX = factory.build(0, x);
                 max = FastMath.max(max, FastMath.abs(dsX.getPartialDerivative(maxOrder) -
                                                      id.value(dsX).getPartialDerivative(maxOrder)));
                 Assert.assertEquals(dsX.getPartialDerivative(maxOrder),
@@ -194,7 +198,7 @@ public class LogitTest {
 
             // each function evaluates correctly near boundaries,
             // but combination leads to NaN as some intermediate point is infinite
-            final DerivativeStructure dsLo = new DerivativeStructure(1, maxOrder, 0, lo);
+            final DerivativeStructure dsLo = factory.build(0, lo);
             if (maxOrder == 0) {
                 Assert.assertTrue(Double.isInfinite(f.value(dsLo).getPartialDerivative(maxOrder)));
                 Assert.assertEquals(lo, id.value(dsLo).getPartialDerivative(maxOrder), epsilon[maxOrder]);
@@ -206,7 +210,7 @@ public class LogitTest {
                 Assert.assertTrue(Double.isNaN(id.value(dsLo).getPartialDerivative(maxOrder)));
             }
 
-            final DerivativeStructure dsHi = new DerivativeStructure(1, maxOrder, 0, hi);
+            final DerivativeStructure dsHi = factory.build(0, hi);
             if (maxOrder == 0) {
                 Assert.assertTrue(Double.isInfinite(f.value(dsHi).getPartialDerivative(maxOrder)));
                 Assert.assertEquals(hi, id.value(dsHi).getPartialDerivative(maxOrder), epsilon[maxOrder]);

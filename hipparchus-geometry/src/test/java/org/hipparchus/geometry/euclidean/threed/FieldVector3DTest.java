@@ -23,6 +23,7 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.hipparchus.Field;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
@@ -44,9 +45,12 @@ public class FieldVector3DTest {
         double sinAlpha = FastMath.sqrt(3) / 2.0;
         double cosDelta = FastMath.sqrt(2) / 2.0;
         double sinDelta = -FastMath.sqrt(2) / 2.0;
-        FieldVector3D<DerivativeStructure> u = new FieldVector3D<DerivativeStructure>(2,
-                new FieldVector3D<DerivativeStructure>(new DerivativeStructure(2, 1, 0,  FastMath.PI / 3),
-                        new DerivativeStructure(2, 1, 1, -FastMath.PI / 4)));
+        DSFactory factory21 = new DSFactory(2, 1);
+        DSFactory factory31 = new DSFactory(3, 1);
+        DSFactory factory41 = new DSFactory(4, 1);
+        FieldVector3D<DerivativeStructure> u = new FieldVector3D<>(2,
+                                                                   new FieldVector3D<>(factory21.build(0,  FastMath.PI / 3),
+                                                                                       factory21.build(1, -FastMath.PI / 4)));
         checkVector(u, 2 * cosAlpha * cosDelta, 2 * sinAlpha * cosDelta, 2 * sinDelta);
         Assert.assertEquals(-2 * sinAlpha * cosDelta, u.getX().getPartialDerivative(1, 0), 1.0e-12);
         Assert.assertEquals(+2 * cosAlpha * cosDelta, u.getY().getPartialDerivative(1, 0), 1.0e-12);
@@ -55,76 +59,76 @@ public class FieldVector3DTest {
         Assert.assertEquals(-2 * sinAlpha * sinDelta, u.getY().getPartialDerivative(0, 1), 1.0e-12);
         Assert.assertEquals(2 * cosDelta,             u.getZ().getPartialDerivative(0, 1), 1.0e-12);
 
-        checkVector(new FieldVector3D<DerivativeStructure>(2, createVector(1, 0,  0, 3)),
-                                   2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2);
-        checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, 3,  2.0),
-                                   createVector(1, 0,  0, 4)),
-                                   2, 0, 0, 2, 0, 0, 1, 0, 2, 0, 0, 0, 0, 2, 0);
-        checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, 3,  2.0),
-                                   new Vector3D(1, 0,  0)),
-                                   2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0);
+        checkVector(new FieldVector3D<>(2, createVector(1, 0,  0, 3)),
+                    2, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0, 2);
+        checkVector(new FieldVector3D<>(factory41.build(3,  2.0),
+                                        createVector(1, 0,  0, 4)),
+                    2, 0, 0, 2, 0, 0, 1, 0, 2, 0, 0, 0, 0, 2, 0);
+        checkVector(new FieldVector3D<>(factory41.build(3,  2.0),
+                                        new Vector3D(1, 0,  0)),
+                    2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0);
 
-        checkVector(new FieldVector3D<DerivativeStructure>(2, createVector(1, 0,  0, 3),
-                                   -3, createVector(0, 0, -1, 3)),
-                                   2, 0, 3, -1, 0, 0, 0, -1, 0, 0, 0, -1);
-        checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, 3,  2.0),
-                                   createVector(1, 0,  0, 4),
-                                   new DerivativeStructure(4, 1, 3, -3.0),
-                                   createVector(0, 0, -1, 4)),
-                                   2, 0, 3, -1, 0, 0, 1, 0, -1, 0, 0, 0, 0, -1, -1);
-        checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, 3,  2.0),
-                                   new Vector3D(1, 0,  0),
-                                   new DerivativeStructure(4, 1, 3, -3.0),
-                                   new Vector3D(0, 0, -1)),
-                                   2, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1);
+        checkVector(new FieldVector3D<>(2, createVector(1, 0,  0, 3),
+                                       -3, createVector(0, 0, -1, 3)),
+                    2, 0, 3, -1, 0, 0, 0, -1, 0, 0, 0, -1);
+        checkVector(new FieldVector3D<>(factory41.build(3,  2.0),
+                                        createVector(1, 0,  0, 4),
+                                        factory41.build(3, -3.0),
+                                        createVector(0, 0, -1, 4)),
+                    2, 0, 3, -1, 0, 0, 1, 0, -1, 0, 0, 0, 0, -1, -1);
+        checkVector(new FieldVector3D<>(factory41.build(3,  2.0),
+                                        new Vector3D(1, 0,  0),
+                                        factory41.build(3, -3.0),
+                                        new Vector3D(0, 0, -1)),
+                    2, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1);
 
-        checkVector(new FieldVector3D<DerivativeStructure>(2, createVector(1, 0, 0, 3),
-                                   5, createVector(0, 1, 0, 3),
-                                   -3, createVector(0, 0, -1, 3)),
-                                   2, 5, 3, 4, 0, 0, 0, 4, 0, 0, 0, 4);
-        checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, 3,  2.0),
-                                   createVector(1, 0,  0, 4),
-                                   new DerivativeStructure(4, 1, 3,  5.0),
-                                   createVector(0, 1,  0, 4),
-                                   new DerivativeStructure(4, 1, 3, -3.0),
-                                   createVector(0, 0, -1, 4)),
-                                   2, 5, 3, 4, 0, 0, 1, 0, 4, 0, 1, 0, 0, 4, -1);
-        checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, 3,  2.0),
-                                   new Vector3D(1, 0,  0),
-                                   new DerivativeStructure(4, 1, 3,  5.0),
-                                   new Vector3D(0, 1,  0),
-                                   new DerivativeStructure(4, 1, 3, -3.0),
-                                   new Vector3D(0, 0, -1)),
-                                   2, 5, 3, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, -1);
+        checkVector(new FieldVector3D<>(2, createVector(1, 0, 0, 3),
+                                        5, createVector(0, 1, 0, 3),
+                                       -3, createVector(0, 0, -1, 3)),
+                    2, 5, 3, 4, 0, 0, 0, 4, 0, 0, 0, 4);
+        checkVector(new FieldVector3D<>(factory41.build(3,  2.0),
+                                        createVector(1, 0,  0, 4),
+                                        factory41.build(3,  5.0),
+                                        createVector(0, 1,  0, 4),
+                                        factory41.build(3, -3.0),
+                                        createVector(0, 0, -1, 4)),
+                    2, 5, 3, 4, 0, 0, 1, 0, 4, 0, 1, 0, 0, 4, -1);
+        checkVector(new FieldVector3D<>(factory41.build(3,  2.0),
+                                        new Vector3D(1, 0,  0),
+                                        factory41.build(3,  5.0),
+                                        new Vector3D(0, 1,  0),
+                                        factory41.build(3, -3.0),
+                                        new Vector3D(0, 0, -1)),
+                    2, 5, 3, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, -1);
 
-        checkVector(new FieldVector3D<DerivativeStructure>(2, createVector(1, 0, 0, 3),
-                                   5, createVector(0, 1, 0, 3),
-                                   5, createVector(0, -1, 0, 3),
-                                   -3, createVector(0, 0, -1, 3)),
-                                   2, 0, 3, 9, 0, 0, 0, 9, 0, 0, 0, 9);
-        checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, 3,  2.0),
-                                   createVector(1, 0,  0, 4),
-                                   new DerivativeStructure(4, 1, 3,  5.0),
-                                   createVector(0, 1,  0, 4),
-                                   new DerivativeStructure(4, 1, 3,  5.0),
-                                   createVector(0, -1,  0, 4),
-                                   new DerivativeStructure(4, 1, 3, -3.0),
-                                   createVector(0, 0, -1, 4)),
-                                   2, 0, 3, 9, 0, 0, 1, 0, 9, 0, 0, 0, 0, 9, -1);
-        checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(4, 1, 3,  2.0),
-                                   new Vector3D(1, 0,  0),
-                                   new DerivativeStructure(4, 1, 3,  5.0),
-                                   new Vector3D(0, 1,  0),
-                                   new DerivativeStructure(4, 1, 3,  5.0),
-                                   new Vector3D(0, -1,  0),
-                                   new DerivativeStructure(4, 1, 3, -3.0),
-                                   new Vector3D(0, 0, -1)),
-                                   2, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1);
+        checkVector(new FieldVector3D<>(2, createVector(1, 0, 0, 3),
+                                        5, createVector(0, 1, 0, 3),
+                                        5, createVector(0, -1, 0, 3),
+                                       -3, createVector(0, 0, -1, 3)),
+                    2, 0, 3, 9, 0, 0, 0, 9, 0, 0, 0, 9);
+        checkVector(new FieldVector3D<>(factory41.build(3,  2.0),
+                                        createVector(1, 0,  0, 4),
+                                        factory41.build(3,  5.0),
+                                        createVector(0, 1,  0, 4),
+                                        factory41.build(3,  5.0),
+                                        createVector(0, -1,  0, 4),
+                                        factory41.build(3, -3.0),
+                                        createVector(0, 0, -1, 4)),
+                    2, 0, 3, 9, 0, 0, 1, 0, 9, 0, 0, 0, 0, 9, -1);
+        checkVector(new FieldVector3D<>(factory41.build(3,  2.0),
+                                        new Vector3D(1, 0,  0),
+                                        factory41.build(3,  5.0),
+                                        new Vector3D(0, 1,  0),
+                                        factory41.build(3,  5.0),
+                                        new Vector3D(0, -1,  0),
+                                        factory41.build(3, -3.0),
+                                        new Vector3D(0, 0, -1)),
+                    2, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, -1);
 
         checkVector(new FieldVector3D<DerivativeStructure>(new DerivativeStructure[] {
-            new DerivativeStructure(3, 1, 2,  2),
-            new DerivativeStructure(3, 1, 1,  5),
-            new DerivativeStructure(3, 1, 0, -3)
+            factory31.build(2,  2),
+            factory31.build(1,  5),
+            factory31.build(0, -3)
         }),
         2, 5, -3, 0, 0, 1, 0, 1, 0, 1, 0, 0);
 
@@ -132,21 +136,22 @@ public class FieldVector3DTest {
 
     @Test
     public void testEquals() {
+        DSFactory factory31 = new DSFactory(3, 1);
         FieldVector3D<DerivativeStructure> u1 = createVector(1, 2, 3, 3);
         FieldVector3D<DerivativeStructure> v  = createVector(1, 2, 3 + 10 * Precision.EPSILON, 3);
         Assert.assertTrue(u1.equals(u1));
-        Assert.assertTrue(u1.equals(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(3, 1, 0, 1.0),
-                                                   new DerivativeStructure(3, 1, 1, 2.0),
-                                                   new DerivativeStructure(3, 1, 2, 3.0))));
-        Assert.assertFalse(u1.equals(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(3, 1, 1.0),
-                                                    new DerivativeStructure(3, 1, 1, 2.0),
-                                                    new DerivativeStructure(3, 1, 2, 3.0))));
-        Assert.assertFalse(u1.equals(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(3, 1, 0, 1.0),
-                                                    new DerivativeStructure(3, 1, 2.0),
-                                                    new DerivativeStructure(3, 1, 2, 3.0))));
-        Assert.assertFalse(u1.equals(new FieldVector3D<DerivativeStructure>(new DerivativeStructure(3, 1, 0, 1.0),
-                                                    new DerivativeStructure(3, 1, 1, 2.0),
-                                                    new DerivativeStructure(3, 1, 3.0))));
+        Assert.assertTrue(u1.equals(new FieldVector3D<>(factory31.build(0, 1.0),
+                                                        factory31.build(1, 2.0),
+                                                        factory31.build(2, 3.0))));
+        Assert.assertFalse(u1.equals(new FieldVector3D<>(factory31.build(1.0),
+                                                         factory31.build(1, 2.0),
+                                                         factory31.build(2, 3.0))));
+        Assert.assertFalse(u1.equals(new FieldVector3D<>(factory31.build(0, 1.0),
+                                                         factory31.build(2.0),
+                                                         factory31.build(2, 3.0))));
+        Assert.assertFalse(u1.equals(new FieldVector3D<>(factory31.build(0, 1.0),
+                                                         factory31.build(1, 2.0),
+                                                         factory31.build(3.0))));
         Assert.assertFalse(u1.equals(v));
         Assert.assertFalse(u1.equals(u1.toVector3D()));
         Assert.assertTrue(createVector(0, Double.NaN, 0, 3).equals(createVector(0, 0, Double.NaN, 3)));
@@ -217,9 +222,10 @@ public class FieldVector3DTest {
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testWrongDimension() throws MathIllegalArgumentException {
+        DSFactory factory31 = new DSFactory(3, 1);
         new FieldVector3D<DerivativeStructure>(new DerivativeStructure[] {
-            new DerivativeStructure(3, 1, 0, 2),
-            new DerivativeStructure(3, 1, 0, 5)
+            factory31.build(0, 2),
+            factory31.build(0, 5)
         });
     }
 
@@ -431,10 +437,12 @@ public class FieldVector3DTest {
         checkVector(v2.subtract(new Vector3D(4, 4, 4)), -7, -6, -5, 1, 0, 0, 0, 1, 0, 0, 0, 1);
         checkVector(v2.subtract(3, v1), -15, -14, -13, 1, 0, 0, 0, 1, 0, 0, 0, 1);
         checkVector(v2.subtract(3, new Vector3D(4, 4, 4)), -15, -14, -13, 1, 0, 0, 0, 1, 0, 0, 0, 1);
-        checkVector(v2.subtract(new DerivativeStructure(3, 1, 2, 3), new Vector3D(4, 4, 4)),
+        DSFactory factory31 = new DSFactory(3, 1);
+        checkVector(v2.subtract(factory31.build(2, 3), new Vector3D(4, 4, 4)),
                     -15, -14, -13, 1, 0, -4, 0, 1, -4, 0, 0, -3);
 
-        checkVector(createVector(1, 2, 3, 4).subtract(new DerivativeStructure(4, 1, 3, 5.0),
+        DSFactory factory41 = new DSFactory(4, 1);
+        checkVector(createVector(1, 2, 3, 4).subtract(factory41.build(3, 5.0),
                                                       createVector(3, -2, 1, 4)),
                     -14, 12, -2,
                      -4,  0,  0, -3,
@@ -454,10 +462,12 @@ public class FieldVector3DTest {
         checkVector(v2.add(new Vector3D(-2, 0, 2)), -5, -2, 1, 1, 0, 0, 0, 1, 0, 0, 0, 1);
         checkVector(v2.add(3, v1), -9, -2, 5, 7, 0, 0, 0, 7, 0, 0, 0, 7);
         checkVector(v2.add(3, new Vector3D(-2, 0, 2)), -9, -2, 5, 1, 0, 0, 0, 1, 0, 0, 0, 1);
-        checkVector(v2.add(new DerivativeStructure(3, 1, 2, 3), new Vector3D(-2, 0, 2)),
+        DSFactory factory31 = new DSFactory(3, 1);
+        checkVector(v2.add(factory31.build(2, 3), new Vector3D(-2, 0, 2)),
                     -9, -2, 5, 1, 0, -2, 0, 1, 0, 0, 0, 3);
 
-        checkVector(createVector(1, 2, 3, 4).add(new DerivativeStructure(4, 1, 3, 5.0),
+        DSFactory factory41 = new DSFactory(4, 1);
+        checkVector(createVector(1, 2, 3, 4).add(factory41.build(3, 5.0),
                                                  createVector(3, -2, 1, 4)),
                     16, -8,  8,
                      6,  0,  0,  3,
@@ -508,8 +518,8 @@ public class FieldVector3DTest {
         checkVector(FieldVector3D.crossProduct(v1, v2), -1, 2, 1);
 
         double scale    = FastMath.scalb(1.0, 100);
-        FieldVector3D<DerivativeStructure> big1   = new FieldVector3D<DerivativeStructure>(scale, v1);
-        FieldVector3D<DerivativeStructure> small2 = new FieldVector3D<DerivativeStructure>(1 / scale, v2);
+        FieldVector3D<DerivativeStructure> big1   = new FieldVector3D<>(scale, v1);
+        FieldVector3D<DerivativeStructure> small2 = new FieldVector3D<>(1 / scale, v2);
         checkVector(FieldVector3D.crossProduct(big1, small2), -1, 2, 1);
 
     }
@@ -662,14 +672,14 @@ public class FieldVector3DTest {
         // leads to a result of   [0.0009765, -0.0001220, -0.0039062],
         // instead of the correct [0.0006913, -0.0001254, -0.0007909]
         final FieldVector3D<DerivativeStructure> u1 = createVector(-1321008684645961.0 /   268435456.0,
-                                         -5774608829631843.0 /   268435456.0,
-                                         -7645843051051357.0 /  8589934592.0, 3);
+                                                                   -5774608829631843.0 /   268435456.0,
+                                                                   -7645843051051357.0 /  8589934592.0, 3);
         final FieldVector3D<DerivativeStructure> u2 = createVector( 1796571811118507.0 /  2147483648.0,
-                                          7853468008299307.0 /  2147483648.0,
-                                          2599586637357461.0 / 17179869184.0, 3);
+                                                                    7853468008299307.0 /  2147483648.0,
+                                                                    2599586637357461.0 / 17179869184.0, 3);
         final FieldVector3D<DerivativeStructure> u3 = createVector(12753243807587107.0 / 18446744073709551616.0,
-                                         -2313766922703915.0 / 18446744073709551616.0,
-                                          -227970081415313.0 /   288230376151711744.0, 3);
+                                                                   -2313766922703915.0 / 18446744073709551616.0,
+                                                                    -227970081415313.0 /   288230376151711744.0, 3);
         FieldVector3D<DerivativeStructure> cNaive = new FieldVector3D<DerivativeStructure>(u1.getY().multiply(u2.getZ()).subtract(u1.getZ().multiply(u2.getY())),
                                        u1.getZ().multiply(u2.getX()).subtract(u1.getX().multiply(u2.getZ())),
                                        u1.getX().multiply(u2.getY()).subtract(u1.getY().multiply(u2.getX())));
@@ -712,9 +722,10 @@ public class FieldVector3DTest {
     }
 
     private FieldVector3D<DerivativeStructure> createVector(double x, double y, double z, int params) {
-        return new FieldVector3D<DerivativeStructure>(new DerivativeStructure(params, 1, 0, x),
-                              new DerivativeStructure(params, 1, 1, y),
-                              new DerivativeStructure(params, 1, 2, z));
+        DSFactory factory = new DSFactory(params, 1);
+        return new FieldVector3D<>(factory.build(0, x),
+                                   factory.build(1, y),
+                                   factory.build(2, z));
     }
 
     private void checkVector(FieldVector3D<DerivativeStructure> v, double x, double y, double z) {

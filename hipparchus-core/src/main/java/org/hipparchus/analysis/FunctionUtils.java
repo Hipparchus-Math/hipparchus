@@ -17,6 +17,7 @@
 
 package org.hipparchus.analysis;
 
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.MultivariateDifferentiableFunction;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
@@ -414,7 +415,7 @@ public class FunctionUtils {
      * @see #derivative(MultivariateDifferentiableFunction, int[])
      */
     public static MultivariateDifferentiableFunction toDifferentiable(final MultivariateFunction f,
-                                                                         final MultivariateVectorFunction gradient) {
+                                                                      final MultivariateVectorFunction gradient) {
 
         return new MultivariateDifferentiableFunction() {
 
@@ -463,7 +464,7 @@ public class FunctionUtils {
 
                 }
 
-                return new DerivativeStructure(parameters, 1, packed);
+                return point[0].getFactory().build(packed);
 
             }
 
@@ -485,12 +486,15 @@ public class FunctionUtils {
      * @see #toDifferentiable(UnivariateFunction, UnivariateFunction...)
      */
     public static UnivariateFunction derivative(final UnivariateDifferentiableFunction f, final int order) {
+
+        final DSFactory factory = new DSFactory(1, order);
+
         return new UnivariateFunction() {
 
             /** {@inheritDoc} */
             @Override
             public double value(final double x) {
-                final DerivativeStructure dsX = new DerivativeStructure(1, order, 0, x);
+                final DerivativeStructure dsX = factory.build(0, x);
                 return f.value(dsX).getPartialDerivative(order);
             }
 
@@ -511,22 +515,31 @@ public class FunctionUtils {
      * @see #toDifferentiable(MultivariateFunction, MultivariateVectorFunction)
      */
     public static MultivariateFunction derivative(final MultivariateDifferentiableFunction f, final int[] orders) {
+
+        // the maximum differentiation order is the sum of all orders
+        int sum = 0;
+        for (final int order : orders) {
+            sum += order;
+        }
+        final int sumOrders = sum;
+
         return new MultivariateFunction() {
+
+            private DSFactory factory = null;
 
             /** {@inheritDoc} */
             @Override
             public double value(final double[] point) {
 
-                // the maximum differentiation order is the sum of all orders
-                int sumOrders = 0;
-                for (final int order : orders) {
-                    sumOrders += order;
+                if (factory == null || point.length != factory.getCompiler().getFreeParameters()) {
+                    // rebuild the factory in case of mismatch
+                    factory = new DSFactory(point.length, sumOrders);
                 }
 
                 // set up the input parameters
                 final DerivativeStructure[] dsPoint = new DerivativeStructure[point.length];
                 for (int i = 0; i < point.length; ++i) {
-                    dsPoint[i] = new DerivativeStructure(point.length, sumOrders, i, point[i]);
+                    dsPoint[i] = factory.build(i, point[i]);
                 }
 
                 return f.value(dsPoint).getPartialDerivative(orders);

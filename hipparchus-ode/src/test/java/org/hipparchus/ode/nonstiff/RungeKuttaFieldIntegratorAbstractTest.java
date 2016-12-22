@@ -24,6 +24,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -512,21 +513,20 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
                                             final double[] epsilonPartials) {
 
         // parameters indices
-        final int parameters = 5;
-        final int order      = 1;
+        final DSFactory factory = new DSFactory(5, 1);
         final int parOmega   = 0;
         final int parTO      = 1;
         final int parY00     = 2;
         final int parY01     = 3;
         final int parT       = 4;
 
-        DerivativeStructure omega = new DerivativeStructure(parameters, order, parOmega, 1.3);
-        DerivativeStructure t0    = new DerivativeStructure(parameters, order, parTO, 1.3);
+        DerivativeStructure omega = factory.build(parOmega, 1.3);
+        DerivativeStructure t0    = factory.build(parTO, 1.3);
         DerivativeStructure[] y0  = new DerivativeStructure[] {
-            new DerivativeStructure(parameters, order, parY00, 3.0),
-            new DerivativeStructure(parameters, order, parY01, 4.0)
+            factory.build(parY00, 3.0),
+            factory.build(parY01, 4.0)
         };
-        DerivativeStructure t     = new DerivativeStructure(parameters, order, parT, 6.0);
+        DerivativeStructure t     = factory.build(parT, 6.0);
         SinCos sinCos = new SinCos(omega);
 
         RungeKuttaFieldIntegrator<DerivativeStructure> integrator =
@@ -544,7 +544,7 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         // check derivatives
         final double[][] derivatives = sinCos.getDerivatives(t.getReal());
         for (int i = 0; i < sinCos.getDimension(); ++i) {
-            for (int parameter = 0; parameter < parameters; ++parameter) {
+            for (int parameter = 0; parameter < factory.getCompiler().getFreeParameters(); ++parameter) {
                 Assert.assertEquals(derivatives[i][parameter],
                                     dYdP(result.getPrimaryState()[i], parameter),
                                     epsilonPartials[parameter]);

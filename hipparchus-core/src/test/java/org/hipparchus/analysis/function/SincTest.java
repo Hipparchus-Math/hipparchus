@@ -17,6 +17,7 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
@@ -76,13 +77,13 @@ public class SincTest {
 
    @Test
    public void testDerivativeZero() {
-       final DerivativeStructure s0 = new Sinc(true).value(new DerivativeStructure(1, 1, 0, 0.0));
+       final DerivativeStructure s0 = new Sinc(true).value(new DSFactory(1, 1).build(0, 0.0));
        Assert.assertEquals(0, s0.getPartialDerivative(1), 0);
    }
 
    @Test
    public void testDerivatives1Dot2Unnormalized() {
-       DerivativeStructure s = new Sinc(false).value(new DerivativeStructure(1, 5, 0, 1.2));
+       DerivativeStructure s = new Sinc(false).value(new DSFactory(1, 5).build(0, 1.2));
        Assert.assertEquals( 0.77669923830602195806, s.getPartialDerivative(0), 1.0e-16);
        Assert.assertEquals(-0.34528456985779031701, s.getPartialDerivative(1), 1.0e-16);
        Assert.assertEquals(-0.2012249552097047631,  s.getPartialDerivative(2), 1.0e-16);
@@ -93,7 +94,7 @@ public class SincTest {
 
    @Test
    public void testDerivatives1Dot2Normalized() {
-       DerivativeStructure s = new Sinc(true).value(new DerivativeStructure(1, 5, 0, 1.2));
+       DerivativeStructure s = new Sinc(true).value(new DSFactory(1, 5).build(0, 1.2));
        Assert.assertEquals(-0.15591488063143983888, s.getPartialDerivative(0), 6.0e-17);
        Assert.assertEquals(-0.54425176145292298767, s.getPartialDerivative(1), 2.0e-16);
        Assert.assertEquals(2.4459044611635856107,   s.getPartialDerivative(2), 9.0e-16);
@@ -113,9 +114,10 @@ public class SincTest {
                }
            };
 
+       DSFactory factory = new DSFactory(1, 1);
        for (double x = 1e-30; x < 1e10; x *= 2) {
            final double fX = f.value(x);
-           final DerivativeStructure sX = sinc.value(new DerivativeStructure(1, 1, 0, x));
+           final DerivativeStructure sX = sinc.value(factory.build(0, x));
            Assert.assertEquals("x=" + x, fX, sX.getPartialDerivative(1), 3.0e-13);
        }
    }

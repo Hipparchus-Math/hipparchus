@@ -899,7 +899,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
         final double[] all = simpleValue.getAllDerivatives();
         all[0] = accurateValue;
-        return new DerivativeStructure(simpleValue.getFreeParameters(), simpleValue.getOrder(), all);
+        return factory.build(all);
 
     }
 
@@ -927,7 +927,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
         final double[] all = simpleValue.getAllDerivatives();
         all[0] = accurateValue;
-        return new DerivativeStructure(simpleValue.getFreeParameters(), simpleValue.getOrder(), all);
+        return factory.build(all);
 
     }
 
@@ -950,7 +950,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
         final double[] all = simpleValue.getAllDerivatives();
         all[0] = accurateValue;
-        return new DerivativeStructure(getFreeParameters(), getOrder(), all);
+        return factory.build(all);
 
     }
 
@@ -973,7 +973,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
         final double[] all = simpleValue.getAllDerivatives();
         all[0] = accurateValue;
-        return new DerivativeStructure(getFreeParameters(), getOrder(), all);
+        return factory.build(all);
 
     }
 
@@ -998,7 +998,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
         final double[] all = simpleValue.getAllDerivatives();
         all[0] = accurateValue;
-        return new DerivativeStructure(getFreeParameters(), getOrder(), all);
+        return factory.build(all);
 
     }
 
@@ -1023,7 +1023,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
         final double[] all = simpleValue.getAllDerivatives();
         all[0] = accurateValue;
-        return new DerivativeStructure(getFreeParameters(), getOrder(), all);
+        return factory.build(all);
 
     }
 
@@ -1050,7 +1050,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
         final double[] all = simpleValue.getAllDerivatives();
         all[0] = accurateValue;
-        return new DerivativeStructure(getFreeParameters(), getOrder(), all);
+        return factory.build(all);
 
     }
 
@@ -1077,7 +1077,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         // create a result with accurate value and all derivatives (not necessarily as accurate as the value)
         final double[] all = simpleValue.getAllDerivatives();
         all[0] = accurateValue;
-        return new DerivativeStructure(getFreeParameters(), getOrder(), all);
+        return factory.build(all);
 
     }
 
@@ -1115,55 +1115,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     @Override
     public int hashCode() {
         return 227 + 229 * getFreeParameters() + 233 * getOrder() + 239 * MathUtils.hash(data);
-    }
-
-    /**
-     * Replace the instance with a data transfer object for serialization.
-     * @return data transfer object that will be serialized
-     */
-    private Object writeReplace() {
-        return new DataTransferObject(factory.getCompiler().getFreeParameters(), factory.getCompiler().getOrder(), data);
-    }
-
-    /** Internal class used only for serialization. */
-    private static class DataTransferObject implements Serializable {
-
-        /** Serializable UID. */
-        private static final long serialVersionUID = 20120730L;
-
-        /** Number of variables.
-         * @serial
-         */
-        private final int variables;
-
-        /** Derivation order.
-         * @serial
-         */
-        private final int order;
-
-        /** Partial derivatives.
-         * @serial
-         */
-        private final double[] data;
-
-        /** Simple constructor.
-         * @param variables number of variables
-         * @param order derivation order
-         * @param data partial derivatives
-         */
-        DataTransferObject(final int variables, final int order, final double[] data) {
-            this.variables = variables;
-            this.order     = order;
-            this.data      = data;
-        }
-
-        /** Replace the deserialized data transfer object with a {@link DerivativeStructure}.
-         * @return replacement {@link DerivativeStructure}
-         */
-        private Object readResolve() {
-            return new DerivativeStructure(variables, order, data);
-        }
-
     }
 
 }

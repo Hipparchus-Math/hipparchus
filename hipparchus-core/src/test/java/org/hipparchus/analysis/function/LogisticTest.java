@@ -18,6 +18,7 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
@@ -90,8 +91,9 @@ public class LogisticTest {
         final double max = 10;
         final double n = 20;
         final double delta = (max - min) / n;
+        final DSFactory factory = new DSFactory(1, 5);
         for (int i = 0; i < n; i++) {
-            final DerivativeStructure x = new DerivativeStructure(1, 5, 0, min + i * delta);
+            final DerivativeStructure x = factory.build(0, min + i * delta);
             for (int order = 0; order <= x.getOrder(); ++order) {
                 Assert.assertEquals("x=" + x.getValue(),
                                     g.value(x).getPartialDerivative(order),

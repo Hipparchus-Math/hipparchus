@@ -18,6 +18,7 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.function.HarmonicOscillator;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -55,10 +56,11 @@ public class HarmonicOscillatorTest {
         final HarmonicOscillator f = new HarmonicOscillator(a, w, p);
 
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            final DSFactory factory = new DSFactory(1, maxOrder);
             final double d = 0.12345;
             for (int i = 0; i < 10; i++) {
                 final double v = i * d;
-                final DerivativeStructure h = f.value(new DerivativeStructure(1, maxOrder, 0, v));
+                final DerivativeStructure h = f.value(factory.build(0, v));
                 for (int k = 0; k <= maxOrder; ++k) {
                     final double trigo;
                     switch (k % 4) {

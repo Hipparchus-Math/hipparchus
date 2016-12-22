@@ -20,7 +20,7 @@ import org.hipparchus.analysis.FunctionUtils;
 import org.hipparchus.analysis.MonitoredFunction;
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
-import org.hipparchus.analysis.differentiation.DerivativeStructure;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.analysis.function.Constant;
 import org.hipparchus.analysis.function.Inverse;
@@ -252,9 +252,10 @@ public final class BrentSolverTest {
                                         FunctionUtils.multiply(new Constant(1e6), inv),
                                         FunctionUtils.multiply(new Constant(1e4),
                                                                FunctionUtils.compose(inv, sqrt)));
+                private final DSFactory factory = new DSFactory(1, 1);
 
                 public double value(double x) {
-                    return func.value(new DerivativeStructure(1, 1, 0, x)).getPartialDerivative(1);
+                    return func.value(factory.build(0, x)).getPartialDerivative(1);
                 }
 
             };

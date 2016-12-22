@@ -1150,7 +1150,7 @@ public class SparseGradientTest extends ExtendedFieldElementAbstractTest<SparseG
         @SuppressWarnings("unchecked")
         Field<SparseGradient> first = (Field<SparseGradient>) map.entrySet().iterator().next().getKey();
         Assert.assertTrue(first.equals(first));
-        Assert.assertFalse(first.equals(new DerivativeStructure(1, 1, 0.0).getField()));
+        Assert.assertFalse(first.equals(new DSFactory(1, 1).build(0.0).getField()));
 
     }
 

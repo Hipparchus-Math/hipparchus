@@ -67,8 +67,9 @@ public class FiniteDifferencesDifferentiatorTest {
                         return 42.0;
                     }
                 });
+        DSFactory factory = new DSFactory(1, 2);
         for (double x = -10; x < 10; x += 0.1) {
-            DerivativeStructure y = f.value(new DerivativeStructure(1, 2, 0, x));
+            DerivativeStructure y = f.value(factory.build(0, x));
             Assert.assertEquals(42.0, y.getValue(), 1.0e-15);
             Assert.assertEquals( 0.0, y.getPartialDerivative(1), 1.0e-15);
             Assert.assertEquals( 0.0, y.getPartialDerivative(2), 1.0e-15);
@@ -86,8 +87,9 @@ public class FiniteDifferencesDifferentiatorTest {
                         return 2 - 3 * x;
                     }
                 });
+        DSFactory factory = new DSFactory(1, 2);
         for (double x = -10; x < 10; x += 0.1) {
-            DerivativeStructure y = f.value(new DerivativeStructure(1, 2, 0, x));
+            DerivativeStructure y = f.value(factory.build(0, x));
             Assert.assertEquals("" + (2 - 3 * x - y.getValue()), 2 - 3 * x, y.getValue(), 2.0e-15);
             Assert.assertEquals(-3.0, y.getPartialDerivative(1), 4.0e-13);
             Assert.assertEquals( 0.0, y.getPartialDerivative(2), 9.0e-11);
@@ -104,9 +106,10 @@ public class FiniteDifferencesDifferentiatorTest {
         double[] expectedError = new double[] {
             6.939e-18, 1.284e-15, 2.477e-13, 1.168e-11, 2.840e-9, 7.971e-8
         };
-       double[] maxError = new double[expectedError.length];
+        double[] maxError = new double[expectedError.length];
+        DSFactory factory = new DSFactory(1, maxError.length - 1);
         for (double x = -10; x < 10; x += 0.1) {
-            DerivativeStructure dsX  = new DerivativeStructure(1, maxError.length - 1, 0, x);
+            DerivativeStructure dsX  = factory.build(0, x);
             DerivativeStructure yRef = gaussian.value(dsX);
             DerivativeStructure y    = f.value(dsX);
             Assert.assertEquals(f.value(dsX.getValue()), f.value(dsX).getValue(), 1.0e-15);
@@ -130,8 +133,9 @@ public class FiniteDifferencesDifferentiatorTest {
                 new FiniteDifferencesDifferentiator(7, 1.0e-6).differentiate(quintic);
         double[] maxErrorGood = new double[7];
         double[] maxErrorBad  = new double[7];
+        DSFactory factory = new DSFactory(1, maxErrorGood.length - 1);
         for (double x = -10; x < 10; x += 0.1) {
-            DerivativeStructure dsX  = new DerivativeStructure(1, 6, 0, x);
+            DerivativeStructure dsX  = factory.build(0, x);
             DerivativeStructure yRef  = quintic.value(dsX);
             DerivativeStructure yGood = goodStep.value(dsX);
             DerivativeStructure yBad  = badStep.value(dsX);
@@ -175,7 +179,7 @@ public class FiniteDifferencesDifferentiatorTest {
                         throw MathRuntimeException.createInternalError();
                     }
                 });
-        f.value(new DerivativeStructure(1, 3, 0, 1.0));
+        f.value(new DSFactory(1, 3).build(0, 1.0));
     }
 
     @Test(expected=MathIllegalArgumentException.class)
@@ -189,7 +193,7 @@ public class FiniteDifferencesDifferentiatorTest {
                         throw MathRuntimeException.createInternalError();
                     }
                 });
-        f.value(new DerivativeStructure(1, 3, 0, 1.0));
+        f.value(new DSFactory(1, 3).build(0, 1.0));
     }
 
     @Test(expected=MathIllegalArgumentException.class)
@@ -203,7 +207,7 @@ public class FiniteDifferencesDifferentiatorTest {
                         throw MathRuntimeException.createInternalError();
                     }
                 });
-        f.value(new DerivativeStructure(1, 3, 0, 1.0));
+        f.value(new DSFactory(1, 3).build(0, 1.0));
     }
 
     @Test(expected=MathIllegalArgumentException.class)
@@ -234,8 +238,9 @@ public class FiniteDifferencesDifferentiatorTest {
                 new FiniteDifferencesDifferentiator(3, 0.1).differentiate(f);
         UnivariateDifferentiableFunction properlyBounded =
                 new FiniteDifferencesDifferentiator(3, 0.1, 0.0, 1.0).differentiate(f);
-        DerivativeStructure tLow  = new DerivativeStructure(1, 1, 0, 0.05);
-        DerivativeStructure tHigh = new DerivativeStructure(1, 1, 0, 0.95);
+        DSFactory factory = new DSFactory(1, 1);
+        DerivativeStructure tLow  = factory.build(0, 0.05);
+        DerivativeStructure tHigh = factory.build(0, 0.95);
 
         try {
             // here, we did not set the bounds, so the differences are evaluated out of domain
@@ -284,11 +289,12 @@ public class FiniteDifferencesDifferentiatorTest {
         });
 
         // we are able to compute derivative near 0, but the accuracy is much poorer there
-        DerivativeStructure t001 = new DerivativeStructure(1, 1, 0, 0.01);
+        DSFactory factory = new DSFactory(1, 1);
+        DerivativeStructure t001 = factory.build(0, 0.01);
         Assert.assertEquals(0.5 / FastMath.sqrt(t001.getValue()), sqrt.value(t001).getPartialDerivative(1), 1.6);
-        DerivativeStructure t01 = new DerivativeStructure(1, 1, 0, 0.1);
+        DerivativeStructure t01 = factory.build(0, 0.1);
         Assert.assertEquals(0.5 / FastMath.sqrt(t01.getValue()), sqrt.value(t01).getPartialDerivative(1), 7.0e-3);
-        DerivativeStructure t03 = new DerivativeStructure(1, 1, 0, 0.3);
+        DerivativeStructure t03 = factory.build(0, 0.3);
         Assert.assertEquals(0.5 / FastMath.sqrt(t03.getValue()), sqrt.value(t03).getPartialDerivative(1), 2.1e-7);
 
     }
@@ -308,8 +314,9 @@ public class FiniteDifferencesDifferentiatorTest {
 
         });
 
+        DSFactory factory = new DSFactory(1, 2);
         for (double x = -10; x < 10; x += 0.1) {
-            DerivativeStructure dsX = new DerivativeStructure(1, 2, 0, x);
+            DerivativeStructure dsX = factory.build(0, x);
             DerivativeStructure[] y = f.value(dsX);
             double cos = FastMath.cos(x);
             double sin = FastMath.sin(x);
@@ -347,8 +354,9 @@ public class FiniteDifferencesDifferentiatorTest {
 
         });
 
+        DSFactory factory = new DSFactory(1, 2);
         for (double x = -1; x < 1; x += 0.02) {
-            DerivativeStructure dsX = new DerivativeStructure(1, 2, 0, x);
+            DerivativeStructure dsX = factory.build(0, x);
             DerivativeStructure[][] y = f.value(dsX);
             double cos = FastMath.cos(x);
             double sin = FastMath.sin(x);
@@ -390,10 +398,11 @@ public class FiniteDifferencesDifferentiatorTest {
             6.696e-16, 1.371e-12, 2.007e-8, 1.754e-5
         };
         double[] maxError = new double[expectedError.length];
-       for (double x = -2; x < 2; x += 0.1) {
+        DSFactory factory = new DSFactory(2, maxError.length - 1);
+        for (double x = -2; x < 2; x += 0.1) {
            for (double y = -2; y < 2; y += 0.1) {
-               DerivativeStructure dsX  = new DerivativeStructure(2, maxError.length - 1, 0, x);
-               DerivativeStructure dsY  = new DerivativeStructure(2, maxError.length - 1, 1, y);
+               DerivativeStructure dsX  = factory.build(0, x);
+               DerivativeStructure dsY  = factory.build(1, y);
                DerivativeStructure dsT  = dsX.multiply(3).subtract(dsY.multiply(2));
                DerivativeStructure sRef = sine.value(dsT);
                DerivativeStructure s    = f.value(dsT);

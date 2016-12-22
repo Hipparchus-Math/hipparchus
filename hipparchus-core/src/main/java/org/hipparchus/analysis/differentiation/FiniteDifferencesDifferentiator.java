@@ -212,20 +212,18 @@ public class FiniteDifferencesDifferentiator
         }
 
         // evaluate interpolation polynomial (represented by top diagonal) at t
-        final int order            = t.getOrder();
-        final int parameters       = t.getFreeParameters();
         final double[] derivatives = t.getAllDerivatives();
         final double dt0           = t.getValue() - t0;
-        DerivativeStructure interpolation = new DerivativeStructure(parameters, order, 0.0);
+        DerivativeStructure interpolation = t.getFactory().build(0.0);
         DerivativeStructure monomial = null;
         for (int i = 0; i < nbPoints; ++i) {
             if (i == 0) {
                 // start with monomial(t) = 1
-                monomial = new DerivativeStructure(parameters, order, 1.0);
+                monomial = t.getFactory().build(1.0);
             } else {
                 // monomial(t) = (t - t0) * (t - t1) * ... * (t - t(i-1))
                 derivatives[0] = dt0 - (i - 1) * stepSize;
-                final DerivativeStructure deltaX = new DerivativeStructure(parameters, order, derivatives);
+                final DerivativeStructure deltaX = t.getFactory().build(derivatives);
                 monomial = monomial.multiply(deltaX);
             }
             interpolation = interpolation.add(monomial.multiply(top[i]));

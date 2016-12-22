@@ -18,6 +18,7 @@
 package org.hipparchus.geometry.euclidean.threed;
 
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.threed.SphericalCoordinates;
@@ -76,23 +77,24 @@ public class SphericalCoordinatesTest {
 
     @Test
     public void testGradient() {
+        DSFactory factory = new DSFactory(3, 1);
         for (double r = 0.2; r < 10; r += 0.5) {
             for (double theta = 0; theta < 2 * FastMath.PI; theta += 0.1) {
                 for (double phi = 0.1; phi < FastMath.PI; phi += 0.1) {
                     SphericalCoordinates sc = new SphericalCoordinates(r, theta, phi);
 
-                    DerivativeStructure svalue = valueSpherical(new DerivativeStructure(3, 1, 0, r),
-                                                                new DerivativeStructure(3, 1, 1, theta),
-                                                                new DerivativeStructure(3, 1, 2, phi));
+                    DerivativeStructure svalue = valueSpherical(factory.build(0, r),
+                                                                factory.build(1, theta),
+                                                                factory.build(2, phi));
                     double[] sGradient = new double[] {
                         svalue.getPartialDerivative(1, 0, 0),
                         svalue.getPartialDerivative(0, 1, 0),
                         svalue.getPartialDerivative(0, 0, 1),
                     };
 
-                    DerivativeStructure cvalue = valueCartesian(new DerivativeStructure(3, 1, 0, sc.getCartesian().getX()),
-                                                                new DerivativeStructure(3, 1, 1, sc.getCartesian().getY()),
-                                                                new DerivativeStructure(3, 1, 2, sc.getCartesian().getZ()));
+                    DerivativeStructure cvalue = valueCartesian(factory.build(0, sc.getCartesian().getX()),
+                                                                factory.build(1, sc.getCartesian().getY()),
+                                                                factory.build(2, sc.getCartesian().getZ()));
                     Vector3D refCGradient = new Vector3D(cvalue.getPartialDerivative(1, 0, 0),
                                                          cvalue.getPartialDerivative(0, 1, 0),
                                                          cvalue.getPartialDerivative(0, 0, 1));
@@ -108,14 +110,15 @@ public class SphericalCoordinatesTest {
 
     @Test
     public void testHessian() {
+        DSFactory factory = new DSFactory(3, 2);
         for (double r = 0.2; r < 10; r += 0.5) {
             for (double theta = 0; theta < 2 * FastMath.PI; theta += 0.2) {
                 for (double phi = 0.1; phi < FastMath.PI; phi += 0.2) {
                     SphericalCoordinates sc = new SphericalCoordinates(r, theta, phi);
 
-                    DerivativeStructure svalue = valueSpherical(new DerivativeStructure(3, 2, 0, r),
-                                                                new DerivativeStructure(3, 2, 1, theta),
-                                                                new DerivativeStructure(3, 2, 2, phi));
+                    DerivativeStructure svalue = valueSpherical(factory.build(0, r),
+                                                                factory.build(1, theta),
+                                                                factory.build(2, phi));
                     double[] sGradient = new double[] {
                         svalue.getPartialDerivative(1, 0, 0),
                         svalue.getPartialDerivative(0, 1, 0),
@@ -132,9 +135,9 @@ public class SphericalCoordinatesTest {
                     sHessian[1][2] = Double.NaN; // just to check upper-right part is not used
                     sHessian[2][2] = svalue.getPartialDerivative(0, 0, 2); // d2F/dPhi2
 
-                    DerivativeStructure cvalue = valueCartesian(new DerivativeStructure(3, 2, 0, sc.getCartesian().getX()),
-                                                                new DerivativeStructure(3, 2, 1, sc.getCartesian().getY()),
-                                                                new DerivativeStructure(3, 2, 2, sc.getCartesian().getZ()));
+                    DerivativeStructure cvalue = valueCartesian(factory.build(0, sc.getCartesian().getX()),
+                                                                factory.build(1, sc.getCartesian().getY()),
+                                                                factory.build(2, sc.getCartesian().getZ()));
                     double[][] refCHessian = new double[3][3];
                     refCHessian[0][0] = cvalue.getPartialDerivative(2, 0, 0); // d2F/dX2
                     refCHessian[1][0] = cvalue.getPartialDerivative(1, 1, 0); // d2F/dXdY

@@ -16,6 +16,8 @@
  */
 package org.hipparchus.analysis.differentiation;
 
+import java.io.Serializable;
+
 import org.hipparchus.Field;
 import org.hipparchus.FieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -27,7 +29,10 @@ import org.hipparchus.exception.MathIllegalArgumentException;
  * @see DerivativeStructure
  * @since 1.1
  */
-public class DSFactory {
+public class DSFactory implements Serializable {
+
+    /** Serializable UID. */
+    private static final long serialVersionUID = 20161222L;
 
     /** Compiler for the current dimensions. */
     private final DSCompiler compiler;
@@ -134,6 +139,48 @@ public class DSFactory {
      */
     void checkCompatibility(final DSFactory factory) throws MathIllegalArgumentException {
         compiler.checkCompatibility(factory.compiler);
+    }
+
+    /**
+     * Replace the instance with a data transfer object for serialization.
+     * @return data transfer object that will be serialized
+     */
+    private Object writeReplace() {
+        return new DataTransferObject(compiler.getFreeParameters(), compiler.getOrder());
+    }
+
+    /** Internal class used only for serialization. */
+    private static class DataTransferObject implements Serializable {
+
+        /** Serializable UID. */
+        private static final long serialVersionUID = 20161222L;
+
+        /** Number of variables.
+         * @serial
+         */
+        private final int variables;
+
+        /** Derivation order.
+         * @serial
+         */
+        private final int order;
+
+        /** Simple constructor.
+         * @param variables number of variables
+         * @param order derivation order
+         */
+        DataTransferObject(final int variables, final int order) {
+            this.variables = variables;
+            this.order     = order;
+        }
+
+        /** Replace the deserialized data transfer object with a {@link DSFactory}.
+         * @return replacement {@link DSFactory}
+         */
+        private Object readResolve() {
+            return new DSFactory(variables, order);
+        }
+
     }
 
     /** Field for {link DerivativeStructure} instances.

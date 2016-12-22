@@ -18,6 +18,7 @@
 package org.hipparchus.analysis.function;
 
 import org.hipparchus.analysis.UnivariateFunction;
+import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -59,7 +60,7 @@ public class GaussianTest {
     @Test
     public void testDerivatives() {
         final UnivariateDifferentiableFunction gaussian = new Gaussian(2.0, 0.9, 3.0);
-        final DerivativeStructure dsX = new DerivativeStructure(1, 4, 0, 1.1);
+        final DerivativeStructure dsX = new DSFactory(1, 4).build(0, 1.1);
         final DerivativeStructure dsY = gaussian.value(dsX);
         Assert.assertEquals( 1.9955604901712128349,   dsY.getValue(),              EPS);
         Assert.assertEquals(-0.044345788670471396332, dsY.getPartialDerivative(1), EPS);
@@ -72,20 +73,21 @@ public class GaussianTest {
     public void testDerivativeLargeArguments() {
         final Gaussian f = new Gaussian(0, 1e-50);
 
-        Assert.assertEquals(0, f.value(new DerivativeStructure(1, 1, 0, Double.NEGATIVE_INFINITY)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(new DerivativeStructure(1, 1, 0, -Double.MAX_VALUE)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(new DerivativeStructure(1, 1, 0, -1e50)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(new DerivativeStructure(1, 1, 0, -1e2)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(new DerivativeStructure(1, 1, 0, 1e2)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(new DerivativeStructure(1, 1, 0, 1e50)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(new DerivativeStructure(1, 1, 0, Double.MAX_VALUE)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(new DerivativeStructure(1, 1, 0, Double.POSITIVE_INFINITY)).getPartialDerivative(1), 0);
+        DSFactory factory = new DSFactory(1, 1);
+        Assert.assertEquals(0, f.value(factory.build(0, Double.NEGATIVE_INFINITY)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.build(0, -Double.MAX_VALUE)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.build(0, -1e50)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.build(0, -1e2)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.build(0, 1e2)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.build(0, 1e50)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.build(0, Double.MAX_VALUE)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.build(0, Double.POSITIVE_INFINITY)).getPartialDerivative(1), 0);
     }
 
     @Test
     public void testDerivativesNaN() {
         final Gaussian f = new Gaussian(0, 1e-50);
-        final DerivativeStructure fx = f.value(new DerivativeStructure(1, 5, 0, Double.NaN));
+        final DerivativeStructure fx = f.value(new DSFactory(1, 5).build(0, Double.NaN));
         for (int i = 0; i <= fx.getOrder(); ++i) {
             Assert.assertTrue(Double.isNaN(fx.getPartialDerivative(i)));
         }
