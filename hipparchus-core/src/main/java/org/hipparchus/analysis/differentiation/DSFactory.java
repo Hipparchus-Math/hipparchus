@@ -46,7 +46,7 @@ public class DSFactory implements Serializable {
      */
     public DSFactory(final int parameters, final int order) {
         this.compiler        = DSCompiler.getCompiler(parameters, order);
-        this.derivativeField = new DSField(build(0.0), build(1.0));
+        this.derivativeField = new DSField(constant(0.0), constant(1.0));
     }
 
     /** Get the {@link Field} the {@link DerivativeStructure} instances belong to.
@@ -59,7 +59,7 @@ public class DSFactory implements Serializable {
     /** Build a {@link DerivativeStructure} representing a constant value.
      * @param value value of the constant
      */
-    public DerivativeStructure build(double value) {
+    public DerivativeStructure constant(double value) {
         final double[] data = new double[compiler.getSize()];
         data[0] = value;
         return new DerivativeStructure(this, data);
@@ -77,7 +77,7 @@ public class DSFactory implements Serializable {
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
      * @see #DerivativeStructure(int, int, double)
      */
-    public DerivativeStructure build(final int index, final double value)
+    public DerivativeStructure variable(final int index, final double value)
         throws MathIllegalArgumentException {
 
         if (index >= getCompiler().getFreeParameters()) {

@@ -44,7 +44,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
 
     @Override
     protected DerivativeStructure build(final double x) {
-        return new DSFactory(2, 1).build(0, x);
+        return new DSFactory(2, 1).variable(0, x);
     }
 
     @Deprecated
@@ -81,28 +81,28 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testWrongVariableIndex() {
-        new DSFactory(3, 1).build(3, 1.0);
+        new DSFactory(3, 1).variable(3, 1.0);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testMissingOrders() {
-        new DSFactory(3, 1).build(0, 1.0).getPartialDerivative(0, 1);
+        new DSFactory(3, 1).variable(0, 1.0).getPartialDerivative(0, 1);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testTooLargeOrder() {
-        new DSFactory(3, 1).build(0, 1.0).getPartialDerivative(1, 1, 2);
+        new DSFactory(3, 1).variable(0, 1.0).getPartialDerivative(1, 1, 2);
     }
 
     @Test
     public void testVariableWithoutDerivative0() {
-        DerivativeStructure v = new DSFactory(1, 0).build(0, 1.0);
+        DerivativeStructure v = new DSFactory(1, 0).variable(0, 1.0);
         Assert.assertEquals(1.0, v.getValue(), 1.0e-15);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testVariableWithoutDerivative1() {
-        DerivativeStructure v = new DSFactory(1, 0).build(0, 1.0);
+        DerivativeStructure v = new DSFactory(1, 0).variable(0, 1.0);
         Assert.assertEquals(1.0, v.getPartialDerivative(1), 1.0e-15);
     }
 
@@ -110,9 +110,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testVariable() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            checkF0F1(factory.build(0, 1.0), 1.0, 1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0), 2.0, 0.0, 1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0), 3.0, 0.0, 0.0, 1.0);
+            checkF0F1(factory.variable(0, 1.0), 1.0, 1.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0), 2.0, 0.0, 1.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0), 3.0, 0.0, 0.0, 1.0);
         }
     }
 
@@ -120,7 +120,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testConstant() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            checkF0F1(factory.build(FastMath.PI), FastMath.PI, 0.0, 0.0, 0.0);
+            checkF0F1(factory.constant(FastMath.PI), FastMath.PI, 0.0, 0.0, 0.0);
         }
     }
 
@@ -128,9 +128,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testPrimitiveAdd() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).add(5), 6.0, 1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).add(5), 7.0, 0.0, 1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).add(5), 8.0, 0.0, 0.0, 1.0);
+            checkF0F1(factory.variable(0, 1.0).add(5), 6.0, 1.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).add(5), 7.0, 0.0, 1.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).add(5), 8.0, 0.0, 0.0, 1.0);
         }
     }
 
@@ -138,9 +138,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testAdd() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            DerivativeStructure x = factory.build(0, 1.0);
-            DerivativeStructure y = factory.build(1, 2.0);
-            DerivativeStructure z = factory.build(2, 3.0);
+            DerivativeStructure x = factory.variable(0, 1.0);
+            DerivativeStructure y = factory.variable(1, 2.0);
+            DerivativeStructure z = factory.variable(2, 3.0);
             DerivativeStructure xyz = x.add(y.add(z));
             checkF0F1(xyz, x.getValue() + y.getValue() + z.getValue(), 1.0, 1.0, 1.0);
         }
@@ -150,9 +150,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testPrimitiveSubtract() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).subtract(5), -4.0, 1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).subtract(5), -3.0, 0.0, 1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).subtract(5), -2.0, 0.0, 0.0, 1.0);
+            checkF0F1(factory.variable(0, 1.0).subtract(5), -4.0, 1.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).subtract(5), -3.0, 0.0, 1.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).subtract(5), -2.0, 0.0, 0.0, 1.0);
         }
     }
 
@@ -160,9 +160,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testSubtract() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            DerivativeStructure x = factory.build(0, 1.0);
-            DerivativeStructure y = factory.build(1, 2.0);
-            DerivativeStructure z = factory.build(2, 3.0);
+            DerivativeStructure x = factory.variable(0, 1.0);
+            DerivativeStructure y = factory.variable(1, 2.0);
+            DerivativeStructure z = factory.variable(2, 3.0);
             DerivativeStructure xyz = x.subtract(y.subtract(z));
             checkF0F1(xyz, x.getValue() - (y.getValue() - z.getValue()), 1.0, -1.0, 1.0);
         }
@@ -172,9 +172,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testPrimitiveMultiply() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).multiply(5),  5.0, 5.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).multiply(5), 10.0, 0.0, 5.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).multiply(5), 15.0, 0.0, 0.0, 5.0);
+            checkF0F1(factory.variable(0, 1.0).multiply(5),  5.0, 5.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).multiply(5), 10.0, 0.0, 5.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).multiply(5), 15.0, 0.0, 0.0, 5.0);
         }
     }
 
@@ -182,9 +182,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testMultiply() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            DerivativeStructure x = factory.build(0, 1.0);
-            DerivativeStructure y = factory.build(1, 2.0);
-            DerivativeStructure z = factory.build(2, 3.0);
+            DerivativeStructure x = factory.variable(0, 1.0);
+            DerivativeStructure y = factory.variable(1, 2.0);
+            DerivativeStructure z = factory.variable(2, 3.0);
             DerivativeStructure xyz = x.multiply(y.multiply(z));
             for (int i = 0; i <= maxOrder; ++i) {
                 for (int j = 0; j <= maxOrder; ++j) {
@@ -206,16 +206,16 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testNegate() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).negate(), -1.0, -1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).negate(), -2.0, 0.0, -1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).negate(), -3.0, 0.0, 0.0, -1.0);
+            checkF0F1(factory.variable(0, 1.0).negate(), -1.0, -1.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).negate(), -2.0, 0.0, -1.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).negate(), -3.0, 0.0, 0.0, -1.0);
         }
     }
 
     @Test
     public void testReciprocal() {
         for (double x = 0.1; x < 1.2; x += 0.1) {
-            DerivativeStructure r = new DSFactory(1, 6).build(0, x).reciprocal();
+            DerivativeStructure r = new DSFactory(1, 6).variable(0, x).reciprocal();
             Assert.assertEquals(1 / x, r.getValue(), 1.0e-15);
             for (int i = 1; i < r.getOrder(); ++i) {
                 double expected = ArithmeticUtils.pow(-1, i) * CombinatoricsUtils.factorial(i) /
@@ -231,9 +231,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
             DSFactory factory = new DSFactory(3, maxOrder);
             for (int n = 0; n < 10; ++n) {
 
-                DerivativeStructure x = factory.build(0, 1.0);
-                DerivativeStructure y = factory.build(1, 2.0);
-                DerivativeStructure z = factory.build(2, 3.0);
+                DerivativeStructure x = factory.variable(0, 1.0);
+                DerivativeStructure y = factory.variable(1, 2.0);
+                DerivativeStructure z = factory.variable(2, 3.0);
                 List<DerivativeStructure> list = Arrays.asList(x, y, z,
                                                                x.add(y).add(z),
                                                                x.multiply(y).multiply(z));
@@ -264,9 +264,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
 
             DSFactory factory = new DSFactory(3, maxOrder);
-            DerivativeStructure x = factory.build(0, 0.1);
-            DerivativeStructure y = factory.build(1, 0.2);
-            DerivativeStructure z = factory.build(2, 0.3);
+            DerivativeStructure x = factory.variable(0, 0.1);
+            DerivativeStructure y = factory.variable(1, 0.2);
+            DerivativeStructure z = factory.variable(2, 0.3);
             List<DerivativeStructure> list = Arrays.asList(x, y, z,
                                                            x.add(y).add(z),
                                                            x.multiply(y).multiply(z));
@@ -276,7 +276,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
                 for (double a : new double[] { 0.0, 0.1, 1.0, 2.0, 5.0 }) {
                     DerivativeStructure reference = (a == 0) ?
                                                     x.getField().getZero() :
-                                                    new DSFactory(3, maxOrder).build(a).pow(ds);
+                                                    new DSFactory(3, maxOrder).constant(a).pow(ds);
                     DerivativeStructure result = DerivativeStructure.pow(a, ds);
                     checkEquals(reference, result, 1.0e-15);
                 }
@@ -284,25 +284,25 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
             }
 
             // negative base: -1^x can be evaluated for integers only, so value is sometimes OK, derivatives are always NaN
-            DerivativeStructure negEvenInteger = DerivativeStructure.pow(-2.0, factory.build(0, 2.0));
+            DerivativeStructure negEvenInteger = DerivativeStructure.pow(-2.0, factory.variable(0, 2.0));
             Assert.assertEquals(4.0, negEvenInteger.getValue(), 1.0e-15);
             Assert.assertTrue(Double.isNaN(negEvenInteger.getPartialDerivative(1, 0, 0)));
-            DerivativeStructure negOddInteger = DerivativeStructure.pow(-2.0, factory.build(0, 3.0));
+            DerivativeStructure negOddInteger = DerivativeStructure.pow(-2.0, factory.variable(0, 3.0));
             Assert.assertEquals(-8.0, negOddInteger.getValue(), 1.0e-15);
             Assert.assertTrue(Double.isNaN(negOddInteger.getPartialDerivative(1, 0, 0)));
-            DerivativeStructure negNonInteger = DerivativeStructure.pow(-2.0, factory.build(0, 2.001));
+            DerivativeStructure negNonInteger = DerivativeStructure.pow(-2.0, factory.variable(0, 2.001));
             Assert.assertTrue(Double.isNaN(negNonInteger.getValue()));
             Assert.assertTrue(Double.isNaN(negNonInteger.getPartialDerivative(1, 0, 0)));
 
-            DerivativeStructure zeroNeg = DerivativeStructure.pow(0.0, factory.build(0, -1.0));
+            DerivativeStructure zeroNeg = DerivativeStructure.pow(0.0, factory.variable(0, -1.0));
             Assert.assertTrue(Double.isNaN(zeroNeg.getValue()));
             Assert.assertTrue(Double.isNaN(zeroNeg.getPartialDerivative(1, 0, 0)));
-            DerivativeStructure posNeg = DerivativeStructure.pow(2.0, factory.build(0, -2.0));
+            DerivativeStructure posNeg = DerivativeStructure.pow(2.0, factory.variable(0, -2.0));
             Assert.assertEquals(1.0 / 4.0, posNeg.getValue(), 1.0e-15);
             Assert.assertEquals(FastMath.log(2.0) / 4.0, posNeg.getPartialDerivative(1, 0, 0), 1.0e-15);
 
             // very special case: a = 0 and power = 0
-            DerivativeStructure zeroZero = DerivativeStructure.pow(0.0, factory.build(0, 0.0));
+            DerivativeStructure zeroZero = DerivativeStructure.pow(0.0, factory.variable(0, 0.0));
 
             // this should be OK for simple first derivative with one variable only ...
             Assert.assertEquals(1.0, zeroZero.getValue(), 1.0e-15);
@@ -357,7 +357,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
             }
 
             // very special case: 0^0 where the power is a primitive
-            DerivativeStructure zeroDsZeroDouble = factory.build(0, 0.0).pow(0.0);
+            DerivativeStructure zeroDsZeroDouble = factory.variable(0, 0.0).pow(0.0);
             boolean first = true;
             for (final double d : zeroDsZeroDouble.getAllDerivatives()) {
                 if (first) {
@@ -367,7 +367,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
                     Assert.assertEquals(0.0, d, Precision.SAFE_MIN);
                 }
             }
-            DerivativeStructure zeroDsZeroInt = factory.build(0, 0.0).pow(0);
+            DerivativeStructure zeroDsZeroInt = factory.variable(0, 0.0).pow(0);
             first = true;
             for (final double d : zeroDsZeroInt.getAllDerivatives()) {
                 if (first) {
@@ -379,7 +379,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
             }
 
             // 0^p with p smaller than 1.0
-            DerivativeStructure u = factory.build(1, -0.0).pow(0.25);
+            DerivativeStructure u = factory.variable(1, -0.0).pow(0.25);
             for (int i0 = 0; i0 <= maxOrder; ++i0) {
                 for (int i1 = 0; i1 <= maxOrder; ++i1) {
                     for (int i2 = 0; i2 <= maxOrder; ++i2) {
@@ -398,11 +398,11 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         DSFactory factory = new DSFactory(3, 5);
         double epsilon = 2.5e-13;
         for (double x = 0; x < 2; x += 0.2) {
-            DerivativeStructure dsX = factory.build(0, x);
+            DerivativeStructure dsX = factory.variable(0, x);
             for (double y = 0; y < 2; y += 0.2) {
-                DerivativeStructure dsY = factory.build(1, y);
+                DerivativeStructure dsY = factory.variable(1, y);
                 for (double z = 0; z >- 2; z -= 0.2) {
-                    DerivativeStructure dsZ = factory.build(2, z);
+                    DerivativeStructure dsZ = factory.variable(2, z);
 
                     // f(x, y, z) = x + 5 x y - 2 z + (8 z x - y)^3
                     DerivativeStructure ds =
@@ -455,9 +455,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.1) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 for (double y = 0.1; y < 1.2; y += 0.1) {
-                    DerivativeStructure dsY = factory.build(y);
+                    DerivativeStructure dsY = factory.constant(y);
                     DerivativeStructure f = dsX.divide(dsY).sqrt();
                     double f0 = FastMath.sqrt(x / y);
                     Assert.assertEquals(f0, f.getValue(), FastMath.abs(epsilon * f0));
@@ -484,11 +484,11 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.1) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 for (double y = 0.1; y < 1.2; y += 0.1) {
-                    DerivativeStructure dsY = factory.build(1, y);
+                    DerivativeStructure dsY = factory.variable(1, y);
                     for (double z = 0.1; z < 1.2; z += 0.1) {
-                        DerivativeStructure dsZ = factory.build(2, z);
+                        DerivativeStructure dsZ = factory.variable(2, z);
                         DerivativeStructure f = dsX.divide(dsY.cos().add(dsZ.tan())).sin();
                         double a = FastMath.cos(y) + FastMath.tan(z);
                         double f0 = FastMath.sin(x / a);
@@ -528,7 +528,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure sqrt1 = dsX.pow(0.5);
                 DerivativeStructure sqrt2 = dsX.sqrt();
                 DerivativeStructure zero = sqrt1.subtract(sqrt2);
@@ -544,7 +544,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int n = 2; n < 10; ++n) {
             for (int maxOrder = 0; maxOrder < 12; ++maxOrder) {
                 DSFactory factory = new DSFactory(1, maxOrder);
-                DerivativeStructure dsZero = factory.build(0, 0.0);
+                DerivativeStructure dsZero = factory.variable(0, 0.0);
                 DerivativeStructure rootN  = dsZero.rootN(n);
                 Assert.assertEquals(0.0, rootN.getValue(), 1.0e-20);
                 if (maxOrder > 0) {
@@ -609,7 +609,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.multiply(dsX).sqrt();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -625,7 +625,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure cbrt1 = dsX.pow(1.0 / 3.0);
                 DerivativeStructure cbrt2 = dsX.cbrt();
                 DerivativeStructure zero = cbrt1.subtract(cbrt2);
@@ -642,7 +642,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.multiply(dsX.multiply(dsX)).cbrt();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -658,9 +658,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.01) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 for (double y = 0.1; y < 1.2; y += 0.01) {
-                    DerivativeStructure dsY = factory.build(1, y);
+                    DerivativeStructure dsY = factory.variable(1, y);
                     DerivativeStructure rebuiltX = dsX.pow(dsY).pow(dsY.reciprocal());
                     DerivativeStructure zero = rebuiltX.subtract(dsX);
                     for (int n = 0; n <= maxOrder; ++n) {
@@ -681,9 +681,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 for (double y = -1.7; y < 2; y += 0.2) {
-                    DerivativeStructure dsY = factory.build(1, y);
+                    DerivativeStructure dsY = factory.variable(1, y);
                     DerivativeStructure hypot = DerivativeStructure.hypot(dsY, dsX);
                     DerivativeStructure ref = dsX.multiply(dsX).add(dsY.multiply(dsY)).sqrt();
                     DerivativeStructure zero = hypot.subtract(ref);
@@ -703,8 +703,8 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testHypotNoOverflow() {
 
         DSFactory factory = new DSFactory(2, 5);
-        DerivativeStructure dsX = factory.build(0, +3.0e250);
-        DerivativeStructure dsY = factory.build(1, -4.0e250);
+        DerivativeStructure dsX = factory.variable(0, +3.0e250);
+        DerivativeStructure dsY = factory.variable(1, -4.0e250);
         DerivativeStructure hypot = DerivativeStructure.hypot(dsX, dsY);
         Assert.assertEquals(5.0e250, hypot.getValue(), 1.0e235);
         Assert.assertEquals(dsX.getValue() / hypot.getValue(), hypot.getPartialDerivative(1, 0), 1.0e-10);
@@ -719,8 +719,8 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testHypotNeglectible() {
 
         DSFactory factory = new DSFactory(2, 5);
-        DerivativeStructure dsSmall = factory.build(0, +3.0e-10);
-        DerivativeStructure dsLarge = factory.build(1, -4.0e25);
+        DerivativeStructure dsSmall = factory.variable(0, +3.0e-10);
+        DerivativeStructure dsLarge = factory.variable(1, -4.0e25);
 
         Assert.assertEquals(dsLarge.abs().getValue(),
                             DerivativeStructure.hypot(dsSmall, dsLarge).getValue(),
@@ -747,14 +747,14 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     @Test
     public void testHypotSpecial() {
         DSFactory factory = new DSFactory(2, 5);
-        Assert.assertTrue(Double.isNaN(DerivativeStructure.hypot(factory.build(0, Double.NaN),
-                                                                 factory.build(0, +3.0e250)).getValue()));
-        Assert.assertTrue(Double.isNaN(DerivativeStructure.hypot(factory.build(0, +3.0e250),
-                                                                 factory.build(0, Double.NaN)).getValue()));
-        Assert.assertTrue(Double.isInfinite(DerivativeStructure.hypot(factory.build(0, Double.POSITIVE_INFINITY),
-                                                                      factory.build(0, +3.0e250)).getValue()));
-        Assert.assertTrue(Double.isInfinite(DerivativeStructure.hypot(factory.build(0, +3.0e250),
-                                                                      factory.build(0, Double.POSITIVE_INFINITY)).getValue()));
+        Assert.assertTrue(Double.isNaN(DerivativeStructure.hypot(factory.variable(0, Double.NaN),
+                                                                 factory.variable(0, +3.0e250)).getValue()));
+        Assert.assertTrue(Double.isNaN(DerivativeStructure.hypot(factory.variable(0, +3.0e250),
+                                                                 factory.variable(0, Double.NaN)).getValue()));
+        Assert.assertTrue(Double.isInfinite(DerivativeStructure.hypot(factory.variable(0, Double.POSITIVE_INFINITY),
+                                                                      factory.variable(0, +3.0e250)).getValue()));
+        Assert.assertTrue(Double.isInfinite(DerivativeStructure.hypot(factory.variable(0, +3.0e250),
+                                                                      factory.variable(0, Double.POSITIVE_INFINITY)).getValue()));
     }
 
     @Test
@@ -763,7 +763,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 for (double y = -1.7; y < 2; y += 0.2) {
                     DerivativeStructure remainder = dsX.remainder(y);
                     DerivativeStructure ref = dsX.subtract(x - FastMath.IEEEremainder(x, y));
@@ -786,9 +786,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 for (double y = -1.7; y < 2; y += 0.2) {
-                    DerivativeStructure dsY = factory.build(1, y);
+                    DerivativeStructure dsY = factory.variable(1, y);
                     DerivativeStructure remainder = dsX.remainder(dsY);
                     DerivativeStructure ref = dsX.subtract(dsY.multiply((x - FastMath.IEEEremainder(x, y)) / y));
                     DerivativeStructure zero = remainder.subtract(ref);
@@ -812,7 +812,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 double refExp = FastMath.exp(x);
-                DerivativeStructure exp = factory.build(0, x).exp();
+                DerivativeStructure exp = factory.variable(0, x).exp();
                 for (int n = 0; n <= maxOrder; ++n) {
                     Assert.assertEquals(refExp, exp.getPartialDerivative(n), epsilon[n]);
                 }
@@ -826,7 +826,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure expm11 = dsX.expm1();
                 DerivativeStructure expm12 = dsX.exp().subtract(dsX.getField().getOne());
                 DerivativeStructure zero = expm11.subtract(expm12);
@@ -844,7 +844,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure log = factory.build(0, x).log();
+                DerivativeStructure log = factory.variable(0, x).log();
                 Assert.assertEquals(FastMath.log(x), log.getValue(), epsilon[0]);
                 for (int n = 1; n <= maxOrder; ++n) {
                     double refDer = -CombinatoricsUtils.factorial(n - 1) / FastMath.pow(-x, n);
@@ -860,7 +860,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 DSFactory factory = new DSFactory(1, maxOrder);
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure log1p1 = dsX.log1p();
                 DerivativeStructure log1p2 = dsX.add(dsX.getField().getOne()).log();
                 DerivativeStructure zero = log1p1.subtract(log1p2);
@@ -877,7 +877,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure log101 = dsX.log10();
                 DerivativeStructure log102 = dsX.log().divide(FastMath.log(10.0));
                 DerivativeStructure zero = log101.subtract(log102);
@@ -894,7 +894,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.exp().log();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -910,7 +910,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.expm1().log1p();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -926,8 +926,8 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
-                DerivativeStructure rebuiltX = factory.build(10.0).pow(dsX).log10();
+                DerivativeStructure dsX = factory.variable(0, x);
+                DerivativeStructure rebuiltX = factory.constant(10.0).pow(dsX).log10();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
                     Assert.assertEquals(0, zero.getPartialDerivative(n), epsilon[n]);
@@ -942,7 +942,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure sin = dsX.sin();
                 DerivativeStructure cos = dsX.cos();
                 double s = FastMath.sin(x);
@@ -977,7 +977,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.sin().asin();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -993,7 +993,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.cos().acos();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1009,7 +1009,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.tan().atan();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1025,7 +1025,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure tan1 = dsX.sin().divide(dsX.cos());
                 DerivativeStructure tan2 = dsX.tan();
                 DerivativeStructure zero = tan1.subtract(tan2);
@@ -1043,9 +1043,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 for (double y = -1.7; y < 2; y += 0.2) {
-                    DerivativeStructure dsY = factory.build(1, y);
+                    DerivativeStructure dsY = factory.variable(1, y);
                     DerivativeStructure atan2 = DerivativeStructure.atan2(dsY, dsX);
                     DerivativeStructure ref = dsY.divide(dsX).atan();
                     if (x < 0) {
@@ -1069,25 +1069,25 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
 
         DSFactory factory = new DSFactory(2, 2);
         DerivativeStructure pp =
-                DerivativeStructure.atan2(factory.build(1, +0.0),
-                                          factory.build(1, +0.0));
+                DerivativeStructure.atan2(factory.variable(1, +0.0),
+                                          factory.variable(1, +0.0));
         Assert.assertEquals(0, pp.getValue(), 1.0e-15);
         Assert.assertEquals(+1, FastMath.copySign(1, pp.getValue()), 1.0e-15);
 
         DerivativeStructure pn =
-                DerivativeStructure.atan2(factory.build(1, +0.0),
-                                          factory.build(1, -0.0));
+                DerivativeStructure.atan2(factory.variable(1, +0.0),
+                                          factory.variable(1, -0.0));
         Assert.assertEquals(FastMath.PI, pn.getValue(), 1.0e-15);
 
         DerivativeStructure np =
-                DerivativeStructure.atan2(factory.build(1, -0.0),
-                                          factory.build(1, +0.0));
+                DerivativeStructure.atan2(factory.variable(1, -0.0),
+                                          factory.variable(1, +0.0));
         Assert.assertEquals(0, np.getValue(), 1.0e-15);
         Assert.assertEquals(-1, FastMath.copySign(1, np.getValue()), 1.0e-15);
 
         DerivativeStructure nn =
-                DerivativeStructure.atan2(factory.build(1, -0.0),
-                                          factory.build(1, -0.0));
+                DerivativeStructure.atan2(factory.variable(1, -0.0),
+                                          factory.variable(1, -0.0));
         Assert.assertEquals(-FastMath.PI, nn.getValue(), 1.0e-15);
 
     }
@@ -1098,7 +1098,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure sinh1 = dsX.exp().subtract(dsX.exp().reciprocal()).multiply(0.5);
                 DerivativeStructure sinh2 = dsX.sinh();
                 DerivativeStructure zero = sinh1.subtract(sinh2);
@@ -1115,7 +1115,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure cosh1 = dsX.exp().add(dsX.exp().reciprocal()).multiply(0.5);
                 DerivativeStructure cosh2 = dsX.cosh();
                 DerivativeStructure zero = cosh1.subtract(cosh2);
@@ -1132,7 +1132,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure tanh1 = dsX.exp().subtract(dsX.exp().reciprocal()).divide(dsX.exp().add(dsX.exp().reciprocal()));
                 DerivativeStructure tanh2 = dsX.tanh();
                 DerivativeStructure zero = tanh1.subtract(tanh2);
@@ -1149,7 +1149,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.sinh().asinh();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1165,7 +1165,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.cosh().acosh();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1181,7 +1181,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.tanh().atanh();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1197,9 +1197,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.1) {
-                DerivativeStructure dsX = factory.build(x);
+                DerivativeStructure dsX = factory.constant(x);
                 for (double y = 0.1; y < 1.2; y += 0.1) {
-                    DerivativeStructure dsY = factory.build(0, y);
+                    DerivativeStructure dsY = factory.variable(0, y);
                     DerivativeStructure f = dsX.divide(dsY).sqrt();
                     double f0 = FastMath.sqrt(x / y);
                     Assert.assertEquals(f0, f.getValue(), FastMath.abs(epsilon * f0));
@@ -1224,11 +1224,11 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testTaylorPolynomial() {
         DSFactory factory = new DSFactory(3, 4);
         for (double x = 0; x < 1.2; x += 0.1) {
-            DerivativeStructure dsX = factory.build(0, x);
+            DerivativeStructure dsX = factory.variable(0, x);
             for (double y = 0; y < 1.2; y += 0.2) {
-                DerivativeStructure dsY = factory.build(1, y);
+                DerivativeStructure dsY = factory.variable(1, y);
                 for (double z = 0; z < 1.2; z += 0.2) {
-                    DerivativeStructure dsZ = factory.build(2, z);
+                    DerivativeStructure dsZ = factory.variable(2, z);
                     DerivativeStructure f = dsX.multiply(dsY).add(dsZ).multiply(dsX).multiply(dsY);
                     for (double dx = -0.2; dx < 0.2; dx += 0.2) {
                         for (double dy = -0.2; dy < 0.2; dy += 0.1) {
@@ -1250,8 +1250,8 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         double y0 = -0.3;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(2, maxOrder);
-            DerivativeStructure dsX   = factory.build(0, x0);
-            DerivativeStructure dsY   = factory.build(1, y0);
+            DerivativeStructure dsX   = factory.variable(0, x0);
+            DerivativeStructure dsY   = factory.variable(1, y0);
             DerivativeStructure atan2 = DerivativeStructure.atan2(dsY, dsX);
             double maxError = 0;
             for (double dx = -0.05; dx < 0.05; dx += 0.001) {
@@ -1269,19 +1269,19 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testAbs() {
 
         DSFactory factory = new DSFactory(1, 1);
-        DerivativeStructure minusOne = factory.build(0, -1.0);
+        DerivativeStructure minusOne = factory.variable(0, -1.0);
         Assert.assertEquals(+1.0, minusOne.abs().getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals(-1.0, minusOne.abs().getPartialDerivative(1), 1.0e-15);
 
-        DerivativeStructure plusOne = factory.build(0, +1.0);
+        DerivativeStructure plusOne = factory.variable(0, +1.0);
         Assert.assertEquals(+1.0, plusOne.abs().getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals(+1.0, plusOne.abs().getPartialDerivative(1), 1.0e-15);
 
-        DerivativeStructure minusZero = factory.build(0, -0.0);
+        DerivativeStructure minusZero = factory.variable(0, -0.0);
         Assert.assertEquals(+0.0, minusZero.abs().getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals(-1.0, minusZero.abs().getPartialDerivative(1), 1.0e-15);
 
-        DerivativeStructure plusZero = factory.build(0, +0.0);
+        DerivativeStructure plusZero = factory.variable(0, +0.0);
         Assert.assertEquals(+0.0, plusZero.abs().getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals(+1.0, plusZero.abs().getPartialDerivative(1), 1.0e-15);
 
@@ -1292,20 +1292,20 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testSignum() {
 
         DSFactory factory = new DSFactory(1, 1);
-        DerivativeStructure minusOne = factory.build(0, -1.0);
+        DerivativeStructure minusOne = factory.variable(0, -1.0);
         Assert.assertEquals(-1.0, minusOne.signum().getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals( 0.0, minusOne.signum().getPartialDerivative(1), 1.0e-15);
 
-        DerivativeStructure plusOne = factory.build(0, +1.0);
+        DerivativeStructure plusOne = factory.variable(0, +1.0);
         Assert.assertEquals(+1.0, plusOne.signum().getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals( 0.0, plusOne.signum().getPartialDerivative(1), 1.0e-15);
 
-        DerivativeStructure minusZero = factory.build(0, -0.0);
+        DerivativeStructure minusZero = factory.variable(0, -0.0);
         Assert.assertEquals(-0.0, minusZero.signum().getPartialDerivative(0), 1.0e-15);
         Assert.assertTrue(Double.doubleToLongBits(minusZero.signum().getValue()) < 0);
         Assert.assertEquals( 0.0, minusZero.signum().getPartialDerivative(1), 1.0e-15);
 
-        DerivativeStructure plusZero = factory.build(0, +0.0);
+        DerivativeStructure plusZero = factory.variable(0, +0.0);
         Assert.assertEquals(+0.0, plusZero.signum().getPartialDerivative(0), 1.0e-15);
         Assert.assertTrue(Double.doubleToLongBits(plusZero.signum().getValue()) == 0);
         Assert.assertEquals( 0.0, plusZero.signum().getPartialDerivative(1), 1.0e-15);
@@ -1316,7 +1316,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testCeilFloorRintLong() {
 
         DSFactory factory = new DSFactory(1, 1);
-        DerivativeStructure x = factory.build(0, -1.5);
+        DerivativeStructure x = factory.variable(0, -1.5);
         Assert.assertEquals(-1.5, x.getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals(+1.0, x.getPartialDerivative(1), 1.0e-15);
         Assert.assertEquals(-1.0, x.ceil().getPartialDerivative(0), 1.0e-15);
@@ -1334,7 +1334,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testCopySign() {
 
         DSFactory factory = new DSFactory(1, 1);
-        DerivativeStructure minusOne = factory.build(0, -1.0);
+        DerivativeStructure minusOne = factory.variable(0, -1.0);
         Assert.assertEquals(+1.0, minusOne.copySign(+1.0).getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals(-1.0, minusOne.copySign(+1.0).getPartialDerivative(1), 1.0e-15);
         Assert.assertEquals(-1.0, minusOne.copySign(-1.0).getPartialDerivative(0), 1.0e-15);
@@ -1346,7 +1346,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         Assert.assertEquals(+1.0, minusOne.copySign(Double.NaN).getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals(-1.0, minusOne.copySign(Double.NaN).getPartialDerivative(1), 1.0e-15);
 
-        DerivativeStructure plusOne = factory.build(0, +1.0);
+        DerivativeStructure plusOne = factory.variable(0, +1.0);
         Assert.assertEquals(+1.0, plusOne.copySign(+1.0).getPartialDerivative(0), 1.0e-15);
         Assert.assertEquals(+1.0, plusOne.copySign(+1.0).getPartialDerivative(1), 1.0e-15);
         Assert.assertEquals(-1.0, plusOne.copySign(-1.0).getPartialDerivative(0), 1.0e-15);
@@ -1366,7 +1366,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 Assert.assertEquals(FastMath.toDegrees(x), dsX.toDegrees().getValue(), epsilon);
                 for (int n = 1; n <= maxOrder; ++n) {
                     if (n == 1) {
@@ -1385,7 +1385,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 Assert.assertEquals(FastMath.toRadians(x), dsX.toRadians().getValue(), epsilon);
                 for (int n = 1; n <= maxOrder; ++n) {
                     if (n == 1) {
@@ -1404,7 +1404,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure rebuiltX = dsX.toDegrees().toRadians();
                 DerivativeStructure zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1416,7 +1416,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testComposeMismatchedDimensions() {
-        new DSFactory(1, 3).build(0, 1.2).compose(new double[3]);
+        new DSFactory(1, 3).variable(0, 1.2).compose(new double[3]);
     }
 
     @Test
@@ -1432,7 +1432,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
                 p[i] = p[i - 1].polynomialDerivative();
             }
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                DerivativeStructure dsX = factory.build(0, x);
+                DerivativeStructure dsX = factory.variable(0, x);
                 DerivativeStructure dsY1 = dsX.getField().getZero();
                 for (int i = poly.degree(); i >= 0; --i) {
                     dsY1 = dsY1.multiply(dsX).add(poly.getCoefficients()[i]);
@@ -1454,7 +1454,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testField() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             DSFactory factory = new DSFactory(3, maxOrder);
-            DerivativeStructure x = factory.build(0, 1.0);
+            DerivativeStructure x = factory.variable(0, 1.0);
             checkF0F1(x.getField().getZero(), 0.0, 0.0, 0.0, 0.0);
             checkF0F1(x.getField().getOne(), 1.0, 0.0, 0.0, 0.0);
             Assert.assertEquals(maxOrder, x.getField().getZero().getOrder());
@@ -1469,7 +1469,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         double cos = FastMath.cos(x);
         double sin = FastMath.sin(x);
         DSFactory factory = new DSFactory(1, 4);
-        DerivativeStructure yRef = factory.build(0, x).cos();
+        DerivativeStructure yRef = factory.variable(0, x).cos();
         try {
             new DSFactory(1, 4).build(0.0, 0.0);
             Assert.fail("an exception should have been thrown");
@@ -1490,9 +1490,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
         double x =  1.2;
         double y =  2.4;
         double z = 12.5;
-        DerivativeStructure xRef = factory.build(0, x);
-        DerivativeStructure yRef = factory.build(1, y);
-        DerivativeStructure zRef = factory.build(2, z);
+        DerivativeStructure xRef = factory.variable(0, x);
+        DerivativeStructure yRef = factory.variable(1, y);
+        DerivativeStructure zRef = factory.variable(2, z);
         try {
             new DSFactory(3, 1).build(x + y - z, 1.0, 1.0);
             Assert.fail("an exception should have been thrown");
@@ -1511,14 +1511,14 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     public void testLinearCombination1DSDS() {
         DSFactory factory = new DSFactory(6, 1);
         final DerivativeStructure[] a = new DerivativeStructure[] {
-            factory.build(0, -1321008684645961.0 / 268435456.0),
-            factory.build(1, -5774608829631843.0 / 268435456.0),
-            factory.build(2, -7645843051051357.0 / 8589934592.0)
+            factory.variable(0, -1321008684645961.0 / 268435456.0),
+            factory.variable(1, -5774608829631843.0 / 268435456.0),
+            factory.variable(2, -7645843051051357.0 / 8589934592.0)
         };
         final DerivativeStructure[] b = new DerivativeStructure[] {
-            factory.build(3, -5712344449280879.0 / 2097152.0),
-            factory.build(4, -4550117129121957.0 / 2097152.0),
-            factory.build(5, 8846951984510141.0 / 131072.0)
+            factory.variable(3, -5712344449280879.0 / 2097152.0),
+            factory.variable(4, -4550117129121957.0 / 2097152.0),
+            factory.variable(5, 8846951984510141.0 / 131072.0)
         };
 
         final DerivativeStructure abSumInline = a[0].linearCombination(a[0], b[0], a[1], b[1], a[2], b[2]);
@@ -1544,9 +1544,9 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
             -7645843051051357.0 / 8589934592.0
         };
         final DerivativeStructure[] b = new DerivativeStructure[] {
-            factory.build(0, -5712344449280879.0 / 2097152.0),
-            factory.build(1, -4550117129121957.0 / 2097152.0),
-            factory.build(2, 8846951984510141.0 / 131072.0)
+            factory.variable(0, -5712344449280879.0 / 2097152.0),
+            factory.variable(1, -4550117129121957.0 / 2097152.0),
+            factory.variable(2, 8846951984510141.0 / 131072.0)
         };
 
         final DerivativeStructure abSumInline = b[0].linearCombination(a[0], b[0],
@@ -1573,8 +1573,8 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
             final DerivativeStructure[] u = new DerivativeStructure[factory.getCompiler().getFreeParameters()];
             final DerivativeStructure[] v = new DerivativeStructure[factory.getCompiler().getFreeParameters()];
             for (int j = 0; j < u.length; ++j) {
-                u[j] = factory.build(j, 1e17 * random.nextDouble());
-                v[j] = factory.build(1e17 * random.nextDouble());
+                u[j] = factory.variable(j, 1e17 * random.nextDouble());
+                v[j] = factory.constant(1e17 * random.nextDouble());
             }
 
             DerivativeStructure lin = u[0].linearCombination(u[0], v[0], u[1], v[1]);
@@ -1619,7 +1619,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
             final DerivativeStructure[] v = new DerivativeStructure[factory.getCompiler().getFreeParameters()];
             for (int j = 0; j < u.length; ++j) {
                 u[j] = 1e17 * random.nextDouble();
-                v[j] = factory.build(j, 1e17 * random.nextDouble());
+                v[j] = factory.variable(j, 1e17 * random.nextDouble());
             }
 
             DerivativeStructure lin = v[0].linearCombination(u[0], v[0], u[1], v[1]);
@@ -1654,7 +1654,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
 
     @Test
     public void testSerialization() {
-        DerivativeStructure a = new DSFactory(3, 2).build(0, 1.3);
+        DerivativeStructure a = new DSFactory(3, 2).variable(0, 1.3);
         DerivativeStructure b = (DerivativeStructure) UnitTestUtils.serializeAndRecover(a);
         Assert.assertEquals(a.getFreeParameters(), b.getFreeParameters());
         Assert.assertEquals(a.getOrder(), b.getOrder());
@@ -1663,7 +1663,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
 
     @Test
     public void testZero() {
-        DerivativeStructure zero = new DSFactory(3, 2).build(2, 17.0).getField().getZero();
+        DerivativeStructure zero = new DSFactory(3, 2).variable(2, 17.0).getField().getZero();
         double[] a = zero.getAllDerivatives();
         Assert.assertEquals(10, a.length);
         for (int i = 0; i < a.length; ++i) {
@@ -1673,7 +1673,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
 
     @Test
     public void testOne() {
-        DerivativeStructure one = new DSFactory(3, 2).build(2, 17.0).getField().getOne();
+        DerivativeStructure one = new DSFactory(3, 2).variable(2, 17.0).getField().getOne();
         double[] a = one.getAllDerivatives();
         Assert.assertEquals(10, a.length);
         for (int i = 0; i < a.length; ++i) {
@@ -1694,7 +1694,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
             // create a brand new factory for each derivative
             int parameters = pairs.get(i % pairs.size())[0];
             int order      = pairs.get(i % pairs.size())[1];
-            map.put(new DSFactory(parameters, order).build(17.0).getField(), 0);
+            map.put(new DSFactory(parameters, order).constant(17.0).getField(), 0);
         }
 
         // despite we have created numerous factories,
@@ -1709,7 +1709,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
 
     @Test
     public void testRunTimeClass() {
-        Field<DerivativeStructure> field = new DSFactory(3, 2).build(0.0).getField();
+        Field<DerivativeStructure> field = new DSFactory(3, 2).constant(0.0).getField();
         Assert.assertEquals(DerivativeStructure.class, field.getRuntimeClass());
     }
 

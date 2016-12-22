@@ -72,7 +72,7 @@ public abstract class AbstractUnivariateDifferentiableSolver
     protected DerivativeStructure computeObjectiveValueAndDerivative(double point)
         throws MathIllegalStateException {
         incrementEvaluationCount();
-        return function.value(factory.build(0, point));
+        return function.value(factory.variable(0, point));
     }
 
     /**

@@ -55,14 +55,14 @@ public class SqrtTest {
        DSFactory factory = new DSFactory(1, 1);
        for (double x = 1e-30; x < 1e10; x *= 2) {
            final double fX = f.value(x);
-           final double sX = sPrime.value(factory.build(0, x)).getPartialDerivative(1);
+           final double sX = sPrime.value(factory.variable(0, x)).getPartialDerivative(1);
            Assert.assertEquals("x=" + x, fX, sX, FastMath.ulp(fX));
        }
    }
 
    @Test
    public void testDerivativesHighOrder() {
-       DerivativeStructure s = new Sqrt().value(new DSFactory(1, 5).build(0, 1.2));
+       DerivativeStructure s = new Sqrt().value(new DSFactory(1, 5).variable(0, 1.2));
        Assert.assertEquals(1.0954451150103322269, s.getPartialDerivative(0), 1.0e-16);
        Assert.assertEquals(0.45643546458763842789, s.getPartialDerivative(1), 1.0e-16);
        Assert.assertEquals(-0.1901814435781826783,  s.getPartialDerivative(2), 1.0e-16);

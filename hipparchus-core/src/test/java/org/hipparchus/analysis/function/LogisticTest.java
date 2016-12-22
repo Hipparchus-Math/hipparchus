@@ -93,7 +93,7 @@ public class LogisticTest {
         final double delta = (max - min) / n;
         final DSFactory factory = new DSFactory(1, 5);
         for (int i = 0; i < n; i++) {
-            final DerivativeStructure x = factory.build(0, min + i * delta);
+            final DerivativeStructure x = factory.variable(0, min + i * delta);
             for (int order = 0; order <= x.getOrder(); ++order) {
                 Assert.assertEquals("x=" + x.getValue(),
                                     g.value(x).getPartialDerivative(order),

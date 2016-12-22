@@ -494,7 +494,7 @@ public class FunctionUtils {
             /** {@inheritDoc} */
             @Override
             public double value(final double x) {
-                final DerivativeStructure dsX = factory.build(0, x);
+                final DerivativeStructure dsX = factory.variable(0, x);
                 return f.value(dsX).getPartialDerivative(order);
             }
 
@@ -539,7 +539,7 @@ public class FunctionUtils {
                 // set up the input parameters
                 final DerivativeStructure[] dsPoint = new DerivativeStructure[point.length];
                 for (int i = 0; i < point.length; ++i) {
-                    dsPoint[i] = factory.build(i, point[i]);
+                    dsPoint[i] = factory.variable(i, point[i]);
                 }
 
                 return f.value(dsPoint).getPartialDerivative(orders);

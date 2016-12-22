@@ -100,12 +100,12 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param order derivation order
      * @param value value of the constant
      * @throws MathIllegalArgumentException if order is too large
-     * @deprecated as of 1.1, replaced by {@link DSFactory#build(double)}
+     * @deprecated as of 1.1, replaced by {@link DSFactory#constant(double)}
      */
     @Deprecated
     public DerivativeStructure(final int parameters, final int order, final double value)
         throws MathIllegalArgumentException {
-        this(new DSFactory(parameters, order).build(value));
+        this(new DSFactory(parameters, order).constant(value));
     }
 
     /** Build an instance representing a variable.
@@ -118,13 +118,13 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param index index of the variable (from 0 to {@code parameters - 1})
      * @param value value of the variable
      * @exception MathIllegalArgumentException if {@code index &ge; parameters}.
-     * @deprecated as of 1.1, replaced by {@link DSFactory#build(int, double)}
+     * @deprecated as of 1.1, replaced by {@link DSFactory#variable(int, double)}
      */
     @Deprecated
     public DerivativeStructure(final int parameters, final int order,
                                final int index, final double value)
         throws MathIllegalArgumentException {
-        this(new DSFactory(parameters, order).build(index, value));
+        this(new DSFactory(parameters, order).variable(index, value));
     }
 
     /** Linear combination constructor.
@@ -233,11 +233,11 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * </p>
      * @param c value of the constant
      * @return a constant compatible with instance order and number of parameters
-     * @deprecated as of 1.1, replaced by {@link DSFactory#build(double)}
+     * @deprecated as of 1.1, replaced by {@link DSFactory#constant(double)}
      */
     @Deprecated
     public DerivativeStructure createConstant(final double c) {
-        return factory.build(c);
+        return factory.constant(c);
     }
 
     /** {@inheritDoc}
@@ -424,21 +424,21 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure ceil() {
-        return factory.build(FastMath.ceil(data[0]));
+        return factory.constant(FastMath.ceil(data[0]));
     }
 
     /** {@inheritDoc}
      */
     @Override
     public DerivativeStructure floor() {
-        return factory.build(FastMath.floor(data[0]));
+        return factory.constant(FastMath.floor(data[0]));
     }
 
     /** {@inheritDoc}
      */
     @Override
     public DerivativeStructure rint() {
-        return factory.build(FastMath.rint(data[0]));
+        return factory.constant(FastMath.rint(data[0]));
     }
 
     /** {@inheritDoc} */
@@ -451,7 +451,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     @Override
     public DerivativeStructure signum() {
-        return factory.build(FastMath.signum(data[0]));
+        return factory.constant(FastMath.signum(data[0]));
     }
 
     /** {@inheritDoc}
@@ -512,9 +512,9 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         factory.checkCompatibility(y.factory);
 
         if (Double.isInfinite(data[0]) || Double.isInfinite(y.data[0])) {
-            return factory.build(Double.POSITIVE_INFINITY);
+            return factory.constant(Double.POSITIVE_INFINITY);
         } else if (Double.isNaN(data[0]) || Double.isNaN(y.data[0])) {
-            return factory.build(Double.NaN);
+            return factory.constant(Double.NaN);
         } else {
 
             final int expX = getExponent();

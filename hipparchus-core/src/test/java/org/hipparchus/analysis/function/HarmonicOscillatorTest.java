@@ -60,7 +60,7 @@ public class HarmonicOscillatorTest {
             final double d = 0.12345;
             for (int i = 0; i < 10; i++) {
                 final double v = i * d;
-                final DerivativeStructure h = f.value(factory.build(0, v));
+                final DerivativeStructure h = f.value(factory.variable(0, v));
                 for (int k = 0; k <= maxOrder; ++k) {
                     final double trigo;
                     switch (k % 4) {

@@ -45,7 +45,7 @@ public class Constant implements UnivariateDifferentiableFunction {
      */
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {
-        return t.getFactory().build(c);
+        return t.getFactory().constant(c);
     }
 
 }

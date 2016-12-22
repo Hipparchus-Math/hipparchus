@@ -151,7 +151,7 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
         if (n == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
-        DerivativeStructure result = t.getFactory().build(coefficients[n - 1]);
+        DerivativeStructure result = t.getFactory().constant(coefficients[n - 1]);
         for (int j = n - 2; j >= 0; j--) {
             result = result.multiply(t).add(coefficients[j]);
         }

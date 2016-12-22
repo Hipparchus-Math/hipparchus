@@ -46,7 +46,7 @@ public class JacobianFunction implements MultivariateMatrixFunction {
         final DSFactory factory = new DSFactory(point.length, 1);
         final DerivativeStructure[] dsX = new DerivativeStructure[point.length];
         for (int i = 0; i < point.length; ++i) {
-            dsX[i] = factory.build(i, point[i]);
+            dsX[i] = factory.variable(i, point[i]);
         }
 
         // compute the derivatives

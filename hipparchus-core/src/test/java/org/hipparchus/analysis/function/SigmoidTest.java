@@ -44,14 +44,14 @@ public class SigmoidTest {
     @Test
     public void testDerivative() {
         final Sigmoid f = new Sigmoid();
-        final DerivativeStructure f0 = f.value(new DSFactory(1, 1).build(0, 0.0));
+        final DerivativeStructure f0 = f.value(new DSFactory(1, 1).variable(0, 0.0));
 
         Assert.assertEquals(0.25, f0.getPartialDerivative(1), 0);
     }
 
     @Test
     public void testDerivativesHighOrder() {
-        DerivativeStructure s = new Sigmoid(1, 3).value(new DSFactory(1, 5).build(0, 1.2));
+        DerivativeStructure s = new Sigmoid(1, 3).value(new DSFactory(1, 5).variable(0, 1.2));
         Assert.assertEquals(2.5370495669980352859, s.getPartialDerivative(0), 5.0e-16);
         Assert.assertEquals(0.35578888129361140441, s.getPartialDerivative(1), 6.0e-17);
         Assert.assertEquals(-0.19107626464144938116,  s.getPartialDerivative(2), 6.0e-17);
@@ -65,14 +65,14 @@ public class SigmoidTest {
         final Sigmoid f = new Sigmoid(1, 2);
 
         DSFactory factory = new DSFactory(1, 1);
-        Assert.assertEquals(0, f.value(factory.build(0, Double.NEGATIVE_INFINITY)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.build(0, -Double.MAX_VALUE)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.build(0, -1e50)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.build(0, -1e3)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.build(0, 1e3)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.build(0, 1e50)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.build(0, Double.MAX_VALUE)).getPartialDerivative(1), 0);
-        Assert.assertEquals(0, f.value(factory.build(0, Double.POSITIVE_INFINITY)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.variable(0, Double.NEGATIVE_INFINITY)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.variable(0, -Double.MAX_VALUE)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.variable(0, -1e50)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.variable(0, -1e3)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.variable(0, 1e3)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.variable(0, 1e50)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.variable(0, Double.MAX_VALUE)).getPartialDerivative(1), 0);
+        Assert.assertEquals(0, f.value(factory.variable(0, Double.POSITIVE_INFINITY)).getPartialDerivative(1), 0);
     }
 
     @Test(expected=NullArgumentException.class)

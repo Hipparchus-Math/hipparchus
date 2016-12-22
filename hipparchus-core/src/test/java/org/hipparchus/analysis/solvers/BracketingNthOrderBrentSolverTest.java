@@ -218,7 +218,7 @@ public final class BracketingNthOrderBrentSolverTest extends BaseSecantSolverAbs
         }
 
         public double value(final double x) {
-            return value(new DSFactory(0, 0).build(x)).getValue();
+            return value(new DSFactory(0, 0).constant(x)).getValue();
         }
 
         public abstract DerivativeStructure value(final DerivativeStructure t);

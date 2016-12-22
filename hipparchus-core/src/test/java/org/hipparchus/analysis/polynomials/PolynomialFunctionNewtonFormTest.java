@@ -142,7 +142,7 @@ public final class PolynomialFunctionNewtonFormTest {
         double eps = 2.0e-14;
         DSFactory factory = new DSFactory(1, 4);
         for (double t = 0.0; t < 10.0; t += 0.1) {
-            DerivativeStructure x = factory.build(0, t);
+            DerivativeStructure x = factory.variable(0, t);
             DerivativeStructure y = p.value(x);
             Assert.assertEquals(t * t * t,   y.getValue(),              eps * t * t * t);
             Assert.assertEquals(3.0 * t * t, y.getPartialDerivative(1), eps * 3.0 * t * t);

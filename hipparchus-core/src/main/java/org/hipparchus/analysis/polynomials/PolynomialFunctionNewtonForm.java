@@ -103,7 +103,7 @@ public class PolynomialFunctionNewtonForm implements UnivariateDifferentiableFun
         verifyInputArray(a, c);
 
         final int n = c.length;
-        DerivativeStructure value = t.getFactory().build(a[n]);
+        DerivativeStructure value = t.getFactory().constant(a[n]);
         for (int i = n - 1; i >= 0; i--) {
             value = t.subtract(c[i]).multiply(value).add(a[i]);
         }

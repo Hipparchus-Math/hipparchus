@@ -73,26 +73,26 @@ public class FunctionUtilsTest {
     public void testComposeDifferentiable() {
         DSFactory factory = new DSFactory(1, 1);
         UnivariateDifferentiableFunction id = new Identity();
-        Assert.assertEquals(1, FunctionUtils.compose(id, id, id).value(factory.build(0, 3)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(1, FunctionUtils.compose(id, id, id).value(factory.variable(0, 3)).getPartialDerivative(1), EPS);
 
         UnivariateDifferentiableFunction c = new Constant(4);
-        Assert.assertEquals(0, FunctionUtils.compose(id, c).value(factory.build(0, 3)).getPartialDerivative(1), EPS);
-        Assert.assertEquals(0, FunctionUtils.compose(c, id).value(factory.build(0, 3)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(0, FunctionUtils.compose(id, c).value(factory.variable(0, 3)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(0, FunctionUtils.compose(c, id).value(factory.variable(0, 3)).getPartialDerivative(1), EPS);
 
         UnivariateDifferentiableFunction m = new Minus();
-        Assert.assertEquals(-1, FunctionUtils.compose(m).value(factory.build(0, 3)).getPartialDerivative(1), EPS);
-        Assert.assertEquals(1, FunctionUtils.compose(m, m).value(factory.build(0, 3)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(-1, FunctionUtils.compose(m).value(factory.variable(0, 3)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(1, FunctionUtils.compose(m, m).value(factory.variable(0, 3)).getPartialDerivative(1), EPS);
 
         UnivariateDifferentiableFunction inv = new Inverse();
-        Assert.assertEquals(0.25, FunctionUtils.compose(inv, m, id).value(factory.build(0, 2)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(0.25, FunctionUtils.compose(inv, m, id).value(factory.variable(0, 2)).getPartialDerivative(1), EPS);
 
         UnivariateDifferentiableFunction pow = new Power(2);
-        Assert.assertEquals(108, FunctionUtils.compose(pow, pow).value(factory.build(0, 3)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(108, FunctionUtils.compose(pow, pow).value(factory.variable(0, 3)).getPartialDerivative(1), EPS);
 
         UnivariateDifferentiableFunction log = new Log();
         double a = 9876.54321;
-        Assert.assertEquals(pow.value(factory.build(0, a)).getPartialDerivative(1) / pow.value(a),
-                            FunctionUtils.compose(log, pow).value(factory.build(0, a)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(pow.value(factory.variable(0, a)).getPartialDerivative(1) / pow.value(a),
+                            FunctionUtils.compose(log, pow).value(factory.variable(0, a)).getPartialDerivative(1), EPS);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class FunctionUtilsTest {
         final double a = 123.456;
         DSFactory factory = new DSFactory(1, 1);
         Assert.assertEquals(- 1 / (a * a) -1 + FastMath.cos(a),
-                            FunctionUtils.add(inv, m, c, sin).value(factory.build(0, a)).getPartialDerivative(1),
+                            FunctionUtils.add(inv, m, c, sin).value(factory.variable(0, a)).getPartialDerivative(1),
                             EPS);
     }
 
@@ -137,17 +137,17 @@ public class FunctionUtilsTest {
         UnivariateDifferentiableFunction id = new Identity();
         DSFactory factory = new DSFactory(1, 1);
         final double a = 1.2345678;
-        Assert.assertEquals(8 * a, FunctionUtils.multiply(c, id, id).value(factory.build(0, a)).getPartialDerivative(1), EPS);
+        Assert.assertEquals(8 * a, FunctionUtils.multiply(c, id, id).value(factory.variable(0, a)).getPartialDerivative(1), EPS);
 
         UnivariateDifferentiableFunction inv = new Inverse();
         UnivariateDifferentiableFunction pow = new Power(2.5);
         UnivariateDifferentiableFunction cos = new Cos();
         Assert.assertEquals(1.5 * FastMath.sqrt(a) * FastMath.cos(a) - FastMath.pow(a, 1.5) * FastMath.sin(a),
-                            FunctionUtils.multiply(inv, pow, cos).value(factory.build(0, a)).getPartialDerivative(1), EPS);
+                            FunctionUtils.multiply(inv, pow, cos).value(factory.variable(0, a)).getPartialDerivative(1), EPS);
 
         UnivariateDifferentiableFunction cosh = new Cosh();
         Assert.assertEquals(1.5 * FastMath.sqrt(a) * FastMath.cosh(a) + FastMath.pow(a, 1.5) * FastMath.sinh(a),
-                            FunctionUtils.multiply(inv, pow, cosh).value(factory.build(0, a)).getPartialDerivative(1), 8 * EPS);
+                            FunctionUtils.multiply(inv, pow, cosh).value(factory.variable(0, a)).getPartialDerivative(1), 8 * EPS);
     }
 
     @Test
@@ -264,7 +264,7 @@ public class FunctionUtilsTest {
         DSFactory factory = new DSFactory(1, 2);
         for (double t = -1.0; t < 1; t += 0.01) {
             // x = sin(t)
-            DerivativeStructure dsT = factory.build(0, t);
+            DerivativeStructure dsT = factory.variable(0, t);
             DerivativeStructure y = f.value(dsT.sin());
             Assert.assertEquals(FastMath.sin(t) * FastMath.sin(t),               f.value(FastMath.sin(t)),  1.0e-15);
             Assert.assertEquals(FastMath.sin(t) * FastMath.sin(t),               y.getValue(),              1.0e-15);
@@ -273,7 +273,7 @@ public class FunctionUtilsTest {
         }
 
         try {
-            f.value(new DSFactory(1, 3).build(0.0));
+            f.value(new DSFactory(1, 3).constant(0.0));
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, e.getSpecifier());
@@ -304,7 +304,7 @@ public class FunctionUtilsTest {
         DSFactory factory11 = new DSFactory(1, 1);
         for (double t = -1.0; t < 1; t += 0.01) {
             // x = sin(t), y = cos(t), hence the method really becomes univariate
-            DerivativeStructure dsT = factory11.build(0, t);
+            DerivativeStructure dsT = factory11.variable(0, t);
             DerivativeStructure y = mdf.value(new DerivativeStructure[] { dsT.sin(), dsT.cos() });
             Assert.assertEquals(a * FastMath.sin(t) + b * FastMath.cos(t), y.getValue(),              1.0e-15);
             Assert.assertEquals(a * FastMath.cos(t) - b * FastMath.sin(t), y.getPartialDerivative(1), 1.0e-15);
@@ -312,9 +312,9 @@ public class FunctionUtilsTest {
 
         DSFactory factory21 = new DSFactory(2, 1);
         for (double u = -1.0; u < 1; u += 0.01) {
-            DerivativeStructure dsU = factory21.build(0, u);
+            DerivativeStructure dsU = factory21.variable(0, u);
             for (double v = -1.0; v < 1; v += 0.01) {
-                DerivativeStructure dsV = factory21.build(1, v);
+                DerivativeStructure dsV = factory21.variable(1, v);
                 DerivativeStructure y = mdf.value(new DerivativeStructure[] { dsU, dsV });
                 Assert.assertEquals(a * u + b * v, mdf.value(new double[] { u, v }), 1.0e-15);
                 Assert.assertEquals(a * u + b * v, y.getValue(),                     1.0e-15);
@@ -325,7 +325,7 @@ public class FunctionUtilsTest {
 
         DSFactory factory13 = new DSFactory(1, 3);
         try {
-            mdf.value(new DerivativeStructure[] { factory13.build(0.0), factory13.build(0.0) });
+            mdf.value(new DerivativeStructure[] { factory13.constant(0.0), factory13.constant(0.0) });
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {
             Assert.assertEquals(LocalizedCoreFormats.NUMBER_TOO_LARGE, e.getSpecifier());
@@ -355,7 +355,7 @@ public class FunctionUtilsTest {
 
         DSFactory factory = new DSFactory(1, 1);
         try {
-            DerivativeStructure dsT = factory.build(0, 0.0);
+            DerivativeStructure dsT = factory.variable(0, 0.0);
             mdf.value(new DerivativeStructure[] { dsT.sin(), dsT.cos() });
             Assert.fail("an exception should have been thrown");
         } catch (MathIllegalArgumentException e) {

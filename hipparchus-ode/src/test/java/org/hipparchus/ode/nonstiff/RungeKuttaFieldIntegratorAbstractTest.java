@@ -520,13 +520,13 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
         final int parY01     = 3;
         final int parT       = 4;
 
-        DerivativeStructure omega = factory.build(parOmega, 1.3);
-        DerivativeStructure t0    = factory.build(parTO, 1.3);
+        DerivativeStructure omega = factory.variable(parOmega, 1.3);
+        DerivativeStructure t0    = factory.variable(parTO, 1.3);
         DerivativeStructure[] y0  = new DerivativeStructure[] {
-            factory.build(parY00, 3.0),
-            factory.build(parY01, 4.0)
+            factory.variable(parY00, 3.0),
+            factory.variable(parY01, 4.0)
         };
-        DerivativeStructure t     = factory.build(parT, 6.0);
+        DerivativeStructure t     = factory.variable(parT, 6.0);
         SinCos sinCos = new SinCos(omega);
 
         RungeKuttaFieldIntegrator<DerivativeStructure> integrator =

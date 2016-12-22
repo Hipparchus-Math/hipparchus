@@ -255,7 +255,7 @@ public final class BrentSolverTest {
                 private final DSFactory factory = new DSFactory(1, 1);
 
                 public double value(double x) {
-                    return func.value(factory.build(0, x)).getPartialDerivative(1);
+                    return func.value(factory.variable(0, x)).getPartialDerivative(1);
                 }
 
             };

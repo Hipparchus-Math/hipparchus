@@ -52,7 +52,7 @@ public class FieldQRDecompositionTest {
             { -4, 24, -41, },
             { -5, 34, 7, }, };
 
-    DerivativeStructure zero = new DSFactory(1, 1).build(0, 0);
+    DerivativeStructure zero = new DSFactory(1, 1).variable(0, 0);
     Field<DerivativeStructure> DSField = zero.getField();
     private static final double entryTolerance = 10e-16;
 
