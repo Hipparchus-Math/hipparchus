@@ -357,8 +357,12 @@ A [UnivariateIntegrator](../apidocs/org/hipparchus/analysis/integration/Univaria
 provides the means to numerically integrate
 [univariate real-valued functions](../apidocs/org/hipparchus/analysis/UnivariateFunction.html).
 
-* `\(f(c) = 0.0\)` (see "function value accuracy")
-* `\(min \le c \le max\)` (except for the secant method, which may find a solution outside the interval)
+Hipparchus includes implementations of the following integration algorithms:
+
+* [Romberg's method](../apidocs/org/apache/commons/math4/analysis/integration/RombergIntegrator.html)
+* [Simpson's method](../apidocs/org/apache/commons/math4/analysis/integration/SimpsonIntegrator.html)
+* [Trapezoid method](./apidocs/org/apache/commons/math4/analysis/integration/TrapezoidIntegrator.html)
+* [Legendre-Gauss method](../apidocs/org/apache/commons/math4/analysis/integration/LegendreGaussIntegrator.html)
 
 
 ## Polynomials
