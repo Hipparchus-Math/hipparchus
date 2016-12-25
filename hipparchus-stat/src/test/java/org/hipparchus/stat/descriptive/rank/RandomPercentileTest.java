@@ -18,12 +18,15 @@ package org.hipparchus.stat.descriptive.rank;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.GammaDistribution;
@@ -35,14 +38,17 @@ import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well19937c;
+import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatistic;
 import org.hipparchus.stat.descriptive.StorelessUnivariateStatisticAbstractTest;
+import org.hipparchus.stat.inference.AlternativeHypothesis;
+import org.hipparchus.stat.inference.BinomialTest;
 import org.hipparchus.util.FastMath;
 import org.junit.Test;
 
 /**
- * Test cases for the {@link PSquarePercentile} class which naturally extends
- * {@link StorelessUnivariateStatisticAbstractTest}.
+ * Test cases for the {@link RandomPercentileTest} class.
+ * Some tests are adapted from PSquarePercentileTest.
  */
 public class RandomPercentileTest extends
         StorelessUnivariateStatisticAbstractTest {
@@ -119,36 +125,6 @@ public class RandomPercentileTest extends
         assertTrue(replica.equals(replica));
         assertTrue(replica.equals(master));
         assertTrue(master.equals(replica));
-    }
-
-
-    //@Test
-    public void testPSquaredEqualsAndMin() {
-        PSquarePercentile ptile = new PSquarePercentile(0);
-        assertEquals(ptile, ptile);
-        assertFalse(ptile.equals(null));
-        assertFalse(ptile.equals(new String()));
-        // Just to check if there is no data get result for zeroth and 100th
-        // ptile returns NAN
-        assertTrue(Double.isNaN(ptile.getResult()));
-        assertTrue(Double.isNaN(new PSquarePercentile(100).getResult()));
-
-        double[] d = new double[] { 1, 3, 2, 4, 9, 10, 11 };
-        ptile.incrementAll(d);
-        assertEquals(ptile, ptile);
-        assertEquals(1d, ptile.getResult(), 1e-02);// this calls min
-    }
-
-    // @Test
-    public void testString() {
-        PSquarePercentile ptile = new PSquarePercentile(95);
-        assertNotNull(ptile.toString());
-        ptile.increment(1);
-        ptile.increment(2);
-        ptile.increment(3);
-        assertNotNull(ptile.toString());
-        assertEquals(expectedValue(), ptile.evaluate(testArray), getTolerance());
-        assertNotNull(ptile.toString());
     }
 
     @Test
@@ -238,6 +214,201 @@ public class RandomPercentileTest extends
             new double[] { 1d, 1d, Double.NEGATIVE_INFINITY, Double.NEGATIVE_INFINITY };
         percentile = new RandomPercentile();
         assertTrue(Double.isNaN(percentile.evaluate(specialValues)));
+    }
+
+    @Test
+    public void testBufferConsumeLevel0() throws Exception {
+        final int len = testArray.length;
+        final double[] sorted = Arrays.copyOf(testArray, len);
+        Arrays.sort(sorted);
+        BufferMock buffer = new BufferMock(len, 0, randomGenerator);
+        for (int i = 0; i < len; i++) {
+            buffer.consume(testArray[i]);
+        }
+        UnitTestUtils.assertEquals(sorted, buffer.getData(), Double.MIN_VALUE);
+        assertFalse(buffer.hasCapacity());
+        assertEquals(StatUtils.min(testArray),buffer.min(), Double.MIN_VALUE);
+        assertEquals(StatUtils.max(testArray),buffer.max(), Double.MIN_VALUE);
+    }
+
+    @Test
+    public void testBufferSampling() throws Exception {
+        // Capacity = 10, level = 2 - should take 1 out of each block of 4 values from the stream
+        BufferMock buffer = new BufferMock(10, 2, randomGenerator);
+        for (int i = 0; i < 40; i++) {
+            buffer.consume(i);
+        }
+        // Buffer should be full, including one value from each consecutive sequence of 4
+        assertFalse(buffer.hasCapacity());
+        final double[] data = buffer.getData();
+        for (int i = 0; i < 10; i++) {
+           assertTrue(data[i] < 4 * (i + 1));
+           assertTrue(data[i] >= 4 * i);
+           // Rank of 4n should be n for n = 1, ..., 10.
+           assertEquals(i + 1, buffer.rankOf((i + 1) * 4));
+           // Check boundary ranks
+           assertEquals(0, buffer.rankOf(-1));
+           assertEquals(10, buffer.rankOf(100));
+        }
+    }
+
+    @Test
+    public void testBufferMergeWith() throws Exception {
+        // Create 2 level 0 buffers of size 20
+        BufferMock buffer1 = new BufferMock(20, 0, randomGenerator);
+        BufferMock buffer2 = new BufferMock(20, 0, randomGenerator);
+
+        // fill buffer1 with 0, ..., 19 and buffer2 with 20, ..., 39
+        for (int i = 0; i < 20; i++) {
+            buffer1.consume(i);
+            buffer2.consume(i + 20);
+        }
+        assertEquals(0, buffer1.getLevel());
+        assertEquals(0, buffer2.getLevel());
+
+        // Merge 1 with 2
+        buffer1.mergeWith(buffer2.getInstance()); // Need to pass the real thing for buffer2
+
+        // Both should now have level 1, buffer1 should be full, buffer2 should be free
+        assertEquals(1,buffer1.getLevel());
+        assertFalse(buffer1.hasCapacity());
+        assertEquals(1,buffer2.getLevel());
+        assertTrue(buffer2.hasCapacity());
+
+        // Check the contents of buffer1 - should be the merged contents of both
+        final double[] data = buffer1.getData();
+        int nSmall = 0;
+        for (double value : data) {
+            assertTrue(value >=0 && value < 40);
+            if (value < 20) {
+                nSmall++;
+            }
+        }
+
+        // Verify merge selection was close to fair
+        BinomialTest bTest = new BinomialTest();
+        assertFalse(bTest.binomialTest(20, nSmall, 0.5, AlternativeHypothesis.TWO_SIDED, 0.01));
+
+        // Check sort on merged buffer
+        buffer1.checkSorted();
+    }
+
+    @Test
+    public void testBufferMergeInto() throws Exception {
+        BufferMock buffer1 = new BufferMock(20, 0, randomGenerator);
+        BufferMock buffer2 = new BufferMock(20, 2, randomGenerator);
+
+        // fill buffer1 with 0, ..., 19
+        for (int i = 0; i < 20; i++) {
+            buffer1.consume(i);
+        }
+
+        // fill buffer 2 - level 2 means it will take 80 values to fill it
+        for (int i = 0; i < 80; i++) {
+            buffer2.consume(i + 20);
+        }
+        assertFalse(buffer1.hasCapacity());
+        assertFalse(buffer2.hasCapacity());
+        buffer1.mergeInto(buffer2.getInstance());
+
+        // levels should be unchanged
+        assertEquals(0, buffer1.getLevel());
+        assertEquals(2, buffer2.getLevel());
+
+        // buffer2 should have about 1/4 values under 20
+        final double[] data = buffer2.getData();
+        int nSmall = 0;
+        for (double value : data) {
+            assertTrue(value >=0 && value < 100);
+            if (value < 20) {
+                nSmall++;
+            }
+        }
+        BinomialTest bTest = new BinomialTest();
+        assertFalse(bTest.binomialTest(20, nSmall, 0.25, AlternativeHypothesis.TWO_SIDED, 0.01));
+
+        // Check sort on merged buffer
+        buffer2.checkSorted();
+    }
+
+    static class BufferMock {
+        private Object instance;
+        private Method consumeMethod;
+        private Method getDataMethod;
+        private Method hasCapacityMethod;
+        private Method minMethod;
+        private Method maxMethod;
+        private Method rankOfMethod;
+        private Method getLevelMethod;
+        private Method mergeWithMethod;
+        private Method mergeIntoMethod;
+        @SuppressWarnings({ "unchecked", "rawtypes" })
+        public BufferMock(int size, int level, RandomGenerator randomGenerator) throws Exception {
+            final Class[] classes = RandomPercentile.class.getDeclaredClasses();
+            for (Class cls : classes) {
+                if (cls.getName().endsWith("$Buffer")) {
+                   Constructor constructor = cls.getDeclaredConstructor(Integer.TYPE, Integer.TYPE, RandomGenerator.class);
+                   instance = constructor.newInstance(size, level, randomGenerator);
+                   consumeMethod = cls.getDeclaredMethod("consume", Double.TYPE);
+                   getDataMethod = cls.getDeclaredMethod("getData");
+                   hasCapacityMethod = cls.getDeclaredMethod("hasCapacity");
+                   minMethod = cls.getDeclaredMethod("min");
+                   maxMethod = cls.getDeclaredMethod("max");
+                   rankOfMethod = cls.getDeclaredMethod("rankOf", Double.TYPE);
+                   getLevelMethod = cls.getDeclaredMethod("getLevel");
+                   mergeWithMethod = cls.getDeclaredMethod("mergeWith", cls);
+                   mergeIntoMethod = cls.getDeclaredMethod("mergeInto", cls);
+                }
+            }
+        }
+
+        public void consume(double value) throws Exception {
+            consumeMethod.invoke(instance, value);
+        }
+
+        public boolean hasCapacity() throws Exception {
+            return (boolean) hasCapacityMethod.invoke(instance);
+        }
+
+        public double[] getData() throws Exception {
+            return (double[]) getDataMethod.invoke(instance);
+        }
+
+        public double min() throws Exception {
+            return (double) minMethod.invoke(instance);
+        }
+
+        public double max() throws Exception {
+            return (double) maxMethod.invoke(instance);
+        }
+
+        public int rankOf(double value) throws Exception {
+            return (int) rankOfMethod.invoke(instance, value);
+        }
+
+        public int getLevel() throws Exception {
+            return (int) getLevelMethod.invoke(instance);
+        }
+
+        public void mergeWith(Object other) throws Exception {
+            mergeWithMethod.invoke(instance, other);
+        }
+
+        public void mergeInto(Object other) throws Exception {
+            mergeIntoMethod.invoke(instance, other);
+        }
+
+        public Object getInstance() {
+            return instance;
+        }
+
+        public void checkSorted() throws Exception {
+            final double[] data = getData();
+            final double[] copy = Arrays.copyOf(data, data.length);
+            Arrays.sort(copy);
+            UnitTestUtils.assertEquals(data, copy, Double.MIN_VALUE);
+        }
+
     }
 
     @Test
