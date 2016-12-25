@@ -482,6 +482,11 @@ public class RandomPercentile
          * have been consumed.
          * <p>
          * Sorts the data array if the consumption renders the buffer full.
+         * <p>
+         * There is no capacity check in this method.  Clients are expected
+         * to use {@link #hasCapacity()} before invoking this method.  If
+         * it is invoked on a full buffer, an ArrayIndexOutOfBounds exception
+         * will result.
          *
          * @param value value to consume from the stream
          */
@@ -582,6 +587,8 @@ public class RandomPercentile
                     higher.data[i] = data[i];
                 }
             }
+            // Resort higher's data
+            Arrays.sort(higher.data);
         }
 
         /**
