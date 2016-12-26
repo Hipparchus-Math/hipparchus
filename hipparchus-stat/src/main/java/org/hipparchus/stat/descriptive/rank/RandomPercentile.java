@@ -88,6 +88,9 @@ public class RandomPercentile
     extends AbstractStorelessUnivariateStatistic implements StorelessUnivariateStatistic,
     AggregatableStatistic<RandomPercentile>, Serializable {
 
+    /** Default quantile estimation error setting */
+    public static final double DEFAULT_EPSILON = 1e-4;
+    /** Serialization version id */
     private static final long serialVersionUID = 1L;
     /** Storage size of each buffer */
     private final int s;
@@ -103,8 +106,6 @@ public class RandomPercentile
     private long n = 0;
     /** Buffer currently being filled */
     private Buffer currentBuffer = null;
-    /** Default quantile estimation error setting */
-    public static final double DEFAULT_EPSILON = 1e-4;
 
     /**
      * Constructs a {@code RandomPercentile} with quantile estimation error
@@ -419,6 +420,7 @@ public class RandomPercentile
      * incremented by the merge. This operation is only used on full buffers.
      */
     private static class Buffer implements Serializable {
+        /** Serialization version id */
         private static final long serialVersionUID = 1L;
         /** Number of values actually stored in the buffer */
         private final int size;
@@ -446,9 +448,8 @@ public class RandomPercentile
          * @param level the base 2 log of the sampling frequency
          *        (one out of every 2^level values is retained)
          * @param randomGenerator PRNG used for sampling and merge operations
-         * @param id unique identifier for this buffer
          */
-        public Buffer(int size, int level, RandomGenerator randomGenerator) {
+        Buffer(int size, int level, RandomGenerator randomGenerator) {
             this.size = size;
             data = new double[size];
             this.level = level;
@@ -708,6 +709,7 @@ public class RandomPercentile
      * Overall capacity is limited by the total number of buffers.
      */
     private static class BufferMap implements Iterable<Buffer>, Serializable {
+        /** Serialization version ID */
         private static final long serialVersionUID = 1L;
         /** Total number of buffers that can be created - cap for count */
         private final int capacity;
@@ -718,7 +720,7 @@ public class RandomPercentile
         /** Uniform buffer size */
         private final int bufferSize;
         /** Backing store for the buffer map. Keys are levels, values are lists of registered buffers. */
-        final HashMap<Integer,List<Buffer>> registry = new HashMap<>();
+        private final HashMap<Integer,List<Buffer>> registry = new HashMap<>();
         /** Maximum buffer level */
         private int maxLevel = 0;
 
@@ -730,7 +732,7 @@ public class RandomPercentile
          * @param bufferSize size of each buffer
          * @param randomGenerator RandomGenerator to use in merges
          */
-        public BufferMap(int capacity, int bufferSize, RandomGenerator randomGenerator) {
+        BufferMap(int capacity, int bufferSize, RandomGenerator randomGenerator) {
             this.bufferSize = bufferSize;
             this.capacity = capacity;
             this.randomGenerator = randomGenerator;
@@ -739,9 +741,9 @@ public class RandomPercentile
         /**
          * Copy constructor.
          *
-         * @param BufferMap to copy
+         * @param original BufferMap to copy
          */
-        public BufferMap(BufferMap original) {
+        BufferMap(BufferMap original) {
             super();
             this.bufferSize = original.bufferSize;
             this.capacity = original.capacity;
@@ -770,6 +772,7 @@ public class RandomPercentile
          * level, registered and returned.  If capacity has been reached,
          * null is returned.
          *
+         * @param level level of the new buffer
          * @return an empty buffer or null if a buffer can't be provided
          */
         public Buffer create(int level) {
@@ -951,9 +954,10 @@ public class RandomPercentile
         @Override
         public Iterator<Buffer> iterator() {
             Iterator<Buffer> it = new Iterator<Buffer>() {
-                Iterator<Integer> levelIterator = registry.keySet().iterator();
-                List<Buffer> currentList = registry.get(levelIterator.next());
-                Iterator<Buffer> bufferIterator = currentList == null ? null : currentList.iterator();
+                private final Iterator<Integer> levelIterator = registry.keySet().iterator();
+                private List<Buffer> currentList = registry.get(levelIterator.next());
+                private Iterator<Buffer> bufferIterator =
+                        currentList == null ? null : currentList.iterator();
 
                 @Override
                 public boolean hasNext() {
@@ -1244,7 +1248,7 @@ public class RandomPercentile
      * <p>
      * If the number of values that have been consumed from the stream is less than 1/2
      * of this value, reported statistics are exact.
-     * 
+     *
      * @param epsilon bound on the relative quantile error (see class javadoc)
      * @return upper bound on the total number of primitive double values retained in memory
      * @throws MathIllegalArgumentException if epsilon is not in the interval (0,1)

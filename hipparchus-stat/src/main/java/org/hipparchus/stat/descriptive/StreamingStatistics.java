@@ -307,10 +307,25 @@ public class StreamingStatistics
         }
     }
 
+    /**
+     * Returns an estimate of the median of the values that have been entered.
+     * See {@link RandomPercentile} for a description of the algorithm used for large
+     * data streams.
+     *
+     * @return the median
+     */
     public double getMedian() {
         return randomPercentile != null ? randomPercentile.getResult(50d) : Double.NaN;
     }
 
+    /**
+     * Returns an estimate of the given percentile of the values that have been entered.
+     * See {@link RandomPercentile} for a description of the algorithm used for large
+     * data streams.
+     *
+     * @param percentile the desired percentile (must be between 0 and 100)
+     * @return estimated percentile
+     */
     public double getPercentile(double percentile) {
         return randomPercentile != null ? randomPercentile.getResult(percentile) : Double.NaN;
     }
