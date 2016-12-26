@@ -168,21 +168,7 @@ public class RandomPercentileTest extends
         RandomPercentile percentile = new RandomPercentile();
         assertEquals(this.percentile5, percentile.evaluate(5, testArray), 0.0001);
     }
-
-    @Test(expected = NullArgumentException.class)
-    public void testNull() {
-        PSquarePercentile percentile = new PSquarePercentile(50d);
-        double[] nullArray = null;
-        percentile.evaluate(nullArray);
-    }
-
-    @Test
-    public void testEmpty() {
-        PSquarePercentile percentile = new PSquarePercentile(50d);
-        double[] emptyArray = new double[] {};
-        assertTrue(Double.isNaN(percentile.evaluate(emptyArray)));
-    }
-
+     
     @Test
     public void testSingleton() {
         RandomPercentile percentile = new RandomPercentile();
@@ -644,6 +630,23 @@ public class RandomPercentileTest extends
         double[] test = { 1d, 2d, 3d, 4d };
         RandomPercentile p = new RandomPercentile();
         assertEquals(1d, p.evaluate(0d,test), 0);
+    }
+    
+    @Test
+    public void testMaxValuesRetained() {
+        assertEquals(546795, RandomPercentile.maxValuesRetained(RandomPercentile.DEFAULT_EPSILON));
+        assertEquals(34727, RandomPercentile.maxValuesRetained(1E-3));
+        assertEquals(2064, RandomPercentile.maxValuesRetained(1E-2));
+    }
+    
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testMaxValuesRetained0Epsilon() {
+        RandomPercentile.maxValuesRetained(0);
+    }
+    
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testMaxValuesRetained1Epsilon() {
+        RandomPercentile.maxValuesRetained(1);
     }
 
 

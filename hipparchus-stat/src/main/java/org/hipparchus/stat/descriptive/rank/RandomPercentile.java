@@ -47,21 +47,24 @@ import org.hipparchus.util.MathArrays;
  * Storage requirements for the RANDOM algorithm depend on the desired
  * accuracy of quantile estimates. Quantile estimate accuracy is defined as follows.
  * <p>
- * Let \(X\) be the set of all data values consumed from the stream.
- * If \(\epsilon\) is the configured accuracy, \(\hat{q}\) is an estimated
- * quantile (what is returned by {@link #getResult()} or {@link #getResult(double)}),
- * \(rank(\hat{q}) = |{x \in X : x < \hat{q}}|\) is the rank of \(\hat{q}\) in the data and
- * \(n = |X|\) is the number of observations, then we can expect
- * \(rank(\hat{q}) / n < \epsilon\).
+ * Let \(X\) be the set of all data values consumed from the stream and let \(q\)
+ * be a quantile (measured between 0 and 1) to be estimated. If <ul>
+ * <li>\(\epsilon\) is the configured accuracy</li>
+ * <li> \(\hat{q}\) is a RandomPercentile estimate for \(q\) (what is returned
+ *      by {@link #getResult()} or {@link #getResult(double)}) with \(100q\) as
+ *      actual parameter)</li>
+ * <li> \(rank(\hat{q}) = |\{x \in X : x < \hat{q}\}|\) is the actual rank of
+ *      \(\hat{q}\) in the full data stream</li>
+ * <li>\(n = |X|\) is the number of observations</li></ul>
+ * then we can expect \((q - \epsilon)n < rank(\hat{q}) < (q + \epsilon)n\).
  * <p>
- * If the {@code epsilon} configuration parameter is set to \(\epsilon\), then
- * the algorithm maintains \(\left\lceil {log_{2}(1/\epsilon)}\right\rceil + 1\) buffers
+ * The algorithm maintains \(\left\lceil {log_{2}(1/\epsilon)}\right\rceil + 1\) buffers
  * of size \(\left\lceil {1/\epsilon \sqrt{log_2(1/\epsilon)}}\right\rceil\).  When
  * {@code epsilon} is set to the default value of \(10^{-4}\), this makes 15 buffers
  * of size 36,453.
  * <p>
- * The algorithm uses the buffers to maintain samples of data from the stream.  Up until
- * the point where all buffers are full, the entire sample is stored in the buffers.
+ * The algorithm uses the buffers to maintain samples of data from the stream.  Until
+ * all buffers are full, the entire sample is stored in the buffers.
  * If one of the {@code getResult} methods is called when all data are available in memory
  * and there is room to make a copy of the data (meaning the combined set of buffers is
  * less than half full), the {@code getResult} method delegates to a {@link Percentile}
@@ -222,7 +225,6 @@ public class RandomPercentile
      * @param values source of input data
      * @param begin position of the first element of the values array to include
      * @param length number of array elements to include
-     * @param percentile desired percentile (scaled 0 - 100)
      *
      * @return estimated percentile
      * @throws MathIllegalArgumentException if percentile is out of the range [0, 100]
@@ -1235,5 +1237,30 @@ public class RandomPercentile
         }
         bufferMap.absorb(other.bufferMap);
         n += other.n;
+    }
+
+    /**
+     * Returns the maximum number of {@code double} values that a {@code RandomPercentile}
+     * instance created with the given {@code epsilon} value will retain in memory.
+     * <p>
+     * If the number of values that have been consumed from the stream is less than 1/2
+     * of this value, reported statistics are exact.
+     * 
+     * @param epsilon bound on the relative quantile error (see class javadoc)
+     * @return upper bound on the total number of primitive double values retained in memory
+     * @throws MathIllegalArgumentException if epsilon is not in the interval (0,1)
+     */
+    public static long maxValuesRetained(double epsilon) {
+        if (epsilon >= 1) {
+            throw new MathIllegalArgumentException(
+                    LocalizedCoreFormats.NUMBER_TOO_LARGE_BOUND_EXCLUDED, epsilon, 1);
+        }
+        if (epsilon <= 0) {
+            throw new MathIllegalArgumentException(
+                    LocalizedCoreFormats.NUMBER_TOO_SMALL_BOUND_EXCLUDED, epsilon, 0);
+        }
+        final long h = (long) FastMath.ceil(log2(1/epsilon));
+        final long s = (long) FastMath.ceil(FastMath.sqrt(log2(1/epsilon)) / epsilon);
+        return (h+1) * s;
     }
 }
