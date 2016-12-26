@@ -707,9 +707,9 @@ public class RandomPercentileTest extends
      */
     @Test
     public void testDistributionStreaming() {
-        checkQuartiles(new NormalDistribution(), 5000000, 5E-3);
-        checkQuartiles(new ExponentialDistribution(1), 100000, 1E-3);
-        checkQuartiles(new GammaDistribution(4d,2d), 100000, 1E-3);
+        checkQuartiles(new NormalDistribution(), 1000000, 5E-4);
+        checkQuartiles(new ExponentialDistribution(1), 100000, 1E-12);
+        checkQuartiles(new GammaDistribution(4d,2d), 100000, 1E-12);
     }
 
     /**

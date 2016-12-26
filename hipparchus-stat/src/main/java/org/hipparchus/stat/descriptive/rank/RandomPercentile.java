@@ -290,11 +290,11 @@ public class RandomPercentile
         Iterator<Buffer> bufferIterator = bufferMap.iterator();
         while (bufferIterator.hasNext()) {
             Buffer buffer = bufferIterator.next();
-            bMin = StatUtils.min(buffer.getData());
+            bMin = buffer.min();
             if (bMin < min) {
                 min = bMin;
             }
-            bMax = StatUtils.max(buffer.getData());
+            bMax = buffer.max();
             if (bMax > max) {
                 max = bMax;
             }
@@ -336,17 +336,16 @@ public class RandomPercentile
             upper = max;
         }
         final double eps = epsilon / 2;
+        final double rankTolerance = eps * n;
+        final double minWidth = eps / n;
         double intervalWidth = FastMath.abs(upper - lower);
-        while (FastMath.abs(estimateRank / n - q) > eps && intervalWidth > eps / n) {
-            if (estimateRank == targetRank) {
-                return estimate;
-            }
+        while (FastMath.abs(estimateRank - targetRank) > rankTolerance && intervalWidth > minWidth) {
             if (estimateRank > targetRank) {
                 upper = estimate;
             } else {
                 lower = estimate;
             }
-            intervalWidth = FastMath.abs(upper - lower);
+            intervalWidth = upper - lower;
             estimate = lower + intervalWidth / 2;
             estimateRank = getRank(estimate);
         }
@@ -663,7 +662,7 @@ public class RandomPercentile
             if (!hasCapacity()) {
                 return data[0];
             } else {
-                return StatUtils.min(data);
+                return StatUtils.min(getData());
             }
         }
 
@@ -674,7 +673,7 @@ public class RandomPercentile
             if (!hasCapacity()) {
                 return data[data.length - 1];
             } else {
-                return StatUtils.max(data);
+                return StatUtils.max(getData());
             }
         }
 
