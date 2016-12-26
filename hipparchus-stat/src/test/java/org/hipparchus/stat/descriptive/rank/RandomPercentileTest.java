@@ -33,7 +33,6 @@ import org.hipparchus.distribution.continuous.GammaDistribution;
 import org.hipparchus.distribution.continuous.LogNormalDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
