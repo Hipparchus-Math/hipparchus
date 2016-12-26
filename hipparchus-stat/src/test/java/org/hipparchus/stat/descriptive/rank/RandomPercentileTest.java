@@ -708,8 +708,29 @@ public class RandomPercentileTest extends
     @Test
     public void testDistributionStreaming() {
         checkQuartiles(new NormalDistribution(), 1000000, 5E-4);
-        checkQuartiles(new ExponentialDistribution(1), 100000, 1E-12);
-        checkQuartiles(new GammaDistribution(4d,2d), 100000, 1E-12);
+        checkQuartiles(new ExponentialDistribution(1), 600000, 5E-4);
+        checkQuartiles(new GammaDistribution(4d,2d), 600000, 5E-4);
+    }
+
+    /**
+     * Verify no sequential bias even when buffer size is small.
+     */
+    @Test
+    public void testSequentialData() {
+        final long seed = 1000;
+        double epsilon = 1e-4;
+        for (int j = 0; j < 3; j++) {
+            epsilon *= 10;
+            final RandomPercentile randomPercentile = new RandomPercentile(epsilon,
+                    new MersenneTwister(seed));
+            final int n = 5000000;
+            for (int i = 1; i <= n; i++) {
+                randomPercentile.accept(i);
+            }
+            for (int i = 1; i < 5; i++) {
+                assertEquals(0.2 * i, randomPercentile.getResult(i * 20) / n, 2 * epsilon);
+            }
+        }
     }
 
     /**
@@ -723,7 +744,7 @@ public class RandomPercentileTest extends
         final long seed = 1000;
         RandomDataGenerator randomDataGenerator = RandomDataGenerator.of(new MersenneTwister(seed));
         final RandomPercentile randomPercentile = new RandomPercentile(RandomPercentile.DEFAULT_EPSILON,
-                                                                       randomDataGenerator);
+                randomGenerator);
         for (int i = 0; i < sampleSize; i++) {
             randomPercentile.increment(randomDataGenerator.nextDeviate(dist));
         }
