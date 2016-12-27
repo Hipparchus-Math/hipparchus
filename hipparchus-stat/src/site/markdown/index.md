@@ -35,7 +35,9 @@ With the exception of percentiles and the median, all of these
 statistics can be computed without maintaining the full list of input
 data values in memory.  The stat package provides interfaces and
 implementations that do not require value storage as well as
-implementations that operate on arrays of stored values.  There is a `PSquarePercentile` class that uses the algorithm in the class name to approximate percentiles without storing all data in memory.
+implementations that operate on arrays of stored values.  There are two classes, `PSquarePercentile` and `RandomPercentile` class that approximate percentiles,
+using the [PSquare](http://www.cse.wustl.edu/~jain/papers/psqr.htm) and
+[RANDOM](http://dimacs.rutgers.edu/~graham/pubs/papers/nquantiles.pdf) algorithms, respectively.
 
 The top level interface is
 [UnivariateStatistic](../apidocs/org/hipparchus/stat/descriptive/UnivariateStatistic.html).
@@ -66,15 +68,14 @@ and
 and has the capability of producing "rolling" statistics computed from a
 "window" consisting of the most recently added values.
 
-`StreamingStatistics` does not store the input data values
-in memory, so the statistics included in this aggregate are limited to those
-that can be computed in one pass through the data without access to
-the full array of values.
+`StreamingStatistics` does not store the full set of input data values
+in memory.  It includes a [RandomPercentile](../apidocs/org/hipparchus/stat/descriptive/rank/RandomPercentile.html) instance that maintains a bounded sample
+of data from the stream (see the class javadoc for `RandomPercentile` for details).
 
 | Aggregate | Statistics Included | Values stored? | "Rolling" capability? |
 | --- | --- | --- | --- |
 | [ DescriptiveStatistics](../apidocs/org/hipparchus/stat/descriptive/DescriptiveStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance, percentiles, skewness, kurtosis, median | Yes | Yes |
-| [ StreamingStatistics](../apidocs/org/hipparchus/stat/descriptive/StreamingStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance | No | No |
+| [ StreamingStatistics](../apidocs/org/hipparchus/stat/descriptive/StreamingStatistics.html) | min, max, mean, geometric mean, n, sum, sum of squares, standard deviation, variance, percentiles | No | No |
 
 `StreamingStatistics` supports aggregation of results using various `aggregate` methods.
 
@@ -107,7 +108,7 @@ Using the `DescriptiveStatistics` aggregate (values are stored in memory):
     double std  = stats.getStandardDeviation();
     double median = stats.getPercentile(50);
 
-Using the `StreamingStatistics` aggregate (values are __not__ stored in memory):
+Using the `StreamingStatistics` aggregate to handle data from a stream:
 
     // Get a StreamingStatistics instance
     StreamingStatistics stats = new StreamingStatistics();
