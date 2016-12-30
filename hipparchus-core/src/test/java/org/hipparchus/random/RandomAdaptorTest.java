@@ -18,6 +18,7 @@ package org.hipparchus.random;
 
 import java.util.Random;
 
+import org.hipparchus.exception.NullArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -48,6 +49,20 @@ public class RandomAdaptorTest {
         Assert.assertEquals(0, random.nextLong());
         random.setSeed(100);
         Assert.assertEquals(0, random.nextDouble(), 0);
+    }
+
+    @SuppressWarnings("unused")
+    @Test(expected=NullArgumentException.class)
+    public void testNullGenerator(){
+       RandomGenerator nullGenerator = null;
+       Random random = new RandomAdaptor(nullGenerator);
+    }
+
+    @SuppressWarnings("unused")
+    @Test(expected=NullArgumentException.class)
+    public void testNullGenerator2(){
+       RandomGenerator nullGenerator = null;
+       Random random = RandomAdaptor.of(nullGenerator);
     }
 
     /*
