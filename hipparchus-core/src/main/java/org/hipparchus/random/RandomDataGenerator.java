@@ -17,19 +17,24 @@
 package org.hipparchus.random;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.hipparchus.distribution.EnumeratedDistribution;
 import org.hipparchus.distribution.IntegerDistribution;
 import org.hipparchus.distribution.RealDistribution;
 import org.hipparchus.distribution.continuous.BetaDistribution;
+import org.hipparchus.distribution.continuous.EnumeratedRealDistribution;
 import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.GammaDistribution;
 import org.hipparchus.distribution.continuous.LogNormalDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.distribution.continuous.UniformRealDistribution;
+import org.hipparchus.distribution.discrete.EnumeratedIntegerDistribution;
 import org.hipparchus.distribution.discrete.PoissonDistribution;
 import org.hipparchus.distribution.discrete.UniformIntegerDistribution;
 import org.hipparchus.distribution.discrete.ZipfDistribution;
@@ -39,6 +44,7 @@ import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.Pair;
 import org.hipparchus.util.Precision;
 import org.hipparchus.util.ResizableDoubleArray;
 
@@ -172,6 +178,15 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
                                 (generator, dist) -> generator.nextUniform(dist.getSupportLowerBound(),
                                                                            dist.getSupportUpperBound()));
 
+        CONTINUOUS_SAMPLERS.put(EnumeratedRealDistribution.class,
+                (generator, dist) -> {
+                    final EnumeratedRealDistribution edist =
+                            (EnumeratedRealDistribution) dist;
+                    EnumeratedDistributionSampler<Double> sampler =
+                            generator.new EnumeratedDistributionSampler<Double>(edist.getPmf());
+                    return sampler.sample();
+                });
+
         // Discrete samplers
 
         DISCRETE_SAMPLERS.put(PoissonDistribution.class,
@@ -186,6 +201,15 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
                                   return generator.nextZipf(zipfDist.getNumberOfElements(),
                                                                  zipfDist.getExponent());
                               });
+
+        DISCRETE_SAMPLERS.put(EnumeratedIntegerDistribution.class,
+                                (generator, dist) -> {
+                                    final EnumeratedIntegerDistribution edist =
+                                            (EnumeratedIntegerDistribution) dist;
+                                    EnumeratedDistributionSampler<Integer> sampler =
+                                            generator.new EnumeratedDistributionSampler<Integer>(edist.getPmf());
+                                    return sampler.sample();
+                                });
     }
 
     /** Source of random data */
@@ -840,6 +864,47 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
     }
 
     /**
+     * Generates a random sample of size sampleSize from {0, 1, ... , weights.length - 1},
+     * using weights as probabilities.
+     * <p>
+     * For 0 < i < weights.length, the probability that i is selected (on any draw) is weights[i].
+     * If necessary, the weights array is normalized to sum to 1 so that weights[i] is a probability
+     * and the array sums to 1.
+     * <p>
+     * Weights can be 0, but must not be negative, infinite or NaN.
+     * At least one weight must be positive.
+     *
+     * @param sampleSize size of sample to generate
+     * @param weights probability sampling weights
+     * @return an array of integers between 0 and weights.length - 1
+     * @throws MathIllegalArgumentException if weights contains negative, NaN or infinite values or only 0s or sampleSize is less than 0
+     */
+    public int[] nextSampleWithReplacement(int sampleSize, double[] weights) {
+
+        // Check sample size
+        if (sampleSize < 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_POSITIVE_NUMBER_OF_SAMPLES);
+        }
+
+        // Check and normalize weights
+        double[] normWt = EnumeratedDistribution.checkAndNormalize(weights);
+
+        // Generate sample values by dividing [0,1] into subintervals corresponding to weights.
+        final int[] out = new int[sampleSize];
+        final int len = normWt.length;
+        for (int i = 0; i < sampleSize; i++) {
+            final double u = randomGenerator.nextDouble();
+            double cum = normWt[0];
+            int j = 1;
+            while (cum < u && j < len) {
+                cum += normWt[j++];
+            }
+            out[i] = --j;
+        }
+        return out;
+    }
+
+    /**
      * Utility class implementing Cheng's algorithms for beta distribution sampling.
      *
      * <blockquote>
@@ -1182,6 +1247,39 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
             else {
                 return 1.+x*(1./2.)*(1.+x*(1./3.)*(1.+x*(1./4.)));
             }
+        }
+    }
+
+    /**
+     * Sampler for enumerated distributions.
+     *
+     * @param <T> type of sample space objects
+     */
+    private final class EnumeratedDistributionSampler<T> {
+        /** Probabilities */
+        private final double[] weights;
+        /** Values */
+        private final List<T> values;
+        /**
+         * Create an EnumeratedDistributionSampler from the provided pmf.
+         *
+         * @param pmf probability mass function describing the distribution
+         */
+        EnumeratedDistributionSampler(List<Pair<T, Double>> pmf) {
+            final int numMasses = pmf.size();
+            weights = new double[numMasses];
+            values = new ArrayList<T>();
+            for (int i = 0; i < numMasses; i++) {
+                weights[i] = pmf.get(i).getSecond();
+                values.add(pmf.get(i).getFirst());
+            }
+        }
+        /**
+         * @return a random value from the distribution
+         */
+        public T sample() {
+            int[] chosen = nextSampleWithReplacement(1, weights);
+            return values.get(chosen[0]);
         }
     }
 }

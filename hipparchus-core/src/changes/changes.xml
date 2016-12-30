@@ -51,6 +51,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="1.1" date="TBD" description="This is a maintenance release.">
       <action dev="psteitz" type="add">
+        Added support for sampling from enumerated distributions in RandomDataGenerator.
+        Fixes Github issue #19.
+      </action>
+      <action dev="psteitz" type="add">
         Added support for exact integration in PolynomialFunction.
         Fixes Github issue #18.
       </action>

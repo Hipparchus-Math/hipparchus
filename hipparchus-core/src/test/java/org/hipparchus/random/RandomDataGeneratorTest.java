@@ -16,6 +16,8 @@
  */
 package org.hipparchus.random;
 
+import static org.junit.Assert.assertEquals;
+
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,9 +26,11 @@ import java.util.List;
 import org.hipparchus.RetryRunner;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.distribution.continuous.BetaDistribution;
+import org.hipparchus.distribution.continuous.EnumeratedRealDistribution;
 import org.hipparchus.distribution.continuous.ExponentialDistribution;
 import org.hipparchus.distribution.continuous.GammaDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
+import org.hipparchus.distribution.discrete.EnumeratedIntegerDistribution;
 import org.hipparchus.distribution.discrete.PoissonDistribution;
 import org.hipparchus.distribution.discrete.ZipfDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -888,6 +892,88 @@ public class RandomDataGeneratorTest {
                 UnitTestUtils.assertChiSquareAccept(expectedCounts, observedCounts, 0.001);
             }
         }
+    }
+
+    @Test
+    public void testNextSampleWithReplacement() {
+        final int sampleSize = 1000;
+        final double[] weights = {1, 2, 3, 4};
+        final int[] sample = randomData.nextSampleWithReplacement(sampleSize, weights);
+        final double[] expected = {sampleSize/10d, sampleSize/5d, 3*sampleSize/10d, 2*sampleSize/5d};
+        final long[] observed = {0, 0, 0, 0};
+        for (int i = 0; i < sampleSize; i++) {
+            observed[sample[i]]++;
+        }
+        UnitTestUtils.assertChiSquareAccept(new String[] {"0", "1", "2","3"}, expected, observed, 0.01);
+    }
+
+    @Test
+    public void testNextSampleWithReplacementPointMass() {
+        final int sampleSize = 2;
+        double[] weights = {1};
+        final int[] expected = new int[] {0, 0};
+        UnitTestUtils.assertEquals(expected, randomData.nextSampleWithReplacement(sampleSize, weights));
+        weights = new double[] {1, 0};
+        UnitTestUtils.assertEquals(expected, randomData.nextSampleWithReplacement(sampleSize, weights));
+    }
+
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testNextSampleWithReplacementAllZeroWeights() {
+        final double[] weights = {0, 0, 0};
+        randomData.nextSampleWithReplacement(1, weights);
+    }
+
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testNextSampleWithReplacementNegativeWeights() {
+        final double[] weights = {-1, 1, 0};
+        randomData.nextSampleWithReplacement(1, weights);
+    }
+
+    @Test
+    public void testNextSampleWithReplacement0SampleSize() {
+        final double[] weights = {1, 0};
+        final int[] expected = {};
+        UnitTestUtils.assertEquals(expected, randomData.nextSampleWithReplacement(0, weights));
+    }
+
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testNextSampleWithReplacementNegativeSampleSize() {
+        final double[] weights = {1, 0};
+        randomData.nextSampleWithReplacement(-1, weights);
+    }
+
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testNextSampleWithReplacementNaNWeights() {
+        final double[] weights = {1, Double.NaN};
+        randomData.nextSampleWithReplacement(0, weights);
+    }
+
+    @Test
+    public void testNextDeviateEnumeratedIntegerDistribution() {
+        final int sampleSize = 1000;
+        final int[] data = new int[] {0, 1, 1, 2, 2, 2};
+        final EnumeratedIntegerDistribution dist = new EnumeratedIntegerDistribution(data);
+        final int[] sample = randomData.nextDeviates(dist, sampleSize);
+        final double[] expected = {sampleSize/6d, sampleSize/3d, sampleSize/2d};
+        final long[] observed = {0, 0, 0};
+        for (int i = 0; i < sampleSize; i++) {
+            observed[sample[i]]++;
+        }
+        UnitTestUtils.assertChiSquareAccept(new String[] {"0", "1", "2"}, expected, observed, 0.01);
+    }
+
+    @Test
+    public void testNextDeviateEnumeratedRealDistribution() {
+        final int sampleSize = 1000;
+        final double[] data = new double[] {0, 1, 1, 2, 2, 2};
+        final EnumeratedRealDistribution dist = new EnumeratedRealDistribution(data);
+        final double[] sample = randomData.nextDeviates(dist, sampleSize);
+        final double[] expected = {sampleSize/6d, sampleSize/3d, sampleSize/2d};
+        final long[] observed = {0, 0, 0};
+        for (int i = 0; i < sampleSize; i++) {
+            observed[(int)sample[i]]++;
+        }
+        UnitTestUtils.assertChiSquareAccept(new String[] {"0", "1", "2"}, expected, observed, 0.01);
     }
 
 }
