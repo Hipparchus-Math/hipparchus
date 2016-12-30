@@ -145,14 +145,18 @@ public class EnumeratedDistribution<T> implements Serializable {
     }
 
     /**
-     * Checks to make sure that weights contains only non-negative, finite, non-NaN values
-     * and if necessary normalizes it to sum to 1.
+     * Checks to make sure that weights is neither null nor empty and contains only non-negative, finite,
+     * non-NaN values and if necessary normalizes it to sum to 1.
      *
      * @param weights input array to be used as the basis for the values of a PMF
      * @return a possibly rescaled copy of the array that sums to 1 and contains only valid probability values
-     * @throws MathIllegalArgumentException of weights includes negative, NaN or infinite values or only 0's
+     * @throws MathIllegalArgumentException of weights is null or empty or includes negative, NaN or
+     *         infinite values or only 0's
      */
     public static double[] checkAndNormalize(double[] weights) {
+        if (weights == null || weights.length == 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.ARRAY_ZERO_LENGTH_OR_NULL_NOT_ALLOWED);
+        }
         final int len = weights.length;
         double sumWt = 0;
         boolean posWt = false;

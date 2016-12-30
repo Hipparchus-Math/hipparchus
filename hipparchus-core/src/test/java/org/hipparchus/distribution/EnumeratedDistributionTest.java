@@ -60,6 +60,20 @@ public class EnumeratedDistributionTest {
         } catch (MathIllegalArgumentException ex) {
             // expected
         }
+        bad = new double[] {};
+        try {
+            EnumeratedDistribution.checkAndNormalize(bad);
+            fail("Expecting IAE - empty probability array");
+        } catch (MathIllegalArgumentException ex) {
+            // expected
+        }
+        bad = null;
+        try {
+            EnumeratedDistribution.checkAndNormalize(bad);
+            fail("Expecting IAE - empty probability array");
+        } catch (MathIllegalArgumentException ex) {
+            // expected
+        }
     }
 
     @Test
