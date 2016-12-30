@@ -370,6 +370,64 @@ public class UnitTestUtils {
         }
     }
 
+    /** verifies that two int arrays are equal */
+    public static void assertEquals(int[] expected, int[] observed) {
+        StringBuilder out = new StringBuilder();
+        if (expected.length != observed.length) {
+            out.append("\n Arrays not same length. \n");
+            out.append("expected has length ");
+            out.append(expected.length);
+            out.append(" observed length = ");
+            out.append(observed.length);
+            Assert.fail(out.toString());
+        }
+        boolean failure = false;
+        for (int i=0; i < expected.length; i++) {
+            if (expected[i] != observed[i]) {
+                failure = true;
+                out.append("\n Elements at index ");
+                out.append(i);
+                out.append(" differ. ");
+                out.append(" expected = ");
+                out.append(expected[i]);
+                out.append(" observed = ");
+                out.append(observed[i]);
+            }
+        }
+        if (failure) {
+            Assert.fail(out.toString());
+        }
+    }
+
+    /** verifies that two int arrays are equal */
+    public static void assertEquals(long[] expected, long[] observed) {
+        StringBuilder out = new StringBuilder();
+        if (expected.length != observed.length) {
+            out.append("\n Arrays not same length. \n");
+            out.append("expected has length ");
+            out.append(expected.length);
+            out.append(" observed length = ");
+            out.append(observed.length);
+            Assert.fail(out.toString());
+        }
+        boolean failure = false;
+        for (int i=0; i < expected.length; i++) {
+            if (expected[i] != observed[i]) {
+                failure = true;
+                out.append("\n Elements at index ");
+                out.append(i);
+                out.append(" differ. ");
+                out.append(" expected = ");
+                out.append(expected[i]);
+                out.append(" observed = ");
+                out.append(observed[i]);
+            }
+        }
+        if (failure) {
+            Assert.fail(out.toString());
+        }
+    }
+
     /** verifies that two arrays are equal */
     public static <T extends FieldElement<T>> void assertEquals(T[] m, T[] n) {
         if (m.length != n.length) {
