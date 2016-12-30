@@ -16,7 +16,7 @@
  */
 
 package org.hipparchus.linear;
-    
+
 import java.util.Arrays;
 
 import org.hipparchus.RealFieldElement;
@@ -37,6 +37,7 @@ import org.hipparchus.util.MathArrays;
  * in Java.</p>
  * <p>This class is based on the class {@link QRDecomposition}.</p>
  *
+ * @param <T> type of the underlying field elements
  * @see <a href="http://mathworld.wolfram.com/QRDecomposition.html">MathWorld</a>
  * @see <a href="http://en.wikipedia.org/wiki/QR_decomposition">Wikipedia</a>
  *
@@ -296,7 +297,10 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
         return new FieldSolver<T>(qrt, rDiag, threshold);
     }
 
-    /** Specialized solver. */
+    /**
+     * Specialized solver.
+     * @param <T> type of the underlying field elements
+     */
     private static class FieldSolver<T extends RealFieldElement<T>> implements FieldDecompositionSolver<T>{
         /**
          * A packed TRANSPOSED representation of the QR decomposition.
@@ -413,7 +417,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
                             alpha[k] = alpha[k].add(d.multiply(yRow[k]));
                         }
                     }
-                    
+
                     for (int k = 0; k < kWidth; ++k) {
                         alpha[k] = alpha[k].multiply(factor);
                     }

@@ -389,7 +389,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
 
     /** {@inheritDoc} */
     @Override
-    public RealMatrix getSubMatrix(final int startRow, final int endRow, 
+    public RealMatrix getSubMatrix(final int startRow, final int endRow,
                                    final int startColumn, final int endColumn)
         throws MathIllegalArgumentException {
         MatrixUtils.checkSubMatrixIndex(this, startRow, endRow, startColumn, endColumn);
@@ -399,7 +399,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
         for (int i = 0; i < rowCount; ++i) {
             System.arraycopy(data[startRow + i], startColumn, outData[i], 0, columnCount);
         }
-        
+
         Array2DRowRealMatrix subMatrix = new Array2DRowRealMatrix();
         subMatrix.data = outData;
         return subMatrix;
