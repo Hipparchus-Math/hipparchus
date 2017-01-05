@@ -316,21 +316,21 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      */
     @Override
     public FieldDerivativeStructure<T> ceil() {
-        return factory.build(data[0].ceil());
+        return factory.constant(data[0].ceil());
     }
 
     /** {@inheritDoc}
      */
     @Override
     public FieldDerivativeStructure<T> floor() {
-        return factory.build(data[0].floor());
+        return factory.constant(data[0].floor());
     }
 
     /** {@inheritDoc}
      */
     @Override
     public FieldDerivativeStructure<T> rint() {
-        return factory.build(data[0].rint());
+        return factory.constant(data[0].rint());
     }
 
     /** {@inheritDoc} */
@@ -343,7 +343,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      */
     @Override
     public FieldDerivativeStructure<T> signum() {
-        return factory.build(data[0].signum());
+        return factory.constant(data[0].signum());
     }
 
     /**
@@ -420,9 +420,9 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
         factory.checkCompatibility(y.factory);
 
         if (Double.isInfinite(data[0].getReal()) || Double.isInfinite(y.data[0].getReal())) {
-            return factory.build(Double.POSITIVE_INFINITY);
+            return factory.constant(Double.POSITIVE_INFINITY);
         } else if (Double.isNaN(data[0].getReal()) || Double.isNaN(y.data[0].getReal())) {
-            return factory.build(Double.NaN);
+            return factory.constant(Double.NaN);
         } else {
 
             final int expX = getExponent();

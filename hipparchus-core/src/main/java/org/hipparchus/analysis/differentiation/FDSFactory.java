@@ -50,8 +50,8 @@ public class FDSFactory<T extends RealFieldElement<T>> {
     public FDSFactory(final Field<T> valueField, final int parameters, final int order) {
         this.compiler        = DSCompiler.getCompiler(parameters, order);
         this.valueField      = valueField;
-        this.derivativeField = new DerivativeField<T>(build(valueField.getZero()),
-                                                      build(valueField.getOne()));
+        this.derivativeField = new DerivativeField<T>(constant(valueField.getZero()),
+                                                      constant(valueField.getOne()));
     }
 
     /** Get the {@link Field} the value and parameters of the function belongs to.
@@ -71,14 +71,14 @@ public class FDSFactory<T extends RealFieldElement<T>> {
     /** Build a {@link FieldDerivativeStructure} representing a constant value.
      * @param value value of the constant
      */
-    public FieldDerivativeStructure<T> build(double value) {
-        return build(valueField.getZero().add(value));
+    public FieldDerivativeStructure<T> constant(double value) {
+        return constant(valueField.getZero().add(value));
     }
 
     /** Build a {@link FieldDerivativeStructure} representing a constant value.
      * @param value value of the constant
      */
-    public FieldDerivativeStructure<T> build(final T value) {
+    public FieldDerivativeStructure<T> constant(final T value) {
         final T[] data = buildArray();
         Arrays.fill(data, valueField.getZero());
         data[0] = value;
@@ -97,7 +97,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
      * @see #FieldDerivativeStructure(int, int, T)
      */
-    public FieldDerivativeStructure<T> build(final int index, final T value)
+    public FieldDerivativeStructure<T> variable(final int index, final T value)
         throws MathIllegalArgumentException {
 
         if (index >= getCompiler().getFreeParameters()) {
@@ -129,7 +129,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
      * @see #FieldDerivativeStructure((int, int, T)
      */
-    public FieldDerivativeStructure<T> build(final int index, final double value)
+    public FieldDerivativeStructure<T> variable(final int index, final double value)
         throws MathIllegalArgumentException {
 
         if (index >= getCompiler().getFreeParameters()) {

@@ -48,25 +48,25 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     @Override
     protected FieldDerivativeStructure<Decimal64> build(final double x) {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, 1);
-        return factory.build(0, x);
+        return factory.variable(0, x);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testWrongFieldVariableIndex() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, 1);
-        factory.build(3, new Decimal64(1.0));
+        factory.variable(3, new Decimal64(1.0));
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testWrongPrimitiveVariableIndex() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, 1);
-        factory.build(3, 1.0);
+        factory.variable(3, 1.0);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testMissingOrders() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, 1);
-        factory.build(0, 1.0).getPartialDerivative(0, 1);
+        factory.variable(0, 1.0).getPartialDerivative(0, 1);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
@@ -84,27 +84,27 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     @Test(expected=MathIllegalArgumentException.class)
     public void testTooLargeOrder() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, 1);
-        factory.build(0, 1.0).getPartialDerivative(1, 1, 2);
+        factory.variable(0, 1.0).getPartialDerivative(1, 1, 2);
     }
 
     @Test
     public void testVariableWithoutDerivativeField() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 0);
-        FieldDerivativeStructure<Decimal64> v = factory.build(0, new Decimal64(1.0));
+        FieldDerivativeStructure<Decimal64> v = factory.variable(0, new Decimal64(1.0));
         Assert.assertEquals(1.0, v.getReal(), 1.0e-15);
     }
 
     @Test
     public void testVariableWithoutDerivativePrimitive() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 0);
-        FieldDerivativeStructure<Decimal64> v = factory.build(0, 1.0);
+        FieldDerivativeStructure<Decimal64> v = factory.variable(0, 1.0);
         Assert.assertEquals(1.0, v.getReal(), 1.0e-15);
     }
 
     @Test(expected=MathIllegalArgumentException.class)
     public void testVariableWithoutDerivative1() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 0);
-        FieldDerivativeStructure<Decimal64> v = factory.build(0, 1.0);
+        FieldDerivativeStructure<Decimal64> v = factory.variable(0, 1.0);
         Assert.assertEquals(1.0, v.getPartialDerivative(1).getReal(), 1.0e-15);
     }
 
@@ -112,11 +112,11 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testVariable() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0),
+            checkF0F1(factory.variable(0, 1.0),
                       1.0, 1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0),
+            checkF0F1(factory.variable(1, 2.0),
                       2.0, 0.0, 1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0),
+            checkF0F1(factory.variable(2, 3.0),
                       3.0, 0.0, 0.0, 1.0);
         }
     }
@@ -125,7 +125,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testConstant() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(FastMath.PI),
+            checkF0F1(factory.constant(FastMath.PI),
                       FastMath.PI, 0.0, 0.0, 0.0);
         }
     }
@@ -134,9 +134,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testFieldAdd() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).add(new Decimal64(5)), 6.0, 1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).add(new Decimal64(5)), 7.0, 0.0, 1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).add(new Decimal64(5)), 8.0, 0.0, 0.0, 1.0);
+            checkF0F1(factory.variable(0, 1.0).add(new Decimal64(5)), 6.0, 1.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).add(new Decimal64(5)), 7.0, 0.0, 1.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).add(new Decimal64(5)), 8.0, 0.0, 0.0, 1.0);
         }
     }
 
@@ -144,9 +144,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testPrimitiveAdd() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).add(5), 6.0, 1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).add(5), 7.0, 0.0, 1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).add(5), 8.0, 0.0, 0.0, 1.0);
+            checkF0F1(factory.variable(0, 1.0).add(5), 6.0, 1.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).add(5), 7.0, 0.0, 1.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).add(5), 8.0, 0.0, 0.0, 1.0);
         }
     }
 
@@ -154,9 +154,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testAdd() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            FieldDerivativeStructure<Decimal64> x = factory.build(0, 1.0);
-            FieldDerivativeStructure<Decimal64> y = factory.build(1, 2.0);
-            FieldDerivativeStructure<Decimal64> z = factory.build(2, 3.0);
+            FieldDerivativeStructure<Decimal64> x = factory.variable(0, 1.0);
+            FieldDerivativeStructure<Decimal64> y = factory.variable(1, 2.0);
+            FieldDerivativeStructure<Decimal64> z = factory.variable(2, 3.0);
             FieldDerivativeStructure<Decimal64> xyz = x.add(y.add(z));
             checkF0F1(xyz, x.getValue().getReal() + y.getValue().getReal() + z.getValue().getReal(), 1.0, 1.0, 1.0);
         }
@@ -166,9 +166,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testFieldSubtract() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).subtract(new Decimal64(5)), -4.0, 1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).subtract(new Decimal64(5)), -3.0, 0.0, 1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).subtract(new Decimal64(5)), -2.0, 0.0, 0.0, 1.0);
+            checkF0F1(factory.variable(0, 1.0).subtract(new Decimal64(5)), -4.0, 1.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).subtract(new Decimal64(5)), -3.0, 0.0, 1.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).subtract(new Decimal64(5)), -2.0, 0.0, 0.0, 1.0);
         }
     }
 
@@ -176,9 +176,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testPrimitiveSubtract() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).subtract(5), -4.0, 1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).subtract(5), -3.0, 0.0, 1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).subtract(5), -2.0, 0.0, 0.0, 1.0);
+            checkF0F1(factory.variable(0, 1.0).subtract(5), -4.0, 1.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).subtract(5), -3.0, 0.0, 1.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).subtract(5), -2.0, 0.0, 0.0, 1.0);
         }
     }
 
@@ -186,9 +186,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testSubtract() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            FieldDerivativeStructure<Decimal64> x = factory.build(0, 1.0);
-            FieldDerivativeStructure<Decimal64> y = factory.build(1, 2.0);
-            FieldDerivativeStructure<Decimal64> z = factory.build(2, 3.0);
+            FieldDerivativeStructure<Decimal64> x = factory.variable(0, 1.0);
+            FieldDerivativeStructure<Decimal64> y = factory.variable(1, 2.0);
+            FieldDerivativeStructure<Decimal64> z = factory.variable(2, 3.0);
             FieldDerivativeStructure<Decimal64> xyz = x.subtract(y.subtract(z));
             checkF0F1(xyz, x.getReal() - (y.getReal() - z.getReal()), 1.0, -1.0, 1.0);
         }
@@ -198,9 +198,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testFieldMultiply() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).multiply(new Decimal64(5)),  5.0, 5.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).multiply(new Decimal64(5)), 10.0, 0.0, 5.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).multiply(new Decimal64(5)), 15.0, 0.0, 0.0, 5.0);
+            checkF0F1(factory.variable(0, 1.0).multiply(new Decimal64(5)),  5.0, 5.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).multiply(new Decimal64(5)), 10.0, 0.0, 5.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).multiply(new Decimal64(5)), 15.0, 0.0, 0.0, 5.0);
         }
     }
 
@@ -208,9 +208,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testPrimitiveMultiply() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).multiply(5),  5.0, 5.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).multiply(5), 10.0, 0.0, 5.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).multiply(5), 15.0, 0.0, 0.0, 5.0);
+            checkF0F1(factory.variable(0, 1.0).multiply(5),  5.0, 5.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).multiply(5), 10.0, 0.0, 5.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).multiply(5), 15.0, 0.0, 0.0, 5.0);
         }
     }
 
@@ -218,9 +218,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testMultiply() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            FieldDerivativeStructure<Decimal64> x = factory.build(0, 1.0);
-            FieldDerivativeStructure<Decimal64> y = factory.build(1, 2.0);
-            FieldDerivativeStructure<Decimal64> z = factory.build(2, 3.0);
+            FieldDerivativeStructure<Decimal64> x = factory.variable(0, 1.0);
+            FieldDerivativeStructure<Decimal64> y = factory.variable(1, 2.0);
+            FieldDerivativeStructure<Decimal64> z = factory.variable(2, 3.0);
             FieldDerivativeStructure<Decimal64> xyz = x.multiply(y.multiply(z));
             for (int i = 0; i <= maxOrder; ++i) {
                 for (int j = 0; j <= maxOrder; ++j) {
@@ -242,9 +242,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testFieldDivide() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).divide(new Decimal64(2)),  0.5, 0.5, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).divide(new Decimal64(2)),  1.0, 0.0, 0.5, 0.0);
-            checkF0F1(factory.build(2, 3.0).divide(new Decimal64(2)),  1.5, 0.0, 0.0, 0.5);
+            checkF0F1(factory.variable(0, 1.0).divide(new Decimal64(2)),  0.5, 0.5, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).divide(new Decimal64(2)),  1.0, 0.0, 0.5, 0.0);
+            checkF0F1(factory.variable(2, 3.0).divide(new Decimal64(2)),  1.5, 0.0, 0.0, 0.5);
         }
     }
 
@@ -252,9 +252,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testPrimitiveDivide() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).divide(2),  0.5, 0.5, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).divide(2),  1.0, 0.0, 0.5, 0.0);
-            checkF0F1(factory.build(2, 3.0).divide(2),  1.5, 0.0, 0.0, 0.5);
+            checkF0F1(factory.variable(0, 1.0).divide(2),  0.5, 0.5, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).divide(2),  1.0, 0.0, 0.5, 0.0);
+            checkF0F1(factory.variable(2, 3.0).divide(2),  1.5, 0.0, 0.0, 0.5);
         }
     }
 
@@ -262,9 +262,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testNegate() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            checkF0F1(factory.build(0, 1.0).negate(), -1.0, -1.0, 0.0, 0.0);
-            checkF0F1(factory.build(1, 2.0).negate(), -2.0, 0.0, -1.0, 0.0);
-            checkF0F1(factory.build(2, 3.0).negate(), -3.0, 0.0, 0.0, -1.0);
+            checkF0F1(factory.variable(0, 1.0).negate(), -1.0, -1.0, 0.0, 0.0);
+            checkF0F1(factory.variable(1, 2.0).negate(), -2.0, 0.0, -1.0, 0.0);
+            checkF0F1(factory.variable(2, 3.0).negate(), -3.0, 0.0, 0.0, -1.0);
         }
     }
 
@@ -272,7 +272,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testReciprocal() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 6);
         for (double x = 0.1; x < 1.2; x += 0.1) {
-            FieldDerivativeStructure<Decimal64> r = factory.build(0, x).reciprocal();
+            FieldDerivativeStructure<Decimal64> r = factory.variable(0, x).reciprocal();
             Assert.assertEquals(1 / x, r.getReal(), 1.0e-15);
             for (int i = 1; i < r.getOrder(); ++i) {
                 double expected = ArithmeticUtils.pow(-1, i) * CombinatoricsUtils.factorial(i) /
@@ -288,9 +288,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
             for (int n = 0; n < 10; ++n) {
 
-                FieldDerivativeStructure<Decimal64> x = factory.build(0, 1.0);
-                FieldDerivativeStructure<Decimal64> y = factory.build(1, 2.0);
-                FieldDerivativeStructure<Decimal64> z = factory.build(2, 3.0);
+                FieldDerivativeStructure<Decimal64> x = factory.variable(0, 1.0);
+                FieldDerivativeStructure<Decimal64> y = factory.variable(1, 2.0);
+                FieldDerivativeStructure<Decimal64> z = factory.variable(2, 3.0);
                 List<FieldDerivativeStructure<Decimal64>> list = Arrays.asList(x, y, z,
                                                                                x.add(y).add(z),
                                                                                x.multiply(y).multiply(z));
@@ -321,9 +321,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
 
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            FieldDerivativeStructure<Decimal64> x = factory.build(0, 0.1);
-            FieldDerivativeStructure<Decimal64> y = factory.build(1, 0.2);
-            FieldDerivativeStructure<Decimal64> z = factory.build(2, 0.3);
+            FieldDerivativeStructure<Decimal64> x = factory.variable(0, 0.1);
+            FieldDerivativeStructure<Decimal64> y = factory.variable(1, 0.2);
+            FieldDerivativeStructure<Decimal64> z = factory.variable(2, 0.3);
             List<FieldDerivativeStructure<Decimal64>> list = Arrays.asList(x, y, z,
                                                                            x.add(y).add(z),
                                                                            x.multiply(y).multiply(z));
@@ -333,7 +333,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
                 for (double a : new double[] { 0.0, 0.1, 1.0, 2.0, 5.0 }) {
                     FieldDerivativeStructure<Decimal64> reference = (a == 0) ?
                                                     x.getField().getZero() :
-                                                    factory.build(a).pow(ds);
+                                                    factory.constant(a).pow(ds);
                     FieldDerivativeStructure<Decimal64> result = FieldDerivativeStructure.pow(a, ds);
                     checkEquals(reference, result, 1.0e-15);
                 }
@@ -341,25 +341,25 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
             }
 
             // negative base: -1^x can be evaluated for integers only, so value is sometimes OK, derivatives are always NaN
-            FieldDerivativeStructure<Decimal64> negEvenInteger = FieldDerivativeStructure.pow(-2.0, factory.build(0, 2.0));
+            FieldDerivativeStructure<Decimal64> negEvenInteger = FieldDerivativeStructure.pow(-2.0, factory.variable(0, 2.0));
             Assert.assertEquals(4.0, negEvenInteger.getReal(), 1.0e-15);
             Assert.assertTrue(Double.isNaN(negEvenInteger.getPartialDerivative(1, 0, 0).getReal()));
-            FieldDerivativeStructure<Decimal64> negOddInteger = FieldDerivativeStructure.pow(-2.0, factory.build(0, 3.0));
+            FieldDerivativeStructure<Decimal64> negOddInteger = FieldDerivativeStructure.pow(-2.0, factory.variable(0, 3.0));
             Assert.assertEquals(-8.0, negOddInteger.getReal(), 1.0e-15);
             Assert.assertTrue(Double.isNaN(negOddInteger.getPartialDerivative(1, 0, 0).getReal()));
-            FieldDerivativeStructure<Decimal64> negNonInteger = FieldDerivativeStructure.pow(-2.0, factory.build(0, 2.001));
+            FieldDerivativeStructure<Decimal64> negNonInteger = FieldDerivativeStructure.pow(-2.0, factory.variable(0, 2.001));
             Assert.assertTrue(Double.isNaN(negNonInteger.getReal()));
             Assert.assertTrue(Double.isNaN(negNonInteger.getPartialDerivative(1, 0, 0).getReal()));
 
-            FieldDerivativeStructure<Decimal64> zeroNeg = FieldDerivativeStructure.pow(0.0, factory.build(0, -1.0));
+            FieldDerivativeStructure<Decimal64> zeroNeg = FieldDerivativeStructure.pow(0.0, factory.variable(0, -1.0));
             Assert.assertTrue(Double.isNaN(zeroNeg.getReal()));
             Assert.assertTrue(Double.isNaN(zeroNeg.getPartialDerivative(1, 0, 0).getReal()));
-            FieldDerivativeStructure<Decimal64> posNeg = FieldDerivativeStructure.pow(2.0, factory.build(0, -2.0));
+            FieldDerivativeStructure<Decimal64> posNeg = FieldDerivativeStructure.pow(2.0, factory.variable(0, -2.0));
             Assert.assertEquals(1.0 / 4.0, posNeg.getReal(), 1.0e-15);
             Assert.assertEquals(FastMath.log(2.0) / 4.0, posNeg.getPartialDerivative(1, 0, 0).getReal(), 1.0e-15);
 
             // very special case: a = 0 and power = 0
-            FieldDerivativeStructure<Decimal64> zeroZero = FieldDerivativeStructure.pow(0.0, factory.build(0, 0.0));
+            FieldDerivativeStructure<Decimal64> zeroZero = FieldDerivativeStructure.pow(0.0, factory.variable(0, 0.0));
 
             // this should be OK for simple first derivative with one variable only ...
             Assert.assertEquals(1.0, zeroZero.getReal(), 1.0e-15);
@@ -414,7 +414,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
             }
 
             // very special case: 0^0 where the power is a primitive
-            FieldDerivativeStructure<Decimal64> zeroDsZeroDouble = factory.build(0, 0.0).pow(0.0);
+            FieldDerivativeStructure<Decimal64> zeroDsZeroDouble = factory.variable(0, 0.0).pow(0.0);
             boolean first = true;
             for (final Decimal64 d : zeroDsZeroDouble.getAllDerivatives()) {
                 if (first) {
@@ -424,7 +424,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
                     Assert.assertEquals(0.0, d.getReal(), Precision.SAFE_MIN);
                 }
             }
-            FieldDerivativeStructure<Decimal64> zeroDsZeroInt = factory.build(0, 0.0).pow(0);
+            FieldDerivativeStructure<Decimal64> zeroDsZeroInt = factory.variable(0, 0.0).pow(0);
             first = true;
             for (final Decimal64 d : zeroDsZeroInt.getAllDerivatives()) {
                 if (first) {
@@ -436,7 +436,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
             }
 
             // 0^p with p smaller than 1.0
-            FieldDerivativeStructure<Decimal64> u = factory.build(1, -0.0).pow(0.25);
+            FieldDerivativeStructure<Decimal64> u = factory.variable(1, -0.0).pow(0.25);
             for (int i0 = 0; i0 <= maxOrder; ++i0) {
                 for (int i1 = 0; i1 <= maxOrder; ++i1) {
                     for (int i2 = 0; i2 <= maxOrder; ++i2) {
@@ -455,11 +455,11 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, 5);
         double epsilon = 2.5e-13;
         for (double x = 0; x < 2; x += 0.2) {
-            FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+            FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
             for (double y = 0; y < 2; y += 0.2) {
-                FieldDerivativeStructure<Decimal64> dsY = factory.build(1, y);
+                FieldDerivativeStructure<Decimal64> dsY = factory.variable(1, y);
                 for (double z = 0; z >- 2; z -= 0.2) {
-                    FieldDerivativeStructure<Decimal64> dsZ = factory.build(2, z);
+                    FieldDerivativeStructure<Decimal64> dsZ = factory.variable(2, z);
 
                     // f(x, y, z) = x + 5 x y - 2 z + (8 z x - y)^3
                     FieldDerivativeStructure<Decimal64> ds =
@@ -512,9 +512,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.1) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 for (double y = 0.1; y < 1.2; y += 0.1) {
-                    FieldDerivativeStructure<Decimal64> dsY = factory.build(y);
+                    FieldDerivativeStructure<Decimal64> dsY = factory.constant(y);
                     FieldDerivativeStructure<Decimal64> f = dsX.divide(dsY).sqrt();
                     double f0 = FastMath.sqrt(x / y);
                     Assert.assertEquals(f0, f.getReal(), FastMath.abs(epsilon * f0));
@@ -541,11 +541,11 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.1) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 for (double y = 0.1; y < 1.2; y += 0.1) {
-                    FieldDerivativeStructure<Decimal64> dsY = factory.build(1, y);
+                    FieldDerivativeStructure<Decimal64> dsY = factory.variable(1, y);
                     for (double z = 0.1; z < 1.2; z += 0.1) {
-                        FieldDerivativeStructure<Decimal64> dsZ = factory.build(2, z);
+                        FieldDerivativeStructure<Decimal64> dsZ = factory.variable(2, z);
                         FieldDerivativeStructure<Decimal64> f = dsX.divide(dsY.cos().add(dsZ.tan())).sin();
                         double a = FastMath.cos(y) + FastMath.tan(z);
                         double f0 = FastMath.sin(x / a);
@@ -585,7 +585,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> sqrt1 = dsX.pow(0.5);
                 FieldDerivativeStructure<Decimal64> sqrt2 = dsX.sqrt();
                 FieldDerivativeStructure<Decimal64> zero = sqrt1.subtract(sqrt2);
@@ -601,7 +601,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int n = 2; n < 10; ++n) {
             for (int maxOrder = 0; maxOrder < 12; ++maxOrder) {
                 final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
-                FieldDerivativeStructure<Decimal64> dsZero = factory.build(0, 0.0);
+                FieldDerivativeStructure<Decimal64> dsZero = factory.variable(0, 0.0);
                 FieldDerivativeStructure<Decimal64> rootN  = dsZero.rootN(n);
                 Assert.assertEquals(0.0, rootN.getReal(), 1.0e-20);
                 if (maxOrder > 0) {
@@ -666,7 +666,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.multiply(dsX).sqrt();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -682,7 +682,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> cbrt1 = dsX.pow(1.0 / 3.0);
                 FieldDerivativeStructure<Decimal64> cbrt2 = dsX.cbrt();
                 FieldDerivativeStructure<Decimal64> zero = cbrt1.subtract(cbrt2);
@@ -699,7 +699,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.multiply(dsX.multiply(dsX)).cbrt();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -715,9 +715,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.01) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 for (double y = 0.1; y < 1.2; y += 0.01) {
-                    FieldDerivativeStructure<Decimal64> dsY = factory.build(1, y);
+                    FieldDerivativeStructure<Decimal64> dsY = factory.variable(1, y);
                     FieldDerivativeStructure<Decimal64> rebuiltX = dsX.pow(dsY).pow(dsY.reciprocal());
                     FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                     for (int n = 0; n <= maxOrder; ++n) {
@@ -738,9 +738,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 for (double y = -1.7; y < 2; y += 0.2) {
-                    FieldDerivativeStructure<Decimal64> dsY = factory.build(1, y);
+                    FieldDerivativeStructure<Decimal64> dsY = factory.variable(1, y);
                     FieldDerivativeStructure<Decimal64> hypot = FieldDerivativeStructure.hypot(dsY, dsX);
                     FieldDerivativeStructure<Decimal64> ref = dsX.multiply(dsX).add(dsY.multiply(dsY)).sqrt();
                     FieldDerivativeStructure<Decimal64> zero = hypot.subtract(ref);
@@ -760,8 +760,8 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testHypotNoOverflow() {
 
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, 5);
-        FieldDerivativeStructure<Decimal64> dsX = factory.build(0, +3.0e250);
-        FieldDerivativeStructure<Decimal64> dsY = factory.build(1, -4.0e250);
+        FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, +3.0e250);
+        FieldDerivativeStructure<Decimal64> dsY = factory.variable(1, -4.0e250);
         FieldDerivativeStructure<Decimal64> hypot = FieldDerivativeStructure.hypot(dsX, dsY);
         Assert.assertEquals(5.0e250, hypot.getReal(), 1.0e235);
         Assert.assertEquals(dsX.getReal() / hypot.getReal(), hypot.getPartialDerivative(1, 0).getReal(), 1.0e-10);
@@ -776,8 +776,8 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testHypotNeglectible() {
 
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, 5);
-        FieldDerivativeStructure<Decimal64> dsSmall = factory.build(0, +3.0e-10);
-        FieldDerivativeStructure<Decimal64> dsLarge = factory.build(1, -4.0e25);
+        FieldDerivativeStructure<Decimal64> dsSmall = factory.variable(0, +3.0e-10);
+        FieldDerivativeStructure<Decimal64> dsLarge = factory.variable(1, -4.0e25);
 
         Assert.assertEquals(dsLarge.abs().getReal(),
                             FieldDerivativeStructure.hypot(dsSmall, dsLarge).getReal(),
@@ -804,14 +804,14 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     @Test
     public void testHypotSpecial() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, 5);
-        Assert.assertTrue(Double.isNaN(FieldDerivativeStructure.hypot(factory.build(0, Double.NaN),
-                                                                 factory.build(0, +3.0e250)).getReal()));
-        Assert.assertTrue(Double.isNaN(FieldDerivativeStructure.hypot(factory.build(0, +3.0e250),
-                                                                 factory.build(0, Double.NaN)).getReal()));
-        Assert.assertTrue(Double.isInfinite(FieldDerivativeStructure.hypot(factory.build(0, Double.POSITIVE_INFINITY),
-                                                                      factory.build(0, +3.0e250)).getReal()));
-        Assert.assertTrue(Double.isInfinite(FieldDerivativeStructure.hypot(factory.build(0, +3.0e250),
-                                                                      factory.build(0, Double.POSITIVE_INFINITY)).getReal()));
+        Assert.assertTrue(Double.isNaN(FieldDerivativeStructure.hypot(factory.variable(0, Double.NaN),
+                                                                 factory.variable(0, +3.0e250)).getReal()));
+        Assert.assertTrue(Double.isNaN(FieldDerivativeStructure.hypot(factory.variable(0, +3.0e250),
+                                                                 factory.variable(0, Double.NaN)).getReal()));
+        Assert.assertTrue(Double.isInfinite(FieldDerivativeStructure.hypot(factory.variable(0, Double.POSITIVE_INFINITY),
+                                                                      factory.variable(0, +3.0e250)).getReal()));
+        Assert.assertTrue(Double.isInfinite(FieldDerivativeStructure.hypot(factory.variable(0, +3.0e250),
+                                                                      factory.variable(0, Double.POSITIVE_INFINITY)).getReal()));
     }
 
     @Test
@@ -820,7 +820,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 for (double y = -1.7; y < 2; y += 0.2) {
                     FieldDerivativeStructure<Decimal64> remainder = dsX.remainder(new Decimal64(y));
                     FieldDerivativeStructure<Decimal64> ref = dsX.subtract(x - FastMath.IEEEremainder(x, y));
@@ -843,7 +843,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 for (double y = -1.7; y < 2; y += 0.2) {
                     FieldDerivativeStructure<Decimal64> remainder = dsX.remainder(y);
                     FieldDerivativeStructure<Decimal64> ref = dsX.subtract(x - FastMath.IEEEremainder(x, y));
@@ -866,9 +866,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 for (double y = -1.7; y < 2; y += 0.2) {
-                    FieldDerivativeStructure<Decimal64> dsY = factory.build(1, y);
+                    FieldDerivativeStructure<Decimal64> dsY = factory.variable(1, y);
                     FieldDerivativeStructure<Decimal64> remainder = dsX.remainder(dsY);
                     FieldDerivativeStructure<Decimal64> ref = dsX.subtract(dsY.multiply((x - FastMath.IEEEremainder(x, y)) / y));
                     FieldDerivativeStructure<Decimal64> zero = remainder.subtract(ref);
@@ -892,7 +892,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
                 double refExp = FastMath.exp(x);
-                FieldDerivativeStructure<Decimal64> exp = factory.build(0, x).exp();
+                FieldDerivativeStructure<Decimal64> exp = factory.variable(0, x).exp();
                 for (int n = 0; n <= maxOrder; ++n) {
                     Assert.assertEquals(refExp, exp.getPartialDerivative(n).getReal(), epsilon[n]);
                 }
@@ -906,7 +906,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> expm11 = dsX.expm1();
                 FieldDerivativeStructure<Decimal64> expm12 = dsX.exp().subtract(dsX.getField().getOne());
                 FieldDerivativeStructure<Decimal64> zero = expm11.subtract(expm12);
@@ -924,7 +924,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> log = factory.build(0, x).log();
+                FieldDerivativeStructure<Decimal64> log = factory.variable(0, x).log();
                 Assert.assertEquals(FastMath.log(x), log.getReal(), epsilon[0]);
                 for (int n = 1; n <= maxOrder; ++n) {
                     double refDer = -CombinatoricsUtils.factorial(n - 1) / FastMath.pow(-x, n);
@@ -940,7 +940,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> log1p1 = dsX.log1p();
                 FieldDerivativeStructure<Decimal64> log1p2 = dsX.add(dsX.getField().getOne()).log();
                 FieldDerivativeStructure<Decimal64> zero = log1p1.subtract(log1p2);
@@ -957,7 +957,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> log101 = dsX.log10();
                 FieldDerivativeStructure<Decimal64> log102 = dsX.log().divide(FastMath.log(10.0));
                 FieldDerivativeStructure<Decimal64> zero = log101.subtract(log102);
@@ -974,7 +974,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.exp().log();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -990,7 +990,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.expm1().log1p();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1006,8 +1006,8 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
-                FieldDerivativeStructure<Decimal64> rebuiltX = factory.build(10.0).pow(dsX).log10();
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
+                FieldDerivativeStructure<Decimal64> rebuiltX = factory.constant(10.0).pow(dsX).log10();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
                     Assert.assertEquals(0, zero.getPartialDerivative(n).getReal(), epsilon[n]);
@@ -1022,7 +1022,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> sin = dsX.sin();
                 FieldDerivativeStructure<Decimal64> cos = dsX.cos();
                 double s = FastMath.sin(x);
@@ -1057,7 +1057,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.sin().asin();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1073,7 +1073,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.cos().acos();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1089,7 +1089,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.tan().atan();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1105,7 +1105,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> tan1 = dsX.sin().divide(dsX.cos());
                 FieldDerivativeStructure<Decimal64> tan2 = dsX.tan();
                 FieldDerivativeStructure<Decimal64> zero = tan1.subtract(tan2);
@@ -1123,9 +1123,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, maxOrder);
             for (double x = -1.7; x < 2; x += 0.2) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 for (double y = -1.7; y < 2; y += 0.2) {
-                    FieldDerivativeStructure<Decimal64> dsY = factory.build(1, y);
+                    FieldDerivativeStructure<Decimal64> dsY = factory.variable(1, y);
                     FieldDerivativeStructure<Decimal64> atan2 = FieldDerivativeStructure.atan2(dsY, dsX);
                     FieldDerivativeStructure<Decimal64> ref = dsY.divide(dsX).atan();
                     if (x < 0) {
@@ -1149,21 +1149,21 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
 
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, 2);
         FieldDerivativeStructure<Decimal64> pp =
-                FieldDerivativeStructure.atan2(factory.build(1, new Decimal64(+0.0)), factory.build(1, new Decimal64(+0.0)));
+                FieldDerivativeStructure.atan2(factory.variable(1, new Decimal64(+0.0)), factory.variable(1, new Decimal64(+0.0)));
         Assert.assertEquals(0, pp.getReal(), 1.0e-15);
         Assert.assertEquals(+1, FastMath.copySign(1, pp.getReal()), 1.0e-15);
 
         FieldDerivativeStructure<Decimal64> pn =
-                FieldDerivativeStructure.atan2(factory.build(1, new Decimal64(+0.0)), factory.build(1, new Decimal64(-0.0)));
+                FieldDerivativeStructure.atan2(factory.variable(1, new Decimal64(+0.0)), factory.variable(1, new Decimal64(-0.0)));
         Assert.assertEquals(FastMath.PI, pn.getReal(), 1.0e-15);
 
         FieldDerivativeStructure<Decimal64> np =
-                FieldDerivativeStructure.atan2(factory.build(1, new Decimal64(-0.0)), factory.build(1, new Decimal64(+0.0)));
+                FieldDerivativeStructure.atan2(factory.variable(1, new Decimal64(-0.0)), factory.variable(1, new Decimal64(+0.0)));
         Assert.assertEquals(0, np.getReal(), 1.0e-15);
         Assert.assertEquals(-1, FastMath.copySign(1, np.getReal()), 1.0e-15);
 
         FieldDerivativeStructure<Decimal64> nn =
-                FieldDerivativeStructure.atan2(factory.build(1, new Decimal64(-0.0)), factory.build(1, new Decimal64(-0.0)));
+                FieldDerivativeStructure.atan2(factory.variable(1, new Decimal64(-0.0)), factory.variable(1, new Decimal64(-0.0)));
         Assert.assertEquals(-FastMath.PI, nn.getReal(), 1.0e-15);
 
     }
@@ -1174,7 +1174,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> sinh1 = dsX.exp().subtract(dsX.exp().reciprocal()).multiply(0.5);
                 FieldDerivativeStructure<Decimal64> sinh2 = dsX.sinh();
                 FieldDerivativeStructure<Decimal64> zero = sinh1.subtract(sinh2);
@@ -1191,7 +1191,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> cosh1 = dsX.exp().add(dsX.exp().reciprocal()).multiply(0.5);
                 FieldDerivativeStructure<Decimal64> cosh2 = dsX.cosh();
                 FieldDerivativeStructure<Decimal64> zero = cosh1.subtract(cosh2);
@@ -1208,7 +1208,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> tanh1 = dsX.exp().subtract(dsX.exp().reciprocal()).divide(dsX.exp().add(dsX.exp().reciprocal()));
                 FieldDerivativeStructure<Decimal64> tanh2 = dsX.tanh();
                 FieldDerivativeStructure<Decimal64> zero = tanh1.subtract(tanh2);
@@ -1225,7 +1225,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.sinh().asinh();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1241,7 +1241,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.cosh().acosh();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1257,7 +1257,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.tanh().atanh();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1273,9 +1273,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.1) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.constant(x);
                 for (double y = 0.1; y < 1.2; y += 0.1) {
-                    FieldDerivativeStructure<Decimal64> dsY = factory.build(0, y);
+                    FieldDerivativeStructure<Decimal64> dsY = factory.variable(0, y);
                     FieldDerivativeStructure<Decimal64> f = dsX.divide(dsY).sqrt();
                     double f0 = FastMath.sqrt(x / y);
                     Assert.assertEquals(f0, f.getReal(), FastMath.abs(epsilon * f0));
@@ -1300,11 +1300,11 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testTaylorPrimitivePolynomial() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, 4);
         for (double x = 0; x < 1.2; x += 0.1) {
-            FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+            FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
             for (double y = 0; y < 1.2; y += 0.2) {
-                FieldDerivativeStructure<Decimal64> dsY = factory.build(1, y);
+                FieldDerivativeStructure<Decimal64> dsY = factory.variable(1, y);
                 for (double z = 0; z < 1.2; z += 0.2) {
-                    FieldDerivativeStructure<Decimal64> dsZ = factory.build(2, z);
+                    FieldDerivativeStructure<Decimal64> dsZ = factory.variable(2, z);
                     FieldDerivativeStructure<Decimal64> f = dsX.multiply(dsY).add(dsZ).multiply(dsX).multiply(dsY);
                     for (double dx = -0.2; dx < 0.2; dx += 0.2) {
                         for (double dy = -0.2; dy < 0.2; dy += 0.1) {
@@ -1323,11 +1323,11 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testTaylorFieldPolynomial() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, 4);
         for (double x = 0; x < 1.2; x += 0.1) {
-            FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+            FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
             for (double y = 0; y < 1.2; y += 0.2) {
-                FieldDerivativeStructure<Decimal64> dsY = factory.build(1, y);
+                FieldDerivativeStructure<Decimal64> dsY = factory.variable(1, y);
                 for (double z = 0; z < 1.2; z += 0.2) {
-                    FieldDerivativeStructure<Decimal64> dsZ = factory.build(2, z);
+                    FieldDerivativeStructure<Decimal64> dsZ = factory.variable(2, z);
                     FieldDerivativeStructure<Decimal64> f = dsX.multiply(dsY).add(dsZ).multiply(dsX).multiply(dsY);
                     for (double dx = -0.2; dx < 0.2; dx += 0.2) {
                         Decimal64 dx64 = new Decimal64(dx);
@@ -1352,8 +1352,8 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         double y0 = -0.3;
         for (int maxOrder = 0; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 2, maxOrder);
-            FieldDerivativeStructure<Decimal64> dsX   = factory.build(0, x0);
-            FieldDerivativeStructure<Decimal64> dsY   = factory.build(1, y0);
+            FieldDerivativeStructure<Decimal64> dsX   = factory.variable(0, x0);
+            FieldDerivativeStructure<Decimal64> dsY   = factory.variable(1, y0);
             FieldDerivativeStructure<Decimal64> atan2 = FieldDerivativeStructure.atan2(dsY, dsX);
             double maxError = 0;
             for (double dx = -0.05; dx < 0.05; dx += 0.001) {
@@ -1371,19 +1371,19 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testAbs() {
 
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 1);
-        FieldDerivativeStructure<Decimal64> minusOne = factory.build(0, -1.0);
+        FieldDerivativeStructure<Decimal64> minusOne = factory.variable(0, -1.0);
         Assert.assertEquals(+1.0, minusOne.abs().getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals(-1.0, minusOne.abs().getPartialDerivative(1).getReal(), 1.0e-15);
 
-        FieldDerivativeStructure<Decimal64> plusOne = factory.build(0, +1.0);
+        FieldDerivativeStructure<Decimal64> plusOne = factory.variable(0, +1.0);
         Assert.assertEquals(+1.0, plusOne.abs().getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals(+1.0, plusOne.abs().getPartialDerivative(1).getReal(), 1.0e-15);
 
-        FieldDerivativeStructure<Decimal64> minusZero = factory.build(0, new Decimal64(-0.0));
+        FieldDerivativeStructure<Decimal64> minusZero = factory.variable(0, new Decimal64(-0.0));
         Assert.assertEquals(+0.0, minusZero.abs().getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals(-1.0, minusZero.abs().getPartialDerivative(1).getReal(), 1.0e-15);
 
-        FieldDerivativeStructure<Decimal64> plusZero = factory.build(0, new Decimal64(+0.0));
+        FieldDerivativeStructure<Decimal64> plusZero = factory.variable(0, new Decimal64(+0.0));
         Assert.assertEquals(+0.0, plusZero.abs().getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals(+1.0, plusZero.abs().getPartialDerivative(1).getReal(), 1.0e-15);
 
@@ -1394,20 +1394,20 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testSignum() {
 
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 1);
-        FieldDerivativeStructure<Decimal64> minusOne = factory.build(0, -1.0);
+        FieldDerivativeStructure<Decimal64> minusOne = factory.variable(0, -1.0);
         Assert.assertEquals(-1.0, minusOne.signum().getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals( 0.0, minusOne.signum().getPartialDerivative(1).getReal(), 1.0e-15);
 
-        FieldDerivativeStructure<Decimal64> plusOne = factory.build(0, +1.0);
+        FieldDerivativeStructure<Decimal64> plusOne = factory.variable(0, +1.0);
         Assert.assertEquals(+1.0, plusOne.signum().getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals( 0.0, plusOne.signum().getPartialDerivative(1).getReal(), 1.0e-15);
 
-        FieldDerivativeStructure<Decimal64> minusZero = factory.build(0, new Decimal64(-0.0));
+        FieldDerivativeStructure<Decimal64> minusZero = factory.variable(0, new Decimal64(-0.0));
         Assert.assertEquals(-0.0, minusZero.signum().getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertTrue(Double.doubleToLongBits(minusZero.signum().getReal()) < 0);
         Assert.assertEquals( 0.0, minusZero.signum().getPartialDerivative(1).getReal(), 1.0e-15);
 
-        FieldDerivativeStructure<Decimal64> plusZero = factory.build(0, new Decimal64(+0.0));
+        FieldDerivativeStructure<Decimal64> plusZero = factory.variable(0, new Decimal64(+0.0));
         Assert.assertEquals(+0.0, plusZero.signum().getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertTrue(Double.doubleToLongBits(plusZero.signum().getReal()) == 0);
         Assert.assertEquals( 0.0, plusZero.signum().getPartialDerivative(1).getReal(), 1.0e-15);
@@ -1418,7 +1418,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testCeilFloorRintLong() {
 
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 1);
-        FieldDerivativeStructure<Decimal64> x = factory.build(0, -1.5);
+        FieldDerivativeStructure<Decimal64> x = factory.variable(0, -1.5);
         Assert.assertEquals(-1.5, x.getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals(+1.0, x.getPartialDerivative(1).getReal(), 1.0e-15);
         Assert.assertEquals(-1.0, x.ceil().getPartialDerivative(0).getReal(), 1.0e-15);
@@ -1436,7 +1436,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testCopySign() {
 
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 1);
-        FieldDerivativeStructure<Decimal64> minusOne = factory.build(0, -1.0);
+        FieldDerivativeStructure<Decimal64> minusOne = factory.variable(0, -1.0);
         Assert.assertEquals(+1.0, minusOne.copySign(+1.0).getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals(-1.0, minusOne.copySign(+1.0).getPartialDerivative(1).getReal(), 1.0e-15);
         Assert.assertEquals(-1.0, minusOne.copySign(-1.0).getPartialDerivative(0).getReal(), 1.0e-15);
@@ -1458,7 +1458,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         Assert.assertEquals(+1.0, minusOne.copySign(new Decimal64(Double.NaN)).getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals(-1.0, minusOne.copySign(new Decimal64(Double.NaN)).getPartialDerivative(1).getReal(), 1.0e-15);
 
-        FieldDerivativeStructure<Decimal64> plusOne = factory.build(0, +1.0);
+        FieldDerivativeStructure<Decimal64> plusOne = factory.variable(0, +1.0);
         Assert.assertEquals(+1.0, plusOne.copySign(+1.0).getPartialDerivative(0).getReal(), 1.0e-15);
         Assert.assertEquals(+1.0, plusOne.copySign(+1.0).getPartialDerivative(1).getReal(), 1.0e-15);
         Assert.assertEquals(-1.0, plusOne.copySign(-1.0).getPartialDerivative(0).getReal(), 1.0e-15);
@@ -1488,7 +1488,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 Assert.assertEquals(FastMath.toDegrees(x), dsX.toDegrees().getReal(), epsilon * FastMath.toDegrees(x));
                 for (int n = 1; n <= maxOrder; ++n) {
                     if (n == 1) {
@@ -1507,7 +1507,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 Assert.assertEquals(FastMath.toRadians(x), dsX.toRadians().getReal(), epsilon);
                 for (int n = 1; n <= maxOrder; ++n) {
                     if (n == 1) {
@@ -1526,7 +1526,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> rebuiltX = dsX.toDegrees().toRadians();
                 FieldDerivativeStructure<Decimal64> zero = rebuiltX.subtract(dsX);
                 for (int n = 0; n <= maxOrder; ++n) {
@@ -1539,7 +1539,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     @Test(expected=MathIllegalArgumentException.class)
     public void testComposeMismatchedDimensions() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 3);
-        factory.build(0, 1.2).compose(new double[3]);
+        factory.variable(0, 1.2).compose(new double[3]);
     }
 
     @Test
@@ -1555,7 +1555,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
                 p[i] = p[i - 1].polynomialDerivative();
             }
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> dsY1 = dsX.getField().getZero();
                 for (int i = poly.degree(); i >= 0; --i) {
                     dsY1 = dsY1.multiply(dsX).add(poly.getCoefficients()[i]);
@@ -1586,7 +1586,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
                 p[i] = p[i - 1].polynomialDerivative();
             }
             for (double x = 0.1; x < 1.2; x += 0.001) {
-                FieldDerivativeStructure<Decimal64> dsX = factory.build(0, x);
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
                 FieldDerivativeStructure<Decimal64> dsY1 = dsX.getField().getZero();
                 for (int i = poly.degree(); i >= 0; --i) {
                     dsY1 = dsY1.multiply(dsX).add(poly.getCoefficients()[i]);
@@ -1608,7 +1608,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testField() {
         for (int maxOrder = 1; maxOrder < 5; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, maxOrder);
-            FieldDerivativeStructure<Decimal64> x = factory.build(0, 1.0);
+            FieldDerivativeStructure<Decimal64> x = factory.variable(0, 1.0);
             checkF0F1(x.getField().getZero(), 0.0, 0.0, 0.0, 0.0);
             checkF0F1(x.getField().getOne(), 1.0, 0.0, 0.0, 0.0);
             Assert.assertEquals(maxOrder, x.getField().getZero().getOrder());
@@ -1623,7 +1623,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         double cos = FastMath.cos(x);
         double sin = FastMath.sin(x);
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, 4);
-        FieldDerivativeStructure<Decimal64> yRef = factory.build(0, x).cos();
+        FieldDerivativeStructure<Decimal64> yRef = factory.variable(0, x).cos();
         try {
             factory.build(0.0, 0.0);
             Assert.fail("an exception should have been thrown");
@@ -1648,9 +1648,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         double y =  2.4;
         double z = 12.5;
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 3, 1);
-        FieldDerivativeStructure<Decimal64> xRef = factory.build(0, x);
-        FieldDerivativeStructure<Decimal64> yRef = factory.build(1, y);
-        FieldDerivativeStructure<Decimal64> zRef = factory.build(2, z);
+        FieldDerivativeStructure<Decimal64> xRef = factory.variable(0, x);
+        FieldDerivativeStructure<Decimal64> yRef = factory.variable(1, y);
+        FieldDerivativeStructure<Decimal64> zRef = factory.variable(2, z);
         try {
             factory.build(x + y - z, 1.0, 1.0);
             Assert.fail("an exception should have been thrown");
@@ -1673,13 +1673,13 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     public void testLinearCombination1DSDS() {
         final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 6, 1);
         final FieldDerivativeStructure<Decimal64>[] a = MathArrays.buildArray(factory.getDerivativeField(), 3);
-        a[0] = factory.build(0, -1321008684645961.0 / 268435456.0);
-        a[1] = factory.build(1, -5774608829631843.0 / 268435456.0);
-        a[2] = factory.build(2, -7645843051051357.0 / 8589934592.0);
+        a[0] = factory.variable(0, -1321008684645961.0 / 268435456.0);
+        a[1] = factory.variable(1, -5774608829631843.0 / 268435456.0);
+        a[2] = factory.variable(2, -7645843051051357.0 / 8589934592.0);
         final FieldDerivativeStructure<Decimal64>[] b = MathArrays.buildArray(factory.getDerivativeField(), 3);
-        b[0] = factory.build(3, -5712344449280879.0 / 2097152.0);
-        b[1] = factory.build(4, -4550117129121957.0 / 2097152.0);
-        b[2] = factory.build(5, 8846951984510141.0 / 131072.0);
+        b[0] = factory.variable(3, -5712344449280879.0 / 2097152.0);
+        b[1] = factory.variable(4, -4550117129121957.0 / 2097152.0);
+        b[2] = factory.variable(5, 8846951984510141.0 / 131072.0);
 
         final FieldDerivativeStructure<Decimal64> abSumInline = a[0].linearCombination(a[0], b[0], a[1], b[1], a[2], b[2]);
         final FieldDerivativeStructure<Decimal64> abSumArray = a[0].linearCombination(a, b);
@@ -1704,9 +1704,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
             new Decimal64(-7645843051051357.0 / 8589934592.0)
         };
         final FieldDerivativeStructure<Decimal64>[] b = MathArrays.buildArray(factory.getDerivativeField(), 3);
-        b[0] = factory.build(0, -5712344449280879.0 / 2097152.0);
-        b[1] = factory.build(1, -4550117129121957.0 / 2097152.0);
-        b[2] = factory.build(2, 8846951984510141.0 / 131072.0);
+        b[0] = factory.variable(0, -5712344449280879.0 / 2097152.0);
+        b[1] = factory.variable(1, -4550117129121957.0 / 2097152.0);
+        b[2] = factory.variable(2, 8846951984510141.0 / 131072.0);
 
         final FieldDerivativeStructure<Decimal64> abSumInline = b[0].linearCombination(a[0], b[0],
                                                                                        a[1], b[1],
@@ -1730,9 +1730,9 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
             -7645843051051357.0 / 8589934592.0
         };
         final FieldDerivativeStructure<Decimal64>[] b = MathArrays.buildArray(factory.getDerivativeField(), 3);
-        b[0] = factory.build(0, -5712344449280879.0 / 2097152.0);
-        b[1] = factory.build(1, -4550117129121957.0 / 2097152.0);
-        b[2] = factory.build(2, 8846951984510141.0 / 131072.0);
+        b[0] = factory.variable(0, -5712344449280879.0 / 2097152.0);
+        b[1] = factory.variable(1, -4550117129121957.0 / 2097152.0);
+        b[2] = factory.variable(2, 8846951984510141.0 / 131072.0);
 
         final FieldDerivativeStructure<Decimal64> abSumInline = b[0].linearCombination(a[0], b[0],
                                                                        a[1], b[1],
@@ -1760,8 +1760,8 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
 
         for (int i = 0; i < 10000; ++i) {
             for (int j = 0; j < u.length; ++j) {
-                u[j] = factory.build(j, 1e17 * random.nextDouble());
-                v[j] = factory.build(1e17 * random.nextDouble());
+                u[j] = factory.variable(j, 1e17 * random.nextDouble());
+                v[j] = factory.constant(1e17 * random.nextDouble());
             }
 
             FieldDerivativeStructure<Decimal64> lin = u[0].linearCombination(u[0], v[0], u[1], v[1]);
@@ -1806,7 +1806,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int i = 0; i < 10000; ++i) {
             for (int j = 0; j < u.length; ++j) {
                 u[j] = 1e17 * random.nextDouble();
-                v[j] = factory.build(j, 1e17 * random.nextDouble());
+                v[j] = factory.variable(j, 1e17 * random.nextDouble());
             }
 
             FieldDerivativeStructure<Decimal64> lin = v[0].linearCombination(u[0], v[0], u[1], v[1]);
@@ -1851,7 +1851,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
         for (int i = 0; i < 10000; ++i) {
             for (int j = 0; j < u.length; ++j) {
                 u[j] = new Decimal64(1e17 * random.nextDouble());
-                v[j] = factory.build(j, 1e17 * random.nextDouble());
+                v[j] = factory.variable(j, 1e17 * random.nextDouble());
             }
 
             FieldDerivativeStructure<Decimal64> lin = v[0].linearCombination(u[0], v[0], u[1], v[1]);
@@ -1887,7 +1887,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     @Test
     public void testZero() {
         FDSFactory<Decimal64> factory = new FDSFactory<>(Decimal64Field.getInstance(), 3, 2);
-        FieldDerivativeStructure<Decimal64> zero = factory.build(17).getField().getZero();
+        FieldDerivativeStructure<Decimal64> zero = factory.constant(17).getField().getZero();
         Decimal64[] a = zero.getAllDerivatives();
         Assert.assertEquals(10, a.length);
         for (int i = 0; i < a.length; ++i) {
@@ -1898,7 +1898,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     @Test
     public void testOne() {
         FDSFactory<Decimal64> factory = new FDSFactory<>(Decimal64Field.getInstance(), 3, 2);
-        FieldDerivativeStructure<Decimal64> one = factory.build(17).getField().getOne();
+        FieldDerivativeStructure<Decimal64> one = factory.constant(17).getField().getOne();
         Decimal64[] a = one.getAllDerivatives();
         Assert.assertEquals(10, a.length);
         for (int i = 0; i < a.length; ++i) {
@@ -1920,7 +1920,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
             int parameters = pairs.get(i % pairs.size())[0];
             int order      = pairs.get(i % pairs.size())[1];
             FDSFactory<Decimal64> factory = new FDSFactory<>(Decimal64Field.getInstance(), parameters, order);
-            map.put(factory.build(new Decimal64(17)).getField(), 0);
+            map.put(factory.constant(new Decimal64(17)).getField(), 0);
         }
 
         // despite we have created numerous factories,
