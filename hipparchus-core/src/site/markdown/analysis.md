@@ -380,7 +380,10 @@ methods can build polynomials up to any degree.
 
 ## Differentiation
 
-The [org.hipparchus.analysis.differentiation](../apidocs/org/hipparchus/analysis/differentiation/package-summary.html) package provides a general-purpose differentiation framework.
+The [org.hipparchus.analysis.differentiation](../apidocs/org/hipparchus/analysis/differentiation/package-summary.html)
+package provides a general-purpose differentiation framework.
+
+### Automated differentiation using DerivativeStructure
 
 The core class is [DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
 which holds the value and the differentials of a function. This class
@@ -390,7 +393,8 @@ href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDifferentiabl
 UnivariateDifferentiableFunction</a> interface. Any differentiable function should implement this
 interface.
 
-The main idea behind the [DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html) class is that it can be used almost as a number (i.e. it can be added,
+The main idea behind the [DerivativeStructure](../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html)
+class is that it can be used almost as a number (i.e. it can be added,
 multiplied, its square root can be extracted or its cosine computed... However, in addition to
 computed the value itself when doing these computations, the partial derivatives are also computed
 alongside. This is an extension of what is sometimes called Rall's numbers. This extension is
@@ -403,39 +407,50 @@ number of free parameters. Rall's numbers therefore can be seen as derivative st
 one derivative and one free parameter, and primitive real numbers can be seen as derivative structures
 with zero order derivative and no free parameters.
 
-The workflow of computation of a derivatives of an expression `y=f(x)` is as follows. First we configure an input parameter `x` of type <a
+The workflow of computation of a derivatives of an expression `y=f(x)` is as follows. First we configure
+a factory with the number of free parameters and the derivation order we want to use throughout the
+computation. Then we use it to create variables (one for each of the free parameters, here only one since
+the single free parameter is `x`) and constants that will be used for the rest of the computation.
+Variables, constants, intermediate values and final results will all be instances of <a
 href="../apidocs/org/hipparchus/analysis/differentiation/DerivativeStructure.html">
-DerivativeStructure</a> so it will drive the function to compute all derivatives up to order 3 for
-example. Then we compute `y=f(x)` normally by passing this parameter to the f function. At
-the end, we extract from `y` the value and the derivatives we want. As we have specified
-3<sup>rd</sup> order when we built `x`, we can retrieve the derivatives up to `\(3^{rd}\)`
-order from `y`. The following example shows that (the 0 parameter in the DerivativeStructure
-constructor will be explained in the next paragraph):
+DerivativeStructure</a>. We compute `y=f(x)` normally by using all these instances just as we would
+use regular numbers (apart from the fact we must write things like `a.add(b)` instead of `a + b` as
+the Java languages does not support operator overriding). At the end, we extract from `y` the value and
+the derivatives we want. As we have specified 3<sup>rd</sup> order when we built `x`, we can retrieve the
+derivatives up to 3<sup>rd</sup> order from `y`. The following example shows that:
 
     int params = 1;
     int order = 3;
+    DSFactory factory = new DSFactory(params, order);
+
     double xRealValue = 2.5;
-    DerivativeStructure x = new DerivativeStructure(params, order, 0, xRealValue);
+    DerivativeStructure x = factory.variable(0, xRealValue);
     DerivativeStructure y = f(x);
     System.out.println("y    = " + y.getValue();
     System.out.println("y'   = " + y.getPartialDerivative(1);
     System.out.println("y''  = " + y.getPartialDerivative(2);
     System.out.println("y''' = " + y.getPartialDerivative(3);
 
-In fact, there are no notions of *variables* in the framework, so neither `x`
+with for example this definition for the `\(f(x) = \cos(1+x)\)` function:
+
+    public DerivativeStructure f(DerivativeStructure x) {
+        return x.add(1).cos();
+    }
+
+In fact, there are no special provisions for *variables* in the framework, so neither `x`
 nor `y` are considered to be variables per se. They are both considered to be
 <em>functions</em> and to depend on implicit free parameters which are represented only by
 indices in the framework. The `x` instance above is there considered by the framework
 to be a function of free parameter `p0` at index 0, and as `y` is
 computed from `x` it is the result of a functions composition and is therefore also
 a function of this `p0` free parameter. The `p0` is not represented by itself,
-it is simply defined implicitly by the 0 index above. This index is the third argument in the
-constructor of the `x` instance. What this constructor means is that we built
-`x` as a function that depends on one free parameter only (first constructor argument
-set to 1), that can be differentiated up to order 3 (second constructor argument set to 3), and
-which correspond to an identity function with respect to implicit free parameter number 0 (third
-constructor argument set to 0), with current value equal to 2.5 (fourth constructor argument set
-to 2.5). This specific constructor defines identity functions, and identity functions are the trick
+it is simply defined implicitly by the 0 index above. This index is the first argument in the
+call to the `variable` factory method to create the `x` instance. What this factory method
+means is that we built `x` as a function that depends on one free parameter only, that can be
+differentiated up to order 3 (as specified when the factory was configured), and
+which correspond to an identity function with respect to implicit free parameter number 0 (first
+factory method argument set to 0), with current value equal to 2.5 (second factory method argument set
+to 2.5). This specific factory method defines identity functions, and identity functions are the trick
 we use to represent variables (there are of course other constructors, for example to build constants
 or functions from all their derivatives if they are known beforehand). From the user point of view,
 the `x` instance can be seen as the `x` variable, but it is really the identity
@@ -459,28 +474,32 @@ the user has to <em>bootstrap</em> the system by providing initial derivatives, 
 done by setting up identity function, i.e. functions that represent the variables themselves and have
 only unit first derivative.
 
-This design also allow a very interesting feature which can be explained with the following example.
+This design also allows a very interesting feature which can be explained with the following example.
 Suppose we have a two-argument function `f` and a one-argument function `g`. If
 we compute `g(f(x, y))` with `x` and `y` be two variables, we
-want to be able to compute the partial derivatives `dg/dx`, `dg/dy`,
-`d2g/dx2` `d2g/dxdy` `d2g/dy2`. This does make sense since we combined
-the two functions, and it does make sense despite g is a one argument function only. In order to do
-this, we simply set up `x` as an identity function of an implicit free parameter
+want to be able to compute the partial derivatives `\(\partial g / \partial x\)`, `\(\partial g / \partial y\)`,
+`\(\partial^2 g / \partial x^2\)`, `\(\partial^2 g / \partial x\partial y\)` and `\(\partial^2 g / \partial y^2\)`.
+This does make sense since we combined the two functions, and it does make sense despite `g` is a one argument
+function only. In order to do this, we simply set up `x` as an identity function of an implicit free parameter
 `p0` and `y` as an identity function of a different implicit free parameter
 `p1` and compute everything directly. In order to be able to combine everything, however,
-both `x` and `y` must be built with the appropriate dimensions, so they will both
-be declared to handle two free parameters, but `x` will depend only on parameter 0 while
-`y` will depend on parameter 1. Here is how we do this (note that
-`getPartialDerivative` is a variable arguments method which take as arguments the derivation
-order with respect to all free parameters, i.e. the first argument is derivation order with respect to
-free parameter 0 and the second argument is derivation order with respect to free parameter 1):
+both `x` and `y` must be built with the appropriate dimensions, so the factory used to create them must
+have been configured to managed two parameters. The `x` instance will be created by calling the factory
+method `variable` with the first parameter set to 0, whereas the `y` instance will be created by calling
+the factory method `variable` with the first parameter set to 1, so they refer to different parameters.
+Here is how we do this (note that `getPartialDerivative` is a variable arguments method which take as
+arguments the derivation order with respect to all free parameters, i.e. the first argument is derivation
+order with respect to free parameter 0 and the second argument is derivation order with respect to free
+parameter 1):
 
     int params = 2;
     int order = 2;
+    DSFactory factory = new DSFactory(params, order);
+
     double xRealValue =  2.5;
     double yRealValue = -1.3;
-    DerivativeStructure x = new DerivativeStructure(params, order, 0, xRealValue);
-    DerivativeStructure y = new DerivativeStructure(params, order, 1, yRealValue);
+    DerivativeStructure x = factory.variable(0, xRealValue);
+    DerivativeStructure y = factory.variable(1, yRealValue);
     DerivativeStructure f = DerivativeStructure.hypot(x, y);
     DerivativeStructure g = f.log();
     System.out.println("g        = " + g.getValue();
@@ -489,6 +508,8 @@ free parameter 0 and the second argument is derivation order with respect to fre
     System.out.println("d2g/dx2  = " + g.getPartialDerivative(2, 0);
     System.out.println("d2g/dxdy = " + g.getPartialDerivative(1, 1);
     System.out.println("d2g/dy2  = " + g.getPartialDerivative(0, 2);
+
+### Differentiable functions
 
 There are several ways a user can create an implementation of the <a
 href="../apidocs/org/hipparchus/analysis/differentiation/UnivariateDifferentiableFunction.html">
@@ -540,8 +561,9 @@ an example on how this implementation can be used:
     // now we can compute display the value and its derivatives
     // here we decided to display up to second order derivatives,
     // because we feed completeF with order 2 DerivativeStructure instances
+    DSFactory factory = new DSFactory(1, 2);
     for (double x = -10; x &lt; 10; x += 0.1) {
-        DerivativeStructure xDS = new DerivativeStructure(1, 2, 0, x);
+        DerivativeStructure xDS = factory.variable(0, x);
         DerivativeStructure yDS = f.value(xDS);
         System.out.format(Locale.US, "%7.3f %7.3f %7.3f%n",
                           yDS.getValue(),
