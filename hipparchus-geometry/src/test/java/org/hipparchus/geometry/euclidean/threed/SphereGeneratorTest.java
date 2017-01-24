@@ -175,10 +175,10 @@ public class SphereGeneratorTest {
         // rational representation corresponding to the scalb calls (i.e. -8039905610797991/2^50, ...)
         // The results were converted to decimal representation rounded to 1.0e-30 when writing the reference
         // values in this test
-        Assert.assertEquals(  0.003616820213530053297575846168, sphere.getRadius(),        1.0e-20);
         Assert.assertEquals( -7.139325643360503322823511839511, sphere.getCenter().getX(), 1.0e-20);
         Assert.assertEquals(-16.571096474251747245361467833760, sphere.getCenter().getY(), 1.0e-20);
         Assert.assertEquals( 11.711945804096960876521111630800, sphere.getCenter().getZ(), 1.0e-20);
+        Assert.assertEquals(  0.003616820213530053297575846168, sphere.getRadius(),        2.0e-15);
 
         for (Vector3D v : support) {
             Assert.assertTrue(sphere.contains(v, 1.0e-14));

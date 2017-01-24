@@ -40,9 +40,19 @@ public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D
             } else {
                 final Vector2D vB = support.get(1);
                 if (support.size() < 3) {
-                    return new EnclosingBall<Euclidean2D, Vector2D>(new Vector2D(0.5, vA, 0.5, vB),
-                                                                    0.5 * vA.distance(vB),
-                                                                    vA, vB);
+                    final Vector2D center = new Vector2D(0.5, vA, 0.5, vB);
+
+                    // we could have computed r directly from the vA and vB
+                    // (it was done this way up to Hipparchus 1.1), but as center
+                    // is approximated in the computation above, it is better to
+                    // take the final value of center and compute r from the distances
+                    // to center of all support points, using a max to ensure all support
+                    // points belong to the ball
+                    // see <https://github.com/Hipparchus-Math/hipparchus/issues/20>
+                    final double r = FastMath.max(Vector2D.distance(vA, center),
+                                                  Vector2D.distance(vB, center));
+                    return new EnclosingBall<Euclidean2D, Vector2D>(center, r, vA, vB);
+
                 } else {
                     final Vector2D vC = support.get(2);
                     // a disk is 2D can be defined as:
@@ -77,18 +87,24 @@ public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D
                         c2[1].multiply(c2[1]).add(c3[1].multiply(c3[1])),
                         c2[2].multiply(c2[2]).add(c3[2].multiply(c3[2]))
                     };
-                    final BigFraction twoM11  = minor(c2, c3).multiply(2);
-                    final BigFraction m12     = minor(c1, c3);
-                    final BigFraction m13     = minor(c1, c2);
-                    final BigFraction centerX = m12.divide(twoM11);
-                    final BigFraction centerY = m13.divide(twoM11).negate();
-                    final BigFraction dx      = c2[0].subtract(centerX);
-                    final BigFraction dy      = c3[0].subtract(centerY);
-                    final BigFraction r2      = dx.multiply(dx).add(dy.multiply(dy));
-                    return new EnclosingBall<Euclidean2D, Vector2D>(new Vector2D(centerX.doubleValue(),
-                                                                                 centerY.doubleValue()),
-                                                                    FastMath.sqrt(r2.doubleValue()),
-                                                                    vA, vB, vC);
+                    final BigFraction twoM11 = minor(c2, c3).multiply(2);
+                    final BigFraction m12    = minor(c1, c3);
+                    final BigFraction m13    = minor(c1, c2);
+                    final Vector2D center    = new Vector2D( m12.divide(twoM11).doubleValue(),
+                                                            -m13.divide(twoM11).doubleValue());
+
+                     // we could have computed r directly from the minors above
+                     // (it was done this way up to Hipparchus 1.1), but as center
+                     // is approximated in the computation above, it is better to
+                     // take the final value of center and compute r from the distances
+                     // to center of all support points, using a max to ensure all support
+                     // points belong to the ball
+                     // see <https://github.com/Hipparchus-Math/hipparchus/issues/20>
+                     final double r = FastMath.max(Vector2D.distance(vA, center),
+                                                   FastMath.max(Vector2D.distance(vB, center),
+                                                                Vector2D.distance(vC, center)));
+                    return new EnclosingBall<Euclidean2D, Vector2D>(center, r, vA, vB, vC);
+
                 }
             }
         }

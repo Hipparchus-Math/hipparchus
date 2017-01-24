@@ -44,9 +44,20 @@ public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector
             } else {
                 final Vector3D vB = support.get(1);
                 if (support.size() < 3) {
-                    return new EnclosingBall<Euclidean3D, Vector3D>(new Vector3D(0.5, vA, 0.5, vB),
-                                                                    0.5 * vA.distance(vB),
-                                                                    vA, vB);
+
+                    final Vector3D center = new Vector3D(0.5, vA, 0.5, vB);
+
+                    // we could have computed r directly from the vA and vB
+                    // (it was done this way up to Hipparchus 1.1), but as center
+                    // is approximated in the computation above, it is better to
+                    // take the final value of center and compute r from the distances
+                    // to center of all support points, using a max to ensure all support
+                    // points belong to the ball
+                    // see <https://github.com/Hipparchus-Math/hipparchus/issues/20>
+                    final double r = FastMath.max(Vector3D.distance(vA, center),
+                                                  Vector3D.distance(vB, center));
+                    return new EnclosingBall<Euclidean3D, Vector3D>(center, r, vA, vB);
+
                 } else {
                     final Vector3D vC = support.get(2);
                     if (support.size() < 4) {
@@ -60,8 +71,19 @@ public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector
                                                                                 p.toSubSpace(vC)));
 
                         // convert back to 3D
-                        return new EnclosingBall<Euclidean3D, Vector3D>(p.toSpace(disk.getCenter()),
-                                                                        disk.getRadius(), vA, vB, vC);
+                        final Vector3D center = p.toSpace(disk.getCenter());
+
+                        // we could have computed r directly from the vA and vB
+                        // (it was done this way up to Hipparchus 1.1), but as center
+                        // is approximated in the computation above, it is better to
+                        // take the final value of center and compute r from the distances
+                        // to center of all support points, using a max to ensure all support
+                        // points belong to the ball
+                        // see <https://github.com/Hipparchus-Math/hipparchus/issues/20>
+                        final double r = FastMath.max(Vector3D.distance(vA, center),
+                                                      FastMath.max(Vector3D.distance(vB, center),
+                                                                   Vector3D.distance(vC, center)));
+                        return new EnclosingBall<Euclidean3D, Vector3D>(center, r, vA, vB, vC);
 
                     } else {
                         final Vector3D vD = support.get(3);
@@ -106,22 +128,27 @@ public class SphereGenerator implements SupportBallGenerator<Euclidean3D, Vector
                             c2[2].multiply(c2[2]).add(c3[2].multiply(c3[2])).add(c4[2].multiply(c4[2])),
                             c2[3].multiply(c2[3]).add(c3[3].multiply(c3[3])).add(c4[3].multiply(c4[3]))
                         };
-                        final BigFraction twoM11  = minor(c2, c3, c4).multiply(2);
-                        final BigFraction m12     = minor(c1, c3, c4);
-                        final BigFraction m13     = minor(c1, c2, c4);
-                        final BigFraction m14     = minor(c1, c2, c3);
-                        final BigFraction centerX = m12.divide(twoM11);
-                        final BigFraction centerY = m13.divide(twoM11).negate();
-                        final BigFraction centerZ = m14.divide(twoM11);
-                        final BigFraction dx      = c2[0].subtract(centerX);
-                        final BigFraction dy      = c3[0].subtract(centerY);
-                        final BigFraction dz      = c4[0].subtract(centerZ);
-                        final BigFraction r2      = dx.multiply(dx).add(dy.multiply(dy)).add(dz.multiply(dz));
-                        return new EnclosingBall<Euclidean3D, Vector3D>(new Vector3D(centerX.doubleValue(),
-                                                                                     centerY.doubleValue(),
-                                                                                     centerZ.doubleValue()),
-                                                                        FastMath.sqrt(r2.doubleValue()),
-                                                                        vA, vB, vC, vD);
+                        final BigFraction twoM11 = minor(c2, c3, c4).multiply(2);
+                        final BigFraction m12    = minor(c1, c3, c4);
+                        final BigFraction m13    = minor(c1, c2, c4);
+                        final BigFraction m14    = minor(c1, c2, c3);
+                        final Vector3D center    = new Vector3D( m12.divide(twoM11).doubleValue(),
+                                                                -m13.divide(twoM11).doubleValue(),
+                                                                 m14.divide(twoM11).doubleValue());
+
+                        // we could have computed r directly from the minors above
+                        // (it was done this way up to Hipparchus 1.1), but as center
+                        // is approximated in the computation above, it is better to
+                        // take the final value of center and compute r from the distances
+                        // to center of all support points, using a max to ensure all support
+                        // points belong to the ball
+                        // see <https://github.com/Hipparchus-Math/hipparchus/issues/20>
+                        final double r = FastMath.max(Vector3D.distance(vA, center),
+                                                      FastMath.max(Vector3D.distance(vB, center),
+                                                                   FastMath.max(Vector3D.distance(vC, center),
+                                                                                Vector3D.distance(vD, center))));
+                        return new EnclosingBall<Euclidean3D, Vector3D>(center, r, vA, vB, vC, vD);
+
                     }
                 }
             }

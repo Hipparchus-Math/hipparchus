@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.hipparchus.geometry.enclosing.EnclosingBall;
-import org.hipparchus.geometry.enclosing.WelzlEncloser;
 import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
 import org.hipparchus.geometry.euclidean.threed.SphereGenerator;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -123,6 +121,45 @@ public class WelzlEncloser3DTest {
             // test we find a sphere at most as large as the one used for random drawings
             checkSphere(points, refRadius);
 
+        }
+    }
+
+    @Test
+    public void testIssue20Generator() {
+
+        final SupportBallGenerator<Euclidean3D, Vector3D> generator = new SphereGenerator();
+        final Vector3D p1 = new Vector3D(0.9987716667, 0.0350821284, 0.0349914572);
+        final Vector3D p2 = new Vector3D(0.9987856181, -0.0346743952, 0.0349996489);
+        final Vector3D p4 = new Vector3D(0.9987798601, 0.0350739383, -0.0347650673);
+        EnclosingBall<Euclidean3D, Vector3D> s24  = generator.ballOnSupport(Arrays.asList(p2, p4));
+        EnclosingBall<Euclidean3D, Vector3D> s142 = generator.ballOnSupport(Arrays.asList(p1, p4, p2));
+
+        Assert.assertFalse(s24.contains(p1));
+        Assert.assertTrue(s24.contains(p2));
+        Assert.assertTrue(s24.contains(p4));
+
+        Assert.assertTrue(s142.contains(p1));
+        Assert.assertTrue(s142.contains(p4));
+        Assert.assertTrue(s142.contains(p2));
+
+        Assert.assertTrue(s142.getRadius() >= s24.getRadius());
+
+    }
+
+    @Test
+    public void testIssue20Encloser() {
+        final WelzlEncloser<Euclidean3D, Vector3D> encloser =
+                        new WelzlEncloser<Euclidean3D, Vector3D>(1e-14, new SphereGenerator());
+        List<Vector3D> points = new ArrayList<Vector3D>();
+        points.add(new Vector3D(0.9999999731, 0.000200015, 0.0001174338));
+        points.add(new Vector3D(0.9987716667, 0.0350821284, 0.0349914572));
+        points.add(new Vector3D(0.9987856181, -0.0346743952, 0.0349996489));
+        points.add(new Vector3D(0.9987938115, -0.0346825853, -0.0347568755));
+        points.add(new Vector3D(0.9987798601, 0.0350739383, -0.0347650673));
+        EnclosingBall<Euclidean3D, Vector3D> enclosing3D = encloser.enclose(points);
+        Assert.assertEquals(0.04932531217754311, enclosing3D.getRadius(), 1.0e-15);
+        for (final Vector3D p : points) {
+            Assert.assertTrue(enclosing3D.contains(p));
         }
     }
 
