@@ -36,6 +36,8 @@ import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well19937a;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -173,9 +175,10 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
      */
     @Test
     public void testGridTooFine() throws Exception {
-        empiricalDistribution = new EmpiricalDistribution(1001);
+        RandomGenerator generator = new Well19937a(0x4e35bd7728ad5b9el);
+        empiricalDistribution = new EmpiricalDistribution(1001, generator);
         tstGen(0.1);
-        empiricalDistribution2 = new EmpiricalDistribution(1001);
+        empiricalDistribution2 = new EmpiricalDistribution(1001, generator);
         tstDoubleGen(0.1);
     }
 
