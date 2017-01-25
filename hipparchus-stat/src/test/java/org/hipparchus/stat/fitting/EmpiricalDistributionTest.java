@@ -42,7 +42,6 @@ import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -174,7 +173,6 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
     /**
      * Make sure we can handle a grid size that is too fine
      */
-    @Ignore
     @Test
     public void testGridTooFine() throws Exception {
         empiricalDistribution = new EmpiricalDistribution(1001);
