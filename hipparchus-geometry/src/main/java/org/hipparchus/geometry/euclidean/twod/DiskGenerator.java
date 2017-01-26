@@ -43,7 +43,7 @@ public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D
                     final Vector2D center = new Vector2D(0.5, vA, 0.5, vB);
 
                     // we could have computed r directly from the vA and vB
-                    // (it was done this way up to Hipparchus 1.1), but as center
+                    // (it was done this way up to Hipparchus 1.0), but as center
                     // is approximated in the computation above, it is better to
                     // take the final value of center and compute r from the distances
                     // to center of all support points, using a max to ensure all support
@@ -94,7 +94,7 @@ public class DiskGenerator implements SupportBallGenerator<Euclidean2D, Vector2D
                                                             -m13.divide(twoM11).doubleValue());
 
                      // we could have computed r directly from the minors above
-                     // (it was done this way up to Hipparchus 1.1), but as center
+                     // (it was done this way up to Hipparchus 1.0), but as center
                      // is approximated in the computation above, it is better to
                      // take the final value of center and compute r from the distances
                      // to center of all support points, using a max to ensure all support
