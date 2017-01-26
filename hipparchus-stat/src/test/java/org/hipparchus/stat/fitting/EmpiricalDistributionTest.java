@@ -36,8 +36,6 @@ import org.hipparchus.distribution.continuous.UniformRealDistribution;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
-import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.random.Well19937a;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
