@@ -40,6 +40,14 @@ import org.hipparchus.util.Precision;
  * memory, so this class can be used to compute statistics for very large data
  * streams.
  * <p>
+ * By default, all statistics other than percentiles are maintained.  Percentile
+ * calculations use an embedded {@link RandomPercentile} which carries more memory
+ * and compute overhead than the other statistics, so it is disabled by default.
+ * To enable percentiles, either pass {@code true} to the constructor or use a
+ * {@link StreamingStatisticsBulder} to configure an instance with percentiles turned
+ * on. Other stats can alos be selectively disabled using
+ * {@code StreamingStatisticsBulder}.
+ * <p>
  * Note: This class is not thread-safe.
  */
 public class StreamingStatistics
@@ -75,24 +83,64 @@ public class StreamingStatistics
     /** source of percentiles */
     private final RandomPercentile randomPercentile;
 
+    /** whether or not moment stats (sum, mean, variance) are maintained */
+    private final boolean computeMoments;
+    /** whether or not sum of squares and quadratic mean are maintained */
+    private final boolean computeSumOfSquares;
+    /** whether or not sum of logs and geometric mean are maintained */
+    private final boolean computeSumOfLogs;
+    /** whether or not percentiles are maintained */
+    private final boolean computePercentiles;
+    /** whether or not min and max are maintained */
+    private final boolean computeExtrema;
+
     /**
-     * Construct a new StreamingStatistics instance.
+     * Construct a new StreamingStatistics instance, maintaining all statistics
+     * other than percentiles.
      */
     public StreamingStatistics() {
-        this.secondMoment     = new SecondMoment();
-        this.maxImpl          = new Max();
-        this.minImpl          = new Min();
-        this.sumImpl          = new Sum();
-        this.sumOfSquaresImpl = new SumOfSquares();
-        this.sumOfLogsImpl    = new SumOfLogs();
-        this.meanImpl         = new Mean(this.secondMoment);
-        this.varianceImpl     = new Variance(this.secondMoment);
-        this.geoMeanImpl      = new GeometricMean(this.sumOfLogsImpl);
+       this(false);
+    }
 
-        // the population variance can not be overridden
-        // it will always use the second moment.
-        this.populationVariance = new Variance(false, this.secondMoment);
-        this.randomPercentile = new RandomPercentile();
+    /**
+     * Construct a new StreamingStatistics instance, maintaining all statistics
+     * other than percentiles and with/without percentiles per the argument.
+     *
+     * @param computePercentiles whether or not percentiles are maintained
+     */
+    public StreamingStatistics(boolean computePercentiles) {
+       this(computePercentiles, true, true, true, true);
+    }
+
+    /**
+     * Private constructor used by {@link StreamingStatisticsBuilder}.
+     *
+     * @param computePercentiles whether or not percentiles are maintained
+     * @param computeMoments whether or not moment stats (mean, sum, variance) are maintained
+     * @param computeSumOfLogs whether or not sum of logs and geometric mean are maintained
+     * @param computeSumOfSquares whether or not sum of squares and quadratic mean are maintained
+     * @param computeExtrema whether or not min and max are maintained
+     */
+    private StreamingStatistics(boolean computePercentiles, boolean computeMoments,
+                                boolean computeSumOfLogs, boolean computeSumOfSquares,
+                                boolean computeExtrema) {
+        this.computeMoments = computeMoments;
+        this.computeSumOfLogs = computeSumOfLogs;
+        this.computeSumOfSquares = computeSumOfSquares;
+        this.computePercentiles = computePercentiles;
+        this.computeExtrema = computeExtrema;
+
+        this.secondMoment = computeMoments ? new SecondMoment() : null;
+        this.maxImpl = computeExtrema ? new Max() : null;
+        this.minImpl = computeExtrema ? new Min() : null;
+        this.sumImpl = computeMoments ? new Sum() : null;
+        this.sumOfSquaresImpl = computeSumOfSquares ? new SumOfSquares() : null;
+        this.sumOfLogsImpl = computeSumOfLogs ? new SumOfLogs() : null;
+        this.meanImpl = computeMoments ? new Mean(this.secondMoment) : null;
+        this.varianceImpl = computeMoments ?  new Variance(this.secondMoment) : null;
+        this.geoMeanImpl = computeSumOfLogs ? new GeometricMean(this.sumOfLogsImpl) : null;
+        this.populationVariance = computeMoments ? new Variance(false, this.secondMoment) : null;
+        this.randomPercentile = computePercentiles ? new RandomPercentile() : null;
     }
 
     /**
@@ -105,20 +153,25 @@ public class StreamingStatistics
         MathUtils.checkNotNull(original);
 
         this.n                = original.n;
-        this.secondMoment     = original.secondMoment.copy();
-        this.maxImpl          = original.maxImpl.copy();
-        this.minImpl          = original.minImpl.copy();
-        this.sumImpl          = original.sumImpl.copy();
-        this.sumOfLogsImpl    = original.sumOfLogsImpl.copy();
-        this.sumOfSquaresImpl = original.sumOfSquaresImpl.copy();
+        this.secondMoment     = original.computeMoments ? original.secondMoment.copy() : null;
+        this.maxImpl          = original.computeExtrema ? original.maxImpl.copy() : null;
+        this.minImpl          = original.computeExtrema ? original.minImpl.copy() : null;
+        this.sumImpl          = original.computeMoments ? original.sumImpl.copy() : null;
+        this.sumOfLogsImpl    = original.computeSumOfLogs ? original.sumOfLogsImpl.copy() : null;
+        this.sumOfSquaresImpl = original.computeSumOfSquares ? original.sumOfSquaresImpl.copy() : null;
 
-        // Keep default statistics with embedded moments in synch
-        this.meanImpl     = new Mean(this.secondMoment);
-        this.varianceImpl = new Variance(this.secondMoment);
-        this.geoMeanImpl  = new GeometricMean(this.sumOfLogsImpl);
+        // Keep statistics with embedded moments in synch
+        this.meanImpl     = original.computeMoments ? new Mean(this.secondMoment) : null;
+        this.varianceImpl = original.computeMoments ? new Variance(this.secondMoment) : null;
+        this.geoMeanImpl  = original.computeSumOfLogs ? new GeometricMean(this.sumOfLogsImpl) : null;
+        this.populationVariance = original.computeMoments ? new Variance(false, this.secondMoment) : null;
+        this.randomPercentile = original.computePercentiles ? original.randomPercentile.copy() : null;
 
-        this.populationVariance = new Variance(false, this.secondMoment);
-        this.randomPercentile = original.randomPercentile.copy();
+        this.computeMoments = original.computeMoments;
+        this.computeSumOfLogs = original.computeSumOfLogs;
+        this.computeSumOfSquares = original.computeSumOfSquares;
+        this.computePercentiles = original.computePercentiles;
+        this.computeExtrema = original.computeExtrema;
     }
 
     /**
@@ -145,17 +198,23 @@ public class StreamingStatistics
      * @param value the value to add
      */
     public void addValue(double value) {
-        secondMoment.increment(value);
-        minImpl.increment(value);
-        maxImpl.increment(value);
-        sumImpl.increment(value);
-        sumOfSquaresImpl.increment(value);
-        sumOfLogsImpl.increment(value);
-        randomPercentile.increment(value);
-
-        // Do not update mean/variance/geoMean
-        // as they use external moments.
-
+        if (computeMoments) {
+            secondMoment.increment(value);
+            sumImpl.increment(value);
+        }
+        if (computeExtrema) {
+            minImpl.increment(value);
+            maxImpl.increment(value);
+        }
+        if (computeSumOfSquares) {
+            sumOfSquaresImpl.increment(value);
+        }
+        if (computeSumOfLogs) {
+            sumOfLogsImpl.increment(value);
+        }
+        if (computePercentiles) {
+            randomPercentile.increment(value);
+        }
         n++;
     }
 
@@ -170,16 +229,23 @@ public class StreamingStatistics
      */
     public void clear() {
         this.n = 0;
-        minImpl.clear();
-        maxImpl.clear();
-        sumImpl.clear();
-        sumOfLogsImpl.clear();
-        sumOfSquaresImpl.clear();
-        secondMoment.clear();
-        randomPercentile.clear();
-
-        // No need to clear mean/variance/geoMean
-        // as they use external moments.
+        if (computeExtrema) {
+            minImpl.clear();
+            maxImpl.clear();
+        }
+        if (computeMoments) {
+            sumImpl.clear();
+            secondMoment.clear();
+        }
+        if (computeSumOfLogs) {
+            sumOfLogsImpl.clear();
+        }
+        if (computeSumOfSquares) {
+            sumOfSquaresImpl.clear();
+        }
+        if (computePercentiles) {
+            randomPercentile.clear();
+        }
     }
 
     /** {@inheritDoc} */
@@ -191,19 +257,19 @@ public class StreamingStatistics
     /** {@inheritDoc} */
     @Override
     public double getMax() {
-        return maxImpl.getResult();
+        return computeExtrema ? maxImpl.getResult() : Double.NaN;
     }
 
     /** {@inheritDoc} */
     @Override
     public double getMin() {
-        return minImpl.getResult();
+        return computeExtrema ? minImpl.getResult() : Double.NaN;
     }
 
     /** {@inheritDoc} */
     @Override
     public double getSum() {
-        return sumImpl.getResult();
+        return computeMoments ? sumImpl.getResult() : Double.NaN;
     }
 
     /**
@@ -214,19 +280,19 @@ public class StreamingStatistics
      * @return The sum of squares
      */
     public double getSumOfSquares() {
-        return sumOfSquaresImpl.getResult();
+        return computeSumOfSquares ? sumOfSquaresImpl.getResult() : Double.NaN;
     }
 
     /** {@inheritDoc} */
     @Override
     public double getMean() {
-        return meanImpl.getResult();
+        return computeMoments ? meanImpl.getResult() : Double.NaN;
     }
 
     /** {@inheritDoc} */
     @Override
     public double getVariance() {
-        return varianceImpl.getResult();
+        return computeMoments ? varianceImpl.getResult() : Double.NaN;
     }
 
     /**
@@ -238,7 +304,7 @@ public class StreamingStatistics
      * @return the population variance
      */
     public double getPopulationVariance() {
-        return populationVariance.getResult();
+        return computeMoments ? populationVariance.getResult() : Double.NaN;
     }
 
     /**
@@ -249,7 +315,7 @@ public class StreamingStatistics
      * @return the geometric mean
      */
     public double getGeometricMean() {
-        return geoMeanImpl.getResult();
+        return computeSumOfLogs ? geoMeanImpl.getResult() : Double.NaN;
     }
 
     /**
@@ -260,7 +326,7 @@ public class StreamingStatistics
      * @return the sum of logs
      */
     public double getSumOfLogs() {
-        return sumOfLogsImpl.getResult();
+        return computeSumOfLogs ? sumOfLogsImpl.getResult() : Double.NaN;
     }
 
     /**
@@ -274,7 +340,7 @@ public class StreamingStatistics
      * @return second central moment statistic
      */
     public double getSecondMoment() {
-        return secondMoment.getResult();
+        return computeMoments ? secondMoment.getResult() : Double.NaN;
     }
 
     /**
@@ -286,8 +352,12 @@ public class StreamingStatistics
      * have been added.
      */
     public double getQuadraticMean() {
-        long size = getN();
-        return size > 0 ? FastMath.sqrt(getSumOfSquares() / size) : Double.NaN;
+        if (computeSumOfSquares) {
+            long size = getN();
+            return size > 0 ? FastMath.sqrt(getSumOfSquares() / size) : Double.NaN;
+        } else {
+            return Double.NaN;
+        }
     }
 
     /**
@@ -300,8 +370,12 @@ public class StreamingStatistics
     @Override
     public double getStandardDeviation() {
         long size = getN();
-        if (size > 0) {
-            return size > 1 ? FastMath.sqrt(getVariance()) : 0.0;
+        if (computeMoments) {
+            if (size > 0) {
+                return size > 1 ? FastMath.sqrt(getVariance()) : 0.0;
+            } else {
+                return Double.NaN;
+            }
         } else {
             return Double.NaN;
         }
@@ -330,20 +404,35 @@ public class StreamingStatistics
         return randomPercentile != null ? randomPercentile.getResult(percentile) : Double.NaN;
     }
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     * Statistics are aggregated only when both this and other are maintaining them.  For example,
+     * if this.computeMoments is false, but other.computeMoments is true, the moment data in other
+     * will be lost.
+     */
     @Override
     public void aggregate(StreamingStatistics other) {
         MathUtils.checkNotNull(other);
 
         if (other.n > 0) {
             this.n += other.n;
-            this.secondMoment.aggregate(other.secondMoment);
-            this.minImpl.aggregate(other.minImpl);
-            this.maxImpl.aggregate(other.maxImpl);
-            this.sumImpl.aggregate(other.sumImpl);
-            this.sumOfLogsImpl.aggregate(other.sumOfLogsImpl);
-            this.sumOfSquaresImpl.aggregate(other.sumOfSquaresImpl);
-            this.randomPercentile.aggregate(other.randomPercentile);
+            if (computeMoments && other.computeMoments) {
+                this.secondMoment.aggregate(other.secondMoment);
+                this.sumImpl.aggregate(other.sumImpl);
+            }
+            if (computeExtrema && other.computeExtrema) {
+                this.minImpl.aggregate(other.minImpl);
+                this.maxImpl.aggregate(other.maxImpl);
+            }
+            if (computeSumOfLogs && other.computeSumOfLogs) {
+                this.sumOfLogsImpl.aggregate(other.sumOfLogsImpl);
+            }
+            if (computeSumOfSquares && other.computeSumOfSquares) {
+                this.sumOfSquaresImpl.aggregate(other.sumOfSquaresImpl);
+            }
+            if (computePercentiles && other.computePercentiles) {
+                this.randomPercentile.aggregate(other.randomPercentile);
+            }
         }
     }
 
@@ -420,4 +509,103 @@ public class StreamingStatistics
         return result;
     }
 
+    /**
+     * Returns a {@link StreamingStatisticsBuilder} to source configured
+     * {@code StreamingStatistics} instances.
+     *
+     * @return a StreamingStatisticsBuilder instance
+     */
+    public static StreamingStatisticsBuilder builder() {
+        return new StreamingStatisticsBuilder();
+    }
+
+    /**
+     * Builder for StreamingStatistics instances.
+     */
+    public static class StreamingStatisticsBuilder {
+        /** whether or not moment statistics are maintained by instances created by this factory */
+        private boolean computeMoments = true;
+        /** whether or not sum of squares and quadratic mean are maintained by instances created by this factory */
+        private boolean computeSumOfSquares = true;
+        /** whether or not sum of logs and geometric mean are maintained by instances created by this factory */
+        private boolean computeSumOfLogs = true;
+        /** whether or not percentiles are maintained by instances created by this factory */
+        private boolean computePercentiles = false;
+        /** whether or not min and max are maintained by instances created by this factory */
+        private boolean computeExtrema = true;
+
+        public StreamingStatisticsBuilder() {
+        }
+
+        /**
+         * Sets the computeMoments setting of the factory
+         *
+         * @param arg whether or not instances created using {@link #build()} will
+         * maintain moment statistics
+         * @return a factory with the given computeMoments property set
+         */
+        public StreamingStatisticsBuilder moments(boolean arg) {
+            this.computeMoments = arg;
+            return this;
+        }
+
+        /**
+         * Sets the computeSumOfLogs setting of the factory
+         *
+         * @param arg whether or not instances created using {@link #build()} will
+         * maintain log sums
+         * @return a factory with the given computeSumOfLogs property set
+         */
+        public StreamingStatisticsBuilder sumOfLogs(boolean arg) {
+            this.computeSumOfLogs = arg;
+            return this;
+        }
+
+        /**
+         * Sets the computeSumOfSquares setting of the factory.
+         *
+         * @param arg whether or not instances created using {@link #build()} will
+         * maintain sums of squares
+         * @return a factory with the given computeSumOfSquares property set
+         */
+        public StreamingStatisticsBuilder sumOfSquares(boolean arg) {
+            this.computeSumOfSquares = arg;
+            return this;
+        }
+
+        /**
+         * Sets the computePercentiles setting of the factory.
+         *
+         * @param arg whether or not instances created using {@link #build()} will
+         * compute percentiles
+         * @return a factory with the given computePercentiles property set
+         */
+        public StreamingStatisticsBuilder percentiles(boolean arg) {
+            this.computePercentiles = arg;
+            return this;
+        }
+
+        /**
+         * Sets the computeExtrema setting of the factory.
+         *
+         * @param arg whether or not instances created using {@link #build()} will
+         * compute min and max
+         * @return a factory with the given computeExtrema property set
+         */
+        public StreamingStatisticsBuilder extrema(boolean arg) {
+            this.computeExtrema = arg;
+            return this;
+        }
+
+        /**
+         * Builds a StreamingStatistics instance with currently defined properties.
+         *
+         * @return newly configured StreamingStatistics instance
+         */
+        public StreamingStatistics build() {
+            return new StreamingStatistics(computePercentiles, computeMoments,
+                                           computeSumOfLogs, computeSumOfSquares,
+                                           computeExtrema);
+        }
+    }
 }

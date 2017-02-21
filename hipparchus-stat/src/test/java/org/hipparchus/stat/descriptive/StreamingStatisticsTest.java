@@ -435,6 +435,153 @@ public class StreamingStatisticsTest {
         assertSummaryStatisticsEquals(totalStats, aggregatedStats, 10e-10);
     }
 
+    @Test
+    public void testBuilderDefault() {
+       StreamingStatistics stats = StreamingStatistics.builder().build();
+       stats.addValue(10);
+       stats.addValue(20);
+       stats.addValue(30);
+       // Percentiles should be NaN, all others should have values
+       Assert.assertFalse(Double.isNaN(stats.getMax()));
+       Assert.assertFalse(Double.isNaN(stats.getMin()));
+       Assert.assertFalse(Double.isNaN(stats.getMean()));
+       Assert.assertFalse(Double.isNaN(stats.getSum()));
+       Assert.assertFalse(Double.isNaN(stats.getVariance()));
+       Assert.assertFalse(Double.isNaN(stats.getPopulationVariance()));
+       Assert.assertFalse(Double.isNaN(stats.getStandardDeviation()));
+       Assert.assertFalse(Double.isNaN(stats.getGeometricMean()));
+       Assert.assertFalse(Double.isNaN(stats.getQuadraticMean()));
+       Assert.assertFalse(Double.isNaN(stats.getSumOfSquares()));
+       Assert.assertFalse(Double.isNaN(stats.getSumOfLogs()));
+       Assert.assertTrue(Double.isNaN(stats.getMedian()));
+       Assert.assertTrue(Double.isNaN(stats.getPercentile(10)));
+    }
+
+    @Test
+    public void testBuilderPercentilesOn() {
+        StreamingStatistics stats = StreamingStatistics.
+                builder().
+                percentiles(true).
+                build();
+        stats.addValue(10);
+        stats.addValue(20);
+        stats.addValue(30);
+        Assert.assertFalse(Double.isNaN(stats.getMax()));
+        Assert.assertFalse(Double.isNaN(stats.getMin()));
+        Assert.assertFalse(Double.isNaN(stats.getMean()));
+        Assert.assertFalse(Double.isNaN(stats.getSum()));
+        Assert.assertFalse(Double.isNaN(stats.getVariance()));
+        Assert.assertFalse(Double.isNaN(stats.getPopulationVariance()));
+        Assert.assertFalse(Double.isNaN(stats.getStandardDeviation()));
+        Assert.assertFalse(Double.isNaN(stats.getGeometricMean()));
+        Assert.assertFalse(Double.isNaN(stats.getQuadraticMean()));
+        Assert.assertFalse(Double.isNaN(stats.getSumOfSquares()));
+        Assert.assertFalse(Double.isNaN(stats.getSumOfLogs()));
+        Assert.assertFalse(Double.isNaN(stats.getMedian()));
+        Assert.assertFalse(Double.isNaN(stats.getPercentile(10)));
+    }
+
+    @Test
+    public void testBuilderMomentsOff() {
+        StreamingStatistics stats = StreamingStatistics.
+                builder().
+                percentiles(true).
+                moments(false).
+                build();
+        stats.addValue(10);
+        stats.addValue(20);
+        stats.addValue(30);
+        Assert.assertFalse(Double.isNaN(stats.getMax()));
+        Assert.assertFalse(Double.isNaN(stats.getMin()));
+        Assert.assertTrue(Double.isNaN(stats.getMean()));
+        Assert.assertTrue(Double.isNaN(stats.getSum()));
+        Assert.assertTrue(Double.isNaN(stats.getVariance()));
+        Assert.assertTrue(Double.isNaN(stats.getPopulationVariance()));
+        Assert.assertTrue(Double.isNaN(stats.getStandardDeviation()));
+        Assert.assertFalse(Double.isNaN(stats.getGeometricMean()));
+        Assert.assertFalse(Double.isNaN(stats.getQuadraticMean()));
+        Assert.assertFalse(Double.isNaN(stats.getSumOfSquares()));
+        Assert.assertFalse(Double.isNaN(stats.getSumOfLogs()));
+        Assert.assertFalse(Double.isNaN(stats.getMedian()));
+        Assert.assertFalse(Double.isNaN(stats.getPercentile(10)));
+    }
+
+    @Test
+    public void testBuilderSumOfLogsOff() {
+        StreamingStatistics stats = StreamingStatistics.
+                builder().
+                percentiles(true).
+                sumOfLogs(false).
+                build();
+        stats.addValue(10);
+        stats.addValue(20);
+        stats.addValue(30);
+        Assert.assertFalse(Double.isNaN(stats.getMax()));
+        Assert.assertFalse(Double.isNaN(stats.getMin()));
+        Assert.assertFalse(Double.isNaN(stats.getMean()));
+        Assert.assertFalse(Double.isNaN(stats.getSum()));
+        Assert.assertFalse(Double.isNaN(stats.getVariance()));
+        Assert.assertFalse(Double.isNaN(stats.getPopulationVariance()));
+        Assert.assertFalse(Double.isNaN(stats.getStandardDeviation()));
+        Assert.assertTrue(Double.isNaN(stats.getGeometricMean()));
+        Assert.assertFalse(Double.isNaN(stats.getQuadraticMean()));
+        Assert.assertFalse(Double.isNaN(stats.getSumOfSquares()));
+        Assert.assertTrue(Double.isNaN(stats.getSumOfLogs()));
+        Assert.assertFalse(Double.isNaN(stats.getMedian()));
+        Assert.assertFalse(Double.isNaN(stats.getPercentile(10)));
+
+    }
+
+    @Test
+    public void testBuilderExtremaOff() {
+        StreamingStatistics stats = StreamingStatistics.
+                builder().
+                percentiles(true).
+                extrema(false).
+                build();
+        stats.addValue(10);
+        stats.addValue(20);
+        stats.addValue(30);
+        Assert.assertTrue(Double.isNaN(stats.getMax()));
+        Assert.assertTrue(Double.isNaN(stats.getMin()));
+        Assert.assertFalse(Double.isNaN(stats.getMean()));
+        Assert.assertFalse(Double.isNaN(stats.getSum()));
+        Assert.assertFalse(Double.isNaN(stats.getVariance()));
+        Assert.assertFalse(Double.isNaN(stats.getPopulationVariance()));
+        Assert.assertFalse(Double.isNaN(stats.getStandardDeviation()));
+        Assert.assertFalse(Double.isNaN(stats.getGeometricMean()));
+        Assert.assertFalse(Double.isNaN(stats.getQuadraticMean()));
+        Assert.assertFalse(Double.isNaN(stats.getSumOfSquares()));
+        Assert.assertFalse(Double.isNaN(stats.getSumOfLogs()));
+        Assert.assertFalse(Double.isNaN(stats.getMedian()));
+        Assert.assertFalse(Double.isNaN(stats.getPercentile(10)));
+    }
+
+    @Test
+    public void testBuilderSumOfSquares() {
+        StreamingStatistics stats = StreamingStatistics.
+                builder().
+                percentiles(true).
+                sumOfSquares(false).
+                build();
+        stats.addValue(10);
+        stats.addValue(20);
+        stats.addValue(30);
+        Assert.assertFalse(Double.isNaN(stats.getMax()));
+        Assert.assertFalse(Double.isNaN(stats.getMin()));
+        Assert.assertFalse(Double.isNaN(stats.getMean()));
+        Assert.assertFalse(Double.isNaN(stats.getSum()));
+        Assert.assertFalse(Double.isNaN(stats.getVariance()));
+        Assert.assertFalse(Double.isNaN(stats.getPopulationVariance()));
+        Assert.assertFalse(Double.isNaN(stats.getStandardDeviation()));
+        Assert.assertFalse(Double.isNaN(stats.getGeometricMean()));
+        Assert.assertTrue(Double.isNaN(stats.getQuadraticMean()));
+        Assert.assertTrue(Double.isNaN(stats.getSumOfSquares()));
+        Assert.assertFalse(Double.isNaN(stats.getSumOfLogs()));
+        Assert.assertFalse(Double.isNaN(stats.getMedian()));
+        Assert.assertFalse(Double.isNaN(stats.getPercentile(10)));
+    }
+
     /**
      * Verifies that a StatisticalSummary and a StatisticalSummaryValues are equal up
      * to delta, with NaNs, infinities returned in the same spots. For max, min, n, values
