@@ -35,10 +35,10 @@ public class DSFactory implements Serializable {
     private static final long serialVersionUID = 20161222L;
 
     /** Compiler for the current dimensions. */
-    private final DSCompiler compiler;
+    private final transient DSCompiler compiler;
 
     /** Field the {@link DerivativeStructure} instances belong to. */
-    private final Field<DerivativeStructure> derivativeField;
+    private final transient Field<DerivativeStructure> derivativeField;
 
     /** Simple constructor.
      * @param parameters number of free parameters
