@@ -58,6 +58,9 @@ If the output is not quite correct, check for invisible trailing spaces!
        Core: Added support for exact integration in PolynomialFunction.
        Fixes Github issue #18.
      </action>
+      <action dev="luc" type="update">
+        Added a factory to simplify building DerivativeStructure instances.
+      </action>
      <action dev="luc" type="add">
        Core: Added proper implementations of equals and hashCode to Fields so they
        can be used as keys in maps.

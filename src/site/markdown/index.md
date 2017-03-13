@@ -56,12 +56,13 @@ at fork time.
 
  ---
 
-## 1.0 Release is out!
+## 1.1 Release is out!
 
-Hipparchus 1.0 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.0 release are:
+Hipparchus 1.1 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.1 release are:
 
-* The library has been divided into modules: a core module including base numerics, PRNGs and probability distributions; and implementation modules (depending on core) for optimization, differential equations, statistics, clustering, fitting, fast-fourier transforms and geometry.
-* A migration module is included to assist users migrating from Apache Commons Math.
-* A samples module is included containing sample code using the library.
-* APIs and implementations have been simplified and improved throughtout the library.
-* The User Guide has been updated and improved.
+* Changes in statistics module improving their use in streams
+* Implementation of RANDOM algorithm for streaming percentile computation
+* Support for sampling from enumerated distributions in RandomDataGenerator
+* Field-based derivative structures
+* Field-based QR decomposition
+* Factory to simplify building DerivativeStructure instances

@@ -43,6 +43,7 @@ o issues/20:  Geometry: Fixed numerical noise issues in Welzl smallest enclosing
               Fixes GitHub #20. 
 
 Changes:
+o           Core: Added a factory to simplify building DerivativeStructure instances.
 o issues/12:  Core: Performance improvement for Array2DRowRealMatrix.getSubMatrix() (and also
               Array2DRowFieldMatrix.getSubMatrix()).
               Fixes Github issue #12. Thanks to Christoph Dibak. 
