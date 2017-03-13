@@ -163,7 +163,6 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
     /** Build a {@link FieldRotation} from a {@link Rotation}.
      * @param field field for the components
      * @param r rotation to convert
-     * @return a new instance
      */
     public FieldRotation(final Field<T> field, final Rotation r) {
         this.q0 = field.getZero().add(r.getQ0());

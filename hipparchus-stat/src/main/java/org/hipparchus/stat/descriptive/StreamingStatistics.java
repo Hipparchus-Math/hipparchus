@@ -44,8 +44,8 @@ import org.hipparchus.util.Precision;
  * calculations use an embedded {@link RandomPercentile} which carries more memory
  * and compute overhead than the other statistics, so it is disabled by default.
  * To enable percentiles, either pass {@code true} to the constructor or use a
- * {@link StreamingStatisticsBulder} to configure an instance with percentiles turned
- * on. Other stats can alos be selectively disabled using
+ * {@link StreamingStatisticsBuilder} to configure an instance with percentiles turned
+ * on. Other stats can also be selectively disabled using
  * {@code StreamingStatisticsBulder}.
  * <p>
  * Note: This class is not thread-safe.

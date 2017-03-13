@@ -95,7 +95,6 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @param value value of the variable
      * @exception MathIllegalArgumentException if index if greater or
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
-     * @see #FieldDerivativeStructure(int, int, T)
      */
     public FieldDerivativeStructure<T> variable(final int index, final T value)
         throws MathIllegalArgumentException {
@@ -127,7 +126,6 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @param value value of the variable
      * @exception MathIllegalArgumentException if index if greater or
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
-     * @see #FieldDerivativeStructure((int, int, T)
      */
     public FieldDerivativeStructure<T> variable(final int index, final double value)
         throws MathIllegalArgumentException {
@@ -155,7 +153,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @exception MathIllegalArgumentException if derivatives array does not match the
      * {@link DSCompiler#getSize() size} expected by the compiler
      * @throws MathIllegalArgumentException if order is too large
-     * @see #getAllDerivatives()
+     * @see FieldDerivativeStructure#getAllDerivatives()
      */
     @SafeVarargs
     public final FieldDerivativeStructure<T> build(final T ... derivatives)
@@ -178,7 +176,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @exception MathIllegalArgumentException if derivatives array does not match the
      * {@link DSCompiler#getSize() size} expected by the compiler
      * @throws MathIllegalArgumentException if order is too large
-     * @see #getAllDerivatives()
+     * @see FieldDerivativeStructure#getAllDerivatives()
      */
     public FieldDerivativeStructure<T> build(final double ... derivatives)
         throws MathIllegalArgumentException {

@@ -153,7 +153,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param ds3 third base (unscaled) derivative structure
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      * @deprecated as of 1.1, replaced by {@link #linearCombination(double, DerivativeStructure,
-     * double, DerivativeStructure, double, DerivativeStructure))}
+     * double, DerivativeStructure, double, DerivativeStructure)}
      */
     @Deprecated
     public DerivativeStructure(final double a1, final DerivativeStructure ds1,
@@ -175,7 +175,7 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      * @param ds4 fourth base (unscaled) derivative structure
      * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      * @deprecated as of 1.1, replaced by {@link #linearCombination(double, DerivativeStructure,
-     * double, DerivativeStructure, double, DerivativeStructure, double, DerivativeStructure))}
+     * double, DerivativeStructure, double, DerivativeStructure, double, DerivativeStructure)}
      */
     @Deprecated
     public DerivativeStructure(final double a1, final DerivativeStructure ds1,

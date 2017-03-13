@@ -304,7 +304,6 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
     /** Build a {@link FieldVector3D} from a {@link Vector3D}.
      * @param field field for the components
      * @param v vector to convert
-     * @return a new instance
      */
     public FieldVector3D(final Field<T> field, final Vector3D v) {
         this.x = field.getZero().add(v.getX());

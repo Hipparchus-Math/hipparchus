@@ -69,7 +69,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
      *
      * @param matrix The matrix to decompose.
      *
-     * @see #QRDecomposition(FieldMatrix<T>,T)
+     * @see #FieldQRDecomposition(FieldMatrix, RealFieldElement)
      */
     public FieldQRDecomposition(FieldMatrix<T> matrix) {
         this(matrix, matrix.getField().getZero());
@@ -81,8 +81,7 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
      * @param matrix The matrix to decompose.
      * @param threshold Singularity threshold.
      */
-    public FieldQRDecomposition(FieldMatrix<T> matrix,
-                           T threshold) {
+    public FieldQRDecomposition(FieldMatrix<T> matrix, T threshold) {
         this.threshold = threshold;
 
         final int m = matrix.getRowDimension();
@@ -287,8 +286,8 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
      * Least Square sense means a solver can be computed for an overdetermined system,
      * (i.e. a system with more equations than unknowns, which corresponds to a tall A
      * matrix with more rows than columns). In any case, if the matrix is singular
-     * within the tolerance set at {@link FieldQRDecomposition#QRDecomposition(FieldMatrix<T>,
-     * T) construction}, an error will be triggered when
+     * within the tolerance set at {@link #FieldQRDecomposition(FieldMatrix,
+     * RealFieldElement) construction}, an error will be triggered when
      * the {@link DecompositionSolver#solve(RealVector) solve} method will be called.
      * </p>
      * @return a solver

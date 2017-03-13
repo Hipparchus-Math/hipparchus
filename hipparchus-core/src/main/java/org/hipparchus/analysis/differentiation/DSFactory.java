@@ -75,7 +75,6 @@ public class DSFactory implements Serializable {
      * @param value value of the variable
      * @exception MathIllegalArgumentException if index if greater or
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
-     * @see #DerivativeStructure(int, int, double)
      */
     public DerivativeStructure variable(final int index, final double value)
         throws MathIllegalArgumentException {
@@ -102,7 +101,7 @@ public class DSFactory implements Serializable {
      * @exception MathIllegalArgumentException if derivatives array does not match the
      * {@link DSCompiler#getSize() size} expected by the compiler
      * @throws MathIllegalArgumentException if order is too large
-     * @see #getAllDerivatives()
+     * @see DerivativeStructure#getAllDerivatives()
      */
     @SafeVarargs
     public final DerivativeStructure build(final double ... derivatives)
