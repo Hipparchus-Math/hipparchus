@@ -19,7 +19,6 @@ package org.hipparchus.optim.univariate;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.Incrementor;
@@ -111,7 +110,7 @@ public class BracketFinder {
      * @param goal {@link GoalType Goal type}.
      * @param xA Initial point.
      * @param xB Initial point.
-     * @throws MathIllegalStateException if the maximum number of evaluations
+     * @throws org.hipparchus.exception.MathIllegalStateException if the maximum number of evaluations
      * is exceeded.
      */
     public void search(UnivariateFunction func,
@@ -298,7 +297,7 @@ public class BracketFinder {
         /**
          * @param x Argument.
          * @return {@code f(x)}
-         * @throws MathIllegalStateException if the maximal number of evaluations is
+         * @throws org.hipparchus.exception.MathIllegalStateException if the maximal number of evaluations is
          * exceeded.
          */
         double value(double x) {

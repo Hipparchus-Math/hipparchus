@@ -33,6 +33,7 @@ public interface ParameterJacobianProvider extends NamedParameterJacobianProvide
      * double[], double[], String, double[])}
      * </p>
      */
+    @Override
     default double[] computeParameterJacobian(final double t, final double[] y,
                                               final double[] yDot, final String paramName)
         throws MathIllegalArgumentException, MathIllegalStateException {

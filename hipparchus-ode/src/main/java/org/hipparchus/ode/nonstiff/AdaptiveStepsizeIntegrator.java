@@ -22,7 +22,6 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.AbstractIntegrator;
 import org.hipparchus.ode.EquationsMapper;
-import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.LocalizedODEFormats;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
@@ -44,10 +43,10 @@ import org.hipparchus.util.FastMath;
  * relTol which will be used for all components.
  * </p>
  * <p>
- * If the Ordinary Differential Equations is an {@link ExpandableODE
+ * If the Ordinary Differential Equations is an {@link org.hipparchus.ode.ExpandableODE
  * extended ODE} rather than a {@link
  * org.hipparchus.migration.ode.FirstOrderDifferentialEquations basic ODE}, then
- * <em>only</em> the {@link ExpandableODE#getPrimary() primary part}
+ * <em>only</em> the {@link org.hipparchus.ode.ExpandableODE#getPrimary() primary part}
  * of the state vector is used for stepsize control, not the complete state vector.
  * </p>
  *

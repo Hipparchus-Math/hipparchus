@@ -19,8 +19,6 @@ package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.ode.DenseOutputModel;
-import org.hipparchus.ode.SecondaryODE;
-import org.hipparchus.ode.sampling.ODEStateInterpolator;
 
 /**
  * This class stores all information provided by an ODE integrator
@@ -75,7 +73,7 @@ import org.hipparchus.ode.sampling.ODEStateInterpolator;
  * step size integrators}).</p>
  *
  * @see org.hipparchus.migration.ode.sampling.StepHandler
- * @see ODEStateInterpolator
+ * @see org.hipparchus.ode.sampling.ODEStateInterpolator
  * @deprecated as of 1.0, replaced with {@link DenseOutputModel}
  */
 @Deprecated
@@ -160,7 +158,7 @@ public class ContinuousOutputModel extends DenseOutputModel {
      * to be preserved across several calls to the associated
      * {@link #setInterpolatedTime(double)} method.</p>
      * @param secondaryStateIndex index of the secondary set, as returned by {@link
-     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(SecondaryODE)
+     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(org.hipparchus.ode.SecondaryODE)
      * ExpandableODE.addSecondaryEquations(secondary)}
      * @return interpolated secondary state at the current interpolation date
      * @see #setInterpolatedTime(double)
@@ -180,7 +178,7 @@ public class ContinuousOutputModel extends DenseOutputModel {
      * to be preserved across several calls to the associated
      * {@link #setInterpolatedTime(double)} method.</p>
      * @param secondaryStateIndex index of the secondary set, as returned by {@link
-     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(SecondaryODE)
+     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(org.hipparchus.ode.SecondaryODE)
      * ExpandableODE.addSecondaryEquations(secondary)}
      * @return interpolated secondary derivatives at the current interpolation date
      * @see #setInterpolatedTime(double)

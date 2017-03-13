@@ -38,7 +38,6 @@ abstract class RungeKuttaStateInterpolator extends AbstractODEStateInterpolator 
     protected double[][] yDotK;
 
     /** Simple constructor.
-     * @param field field to which the time and state vector elements belong
      * @param forward integration direction indicator
      * @param yDotK slopes at the intermediate points
      * @param globalPreviousState start of the global step
@@ -76,7 +75,6 @@ abstract class RungeKuttaStateInterpolator extends AbstractODEStateInterpolator 
     }
 
     /** Create a new instance.
-     * @param newField field to which the time and state vector elements belong
      * @param newForward integration direction indicator
      * @param newYDotK slopes at the intermediate points
      * @param newGlobalPreviousState start of the global step

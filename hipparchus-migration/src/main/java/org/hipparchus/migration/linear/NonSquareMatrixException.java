@@ -16,12 +16,10 @@
  */
 package org.hipparchus.migration.linear;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
-
 /**
  * Exception to be thrown when a square matrix is expected.
  *
- * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalArgumentException}
+ * @deprecated as of 1.0, this exception is replaced by {@link org.hipparchus.exception.MathIllegalArgumentException}
  */
 @Deprecated
 public class NonSquareMatrixException

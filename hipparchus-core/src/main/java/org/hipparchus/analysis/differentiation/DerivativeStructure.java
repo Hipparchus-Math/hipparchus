@@ -88,13 +88,6 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
         this(new DSFactory(parameters, order).build());
     }
 
-    /** Get the factory that built the instance.
-     * @return factory that built the instance
-     */
-    public DSFactory getFactory() {
-        return factory;
-    }
-
     /** Build an instance representing a constant value.
      * @param parameters number of free parameters
      * @param order derivation order
@@ -210,6 +203,13 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     private DerivativeStructure(final DerivativeStructure ds) {
         this.factory = ds.factory;
         this.data    = ds.data.clone();
+    }
+
+    /** Get the factory that built the instance.
+     * @return factory that built the instance
+     */
+    public DSFactory getFactory() {
+        return factory;
     }
 
     /** Get the number of free parameters.

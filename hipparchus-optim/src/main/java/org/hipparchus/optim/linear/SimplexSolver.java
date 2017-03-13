@@ -333,14 +333,11 @@ public class SimplexSolver extends LinearOptimizer {
      * Solves Phase 1 of the Simplex method.
      *
      * @param tableau Simple tableau for the problem.
-     * @throws MathIllegalStateException if the allowed number of iterations has been exhausted.
-     * @throws MathIllegalStateException if the model is found not to have a bounded solution.
-     * @throws MathIllegalStateException if there is no feasible solution?
+     * @throws MathIllegalStateException if the allowed number of iterations has been exhausted,
+     * or if the model is found not to have a bounded solution, or if there is no feasible solution
      */
     protected void solvePhase1(final SimplexTableau tableau)
-        throws MathIllegalStateException,
-               MathIllegalStateException,
-               MathIllegalStateException {
+        throws MathIllegalStateException {
 
         // make sure we're in Phase 1
         if (tableau.getNumArtificialVariables() == 0) {
@@ -360,9 +357,7 @@ public class SimplexSolver extends LinearOptimizer {
     /** {@inheritDoc} */
     @Override
     public PointValuePair doOptimize()
-        throws MathIllegalStateException,
-               MathIllegalStateException,
-               MathIllegalStateException {
+        throws MathIllegalStateException {
 
         // reset the tableau to indicate a non-feasible solution in case
         // we do not pass phase 1 successfully

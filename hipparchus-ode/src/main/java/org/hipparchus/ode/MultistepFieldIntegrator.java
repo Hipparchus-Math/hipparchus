@@ -399,7 +399,7 @@ public abstract class MultistepFieldIntegrator<T extends RealFieldElement<T>>
 
                 // this was the last point we needed, we can compute the derivatives
                 setStepStart(savedStart);
-                final T rawStep = (t[t.length - 1].subtract(t[0]).divide(t.length - 1));
+                final T rawStep = t[t.length - 1].subtract(t[0]).divide(t.length - 1);
                 setStepSize(filterStep(rawStep, rawStep.getReal() >= 0, true));
 
                 // first scaled derivative

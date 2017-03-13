@@ -18,12 +18,11 @@ package org.hipparchus.migration.exception;
 
 import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.LocalizedCoreFormats;
-import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Exception to be thrown when two dimensions differ.
  *
- * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalArgumentException}
+ * @deprecated as of 1.0, this exception is replaced by {@link org.hipparchus.exception.MathIllegalArgumentException}
  */
 @Deprecated
 public class DimensionMismatchException extends MathIllegalNumberException {

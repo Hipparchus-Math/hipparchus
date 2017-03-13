@@ -17,12 +17,11 @@
 package org.hipparchus.migration.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * Exception to be thrown when a non-singular matrix is expected.
  *
- * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalStateException}
+ * @deprecated as of 1.0, this exception is replaced by {@link org.hipparchus.exception.MathIllegalStateException}
  */
 @Deprecated
 public class SingularMatrixException extends MathIllegalArgumentException {

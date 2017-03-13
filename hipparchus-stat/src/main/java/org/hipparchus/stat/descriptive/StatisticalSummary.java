@@ -18,7 +18,6 @@ package org.hipparchus.stat.descriptive;
 
 import java.util.Arrays;
 
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -36,7 +35,7 @@ public interface StatisticalSummary {
      *
      * @param statistics StatisticalSummary instances to aggregate
      * @return summary statistics for the combined dataset
-     * @throws NullArgumentException if the input is null
+     * @throws org.hipparchus.exception.NullArgumentException if the input is null
      */
     static StatisticalSummary aggregate(StatisticalSummary... statistics) {
         MathUtils.checkNotNull(statistics);
@@ -53,7 +52,7 @@ public interface StatisticalSummary {
      *
      * @param statistics iterable of StatisticalSummary instances to aggregate
      * @return summary statistics for the combined dataset
-     * @throws NullArgumentException if the input is null
+     * @throws org.hipparchus.exception.NullArgumentException if the input is null
      */
     static StatisticalSummary aggregate(Iterable<? extends StatisticalSummary> statistics) {
         MathUtils.checkNotNull(statistics);

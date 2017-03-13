@@ -19,7 +19,6 @@ package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.SecondaryODE;
 
 /**
@@ -34,10 +33,10 @@ import org.hipparchus.ode.SecondaryODE;
  * This interface allows users to add such equations to a primary set of {@link
  * FirstOrderDifferentialEquations first order differential equations}
  * thanks to the {@link
- * ExpandableODE#addSecondaryEquations(SecondaryODE)}
+ * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(SecondaryODE)}
  * method.
  * </p>
- * @see ExpandableODE
+ * @see org.hipparchus.ode.ExpandableODE
  * @deprecated as of 1.0, replaced with {@link SecondaryODE}
  */
 @Deprecated

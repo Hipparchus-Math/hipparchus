@@ -297,10 +297,12 @@ public class FieldEventState<T extends RealFieldElement<T>> {
                 t -> handler.g(interpolator.getInterpolatedState(t));
 
         // event time, just at or before the actual root.
-        T beforeRootT = null, beforeRootG = null;
+        T beforeRootT = null;
+        T beforeRootG = null;
         // time on the other side of the root.
         // Initialized the the loop below executes once.
-        T afterRootT = ta, afterRootG = ga.getField().getZero();
+        T afterRootT = ta;
+        T afterRootG = ga.getField().getZero();
 
         // check for some conditions that the root finders don't like
         // these conditions cannot not happen in the loop below
@@ -332,9 +334,10 @@ public class FieldEventState<T extends RealFieldElement<T>> {
 
         // loop to skip through "fake" roots, i.e. where g(t) = g'(t) = 0.0
         // executed once if we didn't hit a special case above
-        T loopT = ta, loopG = ga;
-        while ((afterRootG.getReal() == 0.0 || afterRootG.getReal() > 0.0 == g0Positive)
-                && strictlyAfter(afterRootT, tb)) {
+        T loopT = ta;
+        T loopG = ga;
+        while ((afterRootG.getReal() == 0.0 || afterRootG.getReal() > 0.0 == g0Positive) &&
+               strictlyAfter(afterRootT, tb)) {
             if (loopG.getReal() == 0.0) {
                 // ga == 0.0 and gb may or may not be 0.0
                 // handle the root at ta first
@@ -367,8 +370,8 @@ public class FieldEventState<T extends RealFieldElement<T>> {
                 afterRootG = f.value(afterRootT);
             }
             // check loop is making some progress
-            check((forward && afterRootT.getReal() > beforeRootT.getReal())
-                    || (!forward && afterRootT.getReal() < beforeRootT.getReal()));
+            check((forward && afterRootT.getReal() > beforeRootT.getReal()) ||
+                  (!forward && afterRootT.getReal() < beforeRootT.getReal()));
             // setup next iteration
             loopT = afterRootT;
             loopG = afterRootG;
@@ -567,6 +570,7 @@ public class FieldEventState<T extends RealFieldElement<T>> {
     /**
      * Class to hold the data related to an event occurrence that is needed to decide how
      * to modify integration.
+     * @param <T> the type of the field elements
      */
     public static class EventOccurrence<T extends RealFieldElement<T>> {
 

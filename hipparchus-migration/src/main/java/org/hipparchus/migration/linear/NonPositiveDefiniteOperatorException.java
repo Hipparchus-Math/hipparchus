@@ -18,11 +18,10 @@
 package org.hipparchus.migration.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.RealLinearOperator;
 
 /**
  * Exception to be thrown when a symmetric, definite positive
- * {@link RealLinearOperator} is expected.
+ * {@link org.hipparchus.linear.RealLinearOperator} is expected.
  * Since the coefficients of the matrix are not accessible, the most
  * general definition is used to check that {@code A} is not positive
  * definite, i.e.  there exists {@code x} such that {@code x' A x <= 0}.

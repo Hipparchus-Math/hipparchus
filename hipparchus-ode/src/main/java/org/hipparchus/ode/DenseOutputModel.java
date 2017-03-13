@@ -183,9 +183,9 @@ public class DenseOutputModel implements ODEStepHandler, Serializable {
 
     /** {@inheritDoc} */
     @Override
-    public void init(final ODEStateAndDerivative initialState, final double finalTime) {
+    public void init(final ODEStateAndDerivative initialState, final double targetTime) {
         initialTime    = initialState.getTime();
-        this.finalTime = finalTime;
+        this.finalTime = targetTime;
         forward        = true;
         index          = 0;
         steps.clear();

@@ -25,7 +25,6 @@ import java.util.List;
 import org.hipparchus.analysis.function.Gaussian;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.DiagonalMatrix;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresBuilder;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
@@ -203,7 +202,7 @@ public class GaussianCurveFitter extends AbstractCurveFitter {
          *
          * @param observations Observed points from which to guess the
          * parameters of the Gaussian.
-         * @throws NullArgumentException if {@code observations} is
+         * @throws org.hipparchus.exception.NullArgumentException if {@code observations} is
          * {@code null}.
          * @throws MathIllegalArgumentException if there are less than 3
          * observations.

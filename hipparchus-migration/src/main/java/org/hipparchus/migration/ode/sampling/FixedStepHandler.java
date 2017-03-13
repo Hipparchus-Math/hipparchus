@@ -19,7 +19,6 @@ package org.hipparchus.migration.ode.sampling;
 
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.ode.sampling.ODEFixedStepHandler;
-import org.hipparchus.ode.sampling.StepNormalizer;
 
 /**
  * This interface represents a handler that should be called after
@@ -28,14 +27,14 @@ import org.hipparchus.ode.sampling.StepNormalizer;
  * <p>This interface should be implemented by anyone who is interested
  * in getting the solution of an ordinary differential equation at
  * fixed time steps. Objects implementing this interface should be
- * wrapped within an instance of {@link StepNormalizer} that itself
+ * wrapped within an instance of {@link org.hipparchus.ode.sampling.StepNormalizer} that itself
  * is used as the general {@link StepHandler} by the integrator. The
- * {@link StepNormalizer} object is called according to the integrator
+ * {@link org.hipparchus.ode.sampling.StepNormalizer} object is called according to the integrator
  * internal algorithms and it calls objects implementing this
  * interface as necessary at fixed time steps.</p>
  *
  * @see StepHandler
- * @see StepNormalizer
+ * @see org.hipparchus.ode.sampling.StepNormalizer
  * @deprecated as of 1.0, replaced with {@link ODEFixedStepHandler}
  */
 @Deprecated
@@ -69,12 +68,12 @@ public interface FixedStepHandler extends ODEFixedStepHandler {
      * Handle the last accepted step
      * @param t time of the current step
      * @param y state vector at t. For efficiency purposes, the {@link
-     * StepNormalizer} class reuses the same array on each call, so if
+     * org.hipparchus.ode.sampling.StepNormalizer} class reuses the same array on each call, so if
      * the instance wants to keep it across all calls (for example to
      * provide at the end of the integration a complete array of all
      * steps), it should build a local copy store this copy.
      * @param yDot derivatives of the state vector state vector at t.
-     * For efficiency purposes, the {@link StepNormalizer} class reuses
+     * For efficiency purposes, the {@link org.hipparchus.ode.sampling.StepNormalizer} class reuses
      * the same array on each call, so if
      * the instance wants to keep it across all calls (for example to
      * provide at the end of the integration a complete array of all

@@ -61,7 +61,6 @@ class ThreeEighthesStateInterpolator
     private static final long serialVersionUID = 20160328L;
 
     /** Simple constructor.
-     * @param field field to which the time and state vector elements belong
      * @param forward integration direction indicator
      * @param yDotK slopes at the intermediate points
      * @param globalPreviousState start of the global step

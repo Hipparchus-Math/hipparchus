@@ -70,6 +70,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
 
     /** Build a {@link FieldDerivativeStructure} representing a constant value.
      * @param value value of the constant
+     * @return a {@link FieldDerivativeStructure} representing a constant value
      */
     public FieldDerivativeStructure<T> constant(double value) {
         return constant(valueField.getZero().add(value));
@@ -77,6 +78,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
 
     /** Build a {@link FieldDerivativeStructure} representing a constant value.
      * @param value value of the constant
+     * @return a {@link FieldDerivativeStructure} representing a constant value
      */
     public FieldDerivativeStructure<T> constant(final T value) {
         final T[] data = buildArray();
@@ -93,6 +95,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @param index index of the variable (from 0 to
      * {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()} - 1)
      * @param value value of the variable
+     * @return a {@link FieldDerivativeStructure} representing a variable
      * @exception MathIllegalArgumentException if index if greater or
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
      */
@@ -124,6 +127,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
      * @param index index of the variable (from 0 to
      * {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()} - 1)
      * @param value value of the variable
+     * @return a {@link FieldDerivativeStructure} representing a variable
      * @exception MathIllegalArgumentException if index if greater or
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
      */
@@ -150,9 +154,10 @@ public class FDSFactory<T extends RealFieldElement<T>> {
     /** Build a {@link FieldDerivativeStructure} from all its derivatives.
      * @param derivatives derivatives sorted according to
      * {@link DSCompiler#getPartialDerivativeIndex(int...)}
+     * @return  {@link FieldDerivativeStructure} with specified derivatives
      * @exception MathIllegalArgumentException if derivatives array does not match the
      * {@link DSCompiler#getSize() size} expected by the compiler
-     * @throws MathIllegalArgumentException if order is too large
+     * @exception MathIllegalArgumentException if order is too large
      * @see FieldDerivativeStructure#getAllDerivatives()
      */
     @SafeVarargs
@@ -173,9 +178,10 @@ public class FDSFactory<T extends RealFieldElement<T>> {
     /** Build a {@link FieldDerivativeStructure} from all its derivatives.
      * @param derivatives derivatives sorted according to
      * {@link DSCompiler#getPartialDerivativeIndex(int...)}
+     * @return  {@link FieldDerivativeStructure} with specified derivatives
      * @exception MathIllegalArgumentException if derivatives array does not match the
      * {@link DSCompiler#getSize() size} expected by the compiler
-     * @throws MathIllegalArgumentException if order is too large
+     * @exception MathIllegalArgumentException if order is too large
      * @see FieldDerivativeStructure#getAllDerivatives()
      */
     public FieldDerivativeStructure<T> build(final double ... derivatives)
@@ -196,6 +202,7 @@ public class FDSFactory<T extends RealFieldElement<T>> {
 
     /** Build a {@link FieldDerivativeStructure} with an uninitialized array.
      * <p>This method is intended only for FieldDerivativeStructure internal use.</p>
+     * @return a {@link FieldDerivativeStructure} with an uninitialized array
      */
     FieldDerivativeStructure<T> build() {
         return new FieldDerivativeStructure<>(this, buildArray());
@@ -238,8 +245,8 @@ public class FDSFactory<T extends RealFieldElement<T>> {
          * @param zero constant function evaluating to 0.0
          * @param one constant function evaluating to 1.0
          */
-        public DerivativeField(final FieldDerivativeStructure<T> zero,
-                               final FieldDerivativeStructure<T> one) {
+        DerivativeField(final FieldDerivativeStructure<T> zero,
+                        final FieldDerivativeStructure<T> one) {
             this.zero = zero;
             this.one  = one;
         }

@@ -32,10 +32,8 @@ import org.hipparchus.ode.NamedParameterJacobianProvider;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 import org.hipparchus.ode.ParameterConfiguration;
-import org.hipparchus.ode.Parameterizable;
 import org.hipparchus.ode.ParametersController;
 import org.hipparchus.ode.SecondaryODE;
-import org.hipparchus.ode.VariationalEquation;
 
 /**
  * This class defines a set of {@link SecondaryODE secondary equations} to
@@ -60,7 +58,7 @@ import org.hipparchus.ode.VariationalEquation;
  * @see MainStateJacobianProvider
  * @see NamedParameterJacobianProvider
  * @see ParametersController
- * @deprecated as of 1.0, replaced with {@link VariationalEquation}
+ * @deprecated as of 1.0, replaced with {@link org.hipparchus.ode.VariationalEquation}
  */
 @Deprecated
 public class JacobianMatrices {
@@ -98,8 +96,8 @@ public class JacobianMatrices {
     /** Simple constructor for a secondary equations set computing Jacobian matrices.
      * <p>
      * Parameters must belong to the supported ones given by {@link
-     * Parameterizable#getParametersNames()}, so the primary set of differential
-     * equations must be {@link Parameterizable}.
+     * org.hipparchus.ode.Parameterizable#getParametersNames()}, so the primary set of differential
+     * equations must be {@link org.hipparchus.ode.Parameterizable}.
      * </p>
      * <p>Note that each selection clears the previous selected parameters.</p>
      *
@@ -119,8 +117,8 @@ public class JacobianMatrices {
     /** Simple constructor for a secondary equations set computing Jacobian matrices.
      * <p>
      * Parameters must belong to the supported ones given by {@link
-     * Parameterizable#getParametersNames()}, so the primary set of differential
-     * equations must be {@link Parameterizable}.
+     * org.hipparchus.ode.Parameterizable#getParametersNames()}, so the primary set of differential
+     * equations must be {@link org.hipparchus.ode.Parameterizable}.
      * </p>
      * <p>Note that each selection clears the previous selected parameters.</p>
      *
@@ -232,12 +230,12 @@ public class JacobianMatrices {
     }
 
     /** Set a parameter Jacobian provider.
-     * @param parametersController the controller to compute the parameter Jacobian matrix using finite differences
+     * @param pc the controller to compute the parameter Jacobian matrix using finite differences
      * @deprecated as of 1.0, replaced with {@link #setParametersController(ParametersController)}
      */
     @Deprecated
-    public void setParameterizedODE(final ParametersController parametersController) {
-        setParametersController(parametersController);
+    public void setParameterizedODE(final ParametersController pc) {
+        setParametersController(pc);
     }
 
     /** Set a parameter Jacobian provider.
@@ -583,6 +581,7 @@ public class JacobianMatrices {
 
     }
 
+    /** Selected parameter for parameter Jacobian computation. */
     private static class MutableParameterConfiguration {
 
         /** Parameter name. */

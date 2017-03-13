@@ -41,7 +41,6 @@ class LutherStateInterpolator extends RungeKuttaStateInterpolator {
     private static final double Q = FastMath.sqrt(21);
 
     /** Simple constructor.
-     * @param field field to which the time and state vector elements belong
      * @param forward integration direction indicator
      * @param yDotK slopes at the intermediate points
      * @param globalPreviousState start of the global step

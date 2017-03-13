@@ -679,6 +679,7 @@ public class DSCompiler {
      * @param result array where result must be stored (it may be
      * one of the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void linearCombination(final T a1, final T[] c1, final int offset1,
                                                                   final T a2, final T[] c2, final int offset2,
@@ -700,6 +701,7 @@ public class DSCompiler {
      * @param result array where result must be stored (it may be
      * one of the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void linearCombination(final double a1, final T[] c1, final int offset1,
                                                                   final double a2, final T[] c2, final int offset2,
@@ -751,6 +753,7 @@ public class DSCompiler {
      * @param result array where result must be stored (it may be
      * one of the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void linearCombination(final T a1, final T[] c1, final int offset1,
                                                                   final T a2, final T[] c2, final int offset2,
@@ -778,6 +781,7 @@ public class DSCompiler {
      * @param result array where result must be stored (it may be
      * one of the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void linearCombination(final double a1, final T[] c1, final int offset1,
                                                                   final double a2, final T[] c2, final int offset2,
@@ -840,6 +844,7 @@ public class DSCompiler {
      * @param result array where result must be stored (it may be
      * one of the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void linearCombination(final T a1, final T[] c1, final int offset1,
                                                                   final T a2, final T[] c2, final int offset2,
@@ -872,6 +877,7 @@ public class DSCompiler {
      * @param result array where result must be stored (it may be
      * one of the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void linearCombination(final double a1, final T[] c1, final int offset1,
                                                                   final double a2, final T[] c2, final int offset2,
@@ -912,6 +918,7 @@ public class DSCompiler {
      * @param result array where result must be stored (it may be
      * one of the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void add(final T[] lhs, final int lhsOffset,
                                                     final T[] rhs, final int rhsOffset,
@@ -946,6 +953,7 @@ public class DSCompiler {
      * @param result array where result must be stored (it may be
      * one of the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void subtract(final T[] lhs, final int lhsOffset,
                                                          final T[] rhs, final int rhsOffset,
@@ -989,6 +997,7 @@ public class DSCompiler {
      * multiplication the result array <em>cannot</em> be one of
      * the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void multiply(final T[] lhs, final int lhsOffset,
                                                          final T[] rhs, final int rhsOffset,
@@ -1033,6 +1042,7 @@ public class DSCompiler {
      * division the result array <em>cannot</em> be one of
      * the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void divide(final T[] lhs, final int lhsOffset,
                                                        final T[] rhs, final int rhsOffset,
@@ -1077,6 +1087,7 @@ public class DSCompiler {
      * @param result array where result must be stored (it may be
      * one of the input arrays)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void remainder(final T[] lhs, final int lhsOffset,
                                                           final T[] rhs, final int rhsOffset,
@@ -1145,6 +1156,7 @@ public class DSCompiler {
      * power the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void pow(final double a,
                                                     final T[] operand, final int operandOffset,
@@ -1233,6 +1245,7 @@ public class DSCompiler {
      * power the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void pow(final T[] operand, final int operandOffset, final double p,
                                                     final T[] result, final int resultOffset) {
@@ -1333,6 +1346,7 @@ public class DSCompiler {
      * power the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void pow(final T[] operand, final int operandOffset, final int n,
                                                     final T[] result, final int resultOffset) {
@@ -1409,6 +1423,7 @@ public class DSCompiler {
      * power the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void pow(final T[] x, final int xOffset,
                                                     final T[] y, final int yOffset,
@@ -1466,6 +1481,7 @@ public class DSCompiler {
      * n<sup>th</sup> root the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void rootN(final T[] operand, final int operandOffset, final int n,
                                                       final T[] result, final int resultOffset) {
@@ -1525,6 +1541,7 @@ public class DSCompiler {
      * exponential the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void exp(final T[] operand, final int operandOffset,
                                                     final T[] result, final int resultOffset) {
@@ -1568,6 +1585,7 @@ public class DSCompiler {
      * exponential the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void expm1(final T[] operand, final int operandOffset,
                                                       final T[] result, final int resultOffset) {
@@ -1619,6 +1637,7 @@ public class DSCompiler {
      * logarithm the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void log(final T[] operand, final int operandOffset,
                                                     final T[] result, final int resultOffset) {
@@ -1675,6 +1694,7 @@ public class DSCompiler {
      * @param result array where result must be stored (for
      * shifted logarithm the result array <em>cannot</em> be the input array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void log1p(final T[] operand, final int operandOffset,
                                                       final T[] result, final int resultOffset) {
@@ -1731,6 +1751,7 @@ public class DSCompiler {
      * @param result array where result must be stored (for
      * base 10 logarithm the result array <em>cannot</em> be the input array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void log10(final T[] operand, final int operandOffset,
                                                       final T[] result, final int resultOffset) {
@@ -1787,6 +1808,7 @@ public class DSCompiler {
      * cosine the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void cos(final T[] operand, final int operandOffset,
                                                     final T[] result, final int resultOffset) {
@@ -1849,6 +1871,7 @@ public class DSCompiler {
      * sine the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void sin(final T[] operand, final int operandOffset,
                                                     final T[] result, final int resultOffset) {
@@ -1940,6 +1963,7 @@ public class DSCompiler {
      * tangent the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void tan(final T[] operand, final int operandOffset,
                                                     final T[] result, final int resultOffset) {
@@ -2054,6 +2078,7 @@ public class DSCompiler {
      * arc cosine the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void acos(final T[] operand, final int operandOffset,
                                                      final T[] result, final int resultOffset) {
@@ -2115,7 +2140,7 @@ public class DSCompiler {
      * @param resultOffset offset of the result in its array
      */
     public void asin(final double[] operand, final int operandOffset,
-                    final double[] result, final int resultOffset) {
+                     final double[] result, final int resultOffset) {
 
         // create the function value and derivatives
         double[] function = new double[1 + order];
@@ -2170,6 +2195,7 @@ public class DSCompiler {
      * arc sine the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void asin(final T[] operand, final int operandOffset,
                                                      final T[] result, final int resultOffset) {
@@ -2286,6 +2312,7 @@ public class DSCompiler {
      * arc tangent the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void atan(final T[] operand, final int operandOffset,
                                                      final T[] result, final int resultOffset) {
@@ -2398,6 +2425,7 @@ public class DSCompiler {
      * two arguments arc tangent the result array <em>cannot</em>
      * be the input array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void atan2(final T[] y, final int yOffset,
                                                       final T[] x, final int xOffset,
@@ -2430,7 +2458,7 @@ public class DSCompiler {
             divide(y, yOffset, tmp2, 0, tmp1, 0);       // y /(r - x)
             atan(tmp1, 0, tmp2, 0);                     // atan(y / (r - x))
             result[resultOffset] = tmp2[0].add(tmp2[0]).negate().
-                                   add(((tmp2[0].getReal() <= 0) ? -FastMath.PI : FastMath.PI)); // +/-pi - 2 * atan(y / (r - x))
+                                   add((tmp2[0].getReal() <= 0) ? -FastMath.PI : FastMath.PI); // +/-pi - 2 * atan(y / (r - x))
             for (int i = 1; i < tmp2.length; ++i) {
                 result[resultOffset + i] = tmp2[i].add(tmp2[i]).negate(); // +/-pi - 2 * atan(y / (r - x))
             }
@@ -2475,6 +2503,7 @@ public class DSCompiler {
      * hyperbolic cosine the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void cosh(final T[] operand, final int operandOffset,
                                                      final T[] result, final int resultOffset) {
@@ -2529,6 +2558,7 @@ public class DSCompiler {
      * hyperbolic sine the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void sinh(final T[] operand, final int operandOffset,
                                                      final T[] result, final int resultOffset) {
@@ -2612,6 +2642,7 @@ public class DSCompiler {
      * hyperbolic tangent the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void tanh(final T[] operand, final int operandOffset,
                                                      final T[] result, final int resultOffset) {
@@ -2726,6 +2757,7 @@ public class DSCompiler {
      * inverse hyperbolic cosine the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void acosh(final T[] operand, final int operandOffset,
                                                       final T[] result, final int resultOffset) {
@@ -2787,7 +2819,7 @@ public class DSCompiler {
      * @param resultOffset offset of the result in its array
      */
     public void asinh(final double[] operand, final int operandOffset,
-                     final double[] result, final int resultOffset) {
+                      final double[] result, final int resultOffset) {
 
         // create the function value and derivatives
         double[] function = new double[1 + order];
@@ -2842,6 +2874,7 @@ public class DSCompiler {
      * inverse hyperbolic sine the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void asinh(final T[] operand, final int operandOffset,
                                                       final T[] result, final int resultOffset) {
@@ -2958,6 +2991,7 @@ public class DSCompiler {
      * inverse hyperbolic tangent the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void atanh(final T[] operand, final int operandOffset,
                                                       final T[] result, final int resultOffset) {
@@ -3046,6 +3080,7 @@ public class DSCompiler {
      * composition the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void compose(final T[] operand, final int operandOffset, final T[] f,
                                                         final T[] result, final int resultOffset) {
@@ -3074,6 +3109,7 @@ public class DSCompiler {
      * composition the result array <em>cannot</em> be the input
      * array)
      * @param resultOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> void compose(final T[] operand, final int operandOffset, final double[] f,
                                                         final T[] result, final int resultOffset) {
@@ -3128,6 +3164,7 @@ public class DSCompiler {
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
      * @throws MathRuntimeException if factorials becomes too large
+     * @param <T> the type of the function parameters and value
      */
     @SafeVarargs
     public final <T extends RealFieldElement<T>> T taylor(final T[] ds, final int dsOffset,
@@ -3160,6 +3197,7 @@ public class DSCompiler {
      * @param delta parameters offsets (&Delta;x, &Delta;y, ...)
      * @return value of the Taylor expansion at x + &Delta;x, y + &Delta;y, ...
      * @throws MathRuntimeException if factorials becomes too large
+     * @param <T> the type of the function parameters and value
      */
     public <T extends RealFieldElement<T>> T taylor(final T[] ds, final int dsOffset,
                                                     final double ... delta)

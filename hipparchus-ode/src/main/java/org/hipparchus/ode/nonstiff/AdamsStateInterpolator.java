@@ -143,7 +143,6 @@ class AdamsStateInterpolator extends AbstractODEStateInterpolator {
      * @param scaled first scaled derivative
      * @param nordsieck Nordsieck vector
      * @return estimated state
-     * @param <S> the type of the field elements
      */
     public static ODEStateAndDerivative taylor(final EquationsMapper equationsMapper,
                                                final ODEStateAndDerivative reference,

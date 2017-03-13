@@ -16,12 +16,11 @@
  */
 package org.hipparchus.migration.exception;
 
-import org.hipparchus.exception.MathIllegalArgumentException;
 
 /**
  * Exception to be thrown when the maximal number of evaluations is exceeded.
  *
- * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalArgumentException}
+ * @deprecated as of 1.0, this exception is replaced by {@link org.hipparchus.exception.MathIllegalArgumentException}
  */
 @Deprecated
 public class TooManyEvaluationsException extends MaxCountExceededException {

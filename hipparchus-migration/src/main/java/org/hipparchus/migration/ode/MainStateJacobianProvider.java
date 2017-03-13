@@ -18,13 +18,12 @@ package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.ODEJacobiansProvider;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 
 /** Interface expanding {@link FirstOrderDifferentialEquations first order
  *  differential equations} in order to compute exactly the main state jacobian
  *  matrix for {@link JacobianMatrices partial derivatives equations}.
- * @deprecated as of 1.0, replaced with {@link ODEJacobiansProvider}
+ * @deprecated as of 1.0, replaced with {@link org.hipparchus.ode.ODEJacobiansProvider}
  */
 @Deprecated
 public interface MainStateJacobianProvider extends OrdinaryDifferentialEquation {

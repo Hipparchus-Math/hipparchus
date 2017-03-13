@@ -276,10 +276,12 @@ public class EventState {
         final UnivariateFunction f = t -> handler.g(interpolator.getInterpolatedState(t));
 
         // event time, just at or before the actual root.
-        double beforeRootT = Double.NaN, beforeRootG = Double.NaN;
+        double beforeRootT = Double.NaN;
+        double beforeRootG = Double.NaN;
         // time on the other side of the root.
         // Initialized the the loop below executes once.
-        double afterRootT = ta, afterRootG = 0.0;
+        double afterRootT = ta;
+        double afterRootG = 0.0;
 
         // check for some conditions that the root finders don't like
         // these conditions cannot not happen in the loop below
@@ -311,9 +313,10 @@ public class EventState {
 
         // loop to skip through "fake" roots, i.e. where g(t) = g'(t) = 0.0
         // executed once if we didn't hit a special case above
-        double loopT = ta, loopG = ga;
-        while ((afterRootG == 0.0 || afterRootG > 0.0 == g0Positive)
-                && strictlyAfter(afterRootT, tb)) {
+        double loopT = ta;
+        double loopG = ga;
+        while ((afterRootG == 0.0 || afterRootG > 0.0 == g0Positive) &&
+               strictlyAfter(afterRootT, tb)) {
             if (loopG == 0.0) {
                 // ga == 0.0 and gb may or may not be 0.0
                 // handle the root at ta first

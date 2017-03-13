@@ -17,11 +17,10 @@
 package org.hipparchus.migration.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.RealLinearOperator;
 
 /**
  * An exception to be thrown when the condition number of a
- * {@link RealLinearOperator} is too high.
+ * {@link org.hipparchus.linear.RealLinearOperator} is too high.
  *
  * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalArgumentException}
  */

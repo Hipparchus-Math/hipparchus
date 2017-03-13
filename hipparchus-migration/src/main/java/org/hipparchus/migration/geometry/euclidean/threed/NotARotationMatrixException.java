@@ -19,13 +19,12 @@ package org.hipparchus.migration.geometry.euclidean.threed;
 
 import org.hipparchus.exception.Localizable;
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.exception.MathIllegalStateException;
 
 /**
  * This class represents exceptions thrown while building rotations
  * from matrices.
  *
- * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalStateException}
+ * @deprecated as of 1.0, this exception is replaced by {@link org.hipparchus.exception.MathIllegalStateException}
  */
 @Deprecated
 public class NotARotationMatrixException

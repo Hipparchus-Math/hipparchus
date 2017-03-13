@@ -58,6 +58,7 @@ public class DSFactory implements Serializable {
 
     /** Build a {@link DerivativeStructure} representing a constant value.
      * @param value value of the constant
+     * @return a {@link DerivativeStructure} representing a constant value
      */
     public DerivativeStructure constant(double value) {
         final double[] data = new double[compiler.getSize()];
@@ -75,6 +76,7 @@ public class DSFactory implements Serializable {
      * @param value value of the variable
      * @exception MathIllegalArgumentException if index if greater or
      * equal to {@link #getCompiler()}.{@link DSCompiler#getFreeParameters() getFreeParameters()}.
+     * @return a {@link DerivativeStructure} representing a variable
      */
     public DerivativeStructure variable(final int index, final double value)
         throws MathIllegalArgumentException {
@@ -98,9 +100,10 @@ public class DSFactory implements Serializable {
     /** Build a {@link DerivativeStructure} from all its derivatives.
      * @param derivatives derivatives sorted according to
      * {@link DSCompiler#getPartialDerivativeIndex(int...)}
+     * @return a {@link DerivativeStructure} with specified derivatives
      * @exception MathIllegalArgumentException if derivatives array does not match the
      * {@link DSCompiler#getSize() size} expected by the compiler
-     * @throws MathIllegalArgumentException if order is too large
+     * @exception MathIllegalArgumentException if order is too large
      * @see DerivativeStructure#getAllDerivatives()
      */
     @SafeVarargs
@@ -120,6 +123,7 @@ public class DSFactory implements Serializable {
 
     /** Build a {@link DerivativeStructure} with an uninitialized array.
      * <p>This method is intended only for DerivativeStructure internal use.</p>
+     * @return a {@link DerivativeStructure} with an uninitialized array
      */
     DerivativeStructure build() {
         return new DerivativeStructure(this, new double[compiler.getSize()]);
@@ -196,7 +200,7 @@ public class DSFactory implements Serializable {
          * @param zero constant function evaluating to 0.0
          * @param one constant function evaluating to 1.0
          */
-        public DSField(final DerivativeStructure zero, final DerivativeStructure one) {
+        DSField(final DerivativeStructure zero, final DerivativeStructure one) {
             this.zero = zero;
             this.one  = one;
         }

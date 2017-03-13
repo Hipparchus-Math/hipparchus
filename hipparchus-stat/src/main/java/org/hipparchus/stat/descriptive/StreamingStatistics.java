@@ -524,17 +524,24 @@ public class StreamingStatistics
      */
     public static class StreamingStatisticsBuilder {
         /** whether or not moment statistics are maintained by instances created by this factory */
-        private boolean computeMoments = true;
+        private boolean computeMoments;
         /** whether or not sum of squares and quadratic mean are maintained by instances created by this factory */
-        private boolean computeSumOfSquares = true;
+        private boolean computeSumOfSquares;
         /** whether or not sum of logs and geometric mean are maintained by instances created by this factory */
-        private boolean computeSumOfLogs = true;
+        private boolean computeSumOfLogs;
         /** whether or not percentiles are maintained by instances created by this factory */
-        private boolean computePercentiles = false;
+        private boolean computePercentiles;
         /** whether or not min and max are maintained by instances created by this factory */
-        private boolean computeExtrema = true;
+        private boolean computeExtrema;
 
+        /** Simple constructor.
+         */
         public StreamingStatisticsBuilder() {
+            computeMoments      = true;
+            computeSumOfSquares = true;
+            computeSumOfLogs    = true;
+            computePercentiles  = false;
+            computeExtrema      = true;
         }
 
         /**

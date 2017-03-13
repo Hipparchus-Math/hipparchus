@@ -224,10 +224,10 @@ class DormandPrince853StateInterpolator
             final double[] p = new double[16];
             final double[] q = new double[16];
             for (int i = 0; i < p.length; ++i) {
-                p[i] =     f0 * D[0][i] +   f1 * D[1][i] +   f2 * D[2][i] +   f3 * D[3][i]
-                       +   f4 * D[4][i] +   f5 * D[5][i] +   f6 * D[6][i];
-                q[i] =          D[0][i] + dot1 * D[1][i] + dot2 * D[2][i] + dot3 * D[3][i]
-                       + dot4 * D[4][i] + dot5 * D[5][i] + dot6 * D[6][i];
+                p[i] = f0 * D[0][i] +   f1 * D[1][i] +   f2 * D[2][i] +   f3 * D[3][i] +
+                       f4 * D[4][i] +   f5 * D[5][i] +   f6 * D[6][i];
+                q[i] = D[0][i] + dot1 * D[1][i] + dot2 * D[2][i] + dot3 * D[3][i] +
+                                 dot4 * D[4][i] + dot5 * D[5][i] + dot6 * D[6][i];
             }
             interpolatedState       = previousStateLinearCombination(p[0], p[1], p[ 2], p[ 3], p[ 4], p[ 5], p[ 6], p[ 7],
                                                                      p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15]);
@@ -244,10 +244,10 @@ class DormandPrince853StateInterpolator
             final double[] p = new double[16];
             final double[] q = new double[16];
             for (int i = 0; i < p.length; ++i) {
-                p[i] =     f0 * D[0][i] +   f1 * D[1][i] +   f2 * D[2][i] +   f3 * D[3][i]
-                       +   f4 * D[4][i] +   f5 * D[5][i] +   f6 * D[6][i];
-                q[i] =          D[0][i] + dot1 * D[1][i] + dot2 * D[2][i] + dot3 * D[3][i]
-                       + dot4 * D[4][i] + dot5 * D[5][i] + dot6 * D[6][i];
+                p[i] = f0 * D[0][i] +   f1 * D[1][i] +   f2 * D[2][i] +   f3 * D[3][i] +
+                       f4 * D[4][i] +   f5 * D[5][i] +   f6 * D[6][i];
+                q[i] = D[0][i] + dot1 * D[1][i] + dot2 * D[2][i] + dot3 * D[3][i] +
+                                 dot4 * D[4][i] + dot5 * D[5][i] + dot6 * D[6][i];
             }
             interpolatedState       = currentStateLinearCombination(p[0], p[1], p[ 2], p[ 3], p[ 4], p[ 5], p[ 6], p[ 7],
                                                                     p[8], p[9], p[10], p[11], p[12], p[13], p[14], p[15]);

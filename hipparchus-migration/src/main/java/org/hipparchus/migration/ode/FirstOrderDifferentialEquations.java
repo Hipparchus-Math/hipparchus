@@ -19,8 +19,6 @@ package org.hipparchus.migration.ode;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.FirstOrderConverter;
-import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.OrdinaryDifferentialEquation;
 
 
@@ -29,7 +27,7 @@ import org.hipparchus.ode.OrdinaryDifferentialEquation;
  *
  * <p>This interface should be implemented by all real first order
  * differential equation problems before they can be handled by the
- * integrators {@link ODEIntegrator#integrate} method.</p>
+ * integrators {@link org.hipparchus.ode.ODEIntegrator#integrate} method.</p>
  *
  * <p>A first order differential equations problem, as seen by an
  * integrator is the time derivative <code>dY/dt</code> of a state
@@ -44,8 +42,8 @@ import org.hipparchus.ode.OrdinaryDifferentialEquation;
  * of this interface, the classes that implement it are allowed to
  * handle them as they want.</p>
  *
- * @see ODEIntegrator
- * @see FirstOrderConverter
+ * @see org.hipparchus.ode.ODEIntegrator
+ * @see org.hipparchus.ode.FirstOrderConverter
  * @see SecondOrderDifferentialEquations
  * @deprecated as of 1.0, replaced with {@link OrdinaryDifferentialEquation}
  */
@@ -57,6 +55,7 @@ public interface FirstOrderDifferentialEquations extends OrdinaryDifferentialEqu
      * The default implementation calls {@link #computeDerivatives(double, double[], double[])}.
      * </p>
      */
+    @Override
     default double[] computeDerivatives(double t, double[] y) {
         final double[] yDot = new double[y.length];
         computeDerivatives(t, y, yDot);

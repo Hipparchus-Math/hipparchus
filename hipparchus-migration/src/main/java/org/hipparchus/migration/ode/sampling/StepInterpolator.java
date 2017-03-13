@@ -18,9 +18,6 @@
 package org.hipparchus.migration.ode.sampling;
 
 import org.hipparchus.exception.MathIllegalStateException;
-import org.hipparchus.ode.ODEState;
-import org.hipparchus.ode.ODEStateAndDerivative;
-import org.hipparchus.ode.SecondaryODE;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
 
 /** This interface represents an interpolator over the last step
@@ -51,7 +48,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
     /**
      * Get the previous grid point time.
      * @return previous grid point time
-     * @deprecated as of 1.0, replaced with {@link #getPreviousState()}/{@link ODEState#getTime()}
+     * @deprecated as of 1.0, replaced with {@link #getPreviousState()}/{@link org.hipparchus.ode.ODEState#getTime()}
      */
     @Deprecated
     double getPreviousTime();
@@ -59,7 +56,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
     /**
      * Get the current grid point time.
      * @return current grid point time
-     * @deprecated as of 1.0, replaced with {@link #getCurrentState()}/{@link ODEState#getTime()}
+     * @deprecated as of 1.0, replaced with {@link #getCurrentState()}/{@link org.hipparchus.ode.ODEState#getTime()}
      */
     @Deprecated
     double getCurrentTime();
@@ -69,7 +66,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * If {@link #setInterpolatedTime} has not been called, it returns
      * the current grid point time.
      * @return interpolation point time
-     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}/{@link ODEState#getTime()}
+     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}/{@link org.hipparchus.ode.ODEState#getTime()}
      */
     @Deprecated
     double getInterpolatedTime();
@@ -109,7 +106,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @see #getInterpolatedSecondaryDerivatives(int)
      * @see #setInterpolatedTime(double)
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
-     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link ODEState#getPrimaryState()}
+     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link org.hipparchus.ode.ODEState#getPrimaryState()}
      */
     @Deprecated
     double[] getInterpolatedState() throws MathIllegalStateException;
@@ -126,7 +123,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @see #getInterpolatedSecondaryDerivatives(int)
      * @see #setInterpolatedTime(double)
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
-     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link ODEStateAndDerivative#getPrimaryDerivative()}
+     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link org.hipparchus.ode.ODEStateAndDerivative#getPrimaryDerivative()}
      */
     @Deprecated
     double[] getInterpolatedDerivatives() throws MathIllegalStateException;
@@ -137,7 +134,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * to be preserved across several calls to the associated
      * {@link #setInterpolatedTime(double)} method.</p>
      * @param index index of the secondary set, as returned by {@link
-     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(SecondaryODE)
+     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(org.hipparchus.ode.SecondaryODE)
      * ExpandableODE.addSecondaryEquations(secondary)}
      * @return interpolated secondary state at the current interpolation date
      * @see #getInterpolatedState()
@@ -145,7 +142,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @see #getInterpolatedSecondaryDerivatives(int)
      * @see #setInterpolatedTime(double)
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
-     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link ODEState#getSecondaryState(int)}
+     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link org.hipparchus.ode.ODEState#getSecondaryState(int)}
      */
     @Deprecated
     double[] getInterpolatedSecondaryState(final int index) throws MathIllegalStateException;
@@ -155,7 +152,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * it should not be modified and it should be copied if it needs
      * to be preserved across several calls.</p>
      * @param index index of the secondary set, as returned by {@link
-     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(SecondaryODE)
+     * org.hipparchus.ode.ExpandableODE#addSecondaryEquations(org.hipparchus.ode.SecondaryODE)
      * ExpandableODE.addSecondaryEquations(secondary)}
      * @return interpolated secondary derivatives at the current interpolation date
      * @see #getInterpolatedState()
@@ -163,7 +160,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @see #getInterpolatedSecondaryState(int)
      * @see #setInterpolatedTime(double)
      * @exception MathIllegalStateException if the number of functions evaluations is exceeded
-     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link ODEStateAndDerivative#getSecondaryDerivative(int)}
+     * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link org.hipparchus.ode.ODEStateAndDerivative#getSecondaryDerivative(int)}
      */
     @Deprecated
     double[] getInterpolatedSecondaryDerivatives(final int index) throws MathIllegalStateException;

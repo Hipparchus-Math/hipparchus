@@ -18,10 +18,9 @@
 package org.hipparchus.migration.linear;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
-import org.hipparchus.linear.RealLinearOperator;
 
 /**
- * Exception to be thrown when a self-adjoint {@link RealLinearOperator}
+ * Exception to be thrown when a self-adjoint {@link org.hipparchus.linear.RealLinearOperator}
  * is expected.
  * Since the coefficients of the matrix are not accessible, the most
  * general definition is used to check that A is not self-adjoint, i.e.

@@ -552,6 +552,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
     /** Compute a<sup>x</sup> where a is a double and x a {@link FieldDerivativeStructure}
      * @param a number to exponentiate
      * @param x power to apply
+     * @param <T> the type of the field elements
      * @return a<sup>x</sup>
      */
     public static <T extends RealFieldElement<T>> FieldDerivativeStructure<T> pow(final double a, final FieldDerivativeStructure<T> x) {
@@ -705,6 +706,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
     /** Two arguments arc tangent operation.
      * @param y first argument of the arc tangent
      * @param x second argument of the arc tangent
+     * @param <T> the type of the field elements
      * @return atan2(y, x)
      * @exception MathIllegalArgumentException if number of free parameters
      * or orders do not match
@@ -936,6 +938,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * a<sub>2</sub>&times;b<sub>2</sub>
      * @see #linearCombination(double, Object, double, Object, double, Object)
      * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     public FieldDerivativeStructure<T> linearCombination(final T a1, final FieldDerivativeStructure<T> b1,
                                                          final T a2, final FieldDerivativeStructure<T> b2)
@@ -1011,6 +1014,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * a<sub>2</sub>&times;b<sub>2</sub> + a<sub>3</sub>&times;b<sub>3</sub>
      * @see #linearCombination(double, Object, double, Object)
      * @see #linearCombination(double, Object, double, Object, double, Object, double, Object)
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     public FieldDerivativeStructure<T> linearCombination(final T a1, final FieldDerivativeStructure<T> b1,
                                                          final T a2, final FieldDerivativeStructure<T> b2,
@@ -1097,6 +1101,7 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      * a<sub>4</sub>&times;b<sub>4</sub>
      * @see #linearCombination(double, Object, double, Object)
      * @see #linearCombination(double, Object, double, Object, double, Object)
+     * @exception MathIllegalArgumentException if number of free parameters or orders are inconsistent
      */
     public FieldDerivativeStructure<T> linearCombination(final T a1, final FieldDerivativeStructure<T> b1,
                                                          final T a2, final FieldDerivativeStructure<T> b2,

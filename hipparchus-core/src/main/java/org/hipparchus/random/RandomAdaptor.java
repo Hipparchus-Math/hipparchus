@@ -18,7 +18,6 @@ package org.hipparchus.random;
 
 import java.util.Random;
 
-import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -37,7 +36,7 @@ public class RandomAdaptor extends Random implements RandomGenerator {
      * Construct a RandomAdaptor wrapping the supplied RandomGenerator.
      *
      * @param randomGenerator  the wrapped generator
-     * @throws NullArgumentException if randomGenerator is null
+     * @throws org.hipparchus.exception.NullArgumentException if randomGenerator is null
      */
     public RandomAdaptor(RandomGenerator randomGenerator) {
         MathUtils.checkNotNull(randomGenerator);

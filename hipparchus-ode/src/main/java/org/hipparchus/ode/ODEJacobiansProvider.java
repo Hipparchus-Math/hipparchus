@@ -45,6 +45,7 @@ public interface ODEJacobiansProvider
      * The default implementation has no parameters at all.
      * </p>
      */
+    @Override
     default List<String> getParametersNames() {
         return Collections.emptyList();
     }
@@ -54,6 +55,7 @@ public interface ODEJacobiansProvider
      * The default implementation supports no parameters at all.
      * </p>
      */
+    @Override
     default boolean isSupported(String name) {
         return false;
     }
@@ -63,6 +65,7 @@ public interface ODEJacobiansProvider
      * The default implementation supports no parameters at all.
      * </p>
      */
+    @Override
     default double[] computeParameterJacobian(double t, double[] y, double[] yDot,
                                               String paramName)
         throws MathIllegalArgumentException {

@@ -54,7 +54,7 @@ class MigrationStepInterpolator implements org.hipparchus.migration.ode.sampling
     /** Simple constructor.
      * @param interpolator underlying interpolator
      */
-    public MigrationStepInterpolator(final ODEStateInterpolator interpolator) {
+    MigrationStepInterpolator(final ODEStateInterpolator interpolator) {
         this.interpolator = interpolator;
         this.interpolated = interpolator.getCurrentState();
     }

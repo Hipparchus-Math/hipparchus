@@ -26,7 +26,6 @@ import org.hipparchus.optim.PointValuePair;
 import org.hipparchus.optim.nonlinear.scalar.GoalType;
 import org.hipparchus.optim.nonlinear.scalar.GradientMultivariateOptimizer;
 import org.hipparchus.optim.nonlinear.scalar.LineSearch;
-import org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer;
 
 
 /**
@@ -106,7 +105,7 @@ public class NonLinearConjugateGradientOptimizer
      * find an interval that brackets the optimum in order to perform the
      * line search.
      *
-     * @see LineSearch#LineSearch(MultivariateOptimizer,double,double,double)
+     * @see LineSearch#LineSearch(org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer,double,double,double)
      */
     public NonLinearConjugateGradientOptimizer(final Formula updateFormula,
                                                ConvergenceChecker<PointValuePair> checker,
@@ -133,7 +132,7 @@ public class NonLinearConjugateGradientOptimizer
      * find an interval that brackets the optimum in order to perform the
      * line search.
      *
-     * @see LineSearch#LineSearch(MultivariateOptimizer,double,double,double)
+     * @see LineSearch#LineSearch(org.hipparchus.optim.nonlinear.scalar.MultivariateOptimizer,double,double,double)
      */
     public NonLinearConjugateGradientOptimizer(final Formula updateFormula,
                                                ConvergenceChecker<PointValuePair> checker,

@@ -17,13 +17,12 @@
 package org.hipparchus.migration.exception;
 
 import org.hipparchus.exception.Localizable;
-import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.migration.exception.util.LocalizedFormats;
 
 /**
  * Exception to be thrown when a number is too large.
  *
- * @deprecated as of 1.0, this exception is replaced by {@link MathIllegalArgumentException}
+ * @deprecated as of 1.0, this exception is replaced by {@link org.hipparchus.exception.MathIllegalArgumentException}
  */
 @Deprecated
 public class NumberIsTooLargeException extends MathIllegalNumberException {

@@ -17,14 +17,13 @@
 
 package org.hipparchus.migration.ode;
 
-import org.hipparchus.ode.FirstOrderConverter;
 import org.hipparchus.ode.SecondOrderODE;
 
 /** This interface represents a second order differential equations set.
 
  * <p>This interface should be implemented by all real second order
  * differential equation problems before they can be handled by the
- * {@link FirstOrderConverter converter to first order}.</p>
+ * {@link org.hipparchus.ode.FirstOrderConverter converter to first order}.</p>
  *
  * <p>A second order differential equations problem, as seen by an
  * integrator is the second time derivative <code>d2Y/dt^2</code> of a

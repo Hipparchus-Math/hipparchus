@@ -21,7 +21,6 @@ import java.util.Collection;
 
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.solvers.BracketedUnivariateSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolver;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
@@ -72,7 +71,7 @@ public interface ODEIntegrator  {
     /**
      * Add an event handler to the integrator.
      *
-     * <p> Uses a default {@link UnivariateSolver} with an absolute accuracy equal to the
+     * <p> Uses a default {@link org.hipparchus.analysis.solvers.UnivariateSolver} with an absolute accuracy equal to the
      * given convergence threshold, as root-finding algorithm to detect the state events.
      *
      * @param handler           event handler

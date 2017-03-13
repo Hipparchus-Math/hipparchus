@@ -25,7 +25,6 @@ import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.RealMatrixPreservingVisitor;
 import org.hipparchus.ode.ExpandableODE;
 import org.hipparchus.ode.LocalizedODEFormats;
-import org.hipparchus.ode.ODEIntegrator;
 import org.hipparchus.ode.ODEState;
 import org.hipparchus.ode.ODEStateAndDerivative;
 import org.hipparchus.util.FastMath;
@@ -56,7 +55,7 @@ import org.hipparchus.util.FastMath;
  *
  * <p>A k-steps Adams-Moulton method is of order k+1.</p>
  *
- * <p> There must be sufficient time for the {@link #setStarterIntegrator(ODEIntegrator)
+ * <p> There must be sufficient time for the {@link #setStarterIntegrator(org.hipparchus.ode.ODEIntegrator)
  * starter integrator} to take several steps between the the last reset event, and the end
  * of integration, otherwise an exception may be thrown during integration. The user can
  * adjust the end date of integration, or the step size of the starter integrator to
