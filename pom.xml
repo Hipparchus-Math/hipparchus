@@ -37,6 +37,7 @@
          to avoid maven adding the module name at the end of the URL -->
     <connection>${hipparchusScmConnection}</connection>
     <developerConnection>${hipparchusScmDeveloperConnection}</developerConnection>
+    <url>https://github.com/Hipparchus-Math/hipparchus</url>
   </scm>
 
   <distributionManagement>
