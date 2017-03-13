@@ -49,8 +49,8 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
-    <release version="1.1" date="TBD" description="Maintenance release">
-      <action dev="luc" type="fix">
+    <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
+      <action dev="luc" type="fix" issue="issues/20" >
         Fixed numerical noise issues in Welzl smallest enclosing ball computation.
         Thanks to jerdmanGH for reporting the issue.
         Fixes GitHub #20.

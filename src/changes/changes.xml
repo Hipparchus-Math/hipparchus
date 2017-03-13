@@ -50,11 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
-     <action dev="psteitz" type="add">
+     <action dev="psteitz" type="add" issue="issues/19" >
        Core: Added support for sampling from enumerated distributions in RandomDataGenerator.
        Fixes Github issue #19.
      </action>
-     <action dev="psteitz" type="add">
+     <action dev="psteitz" type="add" issue="issues/18" >
        Core: Added support for exact integration in PolynomialFunction.
        Fixes Github issue #18.
      </action>
@@ -69,11 +69,11 @@ If the output is not quite correct, check for invisible trailing spaces!
      <action dev="luc" type="add">
        Core: Added field-based derivative structures.
      </action>
-     <action dev="luc" type="fix" due-to="Andrea Antolino">
+     <action dev="luc" type="fix" issue="issues/17" due-to="Andrea Antolino">
        Core: Added field-based QR decomposition.
        Fixes Github issue #17.
      </action>
-     <action dev="ebourg" type="update" issue="MATH-1389" due-to="Christoph Dibak">
+     <action dev="ebourg" type="update" issue="issues/12"  due-to="Christoph Dibak">
        Core: Performance improvement for Array2DRowRealMatrix.getSubMatrix() (and also
        Array2DRowFieldMatrix.getSubMatrix()).
        Fixes Github issue #12.
@@ -86,7 +86,7 @@ If the output is not quite correct, check for invisible trailing spaces!
        Core: Added methods to expose the probability mass function to EnumeratedRealDistribution
        and EnumeratedIntegerDistribution.
      </action>
-     <action dev="psteitz" type="fix">
+     <action dev="psteitz" type="fix" issue="issues/13" >
        Stat: Fixed overly-aggressive sufficient data check in OLS/GLS regression classes.
        When there is no intercept in the model, the number of observations can equal
        the number of regressors.  Fixes GitHub #13.
@@ -105,9 +105,20 @@ If the output is not quite correct, check for invisible trailing spaces!
        Stat: "StorelessUnivariateStatistic", "DescriptiveStatistics" and "StreamingStatistics"
        now extend from "DoubleConsumer", allowing to easily use them within streams.
      </action>
-     <action dev="luc" type="fix">
+     <action dev="luc" type="fix" issue="issues/7" >
        Ode: Fixed Field ODE integrators handling of secondary equations.
        GitHub: fixes #7.
+     </action>
+     <action dev="luc" type="fix" issue="issues/20" >
+       Geometry: Fixed numerical noise issues in Welzl smallest enclosing ball computation.
+       Thanks to jerdmanGH for reporting the issue.
+       Fixes GitHub #20.
+     </action>
+     <action dev="luc" type="add">
+       Geometry: Added field based 3D lines.
+     </action>
+     <action dev="luc" type="add">
+       Geometry: Added utility methods for field-based rotations and 3D vectors.
      </action>
     </release>
     <release version="1.0" date="2016-06-23" description="This is the first release of the library">

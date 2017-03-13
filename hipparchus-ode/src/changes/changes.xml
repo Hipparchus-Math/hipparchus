@@ -49,8 +49,8 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
-    <release version="1.1" date="TBD" description="TBD">
-      <action dev="luc" type="fix">
+    <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
+      <action dev="luc" type="fix" issue="issues/7" >
         Fixed Field ODE integrators handling of secondary equations.
         GitHub: fixes #7.
       </action>
