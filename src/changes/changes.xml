@@ -49,6 +49,67 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
+     <action dev="psteitz" type="add">
+       Core: Added support for sampling from enumerated distributions in RandomDataGenerator.
+       Fixes Github issue #19.
+     </action>
+     <action dev="psteitz" type="add">
+       Core: Added support for exact integration in PolynomialFunction.
+       Fixes Github issue #18.
+     </action>
+     <action dev="luc" type="add">
+       Core: Added proper implementations of equals and hashCode to Fields so they
+       can be used as keys in maps.
+     </action>
+     <action dev="luc" type="add">
+       Core: Added a derivatives method in Hermite interpolator, similar to the one
+       from FieldHermiteInterpolator.
+     </action>
+     <action dev="luc" type="add">
+       Core: Added field-based derivative structures.
+     </action>
+     <action dev="luc" type="fix" due-to="Andrea Antolino">
+       Core: Added field-based QR decomposition.
+       Fixes Github issue #17.
+     </action>
+     <action dev="ebourg" type="update" issue="MATH-1389" due-to="Christoph Dibak">
+       Core: Performance improvement for Array2DRowRealMatrix.getSubMatrix() (and also
+       Array2DRowFieldMatrix.getSubMatrix()).
+       Fixes Github issue #12.
+     </action>
+     <action dev="psteitz" type="fix">
+       Core: Improved parameter validation for probabilities provided to enumerated distribution
+       constructors.
+     </action>
+     <action dev="psteitz" type="update">
+       Core: Added methods to expose the probability mass function to EnumeratedRealDistribution
+       and EnumeratedIntegerDistribution.
+     </action>
+     <action dev="psteitz" type="fix">
+       Stat: Fixed overly-aggressive sufficient data check in OLS/GLS regression classes.
+       When there is no intercept in the model, the number of observations can equal
+       the number of regressors.  Fixes GitHub #13.
+     </action>
+     <action dev="psteitz" type="fix">
+       Stat: Fixed bug in 2-sided binomial test leading to inflated p-values in some
+       cases.  This was reported against Commons Math as MATH-1381.
+     </action>
+     <action dev="psteitz" type="add">
+       Stat: Add implementation of RANDOM algorithm for streaming percentile computation.
+     </action>
+     <action dev="tn" type="add">
+       Stat: Add default "toString()" implementation to "AbstractStorelessUnivariateStatistic".
+     </action>
+     <action dev="tn" type="add">
+       Stat: "StorelessUnivariateStatistic", "DescriptiveStatistics" and "StreamingStatistics"
+       now extend from "DoubleConsumer", allowing to easily use them within streams.
+     </action>
+     <action dev="luc" type="fix">
+       Ode: Fixed Field ODE integrators handling of secondary equations.
+       GitHub: fixes #7.
+     </action>
+    </release>
     <release version="1.0" date="2016-06-23" description="This is the first release of the library">
       <action dev="luc" type="add">
         Creation of a migration module and an associated script

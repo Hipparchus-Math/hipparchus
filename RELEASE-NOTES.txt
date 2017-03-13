@@ -1,120 +1,48 @@
 
-              Hipparchus 1.0 RELEASE NOTES
+              Hipparchus 1.1 RELEASE NOTES
 
-The Hipparchus team is pleased to announce the release of hipparchus 1.0.
+The Hipparchus team is pleased to announce the release of hipparchus-1.1
 
-The Hipparchus library is a self-contained library of mathematical components. It started as a
-fork of Apache Commons Math.
+The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.
 
-This is the first release of the library.  Hipparchus is divided into modules.  This release includes all
-modules.  Subsequently, modules may be released separately.
+This is a maintenance release.
 
-Following is a summary of the differences between Hipparchus and Apache Commons Math at the time of the fork
-(February, 2016).
-
-GLOBAL
-======
-
-o  The library has been modularized into several components
-   (hipparchus-core, hipparchus-clustering, hipparchus-fft, hipparchus-fitting,
-   hipparchus-geometry, hipparchus-ode, hipparchus-optim, hipparchus-samples, hipparchus-stat).
-   All other components depend on hipparchus-core and hipparchus-clustering depends on hipparchus-stat.
-o  EmpiricalDistribution and MultivariateNormalExpectationMaximization have been moved from
-   The exceptions hierarchy has been simplified and many exception classes have been eliminated.
-o  The neuralnet and genetics packages from Apache Commons Math have been removed.
-o  Hipparchus includes a migration module and an associated script
-   to help switching from Apache Commons Math to Hipparchus.
-
-Core
-====
+Changes in this version include:
 
 New features:
-o  Added Gauss-Laguerre quadrature for integration of improper integrals. 
+o      Core: Added support for sampling from enumerated distributions in RandomDataGenerator.
+       Fixes Github issue #19. 
+o      Core: Added support for exact integration in PolynomialFunction.
+       Fixes Github issue #18. 
+o      Core: Added proper implementations of equals and hashCode to Fields so they can be used as keys in maps. 
+o      Core: Added a derivatives method in Hermite interpolator, similar to the one from FieldHermiteInterpolator. 
+o      Core: Added field-based derivative structures. 
+o      Stat: Add implementation of RANDOM algorithm for streaming percentile computation. 
+o      Stat: Add default "toString()" implementation to "AbstractStorelessUnivariateStatistic". 
+o      Stat: "StorelessUnivariateStatistic", "DescriptiveStatistics" and "StreamingStatistics"
+       now extend from "DoubleConsumer", allowing to easily use them within streams. 
 
 Fixed Bugs:
-o  Fixed "HypergeometricDistribution#logProbability(int)" which returned NaN
-   in case the number of successes equals the population size. 
-o  Fix DerivativeStructure.pow for 0 argument and power less than 1. Thanks to Andrea Antolino. 
-o  Fix "FastMath#round(..)" to comply to changed contract of "Math#round()" in Java 8. 
-o  Fixed DerivativeStructure.pow(0.0) which was NaN when the DS was 0, despite it should
-   always be 1.0 in this case, regardless of the base (even if the base is NaN, in fact). 
+o      Core: Added field-based QR decomposition.
+       Fixes Github issue #17. Thanks to Andrea Antolino. 
+o      Core: Improved parameter validation for probabilities provided to enumerated distribution constructors. 
+o      Stat: Fixed overly-aggressive sufficient data check in OLS/GLS regression classes.
+       When there is no intercept in the model, the number of observations can equal
+       the number of regressors.  Fixes GitHub #13. 
+o      Stat: Fixed bug in 2-sided binomial test leading to inflated p-values in some
+       cases.  This was reported against Commons Math as MATH-1381. 
+o      Ode: Fixed Field ODE integrators handling of secondary equations.
+       GitHub: fixes #7. 
 
 Changes:
-o  Renamed TestUtils in core stat.inference to InferenceTestUtils and TestUtils in
-   the core unit test package to UnitTestUtils. 
-o  Moved EmpiricalDistribution and MultivariateNormalExpectationMaximization from
-   the random package into stat.fitting and dropped ValueServer. 
-o  Moved sampling (random deviate generation) from distribution implementations 
-   to RandomDataGenerator in the random package. 
-o  Refactored distribution implementations into separate sub-packages:
-   "discrete", "continuous" and "multivariate". 
-o  Simplified "PivotingStrategyInterface" and implementations into single
-   enum class "PivotingStrategy". 
-o  "RealVector#Entry" is now public. 
-o  "RealLinearOperator" is now an interface. 
+o MATH-1389:  Core: Performance improvement for Array2DRowRealMatrix.getSubMatrix() (and also
+       Array2DRowFieldMatrix.getSubMatrix()).
+       Fixes Github issue #12. Thanks to Christoph Dibak. 
+o      Core: Added methods to expose the probability mass function to EnumeratedRealDistribution
+       and EnumeratedIntegerDistribution. 
 
-Removed:
-o  Removed interface "DoubleArray". 
-o  Removed interface "NumberTransformer" and classes "TransformerMap" and
-   "DefaultTransformer" related to transformation of arbitrary objects
-   to double primitives. 
-o  Removed accuracy parameter in constructors of "RealDistribution" implementations
-   that calculate the inverse cumulative probability analytically. 
-o  Removed "copyOf" and "copyOfRange" methods in "MathArrays". "Object#clone()"
-   and "Arrays#copyOfRange(...)" should be used instead. 
-
-ode
-===
-
-Fixed Bugs:
-o Fixed wrong handling of state resets in Adams-Bashforth and Adams-Moulton integrators. 
-o Fixed infinite loop when some step reduction was silently filtered to min step
-  in Gragg-Bulirsch-Stoer integrator.
-o Enhanced reliability of event detection with multiple event detectors. 
-
-Changes:
-o  Revamped Ordinary Differential Equations API to match
-   the new API introduced with field-based ODE. 
-o  Added early detection of NaNs appearing during integration. 
-
-stat
-====
-New features:
-o  Added "AggregatableStatistic" interface for statistics that can
-   aggregate results. 
-
-
-Changes:
-o  Refactored descriptive statistics package to simplify API and implementations and use
-   more meaningful class names. 
-o  Added aggregation capabilities to "StreamingStatistics", replacing
-   the removed class "AggregatingSummaryStatistics". 
-o  Renamed "SummaryStatistics" to "StreamingStatistics". Additionally, removed support
-  for setting custom statistics implementations. 
-o  Replaced "VectorialMean" with a more generic class "VectorialStorelessStatistic"
-   which supports applying any "StorelessUnivariateStatistic" on vector data. 
-o  "Median" does not extend from "Percentile" anymore, but uses composition instead. 
-o  Summary statistics based on external moments (e.g. Mean, Variance)
-   are now immutable. 
-o  Simplified "BinomialConfidenceInterval" and its implementations
-   into class "BinomialProportion". 
-o  "Frequency" class now uses generics. For similar functionality as previous
-   class wrt integer numbers, use "LongFrequency" which supports adding
-   different integer number types (e.g. int, long, short) to the same
-   "LongFrequency" instance. 
- 
-Removed:
-o  Removed "SynchronizedSummaryStatistics", "SynchronizedDescriptiveStatistics"
-   and "SynchronizedMultivariateSummaryStatistics". All implementations
-   are considered to be not threadsafe. Aggregation of results is preferred
-   over synchronization. 
-o  Removed static "copy(A, B)" methods for storeless statistics. 
-
-=================================================================
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the Hipparchus website:
 
-https://www.hipparchus.org
-
-
+https://www.hipparchus.org/
