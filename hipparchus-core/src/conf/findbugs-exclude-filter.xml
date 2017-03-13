@@ -27,7 +27,7 @@
   <!--  which already know about limited precision of the double numbers -->
   <Match>
     <Class name="org.hipparchus.analysis.solvers.BaseSecantSolver" />
-    <Method name="doSolveInterval" params="" returns="double" />
+    <Method name="doSolveInterval"/>
     <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
   </Match>
   <Match>
@@ -210,6 +210,12 @@
     <Class name="org.hipparchus.special.BesselJ" />
     <Method name="rjBesl" />
     <Bug pattern="ICAST_IDIV_CAST_TO_DOUBLE" />
+  </Match>
+
+  <!-- Findbugs false positive, the derivativeField field is properly restored using writeReplace/readResolve -->
+  <Match>
+    <Class name="org.hipparchus.analysis.differentiation.DSFactory" />
+    <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED" />
   </Match>
 
 </FindBugsFilter>
