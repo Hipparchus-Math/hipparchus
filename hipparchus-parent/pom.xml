@@ -460,36 +460,33 @@
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.findbugs-maven-plugin.version>3.0.3</hipparchus.findbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.7.7.201606060606</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.findbugs-maven-plugin.version>3.0.4</hipparchus.findbugs-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.7.9</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.0.0</hipparchus.maven-assembly-plugin.version>
-    <hipparchus.maven-bundle-plugin.version>3.2.0</hipparchus.maven-bundle-plugin.version>
-    <hipparchus.build-helper-maven-plugin>1.12</hipparchus.build-helper-maven-plugin>
+    <hipparchus.maven-bundle-plugin.version>3.3.0</hipparchus.maven-bundle-plugin.version>
+    <hipparchus.build-helper-maven-plugin>3.0.0</hipparchus.build-helper-maven-plugin>
     <hipparchus.maven-changes-plugin.version>2.12.1</hipparchus.maven-changes-plugin.version>
     <hipparchus.maven-checkstyle-plugin.version>2.17</hipparchus.maven-checkstyle-plugin.version>
-    <hipparchus.checkstyle.version>7.3</hipparchus.checkstyle.version>
+    <hipparchus.checkstyle.version>7.6</hipparchus.checkstyle.version>
     <hipparchus.maven-clean-plugin.version>3.0.0</hipparchus.maven-clean-plugin.version>
-    <hipparchus.maven-compiler-plugin.version>3.6.0</hipparchus.maven-compiler-plugin.version>
+    <hipparchus.maven-compiler-plugin.version>3.6.1</hipparchus.maven-compiler-plugin.version>
     <hipparchus.maven-javadoc-plugin.version>2.10.4</hipparchus.maven-javadoc-plugin.version>
     <hipparchus.maven-jar-plugin.version>3.0.2</hipparchus.maven-jar-plugin.version>
     <hipparchus.maven-jxr-plugin.version>2.5</hipparchus.maven-jxr-plugin.version>
-    <hipparchus.maven-plantuml-plugin.version>7954</hipparchus.maven-plantuml-plugin.version>
+    <hipparchus.maven-plantuml-plugin.version>7940</hipparchus.maven-plantuml-plugin.version>
     <hipparchus.maven-project-info-reports-plugin.version>2.9</hipparchus.maven-project-info-reports-plugin.version>
     <hipparchus.maven-pmd-plugin.version>3.7</hipparchus.maven-pmd-plugin.version>
-    <hipparchus.maven-resources-plugin.version>3.0.1</hipparchus.maven-resources-plugin.version>
+    <hipparchus.maven-resources-plugin.version>3.0.2</hipparchus.maven-resources-plugin.version>
     <hipparchus.maven-site-plugin.version>3.4</hipparchus.maven-site-plugin.version>
     <hipparchus.maven-source-plugin.version>3.0.1</hipparchus.maven-source-plugin.version>
     <hipparchus.maven-surefire-plugin.version>2.19.1</hipparchus.maven-surefire-plugin.version>
     <hipparchus.maven-surefire-report-plugin.version>2.19.1</hipparchus.maven-surefire-report-plugin.version>
     <hipparchus.maven-enforcer-plugin.version>1.4.1</hipparchus.maven-enforcer-plugin.version>
     <hipparchus.jgit.buildnumber.version>1.2.10</hipparchus.jgit.buildnumber.version>
-    <hipparchus.maven-release-plugin.version>2.5.3</hipparchus.maven-release-plugin.version>
-    <hipparchus.wagon-ssh.version>2.10</hipparchus.wagon-ssh.version>
-    <hipparchus.wagon-maven-plugin.version>1.0</hipparchus.wagon-maven-plugin.version>
-    <hipparchus.nexus-staging-maven-plugin.version>1.6.7</hipparchus.nexus-staging-maven-plugin.version>
+    <hipparchus.nexus-staging-maven-plugin.version>1.6.8</hipparchus.nexus-staging-maven-plugin.version>
     <hipparchus.maven-gpg-plugin.version>1.6</hipparchus.maven-gpg-plugin.version>
     <hipparchus.maven-install-plugin.version>2.5.2</hipparchus.maven-install-plugin.version>
-    <hipparchus.rat.version>0.12</hipparchus.rat.version>
+    <hipparchus.apache-rat-plugin.version>0.12</hipparchus.apache-rat-plugin.version>
     <hipparchus.junit.version>4.12</hipparchus.junit.version>
     <hipparchus.hamcrest-library.version>1.3</hipparchus.hamcrest-library.version>
     <hipparchus.implementation.build>${git.revision}; ${maven.build.timestamp}</hipparchus.implementation.build>
@@ -498,14 +495,6 @@
   </properties>
 
   <build>
-    <extensions>
-      <extension>
-        <groupId>org.apache.maven.wagon</groupId>
-        <artifactId>wagon-ssh</artifactId>
-        <version>${hipparchus.wagon-ssh.version}</version>
-      </extension>
-    </extensions>
-
     <pluginManagement>
       <plugins>
         <plugin>
@@ -722,11 +711,6 @@
 
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
-          <artifactId>wagon-maven-plugin</artifactId>
-          <version>${hipparchus.wagon-maven-plugin.version}</version>
-        </plugin>
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
           <artifactId>findbugs-maven-plugin</artifactId>
           <version>${hipparchus.findbugs-maven-plugin.version}</version>
           <configuration>
@@ -800,17 +784,6 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-release-plugin</artifactId>
-        <version>${hipparchus.maven-release-plugin.version}</version>
-        <configuration>
-          <autoVersionSubmodules>true</autoVersionSubmodules>
-          <useReleaseProfile>false</useReleaseProfile>
-          <releaseProfiles>release</releaseProfiles>
-          <goals>deploy</goals>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
         <version>${hipparchus.maven-enforcer-plugin.version}</version>
         <executions>
@@ -847,7 +820,7 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <version>${hipparchus.rat.version}</version>
+        <version>${hipparchus.apache-rat-plugin.version}</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

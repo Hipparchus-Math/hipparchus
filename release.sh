@@ -56,7 +56,7 @@ fi
 
 # Stage the release artifacts
 mvn clean
-mvn deploy -Dgpg.keyname=$keyID -Dwagon.skip=true -DskipStagingRepositoryClose=true -Prelease
+mvn deploy -Dgpg.keyname=$keyID -DskipStagingRepositoryClose=true -Prelease
 
 # Add hashes and remove pom files in target
 cd target

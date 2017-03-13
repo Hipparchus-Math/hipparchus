@@ -89,7 +89,7 @@
       <plugin>
         <groupId>org.apache.rat</groupId>
         <artifactId>apache-rat-plugin</artifactId>
-        <version>${hipparchus.rat.version}</version>
+        <version>${hipparchus.apache-rat-plugin.version}</version>
         <configuration>
           <excludes>
 
