@@ -25,6 +25,14 @@
 
   <!--  the following equality tests are part of the reference algorithms -->
   <!--  which already know about limited precision of the double numbers -->
+  <Match>
+    <Class name="org.hipparchus.stat.descriptive.rank.RandomPercentile" />
+    <Or>
+      <Method name="getResult" params="double" returns="double" />
+      <Method name="reduce" params="double,java.util.Collection" returns="double" />
+    </Or>
+    <Bug pattern="FE_FLOATING_POINT_EQUALITY" />
+  </Match>
  
   <!-- the following expositions of internal representation are intentional and documented -->
   <Match>
