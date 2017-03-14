@@ -40,42 +40,42 @@ Alternatively you can pull it from the central Maven repositories:
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-core</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-clustering</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-fft</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-fitting</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-geometry</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-ode</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-optim</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-stat</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 
 ```
@@ -87,7 +87,7 @@ and you want to switch to Hipparchus, you can also add the temporary migration j
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-migration</artifactId>
-  <version>1.0</version>
+  <version>1.1</version>
 </dependency>
 ```
 
