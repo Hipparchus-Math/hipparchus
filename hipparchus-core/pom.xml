@@ -144,9 +144,6 @@
 
   <profiles>
     <profile>
-      <id>jgit-buildnumber</id>
-    </profile>
-    <profile>
       <id>release</id>
     </profile>
     <profile>
