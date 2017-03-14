@@ -22,10 +22,24 @@
 # Signed and hashed .bz2 files are created in /target.
 #
 
-# Config
-# Id of RM signing key
-keyID=0xCC6CB50E6A59DD12
+# the keyID is not configured in the script anymore; it should be in
+# each release manager own settings.xml file as a property as follows:
+# <profiles>
+#   <profile>
+#      <id>hipparchus-gpg-settings</id>
+#      <activation>
+#        <file>
+#          <exists>${basedir}/hipparchus-core</exists>
+#        </file>
+#      </activation>
+#      <properties>
+#        <gpg.keyname>the 16 hexadecimal digits representing the manager keyID</gpg.keyname>
+#      </properties>
+#    </profile>
+#  </profiles>
 
+
+# Config
 # Set to true to generate top-leve release notes draft
 notes=false
 
@@ -56,7 +70,7 @@ fi
 
 # Stage the release artifacts
 mvn clean
-mvn deploy -Dgpg.keyname=$keyID -DskipStagingRepositoryClose=true -Prelease
+mvn deploy -DskipStagingRepositoryClose=true -Prelease
 
 # Add hashes and remove pom files in target
 cd target
