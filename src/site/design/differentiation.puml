@@ -44,10 +44,14 @@
 
       package differentiation #DDDBD8 {
 
+        class DSFactory {
+          +DSFactory(int parameters, int order)
+          +constant(double value)
+          +variable(int index, double value)
+        }
+
         class DerivativeStructure {
-          -DerivativeStructure(DSCompiler compiler)
-          +DerivativeStructure(int parameters, int order, double value)
-          +DerivativeStructure(int parameters, int order, int index, double value)
+          +DSFactory getFactory()
           +int getFreeParameters()
           +int getOrder()
           +double getValue()
@@ -93,6 +97,7 @@
         }
 
         FieldElement_T_     <..      DerivativeStructure
+        DSFactory           --> DerivativeStructure : creates
         DerivativeStructure o--> "1" DSCompiler : delegates computation
         UnivariateFunction  <|..     UnivariateDifferentiable
         UnivariateDifferentiable <-- UnivariateDifferentiator : creates
