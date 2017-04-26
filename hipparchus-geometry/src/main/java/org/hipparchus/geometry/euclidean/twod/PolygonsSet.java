@@ -211,24 +211,12 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
             final Vertex start = vArray[i];
             final Vertex end   = vArray[(i + 1) % n];
 
-            // get the line supporting the edge, taking care not to recreate it
-            // if it was already created earlier due to another edge being aligned
-            // with the current one
-            Line line = start.sharedLineWith(end);
-            if (line == null) {
-                line = new Line(start.getLocation(), end.getLocation(), hyperplaneThickness);
-            }
+            // get the line supporting the edge, taking care not to recreate it if it was
+            // already created earlier due to another edge being aligned with the current one
+            final Line line = supportingLine(start, end, vArray, hyperplaneThickness);
 
             // create the edge and store it
             edges.add(new Edge(start, end, line));
-
-            // check if another vertex also happens to be on this line
-            for (final Vertex vertex : vArray) {
-                if (vertex != start && vertex != end &&
-                    FastMath.abs(line.getOffset((Point<Euclidean2D>) vertex.getLocation())) <= hyperplaneThickness) {
-                    vertex.bindWith(line);
-                }
-            }
 
         }
 
@@ -237,6 +225,54 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
         insertEdges(hyperplaneThickness, tree, edges);
 
         return tree;
+
+    }
+
+    /** Get the supporting line for two vertices.
+     * @param start start vertex of an edge being built
+     * @param end end vertex of an edge being built
+     * @param vArray array containing all vertices
+     * @param hyperplaneThickness tolerance below which points are consider to
+     * belong to the hyperplane (which is therefore more a slab)
+     * @return line bound with both start and end and in the proper orientation
+     */
+    private static Line supportingLine(final Vertex start, final Vertex end,
+                                       final Vertex[] vArray, final double hyperplaneThickness) {
+
+        Line toBeReversed = null;
+        for (final Line line1 : start.getBoundLines()) {
+            for (final Line line2 : end.getBoundLines()) {
+                if (line1 == line2) {
+                    // we already know a line to which both vertices belong
+                    final double xs = line1.toSubSpace(start.getLocation()).getX();
+                    final double xe = line1.toSubSpace(end.getLocation()).getX();
+                    if (xe >= xs) {
+                        // the known line has the proper orientation
+                        return line1;
+                    } else {
+                        toBeReversed = line1;
+                    }
+                }
+            }
+        }
+
+        // we need to create a new circle
+        final Line newLine = (toBeReversed == null) ?
+                             new Line(start.getLocation(), end.getLocation(), hyperplaneThickness) :
+                             toBeReversed.getReverse();
+
+        start.bindWith(newLine);
+        end.bindWith(newLine);
+
+        // check if another vertex also happens to be on this line
+        for (final Vertex vertex : vArray) {
+            if (vertex != start && vertex != end &&
+                FastMath.abs(newLine.getOffset(vertex.getLocation())) <= hyperplaneThickness) {
+                vertex.bindWith(newLine);
+            }
+        }
+
+        return newLine;
 
     }
 
@@ -374,28 +410,20 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
          * @param line line to bind with this vertex
          */
         public void bindWith(final Line line) {
+            for (final Line l : lines) {
+                if (l == line) {
+                    // don't add the line, it is already bound
+                    return;
+                }
+            }
             lines.add(line);
         }
 
-        /** Get the common line bound with both the instance and another vertex, if any.
-         * <p>
-         * When two vertices are both bound to the same line, this means they are
-         * already handled by node associated with this line, so there is no need
-         * to create a cut hyperplane for them.
-         * </p>
-         * @param vertex other vertex to check instance against
-         * @return line bound with both the instance and another vertex, or null if the
-         * two vertices do not share a line yet
+        /** Get the lines bound with this vertex.
+         * @return lines bounds with this vertex
          */
-        public Line sharedLineWith(final Vertex vertex) {
-            for (final Line line1 : lines) {
-                for (final Line line2 : vertex.lines) {
-                    if (line1 == line2) {
-                        return line1;
-                    }
-                }
-            }
-            return null;
+        public List<Line> getBoundLines() {
+            return lines;
         }
 
         /** Set incoming edge.

@@ -1202,6 +1202,19 @@ public class PolygonsSetTest {
 
     }
 
+    @Test
+    public void testOppositeEdges() {
+        PolygonsSet polygon = new PolygonsSet(1.0e-6,
+                                              new Vector2D(+1, -2),
+                                              new Vector2D(+1,  0),
+                                              new Vector2D(+2,  0),
+                                              new Vector2D(-1, +2),
+                                              new Vector2D(-1,  0),
+                                              new Vector2D(-2,  0));
+        Assert.assertEquals(6.0, polygon.getSize(), 1.0e-10);
+        Assert.assertEquals(2.0 * FastMath.sqrt(13.0) + 6.0, polygon.getBoundarySize(), 1.0e-10);
+    }
+
     private static class Counter {
 
         private int internalNodes;

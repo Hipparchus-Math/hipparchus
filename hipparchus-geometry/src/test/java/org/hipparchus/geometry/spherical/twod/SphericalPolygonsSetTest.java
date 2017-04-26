@@ -24,6 +24,7 @@ import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
+import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
@@ -521,6 +522,30 @@ public class SphericalPolygonsSetTest {
             }
         }
 
+    }
+
+    @Test
+    public void testZigZagBoundary() {
+        SphericalPolygonsSet zone = new SphericalPolygonsSet(1.0e-6,
+                                                             new S2Point(-0.12630940610562444, 0.8998192093789258),
+                                                             new S2Point(-0.12731320182988207, 0.8963735568774486),
+                                                             new S2Point(-0.1351107624622557,  0.8978258663483273),
+                                                             new S2Point(-0.13545331405131725, 0.8966781238246179),
+                                                             new S2Point(-0.14324883017454967, 0.8981309629283796),
+                                                             new S2Point(-0.14359875625524995, 0.896983965573036),
+                                                             new S2Point(-0.14749650541159384, 0.8977109994666864),
+                                                             new S2Point(-0.14785037758231825, 0.8965644005442432),
+                                                             new S2Point(-0.15369807257448784, 0.8976550608135502),
+                                                             new S2Point(-0.1526225554339386,  0.9010934265410458),
+                                                             new S2Point(-0.14679028466684121, 0.9000043396997698),
+                                                             new S2Point(-0.14643807494172612, 0.9011511073761742),
+                                                             new S2Point(-0.1386609051963748,  0.8996991539048602),
+                                                             new S2Point(-0.13831601655974668, 0.9008466623902937),
+                                                             new S2Point(-0.1305365419828323,  0.8993961857946309),
+                                                             new S2Point(-0.1301989630405964,  0.9005444294061787));
+        Assert.assertEquals(Region.Location.INSIDE, zone.checkPoint(new S2Point(-0.145, 0.898)));
+        Assert.assertEquals(6.463e-5, zone.getSize(),         1.0e-7);
+        Assert.assertEquals(5.487e-2, zone.getBoundarySize(), 1.0e-4);
     }
 
     private SubCircle create(Vector3D pole, Vector3D x, Vector3D y,

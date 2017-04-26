@@ -58,28 +58,20 @@ public class Vertex {
      * @param circle circle to bind with this vertex
      */
     void bindWith(final Circle circle) {
+        for (final Circle c : circles) {
+            if (c == circle) {
+                // don't add the circle, it is already bound
+                return;
+            }
+        }
         circles.add(circle);
     }
 
-    /** Get the common circle bound with both the instance and another vertex, if any.
-     * <p>
-     * When two vertices are both bound to the same circle, this means they are
-     * already handled by node associated with this circle, so there is no need
-     * to create a cut hyperplane for them.
-     * </p>
-     * @param vertex other vertex to check instance against
-     * @return circle bound with both the instance and another vertex, or null if the
-     * two vertices do not share a circle yet
+    /** Get the circles bound to this vertex.
+     * @return circles bound to this vertex
      */
-    Circle sharedCircleWith(final Vertex vertex) {
-        for (final Circle circle1 : circles) {
-            for (final Circle circle2 : vertex.circles) {
-                if (circle1 == circle2) {
-                    return circle1;
-                }
-            }
-        }
-        return null;
+    List<Circle> getBoundCircles() {
+        return circles;
     }
 
     /** Set incoming edge.

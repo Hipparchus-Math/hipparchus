@@ -215,27 +215,15 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
             final Vertex start = end;
             end = vArray[i];
 
-            // get the circle supporting the edge, taking care not to recreate it
-            // if it was already created earlier due to another edge being aligned
-            // with the current one
-            Circle circle = start.sharedCircleWith(end);
-            if (circle == null) {
-                circle = new Circle(start.getLocation(), end.getLocation(), hyperplaneThickness);
-            }
+            // get the circle supporting the edge, taking care not to recreate it if it was
+            // already created earlier due to another edge being aligned with the current one
+            final Circle circle = supportingCircle(start, end, vArray, hyperplaneThickness);
 
             // create the edge and store it
             edges.add(new Edge(start, end,
                                Vector3D.angle(start.getLocation().getVector(),
                                               end.getLocation().getVector()),
                                circle));
-
-            // check if another vertex also happens to be on this circle
-            for (final Vertex vertex : vArray) {
-                if (vertex != start && vertex != end &&
-                    FastMath.abs(circle.getOffset(vertex.getLocation())) <= hyperplaneThickness) {
-                    vertex.bindWith(circle);
-                }
-            }
 
         }
 
@@ -244,6 +232,55 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
         insertEdges(hyperplaneThickness, tree, edges);
 
         return tree;
+
+    }
+
+    /** Get the supporting circle for two vertices.
+     * @param start start vertex of an edge being built
+     * @param end end vertex of an edge being built
+     * @param vArray array containing all vertices
+     * @param hyperplaneThickness tolerance below which points are consider to
+     * belong to the hyperplane (which is therefore more a slab)
+     * @return circle bound with both start and end and in the proper orientation
+     */
+    private static Circle supportingCircle(final Vertex start, final Vertex end,
+                                           final Vertex[] vArray, final double hyperplaneThickness) {
+
+        Circle toBeReversed = null;
+        for (final Circle circle1 : start.getBoundCircles()) {
+            for (final Circle circle2 : end.getBoundCircles()) {
+                if (circle1 == circle2) {
+                    // we already know a circle to which both vertices belong
+                    final Vector3D s = start.getLocation().getVector();
+                    final Vector3D e = end.getLocation().getVector();
+                    final Vector3D p = Vector3D.crossProduct(s, e);
+                    if (Vector3D.dotProduct(circle1.getPole(), p) > 0) {
+                        // the known circle has the proper orientation
+                        return circle1;
+                    } else {
+                        toBeReversed = circle1;
+                    }
+                }
+            }
+        }
+
+        // we need to create a new circle
+        final Circle newCircle = (toBeReversed == null) ?
+                                 new Circle(start.getLocation(), end.getLocation(), hyperplaneThickness) :
+                                 toBeReversed.getReverse();
+
+        start.bindWith(newCircle);
+        end.bindWith(newCircle);
+
+        // check if another vertex also happens to be on this circle
+        for (final Vertex vertex : vArray) {
+            if (vertex != start && vertex != end &&
+                FastMath.abs(newCircle.getOffset(vertex.getLocation())) <= hyperplaneThickness) {
+                vertex.bindWith(newCircle);
+            }
+        }
+
+        return newCircle;
 
     }
 

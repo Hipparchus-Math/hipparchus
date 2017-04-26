@@ -49,6 +49,13 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Geometry Release Notes</title>
   </properties>
   <body>
+    <release version="1.2" date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/21">
+        Fixed polygons creation from lists of vertices (both in Euclidean and spherical geometry)
+        when separate edges share the same hyperplane (line or circle) but with different
+        orientations.
+      </action>
+    </release>
     <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
       <action dev="luc" type="fix" issue="issues/20" >
         Fixed numerical noise issues in Welzl smallest enclosing ball computation.
