@@ -16,9 +16,6 @@
  */
 package org.hipparchus.geometry.spherical.twod;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /** Spherical polygons boundary vertex.
  * @see SphericalPolygonsSet#getBoundaryLoops()
  * @see Edge
@@ -34,9 +31,6 @@ public class Vertex {
     /** Outgoing edge. */
     private Edge outgoing;
 
-    /** Circles bound with this vertex. */
-    private final List<Circle> circles;
-
     /** Build a non-processed vertex not owned by any node yet.
      * @param location vertex location
      */
@@ -44,7 +38,6 @@ public class Vertex {
         this.location = location;
         this.incoming = null;
         this.outgoing = null;
-        this.circles  = new ArrayList<Circle>();
     }
 
     /** Get Vertex location.
@@ -52,26 +45,6 @@ public class Vertex {
      */
     public S2Point getLocation() {
         return location;
-    }
-
-    /** Bind a circle considered to contain this vertex.
-     * @param circle circle to bind with this vertex
-     */
-    void bindWith(final Circle circle) {
-        for (final Circle c : circles) {
-            if (c == circle) {
-                // don't add the circle, it is already bound
-                return;
-            }
-        }
-        circles.add(circle);
-    }
-
-    /** Get the circles bound to this vertex.
-     * @return circles bound to this vertex
-     */
-    List<Circle> getBoundCircles() {
-        return circles;
     }
 
     /** Set incoming edge.
@@ -83,7 +56,6 @@ public class Vertex {
      */
     void setIncoming(final Edge incoming) {
         this.incoming = incoming;
-        bindWith(incoming.getCircle());
     }
 
     /** Get incoming edge.
@@ -102,7 +74,6 @@ public class Vertex {
      */
     void setOutgoing(final Edge outgoing) {
         this.outgoing = outgoing;
-        bindWith(outgoing.getCircle());
     }
 
     /** Get outgoing edge.

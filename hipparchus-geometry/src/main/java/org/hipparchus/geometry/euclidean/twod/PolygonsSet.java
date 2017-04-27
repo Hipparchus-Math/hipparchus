@@ -18,7 +18,9 @@ package org.hipparchus.geometry.euclidean.twod;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
@@ -199,8 +201,10 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
 
         // build the vertices
         final Vertex[] vArray = new Vertex[n];
+        final Map<Vertex, List<Line>> bindings = new IdentityHashMap<>(n);
         for (int i = 0; i < n; ++i) {
             vArray[i] = new Vertex(vertices[i]);
+            bindings.put(vArray[i], new ArrayList<>());
         }
 
         // build the edges
@@ -213,7 +217,7 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
 
             // get the line supporting the edge, taking care not to recreate it if it was
             // already created earlier due to another edge being aligned with the current one
-            final Line line = supportingLine(start, end, vArray, hyperplaneThickness);
+            final Line line = supportingLine(start, end, vArray, bindings, hyperplaneThickness);
 
             // create the edge and store it
             edges.add(new Edge(start, end, line));
@@ -232,16 +236,19 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
      * @param start start vertex of an edge being built
      * @param end end vertex of an edge being built
      * @param vArray array containing all vertices
+     * @param bindings bindings between vertices and lines
      * @param hyperplaneThickness tolerance below which points are consider to
      * belong to the hyperplane (which is therefore more a slab)
      * @return line bound with both start and end and in the proper orientation
      */
     private static Line supportingLine(final Vertex start, final Vertex end,
-                                       final Vertex[] vArray, final double hyperplaneThickness) {
+                                       final Vertex[] vArray,
+                                       final Map<Vertex, List<Line>> bindings,
+                                       final double hyperplaneThickness) {
 
         Line toBeReversed = null;
-        for (final Line line1 : start.getBoundLines()) {
-            for (final Line line2 : end.getBoundLines()) {
+        for (final Line line1 : bindings.get(start)) {
+            for (final Line line2 : bindings.get(end)) {
                 if (line1 == line2) {
                     // we already know a line to which both vertices belong
                     final double xs = line1.toSubSpace(start.getLocation()).getX();
@@ -261,14 +268,14 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
                              new Line(start.getLocation(), end.getLocation(), hyperplaneThickness) :
                              toBeReversed.getReverse();
 
-        start.bindWith(newLine);
-        end.bindWith(newLine);
+        bindings.get(start).add(newLine);
+        bindings.get(end).add(newLine);
 
         // check if another vertex also happens to be on this line
         for (final Vertex vertex : vArray) {
             if (vertex != start && vertex != end &&
                 FastMath.abs(newLine.getOffset(vertex.getLocation())) <= hyperplaneThickness) {
-                vertex.bindWith(newLine);
+                bindings.get(vertex).add(newLine);
             }
         }
 
@@ -386,9 +393,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
         /** Outgoing edge. */
         private Edge outgoing;
 
-        /** Lines bound with this vertex. */
-        private final List<Line> lines;
-
         /** Build a non-processed vertex not owned by any node yet.
          * @param location vertex location
          */
@@ -396,7 +400,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
             this.location = location;
             this.incoming = null;
             this.outgoing = null;
-            this.lines    = new ArrayList<Line>();
         }
 
         /** Get Vertex location.
@@ -404,26 +407,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
          */
         public Vector2D getLocation() {
             return location;
-        }
-
-        /** Bind a line considered to contain this vertex.
-         * @param line line to bind with this vertex
-         */
-        public void bindWith(final Line line) {
-            for (final Line l : lines) {
-                if (l == line) {
-                    // don't add the line, it is already bound
-                    return;
-                }
-            }
-            lines.add(line);
-        }
-
-        /** Get the lines bound with this vertex.
-         * @return lines bounds with this vertex
-         */
-        public List<Line> getBoundLines() {
-            return lines;
         }
 
         /** Set incoming edge.
@@ -435,7 +418,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
          */
         public void setIncoming(final Edge incoming) {
             this.incoming = incoming;
-            bindWith(incoming.getLine());
         }
 
         /** Get incoming edge.
@@ -454,7 +436,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
          */
         public void setOutgoing(final Edge outgoing) {
             this.outgoing = outgoing;
-            bindWith(outgoing.getLine());
         }
 
         /** Get outgoing edge.
@@ -546,7 +527,6 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
          */
         public Vertex split(final Line splitLine) {
             final Vertex splitVertex = new Vertex(line.intersection(splitLine));
-            splitVertex.bindWith(splitLine);
             final Edge startHalf = new Edge(start, splitVertex, line);
             final Edge endHalf   = new Edge(splitVertex, end, line);
             startHalf.node = node;

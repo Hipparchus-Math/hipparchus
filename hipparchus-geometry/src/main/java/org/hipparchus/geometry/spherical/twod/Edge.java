@@ -108,7 +108,6 @@ public class Edge {
     void setNextEdge(final Edge next) {
         end = next.getStart();
         end.setIncoming(this);
-        end.bindWith(getCircle());
     }
 
     /** Split the edge.
@@ -121,8 +120,7 @@ public class Edge {
      * @param outsideList list where to put parts that are outside of the split circle
      * @param insideList list where to put parts that are inside the split circle
      */
-    void split(final Circle splitCircle,
-                       final List<Edge> outsideList, final List<Edge> insideList) {
+    void split(final Circle splitCircle, final List<Edge> outsideList, final List<Edge> insideList) {
 
         // get the inside arc, synchronizing its phase with the edge itself
         final double edgeStart        = circle.getPhase(start.getLocation().getVector());
@@ -211,7 +209,6 @@ public class Edge {
         }
 
         // really add the edge
-        subEnd.bindWith(splitCircle);
         final Edge edge = new Edge(subStart, subEnd, subLength, circle);
         list.add(edge);
         return subEnd;

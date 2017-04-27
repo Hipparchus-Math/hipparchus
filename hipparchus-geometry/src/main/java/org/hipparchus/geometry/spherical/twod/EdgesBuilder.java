@@ -95,8 +95,6 @@ class EdgesBuilder implements BSPTreeVisitor<Sphere2D> {
         for (final Arc a : arcs) {
             final Vertex start = new Vertex((S2Point) circle.toSpace(new S1Point(a.getInf())));
             final Vertex end   = new Vertex((S2Point) circle.toSpace(new S1Point(a.getSup())));
-            start.bindWith(circle);
-            end.bindWith(circle);
             final Edge edge;
             if (reversed) {
                 edge = new Edge(end, start, a.getSize(), circle.getReverse());

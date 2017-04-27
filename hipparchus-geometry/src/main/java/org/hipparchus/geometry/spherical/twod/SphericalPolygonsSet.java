@@ -19,8 +19,10 @@ package org.hipparchus.geometry.spherical.twod;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.IdentityHashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.enclosing.EnclosingBall;
@@ -202,8 +204,10 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
         // build the vertices
         final Vertex[] vArray = new Vertex[n];
+        final Map<Vertex, List<Circle>> bindings = new IdentityHashMap<>(n);
         for (int i = 0; i < n; ++i) {
             vArray[i] = new Vertex(vertices[i]);
+            bindings.put(vArray[i], new ArrayList<>());
         }
 
         // build the edges
@@ -217,7 +221,7 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
             // get the circle supporting the edge, taking care not to recreate it if it was
             // already created earlier due to another edge being aligned with the current one
-            final Circle circle = supportingCircle(start, end, vArray, hyperplaneThickness);
+            final Circle circle = supportingCircle(start, end, vArray, bindings, hyperplaneThickness);
 
             // create the edge and store it
             edges.add(new Edge(start, end,
@@ -239,16 +243,19 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param start start vertex of an edge being built
      * @param end end vertex of an edge being built
      * @param vArray array containing all vertices
+     * @param bindings bindings between vertices and circles
      * @param hyperplaneThickness tolerance below which points are consider to
      * belong to the hyperplane (which is therefore more a slab)
      * @return circle bound with both start and end and in the proper orientation
      */
     private static Circle supportingCircle(final Vertex start, final Vertex end,
-                                           final Vertex[] vArray, final double hyperplaneThickness) {
+                                           final Vertex[] vArray,
+                                           final Map<Vertex, List<Circle>> bindings,
+                                           final double hyperplaneThickness) {
 
         Circle toBeReversed = null;
-        for (final Circle circle1 : start.getBoundCircles()) {
-            for (final Circle circle2 : end.getBoundCircles()) {
+        for (final Circle circle1 : bindings.get(start)) {
+            for (final Circle circle2 : bindings.get(end)) {
                 if (circle1 == circle2) {
                     // we already know a circle to which both vertices belong
                     final Vector3D s = start.getLocation().getVector();
@@ -269,14 +276,14 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
                                  new Circle(start.getLocation(), end.getLocation(), hyperplaneThickness) :
                                  toBeReversed.getReverse();
 
-        start.bindWith(newCircle);
-        end.bindWith(newCircle);
+        bindings.get(start).add(newCircle);
+        bindings.get(end).add(newCircle);
 
         // check if another vertex also happens to be on this circle
         for (final Vertex vertex : vArray) {
             if (vertex != start && vertex != end &&
                 FastMath.abs(newCircle.getOffset(vertex.getLocation())) <= hyperplaneThickness) {
-                vertex.bindWith(newCircle);
+                bindings.get(vertex).add(newCircle);
             }
         }
 
