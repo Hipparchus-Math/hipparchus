@@ -49,6 +49,12 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="1.2" date="TBD" description="TBD">
+      <action dev="luc" type="update" issue="issues/22" due-to="Christoph Dibak">
+        Improved performance of getRow and setRow for Array2DRowRealMatrix and Array2DRowFieldMatrix.
+        Github: fixes #22.
+      </action>
+    </release>
     <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
       <action dev="psteitz" type="add" issue="issues/19" >
         Added support for sampling from enumerated distributions in RandomDataGenerator.

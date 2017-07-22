@@ -623,4 +623,28 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
         throws MathIllegalArgumentException, NullArgumentException {
         setSubMatrix(in, 0, 0);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public T[] getRow(final int row) throws MathIllegalArgumentException {
+        MatrixUtils.checkRowIndex(this, row);
+        final int nCols = getColumnDimension();
+        final T[] out = MathArrays.buildArray(getField(), nCols);
+        System.arraycopy(data[row], 0, out, 0, nCols);
+        return out;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setRow(final int row, final T[] array)
+        throws MathIllegalArgumentException {
+        MatrixUtils.checkRowIndex(this, row);
+        final int nCols = getColumnDimension();
+        if (array.length != nCols) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   1, array.length, 1, nCols);
+        }
+        System.arraycopy(array, 0, data[row], 0, nCols);
+    }
+
 }

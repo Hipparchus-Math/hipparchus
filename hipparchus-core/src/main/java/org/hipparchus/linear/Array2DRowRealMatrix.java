@@ -562,4 +562,28 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
         throws MathIllegalArgumentException, NullArgumentException {
         setSubMatrix(in, 0, 0);
     }
+
+    /** {@inheritDoc} */
+    @Override
+    public double[] getRow(final int row) throws MathIllegalArgumentException {
+        MatrixUtils.checkRowIndex(this, row);
+        final int nCols = getColumnDimension();
+        final double[] out = new double[nCols];
+        System.arraycopy(data[row], 0, out, 0, nCols);
+        return out;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void setRow(final int row, final double[] array)
+        throws MathIllegalArgumentException {
+        MatrixUtils.checkRowIndex(this, row);
+        final int nCols = getColumnDimension();
+        if (array.length != nCols) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH_2x2,
+                                                   1, array.length, 1, nCols);
+        }
+        System.arraycopy(array, 0, data[row], 0, nCols);
+    }
+
 }
