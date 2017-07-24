@@ -37,6 +37,7 @@ public class ComplexFieldTest {
         Assert.assertEquals(Complex.ONE, ComplexField.getInstance().getOne());
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();

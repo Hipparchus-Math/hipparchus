@@ -508,6 +508,7 @@ public class ComplexTest {
         Complex.equals(null, new Complex(3.0, 4.0), 3);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEqualsClass() {
         Complex x = new Complex(3.0, 4.0);

@@ -35,6 +35,7 @@ public final class StatisticalSummaryValuesTest {
         verifyEquality(u, t);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEqualsAndHashCode() {
         StatisticalSummaryValues u  = new StatisticalSummaryValues(1, 2, 3, 4, 5, 6);

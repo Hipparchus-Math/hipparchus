@@ -134,6 +134,7 @@ public class FieldVector3DTest {
 
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEquals() {
         DSFactory factory31 = new DSFactory(3, 1);

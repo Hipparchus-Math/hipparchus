@@ -37,6 +37,7 @@ public class BigRealFieldTest {
         Assert.assertEquals(BigReal.ONE, BigRealField.getInstance().getOne());
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();

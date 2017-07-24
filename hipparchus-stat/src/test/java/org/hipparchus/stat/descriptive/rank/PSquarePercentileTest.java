@@ -140,6 +140,7 @@ public class PSquarePercentileTest extends
         PSquarePercentile.newMarkers(null, 0);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testMiscellaniousFunctionsInMarkers() {
         double p = 0.5;
@@ -198,6 +199,7 @@ public class PSquarePercentileTest extends
         assertFalse(markers.equals(markersNew));
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testHashCodeInMarkers() {
         PSquarePercentile p = new PSquarePercentile(95);
@@ -310,6 +312,7 @@ public class PSquarePercentileTest extends
         mThat.height(6);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testPSquaredEqualsAndMin() {
         PSquarePercentile ptile = new PSquarePercentile(0);

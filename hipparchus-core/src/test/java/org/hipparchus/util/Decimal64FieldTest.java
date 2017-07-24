@@ -37,6 +37,7 @@ public class Decimal64FieldTest {
         Assert.assertEquals(Decimal64.ONE, Decimal64Field.getInstance().getOne());
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();

@@ -1676,6 +1676,7 @@ public class DfpTest extends ExtendedFieldElementAbstractTest<Dfp> {
         Assert.assertEquals(1.0, one.toDouble(), 1.0e-15);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testMap() {
         int[] decimalDigits = new int[] { 10, 50, 100 }; 

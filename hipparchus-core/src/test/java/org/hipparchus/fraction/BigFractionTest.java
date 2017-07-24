@@ -567,6 +567,7 @@ public class BigFractionTest {
         Assert.assertEquals(new BigDecimal("0.333"), new BigFraction(1, 3).bigDecimalValue(3, BigDecimal.ROUND_DOWN));
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEqualsAndHashCode() {
         BigFraction zero = new BigFraction(0, 1);

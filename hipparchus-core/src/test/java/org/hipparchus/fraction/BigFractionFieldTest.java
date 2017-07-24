@@ -39,6 +39,7 @@ public class BigFractionFieldTest {
         Assert.assertEquals(BigFraction.ONE, BigFractionField.getInstance().getOne());
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();

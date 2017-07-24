@@ -525,6 +525,7 @@ public class ResizableDoubleArrayTest {
 
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEqualsAndHashCode()
         throws Exception {

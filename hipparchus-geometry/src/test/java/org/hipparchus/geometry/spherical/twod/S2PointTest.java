@@ -58,6 +58,7 @@ public class S2PointTest {
         Assert.assertFalse(new S2Point(1.0, 1.3).equals(S2Point.NaN));
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEquals() {
         S2Point a = new S2Point(1.0, 1.0);

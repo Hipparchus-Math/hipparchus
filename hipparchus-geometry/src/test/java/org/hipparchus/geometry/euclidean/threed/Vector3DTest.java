@@ -70,6 +70,7 @@ public class Vector3DTest {
         Assert.assertEquals(0, new Vector3D(1, 2, 2).getZero().getNorm(), 1.0e-15);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEquals() {
         Vector3D u1 = new Vector3D(1, 2, 3);

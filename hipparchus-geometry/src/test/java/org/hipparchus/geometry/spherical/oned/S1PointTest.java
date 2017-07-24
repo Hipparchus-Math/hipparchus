@@ -43,6 +43,7 @@ public class S1PointTest {
         Assert.assertFalse(new S1Point(1.0).equals(S1Point.NaN));
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEquals() {
         S1Point a = new S1Point(1.0);

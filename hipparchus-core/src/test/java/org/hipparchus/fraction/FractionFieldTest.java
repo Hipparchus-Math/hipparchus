@@ -39,6 +39,7 @@ public class FractionFieldTest {
         Assert.assertEquals(Fraction.ONE, FractionField.getInstance().getOne());
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testMap() {
         Map<Field<?>, Integer> map = new HashMap<>();

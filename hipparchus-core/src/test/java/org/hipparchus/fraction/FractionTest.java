@@ -576,6 +576,7 @@ public class FractionTest {
         } catch (MathRuntimeException ex) {}
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEqualsAndHashCode() {
         Fraction zero  = new Fraction(0,1);

@@ -163,6 +163,7 @@ public class BigRealTest {
                             new BigReal(1.0 / 2.0).bigDecimalValue());
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEqualsAndHashCode() {
         BigReal zero = new BigReal(0.0);

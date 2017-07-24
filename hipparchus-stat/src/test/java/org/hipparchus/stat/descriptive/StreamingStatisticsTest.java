@@ -198,6 +198,7 @@ public class StreamingStatisticsTest {
         verifySummary(u, summary);
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEqualsAndHashCode() {
         StreamingStatistics u = createStreamingStatistics();

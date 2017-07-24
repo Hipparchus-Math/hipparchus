@@ -161,6 +161,7 @@ public class MultivariateSummaryStatisticsTest {
 
     }
 
+    @SuppressWarnings("unlikely-arg-type")
     @Test
     public void testEqualsAndHashCode() {
         MultivariateSummaryStatistics u = createMultivariateSummaryStatistics(2, true);
