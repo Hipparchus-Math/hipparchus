@@ -2440,13 +2440,6 @@ public class BOBYQAOptimizer
     }
 
     // XXX utility for figuring out call sequence.
-    private static String caller(int n) {
-        final Throwable t = new Throwable();
-        final StackTraceElement[] elements = t.getStackTrace();
-        final StackTraceElement e = elements[n];
-        return e.getMethodName() + " (at line " + e.getLineNumber() + ")";
-    }
-    // XXX utility for figuring out call sequence.
     private static void printState(int s) {
         //        System.out.println(caller(2) + ": state " + s);
     }
@@ -2455,21 +2448,5 @@ public class BOBYQAOptimizer
         //        System.out.println(caller(2));
     }
 
-    /**
-     * Marker for code paths that are not explored with the current unit tests.
-     * If the path becomes explored, it should just be removed from the code.
-     */
-    private static class PathIsExploredException extends RuntimeException {
-        /** Serializable UID. */
-        private static final long serialVersionUID = 745350979634801853L;
-
-        /** Message string. */
-        private static final String PATH_IS_EXPLORED
-            = "If this exception is thrown, just remove it from the code";
-
-        PathIsExploredException() {
-            super(PATH_IS_EXPLORED + " " + BOBYQAOptimizer.caller(3));
-        }
-    }
 }
 //CHECKSTYLE: resume all

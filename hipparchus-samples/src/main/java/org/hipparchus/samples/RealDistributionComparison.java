@@ -46,8 +46,6 @@ import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.distribution.continuous.ParetoDistribution;
 import org.hipparchus.distribution.continuous.TDistribution;
 import org.hipparchus.distribution.continuous.WeibullDistribution;
-import org.hipparchus.random.MersenneTwister;
-import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 import org.hipparchus.util.FastMath;
 
@@ -242,7 +240,6 @@ public class RealDistributionComparison {
             container.add(comp, c);
 
             c.gridx++;
-            RandomGenerator rng = new MersenneTwister(0);
             comp = createComponent("Levy", 0, 3,
                                    new String[] { "c=0.5", "c=1", "c=2", "c=4", "c=8" },
                                    new LevyDistribution(0, 0.5),

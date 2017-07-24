@@ -16,8 +16,6 @@
  */
 package org.hipparchus.random;
 
-import static org.junit.Assert.assertEquals;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
