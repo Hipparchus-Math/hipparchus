@@ -27,6 +27,7 @@ NOT_CONVEX = les points ne constituent pas une enveloppe convexe
 NOT_CONVEX_HYPERPLANES = les hyperplans ne définissent pas une région convexe
 NOT_SUPPORTED_IN_DIMENSION_N = méthode non disponible en dimension {0}
 OUTLINE_BOUNDARY_LOOP_OPEN = un périmètre frontière est ouvert
+FACET_WITH_SEVERAL_BOUNDARY_LOOPS = une facette a plusieurs périmètres frontières
 OUT_OF_PLANE = le point ({0}, {1}, {2}) est hors du plan
 ROTATION_MATRIX_DIMENSIONS = une matrice {0}x{1} ne peut pas être une matrice de rotation
 UNABLE_TO_ORTHOGONOLIZE_MATRIX = impossible de rendre la matrice orthogonale en {0} itérations

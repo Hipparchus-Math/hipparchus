@@ -91,6 +91,86 @@ public class PolyhedronsSetTest {
     }
 
     @Test
+    public void testBRepExtractor() {
+        double x = 1.0;
+        double y = 2.0;
+        double z = 3.0;
+        double w = 0.1;
+        double l = 1.0;
+        PolyhedronsSet polyhedron =
+            new PolyhedronsSet(x - l, x + l, y - w, y + w, z - w, z + w, 1.0e-10);
+        PolyhedronsSet.BRep brep = polyhedron.getBRep();
+        Assert.assertEquals(6, brep.getFacets().size());
+        Assert.assertEquals(8, brep.getVertices().size());
+    }
+
+    @Test
+    public void testEmptyBRepIfEmpty() {
+        PolyhedronsSet empty = (PolyhedronsSet) new RegionFactory<Euclidean3D>().getComplement(new PolyhedronsSet(1.0e-10));
+        Assert.assertTrue(empty.isEmpty());
+        Assert.assertEquals(0.0, empty.getSize(), 1.0e-10);
+        PolyhedronsSet.BRep brep = empty.getBRep();
+        Assert.assertEquals(0, brep.getFacets().size());
+        Assert.assertEquals(0, brep.getVertices().size());
+    }
+
+    @Test
+    public void testNoBRepHalfSpace() {
+        BSPTree<Euclidean3D> bsp = new BSPTree<>();
+        bsp.insertCut(new Plane(Vector3D.PLUS_K, 1.0e-10));
+        bsp.getPlus().setAttribute(Boolean.FALSE);
+        bsp.getMinus().setAttribute(Boolean.TRUE);
+        PolyhedronsSet polyhedron = new PolyhedronsSet(bsp, 1.0e-10);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, polyhedron.getSize(), 1.0e-10);
+        try {
+            polyhedron.getBRep();
+            Assert.fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            Assert.assertEquals(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN, mre.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testNoBRepUnboundedOctant() {
+        BSPTree<Euclidean3D> bsp = new BSPTree<>();
+        bsp.insertCut(new Plane(Vector3D.PLUS_K, 1.0e-10));
+        bsp.getPlus().setAttribute(Boolean.FALSE);
+        bsp.getMinus().insertCut(new Plane(Vector3D.PLUS_I, 1.0e-10));
+        bsp.getMinus().getPlus().setAttribute(Boolean.FALSE);
+        bsp.getMinus().getMinus().insertCut(new Plane(Vector3D.PLUS_J, 1.0e-10));
+        bsp.getMinus().getMinus().getPlus().setAttribute(Boolean.FALSE);
+        bsp.getMinus().getMinus().getMinus().setAttribute(Boolean.TRUE);
+        PolyhedronsSet polyhedron = new PolyhedronsSet(bsp, 1.0e-10);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, polyhedron.getSize(), 1.0e-10);
+        try {
+            polyhedron.getBRep();
+            Assert.fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            Assert.assertEquals(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN, mre.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testNoBRepHolesInFacet() {
+        double tolerance = 1.0e-10;
+        PolyhedronsSet cube       = new PolyhedronsSet(-1.0, 1.0, -1.0, 1.0, -1.0, 1.0, tolerance);
+        PolyhedronsSet tubeAlongX = new PolyhedronsSet(-2.0, 2.0, -0.5, 0.5, -0.5, 0.5, tolerance);
+        PolyhedronsSet tubeAlongY = new PolyhedronsSet(-0.5, 0.5, -2.0, 2.0, -0.5, 0.5, tolerance);
+        PolyhedronsSet tubeAlongZ = new PolyhedronsSet(-0.5, 0.5, -0.5, 0.5, -2.0, 2.0, tolerance);
+        RegionFactory<Euclidean3D> factory = new RegionFactory<>();
+        PolyhedronsSet cubeWithHoles = (PolyhedronsSet) factory.difference(cube,
+                                                                           factory.union(tubeAlongX,
+                                                                                         factory.union(tubeAlongY, tubeAlongZ)));
+        Assert.assertEquals(4.0, cubeWithHoles.getSize(), 1.0e-10);
+        try {
+            cubeWithHoles.getBRep();
+            Assert.fail("an exception should have been thrown");
+        } catch (MathRuntimeException mre) {
+            Assert.assertEquals(LocalizedGeometryFormats.FACET_WITH_SEVERAL_BOUNDARY_LOOPS, mre.getSpecifier());
+        }
+    }
+
+    @Test
     public void testTetrahedron() throws MathRuntimeException {
         Vector3D vertex1 = new Vector3D(1, 2, 3);
         Vector3D vertex2 = new Vector3D(2, 2, 4);

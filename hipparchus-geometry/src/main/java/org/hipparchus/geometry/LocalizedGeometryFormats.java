@@ -56,6 +56,7 @@ public enum LocalizedGeometryFormats implements Localizable {
     NOT_CONVEX_HYPERPLANES("hyperplanes do not define a convex region"),
     NOT_SUPPORTED_IN_DIMENSION_N("method not supported in dimension {0}"),
     OUTLINE_BOUNDARY_LOOP_OPEN("an outline boundary loop is open"),
+    FACET_WITH_SEVERAL_BOUNDARY_LOOPS("a facet has several boundary loops"),
     OUT_OF_PLANE("point ({0}, {1}, {2}) is out of plane"),
     ROTATION_MATRIX_DIMENSIONS("a {0}x{1} matrix cannot be a rotation matrix"),
     UNABLE_TO_ORTHOGONOLIZE_MATRIX("unable to orthogonalize matrix in {0} iterations"),

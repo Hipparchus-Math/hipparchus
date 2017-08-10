@@ -50,6 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.2" date="TBD" description="TBD.">
+      <action dev="luc" type="add">
+        Added a getBRep method to PolyhedronsSet to extract a Boundary REPresentation in
+        regular cases (unbounded PolyhedronsSet or PolyhedronsSet with holes in their
+        boundary are not supported).
+      </action>
       <action dev="luc" type="fix" issue="issues/23">
         Fixed NullPointerException when computing size of unbounded polygons sets.
       </action>

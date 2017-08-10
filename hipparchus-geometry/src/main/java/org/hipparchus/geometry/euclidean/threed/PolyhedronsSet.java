@@ -23,6 +23,7 @@ import java.util.List;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.oned.Euclidean1D;
@@ -121,6 +122,22 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
     public PolyhedronsSet(final List<Vector3D> vertices, final List<int[]> facets,
                           final double tolerance) {
         super(buildBoundary(vertices, facets, tolerance), tolerance);
+    }
+
+    /** Build a polyhedrons set from a Boundary REPresentation (B-rep) specified by connected vertices.
+     * <p>
+     * Some basic sanity checks are performed but not everything is thoroughly
+     * assessed, so it remains under caller responsibility to ensure the vertices
+     * and facets are consistent and properly define a polyhedrons set.
+     * </p>
+     * @param vertices list of polyhedrons set vertices
+     * @param facets list of facets, as vertices indices in the vertices list
+     * @param tolerance tolerance below which points are considered identical
+     * @exception MathIllegalArgumentException if some basic sanity checks fail
+     * @since 1.2
+     */
+    public PolyhedronsSet(final BRep brep, final double tolerance) {
+        super(buildBoundary(brep.getVertices(), brep.getFacets(), tolerance), tolerance);
     }
 
     /** Build a parallellepipedic box.
@@ -338,6 +355,138 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
     @Override
     public PolyhedronsSet buildNew(final BSPTree<Euclidean3D> tree) {
         return new PolyhedronsSet(tree, getTolerance());
+    }
+
+    /** Get the boundary representation of the instance.
+     * <p>
+     * The boundary representation can be extracted <em>only</em> from
+     * bounded polyhedrons sets. If the polyhedrons set is unbounded,
+     * a {@link MathRuntimeException} will be thrown.
+     * </p>
+     * <p>
+     * The boundary representation extracted is not minimal, as for
+     * example canonical facets may be split into several smaller
+     * independent sub-facets sharing the same plane and connected by
+     * their edges.
+     * </p>
+     * <p>
+     * As the {@link BRep B-Rep} representation does not support
+     * facets with several boundary loops (for example facets with
+     * holes), an exception is triggered when attempting to extract
+     * B-Rep from such complex polyhedrons sets.
+     * </p>
+     * @return boundary representation of the instance
+     * @exception MathRuntimeException if polyhedrons is unbounded
+     * @since 1.2
+     */
+    public BRep getBRep() throws MathRuntimeException {
+        BRepExtractor extractor = new BRepExtractor(getTolerance());
+        getTree(true).visit(extractor);
+        return extractor.getBRep();
+    }
+
+    /** Visitor extracting BRep. */
+    private static class BRepExtractor implements BSPTreeVisitor<Euclidean3D> {
+
+        /** Tolerance for vertices identification. */
+        private final double tolerance;
+
+        /** Extracted vertices. */
+        private final List<Vector3D> vertices;
+
+        /** Extracted facets. */
+        private final List<int[]> facets;
+
+        /** Simple constructor.
+         * @param tolerance tolerance for vertices identification
+         */
+        BRepExtractor(final double tolerance) {
+            this.tolerance = tolerance;
+            this.vertices  = new ArrayList<>();
+            this.facets    = new ArrayList<>();
+        }
+
+        /** Get the BRep.
+         * @return extracted BRep
+         */
+        public BRep getBRep() {
+            return new BRep(vertices, facets);
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public Order visitOrder(final BSPTree<Euclidean3D> node) {
+            return Order.MINUS_SUB_PLUS;
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public void visitInternalNode(final BSPTree<Euclidean3D> node) {
+            @SuppressWarnings("unchecked")
+            final BoundaryAttribute<Euclidean3D> attribute =
+                (BoundaryAttribute<Euclidean3D>) node.getAttribute();
+            if (attribute.getPlusOutside() != null) {
+                addContribution(attribute.getPlusOutside(), false);
+            }
+            if (attribute.getPlusInside() != null) {
+                addContribution(attribute.getPlusInside(), true);
+            }
+        }
+
+        /** {@inheritDoc} */
+        @Override
+        public void visitLeafNode(final BSPTree<Euclidean3D> node) {
+        }
+
+        /** Add he contribution of a boundary facet.
+         * @param facet boundary facet
+         * @param reversed if true, the facet has the inside on its plus side
+         * @exception MathRuntimeException if facet is unbounded
+         */
+        private void addContribution(final SubHyperplane<Euclidean3D> facet, final boolean reversed)
+            throws MathRuntimeException {
+
+            final Plane plane = (Plane) facet.getHyperplane();
+            final PolygonsSet polygon = (PolygonsSet) ((SubPlane) facet).getRemainingRegion();
+            final Vector2D[][] loops2D = polygon.getVertices();
+            if (loops2D.length == 0) {
+                throw new MathRuntimeException(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN);
+            } else if (loops2D.length > 1) {
+                throw new MathRuntimeException(LocalizedGeometryFormats.FACET_WITH_SEVERAL_BOUNDARY_LOOPS);
+            } else {
+                for (final Vector2D[] loop2D : polygon.getVertices()) {
+                    final int[] loop3D = new int[loop2D.length];
+                    for (int i = 0; i < loop2D.length ; ++i) {
+                        if (loop2D[i] == null) {
+                            throw new MathRuntimeException(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN);
+                        }
+                        loop3D[reversed ? loop2D.length - 1 - i : i] = getVertexIndex(plane.toSpace(loop2D[i]));
+                    }
+                    facets.add(loop3D);
+                }
+            }
+
+        }
+
+        /** Get the index of a vertex.
+         * @param vertex vertex as a 3D point
+         * @return index of the vertex
+         */
+        private int getVertexIndex(final Vector3D vertex) {
+
+            for (int i = 0; i < vertices.size(); ++i) {
+                if (Vector3D.distance(vertex, vertices.get(i)) <= tolerance) {
+                    // the vertex is already known
+                    return i;
+                }
+            }
+
+            // the vertex is a new one, add it
+            vertices.add(vertex);
+            return vertices.size() - 1;
+
+        }
+
     }
 
     /** {@inheritDoc} */
@@ -662,6 +811,50 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
 
             return ((SubLine) sub).applyTransform(cachedTransform);
 
+        }
+
+    }
+
+    /** Container for Boundary REPresentation (B-Rep).
+     * <p>
+     * The boundary is provided as a list of vertices and a list of facets.
+     * Each facet is specified as an integer array containing the arrays vertices
+     * indices in the vertices list. Each facet normal is oriented by right hand
+     * rule to the facet vertices list.
+     * </p>
+     * @see PolyhedronsSet#PolyhedronsSet(BSPTree, double)
+     * @see PolyhedronsSet#getBRep()
+     * @since 1.2
+     */
+    public static class BRep {
+
+        /** List of polyhedrons set vertices. */
+        private final List<Vector3D> vertices;
+
+        /** List of facets, as vertices indices in the vertices list. */
+        private final List<int[]> facets;
+
+        /** Simple constructor.
+         * @param vertices list of polyhedrons set vertices
+         * @param facets list of facets, as vertices indices in the vertices list
+         */
+        public BRep(final List<Vector3D> vertices, final List<int[]> facets) {
+            this.vertices = vertices;
+            this.facets   = facets;
+        }
+
+        /** Get the extracted vertices.
+         * @return extracted vertices
+         */
+        public List<Vector3D> getVertices() {
+            return vertices;
+        }
+
+        /** Get the extracted facets.
+         * @return extracted facets
+         */
+        public List<int[]> getFacets() {
+            return facets;
         }
 
     }
