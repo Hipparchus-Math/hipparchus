@@ -1215,6 +1215,19 @@ public class PolygonsSetTest {
         Assert.assertEquals(2.0 * FastMath.sqrt(13.0) + 6.0, polygon.getBoundarySize(), 1.0e-10);
     }
 
+    @Test
+    public void testInfiniteQuadrant() {
+        final double tolerance = 1.0e-10;
+        BSPTree<Euclidean2D> bsp = new BSPTree<>();
+        bsp.insertCut(new Line(Vector2D.ZERO, 0.0, tolerance));
+        bsp.getPlus().setAttribute(Boolean.FALSE);
+        bsp.getMinus().insertCut(new Line(Vector2D.ZERO, 0.5 * FastMath.PI, tolerance));
+        bsp.getMinus().getPlus().setAttribute(Boolean.FALSE);
+        bsp.getMinus().getMinus().setAttribute(Boolean.TRUE);
+        PolygonsSet polygons = new PolygonsSet(bsp, tolerance);
+        Assert.assertEquals(Double.POSITIVE_INFINITY, polygons.getSize(), 1.0e-10);
+    }
+
     private static class Counter {
 
         private int internalNodes;

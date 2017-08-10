@@ -1074,9 +1074,13 @@ public class PolygonsSet extends AbstractRegion<Euclidean2D, Euclidean1D> {
          */
         private BSPTree<Euclidean2D> selectClosest(final Vector2D point, final Iterable<BSPTree<Euclidean2D>> candidates) {
 
-            BSPTree<Euclidean2D> selected = null;
-            double min = Double.POSITIVE_INFINITY;
+            if (point == null) {
+                return null;
+            }
 
+            BSPTree<Euclidean2D> selected = null;
+
+            double min = Double.POSITIVE_INFINITY;
             for (final BSPTree<Euclidean2D> node : candidates) {
                 final double distance = FastMath.abs(node.getCut().getHyperplane().getOffset(point));
                 if (distance < min) {

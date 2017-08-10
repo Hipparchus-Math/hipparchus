@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.2" date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/23">
+        Fixed NullPointerException when computing size of unbounded polygons sets.
+      </action>
       <action dev="luc" type="fix" issue="issues/21">
         Fixed polygons creation from lists of vertices (both in Euclidean and spherical geometry)
         when separate edges share the same hyperplane (line or circle) but with different
