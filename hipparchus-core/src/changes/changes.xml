@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.2" date="TBD" description="TBD">
+      <action dev="luc" type="add" >
+        Added bracketing helper methods in UnivariateSolverUtils for RealFieldUnivariateFunction.
+        Github: fixes #24.
+      </action>
       <action dev="luc" type="update" issue="issues/22" due-to="Christoph Dibak">
         Improved performance of getRow and setRow for Array2DRowRealMatrix and Array2DRowFieldMatrix.
         Github: fixes #22.
