@@ -13,6 +13,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+# This is not the original file distributed by the Apache Software Foundation
+# It has been modified by the Hipparchus project
+
 CANNOT_NORMALIZE_A_ZERO_NORM_VECTOR = impossible de normer un vecteur de norme nulle
 CARDAN_ANGLES_SINGULARITY = singularité d''angles de Cardan
 CLOSEST_ORTHOGONAL_MATRIX_HAS_NEGATIVE_DETERMINANT = la matrice orthogonale la plus proche a un déterminant négatif {0}

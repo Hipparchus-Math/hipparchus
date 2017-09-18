@@ -13,6 +13,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+# This is not the original file distributed by the Apache Software Foundation
+# It has been modified by the Hipparchus project
+
 ARGUMENT_OUTSIDE_DOMAIN = argument {0} hors domaine [{1} ; {2}]
 ASSYMETRIC_EIGEN_NOT_SUPPORTED = la décomposition en valeurs/vecteurs propres de matrices 
 BOBYQA_BOUND_DIFFERENCE_CONDITION = la différence entre la contrainte supérieure et inférieure doit être plus grande que deux fois le rayon de la région de confiance initiale ({0})

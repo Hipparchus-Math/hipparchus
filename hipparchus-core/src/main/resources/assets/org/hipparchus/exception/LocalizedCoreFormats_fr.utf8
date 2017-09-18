@@ -13,6 +13,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+# This is not the original file distributed by the Apache Software Foundation
+# It has been modified by the Hipparchus project
+
 ARRAY_SIZE_EXCEEDS_MAX_VARIABLES = la taille de tableau ne devrait pas dépasser {0}
 ARRAY_SIZES_SHOULD_HAVE_DIFFERENCE_1 = les tableaux devraient avoir une différence de taille de 1 ({0} != {1} + 1)
 ARRAY_SUMS_TO_ZERO = somme du tableau nulle

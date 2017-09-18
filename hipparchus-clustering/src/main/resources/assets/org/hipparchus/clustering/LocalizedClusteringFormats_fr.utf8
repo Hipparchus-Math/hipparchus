@@ -12,4 +12,8 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+
+# This is not the original file distributed by the Apache Software Foundation
+# It has been modified by the Hipparchus project
+
 EMPTY_CLUSTER_IN_K_MEANS = groupe vide dans l''algorithme des k-moyennes

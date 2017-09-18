@@ -13,6 +13,9 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+# This is not the original file distributed by the Apache Software Foundation
+# It has been modified by the Hipparchus project
+
 FIRST_ELEMENT_NOT_ZERO = le premier élément n''est pas nul : {0}
 NOT_POWER_OF_TWO = {0} n''est pas une puissance de 2
 NOT_POWER_OF_TWO_CONSIDER_PADDING = {0} n''est pas une puissance de 2, ajoutez des éléments pour corriger

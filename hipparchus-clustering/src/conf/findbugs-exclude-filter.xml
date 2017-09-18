@@ -17,6 +17,11 @@
 -->
 
 <!--
+   This is not the original file distributed by the Apache Software Foundation
+   It has been modified by the Hipparchus project
+-->
+
+<!--
   This file contains some false positive bugs detected by findbugs. Their
   false positive nature has been analyzed individually and they have been
   put here to instruct findbugs it must ignore them.

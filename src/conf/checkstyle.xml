@@ -17,6 +17,11 @@
    limitations under the License.
   -->
 
+<!--
+   This is not the original file distributed by the Apache Software Foundation
+   It has been modified by the Hipparchus project
+-->
+
 <!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.1//EN" "http://www.puppycrawl.com/dtds/configuration_1_1.dtd">
 
 <!-- Hipparchus customization of default Checkstyle behavior -->
