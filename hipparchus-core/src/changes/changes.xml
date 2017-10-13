@@ -50,7 +50,7 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.2" date="TBD" description="TBD">
-      <action dev="luc" type="add" >
+      <action dev="luc" type="add" issue="issues/24">
         Added bracketing helper methods in UnivariateSolverUtils for RealFieldUnivariateFunction.
         Github: fixes #24.
       </action>
