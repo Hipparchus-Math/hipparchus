@@ -198,7 +198,7 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
         }
         this.binCount = binCount;
         this.randomData = randomData;
-        binStats = new ArrayList<StreamingStatistics>();
+        binStats = new ArrayList<>();
     }
 
     /**
@@ -772,14 +772,14 @@ public class EmpiricalDistribution extends AbstractRealDistribution {
 
     /**
      * The within-bin smoothing kernel. Returns a Gaussian distribution
-     * parameterized by {@code bStats}, unless the bin contains only one
-     * observation, in which case a constant distribution is returned.
+     * parameterized by {@code bStats}, unless the bin contains less than 2
+     * observations, in which case a constant distribution is returned.
      *
      * @param bStats summary statistics for the bin
      * @return within-bin kernel parameterized by bStats
      */
     protected RealDistribution getKernel(StreamingStatistics bStats) {
-        if (bStats.getN() == 1 || bStats.getVariance() == 0) {
+        if (bStats.getN() < 2 || bStats.getVariance() == 0) {
             return new ConstantRealDistribution(bStats.getMean());
         } else {
             return new NormalDistribution(bStats.getMean(),

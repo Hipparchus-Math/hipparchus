@@ -65,7 +65,7 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         super.setUp();
         empiricalDistribution = new EmpiricalDistribution(100);
         url = getClass().getResource("testData.txt");
-        final ArrayList<Double> list = new ArrayList<Double>();
+        final ArrayList<Double> list = new ArrayList<>();
         try {
             empiricalDistribution2 = new EmpiricalDistribution(100);
             BufferedReader in =
@@ -524,6 +524,21 @@ public final class EmpiricalDistributionTest extends RealDistributionAbstractTes
         Assert.assertEquals(6.0, dist.inverseCumulativeProbability(0.4), tol);
         Assert.assertEquals(8.0, dist.inverseCumulativeProbability(0.5), tol);
         Assert.assertEquals(9.0, dist.inverseCumulativeProbability(0.6), tol);
+    }
+
+    @Test
+    public void testEmptyBins() {
+        double[] data = new double[10];
+        for (int i = 0; i < 10; ++i) {
+            data[i] = i < 5 ? 0 : 1;
+        }
+        EmpiricalDistribution edist = new EmpiricalDistribution(100);
+        edist.load(data);
+        Assert.assertEquals(0.5, edist.cumulativeProbability(0), Double.MIN_VALUE);
+        Assert.assertEquals(0.5, edist.cumulativeProbability(0.3), Double.MIN_VALUE);
+        Assert.assertEquals(0.5, edist.cumulativeProbability(0.9), Double.MIN_VALUE);
+        Assert.assertEquals(1, edist.cumulativeProbability(1), Double.MIN_VALUE);
+        Assert.assertEquals(1, edist.cumulativeProbability(1.5), Double.MIN_VALUE);
     }
 
 
