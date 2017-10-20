@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.2" date="TBD" description="TBD">
+      <action dev="luc" type="add">
+        Added a method to compute the orientation of a triplet of points in 2D.
+      </action>
       <action dev="luc" type="add" issue="issues/24">
         Added bracketing helper methods in UnivariateSolverUtils for RealFieldUnivariateFunction.
         Github: fixes #24.

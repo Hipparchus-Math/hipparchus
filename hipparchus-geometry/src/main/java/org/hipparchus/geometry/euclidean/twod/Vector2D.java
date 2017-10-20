@@ -412,6 +412,23 @@ public class Vector2D implements Vector<Euclidean2D> {
         return p1.distanceSq(p2);
     }
 
+    /** Compute the orientation of a triplet of points.
+     * @param p first vector of the triplet
+     * @param q second vector of the triplet
+     * @param r third vector of the triplet
+     * @return a positive value if (p, q, r) define a counterclockwise oriented
+     * triangle, a negative value if (p, q, r) define a clockwise oriented
+     * triangle, and 0 if (p, q, r) are collinear or some points are equal
+     * @since 1.2
+     */
+    public static double orientation(final Vector2D p, final Vector2D q, final Vector2D r) {
+        return MathArrays.linearCombination(new double[] {
+            p.getX(), -p.getX(), q.getX(), -q.getX(), r.getX(), -r.getX()
+        }, new double[] {
+            q.getY(),  r.getY(), r.getY(),  p.getY(), p.getY(),  q.getY()
+        });
+    }
+
     /**
      * Test for the equality of two 2D vectors.
      * <p>

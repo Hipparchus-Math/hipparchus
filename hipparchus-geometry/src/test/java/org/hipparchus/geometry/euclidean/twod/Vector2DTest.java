@@ -43,4 +43,25 @@ public class Vector2DTest {
         Vector2D p5 = new Vector2D(2, 1);
         Assert.assertEquals(-1.0, p5.crossProduct(p1, p2), epsilon);
     }
+
+    @Test
+    public void testOrientation() {
+        Assert.assertTrue(Vector2D.orientation(new Vector2D(0, 0),
+                                               new Vector2D(1, 0),
+                                               new Vector2D(1, 1)) > 0);
+        Assert.assertTrue(Vector2D.orientation(new Vector2D(1, 0),
+                                               new Vector2D(0, 0),
+                                               new Vector2D(1, 1)) < 0);
+        Assert.assertEquals(0.0,
+                            Vector2D.orientation(new Vector2D(0, 0),
+                                                 new Vector2D(1, 0),
+                                                 new Vector2D(1, 0)),
+                            1.0e-15);
+        Assert.assertEquals(0.0,
+                            Vector2D.orientation(new Vector2D(0, 0),
+                                                 new Vector2D(1, 0),
+                                                 new Vector2D(2, 0)),
+                            1.0e-15);
+    }
+
 }
