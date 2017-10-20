@@ -51,6 +51,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="1.2" date="TBD" description="TBD.">
       <action dev="luc" type="add">
+        Added a method to compute the orientation of a triplet of points in 2D.
+      </action>
+      <action dev="luc" type="add">
         Added a getBRep method to PolyhedronsSet to extract a Boundary REPresentation in
         regular cases (unbounded PolyhedronsSet or PolyhedronsSet with holes in their
         boundary are not supported).
