@@ -50,6 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.2" date="TBD" description="TBD">
+      <action dev="luc" type="add" >
+        Added new RealFieldElement implementations computing a tuple. This allow to perform the
+        same computation on several values at once. The getReal() value correspond to the
+        first component of the tuple.
+      </action>
       <action dev="luc" type="add">
         Added a method to compute the orientation of a triplet of points in 2D.
       </action>
