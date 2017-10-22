@@ -43,6 +43,16 @@ Maven's internal mechanism will automatically download any internal dependencies
 
 |     package       |                                  link                                                     | hash | signature |
 |-------------------|-------------------------------------------------------------------------------------------|------|-----------|
+|  source (zip)     | [hipparchus-1.2-src.zip](https://hipparchus.org/downloads/hipparchus-1.2-src.zip) | [md5](https://hipparchus.org/downloads/hipparchus-1.2-src.zip.md5)| [sig](https://hipparchus.org/downloads/hipparchus-1.2-src.zip.asc)|
+|  source (tar.bz2) | [hipparchus-1.2-src.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.2-src.tar.bz2) | [md5](https://hipparchus.org/downloads/hipparchus-1.2-src.tar.bz2.md5) | [sig](https://hipparchus.org/downloads/hipparchus-1.2-src.tar.bz2.asc)|
+|  binary (zip)     | [hipparchus-1.2-bin.zip](https://hipparchus.org/downloads/hipparchus-1.2-bin.zip)| [md5](https://hipparchus.org/downloads/hipparchus-1.2-bin.zip.md5) | [sig](https://hipparchus.org/downloads/hipparchus-1.2-bin.zip.asc)|
+|  binary (tar.bz2) | [hipparchus-1.2-bin.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.2-bin.tar.bz2) | [md5](https://hipparchus.org/downloads/hipparchus-1.2-bin.tar.bz2.md5) | [sig](https://hipparchus.org/downloads/hipparchus-1.2-bin.tar.bz2.asc)
+version 1.2 downloads (release date: 25-October-2017)
+
+---
+
+|     package       |                                  link                                                     | hash | signature |
+|-------------------|-------------------------------------------------------------------------------------------|------|-----------|
 |  source (zip)     | [hipparchus-1.1-src.zip](https://hipparchus.org/downloads/hipparchus-1.1-src.zip) | [md5](https://hipparchus.org/downloads/hipparchus-1.1-src.zip.md5)| [sig](https://hipparchus.org/downloads/hipparchus-1.1-src.zip.asc)|
 |  source (tar.bz2) | [hipparchus-1.1-src.tar.bz2](https://hipparchus.org/downloads/hipparchus-1.1-src.tar.bz2) | [md5](https://hipparchus.org/downloads/hipparchus-1.1-src.tar.bz2.md5) | [sig](https://hipparchus.org/downloads/hipparchus-1.1-src.tar.bz2.asc)|
 |  binary (zip)     | [hipparchus-1.1-bin.zip](https://hipparchus.org/downloads/hipparchus-1.1-bin.zip)| [md5](https://hipparchus.org/downloads/hipparchus-1.1-bin.zip.md5) | [sig](https://hipparchus.org/downloads/hipparchus-1.1-bin.zip.asc)|
