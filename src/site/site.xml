@@ -95,6 +95,7 @@
       <item name="Source Repository (current)"   href="https://github.com/Hipparchus-Math/hipparchus"/>
       <item name="Developers Guide"              href="developers.html"/>
       <item name="User Guide"                    href="user-guide.html" />
+      <item name="Release Guide"                 href="release-guide.html" />
     </menu>
 
     <menu name="Modules" ref="modules"/>
