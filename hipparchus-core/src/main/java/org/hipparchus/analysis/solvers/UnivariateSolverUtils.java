@@ -374,6 +374,7 @@ public class UnivariateSolverUtils {
      * @param lowerBound Lower bound (a is never lower than this value)
      * @param upperBound Upper bound (b never is greater than this
      * value).
+     * @param <T> type of the field elements
      * @return a two-element array holding a and b.
      * @throws MathIllegalArgumentException if a root cannot be bracketed.
      * @throws MathIllegalArgumentException if {@code maximumIterations <= 0}.
@@ -401,6 +402,7 @@ public class UnivariateSolverUtils {
      * @param upperBound Upper bound (b never is greater than this
      * value).
      * @param maximumIterations Maximum number of iterations to perform
+     * @param <T> type of the field elements
      * @return a two element array holding a and b.
      * @throws MathIllegalArgumentException if the algorithm fails to find a and b
      * satisfying the desired conditions.
@@ -476,6 +478,7 @@ public class UnivariateSolverUtils {
      * @param q additive offset used to compute bounds sequence (must be strictly positive)
      * @param r multiplicative factor used to compute bounds sequence
      * @param maximumIterations Maximum number of iterations to perform
+     * @param <T> type of the field elements
      * @return a two element array holding the bracketing values.
      * @exception MathIllegalArgumentException if function cannot be bracketed in the search interval
      * @since 1.2
@@ -560,6 +563,7 @@ public class UnivariateSolverUtils {
     /** Compute the maximum of two values
      * @param a first value
      * @param b second value
+     * @param <T> type of the field elements
      * @return b if a is lesser or equal to b, a otherwise
      * @since 1.2
      */
@@ -570,6 +574,7 @@ public class UnivariateSolverUtils {
     /** Compute the minimum of two values
      * @param a first value
      * @param b second value
+     * @param <T> type of the field elements
      * @return a if a is lesser or equal to b, b otherwise
      * @since 1.2
      */
