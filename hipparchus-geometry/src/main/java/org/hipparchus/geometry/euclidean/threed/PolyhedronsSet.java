@@ -135,8 +135,7 @@ public class PolyhedronsSet extends AbstractRegion<Euclidean3D, Euclidean2D> {
      * assessed, so it remains under caller responsibility to ensure the vertices
      * and facets are consistent and properly define a polyhedrons set.
      * </p>
-     * @param vertices list of polyhedrons set vertices
-     * @param facets list of facets, as vertices indices in the vertices list
+     * @param brep Boundary REPresentation of the polyhedron to build
      * @param tolerance tolerance below which points are considered identical
      * @exception MathIllegalArgumentException if some basic sanity checks fail
      * @since 1.2
