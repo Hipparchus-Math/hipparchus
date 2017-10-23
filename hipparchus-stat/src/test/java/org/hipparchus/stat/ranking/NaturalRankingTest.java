@@ -21,14 +21,11 @@
  */
 package org.hipparchus.stat.ranking;
 
-import org.junit.Assert;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.JDKRandomGenerator;
 import org.hipparchus.random.RandomGenerator;
-import org.hipparchus.stat.ranking.NaNStrategy;
-import org.hipparchus.stat.ranking.NaturalRanking;
-import org.hipparchus.stat.ranking.TiesStrategy;
+import org.junit.Assert;
 import org.junit.Test;
 
 
@@ -181,23 +178,22 @@ public class NaturalRankingTest {
         NaturalRanking ranking = new NaturalRanking(NaNStrategy.FIXED,
                 randomGenerator);
         double[] ranks = ranking.rank(exampleData);
-        double[] correctRanks = { 5, 3, 6, 7, 3, 8, Double.NaN, 1, 2 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        double[][] correctRanks = { {5}, {2, 3, 4}, {6}, {7}, {2, 3, 4}, {8}, {Double.NaN}, {1}, {2, 3, 4} };
+        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesFirst);
-        correctRanks = new double[] { 1, 2, 4, 3, 5 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        correctRanks = new double[][] { {1, 2}, {1, 2}, {4}, {3}, {5} };
+        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
         ranks = ranking.rank(tiesLast);
-        correctRanks = new double[] { 3, 3, 2, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        correctRanks = new double[][] { {3, 4}, {3, 4}, {2}, {1} };
+        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
         ranks = ranking.rank(multipleNaNs);
-        correctRanks = new double[] { 1, 2, Double.NaN, Double.NaN };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        UnitTestUtils.assertEquals(new double[] { 1, 2, Double.NaN, Double.NaN }, ranks, 0d);
         ranks = ranking.rank(multipleTies);
-        correctRanks = new double[] { 3, 2, 4, 4, 6, 7, 1 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        correctRanks = new double[][] { {3}, {2}, {4, 5}, {4, 5}, {6, 7}, {6, 7}, {1} };
+        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
         ranks = ranking.rank(allSame);
-        correctRanks = new double[] { 2, 3, 3, 3 };
-        UnitTestUtils.assertEquals(correctRanks, ranks, 0d);
+        correctRanks = new double[][] { {1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4}, {1, 2, 3, 4} };
+        UnitTestUtils.assertContains(correctRanks, ranks, 0d);
     }
 
     @Test

@@ -404,6 +404,46 @@ public class UnitTestUtils {
         }
     }
 
+    /**
+     * verifies that for i = 0,..., observed.length, observed[i] is within epsilon of one of the values in expected[i]
+     * or observed[i] is NaN and expected[i] contains a NaN.
+     */
+    public static void assertContains(double[][] expected, double[] observed, double epsilon) {
+        StringBuilder out = new StringBuilder();
+        if (expected.length != observed.length) {
+            out.append("\n Arrays not same length. \n");
+            out.append("expected has length ");
+            out.append(expected.length);
+            out.append(" observed length = ");
+            out.append(observed.length);
+            Assert.fail(out.toString());
+        }
+        boolean failure = false;
+        for (int i = 0; i < expected.length; i++) {
+            boolean found = false;
+            for (int j = 0; j < expected[i].length; j++) {
+                if (Precision.equalsIncludingNaN(expected[i][j], observed[i], epsilon)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                out.append("\n Observed element at index ");
+                out.append(i);
+                out.append(" is not among the expected values. ");
+                out.append(" expected = " + Arrays.toString(expected[i]));
+                out.append(" observed = ");
+                out.append(observed[i]);
+                failure = true;
+            }
+        }
+        if (failure) {
+            Assert.fail(out.toString());
+        }
+    }
+
+
+
     /** verifies that two int arrays are equal */
     public static void assertEquals(long[] expected, long[] observed) {
         StringBuilder out = new StringBuilder();
@@ -906,7 +946,7 @@ public class UnitTestUtils {
      * @param <T> type of objects being tracked
      */
     public static class Frequency<T> {
-        private Map<T, Integer> counts = new HashMap<T, Integer>();
+        private Map<T, Integer> counts = new HashMap<>();
         public void addValue(T value) {
            Integer old = counts.put(value, 0);
            if (old != null) {
@@ -924,7 +964,7 @@ public class UnitTestUtils {
      * Actually holds all values in memory, so not suitable for very large streams of data.
      */
     public static class SimpleStatistics {
-        private final List<Double> values = new ArrayList<Double>();
+        private final List<Double> values = new ArrayList<>();
         public void addValue(double value) {
             values.add(value);
         }
