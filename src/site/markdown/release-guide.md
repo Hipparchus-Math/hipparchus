@@ -253,7 +253,7 @@ The site is generated locally using:
 Once generated, the site can be archived and uploaded to the Hipparchus site:
 
     cd target/staging
-    tar cjf www-X.Y.hipparchus.org.bz2 .
+    tar cjf ../www-X.Y.hipparchus.org.bz2 .
 
 This archive content must be extracted in the `staging` directory that already contains the
 `downloads` directory with the 12 files uploaded just before. When the `staging` directory
