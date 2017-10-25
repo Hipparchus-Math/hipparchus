@@ -51,7 +51,6 @@ public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldEleme
     private FieldTuple(final FieldTupleField<T> field, final T[] x) {
         this.values = x;
         this.field  = field;
-        
     }
 
     /** Get the dimension of the tuple.
@@ -743,7 +742,7 @@ public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldEleme
         public boolean equals(final Object other) {
             if (other instanceof FieldTupleField) {
                 @SuppressWarnings("unchecked")
-                final FieldTupleField<T> that = ((FieldTupleField<T>) other);
+                final FieldTupleField<T> that = (FieldTupleField<T>) other;
                 return zero.getDimension() == that.zero.getDimension();
             } else {
                 return false;

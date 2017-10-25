@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="1.2" date="TBD" description="TBD">
+    <release version="1.2" date="2017-10-25" description="This is a maintenance release.">
       <action dev="luc" type="add" >
         Added new RealFieldElement implementations computing a tuple. This allow to perform the
         same computation on several values at once. The getReal() value correspond to the

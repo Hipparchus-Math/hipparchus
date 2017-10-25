@@ -49,7 +49,6 @@ public class Tuple implements RealFieldElement<Tuple> {
     private Tuple(final TupleField field, final double[] x) {
         this.values = x;
         this.field  = field;
-        
     }
 
     /** Get the dimension of the tuple.
@@ -158,7 +157,7 @@ public class Tuple implements RealFieldElement<Tuple> {
             if (getDimension() == that.getDimension()) {
                 boolean equals = true;
                 for (int i = 0; i < values.length; ++i) {
-                    equals &= (Double.doubleToRawLongBits(values[i]) == Double.doubleToRawLongBits(that.values[i]));
+                    equals &= Double.doubleToRawLongBits(values[i]) == Double.doubleToRawLongBits(that.values[i]);
                 }
                 return equals;
             }

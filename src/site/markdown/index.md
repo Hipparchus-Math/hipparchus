@@ -56,13 +56,11 @@ at fork time.
 
  ---
 
-## 1.1 Release is out!
+## 1.2 Release is out!
 
-Hipparchus 1.1 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.1 release are:
+Hipparchus 1.2 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.1 release are:
 
-* Changes in statistics module improving their use in streams
-* Implementation of RANDOM algorithm for streaming percentile computation
-* Support for sampling from enumerated distributions in RandomDataGenerator
-* Field-based derivative structures
-* Field-based QR decomposition
-* Factory to simplify building DerivativeStructure instances
+* new RealFieldElement implementations computing a tuple
+* method to compute the orientation of a triplet of points in 2D
+* bracketing helper methods in UnivariateSolverUtils for RealFieldUnivariateFunction
+* getBRep method to PolyhedronsSet to extract a Boundary REPresentation in regular cases

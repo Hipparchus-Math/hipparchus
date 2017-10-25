@@ -49,12 +49,14 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
-    <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
-      <action dev="psteitz" tyoe="fix" issue="issues/25">
+    <release version="1.2" date="2017-10-25" description="This is a maintenance release.">
+      <action dev="psteitz" type="fix" issue="issues/25">
         Fixed an error in EmpiricalDistribution causing cumulative probabilities to be returned
-        as NaN when some data bins are empty.  This was reported against Commons Math as
+        as NaN when some data bins are empty.  This was reported against Apache Commons Math as
         MATH-1431.
       </action>
+    </release>
+    <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
       <action dev="psteitz" type="fix" issue="issues/13" >
         Fixed overly-aggressive sufficient data check in OLS/GLS regression classes.
         When there is no intercept in the model, the number of observations can equal
