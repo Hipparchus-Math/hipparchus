@@ -103,10 +103,3 @@ License
 -------
 
 Code is under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2.0.txt).
-
-Additional Resources
---------------------
-
-+ [Project home page](https://hipparchus.org/)
-+ [Contributor License Agreement](https://hipparchus.org/clas/ICLA.pdf)
-+ [Mailing lists](https://hipparchus.org/mail-lists.html)
