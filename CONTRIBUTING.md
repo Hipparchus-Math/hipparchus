@@ -15,7 +15,7 @@
  limitations under the License.
 -->
 Contributing to Hipparchus
-======================
+==========================
 
 You have found a bug or you have an idea for a cool new feature? Contributing code is a great way to give something back to
 the open source community. Before you dig right into the code there are a few guidelines that we need contributors to
@@ -53,7 +53,7 @@ In this case, it is appropriate to start the first line of a commit with '(doc)'
 Submitting Changes
 ------------------
 
-+ Sign the [Contributor License Agreement][FIXME! cla] if you haven't already.
++ Sign the [Contributor License Agreement](https://hipparchus.org/licenses/#clas) if you haven't already.
 + Push your changes to a topic branch in your fork of the repository.
 + Submit a pull request to the repository in the apache organization.
 + Update your GitHub ticket and include a link to the pull request in the ticket.
@@ -62,8 +62,6 @@ Additional Resources
 --------------------
 
 + [Project home page](https://hipparchus.org/)
-+ [Contributor License Agreement][FIXME! cla]
-+ [Mailing lists][FIXME! ml]
 + [General GitHub documentation](https://help.github.com/)
 + [GitHub pull request documentation](https://help.github.com/send-pull-requests/)
 + [Contributor License Agreement ](https://hipparchus.org/licenses/#clas)

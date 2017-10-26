@@ -14,8 +14,9 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
+
 Hipparchus
-===================
+==========
 
 [![License](http://img.shields.io/:license-apache-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0.html)
 
@@ -99,23 +100,12 @@ and you want to switch to Hipparchus, you can also add the temporary migration j
 Contributing
 ------------
 
-We accept PRs via github. The [developers mailing list](mailto:developers@hipparchus.org) is the main channel of communication for contributors.
-There are some guidelines which will make applying PRs easier for us:
+We accept PRs via github. The [developers mailing list](mailto:developers@hipparchus.org)
+is the main channel of communication for contributors. There are some guidelines which
+will make applying PRs easier for us. Please read through our
+[contributing guidelines](https://github.com/Hipparchus-Math/hipparchus/blob/master/CONTRIBUTING.md).
 
-+ No tabs! Please use spaces for indentation.
-+ Respect the code style.
-+ Create minimal diffs - disable on save actions like reformat source code or organize imports. If you feel the source code should be reformatted create a separate PR for this change.
-+ Provide JUnit tests for your changes and make sure your changes don't break any existing tests by running ```mvn clean test```.
-
-If you plan to contribute on a regular basis, please consider filing a [Contributor License Agreement](https://hipparchus.org/clas/ICLA.pdf).
-You can learn more about contributing to Hipparchus via our [developers guide](https://www.hipparchus.org/developers.html).
 License
 -------
+
 Code is under the [Apache Licence v2](https://www.apache.org/licenses/LICENSE-2.0.txt).
-
-Additional Resources
---------------------
-
-+ [Project home page](https://hipparchus.org/)
-+ [Contributor License Agreement](https://hipparchus.org/clas/ICLA.pdf)
-+ [Mailing lists](https://hipparchus.org/mail-lists.html)
