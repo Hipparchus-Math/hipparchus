@@ -35,48 +35,53 @@ Where can I get the latest release?
 -----------------------------------
 You can download source and binaries from our [download page](https://hipparchus.org/downloads.html).
 
-Alternatively you can pull it from the central Maven repositories:
+Alternatively you can pull it from the central Maven repositories using `pom.xml` settings:
 
 ```xml
+<properties>
+  <!-- change the Hipparchus version number to the one suiting your needs -->
+  <myprojectname.hipparchus.version>1.2</myprojectname.hipparchus.version>
+</properties>
+
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-core</artifactId>
-  <version>1.1</version>
+  <version>${myprojectname.hipparchus.version}</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-clustering</artifactId>
-  <version>1.1</version>
+  <version>${myprojectname.hipparchus.version}</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-fft</artifactId>
-  <version>1.1</version>
+  <version>${myprojectname.hipparchus.version}</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-fitting</artifactId>
-  <version>1.1</version>
+  <version>${myprojectname.hipparchus.version}</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-geometry</artifactId>
-  <version>1.1</version>
+  <version>${myprojectname.hipparchus.version}</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-ode</artifactId>
-  <version>1.1</version>
+  <version>${myprojectname.hipparchus.version}</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-optim</artifactId>
-  <version>1.1</version>
+  <version>${myprojectname.hipparchus.version}</version>
 </dependency>
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-stat</artifactId>
-  <version>1.1</version>
+  <version>${myprojectname.hipparchus.version}</version>
 </dependency>
 
 ```
@@ -88,7 +93,7 @@ and you want to switch to Hipparchus, you can also add the temporary migration j
 <dependency>
   <groupId>org.hipparchus</groupId>
   <artifactId>hipparchus-migration</artifactId>
-  <version>1.1</version>
+  <version>${myprojectname.hipparchus.version}</version>
 </dependency>
 ```
 

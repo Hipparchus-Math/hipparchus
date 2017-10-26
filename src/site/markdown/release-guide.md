@@ -140,11 +140,12 @@ steps must be performed manually).
 
 Several files must be updated to take into account the new version:
 
-|            file name             |           usage          |                                     required update                                                    | 
-|----------------------------------|--------------------------|--------------------------------------------------------------------------------------------------------|
-| `src/site/site.xml         `     | site structure and menus | Add an entry in the menu for X.Y API docs (don't remove the existing entries for previous versions!)   |
-| `src/site/markdown/index.md`     | site home page           | Update the text about the latest available version, including important changes from RELEASE-NOTES.txt |
-| `src/site/markdown/downloads.md` | downloads links          | Add a table with the links for files of the new versions, don't forget the date in the table caption   |
+|            file name             |           usage            |                                     required update                                                    | 
+|----------------------------------|----------------------------|--------------------------------------------------------------------------------------------------------|
+| `src/site/site.xml         `     | site structure and menus   | Add an entry in the menu for X.Y API docs (don't remove the existing entries for previous versions!)   |
+| `src/site/markdown/index.md`     | site home page             | Update the text about the latest available version, including important changes from RELEASE-NOTES.txt |
+| `src/site/markdown/downloads.md` | downloads links            | Add a table with the links for files of the new versions, don't forget the date in the table caption   |
+| `README.md`                      | introduction for new users | Use the latest version number in the example property myprojectname.hipparchus.version                 |
 Documentation files to update
 
 Once the files have been updated, commit the changes:
