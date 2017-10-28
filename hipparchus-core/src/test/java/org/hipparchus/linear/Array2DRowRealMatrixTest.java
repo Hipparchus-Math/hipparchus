@@ -21,6 +21,11 @@
  */
 package org.hipparchus.linear;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import java.text.DecimalFormat;
+
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -1135,5 +1140,83 @@ public final class Array2DRowRealMatrixTest {
 //              System.out.println(os);
 //          }
 //    }
+
+	static private final RealMatrixFormat f = new RealMatrixFormat("", "",
+			"\n", "", "", "\t\t", new DecimalFormat(
+					" ##############0.0000;-##############0.0000"));
+
+	@Test
+	public void testKroneckerProduct() {
+		// AA = [-3 2;1 1];
+		// BB = [1 0;0 1];
+
+		RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { -3, 2 },
+				{ 1, 1 } });
+		Array2DRowRealMatrix A_ = (Array2DRowRealMatrix)
+				A;
+
+		RealMatrix B = MatrixUtils.createRealMatrix(new double[][] { { 1, 0 },
+				{ 0, 1 } });
+
+		RealMatrix C = A_.kroneckerProduct(B);
+
+		assertNotNull(C);
+
+		RealMatrix C_expected = MatrixUtils.createRealMatrix(new double[][] {
+				{ -3, 0, 2, 0 }, { -0, -3, 0, 2 }, { 1, 0, 1, 0 },
+				{ 0, 1, 0, 1 } });
+		assertEquals(f.format(C_expected), f.format(C.scalarAdd(0)));
+
+	}
+
+	@Test
+	public void testStack() {
+		// AA = [-3 2;1 1];
+
+		RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { -3, 2 },
+				{ 1, 1 } });
+		Array2DRowRealMatrix A_ = (Array2DRowRealMatrix)
+				A;
+
+		RealMatrix C = A_.stack();
+
+		assertNotNull(C);
+
+		RealMatrix C_expected = MatrixUtils.createRealMatrix(new double[][] {
+				{ -3 }, { 1 }, { 2 }, { 1 } });
+		assertEquals(f.format(C_expected), f.format(C));
+
+	}
+
+	@Test
+	public void testUnstackSquare() {
+		// AA = [-3 ;2;1; 1];
+
+		RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { -3 },
+				{ 1 }, { 2 }, { 1 } });
+		Array2DRowRealMatrix A_ = (Array2DRowRealMatrix)
+				A;
+
+		RealMatrix C = A_.unstackSquare();
+
+		assertNotNull(C);
+
+		RealMatrix C_expected = MatrixUtils.createRealMatrix(new double[][] {
+				{ -3, 2 }, { 1, 1 } });
+		assertEquals(f.format(C_expected), f.format(C));
+
+	}
+
+	@Test(expected = MathIllegalArgumentException.class)
+	public void testUnstackNotsquare() {
+		// AA = [-3 ;2;1; 1;1];
+
+		RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { -3 },
+				{ 1 }, { 2 }, { 1 }, { 1 } });
+		Array2DRowRealMatrix A_ = (Array2DRowRealMatrix)
+				A;
+
+		A_.unstackSquare();
+	}
 }
 

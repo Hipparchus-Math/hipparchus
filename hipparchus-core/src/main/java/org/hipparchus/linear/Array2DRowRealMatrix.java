@@ -28,6 +28,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
 /**
@@ -590,5 +591,86 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
         }
         System.arraycopy(array, 0, data[row], 0, nCols);
     }
+
+	/**
+	 * Kronecker product of the current matrix and the parameter matrix.
+	 * 
+	 * @param b
+	 * @return
+	 */
+	public RealMatrix kroneckerProduct(final RealMatrix b) {
+		final int m = getRowDimension();
+		final int n = getColumnDimension();
+
+		final int p = b.getRowDimension();
+		final int q = b.getColumnDimension();
+
+		final RealMatrix kroneckerProduct = MatrixUtils.createRealMatrix(m * p,
+				n * q);
+
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				kroneckerProduct.setSubMatrix(b.scalarMultiply(getEntry(i, j))
+						.getData(), i * p, j * q);
+			}
+
+		}
+
+		return kroneckerProduct;
+	}
+
+	/**
+	 * Transforms a matrix in a vector (Vectorization).
+	 * 
+	 * @param b
+	 * @return
+	 */
+	public RealMatrix stack() {
+		final int m = getRowDimension();
+		final int n = getColumnDimension();
+
+		final RealMatrix stacked = MatrixUtils.createRealMatrix(m * n, 1);
+
+		for (int i = 0; i < m; i++) {
+			stacked.setSubMatrix(getColumnMatrix(i).getData(), i * n, 0);
+
+		}
+
+		return stacked;
+	}
+
+	/**
+	 * Transforms a vector in a squared matrix (devectorization).
+	 * 
+	 * @param b
+	 * @return
+	 */
+	public RealMatrix unstackSquare() {
+		final int m = getRowDimension();
+		final int n = getColumnDimension();
+		final double n_ = FastMath.sqrt(m);
+
+		if (n != 1) {
+			throw new MathIllegalArgumentException(
+					LocalizedCoreFormats.CONSTRAINT,
+					"Unstack works with arrays with column dimension 1");
+		}
+		if (n_ % 1 > 0) {
+			throw new MathIllegalArgumentException(
+					LocalizedCoreFormats.CONSTRAINT,
+					"Unstack works with arrays with row dimension defined by a square");
+		}
+		final int n__ = ((int) n_);
+
+		final RealMatrix unstacked = MatrixUtils.createRealMatrix(n__, n__);
+
+		for (int i = 0; i < n__; i++) {
+			unstacked.setColumnMatrix(i,
+					getSubMatrix(i * n__, i * n__ + n__ - 1, 0, 0));
+
+		}
+
+		return unstacked;
+	}
 
 }
