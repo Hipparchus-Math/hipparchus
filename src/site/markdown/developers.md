@@ -165,15 +165,17 @@ in the git book for explanation about how to configure these settings and more.
 
 ## Licensing and copyright
 
-  * All new source file submissions _must_ include the Apache Software
-    License in a comment that begins the file
-  * All contributions must comply with the terms of the Hipparchus
+  * All new source file submissions _must_ include the Hipparchus project
+    header in a comment that begins the file,
+  * Recurring contributors must file an Hipparchus
     Individual Contributor License Agreement (ICLA)
     ([Open Document Format](https://hipparchus.org/clas/ICLA.odt),
     [Portable Document Format](https://hipparchus.org/clas/ICLA.pdf))
     or Corporate Contributor License Agreement (CCLA)
     ([Open Document Format](https://hipparchus.org/clas/CCLA.odt),
     [Portable Document Format](https://hipparchus.org/clas/CCLA.pdf))
+  * Importing pre-existing code into Hipparchus requires filing
+    a Software Grant ([Portable Document Format](https://hipparchus.org/clas/software-grant.pdf)) 
   * Patches _must_ be accompanied by a clear reference to a _source_, - if code has been
     _ported_ from another language, clearly state the source of the original implementation.
     If the _expression_ of a given algorithm is derivative, please note the original source
