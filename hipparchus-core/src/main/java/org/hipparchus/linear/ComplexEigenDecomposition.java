@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -44,9 +44,10 @@ public class ComplexEigenDecomposition {
 
 	/** Internally used epsilon criteria. */
 	private static final double EPSILON = 1e-12;
+	/** Internally used epsilon criteria for equals. */
+	private static final double EPSILON_EQUALS = 1e-6;
 	/** complex eigenvalues. */
 	private Complex[] eigenvalues;
-
 	/** Eigenvectors. */
 	private ArrayFieldVector<Complex>[] eigenvectors;
 	/** Cached value of V. */
@@ -281,7 +282,7 @@ public class ComplexEigenDecomposition {
 		// testing A*V = V*D
 		FieldMatrix<Complex> AV = matrixC.multiply(getV());
 		FieldMatrix<Complex> VD = getV().multiply(getD());
-		if (!equalsWithPrecision(AV, VD, EPSILON)) {
+		if (!equalsWithPrecision(AV, VD, EPSILON_EQUALS)) {
 			throw new MathRuntimeException(LocalizedCoreFormats.CONSTRAINT,
 					"Erro checking definition "
 							+ matrixC.multiply(getV()).toString() + " "
