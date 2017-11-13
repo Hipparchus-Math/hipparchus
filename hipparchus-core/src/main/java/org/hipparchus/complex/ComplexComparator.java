@@ -16,13 +16,17 @@
  */
 package org.hipparchus.complex;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 /**
  * Comparator for Complex Numbers.
  *
  */
-public class ComplexComparator implements Comparator<Complex> {
+public class ComplexComparator implements Comparator<Complex>, Serializable {
+
+    /** Serializable UID. */
+    private static final long serialVersionUID = 20171113L;
 
     /** Compare two complex numbers, using real ordering as the primary sort order and
      * imaginary ordering as the secondary sort order.
@@ -32,28 +36,17 @@ public class ComplexComparator implements Comparator<Complex> {
      * or if real parts are equal and o1 imaginary part is less than o2 imaginary part
      */
     public int compare(Complex o1, Complex o2) {
-        if (o1 == null && o2 != null) {
-            return -1;
-        } else if (o1 != null && o2 == null) {
+        if (o1 == null) {
+            return o2 == null ? 0 : -1;
+        } else if (o2 == null) {
             return 1;
-        } else if (o1 == null && o2 == null) {
-            return 0;
         }
 
-        if (o1.getReal() < o2.getReal()) {
-            return -1;
+        final int cR = Double.compare(o1.getReal(), o2.getReal());
+        if (cR == 0) {
+            return Double.compare(o1.getImaginary(),o2.getImaginary());
         } else {
-            if (o1.getReal() == o2.getReal()) {
-                if (o1.getImaginary() == o2.getImaginary()) {
-                    return 0;
-                } else if (o1.getImaginary() < o2.getImaginary()) {
-                    return -1;
-                } else {
-                    return 1;
-                }
-            } else {
-                return 1;
-            }
+            return cR;
         }
     }
 

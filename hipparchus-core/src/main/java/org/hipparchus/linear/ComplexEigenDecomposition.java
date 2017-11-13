@@ -92,7 +92,7 @@ public class ComplexEigenDecomposition {
      * @return igen values.
      */
     public Complex[] getEigenvalues() {
-        return eigenvalues;
+        return eigenvalues.clone();
     }
 
     /**
