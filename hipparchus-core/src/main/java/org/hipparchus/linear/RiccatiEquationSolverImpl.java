@@ -195,7 +195,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
      * @param Q state cost matrix
      * @param R control cost matrix
      * @param R_inv inverse of matrix R
-     * @param P initial solution
+     * @param initialP initial solution
      * @param maxIterations maximum number of iterations allowed
      * @param epsilon convergence threshold
      * @return improved solution
