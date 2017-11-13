@@ -32,8 +32,7 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
     /**
      * Constructor for the decomposition.
      *
-     * @param matrix
-     *            real matrix.
+     * @param matrix real matrix.
      */
     public OrderedComplexEigenDecomposition(final RealMatrix matrix) {
         super(matrix);
@@ -78,11 +77,8 @@ public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition 
         checkDefinition(matrix);
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.hipparchus.linear.EigenDecomposition#getVT()
-     */
+    /** {@inheritDoc} */
+    @Override
     public FieldMatrix<Complex> getVT() {
         return getV().transpose();
     }

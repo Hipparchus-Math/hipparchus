@@ -285,17 +285,20 @@ public class ComplexEigenDecomposition {
      * Helper method that checks with two matrix is equals taking into account a
      * given precision.
      *
-     * @param matrix
-     * @return
+     * @param matrix1 first matrix to compare
+     * @param matrix2 second matrix to compare
+     * @param tolerance tolerance on matrices entries
+     * @return true is matrices entries are equal within tolerance,
+     * false otherwise
      */
     private boolean equalsWithPrecision(final FieldMatrix<Complex> matrix1,
-                                        final FieldMatrix<Complex> matrix2, final Double error) {
+                                        final FieldMatrix<Complex> matrix2, final double tolerance) {
         boolean toRet = true;
         for (int i = 0; i < matrix1.getRowDimension(); i++) {
             for (int j = 0; j < matrix1.getColumnDimension(); j++) {
                 Complex c1 = matrix1.getEntry(i, j);
                 Complex c2 = matrix2.getEntry(i, j);
-                if (c1.add(c2.negate()).abs() > error) {
+                if (c1.add(c2.negate()).abs() > tolerance) {
                     toRet = false;
                     break;
                 }

@@ -50,14 +50,10 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
      * multiplicative compatible. A and Q must be multiplicative compatible. R
      * must be invertible.
      *
-     * @param A
-     *            matrix A.
-     * @param B
-     *            matrix B.
-     * @param Q
-     *            matrix Q.
-     * @param R
-     *            matrix R.
+     * @param A state transition matrix
+     * @param B control multipliers matrix
+     * @param Q state cost matrix
+     * @param R control cost matrix
      */
     public RiccatiEquationSolverImpl(final RealMatrix A, final RealMatrix B,
                                      final RealMatrix Q, final RealMatrix R) {
@@ -96,21 +92,14 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
      * Compute an initial stable solution and then applies the Kleinman
      * algorithm to approximate it using an EPSILON.
      *
-     * @param A
-     *            matrix A.
-     * @param B
-     *            matrix B.
-     * @param Q
-     *            matrix Q.
-     * @param R
-     *            matrix R.
-     * @param R_inv
-     *            inverse of matrix R.
-     * @param maxIterations
-     *            maximum number of iterations.
-     * @param epsilon
-     *            epsilon to be used.
-     * @return matrix P, solution of the algebraic Riccati equation.
+     * @param A state transition matrix
+     * @param B control multipliers matrix
+     * @param Q state cost matrix
+     * @param R control cost matrix
+     * @param R_inv inverse of matrix R
+     * @param maxIterations maximum number of iterations
+     * @param epsilon epsilon to be used
+     * @return matrix P, solution of the algebraic Riccati equation
      */
     private RealMatrix computeP(final RealMatrix A, final RealMatrix B,
                                 final RealMatrix Q, final RealMatrix R, final RealMatrix R_inv,
@@ -123,17 +112,12 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
      * Compute initial P using the Hamiltonian and the ordered eigen values
      * decomposition.
      *
-     * @param A
-     *            matrix A.
-     * @param B
-     *            matrix B.
-     * @param Q
-     *            matrix Q.
-     * @param R
-     *            matrix R.
-     * @param R_inv
-     *            inverse of matrix R.
-     * @return
+     * @param A state transition matrix
+     * @param B control multipliers matrix
+     * @param Q state cost matrix
+     * @param R control cost matrix
+     * @param R_inv inverse of matrix R
+     * @return initial solution
      */
     private RealMatrix computeInitialP(final RealMatrix A, final RealMatrix B,
                                        final RealMatrix Q, final RealMatrix R, final RealMatrix R_inv) {
@@ -175,8 +159,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         // the
         // Kleinman Algorithm
         // it must be ordered in order to work with submatrices
-        final OrderedComplexEigenDecomposition eigenDecomposition = new OrderedComplexEigenDecomposition(
-                                                                                                         m);
+        final OrderedComplexEigenDecomposition eigenDecomposition = new OrderedComplexEigenDecomposition(m);
         final FieldMatrix<Complex> u = eigenDecomposition.getV();
 
         // solving linear system
@@ -207,16 +190,21 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
     /**
      * Applies the Kleinman's algorithm.
      *
-     * @param A
-     * @param B
-     * @param Q
-     * @param R
+     * @param A state transition matrix
+     * @param B control multipliers matrix
+     * @param Q state cost matrix
+     * @param R control cost matrix
+     * @param R_inv inverse of matrix R
+     * @param P initial solution
+     * @param maxIterations maximum number of iterations allowed
+     * @param epsilon convergence threshold
+     * @return improved solution
      */
     private RealMatrix approximateP(final RealMatrix A, final RealMatrix B,
                                     final RealMatrix Q, final RealMatrix R, final RealMatrix R_inv,
-                                    final RealMatrix P, final int maxIterations, final double epsilon) {
+                                    final RealMatrix initialP, final int maxIterations, final double epsilon) {
         RealMatrix K_ = null;
-        RealMatrix P_ = P;
+        RealMatrix P_ = initialP;
 
         double error = 1;
         int i = 1;
@@ -266,20 +254,14 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         return P_;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.hipparchus.linear.RiccatiEquationSolver1#getP()
-     */
+    /** {inheritDoc} */
+    @Override
     public RealMatrix getP() {
         return P;
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.hipparchus.linear.RiccatiEquationSolver1#getK()
-     */
+    /** {inheritDoc} */
+    @Override
     public RealMatrix getK() {
         return K;
     }
@@ -288,16 +270,16 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
      * Converts a given complex matrix into a real matrix taking into account a
      * precision for the imaginary components.
      *
-     * @param matrix
-     *            complex field matrix.
+     * @param matrix complex field matrix
+     * @param tolerance tolerance on the imaginary part
      * @return real matrix.
      */
-    private RealMatrix convertToRealMatrix(FieldMatrix<Complex> matrix, double error) {
+    private RealMatrix convertToRealMatrix(FieldMatrix<Complex> matrix, double tolerance) {
         final RealMatrix toRet = MatrixUtils.createRealMatrix(matrix.getRowDimension(), matrix.getRowDimension());
         for (int i = 0; i < toRet.getRowDimension(); i++) {
             for (int j = 0; j < toRet.getColumnDimension(); j++) {
                 Complex c = matrix.getEntry(i, j);
-                if (c.getImaginary() != 0 && FastMath.abs(c.getImaginary()) > error) {
+                if (c.getImaginary() != 0 && FastMath.abs(c.getImaginary()) > tolerance) {
                     throw new MathRuntimeException(LocalizedCoreFormats.COMPLEX_CANNOT_BE_CONSIDERED_A_REAL_NUMBER,
                                                    c.getReal(), c.getImaginary());
                 }
@@ -306,4 +288,5 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         }
         return toRet;
     }
+
 }

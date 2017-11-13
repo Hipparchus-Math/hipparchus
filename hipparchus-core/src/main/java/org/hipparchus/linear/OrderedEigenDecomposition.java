@@ -33,7 +33,7 @@ public class OrderedEigenDecomposition extends EigenDecomposition {
     /**
      * Constructor using the EigenDecomposition as starting point for ordering.
      *
-     * @param matrix
+     * @param matrix matrix to decompose
      */
     public OrderedEigenDecomposition(final RealMatrix matrix) {
         super(matrix);
@@ -144,11 +144,8 @@ public class OrderedEigenDecomposition extends EigenDecomposition {
 
     }
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see org.hipparchus.linear.EigenDecomposition#getVT()
-     */
+    /** {@inheritDoc} */
+    @Override
     public RealMatrix getVT() {
         return getV().transpose();
     }

@@ -24,10 +24,12 @@ import java.util.Comparator;
  */
 public class ComplexComparator implements Comparator<Complex> {
 
-    /*
-     * (non-Javadoc)
-     *
-     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+    /** Compare two complex numbers, using real ordering as the primary sort order and
+     * imaginary ordering as the secondary sort order.
+     * @param o1 first complex number
+     * @param o2 second complex number
+     * @return a negative value if o1 real part is less than o2 real part
+     * or if real parts are equal and o1 imaginary part is less than o2 imaginary part
      */
     public int compare(Complex o1, Complex o2) {
         if (o1 == null && o2 != null) {

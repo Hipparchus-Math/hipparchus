@@ -595,8 +595,8 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     /**
      * Kronecker product of the current matrix and the parameter matrix.
      *
-     * @param b
-     * @return
+     * @param b matrix to post Kronecker-multiply by
+     * @return this ⨂ b
      */
     public RealMatrix kroneckerProduct(final RealMatrix b) {
         final int m = getRowDimension();
@@ -618,9 +618,7 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
 
     /**
      * Transforms a matrix in a vector (Vectorization).
-     *
-     * @param b
-     * @return
+     * @return a one column matrix
      */
     public RealMatrix stack() {
         final int m = getRowDimension();
@@ -636,10 +634,8 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     }
 
     /**
-     * Transforms a vector in a squared matrix (devectorization).
-     *
-     * @param b
-     * @return
+     * Transforms a one-column stacked matrix into a squared matrix (devectorization).
+     * @return square matrix
      */
     public RealMatrix unstackSquare() {
         final int m = getRowDimension();

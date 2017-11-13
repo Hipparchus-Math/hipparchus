@@ -23,26 +23,29 @@ package org.hipparchus.linear;
  * or discrete time.
  *
  * The continuous time algebraic Riccati equation (CARE):
- *
- * A^{T}X+XA-XBR^{-1}B^{T}X+Q=0\
+ * \[
+ * A^{T}X+XA-XBR^{-1}B^{T}X+Q=0
+ * \}
  *
  * And the respective linear controller is:
- *
+ * \[
  * K = R^{-1}B^{T}P
+ * \]
  *
  * A solver receives A, B, Q and R and computes P and K.
  *
  */
 public interface RiccatiEquationSolver {
 
-    /**
+    /** Get the solution.
      * @return the p
      */
-    public abstract RealMatrix getP();
+    RealMatrix getP();
 
     /**
-     * @return the k
+     * Get the linear controller k.
+     * @return the linear controller k
      */
-    public abstract RealMatrix getK();
+    RealMatrix getK();
 
 }
