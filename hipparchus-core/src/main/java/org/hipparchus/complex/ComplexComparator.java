@@ -20,39 +20,39 @@ import java.util.Comparator;
 
 /**
  * Comparator for Complex Numbers.
- * 
+ *
  */
 public class ComplexComparator implements Comparator<Complex> {
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
-	 */
-	public int compare(Complex o1, Complex o2) {
-		if (o1 == null && o2 != null) {
-			return -1;
-		} else if (o1 != null && o2 == null) {
-			return 1;
-		} else if (o1 == null && o2 == null) {
-			return 0;
-		}
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
+     */
+    public int compare(Complex o1, Complex o2) {
+        if (o1 == null && o2 != null) {
+            return -1;
+        } else if (o1 != null && o2 == null) {
+            return 1;
+        } else if (o1 == null && o2 == null) {
+            return 0;
+        }
 
-		if (o1.getReal() < o2.getReal()) {
-			return -1;
-		} else {
-			if (o1.getReal() == o2.getReal()) {
-				if (o1.getImaginary() == o2.getImaginary()) {
-					return 0;
-				} else if (o1.getImaginary() < o2.getImaginary()) {
-					return -1;
-				} else {
-					return 1;
-				}
-			} else {
-				return 1;
-			}
-		}
-	}
+        if (o1.getReal() < o2.getReal()) {
+            return -1;
+        } else {
+            if (o1.getReal() == o2.getReal()) {
+                if (o1.getImaginary() == o2.getImaginary()) {
+                    return 0;
+                } else if (o1.getImaginary() < o2.getImaginary()) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            } else {
+                return 1;
+            }
+        }
+    }
 
 }

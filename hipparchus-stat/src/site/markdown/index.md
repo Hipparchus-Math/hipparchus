@@ -374,7 +374,7 @@ The slope may be biased.
 [GLSMultipleLinearRegression](../apidocs/org/hipparchus/stat/regression/GLSMultipleLinearRegression.html) and [MillerUpdatingRegression](../apidocs/org/hipparchus/stat/regression/MillerUpdatingRegression.html)
 provide least squares regression to fit the linear model:
 
-	Y = X * b + u
+    Y = X * b + u
 
 where Y is an n-vector __regressand__, X is a `[n,k]` matrix whose k columns are called
 __regressors__, b is k-vector of __regression parameters__ and u is an n-vector

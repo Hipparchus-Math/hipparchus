@@ -28,136 +28,147 @@ import org.junit.Test;
 
 public class RiccatiEquationSolverTest {
 
-	static private final RealMatrixFormat f = new RealMatrixFormat("", "",
-			"\n", "", "", "\t\t", new DecimalFormat(
-					" ##############0.0000;-##############0.0000"));
+    static private final RealMatrixFormat f =
+                    new RealMatrixFormat("", "", "\n", "", "", "\t\t",
+                                         new DecimalFormat(" ##############0.0000;-##############0.0000"));
 
-	@Test
-	public void test_real_2_2() {
-		// AA = [-3 2;1 1];
-		// BB = [0;1];
+    @Test
+    public void test_real_2_2() {
+        // AA = [-3 2;1 1];
+        // BB = [0;1];
 
-		RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { -3, 2 },
-				{ 1, 1 } });
+        RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
+            { -3, 2 }, { 1, 1 }
+        });
 
-		RealMatrix B = MatrixUtils.createRealMatrix(new double[][] { { 0 },
-				{ 1 } });
+        RealMatrix B = MatrixUtils.createRealMatrix(new double[][] {
+            { 0 }, { 1 }
+        });
 
-		RealMatrix R = MatrixUtils.createRealIdentityMatrix(1);
-		RealMatrix Q = MatrixUtils.createRealIdentityMatrix(2);
+        RealMatrix R = MatrixUtils.createRealIdentityMatrix(1);
+        RealMatrix Q = MatrixUtils.createRealIdentityMatrix(2);
 
-		RiccatiEquationSolver a = new RiccatiEquationSolverImpl(A, B, Q, R);
+        RiccatiEquationSolver a = new RiccatiEquationSolverImpl(A, B, Q, R);
 
-		RealMatrix P_expected = MatrixUtils.createRealMatrix(new double[][] {
-				{ 0.3221, 0.7407 }, { 0.7407, 3.2277 } });
+        RealMatrix P_expected = MatrixUtils.createRealMatrix(new double[][] {
+            { 0.3221, 0.7407 }, { 0.7407, 3.2277 }
+        });
 
-		assertEquals(f.format(P_expected), f.format(a.getP()));
+        assertEquals(f.format(P_expected), f.format(a.getP()));
 
-		// P
-		// 0.3221 0.7407
-		// 0.7407 3.2277
-		// K
-		// 0.7407 3.2277
-	}
+        // P
+        // 0.3221 0.7407
+        // 0.7407 3.2277
+        // K
+        // 0.7407 3.2277
+    }
 
-	@Test
-	public void test_imaginary_2_2() {
-		// AA = [3 -2;4 -1];
-		// BB = [0;1];
+    @Test
+    public void test_imaginary_2_2() {
+        // AA = [3 -2;4 -1];
+        // BB = [0;1];
 
-		RealMatrix A = MatrixUtils.createRealMatrix(new double[][] { { 3, -2 },
-				{ 4, -1 } });
+        RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
+            { 3, -2 }, { 4, -1 }
+        });
 
-		RealMatrix B = MatrixUtils.createRealMatrix(new double[][] { { 0 },
-				{ 1 } });
+        RealMatrix B = MatrixUtils.createRealMatrix(new double[][] {
+            { 0 }, { 1 }
+        });
 
-		RealMatrix R = MatrixUtils.createRealIdentityMatrix(1);
-		RealMatrix Q = MatrixUtils.createRealIdentityMatrix(2);
+        RealMatrix R = MatrixUtils.createRealIdentityMatrix(1);
+        RealMatrix Q = MatrixUtils.createRealIdentityMatrix(2);
 
-		RiccatiEquationSolver a = new RiccatiEquationSolverImpl(A, B, Q, R);
+        RiccatiEquationSolver a = new RiccatiEquationSolverImpl(A, B, Q, R);
 
-		RealMatrix P_expected = MatrixUtils.createRealMatrix(new double[][] {
-				{ 19.7598, -7.6430 }, { -7.6430, 4.7072 } });
+        RealMatrix P_expected = MatrixUtils.createRealMatrix(new double[][] {
+            { 19.7598, -7.6430 }, { -7.6430, 4.7072 }
+        });
 
-		assertEquals(f.format(P_expected), f.format(a.getP()));
+        assertEquals(f.format(P_expected), f.format(a.getP()));
 
-		// P
-		// 19.7598 -7.6430
-		// -7.6430 4.7072
-		//
-		// K
-		// -7.6430 4.7072
+        // P
+        // 19.7598 -7.6430
+        // -7.6430 4.7072
+        //
+        // K
+        // -7.6430 4.7072
 
-	}
+    }
 
-	@Test
-	public void test_imaginary_6_6() {
+    @Test
+    public void test_imaginary_6_6() {
 
-		RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
-				{ 1, 0, 0, 1, 0, 0 }, { 1, 0, 0, 0, 1, 0 },
-				{ 1, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 } });
+        RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
+            { 1, 0, 0, 1, 0, 0 }, { 1, 0, 0, 0, 1, 0 },
+            { 1, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 }
+        });
 
-		RealMatrix B = MatrixUtils.createRealMatrix(new double[][] {
-				{ 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { -0.0032, 0, 0 },
-				{ 0, -0.0028, 0 }, { 0, 0, -0.0019 } });
+        RealMatrix B = MatrixUtils.createRealMatrix(new double[][] {
+            { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { -0.0032, 0, 0 },
+            { 0, -0.0028, 0 }, { 0, 0, -0.0019 }
+        });
 
-		RealMatrix R = MatrixUtils.createRealIdentityMatrix(3);
-		RealMatrix Q = MatrixUtils.createRealIdentityMatrix(6);
+        RealMatrix R = MatrixUtils.createRealIdentityMatrix(3);
+        RealMatrix Q = MatrixUtils.createRealIdentityMatrix(6);
 
-		RiccatiEquationSolver a = new RiccatiEquationSolverImpl(A, B, Q, R);
+        RiccatiEquationSolver a = new RiccatiEquationSolverImpl(A, B, Q, R);
 
-		RealMatrix P_expected = MatrixUtils.createRealMatrix(new double[][] {
-				{ 2.2791, 0.0036, 0.0045, 2.1121, 0.0628, 0.0982 },
-				{ 0.0036, 0.0002, -0.0000, 0.0017, 0.0029, -0.0011 },
-				{ 0.0045, -0.0000, 0.0003, 0.0022, -0.0011, 0.0034 },
-				{ 2.1121, 0.0017, 0.0022, 2.0307, 0.0305, 0.0479 },
-				{ 0.0628, 0.0029, -0.0011, 0.0305, 0.0746, -0.0387 },
-				{ 0.0982, -0.0011, 0.0034, 0.0479, -0.0387, 0.0967 } });
+        RealMatrix P_expected = MatrixUtils.createRealMatrix(new double[][] {
+            { 2.2791, 0.0036, 0.0045, 2.1121, 0.0628, 0.0982 },
+            { 0.0036, 0.0002, -0.0000, 0.0017, 0.0029, -0.0011 },
+            { 0.0045, -0.0000, 0.0003, 0.0022, -0.0011, 0.0034 },
+            { 2.1121, 0.0017, 0.0022, 2.0307, 0.0305, 0.0479 },
+            { 0.0628, 0.0029, -0.0011, 0.0305, 0.0746, -0.0387 },
+            { 0.0982, -0.0011, 0.0034, 0.0479, -0.0387, 0.0967 } });
 
-		assertEquals(f.format(P_expected),
-				f.format(a.getP().scalarMultiply(1e-05)));
+        assertEquals(f.format(P_expected),
+                     f.format(a.getP().scalarMultiply(1e-05)));
 
-		// 1.0e+05 *
-		// 2.2791 0.0036 0.0045 2.1121 0.0628 0.0982
-		// 0.0036 0.0002 -0.0000 0.0017 0.0029 -0.0011
-		// 0.0045 -0.0000 0.0003 0.0022 -0.0011 0.0034
-		// 2.1121 0.0017 0.0022 2.0307 0.0305 0.0479
-		// 0.0628 0.0029 -0.0011 0.0305 0.0746 -0.0387
-		// 0.0982 -0.0011 0.0034 0.0479 -0.0387 0.0967
-	}
+        // 1.0e+05 *
+        // 2.2791 0.0036 0.0045 2.1121 0.0628 0.0982
+        // 0.0036 0.0002 -0.0000 0.0017 0.0029 -0.0011
+        // 0.0045 -0.0000 0.0003 0.0022 -0.0011 0.0034
+        // 2.1121 0.0017 0.0022 2.0307 0.0305 0.0479
+        // 0.0628 0.0029 -0.0011 0.0305 0.0746 -0.0387
+        // 0.0982 -0.0011 0.0034 0.0479 -0.0387 0.0967
+    }
 
-	@Test
-	public void test_imaginary_6_6_ill_conditioned() {
-		// A = [0 0 0 1 0 0; 0 0 0 0 1 0; 0 0 0 0 0 1; 0 0 0 0 0 0; 0 0 0 0 0 0;
-		// 0 0 0 0 0 0];
-		// B = [ 0 0 0; 0 0 0; 0 0 0; -0.0032 0 0; 0 -0.0028 0; 0 0 -0.0019];
-		// R= [1 0 0; 0 1 0; 0 0 1];
-		// Q = [1 0 0 0 0 0; 0 1 0 0 0 0; 0 0 1 0 0 0; 0 0 0 1 0 0; 0 0 0 0 1 0;
-		// 0 0 0 0 0 1];
+    @Test
+    public void test_imaginary_6_6_ill_conditioned() {
+        // A = [0 0 0 1 0 0; 0 0 0 0 1 0; 0 0 0 0 0 1; 0 0 0 0 0 0; 0 0 0 0 0 0;
+        // 0 0 0 0 0 0];
+        // B = [ 0 0 0; 0 0 0; 0 0 0; -0.0032 0 0; 0 -0.0028 0; 0 0 -0.0019];
+        // R= [1 0 0; 0 1 0; 0 0 1];
+        // Q = [1 0 0 0 0 0; 0 1 0 0 0 0; 0 0 1 0 0 0; 0 0 0 1 0 0; 0 0 0 0 1 0;
+        // 0 0 0 0 0 1];
 
-		RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
-				{ 0, 0, 0, 1, 0, 0 }, { 0, 0, 0, 0, 1, 0 },
-				{ 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0 },
-				{ 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 } });
+        RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
+            { 0, 0, 0, 1, 0, 0 }, { 0, 0, 0, 0, 1, 0 },
+            { 0, 0, 0, 0, 0, 1 }, { 0, 0, 0, 0, 0, 0 },
+            { 0, 0, 0, 0, 0, 0 }, { 0, 0, 0, 0, 0, 0 }
+        });
 
-		RealMatrix B = MatrixUtils.createRealMatrix(new double[][] {
-				{ 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { -0.0032, 0, 0 },
-				{ 0, -0.0028, 0 }, { 0, 0, -0.0019 } });
+        RealMatrix B = MatrixUtils.createRealMatrix(new double[][] {
+            { 0, 0, 0 }, { 0, 0, 0 }, { 0, 0, 0 }, { -0.0032, 0, 0 },
+            { 0, -0.0028, 0 }, { 0, 0, -0.0019 }
+        });
 
-		RealMatrix R = MatrixUtils.createRealIdentityMatrix(3);
-		RealMatrix Q = MatrixUtils.createRealIdentityMatrix(6);
-		RiccatiEquationSolver a = new RiccatiEquationSolverImpl(A, B, Q, R);
+        RealMatrix R = MatrixUtils.createRealIdentityMatrix(3);
+        RealMatrix Q = MatrixUtils.createRealIdentityMatrix(6);
+        RiccatiEquationSolver a = new RiccatiEquationSolverImpl(A, B, Q, R);
 
-		RealMatrix P_expected = MatrixUtils.createRealMatrix(new double[][] {
-				{ 25.02, -1E-12, 0, 312.5, -1E-12, 0 },
-				{ -1E-12, 26.7448, 0, 0, 357.1429, 0 },
-				{ 0, 0, 32.4597, -1E-12, -1E-12, 526.3158 },
-				{ 312.5, -1E-12, -1E-12, 7818.7475, 0, 0 },
-				{ -1E-12, 357.1429, -1E-12, 0, 9551.7235, -1E-12 },
-				{ 0, 0, 526.3158, 0, -1E-12, 17084.0482 } });
+        RealMatrix P_expected = MatrixUtils.createRealMatrix(new double[][] {
+            { 25.02, -1E-12, 0, 312.5, -1E-12, 0 },
+            { -1E-12, 26.7448, 0, 0, 357.1429, 0 },
+            { 0, 0, 32.4597, -1E-12, -1E-12, 526.3158 },
+            { 312.5, -1E-12, -1E-12, 7818.7475, 0, 0 },
+            { -1E-12, 357.1429, -1E-12, 0, 9551.7235, -1E-12 },
+            { 0, 0, 526.3158, 0, -1E-12, 17084.0482 }
+        });
 
-		assertEquals(f.format(P_expected), f.format(a.getP()));
-	}
+        assertEquals(f.format(P_expected), f.format(a.getP()));
+    }
 
 }

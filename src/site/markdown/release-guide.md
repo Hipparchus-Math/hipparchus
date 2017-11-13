@@ -120,11 +120,11 @@ incomplete as only this file is parsed during release notes generation.
 The third step to perform is to run the following commands (don't forget to replace
 X.Y by the correct version number):
 
-	mkdir -p hipparchus-parent/src/changes
-	cp src/changes/* hipparchus-parent/src/changes/
-	mvn -Dversion=X.Y changes:announcement-generate -pl hipparchus-parent
-	cp hipparchus-parent/target/announcement/release-notes.vm RELEASE-NOTES.txt
-	rm -rf hipparchus-parent/src
+    mkdir -p hipparchus-parent/src/changes
+    cp src/changes/* hipparchus-parent/src/changes/
+    mvn -Dversion=X.Y changes:announcement-generate -pl hipparchus-parent
+    cp hipparchus-parent/target/announcement/release-notes.vm RELEASE-NOTES.txt
+    rm -rf hipparchus-parent/src
 
 After these commands have been run, the `RELEASE-NOTES.txt` file has been updated
 automatically. It should be reviewed and edited manually to improve readability

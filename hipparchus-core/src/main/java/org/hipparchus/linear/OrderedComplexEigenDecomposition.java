@@ -23,67 +23,67 @@ import org.hipparchus.complex.ComplexComparator;
 
 /**
  * Given a matrix A, it computes a complex eigen decomposition A = VDV^{T}.
- * 
+ *
  * It ensures that eigen values in the diagonal of D are in ascending order.
- * 
+ *
  */
 public class OrderedComplexEigenDecomposition extends ComplexEigenDecomposition {
 
-	/**
-	 * Constructor for the decomposition.
-	 * 
-	 * @param matrix
-	 *            real matrix.
-	 */
-	public OrderedComplexEigenDecomposition(final RealMatrix matrix) {
-		super(matrix);
+    /**
+     * Constructor for the decomposition.
+     *
+     * @param matrix
+     *            real matrix.
+     */
+    public OrderedComplexEigenDecomposition(final RealMatrix matrix) {
+        super(matrix);
 
-		final FieldMatrix<Complex> D = this.getD();
-		final FieldMatrix<Complex> V = this.getV();
+        final FieldMatrix<Complex> D = this.getD();
+        final FieldMatrix<Complex> V = this.getV();
 
-		// getting eigen values
-		TreeSet<Complex> eigenValues = new TreeSet<Complex>(
-				new ComplexComparator());
-		for (int ij = 0; ij < matrix.getRowDimension(); ij++) {
-			eigenValues.add(D.getEntry(ij, ij));
-		}
+        // getting eigen values
+        TreeSet<Complex> eigenValues = new TreeSet<Complex>(
+                        new ComplexComparator());
+        for (int ij = 0; ij < matrix.getRowDimension(); ij++) {
+            eigenValues.add(D.getEntry(ij, ij));
+        }
 
-		// ordering
-		for (int ij = 0; ij < matrix.getRowDimension() - 1; ij++) {
-			final Complex eigValue = eigenValues.pollFirst();
-			int currentIndex = -1;
-			// searching the current index
-			for (currentIndex = ij; currentIndex < matrix.getRowDimension(); currentIndex++) {
-				Complex compCurrent = D.getEntry(currentIndex, currentIndex);
-				if (eigValue.equals(compCurrent)) {
-					break;
-				}
-			}
+        // ordering
+        for (int ij = 0; ij < matrix.getRowDimension() - 1; ij++) {
+            final Complex eigValue = eigenValues.pollFirst();
+            int currentIndex = -1;
+            // searching the current index
+            for (currentIndex = ij; currentIndex < matrix.getRowDimension(); currentIndex++) {
+                Complex compCurrent = D.getEntry(currentIndex, currentIndex);
+                if (eigValue.equals(compCurrent)) {
+                    break;
+                }
+            }
 
-			if (ij == currentIndex) {
-				continue;
-			}
+            if (ij == currentIndex) {
+                continue;
+            }
 
-			// exchanging D
-			Complex previousValue = D.getEntry(ij, ij);
-			D.setEntry(ij, ij, eigValue);
-			D.setEntry(currentIndex, currentIndex, previousValue);
+            // exchanging D
+            Complex previousValue = D.getEntry(ij, ij);
+            D.setEntry(ij, ij, eigValue);
+            D.setEntry(currentIndex, currentIndex, previousValue);
 
-			// exchanging V
-			final Complex[] previousColumnV = V.getColumn(ij);
-			V.setColumn(ij, V.getColumn(currentIndex));
-			V.setColumn(currentIndex, previousColumnV);
-		}
+            // exchanging V
+            final Complex[] previousColumnV = V.getColumn(ij);
+            V.setColumn(ij, V.getColumn(currentIndex));
+            V.setColumn(currentIndex, previousColumnV);
+        }
 
-		checkDefinition(matrix);
-	}
+        checkDefinition(matrix);
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.hipparchus.linear.EigenDecomposition#getVT()
-	 */
-	public FieldMatrix<Complex> getVT() {
-		return getV().transpose();
-	}
+    /*
+     * (non-Javadoc)
+     *
+     * @see org.hipparchus.linear.EigenDecomposition#getVT()
+     */
+    public FieldMatrix<Complex> getVT() {
+        return getV().transpose();
+    }
 }

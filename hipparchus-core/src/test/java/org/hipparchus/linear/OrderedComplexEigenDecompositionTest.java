@@ -23,28 +23,27 @@ import org.junit.Test;
 
 public class OrderedComplexEigenDecompositionTest {
 
-	private final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
-			{ 3, -2 }, { 4, -1 } });
+    private final RealMatrix A = MatrixUtils.createRealMatrix(new double[][] {
+        { 3, -2 }, { 4, -1 } });
 
-	@Test
-	public void testDefinition() {
-		OrderedComplexEigenDecomposition eigenDecomp = new OrderedComplexEigenDecomposition(
-				A);
+    @Test
+    public void testDefinition() {
+        OrderedComplexEigenDecomposition eigenDecomp = new OrderedComplexEigenDecomposition(A);
 
-		FieldMatrix<Complex> A = MatrixUtils.createFieldMatrix(new Complex[][] {
-				{ new Complex(3, 0), new Complex(-2, 0) },
-				{ new Complex(4, 0), new Complex(-1, 0) } });
+        FieldMatrix<Complex> A = MatrixUtils.createFieldMatrix(new Complex[][] {
+            { new Complex(3, 0), new Complex(-2, 0) },
+            { new Complex(4, 0), new Complex(-1, 0) } });
 
-		// testing AV = lamba V - [0]
-		assertEquals(A.operate(eigenDecomp.getEigenvector(0)), eigenDecomp
-				.getEigenvector(0).mapMultiply(eigenDecomp.getEigenvalues()[0]));
+        // testing AV = lamba V - [0]
+        assertEquals(A.operate(eigenDecomp.getEigenvector(0)),
+                     eigenDecomp.getEigenvector(0).mapMultiply(eigenDecomp.getEigenvalues()[0]));
 
-		// testing AV = lamba V - [1]
-		assertEquals(A.operate(eigenDecomp.getEigenvector(1)), eigenDecomp
-				.getEigenvector(1).mapMultiply(eigenDecomp.getEigenvalues()[1]));
+        // testing AV = lamba V - [1]
+        assertEquals(A.operate(eigenDecomp.getEigenvector(1)),
+                     eigenDecomp.getEigenvector(1).mapMultiply(eigenDecomp.getEigenvalues()[1]));
 
-		// checking definition of the decomposition A*V = V*D
-		assertEquals(A.multiply(eigenDecomp.getV()), eigenDecomp.getV()
-				.multiply(eigenDecomp.getD()));
-	}
+        // checking definition of the decomposition A*V = V*D
+        assertEquals(A.multiply(eigenDecomp.getV()),
+                     eigenDecomp.getV().multiply(eigenDecomp.getD()));
+    }
 }
