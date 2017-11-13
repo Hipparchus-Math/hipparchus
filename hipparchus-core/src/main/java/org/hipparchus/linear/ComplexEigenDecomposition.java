@@ -64,8 +64,8 @@ public class ComplexEigenDecomposition {
     public ComplexEigenDecomposition(final RealMatrix matrix) {
 
         if (!matrix.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT,
-                                                   "The matrix must be a square matrix");
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
+                                                   matrix.getRowDimension(), matrix.getColumnDimension());
         }
 
         // computing the eigen values
@@ -274,10 +274,8 @@ public class ComplexEigenDecomposition {
         FieldMatrix<Complex> AV = matrixC.multiply(getV());
         FieldMatrix<Complex> VD = getV().multiply(getD());
         if (!equalsWithPrecision(AV, VD, EPSILON_EQUALS)) {
-            throw new MathRuntimeException(LocalizedCoreFormats.CONSTRAINT,
-                                           "Erro checking definition "
-                                                           + matrixC.multiply(getV()).toString() + " "
-                                                           + getV().multiply(getD()).toString());
+            throw new MathRuntimeException(LocalizedCoreFormats.FAILED_DECOMPOSITION,
+                                           matrix.getRowDimension(), matrix.getColumnDimension());
 
         }
 

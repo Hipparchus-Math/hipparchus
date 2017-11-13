@@ -35,6 +35,7 @@ CANNOT_FORMAT_INSTANCE_AS_COMPLEX = impossible de formater une instance de {0} c
 CANNOT_FORMAT_OBJECT_TO_FRACTION = impossible de formater l''objet sous forme d''un nombre rationnel
 CANNOT_SUBSTITUTE_ELEMENT_FROM_EMPTY_ARRAY = impossible de substituer un élément dans un tableau vide
 COLUMN_INDEX = index de colonne ({0})
+COMPLEX_CANNOT_BE_CONSIDERED_A_REAL_NUMBER = le nombre complexe ({0},{1}) ne peut pas être considéré comme étant un nombre réel
 CONSTRAINT = contrainte
 CONTINUED_FRACTION_INFINITY_DIVERGENCE = Divergence de fraction continue à l''infini pour la valeur {0}
 CONTINUED_FRACTION_NAN_DIVERGENCE = Divergence de fraction continue à NaN pour la valeur {0}
@@ -58,6 +59,7 @@ EVALUATION = évaluation
 EXPANSION_FACTOR_SMALLER_THAN_ONE = facteur d''extension inférieur à un ({0})
 FACTORIAL_NEGATIVE_PARAMETER = n doit être positif pour le calcul de n!, or n = {0}
 FAILED_BRACKETING = nombre d''itérations = {4}, itérations maximum = {5}, valeur initiale = {6}, borne inférieure = {7}, borne supérieure = {8}, valeur a finale = {0}, valeur b finale = {1}, f(a) = {2}, f(b) = {3}
+FAILED_DECOMPOSITION = échec de la décomposition d''une matrice {0}x{1}
 FAILED_FRACTION_CONVERSION = Impossible de convertir {0} en fraction après {1} itérations
 FIRST_COLUMNS_NOT_INITIALIZED_YET = les {0} premières colonnes ne sont pas encore initialisées
 FIRST_ROWS_NOT_INITIALIZED_YET = les {0} premières lignes ne sont pas encore initialisées

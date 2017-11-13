@@ -64,11 +64,12 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
 
         // checking A
         if (!A.isSquare()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT, "A must be square");
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
+                                                   A.getRowDimension(), A.getColumnDimension());
         }
         if (A.getColumnDimension() != B.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT,
-                                                  "A and B must be compatible");
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   A.getRowDimension(), B.getRowDimension());
         }
         MatrixUtils.checkMultiplicationCompatible(B, R);
         MatrixUtils.checkMultiplicationCompatible(A, Q);
@@ -76,7 +77,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         // checking R
         final SingularValueDecomposition svd = new SingularValueDecomposition(R);
         if (!svd.getSolver().isNonSingular()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT, "R must be inversible");
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
         }
         // checking condition number
         if (svd.getConditionNumber() > 2) {
@@ -144,16 +145,20 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         final RealMatrix m21 = Q.scalarMultiply(-1).scalarAdd(0);
         final RealMatrix m22 = A.transpose().scalarMultiply(-1).scalarAdd(0);
         if (m11.getRowDimension() != m12.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT, "Dimensions must match");
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   m11.getRowDimension(), m12.getRowDimension());
         }
         if (m21.getRowDimension() != m22.getRowDimension()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT, "Dimensions must match");
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   m21.getRowDimension(), m22.getRowDimension());
         }
         if (m11.getColumnDimension() != m21.getColumnDimension()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT, "Dimensions must match");
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   m11.getColumnDimension(), m21.getColumnDimension());
         }
         if (m21.getColumnDimension() != m22.getColumnDimension()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT, "Dimensions must match");
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   m21.getColumnDimension(), m22.getColumnDimension());
         }
 
         // defining M
@@ -184,8 +189,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         final FieldDecompositionSolver<Complex> solver = new FieldLUDecomposition<Complex>(u11).getSolver();
 
         if (!solver.isNonSingular()) {
-            throw new MathRuntimeException(LocalizedCoreFormats.CONSTRAINT,
-                                           "Singular matrix");
+            throw new MathRuntimeException(LocalizedCoreFormats.SINGULAR_MATRIX);
         }
 
         // solving U_11^{-1}
@@ -239,8 +243,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
             // final RealMatrix PX = MatrixUtils.inverse(X__).multiply(Y__);
             DecompositionSolver solver = new LUDecomposition(X__).getSolver();
             if (!solver.isNonSingular()) {
-                throw new MathRuntimeException(LocalizedCoreFormats.CONSTRAINT,
-                                               "Singular matrix");
+                throw new MathRuntimeException(LocalizedCoreFormats.SINGULAR_MATRIX);
             }
             final RealMatrix PX = solver.solve(Y__);
 
@@ -256,8 +259,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
             P_ = P__;
             i++;
             if (i > maxIterations) {
-                throw new MathRuntimeException(LocalizedCoreFormats.CONSTRAINT,
-                                               "It does not converge");
+                throw new MathRuntimeException(LocalizedCoreFormats.CONVERGENCE_FAILED);
             }
         }
 
@@ -290,17 +292,14 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
      *            complex field matrix.
      * @return real matrix.
      */
-    private RealMatrix convertToRealMatrix(FieldMatrix<Complex> matrix,
-                                           Double error) {
+    private RealMatrix convertToRealMatrix(FieldMatrix<Complex> matrix, double error) {
         final RealMatrix toRet = MatrixUtils.createRealMatrix(matrix.getRowDimension(), matrix.getRowDimension());
         for (int i = 0; i < toRet.getRowDimension(); i++) {
             for (int j = 0; j < toRet.getColumnDimension(); j++) {
                 Complex c = matrix.getEntry(i, j);
                 if (c.getImaginary() != 0 && FastMath.abs(c.getImaginary()) > error) {
-                    throw new MathRuntimeException(LocalizedCoreFormats.CONSTRAINT,
-                                                   "The resulting matrix is not a real matrix (" + i
-                                                   + "," + j + ") = " + c + " (error=" + error
-                                                   + ")");
+                    throw new MathRuntimeException(LocalizedCoreFormats.COMPLEX_CANNOT_BE_CONSIDERED_A_REAL_NUMBER,
+                                                   c.getReal(), c.getImaginary());
                 }
                 toRet.setEntry(i, j, c.getReal());
             }

@@ -63,6 +63,7 @@ public enum LocalizedCoreFormats implements Localizable {
     CANNOT_FORMAT_OBJECT_TO_FRACTION("cannot format given object as a fraction number"),
     CANNOT_SUBSTITUTE_ELEMENT_FROM_EMPTY_ARRAY("cannot substitute an element from an empty array"),
     COLUMN_INDEX("column index ({0})"), /* keep */
+    COMPLEX_CANNOT_BE_CONSIDERED_A_REAL_NUMBER("complex number ({0},{1}) cannot be considered to be a real number"),
     CONSTRAINT("constraint"), /* keep */
     CONTINUED_FRACTION_INFINITY_DIVERGENCE("Continued fraction convergents diverged to +/- infinity for value {0}"),
     CONTINUED_FRACTION_NAN_DIVERGENCE("Continued fraction diverged to NaN for value {0}"),
@@ -86,6 +87,7 @@ public enum LocalizedCoreFormats implements Localizable {
     EXPANSION_FACTOR_SMALLER_THAN_ONE("expansion factor smaller than one ({0})"),
     FACTORIAL_NEGATIVE_PARAMETER("must have n >= 0 for n!, got n = {0}"),
     FAILED_BRACKETING("number of iterations={4}, maximum iterations={5}, initial={6}, lower bound={7}, upper bound={8}, final a value={0}, final b value={1}, f(a)={2}, f(b)={3}"),
+    FAILED_DECOMPOSITION("failed decomposition of a {0}x{1} matrix"),
     FAILED_FRACTION_CONVERSION("Unable to convert {0} to fraction after {1} iterations"),
     FIRST_COLUMNS_NOT_INITIALIZED_YET("first {0} columns are not initialized yet"),
     FIRST_ROWS_NOT_INITIALIZED_YET("first {0} rows are not initialized yet"),

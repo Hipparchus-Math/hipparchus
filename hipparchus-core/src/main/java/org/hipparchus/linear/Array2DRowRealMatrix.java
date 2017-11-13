@@ -605,15 +605,12 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
         final int p = b.getRowDimension();
         final int q = b.getColumnDimension();
 
-        final RealMatrix kroneckerProduct = MatrixUtils.createRealMatrix(m * p,
-                                                                         n * q);
+        final RealMatrix kroneckerProduct = MatrixUtils.createRealMatrix(m * p, n * q);
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                kroneckerProduct.setSubMatrix(b.scalarMultiply(getEntry(i, j))
-                                              .getData(), i * p, j * q);
+                kroneckerProduct.setSubMatrix(b.scalarMultiply(getEntry(i, j)) .getData(), i * p, j * q);
             }
-
         }
 
         return kroneckerProduct;
@@ -633,7 +630,6 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
 
         for (int i = 0; i < m; i++) {
             stacked.setSubMatrix(getColumnMatrix(i).getData(), i * n, 0);
-
         }
 
         return stacked;
@@ -648,24 +644,19 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
     public RealMatrix unstackSquare() {
         final int m = getRowDimension();
         final int n = getColumnDimension();
-        final double n_ = FastMath.sqrt(m);
+        final int s = (int) FastMath.round(FastMath.sqrt(m));
 
         if (n != 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT,
-                            "Unstack works with arrays with column dimension 1");
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH, n, 1);
         }
-        if (n_ % 1 > 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.CONSTRAINT,
-                            "Unstack works with arrays with row dimension defined by a square");
+        if (s * s != m) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX, s, ((double) m) / s);
         }
-        final int n__ = ((int) n_);
 
-        final RealMatrix unstacked = MatrixUtils.createRealMatrix(n__, n__);
+        final RealMatrix unstacked = MatrixUtils.createRealMatrix(s, s);
 
-        for (int i = 0; i < n__; i++) {
-            unstacked.setColumnMatrix(i,
-                                      getSubMatrix(i * n__, i * n__ + n__ - 1, 0, 0));
-
+        for (int i = 0; i < s; i++) {
+            unstacked.setColumnMatrix(i, getSubMatrix(i * s, i * s + s - 1, 0, 0));
         }
 
         return unstacked;
