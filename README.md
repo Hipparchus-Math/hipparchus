@@ -86,7 +86,7 @@ Alternatively you can pull it from the central Maven repositories using `pom.xml
 
 ```
 
-If your project previously depended on [Apache Commons Math](http://commons.apache.org/commons-math/)
+If your project previously depended on [Apache Commons Math](https://commons.apache.org/proper/commons-math/)
 and you want to switch to Hipparchus, you can also add the temporary migration jar
 
 ```xml
