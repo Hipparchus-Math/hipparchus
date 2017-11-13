@@ -49,6 +49,14 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
+    <release version="1.3" date="TBD" description="TBD">
+      <action dev="luc" type="add" issue="issues/29" due-to="Alessandro Romero">
+        Added a solver for Continuous time Algebraic Riccati Equation.
+      </action>
+      <action dev="luc" type="add" due-to="Alessandro Romero">
+        Added complex eigen decomposition.
+      </action>
+    </release>
     <release version="1.2" date="2017-10-25" description="This is a maintenance release.">
       <action dev="luc" type="add" >
         Added new RealFieldElement implementations computing a tuple. This allow to perform the
