@@ -722,13 +722,14 @@ public class EigenDecomposition {
     private SchurTransformer transformToSchur(final RealMatrix matrix) {
         final SchurTransformer schurTransform = new SchurTransformer(matrix);
         final double[][] matT = schurTransform.getT().getData();
+        final double norm = matrix.getNorm();
 
         realEigenvalues = new double[matT.length];
         imagEigenvalues = new double[matT.length];
 
         for (int i = 0; i < realEigenvalues.length; i++) {
             if (i == (realEigenvalues.length - 1) ||
-                Precision.equals(matT[i + 1][i], 0.0, EPSILON)) {
+                Precision.equals(matT[i + 1][i], 0.0, norm * EPSILON)) {
                 realEigenvalues[i] = matT[i][i];
             } else {
                 final double x = matT[i + 1][i + 1];

@@ -278,6 +278,18 @@ public class EigenDecompositionTest {
 
     }
 
+    @Test
+    public void testGitHubIssue30() {
+        RealMatrix m = MatrixUtils.createRealMatrix(new double[][] {
+            { 23473.684554963584, 4273.093076392109 },
+            { 4273.093076392048,  4462.13956661408  }
+        });
+        EigenDecomposition ed = new EigenDecomposition(m);
+        Assert.assertEquals(0.0,
+                            ed.getV().multiply(ed.getD()).multiply(ed.getVT()).subtract(m).getNorm(),
+                            1.0e-10);
+    }
+
     /** test dimensions */
     @Test
     public void testDimensions() {
