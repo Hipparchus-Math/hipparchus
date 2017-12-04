@@ -37,6 +37,14 @@
       Field<T> getField()
     }
 
+    interface "RealFieldElement<T>" as RealFieldElement_T_ {
+      T sin()
+      T cos()
+      ...
+      T copySign(T sign)
+      double getReal()
+    }
+
     package analysis #DDEBD8  {
       interface UnivariateFunction {
         double value(double x)
@@ -96,7 +104,8 @@
           UnivariateDifferentiable differentiate(UnivariateFunction function)
         }
 
-        FieldElement_T_     <..      DerivativeStructure
+        FieldElement_T_     <..      RealFieldElement_T_
+        RealFieldElement_T_     <..      DerivativeStructure
         DSFactory           --> DerivativeStructure : creates
         DerivativeStructure o--> "1" DSCompiler : delegates computation
         UnivariateFunction  <|..     UnivariateDifferentiable
