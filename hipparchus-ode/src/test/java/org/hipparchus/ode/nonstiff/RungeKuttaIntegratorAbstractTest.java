@@ -432,7 +432,12 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
             @Override
             public double[] computeDerivatives(double t, double[] y) {
-                return new double[] { y[1], -y[0] };
+                // here, we compute only half of the derivative
+                // we will compute the full derivatives by multiplying
+                // the main equation from within the additional equation
+                // it is not the proper way, but it is intended to check
+                // additional equations *can* change main equation
+                return new double[] { 0.5 * y[1], -0.5 * y[0] };
             }
 
         };
@@ -446,6 +451,13 @@ public abstract class RungeKuttaIntegratorAbstractTest {
 
             @Override
             public double[] computeDerivatives(double t, double[] primary, double[] primaryDot, double[] secondary) {
+                for (int i = 0; i < primaryDot.length; ++i) {
+                    // this secondary equation also changes the primary state derivative
+                    // a proper example of this is for example optimal control when
+                    // the secondary equations handle co-state, which changes control,
+                    // and the control changes the primary state
+                    primaryDot[i] *= 2;
+                }
                 return new double[] { -1 };
             }
 

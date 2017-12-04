@@ -130,7 +130,6 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
         int index = 0;
         final T[] primaryState    = mapper.extractEquationData(index, y);
         final T[] primaryStateDot = primary.computeDerivatives(t, primaryState);
-        mapper.insertEquationData(index, primaryStateDot, yDot);
 
         // Add contribution for secondary equations
         while (++index < mapper.getNumberOfEquations()) {
@@ -139,6 +138,12 @@ public class FieldExpandableODE<T extends RealFieldElement<T>> {
                                                                                        componentState);
             mapper.insertEquationData(index, componentStateDot, yDot);
         }
+
+        // we retrieve the primaryStateDot array after the secondary equations have
+        // been computed in case they change the main state derivatives; this happens
+        // for example in optimal control when the secondary equations handle co-state,
+        // which changes control, and the control changes the primary state
+        mapper.insertEquationData(0, primaryStateDot, yDot);
 
         return yDot;
 

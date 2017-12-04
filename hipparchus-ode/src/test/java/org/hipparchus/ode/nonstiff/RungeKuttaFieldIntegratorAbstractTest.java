@@ -568,9 +568,14 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
             @Override
             public T[] computeDerivatives(T t, T[] y) {
+                // here, we compute only half of the derivative
+                // we will compute the full derivatives by multiplying
+                // the main equation from within the additional equation
+                // it is not the proper way, but it is intended to check
+                // additional equations *can* change main equation
                 T[] yDot = y.clone();
-                yDot[0] = y[1];
-                yDot[1] = y[0].negate();
+                yDot[0] = y[1].multiply( 0.5);
+                yDot[1] = y[0].multiply(-0.5);
                 return yDot;
             }
 
@@ -585,6 +590,13 @@ public abstract class RungeKuttaFieldIntegratorAbstractTest {
 
             @Override
             public T[] computeDerivatives(T t, T[] primary, T[] primaryDot, T[] secondary) {
+                for (int i = 0; i < primaryDot.length; ++i) {
+                    // this secondary equation also changes the primary state derivative
+                    // a proper example of this is for example optimal control when
+                    // the secondary equations handle co-state, which changes control,
+                    // and the control changes the primary state
+                    primaryDot[i] = primaryDot[i].multiply(2);
+                }
                 T[] secondaryDot = secondary.clone();
                 secondaryDot[0] = t.getField().getOne().negate();
                 return secondaryDot;
