@@ -75,11 +75,6 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
         if (!svd.getSolver().isNonSingular()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.SINGULAR_MATRIX);
         }
-        // checking condition number
-        if (svd.getConditionNumber() > 2) {
-            // logger.error("R is an ill-conditioned matrix {}",
-            // svd.getConditionNumber());
-        }
 
         final RealMatrix R_inv = svd.getSolver().getInverse();
 
