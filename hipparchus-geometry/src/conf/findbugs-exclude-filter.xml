@@ -46,4 +46,11 @@
     <Bug pattern="CNT_ROUGH_CONSTANT_VALUE" />
   </Match>
 
+  <!-- Spurious: Findbugs confused by a default case that does nothing -->
+  <Match>
+    <Class name="org.hipparchus.geometry.partitioning.AbstractRegion" />
+    <Method name="insertCuts" />
+    <Bug pattern="SF_SWITCH_NO_DEFAULT" />
+  </Match>
+
 </FindBugsFilter>
