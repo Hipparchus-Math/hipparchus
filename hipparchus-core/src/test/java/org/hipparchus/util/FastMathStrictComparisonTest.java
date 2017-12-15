@@ -46,7 +46,6 @@ import org.junit.runners.Parameterized.Parameters;
  * or just run tests against a single method (e.g. scalb):<br/>
  * {@code mvn test -Dtest=FastMathStrictComparisonTest -DargLine="-DtestMethod=scalb"}
  */
-@SuppressWarnings("boxing")
 @RunWith(Parameterized.class)
 public class FastMathStrictComparisonTest {
 

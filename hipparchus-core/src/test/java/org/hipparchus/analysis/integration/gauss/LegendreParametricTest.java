@@ -72,7 +72,6 @@ public class LegendreParametricTest extends GaussianQuadratureAbstractTest {
      *
      * @return the collection of parameters for this parameterized test.
      */
-    @SuppressWarnings("boxing") // OK here
     @Parameters
     public static Collection<Object[]> getParameters() {
         final ArrayList<Object[]> parameters = new ArrayList<Object[]>();

@@ -39,7 +39,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-@SuppressWarnings("boxing")
 public class OpenIntToFieldTest {
 
     private Map<Integer, Fraction> javaMap = new HashMap<Integer, Fraction>();

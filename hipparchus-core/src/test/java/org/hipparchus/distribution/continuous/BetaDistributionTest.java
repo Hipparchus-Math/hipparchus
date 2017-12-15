@@ -292,7 +292,6 @@ public class BetaDistributionTest {
 
     }
 
-    @SuppressWarnings("boxing")
     private void checkDensity(double alpha, double beta, double[] x, double[] expected) {
         BetaDistribution d = new BetaDistribution(alpha, beta);
         for (int i = 0; i < x.length; i++) {
