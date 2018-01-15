@@ -40,6 +40,7 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
+import org.hipparchus.random.Well19937a;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -705,6 +706,32 @@ public class FastMathTest {
         }
 
         assertTrue("exp() had errors in excess of " + MAX_ERROR_ULP + " ULP", maxerrulp < MAX_ERROR_ULP);
+    }
+
+    @Test
+    public void testSinCosSpecialCases() {
+        for (double x : new double[] {
+            -0.0, +0.0, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY,
+            Double.NaN, Precision.EPSILON, -Precision.EPSILON,
+            Precision.SAFE_MIN, -Precision.SAFE_MIN,
+            FastMath.PI, MathUtils.TWO_PI
+        }) {
+            doTestSinCos(x);
+        }
+    }
+
+    @Test
+    public void testSinCosRandom() {
+        final RandomGenerator random = new Well19937a(0xf67ff538323a55eal);
+        for (int i = 0; i < 1000000; ++i) {
+            doTestSinCos(1000000.0 * (2.0 * random.nextDouble() - 1.0));
+        }
+    }
+
+    private void doTestSinCos(final double x) {
+        final SinCos sinCos = FastMath.sinCos(x);
+        UnitTestUtils.assertSame(FastMath.sin(x), sinCos.sin());
+        UnitTestUtils.assertSame(FastMath.cos(x), sinCos.cos());
     }
 
     @Test

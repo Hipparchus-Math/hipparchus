@@ -35,6 +35,7 @@ import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.SinCos;
 
 /** Class holding "compiled" computation rules for derivative structures.
  * <p>This class implements the computation rules described in Dan Kalman's paper <a
@@ -1856,9 +1857,10 @@ public class DSCompiler {
 
         // create the function value and derivatives
         double[] function = new double[1 + order];
-        function[0] = FastMath.sin(operand[operandOffset]);
+        final SinCos sinCos = FastMath.sinCos(operand[operandOffset]);
+        function[0] = sinCos.sin();
         if (order > 0) {
-            function[1] = FastMath.cos(operand[operandOffset]);
+            function[1] = sinCos.cos();
             for (int i = 2; i <= order; ++i) {
                 function[i] = -function[i - 2];
             }

@@ -2427,6 +2427,69 @@ public class FastMath {
     }
 
     /**
+     * Combined Sine and Cosine function.
+     *
+     * @param x Argument.
+     * @return [sin(x), cos(x)]
+     */
+    public static SinCos sinCos(double x) {
+        boolean negative = false;
+        int quadrant = 0;
+        double xa;
+        double xb = 0.0;
+
+        /* Take absolute value of the input */
+        xa = x;
+        if (x < 0) {
+            negative = true;
+            xa = -xa;
+        }
+
+        /* Check for zero and negative zero */
+        if (xa == 0.0) {
+            long bits = Double.doubleToRawLongBits(x);
+            if (bits < 0) {
+                return new SinCos(-0.0, 1.0);
+            }
+            return new SinCos(0.0, 1.0);
+        }
+
+        if (xa != xa || xa == Double.POSITIVE_INFINITY) {
+            return new SinCos(Double.NaN, Double.NaN);
+        }
+
+        /* Perform any argument reduction */
+        if (xa > 3294198.0) {
+            // PI * (2**20)
+            // Argument too big for CodyWaite reduction.  Must use
+            // PayneHanek.
+            double reduceResults[] = new double[3];
+            reducePayneHanek(xa, reduceResults);
+            quadrant = ((int) reduceResults[0]) & 3;
+            xa = reduceResults[1];
+            xb = reduceResults[2];
+        } else if (xa > 1.5707963267948966) {
+            final CodyWaite cw = new CodyWaite(xa);
+            quadrant = cw.getK() & 3;
+            xa = cw.getRemA();
+            xb = cw.getRemB();
+        }
+
+        switch (quadrant) {
+            case 0:
+                return new SinCos(negative ? -sinQ(xa, xb) :  sinQ(xa, xb),  cosQ(xa, xb));
+            case 1:
+                return new SinCos(negative ? -cosQ(xa, xb) :  cosQ(xa, xb), -sinQ(xa, xb));
+            case 2:
+                return new SinCos(negative ?  sinQ(xa, xb) : -sinQ(xa, xb), -cosQ(xa, xb));
+            case 3:
+                return new SinCos(negative ?  cosQ(xa, xb) : -cosQ(xa, xb),  sinQ(xa, xb));
+            default:
+                return new SinCos(Double.NaN, Double.NaN);
+        }
+    }
+
+    /**
      * Tangent function.
      *
      * @param x Argument.

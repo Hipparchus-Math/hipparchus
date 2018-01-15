@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.3" date="TBD" description="TBD">
+      <action dev="luc" type="add" >
+        Added a way to compute both sin and cos at once faster than performing two calls.
+        This also speeds up DerivativeStructure.sin and DerivativeStructure.cos.
+      </action>
       <action dev="luc" type="fix" issue="issues/30" >
         Fixed a problem with eigen decomposition of matrices with large coefficients.
         Github: fixes #30.
