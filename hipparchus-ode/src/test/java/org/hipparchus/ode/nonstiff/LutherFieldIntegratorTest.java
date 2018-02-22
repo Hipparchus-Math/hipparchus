@@ -52,7 +52,7 @@ public class LutherFieldIntegratorTest extends RungeKuttaFieldIntegratorAbstract
     @Override
     public void testDecreasingSteps()
         throws MathIllegalArgumentException, MathIllegalStateException {
-        doTestDecreasingSteps(Decimal64Field.getInstance(), 1.0, 1.0, 1.0e-10);
+        doTestDecreasingSteps(Decimal64Field.getInstance(), 3.6, 1.0, 1.0e-10);
     }
 
     @Override

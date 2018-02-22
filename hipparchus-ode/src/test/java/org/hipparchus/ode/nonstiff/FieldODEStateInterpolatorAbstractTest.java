@@ -27,8 +27,10 @@ import org.hipparchus.ode.FieldEquationsMapper;
 import org.hipparchus.ode.FieldODEStateAndDerivative;
 import org.hipparchus.ode.FieldOrdinaryDifferentialEquation;
 import org.hipparchus.ode.ODEStateAndDerivative;
+import org.hipparchus.ode.sampling.AbstractFieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.FieldODEStateInterpolator;
 import org.hipparchus.ode.sampling.ODEStateInterpolator;
+import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
@@ -92,6 +94,136 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
     }
 
     @Test
+    public void restrictPrevious() {
+        doRestrictPrevious(Decimal64Field.getInstance(), 1e-15, 1e-15);
+    }
+
+    protected <T extends RealFieldElement<T>> void doRestrictPrevious(
+            Field<T> field,
+            double epsilon,
+            double epsilonDot) {
+
+        AbstractFieldODEStateInterpolator<T> original = setUpInterpolator(
+                field, new SinCos<>(field), 0.0, new double[]{0.0, 1.0}, 0.125);
+
+        Assert.assertEquals(false, original.isPreviousStateInterpolated());
+        Assert.assertEquals(false, original.isCurrentStateInterpolated());
+
+        AbstractFieldODEStateInterpolator<T> restricted = original.restrictStep(
+                original.getInterpolatedState(field.getZero().add(1.0 / 32)),
+                original.getCurrentState());
+
+        Assert.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
+        Assert.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
+        Assert.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
+        Assert.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
+        Assert.assertNotSame(restricted.getPreviousState(),  restricted.getGlobalPreviousState());
+        Assert.assertSame(restricted.getCurrentState(),      restricted.getGlobalCurrentState());
+        Assert.assertEquals(1.0 / 32, restricted.getPreviousState().getTime().getReal(), 1.0e-15);
+        Assert.assertEquals(true, restricted.isPreviousStateInterpolated());
+        Assert.assertEquals(false, restricted.isCurrentStateInterpolated());
+
+        checkRestricted(original, restricted, epsilon, epsilonDot);
+
+    }
+
+    @Test
+    public void restrictCurrent() {
+        doRestrictCurrent(Decimal64Field.getInstance(), 1e-15, 1e-15);
+    }
+
+    protected <T extends RealFieldElement<T>> void doRestrictCurrent(Field<T> field,
+                                                                     double epsilon,
+                                                                     double epsilonDot) {
+
+        AbstractFieldODEStateInterpolator<T> original = setUpInterpolator(
+                field, new SinCos<>(field), 0.0, new double[]{0.0, 1.0}, 0.125);
+
+        Assert.assertEquals(false, original.isPreviousStateInterpolated());
+        Assert.assertEquals(false, original.isCurrentStateInterpolated());
+
+        AbstractFieldODEStateInterpolator<T> restricted = original.restrictStep(
+                original.getPreviousState(),
+                original.getInterpolatedState(field.getZero().add(3.0 / 32)));
+
+        Assert.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
+        Assert.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
+        Assert.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
+        Assert.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
+        Assert.assertSame(restricted.getPreviousState(),     restricted.getGlobalPreviousState());
+        Assert.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
+        Assert.assertEquals(3.0 / 32, restricted.getCurrentState().getTime().getReal(), 1.0e-15);
+        Assert.assertEquals(false, restricted.isPreviousStateInterpolated());
+        Assert.assertEquals(true, restricted.isCurrentStateInterpolated());
+
+        checkRestricted(original, restricted, epsilon, epsilonDot);
+
+    }
+
+    @Test
+    public void restrictBothEnds() {
+        doRestrictBothEnds(Decimal64Field.getInstance(), 1e-15, 1e-15);
+    }
+
+    protected <T extends RealFieldElement<T>> void doRestrictBothEnds(Field<T> field,
+                                                                      double epsilon,
+                                                                      double epsilonDot) {
+
+        AbstractFieldODEStateInterpolator<T> original = setUpInterpolator(
+                field, new SinCos<>(field), 0.0, new double[]{0.0, 1.0}, 0.125);
+
+        Assert.assertEquals(false, original.isPreviousStateInterpolated());
+        Assert.assertEquals(false, original.isCurrentStateInterpolated());
+
+        AbstractFieldODEStateInterpolator<T> restricted = original.restrictStep(
+                original.getInterpolatedState(field.getZero().add(1.0 / 32)),
+                original.getInterpolatedState(field.getZero().add(3.0 / 32)));
+
+        Assert.assertSame(original.getPreviousState(),       original.getGlobalPreviousState());
+        Assert.assertSame(original.getCurrentState(),        original.getGlobalCurrentState());
+        Assert.assertSame(original.getGlobalPreviousState(), restricted.getGlobalPreviousState());
+        Assert.assertSame(original.getGlobalCurrentState(),  restricted.getGlobalCurrentState());
+        Assert.assertNotSame(restricted.getPreviousState(),  restricted.getGlobalPreviousState());
+        Assert.assertNotSame(restricted.getCurrentState(),   restricted.getGlobalCurrentState());
+        Assert.assertEquals(1.0 / 32, restricted.getPreviousState().getTime().getReal(), 1.0e-15);
+        Assert.assertEquals(3.0 / 32, restricted.getCurrentState().getTime().getReal(), 1.0e-15);
+        Assert.assertEquals(true, restricted.isPreviousStateInterpolated());
+        Assert.assertEquals(true, restricted.isCurrentStateInterpolated());
+
+        checkRestricted(original, restricted, epsilon, epsilonDot);
+
+    }
+
+    private <T extends RealFieldElement<T>> void checkRestricted(
+            AbstractFieldODEStateInterpolator<T> original,
+            AbstractFieldODEStateInterpolator<T> restricted,
+            double epsilon,
+            double epsilonDot) {
+
+        for (T t = restricted.getPreviousState().getTime();
+             t.getReal() <= restricted.getCurrentState().getTime().getReal();
+             t = t.add(1.0 / 256)) {
+            FieldODEStateAndDerivative<T> originalInterpolated   = original.getInterpolatedState(t);
+            FieldODEStateAndDerivative<T> restrictedInterpolated = restricted.getInterpolatedState(t);
+            Assert.assertEquals(t.getReal(), originalInterpolated.getTime().getReal(), 1.0e-15);
+            Assert.assertEquals(t.getReal(), restrictedInterpolated.getTime().getReal(), 1.0e-15);
+            Assert.assertEquals(originalInterpolated.getPrimaryState()[0].getReal(),
+                                restrictedInterpolated.getPrimaryState()[0].getReal(),
+                                epsilon);
+            Assert.assertEquals(originalInterpolated.getPrimaryState()[1].getReal(),
+                                restrictedInterpolated.getPrimaryState()[1].getReal(),
+                                epsilon);
+            Assert.assertEquals(originalInterpolated.getPrimaryDerivative()[0].getReal(),
+                                restrictedInterpolated.getPrimaryDerivative()[0].getReal(),
+                                epsilonDot);
+            Assert.assertEquals(originalInterpolated.getPrimaryDerivative()[1].getReal(),
+                                restrictedInterpolated.getPrimaryDerivative()[1].getReal(),
+                                epsilonDot);
+        }
+
+    }
+
+    @Test
     public abstract void nonFieldInterpolatorConsistency();
 
     protected <T extends RealFieldElement<T>> void doNonFieldInterpolatorConsistency(final Field<T> field,
@@ -140,10 +272,11 @@ public abstract class FieldODEStateInterpolatorAbstractTest {
     }
 
     protected abstract <T extends RealFieldElement<T>>
-    FieldODEStateInterpolator<T> setUpInterpolator(final Field<T> field,
-                                                   final ReferenceFieldODE<T> eqn,
-                                                   final double t0, final double[] y0,
-                                                   final double t1);
+    AbstractFieldODEStateInterpolator<T> setUpInterpolator(final Field<T> field,
+                                                           final ReferenceFieldODE<T> eqn,
+                                                           final double t0,
+                                                           final double[] y0,
+                                                           final double t1);
 
     protected abstract <T extends RealFieldElement<T>>
     ODEStateInterpolator convertInterpolator(final FieldODEStateInterpolator<T> fieldInterpolator,
