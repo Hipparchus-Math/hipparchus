@@ -87,6 +87,7 @@
         <item name="Hipparchus::Samples"                          href="../hipparchus-samples/index.html" />
         <item name="Hipparchus::Fast Fourier Transforms"          href="../hipparchus-fft/index.html" />
         <item name="Hipparchus::Cluster Algorithms"               href="../hipparchus-clustering/index.html" />
+        <item name="Hipparchus::Filtering"                        href="../hipparchus-filtering/index.html" />
         <item name="Hipparchus::Migration Code "                  href="../hipparchus-migration/index.html" />
     </menu>
 

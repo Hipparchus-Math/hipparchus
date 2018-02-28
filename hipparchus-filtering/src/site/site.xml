@@ -15,7 +15,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<project name="Hipparchus::Core">
+<project name="Hipparchus::Filtering">
   <publishDate position="bottom" format="yyyy-MM-dd"/>
   <version position="bottom"/>
 
@@ -30,7 +30,6 @@
       <localResources>true</localResources>
       <absoluteResourceURL>https://www.hipparchus.org/</absoluteResourceURL>
       <highlightJs>true</highlightJs>
-      <breadcrumbs>false</breadcrumbs>
       <brand>
         <name><![CDATA[<img src="../images/logo-hipparchus-blue.png" style="width:63px;height:40px;"/> ${project.name}]]></name>
         <href>index.html</href>
@@ -44,15 +43,12 @@
       </bottomNav>
       <endContent>
        <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-      </endContent>
-      <pages>
-        <index>
-          <toc>false</toc>
-        </index>
+     </endContent>
+     <pages>
         <license>
           <highlightJs>false</highlightJs>
           <body/>
-        </license>
+          </license>
         <rat-report>
           <highlightJs>false</highlightJs>
           <body/>
@@ -81,19 +77,6 @@
       <item name="User Guide"                    href="../user-guide.html" />
     </menu>
 
-    <menu name="User Guide">
-      <item name="Analysis"                      href="analysis.html"/>
-      <item name="Complex Numbers"               href="complex.html"/>
-      <item name="Distributions"                 href="distribution.html"/>
-      <item name="Exceptions"                    href="exceptions.html"/>
-      <item name="Fractions"                     href="fraction.html"/>
-      <item name="Linear Algebra"                href="linear.html"/>
-      <item name="Random Data"                   href="random.html"/>
-      <item name="Special Functions"             href="special.html"/>
-      <item name="Statistics"                    href="stat.html" />
-      <item name="Utilities"                     href="utilities.html" />
-    </menu>
-
     <menu name="Modules">
         <item name="Hipparchus::Core"                             href="../hipparchus-core/index.html" />
         <item name="Hipparchus::Statistics"                       href="../hipparchus-stat/index.html" />
@@ -101,7 +84,6 @@
         <item name="Hipparchus::Ordinary Differential Equations"  href="../hipparchus-ode/index.html" />
         <item name="Hipparchus::Optimization"                     href="../hipparchus-optim/index.html" />
         <item name="Hipparchus::Fitting"                          href="../hipparchus-fitting/index.html" />
-        <item name="Hipparchus::Performance Tests"                href="../hipparchus-perf/index.html" />
         <item name="Hipparchus::Samples"                          href="../hipparchus-samples/index.html" />
         <item name="Hipparchus::Fast Fourier Transforms"          href="../hipparchus-fft/index.html" />
         <item name="Hipparchus::Cluster Algorithms"               href="../hipparchus-clustering/index.html" />
