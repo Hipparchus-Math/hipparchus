@@ -98,6 +98,13 @@ public class SingularValueDecompositionTest {
 
     }
 
+    @Test
+    public void testDecomposer() {
+        MatrixDecomposer decomposer = new SingularValueDecomposer();
+        Assert.assertTrue(decomposer.decompose(MatrixUtils.createRealMatrix(testSquare)).isNonSingular());
+        Assert.assertFalse(decomposer.decompose(MatrixUtils.createRealMatrix(testNonSquare)).isNonSingular());
+    }
+
     /** Test based on a dimension 4 Hadamard matrix. */
     @Test
     public void testHadamard() {
