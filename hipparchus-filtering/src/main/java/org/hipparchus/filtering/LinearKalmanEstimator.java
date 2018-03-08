@@ -76,9 +76,9 @@ public class LinearKalmanEstimator implements KalmanEstimator {
 
         // the following is equivalent to k = p.h^T * (h.p.h^T + r)^(-1)
         // we don't want to compute the inverse of a matrix,
-        // we start by post-muliplying by h.p.h^T +r and get
+        // we start by post-multiplying by h.p.h^T +r and get
         // k.(h.p.h^T + r) = p.h^T
-        // then we transpose, knowing that both p and r are symetric matrices
+        // then we transpose, knowing that both p and r are symmetric matrices
         // (h.p.h^T + r).k^T = h.p
         // and we use linear system solving instead of matrix inversion
         final RealMatrix k = decomposer.
