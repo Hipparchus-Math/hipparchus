@@ -42,7 +42,7 @@ public class CorrelatedRandomVectorGeneratorTest {
                 b.setEntry(i, j, 1.0 + 0.1 * ++counter);
             }
         }
-        RealMatrix bbt = b.multiply(b.transpose());
+        RealMatrix bbt = b.multiplyTransposed(b);
         covariance = MatrixUtils.createRealMatrix(mean.length, mean.length);
         for (int i = 0; i < covariance.getRowDimension(); ++i) {
             covariance.setEntry(i, i, bbt.getEntry(i, i));
@@ -103,7 +103,7 @@ public class CorrelatedRandomVectorGeneratorTest {
     @Test
     public void testRootMatrix() {
         RealMatrix b = generator.getRootMatrix();
-        RealMatrix bbt = b.multiply(b.transpose());
+        RealMatrix bbt = b.multiplyTransposed(b);
         for (int i = 0; i < covariance.getRowDimension(); ++i) {
             for (int j = 0; j < covariance.getColumnDimension(); ++j) {
                 Assert.assertEquals(covariance.getEntry(i, j), bbt.getEntry(i, j), 1.0e-12);

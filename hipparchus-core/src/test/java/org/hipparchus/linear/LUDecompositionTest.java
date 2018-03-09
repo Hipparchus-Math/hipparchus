@@ -159,7 +159,7 @@ public class LUDecompositionTest {
         RealMatrix matrix = MatrixUtils.createRealMatrix(testData);
         RealMatrix p   = new LUDecomposition(matrix).getP();
 
-        RealMatrix ppT = p.multiply(p.transpose());
+        RealMatrix ppT = p.multiplyTransposed(p);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(p.getRowDimension());
         Assert.assertEquals(0, ppT.subtract(id).getNorm(), normTolerance);
 

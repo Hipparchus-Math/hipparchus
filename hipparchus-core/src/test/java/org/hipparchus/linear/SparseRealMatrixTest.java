@@ -22,8 +22,11 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well1024a;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -225,6 +228,41 @@ public final class SparseRealMatrixTest {
         RealMatrix m4 = createSparseMatrix(d4);
         RealMatrix m5 = createSparseMatrix(d5);
         assertClose("m3*m4=m5", m3.multiply(m4), m5, entryTolerance);
+    }
+
+    @Test
+    public void testMultiplyTransposedSparseRealMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0x5f31d5645cf821efl);
+        final RealMatrixChangingVisitor randomSetter = new DefaultRealMatrixChangingVisitor() {
+            public double visit(final int row, final int column, final double value) {
+                return randomGenerator.nextDouble();
+            }
+        };
+        for (int rows = 1; rows <= 64; rows += 7) {
+            for (int cols = 1; cols <= 64; cols += 7) {
+                final OpenMapRealMatrix a = new OpenMapRealMatrix(rows, cols);
+                a.walkInOptimizedOrder(randomSetter);
+                for (int interm = 1; interm <= 64; interm += 7) {
+                    final OpenMapRealMatrix b = new OpenMapRealMatrix(interm, cols);
+                    b.walkInOptimizedOrder(randomSetter);
+                    Assert.assertEquals(0.0,
+                                        a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                        1.0e-15);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testMultiplyTransposedWrongDimensions() {
+        try {
+            new OpenMapRealMatrix(2, 3).multiplyTransposed(new OpenMapRealMatrix(3, 2));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
     }
 
     /** test trace */

@@ -716,7 +716,7 @@ public class CMAESOptimizer
         if (ccov1 + ccovmu > 0) {
             final RealMatrix arpos = bestArx.subtract(repmat(xold, 1, mu))
                 .scalarMultiply(1 / sigma); // mu difference vectors
-            final RealMatrix roneu = pc.multiply(pc.transpose())
+            final RealMatrix roneu = pc.multiplyTransposed(pc)
                 .scalarMultiply(ccov1); // rank one update
             // minor correction if hsig==false
             double oldFac = hsig ? 0 : ccov1 * cc * (2 - cc);

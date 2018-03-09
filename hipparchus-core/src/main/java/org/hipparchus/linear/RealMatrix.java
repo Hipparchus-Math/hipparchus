@@ -106,6 +106,23 @@ public interface RealMatrix extends AnyMatrix {
         throws MathIllegalArgumentException;
 
     /**
+     * Returns the result of postmultiplying {@code this} by {@code m^T}.
+     * <p>
+     * This is equivalent to call {@link #multiply(RealMatrix) multiply}(m.{@link #transpose()}),
+     * but some implementations may avoid building the intermediate transposed matrix.
+     * </p>
+     * @param m matrix to first transpose and second postmultiply by
+     * @return {@code this * m}
+     * @throws MathIllegalArgumentException if
+     * {@code columnDimension(this) != columnDimension(m)}
+     * @since 1.3
+     */
+    default RealMatrix multiplyTransposed(final RealMatrix m)
+                    throws MathIllegalArgumentException {
+                    return multiply(m.transpose());
+                }
+
+    /**
      * Returns the result of premultiplying {@code this} by {@code m}.
      *
      * @param m matrix to premultiply by

@@ -224,7 +224,7 @@ public class MultivariateNormalMixtureExpectationMaximization {
                     final RealMatrix vec
                         = new Array2DRowRealMatrix(MathArrays.ebeSubtract(data[i], newMeans[j]));
                     final RealMatrix dataCov
-                        = vec.multiply(vec.transpose()).scalarMultiply(gamma[i][j]);
+                        = vec.multiplyTransposed(vec).scalarMultiply(gamma[i][j]);
                     newCovMats[j] = newCovMats[j].add(dataCov);
                 }
             }

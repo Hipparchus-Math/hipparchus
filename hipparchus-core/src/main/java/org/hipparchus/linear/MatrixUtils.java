@@ -604,6 +604,24 @@ public class MatrixUtils {
     }
 
     /**
+     * Check if matrices are multiplication-transposed compatible
+     *
+     * @param left Left hand side matrix.
+     * @param right Right hand side matrix (the one that is transposed before multiplication).
+     * @throws MathIllegalArgumentException if matrices are not multiplication-transposed
+     * compatible.
+     * @since 1.3
+     */
+    public static void checkMultiplicationTransposedCompatible(final AnyMatrix left, final AnyMatrix right)
+        throws MathIllegalArgumentException {
+
+        if (left.getColumnDimension() != right.getColumnDimension()) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   left.getColumnDimension(), right.getColumnDimension());
+        }
+    }
+
+    /**
      * Convert a {@link FieldMatrix}/{@link Fraction} matrix to a {@link RealMatrix}.
      * @param m Matrix to convert.
      * @return the converted matrix.

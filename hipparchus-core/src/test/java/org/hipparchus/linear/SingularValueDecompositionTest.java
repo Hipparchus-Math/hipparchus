@@ -155,7 +155,7 @@ public class SingularValueDecompositionTest {
         RealMatrix u = svd.getU();
         RealMatrix s = svd.getS();
         RealMatrix v = svd.getV();
-        double norm = u.multiply(s).multiply(v.transpose()).subtract(matrix).getNorm();
+        double norm = u.multiply(s).multiplyTransposed(v).subtract(matrix).getNorm();
         Assert.assertEquals(0, norm, normTolerance);
 
     }

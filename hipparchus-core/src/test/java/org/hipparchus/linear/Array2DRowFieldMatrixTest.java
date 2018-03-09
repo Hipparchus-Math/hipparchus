@@ -28,6 +28,10 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well1024a;
+import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,7 +40,7 @@ import org.junit.Test;
  *
  */
 
-public final class FieldMatrixImplTest {
+public final class Array2DRowFieldMatrixTest {
 
     // 3 x 3 identity matrix
     protected Fraction[][] id = { {new Fraction(1),new Fraction(0),new Fraction(0)}, {new Fraction(0),new Fraction(1),new Fraction(0)}, {new Fraction(0),new Fraction(0),new Fraction(1)} };
@@ -195,7 +199,72 @@ public final class FieldMatrixImplTest {
        FieldMatrix<Fraction> m4 = new Array2DRowFieldMatrix<Fraction>(d4);
        FieldMatrix<Fraction> m5 = new Array2DRowFieldMatrix<Fraction>(d5);
        UnitTestUtils.assertEquals(m3.multiply(m4), m5);
-   }
+    }
+
+    @Test
+    public void testMultiplyTransposedArray2DRowRealMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0xdeff3d383a112763l);
+        final FieldMatrixChangingVisitor<Decimal64> randomSetter = new DefaultFieldMatrixChangingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
+            public Decimal64 visit(final int row, final int column, final Decimal64 value) {
+                return new Decimal64(randomGenerator.nextDouble());
+            }
+        };
+        final FieldMatrixPreservingVisitor<Decimal64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
+            public void visit(final int row, final int column, final Decimal64 value) {
+                Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
+            }
+        };
+        for (int rows = 1; rows <= 64; rows += 7) {
+            for (int cols = 1; cols <= 64; cols += 7) {
+                final Array2DRowFieldMatrix<Decimal64> a = new Array2DRowFieldMatrix<>(Decimal64Field.getInstance(), rows, cols);
+                a.walkInOptimizedOrder(randomSetter);
+                for (int interm = 1; interm <= 64; interm += 7) {
+                    final Array2DRowFieldMatrix<Decimal64> b = new Array2DRowFieldMatrix<>(Decimal64Field.getInstance(), interm, cols);
+                    b.walkInOptimizedOrder(randomSetter);
+                    a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).walkInOptimizedOrder(zeroChecker);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testMultiplyTransposedBlockFieldMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0x463e54fb50b900fel);
+        final FieldMatrixChangingVisitor<Decimal64> randomSetter = new DefaultFieldMatrixChangingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
+            public Decimal64 visit(final int row, final int column, final Decimal64 value) {
+                return new Decimal64(randomGenerator.nextDouble());
+            }
+        };
+        final FieldMatrixPreservingVisitor<Decimal64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
+            public void visit(final int row, final int column, final Decimal64 value) {
+                Assert.assertEquals(0.0, value.doubleValue(), 1.0e-15);
+            }
+        };
+        for (int rows = 1; rows <= 64; rows += 7) {
+            for (int cols = 1; cols <= 64; cols += 7) {
+                final Array2DRowFieldMatrix<Decimal64> a = new Array2DRowFieldMatrix<>(Decimal64Field.getInstance(), rows, cols);
+                a.walkInOptimizedOrder(randomSetter);
+                for (int interm = 1; interm <= 64; interm += 7) {
+                    final BlockFieldMatrix<Decimal64> b = new BlockFieldMatrix<>(Decimal64Field.getInstance(), interm, cols);
+                    b.walkInOptimizedOrder(randomSetter);
+                    a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).walkInOptimizedOrder(zeroChecker);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testMultiplyTransposedWrongDimensions() {
+        try {
+            new Array2DRowFieldMatrix<Decimal64>(Decimal64Field.getInstance(), 2, 3).
+            multiplyTransposed(new Array2DRowFieldMatrix<Decimal64>(Decimal64Field.getInstance(), 3, 2));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
 
     @Test
     public void testPower() {

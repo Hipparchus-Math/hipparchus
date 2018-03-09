@@ -250,6 +250,71 @@ public class Array2DRowRealMatrix extends AbstractRealMatrix implements Serializ
         return new Array2DRowRealMatrix(outData, false);
     }
 
+    /**
+     * Returns the result of postmultiplying {@code this} by {@code m^T}.
+     * @param m matrix to first transpose and second postmultiply by
+     * @return {@code this * m}
+     * @throws MathIllegalArgumentException if
+     * {@code columnDimension(this) != columnDimension(m)}
+     * @since 1.3
+     */
+    public Array2DRowRealMatrix multiplyTransposed(final Array2DRowRealMatrix m)
+        throws MathIllegalArgumentException {
+        MatrixUtils.checkMultiplicationTransposedCompatible(this, m);
+
+        final int nRows = this.getRowDimension();
+        final int nCols = m.getRowDimension();
+        final int nSum  = this.getColumnDimension();
+
+        final double[][] outData = new double[nRows][nCols];
+        final double[][] mData   = m.data;
+
+        // Multiply.
+        for (int col = 0; col < nCols; col++) {
+            for (int row = 0; row < nRows; row++) {
+                final double[] dataRow = data[row];
+                final double[] mRow    = mData[col];
+                double sum = 0;
+                for (int i = 0; i < nSum; i++) {
+                    sum += dataRow[i] * mRow[i];
+                }
+                outData[row][col] = sum;
+            }
+        }
+
+        return new Array2DRowRealMatrix(outData, false);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public Array2DRowRealMatrix multiplyTransposed(final RealMatrix m) {
+        if (m instanceof Array2DRowRealMatrix) {
+            return multiplyTransposed((Array2DRowRealMatrix) m);
+        } else {
+            MatrixUtils.checkMultiplicationTransposedCompatible(this, m);
+
+            final int nRows = this.getRowDimension();
+            final int nCols = m.getRowDimension();
+            final int nSum  = this.getColumnDimension();
+
+            final double[][] outData = new double[nRows][nCols];
+
+            // Multiply.
+            for (int col = 0; col < nCols; col++) {
+                for (int row = 0; row < nRows; row++) {
+                    final double[] dataRow = data[row];
+                    double sum = 0;
+                    for (int i = 0; i < nSum; i++) {
+                        sum += dataRow[i] * m.getEntry(col, i);
+                    }
+                    outData[row][col] = sum;
+                }
+            }
+
+            return new Array2DRowRealMatrix(outData, false);
+        }
+    }
+
     /** {@inheritDoc} */
     @Override
     public double[][] getData() {

@@ -625,6 +625,127 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
         return out;
     }
 
+    /**
+     * Returns the result of postmultiplying {@code this} by {@code m^T}.
+     * @param m matrix to first transpose and second postmultiply by
+     * @return {@code this * m}
+     * @throws MathIllegalArgumentException if
+     * {@code columnDimension(this) != columnDimension(m)}
+     * @since 1.3
+     */
+    public BlockFieldMatrix<T> multiplyTransposed(BlockFieldMatrix<T> m)
+        throws MathIllegalArgumentException {
+        // safety check
+        MatrixUtils.checkMultiplicationTransposedCompatible(this, m);
+
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, m.rows);
+
+        // perform multiplication block-wise, to ensure good cache behavior
+        int blockIndex = 0;
+        for (int iBlock = 0; iBlock < out.blockRows; ++iBlock) {
+
+            final int pStart = iBlock * BLOCK_SIZE;
+            final int pEnd   = FastMath.min(pStart + BLOCK_SIZE, rows);
+
+            for (int jBlock = 0; jBlock < out.blockColumns; ++jBlock) {
+                final int jWidth = out.blockWidth(jBlock);
+
+                // select current block
+                final T[] outBlock = out.blocks[blockIndex];
+
+                // perform multiplication on current block
+                for (int kBlock = 0; kBlock < blockColumns; ++kBlock) {
+                    final int kWidth = blockWidth(kBlock);
+                    final T[] tBlock = blocks[iBlock * blockColumns + kBlock];
+                    final T[] mBlock = m.blocks[jBlock * m.blockColumns + kBlock];
+                    int k = 0;
+                    for (int p = pStart; p < pEnd; ++p) {
+                        final int lStart = (p - pStart) * kWidth;
+                        final int lEnd   = lStart + kWidth;
+                        for (int nStart = 0; nStart < jWidth * kWidth; nStart += kWidth) {
+                            T sum = getField().getZero();
+                            int l = lStart;
+                            int n = nStart;
+                            while (l < lEnd - 3) {
+                                sum = sum.
+                                      add(tBlock[l].multiply(mBlock[n])).
+                                      add(tBlock[l + 1].multiply(mBlock[n + 1])).
+                                      add(tBlock[l + 2].multiply(mBlock[n + 2])).
+                                      add(tBlock[l + 3].multiply(mBlock[n + 3]));
+                                l += 4;
+                                n += 4;
+                            }
+                            while (l < lEnd) {
+                                sum = sum.add(tBlock[l++].multiply(mBlock[n++]));
+                            }
+                            outBlock[k] = outBlock[k].add(sum);
+                            ++k;
+                        }
+                    }
+                }
+                // go to next block
+                ++blockIndex;
+            }
+        }
+
+        return out;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public BlockFieldMatrix<T> multiplyTransposed(final FieldMatrix<T> m)
+        throws MathIllegalArgumentException {
+        try {
+            return multiplyTransposed((BlockFieldMatrix<T>) m);
+        } catch (ClassCastException cce) {
+            // safety check
+            MatrixUtils.checkMultiplicationTransposedCompatible(this, m);
+
+            final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, m.getRowDimension());
+
+            // perform multiplication block-wise, to ensure good cache behavior
+            int blockIndex = 0;
+            for (int iBlock = 0; iBlock < out.blockRows; ++iBlock) {
+                final int pStart = iBlock * BLOCK_SIZE;
+                final int pEnd   = FastMath.min(pStart + BLOCK_SIZE, rows);
+
+                for (int jBlock = 0; jBlock < out.blockColumns; ++jBlock) {
+                    final int qStart = jBlock * BLOCK_SIZE;
+                    final int qEnd   = FastMath.min(qStart + BLOCK_SIZE, m.getRowDimension());
+
+                    // select current block
+                    final T[] outBlock = out.blocks[blockIndex];
+
+                    // perform multiplication on current block
+                    for (int kBlock = 0; kBlock < blockColumns; ++kBlock) {
+                        final int kWidth = blockWidth(kBlock);
+                        final T[] tBlock = blocks[iBlock * blockColumns + kBlock];
+                        final int rStart = kBlock * BLOCK_SIZE;
+                        int k = 0;
+                        for (int p = pStart; p < pEnd; ++p) {
+                            final int lStart = (p - pStart) * kWidth;
+                            final int lEnd = lStart + kWidth;
+                            for (int q = qStart; q < qEnd; ++q) {
+                                T sum = getField().getZero();
+                                int r = rStart;
+                                for (int l = lStart; l < lEnd; ++l) {
+                                    sum = sum.add(tBlock[l].multiply(m.getEntry(q, r)));
+                                    ++r;
+                                }
+                                outBlock[k] = outBlock[k].add(sum);
+                                ++k;
+                            }
+                        }
+                    }
+                    // go to next block
+                    ++blockIndex;
+                }
+            }
+
+            return out;
+        }
+    }
+
     /** {@inheritDoc} */
     @Override
     public T[][] getData() {

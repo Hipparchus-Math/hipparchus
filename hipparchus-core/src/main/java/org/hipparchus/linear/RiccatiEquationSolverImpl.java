@@ -80,7 +80,7 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
 
         P = computeP(A, B, Q, R, R_inv, MAX_ITERATIONS, EPSILON);
 
-        K = R_inv.multiply(B.transpose()).multiply(P);
+        K = R_inv.multiplyTransposed(B).multiply(P);
     }
 
     /**
@@ -207,9 +207,9 @@ public class RiccatiEquationSolverImpl implements RiccatiEquationSolver {
             K_ = P_.multiply(B).multiply(R_inv).scalarMultiply(-1);
 
             // X = AA+BB*K1';
-            final RealMatrix X = A.add(B.multiply(K_.transpose()));
+            final RealMatrix X = A.add(B.multiplyTransposed(K_));
             // Y = -K1*RR*K1' - QQ;
-            final RealMatrix Y = K_.multiply(R).multiply(K_.transpose()).scalarMultiply(-1).subtract(Q);
+            final RealMatrix Y = K_.multiply(R).multiplyTransposed(K_).scalarMultiply(-1).subtract(Q);
 
             final Array2DRowRealMatrix X_ = (Array2DRowRealMatrix) X.transpose();
             final Array2DRowRealMatrix Y_ = (Array2DRowRealMatrix) Y;

@@ -749,7 +749,7 @@ public class EigenDecompositionTest {
         final int n = eigenValues.length;
         final RealMatrix v = createOrthogonalMatrix(r, n);
         final RealMatrix d = MatrixUtils.createRealDiagonalMatrix(eigenValues);
-        return v.multiply(d).multiply(v.transpose());
+        return v.multiply(d).multiplyTransposed(v);
     }
 
     public static RealMatrix createOrthogonalMatrix(final Random r, final int size) {

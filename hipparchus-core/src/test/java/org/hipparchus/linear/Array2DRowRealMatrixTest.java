@@ -31,6 +31,8 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -226,7 +228,65 @@ public final class Array2DRowRealMatrixTest {
        RealMatrix m4 = new Array2DRowRealMatrix(d4);
        RealMatrix m5 = new Array2DRowRealMatrix(d5);
        UnitTestUtils.assertEquals("m3*m4=m5", m3.multiply(m4), m5, entryTolerance);
-   }
+    }
+
+    @Test
+    public void testMultiplyTransposedArray2DRowRealMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0xdeff3d383a112763l);
+        final RealMatrixChangingVisitor randomSetter = new DefaultRealMatrixChangingVisitor() {
+            public double visit(final int row, final int column, final double value) {
+                return randomGenerator.nextDouble();
+            }
+        };
+        for (int rows = 1; rows <= 64; rows += 7) {
+            for (int cols = 1; cols <= 64; cols += 7) {
+                final Array2DRowRealMatrix a = new Array2DRowRealMatrix(rows, cols);
+                a.walkInOptimizedOrder(randomSetter);
+                for (int interm = 1; interm <= 64; interm += 7) {
+                    final Array2DRowRealMatrix b = new Array2DRowRealMatrix(interm, cols);
+                    b.walkInOptimizedOrder(randomSetter);
+                    Assert.assertEquals(0.0,
+                                        a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                        1.0e-15);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testMultiplyTransposedBlockRealMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0x463e54fb50b900fel);
+        final RealMatrixChangingVisitor randomSetter = new DefaultRealMatrixChangingVisitor() {
+            public double visit(final int row, final int column, final double value) {
+                return randomGenerator.nextDouble();
+            }
+        };
+        for (int rows = 1; rows <= 64; rows += 7) {
+            for (int cols = 1; cols <= 64; cols += 7) {
+                final Array2DRowRealMatrix a = new Array2DRowRealMatrix(rows, cols);
+                a.walkInOptimizedOrder(randomSetter);
+                for (int interm = 1; interm <= 64; interm += 7) {
+                    final BlockRealMatrix b = new BlockRealMatrix(interm, cols);
+                    b.walkInOptimizedOrder(randomSetter);
+                    Assert.assertEquals(0.0,
+                                        a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                        1.0e-15);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testMultiplyTransposedWrongDimensions() {
+        try {
+            new Array2DRowRealMatrix(2, 3).multiplyTransposed(new Array2DRowRealMatrix(3, 2));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
 
     @Test
     public void testPower() {

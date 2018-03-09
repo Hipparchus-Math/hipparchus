@@ -75,7 +75,7 @@ public class BiDiagonalTransformerTest {
         RealMatrix u = transformer.getU();
         RealMatrix b = transformer.getB();
         RealMatrix v = transformer.getV();
-        double norm = u.multiply(b).multiply(v.transpose()).subtract(matrix).getNorm();
+        double norm = u.multiply(b).multiplyTransposed(v).subtract(matrix).getNorm();
         Assert.assertEquals(0, norm, 1.0e-14);
     }
 
