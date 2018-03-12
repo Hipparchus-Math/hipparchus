@@ -177,7 +177,7 @@ public class SingularValueDecompositionTest {
     }
 
     public void checkOrthogonal(final RealMatrix m) {
-        RealMatrix mTm = m.transpose().multiply(m);
+        RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
         Assert.assertEquals(0, mTm.subtract(id).getNorm(), normTolerance);
     }

@@ -393,9 +393,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     @Override
     public FieldVector<T> add(FieldVector<T> v)
         throws MathIllegalArgumentException {
-        try {
+        if (v instanceof ArrayFieldVector) {
             return add((ArrayFieldVector<T>) v);
-        } catch (ClassCastException cce) {
+        } else {
             checkVectorDimensions(v);
             T[] out = MathArrays.buildArray(field, data.length);
             for (int i = 0; i < data.length; i++) {
@@ -426,9 +426,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     @Override
     public FieldVector<T> subtract(FieldVector<T> v)
         throws MathIllegalArgumentException {
-        try {
+        if (v instanceof ArrayFieldVector) {
             return subtract((ArrayFieldVector<T>) v);
-        } catch (ClassCastException cce) {
+        } else {
             checkVectorDimensions(v);
             T[] out = MathArrays.buildArray(field, data.length);
             for (int i = 0; i < data.length; i++) {
@@ -568,9 +568,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     @Override
     public FieldVector<T> ebeMultiply(FieldVector<T> v)
         throws MathIllegalArgumentException {
-        try {
+        if (v instanceof ArrayFieldVector) {
             return ebeMultiply((ArrayFieldVector<T>) v);
-        } catch (ClassCastException cce) {
+        } else {
             checkVectorDimensions(v);
             T[] out = MathArrays.buildArray(field, data.length);
             for (int i = 0; i < data.length; i++) {
@@ -601,9 +601,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     @Override
     public FieldVector<T> ebeDivide(FieldVector<T> v)
         throws MathIllegalArgumentException, MathRuntimeException {
-        try {
+        if (v instanceof ArrayFieldVector) {
             return ebeDivide((ArrayFieldVector<T>) v);
-        } catch (ClassCastException cce) {
+        } else {
             checkVectorDimensions(v);
             T[] out = MathArrays.buildArray(field, data.length);
             for (int i = 0; i < data.length; i++) {
@@ -652,9 +652,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     @Override
     public T dotProduct(FieldVector<T> v)
         throws MathIllegalArgumentException {
-        try {
+        if (v instanceof ArrayFieldVector) {
             return dotProduct((ArrayFieldVector<T>) v);
-        } catch (ClassCastException cce) {
+        } else {
             checkVectorDimensions(v);
             T dot = field.getZero();
             for (int i = 0; i < data.length; i++) {
@@ -703,9 +703,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldMatrix<T> outerProduct(FieldVector<T> v) {
-        try {
+        if (v instanceof ArrayFieldVector) {
             return outerProduct((ArrayFieldVector<T>) v);
-        } catch (ClassCastException cce) {
+        } else {
             final int m = data.length;
             final int n = v.getDimension();
             final FieldMatrix<T> out = new Array2DRowFieldMatrix<T>(field, m, n);
@@ -750,9 +750,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     /** {@inheritDoc} */
     @Override
     public FieldVector<T> append(FieldVector<T> v) {
-        try {
+        if (v instanceof ArrayFieldVector) {
             return append((ArrayFieldVector<T>) v);
-        } catch (ClassCastException cce) {
+        } else {
             return new ArrayFieldVector<T>(this,new ArrayFieldVector<T>(v));
         }
     }
@@ -806,9 +806,9 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
     @Override
     public void setSubVector(int index, FieldVector<T> v) throws MathIllegalArgumentException {
         try {
-            try {
+            if (v instanceof ArrayFieldVector) {
                 set(index, (ArrayFieldVector<T>) v);
-            } catch (ClassCastException cce) {
+            } else {
                 for (int i = index; i < index + v.getDimension(); ++i) {
                     data[i] = v.getEntry(i-index);
                 }
@@ -1043,7 +1043,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
 
         try {
             @SuppressWarnings("unchecked") // May fail, but we ignore ClassCastException
-                FieldVector<T> rhs = (FieldVector<T>) other;
+            FieldVector<T> rhs = (FieldVector<T>) other;
             if (data.length != rhs.getDimension()) {
                 return false;
             }

@@ -275,6 +275,45 @@ public class SparseFieldMatrixTest {
         }
     }
 
+    @Test
+    public void testTransposeMultiplySparseFieldMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0x5f31d5645cf821efl);
+        final FieldMatrixChangingVisitor<Decimal64> randomSetter = new DefaultFieldMatrixChangingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
+            public Decimal64 visit(final int row, final int column, final Decimal64 value) {
+                return new Decimal64(randomGenerator.nextDouble());
+            }
+        };
+        final FieldMatrixPreservingVisitor<Decimal64> zeroChecker = new DefaultFieldMatrixPreservingVisitor<Decimal64>(Decimal64Field.getInstance().getZero()) {
+            public void visit(final int row, final int column, final Decimal64 value) {
+                Assert.assertEquals(0.0, value.doubleValue(), 3.0e-14);
+            }
+        };
+        for (int rows = 1; rows <= 64; rows += 7) {
+            for (int cols = 1; cols <= 64; cols += 7) {
+                final SparseFieldMatrix<Decimal64> a = new SparseFieldMatrix<>(Decimal64Field.getInstance(), rows, cols);
+                a.walkInOptimizedOrder(randomSetter);
+                for (int interm = 1; interm <= 64; interm += 7) {
+                    final SparseFieldMatrix<Decimal64> b = new SparseFieldMatrix<>(Decimal64Field.getInstance(), rows, interm);
+                    b.walkInOptimizedOrder(randomSetter);
+                   a.transposeMultiply(b).subtract(a.transpose().multiply(b)).walkInOptimizedOrder(zeroChecker);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testTransposeMultiplyWrongDimensions() {
+        try {
+            new SparseFieldMatrix<>(Decimal64Field.getInstance(), 2, 3).
+            transposeMultiply(new SparseFieldMatrix<>(Decimal64Field.getInstance(), 3, 2));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
     /** test trace */
     @Test
     public void testTrace() {

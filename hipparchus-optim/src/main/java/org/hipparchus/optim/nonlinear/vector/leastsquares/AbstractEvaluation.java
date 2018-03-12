@@ -58,7 +58,7 @@ public abstract class AbstractEvaluation implements Evaluation {
         final RealMatrix j = this.getJacobian();
 
         // Compute transpose(J)J.
-        final RealMatrix jTj = j.transpose().multiply(j);
+        final RealMatrix jTj = j.transposeMultiply(j);
 
         // Compute the covariances matrix.
         final DecompositionSolver solver

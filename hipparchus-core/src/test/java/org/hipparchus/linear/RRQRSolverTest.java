@@ -188,7 +188,7 @@ public class RRQRSolverTest {
         Assert.assertTrue(x.subtract(xRef).getNorm() / (p * q) > 0.01);
 
         // the last permuted unknown should have been set to 0
-        RealMatrix permuted = rrqrd.getP().transpose().multiply(x);
+        RealMatrix permuted = rrqrd.getP().transposeMultiply(x);
         Assert.assertEquals(0.0, permuted.getSubMatrix(p, q - 1, 0, permuted.getColumnDimension() - 1).getNorm(), 0);
 
     }

@@ -190,7 +190,7 @@ public class SparseFieldMatrix<T extends FieldElement<T>> extends AbstractFieldM
     public FieldMatrix<T> multiplyTransposed(final FieldMatrix<T> m)
         throws MathIllegalArgumentException {
 
-        MatrixUtils.checkMultiplicationTransposedCompatible(this, m);
+        MatrixUtils.checkSameColumnDimension(this, m);
 
         final int outCols = m.getRowDimension();
         final FieldMatrix<T> out = m.createMatrix(rows, outCols);
@@ -202,6 +202,36 @@ public class SparseFieldMatrix<T extends FieldElement<T>> extends AbstractFieldM
             final int k        = key % columns;
             for (int j = 0; j < outCols; ++j) {
                 out.addToEntry(i, j, value.multiply(m.getEntry(j, k)));
+            }
+        }
+
+        return out;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws MathIllegalArgumentException if {@code m} is an
+     * {@code OpenMapRealMatrix}, and the total number of entries of the product
+     * is larger than {@code Integer.MAX_VALUE}.
+     */
+    @Override
+    public FieldMatrix<T> transposeMultiply(final FieldMatrix<T> m)
+        throws MathIllegalArgumentException {
+
+        MatrixUtils.checkSameRowDimension(this, m);
+
+        final int outCols = m.getColumnDimension();
+        final FieldMatrix<T> out = m.createMatrix(columns, outCols);
+        for (OpenIntToFieldHashMap<T>.Iterator iterator = entries.iterator(); iterator.hasNext();) {
+            iterator.advance();
+            final T   value = iterator.value();
+            final int key   = iterator.key();
+            final int k     = key / columns;
+            final int i     = key % columns;
+            for (int j = 0; j < outCols; ++j) {
+                out.addToEntry(i, j, value.multiply(m.getEntry(k, j)));
             }
         }
 

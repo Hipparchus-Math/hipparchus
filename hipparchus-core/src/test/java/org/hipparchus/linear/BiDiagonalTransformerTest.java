@@ -94,7 +94,7 @@ public class BiDiagonalTransformerTest {
     }
 
     private void checkOrthogonal(RealMatrix m) {
-        RealMatrix mTm = m.transpose().multiply(m);
+        RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
         Assert.assertEquals(0, mTm.subtract(id).getNorm(), 1.0e-14);
     }

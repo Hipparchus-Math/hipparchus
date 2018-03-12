@@ -598,7 +598,7 @@ public class SingularValueDecomposition {
         }, 0, dimension - 1, 0, p - 1);
 
         RealMatrix jv = new Array2DRowRealMatrix(data, false);
-        return jv.transpose().multiply(jv);
+        return jv.transposeMultiply(jv);
     }
 
     /**

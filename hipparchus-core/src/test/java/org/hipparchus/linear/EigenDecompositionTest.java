@@ -565,7 +565,7 @@ public class EigenDecompositionTest {
     @Test
     public void testVOrthogonal() {
         RealMatrix v = new EigenDecomposition(matrix).getV();
-        RealMatrix vTv = v.transpose().multiply(v);
+        RealMatrix vTv = v.transposeMultiply(v);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(vTv.getRowDimension());
         Assert.assertEquals(0, vTv.subtract(id).getNorm(), 2.0e-13);
     }

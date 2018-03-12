@@ -118,7 +118,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * but some implementations may avoid building the intermediate transposed matrix.
      * </p>
      * @param m matrix to first transpose and second postmultiply by
-     * @return {@code this * m}
+     * @return {@code this * m^T}
      * @throws MathIllegalArgumentException if
      * {@code columnDimension(this) != columnDimension(m)}
      * @since 1.3
@@ -126,6 +126,23 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     default FieldMatrix<T> multiplyTransposed(final FieldMatrix<T> m)
         throws MathIllegalArgumentException {
         return multiply(m.transpose());
+    }
+
+    /**
+     * Returns the result of postmultiplying {@code this^T} by {@code m}.
+     * <p>
+     * This is equivalent to call {@link #transpose()}.{@link #multiply(RealMatrix) multiply(m)},
+     * but some implementations may avoid building the intermediate transposed matrix.
+     * </p>
+     * @param m matrix to postmultiply by
+     * @return {@code this^T * m}
+     * @throws MathIllegalArgumentException if
+     * {@code columnDimension(this) != columnDimension(m)}
+     * @since 1.3
+     */
+    default FieldMatrix<T> transposeMultiply(final FieldMatrix<T> m)
+        throws MathIllegalArgumentException {
+        return transpose().multiply(m);
     }
 
     /**

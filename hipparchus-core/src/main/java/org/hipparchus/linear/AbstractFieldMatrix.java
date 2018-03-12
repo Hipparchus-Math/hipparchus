@@ -726,9 +726,9 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldVector<T> operate(final FieldVector<T> v)
         throws MathIllegalArgumentException {
-        try {
+        if (v instanceof ArrayFieldVector) {
             return new ArrayFieldVector<T>(field, operate(((ArrayFieldVector<T>) v).getDataRef()), false);
-        } catch (ClassCastException cce) {
+        } else {
             final int nRows = getRowDimension();
             final int nCols = getColumnDimension();
             if (v.getDimension() != nCols) {
@@ -776,9 +776,9 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
     @Override
     public FieldVector<T> preMultiply(final FieldVector<T> v)
         throws MathIllegalArgumentException {
-        try {
+        if (v instanceof ArrayFieldVector) {
             return new ArrayFieldVector<T>(field, preMultiply(((ArrayFieldVector<T>) v).getDataRef()), false);
-        } catch (ClassCastException cce) {
+        } else {
             final int nRows = getRowDimension();
             final int nCols = getColumnDimension();
             if (v.getDimension() != nRows) {
@@ -1175,7 +1175,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
         throws MathIllegalArgumentException {
         if (getColumnDimension() != m.getRowDimension()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
-                                                   m.getRowDimension(), getColumnDimension());
+                                                   getColumnDimension(), m.getRowDimension());
         }
     }
 }

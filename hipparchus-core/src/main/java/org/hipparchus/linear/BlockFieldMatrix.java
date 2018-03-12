@@ -319,9 +319,9 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public FieldMatrix<T> add(final FieldMatrix<T> m)
         throws MathIllegalArgumentException {
-        try {
+        if (m instanceof BlockFieldMatrix) {
             return add((BlockFieldMatrix<T>) m);
-        } catch (ClassCastException cce) {
+        } else {
 
             // safety check
             checkAdditionCompatible(m);
@@ -391,9 +391,9 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public FieldMatrix<T> subtract(final FieldMatrix<T> m)
         throws MathIllegalArgumentException {
-        try {
+        if (m instanceof BlockFieldMatrix) {
             return subtract((BlockFieldMatrix<T>) m);
-        } catch (ClassCastException cce) {
+        } else {
 
             // safety check
             checkSubtractionCompatible(m);
@@ -496,9 +496,9 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public FieldMatrix<T> multiply(final FieldMatrix<T> m)
         throws MathIllegalArgumentException {
-        try {
+        if (m instanceof BlockFieldMatrix) {
             return multiply((BlockFieldMatrix<T>) m);
-        } catch (ClassCastException cce) {
+        } else {
 
             // safety check
             checkMultiplicationCompatible(m);
@@ -636,7 +636,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     public BlockFieldMatrix<T> multiplyTransposed(BlockFieldMatrix<T> m)
         throws MathIllegalArgumentException {
         // safety check
-        MatrixUtils.checkMultiplicationTransposedCompatible(this, m);
+        MatrixUtils.checkSameColumnDimension(this, m);
 
         final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, m.rows);
 
@@ -695,11 +695,11 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public BlockFieldMatrix<T> multiplyTransposed(final FieldMatrix<T> m)
         throws MathIllegalArgumentException {
-        try {
+        if (m instanceof BlockFieldMatrix) {
             return multiplyTransposed((BlockFieldMatrix<T>) m);
-        } catch (ClassCastException cce) {
+        } else {
             // safety check
-            MatrixUtils.checkMultiplicationTransposedCompatible(this, m);
+            MatrixUtils.checkSameColumnDimension(this, m);
 
             final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), rows, m.getRowDimension());
 
@@ -744,6 +744,137 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
 
             return out;
         }
+    }
+
+    /**
+     * Returns the result of postmultiplying {@code this^T} by {@code m}.
+     * @param m matrix to postmultiply by
+     * @return {@code this^T * m}
+     * @throws MathIllegalArgumentException if
+     * {@code columnDimension(this) != columnDimension(m)}
+     * @since 1.3
+     */
+    public BlockFieldMatrix<T> transposeMultiply(final BlockFieldMatrix<T> m)
+        throws MathIllegalArgumentException {
+        // safety check
+        MatrixUtils.checkSameRowDimension(this, m);
+
+        final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), columns, m.columns);
+
+        // perform multiplication block-wise, to ensure good cache behavior
+        int blockIndex = 0;
+        for (int iBlock = 0; iBlock < out.blockRows; ++iBlock) {
+
+            final int iHeight  = out.blockHeight(iBlock);
+            final int iHeight2 = iHeight  + iHeight;
+            final int iHeight3 = iHeight2 + iHeight;
+            final int iHeight4 = iHeight3 + iHeight;
+            final int pStart   = iBlock * BLOCK_SIZE;
+            final int pEnd     = FastMath.min(pStart + BLOCK_SIZE, columns);
+
+            for (int jBlock = 0; jBlock < out.blockColumns; ++jBlock) {
+                final int jWidth  = out.blockWidth(jBlock);
+                final int jWidth2 = jWidth  + jWidth;
+                final int jWidth3 = jWidth2 + jWidth;
+                final int jWidth4 = jWidth3 + jWidth;
+
+                // select current block
+                final T[] outBlock = out.blocks[blockIndex];
+
+                // perform multiplication on current block
+                for (int kBlock = 0; kBlock < blockRows; ++kBlock) {
+                    final int kHeight = blockHeight(kBlock);
+                    final T[] tBlock  = blocks[kBlock * blockColumns + iBlock];
+                    final T[] mBlock  = m.blocks[kBlock * m.blockColumns + jBlock];
+                    int k = 0;
+                    for (int p = pStart; p < pEnd; ++p) {
+                        final int lStart = p - pStart;
+                        final int lEnd   = lStart + iHeight * kHeight;
+                        for (int nStart = 0; nStart < jWidth; ++nStart) {
+                            T sum = getField().getZero();
+                            int l = lStart;
+                            int n = nStart;
+                            while (l < lEnd - iHeight3) {
+                                sum = sum.add(tBlock[l].multiply(mBlock[n]).
+                                       add(tBlock[l + iHeight].multiply(mBlock[n + jWidth])).
+                                       add(tBlock[l + iHeight2].multiply(mBlock[n + jWidth2])).
+                                       add(tBlock[l + iHeight3].multiply(mBlock[n + jWidth3])));
+                                l += iHeight4;
+                                n += jWidth4;
+                            }
+                            while (l < lEnd) {
+                                sum = sum.add(tBlock[l].multiply(mBlock[n]));
+                                l += iHeight;
+                                n += jWidth;
+                            }
+                            outBlock[k] = outBlock[k].add(sum);
+                            ++k;
+                        }
+                    }
+                }
+                // go to next block
+                ++blockIndex;
+            }
+        }
+
+        return out;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public BlockFieldMatrix<T> transposeMultiply(final FieldMatrix<T> m)
+        throws MathIllegalArgumentException {
+        if (m instanceof BlockFieldMatrix) {
+            return transposeMultiply((BlockFieldMatrix<T>) m);
+        } else {
+            // safety check
+            MatrixUtils.checkSameRowDimension(this, m);
+
+            final BlockFieldMatrix<T> out = new BlockFieldMatrix<>(getField(), columns, m.getColumnDimension());
+
+            // perform multiplication block-wise, to ensure good cache behavior
+            int blockIndex = 0;
+            for (int iBlock = 0; iBlock < out.blockRows; ++iBlock) {
+
+                final int iHeight = out.blockHeight(iBlock);
+                final int pStart  = iBlock * BLOCK_SIZE;
+                final int pEnd    = FastMath.min(pStart + BLOCK_SIZE, columns);
+
+                for (int jBlock = 0; jBlock < out.blockColumns; ++jBlock) {
+                    final int qStart = jBlock * BLOCK_SIZE;
+                    final int qEnd   = FastMath.min(qStart + BLOCK_SIZE, m.getColumnDimension());
+
+                    // select current block
+                    final T[] outBlock = out.blocks[blockIndex];
+
+                    // perform multiplication on current block
+                    for (int kBlock = 0; kBlock < blockRows; ++kBlock) {
+                        final int kHeight = blockHeight(kBlock);
+                        final T[] tBlock  = blocks[kBlock * blockColumns + iBlock];
+                        final int rStart  = kBlock * BLOCK_SIZE;
+                        int k = 0;
+                        for (int p = pStart; p < pEnd; ++p) {
+                            final int lStart = p - pStart;
+                            final int lEnd   = lStart + iHeight * kHeight;
+                            for (int q = qStart; q < qEnd; ++q) {
+                                T sum = getField().getZero();
+                                int r = rStart;
+                                for (int l = lStart; l < lEnd; l += iHeight) {
+                                    sum = sum.add(tBlock[l].multiply(m.getEntry(r++, q)));
+                                }
+                                outBlock[k] = outBlock[k].add(sum);
+                                ++k;
+                            }
+                        }
+                    }
+                    // go to next block
+                    ++blockIndex;
+                }
+            }
+
+            return out;
+        }
+
     }
 
     /** {@inheritDoc} */
@@ -989,9 +1120,9 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public void setRowMatrix(final int row, final FieldMatrix<T> matrix)
         throws MathIllegalArgumentException {
-        try {
+        if (matrix instanceof BlockFieldMatrix) {
             setRowMatrix(row, (BlockFieldMatrix<T>) matrix);
-        } catch (ClassCastException cce) {
+        } else {
             super.setRowMatrix(row, matrix);
         }
     }
@@ -1073,9 +1204,9 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public void setColumnMatrix(final int column, final FieldMatrix<T> matrix)
         throws MathIllegalArgumentException {
-        try {
+        if (matrix instanceof BlockFieldMatrix) {
             setColumnMatrix(column, (BlockFieldMatrix<T>) matrix);
-        } catch (ClassCastException cce) {
+        } else {
             super.setColumnMatrix(column, matrix);
         }
     }
@@ -1147,9 +1278,9 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public void setRowVector(final int row, final FieldVector<T> vector)
         throws MathIllegalArgumentException {
-        try {
+        if (vector instanceof ArrayFieldVector) {
             setRow(row, ((ArrayFieldVector<T>) vector).getDataRef());
-        } catch (ClassCastException cce) {
+        } else {
             super.setRowVector(row, vector);
         }
     }
@@ -1181,9 +1312,9 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
     @Override
     public void setColumnVector(final int column, final FieldVector<T> vector)
         throws MathIllegalArgumentException {
-        try {
+        if (vector instanceof ArrayFieldVector) {
             setColumn(column, ((ArrayFieldVector<T>) vector).getDataRef());
-        } catch (ClassCastException cce) {
+        } else {
             super.setColumnVector(column, vector);
         }
     }
