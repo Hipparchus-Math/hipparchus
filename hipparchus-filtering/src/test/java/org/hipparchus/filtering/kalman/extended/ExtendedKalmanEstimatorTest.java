@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.hipparchus.filtering;
+package org.hipparchus.filtering.kalman.extended;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
+import org.hipparchus.filtering.kalman.KalmanEstimator;
+import org.hipparchus.filtering.kalman.Measurement;
+import org.hipparchus.filtering.kalman.ProcessEstimate;
 import org.hipparchus.linear.CholeskyDecomposer;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -36,20 +39,18 @@ import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class LinearKalmanEstimatorTest {
+public class ExtendedKalmanEstimatorTest {
 
     @Test
     public void testConstant() {
-        final LinearProcess process = new ConstantMatricesProcess(MatrixUtils.createRealIdentityMatrix(1),
-                                                                  null, null,
-                                                                  MatrixUtils.createRealDiagonalMatrix(new double[] {
-                                                                      1.0e-5
-                                                                  }));
 
         // initial estimate is perfect, and process noise is perfectly known
+        final RealMatrix q = MatrixUtils.createRealDiagonalMatrix(new double[] {
+            1.0e-5
+        });
         final ProcessEstimate initial = new ProcessEstimate(0,
                                                             MatrixUtils.createRealVector(new double[] { 10.0 }),
-                                                            process.getProcessNoiseMatrix(0.0));
+                                                            q);
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = loadReferenceData(1, 1, "constant-value.txt");
@@ -61,8 +62,14 @@ public class LinearKalmanEstimatorTest {
                                                  MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
 
         // set up Kalman estimator
-        final LinearKalmanEstimator estimator =
-        new LinearKalmanEstimator(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
+        final ExtendedKalmanEstimator estimator =
+                        new ExtendedKalmanEstimator(new CholeskyDecomposer(1.0e-15, 1.0e-15),
+                                                    (previousTime, previousState, currentTime) ->
+                        new NonLinearEvolution(currentTime,
+                                               previousState,
+                                               MatrixUtils.createRealIdentityMatrix(1),
+                                               q),
+                                               initial);
 
         // sequentially process all measurements and check against the reference estimated state and covariance
         estimator.estimate(measurements).forEach(estimate -> {
@@ -80,32 +87,8 @@ public class LinearKalmanEstimatorTest {
     @Test
     public void testConstantAcceleration() {
 
-        // state:             { position, velocity }
-        // control:           add 0.1 m/s on velocity at each cycle
-        // process noise:     induced by 0.2 m/s² acceleration noise
-        // measurement:       on position only
-        // measurement noise: 10 m (big!)
-
-        final double dt      = 0.1;
-        final double dt2     = dt  * dt;
-        final double dt3     = dt2 * dt;
-        final double dt4     = dt2 * dt2;
-        final double aNoise  = 0.2;
-        final double aNoise2 = aNoise * aNoise;
         final double mNoise  = 10.0;
-        final LinearProcess process = new ConstantMatricesProcess(MatrixUtils.createRealMatrix(new double[][] {
-                                                                      { 1.0, dt },
-                                                                      { 0.0, 1.0 }
-                                                                  }),
-                                                                  MatrixUtils.createRealMatrix(new double[][] {
-                                                                      { 0.5 * dt2 },
-                                                                      { dt }
-                                                                  }),
-                                                                  MatrixUtils.createRealVector(new double[] { 0.1 }),
-                                                                  MatrixUtils.createRealMatrix(new double[][] {
-                                                                      { 0.25 * dt4 * aNoise2, 0.5 * dt3 * aNoise2 },
-                                                                      { 0.5  * dt3 * aNoise2, dt2 * aNoise2 }
-                                                                  }));
+        final NonLinearProcess process = new ConstantAccelerationProcess(1.0, 0.2);
 
         // initial state is estimated to be at rest on origin
         final ProcessEstimate initial = new ProcessEstimate(0,
@@ -125,8 +108,8 @@ public class LinearKalmanEstimatorTest {
                                                  MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
 
         // set up Kalman estimator
-        final LinearKalmanEstimator estimator =
-        new LinearKalmanEstimator(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
+        final ExtendedKalmanEstimator estimator =
+        new ExtendedKalmanEstimator(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
 
         // sequentially process all measurements and check against the reference estimate
         estimator.estimate(measurements).forEach(estimate -> {
@@ -141,6 +124,37 @@ public class LinearKalmanEstimatorTest {
 
     }
 
+    private static class ConstantAccelerationProcess implements NonLinearProcess {
+        private final double a;
+        private final double aNoise2;
+        
+        public ConstantAccelerationProcess(final double a, final double aNoise) {
+            this.a       = a;
+            this.aNoise2 = aNoise * aNoise;
+        }
+
+        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, double currentTime) {
+            final double     dt    = currentTime - previousTime;
+            final double     dt2   = dt  * dt;
+            final double     dt3   = dt2 * dt;
+            final double     dt4   = dt2 * dt2;
+            final RealVector state = MatrixUtils.createRealVector(new double[] {
+                previousState.getEntry(0) + previousState.getEntry(1) * dt + 0.5 * a * dt * dt,
+                previousState.getEntry(1) + a * dt
+            });
+            final RealMatrix stm = MatrixUtils.createRealMatrix(new double[][] {
+                { 1.0,  dt },
+                { 0.0, 1.0 }
+            });
+            final RealMatrix processNoiseMatrix = MatrixUtils.createRealMatrix(new double[][] {
+                { 0.25 * dt4 * aNoise2, 0.5 * dt3 * aNoise2 },
+                { 0.5  * dt3 * aNoise2, dt2 * aNoise2 }
+            });
+            return new NonLinearEvolution(currentTime, state, stm, processNoiseMatrix);
+        }
+
+    }
+
     @Test
     public void testCannonballZeroProcessNoise() {
         doTestCannonball(new double[][] {
@@ -149,7 +163,7 @@ public class LinearKalmanEstimatorTest {
                             { 0.00, 0.00, 0.00, 0.00 },
                             { 0.00, 0.00, 0.00, 0.00 },
                          }, "cannonball-zero-process-noise.txt",
-                         9.0e-16, 6.0e-14);
+                         5.0e-13, 6.0e-14);
     }
 
     @Test
@@ -160,39 +174,22 @@ public class LinearKalmanEstimatorTest {
                             { 0.00, 0.00, 0.01, 0.00 },
                             { 0.00, 0.00, 0.00, 0.10 },
                          }, "cannonball-non-zero-process-noise.txt",
-                         2.0e-13, 2.0e-13);
+                         4.0e-13, 2.0e-13);
     }
 
     private void doTestCannonball(final double[][] q, final String name,
                                   final double tolState, final double tolCovariance) {
 
-        final double dt       = 0.1;
-        final double g        = 9.81;
         final double mNoise   = 30.0;
         final double vIni     = 100.0;
         final double alphaIni = FastMath.PI / 4;
-        final LinearProcess process = new ConstantMatricesProcess(MatrixUtils.createRealMatrix(new double[][] {
-                                                                      { 1.0,  dt, 0.0, 0.0 },
-                                                                      { 0.0, 1.0, 0.0, 0.0 },
-                                                                      { 0.0, 0.0, 1.0,  dt },
-                                                                      { 0.0, 0.0, 0.0, 1.0 },
-                                                                  }),
-                                                                  MatrixUtils.createRealMatrix(new double[][] {
-                                                                      { 0.0, 0.0 },
-                                                                      { 0.0, 0.0 },
-                                                                      { 1.0, 0.0 },
-                                                                      { 0.0, 1.0 }
-                                                                  }),
-                                                                  MatrixUtils.createRealVector(new double[] {
-                                                                      -0.5 * g * dt * dt, -g * dt
-                                                                  }),
-                                                                  MatrixUtils.createRealMatrix(q));
+        final NonLinearProcess process = new CannonballProcess(9.81, q);
 
         // initial state is estimated to be a shot from origin with known angle and velocity
-        final ProcessEstimate initial = new ProcessEstimate(0,
+        final ProcessEstimate initial = new ProcessEstimate(0.0,
                                                             MatrixUtils.createRealVector(new double[] {
-                                                                 0.0, vIni * FastMath.cos(alphaIni),
-                                                                 0.0, vIni * FastMath.sin(alphaIni)
+                                                                0.0, vIni * FastMath.cos(alphaIni),
+                                                                0.0, vIni * FastMath.sin(alphaIni)
                                                             }),
                                                             MatrixUtils.createRealDiagonalMatrix(new double[] {
                                                                 mNoise * mNoise, 1.0e-3, mNoise * mNoise, 1.0e-3
@@ -214,8 +211,8 @@ public class LinearKalmanEstimatorTest {
                                                  })));
 
         // set up Kalman estimator
-        final LinearKalmanEstimator estimator =
-        new LinearKalmanEstimator(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
+        final ExtendedKalmanEstimator estimator =
+        new ExtendedKalmanEstimator(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
 
         // sequentially process all measurements and check against the reference estimate
         estimator.estimate(measurements).forEach(estimate -> {
@@ -227,6 +224,34 @@ public class LinearKalmanEstimatorTest {
                 }
             }
         });
+
+    }
+
+    private static class CannonballProcess implements NonLinearProcess {
+        private final double g;
+        private final RealMatrix q;
+        
+        public CannonballProcess(final double g, final double[][] qData) {
+            this.g = g;
+            this.q = MatrixUtils.createRealMatrix(qData);
+        }
+
+        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, double currentTime) {
+            final double dt = currentTime - previousTime;
+            final RealVector state = MatrixUtils.createRealVector(new double[] {
+                previousState.getEntry(0) + previousState.getEntry(1) * dt,
+                previousState.getEntry(1),
+                previousState.getEntry(2) + previousState.getEntry(3) * dt - 0.5 * g * dt * dt,
+                previousState.getEntry(3) - g * dt
+            });
+            final RealMatrix stm = MatrixUtils.createRealMatrix(new double[][] {
+                { 1.0,  dt, 0.0, 0.0 },
+                { 0.0, 1.0, 0.0, 0.0 },
+                { 0.0, 0.0, 1.0,  dt },
+                { 0.0, 0.0, 0.0, 1.0 },
+            });
+            return new NonLinearEvolution(currentTime, state, stm, q);
+        }
 
     }
 
@@ -261,14 +286,9 @@ public class LinearKalmanEstimatorTest {
         // this is the constant voltage example from paper
         // An Introduction to the Kalman Filter, Greg Welch and Gary Bishop
         // available from http://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf
-        final LinearProcess process = new ConstantMatricesProcess(MatrixUtils.createRealIdentityMatrix(1),
-                                                            null, null,
-                                                            MatrixUtils.createRealDiagonalMatrix(new double[] {
-                                                                q
-                                                            }));
         final ProcessEstimate initial = new ProcessEstimate(0,
-                                                      MatrixUtils.createRealVector(new double[] { initialEstimate }),
-                                                      MatrixUtils.createRealDiagonalMatrix(new double[] { initialCovariance }));
+                                                            MatrixUtils.createRealVector(new double[] { initialEstimate }),
+                                                            MatrixUtils.createRealDiagonalMatrix(new double[] { initialCovariance }));
         final RandomGenerator generator = new Well1024a(seed);
         final Stream<Measurement> measurements =
                         IntStream.
@@ -281,8 +301,16 @@ public class LinearKalmanEstimatorTest {
                                                       MatrixUtils.createRealDiagonalMatrix(new double[] { r })));
 
         // set up Kalman estimator
-        final LinearKalmanEstimator estimator =
-                        new LinearKalmanEstimator(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
+        final ExtendedKalmanEstimator estimator =
+                        new ExtendedKalmanEstimator(new CholeskyDecomposer(1.0e-15, 1.0e-15),
+                                                    (previousTime, previousState, currentTime) ->
+                                                      new NonLinearEvolution(currentTime,
+                                                                             previousState,
+                                                                             MatrixUtils.createRealIdentityMatrix(1),
+                                                                             MatrixUtils.createRealDiagonalMatrix(new double[] {
+                                                                                 q
+                                                                             })),
+                                                    initial);
 
         // sequentially process all measurements and get only the last one
         final Stream<ProcessEstimate> estimates = estimator.estimate(measurements);
@@ -292,50 +320,10 @@ public class LinearKalmanEstimatorTest {
 
     }
 
-    private static class ConstantMatricesProcess implements LinearProcess {
-
-        private final RealMatrix a;
-        private final RealMatrix b;
-        private final RealVector u;
-        private final RealMatrix q;
-
-        
-        public ConstantMatricesProcess(final RealMatrix a,
-                                       final RealMatrix b,
-                                       final RealVector u,
-                                       final RealMatrix q) {
-            this.a = a;
-            this.b = b;
-            this.u = u;
-            this.q = q;
-        }
-
-        @Override
-        public RealMatrix getStateTransitionMatrix(double time) {
-            return a;
-        }
-
-        @Override
-        public RealMatrix getControlMatrix(double time) {
-            return b;
-        }
-
-        @Override
-        public RealVector getCommand(double time) {
-            return u;
-        }
-
-        @Override
-        public RealMatrix getProcessNoiseMatrix(double time) {
-            return q;
-        }
-
-    };
-
     private List<Reference> loadReferenceData(final int stateDimension, final int measurementDimension,
                                               final String name) {
         List<Reference> loaded = new ArrayList<>();
-        try (InputStream is = getClass().getResourceAsStream(name);
+        try (InputStream is = KalmanEstimator.class.getResourceAsStream(name);
              InputStreamReader isr = new InputStreamReader(is, "UTF-8");
              BufferedReader br = new BufferedReader(isr)) {
             for (String line = br.readLine(); line != null; line = br.readLine()) {

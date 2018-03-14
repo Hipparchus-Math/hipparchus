@@ -1,0 +1,106 @@
+' Licensed to the Hipparchus project under one or more
+' contributor license agreements.  See the NOTICE file distributed with
+' this work for additional information regarding copyright ownership.
+' The ASF licenses this file to You under the Apache License, Version 2.0
+' (the "License"); you may not use this file except in compliance with
+' the License.  You may obtain a copy of the License at
+'
+'      http://www.apache.org/licenses/LICENSE-2.0
+'
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
+
+@startuml
+
+  skinparam svek                  true
+  skinparam ClassBackgroundColor  #F3EFEB
+  skinparam ClassArrowColor       #691616
+  skinparam ClassBorderColor      #691616
+  skinparam NoteBackgroundColor   #F3EFEB
+  skinparam NoteBorderColor       #691616
+  skinparam NoteFontColor         #691616
+  skinparam ClassFontSize         11
+
+  package org.hipparchus.filtering.kalman #ECEBD8 {
+
+      class ProcessEstimate {
+        +getTime()
+        +getState()
+        +getCovariance()
+      }
+
+      class Measurement {
+        +getTime()
+        +getValue()
+        +getJacobian()
+        +getCovariance()
+      }
+
+      interface KalmanEstimator {
+        +Stream<ProcessEstimate> estimate(Stream<Measurement> measurements)
+        +ProcessEstimate estimationStep(Measurement measurement)
+      }
+
+      KalmanEstimator --> Measurement     : consumes
+      KalmanEstimator --> ProcessEstimate : generates
+
+      package linear #DDEBD8 {
+          class LinearEvolution {
+            +getStateTransitionMatrix()
+            +getControlMatrix()
+            +getCommand()
+            +getProcessNoiseMatrix()
+          }
+
+          interface LinearProcess {
+            +getEvolution(currentTime)
+          }
+
+          class LinearKalmanEstimator
+
+          LinearProcess    "1" <--o LinearKalmanEstimator : estimates
+          LinearProcess --> LinearEvolution : generate
+          LinearKalmanEstimator ..|> KalmanEstimator
+          LinearEvolution <-left- LinearKalmanEstimator
+
+      }
+
+      package extended #DDEBD8 {
+
+          class NonLinearEvolution {
+            +getCurrentTime()
+            +getCurrentState()
+            +getStateTransitionMatrix()
+            +getProcessNoiseMatrix()
+          }
+
+          interface NonLinearProcess {
+            +getEvolution(previousTime, previousState, currentTime)
+          }
+
+          class ExtendedKalmanEstimator
+
+          NonLinearProcess "1" <--o ExtendedKalmanEstimator : estimates
+          NonLinearProcess --> NonLinearEvolution : generate
+          ExtendedKalmanEstimator ..|> KalmanEstimator
+          ExtendedKalmanEstimator -right-> NonLinearEvolution
+
+      }
+
+
+  }
+
+  package user.application.linear #F3EDF7 {
+    class MyLinearProcess #EAE6F7/B9B3D2
+    MyLinearProcess ..|> LinearProcess
+  }
+
+  package user.application.nonlinear #F3EDF7 {
+    class MyNonLinearProcess #EAE6F7/B9B3D2
+    MyNonLinearProcess ..|> NonLinearProcess
+  }
+
+@enduml

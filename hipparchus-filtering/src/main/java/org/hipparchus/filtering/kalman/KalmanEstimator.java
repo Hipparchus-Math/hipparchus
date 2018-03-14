@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-package org.hipparchus.filtering;
+package org.hipparchus.filtering.kalman;
 
 import java.util.stream.Stream;
 

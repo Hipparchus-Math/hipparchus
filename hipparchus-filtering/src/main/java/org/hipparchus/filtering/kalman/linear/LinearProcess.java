@@ -15,15 +15,14 @@
  * limitations under the License.
  */
 
-package org.hipparchus.filtering;
+package org.hipparchus.filtering.kalman.linear;
 
-import org.hipparchus.linear.RealMatrix;
-import org.hipparchus.linear.RealVector;
+import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
 
 /**
  * Linear process that can be estimated by a {@link LinearKalmanEstimator}.
  * <p>
- * This interface must be implemented by users to represent the behaviour
+ * This interface must be implemented by users to represent the behavior
  * of the process to be estimated
  * </p>
  * <p>
@@ -36,36 +35,16 @@ import org.hipparchus.linear.RealVector;
  *   <li>w<sub>k-1</sub> is the process noise, which as covariance matrix Q<sub>k-1</sub></li>
  * </ul>
  * </p>
+ * @see LinearKalmanEstimator
+ * @see NonLinearProcess
  * @since 1.3
  */
 public interface LinearProcess {
 
-    /** Get the state transition matrix A<sub>k-1</sub>.
-     * @param time time k-1 of the <em>previous</em> state
-     * @return state transition matrix A<sub>k-1</sub> at specified time
+    /** Get the state evolution between two times.
+     * @param currentTime current time at which a measurement will be processed
+     * @return state evolution
      */
-    RealMatrix getStateTransitionMatrix(double time);
-
-    /** Get the control matrix B<sub>k-1</sub>.
-     * @param time time k-1 of the <em>previous</em> state
-     * @return control matrix B<sub>k-1</sub> at specified time
-     * (can be null if there is no control)
-     */
-    RealMatrix getControlMatrix(double time);
-
-    /** Get the command u<sub>k-1</sub>.
-     * @param time time k-1 of the <em>previous</em> state
-     * @return command vector u<sub>k-1</sub> at specified time
-     * (not called if {@link #getControlMatrix(double) getControlMatrix}
-     * returns null)
-     */
-    RealVector getCommand(double time);
-
-    /** Get the process noise matrix Q<sub>k-1</sub>.
-     * @param time time k-1 of the <em>previous</em> state
-     * @returnprocess noise matrix<sub>k-1</sub> at specified time
-     * (can be null if there is no control)
-     */
-    RealMatrix getProcessNoiseMatrix(double time);
+    LinearEvolution getEvolution(double currentTime);
 
 }

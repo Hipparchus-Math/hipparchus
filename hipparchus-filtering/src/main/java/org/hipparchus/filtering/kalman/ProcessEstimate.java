@@ -15,40 +15,34 @@
  * limitations under the License.
  */
 
-package org.hipparchus.filtering;
+package org.hipparchus.filtering.kalman;
 
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
 /**
- * Holder for a measurement on process.
+ * Holder for process state and covariance.
  * @since 1.3
  */
-public class Measurement {
+public class ProcessEstimate {
 
-    /** Measurement time or index. */
+    /** Process time (typically the time or index of a measurement). */
     private final double time;
 
-    /** Measurement vector. */
-    private final RealVector value;
+    /** State vector. */
+    private final RealVector state;
 
-    /** Measurement Jacobian matrix (partial derivatives of measurement with respect to process state). */
-    private final RealMatrix jacobian;
-
-    /** Measurement covariance. */
+    /** State covariance. */
     private final RealMatrix covariance;
 
     /** Simple constructor.
-     * @param time measurement time or index
-     * @param value measurement vector
-     * @param jacobian measurement Jacobian matrix (partial derivatives of measurement with respect to process state)
-     * @param covariance measurement covariance
+     * @param time process time (typically the time or index of a measurement)
+     * @param state state vector
+     * @param covariance state covariance
      */
-    public Measurement(final double time, final RealVector value, final RealMatrix jacobian,
-                       final RealMatrix covariance) {
+    public ProcessEstimate(final double time, final RealVector state, final RealMatrix covariance) {
         this.time       = time;
-        this.value      = value;
-        this.jacobian   = jacobian;
+        this.state      = state;
         this.covariance = covariance;
     }
 
@@ -59,26 +53,15 @@ public class Measurement {
         return time;
     }
 
-    /** Get the measurement vector.
-     * @return measurement vector
+    /** Get the state vector.
+     * @return state vector
      */
-    public RealVector getValue() {
-        return value;
+    public RealVector getState() {
+        return state;
     }
 
-    /** Get the measurement Jacobian matrix.
-     * <p>
-     * The jacobian matrix contains the partial derivatives of measurement
-     * with respect to process state.
-     * </p>
-     * @return measurement Jacobian matrix
-     */
-    public RealMatrix getJacobian() {
-        return jacobian;
-    }
-
-    /** Get the measurement covariance.
-     * @return measurement covariance
+    /** Get the state covariance.
+     * @return state covariance
      */
     public RealMatrix getCovariance() {
         return covariance;
