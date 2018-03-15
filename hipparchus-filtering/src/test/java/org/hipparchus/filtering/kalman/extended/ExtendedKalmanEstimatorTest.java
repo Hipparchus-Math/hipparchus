@@ -88,7 +88,7 @@ public class ExtendedKalmanEstimatorTest {
     public void testConstantAcceleration() {
 
         final double mNoise  = 10.0;
-        final NonLinearProcess process = new ConstantAccelerationProcess(1.0, 0.2);
+        final NonLinearProcess process = new ConstantAccelerationProcess(0.1, 0.2);
 
         // initial state is estimated to be at rest on origin
         final ProcessEstimate initial = new ProcessEstimate(0,
@@ -115,8 +115,8 @@ public class ExtendedKalmanEstimatorTest {
         estimator.estimate(measurements).forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
-                    r.checkState(estimate.getState(), 4.0e-15);
-                    r.checkcovariance(estimate.getCovariance(), 4.0e-15);
+                    r.checkState(estimate.getState(), 6.0e-15);
+                    r.checkcovariance(estimate.getCovariance(), 5.0e-15);
                     return;
                 }
             }
