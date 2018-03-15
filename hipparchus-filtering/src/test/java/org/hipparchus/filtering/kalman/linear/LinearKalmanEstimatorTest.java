@@ -87,7 +87,7 @@ public class LinearKalmanEstimatorTest {
     public void testConstantAcceleration() {
 
         // state:             { position, velocity }
-        // control:           add 0.1 m/s on velocity at each cycle
+        // control:           0.1 m/s² acceleration
         // process noise:     induced by 0.2 m/s² acceleration noise
         // measurement:       on position only
         // measurement noise: 10 m (big!)
@@ -96,6 +96,7 @@ public class LinearKalmanEstimatorTest {
         final double dt2     = dt  * dt;
         final double dt3     = dt2 * dt;
         final double dt4     = dt2 * dt2;
+        final double acc     = 0.1;
         final double aNoise  = 0.2;
         final double aNoise2 = aNoise * aNoise;
         final double mNoise  = 10.0;
@@ -107,7 +108,7 @@ public class LinearKalmanEstimatorTest {
             { 0.5 * dt2 },
             { dt }
         });
-        final RealVector u = MatrixUtils.createRealVector(new double[] { 0.1 });
+        final RealVector u = MatrixUtils.createRealVector(new double[] { acc });
         final RealMatrix q = MatrixUtils.createRealMatrix(new double[][] {
             { 0.25 * dt4 * aNoise2, 0.5 * dt3 * aNoise2 },
             { 0.5  * dt3 * aNoise2, dt2 * aNoise2 }

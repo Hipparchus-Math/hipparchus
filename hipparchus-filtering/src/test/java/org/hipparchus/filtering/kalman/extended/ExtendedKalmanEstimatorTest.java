@@ -87,8 +87,10 @@ public class ExtendedKalmanEstimatorTest {
     @Test
     public void testConstantAcceleration() {
 
-        final double mNoise  = 10.0;
-        final NonLinearProcess process = new ConstantAccelerationProcess(0.1, 0.2);
+        final double acc    = 0.1;
+        final double aNoise = 0.2;
+        final double mNoise = 10.0;
+        final NonLinearProcess process = new ConstantAccelerationProcess(acc, aNoise);
 
         // initial state is estimated to be at rest on origin
         final ProcessEstimate initial = new ProcessEstimate(0,
@@ -125,11 +127,11 @@ public class ExtendedKalmanEstimatorTest {
     }
 
     private static class ConstantAccelerationProcess implements NonLinearProcess {
-        private final double a;
+        private final double acc;
         private final double aNoise2;
         
-        public ConstantAccelerationProcess(final double a, final double aNoise) {
-            this.a       = a;
+        public ConstantAccelerationProcess(final double acc, final double aNoise) {
+            this.acc     = acc;
             this.aNoise2 = aNoise * aNoise;
         }
 
@@ -139,8 +141,8 @@ public class ExtendedKalmanEstimatorTest {
             final double     dt3   = dt2 * dt;
             final double     dt4   = dt2 * dt2;
             final RealVector state = MatrixUtils.createRealVector(new double[] {
-                previousState.getEntry(0) + previousState.getEntry(1) * dt + 0.5 * a * dt * dt,
-                previousState.getEntry(1) + a * dt
+                previousState.getEntry(0) + previousState.getEntry(1) * dt + 0.5 * acc * dt * dt,
+                previousState.getEntry(1) + acc * dt
             });
             final RealMatrix stm = MatrixUtils.createRealMatrix(new double[][] {
                 { 1.0,  dt },
