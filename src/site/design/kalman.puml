@@ -32,7 +32,7 @@
         +getCovariance()
       }
 
-      class Measurement {
+      interface Measurement {
         +getTime()
         +getValue()
         +getCovariance()

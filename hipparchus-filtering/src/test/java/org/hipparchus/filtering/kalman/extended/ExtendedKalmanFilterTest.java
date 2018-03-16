@@ -56,9 +56,9 @@ public class ExtendedKalmanFilterTest {
         final List<Reference> referenceData = loadReferenceData(1, 1, "constant-value.txt");
         final Stream<Measurement> measurements =
                         referenceData.stream().
-                        map(r -> new Measurement(r.time,
-                                                 r.z,
-                                                 MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
+                        map(r -> new SimpleMeasurement(r.time,
+                                                       r.z,
+                                                       MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
 
         // set up Kalman filter
         final ExtendedKalmanFilter filter =
@@ -113,9 +113,9 @@ public class ExtendedKalmanFilterTest {
         final List<Reference> referenceData = loadReferenceData(2, 1, name);
         final Stream<Measurement> measurements =
                         referenceData.stream().
-                        map(r -> new Measurement(r.time,
-                                                 r.z,
-                                                 MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
+                        map(r -> new SimpleMeasurement(r.time,
+                                                       r.z,
+                                                       MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
 
         // set up Kalman filter
         final ExtendedKalmanFilter filter =
@@ -212,11 +212,11 @@ public class ExtendedKalmanFilterTest {
         final List<Reference> referenceData = loadReferenceData(4, 2, name);
         final Stream<Measurement> measurements =
                         referenceData.stream().
-                        map(r -> new Measurement(r.time,
-                                                 r.z,
-                                                 MatrixUtils.createRealDiagonalMatrix(new double[] {
-                                                     mNoise * mNoise, mNoise * mNoise
-                                                 })));
+                        map(r -> new SimpleMeasurement(r.time,
+                                                       r.z,
+                                                       MatrixUtils.createRealDiagonalMatrix(new double[] {
+                                                           mNoise * mNoise, mNoise * mNoise
+                                                       })));
 
         // set up Kalman filter
         final ExtendedKalmanFilter filter =
@@ -305,11 +305,11 @@ public class ExtendedKalmanFilterTest {
         final Stream<Measurement> measurements =
                         IntStream.
                         range(0, nbMeasurements).
-                        mapToObj(i -> new Measurement(i,
-                                                      MatrixUtils.createRealVector(new double[] {
-                                                          trueConstant + generator.nextGaussian() * trueStdv,
-                                                      }),
-                                                      MatrixUtils.createRealDiagonalMatrix(new double[] { r })));
+                        mapToObj(i -> new SimpleMeasurement(i,
+                                                            MatrixUtils.createRealVector(new double[] {
+                                                                trueConstant + generator.nextGaussian() * trueStdv,
+                                                            }),
+                                                            MatrixUtils.createRealDiagonalMatrix(new double[] { r })));
 
         // set up Kalman filter
         final ExtendedKalmanFilter filter =
@@ -397,6 +397,31 @@ public class ExtendedKalmanFilterTest {
                     Assert.assertEquals(time + ": ", c.getEntry(i, j), otherCovariance.getEntry(i, j), tolerance);
                 }
             }
+        }
+
+    }
+
+    public class SimpleMeasurement implements Measurement {
+        private final double time;
+        private final RealVector value;
+        private final RealMatrix covariance;
+
+        public SimpleMeasurement(final double time, final RealVector value, final RealMatrix covariance) {
+            this.time       = time;
+            this.value      = value;
+            this.covariance = covariance;
+        }
+
+        public double getTime() {
+            return time;
+        }
+
+        public RealVector getValue() {
+            return value;
+        }
+
+        public RealMatrix getCovariance() {
+            return covariance;
         }
 
     }

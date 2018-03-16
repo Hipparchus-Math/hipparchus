@@ -21,50 +21,24 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
 /**
- * Holder for a measurement on process.
+ * Interface defining a measurement on process.
  * @since 1.3
  */
-public class Measurement {
-
-    /** Measurement time or index. */
-    private final double time;
-
-    /** Measurement vector. */
-    private final RealVector value;
-
-    /** Measurement covariance. */
-    private final RealMatrix covariance;
-
-    /** Simple constructor.
-     * @param time measurement time or index
-     * @param value measurement vector
-     * @param covariance measurement covariance
-     */
-    public Measurement(final double time, final RealVector value, final RealMatrix covariance) {
-        this.time       = time;
-        this.value      = value;
-        this.covariance = covariance;
-    }
+public interface Measurement {
 
     /** Get the process time.
      * @return process time (typically the time or index of a measurement)
      */
-    public double getTime() {
-        return time;
-    }
+    double getTime();
 
     /** Get the measurement vector.
      * @return measurement vector
      */
-    public RealVector getValue() {
-        return value;
-    }
+    RealVector getValue();
 
     /** Get the measurement covariance.
      * @return measurement covariance
      */
-    public RealMatrix getCovariance() {
-        return covariance;
-    }
+    RealMatrix getCovariance();
 
 }

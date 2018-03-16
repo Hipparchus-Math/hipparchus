@@ -60,9 +60,9 @@ public class LinearKalmanFilterTest {
         final List<Reference> referenceData = loadReferenceData(1, 1, "constant-value.txt");
         final Stream<Measurement> measurements =
                         referenceData.stream().
-                        map(r -> new Measurement(r.time,
-                                                 r.z,
-                                                 MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
+                        map(r -> new SimpleMeasurement(r.time,
+                                                       r.z,
+                                                       MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
 
         // set up Kalman filter
         final LinearKalmanFilter filter =
@@ -136,9 +136,9 @@ public class LinearKalmanFilterTest {
         final List<Reference> referenceData = loadReferenceData(2, 1, name);
         final Stream<Measurement> measurements =
                         referenceData.stream().
-                        map(r -> new Measurement(r.time,
-                                                 r.z,
-                                                 MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
+                        map(r -> new SimpleMeasurement(r.time,
+                                                       r.z,
+                                                       MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
 
         // set up Kalman filter
         final LinearKalmanFilter filter =
@@ -155,14 +155,6 @@ public class LinearKalmanFilterTest {
         filter.estimate(measurements).forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
-                    System.out.format(Locale.US, "%3.1f  %18.15f %18.15f %18.15f %21.15e %21.15e %21.15e%n",
-                                      estimate.getTime(),
-                                      r.z.getEntry(0),
-                                      estimate.getState().getEntry(0),
-                                      estimate.getState().getEntry(1),
-                                      estimate.getCovariance().getEntry(0, 0),
-                                      estimate.getCovariance().getEntry(0, 1),
-                                      estimate.getCovariance().getEntry(1, 1));
                     r.checkState(estimate.getState(), 4.0e-15);
                     r.checkcovariance(estimate.getCovariance(), 4.0e-15);
                     return;
@@ -234,11 +226,11 @@ public class LinearKalmanFilterTest {
         final List<Reference> referenceData = loadReferenceData(4, 2, name);
         final Stream<Measurement> measurements =
                         referenceData.stream().
-                        map(r -> new Measurement(r.time,
-                                                 r.z,
-                                                 MatrixUtils.createRealDiagonalMatrix(new double[] {
-                                                     mNoise * mNoise, mNoise * mNoise
-                                                 })));
+                        map(r -> new SimpleMeasurement(r.time,
+                                                       r.z,
+                                                       MatrixUtils.createRealDiagonalMatrix(new double[] {
+                                                           mNoise * mNoise, mNoise * mNoise
+                                                       })));
 
         // set up Kalman filter
         final LinearKalmanFilter filter =
@@ -307,11 +299,11 @@ public class LinearKalmanFilterTest {
         final Stream<Measurement> measurements =
                         IntStream.
                         range(0, nbMeasurements).
-                        mapToObj(i -> new Measurement(i,
-                                                      MatrixUtils.createRealVector(new double[] {
-                                                          trueConstant + generator.nextGaussian() * trueStdv,
-                                                      }),
-                                                      MatrixUtils.createRealDiagonalMatrix(new double[] { r })));
+                        mapToObj(i -> new SimpleMeasurement(i,
+                                                            MatrixUtils.createRealVector(new double[] {
+                                                                trueConstant + generator.nextGaussian() * trueStdv,
+                                                            }),
+                                                            MatrixUtils.createRealDiagonalMatrix(new double[] { r })));
 
         // set up Kalman filter
         final LinearKalmanFilter filter =
@@ -393,6 +385,31 @@ public class LinearKalmanFilterTest {
                     Assert.assertEquals(time + ": ", c.getEntry(i, j), otherCovariance.getEntry(i, j), tolerance);
                 }
             }
+        }
+
+    }
+
+    public class SimpleMeasurement implements Measurement {
+        private final double time;
+        private final RealVector value;
+        private final RealMatrix covariance;
+
+        public SimpleMeasurement(final double time, final RealVector value, final RealMatrix covariance) {
+            this.time       = time;
+            this.value      = value;
+            this.covariance = covariance;
+        }
+
+        public double getTime() {
+            return time;
+        }
+
+        public RealVector getValue() {
+            return value;
+        }
+
+        public RealMatrix getCovariance() {
+            return covariance;
         }
 
     }
