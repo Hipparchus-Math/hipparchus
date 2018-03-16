@@ -41,8 +41,7 @@ public abstract class AbstractKalmanFilter implements KalmanFilter {
      * @param decomposer decomposer to use for the correction phase
      * @param initialState initial state
      */
-    protected AbstractKalmanFilter(final MatrixDecomposer decomposer,
-                                      final ProcessEstimate initialState) {
+    protected AbstractKalmanFilter(final MatrixDecomposer decomposer, final ProcessEstimate initialState) {
         this.decomposer = decomposer;
         this.corrected  = initialState;
     }

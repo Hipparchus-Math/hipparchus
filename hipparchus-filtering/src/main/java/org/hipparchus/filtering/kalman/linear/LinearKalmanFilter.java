@@ -40,8 +40,8 @@ public class LinearKalmanFilter extends AbstractKalmanFilter {
      * @param initialState initial state
      */
     public LinearKalmanFilter(final MatrixDecomposer decomposer,
-                                 final LinearProcess process,
-                                 final ProcessEstimate initialState) {
+                              final LinearProcess process,
+                              final ProcessEstimate initialState) {
         super(decomposer, initialState);
         this.process = process;
     }

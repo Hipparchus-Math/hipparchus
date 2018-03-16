@@ -38,8 +38,8 @@ public class ExtendedKalmanFilter extends AbstractKalmanFilter {
      * @param initialState initial state
      */
     public ExtendedKalmanFilter(final MatrixDecomposer decomposer,
-                                   final NonLinearProcess process,
-                                   final ProcessEstimate initialState) {
+                                final NonLinearProcess process,
+                                final ProcessEstimate initialState) {
         super(decomposer, initialState);
         this.process = process;
     }
