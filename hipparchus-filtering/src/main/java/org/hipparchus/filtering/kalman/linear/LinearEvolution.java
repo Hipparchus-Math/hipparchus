@@ -39,7 +39,7 @@ public class LinearEvolution {
     /** Process noise matrix Q<sub>k-1</sub>. */
     private final RealMatrix processNoiseMatrix;
 
-    /** Jacobian of the measurement with respect to the state. */
+    /** Jacobian of the measurement with respect to the state (may be null). */
     private final RealMatrix measurementJacobian;
 
     /** Simple constructor.
@@ -48,6 +48,7 @@ public class LinearEvolution {
      * @param command u<sub>k-1</sub>. (can be null if the process is not controlled)
      * @param processNoiseMatrix process noise matrix Q<sub>k-1</sub>
      * @param measurementJacobian Jacobian of the measurement with respect to the state
+     * (may be null if measurement should be ignored)
      */
     public LinearEvolution(final RealMatrix stateTransitionMatrix,
                            final RealMatrix controlMatrix, final RealVector command,
@@ -90,6 +91,7 @@ public class LinearEvolution {
 
     /** Get measurement Jacobian.
      * @return Jacobian of the measurement with respect to the state
+     * (may be null if measurement should be ignored)
      */
     public RealMatrix getMeasurementJacobian() {
         return measurementJacobian;

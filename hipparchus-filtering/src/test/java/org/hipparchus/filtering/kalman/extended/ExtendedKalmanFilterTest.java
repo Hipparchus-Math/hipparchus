@@ -86,6 +86,15 @@ public class ExtendedKalmanFilterTest {
 
     @Test
     public void testConstantAcceleration() {
+        doTestConstantAcceleration("constant-acceleration.txt");
+    }
+
+    @Test
+    public void testConstantAccelerationWithOutlier() {
+        doTestConstantAcceleration("constant-acceleration-with-outlier.txt");
+    }
+
+    private void doTestConstantAcceleration(String name) {
 
         final double acc    = 0.1;
         final double aNoise = 0.2;
@@ -101,7 +110,7 @@ public class ExtendedKalmanFilterTest {
                                                             }));
 
         // reference values from Apache Commons Math 3.6.1 unit test
-        final List<Reference> referenceData = loadReferenceData(2, 1, "constant-acceleration.txt");
+        final List<Reference> referenceData = loadReferenceData(2, 1, name);
         final Stream<Measurement> measurements =
                         referenceData.stream().
                         map(r -> new Measurement(r.time,
@@ -151,8 +160,9 @@ public class ExtendedKalmanFilterTest {
                 { 0.25 * dt4 * aNoise2, 0.5 * dt3 * aNoise2 },
                 { 0.5  * dt3 * aNoise2, dt2 * aNoise2 }
             });
-            return new NonLinearEvolution(measurement.getTime(), state, stm, processNoiseMatrix,
-                                          MatrixUtils.createRealMatrix(new double[][] { { 1.0, 0.0 } }));
+            RealMatrix h = (measurement.getValue().getEntry(0) > 1.0e6) ?
+                           null : MatrixUtils.createRealMatrix(new double[][] { { 1.0, 0.0 } });
+            return new NonLinearEvolution(measurement.getTime(), state, stm, processNoiseMatrix, h);
         }
 
     }

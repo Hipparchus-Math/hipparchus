@@ -39,7 +39,7 @@ public class NonLinearEvolution {
     /** Process noise matrix. */
     private final RealMatrix processNoiseMatrix;
 
-    /** Jacobian of the measurement with respect to the state. */
+    /** Jacobian of the measurement with respect to the state (may be null). */
     private final RealMatrix measurementJacobian;
 
     /** Simple constructor.
@@ -48,6 +48,7 @@ public class NonLinearEvolution {
      * @param stateTransitionMatrix state transition matrix between previous and current state
      * @param processNoiseMatrix process noise
      * @param measurementJacobian Jacobian of the measurement with respect to the state
+     * (may be null if measurement should be ignored)
      */
     public NonLinearEvolution(final double currentTime, final RealVector currentState,
                               final RealMatrix stateTransitionMatrix, final RealMatrix processNoiseMatrix,
@@ -89,6 +90,7 @@ public class NonLinearEvolution {
 
     /** Get measurement Jacobian.
      * @return Jacobian of the measurement with respect to the state
+     * (may be null if measurement should be ignored)
      */
     public RealMatrix getMeasurementJacobian() {
         return measurementJacobian;

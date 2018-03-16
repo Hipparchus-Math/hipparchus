@@ -61,10 +61,17 @@ public abstract class AbstractKalmanFilter implements KalmanFilter {
     /** Perform correction step.
      * @param measurement single measurement to handle
      * @param h Jacobian of the measurement with respect to the state
+     * (may be null if measurement should be ignored)
      * @exception MathIllegalArgumentException if matrix cannot be decomposed
      */
     protected void correct(final Measurement measurement, final RealMatrix h)
         throws MathIllegalArgumentException {
+
+        if (h == null) {
+            // measurement should be ignored
+            corrected = predicted;
+            return;
+        }
 
         // correction phase
         final RealMatrix r          = measurement.getCovariance();

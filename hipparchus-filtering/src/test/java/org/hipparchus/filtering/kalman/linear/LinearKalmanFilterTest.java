@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -66,9 +67,9 @@ public class LinearKalmanFilterTest {
         // set up Kalman filter
         final LinearKalmanFilter filter =
                         new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                  time -> new LinearEvolution(a, b, u, q,
-                                                                              MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
-                                                  initial);
+                                               measurement -> new LinearEvolution(a, b, u, q,
+                                                                                  MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
+                                               initial);
 
         // sequentially process all measurements and check against the reference estimated state and covariance
         filter.estimate(measurements).forEach(estimate -> {
@@ -85,6 +86,15 @@ public class LinearKalmanFilterTest {
 
     @Test
     public void testConstantAcceleration() {
+        doTestConstantAcceleration("constant-acceleration.txt");
+    }
+
+    @Test
+    public void testConstantAccelerationWithOutlier() {
+        doTestConstantAcceleration("constant-acceleration-with-outlier.txt");
+    }
+
+    private void doTestConstantAcceleration(String name) {
 
         // state:             { position, velocity }
         // control:           0.1 m/s² acceleration
@@ -123,7 +133,7 @@ public class LinearKalmanFilterTest {
                                                             }));
 
         // reference values from Apache Commons Math 3.6.1 unit test
-        final List<Reference> referenceData = loadReferenceData(2, 1, "constant-acceleration.txt");
+        final List<Reference> referenceData = loadReferenceData(2, 1, name);
         final Stream<Measurement> measurements =
                         referenceData.stream().
                         map(r -> new Measurement(r.time,
@@ -133,14 +143,26 @@ public class LinearKalmanFilterTest {
         // set up Kalman filter
         final LinearKalmanFilter filter =
         new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                  time -> new LinearEvolution(a, b, u, q,
-                                                              MatrixUtils.createRealMatrix(new double[][] { { 1.0, 0.0 } })),
-                                  initial);
+                               measurement -> {
+                                   RealMatrix h = (measurement.getValue().getEntry(0) > 1.0e6) ?
+                                                  null :
+                                                  MatrixUtils.createRealMatrix(new double[][] { { 1.0, 0.0 } });
+                                   return new LinearEvolution(a, b, u, q, h);
+                               },
+                               initial);
 
         // sequentially process all measurements and check against the reference estimate
         filter.estimate(measurements).forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
+                    System.out.format(Locale.US, "%3.1f  %18.15f %18.15f %18.15f %21.15e %21.15e %21.15e%n",
+                                      estimate.getTime(),
+                                      r.z.getEntry(0),
+                                      estimate.getState().getEntry(0),
+                                      estimate.getState().getEntry(1),
+                                      estimate.getCovariance().getEntry(0, 0),
+                                      estimate.getCovariance().getEntry(0, 1),
+                                      estimate.getCovariance().getEntry(1, 1));
                     r.checkState(estimate.getState(), 4.0e-15);
                     r.checkcovariance(estimate.getCovariance(), 4.0e-15);
                     return;
@@ -294,9 +316,9 @@ public class LinearKalmanFilterTest {
         // set up Kalman filter
         final LinearKalmanFilter filter =
                         new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                  time -> new LinearEvolution(a, b, u, q,
-                                                                              MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
-                                                  initial);
+                                               measurement -> new LinearEvolution(a, b, u, q,
+                                                                                  MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
+                                               initial);
 
         // sequentially process all measurements and get only the last one
         final Stream<ProcessEstimate> estimates = filter.estimate(measurements);

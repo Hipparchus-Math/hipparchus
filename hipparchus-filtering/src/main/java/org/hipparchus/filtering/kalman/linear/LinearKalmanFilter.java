@@ -51,8 +51,9 @@ public class LinearKalmanFilter extends AbstractKalmanFilter {
     public ProcessEstimate estimationStep(final Measurement measurement)
         throws MathRuntimeException {
 
-        // prediction phase
         final LinearEvolution evolution = process.getEvolution(measurement);
+
+        // prediction phase
         final RealMatrix      a         = evolution.getStateTransitionMatrix();
         final RealMatrix      b         = evolution.getControlMatrix();
         final RealVector      u         = (b == null) ? null : evolution.getCommand();

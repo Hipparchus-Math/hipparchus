@@ -59,7 +59,7 @@ If the output is not quite correct, check for invisible trailing spaces!
         without creating the intermediate transposed matrix.
       </action>
       <action dev="luc" type="add" issue="issues/32" >
-        Added Kalman filter.
+        Added linear and extended Kalman filters, with support for outliers rejection.
       </action>
       <action dev="luc" type="add" due-to="Evan Ward">
         Added MatrixDecomposer interface that encapsulates algorithms tolerances.
