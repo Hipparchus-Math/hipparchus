@@ -26,14 +26,6 @@ import org.hipparchus.linear.RealVector;
  * This interface must be implemented by users to represent the behavior
  * of the process to be estimated
  * </p>
- * <p>
- * A linear process is governed by the equation:<br>
- *  x<sub>k</sub> = f(x<sub>k-1</sub>) + w<sub>k-1</sub><br>
- * where <ul>
- *   <li>f is the non-linear state evolution function,</li>
- *   <li>w<sub>k-1</sub> is the process noise, which as covariance matrix Q<sub>k-1</sub></li>
- * </ul>
- * </p>
  * @see ExtendedKalmanEstimator
  * @see LinearProcess
  * @since 1.3
