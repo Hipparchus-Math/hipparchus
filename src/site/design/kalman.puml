@@ -39,13 +39,13 @@
         +getCovariance()
       }
 
-      interface KalmanEstimator {
+      interface KalmanFilter {
         +Stream<ProcessEstimate> estimate(Stream<Measurement> measurements)
         +ProcessEstimate estimationStep(Measurement measurement)
       }
 
-      KalmanEstimator --> Measurement     : consumes
-      KalmanEstimator --> ProcessEstimate : generates
+      KalmanFilter --> Measurement     : consumes
+      KalmanFilter --> ProcessEstimate : generates
 
       package linear #DDEBD8 {
           class LinearEvolution {
@@ -59,12 +59,12 @@
             +getEvolution(currentTime)
           }
 
-          class LinearKalmanEstimator
+          class LinearKalmanFilter
 
-          LinearProcess    "1" <--o LinearKalmanEstimator : estimates
+          LinearProcess    "1" <--o LinearKalmanFilter : estimates
           LinearProcess --> LinearEvolution : generate
-          LinearKalmanEstimator ..|> KalmanEstimator
-          LinearEvolution <-left- LinearKalmanEstimator
+          LinearKalmanFilter ..|> KalmanFilter
+          LinearEvolution <-left- LinearKalmanFilter
 
       }
 
@@ -81,12 +81,12 @@
             +getEvolution(previousTime, previousState, currentTime)
           }
 
-          class ExtendedKalmanEstimator
+          class ExtendedKalmanFilter
 
-          NonLinearProcess "1" <--o ExtendedKalmanEstimator : estimates
+          NonLinearProcess "1" <--o ExtendedKalmanFilter : estimates
           NonLinearProcess --> NonLinearEvolution : generate
-          ExtendedKalmanEstimator ..|> KalmanEstimator
-          ExtendedKalmanEstimator -right-> NonLinearEvolution
+          ExtendedKalmanFilter ..|> KalmanFilter
+          ExtendedKalmanFilter -right-> NonLinearEvolution
 
       }
 

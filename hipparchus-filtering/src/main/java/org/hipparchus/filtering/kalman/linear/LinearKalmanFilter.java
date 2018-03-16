@@ -18,7 +18,7 @@
 package org.hipparchus.filtering.kalman.linear;
 
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.filtering.kalman.AbstractKalmanEstimator;
+import org.hipparchus.filtering.kalman.AbstractKalmanFilter;
 import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.ProcessEstimate;
 import org.hipparchus.linear.MatrixDecomposer;
@@ -26,10 +26,10 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
 /**
- * Kalman estimator for {@link LinearProcess linear process}.
+ * Kalman filter for {@link LinearProcess linear process}.
  * @since 1.3
  */
-public class LinearKalmanEstimator extends AbstractKalmanEstimator {
+public class LinearKalmanFilter extends AbstractKalmanFilter {
 
     /** Process to be estimated. */
     private final LinearProcess process;
@@ -39,7 +39,7 @@ public class LinearKalmanEstimator extends AbstractKalmanEstimator {
      * @param process linear process to estimate
      * @param initialState initial state
      */
-    public LinearKalmanEstimator(final MatrixDecomposer decomposer,
+    public LinearKalmanFilter(final MatrixDecomposer decomposer,
                                  final LinearProcess process,
                                  final ProcessEstimate initialState) {
         super(decomposer, initialState);

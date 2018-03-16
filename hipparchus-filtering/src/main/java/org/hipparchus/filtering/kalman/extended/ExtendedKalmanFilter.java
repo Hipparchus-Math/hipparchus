@@ -18,16 +18,16 @@
 package org.hipparchus.filtering.kalman.extended;
 
 import org.hipparchus.exception.MathRuntimeException;
-import org.hipparchus.filtering.kalman.AbstractKalmanEstimator;
+import org.hipparchus.filtering.kalman.AbstractKalmanFilter;
 import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.ProcessEstimate;
 import org.hipparchus.linear.MatrixDecomposer;
 
 /**
- * Kalman estimator for {@link NonLinearProcess non-linear process}.
+ * Kalman filter for {@link NonLinearProcess non-linear process}.
  * @since 1.3
  */
-public class ExtendedKalmanEstimator extends AbstractKalmanEstimator {
+public class ExtendedKalmanFilter extends AbstractKalmanFilter {
 
     /** Process to be estimated. */
     private final NonLinearProcess process;
@@ -37,7 +37,7 @@ public class ExtendedKalmanEstimator extends AbstractKalmanEstimator {
      * @param process non-linear process to estimate
      * @param initialState initial state
      */
-    public ExtendedKalmanEstimator(final MatrixDecomposer decomposer,
+    public ExtendedKalmanFilter(final MatrixDecomposer decomposer,
                                    final NonLinearProcess process,
                                    final ProcessEstimate initialState) {
         super(decomposer, initialState);

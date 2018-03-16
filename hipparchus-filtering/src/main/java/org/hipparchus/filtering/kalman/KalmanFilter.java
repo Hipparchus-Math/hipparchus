@@ -22,10 +22,10 @@ import java.util.stream.Stream;
 import org.hipparchus.exception.MathRuntimeException;
 
 /**
- * Interface representing a Kalman estimator.
+ * Interface representing a Kalman filter.
  * @since 1.3
  */
-public interface KalmanEstimator {
+public interface KalmanFilter {
 
     /** Transform a measurements stream into an estimated states stream.
      * @param measurements stream of measurements on the estimated process

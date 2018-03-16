@@ -21,12 +21,12 @@ import org.hipparchus.filtering.kalman.linear.LinearProcess;
 import org.hipparchus.linear.RealVector;
 
 /**
- * Non-linear process that can be estimated by a {@link ExtendedKalmanEstimator}.
+ * Non-linear process that can be estimated by a {@link ExtendedKalmanFilter}.
  * <p>
  * This interface must be implemented by users to represent the behavior
  * of the process to be estimated
  * </p>
- * @see ExtendedKalmanEstimator
+ * @see ExtendedKalmanFilter
  * @see LinearProcess
  * @since 1.3
  */

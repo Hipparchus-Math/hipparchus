@@ -23,10 +23,10 @@ import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
 /**
- * Shared parts between linear and non-linear Kalman estimators.
+ * Shared parts between linear and non-linear Kalman filters.
  * @since 1.3
  */
-public abstract class AbstractKalmanEstimator implements KalmanEstimator {
+public abstract class AbstractKalmanFilter implements KalmanFilter {
 
     /** Decomposer decomposer to use for the correction phase. */
     private final MatrixDecomposer decomposer;
@@ -41,7 +41,7 @@ public abstract class AbstractKalmanEstimator implements KalmanEstimator {
      * @param decomposer decomposer to use for the correction phase
      * @param initialState initial state
      */
-    protected AbstractKalmanEstimator(final MatrixDecomposer decomposer,
+    protected AbstractKalmanFilter(final MatrixDecomposer decomposer,
                                       final ProcessEstimate initialState) {
         this.decomposer = decomposer;
         this.corrected  = initialState;

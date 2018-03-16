@@ -20,7 +20,7 @@ package org.hipparchus.filtering.kalman.linear;
 import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
 
 /**
- * Linear process that can be estimated by a {@link LinearKalmanEstimator}.
+ * Linear process that can be estimated by a {@link LinearKalmanFilter}.
  * <p>
  * This interface must be implemented by users to represent the behavior
  * of the process to be estimated
@@ -35,7 +35,7 @@ import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
  *   <li>w<sub>k-1</sub> is the process noise, which as covariance matrix Q<sub>k-1</sub></li>
  * </ul>
  * </p>
- * @see LinearKalmanEstimator
+ * @see LinearKalmanFilter
  * @see NonLinearProcess
  * @since 1.3
  */
