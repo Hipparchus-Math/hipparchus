@@ -61,13 +61,13 @@ public class LinearKalmanFilterTest {
                         referenceData.stream().
                         map(r -> new Measurement(r.time,
                                                  r.z,
-                                                 MatrixUtils.createRealMatrix(new double[][] { { 1.0 } }),
                                                  MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
 
         // set up Kalman filter
         final LinearKalmanFilter filter =
                         new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                  time -> new LinearEvolution(a, b, u, q),
+                                                  time -> new LinearEvolution(a, b, u, q,
+                                                                              MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
                                                   initial);
 
         // sequentially process all measurements and check against the reference estimated state and covariance
@@ -128,13 +128,13 @@ public class LinearKalmanFilterTest {
                         referenceData.stream().
                         map(r -> new Measurement(r.time,
                                                  r.z,
-                                                 MatrixUtils.createRealMatrix(new double[][] { { 1.0, 0.0 } }),
                                                  MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
 
         // set up Kalman filter
         final LinearKalmanFilter filter =
         new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                  time -> new LinearEvolution(a, b, u, q),
+                                  time -> new LinearEvolution(a, b, u, q,
+                                                              MatrixUtils.createRealMatrix(new double[][] { { 1.0, 0.0 } })),
                                   initial);
 
         // sequentially process all measurements and check against the reference estimate
@@ -214,10 +214,6 @@ public class LinearKalmanFilterTest {
                         referenceData.stream().
                         map(r -> new Measurement(r.time,
                                                  r.z,
-                                                 MatrixUtils.createRealMatrix(new double[][] {
-                                                                                  { 1.0, 0.0, 0.0, 0.0 },
-                                                                                  { 0.0, 0.0, 1.0, 0.0 }
-                                                                              }),
                                                  MatrixUtils.createRealDiagonalMatrix(new double[] {
                                                      mNoise * mNoise, mNoise * mNoise
                                                  })));
@@ -225,7 +221,11 @@ public class LinearKalmanFilterTest {
         // set up Kalman filter
         final LinearKalmanFilter filter =
         new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                  time -> new LinearEvolution(a, b, u, q),
+                                  time -> new LinearEvolution(a, b, u, q,
+                                                              MatrixUtils.createRealMatrix(new double[][] {
+                                                                  { 1.0, 0.0, 0.0, 0.0 },
+                                                                  { 0.0, 0.0, 1.0, 0.0 }
+                                                              })),
                                   initial);
 
         // sequentially process all measurements and check against the reference estimate
@@ -289,13 +289,13 @@ public class LinearKalmanFilterTest {
                                                       MatrixUtils.createRealVector(new double[] {
                                                           trueConstant + generator.nextGaussian() * trueStdv,
                                                       }),
-                                                      MatrixUtils.createRealMatrix(new double[][] { { 1.0 } }),
                                                       MatrixUtils.createRealDiagonalMatrix(new double[] { r })));
 
         // set up Kalman filter
         final LinearKalmanFilter filter =
                         new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                  time -> new LinearEvolution(a, b, u, q),
+                                                  time -> new LinearEvolution(a, b, u, q,
+                                                                              MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
                                                   initial);
 
         // sequentially process all measurements and get only the last one

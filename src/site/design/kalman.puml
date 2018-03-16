@@ -35,7 +35,6 @@
       class Measurement {
         +getTime()
         +getValue()
-        +getJacobian()
         +getCovariance()
       }
 
@@ -53,10 +52,11 @@
             +getControlMatrix()
             +getCommand()
             +getProcessNoiseMatrix()
+            +getMeasurementJacobian()
           }
 
           interface LinearProcess {
-            +getEvolution(currentTime)
+            +getEvolution(measurement)
           }
 
           class LinearKalmanFilter
@@ -75,10 +75,11 @@
             +getCurrentState()
             +getStateTransitionMatrix()
             +getProcessNoiseMatrix()
+            +getMeasurementJacobian()
           }
 
           interface NonLinearProcess {
-            +getEvolution(previousTime, previousState, currentTime)
+            +getEvolution(previousTime, previousState, measurement)
           }
 
           class ExtendedKalmanFilter

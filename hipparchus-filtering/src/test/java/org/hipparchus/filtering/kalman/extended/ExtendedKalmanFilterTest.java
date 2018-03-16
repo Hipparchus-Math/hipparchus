@@ -58,17 +58,17 @@ public class ExtendedKalmanFilterTest {
                         referenceData.stream().
                         map(r -> new Measurement(r.time,
                                                  r.z,
-                                                 MatrixUtils.createRealMatrix(new double[][] { { 1.0 } }),
                                                  MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
 
         // set up Kalman filter
         final ExtendedKalmanFilter filter =
                         new ExtendedKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                    (previousTime, previousState, currentTime) ->
-                        new NonLinearEvolution(currentTime,
+                                                    (previousTime, previousState, measurement) ->
+                        new NonLinearEvolution(measurement.getTime(),
                                                previousState,
                                                MatrixUtils.createRealIdentityMatrix(1),
-                                               q),
+                                               q,
+                                               MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
                                                initial);
 
         // sequentially process all measurements and check against the reference estimated state and covariance
@@ -106,7 +106,6 @@ public class ExtendedKalmanFilterTest {
                         referenceData.stream().
                         map(r -> new Measurement(r.time,
                                                  r.z,
-                                                 MatrixUtils.createRealMatrix(new double[][] { { 1.0, 0.0 } }),
                                                  MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
 
         // set up Kalman filter
@@ -135,8 +134,8 @@ public class ExtendedKalmanFilterTest {
             this.aNoise2 = aNoise * aNoise;
         }
 
-        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, double currentTime) {
-            final double     dt    = currentTime - previousTime;
+        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, Measurement measurement) {
+            final double     dt    = measurement.getTime() - previousTime;
             final double     dt2   = dt  * dt;
             final double     dt3   = dt2 * dt;
             final double     dt4   = dt2 * dt2;
@@ -152,7 +151,8 @@ public class ExtendedKalmanFilterTest {
                 { 0.25 * dt4 * aNoise2, 0.5 * dt3 * aNoise2 },
                 { 0.5  * dt3 * aNoise2, dt2 * aNoise2 }
             });
-            return new NonLinearEvolution(currentTime, state, stm, processNoiseMatrix);
+            return new NonLinearEvolution(measurement.getTime(), state, stm, processNoiseMatrix,
+                                          MatrixUtils.createRealMatrix(new double[][] { { 1.0, 0.0 } }));
         }
 
     }
@@ -204,10 +204,6 @@ public class ExtendedKalmanFilterTest {
                         referenceData.stream().
                         map(r -> new Measurement(r.time,
                                                  r.z,
-                                                 MatrixUtils.createRealMatrix(new double[][] {
-                                                                                  { 1.0, 0.0, 0.0, 0.0 },
-                                                                                  { 0.0, 0.0, 1.0, 0.0 }
-                                                                              }),
                                                  MatrixUtils.createRealDiagonalMatrix(new double[] {
                                                      mNoise * mNoise, mNoise * mNoise
                                                  })));
@@ -238,8 +234,8 @@ public class ExtendedKalmanFilterTest {
             this.q = MatrixUtils.createRealMatrix(qData);
         }
 
-        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, double currentTime) {
-            final double dt = currentTime - previousTime;
+        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, Measurement measurement) {
+            final double dt = measurement.getTime() - previousTime;
             final RealVector state = MatrixUtils.createRealVector(new double[] {
                 previousState.getEntry(0) + previousState.getEntry(1) * dt,
                 previousState.getEntry(1),
@@ -252,7 +248,11 @@ public class ExtendedKalmanFilterTest {
                 { 0.0, 0.0, 1.0,  dt },
                 { 0.0, 0.0, 0.0, 1.0 },
             });
-            return new NonLinearEvolution(currentTime, state, stm, q);
+            return new NonLinearEvolution(measurement.getTime(), state, stm, q,
+                                          MatrixUtils.createRealMatrix(new double[][] {
+                                              { 1.0, 0.0, 0.0, 0.0 },
+                                              { 0.0, 0.0, 1.0, 0.0 }
+                                          }));
         }
 
     }
@@ -299,19 +299,19 @@ public class ExtendedKalmanFilterTest {
                                                       MatrixUtils.createRealVector(new double[] {
                                                           trueConstant + generator.nextGaussian() * trueStdv,
                                                       }),
-                                                      MatrixUtils.createRealMatrix(new double[][] { { 1.0 } }),
                                                       MatrixUtils.createRealDiagonalMatrix(new double[] { r })));
 
         // set up Kalman filter
         final ExtendedKalmanFilter filter =
                         new ExtendedKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                    (previousTime, previousState, currentTime) ->
-                                                      new NonLinearEvolution(currentTime,
+                                                    (previousTime, previousState, measurement) ->
+                                                      new NonLinearEvolution(measurement.getTime(),
                                                                              previousState,
                                                                              MatrixUtils.createRealIdentityMatrix(1),
                                                                              MatrixUtils.createRealDiagonalMatrix(new double[] {
                                                                                  q
-                                                                             })),
+                                                                             }),
+                                                                             MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
                                                     initial);
 
         // sequentially process all measurements and get only the last one

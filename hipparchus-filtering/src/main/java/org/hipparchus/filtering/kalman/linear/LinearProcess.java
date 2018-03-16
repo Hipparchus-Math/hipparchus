@@ -17,6 +17,7 @@
 
 package org.hipparchus.filtering.kalman.linear;
 
+import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
 
 /**
@@ -42,9 +43,9 @@ import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
 public interface LinearProcess {
 
     /** Get the state evolution between two times.
-     * @param currentTime current time at which a measurement will be processed
+     * @param measurement measurement to process
      * @return state evolution
      */
-    LinearEvolution getEvolution(double currentTime);
+    LinearEvolution getEvolution(Measurement measurement);
 
 }

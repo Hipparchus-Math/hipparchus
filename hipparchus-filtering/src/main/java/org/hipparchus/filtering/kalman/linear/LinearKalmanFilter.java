@@ -52,7 +52,7 @@ public class LinearKalmanFilter extends AbstractKalmanFilter {
         throws MathRuntimeException {
 
         // prediction phase
-        final LinearEvolution evolution = process.getEvolution(measurement.getTime());
+        final LinearEvolution evolution = process.getEvolution(measurement);
         final RealMatrix      a         = evolution.getStateTransitionMatrix();
         final RealMatrix      b         = evolution.getControlMatrix();
         final RealVector      u         = (b == null) ? null : evolution.getCommand();
@@ -66,7 +66,7 @@ public class LinearKalmanFilter extends AbstractKalmanFilter {
         predict(measurement.getTime(), predXk, a, q);
 
         // correction phase
-        correct(measurement);
+        correct(measurement, evolution.getMeasurementJacobian());
         return getCorrected();
 
     }

@@ -17,6 +17,7 @@
 
 package org.hipparchus.filtering.kalman.extended;
 
+import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.linear.LinearProcess;
 import org.hipparchus.linear.RealVector;
 
@@ -35,9 +36,9 @@ public interface NonLinearProcess {
     /** Get the state evolution between two times.
      * @param previousTime time of the previous state
      * @param previousState process state at {@code previousTime}
-     * @param currentTime time at which 
+     * @param measurement measurement to process
      * @return state evolution
      */
-    NonLinearEvolution getEvolution(double previousTime, RealVector previousState, double currentTime);
+    NonLinearEvolution getEvolution(double previousTime, RealVector previousState, Measurement measurement);
 
 }

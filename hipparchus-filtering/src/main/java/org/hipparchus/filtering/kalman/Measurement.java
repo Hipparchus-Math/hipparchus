@@ -32,23 +32,17 @@ public class Measurement {
     /** Measurement vector. */
     private final RealVector value;
 
-    /** Measurement Jacobian matrix (partial derivatives of measurement with respect to process state). */
-    private final RealMatrix jacobian;
-
     /** Measurement covariance. */
     private final RealMatrix covariance;
 
     /** Simple constructor.
      * @param time measurement time or index
      * @param value measurement vector
-     * @param jacobian measurement Jacobian matrix (partial derivatives of measurement with respect to process state)
      * @param covariance measurement covariance
      */
-    public Measurement(final double time, final RealVector value, final RealMatrix jacobian,
-                       final RealMatrix covariance) {
+    public Measurement(final double time, final RealVector value, final RealMatrix covariance) {
         this.time       = time;
         this.value      = value;
-        this.jacobian   = jacobian;
         this.covariance = covariance;
     }
 
@@ -64,17 +58,6 @@ public class Measurement {
      */
     public RealVector getValue() {
         return value;
-    }
-
-    /** Get the measurement Jacobian matrix.
-     * <p>
-     * The jacobian matrix contains the partial derivatives of measurement
-     * with respect to process state.
-     * </p>
-     * @return measurement Jacobian matrix
-     */
-    public RealMatrix getJacobian() {
-        return jacobian;
     }
 
     /** Get the measurement covariance.

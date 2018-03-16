@@ -39,18 +39,24 @@ public class NonLinearEvolution {
     /** Process noise matrix. */
     private final RealMatrix processNoiseMatrix;
 
+    /** Jacobian of the measurement with respect to the state. */
+    private final RealMatrix measurementJacobian;
+
     /** Simple constructor.
      * @param currentTime current time
      * @param currentState state vector at current time
      * @param stateTransitionMatrix state transition matrix between previous and current state
      * @param processNoiseMatrix process noise
+     * @param measurementJacobian Jacobian of the measurement with respect to the state
      */
     public NonLinearEvolution(final double currentTime, final RealVector currentState,
-                              final RealMatrix stateTransitionMatrix, final RealMatrix processNoiseMatrix) {
+                              final RealMatrix stateTransitionMatrix, final RealMatrix processNoiseMatrix,
+                              final RealMatrix measurementJacobian) {
         this.currentTime           = currentTime;
         this.currentState          = currentState;
         this.stateTransitionMatrix = stateTransitionMatrix;
         this.processNoiseMatrix    = processNoiseMatrix;
+        this.measurementJacobian   = measurementJacobian;
     }
 
     /** Get current time.
@@ -79,6 +85,13 @@ public class NonLinearEvolution {
      */
     public RealMatrix getProcessNoiseMatrix() {
         return processNoiseMatrix;
+    }
+
+    /** Get measurement Jacobian.
+     * @return Jacobian of the measurement with respect to the state
+     */
+    public RealMatrix getMeasurementJacobian() {
+        return measurementJacobian;
     }
 
 }

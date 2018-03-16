@@ -39,19 +39,25 @@ public class LinearEvolution {
     /** Process noise matrix Q<sub>k-1</sub>. */
     private final RealMatrix processNoiseMatrix;
 
+    /** Jacobian of the measurement with respect to the state. */
+    private final RealMatrix measurementJacobian;
+
     /** Simple constructor.
      * @param stateTransitionMatrix state transition matrix A<sub>k-1</sub>
      * @param controlMatrix control matrix B<sub>k-1</sub> (can be null if the process is not controlled)
      * @param command u<sub>k-1</sub>. (can be null if the process is not controlled)
      * @param processNoiseMatrix process noise matrix Q<sub>k-1</sub>
+     * @param measurementJacobian Jacobian of the measurement with respect to the state
      */
     public LinearEvolution(final RealMatrix stateTransitionMatrix,
                            final RealMatrix controlMatrix, final RealVector command,
-                           final RealMatrix processNoiseMatrix) {
+                           final RealMatrix processNoiseMatrix,
+                           final RealMatrix measurementJacobian) {
         this.stateTransitionMatrix = stateTransitionMatrix;
         this.controlMatrix         = controlMatrix;
         this.command               = command;
         this.processNoiseMatrix    = processNoiseMatrix;
+        this.measurementJacobian   = measurementJacobian;
     }
 
     /** Get the state transition matrix A<sub>k-1</sub>.
@@ -80,6 +86,13 @@ public class LinearEvolution {
      */
     public RealMatrix getProcessNoiseMatrix() {
         return processNoiseMatrix;
+    }
+
+    /** Get measurement Jacobian.
+     * @return Jacobian of the measurement with respect to the state
+     */
+    public RealMatrix getMeasurementJacobian() {
+        return measurementJacobian;
     }
 
 }

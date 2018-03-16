@@ -52,13 +52,13 @@ public class ExtendedKalmanFilter extends AbstractKalmanFilter {
         // prediction phase
         final NonLinearEvolution evolution = process.getEvolution(getCorrected().getTime(),
                                                                   getCorrected().getState(),
-                                                                  measurement.getTime());
+                                                                  measurement);
 
         predict(evolution.getCurrentTime(), evolution.getCurrentState(),
                 evolution.getStateTransitionMatrix(), evolution.getProcessNoiseMatrix());
 
         // correction phase
-        correct(measurement);
+        correct(measurement, evolution.getMeasurementJacobian());
         return getCorrected();
 
     }
