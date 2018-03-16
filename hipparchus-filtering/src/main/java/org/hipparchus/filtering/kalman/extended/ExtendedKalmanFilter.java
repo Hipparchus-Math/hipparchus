@@ -25,12 +25,13 @@ import org.hipparchus.linear.MatrixDecomposer;
 
 /**
  * Kalman filter for {@link NonLinearProcess non-linear process}.
+ * @param <T> the type of the measurements
  * @since 1.3
  */
-public class ExtendedKalmanFilter extends AbstractKalmanFilter {
+public class ExtendedKalmanFilter<T extends Measurement> extends AbstractKalmanFilter<T> {
 
     /** Process to be estimated. */
-    private final NonLinearProcess process;
+    private final NonLinearProcess<T> process;
 
     /** Simple constructor.
      * @param decomposer decomposer to use for the correction phase
@@ -38,7 +39,7 @@ public class ExtendedKalmanFilter extends AbstractKalmanFilter {
      * @param initialState initial state
      */
     public ExtendedKalmanFilter(final MatrixDecomposer decomposer,
-                                final NonLinearProcess process,
+                                final NonLinearProcess<T> process,
                                 final ProcessEstimate initialState) {
         super(decomposer, initialState);
         this.process = process;
@@ -46,7 +47,7 @@ public class ExtendedKalmanFilter extends AbstractKalmanFilter {
 
     /** {@inheritDoc} */
     @Override
-    public ProcessEstimate estimationStep(final Measurement measurement)
+    public ProcessEstimate estimationStep(final T measurement)
         throws MathRuntimeException {
 
         // prediction phase

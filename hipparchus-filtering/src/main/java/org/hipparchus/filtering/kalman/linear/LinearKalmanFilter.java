@@ -27,12 +27,13 @@ import org.hipparchus.linear.RealVector;
 
 /**
  * Kalman filter for {@link LinearProcess linear process}.
+ * @param <T> the type of the measurements
  * @since 1.3
  */
-public class LinearKalmanFilter extends AbstractKalmanFilter {
+public class LinearKalmanFilter<T extends Measurement> extends AbstractKalmanFilter<T> {
 
     /** Process to be estimated. */
-    private final LinearProcess process;
+    private final LinearProcess<T> process;
 
     /** Simple constructor.
      * @param decomposer decomposer to use for the correction phase
@@ -40,7 +41,7 @@ public class LinearKalmanFilter extends AbstractKalmanFilter {
      * @param initialState initial state
      */
     public LinearKalmanFilter(final MatrixDecomposer decomposer,
-                              final LinearProcess process,
+                              final LinearProcess<T> process,
                               final ProcessEstimate initialState) {
         super(decomposer, initialState);
         this.process = process;
@@ -48,7 +49,7 @@ public class LinearKalmanFilter extends AbstractKalmanFilter {
 
     /** {@inheritDoc} */
     @Override
-    public ProcessEstimate estimationStep(final Measurement measurement)
+    public ProcessEstimate estimationStep(final T measurement)
         throws MathRuntimeException {
 
         final LinearEvolution evolution = process.getEvolution(measurement);

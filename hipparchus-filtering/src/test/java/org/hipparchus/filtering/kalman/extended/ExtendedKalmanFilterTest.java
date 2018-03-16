@@ -54,16 +54,16 @@ public class ExtendedKalmanFilterTest {
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = loadReferenceData(1, 1, "constant-value.txt");
-        final Stream<Measurement> measurements =
+        final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
                         map(r -> new SimpleMeasurement(r.time,
                                                        r.z,
                                                        MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
 
         // set up Kalman filter
-        final ExtendedKalmanFilter filter =
-                        new ExtendedKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                    (previousTime, previousState, measurement) ->
+        final ExtendedKalmanFilter<SimpleMeasurement> filter =
+                        new ExtendedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
+                                                   (previousTime, previousState, measurement) ->
                         new NonLinearEvolution(measurement.getTime(),
                                                previousState,
                                                MatrixUtils.createRealIdentityMatrix(1),
@@ -99,7 +99,7 @@ public class ExtendedKalmanFilterTest {
         final double acc    = 0.1;
         final double aNoise = 0.2;
         final double mNoise = 10.0;
-        final NonLinearProcess process = new ConstantAccelerationProcess(acc, aNoise);
+        final NonLinearProcess<SimpleMeasurement> process = new ConstantAccelerationProcess(acc, aNoise);
 
         // initial state is estimated to be at rest on origin
         final ProcessEstimate initial = new ProcessEstimate(0,
@@ -111,15 +111,15 @@ public class ExtendedKalmanFilterTest {
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = loadReferenceData(2, 1, name);
-        final Stream<Measurement> measurements =
+        final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
                         map(r -> new SimpleMeasurement(r.time,
                                                        r.z,
                                                        MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
 
         // set up Kalman filter
-        final ExtendedKalmanFilter filter =
-        new ExtendedKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
+        final ExtendedKalmanFilter<SimpleMeasurement> filter =
+        new ExtendedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
 
         // sequentially process all measurements and check against the reference estimate
         filter.estimate(measurements).forEach(estimate -> {
@@ -134,7 +134,7 @@ public class ExtendedKalmanFilterTest {
 
     }
 
-    private static class ConstantAccelerationProcess implements NonLinearProcess {
+    private static class ConstantAccelerationProcess implements NonLinearProcess<SimpleMeasurement> {
         private final double acc;
         private final double aNoise2;
         
@@ -143,7 +143,7 @@ public class ExtendedKalmanFilterTest {
             this.aNoise2 = aNoise * aNoise;
         }
 
-        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, Measurement measurement) {
+        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, SimpleMeasurement measurement) {
             final double     dt    = measurement.getTime() - previousTime;
             final double     dt2   = dt  * dt;
             final double     dt3   = dt2 * dt;
@@ -195,7 +195,7 @@ public class ExtendedKalmanFilterTest {
         final double mNoise   = 30.0;
         final double vIni     = 100.0;
         final double alphaIni = FastMath.PI / 4;
-        final NonLinearProcess process = new CannonballProcess(9.81, q);
+        final NonLinearProcess<SimpleMeasurement> process = new CannonballProcess(9.81, q);
 
         // initial state is estimated to be a shot from origin with known angle and velocity
         final ProcessEstimate initial = new ProcessEstimate(0.0,
@@ -210,7 +210,7 @@ public class ExtendedKalmanFilterTest {
         // reference values from Apache Commons Math 3.6.1 unit test
         // we have changed the test slightly, setting up a non-zero process noise
         final List<Reference> referenceData = loadReferenceData(4, 2, name);
-        final Stream<Measurement> measurements =
+        final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
                         map(r -> new SimpleMeasurement(r.time,
                                                        r.z,
@@ -219,8 +219,8 @@ public class ExtendedKalmanFilterTest {
                                                        })));
 
         // set up Kalman filter
-        final ExtendedKalmanFilter filter =
-        new ExtendedKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
+        final ExtendedKalmanFilter<SimpleMeasurement> filter =
+        new ExtendedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
 
         // sequentially process all measurements and check against the reference estimate
         filter.estimate(measurements).forEach(estimate -> {
@@ -235,7 +235,7 @@ public class ExtendedKalmanFilterTest {
 
     }
 
-    private static class CannonballProcess implements NonLinearProcess {
+    private static class CannonballProcess implements NonLinearProcess<SimpleMeasurement> {
         private final double g;
         private final RealMatrix q;
         
@@ -244,7 +244,7 @@ public class ExtendedKalmanFilterTest {
             this.q = MatrixUtils.createRealMatrix(qData);
         }
 
-        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, Measurement measurement) {
+        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, SimpleMeasurement measurement) {
             final double dt = measurement.getTime() - previousTime;
             final RealVector state = MatrixUtils.createRealVector(new double[] {
                 previousState.getEntry(0) + previousState.getEntry(1) * dt,
@@ -302,7 +302,7 @@ public class ExtendedKalmanFilterTest {
                                                             MatrixUtils.createRealVector(new double[] { initialEstimate }),
                                                             MatrixUtils.createRealDiagonalMatrix(new double[] { initialCovariance }));
         final RandomGenerator generator = new Well1024a(seed);
-        final Stream<Measurement> measurements =
+        final Stream<SimpleMeasurement> measurements =
                         IntStream.
                         range(0, nbMeasurements).
                         mapToObj(i -> new SimpleMeasurement(i,
@@ -312,8 +312,8 @@ public class ExtendedKalmanFilterTest {
                                                             MatrixUtils.createRealDiagonalMatrix(new double[] { r })));
 
         // set up Kalman filter
-        final ExtendedKalmanFilter filter =
-                        new ExtendedKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
+        final ExtendedKalmanFilter<SimpleMeasurement> filter =
+                        new ExtendedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
                                                     (previousTime, previousState, measurement) ->
                                                       new NonLinearEvolution(measurement.getTime(),
                                                                              previousState,

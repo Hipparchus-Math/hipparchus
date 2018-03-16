@@ -27,11 +27,12 @@ import org.hipparchus.linear.RealVector;
  * This interface must be implemented by users to represent the behavior
  * of the process to be estimated
  * </p>
+ * @param <T> the type of the measurements
  * @see ExtendedKalmanFilter
  * @see LinearProcess
  * @since 1.3
  */
-public interface NonLinearProcess {
+public interface NonLinearProcess<T extends Measurement> {
 
     /** Get the state evolution between two times.
      * @param previousTime time of the previous state
@@ -39,6 +40,6 @@ public interface NonLinearProcess {
      * @param measurement measurement to process
      * @return state evolution
      */
-    NonLinearEvolution getEvolution(double previousTime, RealVector previousState, Measurement measurement);
+    NonLinearEvolution getEvolution(double previousTime, RealVector previousState, T measurement);
 
 }

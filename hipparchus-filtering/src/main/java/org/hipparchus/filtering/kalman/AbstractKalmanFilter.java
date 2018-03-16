@@ -24,9 +24,10 @@ import org.hipparchus.linear.RealVector;
 
 /**
  * Shared parts between linear and non-linear Kalman filters.
+ * @param <T> the type of the measurements
  * @since 1.3
  */
-public abstract class AbstractKalmanFilter implements KalmanFilter {
+public abstract class AbstractKalmanFilter<T extends Measurement> implements KalmanFilter<T> {
 
     /** Decomposer decomposer to use for the correction phase. */
     private final MatrixDecomposer decomposer;
@@ -64,7 +65,7 @@ public abstract class AbstractKalmanFilter implements KalmanFilter {
      * (may be null if measurement should be ignored)
      * @exception MathIllegalArgumentException if matrix cannot be decomposed
      */
-    protected void correct(final Measurement measurement, final RealMatrix h)
+    protected void correct(final T measurement, final RealMatrix h)
         throws MathIllegalArgumentException {
 
         if (h == null) {

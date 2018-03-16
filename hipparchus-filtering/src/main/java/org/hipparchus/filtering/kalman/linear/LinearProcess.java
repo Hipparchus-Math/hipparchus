@@ -36,16 +36,17 @@ import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
  *   <li>w<sub>k-1</sub> is the process noise, which as covariance matrix Q<sub>k-1</sub></li>
  * </ul>
  * </p>
+ * @param <T> the type of the measurements
  * @see LinearKalmanFilter
  * @see NonLinearProcess
  * @since 1.3
  */
-public interface LinearProcess {
+public interface LinearProcess<T extends Measurement> {
 
     /** Get the state evolution between two times.
      * @param measurement measurement to process
      * @return state evolution
      */
-    LinearEvolution getEvolution(Measurement measurement);
+    LinearEvolution getEvolution(T measurement);
 
 }

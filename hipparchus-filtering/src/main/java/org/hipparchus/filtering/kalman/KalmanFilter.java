@@ -23,16 +23,17 @@ import org.hipparchus.exception.MathRuntimeException;
 
 /**
  * Interface representing a Kalman filter.
+ * @param <T> the type of the measurements
  * @since 1.3
  */
-public interface KalmanFilter {
+public interface KalmanFilter<T extends Measurement> {
 
     /** Transform a measurements stream into an estimated states stream.
      * @param measurements stream of measurements on the estimated process
      * @return stream of estimated states
      * @exception MathRuntimeException if estimation fails
      */
-    default Stream<ProcessEstimate> estimate(final Stream<Measurement> measurements)
+    default Stream<ProcessEstimate> estimate(final Stream<T> measurements)
         throws MathRuntimeException {
         return measurements.map(measurement -> estimationStep(measurement));
     }
@@ -42,7 +43,7 @@ public interface KalmanFilter {
      * @return estimated state after measurement has been considered
      * @exception MathRuntimeException if estimation fails
      */
-    ProcessEstimate estimationStep(Measurement measurements)
+    ProcessEstimate estimationStep(T measurements)
         throws MathRuntimeException;
 
 }

@@ -57,15 +57,15 @@ public class LinearKalmanFilterTest {
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = loadReferenceData(1, 1, "constant-value.txt");
-        final Stream<Measurement> measurements =
+        final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
                         map(r -> new SimpleMeasurement(r.time,
                                                        r.z,
                                                        MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
 
         // set up Kalman filter
-        final LinearKalmanFilter filter =
-                        new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
+        final LinearKalmanFilter<SimpleMeasurement> filter =
+                        new LinearKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
                                                measurement -> new LinearEvolution(a, b, u, q,
                                                                                   MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
                                                initial);
@@ -133,15 +133,15 @@ public class LinearKalmanFilterTest {
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = loadReferenceData(2, 1, name);
-        final Stream<Measurement> measurements =
+        final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
                         map(r -> new SimpleMeasurement(r.time,
                                                        r.z,
                                                        MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
 
         // set up Kalman filter
-        final LinearKalmanFilter filter =
-        new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
+        final LinearKalmanFilter<SimpleMeasurement> filter =
+        new LinearKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
                                measurement -> {
                                    RealMatrix h = (measurement.getValue().getEntry(0) > 1.0e6) ?
                                                   null :
@@ -223,7 +223,7 @@ public class LinearKalmanFilterTest {
         // reference values from Apache Commons Math 3.6.1 unit test
         // we have changed the test slightly, setting up a non-zero process noise
         final List<Reference> referenceData = loadReferenceData(4, 2, name);
-        final Stream<Measurement> measurements =
+        final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
                         map(r -> new SimpleMeasurement(r.time,
                                                        r.z,
@@ -232,8 +232,8 @@ public class LinearKalmanFilterTest {
                                                        })));
 
         // set up Kalman filter
-        final LinearKalmanFilter filter =
-        new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
+        final LinearKalmanFilter<SimpleMeasurement> filter =
+        new LinearKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
                                   time -> new LinearEvolution(a, b, u, q,
                                                               MatrixUtils.createRealMatrix(new double[][] {
                                                                   { 1.0, 0.0, 0.0, 0.0 },
@@ -295,7 +295,7 @@ public class LinearKalmanFilterTest {
                                                       MatrixUtils.createRealVector(new double[] { initialEstimate }),
                                                       MatrixUtils.createRealDiagonalMatrix(new double[] { initialCovariance }));
         final RandomGenerator generator = new Well1024a(seed);
-        final Stream<Measurement> measurements =
+        final Stream<SimpleMeasurement> measurements =
                         IntStream.
                         range(0, nbMeasurements).
                         mapToObj(i -> new SimpleMeasurement(i,
@@ -305,8 +305,8 @@ public class LinearKalmanFilterTest {
                                                             MatrixUtils.createRealDiagonalMatrix(new double[] { r })));
 
         // set up Kalman filter
-        final LinearKalmanFilter filter =
-                        new LinearKalmanFilter(new CholeskyDecomposer(1.0e-15, 1.0e-15),
+        final LinearKalmanFilter<SimpleMeasurement> filter =
+                        new LinearKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
                                                measurement -> new LinearEvolution(a, b, u, q,
                                                                                   MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
                                                initial);
