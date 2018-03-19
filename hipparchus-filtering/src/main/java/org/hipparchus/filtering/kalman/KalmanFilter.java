@@ -34,4 +34,14 @@ public interface KalmanFilter<T extends Measurement> {
     ProcessEstimate estimationStep(T measurements)
         throws MathRuntimeException;
 
+    /** Get the current predicted state.
+     * @return current predicted state
+     */
+    ProcessEstimate getPredicted();
+
+    /** Get the current corrected state.
+     * @return current corrected state
+     */
+    ProcessEstimate getCorrected();
+
 }

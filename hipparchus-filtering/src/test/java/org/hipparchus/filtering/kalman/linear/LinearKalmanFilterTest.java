@@ -248,6 +248,13 @@ public class LinearKalmanFilterTest {
         // sequentially process all measurements and check against the reference estimate
         measurements.
         map(measurement -> filter.estimationStep(measurement)).
+        map(estimate -> {
+            final ProcessEstimate p = filter.getPredicted();
+            final ProcessEstimate c = filter.getCorrected();
+            Assert.assertEquals(p.getTime(), c.getTime(), 1.0e-15);
+            Assert.assertTrue(p.getState().getDistance(c.getState()) > 0.005);
+            return estimate;
+        }).
         forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {

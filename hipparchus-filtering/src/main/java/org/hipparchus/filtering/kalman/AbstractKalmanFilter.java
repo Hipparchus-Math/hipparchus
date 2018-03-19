@@ -114,10 +114,17 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
 
     }
 
+    /** Get the predicted state.
+     * @return predicted state
+     */
+    public ProcessEstimate getPredicted() {
+        return predicted;
+    }
+
     /** Get the corrected state.
      * @return corrected state
      */
-    protected ProcessEstimate getCorrected() {
+    public ProcessEstimate getCorrected() {
         return corrected;
     }
 
