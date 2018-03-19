@@ -19,6 +19,7 @@ package org.hipparchus.filtering.kalman.extended;
 
 import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.linear.LinearProcess;
+import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
 /**
@@ -41,5 +42,15 @@ public interface NonLinearProcess<T extends Measurement> {
      * @return state evolution
      */
     NonLinearEvolution getEvolution(double previousTime, RealVector previousState, T measurement);
+
+    /** Get the innovation brought by a measurement.
+     * @param measurement measurement to process
+     * @param evolution evolution returned by a previous call to {@link #getEvolution(double, RealVector, Measurement)}
+     * @param innovationCovarianceMatrix innovation covariance matrix, defined as \(h.P.h^T + r\)
+     * where h is the {@link NonLinearEvolution#getMeasurementJacobian() measurement Jacobian},
+     * P is the predicted covariance and r is {@link Measurement#getCovariance() measurement covariance}
+     * @return innovation brought by a measurement, may be null if measurement should be rejected
+     */
+    RealVector getInnovation(T measurement, NonLinearEvolution evolution, RealMatrix innovationCovarianceMatrix);
 
 }

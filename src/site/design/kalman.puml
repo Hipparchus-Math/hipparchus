@@ -80,6 +80,7 @@
 
           interface NonLinearProcess {
             +getEvolution(previousTime, previousState, measurement)
+            +getInnovation(measurement, evolution, innovationCovarianceMatrix)
           }
 
           class ExtendedKalmanFilter

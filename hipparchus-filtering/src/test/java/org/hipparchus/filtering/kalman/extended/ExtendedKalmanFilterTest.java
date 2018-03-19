@@ -44,13 +44,12 @@ public class ExtendedKalmanFilterTest {
     @Test
     public void testConstant() {
 
+        ConstantProcess process = new ConstantProcess();
+
         // initial estimate is perfect, and process noise is perfectly known
-        final RealMatrix q = MatrixUtils.createRealDiagonalMatrix(new double[] {
-            1.0e-5
-        });
         final ProcessEstimate initial = new ProcessEstimate(0,
                                                             MatrixUtils.createRealVector(new double[] { 10.0 }),
-                                                            q);
+                                                            process.q);
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = loadReferenceData(1, 1, "constant-value.txt");
@@ -63,13 +62,7 @@ public class ExtendedKalmanFilterTest {
         // set up Kalman filter
         final ExtendedKalmanFilter<SimpleMeasurement> filter =
                         new ExtendedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                   (previousTime, previousState, measurement) ->
-                        new NonLinearEvolution(measurement.getTime(),
-                                               previousState,
-                                               MatrixUtils.createRealIdentityMatrix(1),
-                                               q,
-                                               MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
-                                               initial);
+                                                   process, initial);
 
         // sequentially process all measurements and check against the reference estimated state and covariance
         measurements.
@@ -83,6 +76,28 @@ public class ExtendedKalmanFilterTest {
                 }
             }
         });
+
+    }
+
+    private static class ConstantProcess implements NonLinearProcess<SimpleMeasurement> {
+
+        private RealMatrix q = MatrixUtils.createRealDiagonalMatrix(new double[] {
+            1.0e-5
+        });
+
+        @Override
+        public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, SimpleMeasurement measurement) {
+            return new NonLinearEvolution(measurement.getTime(),
+                                          previousState,
+                                          MatrixUtils.createRealIdentityMatrix(1),
+                                          q,
+                                          MatrixUtils.createRealMatrix(new double[][] { { 1.0 } }));
+        }
+
+        @Override
+        public RealVector getInnovation(SimpleMeasurement measurement, NonLinearEvolution evolution, RealMatrix innovationCovarianceMatrix) {
+            return measurement.getValue().subtract(evolution.getCurrentState());
+        }
 
     }
 
@@ -147,6 +162,7 @@ public class ExtendedKalmanFilterTest {
             this.aNoise2 = aNoise * aNoise;
         }
 
+        @Override
         public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, SimpleMeasurement measurement) {
             final double     dt    = measurement.getTime() - previousTime;
             final double     dt2   = dt  * dt;
@@ -167,6 +183,13 @@ public class ExtendedKalmanFilterTest {
             RealMatrix h = (measurement.getValue().getEntry(0) > 1.0e6) ?
                            null : MatrixUtils.createRealMatrix(new double[][] { { 1.0, 0.0 } });
             return new NonLinearEvolution(measurement.getTime(), state, stm, processNoiseMatrix, h);
+        }
+
+        @Override
+        public RealVector getInnovation(SimpleMeasurement measurement,
+                                        NonLinearEvolution evolution,
+                                        RealMatrix innovationCovarianceMatrix) {
+            return measurement.getValue().subtract(evolution.getCurrentState().getSubVector(0, 1));
         }
 
     }
@@ -257,6 +280,7 @@ public class ExtendedKalmanFilterTest {
             this.q = MatrixUtils.createRealMatrix(qData);
         }
 
+        @Override
         public NonLinearEvolution getEvolution(double previousTime, RealVector previousState, SimpleMeasurement measurement) {
             final double dt = measurement.getTime() - previousTime;
             final RealVector state = MatrixUtils.createRealVector(new double[] {
@@ -276,6 +300,16 @@ public class ExtendedKalmanFilterTest {
                                               { 1.0, 0.0, 0.0, 0.0 },
                                               { 0.0, 0.0, 1.0, 0.0 }
                                           }));
+        }
+
+        @Override
+        public RealVector getInnovation(SimpleMeasurement measurement, NonLinearEvolution evolution,
+                                        RealMatrix innovationCovarianceMatrix) {
+            return measurement.getValue().
+                            subtract(MatrixUtils.createRealVector(new double[] {
+                                evolution.getCurrentState().getEntry(0),
+                                evolution.getCurrentState().getEntry(2)
+                            }));
         }
 
     }
@@ -308,6 +342,8 @@ public class ExtendedKalmanFilterTest {
                                    final int nbMeasurements,
                                    final double expected, final double tolerance) {
 
+        WelshBishopProcess process = new WelshBishopProcess(q);
+
         // this is the constant voltage example from paper
         // An Introduction to the Kalman Filter, Greg Welch and Gary Bishop
         // available from http://www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf
@@ -327,15 +363,7 @@ public class ExtendedKalmanFilterTest {
         // set up Kalman filter
         final ExtendedKalmanFilter<SimpleMeasurement> filter =
                         new ExtendedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15),
-                                                    (previousTime, previousState, measurement) ->
-                                                      new NonLinearEvolution(measurement.getTime(),
-                                                                             previousState,
-                                                                             MatrixUtils.createRealIdentityMatrix(1),
-                                                                             MatrixUtils.createRealDiagonalMatrix(new double[] {
-                                                                                 q
-                                                                             }),
-                                                                             MatrixUtils.createRealMatrix(new double[][] { { 1.0 } })),
-                                                    initial);
+                                                   process, initial);
 
         // sequentially process all measurements and get only the last one
         ProcessEstimate finalEstimate = measurements.
@@ -343,6 +371,35 @@ public class ExtendedKalmanFilterTest {
                         reduce((first, second) -> second).get();
 
         Assert.assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);
+
+    }
+
+    private final class WelshBishopProcess implements NonLinearProcess<SimpleMeasurement> {
+
+        private RealMatrix q;
+
+        WelshBishopProcess(double qValue) {
+            q = MatrixUtils.createRealDiagonalMatrix(new double[] {
+                qValue
+            });
+        }
+        @Override
+        public NonLinearEvolution getEvolution(double previousTime,
+                                               RealVector previousState,
+                                               SimpleMeasurement measurement) {
+            return new NonLinearEvolution(measurement.getTime(),
+                                          previousState,
+                                          MatrixUtils.createRealIdentityMatrix(1),
+                                          q,
+                                          MatrixUtils.createRealMatrix(new double[][] { { 1.0 } }));
+        }
+
+        @Override
+        public RealVector getInnovation(SimpleMeasurement measurement,
+                                        NonLinearEvolution evolution,
+                                        RealMatrix innovationCovarianceMatrix) {
+            return measurement.getValue().subtract(evolution.getCurrentState());
+        }
 
     }
 

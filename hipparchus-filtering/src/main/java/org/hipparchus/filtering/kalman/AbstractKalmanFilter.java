@@ -59,25 +59,40 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
         predicted = new ProcessEstimate(time, predictedState, predictedCovariance);
     }
 
+    /** Compute innovation covariance matrix.
+     * @param r measurement covariance
+     * @param h Jacobian of the measurement with respect to the state
+     * (may be null if measurement should be ignored)
+     * @return innovation covariance matrix, defined as \(h.P.h^T + r\), or
+     * null if h is null
+     */
+    protected RealMatrix computeInnovationCovarianceMatrix(final RealMatrix r, final RealMatrix h) {
+        if (h == null) {
+            return null;
+        }
+        final RealMatrix phT = predicted.getCovariance().multiplyTransposed(h);
+        return h.multiply(phT).add(r);
+    }
+
     /** Perform correction step.
      * @param measurement single measurement to handle
+     * @param innovation innovation vector (i.e. residuals)
+     * (may be null if measurement should be ignored)
      * @param h Jacobian of the measurement with respect to the state
+     * (may be null if measurement should be ignored)
+     * @param s innovation covariance matrix
      * (may be null if measurement should be ignored)
      * @exception MathIllegalArgumentException if matrix cannot be decomposed
      */
-    protected void correct(final T measurement, final RealMatrix h)
+    protected void correct(final T measurement, final RealVector innovation,
+                           final RealMatrix h, final RealMatrix s)
         throws MathIllegalArgumentException {
 
-        if (h == null) {
+        if (innovation == null) {
             // measurement should be ignored
             corrected = predicted;
             return;
         }
-
-        // correction phase
-        final RealMatrix r          = measurement.getCovariance();
-        final RealMatrix phT        = predicted.getCovariance().multiplyTransposed(h);
-        final RealVector innovation = measurement.getValue().subtract(h.operate(predicted.getState()));
 
         // compute Kalman gain k
         // the following is equivalent to k = p.h^T * (h.p.h^T + r)^(-1)
@@ -88,9 +103,9 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
         // (h.p.h^T + r).k^T = h.p
         // then we can use linear system solving instead of matrix inversion
         final RealMatrix k = decomposer.
-                        decompose(h.multiply(phT).add(r)).
-                        solve(h.multiply(predicted.getCovariance())).
-                        transpose();
+                             decompose(s).
+                             solve(h.multiply(predicted.getCovariance())).
+                             transpose();
 
         // correct state vector
         final RealVector correctedState = predicted.getState().add(k.operate(innovation));
@@ -106,6 +121,7 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
             }
             idMkh.addToEntry(i, i, 1.0);
         }
+        final RealMatrix r = measurement.getCovariance();
         final RealMatrix correctedCovariance =
                         idMkh.multiply(predicted.getCovariance()).multiplyTransposed(idMkh).
                         add(k.multiply(r).multiplyTransposed(k));

@@ -22,6 +22,8 @@ import org.hipparchus.filtering.kalman.AbstractKalmanFilter;
 import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.ProcessEstimate;
 import org.hipparchus.linear.MatrixDecomposer;
+import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.linear.RealVector;
 
 /**
  * Kalman filter for {@link NonLinearProcess non-linear process}.
@@ -59,7 +61,10 @@ public class ExtendedKalmanFilter<T extends Measurement> extends AbstractKalmanF
                 evolution.getStateTransitionMatrix(), evolution.getProcessNoiseMatrix());
 
         // correction phase
-        correct(measurement, evolution.getMeasurementJacobian());
+        final RealMatrix h          = evolution.getMeasurementJacobian();
+        final RealMatrix s          = computeInnovationCovarianceMatrix(measurement.getCovariance(), h);
+        final RealVector innovation = (h == null) ? null : process.getInnovation(measurement, evolution, s);
+        correct(measurement, innovation, h, s);
         return getCorrected();
 
     }
