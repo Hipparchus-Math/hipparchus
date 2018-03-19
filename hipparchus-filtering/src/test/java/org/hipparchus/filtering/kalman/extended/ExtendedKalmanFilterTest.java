@@ -72,7 +72,9 @@ public class ExtendedKalmanFilterTest {
                                                initial);
 
         // sequentially process all measurements and check against the reference estimated state and covariance
-        filter.estimate(measurements).forEach(estimate -> {
+        measurements.
+        map(measurement -> filter.estimationStep(measurement)).
+        forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
                     r.checkState(estimate.getState(), 1.0e-15);
@@ -122,7 +124,9 @@ public class ExtendedKalmanFilterTest {
         new ExtendedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
 
         // sequentially process all measurements and check against the reference estimate
-        filter.estimate(measurements).forEach(estimate -> {
+        measurements.
+        map(measurement -> filter.estimationStep(measurement)).
+        forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
                     r.checkState(estimate.getState(), 6.0e-15);
@@ -223,7 +227,9 @@ public class ExtendedKalmanFilterTest {
         new ExtendedKalmanFilter<>(new CholeskyDecomposer(1.0e-15, 1.0e-15), process, initial);
 
         // sequentially process all measurements and check against the reference estimate
-        filter.estimate(measurements).forEach(estimate -> {
+        measurements.
+        map(measurement -> filter.estimationStep(measurement)).
+        forEach(estimate -> {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
                     r.checkState(estimate.getState(), tolState);
@@ -325,8 +331,9 @@ public class ExtendedKalmanFilterTest {
                                                     initial);
 
         // sequentially process all measurements and get only the last one
-        final Stream<ProcessEstimate> estimates = filter.estimate(measurements);
-        final ProcessEstimate finalEstimate = estimates.reduce((first, second) -> second).get();
+        ProcessEstimate finalEstimate = measurements.
+                        map(measurement -> filter.estimationStep(measurement)).
+                        reduce((first, second) -> second).get();
 
         Assert.assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);
 
