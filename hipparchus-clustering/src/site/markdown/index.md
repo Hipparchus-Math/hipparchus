@@ -31,7 +31,7 @@ The following algorithms are available:
 
 
 An comparison of the available clustering algorithms:<br/>
-![Comparison of clustering algorithms](../images/userguide/cluster_comparison.png)
+![Comparison of clustering algorithms](images/userguide/cluster_comparison.png)
 
 
 ## Distance measures

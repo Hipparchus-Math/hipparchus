@@ -106,8 +106,8 @@ public class CholeskyDecomposition {
      * @see #DEFAULT_ABSOLUTE_POSITIVITY_THRESHOLD
      */
     public CholeskyDecomposition(final RealMatrix matrix,
-                                     final double relativeSymmetryThreshold,
-                                     final double absolutePositivityThreshold) {
+                                 final double relativeSymmetryThreshold,
+                                 final double absolutePositivityThreshold) {
         if (!matrix.isSquare()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NON_SQUARE_MATRIX,
                                                    matrix.getRowDimension(), matrix.getColumnDimension());

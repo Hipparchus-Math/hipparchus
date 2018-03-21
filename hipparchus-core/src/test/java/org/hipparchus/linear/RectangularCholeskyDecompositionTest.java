@@ -50,7 +50,7 @@ public class RectangularCholeskyDecompositionTest {
         Assert.assertEquals(0.0,  d.getRootMatrix().getEntry(2, 2), 1.0e-15);
 
         RealMatrix root = d.getRootMatrix();
-        RealMatrix rebuiltM = root.multiply(root.transpose());
+        RealMatrix rebuiltM = root.multiplyTransposed(root);
         Assert.assertEquals(0.0, m.subtract(rebuiltM).getNorm(), 1.0e-15);
 
     }
@@ -65,7 +65,7 @@ public class RectangularCholeskyDecompositionTest {
             { 0.0905486674, 0.0213768077, 0.0128878333, 0.1014155693 }
         });
 
-        RealMatrix m = base.multiply(base.transpose());
+        RealMatrix m = base.multiplyTransposed(base);
 
         RectangularCholeskyDecomposition d =
                 new RectangularCholeskyDecomposition(m, 1.0e-10);
@@ -115,7 +115,7 @@ public class RectangularCholeskyDecompositionTest {
         RectangularCholeskyDecomposition r = new RectangularCholeskyDecomposition(m);
         Assert.assertEquals(expectedRank, r.getRank());
         RealMatrix root = r.getRootMatrix();
-        RealMatrix rebuiltMatrix = root.multiply(root.transpose());
+        RealMatrix rebuiltMatrix = root.multiplyTransposed(root);
         Assert.assertEquals(0.0, m.subtract(rebuiltMatrix).getNorm(), 1.0e-16);
     }
 

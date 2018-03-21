@@ -307,6 +307,137 @@ public class Array2DRowFieldMatrix<T extends FieldElement<T>>
 
     }
 
+    /**
+     * Returns the result of postmultiplying {@code this} by {@code m^T}.
+     * @param m matrix to first transpose and second postmultiply by
+     * @return {@code this * m^T}
+     * @throws MathIllegalArgumentException if
+     * {@code columnDimension(this) != columnDimension(m)}
+     * @since 1.3
+     */
+    public FieldMatrix<T> multiplyTransposed(final Array2DRowFieldMatrix<T> m)
+        throws MathIllegalArgumentException {
+        MatrixUtils.checkSameColumnDimension(this, m);
+
+        final int nRows = this.getRowDimension();
+        final int nCols = m.getRowDimension();
+        final int nSum  = this.getColumnDimension();
+
+        final FieldMatrix<T> out   = MatrixUtils.createFieldMatrix(getField(), nRows, nCols);
+        final T[][]          mData = m.data;
+
+        // Multiply.
+        for (int col = 0; col < nCols; col++) {
+            for (int row = 0; row < nRows; row++) {
+                final T[] dataRow = data[row];
+                final T[] mRow    = mData[col];
+                T sum = getField().getZero();
+                for (int i = 0; i < nSum; i++) {
+                    sum = sum.add(dataRow[i].multiply(mRow[i]));
+                }
+                out.setEntry(row, col, sum);
+            }
+        }
+
+        return out;
+
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldMatrix<T> multiplyTransposed(final FieldMatrix<T> m) {
+        if (m instanceof Array2DRowFieldMatrix) {
+            return multiplyTransposed((Array2DRowFieldMatrix<T>) m);
+        } else {
+            MatrixUtils.checkSameColumnDimension(this, m);
+
+            final int nRows = this.getRowDimension();
+            final int nCols = m.getRowDimension();
+            final int nSum  = this.getColumnDimension();
+
+            final FieldMatrix<T> out = MatrixUtils.createFieldMatrix(getField(), nRows, nCols);
+
+            // Multiply.
+            for (int col = 0; col < nCols; col++) {
+                for (int row = 0; row < nRows; row++) {
+                    final T[] dataRow = data[row];
+                    T sum = getField().getZero();
+                    for (int i = 0; i < nSum; i++) {
+                        sum = sum.add(dataRow[i].multiply(m.getEntry(col, i)));
+                    }
+                    out.setEntry(row, col, sum);
+                }
+            }
+
+            return out;
+
+        }
+    }
+
+    /**
+     * Returns the result of postmultiplying {@code this^T} by {@code m}.
+     * @param m matrix to postmultiply by
+     * @return {@code this^T * m}
+     * @throws MathIllegalArgumentException if
+     * {@code columnDimension(this) != columnDimension(m)}
+     * @since 1.3
+     */
+    public FieldMatrix<T> transposeMultiply(final Array2DRowFieldMatrix<T> m)
+        throws MathIllegalArgumentException {
+        MatrixUtils.checkSameRowDimension(this, m);
+
+        final int nRows = this.getColumnDimension();
+        final int nCols = m.getColumnDimension();
+        final int nSum  = this.getRowDimension();
+
+        final FieldMatrix<T> out   = MatrixUtils.createFieldMatrix(getField(), nRows, nCols);
+        final T[][]          mData = m.data;
+
+        // Multiply.
+        for (int k = 0; k < nSum; k++) {
+            final T[] dataK = data[k];
+            final T[] mK    = mData[k];
+            for (int row = 0; row < nRows; row++) {
+                final T dataIRow = dataK[row];
+                for (int col = 0; col < nCols; col++) {
+                    out.addToEntry(row, col, dataIRow.multiply(mK[col]));
+                }
+            }
+        }
+
+        return out;
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldMatrix<T> transposeMultiply(final FieldMatrix<T> m) {
+        if (m instanceof Array2DRowFieldMatrix) {
+            return transposeMultiply((Array2DRowFieldMatrix<T>) m);
+        } else {
+            MatrixUtils.checkSameRowDimension(this, m);
+
+            final int nRows = this.getColumnDimension();
+            final int nCols = m.getColumnDimension();
+            final int nSum  = this.getRowDimension();
+
+            final FieldMatrix<T> out = MatrixUtils.createFieldMatrix(getField(), nRows, nCols);
+
+            // Multiply.
+            for (int k = 0; k < nSum; k++) {
+                final T[] dataK = data[k];
+                for (int row = 0; row < nRows; row++) {
+                    final T dataIRow = dataK[row];
+                    for (int col = 0; col < nCols; col++) {
+                        out.addToEntry(row, col, dataIRow.multiply(m.getEntry(k, col)));
+                    }
+                }
+            }
+
+            return out;
+
+        }
+    }
+
     /** {@inheritDoc} */
     @Override
     public T[][] getData() {

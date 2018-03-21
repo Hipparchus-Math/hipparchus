@@ -302,9 +302,9 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
         /** {@inheritDoc} */
         @Override
         public FieldVector<T> solve(FieldVector<T> b) {
-            try {
+            if (b instanceof ArrayFieldVector) {
                 return solve((ArrayFieldVector<T>) b);
-            } catch (ClassCastException cce) {
+            } else {
 
                 final int m = pivot.length;
                 if (b.getDimension() != m) {

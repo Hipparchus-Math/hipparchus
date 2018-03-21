@@ -98,6 +98,13 @@ public class SingularValueDecompositionTest {
 
     }
 
+    @Test
+    public void testDecomposer() {
+        MatrixDecomposer decomposer = new SingularValueDecomposer();
+        Assert.assertTrue(decomposer.decompose(MatrixUtils.createRealMatrix(testSquare)).isNonSingular());
+        Assert.assertFalse(decomposer.decompose(MatrixUtils.createRealMatrix(testNonSquare)).isNonSingular());
+    }
+
     /** Test based on a dimension 4 Hadamard matrix. */
     @Test
     public void testHadamard() {
@@ -148,7 +155,7 @@ public class SingularValueDecompositionTest {
         RealMatrix u = svd.getU();
         RealMatrix s = svd.getS();
         RealMatrix v = svd.getV();
-        double norm = u.multiply(s).multiply(v.transpose()).subtract(matrix).getNorm();
+        double norm = u.multiply(s).multiplyTransposed(v).subtract(matrix).getNorm();
         Assert.assertEquals(0, norm, normTolerance);
 
     }
@@ -170,7 +177,7 @@ public class SingularValueDecompositionTest {
     }
 
     public void checkOrthogonal(final RealMatrix m) {
-        RealMatrix mTm = m.transpose().multiply(m);
+        RealMatrix mTm = m.transposeMultiply(m);
         RealMatrix id  = MatrixUtils.createRealIdentityMatrix(mTm.getRowDimension());
         Assert.assertEquals(0, mTm.subtract(id).getNorm(), normTolerance);
     }

@@ -285,7 +285,7 @@ public class QRDecompositionTest {
             { 1, 6, 4 }, { 2, 4, -1 }, { -1, 2, 5 }
         });
         final RealVector b = new ArrayRealVector(new double[]{ 5, 6, 1 });
-        new QRDecomposition(a, 1.0e-15).getSolver().solve(b);
+        new QRDecomposer(1.0e-15).decompose(a).solve(b);
     }
 
 }

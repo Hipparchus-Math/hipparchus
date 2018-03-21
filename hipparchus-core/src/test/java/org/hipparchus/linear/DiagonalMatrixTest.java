@@ -22,8 +22,11 @@
 package org.hipparchus.linear;
 
 import org.hipparchus.UnitTestUtils;
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
@@ -232,6 +235,112 @@ public class DiagonalMatrixTest {
                 Assert.assertEquals(denseResult.getEntry(i, j),
                                     diagResult.getEntry(i, j), 0d);
             }
+        }
+    }
+
+    @Test
+    public void testMultiplyTransposedDiagonalMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0x4b20cb5a0440c929l);
+        for (int rows = 1; rows <= 64; rows += 7) {
+            final DiagonalMatrix a = new DiagonalMatrix(rows);
+            for (int i = 0; i < rows; ++i) {
+                a.setEntry(i, i, randomGenerator.nextDouble());
+            }
+            final DiagonalMatrix b = new DiagonalMatrix(rows);
+            for (int i = 0; i < rows; ++i) {
+                b.setEntry(i, i, randomGenerator.nextDouble());
+            }
+            Assert.assertEquals(0.0,
+                                a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                1.0e-15);
+        }
+    }
+
+    @Test
+    public void testMultiplyTransposedArray2DRowRealMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0x0fa7b97d4826cd43l);
+        final RealMatrixChangingVisitor randomSetter = new DefaultRealMatrixChangingVisitor() {
+            public double visit(final int row, final int column, final double value) {
+                return randomGenerator.nextDouble();
+            }
+        };
+        for (int rows = 1; rows <= 64; rows += 7) {
+            final DiagonalMatrix a = new DiagonalMatrix(rows);
+            for (int i = 0; i < rows; ++i) {
+                a.setEntry(i, i, randomGenerator.nextDouble());
+            }
+            for (int interm = 1; interm <= 64; interm += 7) {
+                final Array2DRowRealMatrix b = new Array2DRowRealMatrix(interm, rows);
+                b.walkInOptimizedOrder(randomSetter);
+                Assert.assertEquals(0.0,
+                                    a.multiplyTransposed(b).subtract(a.multiply(b.transpose())).getNorm(),
+                                    1.0e-15);
+            }
+        }
+    }
+
+    @Test
+    public void testMultiplyTransposedWrongDimensions() {
+        try {
+            new DiagonalMatrix(3).multiplyTransposed(new DiagonalMatrix(2));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
+        }
+    }
+
+    @Test
+    public void testTransposeMultiplyDiagonalMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0x4b20cb5a0440c929l);
+        for (int rows = 1; rows <= 64; rows += 7) {
+            final DiagonalMatrix a = new DiagonalMatrix(rows);
+            for (int i = 0; i < rows; ++i) {
+                a.setEntry(i, i, randomGenerator.nextDouble());
+            }
+            final DiagonalMatrix b = new DiagonalMatrix(rows);
+            for (int i = 0; i < rows; ++i) {
+                b.setEntry(i, i, randomGenerator.nextDouble());
+            }
+            Assert.assertEquals(0.0,
+                                a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm(),
+                                1.0e-15);
+        }
+    }
+
+    @Test
+    public void testTransposeMultiplyArray2DRowRealMatrix() {
+        RandomGenerator randomGenerator = new Well1024a(0x0fa7b97d4826cd43l);
+        final RealMatrixChangingVisitor randomSetter = new DefaultRealMatrixChangingVisitor() {
+            public double visit(final int row, final int column, final double value) {
+                return randomGenerator.nextDouble();
+            }
+        };
+        for (int rows = 1; rows <= 64; rows += 7) {
+            final DiagonalMatrix a = new DiagonalMatrix(rows);
+            for (int i = 0; i < rows; ++i) {
+                a.setEntry(i, i, randomGenerator.nextDouble());
+            }
+            for (int interm = 1; interm <= 64; interm += 7) {
+                final Array2DRowRealMatrix b = new Array2DRowRealMatrix(rows, interm);
+                b.walkInOptimizedOrder(randomSetter);
+                Assert.assertEquals(0.0,
+                                    a.transposeMultiply(b).subtract(a.transpose().multiply(b)).getNorm(),
+                                    1.0e-15);
+            }
+        }
+    }
+
+    @Test
+    public void testTransposeMultiplyWrongDimensions() {
+        try {
+            new DiagonalMatrix(3).transposeMultiply(new DiagonalMatrix(2));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.DIMENSIONS_MISMATCH, miae.getSpecifier());
+            Assert.assertEquals(3, ((Integer) miae.getParts()[0]).intValue());
+            Assert.assertEquals(2, ((Integer) miae.getParts()[1]).intValue());
         }
     }
 

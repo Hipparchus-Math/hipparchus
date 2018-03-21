@@ -22,6 +22,7 @@
 
 package org.hipparchus.linear;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -73,13 +74,31 @@ public class CholeskyDecompositionTest {
         }));
     }
 
-    @Test(expected = MathIllegalArgumentException.class)
+    @Test
     public void testMath274() {
-        new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][] {
+        try {
+            new CholeskyDecomposition(MatrixUtils.createRealMatrix(new double[][] {
                 { 0.40434286, -0.09376327, 0.30328980, 0.04909388 },
                 {-0.09376327,  0.10400408, 0.07137959, 0.04762857 },
                 { 0.30328980,  0.07137959, 0.30458776, 0.04882449 },
                 { 0.04909388,  0.04762857, 0.04882449, 0.07543265 }
+
+            }));
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedCoreFormats.NOT_POSITIVE_DEFINITE_MATRIX,
+                                miae.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testDecomposer() {
+        new CholeskyDecomposer(1.0e-15, -0.2).
+        decompose(MatrixUtils.createRealMatrix(new double[][] {
+            { 0.40434286, -0.09376327, 0.30328980, 0.04909388 },
+            {-0.09376327,  0.10400408, 0.07137959, 0.04762857 },
+            { 0.30328980,  0.07137959, 0.30458776, 0.04882449 },
+            { 0.04909388,  0.04762857, 0.04882449, 0.07543265 }
 
         }));
     }

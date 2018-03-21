@@ -62,8 +62,8 @@ public class LUSolverTest {
                                                        { 2.0, 5.0, 3.0},
                                                        { 4.000001, 9.0, 9.0}
                                                      });
-        Assert.assertFalse(new LUDecomposition(matrix, 1.0e-5).getSolver().isNonSingular());
-        Assert.assertTrue(new LUDecomposition(matrix, 1.0e-10).getSolver().isNonSingular());
+        Assert.assertFalse(new LUDecomposer(1.0e-5).decompose(matrix).isNonSingular());
+        Assert.assertTrue(new LUDecomposer(1.0e-10).decompose(matrix).isNonSingular());
     }
 
     /** test singular */

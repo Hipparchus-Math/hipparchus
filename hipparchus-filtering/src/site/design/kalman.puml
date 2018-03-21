@@ -1,0 +1,111 @@
+' Licensed to the Hipparchus project under one or more
+' contributor license agreements.  See the NOTICE file distributed with
+' this work for additional information regarding copyright ownership.
+' The ASF licenses this file to You under the Apache License, Version 2.0
+' (the "License"); you may not use this file except in compliance with
+' the License.  You may obtain a copy of the License at
+'
+'      http://www.apache.org/licenses/LICENSE-2.0
+'
+' Unless required by applicable law or agreed to in writing, software
+' distributed under the License is distributed on an "AS IS" BASIS,
+' WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+' See the License for the specific language governing permissions and
+' limitations under the License.
+
+@startuml
+
+  skinparam svek                  true
+  skinparam ClassBackgroundColor  #F3EFEB
+  skinparam ClassArrowColor       #691616
+  skinparam ClassBorderColor      #691616
+  skinparam NoteBackgroundColor   #F3EFEB
+  skinparam NoteBorderColor       #691616
+  skinparam NoteFontColor         #691616
+  skinparam ClassFontSize         11
+
+  package org.hipparchus.filtering.kalman #ECEBD8 {
+
+      class ProcessEstimate {
+        +getTime()
+        +getState()
+        +getCovariance()
+      }
+
+      interface Measurement {
+        +getTime()
+        +getValue()
+        +getCovariance()
+      }
+
+      interface "KalmanFilter<T extends Measurement>" as KalmanFilter_T {
+        +ProcessEstimate estimationStep(measurement)
+      }
+
+      KalmanFilter_T -right-> ProcessEstimate     : generate
+      Measurement <-left- KalmanFilter_T : consume
+
+      package linear #DDEBD8 {
+          class LinearEvolution {
+            +getStateTransitionMatrix()
+            +getControlMatrix()
+            +getCommand()
+            +getProcessNoiseMatrix()
+            +getMeasurementJacobian()
+          }
+
+          interface "LinearProcess<T extends Measurement>" as LinearProcess_T {
+            +getEvolution(measurement)
+          }
+
+          class "LinearKalmanFilter<T extends Measurement>" as LinearKalmanFilter_T
+
+          LinearProcess_T    "1" <--o LinearKalmanFilter_T : estimate
+          LinearProcess_T --> LinearEvolution : generate
+          LinearKalmanFilter_T ..|> KalmanFilter_T
+          LinearEvolution <-left- LinearKalmanFilter_T
+
+      }
+
+      package extended #DDEBD8 {
+
+          class NonLinearEvolution {
+            +getCurrentTime()
+            +getCurrentState()
+            +getStateTransitionMatrix()
+            +getProcessNoiseMatrix()
+            +getMeasurementJacobian()
+          }
+
+          interface "NonLinearProcess<T extends Measurement>" as NonLinearProcess_T {
+            +getEvolution(previousTime, previousState, measurement)
+            +getInnovation(measurement, evolution, innovationCovarianceMatrix)
+          }
+
+          class "ExtendedKalmanFilter<T extends Measurement>" as ExtendedKalmanFilter_T
+
+          NonLinearProcess_T "1" <--o ExtendedKalmanFilter_T : estimate
+          NonLinearProcess_T --> NonLinearEvolution : generate
+          ExtendedKalmanFilter_T ..|> KalmanFilter_T
+          ExtendedKalmanFilter_T -right-> NonLinearEvolution
+
+      }
+
+
+  }
+
+  package user.application.linear #F3EDF7 {
+    class MyLinearMeasurement #EAE6F7/B9B3D2
+    class MyLinearProcess #EAE6F7/B9B3D2
+    MyLinearMeasurement <-left- MyLinearProcess
+    MyLinearProcess ..|> LinearProcess_T
+  }
+
+  package user.application.nonlinear #F3EDF7 {
+    class MyNonLinearProcess #EAE6F7/B9B3D2
+    class MyNonLinearMeasurement #EAE6F7/B9B3D2
+    MyNonLinearMeasurement <-left- MyNonLinearProcess
+    MyNonLinearProcess ..|> NonLinearProcess_T
+  }
+
+@enduml

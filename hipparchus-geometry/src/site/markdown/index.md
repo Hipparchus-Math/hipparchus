@@ -165,6 +165,12 @@ shortcuts `applyTo(Rotation)` which is equivalent to
 `applyInverseTo(Rotation)` which is equivalent to
 `composeInverse(Rotation, RotationConvention.VECTOR_OPERATOR)`.
 
+![dimension 1 class diagram](images/userguide/oneD.png)
+
+![dimension2 class diagram](images/userguide/twoD.png)
+
+![dimension3 class diagram](images/userguide/threeD.png)
+
 
 ## n-Sphere
 The Hipparchus library provides a few classes dealing with geometry
@@ -183,6 +189,8 @@ to associate attributes with each cell. Each node in a BSP tree
 represents a convex region which is partitioned in two convex
 sub-regions at each side of a cut hyperplane. The root tree
 contains the complete space.
+
+![partitioning class diagram](images/userguide/partitioning.png)
 
 
 The main use of such partitions is to use a boolean attribute to

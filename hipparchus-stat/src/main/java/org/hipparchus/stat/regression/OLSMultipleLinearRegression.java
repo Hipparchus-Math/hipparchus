@@ -146,7 +146,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
 
         // Compute and return Hat matrix
         // No DME advertised - args valid if we get here
-        return Q.multiply(augI).multiply(Q.transpose());
+        return Q.multiply(augI).multiplyTransposed(Q);
     }
 
     /**
@@ -278,7 +278,7 @@ public class OLSMultipleLinearRegression extends AbstractMultipleLinearRegressio
         int p = getX().getColumnDimension();
         RealMatrix Raug = qr.getR().getSubMatrix(0, p - 1 , 0, p - 1);
         RealMatrix Rinv = new LUDecomposition(Raug).getSolver().getInverse();
-        return Rinv.multiply(Rinv.transpose());
+        return Rinv.multiplyTransposed(Rinv);
     }
 
 }

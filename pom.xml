@@ -58,6 +58,7 @@
     <module>hipparchus-samples</module>
     <module>hipparchus-fft</module>
     <module>hipparchus-clustering</module>
+    <module>hipparchus-filtering</module>
     <module>hipparchus-migration</module>
   </modules>
 

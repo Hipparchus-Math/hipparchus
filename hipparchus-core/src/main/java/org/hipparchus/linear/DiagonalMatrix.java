@@ -172,14 +172,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
         return new DiagonalMatrix(outData, false);
     }
 
-    /**
-     * Returns the result of postmultiplying {@code this} by {@code m}.
-     *
-     * @param m matrix to postmultiply by
-     * @return {@code this * m}
-     * @throws MathIllegalArgumentException if
-     * {@code columnDimension(this) != rowDimension(m)}
-     */
+    /** {@inheritDoc} */
     @Override
     public RealMatrix multiply(final RealMatrix m)
         throws MathIllegalArgumentException {
@@ -187,15 +180,74 @@ public class DiagonalMatrix extends AbstractRealMatrix
             return multiply((DiagonalMatrix) m);
         } else {
             MatrixUtils.checkMultiplicationCompatible(this, m);
-            final int nRows = m.getRowDimension();
-            final int nCols = m.getColumnDimension();
-            final double[][] product = new double[nRows][nCols];
-            for (int r = 0; r < nRows; r++) {
-                for (int c = 0; c < nCols; c++) {
-                    product[r][c] = data[r] * m.getEntry(r, c);
+            final RealMatrix product = m.createMatrix(m.getRowDimension(), m.getColumnDimension());
+            product.walkInOptimizedOrder(new DefaultRealMatrixChangingVisitor() {
+                /** {@inheritDoc} */
+                @Override
+                public double visit(int row, int column, double value) {
+                    return data[row] * m.getEntry(row, column);
+                }                
+            });
+            return product;
+        }
+    }
+
+    /**
+     * Returns the result of postmultiplying {@code this} by {@code m^T}.
+     * @param m matrix to first transpose and second postmultiply by
+     * @return {@code this * m}
+     * @throws MathIllegalArgumentException if
+     * {@code columnDimension(this) != columnDimension(m)}
+     * @since 1.3
+     */
+    public DiagonalMatrix multiplyTransposed(final DiagonalMatrix m)
+        throws MathIllegalArgumentException {
+        // transposition is no-op for diagonal matrices
+        return multiply(m);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public RealMatrix multiplyTransposed(final RealMatrix m)
+        throws MathIllegalArgumentException {
+        if (m instanceof DiagonalMatrix) {
+            return multiplyTransposed((DiagonalMatrix) m);
+        } else {
+            MatrixUtils.checkSameColumnDimension(this, m);
+            final RealMatrix product = m.createMatrix(m.getColumnDimension(), m.getRowDimension());
+            product.walkInOptimizedOrder(new DefaultRealMatrixChangingVisitor() {
+                /** {@inheritDoc} */
+                @Override
+                public double visit(int row, int column, double value) {
+                    return data[row] * m.getEntry(column, row);
                 }
-            }
-            return new Array2DRowRealMatrix(product, false);
+            });
+            return product;
+        }
+    }
+
+    /**
+     * Returns the result of postmultiplying {@code this^T} by {@code m}.
+     * @param m matrix to first transpose and second postmultiply by
+     * @return {@code this^T * m}
+     * @throws MathIllegalArgumentException if
+     * {@code columnDimension(this) != columnDimension(m)}
+     * @since 1.3
+     */
+    public DiagonalMatrix transposeMultiply(final DiagonalMatrix m)
+        throws MathIllegalArgumentException {
+        // transposition is no-op for diagonal matrices
+        return multiply(m);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public RealMatrix transposeMultiply(final RealMatrix m) {
+        if (m instanceof DiagonalMatrix) {
+            return transposeMultiply((DiagonalMatrix) m);
+        } else {
+            // transposition is no-op for diagonal matrices
+            return multiply(m);
         }
     }
 

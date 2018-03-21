@@ -596,10 +596,41 @@ public class MatrixUtils {
      */
     public static void checkMultiplicationCompatible(final AnyMatrix left, final AnyMatrix right)
         throws MathIllegalArgumentException {
-
         if (left.getColumnDimension() != right.getRowDimension()) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
                                                    left.getColumnDimension(), right.getRowDimension());
+        }
+    }
+
+    /**
+     * Check if matrices have the same number of columns.
+     *
+     * @param left Left hand side matrix.
+     * @param right Right hand side matrix.
+     * @throws MathIllegalArgumentException if matrices don't have the same number of columns.
+     * @since 1.3
+     */
+    public static void checkSameColumnDimension(final AnyMatrix left, final AnyMatrix right)
+        throws MathIllegalArgumentException {
+        if (left.getColumnDimension() != right.getColumnDimension()) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   left.getColumnDimension(), right.getColumnDimension());
+        }
+    }
+
+    /**
+     * Check if matrices have the same number of rows.
+     *
+     * @param left Left hand side matrix.
+     * @param right Right hand side matrix.
+     * @throws MathIllegalArgumentException if matrices don't have the same number of rows.
+     * @since 1.3
+     */
+    public static void checkSameRowDimension(final AnyMatrix left, final AnyMatrix right)
+        throws MathIllegalArgumentException {
+        if (left.getRowDimension() != right.getRowDimension()) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.DIMENSIONS_MISMATCH,
+                                                   left.getRowDimension(), right.getRowDimension());
         }
     }
 

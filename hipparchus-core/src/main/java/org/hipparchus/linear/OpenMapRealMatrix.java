@@ -138,9 +138,9 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     @Override
     public OpenMapRealMatrix subtract(final RealMatrix m)
         throws MathIllegalArgumentException {
-        try {
+        if (m instanceof OpenMapRealMatrix) {
             return subtract((OpenMapRealMatrix) m);
-        } catch (ClassCastException cce) {
+        } else {
             return (OpenMapRealMatrix) super.subtract(m);
         }
     }
@@ -178,27 +178,84 @@ public class OpenMapRealMatrix extends AbstractRealMatrix
     @Override
     public RealMatrix multiply(final RealMatrix m)
         throws MathIllegalArgumentException {
-        try {
-            return multiply((OpenMapRealMatrix) m);
-        } catch (ClassCastException cce) {
 
-            MatrixUtils.checkMultiplicationCompatible(this, m);
+        MatrixUtils.checkMultiplicationCompatible(this, m);
 
-            final int outCols = m.getColumnDimension();
-            final BlockRealMatrix out = new BlockRealMatrix(rows, outCols);
-            for (OpenIntToDoubleHashMap.Iterator iterator = entries.iterator(); iterator.hasNext();) {
-                iterator.advance();
-                final double value = iterator.value();
-                final int key      = iterator.key();
-                final int i        = key / columns;
-                final int k        = key % columns;
-                for (int j = 0; j < outCols; ++j) {
-                    out.addToEntry(i, j, value * m.getEntry(k, j));
-                }
+        final int outCols = m.getColumnDimension();
+        final RealMatrix out = m.createMatrix(rows, outCols);
+        for (OpenIntToDoubleHashMap.Iterator iterator = entries.iterator(); iterator.hasNext();) {
+            iterator.advance();
+            final double value = iterator.value();
+            final int key      = iterator.key();
+            final int i        = key / columns;
+            final int k        = key % columns;
+            for (int j = 0; j < outCols; ++j) {
+                out.addToEntry(i, j, value * m.getEntry(k, j));
             }
-
-            return out;
         }
+
+        return out;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws MathIllegalArgumentException if {@code m} is an
+     * {@code OpenMapRealMatrix}, and the total number of entries of the product
+     * is larger than {@code Integer.MAX_VALUE}.
+     */
+    @Override
+    public RealMatrix multiplyTransposed(final RealMatrix m)
+        throws MathIllegalArgumentException {
+
+        MatrixUtils.checkSameColumnDimension(this, m);
+
+        final int outCols = m.getRowDimension();
+        final RealMatrix out = m.createMatrix(rows, outCols);
+        for (OpenIntToDoubleHashMap.Iterator iterator = entries.iterator(); iterator.hasNext();) {
+            iterator.advance();
+            final double value = iterator.value();
+            final int key      = iterator.key();
+            final int i        = key / columns;
+            final int k        = key % columns;
+            for (int j = 0; j < outCols; ++j) {
+                out.addToEntry(i, j, value * m.getEntry(j, k));
+            }
+        }
+
+        return out;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @throws MathIllegalArgumentException if {@code m} is an
+     * {@code OpenMapRealMatrix}, and the total number of entries of the product
+     * is larger than {@code Integer.MAX_VALUE}.
+     */
+    @Override
+    public RealMatrix transposeMultiply(final RealMatrix m)
+        throws MathIllegalArgumentException {
+
+        MatrixUtils.checkSameRowDimension(this, m);
+
+        final int outCols = m.getColumnDimension();
+        final RealMatrix out = m.createMatrix(columns, outCols);
+        for (OpenIntToDoubleHashMap.Iterator iterator = entries.iterator(); iterator.hasNext();) {
+            iterator.advance();
+            final double value = iterator.value();
+            final int key      = iterator.key();
+            final int k        = key / columns;
+            final int i        = key % columns;
+            for (int j = 0; j < outCols; ++j) {
+                out.addToEntry(i, j, value * m.getEntry(k, j));
+            }
+        }
+
+        return out;
+
     }
 
     /**

@@ -425,6 +425,11 @@
       </dependency>
       <dependency>
         <groupId>org.hipparchus</groupId>
+        <artifactId>hipparchus-filtering</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.hipparchus</groupId>
         <artifactId>hipparchus-migration</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -476,6 +481,8 @@
     <hipparchus.maven-javadoc-plugin.version>3.0.0-M1</hipparchus.maven-javadoc-plugin.version>
     <hipparchus.maven-jar-plugin.version>3.0.2</hipparchus.maven-jar-plugin.version>
     <hipparchus.maven-jxr-plugin.version>2.5</hipparchus.maven-jxr-plugin.version>
+    <hipparchus.plantuml-maven-plugin.version>1.2</hipparchus.plantuml-maven-plugin.version>
+    <hipparchus.plantuml.version>1.2018.2</hipparchus.plantuml.version>
     <hipparchus.maven-project-info-reports-plugin.version>2.9</hipparchus.maven-project-info-reports-plugin.version>
     <hipparchus.maven-pmd-plugin.version>3.8</hipparchus.maven-pmd-plugin.version>
     <hipparchus.maven-resources-plugin.version>3.0.2</hipparchus.maven-resources-plugin.version>
@@ -798,6 +805,39 @@
                 </requireJavaVersion>
               </rules>
             </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.jeluard</groupId>
+        <artifactId>plantuml-maven-plugin</artifactId>
+        <version>${hipparchus.plantuml-maven-plugin.version}</version>
+        <configuration>
+          <sourceFiles>
+            <directory>${project.basedir}/src/site/design</directory>
+            <includes>
+              <include>
+                *.puml
+              </include>
+            </includes>
+          </sourceFiles>
+          <outputDirectory>
+            ${project.build.directory}/site/images/userguide
+          </outputDirectory>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>net.sourceforge.plantuml</groupId>
+            <artifactId>plantuml</artifactId>
+            <version>${hipparchus.plantuml.version}</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <phase>pre-site</phase>
+            <goals>
+              <goal>generate</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
