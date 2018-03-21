@@ -29,7 +29,7 @@ real-valued distributions can be represented via the
 interface.
 
 An overview of available continuous distributions:<br/>
-![Overview of continuous distributions](../images/userguide/real_distribution_examples.png)
+![Overview of continuous distributions](images/userguide/real_distribution_examples.png)
 
 ## Distribution Framework
 

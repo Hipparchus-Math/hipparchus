@@ -31,7 +31,7 @@ public interface KalmanFilter<T extends Measurement> {
      * @return estimated state after measurement has been considered
      * @exception MathRuntimeException if estimation fails
      */
-    ProcessEstimate estimationStep(T measurements)
+    ProcessEstimate estimationStep(T measurement)
         throws MathRuntimeException;
 
     /** Get the current predicted state.

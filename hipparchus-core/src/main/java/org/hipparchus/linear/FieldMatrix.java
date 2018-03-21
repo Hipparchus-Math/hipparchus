@@ -131,7 +131,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
     /**
      * Returns the result of postmultiplying {@code this^T} by {@code m}.
      * <p>
-     * This is equivalent to call {@link #transpose()}.{@link #multiply(RealMatrix) multiply(m)},
+     * This is equivalent to call {@link #transpose()}.{@link #multiply(FieldMatrix) multiply(m)},
      * but some implementations may avoid building the intermediate transposed matrix.
      * </p>
      * @param m matrix to postmultiply by

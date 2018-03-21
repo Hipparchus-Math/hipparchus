@@ -33,7 +33,7 @@ import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
  *   <li>A<sub>k-1</sub> is the state transition matrix in the absence of control,</li>
  *   <li>B<sub>k-1</sub> is the control matrix,</li>
  *   <li>u<sub>k-1</sub> is the command</li>
- *   <li>w<sub>k-1</sub> is the process noise, which as covariance matrix Q<sub>k-1</sub></li>
+ *   <li>w<sub>k-1</sub> is the process noise, which has covariance matrix Q<sub>k-1</sub></li>
  * </ul>
  * </p>
  * @param <T> the type of the measurements

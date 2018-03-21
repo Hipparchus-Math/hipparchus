@@ -216,7 +216,7 @@ Currently, the following low-discrepancy sequences are supported:
 The figure below illustrates the unique properties of low-discrepancy sequences when generating N samples
 in the interval [0, 1]. Roughly speaking, such sequences "fill" the respective space more evenly which leads to faster convergence in quasi-Monte Carlo simulations.
 
-![Comparison of low-discrepancy sequences](../images/userguide/low_discrepancy_sequences.png)
+![Comparison of low-discrepancy sequences](images/userguide/low_discrepancy_sequences.png)
 
 ## Random Strings
 

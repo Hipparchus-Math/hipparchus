@@ -230,6 +230,8 @@ there are only getters to retrieve their values, no setters are available.
 | Relative accuracy | The Relative Accuracy is the maximum difference between the computed root and the true root, divided by the maximum of the absolute values of the numbers. This accuracy measurement is better suited for numerical calculations with computers, due to the way floating point numbers are represented. The default value is chosen so that algorithms will get a result even for roots with large absolute values, even while it may be impossible to reach the given absolute accuracy. |
 | Function value accuracy | This value is used by some algorithms in order to prevent numerical instabilities. If the function is evaluated to an absolute value smaller than the Function Value Accuracy, the algorithms assume they hit a root and return the value immediately. The default value is a "very small value". If the goal is to get a near zero function value rather than an accurate root, computation may be sped up by setting this value appropriately. |
 
+![solvers class diagram](images/userguide/solvers.png)
+
 ## Interpolation
 
 A [UnivariateInterpolator](../apidocs/org/hipparchus/analysis/interpolation/UnivariateInterpolator.html)
@@ -406,6 +408,8 @@ derivative structures hold all partial derivatives up to any specified order, wi
 number of free parameters. Rall's numbers therefore can be seen as derivative structures for order
 one derivative and one free parameter, and primitive real numbers can be seen as derivative structures
 with zero order derivative and no free parameters.
+
+![differentiation class diagram](images/userguide/differentiation.png)
 
 The workflow of computation of a derivatives of an expression `y=f(x)` is as follows. First we configure
 a factory with the number of free parameters and the derivation order we want to use throughout the

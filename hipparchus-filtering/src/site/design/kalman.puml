@@ -38,13 +38,12 @@
         +getCovariance()
       }
 
-      interface KalmanFilter {
-        +Stream<ProcessEstimate> estimate(Stream<Measurement> measurements)
-        +ProcessEstimate estimationStep(Measurement measurement)
+      interface "KalmanFilter<T extends Measurement>" as KalmanFilter_T {
+        +ProcessEstimate estimationStep(measurement)
       }
 
-      KalmanFilter --> Measurement     : consumes
-      KalmanFilter --> ProcessEstimate : generates
+      KalmanFilter_T -right-> ProcessEstimate     : generate
+      Measurement <-left- KalmanFilter_T : consume
 
       package linear #DDEBD8 {
           class LinearEvolution {
@@ -55,16 +54,16 @@
             +getMeasurementJacobian()
           }
 
-          interface LinearProcess {
+          interface "LinearProcess<T extends Measurement>" as LinearProcess_T {
             +getEvolution(measurement)
           }
 
-          class LinearKalmanFilter
+          class "LinearKalmanFilter<T extends Measurement>" as LinearKalmanFilter_T
 
-          LinearProcess    "1" <--o LinearKalmanFilter : estimates
-          LinearProcess --> LinearEvolution : generate
-          LinearKalmanFilter ..|> KalmanFilter
-          LinearEvolution <-left- LinearKalmanFilter
+          LinearProcess_T    "1" <--o LinearKalmanFilter_T : estimate
+          LinearProcess_T --> LinearEvolution : generate
+          LinearKalmanFilter_T ..|> KalmanFilter_T
+          LinearEvolution <-left- LinearKalmanFilter_T
 
       }
 
@@ -78,17 +77,17 @@
             +getMeasurementJacobian()
           }
 
-          interface NonLinearProcess {
+          interface "NonLinearProcess<T extends Measurement>" as NonLinearProcess_T {
             +getEvolution(previousTime, previousState, measurement)
             +getInnovation(measurement, evolution, innovationCovarianceMatrix)
           }
 
-          class ExtendedKalmanFilter
+          class "ExtendedKalmanFilter<T extends Measurement>" as ExtendedKalmanFilter_T
 
-          NonLinearProcess "1" <--o ExtendedKalmanFilter : estimates
-          NonLinearProcess --> NonLinearEvolution : generate
-          ExtendedKalmanFilter ..|> KalmanFilter
-          ExtendedKalmanFilter -right-> NonLinearEvolution
+          NonLinearProcess_T "1" <--o ExtendedKalmanFilter_T : estimate
+          NonLinearProcess_T --> NonLinearEvolution : generate
+          ExtendedKalmanFilter_T ..|> KalmanFilter_T
+          ExtendedKalmanFilter_T -right-> NonLinearEvolution
 
       }
 
@@ -96,13 +95,17 @@
   }
 
   package user.application.linear #F3EDF7 {
+    class MyLinearMeasurement #EAE6F7/B9B3D2
     class MyLinearProcess #EAE6F7/B9B3D2
-    MyLinearProcess ..|> LinearProcess
+    MyLinearMeasurement <-left- MyLinearProcess
+    MyLinearProcess ..|> LinearProcess_T
   }
 
   package user.application.nonlinear #F3EDF7 {
     class MyNonLinearProcess #EAE6F7/B9B3D2
-    MyNonLinearProcess ..|> NonLinearProcess
+    class MyNonLinearMeasurement #EAE6F7/B9B3D2
+    MyNonLinearMeasurement <-left- MyNonLinearProcess
+    MyNonLinearProcess ..|> NonLinearProcess_T
   }
 
 @enduml
