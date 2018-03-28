@@ -51,6 +51,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   <body>
     <release version="1.3" date="TBD" description="TBD">
       <action dev="luc" type="add">
+        Allow FastMath to operate on RealFieldElements.
+        This simplifies a lot "fieldification" of algorithms
+        previously implemented with primitive double numbers.
+      </action>
+      <action dev="luc" type="add">
         Added a transposeMultiply method to compute A^T.B
         without creating the intermediate transposed matrix.
       </action>

@@ -23,6 +23,7 @@ package org.hipparchus.util;
 
 import java.io.PrintStream;
 
+import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathRuntimeException;
 
@@ -4200,6 +4201,473 @@ public class FastMath {
         return ((Float.floatToRawIntBits(f) >>> 23) & 0xff) - 127;
     }
 
+    /** Compute the square root of a number.
+     * @param a number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return square root of a
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T sqrt(final T a) {
+        return a.sqrt();
+    }
+
+    /** Compute the hyperbolic cosine of a number.
+     * @param x number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return hyperbolic cosine of x
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T cosh(final T x) {
+        return x.cosh();
+    }
+
+    /** Compute the hyperbolic sine of a number.
+     * @param x number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return hyperbolic sine of x
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T sinh(final T x) {
+        return x.sinh();
+    }
+
+    /** Compute the hyperbolic tangent of a number.
+     * @param x number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return hyperbolic tangent of x
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T tanh(final T x) {
+        return x.tanh();
+    }
+
+    /** Compute the inverse hyperbolic cosine of a number.
+     * @param a number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return inverse hyperbolic cosine of a
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T acosh(final T a) {
+        return a.acosh();
+    }
+
+    /** Compute the inverse hyperbolic sine of a number.
+     * @param a number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return inverse hyperbolic sine of a
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T asinh(final T a) {
+        return a.asinh();
+    }
+
+    /** Compute the inverse hyperbolic tangent of a number.
+     * @param a number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return inverse hyperbolic tangent of a
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T atanh(final T a) {
+        return a.atanh();
+    }
+
+    /** Compute the signum of a number.
+     * The signum is -1 for negative numbers, +1 for positive numbers and 0 otherwise
+     * @param a number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return -1.0, -0.0, +0.0, +1.0 or NaN depending on sign of a
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T signum(final T a) {
+        return a.signum();
+    }
+
+    /**
+     * Exponential function.
+     *
+     * Computes exp(x), function result is nearly rounded.   It will be correctly
+     * rounded to the theoretical value for 99.9% of input values, otherwise it will
+     * have a 1 ULP error.
+     *
+     * Method:
+     *    Lookup intVal = exp(int(x))
+     *    Lookup fracVal = exp(int(x-int(x) / 1024.0) * 1024.0 );
+     *    Compute z as the exponential of the remaining bits by a polynomial minus one
+     *    exp(x) = intVal * fracVal * (1 + z)
+     *
+     * Accuracy:
+     *    Calculation is done with 63 bits of precision, so result should be correctly
+     *    rounded for 99.9% of input values, with less than 1 ULP error otherwise.
+     *
+     * @param x   a double
+     * @param <T> the type of the field element
+     * @return double e<sup>x</sup>
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T exp(final T x) {
+        return x.exp();
+    }
+
+    /** Compute exp(x) - 1
+     * @param x number to compute shifted exponential
+     * @param <T> the type of the field element
+     * @return exp(x) - 1
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T expm1(final T x) {
+        return x.expm1();
+    }
+
+    /**
+     * Natural logarithm.
+     *
+     * @param x   a double
+     * @param <T> the type of the field element
+     * @return log(x)
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T log(final T x) {
+        return x.log();
+    }
+
+    /**
+     * Computes log(1 + x).
+     *
+     * @param x Number.
+     * @param <T> the type of the field element
+     * @return {@code log(1 + x)}.
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T log1p(final T x) {
+        return x.log1p();
+    }
+
+    /** Compute the base 10 logarithm.
+     * @param x a number
+     * @param <T> the type of the field element
+     * @return log10(x)
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T log10(final T x) {
+        return x.log10();
+    }
+
+    /**
+     * Power function.  Compute x<sup>y</sup>.
+     *
+     * @param x   a double
+     * @param y   a double
+     * @param <T> the type of the field element
+     * @return x<sup>y</sup>
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T pow(final T x, final T y) {
+        return x.pow(y);
+    }
+
+    /**
+     * Raise a double to an int power.
+     *
+     * @param d Number to raise.
+     * @param e Exponent.
+     * @param <T> the type of the field element
+     * @return d<sup>e</sup>
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T pow(T d, int e) {
+        return d.pow(e);
+    }
+
+    /**
+     * Sine function.
+     *
+     * @param x Argument.
+     * @param <T> the type of the field element
+     * @return sin(x)
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T sin(final T x) {
+        return x.sin();
+    }
+
+    /**
+     * Cosine function.
+     *
+     * @param x Argument.
+     * @param <T> the type of the field element
+     * @return cos(x)
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T cos(final T x) {
+        return x.cos();
+    }
+
+    /**
+     * Tangent function.
+     *
+     * @param x Argument.
+     * @param <T> the type of the field element
+     * @return tan(x)
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T tan(final T x) {
+        return x.tan();
+    }
+
+    /**
+     * Arctangent function
+     *  @param x a number
+     * @param <T> the type of the field element
+     *  @return atan(x)
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T atan(final T x) {
+        return x.atan();
+    }
+
+    /**
+     * Two arguments arctangent function
+     * @param y ordinate
+     * @param x abscissa
+     * @param <T> the type of the field element
+     * @return phase angle of point (x,y) between {@code -PI} and {@code PI}
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T atan2(final T y, final T x) {
+        return y.atan2(x);
+    }
+
+    /** Compute the arc sine of a number.
+     * @param x number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return arc sine of x
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T asin(final T x) {
+        return x.asin();
+    }
+
+    /** Compute the arc cosine of a number.
+     * @param x number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return arc cosine of x
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T acos(final T x) {
+        return x.acos();
+    }
+
+    /** Compute the cubic root of a number.
+     * @param x number on which evaluation is done
+     * @param <T> the type of the field element
+     * @return cubic root of x
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T cbrt(final T x) {
+        return x.cbrt();
+    }
+
+    /**
+     * Absolute value.
+     * @param x number from which absolute value is requested
+     * @param <T> the type of the field element
+     * @return abs(x)
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T abs(final T x) {
+        return x.abs();
+    }
+
+    /**
+     * Multiply a double number by a power of 2.
+     * @param d number to multiply
+     * @param n power of 2
+     * @param <T> the type of the field element
+     * @return d &times; 2<sup>n</sup>
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T scalb(final T d, final int n) {
+        return d.scalb(n);
+    }
+
+    /** Get the largest whole number smaller than x.
+     * @param x number from which floor is requested
+     * @param <T> the type of the field element
+     * @return a double number f such that f is an integer f <= x < f + 1.0
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T floor(final T x) {
+        return x.floor();
+    }
+
+    /** Get the smallest whole number larger than x.
+     * @param x number from which ceil is requested
+     * @param <T> the type of the field element
+     * @return a double number c such that c is an integer c - 1.0 < x <= c
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T ceil(final T x) {
+        return x.ceil();
+    }
+
+    /** Get the whole number that is the nearest to x, or the even one if x is exactly half way between two integers.
+     * @param x number from which nearest whole number is requested
+     * @param <T> the type of the field element
+     * @return a double number r such that r is an integer r - 0.5 <= x <= r + 0.5
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T rint(final T x) {
+        return x.rint();
+    }
+
+    /** Get the closest long to x.
+     * @param x number from which closest long is requested
+     * @param <T> the type of the field element
+     * @return closest long to x
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> long round(final T x) {
+        return x.round();
+    }
+
+    /** Compute the minimum of two values
+     * @param a first value
+     * @param b second value
+     * @param <T> the type of the field element
+     * @return a if a is lesser or equal to b, b otherwise
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T min(final T a, final T b) {
+        final double aR = a.getReal();
+        final double bR = b.getReal();
+        if (aR < bR) {
+            return a;
+        } else if (bR < aR) {
+            return b;
+        } else {
+            // either the numbers are equal, or one of them is a NaN
+            return Double.isNaN(aR) ? a : b;
+        }
+    }
+
+    /** Compute the maximum of two values
+     * @param a first value
+     * @param b second value
+     * @param <T> the type of the field element
+     * @return b if a is lesser or equal to b, a otherwise
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T max(final T a, final T b) {
+        final double aR = a.getReal();
+        final double bR = b.getReal();
+        if (aR < bR) {
+            return b;
+        } else if (bR < aR) {
+            return a;
+        } else {
+            // either the numbers are equal, or one of them is a NaN
+            return Double.isNaN(aR) ? a : b;
+        }
+    }
+
+    /**
+     * Returns the hypotenuse of a triangle with sides {@code x} and {@code y}
+     * - sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)<br/>
+     * avoiding intermediate overflow or underflow.
+     *
+     * <ul>
+     * <li> If either argument is infinite, then the result is positive infinity.</li>
+     * <li> else, if either argument is NaN then the result is NaN.</li>
+     * </ul>
+     *
+     * @param x a value
+     * @param y a value
+     * @param <T> the type of the field element
+     * @return sqrt(<i>x</i><sup>2</sup>&nbsp;+<i>y</i><sup>2</sup>)
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T hypot(final T x, final T y) {
+        return x.hypot(y);
+    }
+
+    /**
+     * Computes the remainder as prescribed by the IEEE 754 standard.
+     * The remainder value is mathematically equal to {@code x - y*n}
+     * where {@code n} is the mathematical integer closest to the exact mathematical value
+     * of the quotient {@code x/y}.
+     * If two mathematical integers are equally close to {@code x/y} then
+     * {@code n} is the integer that is even.
+     * <p>
+     * <ul>
+     * <li>If either operand is NaN, the result is NaN.</li>
+     * <li>If the result is not NaN, the sign of the result equals the sign of the dividend.</li>
+     * <li>If the dividend is an infinity, or the divisor is a zero, or both, the result is NaN.</li>
+     * <li>If the dividend is finite and the divisor is an infinity, the result equals the dividend.</li>
+     * <li>If the dividend is a zero and the divisor is finite, the result equals the dividend.</li>
+     * </ul>
+     * @param dividend the number to be divided
+     * @param divisor the number by which to divide
+     * @param <T> the type of the field element
+     * @return the remainder, rounded
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T IEEEremainder(final T dividend, final double divisor) {
+        return dividend.remainder(divisor);
+    }
+
+    /**
+     * Computes the remainder as prescribed by the IEEE 754 standard.
+     * The remainder value is mathematically equal to {@code x - y*n}
+     * where {@code n} is the mathematical integer closest to the exact mathematical value
+     * of the quotient {@code x/y}.
+     * If two mathematical integers are equally close to {@code x/y} then
+     * {@code n} is the integer that is even.
+     * <p>
+     * <ul>
+     * <li>If either operand is NaN, the result is NaN.</li>
+     * <li>If the result is not NaN, the sign of the result equals the sign of the dividend.</li>
+     * <li>If the dividend is an infinity, or the divisor is a zero, or both, the result is NaN.</li>
+     * <li>If the dividend is finite and the divisor is an infinity, the result equals the dividend.</li>
+     * <li>If the dividend is a zero and the divisor is finite, the result equals the dividend.</li>
+     * </ul>
+     * @param dividend the number to be divided
+     * @param divisor the number by which to divide
+     * @param <T> the type of the field element
+     * @return the remainder, rounded
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T IEEEremainder(final T dividend, final T divisor) {
+        return dividend.remainder(divisor);
+    }
+
+    /**
+     * Returns the first argument with the sign of the second argument.
+     * A NaN {@code sign} argument is treated as positive.
+     *
+     * @param magnitude the value to return
+     * @param sign the sign for the returned value
+     * @param <T> the type of the field element
+     * @return the magnitude with the same sign as the {@code sign} argument
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T copySign(T magnitude, T sign) {
+        return magnitude.copySign(sign);
+    }
+
+    /**
+     * Returns the first argument with the sign of the second argument.
+     * A NaN {@code sign} argument is treated as positive.
+     *
+     * @param magnitude the value to return
+     * @param sign the sign for the returned value
+     * @param <T> the type of the field element
+     * @return the magnitude with the same sign as the {@code sign} argument
+     * @since 1.3
+     */
+    public static <T extends RealFieldElement<T>> T copySign(T magnitude, double sign) {
+        return magnitude.copySign(sign);
+    }
+
     /**
      * Print out contents of arrays, and check the length.
      * <p>used to generate the preset arrays originally.</p>
@@ -4381,4 +4849,5 @@ public class FastMath {
             return finalRemB;
         }
     }
+
 }

@@ -94,6 +94,40 @@ public class FastMathTest {
     }
 
     @Test
+    public void testMinMaxField() {
+        double[][] pairs = {
+            { -50.0, 50.0 },
+            {  Double.POSITIVE_INFINITY, 1.0 },
+            {  Double.NEGATIVE_INFINITY, 1.0 },
+            {  Double.NaN, 1.0 },
+            {  Double.POSITIVE_INFINITY, 0.0 },
+            {  Double.NEGATIVE_INFINITY, 0.0 },
+            {  Double.NaN, 0.0 },
+            {  Double.NaN, Double.NEGATIVE_INFINITY },
+            {  Double.NaN, Double.POSITIVE_INFINITY },
+            { Precision.SAFE_MIN, Precision.EPSILON }
+        };
+        for (double[] pair : pairs) {
+            assertEquals("min(" + pair[0] + ", " + pair[1] + ")",
+                         Math.min(pair[0], pair[1]),
+                         FastMath.min(new Decimal64(pair[0]), new Decimal64(pair[1])).getReal(),
+                         Precision.EPSILON);
+            assertEquals("min(" + pair[1] + ", " + pair[0] + ")",
+                         Math.min(pair[1], pair[0]),
+                         FastMath.min(new Decimal64(pair[0]), new Decimal64(pair[1])).getReal(),
+                         Precision.EPSILON);
+            assertEquals("max(" + pair[0] + ", " + pair[1] + ")",
+                         Math.max(pair[0], pair[1]),
+                         FastMath.max(new Decimal64(pair[0]), new Decimal64(pair[1])).getReal(),
+                         Precision.EPSILON);
+            assertEquals("max(" + pair[1] + ", " + pair[0] + ")",
+                         Math.max(pair[1], pair[0]),
+                         FastMath.max(new Decimal64(pair[0]), new Decimal64(pair[1])).getReal(),
+                         Precision.EPSILON);
+        }
+    }
+
+    @Test
     public void testMinMaxFloat() {
         float[][] pairs = {
             { -50.0f, 50.0f },
