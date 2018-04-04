@@ -247,6 +247,16 @@ public class MatrixUtils {
     }
 
     /**
+     * Creates a {@link RealVector} with specified dimensions.
+     *
+     * @param dimension dimension of the vector
+     * @since 1.3
+     */
+    public static RealVector createRealVector(final int dimension) {
+        return new ArrayRealVector(new double[dimension]);
+    }
+
+    /**
      * Creates a {@link FieldVector} using the data from the input array.
      *
      * @param <T> the type of the field elements
@@ -265,6 +275,18 @@ public class MatrixUtils {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
         return new ArrayFieldVector<T>(data[0].getField(), data, true);
+    }
+
+    /**
+     * Creates a {@link FieldVector} with specified dimensions.
+     *
+     * @param <T> the type of the field elements
+     * @param field field to which array elements belong
+     * @param dimension dimension of the vector
+     * @since 1.3
+     */
+    public static <T extends FieldElement<T>> FieldVector<T> createFieldVector(final Field<T> field, final int dimension) {
+        return new ArrayFieldVector<>(MathArrays.buildArray(field, dimension));
     }
 
     /**

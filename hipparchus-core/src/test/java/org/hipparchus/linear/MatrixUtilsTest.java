@@ -30,6 +30,8 @@ import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.fraction.BigFraction;
 import org.hipparchus.fraction.Fraction;
 import org.hipparchus.fraction.FractionField;
+import org.hipparchus.util.Decimal64;
+import org.hipparchus.util.Decimal64Field;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -117,6 +119,36 @@ public final class MatrixUtilsTest {
             Assert.fail("Expecting NullArgumentException");
         } catch (NullArgumentException ex) {
             // expected
+        }
+    }
+
+    @Test
+    public void testCreateRealVector() {
+        RealVector v1 = MatrixUtils.createRealVector(new double[] { 0.0, 1.0, 2.0, 3.0 });
+        Assert.assertEquals(4, v1.getDimension());
+        for (int i = 0; i < v1.getDimension(); ++i) {
+            Assert.assertEquals(i, v1.getEntry(i), 1.0e-15);
+        }
+        RealVector v2 = MatrixUtils.createRealVector(7);
+        Assert.assertEquals(7, v2.getDimension());
+        for (int i = 0; i < v2.getDimension(); ++i) {
+            Assert.assertEquals(0.0, v2.getEntry(i), 1.0e-15);
+        }
+    }
+
+    @Test
+    public void testCreateFieldVector() {
+        FieldVector<Decimal64> v1 = MatrixUtils.createFieldVector(new Decimal64[] {
+            new Decimal64(0.0), new Decimal64(1.0), new Decimal64(2.0), new Decimal64(3.0)
+        });
+        Assert.assertEquals(4, v1.getDimension());
+        for (int i = 0; i < v1.getDimension(); ++i) {
+            Assert.assertEquals(i, v1.getEntry(i).getReal(), 1.0e-15);
+        }
+        FieldVector<Decimal64> v2 = MatrixUtils.createFieldVector(Decimal64Field.getInstance(), 7);
+        Assert.assertEquals(7, v2.getDimension());
+        for (int i = 0; i < v2.getDimension(); ++i) {
+            Assert.assertEquals(0.0, v2.getEntry(i).getReal(), 1.0e-15);
         }
     }
 
