@@ -26,12 +26,17 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
 import org.hipparchus.linear.ArrayRealVector;
+import org.hipparchus.linear.CholeskyDecomposer;
 import org.hipparchus.linear.CholeskyDecomposition;
+import org.hipparchus.linear.LUDecomposer;
 import org.hipparchus.linear.LUDecomposition;
+import org.hipparchus.linear.MatrixDecomposer;
 import org.hipparchus.linear.MatrixUtils;
+import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.linear.QRDecomposition;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
+import org.hipparchus.linear.SingularValueDecomposer;
 import org.hipparchus.linear.SingularValueDecomposition;
 import org.hipparchus.optim.ConvergenceChecker;
 import org.hipparchus.optim.LocalizedOptimFormats;
@@ -46,13 +51,17 @@ import org.hipparchus.util.Pair;
  * of the linearized problem at each iteration. Either LU decomposition or
  * Cholesky decomposition can be used to solve the normal equations, or QR
  * decomposition or SVD decomposition can be used to solve the linear system.
- * LU decomposition is faster but QR decomposition is more robust for difficult
+ * Cholesky/LU decomposition is faster but QR decomposition is more robust for difficult
  * problems, and SVD can compute a solution for rank-deficient problems.
  */
 public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
 
-    /** The decomposition algorithm to use to solve the normal equations. */
-    //TODO move to linear package and expand options?
+    /**
+     * The decomposition algorithm to use to solve the normal equations.
+     *
+     * @deprecated Use {@link MatrixDecomposer} instead.
+     */
+    @Deprecated
     public enum Decomposition {
         /**
          * Solve by forming the normal equations (J<sup>T</sup>Jx=J<sup>T</sup>r) and
@@ -78,6 +87,16 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                     throw new MathIllegalStateException(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
                 }
             }
+
+            @Override
+            protected MatrixDecomposer getDecomposer() {
+                return new LUDecomposer(SINGULARITY_THRESHOLD);
+            }
+
+            @Override
+            protected boolean isFormNormalEquations() {
+                return true;
+            }
         },
         /**
          * Solve the linear least squares problem (Jx=r) using the {@link
@@ -98,6 +117,16 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                 } catch (MathIllegalArgumentException e) {
                     throw new MathIllegalStateException(LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
                 }
+            }
+
+            @Override
+            protected MatrixDecomposer getDecomposer() {
+                return new QRDecomposer(SINGULARITY_THRESHOLD);
+            }
+
+            @Override
+            protected boolean isFormNormalEquations() {
+                return false;
             }
         },
         /**
@@ -129,6 +158,17 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                     }
                 }
             }
+
+            @Override
+            protected MatrixDecomposer getDecomposer() {
+                return new CholeskyDecomposer(SINGULARITY_THRESHOLD,
+                        SINGULARITY_THRESHOLD);
+            }
+
+            @Override
+            protected boolean isFormNormalEquations() {
+                return true;
+            }
         },
         /**
          * Solve the linear least squares problem using the {@link
@@ -145,6 +185,16 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
                         .getSolver()
                         .solve(residuals);
             }
+
+            @Override
+            protected MatrixDecomposer getDecomposer() {
+                return new SingularValueDecomposer();
+            }
+
+            @Override
+            protected boolean isFormNormalEquations() {
+                return false;
+            }
         };
 
         /**
@@ -159,6 +209,22 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
          */
         protected abstract RealVector solve(RealMatrix jacobian,
                                             RealVector residuals);
+
+        /**
+         * Get the equivalent matrix decomposer.
+         *
+         * @return the decomposer.
+         */
+        protected abstract MatrixDecomposer getDecomposer();
+
+        /**
+         * Get if this decomposition forms the normal equations explicitly.
+         *
+         * @return {@code true} if the normal equations are formed explicitly, {@code
+         * false} otherwise.
+         */
+        protected abstract boolean isFormNormalEquations();
+
     }
 
     /**
@@ -168,8 +234,13 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
      */
     private static final double SINGULARITY_THRESHOLD = 1e-11;
 
-    /** Indicator for using LU decomposition. */
+    /** Decomposition. */
+    @Deprecated
     private final Decomposition decomposition;
+    /** Decomposer */
+    private final MatrixDecomposer decomposer;
+    /** Indicates if normal equations should be formed explicitly. */
+    private final boolean formNormalEquations;
 
     /**
      * Creates a Gauss Newton optimizer.
@@ -186,16 +257,57 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
      * solve the normal equations.
      *
      * @param decomposition the {@link Decomposition} algorithm.
+     * @deprecated Use {@link #GaussNewtonOptimizer(MatrixDecomposer, boolean)} instead.
+     * The new constructor provides control of the numerical tolerances in the
+     * decomposition.
      */
+    @Deprecated
     public GaussNewtonOptimizer(final Decomposition decomposition) {
+        this(decomposition, decomposition.getDecomposer(),
+                decomposition.isFormNormalEquations());
+    }
+
+    /**
+     * Create a Gauss Newton optimizer that uses the given matrix decomposition algorithm
+     * to solve the normal equations.
+     *
+     * @param decomposer          the decomposition algorithm to use.
+     * @param formNormalEquations whether the normal equations should be explicitly
+     *                            formed. If {@code true} then {@code decomposer} is used
+     *                            to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
+     *                            {@code decomposer} is used to solve Jx=r. If {@code
+     *                            decomposer} can only solve square systems then this
+     *                            parameter should be {@code true}.
+     */
+    public GaussNewtonOptimizer(final MatrixDecomposer decomposer,
+                                final boolean formNormalEquations) {
+        this(null, decomposer, formNormalEquations);
+    }
+
+    /**
+     * Bridge constructor until the deprecated field can be removed.
+     *
+     * @param decomposition       the value of the deprecated field.
+     * @param decomposer          to use.
+     * @param formNormalEquations explicitly or not.
+     */
+    @Deprecated
+    private GaussNewtonOptimizer(final Decomposition decomposition,
+                                 final MatrixDecomposer decomposer,
+                                 final boolean formNormalEquations) {
         this.decomposition = decomposition;
+        this.decomposer = decomposer;
+        this.formNormalEquations = formNormalEquations;
     }
 
     /**
      * Get the matrix decomposition algorithm used to solve the normal equations.
      *
-     * @return the matrix {@link Decomposition} algoritm.
+     * @return the matrix {@link Decomposition} algorithm. May be {@code null}.
+     * @deprecated Use {@link #getDecomposer()} and {@link #isFormNormalEquations()}
+     * instead.
      */
+    @Deprecated
     public Decomposition getDecomposition() {
         return this.decomposition;
     }
@@ -205,9 +317,59 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
      *
      * @param newDecomposition the {@link Decomposition} algorithm to use.
      * @return a new instance.
+     * @deprecated Use {@link #withDecomposer(MatrixDecomposer)} and {@link
+     * #withFormNormalEquations(boolean)} instead. the new methods allow the numerical
+     * tolerance of the decomposition to be set.
      */
+    @Deprecated
     public GaussNewtonOptimizer withDecomposition(final Decomposition newDecomposition) {
         return new GaussNewtonOptimizer(newDecomposition);
+    }
+
+    /**
+     * Get the matrix decomposition algorithm.
+     *
+     * @return the decomposition algorithm.
+     */
+    public MatrixDecomposer getDecomposer() {
+        return decomposer;
+    }
+
+    /**
+     * Configure the matrix decomposition algorithm.
+     *
+     * @param decomposer the decomposition algorithm to use.
+     * @return a new instance.
+     */
+    public GaussNewtonOptimizer withDecomposer(final MatrixDecomposer decomposer) {
+        return new GaussNewtonOptimizer(decomposer, this.isFormNormalEquations());
+    }
+
+    /**
+     * Get if the normal equations are explicitly formed.
+     *
+     * @return if the normal equations should be explicitly formed. If {@code true} then
+     * {@code decomposer} is used to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
+     * {@code decomposer} is used to solve Jx=r.
+     */
+    public boolean isFormNormalEquations() {
+        return formNormalEquations;
+    }
+
+    /**
+     * Configure if the normal equations should be explicitly formed.
+     *
+     * @param formNormalEquations whether the normal equations should be explicitly
+     *                            formed. If {@code true} then {@code decomposer} is used
+     *                            to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
+     *                            {@code decomposer} is used to solve Jx=r. If {@code
+     *                            decomposer} can only solve square systems then this
+     *                            parameter should be {@code true}.
+     * @return a new instance.
+     */
+    public GaussNewtonOptimizer withFormNormalEquations(
+            final boolean formNormalEquations) {
+        return new GaussNewtonOptimizer(this.getDecomposer(), formNormalEquations);
     }
 
     /** {@inheritDoc} */
@@ -249,7 +411,25 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
             }
 
             // solve the linearized least squares problem
-            final RealVector dX = this.decomposition.solve(weightedJacobian, currentResiduals);
+            final RealMatrix lhs; // left hand side
+            final RealVector rhs; // right hand side
+            if (this.formNormalEquations) {
+                final Pair<RealMatrix, RealVector> normalEquation =
+                        computeNormalMatrix(weightedJacobian, currentResiduals);
+                lhs = normalEquation.getFirst();
+                rhs = normalEquation.getSecond();
+            } else {
+                lhs = weightedJacobian;
+                rhs = currentResiduals;
+            }
+            final RealVector dX;
+            try {
+                dX = this.decomposer.decompose(lhs).solve(rhs);
+            } catch (MathIllegalArgumentException e) {
+                // change exception message
+                throw new MathIllegalStateException(
+                        LocalizedOptimFormats.UNABLE_TO_SOLVE_SINGULAR_PROBLEM, e);
+            }
             // update the estimated parameters
             currentPoint = currentPoint.add(dX);
         }
@@ -259,7 +439,8 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
     @Override
     public String toString() {
         return "GaussNewtonOptimizer{" +
-                "decomposition=" + decomposition +
+                "decomposer=" + decomposer +
+                ", formNormalEquations=" + formNormalEquations +
                 '}';
     }
 

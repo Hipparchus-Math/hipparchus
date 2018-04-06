@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Optim Release Notes</title>
   </properties>
   <body>
+    <release version="1.3" date="TBD" description="TBD">
+      <action dev="evan" type="update">
+        Use the new MatrixDecomposer in GaussNewtonOptimizer. Deprecate Decomposition.
+      </action>
+    </release>
     <release version="1.2" date="2017-10-25" description="This is a maintenance release.">
        <action dev="luc" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,
