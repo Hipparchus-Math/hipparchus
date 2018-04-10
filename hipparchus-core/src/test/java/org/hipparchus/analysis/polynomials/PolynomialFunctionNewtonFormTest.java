@@ -25,6 +25,7 @@ import org.hipparchus.analysis.differentiation.DSFactory;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.polynomials.PolynomialFunctionNewtonForm;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.Decimal64;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -56,7 +57,7 @@ public final class PolynomialFunctionNewtonFormTest {
         z = 4.5; expected = 2.75; result = p.value(z);
         Assert.assertEquals(expected, result, tolerance);
 
-        z = 6.0; expected = 5.0; result = p.value(z);
+        z = 6.0; expected = 5.0; result = p.value(new Decimal64(z)).getReal();
         Assert.assertEquals(expected, result, tolerance);
 
         Assert.assertEquals(1, p.degree());

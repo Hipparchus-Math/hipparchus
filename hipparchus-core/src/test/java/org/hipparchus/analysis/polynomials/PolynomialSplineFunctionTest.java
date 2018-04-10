@@ -23,10 +23,10 @@ package org.hipparchus.analysis.polynomials;
 
 import java.util.Arrays;
 
-import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.util.Decimal64;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -97,7 +97,7 @@ public class PolynomialSplineFunctionTest {
     public void testValues() {
         PolynomialSplineFunction spline =
             new PolynomialSplineFunction(knots, polynomials);
-        UnivariateFunction dSpline = spline.polynomialSplineDerivative();
+        PolynomialSplineFunction dSpline = spline.polynomialSplineDerivative();
 
         /**
          * interior points -- spline value at x should equal p(x - knot)
@@ -120,7 +120,7 @@ public class PolynomialSplineFunctionTest {
             Assert.assertEquals("spline function evaluation failed for knot=" + knots[i],
                     polynomials[i].value(0), spline.value(knots[i]), tolerance);
             Assert.assertEquals("spline function evaluation failed for knot=" + knots[i],
-                    dp.value(0), dSpline.value(knots[i]), tolerance);
+                    dp.value(0), dSpline.value(new Decimal64(knots[i])).getReal(), tolerance);
         }
 
         try { //outside of domain -- under min

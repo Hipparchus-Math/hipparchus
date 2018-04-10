@@ -22,13 +22,14 @@
 
 package org.hipparchus.analysis.solvers;
 
+import org.hipparchus.RealFieldElement;
+import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.analysis.RealFieldUnivariateFunction;
-import org.hipparchus.analysis.solvers.AllowedSolution;
 import org.hipparchus.dfp.Dfp;
 import org.hipparchus.dfp.DfpField;
 import org.hipparchus.dfp.DfpMath;
-import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,24 +60,24 @@ public final class FieldBracketingNthOrderBrentSolverTest {
         FieldBracketingNthOrderBrentSolver<Dfp> solver =
                 new FieldBracketingNthOrderBrentSolver<Dfp>(relativeAccuracy, absoluteAccuracy,
                                                             field.newDfp(1.0e-20), 20);
-        RealFieldUnivariateFunction<Dfp> f = new RealFieldUnivariateFunction<Dfp>() {
-            public Dfp value(Dfp x) {
-                Dfp one     = field.getOne();
-                Dfp oneHalf = one.divide(2);
-                Dfp xMo     = x.subtract(one);
-                Dfp xMh     = x.subtract(oneHalf);
-                Dfp xPh     = x.add(oneHalf);
-                Dfp xPo     = x.add(one);
+        FieldUnivariateFunction f = new FieldUnivariateFunction() {
+            public <T extends RealFieldElement<T>> T value(T x) {
+                T one     = x.getField().getOne();
+                T oneHalf = one.divide(2);
+                T xMo     = x.subtract(one);
+                T xMh     = x.subtract(oneHalf);
+                T xPh     = x.add(oneHalf);
+                T xPo     = x.add(one);
                 return xMo.multiply(xMh).multiply(x).multiply(xPh).multiply(xPo);
             }
         };
 
-        Dfp result = solver.solve(20, f, field.newDfp(0.2), field.newDfp(0.9),
+        Dfp result = solver.solve(20, f.toRealFieldUnivariateFunction(field), field.newDfp(0.2), field.newDfp(0.9),
                                   field.newDfp(0.4), AllowedSolution.BELOW_SIDE);
         Assert.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
         Assert.assertTrue(f.value(result).negativeOrNull());
         Assert.assertTrue(result.subtract(field.newDfp(0.5)).subtract(solver.getAbsoluteAccuracy()).positiveOrNull());
-        result = solver.solve(20, f, field.newDfp(-0.9), field.newDfp(-0.2),
+        result = solver.solve(20, f.toRealFieldUnivariateFunction(field), field.newDfp(-0.9), field.newDfp(-0.2),
                               field.newDfp(-0.4), AllowedSolution.ABOVE_SIDE);
         Assert.assertTrue(f.value(result).abs().lessThan(solver.getFunctionValueAccuracy()));
         Assert.assertTrue(f.value(result).positiveOrNull());

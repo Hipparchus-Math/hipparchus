@@ -24,6 +24,7 @@ package org.hipparchus.analysis.polynomials;
 import org.hipparchus.UnitTestUtils;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.random.RandomDataGenerator;
+import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -74,14 +75,14 @@ public final class PolynomialFunctionTest {
         PolynomialFunction f = new PolynomialFunction(c);
 
         // verify that we are equal to c[0] when x=0
-        Assert.assertEquals(f.value(0), c[0], tolerance);
+        Assert.assertEquals(f.value(new Decimal64(0)).getReal(), c[0], tolerance);
 
         // now check a few other places
-        Assert.assertEquals(-4.5, f.value(-1), tolerance);
-        Assert.assertEquals(-9, f.value(-2.5), tolerance);
-        Assert.assertEquals(0, f.value(0.5), tolerance);
-        Assert.assertEquals(3, f.value(1.5), tolerance);
-        Assert.assertEquals(7.5, f.value(3), tolerance);
+        Assert.assertEquals(-4.5, f.value(new Decimal64(-1)).getReal(), tolerance);
+        Assert.assertEquals(-9, f.value(new Decimal64(-2.5)).getReal(), tolerance);
+        Assert.assertEquals(0, f.value(new Decimal64(0.5)).getReal(), tolerance);
+        Assert.assertEquals(3, f.value(new Decimal64(1.5)).getReal(), tolerance);
+        Assert.assertEquals(7.5, f.value(new Decimal64(3)).getReal(), tolerance);
 
         Assert.assertEquals(f.degree(), 1);
 

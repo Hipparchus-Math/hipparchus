@@ -24,6 +24,8 @@ package org.hipparchus.analysis.polynomials;
 import java.io.Serializable;
 import java.util.Arrays;
 
+import org.hipparchus.RealFieldElement;
+import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.analysis.ParametricUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
@@ -40,7 +42,7 @@ import org.hipparchus.util.MathUtils;
  * is used to evaluate the function.</p>
  *
  */
-public class PolynomialFunction implements UnivariateDifferentiableFunction, Serializable {
+public class PolynomialFunction implements UnivariateDifferentiableFunction, FieldUnivariateFunction, Serializable {
     /**
      * Serialization identifier
      */
@@ -157,6 +159,26 @@ public class PolynomialFunction implements UnivariateDifferentiableFunction, Ser
             throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
         }
         DerivativeStructure result = t.getFactory().constant(coefficients[n - 1]);
+        for (int j = n - 2; j >= 0; j--) {
+            result = result.multiply(t).add(coefficients[j]);
+        }
+        return result;
+    }
+
+    /** {@inheritDoc}
+     * @throws MathIllegalArgumentException if {@code coefficients} is empty.
+     * @throws NullArgumentException if {@code coefficients} is {@code null}.
+     * @since 1.3
+     */
+    @Override
+    public <T extends RealFieldElement<T>> T value(final T t)
+        throws MathIllegalArgumentException, NullArgumentException {
+        MathUtils.checkNotNull(coefficients);
+        int n = coefficients.length;
+        if (n == 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.EMPTY_POLYNOMIALS_COEFFICIENTS_ARRAY);
+        }
+        T result = t.getField().getZero().add(coefficients[n - 1]);
         for (int j = n - 2; j >= 0; j--) {
             result = result.multiply(t).add(coefficients[j]);
         }

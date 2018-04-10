@@ -23,6 +23,8 @@ package org.hipparchus.analysis.polynomials;
 
 import java.util.Arrays;
 
+import org.hipparchus.RealFieldElement;
+import org.hipparchus.analysis.FieldUnivariateFunction;
 import org.hipparchus.analysis.differentiation.DerivativeStructure;
 import org.hipparchus.analysis.differentiation.UnivariateDifferentiableFunction;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -64,7 +66,7 @@ import org.hipparchus.util.MathUtils;
  * {@code polynomials[j](x - knot[j])}</li></ol>
  *
  */
-public class PolynomialSplineFunction implements UnivariateDifferentiableFunction {
+public class PolynomialSplineFunction implements UnivariateDifferentiableFunction, FieldUnivariateFunction {
     /**
      * Spline segment interval delimiters (knots).
      * Size is n + 1 for n segments.
@@ -165,6 +167,26 @@ public class PolynomialSplineFunction implements UnivariateDifferentiableFunctio
     @Override
     public DerivativeStructure value(final DerivativeStructure t) {
         final double t0 = t.getValue();
+        MathUtils.checkRangeInclusive(t0, knots[0], knots[n]);
+        int i = Arrays.binarySearch(knots, t0);
+        if (i < 0) {
+            i = -i - 2;
+        }
+        // This will handle the case where t is the last knot value
+        // There are only n-1 polynomials, so if t is the last knot
+        // then we will use the last polynomial to calculate the value.
+        if ( i >= polynomials.length ) {
+            i--;
+        }
+        return polynomials[i].value(t.subtract(knots[i]));
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public <T extends RealFieldElement<T>> T value(final T t) {
+        final double t0 = t.getReal();
         MathUtils.checkRangeInclusive(t0, knots[0], knots[n]);
         int i = Arrays.binarySearch(knots, t0);
         if (i < 0) {

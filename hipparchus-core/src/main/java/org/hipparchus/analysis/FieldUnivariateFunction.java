@@ -21,63 +21,33 @@
  */
 package org.hipparchus.analysis;
 
+import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 
 /**
- * An interface representing a univariate real function.
+ * An interface representing a univariate real function for any field type.
  * <p>
- * When a <em>user-defined</em> function encounters an error during
- * evaluation, the {@link #value(RealFieldElement) value} method should throw a
- * <em>user-defined</em> unchecked exception.</p>
- * <p>
- * The following code excerpt shows the recommended way to do that using
- * a root solver as an example, but the same construct is applicable to
- * ODE integrators or optimizers.
- *
- * <pre>
- * private static class LocalException extends RuntimeException {
- *     // The x value that caused the problem.
- *     private final SomeFieldType x;
- *
- *     public LocalException(SomeFieldType x) {
- *         this.x = x;
- *     }
- *
- *     public double getX() {
- *         return x;
- *     }
- * }
- *
- * private static class MyFunction implements FieldUnivariateFunction&lt;SomeFieldType&gt; {
- *     public SomeFieldType value(SomeFieldType x) {
- *         SomeFieldType y = hugeFormula(x);
- *         if (somethingBadHappens) {
- *           throw new LocalException(x);
- *         }
- *         return y;
- *     }
- * }
- *
- * public void compute() {
- *     try {
- *         solver.solve(maxEval, new MyFunction(a, b, c), min, max);
- *     } catch (LocalException le) {
- *         // Retrieve the x value.
- *     }
- * }
- * </pre>
- *<p>
- * As shown, the exception is local to the user's code and it is guaranteed
- * that Hipparchus will not catch it.</p>
- *
- * @param <T> the type of the field elements
+ * This interface is more general than {@link RealFieldUnivariateFunction} because
+ * the same instance can accept any field type, not just one.
+ * </p>
  * @see UnivariateFunction
- * @see FieldUnivariateFunction
+ * @see RealFieldUnivariateFunction
+ * @since 1.3
  */
-public interface RealFieldUnivariateFunction<T extends RealFieldElement<T>> {
+public interface FieldUnivariateFunction {
+
+    /** Convert to a {@link RealFieldUnivariateFunction} with a specific type.
+     * @param field field for the argument and value
+     * @return converted function
+     */
+    default <T extends RealFieldElement<T>> RealFieldUnivariateFunction<T> toRealFieldUnivariateFunction(Field<T> field) {
+        return this::value;
+    }
+
     /**
      * Compute the value of the function.
      *
+     * @param <T> the type of the field elements
      * @param x Point at which the function value should be computed.
      * @return the value of the function.
      * @throws IllegalArgumentException when the activated method itself can
@@ -87,5 +57,6 @@ public interface RealFieldUnivariateFunction<T extends RealFieldElement<T>> {
      * usually the consequence of checking the actual parameters passed to
      * the method.
      */
-    T value(T x);
+    <T extends RealFieldElement<T>> T value(T x);
+
 }
