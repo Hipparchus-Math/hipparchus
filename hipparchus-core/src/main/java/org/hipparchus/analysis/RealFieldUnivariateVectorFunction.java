@@ -16,30 +16,21 @@
  */
 package org.hipparchus.analysis;
 
-import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 
 /**
  * An interface representing a univariate vectorial function for any field type.
  *
+     * @param <T> the type of the field elements
  * @since 1.3
  */
-public interface FieldUnivariateVectorFunction {
-
-    /** Convert to a {@link RealFieldUnivariateVectorFunction} with a specific type.
-     * @param field field for the argument and value
-     * @return converted function
-     */
-    default <T extends RealFieldElement<T>> RealFieldUnivariateVectorFunction<T> toRealFieldUnivariateVectorFunction(Field<T> field) {
-        return this::value;
-    }
+public interface RealFieldUnivariateVectorFunction<T extends RealFieldElement<T>>  {
 
     /**
      * Compute the value for the function.
-     * @param <T> the type of the field elements
      * @param x the point for which the function value should be computed
      * @return the value
      */
-    <T extends RealFieldElement<T>> T[] value(T x);
+    T[] value(T x);
 
 }

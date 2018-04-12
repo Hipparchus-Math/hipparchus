@@ -1,8 +1,8 @@
 /*
- * Licensed to the Apache Software Foundation (ASF) under one or more
+ * Licensed to the Hipparchus project under one or more
  * contributor license agreements.  See the NOTICE file distributed with
  * this work for additional information regarding copyright ownership.
- * The ASF licenses this file to You under the Apache License, Version 2.0
+ * The Hipparchus project licenses this file to You under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with
  * the License.  You may obtain a copy of the License at
  *
@@ -14,13 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-/*
- * This is not the original file distributed by the Apache Software Foundation
- * It has been modified by the Hipparchus project
- */
 package org.hipparchus.analysis;
 
+import org.hipparchus.Field;
 import org.hipparchus.RealFieldElement;
 
 /**
@@ -29,6 +25,14 @@ import org.hipparchus.RealFieldElement;
  * @since 1.3
  */
 public interface FieldUnivariateMatrixFunction {
+
+    /** Convert to a {@link RealFieldUnivariateMatrixFunction} with a specific type.
+     * @param field field for the argument and value
+     * @return converted function
+     */
+    default <T extends RealFieldElement<T>> RealFieldUnivariateMatrixFunction<T> toRealFieldUnivariateMatrixFunction(Field<T> field) {
+        return this::value;
+    }
 
     /**
      * Compute the value for the function.
