@@ -41,6 +41,7 @@ import org.hipparchus.random.MersenneTwister;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.random.Well19937a;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -2021,6 +2022,97 @@ public class FastMathTest {
         assertTrue(x == Math.rint(x));
         assertTrue(x == FastMath.round(x));
         assertTrue(x == Math.round(x));
+    }
+
+    @Test
+    public void testFMADouble() {
+        // examples from official javadoc
+        Assert.assertEquals(Double.doubleToRawLongBits(+0.0),
+                            Double.doubleToRawLongBits(FastMath.fma(-0.0, +0.0, +0.0)));
+        Assert.assertEquals(Double.doubleToRawLongBits(-0.0),
+                            Double.doubleToRawLongBits(-0.0 * +0.0));
+
+        // computed using Emacs calculator with 50 digits
+        double a   =  0x1.123456789abcdp-04;
+        double b   =  0x1.dcba987654321p+01;
+        double c   = -0x1.fea12e1ce4000p-03;
+        double fma =  0x1.fb864494872dap-44;
+        Assert.assertEquals(fma, FastMath.fma(a, b, c), 1.0e-50);
+        Assert.assertTrue(FastMath.fma(a, b, c) - (a * b + c) > 5.0e-18);
+
+    }
+
+    @Test
+    public void testFMAFloat() {
+        // examples from official javadoc
+        Assert.assertEquals(Float.floatToRawIntBits(+0.0f),
+                            Float.floatToRawIntBits(FastMath.fma(-0.0f, +0.0f, +0.0f)));
+        Assert.assertEquals(Float.floatToRawIntBits(-0.0f),
+                            Float.floatToRawIntBits(-0.0f * +0.0f));
+
+        // computed using Emacs calculator with 50 digits
+        float a   =  0x1.123456p-04f;
+        float b   =  0x1.654322p+01f;
+        float c   = -0x1.7eaa00p-03f;
+        float fma =  0x1.c816eap-20f;
+        Assert.assertEquals(fma, FastMath.fma(a, b, c), 1.0e-20f);
+        Assert.assertTrue(FastMath.fma(a, b, c) - (a * b + c) > 3.0e-10f);
+
+    }
+
+    @Test
+    public void testMultiplyHigh() {
+
+        // a * b = Long.MAX_VALUE (exactly), multiplication just fits in a 64 bits primitive long
+        final long a = 153092023l;
+        final long b = 60247241209l;
+        Assert.assertEquals(Long.MAX_VALUE, a * b);
+        Assert.assertEquals(0, FastMath.multiplyHigh(a, b));
+
+        // as we just slightly exceeds Long.MAX_VALUE, there are no extra bits,
+        // but sign is nevertheless wrong because the most significant bit is set to 1
+        final long c1 = 1l << 31;
+        final long c2 = 1l << 32;
+        Assert.assertEquals(0, FastMath.multiplyHigh(c1, c2)); // no extra bits
+        Assert.assertEquals(Long.MIN_VALUE, c1 * c2);          // but result is negative despite c1 and c2 are both positive
+
+        // some small and large integers
+        final long[] values = new long[] {
+            -1l, 0l, 1l, 10l,
+            0x100000000l, 0x200000000l, 0x400000000l, -0x100000000l, -0x200000000l, -0x400000000l,
+            ((long) Integer.MIN_VALUE) -1, ((long) Integer.MIN_VALUE), ((long) Integer.MIN_VALUE) +1,
+            ((long) Integer.MAX_VALUE) -1, ((long) Integer.MAX_VALUE), ((long) Integer.MAX_VALUE) +1,
+            Long.MIN_VALUE, Long.MAX_VALUE
+        };
+        for (final long p : values) {
+            for (long q : values) {
+                Assert.assertEquals(poorManMultiplyHigh(p, q), FastMath.multiplyHigh(p, q));
+            }
+        }
+
+        // random values
+        RandomGenerator random = new Well1024a(0x082a2316178e5e9el);
+        for (int i = 0; i < 10000000; ++i) {
+            long m = random.nextLong();
+            long n = random.nextLong();
+            Assert.assertEquals(poorManMultiplyHigh(m, n), FastMath.multiplyHigh(m, n));
+        }
+    }
+
+    private static long poorManMultiplyHigh(final long p, final long q) {
+
+        BigInteger bigP = BigInteger.valueOf(p);
+        if (p < 0) {
+            bigP = BigInteger.ONE.shiftLeft(128).add(bigP);
+        }
+
+        BigInteger bigQ = BigInteger.valueOf(q);
+        if (q < 0) {
+            bigQ = BigInteger.ONE.shiftLeft(128).add(bigQ);
+        }
+
+        return bigP.multiply(bigQ).shiftRight(64).longValue();
+
     }
 
 }

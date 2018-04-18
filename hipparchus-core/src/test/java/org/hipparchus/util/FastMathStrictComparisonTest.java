@@ -186,31 +186,35 @@ public class FastMathStrictComparisonTest {
                 reportFailedResults(mathMethod, params, expected, actual, entries);
             }
         } catch (IllegalArgumentException e) {
+            System.out.println(mathMethod);
+            System.out.println(fastMethod);
+            System.out.print("params = ");
+            for (Object o : params) {
+                System.out.print(" " + o);
+            }
+            System.out.println();
+            System.out.print("entries = ");
+            for (int i : entries) {
+                System.out.print(" " + i);
+            }
+            System.out.println();
+            e.printStackTrace();
             Assert.fail(mathMethod+" "+e);
         }
     }
 
     private static void setupMethodCall(Method mathMethod, Method fastMethod,
-            Type[] types, Object[][] valueArrays) throws Exception {
+                                        Type[] types, Object[][] valueArrays) throws Exception {
         Object[] params = new Object[types.length];
-        int entry1 = 0;
         int[] entries = new int[types.length];
-        for(Object d : valueArrays[0]) {
-            entry1++;
-            params[0] = d;
-            entries[0] = entry1;
-            if (params.length > 1){
-                int entry2 = 0;
-                for(Object d1 : valueArrays[1]) {
-                    entry2++;
-                    params[1] = d1;
-                    entries[1] = entry2;
-                    callMethods(mathMethod, fastMethod, params, entries);
-                }
-            } else {
-                callMethods(mathMethod, fastMethod, params, entries);
+        for (int i = 0; i < params.length; ++i) {
+            for (int j = 0; j < valueArrays[i].length; ++j) {
+                Object d = valueArrays[i][j];
+                params[i] = d;
+                entries[i] = j;
             }
         }
+        callMethods(mathMethod, fastMethod, params, entries);
     }
 
     @Parameters

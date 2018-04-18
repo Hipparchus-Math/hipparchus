@@ -4005,6 +4005,17 @@ public class FastMath {
      * @param b second number to multiply
      * @return a*b if no overflows occur
      * @exception MathRuntimeException if an overflow occurs
+     * @since 1.3
+     */
+    public static long multiplyExact(final long a, final int b) {
+        return multiplyExact(a, (long) b);
+    }
+
+    /** Multiply two numbers, detecting overflows.
+     * @param a first number to multiply
+     * @param b second number to multiply
+     * @return a*b if no overflows occur
+     * @exception MathRuntimeException if an overflow occurs
      */
     public static long multiplyExact(final long a, final long b) {
         if (((b  >  0l)  && (a > Long.MAX_VALUE / b || a < Long.MIN_VALUE / b)) ||
@@ -4013,6 +4024,64 @@ public class FastMath {
                 throw new MathRuntimeException(LocalizedCoreFormats.OVERFLOW_IN_MULTIPLICATION, a, b);
             }
             return a * b;
+    }
+
+    /** Multiply two integers and give an exact result without overflow.
+     * @param a first factor
+     * @param b second factor
+     * @return a * b exactly
+     * @since 1.3
+     */
+    public static long multiplyFull(final int a, final int b) {
+        return ((long) a) * ((long) b);
+    }
+
+    /** Multiply two long integers and give the 64 most significant bits of the result.
+     * <p>
+     * Beware that as Java primitive long are always considered to be signed, there are some
+     * intermediate values {@code a} and {@code b} for which {@code a * b} exceeds {@code Long.MAX_VALUE}
+     * but this method will still return 0l. This happens for example for {@code a = 2³¹} and
+     * {@code b = 2³²} as {@code a * b = 2⁶³ = Long.MAX_VALUE + 1}, so it exceeds the max value
+     * for a long, but still fits in 64 bits, so this method correctly returns 0l in this case,
+     * but multiplication result would be considered negative (and in fact equal to {@code Long.MIN_VALUE}
+     * </p>
+     * @param a first factor
+     * @param b second factor
+     * @return a * b / 2<sup>64</sup>
+     * @since 1.3
+     */
+    public static long multiplyHigh(final long a, final long b) {
+
+        // all computations below are performed on unsigned numbers because we start
+        // by using logical shifts (and not arithmetic shifts). We will therefore
+        // need to take care of sign before returning
+        // a negative long n between -2⁶³ and -1, interpreted as an unsigned long
+        // corresponds to 2⁶⁴ + n (which is between 2⁶³ and 2⁶⁴-1)
+        // so if this number is multiplied by p, what we really compute
+        // is (2⁶⁴ + n) * p = 2⁶⁴ * p + n * p, therefore the part above 64 bits
+        // will have an extra term p that we will need to remove
+        final long tobeRemoved = ((a < 0) ? b : 0) + ((b < 0) ? a : 0);
+
+        // split numbers in two 32 bits parts
+        final long aHigh  = a >>> 32;
+        final long aLow   = a & 0xFFFFFFFFl;
+        final long bHigh  = b >>> 32;
+        final long bLow   = b & 0xFFFFFFFFl;
+
+        // ab = aHigh * bHigh * 2⁶⁴ + (aHigh * bLow + aLow * bHigh) * 2³² + aLow * bLow
+        final long hh     = aHigh * bHigh;
+        final long hl1    = aHigh * bLow;
+        final long hl2    = aLow  * bHigh;
+        final long ll     = aLow  * bLow;
+
+        // adds up everything in the above 64 bit part, taking care to avoid overflow
+        final long hlHigh = (hl1 >>> 32) + (hl2 >>> 32);
+        final long hlLow  = (hl1 & 0xFFFFFFFFl) + (hl2 & 0xFFFFFFFFl);
+        final long carry  = (hlLow + (ll >>> 32)) >>> 32;
+        final long unsignedResult = hh + hlHigh + carry;
+
+        return unsignedResult - tobeRemoved;
+
     }
 
     /** Finds q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
@@ -4042,6 +4111,23 @@ public class FastMath {
             return (a / b) - 1;
         }
 
+    }
+
+    /** Finds q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
+     * <p>
+     * This methods returns the same value as integer division when
+     * a and b are same signs, but returns a different value when
+     * they are opposite (i.e. q is negative).
+     *
+     * @param a dividend
+     * @param b divisor
+     * @return q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
+     * @exception MathRuntimeException if b == 0
+     * @see #floorMod(long, int)
+     * @since 1.3
+     */
+    public static long floorDiv(final long a, final int b) throws MathRuntimeException {
+        return floorDiv(a, (long) b);
     }
 
     /** Finds q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
@@ -4100,6 +4186,23 @@ public class FastMath {
             return b + m;
         }
 
+    }
+
+    /** Finds r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
+     * <p>
+     * This methods returns the same value as integer modulo when
+     * a and b are same signs, but returns a different value when
+     * they are opposite (i.e. q is negative).
+     * </p>
+     * @param a dividend
+     * @param b divisor
+     * @return r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
+     * @exception MathRuntimeException if b == 0
+     * @see #floorDiv(long, int)
+     * @since 1.3
+     */
+    public static int floorMod(final long a, final int b) {
+        return (int) floorMod(a, (long) b);
     }
 
     /** Finds r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
@@ -4199,6 +4302,49 @@ public class FastMath {
     public static int getExponent(final float f) {
         // NaN and Infinite will return the same exponent anywho so can use raw bits
         return ((Float.floatToRawIntBits(f) >>> 23) & 0xff) - 127;
+    }
+
+    /** Compute Fused-multiply-add operation a * b + c.
+     * <p>
+     * This method was introduced in the regular {@code Math} and {@code StrictMath}
+     * methods with Java 9, and then added to Hipparchus for consistency. However,
+     * a more general method was available in Hipparchus that also allow to repeat
+     * this computation across several terms: {@link MathArrays#linearCombination(double[], double[])}.
+     * The linear combination method should probably be preferred in most cases.
+     * </p>
+     * @param a first factor
+     * @param b second factor
+     * @param c additive term
+     * @return a * b + c, using extended precision in the multiplication
+     * @see MathArrays#linearCombination(double[], double[])
+     * @see MathArrays#linearCombination(double, double, double, double)
+     * @see MathArrays#linearCombination(double, double, double, double, double, double)
+     * @see MathArrays#linearCombination(double, double, double, double, double, double, double, double)
+     * @since 1.3
+     */
+    public static double fma(final double a, final double b, final double c) {
+        return MathArrays.linearCombination(a, b, 1.0, c);
+    }
+
+    /** Compute Fused-multiply-add operation a * b + c.
+     * <p>
+     * This method was introduced in the regular {@code Math} and {@code StrictMath}
+     * methods with Java 9, and then added to Hipparchus for consistency. However,
+     * a more general method was available in Hipparchus that also allow to repeat
+     * this computation across several terms: {@link MathArrays#linearCombination(double[], double[])}.
+     * The linear combination method should probably be preferred in most cases.
+     * </p>
+     * @param a first factor
+     * @param b second factor
+     * @param c additive term
+     * @return a * b + c, using extended precision in the multiplication
+     * @see MathArrays#linearCombination(double[], double[])
+     * @see MathArrays#linearCombination(double, double, double, double)
+     * @see MathArrays#linearCombination(double, double, double, double, double, double)
+     * @see MathArrays#linearCombination(double, double, double, double, double, double, double, double)
+     */
+    public static float fma(final float a, final float b, final float c) {
+        return (float) MathArrays.linearCombination(a, b, 1.0, c);
     }
 
     /** Compute the square root of a number.
