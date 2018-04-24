@@ -37,9 +37,10 @@ public class WilcoxonSignedRankTestTest {
     @Test
     public void testWilcoxonSignedRankSimple() {
         /*
-         * Target values computed using R version 2.11.1 x <- c(1.83, 0.50,
-         * 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30) y <- c(0.878, 0.647, 0.598,
-         * 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
+         * Hollandar and Wolfe data from R docs.
+         * Target values computed using R version 3.4.4.
+         * x <- c(1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30)
+         * y <- c(0.878, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29)
          */
         final double x[] = {
             1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30
@@ -49,9 +50,11 @@ public class WilcoxonSignedRankTestTest {
         };
 
         /*
-         * EXACT: wilcox.test(x, y, alternative = "two.sided", mu = 0, paired =
-         * TRUE, exact = TRUE, correct = FALSE) V = 40, p-value = 0.03906
-         * Corresponds to the value obtained in R.
+         * EXACT:
+         * wilcox.test(x, y, alternative = "two.sided", mu = 0, paired = TRUE
+         * exact = TRUE, correct = FALSE)
+         * V = 40, p-value = 0.03906
+         * Expected values are from R, version 3.4.4.
          */
         Assert.assertEquals(40, testStatistic.wilcoxonSignedRank(x, y), 1e-10);
         Assert.assertEquals(0.03906,
@@ -59,16 +62,64 @@ public class WilcoxonSignedRankTestTest {
                             1e-5);
 
         /*
-         * ASYMPTOTIC: wilcox.test(x, y, alternative = "two.sided", mu = 0,
-         * paired = TRUE, exact = FALSE, correct = FALSE) V = 40, p-value =
-         * 0.03815 This is not entirely the same due to different corrects, e.g.
-         * http://mlsc.lboro.ac.uk/resources/statistics/wsrt.pdf and
-         * src/library/stats/R/wilcox.test.R in the R source
+         * ASYMPTOTIC:
+         * wilcox.test(x, y, alternative = "two.sided", mu = 0,
+         * paired = TRUE, exact = FALSE, correct = TRUE)
+         * V = 40, p-value = 0.044010984013
          */
         Assert.assertEquals(40, testStatistic.wilcoxonSignedRank(x, y), 1e-10);
-        Assert.assertEquals(0.0329693812,
+        Assert.assertEquals(0.044010984013,
                             testStatistic.wilcoxonSignedRankTest(x, y, false),
                             1e-10);
+    }
+
+    @Test
+    public void testWilcoxonSignedRankSimple2() {
+        /*
+         * x <- c(0.80, 0.83, 1.89, 1.04, 1.45, 1.38, 1.91)
+         * y <- c(1.15, 0.88, 0.90, 0.74, 1.21, 2.0, 1.72)
+         * Expected values are from R, version 3.4.4.
+         */
+        final double[] x = {0.80, 0.83, 1.89, 1.04, 1.45, 1.38, 1.91};
+        final double[] y = {1.15, 0.88, 0.90, 0.74, 1.21, 2.0, 1.72};
+        Assert.assertEquals(16,  testStatistic.wilcoxonSignedRank(x, y), 0);
+        // Exact
+        Assert.assertEquals(0.8125,
+                            testStatistic.wilcoxonSignedRankTest(x, y, true),
+                            1e-10);
+        // Asymptotic
+        Assert.assertEquals(0.79984610566,
+                            testStatistic.wilcoxonSignedRankTest(x, y, false),
+                            1e-10);
+    }
+
+
+    @Test
+    public void testWilcoxonSignedRankTiesDiscarded() {
+        /*
+         * Verify that tied pairs are discarded.
+         */
+        final double x[] = {
+            1.83, 0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30
+        };
+        final double y[] = {
+            1.83, 0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29
+        };
+        final double xp[] = {
+            0.50, 1.62, 2.48, 1.68, 1.88, 1.55, 3.06, 1.30
+        };
+        final double yp[] = {
+            0.647, 0.598, 2.05, 1.06, 1.29, 1.06, 3.14, 1.29
+        };
+        Assert.assertEquals(testStatistic.wilcoxonSignedRank(xp, yp),
+                            testStatistic.wilcoxonSignedRank(x, y),
+                            0);
+        Assert.assertEquals(testStatistic.wilcoxonSignedRankTest(xp, yp, true),
+                            testStatistic.wilcoxonSignedRankTest(x, y, true),
+                            0);
+        Assert.assertEquals(testStatistic.wilcoxonSignedRankTest(xp, yp, false),
+                            testStatistic.wilcoxonSignedRankTest(x, y, false),
+                            0);
     }
 
     @Test
@@ -139,7 +190,7 @@ public class WilcoxonSignedRankTestTest {
         }
 
         /*
-         * Samples not same size, i.e. cannot be pairred
+         * Samples not same size, i.e. cannot be paired
          */
         try {
             testStatistic.wilcoxonSignedRankTest(new double[] {
@@ -225,4 +276,22 @@ public class WilcoxonSignedRankTestTest {
             // expected
         }
     }
+
+    @Test(expected = MathIllegalArgumentException.class)
+    public void testBadInputAllTies() {
+        testStatistic.wilcoxonSignedRankTest(new double[] {
+            1.0, 2.0, 3.0
+        }, new double[] {
+            1.0, 2.0, 3.0
+        }, true);
+    }
+
+    @Test
+    public void testDegenerateOnePair() {
+        final double[] x = {1};
+        final double[] y = {2};
+        Assert.assertEquals(1.0, testStatistic.wilcoxonSignedRank(x,y), 0);
+        Assert.assertEquals(1.0, testStatistic.wilcoxonSignedRankTest(x,y, true), 0);
+    }
+
 }

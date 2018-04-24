@@ -21,6 +21,9 @@
  */
 package org.hipparchus.stat.inference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
@@ -34,16 +37,20 @@ import org.hipparchus.util.MathArrays;
 
 /**
  * An implementation of the Wilcoxon signed-rank test.
+ *
+ * This implementation currently handles only paired (equal length) samples
+ * and discards tied pairs from the analysis. The latter behavior differs from
+ * the R implementation of wilcox.test and corresponds to the "wilcox"
+ * zero_method configurable in scipy.stats.wilcoxon.
  */
 public class WilcoxonSignedRankTest {
 
     /** Ranking algorithm. */
-    private NaturalRanking naturalRanking;
+    private final NaturalRanking naturalRanking;
 
     /**
      * Create a test instance where NaN's are left in place and ties get the
-     * average of applicable ranks. Use this unless you are very sure of what
-     * you are doing.
+     * average of applicable ranks.
      */
     public WilcoxonSignedRankTest() {
         naturalRanking = new NaturalRanking(NaNStrategy.FIXED,
@@ -52,7 +59,6 @@ public class WilcoxonSignedRankTest {
 
     /**
      * Create a test instance using the given strategies for NaN's and ties.
-     * Only use this if you are sure of what you are doing.
      *
      * @param nanStrategy specifies the strategy that should be used for
      *        Double.NaN's
@@ -64,17 +70,21 @@ public class WilcoxonSignedRankTest {
     }
 
     /**
-     * Ensures that the provided arrays fulfills the assumptions.
+     * Ensures that the provided arrays fulfills the assumptions. Also computes
+     * and returns the number of tied pairs (i.e., zero differences).
      *
      * @param x first sample
      * @param y second sample
+     * @return the number of indices where x[i] == y[i]
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are
-     *         zero-length.
+     *         zero-length
      * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      *         have the same length.
+     * @throws MathIllegalArgumentException if all pairs are tied (i.e., if no
+     *         data remains when tied pairs have been removed.
      */
-    private void ensureDataConformance(final double[] x, final double[] y)
+    private int ensureDataConformance(final double[] x, final double[] y)
         throws MathIllegalArgumentException, NullArgumentException {
 
         if (x == null || y == null) {
@@ -84,23 +94,37 @@ public class WilcoxonSignedRankTest {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
         MathArrays.checkEqualLength(y, x);
+        int nTies = 0;
+        for (int i = 0; i < x.length; i++) {
+            if (x[i] == y[i]) {
+                nTies++;
+            }
+        }
+        if (x.length - nTies == 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.INSUFFICIENT_DATA);
+        }
+        return nTies;
     }
 
     /**
-     * Calculates y[i] - x[i] for all i
+     * Calculates y[i] - x[i] for all i, discarding ties.
      *
      * @param x first sample
      * @param y second sample
-     * @return z = y - x
+     * @return z = y - x (minus tied values)
      */
     private double[] calculateDifferences(final double[] x, final double[] y) {
-
-        final double[] z = new double[x.length];
-
+        final List<Double> differences = new ArrayList<>();
         for (int i = 0; i < x.length; ++i) {
-            z[i] = y[i] - x[i];
+            if (y[i] != x[i]) {
+                differences.add(y[i] - x[i]);
+            }
         }
-
+        final int nDiff = differences.size();
+        final double[] z = new double[nDiff];
+        for (int i = 0; i < nDiff; i++) {
+            z[i] = differences.get(i);
+        }
         return z;
     }
 
@@ -135,12 +159,12 @@ public class WilcoxonSignedRankTest {
     /**
      * Computes the
      * <a href="http://en.wikipedia.org/wiki/Wilcoxon_signed-rank_test">
-     * Wilcoxon signed ranked statistic</a> comparing mean for two related
+     * Wilcoxon signed ranked statistic</a> comparing means for two related
      * samples or repeated measurements on a single sample.
      * <p>
      * This statistic can be used to perform a Wilcoxon signed ranked test
      * evaluating the null hypothesis that the two related samples or repeated
-     * measurements on a single sample has equal mean.
+     * measurements on a single sample have equal mean.
      * </p>
      * <p>
      * Let X<sub>i</sub> denote the i'th individual of the first sample and
@@ -173,8 +197,6 @@ public class WilcoxonSignedRankTest {
 
         ensureDataConformance(x, y);
 
-        // throws IllegalArgumentException if x and y are not correctly
-        // specified
         final double[] z = calculateDifferences(x, y);
         final double[] zAbs = calculateAbsoluteDifferences(z);
 
@@ -188,34 +210,29 @@ public class WilcoxonSignedRankTest {
             }
         }
 
-        final int N = x.length;
-        final double Wminus = ((N * (N + 1)) / 2.0) - Wplus;
+        final int n = z.length;
+        final double Wminus = ((n * (n + 1)) / 2.0) - Wplus;
 
         return FastMath.max(Wplus, Wminus);
     }
 
     /**
-     * Algorithm inspired by
-     * http://www.fon.hum.uva.nl/Service/Statistics/Signed_Rank_Algorihms.html#C
-     * by Rob van Son, Institute of Phonetic Sciences & IFOTT, University of
-     * Amsterdam
+     * Calculates the p-value associated with a Wilcoxon signed rank statistic
+     * by enumerating all possible rank sums and counting the number that exceed
+     * the given value.
      *
-     * @param Wmax largest Wilcoxon signed rank value
-     * @param N number of subjects (corresponding to x.length)
+     * @param stat Wilcoxon signed rank statistic value
+     * @param n number of subjects (corresponding to x.length)
      * @return two-sided exact p-value
      */
-    private double calculateExactPValue(final double Wmax, final int N) {
-
-        // Total number of outcomes (equal to 2^N but a lot faster)
-        final int m = 1 << N;
-
+    private double calculateExactPValue(final double stat, final int n) {
+        final int m = 1 << n;
         int largerRankSums = 0;
-
         for (int i = 0; i < m; ++i) {
             int rankSum = 0;
 
             // Generate all possible rank sums
-            for (int j = 0; j < N; ++j) {
+            for (int j = 0; j < n; ++j) {
 
                 // (i >> j) & 1 extract i's j-th bit from the right
                 if (((i >> j) & 1) == 1) {
@@ -223,7 +240,7 @@ public class WilcoxonSignedRankTest {
                 }
             }
 
-            if (rankSum >= Wmax) {
+            if (rankSum >= stat) {
                 ++largerRankSums;
             }
         }
@@ -236,26 +253,33 @@ public class WilcoxonSignedRankTest {
     }
 
     /**
-     * @param Wmin smallest Wilcoxon signed rank value
-     * @param N number of subjects (corresponding to x.length)
+     * Computes an estimate of the (2-sided) p-value using the normal
+     * approximation. Includes a continuity correction in computing the
+     * correction factor.
+     *
+     * @param stat Wilcoxon rank sum statistic
+     * @param n number of subjects (corresponding to x.length minus any tied ranks)
      * @return two-sided asymptotic p-value
      */
-    private double calculateAsymptoticPValue(final double Wmin, final int N) {
+    private double calculateAsymptoticPValue(final double stat, final int n) {
 
-        final double ES = N * (N + 1) / 4.0;
+        final double ES = n * (n + 1) / 4.0;
 
         /*
          * Same as (but saves computations): final double VarW = ((double) (N *
          * (N + 1) * (2*N + 1))) / 24;
          */
-        final double VarS = ES * ((2 * N + 1) / 6.0);
+        final double VarS = ES * ((2 * n + 1) / 6.0);
 
-        // - 0.5 is a continuity correction
-        final double z = (Wmin - ES - 0.5) / FastMath.sqrt(VarS);
+        double z = stat - ES;
+        final double t = FastMath.signum(z);
+        z = (z - t * 0.5) / FastMath.sqrt(VarS);
 
-        // No try-catch or advertised exception because args are valid
+        // want 2-sided tail probability, so make sure z < 0
+        if (z > 0) {
+            z = -z;
+        }
         final NormalDistribution standardNormal = new NormalDistribution(0, 1);
-
         return 2 * standardNormal.cumulativeProbability(z);
     }
 
@@ -281,17 +305,26 @@ public class WilcoxonSignedRankTest {
      * ordered, so the comparisons greater than, less than, and equal to are
      * meaningful.</li>
      * </ul>
+     * <strong>Implementation notes</strong>:
+     * <ul>
+     * <li>Tied pairs are discarded from the data.</li>
+     * <li>When {@code exactPValue} is false, the normal approximation is used
+     * to estimate the p-value including a continuity correction factor.
+     * {@code wilcoxonSignedRankTest(x, y, true)} should give the same results
+     * as {@code  wilcox.test(x, y, alternative = "two.sided", mu = 0,
+     *     paired = TRUE, exact = FALSE, correct = TRUE)} in R (as long as
+     * there are no tied pairs in the data).</li>
+     * </ul>
      * </p>
      *
      * @param x the first sample
      * @param y the second sample
      * @param exactPValue if the exact p-value is wanted (only works for
-     *        x.length <= 30, if true and x.length > 30, this is ignored because
-     *        calculations may take too long)
+     *        x.length <= 30, if true and x.length > 30, MathIllegalArgumentException is thrown)
      * @return p-value
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are
-     *         zero-length.
+     *         zero-length or for all i, x[i] == y[i]
      * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      *         have the same length.
      * @throws MathIllegalArgumentException if {@code exactPValue} is
@@ -306,21 +339,20 @@ public class WilcoxonSignedRankTest {
         throws MathIllegalArgumentException, NullArgumentException,
         MathIllegalStateException {
 
-        ensureDataConformance(x, y);
+        final int nTies = ensureDataConformance(x, y);
 
-        final int N = x.length;
-        final double Wmax = wilcoxonSignedRank(x, y);
+        final int n = x.length - nTies;
+        final double stat = wilcoxonSignedRank(x, y);
 
-        if (exactPValue && N > 30) {
+        if (exactPValue && n > 30) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
-                                                   N, 30);
+                                                   n, 30);
         }
 
         if (exactPValue) {
-            return calculateExactPValue(Wmax, N);
+            return calculateExactPValue(stat, n);
         } else {
-            final double Wmin = (N * (N + 1) / 2.0) - Wmax;
-            return calculateAsymptoticPValue(Wmin, N);
+            return calculateAsymptoticPValue(stat, n);
         }
     }
 }
