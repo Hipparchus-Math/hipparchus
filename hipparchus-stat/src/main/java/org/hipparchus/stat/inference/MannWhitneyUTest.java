@@ -32,7 +32,8 @@ import org.hipparchus.stat.ranking.TiesStrategy;
 import org.hipparchus.util.FastMath;
 
 /**
- * An implementation of the Mann-Whitney U test (also called Wilcoxon rank-sum test).
+ * An implementation of the Mann-Whitney U test (also called Wilcoxon rank-sum
+ * test).
  */
 public class MannWhitneyUTest {
 
@@ -53,7 +54,8 @@ public class MannWhitneyUTest {
      * Create a test instance using the given strategies for NaN's and ties.
      * Only use this if you are sure of what you are doing.
      *
-     * @param nanStrategy specifies the strategy that should be used for Double.NaN's
+     * @param nanStrategy specifies the strategy that should be used for
+     *        Double.NaN's
      * @param tiesStrategy specifies the strategy that should be used for ties
      */
     public MannWhitneyUTest(final NaNStrategy nanStrategy,
@@ -67,17 +69,16 @@ public class MannWhitneyUTest {
      * @param x first sample
      * @param y second sample
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are
+     *         zero-length.
      */
     private void ensureDataConformance(final double[] x, final double[] y)
         throws MathIllegalArgumentException, NullArgumentException {
 
-        if (x == null ||
-            y == null) {
+        if (x == null || y == null) {
             throw new NullArgumentException();
         }
-        if (x.length == 0 ||
-            y.length == 0) {
+        if (x.length == 0 || y.length == 0) {
             throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
         }
     }
@@ -99,10 +100,10 @@ public class MannWhitneyUTest {
     }
 
     /**
-     * Computes the <a
-     * href="http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U"> Mann-Whitney
-     * U statistic</a> comparing mean for two independent samples possibly of
-     * different length.
+     * Computes the
+     * <a href="http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U">
+     * Mann-Whitney U statistic</a> comparing mean for two independent samples
+     * possibly of different length.
      * <p>
      * This statistic can be used to perform a Mann-Whitney U test evaluating
      * the null hypothesis that the two independent samples has equal mean.
@@ -114,14 +115,17 @@ public class MannWhitneyUTest {
      * <strong>Preconditions</strong>:
      * <ul>
      * <li>All observations in the two samples are independent.</li>
-     * <li>The observations are at least ordinal (continuous are also ordinal).</li>
+     * <li>The observations are at least ordinal (continuous are also
+     * ordinal).</li>
      * </ul>
      *
      * @param x the first sample
      * @param y the second sample
-     * @return Mann-Whitney U statistic (maximum of U<sup>x</sup> and U<sup>y</sup>)
+     * @return Mann-Whitney U statistic (maximum of U<sup>x</sup> and
+     *         U<sup>y</sup>)
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are
+     *         zero-length.
      */
     public double mannWhitneyU(final double[] x, final double[] y)
         throws MathIllegalArgumentException, NullArgumentException {
@@ -160,18 +164,18 @@ public class MannWhitneyUTest {
      * @param n1 number of subjects in first sample
      * @param n2 number of subjects in second sample
      * @return two-sided asymptotic p-value
-     * @throws MathIllegalStateException if the p-value can not be computed
-     * due to a convergence error
-     * @throws MathIllegalStateException if the maximum number of
-     * iterations is exceeded
+     * @throws MathIllegalStateException if the p-value can not be computed due
+     *         to a convergence error
+     * @throws MathIllegalStateException if the maximum number of iterations is
+     *         exceeded
      */
-    private double calculateAsymptoticPValue(final double Umin,
-                                             final int n1,
+    private double calculateAsymptoticPValue(final double Umin, final int n1,
                                              final int n2)
         throws MathIllegalStateException {
 
-        /* long multiplication to avoid overflow (double not used due to efficiency
-         * and to avoid precision loss)
+        /*
+         * long multiplication to avoid overflow (double not used due to
+         * efficiency and to avoid precision loss)
          */
         final long n1n2prod = (long) n1 * n2;
 
@@ -190,9 +194,9 @@ public class MannWhitneyUTest {
     /**
      * Returns the asymptotic <i>observed significance level</i>, or
      * <a href="http://www.cas.lancs.ac.uk/glossary_v1.1/hyptest.html#pvalue">
-     * p-value</a>, associated with a
-     * <a href="http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U">Mann-Whitney
-     * U statistic</a> comparing mean for two independent samples.
+     * p-value</a>, associated with a <a href=
+     * "http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U">Mann-Whitney U
+     * statistic</a> comparing mean for two independent samples.
      * <p>
      * Let X<sub>i</sub> denote the i'th individual of the first sample and
      * Y<sub>j</sub> the j'th individual in the second sample. Note that the
@@ -201,7 +205,8 @@ public class MannWhitneyUTest {
      * <strong>Preconditions</strong>:
      * <ul>
      * <li>All observations in the two samples are independent.</li>
-     * <li>The observations are at least ordinal (continuous are also ordinal).</li>
+     * <li>The observations are at least ordinal (continuous are also
+     * ordinal).</li>
      * </ul>
      * <p>
      * Ties give rise to biased variance at the moment. See e.g.
@@ -212,11 +217,12 @@ public class MannWhitneyUTest {
      * @param y the second sample
      * @return asymptotic p-value
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws MathIllegalArgumentException if {@code x} or {@code y} are zero-length.
-     * @throws MathIllegalStateException if the p-value can not be computed due to a
-     * convergence error
-     * @throws MathIllegalStateException if the maximum number of iterations
-     * is exceeded
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are
+     *         zero-length.
+     * @throws MathIllegalStateException if the p-value can not be computed due
+     *         to a convergence error
+     * @throws MathIllegalStateException if the maximum number of iterations is
+     *         exceeded
      */
     public double mannWhitneyUTest(final double[] x, final double[] y)
         throws MathIllegalArgumentException, NullArgumentException,
