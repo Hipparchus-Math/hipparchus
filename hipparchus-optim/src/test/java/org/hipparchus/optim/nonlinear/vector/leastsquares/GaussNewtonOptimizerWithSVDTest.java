@@ -27,11 +27,8 @@ import java.io.IOException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.euclidean.threed.Plane;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
+import org.hipparchus.linear.SingularValueDecomposer;
 import org.hipparchus.optim.SimpleVectorValueChecker;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
@@ -55,7 +52,7 @@ public class GaussNewtonOptimizerWithSVDTest
 
     @Override
     public LeastSquaresOptimizer getOptimizer() {
-        return new GaussNewtonOptimizer(Decomposition.SVD);
+        return new GaussNewtonOptimizer(new SingularValueDecomposer(), false);
     }
 
     @Test

@@ -25,11 +25,8 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 import java.io.IOException;
 
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.linear.CholeskyDecomposer;
 import org.hipparchus.optim.SimpleVectorValueChecker;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.junit.Test;
 
 /**
@@ -50,7 +47,7 @@ public class GaussNewtonOptimizerWithCholeskyTest
 
     @Override
     public LeastSquaresOptimizer getOptimizer() {
-        return new GaussNewtonOptimizer(Decomposition.CHOLESKY);
+        return new GaussNewtonOptimizer(new CholeskyDecomposer(1.0e-11, 1.0e-11), true);
     }
 
     @Override

@@ -25,11 +25,8 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 import java.io.IOException;
 
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.linear.LUDecomposer;
 import org.hipparchus.optim.SimpleVectorValueChecker;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.junit.Test;
 
 /**
@@ -50,7 +47,7 @@ public class GaussNewtonOptimizerWithLUTest
 
     @Override
     public LeastSquaresOptimizer getOptimizer() {
-        return new GaussNewtonOptimizer(Decomposition.LU);
+        return new GaussNewtonOptimizer(new LUDecomposer(1.0e-11), true);
     }
 
     @Override
