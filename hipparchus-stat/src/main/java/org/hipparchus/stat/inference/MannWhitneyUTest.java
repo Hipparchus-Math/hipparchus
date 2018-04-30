@@ -21,38 +21,61 @@
  */
 package org.hipparchus.stat.inference;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.stat.ranking.NaturalRanking;
 import org.hipparchus.stat.ranking.TiesStrategy;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Precision;
 
 /**
- * An implementation of the Mann-Whitney U test (also called Wilcoxon rank-sum
- * test).
+ * An implementation of the Mann-Whitney U test.
+ * <p>
+ * The definitions and computing formulas used in this implementation follow
+ * those in the article,
+ * <a href="http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U"> Mann-Whitney U
+ * Test</a>
+ * <p>
+ * In general, results correspond to (and have been tested against) the R
+ * wilcox.test function, with {@code exact} meaning the same thing in both APIs
+ * and {@code CORRECT} uniformly true in this implementation. For example,
+ * wilcox.test(x, y, alternative = "two.sided", mu = 0, paired = FALSE,
+ * exact = FALSE, correct = TRUE) will return the same p-value as
+ * mannWhitneyUTest(x, y, false). The minimum of the W value returned by R
+ * for wilcox.test(x, y...) and wilcox.test(y, x...) should equal
+ * mannWhitneyU(x, y...).
  */
 public class MannWhitneyUTest {
 
+    /** If both samples are no larger than this, test defaults to exact test. */
+    private static final int SMALL_SAMPLE_SIZE = 15;
+
     /** Ranking algorithm. */
-    private NaturalRanking naturalRanking;
+    private final NaturalRanking naturalRanking;
+
+    /** Normal distribution */
+    private final NormalDistribution standardNormal;
 
     /**
      * Create a test instance using where NaN's are left in place and ties get
-     * the average of applicable ranks. Use this unless you are very sure of
-     * what you are doing.
+     * the average of applicable ranks.
      */
     public MannWhitneyUTest() {
         naturalRanking = new NaturalRanking(NaNStrategy.FIXED,
                                             TiesStrategy.AVERAGE);
+        standardNormal = new NormalDistribution(0, 1);
     }
 
     /**
      * Create a test instance using the given strategies for NaN's and ties.
-     * Only use this if you are sure of what you are doing.
      *
      * @param nanStrategy specifies the strategy that should be used for
      *        Double.NaN's
@@ -61,56 +84,21 @@ public class MannWhitneyUTest {
     public MannWhitneyUTest(final NaNStrategy nanStrategy,
                             final TiesStrategy tiesStrategy) {
         naturalRanking = new NaturalRanking(nanStrategy, tiesStrategy);
-    }
-
-    /**
-     * Ensures that the provided arrays fulfills the assumptions.
-     *
-     * @param x first sample
-     * @param y second sample
-     * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
-     * @throws MathIllegalArgumentException if {@code x} or {@code y} are
-     *         zero-length.
-     */
-    private void ensureDataConformance(final double[] x, final double[] y)
-        throws MathIllegalArgumentException, NullArgumentException {
-
-        if (x == null || y == null) {
-            throw new NullArgumentException();
-        }
-        if (x.length == 0 || y.length == 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
-        }
-    }
-
-    /**
-     * Concatenate the samples into one array.
-     *
-     * @param x first sample
-     * @param y second sample
-     * @return concatenated array
-     */
-    private double[] concatenateSamples(final double[] x, final double[] y) {
-        final double[] z = new double[x.length + y.length];
-
-        System.arraycopy(x, 0, z, 0, x.length);
-        System.arraycopy(y, 0, z, x.length, y.length);
-
-        return z;
+        standardNormal = new NormalDistribution(0, 1);
     }
 
     /**
      * Computes the
      * <a href="http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U">
-     * Mann-Whitney U statistic</a> comparing mean for two independent samples
-     * possibly of different length.
+     * Mann-Whitney U statistic</a> comparing means for two independent samples
+     * possibly of different lengths.
      * <p>
      * This statistic can be used to perform a Mann-Whitney U test evaluating
-     * the null hypothesis that the two independent samples has equal mean.
+     * the null hypothesis that the two independent samples have equal mean.
      * <p>
      * Let X<sub>i</sub> denote the i'th individual of the first sample and
      * Y<sub>j</sub> the j'th individual in the second sample. Note that the
-     * samples would often have different length.
+     * samples can have different lengths.
      * <p>
      * <strong>Preconditions</strong>:
      * <ul>
@@ -121,7 +109,7 @@ public class MannWhitneyUTest {
      *
      * @param x the first sample
      * @param y the second sample
-     * @return Mann-Whitney U statistic (maximum of U<sup>x</sup> and
+     * @return Mann-Whitney U statistic (minimum of U<sup>x</sup> and
      *         U<sup>y</sup>)
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are
@@ -152,43 +140,27 @@ public class MannWhitneyUTest {
         final double U1 = sumRankX - ((long) x.length * (x.length + 1)) / 2;
 
         /*
-         * It can be shown that U1 + U2 = n1 * n2
+         * U1 + U2 = n1 * n2
          */
         final double U2 = (long) x.length * y.length - U1;
 
-        return FastMath.max(U1, U2);
+        return FastMath.min(U1, U2);
     }
 
     /**
-     * @param Umin smallest Mann-Whitney U value
-     * @param n1 number of subjects in first sample
-     * @param n2 number of subjects in second sample
-     * @return two-sided asymptotic p-value
-     * @throws MathIllegalStateException if the p-value can not be computed due
-     *         to a convergence error
-     * @throws MathIllegalStateException if the maximum number of iterations is
-     *         exceeded
+     * Concatenate the samples into one array.
+     *
+     * @param x first sample
+     * @param y second sample
+     * @return concatenated array
      */
-    private double calculateAsymptoticPValue(final double Umin, final int n1,
-                                             final int n2)
-        throws MathIllegalStateException {
+    private double[] concatenateSamples(final double[] x, final double[] y) {
+        final double[] z = new double[x.length + y.length];
 
-        /*
-         * long multiplication to avoid overflow (double not used due to
-         * efficiency and to avoid precision loss)
-         */
-        final long n1n2prod = (long) n1 * n2;
+        System.arraycopy(x, 0, z, 0, x.length);
+        System.arraycopy(y, 0, z, x.length, y.length);
 
-        // http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U#Normal_approximation
-        final double EU = n1n2prod / 2.0;
-        final double VarU = n1n2prod * (n1 + n2 + 1) / 12.0;
-
-        final double z = (Umin - EU) / FastMath.sqrt(VarU);
-
-        // No try-catch or advertised exception because args are valid
-        final NormalDistribution standardNormal = new NormalDistribution(0, 1);
-
-        return 2 * standardNormal.cumulativeProbability(z);
+        return z;
     }
 
     /**
@@ -196,48 +168,268 @@ public class MannWhitneyUTest {
      * <a href="http://www.cas.lancs.ac.uk/glossary_v1.1/hyptest.html#pvalue">
      * p-value</a>, associated with a <a href=
      * "http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U">Mann-Whitney U
-     * statistic</a> comparing mean for two independent samples.
+     * Test</a> comparing means for two independent samples.
      * <p>
      * Let X<sub>i</sub> denote the i'th individual of the first sample and
-     * Y<sub>j</sub> the j'th individual in the second sample. Note that the
-     * samples would often have different length.
+     * Y<sub>j</sub> the j'th individual in the second sample.
      * <p>
      * <strong>Preconditions</strong>:
      * <ul>
      * <li>All observations in the two samples are independent.</li>
-     * <li>The observations are at least ordinal (continuous are also
-     * ordinal).</li>
+     * <li>The observations are at least ordinal.</li>
      * </ul>
      * <p>
-     * Ties give rise to biased variance at the moment. See e.g.
-     * <a href="http://mlsc.lboro.ac.uk/resources/statistics/Mannwhitney.pdf">
-     * http://mlsc.lboro.ac.uk/resources/statistics/Mannwhitney.pdf</a>.
+     * If there are no ties in the data and both samples are small (less than or
+     * equal to 15 observations), an exact test is performed; otherwise the test
+     * uses the normal approximation (with continuity correction).
+     * <p>
+     * If the combined dataset contains ties, the variance used in the normal
+     * approximation is bias-adjusted using the formula in the reference above.
      *
      * @param x the first sample
      * @param y the second sample
-     * @return asymptotic p-value
+     * @return approximate 2-sized p-value
+     * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are
+     *         zero-length
+     */
+    public double mannWhitneyUTest(final double[] x, final double[] y)
+        throws MathIllegalArgumentException, NullArgumentException {
+        ensureDataConformance(x, y);
+
+        // If samples are both small and there are no ties, perform exact test
+        if (x.length <= SMALL_SAMPLE_SIZE && y.length <= SMALL_SAMPLE_SIZE &&
+            tiesMap(x, y).isEmpty()) {
+            return mannWhitneyUTest(x, y, true);
+        } else { // Normal approximation
+            return mannWhitneyUTest(x, y, false);
+        }
+    }
+
+    /**
+     * Returns the asymptotic <i>observed significance level</i>, or
+     * <a href="http://www.cas.lancs.ac.uk/glossary_v1.1/hyptest.html#pvalue">
+     * p-value</a>, associated with a <a href=
+     * "http://en.wikipedia.org/wiki/Mann%E2%80%93Whitney_U">Mann-Whitney U
+     * Test</a> comparing means for two independent samples.
+     * <p>
+     * Let X<sub>i</sub> denote the i'th individual of the first sample and
+     * Y<sub>j</sub> the j'th individual in the second sample.
+     * <p>
+     * <strong>Preconditions</strong>:
+     * <ul>
+     * <li>All observations in the two samples are independent.</li>
+     * <li>The observations are at least ordinal.</li>
+     * </ul>
+     * <p>
+     * If {@code exact} is {@code true}, the p-value reported is exact, computed
+     * using the exact distribution of the U statistic. The computation in this
+     * case is expensive, using a recursive algorithm. Exact computation with
+     * sample sizes larger than {@link #SMALL_SAMPLE_SIZE} may take a very long
+     * time and possibly run out of stack space.
+     * <p>
+     * If {@code exact} is {@code false}, the normal approximation is used to
+     * estimate the p-value.
+     * <p>
+     * If the combined dataset contains ties and {@code exact} is {@code true},
+     * MathIllegalArgumentException is thrown. If {@code exact} is {@code false}
+     * and the ties are present, the variance used to compute the approximate
+     * p-value in the normal approximation is bias-adjusted using the formula in
+     * the reference above.
+     *
+     * @param x the first sample
+     * @param y the second sample
+     * @param exact true means compute the p-value exactly,
+     *        false means use the normal approximation
+     * @return approximate 2-sided p-value
+     * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
+     * @throws MathIllegalArgumentException if {@code x} or {@code y} are
+     *         zero-length or if {@code exact} is {@code true} and ties are
+     *         present in the data
+     */
+    public double mannWhitneyUTest(final double[] x, final double[] y,
+                                   final boolean exact)
+        throws MathIllegalArgumentException, NullArgumentException {
+        ensureDataConformance(x, y);
+        final Map<Double, Integer> tiesMap = tiesMap(x, y);
+        final double u = mannWhitneyU(x, y);
+        if (exact) {
+            if (!tiesMap.isEmpty()) {
+                throw new MathIllegalArgumentException(LocalizedStatFormats.TIES_ARE_NOT_ALLOWED);
+            }
+            return exactP(x.length, y.length, u);
+        }
+
+        return approximateP(u, x.length, y.length,
+                            varU(x.length, y.length, tiesMap));
+    }
+
+    /**
+     * Ensures that the provided arrays fulfills the assumptions.
+     *
+     * @param x first sample
+     * @param y second sample
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are
      *         zero-length.
+     */
+    private void ensureDataConformance(final double[] x, final double[] y)
+        throws MathIllegalArgumentException, NullArgumentException {
+
+        if (x == null || y == null) {
+            throw new NullArgumentException();
+        }
+        if (x.length == 0 || y.length == 0) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_DATA);
+        }
+    }
+
+    /**
+     * Estimates the 2-sided p-value associated with a Mann-Whitney U statistic
+     * value using the normal approximation.
+     * <p>
+     * The variance passed in is assumed to be corrected for ties. Continuity
+     * correction is applied to the normal approximation.
+     *
+     * @param u Mann-Whitney U statistic
+     * @param n1 number of subjects in first sample
+     * @param n2 number of subjects in second sample
+     * @param varU variance of U (corrected for ties if these exist)
+     * @return two-sided asymptotic p-value
      * @throws MathIllegalStateException if the p-value can not be computed due
      *         to a convergence error
      * @throws MathIllegalStateException if the maximum number of iterations is
      *         exceeded
      */
-    public double mannWhitneyUTest(final double[] x, final double[] y)
-        throws MathIllegalArgumentException, NullArgumentException,
-        MathIllegalStateException {
+    private double approximateP(final double u, final int n1, final int n2,
+                                final double varU)
+        throws MathIllegalStateException {
 
-        ensureDataConformance(x, y);
+        final double mu = (long) n1 * n2 / 2.0;
 
-        final double Umax = mannWhitneyU(x, y);
+        // If u == mu, return 1
+        if (Precision.equals(mu, u)) {
+            return 1;
+        }
 
-        /*
-         * It can be shown that U1 + U2 = n1 * n2
-         */
-        final double Umin = (long) x.length * y.length - Umax;
+        // Force z <= 0 so we get tail probability. Also apply continuity
+        // correction
+        final double z = -Math.abs((u - mu) + 0.5) / FastMath.sqrt(varU);
 
-        return calculateAsymptoticPValue(Umin, x.length, y.length);
+        return 2 * standardNormal.cumulativeProbability(z);
     }
 
+    /**
+     * Calculates the (2-sided) p-value associated with a Mann-Whitney U
+     * statistic.
+     * <p>
+     * To compute the p-value, the probability densities for each value of U up
+     * to and including u are summed and the resulting tail probability is
+     * multiplied by 2.
+     * <p>
+     * The result of this computation is only valid when the combined n + m
+     * sample has no tied values.
+     * <p>
+     * This method should not be used for large values of n or m (greater than
+     * 20).
+     *
+     * @param u Mann-Whitney U statistic value
+     * @param n first sample size
+     * @param m second sample size
+     * @return two-sided exact p-value
+     */
+    private double exactP(final int n, final int m, final double u) {
+        final double nm = m * n;
+        if (u > nm) { // Quick exit if u is out of range
+            return 1;
+        }
+        // Need to convert u to a mean deviation, so cumulative probability is
+        // tail probability
+        final double crit = u < nm / 2 ? u : nm / 2 - u;
+
+        double cum = 0d;
+        for (int ct = 0; ct <= crit; ct++) {
+            cum += uDensity(n, m, ct);
+        }
+        return 2 * cum;
+    }
+
+    /**
+     * Computes the probability density function for the Mann-Whitney U
+     * statistic.
+     * <p>
+     * Uses the recurrence relation defined in Mann, H. B. and D. R. Whitney
+     * (1947) "On a test of whether one of two random variables is
+     * stochastically larger than the other", The Annals of Mathematical
+     * Statistics, 18, 50–60.
+     * <p>
+     * This method should not be used for large values of n or m (greater than
+     * 15).
+     *
+     * @param n first sample size
+     * @param m second sample size
+     * @param u U-statistic value
+     * @return the probability that a U statistic derived from random samples of
+     *         size n and m (containing no ties) equals u
+     */
+    private double uDensity(final int n, final int m, double u) {
+        if (u < 0 || u > m * n) {
+            return 0;
+        }
+        if (n == 0 || m == 0) {
+            return u == 0 ? 1d : 0d;
+        }
+        final double dSum = (double) (n + m);
+        return (n / dSum) * uDensity(n - 1, m, u - m) +
+               (m / dSum) * uDensity(n, m - 1, u);
+
+    }
+
+    /**
+     * Computes the variance for a U-statistic associated with samples of
+     * sizes{@code n} and {@code m} and ties described by {@code tiesMap}. If
+     * {@code tiesMap} is non-empty, the multiplicity counts in its values set
+     * are used to adjust the variance.
+     *
+     * @param n first sample size
+     * @param m second sample size
+     * @param tiesMap map of <value, multiplicity>
+     * @return ties-adjusted variance
+     */
+    private double varU(final int n, final int m,
+                        Map<Double, Integer> tiesMap) {
+        final double nm = (long) n * m;
+        if (tiesMap.isEmpty()) {
+            return nm * (n + m + 1) / 12.0;
+        }
+        final long tSum = tiesMap.entrySet().stream()
+            .mapToLong(e -> e.getValue() * e.getValue() * e.getValue() -
+                            e.getValue())
+            .sum();
+        final double totalN = n + m;
+        return (nm / 12) * (totalN + 1 - tSum / (totalN * (totalN - 1)));
+
+    }
+
+    /**
+     * Creates a map whose keys are values occurring more than once in the
+     * combined dataset formed from x and y. Map entry values are the number of
+     * occurrences. The returned map is empty iff there are no ties in the data.
+     *
+     * @param x first dataset
+     * @param y second dataset
+     * @return map of <value, number of times it occurs> for values occurring
+     *         more than once or an empty map if there are no ties.
+     */
+    private Map<Double, Integer> tiesMap(final double[] x, final double[] y) {
+        final Map<Double, Integer> tiesMap = new TreeMap<>();
+        for (int i = 0; i < x.length; i++) {
+            tiesMap.merge(x[i], 1, Integer::sum);
+        }
+        for (int i = 0; i < y.length; i++) {
+            tiesMap.merge(y[i], 1, Integer::sum);
+        }
+        tiesMap.entrySet().removeIf(e -> e.getValue() == 1);
+        return tiesMap;
+    }
 }
