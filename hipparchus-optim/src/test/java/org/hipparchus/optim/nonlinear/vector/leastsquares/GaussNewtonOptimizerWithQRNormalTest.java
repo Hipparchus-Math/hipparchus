@@ -22,15 +22,14 @@
 
 package org.hipparchus.optim.nonlinear.vector.leastsquares;
 
+import java.io.IOException;
+
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.IOException;
 
 /**
  * <p>Some of the unit tests are re-implementations of the MINPACK <a

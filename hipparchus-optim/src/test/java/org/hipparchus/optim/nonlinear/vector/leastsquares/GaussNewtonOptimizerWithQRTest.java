@@ -25,12 +25,9 @@ package org.hipparchus.optim.nonlinear.vector.leastsquares;
 import java.io.IOException;
 
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.linear.QRDecomposer;
 import org.hipparchus.optim.LocalizedOptimFormats;
 import org.hipparchus.optim.SimpleVectorValueChecker;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem;
-import org.hipparchus.optim.nonlinear.vector.leastsquares.GaussNewtonOptimizer.Decomposition;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -52,7 +49,7 @@ public class GaussNewtonOptimizerWithQRTest
 
     @Override
     public LeastSquaresOptimizer getOptimizer() {
-        return new GaussNewtonOptimizer(Decomposition.QR);
+        return new GaussNewtonOptimizer(new QRDecomposer(1.0e-11), false);
     }
 
     @Override
