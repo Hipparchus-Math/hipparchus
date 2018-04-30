@@ -26,6 +26,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.stat.regression.SimpleRegression;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -113,7 +114,7 @@ public class PearsonsCorrelation {
      */
     public PearsonsCorrelation(Covariance covariance) {
         RealMatrix covarianceMatrix = covariance.getCovarianceMatrix();
-        MathUtils.checkNotNull(covarianceMatrix, LocalizedCoreFormats.COVARIANCE_MATRIX);
+        MathUtils.checkNotNull(covarianceMatrix, LocalizedStatFormats.COVARIANCE_MATRIX);
         nObs = covariance.getN();
         correlationMatrix = covarianceToCorrelation(covarianceMatrix);
     }

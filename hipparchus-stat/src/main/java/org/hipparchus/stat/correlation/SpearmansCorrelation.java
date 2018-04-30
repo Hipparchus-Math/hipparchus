@@ -26,6 +26,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.linear.BlockRealMatrix;
 import org.hipparchus.linear.RealMatrix;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.stat.ranking.NaturalRanking;
 import org.hipparchus.stat.ranking.RankingAlgorithm;
@@ -70,7 +71,7 @@ public class SpearmansCorrelation {
 
         if (rankingAlgorithm instanceof NaturalRanking &&
             NaNStrategy.REMOVED == ((NaturalRanking) rankingAlgorithm).getNanStrategy()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_SUPPORTED_NAN_STRATEGY,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.NOT_SUPPORTED_NAN_STRATEGY,
                                                    NaNStrategy.REMOVED);
         }
 
@@ -104,7 +105,7 @@ public class SpearmansCorrelation {
 
         if (rankingAlgorithm instanceof NaturalRanking &&
             NaNStrategy.REMOVED == ((NaturalRanking) rankingAlgorithm).getNanStrategy()) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NOT_SUPPORTED_NAN_STRATEGY,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.NOT_SUPPORTED_NAN_STRATEGY,
                                                    NaNStrategy.REMOVED);
         }
 

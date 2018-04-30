@@ -28,6 +28,7 @@ import org.hipparchus.linear.Array2DRowRealMatrix;
 import org.hipparchus.linear.ArrayRealVector;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.stat.descriptive.moment.Variance;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -226,7 +227,7 @@ public abstract class AbstractMultipleLinearRegression implements
         }
         if (x[0].length + (noIntercept ? 0 : 1) > x.length) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
+                    LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                     x.length, x[0].length);
         }
     }

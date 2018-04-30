@@ -25,6 +25,7 @@ import org.hipparchus.distribution.continuous.FDistribution;
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 
@@ -271,7 +272,7 @@ public class BinomialProportion {
         }
         MathUtils.checkRangeInclusive(probabilityOfSuccess, 0, 1);
         if (confidenceLevel <= 0 || confidenceLevel >= 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
                                                    confidenceLevel, 0, 1);
         }
     }

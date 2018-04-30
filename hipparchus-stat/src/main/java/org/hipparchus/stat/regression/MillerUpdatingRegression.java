@@ -25,6 +25,7 @@ import java.util.Arrays;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
@@ -105,7 +106,7 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
     public MillerUpdatingRegression(int numberOfVariables, boolean includeConstant, double errorTolerance)
             throws MathIllegalArgumentException {
         if (numberOfVariables < 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_REGRESSORS);
+            throw new MathIllegalArgumentException(LocalizedStatFormats.NO_REGRESSORS);
         }
         if (includeConstant) {
             this.nvars = numberOfVariables + 1;
@@ -177,7 +178,7 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
 
         if ((!this.hasIntercept && x.length != nvars) ||
                (this.hasIntercept && x.length + 1 != nvars)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.INVALID_REGRESSION_OBSERVATION,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.INVALID_REGRESSION_OBSERVATION,
                     x.length, nvars);
         }
         if (!this.hasIntercept) {
@@ -209,7 +210,7 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
         }
         if (x[0].length + 1 > x.length) {
             throw new MathIllegalArgumentException(
-                  LocalizedCoreFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
+                  LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                   x.length, x[0].length);
         }
         for (int i = 0; i < x.length; i++) {
@@ -377,11 +378,11 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
     private double[] regcf(int nreq) throws MathIllegalArgumentException {
         int nextr;
         if (nreq < 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.NO_REGRESSORS);
+            throw new MathIllegalArgumentException(LocalizedStatFormats.NO_REGRESSORS);
         }
         if (nreq > this.nvars) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.TOO_MANY_REGRESSORS, nreq, this.nvars);
+                    LocalizedStatFormats.TOO_MANY_REGRESSORS, nreq, this.nvars);
         }
         if (!this.tol_set) {
             tolset();
@@ -926,12 +927,12 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
     public RegressionResults regress(int numberOfRegressors) throws MathIllegalArgumentException {
         if (this.nobs <= numberOfRegressors) {
            throw new MathIllegalArgumentException(
-                   LocalizedCoreFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
+                   LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                    this.nobs, numberOfRegressors);
         }
         if( numberOfRegressors > this.nvars ){
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.TOO_MANY_REGRESSORS, numberOfRegressors, this.nvars);
+                    LocalizedStatFormats.TOO_MANY_REGRESSORS, numberOfRegressors, this.nvars);
         }
 
         tolset();
@@ -1013,11 +1014,11 @@ public class MillerUpdatingRegression implements UpdatingMultipleLinearRegressio
     public RegressionResults regress(int[] variablesToInclude) throws MathIllegalArgumentException {
         if (variablesToInclude.length > this.nvars) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.TOO_MANY_REGRESSORS, variablesToInclude.length, this.nvars);
+                    LocalizedStatFormats.TOO_MANY_REGRESSORS, variablesToInclude.length, this.nvars);
         }
         if (this.nobs <= this.nvars) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
+                    LocalizedStatFormats.NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS,
                     this.nobs, this.nvars);
         }
         Arrays.sort(variablesToInclude);

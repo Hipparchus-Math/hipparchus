@@ -29,6 +29,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.stat.descriptive.StreamingStatistics;
 import org.hipparchus.util.MathUtils;
 
@@ -277,14 +278,14 @@ public class OneWayAnova {
         if (!allowOneElementData) {
             // check if we have enough categories
             if (categoryData.size() < 2) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.TWO_OR_MORE_CATEGORIES_REQUIRED,
+                throw new MathIllegalArgumentException(LocalizedStatFormats.TWO_OR_MORE_CATEGORIES_REQUIRED,
                                                        categoryData.size(), 2);
             }
 
             // check if each category has enough data
             for (final StreamingStatistics array : categoryData) {
                 if (array.getN() <= 1) {
-                    throw new MathIllegalArgumentException(LocalizedCoreFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED,
+                    throw new MathIllegalArgumentException(LocalizedStatFormats.TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED,
                                                            (int) array.getN(), 2);
                 }
             }

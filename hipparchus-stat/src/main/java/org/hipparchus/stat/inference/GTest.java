@@ -25,6 +25,7 @@ import org.hipparchus.distribution.continuous.ChiSquaredDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -234,7 +235,7 @@ public class GTest {
             throws MathIllegalArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                     alpha, 0, 0.5);
         }
         return gTest(expected, observed) < alpha;
@@ -523,7 +524,7 @@ public class GTest {
 
         if (alpha <= 0 || alpha > 0.5) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
+                    LocalizedStatFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
         }
         return gTestDataSetsComparison(observed1, observed2) < alpha;
     }

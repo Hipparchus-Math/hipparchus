@@ -107,6 +107,7 @@ public enum LocalizedCoreFormats implements Localizable {
     INITIAL_COLUMN_AFTER_FINAL_COLUMN("initial column {1} after final column {0}"),
     INITIAL_ROW_AFTER_FINAL_ROW("initial row {1} after final row {0}"),
     INSUFFICIENT_DATA("insufficient data"),
+    @Deprecated // Use LocalizedStatFormats version
     INSUFFICIENT_DATA_FOR_T_STATISTIC("insufficient data for t statistic, needs at least 2, got {0}"),
     INSUFFICIENT_DIMENSION("insufficient dimension {0}, must be at least {1}"),
     DIMENSION("dimension ({0})"), /* keep */
@@ -114,7 +115,9 @@ public enum LocalizedCoreFormats implements Localizable {
     INSUFFICIENT_ROWS_AND_COLUMNS("insufficient data: only {0} rows and {1} columns."),
     INTERNAL_ERROR("internal error, please fill a bug report at {0}"),
     INVALID_MAX_ITERATIONS("bad value for maximum iterations number: {0}"),
+    @Deprecated // Use LocalizedStatFormats version
     NOT_ENOUGH_DATA_REGRESSION("the number of observations is not sufficient to conduct regression"),
+    @Deprecated // Use LocalizedStatFormats version
     INVALID_REGRESSION_OBSERVATION("length of regressor array = {0} does not match the number of variables = {1} in the model"),
     INVALID_ROUNDING_METHOD("invalid rounding method {0}, valid methods: {1} ({2}), {3} ({4}), {5} ({6}), {7} ({8}), {9} ({10}), {11} ({12}), {13} ({14}), {15} ({16})"),
     ITERATIONS("iterations"), /* keep */
@@ -139,6 +142,7 @@ public enum LocalizedCoreFormats implements Localizable {
     NORMALIZE_INFINITE("Cannot normalize to an infinite value"),
     NORMALIZE_NAN("Cannot normalize to NaN"),
     NOT_DECREASING_SEQUENCE("points {3} and {2} are not decreasing ({1} < {0})"), /* keep */
+    @Deprecated // Use LocalizedStatFormats version
     NOT_ENOUGH_DATA_FOR_NUMBER_OF_PREDICTORS("not enough data ({0} rows) for this many predictors ({1} predictors)"),
     NOT_ENOUGH_POINTS_IN_SPLINE_PARTITION("spline partition must have at least {0} points, got {1}"),
     NOT_INCREASING_SEQUENCE("points {3} and {2} are not increasing ({1} > {0})"), /* keep */
@@ -164,15 +168,18 @@ public enum LocalizedCoreFormats implements Localizable {
     NOT_POSITIVE_WINDOW_SIZE("window size must be positive ({0})"),
     NOT_STRICTLY_DECREASING_SEQUENCE("points {3} and {2} are not strictly decreasing ({1} <= {0})"), /* keep */
     NOT_STRICTLY_INCREASING_SEQUENCE("points {3} and {2} are not strictly increasing ({1} >= {0})"), /* keep */
+    @Deprecated // Use LocalizedStatFormats version
     NOT_SUPPORTED_NAN_STRATEGY("NaN strategy {0} not supported"),
     NON_SYMMETRIC_MATRIX("non symmetric matrix: the difference between entries at ({0},{1}) and ({1},{0}) is larger than {2}"), /* keep */
     NO_CONVERGENCE_WITH_ANY_START_POINT("none of the {0} start points lead to convergence"), /* keep */
     NO_DATA("no data"), /* keep */
     NO_OPTIMUM_COMPUTED_YET("no optimum computed yet"), /* keep */
+    @Deprecated // Use LocalizedStatFormats version
     NO_REGRESSORS("Regression model must include at least one regressor"),
     NAN_NOT_ALLOWED("NaN is not allowed"),
     NULL_NOT_ALLOWED("null is not allowed"), /* keep */
     ARRAY_ZERO_LENGTH_OR_NULL_NOT_ALLOWED("a null or zero length array not allowed"),
+    @Deprecated // Use LocalizedStatFormats version
     COVARIANCE_MATRIX("covariance matrix"), /* keep */
     DENOMINATOR("denominator"), /* keep */
     DENOMINATOR_FORMAT("denominator format"), /* keep */
@@ -191,9 +198,13 @@ public enum LocalizedCoreFormats implements Localizable {
     NUMBER_OF_SUCCESS_LARGER_THAN_POPULATION_SIZE("number of successes ({0}) must be less than or equal to population size ({1})"),
     NUMERATOR_OVERFLOW_AFTER_MULTIPLY("overflow, numerator too large after multiply: {0}"),
     OBSERVED_COUNTS_BOTTH_ZERO_FOR_ENTRY("observed counts are both zero for entry {0}"),
+    @Deprecated // Use LocalizedStatFormats version
     OUT_OF_BOUNDS_QUANTILE_VALUE("out of bounds quantile value: {0}, must be in (0, 100]"),
+    @Deprecated // Use LocalizedStatFormats version
     OUT_OF_BOUNDS_CONFIDENCE_LEVEL("out of bounds confidence level {0}, must be between {1} and {2}"),
+    @Deprecated // Use LocalizedStatFormats version
     OUT_OF_BOUND_SIGNIFICANCE_LEVEL("out of bounds significance level {0}, must be between {1} and {2}"),
+    @Deprecated // Use LocalizedStatFormats version
     SIGNIFICANCE_LEVEL("significance level ({0})"), /* keep */
     OUT_OF_RANGE_ROOT_OF_UNITY_INDEX("out of range root of unity index {0} (must be in [{1};{2}])"),
     OUT_OF_RANGE("out of range"), /* keep */
@@ -204,7 +215,9 @@ public enum LocalizedCoreFormats implements Localizable {
     OVERFLOW_IN_ADDITION("overflow in addition: {0} + {1}"),
     OVERFLOW_IN_SUBTRACTION("overflow in subtraction: {0} - {1}"),
     OVERFLOW_IN_MULTIPLICATION("overflow in multiplication: {0} * {1}"),
+    @Deprecated // Obsolete
     PERCENTILE_IMPLEMENTATION_CANNOT_ACCESS_METHOD("cannot access {0} method in percentile implementation {1}"),
+    @Deprecated // Obsolete
     PERCENTILE_IMPLEMENTATION_UNSUPPORTED_METHOD("percentile implementation {0} does not support {1}"),
     PERMUTATION_EXCEEDS_N("permutation size ({0}) exceeds permuation domain ({1})"), /* keep */
     POLYNOMIAL("polynomial"), /* keep */
@@ -220,8 +233,11 @@ public enum LocalizedCoreFormats implements Localizable {
     SUBARRAY_ENDS_AFTER_ARRAY_END("subarray ends after array end"),
     TOO_LARGE_CUTOFF_SINGULAR_VALUE("cutoff singular value is {0}, should be at most {1}"),
     TOO_MANY_ELEMENTS_TO_DISCARD_FROM_ARRAY("cannot discard {0} elements from a {1} elements array"),
+    @Deprecated // Use LocalizedStatFormats version
     TOO_MANY_REGRESSORS("too many regressors ({0}) specified, only {1} in the model"),
+    @Deprecated // Use LocalizedStatFormats version
     TWO_OR_MORE_CATEGORIES_REQUIRED("two or more categories required, got {0}"),
+    @Deprecated // Use LocalizedStatFormats version
     TWO_OR_MORE_VALUES_IN_CATEGORY_REQUIRED("two or more values required in each category, one has {0}"),
     UNKNOWN_MODE("unknown mode {0}, known modes: {1} ({2}), {3} ({4}), {5} ({6}), {7} ({8}), {9} ({10}) and {11} ({12})"),
     CANNOT_PARSE_AS_TYPE("string \"{0}\" unparseable (from position {1}) as an object of type {2}"), /* keep */
@@ -231,6 +247,7 @@ public enum LocalizedCoreFormats implements Localizable {
     ILLEGAL_STATE("illegal state"), /* keep */
     USER_EXCEPTION("exception generated in user code"), /* keep */
     URL_CONTAINS_NO_DATA("URL {0} contains no data"),
+    @Deprecated // Obsolete
     VALUES_ADDED_BEFORE_CONFIGURING_STATISTIC("{0} values have been added before statistic is configured"),
     VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT("vector must have at least one element"),
     WEIGHT_AT_LEAST_ONE_NON_ZERO("weight array must contain at least one non-zero value"),

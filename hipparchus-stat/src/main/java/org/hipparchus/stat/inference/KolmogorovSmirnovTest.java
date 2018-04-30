@@ -39,6 +39,7 @@ import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.random.RandomDataGenerator;
 import org.hipparchus.random.RandomGenerator;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
@@ -374,7 +375,7 @@ public class KolmogorovSmirnovTest {
      */
     public boolean kolmogorovSmirnovTest(RealDistribution distribution, double[] data, double alpha) {
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
+            throw new MathIllegalArgumentException(LocalizedStatFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL, alpha, 0, 0.5);
         }
         return kolmogorovSmirnovTest(distribution, data) < alpha;
     }

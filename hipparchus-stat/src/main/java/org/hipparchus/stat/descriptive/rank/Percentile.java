@@ -28,6 +28,7 @@ import java.util.BitSet;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.stat.descriptive.AbstractUnivariateStatistic;
 import org.hipparchus.stat.ranking.NaNStrategy;
 import org.hipparchus.util.FastMath;
@@ -330,7 +331,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
 
         MathArrays.verifyValues(values, begin, length);
         if (p > 100 || p <= 0) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_QUANTILE_VALUE,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.OUT_OF_BOUNDS_QUANTILE_VALUE,
                                                    p, 0, 100);
         }
         if (length == 0) {
@@ -367,7 +368,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
     public void setQuantile(final double p) throws MathIllegalArgumentException {
         if (p <= 0 || p > 100) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.OUT_OF_BOUNDS_QUANTILE_VALUE, p, 0, 100);
+                    LocalizedStatFormats.OUT_OF_BOUNDS_QUANTILE_VALUE, p, 0, 100);
         }
         quantile = p;
     }

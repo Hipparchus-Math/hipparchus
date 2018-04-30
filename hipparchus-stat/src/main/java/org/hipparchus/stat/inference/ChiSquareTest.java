@@ -26,6 +26,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
@@ -203,7 +204,7 @@ public class ChiSquareTest {
         throws MathIllegalArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                                           alpha, 0, 0.5);
         }
         return chiSquareTest(expected, observed) < alpha;
@@ -351,7 +352,7 @@ public class ChiSquareTest {
         throws MathIllegalArgumentException, NullArgumentException, MathIllegalStateException {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                                           alpha, 0, 0.5);
         }
         return chiSquareTest(counts) < alpha;
@@ -548,7 +549,7 @@ public class ChiSquareTest {
 
         if (alpha <= 0 ||
             alpha > 0.5) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                                           alpha, 0, 0.5);
         }
         return chiSquareTestDataSetsComparison(observed1, observed2) < alpha;

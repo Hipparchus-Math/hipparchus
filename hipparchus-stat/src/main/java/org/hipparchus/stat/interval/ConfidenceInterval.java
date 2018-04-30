@@ -23,6 +23,7 @@ package org.hipparchus.stat.interval;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.stat.LocalizedStatFormats;
 
 /**
  * Represents an interval estimate of a population parameter.
@@ -107,7 +108,7 @@ public class ConfidenceInterval {
                                                    lower, upper);
         }
         if (confidence <= 0 || confidence >= 1) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.OUT_OF_BOUNDS_CONFIDENCE_LEVEL,
                                                    confidence, 0, 1);
         }
     }

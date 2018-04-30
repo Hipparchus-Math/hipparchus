@@ -26,6 +26,7 @@ import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
+import org.hipparchus.stat.LocalizedStatFormats;
 import org.hipparchus.stat.StatUtils;
 import org.hipparchus.stat.descriptive.StatisticalSummary;
 import org.hipparchus.util.FastMath;
@@ -1107,7 +1108,7 @@ public class TTest {
         throws MathIllegalArgumentException {
 
         if (alpha <= 0 || alpha > 0.5) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.SIGNIFICANCE_LEVEL,
+            throw new MathIllegalArgumentException(LocalizedStatFormats.SIGNIFICANCE_LEVEL,
                                           alpha, 0.0, 0.5);
         }
 
@@ -1126,7 +1127,7 @@ public class TTest {
         MathUtils.checkNotNull(data, LocalizedCoreFormats.INPUT_ARRAY);
         if (data.length < 2) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
+                    LocalizedStatFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
                     data.length, 2, true);
         }
 
@@ -1145,7 +1146,7 @@ public class TTest {
         MathUtils.checkNotNull(stat);
         if (stat.getN() < 2) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
+                    LocalizedStatFormats.INSUFFICIENT_DATA_FOR_T_STATISTIC,
                     stat.getN(), 2, true);
         }
 
