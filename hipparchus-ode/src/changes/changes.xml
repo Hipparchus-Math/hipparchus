@@ -49,7 +49,9 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus ODE Release Notes</title>
   </properties>
   <body>
-    <release version="1.3" date="TBD" description="TBD.">
+    <release version="1.3" date="2018-05-04" description="This is a maintenance release. The main
+    changes since last version is that secondary equations can now updates the derivatives of
+    the primary equation.">
        <action dev="evan" type="fix">
          Fix Field ODE interpolation with restricted step.
        </action>

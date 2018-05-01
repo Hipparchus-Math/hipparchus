@@ -56,11 +56,12 @@ at fork time.
 
  ---
 
-## 1.2 Release is out!
+## 1.3 Release is out!
 
-Hipparchus 1.2 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.1 release are:
+Hipparchus 1.3 is now available for download from the [Hipparchus download page](downloads.html) or on Maven central and its mirrors under the groupId **org.hipparchus**. Highlights in the 1.3 release are:
 
-* new RealFieldElement implementations computing a tuple
-* method to compute the orientation of a triplet of points in 2D
-* bracketing helper methods in UnivariateSolverUtils for RealFieldUnivariateFunction
-* getBRep method to PolyhedronsSet to extract a Boundary REPresentation in regular cases
+  * complex eigen decomposition
+  * solver for continuous time algebraic Riccati equation
+  * a complete Kalman module featuring both a filter for linear processes and a filter for non-linear processes
+  * capability for secondary equations to update the derivatives of the primary equation in ODE
+  * matrix decomposer to configure decomposition threshold independently of the matrix
