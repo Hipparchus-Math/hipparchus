@@ -99,7 +99,7 @@ public abstract class AbstractMultipleLinearRegression implements
      * <p>Throws IllegalArgumentException if any of the following preconditions fail:
      * <ul><li><code>data</code> cannot be null</li>
      * <li><code>data.length = nobs * (nvars + 1)</li>
-     * <li><code>nobs > nvars</code></li></ul>
+     * <li><code>nobs &gt; nvars</code></li></ul>
      * </p>
      *
      * @param data input data array

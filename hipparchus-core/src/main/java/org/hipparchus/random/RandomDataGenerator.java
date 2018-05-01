@@ -872,7 +872,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
      * Generates a random sample of size sampleSize from {0, 1, ... , weights.length - 1},
      * using weights as probabilities.
      * <p>
-     * For 0 < i < weights.length, the probability that i is selected (on any draw) is weights[i].
+     * For 0 &lt; i &lt; weights.length, the probability that i is selected (on any draw) is weights[i].
      * If necessary, the weights array is normalized to sum to 1 so that weights[i] is a probability
      * and the array sums to 1.
      * <p>

@@ -53,10 +53,10 @@ import org.hipparchus.util.MathArrays;
  * <li> \(\hat{q}\) is a RandomPercentile estimate for \(q\) (what is returned
  *      by {@link #getResult()} or {@link #getResult(double)}) with \(100q\) as
  *      actual parameter)</li>
- * <li> \(rank(\hat{q}) = |\{x \in X : x < \hat{q}\}|\) is the actual rank of
+ * <li> \(rank(\hat{q}) = |\{x \in X : x &lt; \hat{q}\}|\) is the actual rank of
  *      \(\hat{q}\) in the full data stream</li>
  * <li>\(n = |X|\) is the number of observations</li></ul>
- * then we can expect \((q - \epsilon)n < rank(\hat{q}) < (q + \epsilon)n\).
+ * then we can expect \((q - \epsilon)n &lt; rank(\hat{q}) &lt; (q + \epsilon)n\).
  * <p>
  * The algorithm maintains \(\left\lceil {log_{2}(1/\epsilon)}\right\rceil + 1\) buffers
  * of size \(\left\lceil {1/\epsilon \sqrt{log_2(1/\epsilon)}}\right\rceil\).  When
@@ -354,7 +354,7 @@ public class RandomPercentile
     }
 
     /**
-     * Gets the estimated rank of {@code value}, i.e.  \(|\{x \in X : x < value\}|\)
+     * Gets the estimated rank of {@code value}, i.e.  \(|\{x \in X : x &lt; value\}|\)
      * where \(X\) is the set of values that have been consumed from the stream.
      *
      * @param value value whose overall rank is sought
@@ -372,7 +372,7 @@ public class RandomPercentile
 
     /**
      * Returns the estimated quantile position of value in the dataset.
-     * Specifically, what is returned is an estimate of \(|\{x \in X : x < value\}| / |X|\)
+     * Specifically, what is returned is an estimate of \(|\{x \in X : x &lt; value\}| / |X|\)
      * where \(X\) is the set of values that have been consumed from the stream.
      *
      * @param value value whose quantile rank is sought.
@@ -1189,7 +1189,7 @@ public class RandomPercentile
 
     /**
      * Returns the estimated quantile position of value in the combined dataset of the aggregates.
-     * Specifically, what is returned is an estimate of \(|\{x \in X : x < value\}| / |X|\)
+     * Specifically, what is returned is an estimate of \(|\{x \in X : x &lt; value\}| / |X|\)
      * where \(X\) is the set of values that have been consumed from all of the datastreams
      * feeding the aggregates.
      *
@@ -1205,7 +1205,7 @@ public class RandomPercentile
      * Returns the total number of values that have been consumed by the aggregates.
      *
      * @param aggregates collection of RandomPercentile instances whose combined sample size is sought
-     * @return total number of values that have been consumbed by the aggregates
+     * @return total number of values that have been consumed by the aggregates
      */
     public double getAggregateN(Collection<RandomPercentile> aggregates) {
         double result = 0;

@@ -181,14 +181,14 @@ public class BesselJ
      * that can be considered accurate.
      * </p><p>
      * <ul>
-     * <li>nVals < 0: An argument is out of range. For example, nb <= 0, alpha
-     * < 0 or > 1, or x is too large. In this case, b(0) is set to zero, the
+     * <li>nVals &lt; 0: An argument is out of range. For example, nb &lt;= 0, alpha
+     * &lt; 0 or &gt; 1, or x is too large. In this case, b(0) is set to zero, the
      * remainder of the b-vector is not calculated, and nVals is set to
      * MIN(nb,0) - 1 so that nVals != nb.</li>
-     * <li>nb > nVals > 0: Not all requested function values could be calculated
+     * <li>nb &gt; nVals &gt; 0: Not all requested function values could be calculated
      * accurately. This usually occurs because nb is much larger than abs(x). In
-     * this case, b(n) is calculated to the desired accuracy for n < nVals, but
-     * precision is lost for nVals < n <= nb. If b(n) does not vanish for n >
+     * this case, b(n) is calculated to the desired accuracy for n &lt; nVals, but
+     * precision is lost for nVals &lt; n &lt;= nb. If b(n) does not vanish for n &gt;
      * nVals (because it is too small to be represented), and b(n)/b(nVals) =
      * \(10^{-k}\), then only the first NSIG-k significant figures of b(n) can be
      * trusted.</li></ul></p>
@@ -238,8 +238,8 @@ public class BesselJ
      * </p>
      * @param x non-negative real argument for which J's are to be calculated
      * @param alpha fractional part of order for which J's or exponentially
-     * scaled J's (\(J\cdot e^{x}\)) are to be calculated. 0 <= alpha < 1.0.
-     * @param nb integer number of functions to be calculated, nb > 0. The first
+     * scaled J's (\(J\cdot e^{x}\)) are to be calculated. 0 &lt;= alpha &lt; 1.0.
+     * @param nb integer number of functions to be calculated, nb &gt; 0. The first
      * function calculated is of order alpha, and the last is of order
      * nb - 1 + alpha.
      * @return BesselJResult a vector of the functions

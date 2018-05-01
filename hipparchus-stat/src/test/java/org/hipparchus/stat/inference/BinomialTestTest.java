@@ -86,7 +86,7 @@ public class BinomialTestTest {
     }
 
     /**
-     * All successes with p >> 0.5 - p-value picks up all mass points.
+     * All successes with p &gt;&gt; 0.5 - p-value picks up all mass points.
      */
     @Test
     public void testAllSuccessesTwoSidedHighP() {
@@ -117,7 +117,7 @@ public class BinomialTestTest {
     }
 
     /**
-     * All successes with p < 0.5 - p-value is 5 mass point.
+     * All successes with p &lt; 0.5 - p-value is 5 mass point.
      */
     @Test
     public void testAllSuccessesTwoSidedLowP() {

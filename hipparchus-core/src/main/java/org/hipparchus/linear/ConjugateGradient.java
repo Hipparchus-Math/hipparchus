@@ -57,7 +57,7 @@ import org.hipparchus.util.IterationManager;
  * <ul>
  * <li>key {@code "operator"} points to the offending linear operator, say L,</li>
  * <li>key {@code "vector"} points to the offending vector, say x, such that
- * x<sup>T</sup> &middot; L &middot; x < 0.</li>
+ * x<sup>T</sup> &middot; L &middot; x &lt; 0.</li>
  * </ul>
  * </p>
  * <h3>References</h3>

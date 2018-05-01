@@ -43,7 +43,7 @@ public class SkewnessTest extends StorelessUnivariateStatisticAbstractTest{
     }
 
     /**
-     * Make sure Double.NaN is returned iff n < 3
+     * Make sure Double.NaN is returned iff n &lt; 3
      */
     @Test
     public void testNaN() {

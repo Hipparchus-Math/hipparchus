@@ -185,7 +185,7 @@ public class StorelessCovariance extends Covariance {
     /**
      * {@inheritDoc}
      * @throws MathIllegalArgumentException if the number of observations
-     * in a cell is < 2
+     * in a cell is &lt; 2
      */
     @Override
     public RealMatrix getCovarianceMatrix() throws MathIllegalArgumentException {

@@ -38,7 +38,7 @@ import org.hipparchus.util.MathUtils;
  * Uses a {@link SumOfLogs} instance to compute sum of logs and returns
  * <code> exp( 1/n  (sum of logs) ).</code>  Therefore,
  * <ul>
- * <li>If any of values are < 0, the result is <code>NaN.</code></li>
+ * <li>If any of values are &lt; 0, the result is <code>NaN.</code></li>
  * <li>If all values are non-negative and less than
  * <code>Double.POSITIVE_INFINITY</code>,  but at least one value is 0, the
  * result is <code>0.</code></li>

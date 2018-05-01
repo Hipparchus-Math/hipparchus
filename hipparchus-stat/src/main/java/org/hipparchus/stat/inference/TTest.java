@@ -457,7 +457,7 @@ public class TTest {
      * <li>To test the (2-sided) hypothesis <code>sample mean = mu </code> at
      * the 95% level, use <br><code>tTest(mu, sample, 0.05) </code>
      * </li>
-     * <li>To test the (one-sided) hypothesis <code> sample mean < mu </code>
+     * <li>To test the (one-sided) hypothesis <code> sample mean &lt; mu </code>
      * at the 99% level, first verify that the measured sample mean is less
      * than <code>mu</code> and then use
      * <br><code>tTest(mu, sample, 0.02) </code>
@@ -540,7 +540,7 @@ public class TTest {
      * <li>To test the (2-sided) hypothesis <code>sample mean = mu </code> at
      * the 95% level, use <br><code>tTest(mu, sampleStats, 0.05) </code>
      * </li>
-     * <li>To test the (one-sided) hypothesis <code> sample mean < mu </code>
+     * <li>To test the (one-sided) hypothesis <code> sample mean &lt; mu </code>
      * at the 99% level, first verify that the measured sample mean is less
      * than <code>mu</code> and then use
      * <br><code>tTest(mu, sampleStats, 0.02) </code>
@@ -694,7 +694,7 @@ public class TTest {
      * the 95% level,  use
      * <br><code>tTest(sample1, sample2, 0.05). </code>
      * </li>
-     * <li>To test the (one-sided) hypothesis <code> mean 1 < mean 2 </code>,
+     * <li>To test the (one-sided) hypothesis <code> mean 1 &lt; mean 2 </code>,
      * at the 99% level, first verify that the measured  mean of <code>sample 1</code>
      * is less than the mean of <code>sample 2</code> and then use
      * <br><code>tTest(sample1, sample2, 0.02) </code>
@@ -709,7 +709,7 @@ public class TTest {
      * <strong>Preconditions</strong>: <ul>
      * <li>The observed array lengths must both be at least 2.
      * </li>
-     * <li> <code> 0 < alpha < 0.5 </code>
+     * <li> <code> 0 &lt; alpha &lt; 0.5 </code>
      * </li></ul></p>
      *
      * @param sample1 array of sample data values
@@ -754,7 +754,7 @@ public class TTest {
      * <li>To test the (2-sided) hypothesis <code>mean 1 = mean 2 </code> at
      * the 95% level, use <br><code>tTest(sample1, sample2, 0.05). </code>
      * </li>
-     * <li>To test the (one-sided) hypothesis <code> mean 1 < mean 2, </code>
+     * <li>To test the (one-sided) hypothesis <code> mean 1 &lt; mean 2, </code>
      * at the 99% level, first verify that the measured mean of
      * <code>sample 1</code> is less than the mean of <code>sample 2</code>
      * and then use
@@ -770,7 +770,7 @@ public class TTest {
      * <strong>Preconditions</strong>: <ul>
      * <li>The observed array lengths must both be at least 2.
      * </li>
-     * <li> <code> 0 < alpha < 0.5 </code>
+     * <li> <code> 0 &lt; alpha &lt; 0.5 </code>
      * </li></ul></p>
      *
      * @param sample1 array of sample data values
@@ -911,7 +911,7 @@ public class TTest {
      * the 95%, use
      * <br><code>tTest(sampleStats1, sampleStats2, 0.05) </code>
      * </li>
-     * <li>To test the (one-sided) hypothesis <code> mean 1 < mean 2 </code>
+     * <li>To test the (one-sided) hypothesis <code> mean 1 &lt; mean 2 </code>
      * at the 99% level,  first verify that the measured mean of
      * <code>sample 1</code> is less than  the mean of <code>sample 2</code>
      * and then use
@@ -928,7 +928,7 @@ public class TTest {
      * <li>The datasets described by the two Univariates must each contain
      * at least 2 observations.
      * </li>
-     * <li> <code> 0 < alpha < 0.5 </code>
+     * <li> <code> 0 &lt; alpha &lt; 0.5 </code>
      * </li></ul></p>
      *
      * @param sampleStats1 StatisticalSummary describing sample data values

@@ -31,9 +31,9 @@ import org.hipparchus.geometry.Space;
  * as {@link Hyperplane hyperplanes}. This interface can be used regardless
  * of the dimensions differences. As an example, {@link
  * org.hipparchus.geometry.euclidean.threed.Line Line} in 3D
- * implements Embedding<{@link
- * org.hipparchus.geometry.euclidean.threed.Vector3D Vector3D}, {link
- * org.hipparchus.geometry.euclidean.oned.Vector1D Vector1D}, i.e. it
+ * implements Embedding&lt; {@link
+ * org.hipparchus.geometry.euclidean.threed.Vector3D Vector3D}, {@link
+ * org.hipparchus.geometry.euclidean.oned.Vector1D Vector1D}&gt;, i.e. it
  * maps directly dimensions 3 and 1.</p>
 
  * <p>In the 3D euclidean space, hyperplanes are 2D planes, and the 1D

@@ -39,8 +39,7 @@
  * <p>
  *  Some problems are solved more efficiently by algorithms that, instead of an
  *  objective function, need access to all the observations.
- *  Such methods are implemented in the {@link org.hipparchus.fitting}
- *  package.
+ *  Such methods are implemented in the fitting module.
  * </p>
  *
  * <p>

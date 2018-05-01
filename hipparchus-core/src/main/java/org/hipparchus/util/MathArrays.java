@@ -589,7 +589,7 @@ public class MathArrays {
     }
 
     /**
-     * Check that all entries of the input array are >= 0.
+     * Check that all entries of the input array are &gt;= 0.
      *
      * @param in Array to be tested
      * @throws MathIllegalArgumentException if any array entries are less than 0.
@@ -604,7 +604,7 @@ public class MathArrays {
     }
 
     /**
-     * Check all entries of the input array are >= 0.
+     * Check all entries of the input array are &gt;= 0.
      *
      * @param in Array to be tested
      * @throws MathIllegalArgumentException if any array entries are less than 0.
@@ -1328,7 +1328,7 @@ public class MathArrays {
      * Normalizes an array to make it sum to a specified value.
      * Returns the result of the transformation
      * <pre>
-     *    x |-> x * normalizedSum / sum
+     *    x ↦ x * normalizedSum / sum
      * </pre>
      * applied to each non-NaN element x of the input array, where sum is the
      * sum of the non-NaN entries in the input array.

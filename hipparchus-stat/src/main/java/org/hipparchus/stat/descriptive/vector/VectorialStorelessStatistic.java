@@ -50,7 +50,7 @@ public class VectorialStorelessStatistic
      *
      * @param dimension the vector dimension
      * @param univariateStatistic the prototype statistic
-     * @throws MathIllegalArgumentException if dimension < 1
+     * @throws MathIllegalArgumentException if dimension &lt; 1
      */
     public VectorialStorelessStatistic(int dimension,
                                        StorelessUnivariateStatistic univariateStatistic) {

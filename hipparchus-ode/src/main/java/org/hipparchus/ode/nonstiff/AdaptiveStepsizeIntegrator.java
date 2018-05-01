@@ -52,7 +52,7 @@ import org.hipparchus.util.FastMath;
  *
  * <p>If the estimated error for ym+1 is such that
  * <pre>
- * sqrt((sum (errEst_i / threshold_i)^2 ) / n) < 1
+ * sqrt((sum (errEst_i / threshold_i)^2 ) / n) &lt; 1
  * </pre>
  *
  * (where n is the main set dimension) then the step is accepted,

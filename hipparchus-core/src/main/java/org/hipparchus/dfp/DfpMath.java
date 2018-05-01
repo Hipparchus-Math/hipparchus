@@ -287,7 +287,7 @@ public class DfpMath {
     }
 
     /** Computes e to the given power.
-     * Where -1 < a < 1.  Use the classic Taylor series.  1 + x**2/2! + x**3/3! + x**4/4!  ...
+     * Where -1 &lt; a &lt; 1.  Use the classic Taylor series.  1 + x**2/2! + x**3/3! + x**4/4!  ...
      * @param a power at which e should be raised
      * @return e<sup>a</sup>
      */
@@ -313,7 +313,7 @@ public class DfpMath {
     /** Returns the natural logarithm of a.
      * a is first split into three parts such that  a = (10000^h)(2^j)k.
      * ln(a) is computed by ln(a) = ln(5)*h + ln(2)*(h+j) + ln(k)
-     * k is in the range 2/3 < k <4/3 and is passed on to a series expansion.
+     * k is in the range 2/3 &lt; k &lt; 4/3 and is passed on to a series expansion.
      * @param a number from which logarithm is requested
      * @return log(a)
      */
@@ -387,7 +387,7 @@ public class DfpMath {
      *
      *           -----          n+1         n
      *  f(x) =   \           (-1)    (x - 1)
-     *           /          ----------------    for 1 <= n <= infinity
+     *           /          ----------------    for 1 &lt;= n &lt;= infinity
      *           -----             n
      *
      *  or
@@ -476,7 +476,7 @@ public class DfpMath {
      *  <li> Compute c = a - b*ln(2)
      *  <li> x<sup>y</sup> = x<sup>u</sup>  *   2<sup>b</sup> * e<sup>c</sup>
      *  </ol>
-     *  if |y| > 1e8, then we compute by exp(y*ln(x))   <p>
+     *  if |y| &gt; 1e8, then we compute by exp(y*ln(x))   <p>
      *
      *  <b>Special Cases</b><p>
      *  <ul>
@@ -484,22 +484,22 @@ public class DfpMath {
      *  <li>  if y is 1.0 then result is x
      *  <li>  if y is NaN then result is NaN
      *  <li>  if x is NaN and y is not zero then result is NaN
-     *  <li>  if |x| > 1.0 and y is +Infinity then result is +Infinity
-     *  <li>  if |x| < 1.0 and y is -Infinity then result is +Infinity
-     *  <li>  if |x| > 1.0 and y is -Infinity then result is +0
-     *  <li>  if |x| < 1.0 and y is +Infinity then result is +0
+     *  <li>  if |x| &gt; 1.0 and y is +Infinity then result is +Infinity
+     *  <li>  if |x| &lt; 1.0 and y is -Infinity then result is +Infinity
+     *  <li>  if |x| &gt; 1.0 and y is -Infinity then result is +0
+     *  <li>  if |x| &lt; 1.0 and y is +Infinity then result is +0
      *  <li>  if |x| = 1.0 and y is +/-Infinity then result is NaN
-     *  <li>  if x = +0 and y > 0 then result is +0
-     *  <li>  if x = +Inf and y < 0 then result is +0
-     *  <li>  if x = +0 and y < 0 then result is +Inf
-     *  <li>  if x = +Inf and y > 0 then result is +Inf
-     *  <li>  if x = -0 and y > 0, finite, not odd integer then result is +0
-     *  <li>  if x = -0 and y < 0, finite, and odd integer then result is -Inf
-     *  <li>  if x = -Inf and y > 0, finite, and odd integer then result is -Inf
-     *  <li>  if x = -0 and y < 0, not finite odd integer then result is +Inf
-     *  <li>  if x = -Inf and y > 0, not finite odd integer then result is +Inf
-     *  <li>  if x < 0 and y > 0, finite, and odd integer then result is -(|x|<sup>y</sup>)
-     *  <li>  if x < 0 and y > 0, finite, and not integer then result is NaN
+     *  <li>  if x = +0 and y &gt; 0 then result is +0
+     *  <li>  if x = +Inf and y &lt; 0 then result is +0
+     *  <li>  if x = +0 and y &lt; 0 then result is +Inf
+     *  <li>  if x = +Inf and y &gt; 0 then result is +Inf
+     *  <li>  if x = -0 and y &gt; 0, finite, not odd integer then result is +0
+     *  <li>  if x = -0 and y &lt; 0, finite, and odd integer then result is -Inf
+     *  <li>  if x = -Inf and y &gt; 0, finite, and odd integer then result is -Inf
+     *  <li>  if x = -0 and y &lt; 0, not finite odd integer then result is +Inf
+     *  <li>  if x = -Inf and y &gt; 0, not finite odd integer then result is +Inf
+     *  <li>  if x &lt; 0 and y &gt; 0, finite, and odd integer then result is -(|x|<sup>y</sup>)
+     *  <li>  if x &lt; 0 and y &gt; 0, finite, and not integer then result is NaN
      *  </ul>
      *  @param x base to be raised
      *  @param y power to which base should be raised
@@ -665,7 +665,7 @@ public class DfpMath {
 
     }
 
-    /** Computes sin(a)  Used when 0 < a < pi/4.
+    /** Computes sin(a)  Used when 0 &lt; a &lt; pi/4.
      * Uses the classic Taylor series.  x - x**3/3! + x**5/5!  ...
      * @param a number from which sine is desired, in split form
      * @return sin(a)
@@ -695,7 +695,7 @@ public class DfpMath {
 
     }
 
-    /** Computes cos(a)  Used when 0 < a < pi/4.
+    /** Computes cos(a)  Used when 0 &lt; a &lt; pi/4.
      * Uses the classic Taylor series for cosine.  1 - x**2/2! + x**4/4!  ...
      * @param a number from which cosine is desired, in split form
      * @return cos(a)

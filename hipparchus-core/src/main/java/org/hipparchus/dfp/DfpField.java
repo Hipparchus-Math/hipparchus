@@ -711,7 +711,7 @@ public class DfpField implements Field<Dfp> {
      *
      *           -----          n+1         n
      *  f(x) =   \           (-1)    (x - 1)
-     *           /          ----------------    for 1 <= n <= infinity
+     *           /          ----------------    for 1 &lt;= n &lt;= infinity
      *           -----             n
      *
      *  or

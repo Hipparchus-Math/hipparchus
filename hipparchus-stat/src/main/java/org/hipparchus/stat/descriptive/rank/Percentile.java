@@ -47,15 +47,15 @@ import org.hipparchus.util.Precision;
  * significantly different results.  The algorithm implemented here works as follows:
  * <ol>
  * <li>Let <code>n</code> be the length of the (sorted) array and
- * <code>0 < p <= 100</code> be the desired percentile.</li>
+ * <code>0 &lt; p &lt;= 100</code> be the desired percentile.</li>
  * <li>If <code> n = 1 </code> return the unique array element (regardless of
  * the value of <code>p</code>); otherwise </li>
  * <li>Compute the estimated percentile position
  * <code> pos = p * (n + 1) / 100</code> and the difference, <code>d</code>
  * between <code>pos</code> and <code>floor(pos)</code> (i.e. the fractional
  * part of <code>pos</code>).</li>
- * <li> If <code>pos < 1</code> return the smallest element in the array.</li>
- * <li> Else if <code>pos >= n</code> return the largest element in the array.</li>
+ * <li> If <code>pos &lt; 1</code> return the smallest element in the array.</li>
+ * <li> Else if <code>pos &gt;= n</code> return the largest element in the array.</li>
  * <li> Else let <code>lower</code> be the element in position
  * <code>floor(pos)</code> in the array and let <code>upper</code> be the
  * next element in the array.  Return <code>lower + d * (upper - lower)</code>
@@ -361,7 +361,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
      * Sets the value of the quantile field (determines what percentile is
      * computed when evaluate() is called with no quantile argument).
      *
-     * @param p a value between 0 < p <= 100
+     * @param p a value between 0 &lt; p &lt;= 100
      * @throws MathIllegalArgumentException  if p is not greater than 0 and less
      * than or equal to 100
      */
