@@ -984,7 +984,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
                                   final KthSelector selector) {
             MathUtils.checkNotNull(work);
             if (p > 100 || p <= 0) {
-                throw new MathIllegalArgumentException(LocalizedCoreFormats.OUT_OF_BOUNDS_QUANTILE_VALUE,
+                throw new MathIllegalArgumentException(LocalizedStatFormats.OUT_OF_BOUNDS_QUANTILE_VALUE,
                                               p, 0, 100);
             }
             return estimate(work, pivotsHeap, index(p/100d, work.length), work.length, selector);

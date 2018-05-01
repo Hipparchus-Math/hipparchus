@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.hipparchus.distribution.continuous.FDistribution;
-import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.NullArgumentException;
@@ -250,7 +249,7 @@ public class OneWayAnova {
 
         if ((alpha <= 0) || (alpha > 0.5)) {
             throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
+                    LocalizedStatFormats.OUT_OF_BOUND_SIGNIFICANCE_LEVEL,
                     alpha, 0, 0.5);
         }
         return anovaPValue(categoryData) < alpha;
