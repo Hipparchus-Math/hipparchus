@@ -23,6 +23,7 @@ package org.hipparchus.stat.inference;
 
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.LongStream;
 
 import org.hipparchus.distribution.continuous.NormalDistribution;
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -47,16 +48,18 @@ import org.hipparchus.util.Precision;
  * In general, results correspond to (and have been tested against) the R
  * wilcox.test function, with {@code exact} meaning the same thing in both APIs
  * and {@code CORRECT} uniformly true in this implementation. For example,
- * wilcox.test(x, y, alternative = "two.sided", mu = 0, paired = FALSE,
- * exact = FALSE, correct = TRUE) will return the same p-value as
- * mannWhitneyUTest(x, y, false). The minimum of the W value returned by R
- * for wilcox.test(x, y...) and wilcox.test(y, x...) should equal
- * mannWhitneyU(x, y...).
+ * wilcox.test(x, y, alternative = "two.sided", mu = 0, paired = FALSE, exact = FALSE
+ * correct = TRUE) will return the same p-value as mannWhitneyUTest(x, y,
+ * false). The minimum of the W value returned by R for wilcox.test(x, y...) and
+ * wilcox.test(y, x...) should equal mannWhitneyU(x, y...).
  */
 public class MannWhitneyUTest {
 
-    /** If both samples are no larger than this, test defaults to exact test. */
-    private static final int SMALL_SAMPLE_SIZE = 15;
+    /**
+     * If the combined dataset contains no more values than this, test defaults to
+     * exact test.
+     */
+    private static final int SMALL_SAMPLE_SIZE = 50;
 
     /** Ranking algorithm. */
     private final NaturalRanking naturalRanking;
@@ -180,8 +183,9 @@ public class MannWhitneyUTest {
      * </ul>
      * <p>
      * If there are no ties in the data and both samples are small (less than or
-     * equal to 15 observations), an exact test is performed; otherwise the test
-     * uses the normal approximation (with continuity correction).
+     * equal to 50 values in the combined dataset), an exact test is performed;
+     * otherwise the test uses the normal approximation (with continuity
+     * correction).
      * <p>
      * If the combined dataset contains ties, the variance used in the normal
      * approximation is bias-adjusted using the formula in the reference above.
@@ -198,7 +202,7 @@ public class MannWhitneyUTest {
         ensureDataConformance(x, y);
 
         // If samples are both small and there are no ties, perform exact test
-        if (x.length <= SMALL_SAMPLE_SIZE && y.length <= SMALL_SAMPLE_SIZE &&
+        if (x.length + y.length <= SMALL_SAMPLE_SIZE &&
             tiesMap(x, y).isEmpty()) {
             return mannWhitneyUTest(x, y, true);
         } else { // Normal approximation
@@ -224,9 +228,8 @@ public class MannWhitneyUTest {
      * <p>
      * If {@code exact} is {@code true}, the p-value reported is exact, computed
      * using the exact distribution of the U statistic. The computation in this
-     * case is expensive, using a recursive algorithm. Exact computation with
-     * sample sizes larger than {@link #SMALL_SAMPLE_SIZE} may take a very long
-     * time and possibly run out of stack space.
+     * case requires storage on the order of the product of the two sample
+     * sizes, so this should not be used for large samples.
      * <p>
      * If {@code exact} is {@code false}, the normal approximation is used to
      * estimate the p-value.
@@ -239,8 +242,8 @@ public class MannWhitneyUTest {
      *
      * @param x the first sample
      * @param y the second sample
-     * @param exact true means compute the p-value exactly,
-     *        false means use the normal approximation
+     * @param exact true means compute the p-value exactly, false means use the
+     *        normal approximation
      * @return approximate 2-sided p-value
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are
@@ -330,8 +333,8 @@ public class MannWhitneyUTest {
      * The result of this computation is only valid when the combined n + m
      * sample has no tied values.
      * <p>
-     * This method should not be used for large values of n or m (greater than
-     * 20).
+     * This method should not be used for large values of n or m as it maintains
+     * work arrays of size n*m.
      *
      * @param u Mann-Whitney U statistic value
      * @param n first sample size
@@ -358,13 +361,8 @@ public class MannWhitneyUTest {
      * Computes the probability density function for the Mann-Whitney U
      * statistic.
      * <p>
-     * Uses the recurrence relation defined in Mann, H. B. and D. R. Whitney
-     * (1947) "On a test of whether one of two random variables is
-     * stochastically larger than the other", The Annals of Mathematical
-     * Statistics, 18, 50–60.
-     * <p>
-     * This method should not be used for large values of n or m (greater than
-     * 15).
+     * This method should not be used for large values of n or m as it maintains
+     * work arrays of size n*m.
      *
      * @param n first sample size
      * @param m second sample size
@@ -376,13 +374,57 @@ public class MannWhitneyUTest {
         if (u < 0 || u > m * n) {
             return 0;
         }
-        if (n == 0 || m == 0) {
-            return u == 0 ? 1d : 0d;
-        }
-        final double dSum = (double) (n + m);
-        return (n / dSum) * uDensity(n - 1, m, u - m) +
-               (m / dSum) * uDensity(n, m - 1, u);
+        final long[] freq = uFrequencies(n, m);
+        return freq[(int) FastMath.round(u + 1)] /
+               (double) LongStream.of(freq).sum();
+    }
 
+    /**
+     * Computes frequency counts for values of the Mann-Whitney U statistc. If
+     * freq[] is the returned array, freq[u + 1] counts the frequency of U = u
+     * among all possible n-m orderings. Therefore, P(u = U) = freq[u + 1] / sum
+     * where sum is the sum of the values in the returned array.
+     * <p>
+     * Implements the algorithm presented in "Algorithm AS 62: A Generator for
+     * the Sampling Distribution of the Mann-Whitney U Statistic", L. C. Dinneen
+     * and B. C. Blakesley Journal of the Royal Statistical Society. Series C
+     * (Applied Statistics) Vol. 22, No. 2 (1973), pp. 269-273.
+     *
+     * @param n first sample size
+     * @param m second sample size
+     * @return array of U statistic value frequencies
+     */
+    private long[] uFrequencies(final int n, final int m) {
+        final int max = FastMath.max(m, n);
+        if (max > 100) {
+            throw new MathIllegalArgumentException(LocalizedCoreFormats.NUMBER_TOO_LARGE,
+                                                   max, 100);
+        }
+        final int min = FastMath.min(m, n);
+        final long[] out = new long[n * m + 2];
+        final long[] work = new long[n * m + 2];
+        for (int i = 1; i < out.length; i++) {
+            out[i] = (i <= (max + 1)) ? 1 : 0;
+        }
+        work[1] = 0;
+        int in = max;
+        long sum = 0;
+        for (int i = 2; i <= min; i++) {
+            work[i] = 0;
+            in = in + max;
+            int n1 = in + 2;
+            long l = 1 + in / 2;
+            int k = i;
+            for (int j = 1; j <= l; j++) {
+                k++;
+                n1 = n1 - 1;
+                sum = out[j] + work[j];
+                out[j] = sum;
+                work[k] = sum - out[n1];
+                out[n1] = sum;
+            }
+        }
+        return out;
     }
 
     /**
