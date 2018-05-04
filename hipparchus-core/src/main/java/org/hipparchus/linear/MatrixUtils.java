@@ -250,6 +250,7 @@ public class MatrixUtils {
      * Creates a {@link RealVector} with specified dimensions.
      *
      * @param dimension dimension of the vector
+     * @return a new vector
      * @since 1.3
      */
     public static RealVector createRealVector(final int dimension) {
@@ -283,6 +284,7 @@ public class MatrixUtils {
      * @param <T> the type of the field elements
      * @param field field to which array elements belong
      * @param dimension dimension of the vector
+     * @return a new vector
      * @since 1.3
      */
     public static <T extends FieldElement<T>> FieldVector<T> createFieldVector(final Field<T> field, final int dimension) {

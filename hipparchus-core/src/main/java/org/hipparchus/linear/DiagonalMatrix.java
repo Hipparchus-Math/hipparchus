@@ -186,7 +186,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
                 @Override
                 public double visit(int row, int column, double value) {
                     return data[row] * m.getEntry(row, column);
-                }                
+                }
             });
             return product;
         }

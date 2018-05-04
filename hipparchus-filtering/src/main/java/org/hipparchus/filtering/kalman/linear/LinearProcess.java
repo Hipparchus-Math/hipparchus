@@ -18,7 +18,6 @@
 package org.hipparchus.filtering.kalman.linear;
 
 import org.hipparchus.filtering.kalman.Measurement;
-import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
 
 /**
  * Linear process that can be estimated by a {@link LinearKalmanFilter}.
@@ -38,7 +37,7 @@ import org.hipparchus.filtering.kalman.extended.NonLinearProcess;
  * </p>
  * @param <T> the type of the measurements
  * @see LinearKalmanFilter
- * @see NonLinearProcess
+ * @see org.hipparchus.filtering.kalman.extended.NonLinearProcess
  * @since 1.3
  */
 public interface LinearProcess<T extends Measurement> {

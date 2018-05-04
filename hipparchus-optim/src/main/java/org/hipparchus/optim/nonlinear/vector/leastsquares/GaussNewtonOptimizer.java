@@ -338,11 +338,11 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
     /**
      * Configure the matrix decomposition algorithm.
      *
-     * @param decomposer the decomposition algorithm to use.
+     * @param newDecomposer the decomposition algorithm to use.
      * @return a new instance.
      */
-    public GaussNewtonOptimizer withDecomposer(final MatrixDecomposer decomposer) {
-        return new GaussNewtonOptimizer(decomposer, this.isFormNormalEquations());
+    public GaussNewtonOptimizer withDecomposer(final MatrixDecomposer newDecomposer) {
+        return new GaussNewtonOptimizer(newDecomposer, this.isFormNormalEquations());
     }
 
     /**
@@ -359,17 +359,16 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
     /**
      * Configure if the normal equations should be explicitly formed.
      *
-     * @param formNormalEquations whether the normal equations should be explicitly
-     *                            formed. If {@code true} then {@code decomposer} is used
-     *                            to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
-     *                            {@code decomposer} is used to solve Jx=r. If {@code
-     *                            decomposer} can only solve square systems then this
-     *                            parameter should be {@code true}.
+     * @param newFormNormalEquations whether the normal equations should be explicitly
+     *                               formed. If {@code true} then {@code decomposer} is used
+     *                               to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
+     *                               {@code decomposer} is used to solve Jx=r. If {@code
+     *                               decomposer} can only solve square systems then this
+     *                               parameter should be {@code true}.
      * @return a new instance.
      */
-    public GaussNewtonOptimizer withFormNormalEquations(
-            final boolean formNormalEquations) {
-        return new GaussNewtonOptimizer(this.getDecomposer(), formNormalEquations);
+    public GaussNewtonOptimizer withFormNormalEquations(final boolean newFormNormalEquations) {
+        return new GaussNewtonOptimizer(this.getDecomposer(), newFormNormalEquations);
     }
 
     /** {@inheritDoc} */
