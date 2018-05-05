@@ -24,7 +24,7 @@ The filtering package provides classes useful for real-time process estimation:
 ![Kalman class diagram](images/userguide/kalman.png)
 
 Kalman filters are devoted to real time estimates. They process measurements one by one
-as they arrive an produce a new estimate of the process state based on each measurement.
+as they arrive and produce a new estimate of the process state based on each measurement.
 
 Depending on the type of process (linear or non-linear), a different type of Kalman
 filter should be used (see below), and different interfaces must be implemented
