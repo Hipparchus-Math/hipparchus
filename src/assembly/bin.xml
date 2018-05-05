@@ -79,13 +79,6 @@ limitations under the License.
       </includes>
     </fileSet>
     <fileSet>
-      <directory>hipparchus-genetics/target/</directory>
-      <outputDirectory></outputDirectory>
-      <includes>
-        <include>hipparchus-genetics-${project.version}.jar</include>
-      </includes>
-    </fileSet>
-    <fileSet>
       <directory>hipparchus-geometry/target/</directory>
       <outputDirectory></outputDirectory>
       <includes>
