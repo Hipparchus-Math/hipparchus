@@ -65,6 +65,13 @@ limitations under the License.
       </includes>
     </fileSet>
     <fileSet>
+      <directory>hipparchus-filtering/target/</directory>
+      <outputDirectory></outputDirectory>
+      <includes>
+        <include>hipparchus-filtering-${project.version}.jar</include>
+      </includes>
+    </fileSet>
+    <fileSet>
       <directory>hipparchus-fitting/target/</directory>
       <outputDirectory></outputDirectory>
       <includes>

@@ -53,8 +53,8 @@ If the output is not quite correct, check for invisible trailing spaces!
     Changes in this module only consist in bug fixes in MannWhitneyTest and WilcoxonSignedRankTest.">
       <action dev="psteitz" type="fix" issue="issues/38">
         Corrected MannWhitneyTest to report the U statistic used in the test and improved
-        accuracy of the reported p-values by 1) adding a (currently naive) implementation
-        of exact computation for very small sample sizes 2) applying continuity correction
+        accuracy of the reported p-values by 1) adding an implementation
+        of exact computation for small sample sizes 2) applying continuity correction
         to the normal approximation when this is used 3) adjusting variance for the presence
         of ties in the data. The problem with the U statistic was reported against Apache
         Commons Math as MATH-1453.
