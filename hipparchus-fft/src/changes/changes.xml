@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus FFT Release Notes</title>
   </properties>
   <body>
-    <release version="1.3" date="2018-05-07" description="This is a maintenance release.">
+    <release version="1.3" date="2018-05-08" description="This is a maintenance release.">
       <action dev="luc" type="update">
         No changes directly in this module. However, lower level Hipparchus modules did change,
         hence a new release was needed.

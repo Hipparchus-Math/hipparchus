@@ -47,7 +47,7 @@ Maven's internal mechanism will automatically download any internal dependencies
 |  source (tar.bz2) | [hipparchus-1.3-src.tar.bz2](downloads/hipparchus-1.3-src.tar.bz2) | [md5](downloads/hipparchus-1.3-src.tar.bz2.md5) | [sig](downloads/hipparchus-1.3-src.tar.bz2.asc)|
 |  binary (zip)     | [hipparchus-1.3-bin.zip](downloads/hipparchus-1.3-bin.zip)| [md5](downloads/hipparchus-1.3-bin.zip.md5) | [sig](downloads/hipparchus-1.3-bin.zip.asc)|
 |  binary (tar.bz2) | [hipparchus-1.3-bin.tar.bz2](downloads/hipparchus-1.3-bin.tar.bz2) | [md5](downloads/hipparchus-1.3-bin.tar.bz2.md5) | [sig](downloads/hipparchus-1.3-bin.tar.bz2.asc)
-version 1.3 downloads (release date: 07-May-2018)
+version 1.3 downloads (release date: 08-May-2018)
 
 ---
 

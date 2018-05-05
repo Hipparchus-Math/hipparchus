@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Optim Release Notes</title>
   </properties>
   <body>
-    <release version="1.3" date="2018-05-07" description="This is a maintenance release. The main
+    <release version="1.3" date="2018-05-08" description="This is a maintenance release. The main
     change since last version is the introduction of a matrix decomposer to configure decomposition
     threshold independently of the matrix.">
       <action dev="evan" type="update">

@@ -49,7 +49,7 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Release Notes</title>
   </properties>
   <body>
-    <release version="1.3" date="2018-05-07" description="This is a maintenance release. The main
+    <release version="1.3" date="2018-05-08" description="This is a maintenance release. The main
     changes since last version are the introduction of complex eigen decomposition, introduction of
     a solver for continuous time algebraic Riccati equation, a new Kalman module featuring both a
     filter for linear processes and a filter for non-linear processes, capability for secondary
