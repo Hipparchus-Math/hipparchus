@@ -104,6 +104,19 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="add" due-to="Alessandro Romero">
         Added complex eigen decomposition.
       </action>
+      <action dev="psteitz" type="fix" issue="issues/38">
+        Corrected MannWhitneyTest to report the U statistic used in the test and improved
+        accuracy of the reported p-values by 1) adding an implementation
+        of exact computation for small sample sizes 2) applying continuity correction
+        to the normal approximation when this is used 3) adjusting variance for the presence
+        of ties in the data. The problem with the U statistic was reported against Apache
+        Commons Math as MATH-1453.
+      </action>
+      <action dev="psteitz" type="fix" issue="issues/37">
+        Corrected WilcoxonSignedRankTest to discard tied pairs and to correctly perform
+        continuity correction when estimating p-values using the normal approximation.
+        This was reported against Apache Commons Math as MATH-1233.
+      </action>
     </release>
     <release version="1.2" date="2017-10-25" description="This is a maintenance release.">
       <action dev="luc" type="add" >
