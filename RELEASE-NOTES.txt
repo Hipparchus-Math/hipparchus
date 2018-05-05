@@ -5,46 +5,58 @@ The Hipparchus team is pleased to announce the release of hipparchus-1.3
 
 The Hipparchus library is a library of mathematical components. It started as a fork of Apache Commons Math.
 
-This is a maintenance release. The main changes since last version are the introduction of
-complex eigen decomposition, introduction of a solver for continuous time algebraic Riccati equation,
-a new Kalman module featuring both a filter for linear processes and a filter for non-linear processes,
-capability for secondary equations to update the derivatives of the primary equation in ODE, and
-introduction of a matrix decomposer to configure decomposition threshold independently of the matrix.
+This is a maintenance release. The main changes since last version are the introduction of complex eigen decomposition,
+introduction of a solver for continuous time algebraic Riccati equation, a new Kalman module featuring both a filter
+for linear processes and a filter for non-linear processes, capability for secondary equations to update the derivatives
+of the primary equation in ODE, and introduction of a matrix decomposer to configure decomposition threshold independently
+of the matrix.
 
 Changes in this version include:
 
 New features:
 o issues/36:  Added in FastMath the methods Java 9 added in StrictMath.
-                This ensures FastMath is always a drop-in replacement for Math/StrictMath.
-                Github: fixes #36. 
+              This ensures FastMath is always a drop-in replacement for Math/StrictMath.
+              Github: fixes #36. 
 o             Added new utility methods to create real and field vectors from dimension. 
 o             Allow FastMath to operate on RealFieldElements.
-                This simplifies a lot "fieldification" of algorithms
-                previously implemented with primitive double numbers. 
+              This simplifies a lot "fieldification" of algorithms
+              previously implemented with primitive double numbers. 
 o             Added a transposeMultiply method to compute A^T.B
-                without creating the intermediate transposed matrix. 
+              without creating the intermediate transposed matrix. 
 o             Added a multiplyTransposed method to compute A.B^T
-                without creating the intermediate transposed matrix. 
+              without creating the intermediate transposed matrix. 
 o issues/32:  Added linear and extended Kalman filters, with support for outliers rejection. 
 o             Added MatrixDecomposer interface that encapsulates algorithms tolerances. Thanks to Evan Ward. 
 o             Added a way to compute both sin and cos at once faster than performing two calls.
-                This also speeds up DerivativeStructure.sin and DerivativeStructure.cos. 
+              This also speeds up DerivativeStructure.sin and DerivativeStructure.cos. 
 o issues/31:  Allow secondary equations to update derivatives of primary equation in ODE.
-                GitHub: fixes #31. 
+              GitHub: fixes #31. 
 o issues/29:  Added a solver for Continuous time Algebraic Riccati Equation. Thanks to Alessandro Romero. 
 o             Added complex eigen decomposition. Thanks to Alessandro Romero. 
 
 Fixed Bugs:
 o issues/35:  Added FieldUnivariateVectorFunction and FieldUnivariateMatrixFunction interfaces,
-                as well as RealFieldUnivariateVectorFunction and RealFieldUnivariateMatrixFunction 
-                Github: fixes #35. 
+              as well as RealFieldUnivariateVectorFunction and RealFieldUnivariateMatrixFunction 
+              Github: fixes #35. 
 o issues/34:  Added FieldUnivariateFunction interface and have polynomials implement it.
-                Github: fixes #34. 
+              Github: fixes #34. 
 o issues/30:  Fixed a problem with eigen decomposition of matrices with large coefficients.
-                Github: fixes #30. 
+              Github: fixes #30. 
+o issues/38:  Corrected MannWhitneyTest to report the U statistic used in the test and improved
+              accuracy of the reported p-values by 1) adding an implementation
+              of exact computation for small sample sizes 2) applying continuity correction
+              to the normal approximation when this is used 3) adjusting variance for the presence
+              of ties in the data. The problem with the U statistic was reported against Apache
+              Commons Math as MATH-1453. 
+o issues/37:  Corrected WilcoxonSignedRankTest to discard tied pairs and to correctly perform
+              continuity correction when estimating p-values using the normal approximation.
+              This was reported against Apache Commons Math as MATH-1233. 
+
 
 
 For complete information on Hipparchus, including instructions on how to submit bug reports,
 patches, or suggestions for improvement, see the Hipparchus website:
 
 https://www.hipparchus.org/
+
+
