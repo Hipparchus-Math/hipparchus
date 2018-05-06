@@ -103,9 +103,9 @@ and create an [ExtendedKalmanFilter](../apidocs/org/hipparchus/filtering/kalman/
 instance.
 
 If a measurement should be ignored, either a null measurement Jacobian matrix should be put in the
-[NonLinearEvolution](../apidocs/org/hipparchus/filtering/kalman/linear/NonLinearEvolution.html)
-instance returned by the linear process, or a null innovation vector should be returned by the
-linear process. The former way can be used if the decision about ignoring the measurement can be taken
+[NonLinearEvolution](../apidocs/org/hipparchus/filtering/kalman/extended/NonLinearEvolution.html)
+instance returned by the process, or a null innovation vector should be returned by the
+process. The former way can be used if the decision about ignoring the measurement can be taken
 early in the prediction phase, and the latter can be used when the decision needs to perform some
 computations based on the innovation covariance matrix. This second case typically occurs when rejecting
 outliers measurements is based on a ratio between the innovation (which is a residual) and the a posteriori
