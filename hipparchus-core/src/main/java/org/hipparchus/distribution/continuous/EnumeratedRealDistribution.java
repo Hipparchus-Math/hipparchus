@@ -280,7 +280,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
     }
 
     /**
-     * Return the probability mass function as a list of <value, probability> pairs.
+     * Return the probability mass function as a list of (value, probability) pairs.
      *
      * @return the probability mass function.
      */

@@ -27,6 +27,7 @@ import org.hipparchus.RealFieldElement;
 public interface FieldUnivariateMatrixFunction {
 
     /** Convert to a {@link RealFieldUnivariateMatrixFunction} with a specific type.
+     * @param <T> the type of the field elements
      * @param field field for the argument and value
      * @return converted function
      */

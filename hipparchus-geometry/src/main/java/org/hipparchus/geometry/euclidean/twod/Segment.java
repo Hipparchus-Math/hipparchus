@@ -77,7 +77,7 @@ public class Segment {
      * </p>
      *
      * Algorithm adapted from:
-     * <a href="http://www.codeguru.com/forum/printthread.php?s=cc8cf0596231f9a7dba4da6e77c29db3&t=194400&pp=15&page=1">
+     * <a href="http://www.codeguru.com/forum/printthread.php?s=cc8cf0596231f9a7dba4da6e77c29db3&amp;t=194400&amp;pp=15&amp;page=1">
      * Thread @ Codeguru</a>
      *
      * @param p to check

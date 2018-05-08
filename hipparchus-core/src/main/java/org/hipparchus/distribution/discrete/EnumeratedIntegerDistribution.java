@@ -227,7 +227,7 @@ public class EnumeratedIntegerDistribution extends AbstractIntegerDistribution {
     }
 
     /**
-     * Return the probability mass function as a list of <value, probability> pairs.
+     * Return the probability mass function as a list of (value, probability) pairs.
      *
      * @return the probability mass function.
      */

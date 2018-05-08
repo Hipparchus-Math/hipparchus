@@ -320,7 +320,7 @@ public class WilcoxonSignedRankTest {
      * @param x the first sample
      * @param y the second sample
      * @param exactPValue if the exact p-value is wanted (only works for
-     *        x.length <= 30, if true and x.length > 30, MathIllegalArgumentException is thrown)
+     *        x.length &lt;= 30, if true and x.length &gt; 30, MathIllegalArgumentException is thrown)
      * @return p-value
      * @throws NullArgumentException if {@code x} or {@code y} are {@code null}.
      * @throws MathIllegalArgumentException if {@code x} or {@code y} are
@@ -328,7 +328,7 @@ public class WilcoxonSignedRankTest {
      * @throws MathIllegalArgumentException if {@code x} and {@code y} do not
      *         have the same length.
      * @throws MathIllegalArgumentException if {@code exactPValue} is
-     *         {@code true} and {@code x.length} > 30
+     *         {@code true} and {@code x.length} &gt; 30
      * @throws MathIllegalStateException if the p-value can not be computed due
      *         to a convergence error
      * @throws MathIllegalStateException if the maximum number of iterations is

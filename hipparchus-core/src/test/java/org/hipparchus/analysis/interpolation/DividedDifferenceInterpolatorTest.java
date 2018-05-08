@@ -50,7 +50,7 @@ public final class DividedDifferenceInterpolatorTest {
     /**
      * Test of interpolator for the sine function.
      * <p>
-     * |sin^(n)(zeta)| <= 1.0, zeta in [0, 2*PI]
+     * |sin^(n)(zeta)| &lt;= 1.0, zeta in [0, 2*PI]
      */
     @Test
     public void testSinFunction() {
@@ -82,7 +82,7 @@ public final class DividedDifferenceInterpolatorTest {
     /**
      * Test of interpolator for the exponential function.
      * <p>
-     * |expm1^(n)(zeta)| <= e, zeta in [-1, 1]
+     * |expm1^(n)(zeta)| &lt;= e, zeta in [-1, 1]
      */
     @Test
     public void testExpm1Function() {

@@ -68,7 +68,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
          * using the {@link LUDecomposition}.
          *
          * <p> Theoretically this method takes mn<sup>2</sup>/2 operations to compute the
-         * normal matrix and n<sup>3</sup>/3 operations (m > n) to solve the system using
+         * normal matrix and n<sup>3</sup>/3 operations (m &gt; n) to solve the system using
          * the LU decomposition. </p>
          */
         LU {
@@ -103,7 +103,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
          * QRDecomposition}.
          *
          * <p> Theoretically this method takes mn<sup>2</sup> - n<sup>3</sup>/3 operations
-         * (m > n) and has better numerical accuracy than any method that forms the normal
+         * (m &gt; n) and has better numerical accuracy than any method that forms the normal
          * equations. </p>
          */
         QR {
@@ -134,7 +134,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
          * using the {@link CholeskyDecomposition}.
          *
          * <p> Theoretically this method takes mn<sup>2</sup>/2 operations to compute the
-         * normal matrix and n<sup>3</sup>/6 operations (m > n) to solve the system using
+         * normal matrix and n<sup>3</sup>/6 operations (m &gt; n) to solve the system using
          * the Cholesky decomposition. </p>
          */
         CHOLESKY {
@@ -200,7 +200,7 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
         /**
          * Solve the linear least squares problem Jx=r.
          *
-         * @param jacobian  the Jacobian matrix, J. the number of rows >= the number or
+         * @param jacobian  the Jacobian matrix, J. the number of rows &gt;= the number or
          *                  columns.
          * @param residuals the computed residuals, r.
          * @return the solution x, to the linear least squares problem Jx=r.
@@ -338,11 +338,11 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
     /**
      * Configure the matrix decomposition algorithm.
      *
-     * @param decomposer the decomposition algorithm to use.
+     * @param newDecomposer the decomposition algorithm to use.
      * @return a new instance.
      */
-    public GaussNewtonOptimizer withDecomposer(final MatrixDecomposer decomposer) {
-        return new GaussNewtonOptimizer(decomposer, this.isFormNormalEquations());
+    public GaussNewtonOptimizer withDecomposer(final MatrixDecomposer newDecomposer) {
+        return new GaussNewtonOptimizer(newDecomposer, this.isFormNormalEquations());
     }
 
     /**
@@ -359,17 +359,16 @@ public class GaussNewtonOptimizer implements LeastSquaresOptimizer {
     /**
      * Configure if the normal equations should be explicitly formed.
      *
-     * @param formNormalEquations whether the normal equations should be explicitly
-     *                            formed. If {@code true} then {@code decomposer} is used
-     *                            to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
-     *                            {@code decomposer} is used to solve Jx=r. If {@code
-     *                            decomposer} can only solve square systems then this
-     *                            parameter should be {@code true}.
+     * @param newFormNormalEquations whether the normal equations should be explicitly
+     *                               formed. If {@code true} then {@code decomposer} is used
+     *                               to solve J<sup>T</sup>Jx=J<sup>T</sup>r, otherwise
+     *                               {@code decomposer} is used to solve Jx=r. If {@code
+     *                               decomposer} can only solve square systems then this
+     *                               parameter should be {@code true}.
      * @return a new instance.
      */
-    public GaussNewtonOptimizer withFormNormalEquations(
-            final boolean formNormalEquations) {
-        return new GaussNewtonOptimizer(this.getDecomposer(), formNormalEquations);
+    public GaussNewtonOptimizer withFormNormalEquations(final boolean newFormNormalEquations) {
+        return new GaussNewtonOptimizer(this.getDecomposer(), newFormNormalEquations);
     }
 
     /** {@inheritDoc} */

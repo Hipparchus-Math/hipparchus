@@ -199,7 +199,7 @@ public class GTest {
      * {@code gTest(expected, observed, 0.01)}</p>
      *
      * <p>Returns true iff {@link #gTest(double[], long[])
-     *  gTestGoodnessOfFitPValue(expected, observed)} < alpha</p>
+     *  gTestGoodnessOfFitPValue(expected, observed)} &gt; alpha</p>
      *
      * <p><strong>Preconditions</strong>: <ul>
      * <li>Expected counts must all be positive. </li>

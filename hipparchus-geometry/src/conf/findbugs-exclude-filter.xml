@@ -53,4 +53,10 @@
     <Bug pattern="SF_SWITCH_NO_DEFAULT" />
   </Match>
 
+  <!-- Spurious: Findbugs confused by a field that is safely null at deserialization -->
+  <Match>
+    <Class name="org.hipparchus.geometry.euclidean.twod.hull.ConvexHull2D" />
+    <Bug pattern="SE_TRANSIENT_FIELD_NOT_RESTORED" />
+  </Match>
+
 </FindBugsFilter>

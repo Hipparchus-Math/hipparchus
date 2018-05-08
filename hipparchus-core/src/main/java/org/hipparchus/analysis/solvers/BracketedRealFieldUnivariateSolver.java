@@ -159,9 +159,9 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
      * @return an interval [ta, tb] such that for some t in [ta, tb] f(t) == 0.0 or has a
      * step wise discontinuity that crosses zero. Both end points also satisfy the
      * convergence criteria so either one could be used as the root. That is the interval
-     * satisfies the condition (| tb - ta | <= {@link #getAbsoluteAccuracy() absolute}
+     * satisfies the condition (| tb - ta | &lt;= {@link #getAbsoluteAccuracy() absolute}
      * accuracy + max(ta, tb) * {@link #getRelativeAccuracy() relative} accuracy) or (
-     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}) or there are no
+     * max(|f(ta)|, |f(tb)|) &lt;= {@link #getFunctionValueAccuracy()}) or there are no
      * numbers in the field between ta and tb. The width of the interval (tb - ta) may be
      * zero.
      * @throws MathIllegalArgumentException if the arguments do not satisfy the
@@ -191,9 +191,9 @@ public interface BracketedRealFieldUnivariateSolver<T extends RealFieldElement<T
      * @return an interval [ta, tb] such that for some t in [ta, tb] f(t) == 0.0 or has a
      * step wise discontinuity that crosses zero. Both end points also satisfy the
      * convergence criteria so either one could be used as the root. That is the interval
-     * satisfies the condition (| tb - ta | <= {@link #getAbsoluteAccuracy() absolute}
+     * satisfies the condition (| tb - ta | &lt;= {@link #getAbsoluteAccuracy() absolute}
      * accuracy + max(ta, tb) * {@link #getRelativeAccuracy() relative} accuracy) or (
-     * max(|f(ta)|, |f(tb)|) <= {@link #getFunctionValueAccuracy()}) or numbers in the
+     * max(|f(ta)|, |f(tb)|) &lt;= {@link #getFunctionValueAccuracy()}) or numbers in the
      * field between ta and tb. The width of the interval (tb - ta) may be zero.
      * @throws MathIllegalArgumentException if the arguments do not satisfy the
      *                                      requirements specified by the solver.

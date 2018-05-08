@@ -237,8 +237,8 @@ public class RandomDataGeneratorTest {
     }
 
     /**
-     * Make sure that empirical distribution of random Poisson(4)'s has P(X <=
-     * 5) close to actual cumulative Poisson probability and that nextPoisson
+     * Make sure that empirical distribution of random Poisson(4)'s has P(X &lt;= 5)
+     * close to actual cumulative Poisson probability and that nextPoisson
      * fails when mean is non-positive.
      */
     @Test

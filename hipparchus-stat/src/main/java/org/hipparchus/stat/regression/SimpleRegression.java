@@ -483,7 +483,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * This is defined as SSTO
      * <a href="http://www.xycoon.com/SumOfSquares.htm">here</a>.</p>
      * <p>
-     * If <code>n < 2</code>, this returns <code>Double.NaN</code>.</p>
+     * If {@code n < 2}, this returns <code>Double.NaN</code>.</p>
      *
      * @return sum of squared deviations of y values
      */
@@ -497,7 +497,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
     /**
      * Returns the sum of squared deviations of the x values about their mean.
      *
-     * If <code>n < 2</code>, this returns <code>Double.NaN</code>.</p>
+     * If {@code n < 2}, this returns <code>Double.NaN</code>.</p>
      *
      * @return sum of squared deviations of x values
      */
@@ -680,7 +680,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * model, or if there is no variation in x, this returns
      * <code>Double.NaN</code>.
      * </li>
-     * <li><code>(0 < alpha < 1)</code>; otherwise an
+     * <li>{@code (0 < alpha < 1)}; otherwise an
      * <code>MathIllegalArgumentException</code> is thrown.
      * </li></ul></p>
      *
@@ -709,7 +709,7 @@ public class SimpleRegression implements Serializable, UpdatingMultipleLinearReg
      * Specifically, the returned value is the smallest <code>alpha</code>
      * such that the slope confidence interval with significance level
      * equal to <code>alpha</code> does not include <code>0</code>.
-     * On regression output, this is often denoted <code>Prob(|t| > 0)</code>
+     * On regression output, this is often denoted <code>Prob(|t| &gt; 0)</code>
      * </p><p>
      * <strong>Usage Note</strong>:<br>
      * The validity of this statistic depends on the assumption that the

@@ -304,7 +304,7 @@ public class KolmogorovSmirnovTestTest {
 
     /**
      * MATH-1181
-     * Verify that large sample method is selected for sample product > Integer.MAX_VALUE
+     * Verify that large sample method is selected for sample product &gt; Integer.MAX_VALUE
      * (integer overflow in sample product)
      */
     @Test(timeout=5000)
@@ -527,7 +527,7 @@ public class KolmogorovSmirnovTestTest {
 
     /**
      * Verify that fixTies is deterministic, i.e,
-     * x = x', y = y' => fixTies(x,y) = fixTies(x', y')
+     * x = x', y = y' ⇒ fixTies(x,y) = fixTies(x', y')
      */
     @Test
     public void testFixTiesConsistency() throws Exception {

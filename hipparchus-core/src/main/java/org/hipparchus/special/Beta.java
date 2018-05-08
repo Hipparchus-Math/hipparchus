@@ -384,7 +384,7 @@ public class Beta {
     }
 
     /**
-     * Returns the value of log B(p, q) for 0 ≤ x ≤ 1 and p, q > 0. Based on the
+     * Returns the value of log B(p, q) for 0 ≤ x ≤ 1 and p, q &gt; 0. Based on the
      * <em>NSWC Library of Mathematics Subroutines</em> implementation,
      * {@code DBETLN}.
      *

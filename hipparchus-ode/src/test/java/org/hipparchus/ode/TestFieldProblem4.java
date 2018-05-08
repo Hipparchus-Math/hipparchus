@@ -40,7 +40,7 @@ import org.hipparchus.util.MathArrays;
  * </pre>
  * And when x decreases down to 0, the state should be changed as follows :
  * <pre>
- *   x' -> -x'
+ *   x' → -x'
  * </pre>
  * The theoretical solution of this problem is x = |sin(t+a)|
  * </p>

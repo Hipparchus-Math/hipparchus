@@ -456,7 +456,7 @@ public class EigenDecompositionTest {
      * Tests the porting of a bugfix in Jama-1.0.3 (from changelog):
      *
      *  Patched hqr2 method in Jama.EigenvalueDecomposition to avoid infinite loop;
-     *  Thanks Frederic Devernay <frederic.devernay@m4x.org>
+     *  Thanks Frederic Devernay &lt;frederic.devernay@m4x.org&gt;
      */
     @Test
     public void testMath1051() {

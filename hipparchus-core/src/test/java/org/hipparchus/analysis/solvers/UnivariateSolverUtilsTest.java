@@ -299,7 +299,7 @@ public class UnivariateSolverUtilsTest {
         UnivariateSolverUtils.bracket(fieldSin, new Decimal64(1.5), new Decimal64(0), new Decimal64(2.0), 0);
     }
 
-    /** check the search continues when a = lowerBound and b < upperBound. */
+    /** check the search continues when a = lowerBound and b &lt; upperBound. */
     @Test
     public void testBracketLoopConditionForB() {
         double[] result = UnivariateSolverUtils.bracket(sin, -0.9, -1, 1, 0.1, 1, 100);

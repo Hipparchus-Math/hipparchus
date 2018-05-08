@@ -239,7 +239,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
      * 0.65 for stepControl1 and 0.94 for stepControl2.</p>
      * <p>The step size is subject to the restriction:
      * <pre>
-     * stepControl3^(1/(2k + 1))/stepControl4 <= hNew/h <= 1/stepControl3^(1/(2k + 1))
+     * stepControl3^(1/(2k + 1))/stepControl4 &lt;= hNew/h &lt;= 1/stepControl3^(1/(2k + 1))
      * </pre>
      * The default values are 0.02 for stepControl3 and 4.0 for
      * stepControl4.</p>
@@ -288,8 +288,8 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
      * maximal order that will be used is always even, it is twice the
      * maximal number of columns in the extrapolation table.</p>
      * <pre>
-     * order is decreased if w(k - 1) <= w(k)     * orderControl1
-     * order is increased if w(k)     <= w(k - 1) * orderControl2
+     * order is decreased if w(k - 1) &lt;= w(k)     * orderControl1
+     * order is increased if w(k)     &lt;= w(k - 1) * orderControl2
      * </pre>
      * <p>where w is the table of work per unit step for each order
      * (number of function calls divided by the step length), and k is
@@ -298,7 +298,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
      * maximal number of columns is 9). The default values are 0.8 for
      * orderControl1 and 0.9 for orderControl2.</p>
      * @param maximalOrder maximal order in the extrapolation table (the
-     * maximal order is reset to default if order <= 6 or odd)
+     * maximal order is reset to default if order &lt;= 6 or odd)
      * @param control1 first order control factor (the factor is
      * reset to default if lower than 0.0001 or greater than 0.9999)
      * @param control2 second order control factor (the factor
@@ -375,7 +375,7 @@ public class GraggBulirschStoerIntegrator extends AdaptiveStepsizeIntegrator {
      * @param useInterpolationErrorForControl if true, interpolation error is used
      * for stepsize control
      * @param mudifControlParameter interpolation order control parameter (the parameter
-     * is reset to default if <= 0 or >= 7)
+     * is reset to default if &lt;= 0 or &gt;= 7)
      */
     public void setInterpolationControl(final boolean useInterpolationErrorForControl,
                                         final int mudifControlParameter) {

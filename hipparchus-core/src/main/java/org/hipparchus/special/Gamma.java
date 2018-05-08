@@ -434,7 +434,7 @@ public class Gamma {
      *
      * <p>Some of the constants have been changed to increase accuracy at the moderate expense
      * of run-time.  The result should be accurate to within 10^-8 absolute tolerance for
-     * x >= 10^-5 and within 10^-8 relative tolerance for x > 0.</p>
+     * x &gt;= 10^-5 and within 10^-8 relative tolerance for x &gt; 0.</p>
      *
      * <p>Performance for large negative values of x will be quite expensive (proportional to
      * |x|).  Accuracy for negative values of x should be about 10^-8 absolute for results

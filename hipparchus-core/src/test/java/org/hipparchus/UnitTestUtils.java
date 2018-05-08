@@ -643,7 +643,7 @@ public class UnitTestUtils {
 
     /**
      * Updates observed counts of values in quartiles.
-     * counts[0] <-> 1st quartile ... counts[3] <-> top quartile
+     * counts[0] ↔ 1st quartile ... counts[3] ↔ top quartile
      */
     public static void updateCounts(double value, long[] counts, double[] quartiles) {
         if (value < quartiles[0]) {

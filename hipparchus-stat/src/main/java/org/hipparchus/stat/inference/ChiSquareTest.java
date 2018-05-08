@@ -373,7 +373,7 @@ public class ChiSquareTest {
      * <p>
      * where
      * <p>
-     * <code>K = &sqrt;[&sum(observed2 / &sum;(observed1)]</code>
+     * <code>K = &sqrt;[&sum;(observed2 / &sum;(observed1)]</code>
      * <p>
      * This statistic can be used to perform a Chi-Square test evaluating the
      * null hypothesis that both observed counts follow the same distribution.
@@ -522,7 +522,7 @@ public class ChiSquareTest {
      * <li>Observed counts for a specific sample must not all be 0.</li>
      * <li>The arrays <code>observed1</code> and <code>observed2</code> must
      * have the same length and their common length must be at least 2.</li>
-     * <li><code> 0 < alpha < 0.5</code></li>
+     * <li><code> 0 &lt; alpha &lt; 0.5</code></li>
      * </ul>
      * <p>
      * If any of the preconditions are not met, an

@@ -292,7 +292,7 @@ public class PearsonsCorrelation {
      *
      * <p>Uses the formula <br/>
      * <code>r(X,Y) = cov(X,Y)/s(X)s(Y)</code> where
-     * <code>r(&middot,&middot;)</code> is the correlation coefficient and
+     * <code>r(&middot;,&middot;)</code> is the correlation coefficient and
      * <code>s(&middot;)</code> means standard deviation.</p>
      *
      * @param covarianceMatrix the covariance matrix

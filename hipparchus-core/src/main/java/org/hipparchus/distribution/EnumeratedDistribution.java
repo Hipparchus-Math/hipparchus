@@ -130,7 +130,7 @@ public class EnumeratedDistribution<T> implements Serializable {
     }
 
     /**
-     * Return the probability mass function as a list of <value, probability> pairs.
+     * Return the probability mass function as a list of (value, probability) pairs.
      * <p>
      * Note that if duplicate and / or null values were provided to the constructor
      * when creating this EnumeratedDistribution, the returned list will contain these

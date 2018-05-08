@@ -3488,7 +3488,7 @@ public class FastMath {
 
     /** Get the largest whole number smaller than x.
      * @param x number from which floor is requested
-     * @return a double number f such that f is an integer f <= x < f + 1.0
+     * @return a double number f such that f is an integer f &lt;= x &lt; f + 1.0
      */
     public static double floor(double x) {
         long y;
@@ -3515,7 +3515,7 @@ public class FastMath {
 
     /** Get the smallest whole number larger than x.
      * @param x number from which ceil is requested
-     * @return a double number c such that c is an integer c - 1.0 < x <= c
+     * @return a double number c such that c is an integer c - 1.0 &lt; x &lt;= c
      */
     public static double ceil(double x) {
         double y;
@@ -3540,7 +3540,7 @@ public class FastMath {
 
     /** Get the whole number that is the nearest to x, or the even one if x is exactly half way between two integers.
      * @param x number from which nearest whole number is requested
-     * @return a double number r such that r is an integer r - 0.5 <= x <= r + 0.5
+     * @return a double number r such that r is an integer r - 0.5 &lt;= x &lt;= r + 0.5
      */
     public static double rint(double x) {
         double y = floor(x);
@@ -4084,7 +4084,7 @@ public class FastMath {
 
     }
 
-    /** Finds q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
+    /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code  b < 0}.
      * <p>
      * This methods returns the same value as integer division when
      * a and b are same signs, but returns a different value when
@@ -4092,7 +4092,7 @@ public class FastMath {
      *
      * @param a dividend
      * @param b divisor
-     * @return q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
+     * @return q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code  b < 0}
      * @exception MathRuntimeException if b == 0
      * @see #floorMod(int, int)
      */
@@ -4113,7 +4113,7 @@ public class FastMath {
 
     }
 
-    /** Finds q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
+    /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}.
      * <p>
      * This methods returns the same value as integer division when
      * a and b are same signs, but returns a different value when
@@ -4121,7 +4121,7 @@ public class FastMath {
      *
      * @param a dividend
      * @param b divisor
-     * @return q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
+     * @return q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}
      * @exception MathRuntimeException if b == 0
      * @see #floorMod(long, int)
      * @since 1.3
@@ -4130,7 +4130,7 @@ public class FastMath {
         return floorDiv(a, (long) b);
     }
 
-    /** Finds q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
+    /** Finds q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}.
      * <p>
      * This methods returns the same value as integer division when
      * a and b are same signs, but returns a different value when
@@ -4138,7 +4138,7 @@ public class FastMath {
      *
      * @param a dividend
      * @param b divisor
-     * @return q such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
+     * @return q such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}
      * @exception MathRuntimeException if b == 0
      * @see #floorMod(long, long)
      */
@@ -4159,7 +4159,7 @@ public class FastMath {
 
     }
 
-    /** Finds r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
+    /** Finds r such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}.
      * <p>
      * This methods returns the same value as integer modulo when
      * a and b are same signs, but returns a different value when
@@ -4167,7 +4167,7 @@ public class FastMath {
      * </p>
      * @param a dividend
      * @param b divisor
-     * @return r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
+     * @return r such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}
      * @exception MathRuntimeException if b == 0
      * @see #floorDiv(int, int)
      */
@@ -4188,7 +4188,7 @@ public class FastMath {
 
     }
 
-    /** Finds r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
+    /** Finds r such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}.
      * <p>
      * This methods returns the same value as integer modulo when
      * a and b are same signs, but returns a different value when
@@ -4196,7 +4196,7 @@ public class FastMath {
      * </p>
      * @param a dividend
      * @param b divisor
-     * @return r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
+     * @return r such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}
      * @exception MathRuntimeException if b == 0
      * @see #floorDiv(long, int)
      * @since 1.3
@@ -4205,7 +4205,7 @@ public class FastMath {
         return (int) floorMod(a, (long) b);
     }
 
-    /** Finds r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0.
+    /** Finds r such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}.
      * <p>
      * This methods returns the same value as integer modulo when
      * a and b are same signs, but returns a different value when
@@ -4213,7 +4213,7 @@ public class FastMath {
      * </p>
      * @param a dividend
      * @param b divisor
-     * @return r such that a = q b + r with 0 <= r < b if b > 0 and b < r <= 0 if b < 0
+     * @return r such that {@code a = q b + r} with {@code 0 <= r < b} if {@code b > 0} and {@code b < r <= 0} if {@code b < 0}
      * @exception MathRuntimeException if b == 0
      * @see #floorDiv(long, long)
      */
@@ -4639,7 +4639,7 @@ public class FastMath {
     /** Get the largest whole number smaller than x.
      * @param x number from which floor is requested
      * @param <T> the type of the field element
-     * @return a double number f such that f is an integer f <= x < f + 1.0
+     * @return a double number f such that f is an integer f &lt;= x &lt; f + 1.0
      * @since 1.3
      */
     public static <T extends RealFieldElement<T>> T floor(final T x) {
@@ -4649,7 +4649,7 @@ public class FastMath {
     /** Get the smallest whole number larger than x.
      * @param x number from which ceil is requested
      * @param <T> the type of the field element
-     * @return a double number c such that c is an integer c - 1.0 < x <= c
+     * @return a double number c such that c is an integer c - 1.0 &lt; x &lt;= c
      * @since 1.3
      */
     public static <T extends RealFieldElement<T>> T ceil(final T x) {
@@ -4659,7 +4659,7 @@ public class FastMath {
     /** Get the whole number that is the nearest to x, or the even one if x is exactly half way between two integers.
      * @param x number from which nearest whole number is requested
      * @param <T> the type of the field element
-     * @return a double number r such that r is an integer r - 0.5 <= x <= r + 0.5
+     * @return a double number r such that r is an integer r - 0.5 &lt;= x &lt;= r + 0.5
      * @since 1.3
      */
     public static <T extends RealFieldElement<T>> T rint(final T x) {

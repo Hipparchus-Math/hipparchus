@@ -109,7 +109,7 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
 
         // correct state vector
         final RealVector correctedState = predicted.getState().add(k.operate(innovation));
-        
+
         // here we use the Joseph algorithm (see "Fundamentals of Astrodynamics and Applications,
         // Vallado, Fourth Edition §10.6 eq.10-34) which is equivalent to
         // the traditional Pest = (I - k.h) x Ppred expression but guarantees the output stays symmetric:

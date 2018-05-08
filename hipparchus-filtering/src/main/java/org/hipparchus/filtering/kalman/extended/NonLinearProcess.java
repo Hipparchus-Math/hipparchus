@@ -18,7 +18,6 @@
 package org.hipparchus.filtering.kalman.extended;
 
 import org.hipparchus.filtering.kalman.Measurement;
-import org.hipparchus.filtering.kalman.linear.LinearProcess;
 import org.hipparchus.linear.RealMatrix;
 import org.hipparchus.linear.RealVector;
 
@@ -30,7 +29,7 @@ import org.hipparchus.linear.RealVector;
  * </p>
  * @param <T> the type of the measurements
  * @see ExtendedKalmanFilter
- * @see LinearProcess
+ * @see org.hipparchus.filtering.kalman.linear.LinearProcess
  * @since 1.3
  */
 public interface NonLinearProcess<T extends Measurement> {
