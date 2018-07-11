@@ -1381,7 +1381,7 @@ public class MathArrays {
 
     /** Build an array of elements.
      * <p>
-     * Arrays are filled with field.getZero()
+     * Arrays are filled with {@code field.getZero()}
      *
      * @param <T> the type of the field elements
      * @param field field to which array elements belong
@@ -1395,15 +1395,15 @@ public class MathArrays {
         return array;
     }
 
-    /** Build a double dimension  array of elements.
+    /** Build a double dimension array of elements.
      * <p>
-     * Arrays are filled with field.getZero()
+     * Arrays are filled with {@code field.getZero()}
      *
      * @param <T> the type of the field elements
      * @param field field to which array elements belong
      * @param rows number of rows in the array
      * @param columns number of columns (may be negative to build partial
-     * arrays in the same way <code>new Field[rows][]</code> works)
+     * arrays in the same way {@code new Field[rows][]} works)
      * @return a new array
      */
     @SuppressWarnings("unchecked")
@@ -1419,6 +1419,39 @@ public class MathArrays {
                                               });
             for (int i = 0; i < rows; ++i) {
                 Arrays.fill(array[i], field.getZero());
+            }
+        }
+        return array;
+    }
+
+    /** Build a triple dimension array of elements.
+     * <p>
+     * Arrays are filled with {@code field.getZero()}
+     *
+     * @param <T> the type of the field elements
+     * @param field field to which array elements belong
+     * @param l1 number of elements along first dimension
+     * @param l2 number of elements along second dimension
+     * @param l3 number of elements along third dimension (may be negative to build partial
+     * arrays in the same way {@code new Field[l1][l2][]} works)
+     * @return a new array
+     * @since 1.4
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T[][][] buildArray(final Field<T> field, final int l1, final int l2, final int l3) {
+        final T[][][] array;
+        if (l3 < 0) {
+            T[] dummyRow = buildArray(field, 0);
+            array = (T[][][]) Array.newInstance(dummyRow.getClass(), l1, l2);
+        } else {
+            array = (T[][][]) Array.newInstance(field.getRuntimeClass(),
+                                                new int[] {
+                                                  l1, l2, l3
+                                                });
+            for (int i = 0; i < l1; ++i) {
+                for (int j = 0; j < l2; ++j) {
+                    Arrays.fill(array[i][j], field.getZero());
+                }
             }
         }
         return array;

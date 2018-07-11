@@ -1181,4 +1181,67 @@ public class MathArraysTest {
     public void testUniqueNullArgument() {
         MathArrays.unique(null);
     }
+
+    @Test
+    public void testBuildArray1() {
+        Decimal64Field field = Decimal64Field.getInstance();
+        Decimal64[] array = MathArrays.buildArray(field, 3);
+        Assert.assertEquals(3, array.length);
+        for (Decimal64 d : array) {
+            Assert.assertSame(field.getZero(), d);
+        }
+    }
+
+    @Test
+    public void testBuildArray2AllIndices() {
+        Decimal64Field field = Decimal64Field.getInstance();
+        Decimal64[][] array = MathArrays.buildArray(field, 3, 2);
+        Assert.assertEquals(3, array.length);
+        for (Decimal64[] a1 : array) {
+            Assert.assertEquals(2, a1.length);
+            for (Decimal64 d : a1) {
+                Assert.assertSame(field.getZero(), d);
+            }
+        }
+    }
+
+    @Test
+    public void testBuildArray2MissingLastIndex() {
+        Decimal64Field field = Decimal64Field.getInstance();
+        Decimal64[][] array = MathArrays.buildArray(field, 3, -1);
+        Assert.assertEquals(3, array.length);
+        for (Decimal64[] a1 : array) {
+            Assert.assertNull(a1);
+        }
+    }
+
+    @Test
+    public void testBuildArray3AllIndices() {
+        Decimal64Field field = Decimal64Field.getInstance();
+        Decimal64[][][] array = MathArrays.buildArray(field, 3, 2, 4);
+        Assert.assertEquals(3, array.length);
+        for (Decimal64[][] a1 : array) {
+            Assert.assertEquals(2, a1.length);
+            for (Decimal64[] a2 : a1) {
+                Assert.assertEquals(4, a2.length);
+                for (Decimal64 d : a2) {
+                    Assert.assertSame(field.getZero(), d);
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testBuildArray3MissingLastIndex() {
+        Decimal64Field field = Decimal64Field.getInstance();
+        Decimal64[][][] array = MathArrays.buildArray(field, 3, 2, -1);
+        Assert.assertEquals(3, array.length);
+        for (Decimal64[][] a1 : array) {
+            Assert.assertEquals(2, a1.length);
+            for (Decimal64[] a2 : a1) {
+                Assert.assertNull(a2);
+            }
+        }
+    }
+
 }

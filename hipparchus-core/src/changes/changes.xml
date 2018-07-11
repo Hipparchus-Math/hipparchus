@@ -49,6 +49,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Core Release Notes</title>
   </properties>
   <body>
+    <release version="1.4" date="TBC" description="TBC">
+      <action dev="luc" type="add" >
+        Added a way to build three-dimensional field arrays.
+      </action>
+    </release>
     <release version="1.3" date="2018-05-08" description="This is a maintenance release. The main
     changes since last version are the introduction of complex eigen decomposition, and introduction
     of a solver for continuous time algebraic Riccati equation.">
