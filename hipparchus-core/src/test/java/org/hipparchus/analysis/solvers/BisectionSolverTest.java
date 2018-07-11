@@ -25,6 +25,7 @@ import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.solvers.BisectionSolver;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -93,4 +94,11 @@ public final class BisectionSolverTest {
         BisectionSolver solver = new BisectionSolver();
         Assert.assertEquals(FastMath.PI, solver.solve(100, f, 3.0, 3.2, 3.1), solver.getAbsoluteAccuracy());
     }
+
+    @Test(expected= MathIllegalArgumentException.class)
+    public void testHipparchusGithub40() {
+        new BisectionSolver().solve(100, x -> Math.cos(x) + 2, 0.0, 5.0);
+    }
+
 }
+

@@ -69,6 +69,7 @@ public class BisectionSolver extends AbstractUnivariateSolver {
         double min = getMin();
         double max = getMax();
         verifyInterval(min, max);
+        verifyBracketing(min, max);
         final double absoluteAccuracy = getAbsoluteAccuracy();
         double m;
         double fm;
