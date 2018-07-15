@@ -101,6 +101,21 @@ public class LimitAngle implements Hyperplane<Sphere1D> {
         return new SubLimitAngle(this, null);
     }
 
+    /** {@inheritDoc}
+     * <p>Since this class represent zero dimension spaces which does
+     * not have lower dimension sub-spaces, this method returns a dummy
+     * implementation of a {@link
+     * org.hipparchus.geometry.partitioning.SubHyperplane SubHyperplane}.
+     * This implementation is only used to allow the {@link
+     * org.hipparchus.geometry.partitioning.SubHyperplane
+     * SubHyperplane} class implementation to work properly, it should
+     * <em>not</em> be used otherwise.</p>
+     */
+    @Override
+    public SubLimitAngle emptyHyperplane() {
+        return new SubLimitAngle(this, null);
+    }
+
     /** Build a region covering the whole space.
      * @return a region containing the instance (really an {@link
      * ArcsSet IntervalsSet} instance)

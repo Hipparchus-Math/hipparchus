@@ -27,19 +27,12 @@ import java.util.List;
 import org.hipparchus.geometry.enclosing.EnclosingBall;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
-import org.hipparchus.geometry.partitioning.RegionFactory;
-import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
+import org.hipparchus.geometry.partitioning.RegionFactory;
+import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
-import org.hipparchus.geometry.spherical.twod.Circle;
-import org.hipparchus.geometry.spherical.twod.Edge;
-import org.hipparchus.geometry.spherical.twod.S2Point;
-import org.hipparchus.geometry.spherical.twod.Sphere2D;
-import org.hipparchus.geometry.spherical.twod.SphericalPolygonsSet;
-import org.hipparchus.geometry.spherical.twod.SubCircle;
-import org.hipparchus.geometry.spherical.twod.Vertex;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
@@ -551,6 +544,39 @@ public class SphericalPolygonsSetTest {
         Assert.assertEquals(Region.Location.INSIDE, zone.checkPoint(new S2Point(-0.145, 0.898)));
         Assert.assertEquals(6.463e-5, zone.getSize(),         1.0e-7);
         Assert.assertEquals(5.487e-2, zone.getBoundarySize(), 1.0e-4);
+    }
+
+    @Test
+    public void testGitHubIssue42() {
+        RegionFactory<Sphere2D> regionFactory = new RegionFactory<>();
+        S2Point[] s2pA = new S2Point[]{
+                new S2Point(new Vector3D(0.2122954606, -0.629606302,  0.7473463333)),
+                new S2Point(new Vector3D(0.2120220248, -0.6296445493, 0.747391733)),
+                new S2Point(new Vector3D(0.2119838016, -0.6298173178, 0.7472569934)),
+                new S2Point(new Vector3D(0.2122571927, -0.6297790738, 0.7472116182))};
+
+        S2Point[] s2pB = new S2Point[]{
+                new S2Point(new Vector3D(0.2120291561, -0.629952069,  0.7471305292)),
+                new S2Point(new Vector3D(0.2123026002, -0.6299138005, 0.7470851423)),
+                new S2Point(new Vector3D(0.2123408927, -0.6297410403, 0.7472198923)),
+                new S2Point(new Vector3D(0.2120674039, -0.6297793122, 0.7472653037))};
+
+        final double tol = 0.0001;
+        final SphericalPolygonsSet spsA = new SphericalPolygonsSet(tol, s2pA);
+        final SphericalPolygonsSet spsB = new SphericalPolygonsSet(tol, s2pB);
+        Assert.assertEquals(0.61254e-7, spsA.getSize(),          1.0e-12);
+        Assert.assertEquals(1.00437e-3, spsA.getBoundarySize(),  1.0e-08);
+        Assert.assertEquals(0.61269e-7, spsB.getSize(),          1.0e-12);
+        Assert.assertEquals(1.00452e-3, spsB.getBoundarySize(),  1.0e-08);
+        SphericalPolygonsSet union = (SphericalPolygonsSet) regionFactory.union(spsA, spsB);
+
+        // as the tolerance is very large with respect to polygons,
+        // the union is not computed properly, which is EXPECTED
+        // so the thresholds for the tests are large.
+        // the reference values have been computed with a much lower tolerance
+        Assert.assertEquals(1.15628e-7, union.getSize(),         4.0e-9);
+        Assert.assertEquals(1.53824e-3, union.getBoundarySize(), 3.0e-4);
+
     }
 
     private SubCircle create(Vector3D pole, Vector3D x, Vector3D y,

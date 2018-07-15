@@ -32,6 +32,7 @@ import org.hipparchus.geometry.euclidean.twod.PolygonsSet;
 import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.partitioning.Embedding;
 import org.hipparchus.geometry.partitioning.Hyperplane;
+import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.util.FastMath;
 
 /** The class represent planes in a three dimensional space.
@@ -429,6 +430,12 @@ public class Plane implements Hyperplane<Euclidean3D>, Embedding<Euclidean3D, Eu
     @Override
     public SubPlane wholeHyperplane() {
         return new SubPlane(this, new PolygonsSet(tolerance));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public SubPlane emptyHyperplane() {
+        return new SubPlane(this, new RegionFactory<Euclidean2D>().getComplement(new PolygonsSet(tolerance)));
     }
 
     /** Build a region covering the whole space.

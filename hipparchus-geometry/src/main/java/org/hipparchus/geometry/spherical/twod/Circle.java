@@ -26,6 +26,7 @@ import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.Embedding;
 import org.hipparchus.geometry.partitioning.Hyperplane;
+import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.partitioning.Transform;
 import org.hipparchus.geometry.spherical.oned.Arc;
@@ -248,6 +249,12 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
     @Override
     public SubCircle wholeHyperplane() {
         return new SubCircle(this, new ArcsSet(tolerance));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public SubCircle emptyHyperplane() {
+        return new SubCircle(this, new RegionFactory<Sphere1D>().getComplement(new ArcsSet(tolerance)));
     }
 
     /** Build a region covering the whole space.

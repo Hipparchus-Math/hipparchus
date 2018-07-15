@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.4" date="TBC" description="TBC">
+      <action dev="luc" type="fix" issue="issues/41">
+        Fixed a corner case in BSPTree split.
+        Fixes GitHub #41.
+      </action>
       <action dev="luc" type="fix" issue="issues/40" >
         Bisection solvers failed to raise an exception when the search
         interval did not bracket a root.

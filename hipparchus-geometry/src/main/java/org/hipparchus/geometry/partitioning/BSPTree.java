@@ -600,18 +600,27 @@ public class BSPTree<S extends Space> {
         {
             final SubHyperplane.SplitSubHyperplane<S> cutParts = cut.split(sHyperplane);
             final BSPTree<S> split =
-                new BSPTree<S>(sub, plus.split(subParts.getPlus()), minus.split(subParts.getMinus()),
-                               null);
-            split.plus.cut          = cutParts.getPlus();
-            split.minus.cut         = cutParts.getMinus();
+                            new BSPTree<S>(sub, plus.split(subParts.getPlus()), minus.split(subParts.getMinus()),
+                                            null);
             final BSPTree<S> tmp    = split.plus.minus;
             split.plus.minus        = split.minus.plus;
             split.plus.minus.parent = split.plus;
             split.minus.plus        = tmp;
             split.minus.plus.parent = split.minus;
+            if (cutParts.getPlus() == null) {
+                split.plus.cut = cut.getHyperplane().emptyHyperplane();
+            } else {
+                split.plus.cut = cutParts.getPlus();
+            }
+            if (cutParts.getMinus() == null) {
+                split.minus.cut = cut.getHyperplane().emptyHyperplane();
+            } else {
+                split.minus.cut = cutParts.getMinus();
+            }
             split.plus.condense();
             split.minus.condense();
             return split;
+
         }
         default :
             return cHyperplane.sameOrientationAs(sHyperplane) ?

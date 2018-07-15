@@ -94,6 +94,22 @@ public class OrientedPoint implements Hyperplane<Euclidean1D> {
         return new SubOrientedPoint(this, null);
     }
 
+    /** {@inheritDoc}.
+     * <p>Since this class represent zero dimension spaces which does
+     * not have lower dimension sub-spaces, this method returns a dummy
+     * implementation of a {@link
+     * org.hipparchus.geometry.partitioning.SubHyperplane SubHyperplane}.
+     * This implementation is only used to allow the {@link
+     * org.hipparchus.geometry.partitioning.SubHyperplane
+     * SubHyperplane} class implementation to work properly, it should
+     * <em>not</em> be used otherwise.</p>
+     * @return a dummy sub hyperplane
+     */
+    @Override
+    public SubOrientedPoint emptyHyperplane() {
+        return new SubOrientedPoint(this, null);
+    }
+
     /** Build a region covering the whole space.
      * @return a region containing the instance (really an {@link
      * IntervalsSet IntervalsSet} instance)

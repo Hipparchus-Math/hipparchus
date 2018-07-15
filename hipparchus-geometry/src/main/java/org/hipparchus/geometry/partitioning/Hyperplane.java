@@ -92,6 +92,12 @@ public interface Hyperplane<S extends Space> {
      */
     SubHyperplane<S> wholeHyperplane();
 
+    /** Build a sub-hyperplane covering nothing.
+     * @return a sub-hyperplane covering nothing
+     * @since 1.4
+     */
+    SubHyperplane<S> emptyHyperplane();
+
     /** Build a region covering the whole space.
      * @return a region containing the instance
      */

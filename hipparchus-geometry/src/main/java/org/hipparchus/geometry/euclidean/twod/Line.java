@@ -31,6 +31,7 @@ import org.hipparchus.geometry.euclidean.oned.OrientedPoint;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
 import org.hipparchus.geometry.partitioning.Embedding;
 import org.hipparchus.geometry.partitioning.Hyperplane;
+import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.partitioning.Transform;
 import org.hipparchus.util.FastMath;
@@ -287,6 +288,12 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
     @Override
     public SubLine wholeHyperplane() {
         return new SubLine(this, new IntervalsSet(tolerance));
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public SubLine emptyHyperplane() {
+        return new SubLine(this, new RegionFactory<Euclidean1D>().getComplement(new IntervalsSet(tolerance)));
     }
 
     /** Build a region covering the whole space.
