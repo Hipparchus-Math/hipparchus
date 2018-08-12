@@ -22,6 +22,7 @@
 package org.hipparchus.geometry.spherical.twod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.hipparchus.geometry.enclosing.EnclosingBall;
@@ -29,6 +30,7 @@ import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
+import org.hipparchus.geometry.partitioning.RegionDumper;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
@@ -547,7 +549,7 @@ public class SphericalPolygonsSetTest {
     }
 
     @Test
-    public void testGitHubIssue42() {
+    public void testGitHubIssue41() {
         RegionFactory<Sphere2D> regionFactory = new RegionFactory<>();
         S2Point[] s2pA = new S2Point[]{
                 new S2Point(new Vector3D(0.2122954606, -0.629606302,  0.7473463333)),
@@ -577,6 +579,36 @@ public class SphericalPolygonsSetTest {
         Assert.assertEquals(1.15628e-7, union.getSize(),         4.0e-9);
         Assert.assertEquals(1.53824e-3, union.getBoundarySize(), 3.0e-4);
 
+    }
+
+    @Test
+    public void testGitHubIssue42A() {
+        // the BSP tree is wrong, it includes a large extra chunk that contains a point that should really be outside
+        doTestGitHubIssue42(1.0e-100);
+    }
+
+    @Test
+    public void testGitHubIssue42B() {
+        // the BSP tree is right, but size cannot be computed
+        doTestGitHubIssue42(9.0e-16);
+    }
+
+    private void doTestGitHubIssue42(double tolerance) {
+        S2Point[] s2pA = new S2Point[]{
+            new S2Point(new Vector3D(0.1504230736114679,  -0.6603084987333554, 0.7357754993377947)),
+            new S2Point(new Vector3D(0.15011191112224423, -0.6603400871954631, 0.7358106980616113)),
+            new S2Point(new Vector3D(0.15008035620222715, -0.6605195692153062, 0.7356560238085725)),
+            new S2Point(new Vector3D(0.1503914563063968,  -0.6604879854490165, 0.7356208472763267))
+        };
+        S2Point outsidePoint = new S2Point(new Vector3D( 2, s2pA[0].getVector(),
+                                                        -1, s2pA[1].getVector(),
+                                                        -1, s2pA[2].getVector(),
+                                                         2, s2pA[3].getVector()).normalize());
+
+        final SphericalPolygonsSet spsA = new SphericalPolygonsSet(tolerance, s2pA);
+        System.out.println(RegionDumper.dump(spsA));
+        Assert.assertEquals(Location.OUTSIDE, spsA.checkPoint(outsidePoint));
+        Assert.assertEquals(7.4547e-8, spsA.getSize(), 1.0e-12);
     }
 
     private SubCircle create(Vector3D pole, Vector3D x, Vector3D y,
