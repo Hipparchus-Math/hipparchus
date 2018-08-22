@@ -21,6 +21,7 @@
  */
 package org.hipparchus.geometry.spherical.twod;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -65,8 +66,11 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * <p>The circle is oriented in the trigonometric direction around pole.</p>
      * @param pole circle pole
      * @param tolerance tolerance below which close sub-arcs are merged together
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    public Circle(final Vector3D pole, final double tolerance) {
+    public Circle(final Vector3D pole, final double tolerance)
+        throws MathIllegalArgumentException {
+        Sphere2D.checkTolerance(tolerance);
         reset(pole);
         this.tolerance = tolerance;
     }
@@ -76,8 +80,11 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * @param first first point contained in the great circle
      * @param second second point contained in the great circle
      * @param tolerance tolerance below which close sub-arcs are merged together
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    public Circle(final S2Point first, final S2Point second, final double tolerance) {
+    public Circle(final S2Point first, final S2Point second, final double tolerance)
+        throws MathIllegalArgumentException {
+        Sphere2D.checkTolerance(tolerance);
         reset(first.getVector().crossProduct(second.getVector()));
         this.tolerance = tolerance;
     }
@@ -88,9 +95,11 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
      * @param x first axis in the equator plane
      * @param y second axis in the equator plane
      * @param tolerance tolerance below which close sub-arcs are merged together
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    private Circle(final Vector3D pole, final Vector3D x, final Vector3D y,
-                   final double tolerance) {
+    private Circle(final Vector3D pole, final Vector3D x, final Vector3D y, final double tolerance)
+        throws MathIllegalArgumentException {
+        Sphere2D.checkTolerance(tolerance);
         this.pole      = pole;
         this.x         = x;
         this.y         = y;

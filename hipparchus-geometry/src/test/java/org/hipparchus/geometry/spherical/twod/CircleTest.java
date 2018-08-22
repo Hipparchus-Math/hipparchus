@@ -21,6 +21,7 @@
  */
 package org.hipparchus.geometry.spherical.twod;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.RotationConvention;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -30,9 +31,6 @@ import org.hipparchus.geometry.spherical.oned.LimitAngle;
 import org.hipparchus.geometry.spherical.oned.S1Point;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.geometry.spherical.oned.SubLimitAngle;
-import org.hipparchus.geometry.spherical.twod.Circle;
-import org.hipparchus.geometry.spherical.twod.S2Point;
-import org.hipparchus.geometry.spherical.twod.Sphere2D;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.UnitSphereRandomVectorGenerator;
 import org.hipparchus.random.Well1024a;
@@ -191,6 +189,11 @@ public class CircleTest {
             Assert.assertEquals(0.0, r.applyTo(psub).distance(ptsub), 1.0e-10);
 
         }
+    }
+
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testTooSmallTolerance() {
+        new Circle(Vector3D.PLUS_K, 0.9 * Sphere2D.SMALLEST_TOLERANCE);
     }
 
 }

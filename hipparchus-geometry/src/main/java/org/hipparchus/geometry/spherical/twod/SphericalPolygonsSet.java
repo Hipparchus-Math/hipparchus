@@ -29,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.enclosing.EnclosingBall;
 import org.hipparchus.geometry.enclosing.WelzlEncloser;
@@ -55,21 +56,26 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
     /** Build a polygons set representing the whole real 2-sphere.
      * @param tolerance below which points are consider to be identical
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    public SphericalPolygonsSet(final double tolerance) {
+    public SphericalPolygonsSet(final double tolerance) throws MathIllegalArgumentException {
         super(tolerance);
+        Sphere2D.checkTolerance(tolerance);
     }
 
     /** Build a polygons set representing a hemisphere.
      * @param pole pole of the hemisphere (the pole is in the inside half)
      * @param tolerance below which points are consider to be identical
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    public SphericalPolygonsSet(final Vector3D pole, final double tolerance) {
+    public SphericalPolygonsSet(final Vector3D pole, final double tolerance)
+        throws MathIllegalArgumentException {
         super(new BSPTree<Sphere2D>(new Circle(pole, tolerance).wholeHyperplane(),
                                     new BSPTree<Sphere2D>(Boolean.FALSE),
                                     new BSPTree<Sphere2D>(Boolean.TRUE),
                                     null),
               tolerance);
+        Sphere2D.checkTolerance(tolerance);
     }
 
     /** Build a polygons set representing a regular polygon.
@@ -78,10 +84,12 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param outsideRadius distance of the vertices to the center
      * @param n number of sides of the polygon
      * @param tolerance below which points are consider to be identical
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
     public SphericalPolygonsSet(final Vector3D center, final Vector3D meridian,
                                 final double outsideRadius, final int n,
-                                final double tolerance) {
+                                final double tolerance)
+        throws MathIllegalArgumentException {
         this(tolerance, createRegularPolygonVertices(center, meridian, outsideRadius, n));
     }
 
@@ -94,9 +102,12 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * {@code Boolean.TRUE} and {@code Boolean.FALSE}</p>
      * @param tree inside/outside BSP tree representing the region
      * @param tolerance below which points are consider to be identical
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    public SphericalPolygonsSet(final BSPTree<Sphere2D> tree, final double tolerance) {
+    public SphericalPolygonsSet(final BSPTree<Sphere2D> tree, final double tolerance)
+        throws MathIllegalArgumentException {
         super(tree, tolerance);
+        Sphere2D.checkTolerance(tolerance);
     }
 
     /** Build a polygons set from a Boundary REPresentation (B-rep).
@@ -119,9 +130,12 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param boundary collection of boundary elements, as a
      * collection of {@link SubHyperplane SubHyperplane} objects
      * @param tolerance below which points are consider to be identical
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    public SphericalPolygonsSet(final Collection<SubHyperplane<Sphere2D>> boundary, final double tolerance) {
+    public SphericalPolygonsSet(final Collection<SubHyperplane<Sphere2D>> boundary, final double tolerance)
+        throws MathIllegalArgumentException {
         super(boundary, tolerance);
+        Sphere2D.checkTolerance(tolerance);
     }
 
     /** Build a polygon from a simple list of vertices.
@@ -153,9 +167,12 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @param hyperplaneThickness tolerance below which points are considered to
      * belong to the hyperplane (which is therefore more a slab)
      * @param vertices vertices of the simple loop boundary
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    public SphericalPolygonsSet(final double hyperplaneThickness, final S2Point ... vertices) {
+    public SphericalPolygonsSet(final double hyperplaneThickness, final S2Point ... vertices)
+        throws MathIllegalArgumentException {
         super(verticesToTree(hyperplaneThickness, vertices), hyperplaneThickness);
+        Sphere2D.checkTolerance(hyperplaneThickness);
     }
 
     /** Build the vertices representing a regular polygon.

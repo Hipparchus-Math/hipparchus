@@ -21,8 +21,7 @@
  */
 package org.hipparchus.geometry.spherical.oned;
 
-import org.hipparchus.geometry.spherical.oned.LimitAngle;
-import org.hipparchus.geometry.spherical.oned.S1Point;
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.MathUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -40,6 +39,11 @@ public class LimitAngleTest {
             Assert.assertEquals(MathUtils.TWO_PI, l.wholeSpace().getSize(), 1.0e-10);
             Assert.assertEquals(MathUtils.TWO_PI, l.getReverse().wholeSpace().getSize(), 1.0e-10);
         }
+    }
+
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testTooSmallTolerance() {
+        new LimitAngle(new S1Point(1.0), false, 0.9 * Sphere1D.SMALLEST_TOLERANCE);
     }
 
 }

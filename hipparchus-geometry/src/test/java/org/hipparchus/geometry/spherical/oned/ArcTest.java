@@ -54,6 +54,11 @@ public class ArcTest {
         new Arc(1.2, 0.0, 1.0e-10);
     }
 
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testTooSmallTolerance() {
+        new Arc(0.0, 1.0, 0.9 * Sphere1D.SMALLEST_TOLERANCE);
+    }
+
     @Test
     public void testTolerance() {
         Assert.assertEquals(Region.Location.OUTSIDE,  new Arc(2.3, 5.7, 1.0).checkPoint(1.2));
@@ -79,7 +84,7 @@ public class ArcTest {
 
     @Test
     public void testSmall() {
-        Arc arc = new Arc(1.0, FastMath.nextAfter(1.0, Double.POSITIVE_INFINITY), Precision.EPSILON);
+        Arc arc = new Arc(1.0, FastMath.nextAfter(1.0, Double.POSITIVE_INFINITY), 1.01 * Sphere1D.SMALLEST_TOLERANCE);
         Assert.assertEquals(2 * Precision.EPSILON, arc.getSize(), Precision.SAFE_MIN);
         Assert.assertEquals(1.0, arc.getBarycenter(), Precision.EPSILON);
     }

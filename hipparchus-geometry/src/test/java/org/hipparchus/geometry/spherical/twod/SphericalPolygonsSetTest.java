@@ -22,9 +22,10 @@
 package org.hipparchus.geometry.spherical.twod;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.enclosing.EnclosingBall;
 import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
@@ -583,8 +584,17 @@ public class SphericalPolygonsSetTest {
 
     @Test
     public void testGitHubIssue42A() {
-        // the BSP tree is wrong, it includes a large extra chunk that contains a point that should really be outside
-        doTestGitHubIssue42(1.0e-100);
+        // if building it was allowed (i.e. if the check for tolerance was removed)
+        // the BSP tree would wrong, it would include a large extra chunk that contains
+        // a point that should really be outside
+        try {
+            doTestGitHubIssue42(1.0e-100);
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedGeometryFormats.TOO_SMALL_TOLERANCE, miae.getSpecifier());
+            Assert.assertEquals(1.0e-100, ((Double) miae.getParts()[0]).doubleValue(), 1.0e-110);
+            Assert.assertEquals("Sphere2D.SMALLEST_TOLERANCE", miae.getParts()[1]);
+            Assert.assertEquals(Sphere2D.SMALLEST_TOLERANCE, ((Double) miae.getParts()[2]).doubleValue(), 1.0e-20);
+        }
     }
 
     @Test
@@ -593,7 +603,7 @@ public class SphericalPolygonsSetTest {
         doTestGitHubIssue42(9.0e-16);
     }
 
-    private void doTestGitHubIssue42(double tolerance) {
+    private void doTestGitHubIssue42(double tolerance) throws MathIllegalArgumentException {
         S2Point[] s2pA = new S2Point[]{
             new S2Point(new Vector3D(0.1504230736114679,  -0.6603084987333554, 0.7357754993377947)),
             new S2Point(new Vector3D(0.15011191112224423, -0.6603400871954631, 0.7358106980616113)),

@@ -66,7 +66,8 @@ public enum LocalizedGeometryFormats implements Localizable {
     ROTATION_MATRIX_DIMENSIONS("a {0}x{1} matrix cannot be a rotation matrix"),
     UNABLE_TO_ORTHOGONOLIZE_MATRIX("unable to orthogonalize matrix in {0} iterations"),
     ZERO_NORM_FOR_ROTATION_AXIS("zero norm for rotation axis"),
-    ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR("zero norm for rotation defining vector");
+    ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR("zero norm for rotation defining vector"),
+    TOO_SMALL_TOLERANCE("tolerance {0,number,0.00000E00} is not computationally feasible, it is smaller than {1} ({2,number,0.00000E00})");
 
     // CHECKSTYLE: resume JavadocVariable
     // CHECKSTYLE: resume MultipleVariableDeclarations

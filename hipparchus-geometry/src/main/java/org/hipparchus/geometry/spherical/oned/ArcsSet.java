@@ -54,9 +54,12 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
 
     /** Build an arcs set representing the whole circle.
      * @param tolerance tolerance below which close sub-arcs are merged together
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    public ArcsSet(final double tolerance) {
+    public ArcsSet(final double tolerance)
+        throws MathIllegalArgumentException {
         super(tolerance);
+        Sphere1D.checkTolerance(tolerance);
     }
 
     /** Build an arcs set corresponding to a single arc.
@@ -71,10 +74,12 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
      * @param upper upper bound of the arc
      * @param tolerance tolerance below which close sub-arcs are merged together
      * @exception MathIllegalArgumentException if lower is greater than upper
+     * or tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
     public ArcsSet(final double lower, final double upper, final double tolerance)
         throws MathIllegalArgumentException {
         super(buildTree(lower, upper, tolerance), tolerance);
+        Sphere1D.checkTolerance(tolerance);
     }
 
     /** Build an arcs set from an inside/outside BSP tree.
@@ -88,10 +93,12 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
      * @param tolerance tolerance below which close sub-arcs are merged together
      * @exception InconsistentStateAt2PiWrapping if the tree leaf nodes are not
      * consistent across the \( 0, 2 \pi \) crossing
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
     public ArcsSet(final BSPTree<Sphere1D> tree, final double tolerance)
-        throws InconsistentStateAt2PiWrapping {
+        throws InconsistentStateAt2PiWrapping, MathIllegalArgumentException {
         super(tree, tolerance);
+        Sphere1D.checkTolerance(tolerance);
         check2PiConsistency();
     }
 
@@ -116,24 +123,31 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
      * @param tolerance tolerance below which close sub-arcs are merged together
      * @exception InconsistentStateAt2PiWrapping if the tree leaf nodes are not
      * consistent across the \( 0, 2 \pi \) crossing
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
     public ArcsSet(final Collection<SubHyperplane<Sphere1D>> boundary, final double tolerance)
-        throws InconsistentStateAt2PiWrapping {
+        throws InconsistentStateAt2PiWrapping, MathIllegalArgumentException {
         super(boundary, tolerance);
+        Sphere1D.checkTolerance(tolerance);
         check2PiConsistency();
     }
 
+    /** Check tolerance.
+     * 
+     */
     /** Build an inside/outside tree representing a single arc.
      * @param lower lower angular bound of the arc
      * @param upper upper angular bound of the arc
      * @param tolerance tolerance below which close sub-arcs are merged together
      * @return the built tree
      * @exception MathIllegalArgumentException if lower is greater than upper
+     * or tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
     private static BSPTree<Sphere1D> buildTree(final double lower, final double upper,
                                                final double tolerance)
         throws MathIllegalArgumentException {
 
+        Sphere1D.checkTolerance(tolerance);
         if (Precision.equals(lower, upper, 0) || (upper - lower) >= MathUtils.TWO_PI) {
             // the tree must cover the whole circle
             return new BSPTree<Sphere1D>(Boolean.TRUE);
