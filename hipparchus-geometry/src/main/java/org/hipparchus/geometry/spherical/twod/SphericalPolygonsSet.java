@@ -25,12 +25,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.enclosing.EnclosingBall;
 import org.hipparchus.geometry.enclosing.WelzlEncloser;
 import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
@@ -46,6 +46,7 @@ import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.Precision;
 
 /** This class represents a region on the 2-sphere: a set of spherical polygons.
  */
@@ -443,42 +444,157 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
                 // sort the arcs according to their start point
                 final BSPTree<Sphere2D> root = getTree(true);
-                final EdgesBuilder visitor = new EdgesBuilder(root, getTolerance());
+                final EdgesWithNodeInfoBuilder visitor = new EdgesWithNodeInfoBuilder(root, getTolerance());
                 root.visit(visitor);
-                final List<Edge> edges = visitor.getEdges();
+                final List<EdgeWithNodeInfo> edges = visitor.getEdges();
 
+                // connect all edges, using topological criteria first
+                // and using Euclidean distance only as a last resort
+                int pending = edges.size();
+                pending -= naturalFollowerConnections(edges);
+                if (pending > 0) {
+                    pending -= splitEdgeConnections(edges);
+                }
+                if (pending > 0) {
+                    pending -= closeVerticesConnections(edges);
+                }
 
-                // convert the list of all edges into a list of start vertices
-                loops = new ArrayList<Vertex>();
-                while (!edges.isEmpty()) {
-
-                    // this is an edge belonging to a new loop, store it
-                    Edge edge = edges.get(0);
-                    final Vertex startVertex = edge.getStart();
-                    loops.add(startVertex);
-
-                    // remove all remaining edges in the same loop
-                    do {
-
-                        // remove one edge
-                        for (final Iterator<Edge> iterator = edges.iterator(); iterator.hasNext();) {
-                            if (iterator.next() == edge) {
-                                iterator.remove();
-                                break;
-                            }
-                        }
-
-                        // go to next edge following the boundary loop
-                        edge = edge.getEnd().getOutgoing();
-
-                    } while (edge.getStart() != startVertex);
-
+                // extract the edges loops
+                loops = new ArrayList<>();
+                for (EdgeWithNodeInfo s = getUnprocessed(edges); s != null; s = getUnprocessed(edges)) {
+                    loops.add(s.getStart());
+                    followLoop(s);
                 }
 
             }
         }
 
         return Collections.unmodifiableList(loops);
+
+    }
+
+    /** Connect the edges using only natural follower information.
+     * @param edges edges complete edges list
+     * @return number of connections performed
+     */
+    private int naturalFollowerConnections(final List<EdgeWithNodeInfo> edges) {
+        int connected = 0;
+        for (final EdgeWithNodeInfo edge : edges) {
+            if (edge.getEnd().getOutgoing() == null) {
+                for (final EdgeWithNodeInfo candidateNext : edges) {
+                    if (EdgeWithNodeInfo.areNaturalFollowers(edge, candidateNext)) {
+                        // connect the two edges
+                        edge.setNextEdge(candidateNext);
+                        ++connected;
+                        break;
+                    }
+                }
+            }
+        }
+        return connected;
+    }
+
+    /** Connect the edges resulting from a circle splitting a circular edge.
+     * @param edges edges complete edges list
+     * @return number of connections performed
+     */
+    private int splitEdgeConnections(final List<EdgeWithNodeInfo> edges) {
+        int connected = 0;
+        for (final EdgeWithNodeInfo edge : edges) {
+            if (edge.getEnd().getOutgoing() == null) {
+                for (final EdgeWithNodeInfo candidateNext : edges) {
+                    if (EdgeWithNodeInfo.resultFromASplit(edge, candidateNext)) {
+                        // connect the two edges
+                        edge.setNextEdge(candidateNext);
+                        ++connected;
+                        break;
+                    }
+                }
+            }
+        }
+        return connected;
+    }
+
+    /** Connect the edges using spherical distance.
+     * <p>
+     * This connection heuristic should be used last, as it relies
+     * only on a fuzzy distance criterion.
+     * </p>
+     * @param edges edges complete edges list
+     * @return number of connections performed
+     */
+    private int closeVerticesConnections(final List<EdgeWithNodeInfo> edges) {
+        int connected = 0;
+        for (final EdgeWithNodeInfo edge : edges) {
+            if (edge.getEnd().getOutgoing() == null && edge.getEnd() != null) {
+                final Vector3D end = edge.getEnd().getLocation().getVector();
+                EdgeWithNodeInfo selectedNext = null;
+                double min = Double.POSITIVE_INFINITY;
+                for (final EdgeWithNodeInfo candidateNext : edges) {
+                    if (candidateNext.getStart().getIncoming() == null) {
+                        final double distance = Vector3D.distance(end, candidateNext.getStart().getLocation().getVector());
+                        if (distance < min) {
+                            selectedNext = candidateNext;
+                            min          = distance;
+                        }
+                    }
+                }
+                if (min <= getTolerance()) {
+                    // connect the two edges
+                    edge.setNextEdge(selectedNext);
+                    ++connected;
+                }
+            }
+        }
+        return connected;
+    }
+
+    /** Get first unprocessed edge from a list.
+     * @param edges edges list
+     * @return first edge that has not been processed yet
+     * or null if all edges have been processed
+     */
+    private EdgeWithNodeInfo getUnprocessed(final List<EdgeWithNodeInfo> edges) {
+        for (final EdgeWithNodeInfo edge : edges) {
+            if (!edge.isProcessed()) {
+                return edge;
+            }
+        }
+        return null;
+    }
+
+    /** Build the loop containing a edge.
+     * <p>
+     * All edges put in the loop will be marked as processed.
+     * </p>
+     * @param defining edge used to define the loop
+     */
+    private void followLoop(final EdgeWithNodeInfo defining) {
+
+        defining.setProcessed(true);
+
+        // process edges in connection order
+        EdgeWithNodeInfo previous = defining;
+        EdgeWithNodeInfo next     = (EdgeWithNodeInfo) defining.getEnd().getOutgoing();
+        while (next != defining) {
+            if (next == null) {
+                // this should not happen
+                throw new MathIllegalStateException(LocalizedGeometryFormats.OUTLINE_BOUNDARY_LOOP_OPEN);
+            }
+            next.setProcessed(true);
+
+            // filter out spurious vertices
+            if (Vector3D.angle(previous.getCircle().getPole(), next.getCircle().getPole()) <= Precision.EPSILON) {
+                // the vertex between the two edges is a spurious one
+                // replace the two edges by a single one
+                previous.setNextEdge(next.getEnd().getOutgoing());
+                previous.setLength(previous.getLength() + next.getLength());
+            }
+
+            previous = next;
+            next     = (EdgeWithNodeInfo) next.getEnd().getOutgoing();
+
+        }
 
     }
 

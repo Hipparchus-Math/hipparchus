@@ -31,7 +31,6 @@ import org.hipparchus.geometry.euclidean.threed.Rotation;
 import org.hipparchus.geometry.euclidean.threed.Vector3D;
 import org.hipparchus.geometry.partitioning.Region;
 import org.hipparchus.geometry.partitioning.Region.Location;
-import org.hipparchus.geometry.partitioning.RegionDumper;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
 import org.hipparchus.geometry.spherical.oned.ArcsSet;
@@ -616,7 +615,6 @@ public class SphericalPolygonsSetTest {
                                                          2, s2pA[3].getVector()).normalize());
 
         final SphericalPolygonsSet spsA = new SphericalPolygonsSet(tolerance, s2pA);
-        System.out.println(RegionDumper.dump(spsA));
         Assert.assertEquals(Location.OUTSIDE, spsA.checkPoint(outsidePoint));
         Assert.assertEquals(7.4547e-8, spsA.getSize(), 1.0e-12);
     }
