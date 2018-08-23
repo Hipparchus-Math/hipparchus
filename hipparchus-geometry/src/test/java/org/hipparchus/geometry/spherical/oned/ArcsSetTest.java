@@ -127,6 +127,11 @@ public class ArcsSetTest {
         new ArcsSet(1.2, 0.0, 1.0e-10);
     }
 
+    @Test(expected=MathIllegalArgumentException.class)
+    public void testTooSmallTolerance() {
+        new ArcsSet(0.0, 1.0, 0.9 * Sphere1D.SMALLEST_TOLERANCE);
+    }
+
     @Test
     public void testFullEqualEndPoints() {
         ArcsSet set = new ArcsSet(1.0, 1.0, 1.0e-10);

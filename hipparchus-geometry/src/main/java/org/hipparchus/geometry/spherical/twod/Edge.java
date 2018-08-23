@@ -41,7 +41,7 @@ public class Edge {
     private Vertex end;
 
     /** Length of the arc. */
-    private final double length;
+    private double length;
 
     /** Circle supporting the edge. */
     private final Circle circle;
@@ -105,6 +105,13 @@ public class Edge {
      */
     public Vector3D getPointAt(final double alpha) {
         return circle.getPointAt(alpha + circle.getPhase(start.getLocation().getVector()));
+    }
+
+    /** Set the length.
+     * @param length new length
+     */
+    void setLength(final double length) {
+        this.length = length;
     }
 
     /** Connect the instance with a following edge.

@@ -61,9 +61,11 @@ public class Arc {
      * @param upper upper angular bound of the arc
      * @param tolerance tolerance below which angles are considered identical
      * @exception MathIllegalArgumentException if lower is greater than upper
+     * or tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
     public Arc(final double lower, final double upper, final double tolerance)
         throws MathIllegalArgumentException {
+        Sphere1D.checkTolerance(tolerance);
         this.tolerance = tolerance;
         if (Precision.equals(lower, upper, 0) || (upper - lower) >= MathUtils.TWO_PI) {
             // the arc must cover the whole circle

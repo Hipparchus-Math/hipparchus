@@ -42,7 +42,7 @@ class Characterization<S extends Space> {
     /** Nodes that were used to split the outside touching part. */
     private final NodesSet<S> outsideSplitters;
 
-    /** Nodes that were used to split the outside touching part. */
+    /** Nodes that were used to split the inside touching part. */
     private final NodesSet<S> insideSplitters;
 
     /** Simple constructor.

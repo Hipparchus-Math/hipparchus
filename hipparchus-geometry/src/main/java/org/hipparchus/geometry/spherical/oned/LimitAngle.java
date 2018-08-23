@@ -21,6 +21,7 @@
  */
 package org.hipparchus.geometry.spherical.oned;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.partitioning.Hyperplane;
 
@@ -44,8 +45,11 @@ public class LimitAngle implements Hyperplane<Sphere1D> {
      * @param direct if true, the plus side of the hyperplane is towards
      * angles greater than {@code location}
      * @param tolerance tolerance below which angles are considered identical
+     * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
      */
-    public LimitAngle(final S1Point location, final boolean direct, final double tolerance) {
+    public LimitAngle(final S1Point location, final boolean direct, final double tolerance)
+        throws MathIllegalArgumentException {
+        Sphere1D.checkTolerance(tolerance);
         this.location  = location;
         this.direct    = direct;
         this.tolerance = tolerance;

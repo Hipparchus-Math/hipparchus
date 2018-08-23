@@ -24,8 +24,11 @@ package org.hipparchus.geometry.spherical.twod;
 
 import java.io.Serializable;
 
+import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.geometry.Space;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
+import org.hipparchus.util.FastMath;
 
 /**
  * This class implements a two-dimensional sphere (i.e. the regular sphere).
@@ -41,6 +44,14 @@ public class Sphere2D implements Serializable, Space {
     /** Serializable version identifier. */
     private static final long serialVersionUID = 20131218L;
 
+    /** Smallest tolerance that can be managed.
+     * <p>
+     * Tolerances smaller than this value will generate exceptions.
+     * </p>
+     * @since 1.4
+     */
+    public static final double SMALLEST_TOLERANCE = FastMath.ulp(2 * FastMath.PI);
+
     /** Private constructor for the singleton.
      */
     private Sphere2D() {
@@ -51,6 +62,19 @@ public class Sphere2D implements Serializable, Space {
      */
     public static Sphere2D getInstance() {
         return LazyHolder.INSTANCE;
+    }
+
+    /** Check tolerance against {@link #SMALLEST_TOLERANCE}.
+     * @param tolerance tolerance to check
+     * @exception MathIllegalArgumentException if tolerance is smaller
+     * than {@link #SMALLEST_TOLERANCE}
+     */
+    public static void checkTolerance(final double tolerance)
+        throws MathIllegalArgumentException {
+        if (tolerance < Sphere1D.SMALLEST_TOLERANCE) {
+            throw new MathIllegalArgumentException(LocalizedGeometryFormats.TOO_SMALL_TOLERANCE,
+                                                   tolerance, "Sphere2D.SMALLEST_TOLERANCE", SMALLEST_TOLERANCE);
+        }
     }
 
     /** {@inheritDoc} */

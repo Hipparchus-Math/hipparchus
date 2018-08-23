@@ -50,6 +50,15 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.4" date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/42">
+        Use topological information from BSP tree to connect more reliably edges and
+        vertices when building the boundary loops of SphericalPolygonsSet.
+        Fixes GitHub #42.
+      </action>
+      <action dev="luc" type="fix" issue="issues/42">
+        Forbid use of unrealistic tolerances (below ulp(2π)) in spherical geometry.
+        Fixes GitHub #42.
+      </action>
       <action dev="luc" type="fix" issue="issues/41">
         Fixed a corner case in BSPTree split.
         Fixes GitHub #41.

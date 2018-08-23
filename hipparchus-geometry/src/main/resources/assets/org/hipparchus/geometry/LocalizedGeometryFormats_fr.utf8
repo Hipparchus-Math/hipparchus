@@ -36,3 +36,4 @@ ROTATION_MATRIX_DIMENSIONS = une matrice {0}x{1} ne peut pas être une matrice d
 UNABLE_TO_ORTHOGONOLIZE_MATRIX = impossible de rendre la matrice orthogonale en {0} itérations
 ZERO_NORM_FOR_ROTATION_AXIS = norme nulle pour un axe de rotation
 ZERO_NORM_FOR_ROTATION_DEFINING_VECTOR = norme nulle pour un axe de définition de rotation
+TOO_SMALL_TOLERANCE = la tolérance {0,number,0.00000E00} n''est pas réaliste en termes de calcul, elle est plus petite que {1} ({2,number,0.00000E00})
