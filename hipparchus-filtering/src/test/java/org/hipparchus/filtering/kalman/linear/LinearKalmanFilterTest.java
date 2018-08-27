@@ -17,18 +17,13 @@
 
 package org.hipparchus.filtering.kalman.linear;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-import org.hipparchus.filtering.kalman.KalmanFilter;
-import org.hipparchus.filtering.kalman.Measurement;
 import org.hipparchus.filtering.kalman.ProcessEstimate;
+import org.hipparchus.filtering.kalman.Reference;
+import org.hipparchus.filtering.kalman.SimpleMeasurement;
 import org.hipparchus.linear.CholeskyDecomposer;
 import org.hipparchus.linear.MatrixUtils;
 import org.hipparchus.linear.RealMatrix;
@@ -56,11 +51,11 @@ public class LinearKalmanFilterTest {
                                                             q);
 
         // reference values from Apache Commons Math 3.6.1 unit test
-        final List<Reference> referenceData = loadReferenceData(1, 1, "constant-value.txt");
+        final List<Reference> referenceData = Reference.loadReferenceData(1, 1, "constant-value.txt");
         final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
-                        map(r -> new SimpleMeasurement(r.time,
-                                                       r.z,
+                        map(r -> new SimpleMeasurement(r.getTime(),
+                                                       r.getZ(),
                                                        MatrixUtils.createRealDiagonalMatrix(new double[] { 0.1 })));
 
         // set up Kalman filter
@@ -134,11 +129,11 @@ public class LinearKalmanFilterTest {
                                                             }));
 
         // reference values from Apache Commons Math 3.6.1 unit test
-        final List<Reference> referenceData = loadReferenceData(2, 1, name);
+        final List<Reference> referenceData = Reference.loadReferenceData(2, 1, name);
         final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
-                        map(r -> new SimpleMeasurement(r.time,
-                                                       r.z,
+                        map(r -> new SimpleMeasurement(r.getTime(),
+                                                       r.getZ(),
                                                        MatrixUtils.createRealDiagonalMatrix(new double[] { mNoise * mNoise })));
 
         // set up Kalman filter
@@ -226,11 +221,11 @@ public class LinearKalmanFilterTest {
 
         // reference values from Apache Commons Math 3.6.1 unit test
         // we have changed the test slightly, setting up a non-zero process noise
-        final List<Reference> referenceData = loadReferenceData(4, 2, name);
+        final List<Reference> referenceData = Reference.loadReferenceData(4, 2, name);
         final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
-                        map(r -> new SimpleMeasurement(r.time,
-                                                       r.z,
+                        map(r -> new SimpleMeasurement(r.getTime(),
+                                                       r.getZ(),
                                                        MatrixUtils.createRealDiagonalMatrix(new double[] {
                                                            mNoise * mNoise, mNoise * mNoise
                                                        })));
@@ -330,100 +325,6 @@ public class LinearKalmanFilterTest {
                         reduce((first, second) -> second).get();
 
         Assert.assertEquals(expected, finalEstimate.getState().getEntry(0), tolerance);
-
-    }
-
-    private List<Reference> loadReferenceData(final int stateDimension, final int measurementDimension,
-                                              final String name) {
-        List<Reference> loaded = new ArrayList<>();
-        try (InputStream is = KalmanFilter.class.getResourceAsStream(name);
-             InputStreamReader isr = new InputStreamReader(is, "UTF-8");
-             BufferedReader br = new BufferedReader(isr)) {
-            for (String line = br.readLine(); line != null; line = br.readLine()) {
-                line = line.trim();
-                if (line.length() > 0 && !line.startsWith("#")) {
-                    loaded.add(new Reference(stateDimension, measurementDimension, line));
-                }
-            }
-        } catch (IOException ioe) {
-            Assert.fail(ioe.getLocalizedMessage());
-        }
-        return loaded;
-    }
-
-    private static class Reference {
-
-        private final double     time;
-        private final RealVector z;
-        private final RealVector s;
-        private final RealMatrix c;
-
-        Reference(final int stateDimension, final int measurementDimension, final String line) {
-            final String[] fields = line.split("\\s+");
-            int index = 0;
-            time = Double.parseDouble(fields[index++]);
-            z = MatrixUtils.createRealVector(new double[measurementDimension]);
-            for (int i = 0; i < measurementDimension; ++i) {
-                z.setEntry(i, Double.parseDouble(fields[index++]));
-            }
-            s = MatrixUtils.createRealVector(new double[stateDimension]);
-            for (int i = 0; i < stateDimension; ++i) {
-                s.setEntry(i, Double.parseDouble(fields[index++]));
-            }
-            c = MatrixUtils.createRealMatrix(stateDimension, stateDimension);
-            for (int i = 0; i < stateDimension; ++i) {
-                for (int j = i; j < stateDimension; ++j) {
-                    c.setEntry(i, j, Double.parseDouble(fields[index++]));
-                    c.setEntry(j, i, c.getEntry(i, j));
-                }
-            }
-        }
-
-        public boolean sameTime(final double otherTime) {
-            return FastMath.abs(time - otherTime) < 1.0e-6;
-        }
-
-        public void checkState(final RealVector otherState, final double tolerance) {
-            Assert.assertEquals(s.getDimension(), otherState.getDimension());
-            for (int i = 0; i < s.getDimension(); ++i) {
-                Assert.assertEquals(time + ": ", s.getEntry(i), otherState.getEntry(i), tolerance);
-            }
-        }
-
-        public void checkcovariance(final RealMatrix otherCovariance, final double tolerance) {
-            Assert.assertEquals(c.getRowDimension(), otherCovariance.getRowDimension());
-            Assert.assertEquals(c.getColumnDimension(), otherCovariance.getColumnDimension());
-            for (int i = 0; i < c.getRowDimension(); ++i) {
-                for (int j = i; j < c.getColumnDimension(); ++j) {
-                    Assert.assertEquals(time + ": ", c.getEntry(i, j), otherCovariance.getEntry(i, j), tolerance);
-                }
-            }
-        }
-
-    }
-
-    public class SimpleMeasurement implements Measurement {
-        private final double time;
-        private final RealVector value;
-        private final RealMatrix covariance;
-
-        public SimpleMeasurement(final double time, final RealVector value, final RealMatrix covariance) {
-            this.time       = time;
-            this.value      = value;
-            this.covariance = covariance;
-        }
-
-        public double getTime() {
-            return time;
-        }
-
-        public RealVector getValue() {
-            return value;
-        }
-
-        public RealMatrix getCovariance() {
-            return covariance;
-        }
 
     }
 
