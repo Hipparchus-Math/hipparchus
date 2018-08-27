@@ -76,7 +76,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="psteitz" type="fix" issue="issues/13" >
         Fixed overly-aggressive sufficient data check in OLS/GLS regression classes.
         When there is no intercept in the model, the number of observations can equal
-        the number of regressors.  Fixes GitHub #13.
+        the number of regressors.  GitHub: fixes #13.
       </action>
       <action dev="psteitz" type="fix">
         Fixed bug in 2-sided binomial test leading to inflated p-values in some

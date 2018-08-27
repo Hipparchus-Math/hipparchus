@@ -128,11 +128,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
       <action dev="psteitz" type="add" issue="issues/19" >
         Added support for sampling from enumerated distributions in RandomDataGenerator.
-        Fixes Github issue #19.
+        GitHub: fixes issue #19.
       </action>
       <action dev="psteitz" type="add" issue="issues/18" >
         Added support for exact integration in PolynomialFunction.
-        Fixes Github issue #18.
+        GitHub: fixes issue #18.
       </action>
       <action dev="luc" type="update">
         Added a factory to simplify building DerivativeStructure instances.
@@ -150,12 +150,12 @@ If the output is not quite correct, check for invisible trailing spaces!
       </action>
       <action dev="luc" type="fix" issue="issues/17" due-to="Andrea Antolino">
         Added field-based QR decomposition.
-        Fixes Github issue #17.
+        GitHub: fixes issue #17.
       </action>
       <action dev="ebourg" type="update" issue="issues/12" due-to="Christoph Dibak">
         Performance improvement for Array2DRowRealMatrix.getSubMatrix() (and also
         Array2DRowFieldMatrix.getSubMatrix()).
-        Fixes Github issue #12.
+        GitHub: fixes issue #12.
       </action>
       <action dev="psteitz" type="fix">
         Improved parameter validation for probabilities provided to enumerated distribution

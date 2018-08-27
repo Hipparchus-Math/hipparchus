@@ -53,15 +53,15 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" issue="issues/42">
         Use topological information from BSP tree to connect more reliably edges and
         vertices when building the boundary loops of SphericalPolygonsSet.
-        Fixes GitHub #42.
+        GitHub: fixes #42.
       </action>
       <action dev="luc" type="fix" issue="issues/42">
         Forbid use of unrealistic tolerances (below ulp(2π)) in spherical geometry.
-        Fixes GitHub #42.
+        GitHub: fixes #42.
       </action>
       <action dev="luc" type="fix" issue="issues/41">
         Fixed a corner case in BSPTree split.
-        Fixes GitHub #41.
+        GitHub: fixes #41.
       </action>
     </release>
     <release version="1.3" date="2018-05-08" description="This is a maintenance release.">
@@ -92,7 +92,7 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" issue="issues/20" >
         Fixed numerical noise issues in Welzl smallest enclosing ball computation.
         Thanks to jerdmanGH for reporting the issue.
-        Fixes GitHub #20.
+        GitHub: fixes #20.
       </action>
       <action dev="luc" type="add">
         Added field based 3D lines.

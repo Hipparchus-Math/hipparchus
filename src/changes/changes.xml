@@ -53,20 +53,20 @@ If the output is not quite correct, check for invisible trailing spaces!
       <action dev="luc" type="fix" issue="issues/42">
         Use topological information from BSP tree to connect more reliably edges and
         vertices when building the boundary loops of SphericalPolygonsSet.
-        Fixes GitHub #42.
+        GitHub: fixes #42.
       </action>
       <action dev="luc" type="fix" issue="issues/42">
         Forbid use of unrealistic tolerances (below ulp(2π)) in spherical geometry.
-        Fixes GitHub #42.
+        GitHub: fixes #42.
       </action>
       <action dev="luc" type="fix" issue="issues/41">
         Fixed a corner case in BSPTree split.
-        Fixes GitHub #41.
+        GitHub: fixes #41.
       </action>
       <action dev="luc" type="fix" issue="issues/40" >
         Bisection solvers failed to raise an exception when the search
         interval did not bracket a root.
-        Github: fixes #40.
+        GitHub: fixes #40.
       </action>
       <action dev="luc" type="add" >
         Added a way to build three-dimensional field arrays.
@@ -186,11 +186,11 @@ If the output is not quite correct, check for invisible trailing spaces!
     <release version="1.1" date="2017-03-16" description="This is a maintenance release.">
      <action dev="psteitz" type="add" issue="issues/19" >
        Core: Added support for sampling from enumerated distributions in RandomDataGenerator.
-       Fixes Github issue #19.
+       GitHub: fixes issue #19.
      </action>
      <action dev="psteitz" type="add" issue="issues/18" >
        Core: Added support for exact integration in PolynomialFunction.
-       Fixes Github issue #18.
+       GitHub: fixes issue #18.
      </action>
       <action dev="luc" type="update">
         Added a factory to simplify building DerivativeStructure instances.
@@ -208,12 +208,12 @@ If the output is not quite correct, check for invisible trailing spaces!
      </action>
      <action dev="luc" type="fix" issue="issues/17" due-to="Andrea Antolino">
        Core: Added field-based QR decomposition.
-       Fixes Github issue #17.
+       GitHub: fixes issue #17.
      </action>
      <action dev="ebourg" type="update" issue="issues/12"  due-to="Christoph Dibak">
        Core: Performance improvement for Array2DRowRealMatrix.getSubMatrix() (and also
        Array2DRowFieldMatrix.getSubMatrix()).
-       Fixes Github issue #12.
+       GitHub: fixes issue #12.
      </action>
      <action dev="psteitz" type="fix">
        Core: Improved parameter validation for probabilities provided to enumerated distribution
@@ -226,7 +226,7 @@ If the output is not quite correct, check for invisible trailing spaces!
      <action dev="psteitz" type="fix" issue="issues/13" >
        Stat: Fixed overly-aggressive sufficient data check in OLS/GLS regression classes.
        When there is no intercept in the model, the number of observations can equal
-       the number of regressors.  Fixes GitHub #13.
+       the number of regressors.  GitHub: fixes #13.
      </action>
      <action dev="psteitz" type="fix">
        Stat: Fixed bug in 2-sided binomial test leading to inflated p-values in some
@@ -249,7 +249,7 @@ If the output is not quite correct, check for invisible trailing spaces!
      <action dev="luc" type="fix" issue="issues/20" >
        Geometry: Fixed numerical noise issues in Welzl smallest enclosing ball computation.
        Thanks to jerdmanGH for reporting the issue.
-       Fixes GitHub #20.
+       GitHub: fixes #20.
      </action>
      <action dev="luc" type="add">
        Geometry: Added field based 3D lines.
