@@ -71,7 +71,7 @@ public class LinearKalmanFilter<T extends Measurement> extends AbstractKalmanFil
         final RealMatrix h          = evolution.getMeasurementJacobian();
         final RealMatrix s          = computeInnovationCovarianceMatrix(measurement.getCovariance(), h);
         final RealVector innovation = (h == null) ? null : measurement.getValue().subtract(h.operate(predXk));
-        correct(measurement, innovation, h, s);
+        correct(measurement, a, innovation, h, s);
         return getCorrected();
 
     }

@@ -76,6 +76,7 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
 
     /** Perform correction step.
      * @param measurement single measurement to handle
+     * @param stm state transition matrix
      * @param innovation innovation vector (i.e. residuals)
      * (may be null if measurement should be ignored)
      * @param h Jacobian of the measurement with respect to the state
@@ -84,7 +85,7 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
      * (may be null if measurement should be ignored)
      * @exception MathIllegalArgumentException if matrix cannot be decomposed
      */
-    protected void correct(final T measurement, final RealVector innovation,
+    protected void correct(final T measurement, final RealMatrix stm, final RealVector innovation,
                            final RealMatrix h, final RealMatrix s)
         throws MathIllegalArgumentException {
 
@@ -126,7 +127,8 @@ public abstract class AbstractKalmanFilter<T extends Measurement> implements Kal
                         idMkh.multiply(predicted.getCovariance()).multiplyTransposed(idMkh).
                         add(k.multiply(r).multiplyTransposed(k));
 
-        corrected = new ProcessEstimate(measurement.getTime(), correctedState, correctedCovariance);
+        corrected = new ProcessEstimate(measurement.getTime(), correctedState, correctedCovariance,
+                                        stm, h, s, k);
 
     }
 

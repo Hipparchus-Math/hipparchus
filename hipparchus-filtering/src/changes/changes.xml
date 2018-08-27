@@ -49,6 +49,13 @@ If the output is not quite correct, check for invisible trailing spaces!
     <title>Hipparchus Filtering Release Notes</title>
   </properties>
   <body>
+    <release version="1.4" date="TBC" description="TBC">
+      <action dev="luc" type="fix" issue="issues/43">
+        Added accessors for state transition matrix, Jacobian matrix H, innovation covariance matrix
+        and Kalman gain in Kalman filters.
+        GitHub: fixes #43.
+      </action>
+    </release>
     <release version="1.3" date="2018-05-08" description="This is the first release of the filtering module.
     The module features both Kalman filter for linear processes and Kalman filter for non-linear processes.">
       <action dev="luc" type="add" issue="issues/32" >

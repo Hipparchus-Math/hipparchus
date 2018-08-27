@@ -49,6 +49,7 @@ public class LinearKalmanFilterTest {
         final ProcessEstimate initial = new ProcessEstimate(0,
                                                             MatrixUtils.createRealVector(new double[] { 10.0 }),
                                                             q);
+        Assert.assertNull(initial.getInnovationCovariance());
 
         // reference values from Apache Commons Math 3.6.1 unit test
         final List<Reference> referenceData = Reference.loadReferenceData(1, 1, "constant-value.txt");
@@ -72,7 +73,7 @@ public class LinearKalmanFilterTest {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
                     r.checkState(estimate.getState(), 1.0e-15);
-                    r.checkcovariance(estimate.getCovariance(), 3.0e-19);
+                    r.checkCovariance(estimate.getCovariance(), 3.0e-19);
                     return;
                 }
             }
@@ -83,6 +84,11 @@ public class LinearKalmanFilterTest {
     @Test
     public void testConstantAcceleration() {
         doTestConstantAcceleration("constant-acceleration.txt");
+    }
+
+    @Test
+    public void testConstantAccelerationWithIntermediateData() {
+        doTestConstantAcceleration("constant-acceleration-with-intermediate-data.txt");
     }
 
     @Test
@@ -129,6 +135,7 @@ public class LinearKalmanFilterTest {
                                                             }));
 
         // reference values from Apache Commons Math 3.6.1 unit test
+        // possibly with additional intermediate data
         final List<Reference> referenceData = Reference.loadReferenceData(2, 1, name);
         final Stream<SimpleMeasurement> measurements =
                         referenceData.stream().
@@ -154,7 +161,14 @@ public class LinearKalmanFilterTest {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
                     r.checkState(estimate.getState(), 4.0e-15);
-                    r.checkcovariance(estimate.getCovariance(), 4.0e-15);
+                    r.checkCovariance(estimate.getCovariance(), 4.0e-15);
+                    if (r.hasIntermediateData()) {
+                      r.checkStateTransitionMatrix(estimate.getStateTransitionMatrix(), 1.0e-14);
+                      r.checkMeasurementJacobian(estimate.getMeasurementJacobian(),     1.0e-15);
+                      r.checkInnovationCovariance(estimate.getInnovationCovariance(),   1.0e-12);
+                      r.checkKalmanGain(estimate.getKalmanGain(),                       1.0e-12);
+                      r.checkKalmanGain(estimate.getKalmanGain(),                       1.0e-15);
+                    }
                     return;
                 }
             }
@@ -254,7 +268,7 @@ public class LinearKalmanFilterTest {
             for (Reference r : referenceData) {
                 if (r.sameTime(estimate.getTime())) {
                     r.checkState(estimate.getState(), tolState);
-                    r.checkcovariance(estimate.getCovariance(), tolCovariance);
+                    r.checkCovariance(estimate.getCovariance(), tolCovariance);
                     return;
                 }
             }

@@ -36,6 +36,10 @@ public class Reference {
     private final RealVector z;
     private final RealVector s;
     private final RealMatrix c;
+    private final RealMatrix stm;
+    private final RealMatrix h;
+    private final RealMatrix icm;
+    private final RealMatrix k;
 
     private Reference(final int stateDimension, final int measurementDimension, final String line) {
         final String[] fields = line.split("\\s+");
@@ -55,6 +59,44 @@ public class Reference {
                 c.setEntry(i, j, Double.parseDouble(fields[index++]));
                 c.setEntry(j, i, c.getEntry(i, j));
             }
+        }
+        if (fields.length > index) {
+            // there are additional data
+
+            stm = MatrixUtils.createRealMatrix(stateDimension, stateDimension);
+            for (int i = 0; i < stateDimension; ++i) {
+                for (int j = 0; j < stateDimension; ++j) {
+                    stm.setEntry(i, j, Double.parseDouble(fields[index++]));
+                }
+            }
+
+            h = MatrixUtils.createRealMatrix(measurementDimension, stateDimension);
+            for (int i = 0; i < measurementDimension; ++i) {
+                for (int j = 0; j < stateDimension; ++j) {
+                    h.setEntry(i, j, Double.parseDouble(fields[index++]));
+                }
+            }
+
+            icm = MatrixUtils.createRealMatrix(measurementDimension, measurementDimension);
+            for (int i = 0; i < measurementDimension; ++i) {
+                for (int j = i; j < measurementDimension; ++j) {
+                    icm.setEntry(i, j, Double.parseDouble(fields[index++]));
+                    icm.setEntry(j, i, icm.getEntry(i, j));
+                }
+            }
+
+            k = MatrixUtils.createRealMatrix(stateDimension, measurementDimension);
+            for (int i = 0; i < stateDimension; ++i) {
+                for (int j = 0; j < measurementDimension; ++j) {
+                    k.setEntry(i, j, Double.parseDouble(fields[index++]));
+                }
+            }
+
+        } else {
+            stm = null;
+            h   = null;
+            icm = null;
+            k   = null;
         }
     }
 
@@ -81,20 +123,31 @@ public class Reference {
     }
 
     public void checkState(final RealVector otherState, final double tolerance) {
-        Assert.assertEquals(s.getDimension(), otherState.getDimension());
-        for (int i = 0; i < s.getDimension(); ++i) {
-            Assert.assertEquals(time + ": ", s.getEntry(i), otherState.getEntry(i), tolerance);
-        }
+        checkVector(s, otherState, tolerance);
     }
 
-    public void checkcovariance(final RealMatrix otherCovariance, final double tolerance) {
-        Assert.assertEquals(c.getRowDimension(), otherCovariance.getRowDimension());
-        Assert.assertEquals(c.getColumnDimension(), otherCovariance.getColumnDimension());
-        for (int i = 0; i < c.getRowDimension(); ++i) {
-            for (int j = i; j < c.getColumnDimension(); ++j) {
-                Assert.assertEquals(time + ": ", c.getEntry(i, j), otherCovariance.getEntry(i, j), tolerance);
-            }
-        }
+    public void checkCovariance(final RealMatrix otherCovariance, final double tolerance) {
+        checkMatrix(c, otherCovariance, tolerance);
+    }
+
+    public boolean hasIntermediateData() {
+        return stm != null;
+    }
+
+    public void checkStateTransitionMatrix(final RealMatrix otherSTM, final double tolerance) {
+        checkMatrix(stm, otherSTM, tolerance);
+    }
+
+    public void checkMeasurementJacobian(final RealMatrix otherMeasurementJacobian, final double tolerance) {
+        checkMatrix(h, otherMeasurementJacobian, tolerance);
+    }
+
+    public void checkInnovationCovariance(final RealMatrix otherInnovationCovariance, final double tolerance) {
+        checkMatrix(icm, otherInnovationCovariance, tolerance);
+    }
+
+    public void checkKalmanGain(final RealMatrix otherKalmanGain, final double tolerance) {
+        checkMatrix(k, otherKalmanGain, tolerance);
     }
 
     public double getTime() {
@@ -103,6 +156,23 @@ public class Reference {
 
     public RealVector getZ() {
         return z;
+    }
+
+    private void checkVector(final RealVector referenceVector, final RealVector otherVector, final double tolerance) {
+        Assert.assertEquals(referenceVector.getDimension(), otherVector.getDimension());
+        for (int i = 0; i < referenceVector.getDimension(); ++i) {
+            Assert.assertEquals(time + ": ", referenceVector.getEntry(i), otherVector.getEntry(i), tolerance);
+        }
+    }
+
+    private void checkMatrix(final RealMatrix referenceMatrix, final RealMatrix otherMatrix, final double tolerance) {
+        Assert.assertEquals(referenceMatrix.getRowDimension(), otherMatrix.getRowDimension());
+        Assert.assertEquals(referenceMatrix.getColumnDimension(), otherMatrix.getColumnDimension());
+        for (int i = 0; i < referenceMatrix.getRowDimension(); ++i) {
+            for (int j = i; j < referenceMatrix.getColumnDimension(); ++j) {
+                Assert.assertEquals(time + ": ", referenceMatrix.getEntry(i, j), otherMatrix.getEntry(i, j), tolerance);
+            }
+        }
     }
 
 }

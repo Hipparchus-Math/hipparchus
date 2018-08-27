@@ -57,14 +57,15 @@ public class ExtendedKalmanFilter<T extends Measurement> extends AbstractKalmanF
                                                                   getCorrected().getState(),
                                                                   measurement);
 
+        final RealMatrix stm = evolution.getStateTransitionMatrix();
         predict(evolution.getCurrentTime(), evolution.getCurrentState(),
-                evolution.getStateTransitionMatrix(), evolution.getProcessNoiseMatrix());
+                stm, evolution.getProcessNoiseMatrix());
 
         // correction phase
         final RealMatrix h          = evolution.getMeasurementJacobian();
         final RealMatrix s          = computeInnovationCovarianceMatrix(measurement.getCovariance(), h);
         final RealVector innovation = (h == null) ? null : process.getInnovation(measurement, evolution, s);
-        correct(measurement, innovation, h, s);
+        correct(measurement, stm, innovation, h, s);
         return getCorrected();
 
     }
