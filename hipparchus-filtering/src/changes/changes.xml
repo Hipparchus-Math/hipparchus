@@ -50,7 +50,7 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.4" date="TBC" description="TBC">
-      <action dev="luc" type="fix" issue="issues/43">
+      <action dev="luc" type="add" issue="issues/43">
         Added accessors for state transition matrix, Jacobian matrix H, innovation covariance matrix
         and Kalman gain in Kalman filters.
         GitHub: fixes #43.
