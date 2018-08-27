@@ -110,7 +110,7 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
 
     private void verifyQuantiles() {
         LogNormalDistribution distribution = (LogNormalDistribution)getDistribution();
-        double mu = distribution.getScale();
+        double mu = distribution.getLocation();
         double sigma = distribution.getShape();
         setCumulativeTestPoints( new double[] { mu - 2 *sigma, mu - sigma,
                                                 mu, mu + sigma, mu + 2 * sigma,
@@ -164,10 +164,17 @@ public class LogNormalDistributionTest extends RealDistributionAbstractTest {
         verifyInverseCumulativeProbabilities();
     }
 
+    @Deprecated
     @Test
-    public void testGetScale() {
+    public void testGetScaleDeprecated() {
         LogNormalDistribution distribution = (LogNormalDistribution)getDistribution();
         Assert.assertEquals(2.1, distribution.getScale(), 0);
+    }
+
+    @Test
+    public void testGetLocation() {
+        LogNormalDistribution distribution = (LogNormalDistribution)getDistribution();
+        Assert.assertEquals(2.1, distribution.getLocation(), 0);
     }
 
     @Test

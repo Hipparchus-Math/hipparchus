@@ -50,6 +50,11 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.4" date="TBC" description="TBC">
+      <action dev="luc" type="fix" issue="issues/4" >
+        Renamed scale parameter to location parameter in the log-normal distribution,
+        to avoid confusion.
+        Github: fixes #4.
+      </action>
       <action dev="luc" type="add" issue="issues/43">
         Added accessors for state transition matrix, Jacobian matrix H, innovation covariance matrix
         and Kalman gain in Kalman filters.

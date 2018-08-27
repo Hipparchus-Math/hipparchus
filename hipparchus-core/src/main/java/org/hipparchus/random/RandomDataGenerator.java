@@ -176,7 +176,7 @@ public class RandomDataGenerator extends ForwardingRandomGenerator
                                 (generator, dist) -> {
                                     LogNormalDistribution logNormal = (LogNormalDistribution) dist;
                                     return generator.nextLogNormal(logNormal.getShape(),
-                                                                   logNormal.getScale());
+                                                                   logNormal.getLocation());
                                 });
 
         CONTINUOUS_SAMPLERS.put(UniformRealDistribution.class,
