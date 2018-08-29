@@ -36,7 +36,9 @@ public final class RegulaFalsiSolverTest extends BaseSecantSolverAbstractTest {
     /** {@inheritDoc} */
     @Override
     protected UnivariateSolver getSolver() {
-        return new RegulaFalsiSolver();
+        UnivariateSolver solver = new RegulaFalsiSolver();
+        checktype(solver, BaseSecantSolver.Method.REGULA_FALSI);
+        return solver;
     }
 
     /** {@inheritDoc} */

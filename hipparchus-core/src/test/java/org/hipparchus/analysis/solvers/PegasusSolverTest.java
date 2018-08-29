@@ -33,7 +33,9 @@ public final class PegasusSolverTest extends BaseSecantSolverAbstractTest {
     /** {@inheritDoc} */
     @Override
     protected UnivariateSolver getSolver() {
-        return new PegasusSolver();
+        UnivariateSolver solver = new PegasusSolver();
+        checktype(solver, BaseSecantSolver.Method.PEGASUS);
+        return solver;
     }
 
     /** {@inheritDoc} */

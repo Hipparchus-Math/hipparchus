@@ -21,6 +21,8 @@
  */
 package org.hipparchus.analysis.solvers;
 
+import java.lang.reflect.Field;
+
 import org.hipparchus.analysis.QuinticFunction;
 import org.hipparchus.analysis.UnivariateFunction;
 import org.hipparchus.analysis.XMinus5Function;
@@ -268,6 +270,17 @@ public abstract class BaseSecantSolverAbstractTest {
             return UnivariateSolverUtils.forceSide(maxEval - solver.getEvaluations(),
                                                        f, bracketing, baseRoot, left, right,
                                                        allowedSolution);
+        }
+    }
+
+    protected void checktype(UnivariateSolver solver, BaseSecantSolver.Method expected) {
+        try {
+            Field methodField = BaseSecantSolver.class.getDeclaredField("method");
+            methodField.setAccessible(true);
+            BaseSecantSolver.Method method = (BaseSecantSolver.Method) methodField.get(solver);
+            Assert.assertEquals(expected, method);
+        } catch (IllegalAccessException | NoSuchFieldException | SecurityException e) {
+            Assert.fail(e.getLocalizedMessage());
         }
     }
 

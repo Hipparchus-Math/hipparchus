@@ -81,6 +81,6 @@ public class IllinoisSolver extends BaseSecantSolver {
     public IllinoisSolver(final double relativeAccuracy,
                           final double absoluteAccuracy,
                           final double functionValueAccuracy) {
-        super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy, Method.PEGASUS);
+        super(relativeAccuracy, absoluteAccuracy, functionValueAccuracy, Method.ILLINOIS);
     }
 }

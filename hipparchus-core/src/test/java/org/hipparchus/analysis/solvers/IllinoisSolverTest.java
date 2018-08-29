@@ -22,8 +22,7 @@
 
 package org.hipparchus.analysis.solvers;
 
-import org.hipparchus.analysis.solvers.IllinoisSolver;
-import org.hipparchus.analysis.solvers.UnivariateSolver;
+import org.junit.Test;
 
 /**
  * Test case for {@link IllinoisSolver Illinois} solver.
@@ -33,7 +32,9 @@ public final class IllinoisSolverTest extends BaseSecantSolverAbstractTest {
     /** {@inheritDoc} */
     @Override
     protected UnivariateSolver getSolver() {
-        return new IllinoisSolver();
+        UnivariateSolver solver = new IllinoisSolver();
+        checktype(solver, BaseSecantSolver.Method.ILLINOIS);
+        return solver;
     }
 
     /** {@inheritDoc} */
@@ -41,4 +42,10 @@ public final class IllinoisSolverTest extends BaseSecantSolverAbstractTest {
     protected int[] getQuinticEvalCounts() {
         return new int[] {3, 7, 9, 10, 10, 10, 12, 12, 14, 15, 20};
     }
+
+    @Test
+    public void testGitHubIssue44() {
+        checktype(new IllinoisSolver(1.0e-6, 1.0e-14, 1.0e-15), BaseSecantSolver.Method.ILLINOIS);
+    }
+
 }
