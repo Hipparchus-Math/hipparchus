@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.4" date="TBC" description="TBC">
+      <action dev="luc" type="add" issue="issues/39" >
+        Added support for complex ordinary differential equations (both primary and secondary equations).
+        Github: fixes #39.
+      </action>
       <action dev="luc" type="fix" issue="issues/44" >
         Fixed wrong construction of an Illinois solver that really built a Pegasus solver.
         Github: fixes #44.
