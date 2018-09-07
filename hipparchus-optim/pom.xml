@@ -53,6 +53,12 @@
 
     <dependency>
       <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-core</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.hipparchus</groupId>
       <artifactId>hipparchus-geometry</artifactId>
       <scope>test</scope>
     </dependency>

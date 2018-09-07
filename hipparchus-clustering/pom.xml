@@ -56,6 +56,12 @@
     <!-- Test dependencies -->
 
     <dependency>
+      <groupId>org.hipparchus</groupId>
+      <artifactId>hipparchus-core</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
