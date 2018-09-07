@@ -31,7 +31,7 @@ pipeline {
 
     post {
         always {
-            archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+            archiveArtifacts artifacts: 'hipparchus-*/target/*.jar', fingerprint: true
             script {
                 if ( env.BRANCH_NAME ==~ /^release-[.0-9]+$/ ) {
                     archiveArtifacts artifacts: 'target/*.zip', fingerprint: true
