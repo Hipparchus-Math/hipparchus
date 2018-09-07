@@ -3,7 +3,7 @@ pipeline {
     agent any
     tools {
         maven 'mvn-default'
-        hdk   'openjdk-8'
+        jdk   'openjdk-8'
     }
 
     options {
@@ -20,24 +20,19 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn compile'
-                checkstyle pattern: 'target/checkstyle-result.xml'
+                sh 'mvn compile checkstyle:checkstyle'
+                checkstyle pattern: 'hipparchus-*/target/checkstyle-result.xml'
             }
         }
 
         stage('Test') {
             steps {
-                sh 'mvn test'
-                junit 'target/surefire-reports/*.xml'
-                jacoco execPattern:'target/**.exec', classPattern: '**/classes', sourcePattern: '**/src/main/java'
+                sh 'mvn site site:stage'
+                junit 'hipparchus-*/target/surefire-reports/*.xml'
+                jacoco execPattern:'hipparchus-*/target/**.exec', classPattern: '**/classes', sourcePattern: '**/src/main/java'
             }
         }
 
-        stage('Deploy') {
-            steps {
-                sh 'mvn install'
-            }
-        }
     }
 
     post {
