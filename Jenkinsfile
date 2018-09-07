@@ -20,14 +20,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn -D maven.test.skip=true package install checkstyle:checkstyle'
+                sh 'mvn package test install checkstyle:checkstyle'
                 checkstyle pattern: 'hipparchus-*/target/checkstyle-result.xml'
-            }
-        }
-
-        stage('Test') {
-            steps {
-                sh 'mvn test'
                 junit 'hipparchus-*/target/surefire-reports/*.xml'
                 jacoco execPattern:'hipparchus-*/target/**.exec', classPattern: '**/classes', sourcePattern: '**/src/main/java'
             }
