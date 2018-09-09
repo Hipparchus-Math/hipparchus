@@ -31,8 +31,9 @@ import org.hipparchus.complex.Complex;
  *
  * <p>One should be aware that the data is duplicated during the
  * transformation process and that for each call to {@link
- * #computeDerivatives computeDerivatives}, this wrapper does copy 4n
- * scalars : 2n before the call to {@link
+ * OrdinaryDifferentialEquation#computeDerivatives(double, double[])
+ * computeDerivatives}, this wrapper does copy 4n scalars : 2n before
+ * the call to {@link
  * OrdinaryDifferentialEquation#computeDerivatives(double, double[])
  * computeDerivatives} in order to dispatch the y state vector,
  * and 2n after the call to gather zDot. Since the underlying problem
@@ -50,7 +51,7 @@ import org.hipparchus.complex.Complex;
  *   ComplexOrdinaryDifferentialEquation complexEquations = ...set up the complex problem...;
  *   ComplexODEState                     initialState     = ...set up initial state...;
  *   ComplexODEConverter                 converter        = new ComplexODEConverter();
- *   ComplexODEStateAndDerivative         finalstate      =
+ *   ComplexODEStateAndDerivative        finalstate       =
  *      converter.convertStateAndDerivative(integrator.integrate(converter.convertEquations(complexEquations),
  *                                                               converter.convertState(initialState),
  *                                                               t);
@@ -59,7 +60,7 @@ import org.hipparchus.complex.Complex;
  * If there are {@link ComplexSecondaryODE complex secondary equations}, they must be converted
  * too and both the converted primary equations and converted secondary equations must be
  * combined together using {@link ExpandableODE ExpandableODE} as usual for regular real equations.
- * </p
+ * </p>
  *
  * @see ComplexOrdinaryDifferentialEquation
  * @see OrdinaryDifferentialEquation

@@ -67,7 +67,6 @@ import com.xeiam.xchart.XChartPanel;
  */
 public class RealDistributionComparison {
 
-    // CHECKSTYLE: stop JavadocMethodCheck
     public static void addPDFSeries(Chart chart, RealDistribution distribution, String desc, int lowerBound, int upperBound) {
         // generates Log data
         List<Number> xData = new ArrayList<Number>();
@@ -309,7 +308,5 @@ public class RealDistributionComparison {
     public static void main(String[] args) {
         ExampleUtils.showExampleFrame(new Display());
     }
-
-    // CHECKSTYLE: resume JavadocMethodCheck
 
 }

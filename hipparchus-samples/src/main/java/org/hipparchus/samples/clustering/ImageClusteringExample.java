@@ -58,7 +58,6 @@ import org.hipparchus.samples.ExampleUtils.ExampleFrame;
 @SuppressWarnings("serial")
 public class ImageClusteringExample {
 
-    // CHECKSTYLE: stop JavadocMethodCheck
     public static class Display extends ExampleFrame {
 
         private BufferedImage referenceImage;
@@ -207,5 +206,4 @@ public class ImageClusteringExample {
         ExampleUtils.showExampleFrame(new Display());
     }
 
-    // CHECKSTYLE: resume JavadocMethodCheck
 }

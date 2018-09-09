@@ -69,7 +69,6 @@ import org.piccolo2d.nodes.PText;
  */
 public class GeometryExample {
 
-    // CHECKSTYLE: stop JavadocMethodCheck
     public static List<Vector2D> createRandomPoints(int size) {
         RandomGenerator random = new MersenneTwister();
 
@@ -283,7 +282,5 @@ public class GeometryExample {
     public static void main(final String[] argv) {
         ExampleUtils.showExampleFrame(new Display());
     }
-
-    // CHECKSTYLE: resume JavadocMethodCheck
 
 }

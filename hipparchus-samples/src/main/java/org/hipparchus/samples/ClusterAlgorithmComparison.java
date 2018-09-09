@@ -64,7 +64,6 @@ import org.hipparchus.util.Pair;
  */
 public class ClusterAlgorithmComparison {
 
-    // CHECKSTYLE: stop JavadocMethodCheck
     public static List<Vector2D> makeCircles(int samples, boolean shuffle, double noise, double factor, final RandomGenerator random) {
         if (factor < 0 || factor > 1) {
             throw new IllegalArgumentException();
@@ -307,7 +306,5 @@ public class ClusterAlgorithmComparison {
     public static void main(String[] args) {
         ExampleUtils.showExampleFrame(new Display());
     }
-
-    // CHECKSTYLE: resume JavadocMethodCheck
 
 }
