@@ -931,7 +931,7 @@ public class Percentile extends AbstractUnivariateStatistic implements Serializa
          * @param length the total number of array elements in the work array
          * @return a computed real valued index as explained in the wikipedia
          */
-        protected abstract double index(final double p, final int length);
+        protected abstract double index(double p, int length);
 
         /**
          * Estimation based on K<sup>th</sup> selection. This may be overridden

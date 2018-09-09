@@ -48,7 +48,7 @@ public abstract class AbstractStorelessUnivariateStatistic
 
     /** {@inheritDoc} */
     @Override
-    public abstract void increment(final double d);
+    public abstract void increment(double d);
 
     /**
      * Returns true iff <code>object</code> is the same type of

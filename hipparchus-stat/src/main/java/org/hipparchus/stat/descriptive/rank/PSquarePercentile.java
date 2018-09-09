@@ -977,7 +977,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          * @return percentile value of the marker index passed
          * @throws MathIllegalArgumentException in case the index is not within [1-5]
          */
-        double height(final int markerIndex);
+        double height(int markerIndex);
 
         /**
          * Process a data point by moving the marker heights based on estimator.
@@ -985,7 +985,7 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          * @param inputDataPoint is the data point passed
          * @return computed percentile
          */
-        double processDataPoint(final double inputDataPoint);
+        double processDataPoint(double inputDataPoint);
 
         /**
          * An Estimate of the percentile value of a given Marker
@@ -994,6 +994,6 @@ public class PSquarePercentile extends AbstractStorelessUnivariateStatistic
          * @return percentile estimate
          * @throws MathIllegalArgumentException in case if index is not within [1-5]
          */
-        double estimate(final int index);
+        double estimate(int index);
     }
 }

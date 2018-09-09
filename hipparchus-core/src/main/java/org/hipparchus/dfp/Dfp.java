@@ -2171,6 +2171,7 @@ public class Dfp implements RealFieldElement<Dfp> {
      * @return string representation of the instance in normal notation
      */
     protected String dfp2string() {
+        final String fourZero = "0000";
         int e = exp;
         boolean pointInserted = false;
 
@@ -2183,7 +2184,7 @@ public class Dfp implements RealFieldElement<Dfp> {
         }
 
         while (e < 0) {
-            builder.append("0000");
+            builder.append(fourZero);
             e++;
         }
 
@@ -2199,7 +2200,7 @@ public class Dfp implements RealFieldElement<Dfp> {
         }
 
         while (e > 0) {
-            builder.append("0000");
+            builder.append(fourZero);
             e--;
         }
 
