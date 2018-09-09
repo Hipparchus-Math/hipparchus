@@ -47,45 +47,48 @@ public class DfpMath {
      */
     protected static Dfp[] split(final DfpField field, final String a) {
         Dfp result[] = new Dfp[2];
-        char[] buf;
         boolean leading = true;
         int sp = 0;
         int sig = 0;
 
-        buf = new char[a.length()];
+        StringBuilder builder1 = new StringBuilder(a.length());
 
-        for (int i = 0; i < buf.length; i++) {
-            buf[i] = a.charAt(i);
+        for (int i = 0; i < a.length(); i++) {
+          final char c = a.charAt(i);
+          builder1.append(c);
 
-            if (buf[i] >= '1' && buf[i] <= '9') {
-                leading = false;
-            }
+          if (c >= '1' && c <= '9') {
+              leading = false;
+          }
 
-            if (buf[i] == '.') {
-                sig += (400 - sig) % 4;
-                leading = false;
-            }
+          if (c == '.') {
+            sig += (400 - sig) % 4;
+            leading = false;
+          }
 
-            if (sig == (field.getRadixDigits() / 2) * 4) {
-                sp = i;
-                break;
-            }
+          if (sig == (field.getRadixDigits() / 2) * 4) {
+            sp = i;
+            break;
+          }
 
-            if (buf[i] >= '0' && buf[i] <= '9' && !leading) {
-                sig ++;
-            }
+          if (c >= '0' &&c <= '9' && !leading) {
+              sig ++;
+          }
         }
 
-        result[0] = field.newDfp(new String(buf, 0, sp));
+        result[0] = field.newDfp(builder1.substring(0, sp));
 
-        for (int i = 0; i < buf.length; i++) {
-            buf[i] = a.charAt(i);
-            if (buf[i] >= '0' && buf[i] <= '9' && i < sp) {
-                buf[i] = '0';
-            }
+        StringBuilder builder2 = new StringBuilder(a.length());
+        for (int i = 0; i < a.length(); i++) {
+            final char c = a.charAt(i);
+            if (c >= '0' && c <= '9' && i < sp) {
+                builder2.append('0');
+            } else {
+                builder2.append(c);
+          }
         }
 
-        result[1] = field.newDfp(new String(buf));
+        result[1] = field.newDfp(builder2.toString());
 
         return result;
     }

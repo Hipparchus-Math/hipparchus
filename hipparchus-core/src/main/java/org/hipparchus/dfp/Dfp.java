@@ -2097,9 +2097,7 @@ public class Dfp implements RealFieldElement<Dfp> {
      */
     protected String dfp2sci() {
         char rawdigits[]    = new char[mant.length * 4];
-        char outputbuffer[] = new char[mant.length * 4 + 20];
         int p;
-        int q;
         int e;
         int ae;
         int shf;
@@ -2122,29 +2120,25 @@ public class Dfp implements RealFieldElement<Dfp> {
         shf = p;
 
         // Now do the conversion
-        q = 0;
+        StringBuilder builder = new StringBuilder();
         if (sign == -1) {
-            outputbuffer[q++] = '-';
+            builder.append('-');
         }
 
         if (p != rawdigits.length) {
             // there are non zero digits...
-            outputbuffer[q++] = rawdigits[p++];
-            outputbuffer[q++] = '.';
+            builder.append(rawdigits[p++]);
+            builder.append('.');
 
             while (p<rawdigits.length) {
-                outputbuffer[q++] = rawdigits[p++];
+                builder.append(rawdigits[p++]);
             }
         } else {
-            outputbuffer[q++] = '0';
-            outputbuffer[q++] = '.';
-            outputbuffer[q++] = '0';
-            outputbuffer[q++] = 'e';
-            outputbuffer[q++] = '0';
-            return new String(outputbuffer, 0, 5);
+            builder.append("0.0e0");
+            return builder.toString();
         }
 
-        outputbuffer[q++] = 'e';
+        builder.append('e');
 
         // Find the msd of the exponent
 
@@ -2160,16 +2154,16 @@ public class Dfp implements RealFieldElement<Dfp> {
         }
 
         if (e < 0) {
-            outputbuffer[q++] = '-';
+            builder.append('-');
         }
 
         while (p > 0) {
-            outputbuffer[q++] = (char)(ae / p + '0');
+            builder.append((char)(ae / p + '0'));
             ae %= p;
             p /= 10;
         }
 
-        return new String(outputbuffer, 0, q);
+        return builder.toString();
 
     }
 
@@ -2177,72 +2171,62 @@ public class Dfp implements RealFieldElement<Dfp> {
      * @return string representation of the instance in normal notation
      */
     protected String dfp2string() {
-        char buffer[] = new char[mant.length*4 + 20];
-        int p = 1;
-        int q;
         int e = exp;
         boolean pointInserted = false;
 
-        buffer[0] = ' ';
+        StringBuilder builder = new StringBuilder();
 
         if (e <= 0) {
-            buffer[p++] = '0';
-            buffer[p++] = '.';
+            builder.append('0');
+            builder.append('.');
             pointInserted = true;
         }
 
         while (e < 0) {
-            buffer[p++] = '0';
-            buffer[p++] = '0';
-            buffer[p++] = '0';
-            buffer[p++] = '0';
+            builder.append("0000");
             e++;
         }
 
         for (int i = mant.length - 1; i >= 0; i--) {
-            buffer[p++] = (char) ((mant[i] / 1000) + '0');
-            buffer[p++] = (char) (((mant[i] / 100) % 10) + '0');
-            buffer[p++] = (char) (((mant[i] / 10) % 10) + '0');
-            buffer[p++] = (char) (((mant[i]) % 10) + '0');
+            builder.append((char) ((mant[i] / 1000) + '0'));
+            builder.append((char) (((mant[i] / 100) % 10) + '0'));
+            builder.append((char) (((mant[i] / 10) % 10) + '0'));
+            builder.append((char) (((mant[i]) % 10) + '0'));
             if (--e == 0) {
-                buffer[p++] = '.';
+                builder.append('.');
                 pointInserted = true;
             }
         }
 
         while (e > 0) {
-            buffer[p++] = '0';
-            buffer[p++] = '0';
-            buffer[p++] = '0';
-            buffer[p++] = '0';
+            builder.append("0000");
             e--;
         }
 
         if (!pointInserted) {
             // Ensure we have a radix point!
-            buffer[p++] = '.';
+            builder.append('.');
         }
 
         // Suppress leading zeros
-        q = 1;
-        while (buffer[q] == '0') {
-            q++;
+        while (builder.charAt(0) == '0') {
+            builder.deleteCharAt(0);
         }
-        if (buffer[q] == '.') {
-            q--;
+        if (builder.charAt(0) == '.') {
+            builder.insert(0, '0');
         }
 
         // Suppress trailing zeros
-        while (buffer[p-1] == '0') {
-            p--;
+        while (builder.charAt(builder.length() - 1) == '0') {
+            builder.deleteCharAt(builder.length() - 1);
         }
 
         // Insert sign
         if (sign < 0) {
-            buffer[--q] = '-';
+            builder.insert(0, '-');
         }
 
-        return new String(buffer, q, p - q);
+        return builder.toString();
 
     }
 
