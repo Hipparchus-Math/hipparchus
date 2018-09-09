@@ -54,7 +54,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @throws MathIllegalArgumentException if row or column dimension is not
      * positive.
      */
-    FieldMatrix<T> createMatrix(final int rowDimension, final int columnDimension)
+    FieldMatrix<T> createMatrix(int rowDimension, int columnDimension)
     throws MathIllegalArgumentException;
 
     /**
@@ -165,7 +165,7 @@ public interface FieldMatrix<T extends FieldElement<T>> extends AnyMatrix {
      * @throws MathIllegalArgumentException if {@code p < 0}
      * @throws MathIllegalArgumentException if {@code this matrix} is not square
      */
-    FieldMatrix<T> power(final int p) throws MathIllegalArgumentException;
+    FieldMatrix<T> power(int p) throws MathIllegalArgumentException;
 
     /**
      * Returns matrix entries as a two-dimensional array.

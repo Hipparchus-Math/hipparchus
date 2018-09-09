@@ -282,4 +282,5 @@ public class GeometryExample {
     public static void main(final String[] argv) {
         ExampleUtils.showExampleFrame(new Display());
     }
+
 }

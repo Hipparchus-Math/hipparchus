@@ -132,9 +132,6 @@ public class ArcsSet extends AbstractRegion<Sphere1D, Sphere1D> implements Itera
         check2PiConsistency();
     }
 
-    /** Check tolerance.
-     * 
-     */
     /** Build an inside/outside tree representing a single arc.
      * @param lower lower angular bound of the arc
      * @param upper upper angular bound of the arc

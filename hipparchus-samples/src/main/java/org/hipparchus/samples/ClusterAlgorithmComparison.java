@@ -306,4 +306,5 @@ public class ClusterAlgorithmComparison {
     public static void main(String[] args) {
         ExampleUtils.showExampleFrame(new Display());
     }
+
 }

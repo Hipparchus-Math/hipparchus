@@ -97,7 +97,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}
      */
     @Deprecated
-    void setInterpolatedTime(final double time);
+    void setInterpolatedTime(double time);
 
     /**
      * Get the state vector of the interpolated point.
@@ -150,7 +150,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link org.hipparchus.ode.ODEState#getSecondaryState(int)}
      */
     @Deprecated
-    double[] getInterpolatedSecondaryState(final int index) throws MathIllegalStateException;
+    double[] getInterpolatedSecondaryState(int index) throws MathIllegalStateException;
 
     /** Get the interpolated secondary derivatives corresponding to the secondary equations.
      * <p>The returned vector is a reference to a reused array, so
@@ -168,7 +168,7 @@ public interface StepInterpolator extends ODEStateInterpolator {
      * @deprecated as of 1.0, replaced with {@link #getInterpolatedState(double)}.{@link org.hipparchus.ode.ODEStateAndDerivative#getSecondaryDerivative(int)}
      */
     @Deprecated
-    double[] getInterpolatedSecondaryDerivatives(final int index) throws MathIllegalStateException;
+    double[] getInterpolatedSecondaryDerivatives(int index) throws MathIllegalStateException;
 
     /** Check if the natural integration direction is forward.
      * <p>This method provides the integration direction as specified by

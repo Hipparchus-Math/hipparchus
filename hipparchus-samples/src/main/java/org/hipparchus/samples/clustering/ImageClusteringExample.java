@@ -205,4 +205,5 @@ public class ImageClusteringExample {
     public static void main(String[] args) throws Exception {
         ExampleUtils.showExampleFrame(new Display());
     }
+
 }

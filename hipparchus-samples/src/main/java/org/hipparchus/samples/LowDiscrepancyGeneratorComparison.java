@@ -255,4 +255,5 @@ public class LowDiscrepancyGeneratorComparison {
     public static void main(String[] args) {
         ExampleUtils.showExampleFrame(new Display());
     }
+
 }

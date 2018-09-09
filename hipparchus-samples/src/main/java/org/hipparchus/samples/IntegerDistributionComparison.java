@@ -241,4 +241,5 @@ public class IntegerDistributionComparison {
     public static void main(String[] args) {
         ExampleUtils.showExampleFrame(new Display());
     }
+
 }

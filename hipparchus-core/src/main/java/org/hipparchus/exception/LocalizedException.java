@@ -30,7 +30,7 @@ public interface LocalizedException {
      * @param locale Locale in which the message should be translated
      * @return localized message
      */
-    String getMessage(final Locale locale);
+    String getMessage(Locale locale);
 
     /** Get the localizable specifier of the error message.
      * @return localizable specifier of the error message

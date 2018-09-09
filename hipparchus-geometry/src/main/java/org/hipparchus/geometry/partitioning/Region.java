@@ -107,7 +107,7 @@ public interface Region<S extends Space> {
      * property)
      * @return true if the sub-tree starting at the given node is empty
      */
-    boolean isEmpty(final BSPTree<S> node);
+    boolean isEmpty(BSPTree<S> node);
 
     /** Check if the instance covers the full space.
      * @return true if the instance covers the full space
@@ -121,26 +121,26 @@ public interface Region<S extends Space> {
      * property)
      * @return true if the sub-tree starting at the given node covers the full space
      */
-    boolean isFull(final BSPTree<S> node);
+    boolean isFull(BSPTree<S> node);
 
     /** Check if the instance entirely contains another region.
      * @param region region to check against the instance
      * @return true if the instance contains the specified tree
      */
-    boolean contains(final Region<S> region);
+    boolean contains(Region<S> region);
 
     /** Check a point with respect to the region.
      * @param point point to check
      * @return a code representing the point status: either {@link
      * Location#INSIDE}, {@link Location#OUTSIDE} or {@link Location#BOUNDARY}
      */
-    Location checkPoint(final Point<S> point);
+    Location checkPoint(Point<S> point);
 
     /** Project a point on the boundary of the region.
      * @param point point to check
      * @return projection of the point on the boundary
      */
-    BoundaryProjection<S> projectToBoundary(final Point<S> point);
+    BoundaryProjection<S> projectToBoundary(Point<S> point);
 
     /** Get the underlying BSP tree.
 
@@ -181,7 +181,7 @@ public interface Region<S extends Space> {
      * @return underlying BSP tree
      * @see BoundaryAttribute
      */
-    BSPTree<S> getTree(final boolean includeBoundaryAttributes);
+    BSPTree<S> getTree(boolean includeBoundaryAttributes);
 
     /** Get the size of the boundary.
      * @return the size of the boundary (this is 0 in 1D, a length in
@@ -206,6 +206,6 @@ public interface Region<S extends Space> {
      * @param sub sub-hyperplane traversing the region
      * @return filtered sub-hyperplane
      */
-    SubHyperplane<S> intersection(final SubHyperplane<S> sub);
+    SubHyperplane<S> intersection(SubHyperplane<S> sub);
 
 }

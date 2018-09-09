@@ -74,7 +74,7 @@ public interface RealLinearOperator {
      * @throws MathIllegalArgumentException if the column dimension does not match
      * the size of {@code x}
      */
-    RealVector operate(final RealVector x)
+    RealVector operate(RealVector x)
         throws MathIllegalArgumentException;
 
     /**

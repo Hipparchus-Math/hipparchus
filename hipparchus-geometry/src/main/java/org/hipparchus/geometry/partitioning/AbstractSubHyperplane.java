@@ -63,8 +63,8 @@ public abstract class AbstractSubHyperplane<S extends Space, T extends Space>
      * @param remaining remaining region of the hyperplane
      * @return a new sub-hyperplane
      */
-    protected abstract AbstractSubHyperplane<S, T> buildNew(final Hyperplane<S> hyper,
-                                                            final Region<T> remaining);
+    protected abstract AbstractSubHyperplane<S, T> buildNew(Hyperplane<S> hyper,
+                                                            Region<T> remaining);
 
     /** {@inheritDoc} */
     @Override
