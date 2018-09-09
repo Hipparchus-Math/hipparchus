@@ -42,6 +42,7 @@ import javax.swing.SwingUtilities;
 
 public class ExampleUtils {
 
+    // CHECKSTYLE: stop JavadocMethodCheck
     @SuppressWarnings("serial")
     public static class ExampleFrame extends JFrame {
 
@@ -115,5 +116,7 @@ public class ExampleUtils {
         g.dispose();
         return resizedImage;
     }
+
+    // CHECKSTYLE: resume JavadocMethodCheck
 
 }

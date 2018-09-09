@@ -55,6 +55,7 @@ import org.hipparchus.util.Pair;
  */
 public class LowDiscrepancyGeneratorComparison {
 
+    // CHECKSTYLE: stop JavadocMethodCheck
     public static List<Vector2D> makeCircle(int samples, final RandomVectorGenerator generator) {
         List<Vector2D> points = new ArrayList<Vector2D>();
         for (double i = 0; i < samples; i++) {
@@ -255,4 +256,7 @@ public class LowDiscrepancyGeneratorComparison {
     public static void main(String[] args) {
         ExampleUtils.showExampleFrame(new Display());
     }
+
+    // CHECKSTYLE: resume JavadocMethodCheck
+
 }
