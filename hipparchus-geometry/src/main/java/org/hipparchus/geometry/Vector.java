@@ -145,6 +145,6 @@ public interface Vector<S extends Space> extends Point<S> {
      * @param format the custom format for components
      * @return a string representation of this vector
      */
-    String toString(final NumberFormat format);
+    String toString(NumberFormat format);
 
 }

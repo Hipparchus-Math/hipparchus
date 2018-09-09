@@ -86,8 +86,9 @@ public abstract class AdamsIntegrator extends MultistepIntegrator {
 
     /** {@inheritDoc} */
     @Override
-    public abstract ODEStateAndDerivative integrate(final ExpandableODE equations,
-                                                    final ODEState initialState, final double finalTime)
+    public abstract ODEStateAndDerivative integrate(ExpandableODE equations,
+                                                    ODEState initialState,
+                                                    double finalTime)
         throws MathIllegalArgumentException, MathIllegalStateException;
 
     /** {@inheritDoc} */

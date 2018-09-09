@@ -41,9 +41,6 @@ import org.hipparchus.util.FastMath;
  */
 public class Sphere2D implements Serializable, Space {
 
-    /** Serializable version identifier. */
-    private static final long serialVersionUID = 20131218L;
-
     /** Smallest tolerance that can be managed.
      * <p>
      * Tolerances smaller than this value will generate exceptions.
@@ -51,6 +48,9 @@ public class Sphere2D implements Serializable, Space {
      * @since 1.4
      */
     public static final double SMALLEST_TOLERANCE = FastMath.ulp(2 * FastMath.PI);
+
+    /** Serializable version identifier. */
+    private static final long serialVersionUID = 20131218L;
 
     /** Private constructor for the singleton.
      */

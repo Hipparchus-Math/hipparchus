@@ -130,8 +130,7 @@ public abstract class AbstractFieldMatrix<T extends FieldElement<T>>
 
     /** {@inheritDoc} */
     @Override
-    public abstract FieldMatrix<T> createMatrix(final int rowDimension,
-                                                final int columnDimension)
+    public abstract FieldMatrix<T> createMatrix(int rowDimension, int columnDimension)
         throws MathIllegalArgumentException;
 
     /** {@inheritDoc} */

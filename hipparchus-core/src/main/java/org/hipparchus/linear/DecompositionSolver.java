@@ -52,7 +52,7 @@ public interface DecompositionSolver {
      * if the matrices dimensions do not match.
      * @throws MathIllegalArgumentException if the decomposed matrix is singular.
      */
-    RealVector solve(final RealVector b) throws MathIllegalArgumentException;
+    RealVector solve(RealVector b) throws MathIllegalArgumentException;
 
     /**
      * Solve the linear equation A &times; X = B for matrices A.
@@ -66,7 +66,7 @@ public interface DecompositionSolver {
      * if the matrices dimensions do not match.
      * @throws MathIllegalArgumentException if the decomposed matrix is singular.
      */
-    RealMatrix solve(final RealMatrix b) throws MathIllegalArgumentException;
+    RealMatrix solve(RealMatrix b) throws MathIllegalArgumentException;
 
     /**
      * Check if the decomposed matrix is non-singular.
