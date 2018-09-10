@@ -469,7 +469,7 @@
     <!-- Project specific plugin versions -->
 
     <hipparchus.findbugs-maven-plugin.version>3.0.5</hipparchus.findbugs-maven-plugin.version>
-    <hipparchus.jacoco-maven-plugin.version>0.8.1</hipparchus.jacoco-maven-plugin.version>
+    <hipparchus.jacoco-maven-plugin.version>0.8.2</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.1.0</hipparchus.maven-assembly-plugin.version>
     <hipparchus.maven-bundle-plugin.version>3.5.0</hipparchus.maven-bundle-plugin.version>
     <hipparchus.build-helper-maven-plugin>3.0.0</hipparchus.build-helper-maven-plugin>
@@ -600,7 +600,7 @@
             <excludes>
               <exclude>**/*AbstractTest.java</exclude>
             </excludes>
-            <argLine>-Xmx1200m</argLine>
+            <argLine>@{jacoco.agent.args} -Xmx1200m</argLine>
             </configuration>
         </plugin>
         <plugin>
@@ -662,14 +662,15 @@
           <executions>
             <execution>
               <id>prepare-agent</id>
-              <phase>process-test-classes</phase>
               <goals>
                 <goal>prepare-agent</goal>
               </goals>
+              <configuration>
+                <propertyName>jacoco.agent.args</propertyName>
+              </configuration>
             </execution>
             <execution>
               <id>report</id>
-              <phase>site</phase>
               <goals>
                 <goal>report</goal>
               </goals>
@@ -817,6 +818,10 @@
         </executions>
       </plugin>
       <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+      </plugin>
+      <plugin>
         <groupId>com.github.jeluard</groupId>
         <artifactId>plantuml-maven-plugin</artifactId>
         <version>${hipparchus.plantuml-maven-plugin.version}</version>
@@ -923,6 +928,10 @@
             </reports>
           </reportSet>
         </reportSets>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
       </plugin>
     </plugins>
   </reporting>
