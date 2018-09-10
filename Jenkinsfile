@@ -15,6 +15,7 @@ pipeline {
         stage('Cleaning') {
             steps {
                 sh 'git clean -fdx'
+                sh 'mvn clean'
             }
         }
 
