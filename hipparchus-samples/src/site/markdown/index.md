@@ -17,5 +17,6 @@
 
 ## Hipparchus Samples
 
-This module is devoted to ...
+This module contains some examples about using Hipparchus.
+
 
