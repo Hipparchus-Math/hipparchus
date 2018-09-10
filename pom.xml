@@ -60,6 +60,7 @@
     <module>hipparchus-clustering</module>
     <module>hipparchus-filtering</module>
     <module>hipparchus-migration</module>
+    <module>hipparchus-coverage</module>
   </modules>
 
   <build>
