@@ -24,7 +24,7 @@ pipeline {
                 sh 'mvn package test install checkstyle:checkstyle'
                 checkstyle pattern: 'hipparchus-*/target/checkstyle-result.xml'
                 junit 'hipparchus-*/target/surefire-reports/*.xml'
-                jacoco execPattern:'**/jacoco.exec', classPattern: '**/classes', sourcePattern: '**/src/main/java', exclusionPattern: 'hipparchus-migration/*', exclusionPattern: 'hipparchus-samples/*'
+                jacoco execPattern:'**/jacoco.exec', classPattern: '**/classes', sourcePattern: '**/src/main/java', exclusionPattern: 'hipparchus-migration/*'
             }
         }
 
