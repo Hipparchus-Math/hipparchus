@@ -116,4 +116,14 @@ public class GaussNewtonOptimizerWithQRTest
         }
     }
 
+    @Test
+    @Deprecated
+    public void testDeprecated() {
+        new GaussNewtonOptimizerWithQRTest() {
+            public LeastSquaresOptimizer getOptimizer() {
+                return new GaussNewtonOptimizer(GaussNewtonOptimizer.Decomposition.QR);
+            }
+        }.testTrivial();
+    }
+
 }

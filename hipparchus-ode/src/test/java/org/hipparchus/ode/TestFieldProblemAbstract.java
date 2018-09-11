@@ -77,6 +77,14 @@ public abstract class TestFieldProblemAbstract<T extends RealFieldElement<T>>
         return s0.getPrimaryStateDimension();
     }
 
+    /**
+     * Get the initial time.
+     * @return initial time
+     */
+    public T getInitialTime() {
+        return s0.getTime();
+    }
+
    /**
      * Get the initial state.
      * @return initial state

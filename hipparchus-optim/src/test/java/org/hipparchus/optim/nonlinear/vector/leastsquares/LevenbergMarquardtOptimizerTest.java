@@ -42,6 +42,7 @@ import org.hipparchus.optim.nonlinear.vector.leastsquares.ParameterValidator;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresOptimizer.Optimum;
 import org.hipparchus.optim.nonlinear.vector.leastsquares.LeastSquaresProblem.Evaluation;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.Incrementor;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
@@ -274,8 +275,10 @@ public class LevenbergMarquardtOptimizerTest
         // First guess for the center's coordinates and radius.
         final double[] init = { 90, 659, 115 };
 
+        Incrementor incrementor = new Incrementor();
         final Optimum optimum = optimizer.optimize(
-                builder(circle).maxIterations(50).start(init).build());
+                LeastSquaresFactory.countEvaluations(builder(circle).maxIterations(50).start(init).build(),
+                                                     incrementor));
 
         final double[] paramFound = optimum.getPoint().toArray();
 
@@ -286,6 +289,7 @@ public class LevenbergMarquardtOptimizerTest
         Assert.assertEquals(xCenter, paramFound[0], 3 * asymptoticStandardErrorFound[0]);
         Assert.assertEquals(yCenter, paramFound[1], 3 * asymptoticStandardErrorFound[1]);
         Assert.assertEquals(radius,  paramFound[2], 3 * asymptoticStandardErrorFound[2]);
+        Assert.assertTrue(incrementor.getCount() < 40);
     }
 
     @Test

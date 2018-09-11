@@ -42,6 +42,7 @@ import org.hipparchus.analysis.function.Pow;
 import org.hipparchus.analysis.function.Power;
 import org.hipparchus.analysis.function.Sin;
 import org.hipparchus.analysis.function.Sinc;
+import org.hipparchus.analysis.function.Subtract;
 import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
@@ -157,11 +158,11 @@ public class FunctionUtilsTest {
 
     @Test
     public void testCombine() {
-        BivariateFunction bi = new Add();
+        BivariateFunction bi = new Subtract();
         UnivariateFunction id = new Identity();
         UnivariateFunction m = new Minus();
         UnivariateFunction c = FunctionUtils.combine(bi, id, m);
-        Assert.assertEquals(0, c.value(2.3456), EPS);
+        Assert.assertEquals(4.6912, c.value(2.3456), EPS);
 
         bi = new Multiply();
         UnivariateFunction inv = new Inverse();

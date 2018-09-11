@@ -105,6 +105,46 @@ public class VariationalEquationTest {
     }
 
     @Test
+    public void testMismatchedEquations() {
+        try {
+            ExpandableODE efode = new ExpandableODE(new ParamBrusselator(2.9));
+            ODEJacobiansProvider jode = new Brusselator(2.9);
+            new VariationalEquation(efode, jode);
+            Assert.fail("an exception should have been thrown");
+        } catch (VariationalEquation.MismatchedEquations upe) {
+            Assert.assertEquals(LocalizedODEFormats.UNMATCHED_ODE_IN_EXPANDED_SET,
+                                upe.getSpecifier());
+        }
+    }
+
+    @Test
+    public void testDefaultMethods() {
+        final String name = "name";
+        ODEJacobiansProvider jode = new ODEJacobiansProvider() {
+            public int getDimension() {
+                return 1;
+            }
+            public double[] computeDerivatives(double t, double[] y) {
+                return y;
+            }
+            public double[][] computeMainStateJacobian(double t, double[] y, double[] yDot) {
+                return null;
+            }
+        };
+        Assert.assertFalse(jode.isSupported(name));
+        Assert.assertTrue(jode.getParametersNames().isEmpty());
+        try {
+            double t = 0.0;
+            double[] y = new double[] { 0.0 };
+            jode.computeParameterJacobian(t, y, jode.computeDerivatives(t, y), name);
+            Assert.fail("an exception should have been thrown");
+        } catch (MathIllegalArgumentException miae) {
+            Assert.assertEquals(LocalizedODEFormats.UNKNOWN_PARAMETER, miae.getSpecifier());
+            Assert.assertSame(name, miae.getParts()[0]);
+        }
+    }
+
+    @Test
     public void testInternalDifferentiation()
                     throws MathIllegalArgumentException, MathIllegalStateException, MismatchedEquations {
         AbstractIntegrator integ =

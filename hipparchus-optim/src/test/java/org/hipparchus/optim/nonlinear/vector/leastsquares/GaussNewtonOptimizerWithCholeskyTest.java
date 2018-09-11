@@ -108,4 +108,14 @@ public class GaussNewtonOptimizerWithCholeskyTest
         fail(optimizer);
     }
 
+    @Test
+    @Deprecated
+    public void testDeprecated() {
+        new GaussNewtonOptimizerWithCholeskyTest() {
+            public LeastSquaresOptimizer getOptimizer() {
+                return new GaussNewtonOptimizer(GaussNewtonOptimizer.Decomposition.CHOLESKY);
+            }
+        }.testTrivial();
+    }
+
 }

@@ -112,4 +112,14 @@ public class GaussNewtonOptimizerWithLUTest
         super.testHahn1();
     }
 
+    @Test
+    @Deprecated
+    public void testDeprecated() {
+        new GaussNewtonOptimizerWithLUTest() {
+            public LeastSquaresOptimizer getOptimizer() {
+                return new GaussNewtonOptimizer(GaussNewtonOptimizer.Decomposition.LU);
+            }
+        }.testTrivial();
+    }
+
 }

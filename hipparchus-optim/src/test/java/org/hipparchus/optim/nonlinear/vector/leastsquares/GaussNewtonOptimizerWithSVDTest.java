@@ -123,7 +123,7 @@ public class GaussNewtonOptimizerWithSVDTest
     public void testNonInvertible() throws Exception {
         /*  SVD can compute a solution to singular problems.
          *  In this case the target vector, b, is not in the
-         *  span of the jacobian matrix, A. The closes point
+         *  span of the jacobian matrix, A. The closest point
          *  to b on the plane spanned by A is computed.
          */
         LinearProblem problem = new LinearProblem(new double[][]{
@@ -140,6 +140,16 @@ public class GaussNewtonOptimizerWithSVDTest
 
         //verify
         Assert.assertEquals(expected, actual, TOl);
+    }
+
+    @Test
+    @Deprecated
+    public void testDeprecated() {
+        new GaussNewtonOptimizerWithSVDTest() {
+            public LeastSquaresOptimizer getOptimizer() {
+                return new GaussNewtonOptimizer(GaussNewtonOptimizer.Decomposition.SVD);
+            }
+        }.testTrivial();
     }
 
 }
