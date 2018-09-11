@@ -180,7 +180,7 @@ public class OutlineExtractor {
                 Vector2D[][] vertices =
                     ((PolygonsSet) absFacet.getRemainingRegion()).getVertices();
 
-                if ((scal < 0)) {
+                if (scal < 0) {
                     // the facet is seen from the back of the plane,
                     // we need to invert its boundary orientation
                     final Vector2D[][] newVertices = new Vector2D[vertices.length][];
