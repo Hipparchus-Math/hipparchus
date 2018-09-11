@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.4" date="TBD" description="TBD.">
+      <action dev="luc" type="fix" issue="issues/45">
+        Fixed 2D outline extraction from 3D polyhedrons sets with holes.
+        GitHub: fixes #45.
+      </action>
       <action dev="luc" type="fix" issue="issues/42">
         Use topological information from BSP tree to connect more reliably edges and
         vertices when building the boundary loops of SphericalPolygonsSet.

@@ -152,10 +152,10 @@ public class OutlineExtractor {
             final BoundaryAttribute<Euclidean3D> attribute =
                 (BoundaryAttribute<Euclidean3D>) node.getAttribute();
             if (attribute.getPlusOutside() != null) {
-                addContribution(attribute.getPlusOutside(), false);
+                addContribution(attribute.getPlusOutside());
             }
             if (attribute.getPlusInside() != null) {
-                addContribution(attribute.getPlusInside(), true);
+                addContribution(attribute.getPlusInside());
             }
         }
 
@@ -166,9 +166,8 @@ public class OutlineExtractor {
 
         /** Add he contribution of a boundary facet.
          * @param facet boundary facet
-         * @param reversed if true, the facet has the inside on its plus side
          */
-        private void addContribution(final SubHyperplane<Euclidean3D> facet, final boolean reversed) {
+        private void addContribution(final SubHyperplane<Euclidean3D> facet) {
 
             // extract the vertices of the facet
             @SuppressWarnings("unchecked")
@@ -181,8 +180,8 @@ public class OutlineExtractor {
                 Vector2D[][] vertices =
                     ((PolygonsSet) absFacet.getRemainingRegion()).getVertices();
 
-                if ((scal < 0) ^ reversed) {
-                    // the facet is seen from the inside,
+                if ((scal < 0)) {
+                    // the facet is seen from the back of the plane,
                     // we need to invert its boundary orientation
                     final Vector2D[][] newVertices = new Vector2D[vertices.length][];
                     for (int i = 0; i < vertices.length; ++i) {

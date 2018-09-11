@@ -25,7 +25,6 @@ import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class OutlineExtractorTest {
@@ -74,9 +73,6 @@ public class OutlineExtractorTest {
 
     }
 
-    // temporarily ignoring, while I am just globally looking at test coverage
-    // the bug has been registered on GitHub as issue 45, so it will not be forgotten
-    @Ignore
     @Test
     public void testHolesInFacet() {
         double tolerance = 1.0e-10;
