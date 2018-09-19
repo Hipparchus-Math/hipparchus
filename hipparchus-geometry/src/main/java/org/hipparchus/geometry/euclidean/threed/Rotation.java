@@ -30,6 +30,7 @@ import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
+import org.hipparchus.util.SinCos;
 
 /**
  * This class implements rotations in a three-dimensional space.
@@ -186,9 +187,10 @@ public class Rotation implements Serializable {
     }
 
     double halfAngle = convention == RotationConvention.VECTOR_OPERATOR ? -0.5 * angle : +0.5 * angle;
-    double coeff = FastMath.sin(halfAngle) / norm;
+    SinCos sinCos = FastMath.sinCos(halfAngle);
+    double coeff = sinCos.sin() / norm;
 
-    q0 = FastMath.cos (halfAngle);
+    q0 = sinCos.cos();
     q1 = coeff * axis.getX();
     q2 = coeff * axis.getY();
     q3 = coeff * axis.getZ();

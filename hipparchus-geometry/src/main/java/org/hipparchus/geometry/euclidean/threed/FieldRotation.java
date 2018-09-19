@@ -31,6 +31,7 @@ import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -156,9 +157,10 @@ public class FieldRotation<T extends RealFieldElement<T>> implements Serializabl
         }
 
         final T halfAngle = angle.multiply(convention == RotationConvention.VECTOR_OPERATOR ? -0.5 : 0.5);
-        final T coeff = halfAngle.sin().divide(norm);
+        final FieldSinCos<T> sinCos = FastMath.sinCos(halfAngle);
+        final T coeff = sinCos.sin().divide(norm);
 
-        q0 = halfAngle.cos();
+        q0 = sinCos.cos();
         q1 = coeff.multiply(axis.getX());
         q2 = coeff.multiply(axis.getY());
         q3 = coeff.multiply(axis.getZ());

@@ -32,6 +32,7 @@ import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 
 /**
@@ -93,10 +94,11 @@ public class FieldVector3D<T extends RealFieldElement<T>> implements Serializabl
      * @see #getDelta()
      */
     public FieldVector3D(final T alpha, final T delta) {
-        T cosDelta = delta.cos();
-        this.x = alpha.cos().multiply(cosDelta);
-        this.y = alpha.sin().multiply(cosDelta);
-        this.z = delta.sin();
+        FieldSinCos<T> sinCosAlpha = FastMath.sinCos(alpha);
+        FieldSinCos<T> sinCosDelta = FastMath.sinCos(delta);
+        this.x = sinCosAlpha.cos().multiply(sinCosDelta.cos());
+        this.y = sinCosAlpha.sin().multiply(sinCosDelta.cos());
+        this.z = sinCosDelta.sin();
     }
 
     /** Multiplicative constructor.

@@ -35,6 +35,7 @@ import org.hipparchus.geometry.Vector;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.SinCos;
 
 /**
  * This class implements vectors in a three-dimensional space.
@@ -128,10 +129,11 @@ public class Vector3D implements Serializable, Vector<Euclidean3D> {
      * @see #getDelta()
      */
     public Vector3D(double alpha, double delta) {
-        double cosDelta = FastMath.cos(delta);
-        this.x = FastMath.cos(alpha) * cosDelta;
-        this.y = FastMath.sin(alpha) * cosDelta;
-        this.z = FastMath.sin(delta);
+        SinCos sinCosAlpha = FastMath.sinCos(alpha);
+        SinCos sinCosDelta = FastMath.sinCos(delta);
+        this.x = sinCosAlpha.cos() * sinCosDelta.cos();
+        this.y = sinCosAlpha.sin() * sinCosDelta.cos();
+        this.z = sinCosDelta.sin();
     }
 
     /** Multiplicative constructor

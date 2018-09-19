@@ -37,6 +37,7 @@ import org.hipparchus.geometry.partitioning.Transform;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
+import org.hipparchus.util.SinCos;
 
 /** This class represents an oriented line in the 2D plane.
 
@@ -170,9 +171,10 @@ public class Line implements Hyperplane<Euclidean2D>, Embedding<Euclidean2D, Euc
      */
     public void reset(final Vector2D p, final double alpha) {
         unlinkReverse();
+        final SinCos sinCos = FastMath.sinCos(alpha);
         this.angle   = MathUtils.normalizeAngle(alpha, FastMath.PI);
-        cos          = FastMath.cos(this.angle);
-        sin          = FastMath.sin(this.angle);
+        cos          = sinCos.cos();
+        sin          = sinCos.sin();
         originOffset = MathArrays.linearCombination(cos, p.getY(), -sin, p.getX());
     }
 

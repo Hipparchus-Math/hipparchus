@@ -25,6 +25,7 @@ package org.hipparchus.geometry.euclidean.threed;
 import java.io.Serializable;
 
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.SinCos;
 
 /** This class provides conversions related to <a
  * href="http://mathworld.wolfram.com/SphericalCoordinates.html">spherical coordinates</a>.
@@ -104,10 +105,8 @@ public class SphericalCoordinates implements Serializable {
      */
     public SphericalCoordinates(final double r, final double theta, final double phi) {
 
-        final double cosTheta = FastMath.cos(theta);
-        final double sinTheta = FastMath.sin(theta);
-        final double cosPhi   = FastMath.cos(phi);
-        final double sinPhi   = FastMath.sin(phi);
+        final SinCos sinCosTheta = FastMath.sinCos(theta);
+        final SinCos sinCosPhi   = FastMath.sinCos(phi);
 
         // spherical coordinates
         this.r     = r;
@@ -115,9 +114,9 @@ public class SphericalCoordinates implements Serializable {
         this.phi   = phi;
 
         // Cartesian coordinates
-        this.v  = new Vector3D(r * cosTheta * sinPhi,
-                               r * sinTheta * sinPhi,
-                               r * cosPhi);
+        this.v  = new Vector3D(r * sinCosTheta.cos() * sinCosPhi.sin(),
+                               r * sinCosTheta.sin() * sinCosPhi.sin(),
+                               r * sinCosPhi.cos());
 
     }
 
