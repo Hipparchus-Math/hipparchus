@@ -22,6 +22,7 @@
 package org.hipparchus;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
+import org.hipparchus.util.FieldSinCos;
 
 /**
  * Interface representing a <a href="http://mathworld.wolfram.com/RealNumber.html">real</a>
@@ -223,6 +224,14 @@ public interface RealFieldElement<T> extends FieldElement<T> {
      * @return sin(this)
      */
     T sin();
+
+    /** Combined Sine and Cosine operation.
+     * @return [sin(this), cos(this)]
+     * @since 1.4
+     */
+    default FieldSinCos<T> sinCos() {
+        return new FieldSinCos<>(sin(), cos());
+    }
 
     /** Tangent operation.
      * @return tan(this)

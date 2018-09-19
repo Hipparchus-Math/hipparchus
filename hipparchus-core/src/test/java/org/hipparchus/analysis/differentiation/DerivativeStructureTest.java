@@ -38,6 +38,7 @@ import org.hipparchus.util.ArithmeticUtils;
 import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
 import org.junit.Test;
@@ -972,7 +973,7 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
     }
 
     @Test
-    public void testSinCos() {
+    public void testSinCosSeparated() {
         double epsilon = 5.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             DSFactory factory = new DSFactory(1, maxOrder);
@@ -999,6 +1000,40 @@ public class DerivativeStructureTest extends ExtendedFieldElementAbstractTest<De
                     default :
                         Assert.assertEquals(-c, sin.getPartialDerivative(n), epsilon);
                         Assert.assertEquals( s, cos.getPartialDerivative(n), epsilon);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testSinCosCombined() {
+        double epsilon = 5.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            DSFactory factory = new DSFactory(1, maxOrder);
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                DerivativeStructure dsX = factory.variable(0, x);
+                FieldSinCos<DerivativeStructure> sinCos = FastMath.sinCos(dsX);
+                double s = FastMath.sin(x);
+                double c = FastMath.cos(x);
+                for (int n = 0; n <= maxOrder; ++n) {
+                    switch (n % 4) {
+                    case 0 :
+                        Assert.assertEquals( s, sinCos.sin().getPartialDerivative(n), epsilon);
+                        Assert.assertEquals( c, sinCos.cos().getPartialDerivative(n), epsilon);
+                        break;
+                    case 1 :
+                        Assert.assertEquals( c, sinCos.sin().getPartialDerivative(n), epsilon);
+                        Assert.assertEquals(-s, sinCos.cos().getPartialDerivative(n), epsilon);
+                        break;
+                    case 2 :
+                        Assert.assertEquals(-s, sinCos.sin().getPartialDerivative(n), epsilon);
+                        Assert.assertEquals(-c, sinCos.cos().getPartialDerivative(n), epsilon);
+                        break;
+                    default :
+                        Assert.assertEquals(-c, sinCos.sin().getPartialDerivative(n), epsilon);
+                        Assert.assertEquals( s, sinCos.cos().getPartialDerivative(n), epsilon);
                         break;
                     }
                 }

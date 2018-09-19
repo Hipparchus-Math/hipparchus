@@ -25,6 +25,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.random.RandomGenerator;
 import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 import org.junit.Assert;
 import org.junit.Test;
@@ -157,6 +158,15 @@ public abstract class ExtendedFieldElementAbstractTest<T extends RealFieldElemen
     public void testAsin() {
         for (double x = -0.9; x < 0.9; x += 0.05) {
             checkRelative(FastMath.asin(x), build(x).asin());
+        }
+    }
+
+    @Test
+    public void testSinCos() {
+        for (double x = -0.9; x < 0.9; x += 0.05) {
+            FieldSinCos<T> sinCos = build(x).sinCos();
+            checkRelative(FastMath.sin(x), sinCos.sin());
+            checkRelative(FastMath.cos(x), sinCos.cos());
         }
     }
 

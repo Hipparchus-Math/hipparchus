@@ -21,6 +21,7 @@ import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathRuntimeException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 
@@ -654,6 +655,16 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
         final FieldDerivativeStructure<T> result = factory.build();
         factory.getCompiler().sin(data, 0, result.data, 0);
         return result;
+    }
+
+    /** {@inheritDoc}
+     */
+    @Override
+    public FieldSinCos<FieldDerivativeStructure<T>> sinCos() {
+        final FieldDerivativeStructure<T> sin = factory.build();
+        final FieldDerivativeStructure<T> cos = factory.build();
+        factory.getCompiler().sinCos(data, 0, sin.data, 0, cos.data, 0);
+        return new FieldSinCos<>(sin, cos);
     }
 
     /** {@inheritDoc}

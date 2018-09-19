@@ -469,6 +469,19 @@ public class Tuple implements RealFieldElement<Tuple> {
 
     /** {@inheritDoc} */
     @Override
+    public FieldSinCos<Tuple> sinCos() {
+        final Tuple sin = new Tuple(field, new double[values.length]);
+        final Tuple cos = new Tuple(field, new double[values.length]);
+        for (int i = 0; i < values.length; ++i) {
+            final SinCos sc = FastMath.sinCos(values[i]);
+            sin.values[i] = sc.sin();
+            cos.values[i] = sc.cos();
+        }
+        return new FieldSinCos<>(sin, cos);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public Tuple tan() {
         final Tuple result = new Tuple(field, new double[values.length]);
         for (int i = 0; i < values.length; ++i) {

@@ -31,9 +31,11 @@ import org.hipparchus.FieldElement;
 import org.hipparchus.RealFieldElement;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.MathUtils;
 import org.hipparchus.util.Precision;
+import org.hipparchus.util.SinCos;
 
 /**
  * First derivative computation with large number of variables.
@@ -636,13 +638,23 @@ public class SparseGradient implements RealFieldElement<SparseGradient>, Seriali
     /** {@inheritDoc} */
     @Override
     public SparseGradient cos() {
-        return new SparseGradient(FastMath.cos(value), -FastMath.sin(value), derivatives);
+        final SinCos sc = FastMath.sinCos(value);
+        return new SparseGradient(sc.cos(), -sc.sin(), derivatives);
     }
 
     /** {@inheritDoc} */
     @Override
     public SparseGradient sin() {
-        return new SparseGradient(FastMath.sin(value), FastMath.cos(value), derivatives);
+        final SinCos sc = FastMath.sinCos(value);
+        return new SparseGradient(sc.sin(), sc.cos(), derivatives);
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public FieldSinCos<SparseGradient> sinCos() {
+        final SinCos sc = FastMath.sinCos(value);
+        return new FieldSinCos<>(new SparseGradient(sc.sin(),  sc.cos(), derivatives),
+                                 new SparseGradient(sc.cos(), -sc.sin(), derivatives));
     }
 
     /** {@inheritDoc} */

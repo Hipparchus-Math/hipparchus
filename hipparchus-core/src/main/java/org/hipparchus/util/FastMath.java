@@ -2491,6 +2491,18 @@ public class FastMath {
     }
 
     /**
+     * Combined Sine and Cosine function.
+     *
+     * @param x Argument.
+     * @param <T> the type of the field element
+     * @return [sin(x), cos(x)]
+     * @since 1.4
+     */
+    public static <T extends RealFieldElement<T>> FieldSinCos<T> sinCos(T x) {
+        return x.sinCos();
+    }
+
+    /**
      * Tangent function.
      *
      * @param x Argument.

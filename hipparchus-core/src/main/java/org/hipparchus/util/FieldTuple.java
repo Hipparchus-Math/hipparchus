@@ -468,6 +468,19 @@ public class FieldTuple<T extends RealFieldElement<T>> implements RealFieldEleme
 
     /** {@inheritDoc} */
     @Override
+    public FieldSinCos<FieldTuple<T>> sinCos() {
+        final FieldTuple<T> sin = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
+        final FieldTuple<T> cos = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
+        for (int i = 0; i < values.length; ++i) {
+            final FieldSinCos<T> sc = FastMath.sinCos(values[i]);
+            sin.values[i] = sc.sin();
+            cos.values[i] = sc.cos();
+        }
+        return new FieldSinCos<>(sin, cos);
+    }
+
+    /** {@inheritDoc} */
+    @Override
     public FieldTuple<T> tan() {
         final FieldTuple<T> result = new FieldTuple<>(field, MathArrays.buildArray(values[0].getField(), values.length));
         for (int i = 0; i < values.length; ++i) {

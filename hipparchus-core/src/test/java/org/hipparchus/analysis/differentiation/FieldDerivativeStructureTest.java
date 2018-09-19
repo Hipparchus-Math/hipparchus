@@ -35,6 +35,7 @@ import org.hipparchus.util.CombinatoricsUtils;
 import org.hipparchus.util.Decimal64;
 import org.hipparchus.util.Decimal64Field;
 import org.hipparchus.util.FastMath;
+import org.hipparchus.util.FieldSinCos;
 import org.hipparchus.util.MathArrays;
 import org.hipparchus.util.Precision;
 import org.junit.Assert;
@@ -1017,7 +1018,7 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
     }
 
     @Test
-    public void testSinCos() {
+    public void testSinCosSeparated() {
         double epsilon = 5.0e-16;
         for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
             final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
@@ -1044,6 +1045,40 @@ public class FieldDerivativeStructureTest extends ExtendedFieldElementAbstractTe
                     default :
                         Assert.assertEquals(-c, sin.getPartialDerivative(n).getReal(), epsilon);
                         Assert.assertEquals( s, cos.getPartialDerivative(n).getReal(), epsilon);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    @Test
+    public void testSinCosCombined() {
+        double epsilon = 5.0e-16;
+        for (int maxOrder = 0; maxOrder < 6; ++maxOrder) {
+            final FDSFactory<Decimal64> factory = new FDSFactory<Decimal64>(Decimal64Field.getInstance(), 1, maxOrder);
+            for (double x = 0.1; x < 1.2; x += 0.001) {
+                FieldDerivativeStructure<Decimal64> dsX = factory.variable(0, x);
+                FieldSinCos<FieldDerivativeStructure<Decimal64>> sinCos = dsX.sinCos();
+                double s = FastMath.sin(x);
+                double c = FastMath.cos(x);
+                for (int n = 0; n <= maxOrder; ++n) {
+                    switch (n % 4) {
+                    case 0 :
+                        Assert.assertEquals( s, sinCos.sin().getPartialDerivative(n).getReal(), epsilon);
+                        Assert.assertEquals( c, sinCos.cos().getPartialDerivative(n).getReal(), epsilon);
+                        break;
+                    case 1 :
+                        Assert.assertEquals( c, sinCos.sin().getPartialDerivative(n).getReal(), epsilon);
+                        Assert.assertEquals(-s, sinCos.cos().getPartialDerivative(n).getReal(), epsilon);
+                        break;
+                    case 2 :
+                        Assert.assertEquals(-s, sinCos.sin().getPartialDerivative(n).getReal(), epsilon);
+                        Assert.assertEquals(-c, sinCos.cos().getPartialDerivative(n).getReal(), epsilon);
+                        break;
+                    default :
+                        Assert.assertEquals(-c, sinCos.sin().getPartialDerivative(n).getReal(), epsilon);
+                        Assert.assertEquals( s, sinCos.cos().getPartialDerivative(n).getReal(), epsilon);
                         break;
                     }
                 }
