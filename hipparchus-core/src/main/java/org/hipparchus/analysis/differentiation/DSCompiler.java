@@ -1957,6 +1957,7 @@ public class DSCompiler {
      * cosine the result array <em>cannot</em> be the input
      * array)
      * @param cosOffset offset of the result in its array
+     * @param <T> the type of the function parameters and value
      * @since 1.4
      */
     public <T extends RealFieldElement<T>> void sinCos(final T[] operand, final int operandOffset,

@@ -16,13 +16,11 @@
  */
 package org.hipparchus.util;
 
-import org.hipparchus.RealFieldElement;
-
 /** Holder for both sin and cosine values.
  * <p>
  * This class is a simple container, it does not provide any computational method.
  * </p>
- * @see FastMath#sinCos(RealFieldElement)
+ * @see FastMath#sinCos(org.hipparchus.RealFieldElement)
  * @param <T> the type of the field elements
  * @since 1.4
  */
