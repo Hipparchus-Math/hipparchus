@@ -50,6 +50,10 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.4" date="TBC" description="TBC">
+      <action dev="luc" type="add" issue="issues/48" >
+        Added bilinear interpolation for 2D grids.
+        Github: fixes #48.
+      </action>
       <action dev="luc" type="add" issue="issues/47" >
         Added field version of sinCos.
         Github: fixes #47.
