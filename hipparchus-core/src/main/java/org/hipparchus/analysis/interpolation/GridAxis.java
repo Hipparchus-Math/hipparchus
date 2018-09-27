@@ -159,19 +159,32 @@ public class GridAxis implements Serializable {
     public int interpolationIndex(final double t) {
 
         final int middleOffset = (n - 1) / 2;
+        int iInf = middleOffset;
+        int iSup = grid.length - (n - 1) + middleOffset;
 
-        // first try to simply reuse the last used index,
+        // first try to simply reuse the cached index,
         // for faster return in a common case
-        final int cached = cache.get();
-        final int middle = cached + middleOffset;
-        if (grid[middle] <= t && t < grid[middle + 1]) {
+        final int    cached = cache.get();
+        final int    middle = cached + middleOffset;
+        final double aMid0  = grid[middle];
+        final double aMid1  = grid[middle + 1];
+        if (t < aMid0) {
+            // we are in the unbalanced low area
+            if (middle == iInf) {
+                return cached;
+            }
+        } else if (t < aMid1) {
+            // we are in the balanced middle area
             return cached;
+        } else {
+            // we are in the unbalanced high area
+            if (middle == iSup - 1) {
+                return cached;
+            }
         }
 
         // we need to find a new index
-        int    iInf = middleOffset;
         double aInf = grid[iInf];
-        int    iSup = grid.length - (n - 1) + middleOffset;
         double aSup = grid[iSup];
         while (iSup - iInf > 1) {
             final int iInterp = (int) ((iInf * (aSup - t) + iSup * (t - aInf)) / (aSup - aInf));
