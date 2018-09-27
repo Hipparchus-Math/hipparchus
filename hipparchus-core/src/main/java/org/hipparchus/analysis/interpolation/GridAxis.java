@@ -169,16 +169,16 @@ public class GridAxis implements Serializable {
         final double aMid0  = grid[middle];
         final double aMid1  = grid[middle + 1];
         if (t < aMid0) {
-            // we are in the unbalanced low area
             if (middle == iInf) {
+                // we are in the unbalanced low area
                 return cached;
             }
         } else if (t < aMid1) {
             // we are in the balanced middle area
             return cached;
         } else {
-            // we are in the unbalanced high area
             if (middle == iSup - 1) {
+                // we are in the unbalanced high area
                 return cached;
             }
         }
