@@ -108,24 +108,47 @@ public class GridAxis implements Serializable {
 
     /** Get the index of the first interpolation node for some coordinate along the grid.
      * <p>
-     * The index return is the one for the lowest interpolation node suitabme for
+     * The index return is the one for the lowest interpolation node suitable for
      * {@code t}. This means that if {@code i} is returned the nodes to use for
      * interpolation at coordinate {@code t} are at indices {@code i}, {@code i+1},
      * ..., {@code i+n-1}, where {@code n} is the number of points required for
      * interpolation passed at construction.
      * </p>
      * <p>
-     * The index is selected in order to have the array as balanced as possible
-     * around {@code t}. This means that if {@code n} if even and {@code t} is
-     * sufficiently far from the grid endpoints, the nodes at indices {@code i} to
-     * {code i+n/2} will be smaller than {@code t} and nodes at indices {@code i+n/2+1}
-     * to {@code i+n-1} will be larger than {@code t}. If {@code t} is close to endpoints
-     * but still within the grid, the returned node will be unbalanced. If {@code t}
-     * is outside of the grid, all nodes will be on the same side with respect to
-     * {@code t}. It is <em>not</em> an error to call this method with {@code t} outside
-     * of the grid, it simply implies that the interpolation will become an extrapolation
-     * and accuracy will decrease as {@code t} goes farther from the grid points. This
-     * is intended so interpolation does not fail near the end of the grid.
+     * The index is selected in order to have the subset of nodes from {@code i} to
+     * {@code i+n-1} as balanced as possible around {@code t}:
+     * </p>
+     * <ul>
+     *   <li>
+     *     if {@code t} is inside the grid and sufficiently far from the endpoints
+     *     <ul>
+     *       <li>
+     *         if {@code n} is even, the returned nodes will be perfectly balanced:
+     *         there will be {@code n/2} nodes smaller than {@code t} and {@code n/2}
+     *         nodes larger than {@code t}
+     *       </li>
+     *       <li>
+     *         if {@code n} is odd, the returned nodes will be slightly unbalanced by
+     *         one point: there will be {@code (n+1)/2} nodes smaller than {@code t}
+     *         and {@code (n-1)/2} nodes larger than {@code t}
+     *       </li>
+     *     </ul>
+     *   </li>
+     *   <li>
+     *     if {@code t} is inside the grid and close to endpoints, the returned nodes
+     *     will be unbalanced: there will be less nodes on the endpoints side and
+     *     more nodes on the interior side
+     *   </li>
+     *   <li>
+     *     if {@code t} is outside of the grid, the returned nodes will completely
+     *     off balance: all nodes will be on the same side with respect to {@code t}
+     *   </li>
+     * </ul>
+     * <p>
+     * It is <em>not</em> an error to call this method with {@code t} outside of the grid,
+     * it simply implies that the interpolation will become an extrapolation and accuracy
+     * will decrease as {@code t} goes farther from the grid points. This is intended so
+     * interpolation does not fail near the end of the grid.
      * </p>
      * @param t coordinate of the point to interpolate
      * @return index {@code i} such {@link #node(int) node(i)}, {@link #node(int) node(i+1)},
