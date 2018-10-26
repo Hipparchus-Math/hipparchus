@@ -22,15 +22,17 @@
 package org.hipparchus.geometry.spherical.twod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.IntPredicate;
 
+import org.hipparchus.exception.LocalizedCoreFormats;
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.exception.MathIllegalStateException;
 import org.hipparchus.geometry.LocalizedGeometryFormats;
+import org.hipparchus.geometry.Point;
 import org.hipparchus.geometry.enclosing.EnclosingBall;
 import org.hipparchus.geometry.enclosing.WelzlEncloser;
 import org.hipparchus.geometry.euclidean.threed.Euclidean3D;
@@ -43,6 +45,7 @@ import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BoundaryProjection;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
+import org.hipparchus.geometry.spherical.oned.Arc;
 import org.hipparchus.geometry.spherical.oned.Sphere1D;
 import org.hipparchus.util.FastMath;
 import org.hipparchus.util.MathUtils;
@@ -151,6 +154,16 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * double) general constructor} using {@link SubHyperplane subhyperplanes}.</p>
      * <p>If the list is empty, the region will represent the whole
      * space.</p>
+     * <p>This constructor assumes that edges between {@code vertices}, including the edge
+     * between the last and the first vertex, are shorter than pi. If edges longer than pi
+     * are used it may produce unintuitive results, such as reversing the direction of the
+     * edge. This implies using a {@code vertices} array of length 1 or 2 in this
+     * constructor produces an ill-defined region. Use one of the other constructors or
+     * {@link RegionFactory} instead.</p>
+     * <p>The list of {@code vertices} is reduced by selecting a sub-set of vertices
+     * before creating the boundary set. Every point in {@code vertices} will be on the
+     * {@link #checkPoint(Point) boundary} of the constructed polygon set, but not
+     * necessarily the center-line of the boundary.</p>
      * <p>
      * Polygons with thin pikes or dents are inherently difficult to handle because
      * they involve circles with almost opposite directions at some vertices. Polygons
@@ -166,9 +179,12 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * parameter.
      * </p>
      * @param hyperplaneThickness tolerance below which points are considered to
-     * belong to the hyperplane (which is therefore more a slab)
+     * belong to the hyperplane (which is therefore more a slab). Should be greater than
+     * {@code FastMath.ulp(4 * FastMath.PI)} for meaningful results.
      * @param vertices vertices of the simple loop boundary
      * @exception MathIllegalArgumentException if tolerance is smaller than {@link Sphere1D#SMALLEST_TOLERANCE}
+     * @exception org.hipparchus.exception.MathRuntimeException if {@code vertices}
+     * contains only a single vertex or repeated vertices.
      */
     public SphericalPolygonsSet(final double hyperplaneThickness, final S2Point ... vertices)
         throws MathIllegalArgumentException {
@@ -217,8 +233,9 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
      * @return the BSP tree of the input vertices
      */
     private static BSPTree<Sphere2D> verticesToTree(final double hyperplaneThickness,
-                                                    final S2Point ... vertices) {
-
+                                                    S2Point ... vertices) {
+        // thin vertices to those that define distinct circles
+        vertices = reduce(hyperplaneThickness, vertices).toArray(new S2Point[0]);
         final int n = vertices.length;
         if (n == 0) {
             // the tree represents the whole space
@@ -227,14 +244,12 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
         // build the vertices
         final Vertex[] vArray = new Vertex[n];
-        final Map<Vertex, List<Circle>> bindings = new IdentityHashMap<>(n);
         for (int i = 0; i < n; ++i) {
             vArray[i] = new Vertex(vertices[i]);
-            bindings.put(vArray[i], new ArrayList<>());
         }
 
         // build the edges
-        List<Edge> edges = new ArrayList<Edge>(n);
+        final List<Edge> edges = new ArrayList<Edge>(n);
         Vertex end = vArray[n - 1];
         for (int i = 0; i < n; ++i) {
 
@@ -242,9 +257,8 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
             final Vertex start = end;
             end = vArray[i];
 
-            // get the circle supporting the edge, taking care not to recreate it if it was
-            // already created earlier due to another edge being aligned with the current one
-            final Circle circle = supportingCircle(start, end, vArray, bindings, hyperplaneThickness);
+            // get the circle supporting the edge
+            final Circle circle = new Circle(start.getLocation(), end.getLocation(), hyperplaneThickness);
 
             // create the edge and store it
             edges.add(new Edge(start, end,
@@ -262,56 +276,154 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
 
     }
 
-    /** Get the supporting circle for two vertices.
-     * @param start start vertex of an edge being built
-     * @param end end vertex of an edge being built
-     * @param vArray array containing all vertices
-     * @param bindings bindings between vertices and circles
-     * @param hyperplaneThickness tolerance below which points are consider to
-     * belong to the hyperplane (which is therefore more a slab)
-     * @return circle bound with both start and end and in the proper orientation
+    /**
+     * Compute a subset of vertices that define the boundary to within the given
+     * tolerance. This method partitions {@code vertices} into segments that all lie same
+     * arc to within {@code hyperplaneThickness}, and then returns the end points of the
+     * arcs. Combined arcs are limited to length of pi. If the input vertices has arcs
+     * longer than pi these will be preserved in the returned data.
+     *
+     * @param hyperplaneThickness of each circle in radians.
+     * @param vertices            to decimate.
+     * @return a subset of {@code vertices}.
      */
-    private static Circle supportingCircle(final Vertex start, final Vertex end,
-                                           final Vertex[] vArray,
-                                           final Map<Vertex, List<Circle>> bindings,
-                                           final double hyperplaneThickness) {
-
-        Circle toBeReversed = null;
-        for (final Circle circle1 : bindings.get(start)) {
-            for (final Circle circle2 : bindings.get(end)) {
-                if (circle1 == circle2) {
-                    // we already know a circle to which both vertices belong
-                    final Vector3D s = start.getLocation().getVector();
-                    final Vector3D e = end.getLocation().getVector();
-                    final Vector3D p = Vector3D.crossProduct(s, e);
-                    if (Vector3D.dotProduct(circle1.getPole(), p) > 0) {
-                        // the known circle has the proper orientation
-                        return circle1;
-                    } else {
-                        toBeReversed = circle1;
-                    }
+    private static List<S2Point> reduce(final double hyperplaneThickness,
+                                        final S2Point[] vertices) {
+        final int n = vertices.length;
+        if (n <= 3) {
+            // can't reduce to fewer than three points
+            return Arrays.asList(vertices.clone());
+        }
+        final List<S2Point> points = new ArrayList<>();
+        /* Use a simple greedy search to add points to a circle s.t. all intermediate
+         * points are within the thickness. Running time is O(n lg n) worst case.
+         * Since the first vertex may be the middle of a straight edge, look backward
+         * and forward to establish the first edge.
+         * Uses the property that any two points define a circle, so don't check
+         * circles that just span two points.
+         */
+        // first look backward
+        final IntPredicate onCircleBackward = j -> {
+            final int i = n - 2 - j;
+            // circle spanning considered points
+            final Circle circle = new Circle(vertices[0], vertices[i], hyperplaneThickness);
+            final Arc arc = circle.getArc(vertices[0], vertices[i]);
+            if (arc.getSize() >= FastMath.PI) {
+                return false;
+            }
+            for (int k = i + 1; k < n; k++) {
+                final S2Point vertex = vertices[k];
+                if (FastMath.abs(circle.getOffset(vertex)) > hyperplaneThickness ||
+                        arc.getOffset(circle.toSubSpace(vertex)) > 0) {
+                    // point is not within the thickness or arc, start new edge
+                    return false;
                 }
             }
+            return true;
+        };
+        // last index in vertices of last entry added to points
+        int last = n - 2 - searchHelper(onCircleBackward, 0, n - 2);
+        if (last > 1) {
+            points.add(vertices[last]);
+        } else {
+            // all points lie on one semi-circle, distance from 0 to 1 is > pi
+            // ill-defined case, just return three points from the list
+            return Arrays.asList(Arrays.copyOfRange(vertices, 0, 3));
+        }
+        final int first = last;
+        // then build edges forward
+        for (int j = 1; ; j += 2) {
+            final int lastFinal = last;
+            final IntPredicate onCircle = i -> {
+                // circle spanning considered points
+                final Circle circle = new Circle(vertices[lastFinal], vertices[i], hyperplaneThickness);
+                final Arc arc = circle.getArc(vertices[lastFinal], vertices[i]);
+                if (arc.getSize() >= FastMath.PI) {
+                    return false;
+                }
+                final int end = lastFinal < i ? i : i + n;
+                for (int k = lastFinal + 1; k < end; k++) {
+                    final S2Point vertex = vertices[k % n];
+                    if (FastMath.abs(circle.getOffset(vertex)) > hyperplaneThickness ||
+                            arc.getOffset(circle.toSubSpace(vertex)) > 0) {
+                        // point is not within the thickness or arc, start new edge
+                        return false;
+                    }
+                }
+                return true;
+            };
+            j = searchHelper(onCircle, j, first + 1);
+            if (j >= first) {
+                break;
+            }
+            last = j;
+            points.add(vertices[last]);
+        }
+        return points;
+    }
+
+    /**
+     * Search {@code items} for the first item where {@code predicate} is false between
+     * {@code a} and {@code b}. Assumes that predicate switches from true to false at
+     * exactly one location in [a, b]. Similar to {@link Arrays#binarySearch(int[], int,
+     * int, int)} except that 1. it operates on indices, not elements, 2. there is not a
+     * shortcut for equality, and 3. it is optimized for cases where the return value is
+     * close to a.
+     *
+     * <p> This method achieves O(lg n) performance in the worst case, where n = b - a.
+     * Performance improves to O(lg(i-a)) when i is close to a, where i is the return
+     * value.
+     *
+     * @param predicate to apply.
+     * @param a         start, inclusive.
+     * @param b         end, exclusive.
+     * @return a if a==b, a-1 if predicate.test(a) == false, b - 1 if predicate.test(b-1),
+     * otherwise i s.t. predicate.test(i) == true && predicate.test(i + 1) == false.
+     * @throws MathIllegalArgumentException if a > b.
+     */
+    private static int searchHelper(final IntPredicate predicate,
+                                    final int a,
+                                    final int b) {
+        if (a > b) {
+            throw new MathIllegalArgumentException(
+                    LocalizedCoreFormats.LOWER_ENDPOINT_ABOVE_UPPER_ENDPOINT, a, b);
+        }
+        // Argument checks and special cases
+        if (a == b) {
+            return a;
+        }
+        if (!predicate.test(a)) {
+            return a - 1;
         }
 
-        // we need to create a new circle
-        final Circle newCircle = (toBeReversed == null) ?
-                                 new Circle(start.getLocation(), end.getLocation(), hyperplaneThickness) :
-                                 toBeReversed.getReverse();
-
-        bindings.get(start).add(newCircle);
-        bindings.get(end).add(newCircle);
-
-        // check if another vertex also happens to be on this circle
-        for (final Vertex vertex : vArray) {
-            if (vertex != start && vertex != end &&
-                FastMath.abs(newCircle.getOffset(vertex.getLocation())) <= hyperplaneThickness) {
-                bindings.get(vertex).add(newCircle);
+        // start with exponential search
+        int start = a;
+        int end = b;
+        for (int i = 2; a + i < b; i *= 2) {
+            if (predicate.test(a + i)) {
+                // update lower bound of search
+                start = a + i;
+            } else {
+                // found upper bound of search
+                end = a + i;
+                break;
             }
         }
 
-        return newCircle;
-
+        // next binary search
+        // copied from Arrays.binarySearch() and modified to work on indices alone
+        int low = start;
+        int high = end - 1;
+        while (low <= high) {
+            final int mid = (low + high) >>> 1;
+            if (predicate.test(mid)) {
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+        // low is now insertion point, according to Arrays.binarySearch()
+        return low - 1;
     }
 
     /** Recursively build a tree by inserting cut sub-hyperplanes.

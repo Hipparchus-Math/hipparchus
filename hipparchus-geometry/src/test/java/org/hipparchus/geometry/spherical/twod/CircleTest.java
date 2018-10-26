@@ -196,4 +196,28 @@ public class CircleTest {
         new Circle(Vector3D.PLUS_K, 0.9 * Sphere2D.SMALLEST_TOLERANCE);
     }
 
+    /** Check {@link Circle#getArc(S2Point, S2Point)}. */
+    @Test
+    public void testGetArc() {
+        // setup
+        double tol = 1e-6;
+        Circle circle = new Circle(Vector3D.PLUS_K, tol);
+
+        // action
+        Arc arc = circle.getArc(new S2Point(circle.getPointAt(0)), new S2Point(circle.getPointAt(1)));
+        // verify
+        Assert.assertEquals(arc.getBarycenter(), 0.5, tol);
+        Assert.assertEquals(arc.getInf(), 0, tol);
+        Assert.assertEquals(arc.getSup(), 1, tol);
+        Assert.assertEquals(arc.getTolerance(), tol, 0);
+
+        // action, crossing discontinuity
+        arc = circle.getArc(new S2Point(circle.getPointAt(3)), new S2Point(circle.getPointAt(-3)));
+        // verify
+        Assert.assertEquals(arc.getBarycenter(), FastMath.PI, tol);
+        Assert.assertEquals(arc.getInf(), 3, tol);
+        Assert.assertEquals(arc.getSup(), 2 * FastMath.PI - 3, tol);
+        Assert.assertEquals(arc.getTolerance(), tol, 0);
+    }
+
 }

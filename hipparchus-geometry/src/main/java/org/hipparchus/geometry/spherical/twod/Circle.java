@@ -303,6 +303,23 @@ public class Circle implements Hyperplane<Sphere2D>, Embedding<Sphere2D, Sphere1
         return Vector3D.dotProduct(pole, otherC.pole) >= 0.0;
     }
 
+    /**
+     * Get the arc on this circle between two defining points. Only the point's projection
+     * on the circle matters, which is computed using {@link #getPhase(Vector3D)}.
+     *
+     * @param a first point.
+     * @param b second point.
+     * @return an arc of the circle.
+     */
+    public Arc getArc(final S2Point a, final S2Point b) {
+        final double phaseA = getPhase(a.getVector());
+        double phaseB = getPhase(b.getVector());
+        if (phaseB < phaseA) {
+            phaseB += 2 * FastMath.PI;
+        }
+        return new Arc(phaseA, phaseB, tolerance);
+    }
+
     /** Get a {@link org.hipparchus.geometry.partitioning.Transform
      * Transform} embedding a 3D rotation.
      * @param rotation rotation to use

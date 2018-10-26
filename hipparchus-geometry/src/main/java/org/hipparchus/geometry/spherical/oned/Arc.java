@@ -135,4 +135,35 @@ public class Arc {
         }
     }
 
+    /**
+     * Get the distance (arc length) from a point to the edge of the arc.
+     *
+     * <p>This method does not use {@link #getTolerance()}.
+     *
+     * @param point to test.
+     * @return offset, negative if the point is inside the arc, positive if it is outside
+     * the arc, or zero if {@code point} is {@link #getInf()} or {@link #getSup()}.
+     */
+    public double getOffset(final double point) {
+        final double normalizedPoint = MathUtils.normalizeAngle(point, middle);
+        if (normalizedPoint < middle) {
+            return lower - normalizedPoint;
+        } else {
+            return normalizedPoint - upper;
+        }
+    }
+
+    /**
+     * Get the distance (arc length) from a point to the edge of the arc.
+     *
+     * <p>This method does not use {@link #getTolerance()}.
+     *
+     * @param point to test.
+     * @return offset, negative if the point is inside the arc, positive if it is outside
+     * the arc, or zero if {@code point} is {@link #getInf()} or {@link #getSup()}.
+     */
+    public double getOffset(final S1Point point) {
+        return getOffset(point.getAlpha());
+    }
+
 }

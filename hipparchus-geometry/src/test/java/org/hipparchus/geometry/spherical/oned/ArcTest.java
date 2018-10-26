@@ -89,4 +89,20 @@ public class ArcTest {
         Assert.assertEquals(1.0, arc.getBarycenter(), Precision.EPSILON);
     }
 
+    /** Check {@link Arc#getOffset(double)}. */
+    @Test
+    public void testGetOffset() {
+        // setup
+        double twopi = 2 * FastMath.PI;
+        Arc arc = new Arc(twopi + 1, twopi + 2, 1e-6);
+
+        // action & verify
+        double tol = FastMath.ulp(twopi);
+        Assert.assertEquals(arc.getOffset(0), 1, tol);
+        Assert.assertEquals(arc.getOffset(1), 0, tol);
+        Assert.assertEquals(arc.getOffset(1.5), -0.5, tol);
+        Assert.assertEquals(arc.getOffset(2), 0, tol);
+        Assert.assertEquals(arc.getOffset(3), 1, tol);
+    }
+
 }

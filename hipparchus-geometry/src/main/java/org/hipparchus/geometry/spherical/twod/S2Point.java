@@ -239,4 +239,12 @@ public class S2Point implements Point<Sphere2D> {
         return 134 * (37 * MathUtils.hash(theta) +  MathUtils.hash(phi));
     }
 
+    @Override
+    public String toString() {
+        return "S2Point{" +
+                "theta=" + theta +
+                ", phi=" + phi +
+                '}';
+    }
+
 }
