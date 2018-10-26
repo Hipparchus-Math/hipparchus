@@ -40,6 +40,15 @@ public class Segment {
     /** Build a segment.
      * @param start start point of the segment
      * @param end end point of the segment
+     * @param tolerance of the line.
+     */
+    public Segment(final Vector2D start, final Vector2D end, final double tolerance) {
+        this(start, end, new Line(start, end, tolerance));
+    }
+
+    /** Build a segment.
+     * @param start start point of the segment
+     * @param end end point of the segment
      * @param line line containing the segment
      */
     public Segment(final Vector2D start, final Vector2D end, final Line line) {
@@ -67,6 +76,15 @@ public class Segment {
      */
     public Line getLine() {
         return line;
+    }
+
+    /**
+     * Get the length of the line segment.
+     *
+     * @return line segment length.
+     */
+    public double getLength() {
+        return getEnd().distance(getStart());
     }
 
     /** Calculates the shortest distance from a point to this line segment.

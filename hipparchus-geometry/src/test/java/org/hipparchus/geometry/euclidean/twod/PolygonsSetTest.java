@@ -22,25 +22,26 @@
 package org.hipparchus.geometry.euclidean.twod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.hipparchus.exception.MathIllegalArgumentException;
 import org.hipparchus.geometry.euclidean.oned.Interval;
 import org.hipparchus.geometry.euclidean.oned.IntervalsSet;
 import org.hipparchus.geometry.euclidean.oned.Vector1D;
-import org.hipparchus.geometry.euclidean.twod.Euclidean2D;
-import org.hipparchus.geometry.euclidean.twod.Line;
-import org.hipparchus.geometry.euclidean.twod.PolygonsSet;
-import org.hipparchus.geometry.euclidean.twod.SubLine;
-import org.hipparchus.geometry.euclidean.twod.Vector2D;
 import org.hipparchus.geometry.partitioning.BSPTree;
 import org.hipparchus.geometry.partitioning.BSPTreeVisitor;
 import org.hipparchus.geometry.partitioning.BoundaryProjection;
 import org.hipparchus.geometry.partitioning.Hyperplane;
 import org.hipparchus.geometry.partitioning.Region;
+import org.hipparchus.geometry.partitioning.Region.Location;
 import org.hipparchus.geometry.partitioning.RegionFactory;
 import org.hipparchus.geometry.partitioning.SubHyperplane;
-import org.hipparchus.geometry.partitioning.Region.Location;
+import org.hipparchus.random.RandomVectorGenerator;
+import org.hipparchus.random.UncorrelatedRandomVectorGenerator;
+import org.hipparchus.random.UniformRandomGenerator;
+import org.hipparchus.random.Well1024a;
 import org.hipparchus.util.FastMath;
 import org.junit.Assert;
 import org.junit.Test;
@@ -1231,6 +1232,146 @@ public class PolygonsSetTest {
         bsp.getMinus().getMinus().setAttribute(Boolean.TRUE);
         PolygonsSet polygons = new PolygonsSet(bsp, tolerance);
         Assert.assertEquals(Double.POSITIVE_INFINITY, polygons.getSize(), 1.0e-10);
+    }
+
+    @Test
+    public void testZigZagBoundaryOversampledIssue46() {
+        final double tol = 1.0e-4;
+        // sample region, non-convex, not too big, not too small
+        final List<Vector2D> vertices = Arrays.asList(
+                new Vector2D(-0.12630940610562444e1, (0.8998192093789258 - 0.89) * 100),
+                new Vector2D(-0.12731320182988207e1, (0.8963735568774486 - 0.89) * 100),
+                new Vector2D(-0.1351107624622557e1, (0.8978258663483273 - 0.89) * 100),
+                new Vector2D(-0.13545331405131725e1, (0.8966781238246179 - 0.89) * 100),
+                new Vector2D(-0.14324883017454967e1, (0.8981309629283796 - 0.89) * 100),
+                new Vector2D(-0.14359875625524995e1, (0.896983965573036 - 0.89) * 100),
+                new Vector2D(-0.14749650541159384e1, (0.8977109994666864 - 0.89) * 100),
+                new Vector2D(-0.14785037758231825e1, (0.8965644005442432 - 0.89) * 100),
+                new Vector2D(-0.15369807257448784e1, (0.8976550608135502 - 0.89) * 100),
+                new Vector2D(-0.1526225554339386e1, (0.9010934265410458 - 0.89) * 100),
+                new Vector2D(-0.14679028466684121e1, (0.9000043396997698 - 0.89) * 100),
+                new Vector2D(-0.14643807494172612e1, (0.9011511073761742 - 0.89) * 100),
+                new Vector2D(-0.1386609051963748e1, (0.8996991539048602 - 0.89) * 100),
+                new Vector2D(-0.13831601655974668e1, (0.9008466623902937 - 0.89) * 100),
+                new Vector2D(-0.1305365419828323e1, (0.8993961857946309 - 0.89) * 100),
+                new Vector2D(-0.1301989630405964e1, (0.9005444294061787 - 0.89) * 100));
+        Collections.reverse(vertices);
+        PolygonsSet expected = new PolygonsSet(tol, vertices.toArray(new Vector2D[0]));
+        // sample high resolution boundary
+        List<Vector2D> points = new ArrayList<>();
+        final Vector2D[] boundary = expected.getVertices()[0];
+        double step = tol / 10;
+        for (int i = 1; i < boundary.length; i++) {
+            Segment edge = new Segment(boundary[i - 1], boundary[i], tol);
+            final double length = edge.getLength();
+            final double x0 = edge.getLine().toSubSpace(edge.getStart()).getX();
+            int n = (int) (length / step);
+            for (int j = 0; j < n; j++) {
+                points.add(edge.getLine().getPointAt(new Vector1D(x0 + j * step), 0));
+            }
+        }
+        // create zone from high resolution boundary
+        PolygonsSet zone = new PolygonsSet(tol, points.toArray(new Vector2D[0]));
+        Assert.assertEquals(expected.getSize(), zone.getSize(), tol);
+        Assert.assertEquals(expected.getBarycenter().distance(zone.getBarycenter()), 0, tol);
+        Assert.assertEquals("" + expected.getBarycenter() +  zone.getBarycenter(),
+                Location.INSIDE, zone.checkPoint(zone.getBarycenter()));
+        // extra tolerance at corners due to SPS tolerance being a hyperplaneThickness
+        // a factor of 3.1 corresponds to a edge intersection angle of ~19 degrees
+        final double cornerTol = 3.1 * tol;
+        for (Vector2D vertex : vertices) {
+            // check original points are on the boundary
+            Assert.assertEquals("" + vertex, Location.BOUNDARY, zone.checkPoint(vertex));
+            double offset = FastMath.abs(zone.projectToBoundary(vertex).getOffset());
+            Assert.assertEquals("" + vertex + " offset: " + offset, 0, offset, cornerTol);
+        }
+    }
+
+    @Test
+    public void testPositiveQuadrantByVerticesDetailIssue46() {
+        double tol = 0.01;
+        Line x = new Line(Vector2D.ZERO, new Vector2D(1, 0), tol);
+        Line y = new Line(Vector2D.ZERO, new Vector2D(0, 1), tol);
+        double length = 1;
+        double step = tol / 10;
+        // sample high resolution boundary
+        int n = (int) (length / step);
+        List<Vector2D> points = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            double t = i * step;
+            points.add(y.getPointAt(new Vector1D(t), 0));
+        }
+        for (int i = 0; i < n; i++) {
+            double t = i * step;
+            points.add(x.getPointAt(new Vector1D(t), 0).add(new Vector2D(0, 1)));
+        }
+        for (int i = 0; i < n; i++) {
+            double t = i * step;
+            points.add(new Vector2D(1, 1).subtract(y.getPointAt(new Vector1D(t), 0)));
+        }
+        Collections.reverse(points);
+        PolygonsSet set = new PolygonsSet(tol, points.toArray(new Vector2D[0]));
+        RandomVectorGenerator random =
+                new UncorrelatedRandomVectorGenerator(2, new UniformRandomGenerator(new Well1024a(0xb8fc5acc91044308l)));
+        /* Where exactly the boundaries fall depends on which points are kept from
+         * decimation, which can vary by up to tol. So a point up to 2*tol away from a
+         * input point may be on the boundary. All input points are guaranteed to be on
+         * the boundary, just not the center of the boundary.
+         */
+        for (int i = 0; i < 1000; ++i) {
+            Vector2D v = new Vector2D(random.nextVector());
+            final Location actual = set.checkPoint(v);
+            if ((v.getX() > tol) && (v.getY() > tol) && (v.getX() < 1 - tol) && (v.getY() < 1 - tol)) {
+                if ((v.getX() > 2 * tol) && (v.getY() > 2 * tol) && (v.getX() < 1 - 2 * tol) && (v.getY() < 1 - 2 * tol)) {
+                    // certainly inside
+                    Assert.assertEquals("" + v, Location.INSIDE, actual);
+                } else {
+                    // may be inside or boundary
+                    Assert.assertNotEquals("" + v, Location.OUTSIDE, actual);
+                }
+            } else if ((v.getX() < 0) || (v.getY() < 0) || (v.getX() > 1) || (v.getY() > 1)) {
+                if ((v.getX() < -tol) || (v.getY() < -tol) || (v.getX() > 1 + tol) || (v.getY() > 1 + tol)) {
+                    // certainly outside
+                    Assert.assertEquals(Location.OUTSIDE, actual);
+                } else {
+                    // may be outside or boundary
+                    Assert.assertNotEquals(Location.INSIDE, actual);
+                }
+            } else {
+                // certainly boundary
+                Assert.assertEquals(Location.BOUNDARY, actual);
+            }
+        }
+        // all input points are on the boundary
+        for (Vector2D point : points) {
+            Assert.assertEquals("" + point, Location.BOUNDARY, set.checkPoint(point));
+        }
+    }
+
+    @Test
+    public void testOversampledCircleIssue64() {
+        // setup
+        double tol = 1e-2;
+        double length = FastMath.PI * 2;
+        int n = (int) (length / tol);
+        double step = length / n;
+        List<Vector2D> points = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            double angle = i * step;
+            points.add(new Vector2D(FastMath.cos(angle), FastMath.sin(angle)));
+        }
+
+        // action
+        PolygonsSet set = new PolygonsSet(tol, points.toArray(new Vector2D[0]));
+
+        // verify
+        Assert.assertEquals(set.getSize(), FastMath.PI, tol);
+        Assert.assertEquals(set.getBarycenter().distance(Vector2D.ZERO), 0, tol);
+        // each segment is shorter than boundary, so error builds up
+        Assert.assertEquals(set.getBoundarySize(), length, 2 * tol);
+        for (Vector2D point : points) {
+            Assert.assertEquals(set.checkPoint(point), Location.BOUNDARY);
+        }
     }
 
     private static class Counter {
