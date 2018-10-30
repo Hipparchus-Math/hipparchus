@@ -359,6 +359,9 @@ public class SphericalPolygonsSet extends AbstractRegion<Sphere2D, Sphere1D> {
             last = j;
             points.add(vertices[last]);
         }
+        // put first point last
+        final S2Point swap = points.remove(0);
+        points.add(swap);
         return points;
     }
 
