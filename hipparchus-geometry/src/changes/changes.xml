@@ -50,6 +50,9 @@ If the output is not quite correct, check for invisible trailing spaces!
   </properties>
   <body>
     <release version="1.4" date="TBD" description="TBD.">
+      <action dev="evan" type="fix" issue="issues/46">
+        Fixed creating a SphericalPolygonsSet from oversampled or noisy data.
+      </action>
       <action dev="luc" type="fix" issue="issues/45">
         Fixed 2D outline extraction from 3D polyhedrons sets with holes.
         GitHub: fixes #45.
