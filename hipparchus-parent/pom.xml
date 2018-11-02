@@ -468,7 +468,7 @@
 
     <!-- Project specific plugin versions -->
 
-    <hipparchus.findbugs-maven-plugin.version>3.0.5</hipparchus.findbugs-maven-plugin.version>
+    <hipparchus.spotbugs-maven-plugin.version>3.1.7</hipparchus.spotbugs-maven-plugin.version>
     <hipparchus.jacoco-maven-plugin.version>0.8.2</hipparchus.jacoco-maven-plugin.version>
     <hipparchus.maven-assembly-plugin.version>3.1.0</hipparchus.maven-assembly-plugin.version>
     <hipparchus.maven-bundle-plugin.version>3.5.0</hipparchus.maven-bundle-plugin.version>
@@ -725,14 +725,14 @@
         </plugin>
 
         <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>findbugs-maven-plugin</artifactId>
-          <version>${hipparchus.findbugs-maven-plugin.version}</version>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>${hipparchus.spotbugs-maven-plugin.version}</version>
           <configuration>
             <threshold>Normal</threshold>
             <effort>Default</effort>
-            <!-- each project has their own findbugs exclude filter -->
-            <excludeFilterFile>${basedir}/src/conf/findbugs-exclude-filter.xml</excludeFilterFile>
+            <!-- each project has their own spotbugs exclude filter -->
+            <excludeFilterFile>${basedir}/src/conf/spotbugs-exclude-filter.xml</excludeFilterFile>
           </configuration>
         </plugin>
         <plugin>
