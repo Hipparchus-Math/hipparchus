@@ -64,6 +64,23 @@
     </dependency>
   </dependencies>
   
+  <build>
+    <plugins>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-checkstyle-plugin</artifactId>
+          <dependencies>
+            <!-- dependencies are not inherited from parent pom so we have to repeat them here -->
+            <dependency>
+              <groupId>com.puppycrawl.tools</groupId>
+              <artifactId>checkstyle</artifactId>
+              <version>${hipparchus.checkstyle.version}</version>
+            </dependency>
+          </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+
   <reporting>
     <plugins>
       <plugin>

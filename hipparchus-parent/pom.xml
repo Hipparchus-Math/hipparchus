@@ -474,8 +474,8 @@
     <hipparchus.maven-bundle-plugin.version>3.5.0</hipparchus.maven-bundle-plugin.version>
     <hipparchus.build-helper-maven-plugin>3.0.0</hipparchus.build-helper-maven-plugin>
     <hipparchus.maven-changes-plugin.version>2.12.1</hipparchus.maven-changes-plugin.version>
-    <hipparchus.maven-checkstyle-plugin.version>2.17</hipparchus.maven-checkstyle-plugin.version>
-    <hipparchus.checkstyle.version>7.8.2</hipparchus.checkstyle.version>
+    <hipparchus.maven-checkstyle-plugin.version>3.0.0</hipparchus.maven-checkstyle-plugin.version>
+    <hipparchus.checkstyle.version>8.14</hipparchus.checkstyle.version>
     <hipparchus.maven-clean-plugin.version>3.1.0</hipparchus.maven-clean-plugin.version>
     <hipparchus.maven-compiler-plugin.version>3.7.0</hipparchus.maven-compiler-plugin.version>
     <hipparchus.maven-javadoc-plugin.version>3.0.0</hipparchus.maven-javadoc-plugin.version>
