@@ -29,35 +29,36 @@
     This ruleset checks the code for discouraged programming constructs.
   </description>
 
-  <rule ref="rulesets/java/basic.xml"/>
+  <rule ref="category/java/errorprone.xml">
 
-  <rule ref="rulesets/java/braces.xml"/>
+    <exclude name="AvoidLiteralsInIfCondition"/>
+    <exclude name="BeanMembersShouldSerialize"/>
+    <exclude name="AvoidFieldNameMatchingMethodName"/>
+    <exclude name="NullAssignment"/>
+    <exclude name="ConstructorCallsOverridableMethod"/>
 
-  <rule ref="rulesets/java/comments.xml">
-    <exclude name="CommentSize"/>
-  </rule>
-  <rule ref="rulesets/java/comments.xml/CommentSize">
-    <properties>
-      <property name="maxLines"      value="200"/>
-      <property name="maxLineLength" value="256"/>
-    </properties>
-  </rule>
-
-  <rule ref="rulesets/java/empty.xml"/>
-
-  <rule ref="rulesets/java/finalizers.xml"/>
-
-  <rule ref="rulesets/java/imports.xml"/>
-
-  <rule ref="rulesets/java/typeresolution.xml">
     <!-- TODO: we should reactivate this rule -->
     <exclude name="CloneMethodMustImplementCloneable"/>
+
+    <!-- We should really activate this rule, but it is a tremendous amount of changes! -->
+    <exclude name="DataflowAnomalyAnalysis"/>
+
   </rule>
 
-  <!-- TODO: we should reactivate this ruleset -->
-  <!-- <rule ref="rulesets/java/clone.xml"/> -->
+  <rule ref="category/java/multithreading.xml"/>
 
-  <rule ref="rulesets/java/unnecessary.xml">
+  <rule ref="category/java/bestpractices.xml">
+
+    <exclude name="AccessorClassGeneration"/>
+    <exclude name="AccessorMethodGeneration"/>
+    <exclude name="AvoidReassigningParameters"/>
+    <exclude name="ForLoopCanBeForeach"/>
+
+    <!-- in mathematics, arrays are first-class citizens, they don't always serve the same purpose as varargs -->
+    <exclude name="UseVarargs"/>
+  </rule>
+
+  <rule ref="category/java/codestyle.xml">
 
     <!-- In many places in Hipparchus, there are complex boolean expressions.
          We do use extra parentheses there as most people do not recall operator precedence,
@@ -65,6 +66,46 @@
          them useless for the developer. This is the reason why we disable this rule. -->
     <exclude name="UselessParentheses"/>
 
+    <!-- In complex algorithms, in iterations, or for efficiency with shortcut returns,
+         it makes sense to have more than one return. -->
+    <exclude name="OnlyOneReturn"/>
+
+    <!-- in mathematics, short names are not a problem -->
+    <exclude name="ShortVariable"/>
+    <exclude name="ShortClassName"/>
+
+    <!-- on the other hand, we also love long names... -->
+    <exclude name="LongVariable"/>
+
+    <!-- We should really activate these rules, but it is a tremendous amount of changes! -->
+    <exclude name="MethodArgumentCouldBeFinal"/>
+    <exclude name="LocalVariableCouldBeFinal"/>
+
+    <!-- Many mathematical classes have no fields at all, so we don't set up empty constructors -->
+    <exclude name="AtLeastOneConstructor"/>
+
+    <exclude name="AvoidFinalLocalVariable"/>
+    <exclude name="ClassNamingConventions"/>
+    <exclude name="VariableNamingConventions"/>
+    <exclude name="LocalVariableNamingConventions"/>
+    <exclude name="FieldNamingConventions"/>
+    <exclude name="MethodNamingConventions"/>
+    <exclude name="FormalParameterNamingConventions"/>
+    <exclude name="ConfusingTernary"/>
+    <exclude name="DefaultPackage"/>
+    <exclude name="CommentDefaultAccessModifier"/>
+    <exclude name="PrematureDeclaration"/>
+    <exclude name="CallSuperInConstructor"/>
+
+  </rule>
+
+  <rule ref="category/java/performance.xml">
+    <exclude name="AvoidArrayLoops"/>
+    <exclude name="AvoidInstantiatingObjectsInLoops"/>
+    <exclude name="AvoidUsingShortType"/>
+  </rule>
+
+  <rule ref="category/java/design.xml">
     <!-- At several places in the optimization package, we set up public "optimize" methods
          that simply call their base class optimize method. This is intentional and allows
          to update the javadoc and make sure the additional parameters implemented at the
@@ -74,6 +115,43 @@
          class. This is the reason why we disable this rule. -->
     <exclude name="UselessOverridingMethod"/>
 
+    <!-- Law of Demeter forbid chain calls, which Hipparchus use a lot,
+         for example getCompiler().subtract() in DerivativeStructure -->
+    <exclude name="LawOfDemeter"/>
+
+    <!-- All implementations of RealFieldElement *needs* to have many methods. -->
+    <exclude name="ExcessivePublicCount"/>
+    <exclude name="ExcessiveClassLength"/>
+    <exclude name="TooManyMethods"/>
+
+    <!-- Many utility classes as well as linear algebra classes (matrices and vectors) have many features -->
+    <exclude name="GodClass"/>
+
+    <!-- Lots of reference algorithms have a high complexity -->
+    <exclude name="CyclomaticComplexity"/>
+    <exclude name="NPathComplexity"/>
+    <exclude name="NcssCount"/>
+    <exclude name="ExcessiveMethodLength"/>
+    <exclude name="ExcessiveParameterList"/>
+
+    <exclude name="ClassWithOnlyPrivateConstructorsShouldBeFinal"/>
+
+    <!-- TODO: we should reactivate these rules -->
+    <exclude name="ImmutableField"/>
+    <exclude name="SimplifyBooleanReturns"/>
+
+  </rule>
+
+  <rule ref="category/java/documentation.xml">
+    <exclude name="CommentSize"/>
+    <exclude name="UncommentedEmptyMethodBody"/>
+  </rule>
+
+  <rule ref="category/java/documentation.xml/CommentSize">
+    <properties>
+      <property name="maxLines"      value="200"/>
+      <property name="maxLineLength" value="256"/>
+    </properties>
   </rule>
 
 </ruleset>
