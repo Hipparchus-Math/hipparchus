@@ -270,7 +270,7 @@ public class DiagonalMatrix extends AbstractRealMatrix
      * @return 1-dimensional array of entries.
      */
     public double[] getDataRef() {
-        return data;
+        return data; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /** {@inheritDoc} */

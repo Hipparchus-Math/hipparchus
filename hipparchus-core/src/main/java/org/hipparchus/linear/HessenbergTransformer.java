@@ -175,7 +175,7 @@ class HessenbergTransformer {
      * @return the main diagonal elements of the B matrix
      */
     double[][] getHouseholderVectorsRef() {
-        return householderVectors;
+        return householderVectors; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /**

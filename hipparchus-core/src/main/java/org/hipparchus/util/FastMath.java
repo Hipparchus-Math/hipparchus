@@ -1593,9 +1593,7 @@ public class FastMath {
                     z = z * lnb + 1.0;
                     z *= lnb;
 
-                    final double result = exp(lna, z, null);
-                    //result = result + result * z;
-                    return result;
+                    return exp(lna, z, null);
 
                 }
             }
@@ -2859,9 +2857,8 @@ public class FastMath {
         }
 
         // Call atan
-        final double result = atan(ra, rb, x < 0);
+        return atan(ra, rb, x < 0);
 
-        return result;
     }
 
     /** Compute the arc sine of a number.

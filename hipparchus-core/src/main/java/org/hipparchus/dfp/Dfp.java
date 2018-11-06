@@ -371,9 +371,9 @@ public class Dfp implements RealFieldElement<Dfp> {
         }
 
         // Check for scientific notation
-        int p = s.indexOf("e");
+        int p = s.indexOf('e');
         if (p == -1) { // try upper case?
-            p = s.indexOf("E");
+            p = s.indexOf('E');
         }
 
         final String fpdecimal;
@@ -405,7 +405,7 @@ public class Dfp implements RealFieldElement<Dfp> {
         }
 
         // If there is a minus sign in the number then it is negative
-        if (fpdecimal.indexOf("-") !=  -1) {
+        if (fpdecimal.indexOf('-') !=  -1) {
             sign = -1;
         }
 
@@ -1227,6 +1227,7 @@ public class Dfp implements RealFieldElement<Dfp> {
                 break;
             default:
                 d = d.multiply(1000);
+                break;
         }
 
         return d;
@@ -1839,7 +1840,7 @@ public class Dfp implements RealFieldElement<Dfp> {
                     trialgood = false;
                 }
 
-                if (trialgood == false) {
+                if (!trialgood) {
                     min = trial+1;
                 }
             }
@@ -2036,6 +2037,7 @@ public class Dfp implements RealFieldElement<Dfp> {
                 break;
             default:
                 x.mant[mant.length-1] = 3000;
+                break;
         }
 
         Dfp dx = newInstance(x);
@@ -2178,8 +2180,7 @@ public class Dfp implements RealFieldElement<Dfp> {
         StringBuilder builder = new StringBuilder();
 
         if (e <= 0) {
-            builder.append('0');
-            builder.append('.');
+            builder.append("0.");
             pointInserted = true;
         }
 
@@ -2193,7 +2194,8 @@ public class Dfp implements RealFieldElement<Dfp> {
             builder.append((char) (((mant[i] / 100) % 10) + '0'));
             builder.append((char) (((mant[i] / 10) % 10) + '0'));
             builder.append((char) (((mant[i]) % 10) + '0'));
-            if (--e == 0) {
+            --e;
+            if (e == 0) {
                 builder.append('.');
                 pointInserted = true;
             }
@@ -2395,7 +2397,7 @@ public class Dfp implements RealFieldElement<Dfp> {
             result = dotrap(DfpField.FLAG_INEXACT, NEXT_AFTER_TRAP, x, result);
         }
 
-        if (result.equals(getZero()) && this.equals(getZero()) == false) {
+        if (result.equals(getZero()) && !this.equals(getZero())) {
             field.setIEEEFlagsBits(DfpField.FLAG_INEXACT);
             result = dotrap(DfpField.FLAG_INEXACT, NEXT_AFTER_TRAP, x, result);
         }

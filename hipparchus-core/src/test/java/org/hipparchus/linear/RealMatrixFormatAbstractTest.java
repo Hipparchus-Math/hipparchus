@@ -44,7 +44,7 @@ public abstract class RealMatrixFormatAbstractTest {
     protected abstract char getDecimalCharacter();
 
     public RealMatrixFormatAbstractTest() {
-        realMatrixFormat = RealMatrixFormat.getInstance(getLocale());
+        realMatrixFormat = RealMatrixFormat.getRealMatrixFormat(getLocale());
         final NumberFormat nf = NumberFormat.getInstance(getLocale());
         nf.setMaximumFractionDigits(2);
         realMatrixFormatOctave = new RealMatrixFormat("[", "]", "", "", "; ", ", ", nf);

@@ -304,37 +304,11 @@ public class QRDecomposition {
      * @return a solver
      */
     public DecompositionSolver getSolver() {
-        return new Solver(qrt, rDiag, threshold);
+        return new Solver();
     }
 
     /** Specialized solver. */
-    private static class Solver implements DecompositionSolver {
-        /**
-         * A packed TRANSPOSED representation of the QR decomposition.
-         * <p>The elements BELOW the diagonal are the elements of the UPPER triangular
-         * matrix R, and the rows ABOVE the diagonal are the Householder reflector vectors
-         * from which an explicit form of Q can be recomputed if desired.</p>
-         */
-        private final double[][] qrt;
-        /** The diagonal elements of R. */
-        private final double[] rDiag;
-        /** Singularity threshold. */
-        private final double threshold;
-
-        /**
-         * Build a solver from decomposed matrix.
-         *
-         * @param qrt Packed TRANSPOSED representation of the QR decomposition.
-         * @param rDiag Diagonal elements of R.
-         * @param threshold Singularity threshold.
-         */
-        private Solver(final double[][] qrt,
-                       final double[] rDiag,
-                       final double threshold) {
-            this.qrt   = qrt;
-            this.rDiag = rDiag;
-            this.threshold = threshold;
-        }
+    private class Solver implements DecompositionSolver {
 
         /** {@inheritDoc} */
         @Override
@@ -485,9 +459,7 @@ public class QRDecomposition {
          * @throws MathIllegalArgumentException if the matrix is singular and
          * {@code raise} is {@code true}.
          */
-        private static boolean checkSingular(double[] diag,
-                                             double min,
-                                             boolean raise) {
+        private boolean checkSingular(double[] diag, double min, boolean raise) {
             final int len = diag.length;
             for (int i = 0; i < len; i++) {
                 final double d = diag[i];

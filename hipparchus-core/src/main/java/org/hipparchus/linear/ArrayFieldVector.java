@@ -102,7 +102,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             field = d[0].getField();
             data = d.clone();
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new MathIllegalArgumentException(LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
+            throw new MathIllegalArgumentException(e, LocalizedCoreFormats.VECTOR_MUST_HAVE_AT_LEAST_ONE_ELEMENT);
         }
     }
 
@@ -544,7 +544,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             try {
                 out[i] = one.divide(data[i]);
             } catch (final MathRuntimeException e) {
-                throw new MathRuntimeException(LocalizedCoreFormats.INDEX, i);
+                throw new MathRuntimeException(e, LocalizedCoreFormats.INDEX, i);
             }
         }
         return new ArrayFieldVector<T>(field, out, false);
@@ -558,7 +558,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             try {
                 data[i] = one.divide(data[i]);
             } catch (final MathRuntimeException e) {
-                throw new MathRuntimeException(LocalizedCoreFormats.INDEX, i);
+                throw new MathRuntimeException(e, LocalizedCoreFormats.INDEX, i);
             }
         }
         return this;
@@ -610,7 +610,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
                 try {
                     out[i] = data[i].divide(v.getEntry(i));
                 } catch (final MathRuntimeException e) {
-                    throw new MathRuntimeException(LocalizedCoreFormats.INDEX, i);
+                    throw new MathRuntimeException(e, LocalizedCoreFormats.INDEX, i);
                 }
             }
             return new ArrayFieldVector<T>(field, out, false);
@@ -633,7 +633,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
             try {
                 out[i] = data[i].divide(v.data[i]);
             } catch (final MathRuntimeException e) {
-                throw new MathRuntimeException(LocalizedCoreFormats.INDEX, i);
+                throw new MathRuntimeException(e, LocalizedCoreFormats.INDEX, i);
             }
         }
         return new ArrayFieldVector<T>(field, out, false);
@@ -645,7 +645,7 @@ public class ArrayFieldVector<T extends FieldElement<T>> implements FieldVector<
      * @return array of entries
      */
     public T[] getDataRef() {
-        return data;
+        return data; // NOPMD - returning an internal array is intentional and documented here
     }
 
     /** {@inheritDoc} */

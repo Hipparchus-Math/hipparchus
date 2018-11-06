@@ -49,7 +49,16 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
      */
     FieldDerivativeStructure(final FDSFactory<T> factory, final T[] data) {
         this.factory = factory;
-        this.data    = data;
+        this.data    = data.clone();
+    }
+
+    /** Build an instance with all values and derivatives set to 0.
+     * @param factory factory that built the instance
+     * @since 1.4
+     */
+    FieldDerivativeStructure(final FDSFactory<T> factory) {
+        this.factory = factory;
+        this.data    = MathArrays.buildArray(factory.getValueField(), factory.getCompiler().getSize());
     }
 
     /** Get the factory that built the instance.
@@ -78,6 +87,21 @@ public class FieldDerivativeStructure<T extends RealFieldElement<T>>
     @Override
     public double getReal() {
         return data[0].getReal();
+    }
+
+    /** Set a derivative component.
+     * <p>
+     * This method is package-private (no modifier specified), as it is intended
+     * to be used only by {@link FDSFactory} since it relied on the ordering of
+     * derivatives within the class. This allows avoiding checks on the index,
+     * for performance reasons.
+     * </p>
+     * @param index index of the derivative
+     * @param value of the derivative to set
+     * @since 1.4
+     */
+    void setDerivativeComponent(final int index, final T value) {
+        data[index] = value;
     }
 
     /** Get the value part of the derivative structure.

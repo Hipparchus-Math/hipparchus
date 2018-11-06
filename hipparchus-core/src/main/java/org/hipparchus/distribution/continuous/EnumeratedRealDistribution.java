@@ -62,7 +62,7 @@ public class EnumeratedRealDistribution extends AbstractRealDistribution {
      */
     public EnumeratedRealDistribution(final double[] data) {
         super();
-        final Map<Double, Integer> dataMap = new HashMap<>();
+        final Map<Double, Integer> dataMap = new HashMap<>(); // NOPMD - no need for ConcurrentHashMap here
         for (double value : data) {
             Integer count = dataMap.get(value);
             if (count == null) {

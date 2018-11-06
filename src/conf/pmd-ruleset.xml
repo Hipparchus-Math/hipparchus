@@ -25,7 +25,7 @@
     xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
-  <description>
+  <description>mul
     This ruleset checks the code for discouraged programming constructs.
   </description>
 
@@ -73,6 +73,7 @@
     <!-- in mathematics, short names are not a problem -->
     <exclude name="ShortVariable"/>
     <exclude name="ShortClassName"/>
+    <exclude name="ShortMethodName"/>
 
     <!-- on the other hand, we also love long names... -->
     <exclude name="LongVariable"/>
@@ -122,10 +123,15 @@
     <!-- All implementations of RealFieldElement *needs* to have many methods. -->
     <exclude name="ExcessivePublicCount"/>
     <exclude name="ExcessiveClassLength"/>
+    <exclude name="ExcessiveImports"/>
     <exclude name="TooManyMethods"/>
+    <exclude name="TooManyFields"/>
 
     <!-- Many utility classes as well as linear algebra classes (matrices and vectors) have many features -->
     <exclude name="GodClass"/>
+
+    <!-- Some classes are intentionally DataClass, they are for example used to return several related values together -->
+    <exclude name="DataClass"/>
 
     <!-- Lots of reference algorithms have a high complexity -->
     <exclude name="CyclomaticComplexity"/>

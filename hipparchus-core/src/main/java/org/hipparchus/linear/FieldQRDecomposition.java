@@ -298,40 +298,13 @@ public class FieldQRDecomposition<T extends RealFieldElement<T>> {
      * @return a solver
      */
     public FieldDecompositionSolver<T> getSolver() {
-        return new FieldSolver<T>(qrt, rDiag, threshold);
+        return new FieldSolver();
     }
 
     /**
      * Specialized solver.
-     * @param <T> type of the underlying field elements
      */
-    private static class FieldSolver<T extends RealFieldElement<T>> implements FieldDecompositionSolver<T>{
-        /**
-         * A packed TRANSPOSED representation of the QR decomposition.
-         * <p>The elements BELOW the diagonal are the elements of the UPPER triangular
-         * matrix R, and the rows ABOVE the diagonal are the Householder reflector vectors
-         * from which an explicit form of Q can be recomputed if desired.</p>
-         */
-        private final T[][] qrt;
-        /** The diagonal elements of R. */
-        private final T[] rDiag;
-        /** Singularity threshold. */
-        private final T threshold;
-
-        /**
-         * Build a solver from decomposed matrix.
-         *
-         * @param qrt Packed TRANSPOSED representation of the QR decomposition.
-         * @param rDiag Diagonal elements of R.
-         * @param threshold Singularity threshold.
-         */
-        private FieldSolver(final T[][] qrt,
-                       final T[] rDiag,
-                       final T threshold) {
-            this.qrt   = qrt;
-            this.rDiag = rDiag;
-            this.threshold = threshold;
-        }
+    private class FieldSolver implements FieldDecompositionSolver<T>{
 
         /** {@inheritDoc} */
         @Override

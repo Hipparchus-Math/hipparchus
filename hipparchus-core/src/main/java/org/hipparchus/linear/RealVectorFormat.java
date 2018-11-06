@@ -45,6 +45,7 @@ import org.hipparchus.util.CompositeFormat;
  * just after the closing curly brace, i.e. just before the trailing space.</p>
  *
  */
+@SuppressWarnings("PMD.SingleMethodSingleton") // the violations have been taken care of as of 1.4, they correspond to deprecated methods
 public class RealVectorFormat {
 
     /** The default prefix: "{". */
@@ -161,18 +162,41 @@ public class RealVectorFormat {
     /**
      * Returns the default real vector format for the current locale.
      * @return the default real vector format.
+     * @since 1.4
      */
+    public static RealVectorFormat getRealVectorFormat() {
+        return getRealVectorFormat(Locale.getDefault());
+    }
+
+    /**
+     * Returns the default real vector format for the current locale.
+     * @return the default real vector format.
+     * @deprecated as of 1.4, replaced by {@link #getRealVectorFormat()}
+     */
+    @Deprecated
     public static RealVectorFormat getInstance() {
-        return getInstance(Locale.getDefault());
+        return getRealVectorFormat();
     }
 
     /**
      * Returns the default real vector format for the given locale.
      * @param locale the specific locale used by the format.
      * @return the real vector format specific to the given locale.
+     * @since 1.4
      */
-    public static RealVectorFormat getInstance(final Locale locale) {
+    public static RealVectorFormat getRealVectorFormat(final Locale locale) {
         return new RealVectorFormat(CompositeFormat.getDefaultNumberFormat(locale));
+    }
+
+    /**
+     * Returns the default real vector format for the given locale.
+     * @param locale the specific locale used by the format.
+     * @return the real vector format specific to the given locale.
+     * @deprecated as of 1.4, replaced by {@link #getRealVectorFormat(Locale)}
+     */
+    @Deprecated
+    public static RealVectorFormat getInstance(final Locale locale) {
+        return getRealVectorFormat(locale);
     }
 
     /**

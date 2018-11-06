@@ -136,13 +136,12 @@ public class Combinations implements Iterable<int[]> {
     public Iterator<int[]> iterator() {
         if (k == 0 ||
             k == n) {
-            return new SingletonIterator(MathArrays.natural(k));
+            return new SingletonIterator(k);
         }
 
-        switch (iterationOrder) {
-        case LEXICOGRAPHIC:
+        if (iterationOrder == IterationOrder.LEXICOGRAPHIC) {
             return new LexicographicIterator(n, k);
-        default:
+        } else {
             throw MathRuntimeException.createInternalError(); // Should never happen.
         }
     }
@@ -297,10 +296,10 @@ public class Combinations implements Iterable<int[]> {
         private boolean more = true;
         /**
          * Create a singleton iterator providing the given array.
-         * @param singleton array returned by the iterator
+         * @param k number of entries (i.e. entries will be 0..k-1)
          */
-        SingletonIterator(final int[] singleton) {
-            this.singleton = singleton;
+        SingletonIterator(final int k) {
+            this.singleton = MathArrays.natural(k);
         }
         /** @return True until next is called the first time, then false */
         @Override

@@ -42,8 +42,8 @@ public abstract class ComplexFormatAbstractTest {
     protected abstract char getDecimalCharacter();
 
     protected ComplexFormatAbstractTest() {
-        complexFormat = ComplexFormat.getInstance(getLocale());
-        complexFormatJ = ComplexFormat.getInstance("j", getLocale());
+        complexFormat = ComplexFormat.getComplexFormat(getLocale());
+        complexFormatJ = ComplexFormat.getComplexFormat("j", getLocale());
     }
 
     @Test
@@ -56,7 +56,7 @@ public abstract class ComplexFormatAbstractTest {
 
     @Test
     public void testTrimOneImaginary() {
-        final ComplexFormat fmt = ComplexFormat.getInstance(getLocale());
+        final ComplexFormat fmt = ComplexFormat.getComplexFormat(getLocale());
         fmt.getImaginaryFormat().setMaximumFractionDigits(1);
 
         Complex c = new Complex(1, 1.04);
@@ -301,7 +301,7 @@ public abstract class ComplexFormatAbstractTest {
 
     @Test
     public void testFormatNumber() {
-        ComplexFormat cf = ComplexFormat.getInstance(getLocale());
+        ComplexFormat cf = ComplexFormat.getComplexFormat(getLocale());
         Double pi = Double.valueOf(FastMath.PI);
         String text = cf.format(pi);
         Assert.assertEquals("3" + getDecimalCharacter() + "1415926536", text);

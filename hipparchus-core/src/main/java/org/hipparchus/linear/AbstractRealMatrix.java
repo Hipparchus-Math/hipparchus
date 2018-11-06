@@ -41,7 +41,7 @@ public abstract class AbstractRealMatrix
     implements RealMatrix, RealLinearOperator {
 
     /** Default format. */
-    private static final RealMatrixFormat DEFAULT_FORMAT = RealMatrixFormat.getInstance(Locale.US);
+    private static final RealMatrixFormat DEFAULT_FORMAT = RealMatrixFormat.getRealMatrixFormat(Locale.US);
     static {
         // set the minimum fraction digits to 1 to keep compatibility
         DEFAULT_FORMAT.getFormat().setMinimumFractionDigits(1);
@@ -50,7 +50,9 @@ public abstract class AbstractRealMatrix
     /**
      * Creates a matrix with no data
      */
-    protected AbstractRealMatrix() {}
+    protected AbstractRealMatrix() {
+        // This constructor is intentionally empty. Nothing special is needed here.
+    }
 
     /**
      * Create a new RealMatrix with the supplied row and column dimensions.
@@ -976,8 +978,7 @@ public abstract class AbstractRealMatrix
         final StringBuilder res = new StringBuilder();
         String fullClassName = getClass().getName();
         String shortClassName = fullClassName.substring(fullClassName.lastIndexOf('.') + 1);
-        res.append(shortClassName);
-        res.append(DEFAULT_FORMAT.format(this));
+        res.append(shortClassName).append(DEFAULT_FORMAT.format(this));
         return res.toString();
     }
 
@@ -991,10 +992,10 @@ public abstract class AbstractRealMatrix
      */
     @Override
     public boolean equals(final Object object) {
-        if (object == this ) {
+        if (object == this) {
             return true;
         }
-        if (object instanceof RealMatrix == false) {
+        if (!(object instanceof RealMatrix)) {
             return false;
         }
         RealMatrix m = (RealMatrix) object;

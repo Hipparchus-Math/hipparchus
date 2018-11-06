@@ -142,9 +142,8 @@ public class PiecewiseBicubicSplineInterpolatingFunction
 
         final PolynomialSplineFunction spline = interpolator.interpolate(yArray, interpArray);
 
-        double returnValue = spline.value(y);
+        return spline.value(y);
 
-        return returnValue;
     }
 
     /**

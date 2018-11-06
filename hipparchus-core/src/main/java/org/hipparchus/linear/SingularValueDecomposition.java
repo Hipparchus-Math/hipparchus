@@ -294,7 +294,7 @@ public class SingularValueDecomposition {
                 // indefinitely in case of NaNs because comparison on NaNs
                 // always return false, regardless of what is checked
                 // see issue MATH-947
-                if (!(FastMath.abs(e[k]) > threshold)) {
+                if (!(FastMath.abs(e[k]) > threshold)) { // NOPMD - as explained above, the way this test is written is correct
                     e[k] = 0;
                     break;
                 }
@@ -327,7 +327,7 @@ public class SingularValueDecomposition {
             }
             k++;
             // Perform the task indicated by kase.
-            switch (kase) {
+            switch (kase) { // NOPMD - breaking this complex algorithm into functions just to keep PMD happy would be artificial
                 // Deflate negligible s(p).
                 case 1: {
                     double f = e[p - 2];

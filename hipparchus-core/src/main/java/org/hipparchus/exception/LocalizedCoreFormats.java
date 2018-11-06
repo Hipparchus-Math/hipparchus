@@ -291,7 +291,7 @@ public enum LocalizedCoreFormats implements Localizable {
                 final String translated = bundle.getString(name());
                 if ((translated != null) &&
                     (translated.length() > 0) &&
-                    (!translated.toLowerCase().contains("missing translation"))) {
+                    (!translated.toLowerCase(locale).contains("missing translation"))) {
                     // the value of the resource is the translated format
                     return translated;
                 }

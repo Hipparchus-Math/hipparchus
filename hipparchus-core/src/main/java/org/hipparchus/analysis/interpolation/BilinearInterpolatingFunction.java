@@ -36,9 +36,6 @@ public class BilinearInterpolatingFunction implements BivariateFunction, Seriali
     /** Grid along the x axis. */
     private final GridAxis xGrid;
 
-    /** Grid size along the x axis. */
-    private final int xSize;
-
     /** Grid along the y axis. */
     private final GridAxis yGrid;
 
@@ -62,12 +59,11 @@ public class BilinearInterpolatingFunction implements BivariateFunction, Seriali
                                          final double[][] fVal)
         throws MathIllegalArgumentException {
         this.xGrid = new GridAxis(xVal, 2);
-        this.xSize = xVal.length;
         this.yGrid = new GridAxis(yVal, 2);
         this.ySize = yVal.length;
-        this.fVal  = new double[xSize * ySize];
+        this.fVal  = new double[xVal.length * ySize];
         int k = 0;
-        for (int i = 0; i < xSize; ++i) {
+        for (int i = 0; i < xVal.length; ++i) {
             final double[] fi = fVal[i];
             for (int j = 0; j < ySize; ++j) {
                 this.fVal[k++] = fi[j];

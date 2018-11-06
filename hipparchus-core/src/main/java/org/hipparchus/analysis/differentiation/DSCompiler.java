@@ -389,7 +389,7 @@ public class DSCompiler {
                 }
             }
 
-            multIndirection[vSize + i] = combined.toArray(new int[combined.size()][]);
+            multIndirection[vSize + i] = combined.toArray(new int[0][]);
 
         }
 
@@ -503,7 +503,7 @@ public class DSCompiler {
                 }
             }
 
-            compIndirection[vSize + i] = combined.toArray(new int[combined.size()][]);
+            compIndirection[vSize + i] = combined.toArray(new int[0][]);
 
         }
 
@@ -583,7 +583,8 @@ public class DSCompiler {
                                                        ordersSum, order);
             }
 
-            while (derivativeOrder-- > 0) {
+            while (derivativeOrder > 0) {
+                --derivativeOrder;
                 // as long as we differentiate according to current free parameter,
                 // we have to skip the value part and dive into the derivative part
                 // so we add the size of the value part to the base index
@@ -626,7 +627,7 @@ public class DSCompiler {
      * @see #getPartialDerivativeIndex(int...)
      */
     public int[] getPartialDerivativeOrders(final int index) {
-        return derivativesIndirection[index];
+        return derivativesIndirection[index].clone();
     }
 
     /** Get the number of free parameters.

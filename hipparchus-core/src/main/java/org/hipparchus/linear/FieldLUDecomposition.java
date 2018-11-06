@@ -258,40 +258,12 @@ public class FieldLUDecomposition<T extends FieldElement<T>> {
      * @return a solver
      */
     public FieldDecompositionSolver<T> getSolver() {
-        return new Solver<T>(field, lu, pivot, singular);
+        return new Solver();
     }
 
     /** Specialized solver.
-     * @param <T> the type of the field elements
      */
-    private static class Solver<T extends FieldElement<T>> implements FieldDecompositionSolver<T> {
-
-        /** Field to which the elements belong. */
-        private final Field<T> field;
-
-        /** Entries of LU decomposition. */
-        private final T[][] lu;
-
-        /** Pivot permutation associated with LU decomposition. */
-        private final int[] pivot;
-
-        /** Singularity indicator. */
-        private final boolean singular;
-
-        /**
-         * Build a solver from decomposed matrix.
-         * @param field field to which the matrix elements belong
-         * @param lu entries of LU decomposition
-         * @param pivot pivot permutation associated with LU decomposition
-         * @param singular singularity indicator
-         */
-        private Solver(final Field<T> field, final T[][] lu,
-                       final int[] pivot, final boolean singular) {
-            this.field    = field;
-            this.lu       = lu;
-            this.pivot    = pivot;
-            this.singular = singular;
-        }
+    private class Solver implements FieldDecompositionSolver<T> {
 
         /** {@inheritDoc} */
         @Override

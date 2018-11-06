@@ -49,6 +49,7 @@ public class BigFractionFormat extends AbstractFormat implements Serializable {
      * for the numerator and denominator.
      */
     public BigFractionFormat() {
+        // This constructor is intentionally empty. Nothing special is needed here.
     }
 
     /**
@@ -137,7 +138,7 @@ public class BigFractionFormat extends AbstractFormat implements Serializable {
      *            offsets of the alignment field
      * @return the value passed in as toAppendTo.
      */
-    public StringBuffer format(final BigFraction BigFraction,
+    public StringBuffer format(final BigFraction BigFraction, // NOPMD - PMD false positive, we cannot have @Override here
                                final StringBuffer toAppendTo, final FieldPosition pos) {
 
         pos.setBeginIndex(0);

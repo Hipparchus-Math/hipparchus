@@ -147,7 +147,7 @@ public class BlockFieldMatrix<T extends FieldElement<T>> extends AbstractFieldMa
      * @see #BlockFieldMatrix(FieldElement[][])
      */
     public BlockFieldMatrix(final int rows, final int columns,
-                            final T[][] blockData, final boolean copyArray)
+                            final T[][] blockData, final boolean copyArray) // NOPMD - array copy is taken care of by parameter
         throws MathIllegalArgumentException {
         super(extractField(blockData), rows, columns);
         this.rows    = rows;

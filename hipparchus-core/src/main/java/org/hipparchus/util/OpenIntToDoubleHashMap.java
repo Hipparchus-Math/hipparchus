@@ -575,7 +575,7 @@ public class OpenIntToDoubleHashMap implements Serializable {
             } catch (ArrayIndexOutOfBoundsException e) {
                 next = -2;
                 if (current < 0) {
-                    throw new NoSuchElementException();
+                    throw new NoSuchElementException(); // NOPMD
                 }
             }
 

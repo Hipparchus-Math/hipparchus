@@ -21,7 +21,7 @@
  */
 package org.hipparchus.analysis.integration.gauss;
 
-import java.util.Map;
+import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.hipparchus.exception.LocalizedCoreFormats;
@@ -40,10 +40,10 @@ import org.hipparchus.util.Pair;
  */
 public abstract class BaseRuleFactory<T extends Number> {
     /** List of points and weights, indexed by the order of the rule. */
-    private final Map<Integer, Pair<T[], T[]>> pointsAndWeights
+    private final SortedMap<Integer, Pair<T[], T[]>> pointsAndWeights
         = new TreeMap<Integer, Pair<T[], T[]>>();
     /** Cache for double-precision rules. */
-    private final Map<Integer, Pair<double[], double[]>> pointsAndWeightsDouble
+    private final SortedMap<Integer, Pair<double[], double[]>> pointsAndWeightsDouble
         = new TreeMap<Integer, Pair<double[], double[]>>();
 
     /**
@@ -94,15 +94,18 @@ public abstract class BaseRuleFactory<T extends Number> {
      * @throws MathIllegalArgumentException if the elements of the rule pair do not
      * have the same length.
      */
-    protected synchronized Pair<T[], T[]> getRuleInternal(int numberOfPoints)
+    protected Pair<T[], T[]> getRuleInternal(int numberOfPoints)
         throws MathIllegalArgumentException {
-        final Pair<T[], T[]> rule = pointsAndWeights.get(numberOfPoints);
-        if (rule == null) {
-            addRule(computeRule(numberOfPoints));
-            // The rule should be available now.
-            return getRuleInternal(numberOfPoints);
+        final Pair<T[], T[]> rule;
+        synchronized (pointsAndWeights) {
+            rule = pointsAndWeights.get(numberOfPoints);
+            if (rule == null) {
+                addRule(computeRule(numberOfPoints));
+                // The rule should be available now.
+                return getRuleInternal(numberOfPoints);
+            }
+            return rule;
         }
-        return rule;
     }
 
     /**
@@ -114,7 +117,9 @@ public abstract class BaseRuleFactory<T extends Number> {
      */
     protected void addRule(Pair<T[], T[]> rule) throws MathIllegalArgumentException {
         MathUtils.checkDimension(rule.getFirst().length, rule.getSecond().length);
-        pointsAndWeights.put(rule.getFirst().length, rule);
+        synchronized (pointsAndWeights) {
+            pointsAndWeights.put(rule.getFirst().length, rule);
+        }
     }
 
     /**

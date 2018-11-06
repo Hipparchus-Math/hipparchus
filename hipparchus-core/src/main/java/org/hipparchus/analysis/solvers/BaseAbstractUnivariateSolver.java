@@ -37,11 +37,11 @@ import org.hipparchus.util.MathUtils;
  * rely on the default, but rather carefully consider values that match
  * user's expectations, as well as the specifics of each implementation.
  *
- * @param <FUNC> Type of function to solve.
+ * @param <F> Type of function to solve.
  *
  */
-public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFunction>
-    implements BaseUnivariateSolver<FUNC> {
+public abstract class BaseAbstractUnivariateSolver<F extends UnivariateFunction>
+    implements BaseUnivariateSolver<F> {
     /** Default relative accuracy. */
     private static final double DEFAULT_RELATIVE_ACCURACY = 1e-14;
     /** Default function value accuracy. */
@@ -61,7 +61,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
     /** Initial guess. */
     private double searchStart;
     /** Function to solve. */
-    private FUNC function;
+    private F function;
 
     /**
      * Construct a solver with given absolute accuracy.
@@ -179,7 +179,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
      * @exception NullArgumentException if f is null
      */
     protected void setup(int maxEval,
-                         FUNC f,
+                         F f,
                          double min, double max,
                          double startValue)
         throws NullArgumentException {
@@ -196,7 +196,7 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
 
     /** {@inheritDoc} */
     @Override
-    public double solve(int maxEval, FUNC f, double min, double max, double startValue)
+    public double solve(int maxEval, F f, double min, double max, double startValue)
         throws MathIllegalArgumentException, MathIllegalStateException {
         // Initialization.
         setup(maxEval, f, min, max, startValue);
@@ -207,13 +207,13 @@ public abstract class BaseAbstractUnivariateSolver<FUNC extends UnivariateFuncti
 
     /** {@inheritDoc} */
     @Override
-    public double solve(int maxEval, FUNC f, double min, double max) {
+    public double solve(int maxEval, F f, double min, double max) {
         return solve(maxEval, f, min, max, min + 0.5 * (max - min));
     }
 
     /** {@inheritDoc} */
     @Override
-    public double solve(int maxEval, FUNC f, double startValue)
+    public double solve(int maxEval, F f, double startValue)
         throws MathIllegalArgumentException, MathIllegalStateException {
         return solve(maxEval, f, Double.NaN, Double.NaN, startValue);
     }

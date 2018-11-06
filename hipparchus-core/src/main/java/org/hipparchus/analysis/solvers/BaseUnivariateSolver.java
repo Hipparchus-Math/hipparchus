@@ -34,13 +34,13 @@ import org.hipparchus.exception.MathIllegalStateException;
  * library, regular user should rely on more specific interfaces like
  * {@link UnivariateSolver}, {@link PolynomialSolver} or {@link
  * UnivariateDifferentiableSolver}.
- * @param <FUNC> Type of function to solve.
+ * @param <F> Type of function to solve.
  *
  * @see UnivariateSolver
  * @see PolynomialSolver
  * @see UnivariateDifferentiableSolver
  */
-public interface BaseUnivariateSolver<FUNC extends UnivariateFunction> {
+public interface BaseUnivariateSolver<F extends UnivariateFunction> {
     /**
      * Get the maximum number of function evaluations.
      *
@@ -107,7 +107,7 @@ public interface BaseUnivariateSolver<FUNC extends UnivariateFunction> {
      * @throws MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
-    double solve(int maxEval, FUNC f, double min, double max)
+    double solve(int maxEval, F f, double min, double max)
         throws MathIllegalArgumentException, MathIllegalStateException;
 
     /**
@@ -127,7 +127,7 @@ public interface BaseUnivariateSolver<FUNC extends UnivariateFunction> {
      * @throws MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
-    double solve(int maxEval, FUNC f, double min, double max, double startValue)
+    double solve(int maxEval, F f, double min, double max, double startValue)
         throws MathIllegalArgumentException, MathIllegalStateException;
 
     /**
@@ -142,5 +142,5 @@ public interface BaseUnivariateSolver<FUNC extends UnivariateFunction> {
      * @throws org.hipparchus.exception.MathIllegalStateException if
      * the allowed number of evaluations is exceeded.
      */
-    double solve(int maxEval, FUNC f, double startValue);
+    double solve(int maxEval, F f, double startValue);
 }

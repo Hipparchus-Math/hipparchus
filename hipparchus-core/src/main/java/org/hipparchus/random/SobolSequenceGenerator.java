@@ -78,7 +78,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
     private final int dimension;
 
     /** The current index in the sequence. */
-    private int count = 0;
+    private int count;
 
     /** The direction vector for each component. */
     private final long[][] direction;
@@ -109,12 +109,9 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
 
         try {
             initFromStream(is);
-        } catch (IOException e) {
-            // the internal resource file could not be read -> should not happen
-            throw MathRuntimeException.createInternalError();
-        } catch (MathIllegalStateException e) {
+        } catch (IOException | MathIllegalStateException e) {
             // the internal resource file could not be parsed -> should not happen
-            throw MathRuntimeException.createInternalError();
+            throw MathRuntimeException.createInternalError(e);
         } finally {
             try {
                 is.close();
@@ -202,8 +199,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
 
             int lineNumber = 2;
             int index = 1;
-            String line = null;
-            while ( (line = reader.readLine()) != null) {
+            for (String line = reader.readLine(); line != null; line = reader.readLine()) {
                 StringTokenizer st = new StringTokenizer(line, " ");
                 try {
                     dim = Integer.parseInt(st.nextToken());
@@ -221,7 +217,7 @@ public class SobolSequenceGenerator implements RandomVectorGenerator {
                         return dim;
                     }
                 } catch (NoSuchElementException|NumberFormatException e) {
-                    throw new MathIllegalStateException(LocalizedCoreFormats.CANNOT_PARSE,
+                    throw new MathIllegalStateException(e, LocalizedCoreFormats.CANNOT_PARSE,
                                                         line, lineNumber);
                 }
                 lineNumber++;

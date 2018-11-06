@@ -46,7 +46,7 @@ public class Incrementor {
     /** Function called at counter exhaustion. */
     private final MaxCountExceededCallback maxCountCallback;
     /** Current count. */
-    private int count = 0;
+    private int count;
 
     /**
      * Defines a method to be called at counter exhaustion.
@@ -233,7 +233,8 @@ public class Incrementor {
      * @see #increment(int)
      */
     public void increment() {
-        if (++count > maximalCount) {
+        ++count;
+        if (count > maximalCount) {
             maxCountCallback.trigger(maximalCount);
         }
     }

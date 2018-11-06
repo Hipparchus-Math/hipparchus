@@ -79,7 +79,16 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
      */
     DerivativeStructure(final DSFactory factory, final double[] data) {
         this.factory = factory;
-        this.data    = data;
+        this.data    = data.clone();
+    }
+
+    /** Build an instance with all values and derivatives set to 0.
+     * @param factory factory that built the instance
+     * @since 1.4
+     */
+    DerivativeStructure(final DSFactory factory) {
+        this.factory = factory;
+        this.data    = new double[factory.getCompiler().getSize()];
     }
 
     /** Build an instance with all values and derivatives set to 0.
@@ -244,6 +253,21 @@ public class DerivativeStructure implements RealFieldElement<DerivativeStructure
     @Deprecated
     public DerivativeStructure createConstant(final double c) {
         return factory.constant(c);
+    }
+
+    /** Set a derivative component.
+     * <p>
+     * This method is package-private (no modifier specified), as it is intended
+     * to be used only by {@link DSFactory} since it relied on the ordering of
+     * derivatives within the class. This allows avoiding checks on the index,
+     * for performance reasons.
+     * </p>
+     * @param index index of the derivative
+     * @param value of the derivative to set
+     * @since 1.4
+     */
+    void setDerivativeComponent(final int index, final double value) {
+        data[index] = value;
     }
 
     /** {@inheritDoc}

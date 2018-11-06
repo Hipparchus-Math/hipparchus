@@ -69,11 +69,6 @@ public class EnumeratedDistribution<T> implements Serializable {
     private final double[] probabilities;
 
     /**
-     * Cumulative probabilities, cached to speed up sampling.
-     */
-    private final double[] cumulativeProbabilities;
-
-    /**
      * Create an enumerated distribution using the given probability mass function
      * enumeration.
      *
@@ -96,12 +91,6 @@ public class EnumeratedDistribution<T> implements Serializable {
 
         probabilities = checkAndNormalize(probs);
 
-        cumulativeProbabilities = new double[probabilities.length];
-        double sum = 0;
-        for (int i = 0; i < probabilities.length; i++) {
-            sum += probabilities[i];
-            cumulativeProbabilities[i] = sum;
-        }
     }
 
     /**

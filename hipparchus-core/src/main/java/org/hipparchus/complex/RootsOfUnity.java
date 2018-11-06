@@ -82,14 +82,15 @@ public class RootsOfUnity implements Serializable {
      * @return {@code true} if the roots of unity are stored in counter-clockwise order
      * @throws MathIllegalStateException if no roots of unity have been computed yet
      */
-    public synchronized boolean isCounterClockWise()
+    public boolean isCounterClockWise()
             throws MathIllegalStateException {
-
-        if (omegaCount == 0) {
-            throw new MathIllegalStateException(
-                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+        synchronized (this) {
+            if (omegaCount == 0) {
+                throw new MathIllegalStateException(
+                        LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+            }
+            return isCounterClockWise;
         }
-        return isCounterClockWise;
     }
 
     /**
@@ -109,40 +110,42 @@ public class RootsOfUnity implements Serializable {
      * @param n the (signed) number of roots of unity to be computed
      * @throws MathIllegalArgumentException if {@code n = 0}
      */
-    public synchronized void computeRoots(int n) throws MathIllegalArgumentException {
+    public void computeRoots(int n) throws MathIllegalArgumentException {
 
         if (n == 0) {
             throw new MathIllegalArgumentException(
                     LocalizedCoreFormats.CANNOT_COMPUTE_0TH_ROOT_OF_UNITY);
         }
 
-        isCounterClockWise = n > 0;
+        synchronized (this) {
+            isCounterClockWise = n > 0;
 
-        // avoid repetitive calculations
-        final int absN = FastMath.abs(n);
+            // avoid repetitive calculations
+            final int absN = FastMath.abs(n);
 
-        if (absN == omegaCount) {
-            return;
+            if (absN == omegaCount) {
+                return;
+            }
+
+            // calculate everything from scratch
+            final double t = 2.0 * FastMath.PI / absN;
+            final double cosT = FastMath.cos(t);
+            final double sinT = FastMath.sin(t);
+            omegaReal = new double[absN];
+            omegaImaginaryCounterClockwise = new double[absN];
+            omegaImaginaryClockwise = new double[absN];
+            omegaReal[0] = 1.0;
+            omegaImaginaryCounterClockwise[0] = 0.0;
+            omegaImaginaryClockwise[0] = 0.0;
+            for (int i = 1; i < absN; i++) {
+                omegaReal[i] = omegaReal[i - 1] * cosT -
+                                omegaImaginaryCounterClockwise[i - 1] * sinT;
+                omegaImaginaryCounterClockwise[i] = omegaReal[i - 1] * sinT +
+                                omegaImaginaryCounterClockwise[i - 1] * cosT;
+                omegaImaginaryClockwise[i] = -omegaImaginaryCounterClockwise[i];
+            }
+            omegaCount = absN;
         }
-
-        // calculate everything from scratch
-        final double t = 2.0 * FastMath.PI / absN;
-        final double cosT = FastMath.cos(t);
-        final double sinT = FastMath.sin(t);
-        omegaReal = new double[absN];
-        omegaImaginaryCounterClockwise = new double[absN];
-        omegaImaginaryClockwise = new double[absN];
-        omegaReal[0] = 1.0;
-        omegaImaginaryCounterClockwise[0] = 0.0;
-        omegaImaginaryClockwise[0] = 0.0;
-        for (int i = 1; i < absN; i++) {
-            omegaReal[i] = omegaReal[i - 1] * cosT -
-                    omegaImaginaryCounterClockwise[i - 1] * sinT;
-            omegaImaginaryCounterClockwise[i] = omegaReal[i - 1] * sinT +
-                    omegaImaginaryCounterClockwise[i - 1] * cosT;
-            omegaImaginaryClockwise[i] = -omegaImaginaryCounterClockwise[i];
-        }
-        omegaCount = absN;
     }
 
     /**
@@ -153,22 +156,24 @@ public class RootsOfUnity implements Serializable {
      * @throws MathIllegalStateException if no roots of unity have been computed yet
      * @throws MathIllegalArgumentException if {@code k} is out of range
      */
-    public synchronized double getReal(int k)
+    public double getReal(int k)
             throws MathIllegalArgumentException, MathIllegalStateException {
 
-        if (omegaCount == 0) {
-            throw new MathIllegalStateException(
-                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
-        }
-        if ((k < 0) || (k >= omegaCount)) {
-            throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
-                    Integer.valueOf(k),
-                    Integer.valueOf(0),
-                    Integer.valueOf(omegaCount - 1));
-        }
+        synchronized (this) {
+            if (omegaCount == 0) {
+                throw new MathIllegalStateException(
+                                                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+            }
+            if ((k < 0) || (k >= omegaCount)) {
+                throw new MathIllegalArgumentException(
+                                                       LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                                                       Integer.valueOf(k),
+                                                       Integer.valueOf(0),
+                                                       Integer.valueOf(omegaCount - 1));
+            }
 
-        return omegaReal[k];
+            return omegaReal[k];
+        }
     }
 
     /**
@@ -179,23 +184,25 @@ public class RootsOfUnity implements Serializable {
      * @throws MathIllegalStateException if no roots of unity have been computed yet
      * @throws MathIllegalArgumentException if {@code k} is out of range
      */
-    public synchronized double getImaginary(int k)
+    public double getImaginary(int k)
             throws MathIllegalArgumentException, MathIllegalStateException {
 
-        if (omegaCount == 0) {
-            throw new MathIllegalStateException(
-                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
-        }
-        if ((k < 0) || (k >= omegaCount)) {
-            throw new MathIllegalArgumentException(
-                    LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
-                    Integer.valueOf(k),
-                    Integer.valueOf(0),
-                    Integer.valueOf(omegaCount - 1));
-        }
+        synchronized (this) {
+            if (omegaCount == 0) {
+                throw new MathIllegalStateException(
+                                                    LocalizedCoreFormats.ROOTS_OF_UNITY_NOT_COMPUTED_YET);
+            }
+            if ((k < 0) || (k >= omegaCount)) {
+                throw new MathIllegalArgumentException(
+                                                       LocalizedCoreFormats.OUT_OF_RANGE_ROOT_OF_UNITY_INDEX,
+                                                       Integer.valueOf(k),
+                                                       Integer.valueOf(0),
+                                                       Integer.valueOf(omegaCount - 1));
+            }
 
-        return isCounterClockWise ? omegaImaginaryCounterClockwise[k] :
-            omegaImaginaryClockwise[k];
+            return isCounterClockWise ? omegaImaginaryCounterClockwise[k] :
+                omegaImaginaryClockwise[k];
+        }
     }
 
     /**
@@ -207,7 +214,9 @@ public class RootsOfUnity implements Serializable {
      *
      * @return the number of roots of unity currently stored
      */
-    public synchronized int getNumberOfRoots() {
-        return omegaCount;
+    public int getNumberOfRoots() {
+        synchronized (this) {
+            return omegaCount;
+        }
     }
 }

@@ -35,6 +35,7 @@ public class ComplexComparator implements Comparator<Complex>, Serializable {
      * @return a negative value if o1 real part is less than o2 real part
      * or if real parts are equal and o1 imaginary part is less than o2 imaginary part
      */
+    @Override
     public int compare(Complex o1, Complex o2) {
         if (o1 == null) {
             return o2 == null ? 0 : -1;

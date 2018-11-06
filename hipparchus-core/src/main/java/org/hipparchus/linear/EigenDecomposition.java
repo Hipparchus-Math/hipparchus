@@ -372,32 +372,11 @@ public class EigenDecomposition {
         if (hasComplexEigenvalues()) {
             throw new MathRuntimeException(LocalizedCoreFormats.UNSUPPORTED_OPERATION);
         }
-        return new Solver(realEigenvalues, imagEigenvalues, eigenvectors);
+        return new Solver();
     }
 
     /** Specialized solver. */
-    private static class Solver implements DecompositionSolver {
-        /** Real part of the realEigenvalues. */
-        private final double[] realEigenvalues;
-        /** Imaginary part of the realEigenvalues. */
-        private final double[] imagEigenvalues;
-        /** Eigenvectors. */
-        private final ArrayRealVector[] eigenvectors;
-
-        /**
-         * Builds a solver from decomposed matrix.
-         *
-         * @param realEigenvalues Real parts of the eigenvalues.
-         * @param imagEigenvalues Imaginary parts of the eigenvalues.
-         * @param eigenvectors Eigenvectors.
-         */
-        private Solver(final double[] realEigenvalues,
-                final double[] imagEigenvalues,
-                final ArrayRealVector[] eigenvectors) {
-            this.realEigenvalues = realEigenvalues;
-            this.imagEigenvalues = imagEigenvalues;
-            this.eigenvectors = eigenvectors;
-        }
+    private class Solver implements DecompositionSolver {
 
         /**
          * Solves the linear equation A &times; X = B for symmetric matrices A.
